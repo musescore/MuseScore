@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>194</width>
-    <height>135</height>
+    <width>335</width>
+    <height>154</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -199,31 +199,6 @@
           <string>Prall Prall</string>
          </property>
         </item>
-        <item>
-         <property name="text">
-          <string>Guitar vibrato</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Guitar vibrato wide</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Vibrato sawtooth narrow</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Vibrato sawtooth</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Vibrato sawtooth wide</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="1" column="1">
@@ -262,6 +237,9 @@
       </item>
       <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="playArticulation">
+        <property name="accessibleName">
+         <string>Play</string>
+        </property>
         <property name="text">
          <string>Play</string>
         </property>

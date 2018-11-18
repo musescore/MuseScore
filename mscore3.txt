@@ -94,6 +94,20 @@ Palette handling
       - shift+drag allows to move a palette element in the palette
       - ctrl+drag is drag operation with special semantic
 
+Lyrics
+-------------------------------
+      - lyrics can be placed above a staff by changing the Placement property to "Above".
+        Verse numbers are counted from top to bottom. If you change for example the placment
+        of a lyric in verse 3 to Above then all lyrics in verse 1-3 are placed above, verse 4+
+        will stay below.
+      - 'x' (flip) changes the placement of a lyric.
+      - up/down moves a lyric to the previous/next verse. If there is already a lyric, the text
+        is swapped.
+      - the style values "Position above" and "Position below" determine the default lyric position.
+      - lyrics are move up or down when a collision with other score elements are detected. The style
+        value "Autoplace vertical align range" tells mscore to align other lyrics measure or system wide.
+
+
 
 ====================================================================
       Programming Style Changes in MuseScore 3
@@ -245,20 +259,44 @@ Dynamics
 
 
 ==============================================================
-Properties & Styles
+      Styles
 ==============================================================
 
-Properties are identified by the enumeration P_ID.
-Style values are identified by the enumeration StyleIdx.
+A style is part of a score. Its a list of style values.
+Style values are identified by the enumeration Sid.
+A style is initialized with a set of build in hard coded values. This build in style can be
+modified by a style set in preferences (if set).
+The style associated with a score can be modified by the user in the UI.
+If the user resets a style value in the UI, it is set to the hardcoded build in value;
+Only style values which differ from the build in values are saved in a score.
+
+==============================================================
+      Properties
+==============================================================
+
+Properties are identified by the enumeration Pid.
 
 Some properties are associated with a Style. This styled properties have
-a state (enumeration PropertyFlags). The property can by STYLED in which case it has
-the value of the associated Style. If the style changes, the value of all styled properties
-also change. If the property is UNSTYLED, then the local value of the property is valid.
-Style changes have no effect on unstyled properties. If an property has no associated style, then its
-state is NOSTYLE.
+a state (enumeration PropertyFlags):
 
-If the user changes a styled property in the inspector it is set to UNSTYLED.
+      NOSTYLE:
+            The property has no associated style.
+
+      STYLED
+            The property has the value of the associated Style. If the style changes, the value
+            of all styled properties also change.
+            If the user changes a styled property in the inspector it is set to UNSTYLED. That means
+            that it does not follow any style changes anymore but stays on the user modified value.
+            A reset of the property in the inspector resets it to its styled value and also sets
+            its state from UNSTYLED to STYLED.
+
+      UNSTYLED
+            The property has an associated style but does not follow any style changes.
+            Only the local value of the property is valid.
+
+Every element has a list of styled properties. Usually this list points to an element type specific
+static list. Some element types can change their style and therefore have a local copy of the static list.
+
 
 Element Interface
 
@@ -290,6 +328,11 @@ Serialization:
 
       bool Element::readProperty(const QStringRef&, XmlReader&, P_ID);
             This sets the property state to UNSTYLED if it is a styled property.
+
+Human-readable representation:
+
+      virtual QString propertyUserValue(Pid) const;
+            Returns the value of the property in a human-readable representation.
 
 Styled properties:
 
@@ -331,4 +374,19 @@ Functions which must be implemented for any new ScoreElement:
       virtual QVariant getProperty(P_ID propertyId) const override;
       virtual bool setProperty(P_ID propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(P_ID) const override;
+
+
+==============================================================
+      Element position
+==============================================================
+
+The position of an element is notated relative to its parent element so it has
+a local coordinate system starting with zero. The draw position of an element is the
+sum of Element->_pos + Element->_offset.
+
+For some element types _offset is styled. The style value gives the default position of an
+element. Each element can separatly moved by the user by changing the _offset value.
+
+If an element is "autoplaced" then Element->_pos is changed to move the element to a position without
+colliding with other element.
 

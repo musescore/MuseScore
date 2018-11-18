@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -128,10 +127,10 @@ bool savePositions(Score* score, const QString& name, bool segments)
                               saveMeasureEvents(xml, m, tickOffset);
                         else {
                               int tick = m->tick() + tickOffset;
-                              int id = segs[(void*)m];
+                              int i = segs[(void*)m];
                               int time = lrint(m->score()->repeatList()->utick2utime(tick) * 1000);
                               xml.tagE(QString("event elid=\"%1\" position=\"%2\"")
-                                 .arg(id)
+                                 .arg(i)
                                  .arg(time)
                                  );
                               }

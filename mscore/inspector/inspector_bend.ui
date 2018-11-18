@@ -14,7 +14,7 @@
    <string/>
   </property>
   <property name="accessibleName">
-   <string>Glissando Inspector</string>
+   <string>Bend Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -97,6 +97,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Play</string>
+        </property>
         <property name="text">
          <string>Play</string>
         </property>
@@ -153,6 +156,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Font face</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
@@ -166,7 +172,11 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QSpinBox" name="fontSize"/>
+       <widget class="QSpinBox" name="fontSize">
+        <property name="accessibleName">
+         <string>Font size</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="2">
        <widget class="QToolButton" name="resetFontSize">
@@ -360,6 +370,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="lineWidth">
+        <property name="accessibleName">
+         <string>Line width</string>
+        </property>
         <property name="suffix">
          <string>sp</string>
         </property>

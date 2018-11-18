@@ -162,5 +162,15 @@
         <file>data/icons/clef-bass.svg</file>
         <file>data/solid_note_head.dat</file>
         <file>data/icons/edit-swap.svg</file>
+        <file>data/icons/mail.svg</file>
+        <file>data/icons/bug.svg</file>
+        <file>data/icons/note_timewise.svg</file>
+        <file>data/icons/mixer-slider-handle.svg</file>
+        <file>data/icons/mixer-mute-off.svg</file>
+        <file>data/icons/mixer-mute-on.svg</file>
+        <file>data/icons/mixer-solo-off.svg</file>
+        <file>data/icons/mixer-solo-on.svg</file>
+        <file>data/icons/mixer-dial.svg</file>
+        <file>data/icons/mixer-slider-handle-vertical.svg</file>
     </qresource>
 </RCC>

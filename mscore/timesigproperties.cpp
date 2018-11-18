@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: restproperties.cpp 1840 2009-05-20 11:57:51Z wschweer $
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -106,10 +105,10 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       ScoreFont* scoreFont = gscore->scoreFont();
       int idx = 0;
       otherCombo->clear();
-      for (ProlatioTable t : prolatioList) {
-            const QString& str = scoreFont->toString(t.id);
+      for (ProlatioTable pt : prolatioList) {
+            const QString& str = scoreFont->toString(pt.id);
             if (str.size() > 0) {
-                  otherCombo->addItem(*icons[int(t.icon)],"", int(t.id));
+                  otherCombo->addItem(*icons[int(pt.icon)],"", int(pt.id));
                   // if time sig matches this symbol string, set as selected
                   if (timesig->timeSigType() == TimeSigType::NORMAL && timesig->denominatorString().isEmpty()
                      && timesig->numeratorString() == str) {
@@ -124,7 +123,7 @@ TimeSigProperties::TimeSigProperties(TimeSig* t, QWidget* parent)
       Groups g = t->groups();
       if (g.empty())
             g = Groups::endings(timesig->sig());     // initialize with default
-      groups->setSig(timesig->sig(), g);
+      groups->setSig(timesig->sig(), g, timesig->numeratorString(), timesig->denominatorString());
 
       MuseScore::restoreGeometry(this);
       }

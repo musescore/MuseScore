@@ -975,10 +975,6 @@
     <seq>Ctrl+Left</seq>
     </SC>
   <SC>
-    <key>relayout</key>
-    <seq>Shift+L</seq>
-    </SC>
-  <SC>
     <key>text-word-right</key>
     <seq>Ctrl+Right</seq>
     </SC>

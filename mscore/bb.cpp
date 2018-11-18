@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: bb.cpp 5427 2012-03-07 12:41:34Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //
@@ -113,7 +112,13 @@ bool BBFile::read(const QString& name)
       int idx = 0;
       _version = a[idx++];
       switch(_version) {
-            case 0x43 ... 0x49:
+            case 0x43:
+            case 0x44:
+            case 0x45:
+            case 0x46:
+            case 0x47:
+            case 0x48:
+            case 0x49:
                   break;
             default:
                   qDebug("BB: unknown file version %02x", _version);
@@ -342,16 +347,16 @@ bool BBFile::read(const QString& name)
                         note.setPitch(a[idx + 5]);
                         note.setVelo(a[idx + 6]);
                         note.setChannel(channel);
-                        int len = a[idx+8] + (a[idx+9]<<8) + (a[idx+10]<<16) + (a[idx+11]<<24);
-                        if (len == 0) {
+                        int len1 = a[idx+8] + (a[idx+9]<<8) + (a[idx+10]<<16) + (a[idx+11]<<24);
+                        if (len1 == 0) {
                               if (lastLen == 0) {
                                     qDebug("note event of len 0 at idx %04x", idx);
                                     continue;
                                     }
-                              len = lastLen;
+                              len1 = lastLen;
                               }
-                        lastLen = len;
-                        note.setDuration((len * MScore::division) / bbDivision);
+                        lastLen = len1;
+                        note.setDuration((len1 * MScore::division) / bbDivision);
                         track->append(note);
                         }
                   else if (type == 0xb0 || type == 0xc0) {
@@ -448,8 +453,8 @@ Score::FileError importBB(MasterScore* score, const QString& name)
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   rest->setDuration(measure->len());
                   rest->setTrack(0);
-                  Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-                  s->add(rest);
+                  Segment* s1 = measure->getSegment(SegmentType::ChordRest, measure->tick());
+                  s1->add(rest);
                   }
             }
 
@@ -459,17 +464,17 @@ Score::FileError importBB(MasterScore* score, const QString& name)
       //    create title
       //---------------------------------------------------
 
-      Text* text = new Text(SubStyleId::TITLE, score);
+      Text* text = new Text(score, Tid::TITLE);
       text->setPlainText(bb.title());
 
-      MeasureBase* measure = score->first();
-      if (measure->type() != ElementType::VBOX) {
-            measure = new VBox(score);
-            measure->setTick(0);
-            measure->setNext(score->first());
-            score->measures()->add(measure);
+      MeasureBase* measureB = score->first();
+      if (measureB->type() != ElementType::VBOX) {
+            measureB = new VBox(score);
+            measureB->setTick(0);
+            measureB->setNext(score->first());
+            score->measures()->add(measureB);
             }
-      measure->add(text);
+      measureB->add(text);
 
       //---------------------------------------------------
       //    create chord symbols
@@ -658,7 +663,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
       const EventList el = track->events();
 
       for (int voice = 0; voice < voices; ++voice) {
-            int track = staffIdx * VOICES + voice;
+            int tr = staffIdx * VOICES + voice;
             QList<MNote*> notes;
 
             int ctick = 0;
@@ -680,9 +685,9 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                         qFatal("bad restlen ontime %d - ctick %d", e.ontime(), ctick);
 
                   while (!notes.isEmpty()) {
-                        int len = processPendingNotes(score, &notes, restLen, track);
+                        int len = processPendingNotes(score, &notes, restLen, tr);
                         if (len == 0) {
-                              qDebug("processPendingNotes returns zero, restlen %d, track %d", restLen, track);
+                              qDebug("processPendingNotes returns zero, restlen %d, track %d", restLen, tr);
                               ctick += restLen;
                               restLen = 0;
                               break;
@@ -738,7 +743,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
             // process pending notes
             //
             while (!notes.isEmpty()) {
-                  int len = processPendingNotes(score, &notes, 0x7fffffff, track);
+                  int len = processPendingNotes(score, &notes, 0x7fffffff, tr);
                   ctick += len;
                   }
             if (voice == 0) {
@@ -802,7 +807,7 @@ void BBTrack::quantize(int startTick, int endTick, EventList* dst)
       //
       //  quantize onset
       //
-      for (iEvent i = si; i != _events.end(); ++i) {
+      for (i = si; i != _events.end(); ++i) {
             Event e = *i;
             if (e.ontime() >= endTick)
                   break;
@@ -819,7 +824,7 @@ void BBTrack::quantize(int startTick, int endTick, EventList* dst)
       //
       //  quantize duration
       //
-      for (iEvent i = dst->begin(); i != dst->end(); ++i) {
+      for (i = dst->begin(); i != dst->end(); ++i) {
             Event& e = *i;
             if (e.type() != ME_NOTE)
                   continue;

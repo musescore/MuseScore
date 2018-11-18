@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2013 Werner Schweer
 //
@@ -28,7 +27,8 @@ InspectorArpeggio::InspectorArpeggio(QWidget* parent)
       g.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::PLAY, 0,     g.playArpeggio, g.resetPlayArpeggio}
+            { Pid::PLAY,            0,    g.playArpeggio, g.resetPlayArpeggio},
+            { Pid::TIME_STRETCH,    0,    g.stretch,      g.resetStretch }
             };
       const std::vector<InspectorPanel> ppList = {
             { g.title, g.panel }

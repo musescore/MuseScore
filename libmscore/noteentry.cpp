@@ -290,10 +290,13 @@ void Score::putNote(const QPointF& pos, bool replace, bool insert)
             return;
             }
       Score* score = p.segment->score();
-      if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
+      // it is not safe to call Score::repitchNote() if p is on a TAB staff
+      bool isTablature = staff(p.staffIdx)->isTabStaff(p.segment->tick());
+      if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature)
             score->repitchNote(p, replace);
       else {
-            if (insert)
+            if (insert
+               || score->inputState().usingNoteEntryMethod(NoteEntryMethod::TIMEWISE))
                   score->insertChord(p);
             else
                   score->putNote(p, replace);
@@ -572,14 +575,14 @@ void Score::localInsertChord(const Position& pos)
                         continue;
                         }
                   Segment* seg1 = 0;
-                  for (Segment* s = fs; s; s = s->next(SegmentType::ChordRest)) {
-                        if (s->element(track)) {
-                              ChordRest* cr = toChordRest(s->element(track));
-                              if (s->tick() > tick)
+                  for (Segment* ns = fs; ns; ns = ns->next(SegmentType::ChordRest)) {
+                        if (ns->element(track)) {
+                              ChordRest* cr = toChordRest(ns->element(track));
+                              if (ns->tick() > tick)
                                     break;
-                              if (s->tick() + cr->duration().ticks() < tick)
+                              if (ns->tick() + cr->duration().ticks() < tick)
                                     continue;
-                              seg1 = s;
+                              seg1 = ns;
                               break;
                               }
                         }

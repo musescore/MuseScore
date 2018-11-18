@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: importmidi.cpp 2721 2010-02-15 19:41:28Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
@@ -278,10 +277,10 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
 
       OmrState state;
       state.score = score;
-      foreach (OmrPage* omrPage, omr->pages()) {
-            OmrStaff staff = omrPage->systems().last().staves().first();
+      for (OmrPage* omrPage1 : omr->pages()) {
+            OmrStaff staff = omrPage1->systems().last().staves().first();
             qreal top = staff.top()/omr->spatium();
-            state.importPdfPage(omrPage, top);
+            state.importPdfPage(omrPage1, top);
             }
 
       //---create bracket

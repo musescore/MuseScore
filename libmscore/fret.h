@@ -21,9 +21,6 @@ class StringData;
 class Chord;
 class Harmony;
 
-static const int DEFAULT_STRINGS = 6;
-static const int DEFAULT_FRETS = 5;
-
 //---------------------------------------------------------
 //   @@ FretDiagram
 ///    Fretboard diagram
@@ -36,9 +33,9 @@ static const int DEFAULT_FRETS = 5;
 //---------------------------------------------------------
 
 class FretDiagram final : public Element {
-      int _strings       { DEFAULT_STRINGS };
+      int _strings;
       int maxStrings     { 0 };
-      int _frets         { DEFAULT_FRETS };
+      int _frets;
       int _fretOffset    { 0  };
       int _maxFrets      { 24 };
       int _barre         { 0 };
@@ -81,7 +78,6 @@ class FretDiagram final : public Element {
 
       int strings() const    { return _strings; }
       int frets()   const    { return _frets; }
-      void setOffset(int offset);
       void setStrings(int n);
       void setFrets(int n)        { _frets = n; }
       void setDot(int string, int fret);

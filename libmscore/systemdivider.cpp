@@ -64,14 +64,10 @@ void SystemDivider::layout()
 void SystemDivider::setDividerType(SystemDivider::Type v)
       {
       _dividerType = v;
-      if (v == SystemDivider::LEFT) {
-            setXoff(score()->styleD(Sid::dividerLeftX));
-            setYoff(score()->styleD(Sid::dividerLeftY));
-            }
-      else {
-            setXoff(score()->styleD(Sid::dividerRightX));
-            setYoff(score()->styleD(Sid::dividerRightY));
-            }
+      if (v == SystemDivider::LEFT)
+            setOffset(QPointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
+      else
+            setOffset(QPointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
       }
 
 //---------------------------------------------------------
@@ -91,9 +87,9 @@ QRectF SystemDivider::drag(EditData& ed)
 void SystemDivider::write(XmlWriter& xml) const
       {
       if (dividerType() == SystemDivider::Type::LEFT)
-            xml.stag(QString("SystemDivider type=\"left\""));
+            xml.stag(this, "type=\"left\"");
       else
-            xml.stag(QString("SystemDivider type=\"right\""));
+            xml.stag(this, "type=\"right\"");
       writeProperties(xml);
       xml.etag();
       }
@@ -109,15 +105,13 @@ void SystemDivider::read(XmlReader& e)
             _dividerType = SystemDivider::Type::LEFT;
             SymId sym = Sym::name2id(score()->styleSt(Sid::dividerLeftSym));
             setSym(sym, sf);
-            setXoff(score()->styleD(Sid::dividerLeftX));
-            setYoff(score()->styleD(Sid::dividerLeftY));
+            setOffset(QPointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
             }
       else {
             _dividerType = SystemDivider::Type::RIGHT;
             SymId sym = Sym::name2id(score()->styleSt(Sid::dividerRightSym));
             setSym(sym, sf);
-            setXoff(score()->styleD(Sid::dividerRightX));
-            setYoff(score()->styleD(Sid::dividerRightY));
+            setOffset(QPointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
             }
       Symbol::read(e);
       }

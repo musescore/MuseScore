@@ -55,6 +55,8 @@ class Stem final : public Element {
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
 
+      virtual int vStaffIdx() const override;
+
       Chord* chord() const            { return toChord(parent()); }
       bool up() const;
 

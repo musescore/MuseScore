@@ -30,6 +30,14 @@
 
 namespace Ms {
 
+static const ElementStyle boxStyle {
+      { Sid::systemFrameDistance,                Pid::TOP_GAP                 },
+      { Sid::frameSystemDistance,                Pid::BOTTOM_GAP              },
+      };
+
+static const ElementStyle hBoxStyle {
+      };
+
 //---------------------------------------------------------
 //   Box
 //---------------------------------------------------------
@@ -181,7 +189,7 @@ void Box::updateGrips(EditData& ed) const
 
 void Box::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       writeProperties(xml);
       xml.etag();
       }
@@ -401,8 +409,6 @@ bool Box::setProperty(Pid propertyId, const QVariant& v)
 QVariant Box::propertyDefault(Pid id) const
       {
       switch(id) {
-            case Pid::SUB_STYLE:
-                  return int(SubStyleId::BOX);
             case Pid::BOX_HEIGHT:
             case Pid::BOX_WIDTH:
                   return Spatium(0.0);
@@ -447,7 +453,7 @@ void Box::copyValues(Box* origin)
 HBox::HBox(Score* score)
    : Box(score)
       {
-      initSubStyle(SubStyleId::BOX);
+      initElementStyle(&hBoxStyle);
       setBoxWidth(Spatium(5.0));
       }
 
@@ -488,7 +494,7 @@ void HBox::layout2()
 
 bool Box::acceptDrop(EditData& data) const
       {
-      ElementType t = data.element->type();
+      ElementType t = data.dropElement->type();
       if (data.element->flag(ElementFlag::ON_STAFF))
             return false;
       switch (t) {
@@ -499,7 +505,7 @@ bool Box::acceptDrop(EditData& data) const
             case ElementType::SYMBOL:
                   return true;
             case ElementType::ICON:
-                  switch (toIcon(data.element)->iconType()) {
+                  switch (toIcon(data.dropElement)->iconType()) {
                         case IconType::VFRAME:
                         case IconType::TFRAME:
                         case IconType::FFRAME:
@@ -510,7 +516,7 @@ bool Box::acceptDrop(EditData& data) const
                         }
                   break;
             case ElementType::BAR_LINE:
-                  return type() == ElementType::HBOX;
+                  return isHBox();
             default:
                   break;
             }
@@ -523,7 +529,7 @@ bool Box::acceptDrop(EditData& data) const
 
 Element* Box::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       if (e->flag(ElementFlag::ON_STAFF))
             return 0;
       switch (e->type()) {
@@ -558,7 +564,7 @@ Element* Box::drop(EditData& data)
 
             case ElementType::STAFF_TEXT:
                   {
-                  Text* text = new Text(SubStyleId::FRAME, score());
+                  Text* text = new Text(score(), Tid::FRAME);
                   text->setParent(this);
                   text->setXmlText(toStaffText(e)->xmlText());
                   score()->undoAddElement(text);
@@ -605,7 +611,7 @@ QRectF HBox::drag(EditData& data)
       {
       QRectF r(canvasBoundingRect());
       qreal diff = data.delta.x();
-      qreal x1   = userOff().x() + diff;
+      qreal x1   = offset().x() + diff;
       if (parent()->type() == ElementType::VBOX) {
             VBox* vb = toVBox(parent());
             qreal x2 = parent()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
@@ -614,7 +620,7 @@ QRectF HBox::drag(EditData& data)
             else if (x1 > x2)
                   x1 = x2;
             }
-      setUserOff(QPointF(x1, 0.0));
+      setOffset(QPointF(x1, 0.0));
 //      setStartDragPosition(data.delta);
       return canvasBoundingRect() | r;
       }
@@ -676,8 +682,6 @@ bool HBox::setProperty(Pid propertyId, const QVariant& v)
 QVariant HBox::propertyDefault(Pid id) const
       {
       switch(id) {
-            case Pid::SUB_STYLE:
-                  return int(SubStyleId::BOX);
             case Pid::CREATE_SYSTEM_HEADER:
                   return true;
             default:
@@ -692,7 +696,7 @@ QVariant HBox::propertyDefault(Pid id) const
 VBox::VBox(Score* score)
    : Box(score)
       {
-      initSubStyle(SubStyleId::BOX);
+      initElementStyle(&boxStyle);
       setBoxHeight(Spatium(10.0));
       setLineBreak(true);
       }
@@ -703,7 +707,7 @@ VBox::VBox(Score* score)
 
 void VBox::layout()
       {
-      setPos(QPointF());      // !?
+      setPos(QPointF());
       if (system())
             bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
       else

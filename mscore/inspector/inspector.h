@@ -40,7 +40,7 @@
 #include "ui_inspector_slur.h"
 #include "ui_inspector_empty.h"
 #include "ui_inspector_text.h"
-#include "ui_inspector_fret.h"
+// #include "ui_inspector_fret.h"
 #include "ui_inspector_tremolo.h"
 #include "ui_inspector_caesura.h"
 #include "ui_inspector_bracket.h"
@@ -175,9 +175,19 @@ class InspectorRest : public InspectorElementBase {
       Ui::InspectorSegment s;
       Ui::InspectorRest    r;
 
+      QToolButton* dot1;
+      QToolButton* dot2;
+      QToolButton* dot3;
+      QToolButton* dot4;
       QToolButton* tuplet;
 
+      void dotClicked(int n);
+
    private slots:
+      void dot1Clicked();
+      void dot2Clicked();
+      void dot3Clicked();
+      void dot4Clicked();
       void tupletClicked();
 
    public:
@@ -331,7 +341,6 @@ class InspectorLyric : public InspectorTextBase {
       Ui::InspectorLyric l;
 
    private slots:
-      virtual void valueChanged(int idx) override;
 
    public:
       InspectorLyric(QWidget* parent);
@@ -446,6 +455,8 @@ class InspectorEmpty : public InspectorBase {
       InspectorEmpty(QWidget* parent);
       virtual QSize sizeHint() const override;
       };
+
+extern void populatePlacement(QComboBox*);
 
 } // namespace Ms
 #endif

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE
 //  Linux Music Editor
-//  $Id:$
 //
 //  Copyright (C) 2002-2010 by Werner Schweer and others
 //
@@ -24,6 +23,7 @@
 #cmakedefine USE_PORTMIDI
 #cmakedefine USE_PULSEAUDIO
 #cmakedefine USE_LAME
+#cmakedefine USE_WEBENGINE
 
 #cmakedefine FOR_WINSTORE
 
@@ -38,7 +38,10 @@
 #define INSTALL_NAME            "${Mscore_INSTALL_NAME}"
 #define INSTPREFIX              "${CMAKE_INSTALL_PREFIX}"
 #define VERSION                 "${MUSESCORE_VERSION_FULL}"
+#define BUILD_NUMBER            "${CMAKE_BUILD_NUMBER}"
 
+
+#cmakedefine MAC_SPARKLE_ENABLED
 #cmakedefine AEOLUS
 #cmakedefine ZERBERUS
 #cmakedefine OMR

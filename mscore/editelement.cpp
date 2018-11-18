@@ -90,6 +90,8 @@ void ScoreView::startEditMode(Element* e)
             qDebug("The element cannot be edited");
             return;
             }
+      if (score()->undoStack()->active())
+            score()->endCmd();
       editData.element = e;
       changeState(ViewState::EDIT);
       }
@@ -127,7 +129,6 @@ void ScoreView::startEdit()
       editData.element->startEdit(editData);
       updateGrips();
 
-      qDebug("reset input method");
       QGuiApplication::inputMethod()->reset();
       QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
       setAttribute(Qt::WA_InputMethodEnabled, editData.element->isTextBase());

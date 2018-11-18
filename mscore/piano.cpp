@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2009 Werner Schweer and others
 //
@@ -346,7 +345,7 @@ void Piano::paintEvent(QPaintEvent* event)
       p.drawTiledPixmap(QRectF(x, y, qreal(r.width()), h), *octave, offset);
 
       if (curPitch != -1) {
-            int y = pitch2y(curPitch);
+            int py = pitch2y(curPitch);
             QPixmap* pm;
             switch(curPitch % 12) {
                   case 0:
@@ -366,7 +365,7 @@ void Piano::paintEvent(QPaintEvent* event)
                         pm = mk4;
                         break;
                   }
-            p.drawPixmap(0, y, *pm);
+            p.drawPixmap(0, py, *pm);
             }
       }
 

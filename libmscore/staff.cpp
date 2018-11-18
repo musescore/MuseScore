@@ -43,6 +43,16 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   Staff
+//---------------------------------------------------------
+
+Staff::Staff(Score* score)
+   : ScoreElement(score)
+      {
+//      initFromStaffType(0);
+      }
+
+//---------------------------------------------------------
 //   idx
 //---------------------------------------------------------
 
@@ -289,7 +299,7 @@ ClefTypeList Staff::clefType(int tick) const
       {
       ClefTypeList ct = clefs.clef(tick);
       if (ct._concertClef == ClefType::INVALID) {
-            switch(staffType(tick)->group()) {
+            switch (staffType(tick)->group()) {
                   case StaffGroup::TAB:
                         {
                         ClefType sct = ClefType(score()->styleI(Sid::tabClef));
@@ -438,9 +448,11 @@ TimeSig* Staff::timeSig(int tick) const
       auto i = timesigs.upper_bound(tick);
       if (i != timesigs.begin())
             --i;
+      if (i == timesigs.end())
+            return 0;
       else if (tick < i->first)
             return 0;
-      return (i == timesigs.end()) ? 0 : i->second;
+      return i->second;
       }
 
 //---------------------------------------------------------
@@ -574,7 +586,7 @@ int Staff::currentKeyTick(int tick) const
 void Staff::write(XmlWriter& xml) const
       {
       int idx = this->idx();
-      xml.stag(QString("Staff id=\"%1\"").arg(idx + 1));
+      xml.stag(this, QString("id=\"%1\"").arg(idx + 1));
       if (links()) {
             Score* s = masterScore();
             for (auto le : *links()) {
@@ -657,7 +669,7 @@ bool Staff::readProperties(XmlReader& e)
       if (tag == "StaffType") {
             StaffType st;
             st.read(e);
-            _staffTypeList.setStaffType(0, &st);
+            setStaffType(0, st);
             }
       else if (tag == "defaultClef") {           // sets both default transposing and concert clef
             QString val(e.readElementText());
@@ -687,15 +699,11 @@ bool Staff::readProperties(XmlReader& e)
       else if (tag == "keylist")
             _keys.read(e, score());
       else if (tag == "bracket") {
-            BracketItem* b = new BracketItem(score());
-            b->setStaff(this);
-            b->setBracketType(BracketType(e.intAttribute("type", -1)));
-            b->setBracketSpan(e.intAttribute("span", 0));
             int col = e.intAttribute("col", -1);
             if (col == -1)
                   col = _brackets.size();
-            b->setColumn(col);
-            _brackets.append(b);
+            setBracketType(col, BracketType(e.intAttribute("type", -1)));
+            setBracketSpan(col, e.intAttribute("span", 0));
             e.readNext();
             }
       else if (tag == "barLineSpan")
@@ -710,20 +718,22 @@ bool Staff::readProperties(XmlReader& e)
             /*_userMag =*/ e.readDouble(0.1, 10.0);
       else if (tag == "linkedTo") {
             int v = e.readInt() - 1;
-            //
-            // if this is an excerpt, link staff to masterScore()
-            //
-            if (!score()->isMaster()) {
-                  Staff* st = masterScore()->staff(v);
-                  if (st)
-                        linkTo(st);
-                  else {
-                        qDebug("staff %d not found in parent", v);
-                        }
+            Staff* st = masterScore()->staff(v);
+            if (_links) {
+                  qDebug("Staff::readProperties: multiple <linkedTo> tags");
+                  if (!st || isLinked(st)) // maybe we don't need actually to relink...
+                        return true;
+                  // not using unlink() here as it may delete _links
+                  // a pointer to which is stored also in XmlReader.
+                  _links->removeOne(this);
+                  _links = nullptr;
                   }
-            else {
-                  if (v >= 0 && v < idx())
-                        linkTo(score()->staff(v));
+            if (st && st != this)
+                  linkTo(st);
+            else if (!score()->isMaster() && !st) {
+                  // if it is a master score it is OK not to find
+                  // a staff which is going after the current one.
+                  qDebug("staff %d not found in parent", v);
                   }
             }
       else if (tag == "color")
@@ -752,7 +762,8 @@ bool Staff::readProperties(XmlReader& e)
 qreal Staff::height() const
       {
       int tick = 0;     // TODO
-      return (lines(tick) == 1 ? 2 : lines(tick)-1) * spatium(tick) * staffType(tick)->lineDistance().val();
+//      return (lines(tick) == 1 ? 2 : lines(tick)-1) * spatium(tick) * staffType(tick)->lineDistance().val();
+      return (lines(tick)-1) * spatium(tick) * staffType(tick)->lineDistance().val();
       }
 
 //---------------------------------------------------------
@@ -788,7 +799,7 @@ qreal Staff::userMag(int tick) const
 
 void Staff::setUserMag(int tick, qreal m)
       {
-      return staffType(tick)->setUserMag(m);
+      staffType(tick)->setUserMag(m);
       }
 
 //---------------------------------------------------------
@@ -833,6 +844,21 @@ SwingParameters Staff::swing(int tick) const
       QMap<int, SwingParameters>::const_iterator i = _swingList.upperBound(tick);
       if (i == _swingList.begin())
             return sp;
+      --i;
+      return i.value();
+      }
+
+//---------------------------------------------------------
+//   capo
+//---------------------------------------------------------
+
+int Staff::capo(int tick) const
+      {
+      if (_capoList.empty())
+            return 0;
+      QMap<int, int>::const_iterator i = _capoList.upperBound(tick);
+      if (i == _capoList.begin())
+            return 0;
       --i;
       return i.value();
       }
@@ -890,69 +916,6 @@ void Staff::setSlashStyle(int tick, bool val)
       staffType(tick)->setSlashStyle(val);
       }
 
-#if 0
-//---------------------------------------------------------
-//   linkTo
-//---------------------------------------------------------
-
-void Staff::linkTo(Staff* staff)
-      {
-      if (!_linkedStaves) {
-            if (staff->linkedStaves()) {
-                  _linkedStaves = staff->linkedStaves();
-                  }
-            else {
-                  _linkedStaves = new LinkedStaves;
-                  _linkedStaves->add(staff);
-                  staff->setLinkedStaves(_linkedStaves);
-                  }
-            _linkedStaves->add(this);
-            }
-      else {
-            _linkedStaves->add(staff);
-            if (!staff->_linkedStaves)
-                  staff->_linkedStaves = _linkedStaves;
-            }
-      }
-
-//---------------------------------------------------------
-//   unlink
-//---------------------------------------------------------
-
-void Staff::unlink(Staff* staff)
-      {
-      if (!_linkedStaves)
-            return;
-      if (!_linkedStaves->staves().contains(staff))
-            return;
-      _linkedStaves->remove(staff);
-      if (_linkedStaves->staves().size() <= 1) {
-            delete _linkedStaves;
-            _linkedStaves = 0;
-            }
-      staff->_linkedStaves = 0;
-      }
-
-//---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
-void LinkedStaves::add(Staff* staff)
-      {
-      if (!_staves.contains(staff))
-            _staves.append(staff);
-      }
-
-//---------------------------------------------------------
-//   remove
-//---------------------------------------------------------
-
-void LinkedStaves::remove(Staff* staff)
-      {
-      _staves.removeOne(staff);
-      }
-#endif
-
 //---------------------------------------------------------
 //   primaryStaff
 ///   if there are linked staves, the primary staff is
@@ -990,6 +953,11 @@ const StaffType* Staff::staffType(int tick) const
       return &_staffTypeList.staffType(tick);
       }
 
+const StaffType* Staff::constStaffType(int tick) const
+      {
+      return &_staffTypeList.staffType(tick);
+      }
+
 StaffType* Staff::staffType(int tick)
       {
       return &_staffTypeList.staffType(tick);
@@ -1016,7 +984,7 @@ void Staff::staffTypeListChanged(int tick)
 //   setStaffType
 //---------------------------------------------------------
 
-StaffType* Staff::setStaffType(int tick, const StaffType* nst)
+StaffType* Staff::setStaffType(int tick, const StaffType& nst)
       {
       auto i = _staffTypeList.find(tick);
       if (i != _staffTypeList.end()) {
@@ -1032,6 +1000,11 @@ StaffType* Staff::setStaffType(int tick, const StaffType* nst)
 void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int cidx)
       {
       // set staff-type-independent parameters
+      const StaffType* pst = staffType ? staffType : t->staffTypePreset;
+      if (!pst)
+            pst = StaffType::getDefaultPreset(t->staffGroup);
+
+      setStaffType(0, *pst);
       if (cidx >= MAX_STAVES) {
             setSmall(0, false);
             }
@@ -1041,11 +1014,6 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
             setBracketSpan(0, t->bracketSpan[cidx]);
             setBarLineSpan(t->barlineSpan[cidx]);
             }
-      const StaffType* pst = staffType ? staffType : t->staffTypePreset;
-      if (!pst)
-            pst = StaffType::getDefaultPreset(t->staffGroup);
-
-      setStaffType(0, pst);
       setDefaultClefType(t->clefType(cidx));
       }
 
@@ -1086,7 +1054,7 @@ void Staff::initFromStaffType(const StaffType* staffType)
             staffType = StaffType::getDefaultPreset(StaffGroup::STANDARD);
 
       // use selected staff type
-      setStaffType(0, staffType);
+      setStaffType(0, *staffType);
       }
 
 //---------------------------------------------------------
@@ -1113,17 +1081,17 @@ bool Staff::show() const
 
 bool Staff::genKeySig()
       {
-      if (staffType(0)->group() == StaffGroup::TAB)
+      if (constStaffType(0)->group() == StaffGroup::TAB)
             return false;
       else
-            return staffType(0)->genKeysig();
+            return constStaffType(0)->genKeysig();
       }
 
 //---------------------------------------------------------
 //   showLedgerLines
 //---------------------------------------------------------
 
-bool Staff::showLedgerLines(int tick)
+bool Staff::showLedgerLines(int tick) const
       {
       return staffType(tick)->showLedgerLines();
       }
@@ -1175,9 +1143,9 @@ void Staff::insertTime(int tick, int len)
       KeyList kl2;
       for (auto i = _keys.lower_bound(tick); i != _keys.end();) {
             KeySigEvent kse = i->second;
-            int tick = i->first;
+            int t = i->first;
             _keys.erase(i++);
-            kl2[tick + len] = kse;
+            kl2[t + len] = kse;
             }
       _keys.insert(kl2.begin(), kl2.end());
 
@@ -1282,8 +1250,10 @@ QVariant Staff::getProperty(Pid id) const
                   return barLineTo();
             case Pid::STAFF_USERDIST:
                   return userDist();
+            case Pid::GENERATED:
+                  return false;
             default:
-                  qDebug("unhandled id %s", propertyName(id));
+                  qDebug("unhandled id <%s>", propertyName(id));
                   return QVariant();
             }
       }
@@ -1332,7 +1302,7 @@ bool Staff::setProperty(Pid id, const QVariant& v)
                   setUserDist(v.toReal());
                   break;
             default:
-                  qDebug("unhandled id %s", propertyName(id));
+                  qDebug("unhandled id <%s>", propertyName(id));
                   break;
             }
       score()->setLayoutAll();
@@ -1365,7 +1335,7 @@ QVariant Staff::propertyDefault(Pid id) const
             case Pid::STAFF_USERDIST:
                   return qreal(0.0);
             default:
-                  qDebug("unhandled id %s", propertyName(id));
+                  qDebug("unhandled id <%s>", propertyName(id));
                   return QVariant();
             }
       }
@@ -1438,7 +1408,7 @@ int Staff::lines(int tick) const
 
 void Staff::setLines(int tick, int val)
       {
-      staffType(tick)->setLines(val);     // TODO: make undoable
+      staffType(tick)->setLines(val);
       }
 
 //---------------------------------------------------------

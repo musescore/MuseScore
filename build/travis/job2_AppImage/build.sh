@@ -39,6 +39,7 @@ then # Build is marked UNSTABLE inside CMakeLists.txt
   then # This is a nightly build
     makefile_overrides="PREFIX='MuseScoreNightly-$date-$branch-$revision' \
                         SUFFIX='-portable-nightly' \
+                        BUILD_NUMBER='${TRAVIS_BUILD_NUMBER}' \
                         LABEL='Portable Nightly Build'"
     cp -f build/travis/resources/splash-nightly.png mscore/data/splash.png
   else

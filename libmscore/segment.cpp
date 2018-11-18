@@ -490,7 +490,7 @@ void Segment::add(Element* el)
                   _elist[track] = el;
                   if (!el->generated()) {
                         el->staff()->setClef(toClef(el));
-                        updateNoteLines(this, el->track());
+//                        updateNoteLines(this, el->track());   TODO::necessary?
                         }
                   setEmpty(false);
                   break;
@@ -586,10 +586,14 @@ void Segment::remove(Element* el)
                   auto spanners = smap.findOverlapping(tick(), tick());
                   for (auto interval : spanners) {
                         Spanner* s = interval.value;
+                        Element* start = s->startElement();
+                        Element* end = s->endElement();
                         if (s->startElement() == el)
-                              s->setStartElement(nullptr);
+                              start = nullptr;
                         if (s->endElement() == el)
-                              s->setEndElement(nullptr);
+                              end = nullptr;
+                        if (start != s->startElement() || end != s->endElement())
+                              score()->undo(new ChangeStartEndSpanner(s, start, end));
                         }
                   }
                   break;
@@ -760,13 +764,23 @@ void Segment::checkEmpty() const
       }
 
 //---------------------------------------------------------
-//   fpos
+//   rfrac
 //    return relative position of segment in measure
 //---------------------------------------------------------
 
-Fraction Segment::fpos() const
+Fraction Segment::rfrac() const
       {
       return Fraction::fromTicks(_tick);
+      }
+
+//---------------------------------------------------------
+//   afrac
+//    return absolute position of segment
+//---------------------------------------------------------
+
+Fraction Segment::afrac() const
+      {
+      return Fraction::fromTicks(tick());
       }
 
 //---------------------------------------------------------
@@ -794,7 +808,7 @@ void Segment::write(XmlWriter& xml) const
       setWritten(true);
       if (_extraLeadingSpace.isZero())
             return;
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("leadingSpace", _extraLeadingSpace.val());
       xml.etag();
       }
@@ -1509,7 +1523,7 @@ Element* Segment::nextElement(int activeStaff)
                         return s->spannerSegments().front();
                   Segment* nextSegment =  seg->next1();
                   while (nextSegment) {
-                        Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
+                        nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
                         nextSegment = nextSegment->next1();
@@ -1679,7 +1693,6 @@ Element* Segment::prevElement(int activeStaff)
                          }
                   }
             }
-            return nullptr;
       }
 
 //--------------------------------------------------------
@@ -1811,28 +1824,42 @@ void Segment::createShape(int staffIdx)
             BarLine* bl = toBarLine(element(0));
             if (bl) {
                   qreal w = BarLine::layoutWidth(score(), bl->barLineType());
+#ifndef NDEBUG
+                  s.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos()), bl->name());
+#else
                   s.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos()));
+#endif
                   }
             return;
             }
-
+#if 0
       for (int track = staffIdx * VOICES; track < (staffIdx + 1) * VOICES; ++track) {
             Element* e = _elist[track];
-            if (e) {
+            if (e)
                   s.add(e->shape().translated(e->pos()));
-                  }
+            }
+#endif
+      int strack = staffIdx * VOICES;
+      int etrack = strack + VOICES;
+      for (Element* e : _elist) {
+            if (!e)
+                  continue;
+            int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
+            if (effectiveTrack >= strack && effectiveTrack < etrack)
+                  s.add(e->shape().translated(e->pos()));
             }
 
       for (Element* e : _annotations) {
-            // probably only allow for lyrics and chordnames
-            if (e->staffIdx() == staffIdx
+            if (e->staffIdx() == staffIdx             // whats left?
                && !e->isRehearsalMark()
                && !e->isFretDiagram()
+               && !e->isHarmony()
                && !e->isTempoText()
                && !e->isDynamic()
                && !e->isSymbol()
                && !e->isFSymbol()
                && !e->isSystemText()
+               && !e->isInstrumentChange()
                && !e->isArticulation()
                && !e->isFermata()
                && !e->isStaffText())

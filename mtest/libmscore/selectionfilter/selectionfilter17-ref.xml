@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StaffList version="2.00" tick="0" len="1920" staff="0" staves="1">
   <Staff id="0">
-    <voice id="1">0</voice>
-    <move>0/1</move>
+    <voiceOffset>
+      <voice id="1">0</voice>
+      </voiceOffset>
+    <location>
+      <voices>1</voices>
+      </location>
     <Chord>
-      <track>1</track>
       <durationType>half</durationType>
       <Note>
-        <track>1</track>
         <pitch>64</pitch>
         <tpc>18</tpc>
         </Note>
       </Chord>
     <Chord>
-      <track>1</track>
       <durationType>half</durationType>
       <Note>
-        <track>1</track>
         <pitch>64</pitch>
         <tpc>18</tpc>
         </Note>

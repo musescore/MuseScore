@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: select.cpp -1   $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
@@ -31,6 +30,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/articulation.h"
 #include "musescore.h"
+#include "libmscore/rest.h"
 
 namespace Ms {
 
@@ -67,6 +67,7 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
       sameSubtype->setEnabled(e->subtype() != -1);
       subtype->setEnabled(e->subtype() != -1);
       inSelection->setEnabled(e->score()->selection().isRange());
+      sameDuration->setEnabled(e->isRest());
 
       MuseScore::restoreGeometry(this);
       }
@@ -93,6 +94,11 @@ void SelectDialog::setPattern(ElementPattern* p)
       else {
             p->staffStart = -1;
             p->staffEnd = -1;
+            }
+
+      if (sameDuration->isChecked() && e->isRest()) {
+            const Rest* r = toRest(e);
+            p->durationTicks = r->actualTicks();
             }
 
       p->voice   = sameVoice->isChecked() ? e->voice() : -1;

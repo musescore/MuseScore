@@ -4,6 +4,13 @@ clone_folder: C:\MuseScore
 # set clone depth
 clone_depth: 3                      # clone entire repository history if not defined
 
+image: Visual Studio 2017
+
+branches:
+  only:
+  - master
+  - 3.0alpha
+
 # build cache to preserve files/folders between builds
 cache:
   - dependencies.7z
@@ -47,4 +54,18 @@ after_build:
 
 artifacts:
   - path: $(ARTIFACT_NAME)
+    name: musescore-binary
+  - path: update_win_nightly.xml
+    name: update_win_nightly.xml
+
+deploy:
+  provider: S3
+  access_key_id:
+    secure: k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
+  secret_access_key:
+    secure: IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
+  bucket: update.musescore.org
+  region: us-east-1
+  set_public: true
+  artifact: update_win_nightly.xml
 

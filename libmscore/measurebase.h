@@ -123,6 +123,9 @@ class MeasureBase : public Element {
       int endTick() const                    { return tick() + ticks();  }
       void setTick(int t)                    { _tick = t;     }
 
+      Fraction rfrac() const override        { return 0;      }
+      Fraction afrac() const override;
+
       qreal pause() const;
 
       virtual QVariant getProperty(Pid) const override;
@@ -167,6 +170,7 @@ class MeasureBase : public Element {
       virtual void computeMinWidth() { };
 
       int index() const;
+      int measureIndex() const;
       };
 
 

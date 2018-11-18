@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -11,6 +10,7 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "inspector.h"
 #include "inspectorHairpin.h"
 #include "musescore.h"
 #include "libmscore/hairpin.h"
@@ -55,16 +55,58 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { Pid::BEGIN_FONT_SIZE,      0, h.fontSize,            h.resetFontSize          },
             { Pid::BEGIN_FONT_BOLD,      0, h.fontBold,            h.resetFontBold          },
             { Pid::BEGIN_FONT_ITALIC,    0, h.fontItalic,          h.resetFontItalic        },
-            { Pid::BEGIN_FONT_UNDERLINE, 0, h.fontUnderline,       h.resetFontUnderline     }
+            { Pid::BEGIN_FONT_UNDERLINE, 0, h.fontUnderline,       h.resetFontUnderline     },
+            { Pid::BEGIN_TEXT,           0, h.beginText,           h.resetBeginText         },
+            { Pid::END_TEXT,             0, h.endText,             h.resetEndText           }
             };
       const std::vector<InspectorPanel> ppList = {
             { l.title, l.panel },
             { h.title, h.panel }
             };
+      populatePlacement(h.placement);
       h.fontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
       h.fontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       h.fontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
       mapSignals(il, ppList);
+      }
+
+//---------------------------------------------------------
+//   updateLineType
+//---------------------------------------------------------
+
+void InspectorHairpin::updateLineType()
+      {
+      HairpinSegment* hs = toHairpinSegment(inspector->element());
+      Hairpin* hp = hs->hairpin();
+      bool userDash = hp->lineStyle() == Qt::CustomDashLine;
+
+      l.dashLineLength->setVisible(userDash);
+      l.dashGapLength->setVisible(userDash);
+      l.resetDashLineLength->setVisible(userDash);
+      l.resetDashGapLength->setVisible(userDash);
+      l.dashLineLengthLabel->setVisible(userDash);
+      l.dashGapLengthLabel->setVisible(userDash);
+      }
+
+//---------------------------------------------------------
+//   valueChanged
+//---------------------------------------------------------
+
+void InspectorHairpin::valueChanged(int idx)
+      {
+      InspectorBase::valueChanged(idx);
+      if (iList[idx].t == Pid::LINE_STYLE)
+            updateLineType();
+      }
+
+//---------------------------------------------------------
+//   setElement
+//---------------------------------------------------------
+
+void InspectorHairpin::setElement()
+      {
+      InspectorElementBase::setElement();
+      updateLineType();
       }
 
 //---------------------------------------------------------

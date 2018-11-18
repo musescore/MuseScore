@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: editinstrument.h 4052 2011-02-23 15:29:16Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //

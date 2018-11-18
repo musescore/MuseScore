@@ -5,7 +5,7 @@ if [ "`uname`" = 'Darwin' ]; then
       BROWSER=open
 else
       MSCORE=../../build.debug/mscore/mscore
-      BROWSER=rekonq
+      BROWSER=firefox
 fi
 
 if [ -n "$VTEST_MSCORE" ]; then
@@ -50,7 +50,7 @@ else
        accidental-6 accidental-7 accidental-8 accidental-9 accidental-10 accidental-mirror\
        tie-1 tie-2 tie-3 \
        grace-1 grace-2 grace-3 grace-4 grace-5 \
-       tuplets-1 tuplets-2 breath-1\
+       tuplets-1 tuplets-2 tuplets-3 tuplets-4 breath-1\
        harmony-1 harmony-2 harmony-3 harmony-4 harmony-5 harmony-6 harmony-7\
        harmony-8 harmony-9 harmony-10 harmony-11 harmony-12\
        beams-1 beams-2 beams-3 beams-4 beams-5 beams-6 beams-7 beams-8 beams-9 beams-10\
@@ -134,6 +134,7 @@ for src in $SRC; do
 echo "  </body>" >> $F
 echo "</html>" >> $F
 
+echo $BROWSER
 
 $BROWSER $F 2>/dev/null
 

@@ -111,7 +111,11 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QComboBox" name="bracket"/>
+       <widget class="QComboBox" name="bracket">
+        <property name="accessibleName">
+         <string>Bracket type</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="1">
        <widget class="QLabel" name="label">

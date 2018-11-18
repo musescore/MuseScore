@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: importove.cpp 3763 2010-12-15 15:50:09Z vanferry $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -325,9 +324,9 @@ OVE::Staff* getStaff(const OVE::OveSong* ove, int track) {
       return 0;
       }
 
-void addText(VBox* & vbox, Score* s, QString strTxt, SubStyleId stl) {
+void addText(VBox* & vbox, Score* s, QString strTxt, Tid stl) {
       if (!strTxt.isEmpty()) {
-            Text* text = new Text(stl, s);
+            Text* text = new Text(s, stl);
             text->setPlainText(strTxt);
             if(vbox == 0) {
                   vbox = new VBox(s);
@@ -342,7 +341,7 @@ void OveToMScore::convertHeader() {
       if( !titles.empty() && !titles[0].isEmpty() ) {
             QString title = titles[0];
             score_->setMetaTag("movementTitle", title);
-            addText(vbox, score_, title, SubStyleId::TITLE);
+            addText(vbox, score_, title, Tid::TITLE);
             }
 
       QList<QString> copyrights = ove_->getCopyrights();
@@ -354,19 +353,19 @@ void OveToMScore::convertHeader() {
       QList<QString> annotates = ove_->getAnnotates();
       if( !annotates.empty() && !annotates[0].isEmpty() ) {
             QString annotate = annotates[0];
-            addText(vbox, score_, annotate, SubStyleId::POET);
+            addText(vbox, score_, annotate, Tid::POET);
             }
 
       QList<QString> writers = ove_->getWriters();
       if(!writers.empty()) {
             QString composer = writers[0];
             score_->setMetaTag("composer", composer);
-            addText(vbox, score_, composer, SubStyleId::COMPOSER);
+            addText(vbox, score_, composer, Tid::COMPOSER);
             }
 
       if(writers.size() > 1) {
             QString lyricist = writers[1];
-            addText(vbox, score_, lyricist, SubStyleId::POET);
+            addText(vbox, score_, lyricist, Tid::POET);
             }
 
       if (vbox) {
@@ -622,7 +621,7 @@ void OveToMScore::convertTrackHeader(OVE::Track* track, Part* part){
                         }
                   }
 
-            part->instrument()->channel(0)->bank = 128;
+            part->instrument()->channel(0)->setBank(128);
             part->setMidiProgram(0);
             part->instrument()->setDrumset(smDrumset);
             part->instrument()->setDrumset(drumset);
@@ -693,7 +692,7 @@ void OveToMScore::convertTrackElements(int track) {
                                     }
 
                               if(y_off != 0) {
-                                    ottava->setUserOff(QPointF(0, y_off * score_->spatium()));
+                                    ottava->setOffset(QPointF(0, y_off * score_->spatium()));
                                     }
 
                               ottava->setTick(absTick);
@@ -705,8 +704,6 @@ void OveToMScore::convertTrackElements(int track) {
                               }
                         } else if (octave->getOctaveShiftPosition() == OVE::OctaveShiftPosition::Stop) {
                         if(ottava != 0) {
-                              int absTick = mtt_->getTick(i, octave->getEndTick());
-
                               ottava->setTick2(absTick);
                               score_->addSpanner(ottava);
                               ottava->staff()->updateOttava();
@@ -1464,7 +1461,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                               int lineOffset = static_cast<Ms::Rest*>(cr)->computeLineOffset(5);
                               yOffset -= qreal(lineOffset + stepOffset);
                               yOffset *= score_->spatium()/2.0;
-                              cr->setUserYoffset(yOffset);
+                              cr->ryoffset() = yOffset;
                               cr->setAutoplace(false);
                               }
                         }
@@ -1878,14 +1875,14 @@ void OveToMScore::convertArticulation(
             case OVE::ArticulationType::Up_Bow_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setSymId(SymId::stringsUpBow);
-                  a->setUserYoffset(5.3);
+                  a->ryoffset() = 5.3;
                   cr->add(a);
                   break;
                   }
             case OVE::ArticulationType::Down_Bow_Inverted :{
                   Articulation* a = new Articulation(score_);
                   a->setSymId(SymId::stringsDownBow);
-                  a->setUserYoffset(5.3);
+                  a->ryoffset() = 5.3;
                   cr->add(a);
                   break;
                   }
@@ -2293,7 +2290,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
       for(int i=0; i<expressions.size(); ++i){
             OVE::Expressions* expressionPtr = static_cast<OVE::Expressions*>(expressions[i]);
             int absTick = mtt_->getTick(measure->no(), expressionPtr->getTick());
-            Text* t = new Text(SubStyleId::EXPRESSION, score_);
+            Text* t = new Text(score_, Tid::EXPRESSION);
 
             t->setPlainText(expressionPtr->getText());
             t->setTrack(track);

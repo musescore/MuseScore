@@ -57,6 +57,7 @@
 #include "excerpt.h"
 #include "spatium.h"
 #include "barline.h"
+#include "skyline.h"
 
 namespace Ms {
 
@@ -65,10 +66,12 @@ bool MScore::testMode = false;
 
 // #ifndef NDEBUG
 bool MScore::showSegmentShapes   = false;
+bool MScore::showSkylines        = false;
 bool MScore::showMeasureShapes   = false;
 bool MScore::noHorizontalStretch = false;
 bool MScore::noVerticalStretch   = false;
 bool MScore::showBoundingRect    = false;
+bool MScore::showSystemBoundingRect    = false;
 bool MScore::showCorruptedMeasures = true;
 bool MScore::useFallbackFont       = true;
 bool MScore::autoplaceSlurs        = true;
@@ -186,7 +189,12 @@ const char* toString(Direction val)
             case Direction::UP:   return "up";
             case Direction::DOWN: return "down";
             }
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       __builtin_unreachable();
+#else
+      // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
+      __assume(0);
+#endif
       }
 
 //---------------------------------------------------------
@@ -250,6 +258,9 @@ void MScore::init()
 //      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
 #endif
       qRegisterMetaType<Fraction>("Fraction");
+
+      if (!QMetaType::registerConverter<Fraction, QString>(&Fraction::toString))
+          qFatal("registerConverter Fraction::toString failed");
 
 #ifdef Q_OS_WIN
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
@@ -339,10 +350,10 @@ void MScore::init()
             };
 
       for (unsigned i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {
-            QString s(fonts[i]);
-            if (-1 == QFontDatabase::addApplicationFont(s)) {
+            QString str(fonts[i]);
+            if (-1 == QFontDatabase::addApplicationFont(str)) {
                   if (!MScore::testMode)
-                        qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
+                        qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(str));
                   if (!MScore::debugMode && !MScore::testMode)
                         exit(-1);
                   }
@@ -520,7 +531,6 @@ int MPaintDevice::metric(PaintDeviceMetric m) const
                   printf("debug: metric %d\n", int(m));
                   return 1;
             }
-      return 0;
       }
 
 //---------------------------------------------------------

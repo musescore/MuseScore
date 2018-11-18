@@ -1,10 +1,10 @@
 import QtQuick 2.0
-import MuseScore 1.0
+import MuseScore 3.0
 
 
 MuseScore {
     menuPath:    "Plugins.helloQml"
-    version:     "2.0"
+    version:     "3.0"
     description: qsTr("This demo plugin shows some basic tasks.")
     pluginType: "dialog"
 
@@ -26,10 +26,10 @@ MuseScore {
             while (segment) {
                 var element
                 element = segment.elementAt(0)
-                if (element && element.type == Element.CHORD) {
+                if (element() && element().type == Ms.CHORD) {
                     console.log(qsTr("    element"))
-                    console.log(element.beamMode)
-                    if (element.beamMode == BeamMode.NO)
+                    console.log(element().beamMode)
+                    if (element().beamMode == BeamMode.NO)
                         console.log("  beam no")
                     }
                 segment = segment.next()

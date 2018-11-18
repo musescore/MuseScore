@@ -2,7 +2,6 @@
 #  BWW to MusicXML converter
 #  Part of MusE Score
 #  Linux Music Score Editor
-#  $Id: CMakeLists.txt 5560 2012-04-19 11:39:34Z lasconic $
 #
 #  Copyright (C) 2002-2010 by Werner Schweer and others
 #
@@ -32,10 +31,17 @@ add_library(bww STATIC
    lexer.cpp
    parser.cpp
    symbols.cpp
-   writer.cpp
    )
 
-if (NOT MINGW AND NOT APPLE)
+if (MSVC)
+   set_target_properties (
+      bww
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (MSVC)
+
+if (NOT MINGW AND NOT APPLE AND NOT MSVC)
    add_executable(bww2mxml
       ${INCS}
       lexer.cpp
@@ -57,10 +63,15 @@ if (NOT MINGW AND NOT APPLE)
       )
    ADD_DEPENDENCIES(bww2mxml mops1)
    ADD_DEPENDENCIES(bww2mxml mops2)
-endif (NOT MINGW AND NOT APPLE)
+endif (NOT MINGW AND NOT APPLE AND NOT MSVC)
 
 xcode_pch(bww all)
 
-ADD_DEPENDENCIES(bww mops1)
-ADD_DEPENDENCIES(bww mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( bww )
 
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(bww mops1)
+   ADD_DEPENDENCIES(bww mops2)
+endif (NOT MSVC)

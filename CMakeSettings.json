@@ -1,0 +1,38 @@
+{
+   // See https://go.microsoft.com//fwlink//?linkid=834763 for more information about this file.
+   "configurations": [
+      {
+         "name": "x64-RelWithDebInfo",
+         "generator": "Visual Studio 15 2017 Win64",
+         "configurationType": "RelWithDebInfo",
+         "inheritEnvironments": [ "msvc_x64_x64" ],
+         "buildRoot": "${projectDir}\\msvc.build_x64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}", 
+         "installRoot": "${projectDir}\\msvc.install_x64", // "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
+         "cmakeCommandArgs": "-Wno-deprecated",
+         "variables": [
+            {
+               "name": "CMAKE_BUILD_TYPE",
+               "value": "RELWITHDEBINFO"
+            },
+            {
+               "name": "BUILD_FOR_WINSTORE",
+               "value": "OFF"
+            },
+            {
+               "name": "BUILD_64",
+               "value": "ON"
+            },
+            {
+               "name": "CMAKE_PREFIX_PATH",
+               "value": "${env.PATH};${projectDir}\\dependencies"
+            },
+            {
+               "name": "CMAKE_LIBRARY_PATH",
+               "value": "${projectDir}\\dependencies\\libx64"
+            }
+         ],
+         "buildCommandArgs": "-v",
+         "ctestCommandArgs": ""
+      }
+   ]
+}

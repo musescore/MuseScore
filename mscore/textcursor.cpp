@@ -89,7 +89,7 @@ void PositionCursor::paint(QPainter* p)
                         int         track       = _sv->score()->inputTrack();
                         if (track >= 0) {
                               Staff*      staff       = _sv->score()->staff(track2staff(track));
-                              StaffType*  staffType   = staff->staffType(0);
+                              const StaffType*  staffType   = staff->staffType(0);
                               if (staffType && staffType->group() == StaffGroup::TAB)
                                     staffType->drawInputStringMarks(p, _sv->score()->inputState().string(),
                                        track2voice(track), _rect);
@@ -139,7 +139,7 @@ void PositionCursor::move(int tick)
       Measure* measure = score->tick2measureMM(tick);
       if (measure == 0)
             return;
-      qreal x;
+      qreal x = 0.0;
       int offset = 0;
 
       Segment* s;
@@ -171,7 +171,7 @@ void PositionCursor::move(int tick)
             return;
 
       System* system = measure->system();
-      if (system == 0)
+      if (system == 0 || system->page() == 0)
             return;
       double y        = system->staffYpage(0) + system->page()->pos().y();
       double _spatium = score->spatium();

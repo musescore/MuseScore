@@ -171,9 +171,9 @@ const InstrumentTemplate* findClosestInstrument(const MTrack &track)
                   if (track.mtrack->drumTrack() != isDrumTemplate)
                         continue;
                   for (const auto &channel: templ->channel) {
-                        if (channel.program < track.program
-                                    && channel.program > maxLessProgram) {
-                              maxLessProgram = channel.program;
+                        if (channel.program() < track.program
+                                    && channel.program() > maxLessProgram) {
+                              maxLessProgram = channel.program();
                               closestTemplate = templ;
                               break;
                               }
@@ -205,7 +205,7 @@ std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &
                         findNotEmptyDrumPitches(drumPitches, templ);
 
                   for (const auto &channel: templ->channel) {
-                        if (channel.program == program) {
+                        if (channel.program() == program) {
                               if (isDrumTemplate && templ->drumset) {
                                     if (hasNotDefinedDrumPitch(trackPitches, drumPitches))
                                           break;
@@ -397,7 +397,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
 
             if (part->nstaves() == 1) {
                   if (track.mtrack->drumTrack()) {
-                        part->staff(0)->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
+                        part->staff(0)->setStaffType(0, *StaffType::preset(StaffTypes::PERC_DEFAULT));
                         if (!instr) {
                               part->instrument()->setDrumset(smDrumset);
                               }
@@ -417,10 +417,12 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
 
             if (instr) {
                   for (int i = 0; i != part->nstaves(); ++i) {
-                        if (instr->staffTypePreset)
-                              part->staff(i)->setStaffType(0, instr->staffTypePreset);
-                        part->staff(i)->setLines(0, instr->staffLines[i]);
-                        part->staff(i)->setSmall(0, instr->smallStaff[i]);
+                        if (instr->staffTypePreset) {
+                              part->staff(i)->init(instr, nullptr, i);
+                              part->staff(i)->setStaffType(0, *(instr->staffTypePreset));
+                              }
+//                        part->staff(i)->setLines(0, instr->staffLines[i]);
+//                        part->staff(i)->setSmall(0, instr->smallStaff[i]);
                         part->staff(i)->setDefaultClefType(instr->clefTypes[i]);
                         }
                   }
@@ -436,7 +438,7 @@ void createInstruments(Score *score, QList<MTrack> &tracks)
             if (track.volumes.size() == 1) {
                   for (auto &i: track.volumes) {
                         if (i.first == ReducedFraction(0, 1)) {
-                              part->instrument()->channel(0)->volume = i.second;
+                              part->instrument()->channel(0)->setVolume(i.second);
                               }
                         }
                   }

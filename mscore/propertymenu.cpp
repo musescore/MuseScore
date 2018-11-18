@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -278,8 +277,8 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             popup->addAction(tr("Change Instrument..."))->setData("ch-instr");
             }
-      else if (e->isFretDiagram())
-            popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
+//      else if (e->isFretDiagram())
+//            popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
       else if (e->isInstrumentName())
             popup->addAction(tr("Staff Properties..."))->setData("staff-props");
       else
@@ -313,42 +312,42 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             mscore->addImage(score(), static_cast<HBox*>(e));
             }
       else if (cmd == "frame-text") {
-            Text* t = new Text(SubStyleId::FRAME, score());
+            Text* t = new Text(score(), Tid::FRAME);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "title-text") {
-            Text* t = new Text(SubStyleId::TITLE, score());
+            Text* t = new Text(score(), Tid::TITLE);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "subtitle-text") {
-            Text* t = new Text(SubStyleId::SUBTITLE, score());
+            Text* t = new Text(score(), Tid::SUBTITLE);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "composer-text") {
-            Text* t = new Text(SubStyleId::COMPOSER, score());
+            Text* t = new Text(score(), Tid::COMPOSER);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "poet-text") {
-            Text* t = new Text(SubStyleId::POET, score());
+            Text* t = new Text(score(), Tid::POET);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
             startEditMode(t);
             }
       else if (cmd == "part-text") {
-            Text* t = new Text(SubStyleId::INSTRUMENT_EXCERPT, score());
+            Text* t = new Text(score(), Tid::INSTRUMENT_EXCERPT);
             t->setParent(e);
             score()->undoAddElement(t);
             score()->select(t, SelectType::SINGLE, 0);
@@ -406,6 +405,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                   nt->setScore(score);
                   score->undoChangeElement(e, nt);
                   score->masterScore()->updateChannel();
+                  score->updateCapo();
                   score->updateSwing();
                   score->setPlaylistDirty();
                   }
@@ -491,17 +491,35 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             if (si.exec()) {
                   const InstrumentTemplate* it = si.instrTemplate();
                   if (it) {
+                        int tickStart = ic->segment()->tick();
+                        Part* part = ic->staff()->part();
+                        Interval oldV = part->instrument(tickStart)->transpose();
+                        //Instrument* oi = ic->instrument();  //part->instrument(tickStart);
                         //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
-                        ic->setInstrument(Instrument::fromTemplate(it));
-                        score()->undo(new ChangeInstrument(ic, ic->instrument()));
-                        score()->masterScore()->updateChannel();
+                        // change instrument in all linked scores
+                        for (ScoreElement* se : ic->linkList()) {
+                              InstrumentChange* lic = static_cast<InstrumentChange*>(se);
+                              Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
+                              lic->score()->undo(new ChangeInstrument(lic, instrument));
+                              }
+                        // transpose for current score only
+                        // this automatically propagates to linked scores
+                        if (part->instrument(tickStart)->transpose() != oldV) {
+                              auto i = part->instruments()->upper_bound(tickStart);    // find(), ++i
+                              int tickEnd;
+                              if (i == part->instruments()->end())
+                                    tickEnd = -1;
+                              else
+                                    tickEnd = i->first;
+                              ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
+                              }
                         }
                   else
                         qDebug("no template selected?");
                   }
            }
-      else if (cmd == "fret-props")
-            editFretDiagram(static_cast<FretDiagram*>(e));
+//      else if (cmd == "fret-props")
+//            editFretDiagram(static_cast<FretDiagram*>(e));
       else if (cmd == "staff-props") {
             int tick = -1;
             if (e->isChordRest())
@@ -521,6 +539,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             }
       }
 
+#if 0
 //---------------------------------------------------------
 //   editFretDiagram
 //---------------------------------------------------------
@@ -542,6 +561,7 @@ void ScoreView::editFretDiagram(FretDiagram* fd)
             }
       delete nFret;
       }
+#endif
 
 //---------------------------------------------------------
 //   editBendProperties

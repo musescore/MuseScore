@@ -56,23 +56,10 @@ Shape Shape::translated(const QPointF& pt) const
       return s;
       }
 
-//---------------------------------------------------------
-//   draw
-//    Draw outline of shape. For testing only.
-//---------------------------------------------------------
-
-void Shape::draw(QPainter* p) const
-      {
-      p->save();
-      for (const QRectF& r : *this)
-            p->drawRect(r);
-      p->restore();
-      }
-
 //-------------------------------------------------------------------
 //   minHorizontalDistance
 //    a is located right of this shape.
-//    Calculates the minimum vertical distance between the two shapes
+//    Calculates the minimum horizontal distance between the two shapes
 //    so they dont touch.
 //-------------------------------------------------------------------
 
@@ -96,7 +83,7 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
 
 //-------------------------------------------------------------------
 //   minVerticalDistance
-//    a is located below of this shape.
+//    a is located below this shape.
 //    Calculates the minimum distance between two shapes.
 //-------------------------------------------------------------------
 
@@ -259,7 +246,7 @@ bool Shape::intersects(const QRectF& rr) const
 //   paint
 //---------------------------------------------------------
 
-void Shape::paint(QPainter& p)
+void Shape::paint(QPainter& p) const
       {
       for (const QRectF& r : *this)
             p.drawRect(r);
@@ -272,7 +259,7 @@ void Shape::paint(QPainter& p)
 
 void Shape::dump(const char* p) const
       {
-      printf("Shape dump: %p %s size %d\n", this, p, size());
+      qDebug("Shape dump: %p %s size %zu", this, p, size());
       for (const ShapeElement& r : *this) {
             r.dump();
             }
@@ -280,7 +267,7 @@ void Shape::dump(const char* p) const
 
 void ShapeElement::dump() const
       {
-      printf("   %s: %f %f %f %f\n", text ? text : "", x(), y(), width(), height());
+      qDebug("   %s: %f %f %f %f", text ? text : "", x(), y(), width(), height());
       }
 
 //---------------------------------------------------------

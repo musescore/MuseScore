@@ -22,14 +22,13 @@ namespace Ms {
 //---------------------------------------------------------
 
 LayoutBreak::LayoutBreak(Score* score)
-   : Element(score)
+   : Element(score, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
       {
       _layoutBreakType     = Type(propertyDefault(Pid::LAYOUT_BREAK).toInt());
       _pause               = score->styleD(Sid::SectionPause);
       _startWithLongNames  = true;
       _startWithMeasureOne = true;
       lw                   = spatium() * 0.3;
-      setFlag(ElementFlag::HAS_TAG, true);
       }
 
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
@@ -49,7 +48,7 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
 
 void LayoutBreak::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::LAYOUT_BREAK);
@@ -71,7 +70,7 @@ void LayoutBreak::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "subtype")
-                  setLayoutBreakType(Type(Ms::getProperty(Pid::LAYOUT_BREAK, e).toInt()));
+                  readProperty(e, Pid::LAYOUT_BREAK);
             else if (tag == "pause")
                   _pause = e.readDouble();
             else if (tag == "startWithLongNames")
@@ -212,8 +211,8 @@ void LayoutBreak::spatiumChanged(qreal, qreal)
 
 bool LayoutBreak::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::LAYOUT_BREAK
-         && toLayoutBreak(data.element)->layoutBreakType() != layoutBreakType();
+      return data.dropElement->type() == ElementType::LAYOUT_BREAK
+         && toLayoutBreak(data.dropElement)->layoutBreakType() != layoutBreakType();
       }
 
 //---------------------------------------------------------
@@ -222,7 +221,7 @@ bool LayoutBreak::acceptDrop(EditData& data) const
 
 Element* LayoutBreak::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       score()->undoChangeElement(this, e);
       return e;
       }

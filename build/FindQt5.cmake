@@ -23,8 +23,9 @@ if (NOT MINGW)
     ${_components}
     WebEngine
     WebEngineCore
-    WebEngineWidgets)
-endif()
+    WebEngineWidgets
+	)
+endif(NOT MINGW)
 foreach(_component ${_components})
   find_package(Qt5${_component})
   list(APPEND QT_LIBRARIES ${Qt5${_component}_LIBRARIES})

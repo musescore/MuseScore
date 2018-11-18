@@ -542,8 +542,16 @@ bool MeasureBase::readProperties(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   afrac
+//---------------------------------------------------------
+
+Fraction MeasureBase::afrac() const
+      {
+      return Fraction::fromTicks(_tick);
+      }
+
+//---------------------------------------------------------
 //   index
-//    for debugging only
 //---------------------------------------------------------
 
 int MeasureBase::index() const
@@ -554,6 +562,27 @@ int MeasureBase::index() const
             if (m == this)
                   return idx;
             m = m->next();
+            ++idx;
+            }
+      return  -1;
+      }
+
+//---------------------------------------------------------
+//   measureIndex
+//    returns index of measure counting only Measures but
+//    skipping other MeasureBase descendants
+//---------------------------------------------------------
+
+int MeasureBase::measureIndex() const
+      {
+      int idx = 0;
+      MeasureBase* m = score()->first();
+      while (m) {
+            if (m == this)
+                  return idx;
+            m = m->next();
+            if (m && m->isMeasure())
+                  ++idx;
             }
       return  -1;
       }

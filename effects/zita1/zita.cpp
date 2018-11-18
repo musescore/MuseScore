@@ -29,7 +29,7 @@ enum {
       };
 
 static const std::vector<ParDescr> pd = {
-      { R_DELAY, "delay", false,  0.02,        0.100,          0.04  },
+      { R_DELAY, "delay", false,  0.02f,       0.100f,       0.04f },
       { R_XOVER, "xover", true,   logf(50.0),  logf(1000.0), 200.0 },
       { R_RTLOW, "rtlow", true,   logf(1.0),   logf(8.0),    3.0   },
       { R_RTMID, "rtmid", true,   logf(1.0),   logf(8.0),    2.0   },

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: palettebox.cpp 5576 2012-04-24 19:15:22Z wschweer $
 //
 //  Copyright (C) 2011-2016 Werner Schweer and others
 //
@@ -171,6 +170,17 @@ void PaletteBox::updateWorkspaces()
       }
 
 //---------------------------------------------------------
+//   selectWorkspace
+//---------------------------------------------------------
+
+void PaletteBox::selectWorkspace(QString path)
+      {
+      int idx = workspaceList->findData(path);
+      workspaceList->setCurrentIndex(idx);
+      workspaceSelected(idx);
+      }
+
+//---------------------------------------------------------
 //   clear
 //---------------------------------------------------------
 
@@ -272,7 +282,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                   QString path = mscore->getPaletteFilename(true);
                   if (!path.isEmpty()) {
                         QFileInfo fi(path);
-                        Palette* palette = newPalette(fi.completeBaseName(), slot);
+                        palette = newPalette(fi.completeBaseName(), slot);
                         palette->read(path);
                         }
                   }

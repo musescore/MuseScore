@@ -18,8 +18,8 @@
 
 namespace Ms {
 
-#define MSC_VERSION     "3.00"
-static constexpr int MSCVERSION = 300;
+#define MSC_VERSION     "3.01"
+static constexpr int MSCVERSION = 301;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -367,8 +367,10 @@ class MScore : public QObject {
       static bool noHorizontalStretch;
       static bool noVerticalStretch;
       static bool showSegmentShapes;
+      static bool showSkylines;
       static bool showMeasureShapes;
       static bool showBoundingRect;
+      static bool showSystemBoundingRect;
       static bool showCorruptedMeasures;
       static bool useFallbackFont;
       static bool autoplaceSlurs;

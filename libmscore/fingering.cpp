@@ -22,20 +22,27 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   fingeringStyle
+//---------------------------------------------------------
+
+static const ElementStyle fingeringStyle {
+      };
 
 //---------------------------------------------------------
 //   Fingering
 //      Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
 //---------------------------------------------------------
 
-Fingering::Fingering(SubStyleId ssid, Score* s, ElementFlags ef)
-   : TextBase(s, ef)
+Fingering::Fingering(Score* s, Tid tid, ElementFlags ef)
+   : TextBase(s, tid, ef)
       {
-      initSubStyle(ssid);
+      setPlacement(Placement::ABOVE);
+      initElementStyle(&fingeringStyle);
       }
 
 Fingering::Fingering(Score* s, ElementFlags ef)
-  : Fingering(SubStyleId::FINGERING, s, ef)
+  : Fingering(s, Tid::FINGERING, ef)
       {
       }
 
@@ -96,7 +103,7 @@ void Fingering::layout()
             else {
                   x -= spatium();
                   }
-            setUserOff(QPointF(x, y));
+            rpos() += QPointF(x, y);
             }
       }
 
@@ -116,7 +123,7 @@ void Fingering::draw(QPainter* painter) const
 QString Fingering::accessibleInfo() const
       {
       QString rez = Element::accessibleInfo();
-      if (subStyleId() == SubStyleId::STRING_NUMBER)
+      if (tid() == Tid::STRING_NUMBER)
             rez += " " + QObject::tr("String number");
       return QString("%1: %2").arg(rez).arg(plainText());
       }
@@ -128,8 +135,10 @@ QString Fingering::accessibleInfo() const
 QVariant Fingering::propertyDefault(Pid id) const
       {
       switch (id) {
+            case Pid::PLACEMENT:
+                  return int(Placement::ABOVE);
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::FINGERING);
+                  return int(Tid::FINGERING);
             default:
                   return TextBase::propertyDefault(id);
             }

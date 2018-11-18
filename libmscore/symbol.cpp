@@ -59,7 +59,20 @@ void Symbol::layout()
       // foreach(Element* e, leafs())     done in BSymbol::layout() ?
       //      e->layout();
       setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
-      ElementLayout::layout(this);
+      QPointF o(offset());
+      qreal w = width();
+      QPointF p;
+      if (align() & Align::BOTTOM)
+            p.setY(- height());
+      else if (align() & Align::VCENTER)
+            p.setY((- height()) * .5);
+      else if (align() & Align::BASELINE)
+            p.setY(-baseLine());
+      if (align() & Align::RIGHT)
+            p.setX(-w);
+      else if (align() & Align::HCENTER)
+            p.setX(-(w * .5));
+      setPos(p + o);
       BSymbol::layout();
       }
 
@@ -69,7 +82,7 @@ void Symbol::layout()
 
 void Symbol::draw(QPainter* p) const
       {
-      if (type() != ElementType::NOTEDOT || !staff()->isTabStaff(tick())) {
+      if (!isNoteDot() || !staff()->isTabStaff(tick())) {
             p->setPen(curColor());
             if (_scoreFont)
                   _scoreFont->draw(_sym, p, magS(), QPointF());
@@ -84,7 +97,7 @@ void Symbol::draw(QPainter* p) const
 
 void Symbol::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("name", Sym::id2name(_sym));
       if (_scoreFont)
             xml.tag("font", _scoreFont->name());
@@ -186,7 +199,7 @@ void FSymbol::draw(QPainter* painter) const
 
 void FSymbol::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("font",     _font.family());
       xml.tag("fontsize", _font.pointSizeF());
       xml.tag("code",     _code);

@@ -28,6 +28,7 @@ enum class BracketType : signed char;
 
 class Bracket final : public Element {
       BracketItem* _bi;
+      qreal ay1;
       qreal h2;
 
       int _firstStaff;

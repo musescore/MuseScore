@@ -16,8 +16,50 @@
 #include "score.h"
 #include "text.h"
 #include "system.h"
+#include "measure.h"
+#include "score.h"
+#include"tempo.h"
+#include "velo.h"
+#include "staff.h"
 
 namespace Ms {
+
+static const ElementStyle voltaStyle {
+      { Sid::voltaFontFace,                      Pid::BEGIN_FONT_FACE         },
+      { Sid::voltaFontFace,                      Pid::CONTINUE_FONT_FACE      },
+      { Sid::voltaFontFace,                      Pid::END_FONT_FACE           },
+      { Sid::voltaFontSize,                      Pid::BEGIN_FONT_SIZE         },
+      { Sid::voltaFontSize,                      Pid::CONTINUE_FONT_SIZE      },
+      { Sid::voltaFontSize,                      Pid::END_FONT_SIZE           },
+      { Sid::voltaFontBold,                      Pid::BEGIN_FONT_BOLD         },
+      { Sid::voltaFontBold,                      Pid::CONTINUE_FONT_BOLD      },
+      { Sid::voltaFontBold,                      Pid::END_FONT_BOLD           },
+      { Sid::voltaFontItalic,                    Pid::BEGIN_FONT_ITALIC       },
+      { Sid::voltaFontItalic,                    Pid::CONTINUE_FONT_ITALIC    },
+      { Sid::voltaFontItalic,                    Pid::END_FONT_ITALIC         },
+      { Sid::voltaFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE    },
+      { Sid::voltaFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE },
+      { Sid::voltaFontUnderline,                 Pid::END_FONT_UNDERLINE      },
+      { Sid::voltaAlign,                         Pid::BEGIN_TEXT_ALIGN        },
+      { Sid::voltaAlign,                         Pid::CONTINUE_TEXT_ALIGN     },
+      { Sid::voltaAlign,                         Pid::END_TEXT_ALIGN          },
+      { Sid::voltaOffset,                        Pid::BEGIN_TEXT_OFFSET       },
+      { Sid::voltaOffset,                        Pid::CONTINUE_TEXT_OFFSET    },
+      { Sid::voltaOffset,                        Pid::END_TEXT_OFFSET         },
+      { Sid::voltaLineWidth,                     Pid::LINE_WIDTH              },
+      { Sid::voltaLineStyle,                     Pid::LINE_STYLE              },
+      { Sid::voltaHook,                          Pid::BEGIN_HOOK_HEIGHT       },
+      { Sid::voltaHook,                          Pid::END_HOOK_HEIGHT         },
+      { Sid::voltaPosAbove,                      Pid::OFFSET                  },
+      };
+
+//---------------------------------------------------------
+//   VoltaSegment
+//---------------------------------------------------------
+
+VoltaSegment::VoltaSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+      {
+      }
 
 //---------------------------------------------------------
 //   layout
@@ -25,82 +67,19 @@ namespace Ms {
 
 void VoltaSegment::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
       TextLineBaseSegment::layout();
-      if (!parent())
-            return;
-      rypos() = score()->styleP(Sid::voltaY) * mag();
-      if (autoplace()) {
-            qreal minDistance = spatium() * .7;
-            Shape s1 = shape().translated(pos());
-            qreal d  = system()->topDistance(staffIdx(), s1);
-            if (d > -minDistance)
-                  rUserYoffset() = -d - minDistance;
-            }
+      autoplaceSpannerSegment(spatium() * 1.0);
       }
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant VoltaSegment::getProperty(Pid id) const
+Element* VoltaSegment::propertyDelegate(Pid pid)
       {
-      switch (id) {
-            case Pid::BEGIN_HOOK_TYPE:
-            case Pid::END_HOOK_TYPE:
-            case Pid::VOLTA_ENDING:
-                  return spanner()->getProperty(id);
-            default:
-                  break;
-            }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->getProperty(id);
-            }
-      return TextLineBaseSegment::getProperty(id);
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool VoltaSegment::setProperty(Pid id, const QVariant& v)
-      {
-      switch (id) {
-            case Pid::BEGIN_HOOK_TYPE:
-            case Pid::END_HOOK_TYPE:
-            case Pid::VOLTA_ENDING:
-                  return spanner()->setProperty(id, v);
-            default:
-                  break;
-            }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->setProperty(id, v);
-            }
-      return TextLineBaseSegment::setProperty(id, v);
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant VoltaSegment::propertyDefault(Pid id) const
-      {
-      switch (id) {
-            case Pid::BEGIN_HOOK_TYPE:
-            case Pid::END_HOOK_TYPE:
-            case Pid::VOLTA_ENDING:
-                  return volta()->propertyDefault(id);
-            default:
-                  break;
-            }
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->propertyDefault(id);
-            }
-      return TextLineBaseSegment::propertyDefault(id);
+      if (pid == Pid::BEGIN_HOOK_TYPE || pid == Pid::END_HOOK_TYPE || pid == Pid::VOLTA_ENDING)
+            return spanner();
+      return TextLineBaseSegment::propertyDelegate(pid);
       }
 
 //---------------------------------------------------------
@@ -108,9 +87,10 @@ QVariant VoltaSegment::propertyDefault(Pid id) const
 //---------------------------------------------------------
 
 Volta::Volta(Score* s)
-   : TextLineBase(s)
+   : TextLineBase(s, ElementFlag::SYSTEM)
       {
-      initSubStyle(SubStyleId::VOLTA);
+      setPlacement(Placement::ABOVE);
+      initElementStyle(&voltaStyle);
 
       setBeginTextPlace(PlaceText::BELOW);
       setContinueTextPlace(PlaceText::BELOW);
@@ -154,7 +134,6 @@ void Volta::read(XmlReader& e)
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
 
-      e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "endings") {
@@ -177,7 +156,7 @@ void Volta::read(XmlReader& e)
 
 void Volta::write(XmlWriter& xml) const
       {
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(this);
       TextLineBase::writeProperties(xml);
       QString s;
       for (int i : _endings) {
@@ -193,9 +172,15 @@ void Volta::write(XmlWriter& xml) const
 //   createLineSegment
 //---------------------------------------------------------
 
+static const ElementStyle voltaSegmentStyle {
+      { Sid::voltaPosAbove,                      Pid::OFFSET                  },
+      };
+
 LineSegment* Volta::createLineSegment()
       {
-      return new VoltaSegment(score());
+      VoltaSegment* vs = new VoltaSegment(score());
+      vs->initElementStyle(&voltaSegmentStyle);
+      return vs;
       }
 
 //---------------------------------------------------------
@@ -282,8 +267,87 @@ QVariant Volta::propertyDefault(Pid propertyId) const
             case Pid::END_TEXT_PLACE:
                   return int(PlaceText::ABOVE);
 
+            case Pid::PLACEMENT:
+                  return int(Placement::ABOVE);
+
             default:
                   return TextLineBase::propertyDefault(propertyId);
+            }
+      }
+
+//---------------------------------------------------------
+//   layoutSystem
+//---------------------------------------------------------
+
+SpannerSegment * Volta::layoutSystem(System * system) {
+      SpannerSegment* voltaSegment= SLine::layoutSystem(system);
+
+      // we need set tempo in layout because all tempos of score is set in layout
+      // so fermata in seconda volta works correct because fermata apply itself tempo during layouting
+      setTempo();
+
+      return voltaSegment;
+      }
+
+//---------------------------------------------------------
+//   setVelocity
+//---------------------------------------------------------
+
+void Volta::setVelocity() const {
+      Measure* startMeasure = Spanner::startMeasure();
+      Measure* endMeasure = Spanner::endMeasure();
+      
+      if (startMeasure && endMeasure) {
+            if (!endMeasure->repeatEnd())
+            return;
+
+            auto startTick = startMeasure->tick() - 1;
+            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
+            Staff* st = staff();
+            VeloList& velo = st->velocities();
+            auto prevVelo = velo.velo(startTick);
+            velo.setVelo(endTick, prevVelo);
+            }
+      }
+
+//---------------------------------------------------------
+//   setChannel
+//---------------------------------------------------------
+
+void Volta::setChannel() const {
+      Measure* startMeasure = Spanner::startMeasure();
+      Measure* endMeasure = Spanner::endMeasure();
+
+      if (startMeasure && endMeasure) {
+            if (!endMeasure->repeatEnd())
+            return;
+
+            auto startTick = startMeasure->tick() - 1;
+            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
+            Staff* st = staff();
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  int channel = st->channel(startTick, voice);
+                  st->insertIntoChannelList(voice, endTick, channel);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   setTempo
+//---------------------------------------------------------
+
+void Volta::setTempo() const {
+      Measure* startMeasure = Spanner::startMeasure();
+      Measure* endMeasure = Spanner::endMeasure();
+
+      if (startMeasure && endMeasure) {
+            if (!endMeasure->repeatEnd())
+            return;
+
+            auto startTick = startMeasure->tick() - 1;
+            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
+            qreal tempoBeforeVolta = score()->tempomap()->tempo(startTick);
+            score()->setTempo(endTick, tempoBeforeVolta);
             }
       }
 

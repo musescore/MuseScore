@@ -36,6 +36,16 @@ NICE-TO-HAVE TODO:
 
 namespace Ms {
 
+static const ElementStyle glissandoElementStyle {
+      { Sid::glissandoFontFace,                  Pid::FONT_FACE               },
+      { Sid::glissandoFontSize,                  Pid::FONT_SIZE               },
+      { Sid::glissandoFontBold,                  Pid::FONT_BOLD               },
+      { Sid::glissandoFontItalic,                Pid::FONT_ITALIC             },
+      { Sid::glissandoFontUnderline,             Pid::FONT_UNDERLINE          },
+      { Sid::glissandoLineWidth,                 Pid::LINE_WIDTH              },
+      { Sid::glissandoText,                      Pid::GLISS_TEXT              },
+      };
+
 static const qreal      GLISS_PALETTE_WIDTH           = 4.0;
 static const qreal      GLISS_PALETTE_HEIGHT          = 4.0;
 
@@ -83,9 +93,9 @@ void GlissandoSegment::draw(QPainter* painter) const
             }
       else if (glissando()->glissandoType() == GlissandoType::WAVY) {
             QRectF b = symBbox(SymId::wiggleTrill);
-            qreal w  = symAdvance(SymId::wiggleTrill);
-            int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
-            qreal x  = (l - n*w) * 0.5;   // centre line in available space
+            qreal a  = symAdvance(SymId::wiggleTrill);
+            int n    = (int)(l / a);      // always round down (truncate) to avoid overlap
+            qreal x  = (l - n*a) * 0.5;   // centre line in available space
             std::vector<SymId> ids;
             for (int i = 0; i < n; ++i)
                   ids.push_back(SymId::wiggleTrill);
@@ -119,13 +129,12 @@ void GlissandoSegment::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant GlissandoSegment::getProperty(Pid id) const
+Element* GlissandoSegment::propertyDelegate(Pid pid)
       {
-      switch (id) {
-            // route properties of the whole Glissando element to it
+      switch (pid) {
             case Pid::GLISS_TYPE:
             case Pid::GLISS_TEXT:
             case Pid::GLISS_SHOW_TEXT:
@@ -137,119 +146,9 @@ QVariant GlissandoSegment::getProperty(Pid id) const
             case Pid::FONT_ITALIC:
             case Pid::FONT_UNDERLINE:
             case Pid::LINE_WIDTH:
-                  return glissando()->getProperty(id);
+                  return glissando();
             default:
-                  return LineSegment::getProperty(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool GlissandoSegment::setProperty(Pid id, const QVariant& v)
-      {
-      switch (id) {
-            case Pid::GLISS_TYPE:
-            case Pid::GLISS_TEXT:
-            case Pid::GLISS_SHOW_TEXT:
-            case Pid::GLISSANDO_STYLE:
-            case Pid::PLAY:
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->setProperty(id, v);
-            default:
-                  return LineSegment::setProperty(id, v);
-            }
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant GlissandoSegment::propertyDefault(Pid id) const
-      {
-      switch (id) {
-            case Pid::GLISS_TYPE:
-            case Pid::GLISS_TEXT:
-            case Pid::GLISS_SHOW_TEXT:
-            case Pid::GLISSANDO_STYLE:
-            case Pid::PLAY:
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->propertyDefault(id);
-            default:
-                  return LineSegment::propertyDefault(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags& GlissandoSegment::propertyFlags(Pid id)
-      {
-      switch (id) {
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->propertyFlags(id);
-
-            default:
-                  return LineSegment::propertyFlags(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   setPropertyFlags
-//---------------------------------------------------------
-
-void GlissandoSegment::setPropertyFlags(Pid id, PropertyFlags f)
-      {
-      switch (id) {
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  glissando()->setPropertyFlags(id, f);
-                  break;
-
-            default:
-                  LineSegment::setPropertyFlags(id, f);
-                  break;
-            }
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid GlissandoSegment::getPropertyStyle(Pid id) const
-      {
-      switch (id) {
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->getPropertyStyle(id);
-
-            default:
-                  return LineSegment::getPropertyStyle(id);
+                  return LineSegment::propertyDelegate(pid);
             }
       }
 
@@ -263,7 +162,7 @@ Glissando::Glissando(Score* s)
       setAnchor(Spanner::Anchor::NOTE);
       setDiagonal(true);
 
-      initSubStyle(SubStyleId::GLISSANDO);
+      initElementStyle(&glissandoElementStyle);
 
       resetProperty(Pid::GLISS_SHOW_TEXT);
       resetProperty(Pid::PLAY);
@@ -331,11 +230,11 @@ void Glissando::layout()
             s->layout();
             return;
             }
+      SLine::layout();
       if (spannerSegments().empty()) {
             qDebug("no segments");
             return;
             }
-      SLine::layout();
       setPos(0.0, 0.0);
 
       Note*       anchor1     = toNote(startElement());
@@ -423,7 +322,7 @@ void Glissando::layout()
 
       // initial note dots / ledger line / notehead
       offs1 *= -1.0;          // discount changes already applied
-      int dots = cr1->dots();
+      int dots = anchor1->dots().size();
       LedgerLine * ledLin = cr1->ledgerLines();
       // if dots, start at right of last dot
       // if no dots, from right of ledger line, if any; from right of notehead, if no ledger line
@@ -432,10 +331,10 @@ void Glissando::layout()
 
       // final note arpeggio / accidental / ledger line / accidental / arpeggio (i.e. from outermost to innermost)
       offs2 *= -1.0;          // discount changes already applied
-      if (Arpeggio* a = cr2->arpeggio())
-            offs2.rx() += a->pos().x() + a->userOff().x();
-      else if (Accidental* a = anchor2->accidental())
-            offs2.rx() += a->pos().x() + a->userOff().x();
+      if (Arpeggio* ap = cr2->arpeggio())
+            offs2.rx() += ap->pos().x() + ap->offset().x();
+      else if (Accidental* ac = anchor2->accidental())
+            offs2.rx() += ac->pos().x() + ac->offset().x();
       else if ( (ledLin = cr2->ledgerLines()) != nullptr)
             offs2.rx() += ledLin->pos().x();
 
@@ -471,7 +370,7 @@ void Glissando::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(this);
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
 
@@ -490,7 +389,9 @@ void Glissando::read(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
-      e.addSpanner(e.intAttribute("id", -1), this);
+
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
 
       _showText = false;
       while (e.readNextStartElement()) {
@@ -502,7 +403,7 @@ void Glissando::read(XmlReader& e)
             else if (tag == "subtype")
                   _glissandoType = GlissandoType(e.readInt());
             else if (tag == "glissandoStyle")
-                  setProperty(Pid::GLISSANDO_STYLE, Ms::getProperty(Pid::GLISSANDO_STYLE, e));
+                  readProperty(e, Pid::GLISSANDO_STYLE);
             else if (tag == "play")
                   setPlayGlissando(e.readBool());
             else if (readStyledProperty(e, tag))

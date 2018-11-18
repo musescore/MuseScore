@@ -12,6 +12,9 @@
 
 #include "resourceManager.h"
 #include "musescore.h"
+#include "extension.h"
+#include "libmscore/utils.h"
+#include "stringutils.h"
 #include "ui_resourceManager.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
@@ -29,28 +32,130 @@ ResourceManager::ResourceManager(QWidget *parent) :
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
-      baseAddr = "http://extensions.musescore.org/2.3/";
-      displayPlugins();
+      displayExtensions();
       displayLanguages();
       languagesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
       languagesTable->verticalHeader()->hide();
-      tabs->removeTab(tabs->indexOf(plugins));
-      tabs->setCurrentIndex(tabs->indexOf(languages));
+      extensionsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+      extensionsTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+      extensionsTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+      extensionsTable->verticalHeader()->hide();
+      extensionsTable->setColumnWidth(1, 50);
+      extensionsTable->setColumnWidth(1, 100);
       MuseScore::restoreGeometry(this);
       }
 
-void ResourceManager::displayPlugins()
+
+//---------------------------------------------------------
+//   selectLanguagesTab
+//---------------------------------------------------------
+
+void ResourceManager::selectLanguagesTab()
       {
-      textBrowser->setText("hello");
+      tabs->setCurrentIndex(tabs->indexOf(languages));
       }
+
+//---------------------------------------------------------
+//   selectExtensionsTab
+//---------------------------------------------------------
+
+void ResourceManager::selectExtensionsTab()
+      {
+      tabs->setCurrentIndex(tabs->indexOf(extensions));
+      }
+
+
+//---------------------------------------------------------
+//   displayExtensions
+//---------------------------------------------------------
+
+void ResourceManager::displayExtensions()
+      {
+      DownloadUtils js(this);
+      js.setTarget(baseAddr() + "extensions/details.json");
+      js.download();
+      QByteArray json = js.returnData();
+
+      // parse the json file
+      QJsonParseError err;
+      QJsonDocument result = QJsonDocument::fromJson(json, &err);
+      if (err.error != QJsonParseError::NoError || !result.isObject()) {
+            qDebug("An error occurred during parsing");
+            return;
+            }
+      int rowCount = result.object().keys().size();
+      rowCount -= 2; //version and type
+      extensionsTable->setRowCount(rowCount);
+
+      int row = 0;
+      int col = 0;
+      QPushButton* buttonInstall;
+      QPushButton* buttonUninstall;
+      extensionsTable->verticalHeader()->show();
+
+      QStringList exts = result.object().keys();
+      for (QString key : exts) {
+            if (!result.object().value(key).isObject())
+                  continue;
+            QJsonObject value = result.object().value(key).toObject();
+            col = 0;
+            QString test = value.value("file_name").toString();
+            if (test.length() == 0)
+                  continue;
+
+            QString filename = value.value("file_name").toString();
+            QString name = value.value("name").toString();
+            int fileSize = value.value("file_size").toInt();
+            QString hashValue = value.value("hash").toString();
+            QString version = value.value("version").toString();
+
+            extensionsTable->setItem(row, col++, new QTableWidgetItem(name));
+            extensionsTable->setItem(row, col++, new QTableWidgetItem(version));
+            extensionsTable->setItem(row, col++, new QTableWidgetItem(stringutils::convertFileSizeToHumanReadable(fileSize)));
+            buttonInstall = new QPushButton(tr("Install"));
+            buttonUninstall = new QPushButton(tr("Uninstall"));
+
+            connect(buttonInstall, SIGNAL(clicked()), this, SLOT(downloadExtension()));
+            connect(buttonUninstall, SIGNAL(clicked()), this, SLOT(uninstallExtension()));
+            buttonInstall->setProperty("path", "extensions/" + filename);
+            buttonInstall->setProperty("hash", hashValue);
+            buttonInstall->setProperty("rowId", row);
+            buttonUninstall->setProperty("extensionId", key);
+            buttonUninstall->setProperty("rowId", row);
+
+            // get the installed version of the extension if any
+            if (Extension::isInstalled(key)) {
+                  buttonUninstall->setDisabled(false);
+                  QString installedVersion = Extension::getLatestVersion(key);
+                  if (compareVersion(installedVersion, version)) {
+                        buttonInstall->setText(tr("Update"));
+                        }
+                  else {
+                        buttonInstall->setText(tr("Updated"));
+                        buttonInstall->setDisabled(true);
+                        }
+                  }
+            else {
+                  buttonUninstall->setDisabled(true);
+                  }
+            extensionsTable->setIndexWidget(extensionsTable->model()->index(row, col++), buttonInstall);
+            extensionsTable->setIndexWidget(extensionsTable->model()->index(row, col++), buttonUninstall);
+            row++;
+            }
+      }
+
+//---------------------------------------------------------
+//   displayLanguages
+//---------------------------------------------------------
 
 void ResourceManager::displayLanguages()
       {
       // Download details.json
-      DownloadUtils *js = new DownloadUtils(this);
-      js->setTarget(baseAddr + "languages/details.json");
-      js->download();
-      QByteArray json = js->returnData();
+      DownloadUtils js(this);
+      js.setTarget(baseAddr() + "languages/details.json");
+      js.download();
+      QByteArray json = js.returnData();
+      qDebug() << json;
 
       // parse the json file
       QJsonParseError err;
@@ -65,24 +170,30 @@ void ResourceManager::displayLanguages()
 
       int row = 0;
       int col = 0;
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       QPushButton* updateButtons[rowCount];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<QPushButton*> updateButtons(rowCount);
+#endif
       QPushButton* temp;
       languagesTable->verticalHeader()->show();
 
       // move current language to first row
-	QStringList languages = result.object().keys();
+      QStringList langs = result.object().keys();
       QString lang = mscore->getLocaleISOCode();
-      int index = languages.indexOf(lang);
+      int index = langs.indexOf(lang);
       if (index < 0 &&  lang.size() > 2) {
             lang = lang.left(2);
-            index = languages.indexOf(lang);
+            index = langs.indexOf(lang);
             }
       if (index >= 0) {
-            QString l = languages.takeAt(index);
-            languages.prepend(l);
+            QString l = langs.takeAt(index);
+            langs.prepend(l);
             }
 
-      for (QString key : languages) {
+      for (QString key : langs) {
             if (!result.object().value(key).isObject())
                   continue;
             QJsonObject value = result.object().value(key).toObject();
@@ -98,12 +209,12 @@ void ResourceManager::displayLanguages()
 
             languagesTable->setItem(row, col++, new QTableWidgetItem(name));
             languagesTable->setItem(row, col++, new QTableWidgetItem(filename));
-            languagesTable->setItem(row, col++, new QTableWidgetItem(tr("%1 KB").arg(fileSize)));
+            languagesTable->setItem(row, col++, new QTableWidgetItem(tr("%1 kB").arg(fileSize)));
             updateButtons[row] = new QPushButton(tr("Update"));
 
             temp = updateButtons[row];
-            buttonMap[temp] = "languages/" + filename;
-            buttonHashMap[temp] = hashValue;
+            languageButtonMap[temp] = "languages/" + filename;
+            languageButtonHashMap[temp] = hashValue;
 
             languagesTable->setIndexWidget(languagesTable->model()->index(row, col++), temp);
 
@@ -121,15 +232,19 @@ void ResourceManager::displayLanguages()
             bool verifyInstruments = verifyLanguageFile(filenameInstruments, hashInstruments);
 
             if (verifyMScore && verifyInstruments) { // compare local file with distant hash
-                  temp->setText(tr("No update"));
+                  temp->setText(tr("Updated"));
                   temp->setDisabled(1);
                   }
             else {
-                  connect(temp, SIGNAL(clicked()), this, SLOT(download()));
+                  connect(temp, SIGNAL(clicked()), this, SLOT(downloadLanguage()));
                   }
             row++;
             }
       }
+
+//---------------------------------------------------------
+//   verifyLanguageFile
+//---------------------------------------------------------
 
 bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
       {
@@ -143,21 +258,25 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
       return verifyFile(local, hash);
       }
 
-void ResourceManager::download()
+
+//---------------------------------------------------------
+//   downloadLanguage
+//---------------------------------------------------------
+
+void ResourceManager::downloadLanguage()
       {
-      QPushButton *button = qobject_cast<QPushButton*>( sender() );
-      QString data = buttonMap[button];
-      QString hash = buttonHashMap[button];
+      QPushButton *button = static_cast<QPushButton*>( sender() );
+      QString dta  = languageButtonMap[button];
+      QString hash = languageButtonHashMap[button];
       button->setText(tr("Updating"));
-      button->setDisabled(1);
-      QString baseAddress = baseAddr + data;
-      DownloadUtils *dl = new DownloadUtils(this);
-      dl->setTarget(baseAddress);
-      qDebug() << baseAddress;
-      QString localPath = dataPath + "/locale/" + data.split('/')[1];
-      dl->setLocalFile(localPath);
-      dl->download();
-      if( !dl->saveFile() || !verifyFile(localPath, hash)) {
+      button->setDisabled(true);
+      QString baseAddress = baseAddr() + dta;
+      DownloadUtils dl(this);
+      dl.setTarget(baseAddress);
+      QString localPath = dataPath + "/locale/" + dta.split('/')[1];
+      dl.setLocalFile(localPath);
+      dl.download();
+      if (!dl.saveFile() || !verifyFile(localPath, hash)) {
             button->setText(tr("Failed, try again"));
             button->setEnabled(1);
             }
@@ -166,7 +285,7 @@ void ResourceManager::download()
             MQZipReader zipFile(localPath);
             QFileInfo zfi(localPath);
             QString destinationDir(zfi.absolutePath());
-            QList<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
+            QVector<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
             bool result = true;
             foreach (MQZipReader::FileInfo fi, allFiles) {
                   const QString absPath = destinationDir + "/" + fi.filePath;
@@ -186,7 +305,7 @@ void ResourceManager::download()
                   QFile::remove(localPath);
                   button->setText(tr("Updated"));
                   //  retranslate the UI if current language is updated
-                  if (data == buttonMap.first())
+                  if (dta == languageButtonMap.first())
                         setMscoreLocale(localeName);
                   }
             else {
@@ -196,6 +315,79 @@ void ResourceManager::download()
             }
       }
 
+//---------------------------------------------------------
+//   downloadExtension
+//---------------------------------------------------------
+
+void ResourceManager::downloadExtension()
+      {
+      QPushButton* button = static_cast<QPushButton*>(sender());
+      QString path  = button->property("path").toString();
+      QString hash = button->property("hash").toString();
+      button->setText(tr("Updating"));
+      button->setDisabled(true);
+      QString baseAddress = baseAddr() + path;
+      DownloadUtils dl(this);
+      dl.setTarget(baseAddress);
+      QString localPath = QDir::tempPath() + "/" + path.split('/')[1];
+      QFile::remove(localPath);
+      dl.setLocalFile(localPath);
+      dl.download(true);
+      bool saveFileRes = dl.saveFile();
+      bool verifyFileRes = saveFileRes && verifyFile(localPath, hash);
+      if(!verifyFileRes) {
+            QFile::remove(localPath);
+            button->setText(tr("Failed, try again"));
+            button->setEnabled(true);
+
+            QMessageBox msgBox;
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setTextFormat(Qt::RichText);
+            msgBox.setWindowTitle(tr("Extensions Installation Failed"));
+            if (!saveFileRes) //failed to save file on disk
+                  msgBox.setText(tr("Unable to save the extension file on disk"));
+            else //failed to verify package, so size or hash sum is incorrect
+                  msgBox.setText(tr("Unable to download, save and verify the package.\nCheck your internet connection."));
+            msgBox.exec();
+            }
+      else {
+            bool result = mscore->importExtension(localPath);
+            if (result) {
+                  QFile::remove(localPath);
+                  button->setText(tr("Updated"));
+                  // find uninstall button and make it visible
+                  int rowId = button->property("rowId").toInt();
+                  QPushButton* uninstallButton = static_cast<QPushButton*>(extensionsTable->indexWidget(extensionsTable->model()->index(rowId, 4)));
+                  uninstallButton->setDisabled(false);
+                  }
+            else {
+                  button->setText(tr("Failed, try again"));
+                  button->setEnabled(1);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   uninstallExtension
+//---------------------------------------------------------
+
+void ResourceManager::uninstallExtension()
+      {
+      QPushButton* uninstallButton = static_cast<QPushButton*>(sender());
+      QString extensionId = uninstallButton->property("extensionId").toString();
+      if (mscore->uninstallExtension(extensionId)) {
+            // find uninstall button and make it visible
+            int rowId = uninstallButton->property("rowId").toInt();
+            QPushButton* installButton = static_cast<QPushButton*>(extensionsTable->indexWidget(extensionsTable->model()->index(rowId, 3)));
+            installButton->setText("Install");
+            installButton->setDisabled(false);
+            uninstallButton->setDisabled(true);
+            }
+      }
+
+//---------------------------------------------------------
+//   verifyFile
+//---------------------------------------------------------
 
 bool ResourceManager::verifyFile(QString path, QString hash)
       {

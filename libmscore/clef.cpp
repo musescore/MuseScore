@@ -133,7 +133,7 @@ void Clef::layout()
       // check clef visibility and type compatibility
       if (clefSeg && staff()) {
             int tick             = clefSeg->tick();
-            StaffType* staffType = staff()->staffType(tick);
+            const StaffType* staffType = staff()->constStaffType(tick);
             bool show            = staffType->genClef();        // check staff type allows clef display
 
             // check clef is compatible with staff type group:
@@ -147,7 +147,7 @@ void Clef::layout()
                   }
 
             Measure* meas = clefSeg->measure();
-            if (meas && meas->system()) {
+            if (meas && meas->system() && !score()->lineMode()) {
                   auto ml = meas->system()->measures();
                   bool found = (std::find(ml.begin(), ml.end(), meas) != ml.end());
                   bool courtesy = (tick == meas->endTick() && (meas == meas->system()->lastMeasure() || !found));
@@ -236,8 +236,8 @@ void Clef::draw(QPainter* painter) const
 
 bool Clef::acceptDrop(EditData& data) const
       {
-      return (data.element->type() == ElementType::CLEF
-         || (/*!generated() &&*/ data.element->type() == ElementType::AMBITUS) );
+      return (data.dropElement->type() == ElementType::CLEF
+         || (/*!generated() &&*/ data.dropElement->type() == ElementType::AMBITUS) );
       }
 
 //---------------------------------------------------------
@@ -246,7 +246,7 @@ bool Clef::acceptDrop(EditData& data) const
 
 Element* Clef::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       Clef* c = 0;
       if (e->isClef()) {
             Clef* clef = toClef(e);
@@ -310,7 +310,7 @@ void Clef::read(XmlReader& e)
 
 void Clef::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       if (_clefTypes._concertClef != ClefType::INVALID)
             xml.tag("concertClefType", ClefInfo::tag(_clefTypes._concertClef));
       if (_clefTypes._transposingClef != ClefType::INVALID)

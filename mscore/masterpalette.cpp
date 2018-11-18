@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: masterpalette.cpp
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -96,6 +95,19 @@ Palette* MasterPalette::createPalette(int w, int h, bool grid, double mag)
       }
 
 //---------------------------------------------------------
+//   keyPressEvent
+//---------------------------------------------------------
+
+void MasterPalette::keyPressEvent(QKeyEvent* ev) 
+      {
+      if (ev->key() == Qt::Key_Escape && ev->modifiers() == Qt::NoModifier) {
+            close();
+            return;
+            }
+      QWidget::keyPressEvent(ev);
+      }
+
+//---------------------------------------------------------
 //   selectItem
 //---------------------------------------------------------
 
@@ -147,7 +159,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
       treeWidget->clear();
 
-      addPalette(MuseScore::newClefsPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newClefsPalette());
       keyEditor = new KeyEditor;
 
       keyItem = new QTreeWidgetItem();
@@ -162,26 +174,26 @@ MasterPalette::MasterPalette(QWidget* parent)
       treeWidget->addTopLevelItem(timeItem);
 
       addPalette(MuseScore::newBracketsPalette());
-      addPalette(MuseScore::newAccidentalsPalette(PaletteType::MASTER));
-      addPalette(MuseScore::newArticulationsPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newAccidentalsPalette());
+      addPalette(MuseScore::newArticulationsPalette());
       addPalette(MuseScore::newOrnamentsPalette());
       addPalette(MuseScore::newBreathPalette());
-      addPalette(MuseScore::newGraceNotePalette(PaletteType::MASTER));
+      addPalette(MuseScore::newGraceNotePalette());
       addPalette(MuseScore::newNoteHeadsPalette());
-      addPalette(MuseScore::newLinesPalette(PaletteType::MASTER));
-      addPalette(MuseScore::newBarLinePalette(PaletteType::MASTER));
+      addPalette(MuseScore::newLinesPalette());
+      addPalette(MuseScore::newBarLinePalette());
       addPalette(MuseScore::newArpeggioPalette());
       addPalette(MuseScore::newTremoloPalette());
       addPalette(MuseScore::newTextPalette());
-      addPalette(MuseScore::newTempoPalette(PaletteType::MASTER));
-      addPalette(MuseScore::newDynamicsPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newTempoPalette());
+      addPalette(MuseScore::newDynamicsPalette());
       addPalette(MuseScore::newFingeringPalette());
       addPalette(MuseScore::newRepeatsPalette());
       addPalette(MuseScore::newFretboardDiagramPalette());
       addPalette(MuseScore::newBagpipeEmbellishmentPalette());
       addPalette(MuseScore::newBreaksPalette());
       addPalette(MuseScore::newFramePalette());
-      addPalette(MuseScore::newBeamPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newBeamPalette());
 
       symbolItem = new QTreeWidgetItem();
       symbolItem->setData(0, Qt::UserRole, -1);

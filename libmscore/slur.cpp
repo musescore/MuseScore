@@ -315,8 +315,8 @@ void SlurSegment::computeBezier(QPointF p6o)
             QPointF point = p.pointAtPercent(i/float(nbShapes));
             QRectF re     = QRectF(start, point).normalized();
             if (re.height() < minH) {
-                  qreal d = (minH - re.height()) * .5;
-                  re.adjust(0.0, -d, 0.0, d);
+                  qreal d1 = (minH - re.height()) * .5;
+                  re.adjust(0.0, -d1, 0.0, d1);
                   }
             _shape.add(re);
             start = point;
@@ -354,7 +354,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       if (autoplace()) {
             for (UP& up : _ups)
                   up.off = QPointF();
-            rUserYoffset() = 0;
+            ryoffset() = 0;
             }
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
@@ -511,7 +511,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       if (autoplace()) {
             for (UP& up : _ups)
                   up.off = QPointF();
-            rUserYoffset() = 0;
+            ryoffset() = 0;
             }
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
@@ -549,10 +549,10 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   }
             if (gdist > 0.0) {
                   if (up) {
-                        rUserYoffset() -= (gdist + spatium() * .5);
+                        ryoffset() -= (gdist + spatium() * .5);
                         }
                   else
-                        rUserYoffset() += (gdist + spatium() * .5);
+                        ryoffset() += (gdist + spatium() * .5);
                   }
             }
       setbbox(path.boundingRect());
@@ -587,14 +587,14 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
             Articulation* a = al.at(1);
             if (a->up() == c->up())
                   return yo;
-            else if (a->isTenuto() || a->isStaccato())
+            else if (a->layoutCloseToNote())
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
       else if (al.size() >= 1) {
             Articulation* a = al.at(0);
             if (a->up() == c->up())
                   return yo;
-            else if (a->isTenuto() || a->isStaccato())
+            else if (a->layoutCloseToNote())
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
 #endif
@@ -684,7 +684,7 @@ void Slur::slurPos(SlurPos* sp)
 
       bool useTablature  = staff() && staff()->isTabStaff(endCR()->tick());
       bool staffHasStems = true;     // assume staff uses stems
-      StaffType*  stt    = 0;
+      const StaffType* stt = 0;
       if (useTablature) {
             stt           = staff()->staffType(tick());
             staffHasStems = stt->stemThrough();   // if tab with stems beside, stems do not count for slur pos
@@ -1003,32 +1003,9 @@ void Slur::write(XmlWriter& xml) const
             }
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("Slur id=\"%1\"").arg(xml.spannerId(this)));
+      xml.stag(this);
       SlurTie::writeProperties(xml);
       xml.etag();
-      }
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Slur::read(XmlReader& e)
-      {
-      setTrack(e.track());      // set staff
-      e.addSpanner(e.intAttribute("id"), this);
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "track2")
-                  setTrack2(e.readInt());
-            else if (tag == "startTrack")       // obsolete
-                  setTrack(e.readInt());
-            else if (tag == "endTrack")         // obsolete
-                  e.readInt();
-            else if (!SlurTie::readProperties(e))
-                  e.unknown();
-            }
-      if (track2() == -1)
-            setTrack2(track());
       }
 
 //---------------------------------------------------------
@@ -1037,13 +1014,13 @@ void Slur::read(XmlReader& e)
 
 static bool chordsHaveTie(Chord* c1, Chord* c2)
       {
-      int n1 = c1->notes().size();
-      for (int i1 = 0; i1 < n1; ++i1) {
+      size_t n = c1->notes().size();
+      for (size_t i1 = 0; i1 < n; ++i1) {
             Note* n1 = c1->notes().at(i1);
-            int n2 = c2->notes().size();
-            for (int i2 = 0; i2 < n2; ++i2) {
-                  Note* n2 = c2->notes().at(i2);
-                  if (n1->tieFor() && n1->tieFor() == n2->tieBack())
+            size_t n2 = c2->notes().size();
+            for (size_t i2 = 0; i2 < n2; ++i2) {
+                  Note* n3 = c2->notes().at(i2);
+                  if (n1->tieFor() && n1->tieFor() == n3->tieBack())
                         return true;
                   }
             }
@@ -1387,7 +1364,6 @@ bool Slur::readProperties(XmlReader& e)
             for (int i = n; i < idx; ++i)
                   add(new SlurSegment(score()));
             SlurSegment* segment = new SlurSegment(score());
-            segment->setAutoplace(false);
             segment->read(e);
             add(segment);
             }

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: seq.cpp 5660 2012-05-22 14:17:39Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
@@ -46,6 +45,7 @@
 
 #include "click.h"
 
+#define OV_EXCLUDE_STATIC_CALLBACKS
 #include <vorbis/vorbisfile.h>
 
 #ifdef USE_PORTMIDI
@@ -101,7 +101,7 @@ static size_t ovRead(void* ptr, size_t size, size_t nmemb, void* datasource)
       if (n) {
             const char* src = vd->data.data() + vd->pos;
             memcpy(ptr, src, n);
-            vd->pos += n;
+            vd->pos += int(n);
             }
       return n;
       }
@@ -357,7 +357,6 @@ void Seq::stop()
       if (cv)
             cv->setCursorOn(false);
       if (cs) {
-//??            cs->setLayoutAll();
             cs->setUpdateAll();
             cs->update();
             }
@@ -512,16 +511,23 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
       int type = event.type();
       if (type == ME_NOTEON) {
             bool mute = false;
-            const Note* note = event.note();
 
+            const Note* note = event.note();
             if (note) {
                   Staff* staff      = note->staff();
                   Instrument* instr = staff->part()->instrument(note->chord()->tick());
                   const Channel* a = instr->channel(note->subchannel());
-                  mute = a->mute || a->soloMute || !staff->playbackVoice(note->voice());
+                  mute = a->mute() || a->soloMute() || !staff->playbackVoice(note->voice());
                   }
-            if (!mute)
+            if (!mute) {
+                  if (event.discard()) { // ignore noteoff but restrike noteon
+                        if (event.velo() > 0)
+                              putEvent(NPlayEvent(ME_NOTEON, event.channel(), event.pitch(), 0) ,framePos);
+                        else
+                              return;
+                        }
                   putEvent(event, framePos);
+                  }
             }
       else if (type == ME_CONTROLLER || type == ME_PITCHBEND)
             putEvent(event, framePos);
@@ -646,9 +652,9 @@ void Seq::addCountInClicks()
       if (m->isAnacrusis())         // ...measure is incomplete (anacrusis)
             endTick += timeSig.ticksPerMeasure() - m->ticks();
 
-      for (int tick = 0; tick < endTick; tick += clickTicks) {
-            const int rtick = tick % timeSig.ticksPerMeasure();
-            countInEvents.insert(std::pair<int,NPlayEvent>(tick, NPlayEvent(timeSig.rtick2beatType(rtick))));
+      for (int t = 0; t < endTick; t += clickTicks) {
+            const int rtick = t % timeSig.ticksPerMeasure();
+            countInEvents.insert(std::pair<int,NPlayEvent>(t, NPlayEvent(timeSig.rtick2beatType(rtick))));
             }
 
       NPlayEvent event;
@@ -962,10 +968,10 @@ void Seq::initInstruments(bool realTime)
 
       foreach(const MidiMapping& mm, *cs->midiMapping()) {
             Channel* channel = mm.articulation;
-            foreach(const MidiCoreEvent& e, channel->init) {
+            for (const MidiCoreEvent& e : channel->init) {
                   if (e.type() == ME_INVALID)
                         continue;
-                  NPlayEvent event(e.type(), channel->channel, e.dataA(), e.dataB());
+                  NPlayEvent event(e.type(), channel->channel(), e.dataA(), e.dataB());
                   if (realTime)
                         putEvent(event);
                   else
@@ -974,18 +980,18 @@ void Seq::initInstruments(bool realTime)
             // Setting pitch bend sensitivity to 12 semitones for external synthesizers
             if ((preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)) && mm.channel != 9) {
                   if (realTime) {
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 0));
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 0));
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HDATA,12));
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 127));
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 127));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 0));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 0));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HDATA,12));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 127));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 127));
                         }
                   else {
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 0));
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 0));
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HDATA,12));
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_LRPN, 127));
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel, CTRL_HRPN, 127));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 0));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 0));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HDATA,12));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 127));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 127));
                         }
                   }
             }
@@ -1104,11 +1110,11 @@ void Seq::seek(int utick)
             }
       seekCommon(utick);
 
-      int tick = cs->repeatList()->utick2tick(utick);
-      Segment* seg = cs->tick2segment(tick);
+      int t = cs->repeatList()->utick2tick(utick);
+      Segment* seg = cs->tick2segment(t);
       if (seg)
             mscore->currentScoreView()->moveCursor(seg->tick());
-      cs->setPlayPos(tick);
+      cs->setPlayPos(t);
       cs->update();
       guiToSeq(SeqMsg(SeqMsgId::SEEK, utick));
       }
@@ -1254,9 +1260,9 @@ void Seq::nextMeasure()
 
 void Seq::nextChord()
       {
-      int tick = guiPos->first;
+      int t = guiPos->first;
       for (auto i = guiPos; i != events.cend(); ++i) {
-            if (i->second.type() == ME_NOTEON && i->first > tick && i->second.velo()) {
+            if (i->second.type() == ME_NOTEON && i->first > t && i->second.velo()) {
                   seek(i->first);
                   break;
                   }
@@ -1287,14 +1293,14 @@ void Seq::prevMeasure()
 
 void Seq::prevChord()
       {
-      int tick  = playPos->first;
+      int t  = playPos->first;
       //find the chord just before playpos
-      EventMap::const_iterator i = events.upper_bound(cs->repeatList()->tick2utick(tick));
+      EventMap::const_iterator i = events.upper_bound(cs->repeatList()->tick2utick(t));
       for (;;) {
             if (i->second.type() == ME_NOTEON) {
                   const NPlayEvent& n = i->second;
-                  if (i->first < tick && n.velo()) {
-                        tick = i->first;
+                  if (i->first < t && n.velo()) {
+                        t = i->first;
                         break;
                         }
                   }
@@ -1308,7 +1314,7 @@ void Seq::prevChord()
             for (;;) {
                   if (i->second.type() == ME_NOTEON) {
                         const NPlayEvent& n = i->second;
-                        if (i->first < tick && n.velo()) {
+                        if (i->first < t && n.velo()) {
                               seek(i->first);
                               break;
                               }
@@ -1421,7 +1427,7 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
             }
 
       // audio
-      int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti);
+      int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti());
       _synti->play(event, syntiIdx);
 
       // midi
@@ -1507,11 +1513,11 @@ void Seq::heartBeatTimeout()
                   }
             }
       int utick = ppos->first;
-      int tick = cs->repeatList()->utick2tick(utick);
-      mscore->currentScoreView()->moveCursor(tick);
-      mscore->setPos(tick);
+      int t = cs->repeatList()->utick2tick(utick);
+      mscore->currentScoreView()->moveCursor(t);
+      mscore->setPos(t);
 
-      emit(heartBeat(tick, utick, endFrame));
+      emit(heartBeat(t, utick, endFrame));
 
       PianorollEditor* pre = mscore->getPianorollEditor();
       if (pre && pre->isVisible())
@@ -1553,7 +1559,10 @@ void Seq::updateSynthesizerState(int tick1, int tick2)
 
 double Seq::curTempo() const
       {
-      return cs ? cs->tempomap()->tempo(playPos->first) : 0.0;
+      if (playPos != events.end())
+            return cs ? cs->tempomap()->tempo(playPos->first) : 0.0;
+
+      return 0.0;
       }
 
 //---------------------------------------------------------
@@ -1562,18 +1571,18 @@ double Seq::curTempo() const
 
 void Seq::setLoopIn()
       {
-      int tick;
+      int t;
       if (state == Transport::PLAY) {      // If in playback mode, set the In position where note is being played
             auto ppos = playPos;
             if (ppos != events.cbegin())
                   --ppos;                 // We have to go back one pos to get the correct note that has just been played
-            tick = cs->repeatList()->utick2tick(ppos->first);
+            t = cs->repeatList()->utick2tick(ppos->first);
             }
       else
-            tick = cs->pos();             // Otherwise, use the selected note.
-      if (tick >= cs->loopOutTick())   // If In pos >= Out pos, reset Out pos to end of score
+            t = cs->pos();             // Otherwise, use the selected note.
+      if (t >= cs->loopOutTick())   // If In pos >= Out pos, reset Out pos to end of score
             cs->setPos(POS::RIGHT, cs->lastMeasure()->endTick());
-      cs->setPos(POS::LEFT, tick);
+      cs->setPos(POS::LEFT, t);
       }
 
 //---------------------------------------------------------
@@ -1582,25 +1591,25 @@ void Seq::setLoopIn()
 
 void Seq::setLoopOut()
       {
-      int tick;
+      int t;
       if (state == Transport::PLAY) {    // If in playback mode, set the Out position where note is being played
-            tick = cs->repeatList()->utick2tick(playPos->first);
+            t = cs->repeatList()->utick2tick(playPos->first);
             }
       else
-            tick = cs->pos() + cs->inputState().ticks();   // Otherwise, use the selected note.
-      if (tick <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
+            t = cs->pos() + cs->inputState().ticks();   // Otherwise, use the selected note.
+      if (t <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
             cs->setPos(POS::LEFT, 0);
       else
-          if (tick > cs->lastMeasure()->endTick())
-              tick = cs->lastMeasure()->endTick();
-      cs->setPos(POS::RIGHT, tick);
+          if (t > cs->lastMeasure()->endTick())
+              t = cs->lastMeasure()->endTick();
+      cs->setPos(POS::RIGHT, t);
       if (state == Transport::PLAY)
-            guiToSeq(SeqMsg(SeqMsgId::SEEK, tick));
+            guiToSeq(SeqMsg(SeqMsgId::SEEK, t));
       }
 
-void Seq::setPos(POS, unsigned tick)
+void Seq::setPos(POS, unsigned t)
       {
-      qDebug("seq: setPos %d", tick);
+      qDebug("seq: setPos %d", t);
       }
 
 //---------------------------------------------------------

@@ -2,7 +2,6 @@
 //  BWW to MusicXML converter
 //  Part of MusE Score
 //  Linux Music Score Editor
-//  $Id: parser.cpp 4873 2011-10-19 19:33:04Z lvinken $
 //
 //  Copyright (C) 2010 Werner Schweer and others
 //
@@ -711,13 +710,13 @@ namespace Bww {
   {
     qDebug() << "Parser::parseGraces() value:" << qPrintable(lex.symValue());
 
-    const QString type = "32";
+    const QString c_type = "32";
     const int dots = 0;
     QStringList graces = lex.symValue().split(" ");
     for (int i = 0; i < graces.size(); ++i)
     {
       const QString beam = graceBeam(graces.size(), i);
-      NoteDescription noteDesc(graces.at(i), beam, type, dots, false, false, ST_NONE, true);
+      NoteDescription noteDesc(graces.at(i), beam, c_type, dots, false, false, ST_NONE, true);
       if (measures.isEmpty())
       {
         errorHandler("cannot append note: no measure");

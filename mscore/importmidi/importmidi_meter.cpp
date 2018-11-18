@@ -211,8 +211,8 @@ Meter::MaxLevel maxLevelBetween(const ReducedFraction &startTickInBar,
                   maxEndRaster -= divLen;
             if (startTickInDiv < maxEndRaster) {
                               // max level is found
-                  const auto ratio = startTickInDiv / divLen;
-                  const auto maxStartRaster = divLen * (ratio.numerator() / ratio.denominator());
+                  const auto sratio = startTickInDiv / divLen;
+                  const auto maxStartRaster = divLen * (sratio.numerator() / sratio.denominator());
                   const auto count = (maxEndRaster - maxStartRaster) / divLen;
                   level.pos = maxStartRaster + divLen + divInfo.onTime;
                   level.levelCount = count.numerator() / count.denominator();
@@ -385,8 +385,8 @@ collectDurations(const std::map<ReducedFraction, Node> &nodes,
             const auto tupletRatio = findTupletRatio(it1->first, it2->first, tupletsInBar);
             const auto duration = tupletRatio * (it2->first - it1->first);
             auto list = toDurationList(duration.fraction(), useDots, 1, printRestRemains);
-            for (const auto &duration: list)
-                  resultDurations.push_back({tupletRatio, duration});
+            for (const auto &dur : list)
+                  resultDurations.push_back({tupletRatio, dur});
             }
 
       return resultDurations;
@@ -400,7 +400,7 @@ bool badLevelCondition(int startLevelDiff, int endLevelDiff, int tol)
 int noteCount(const ReducedFraction &duration,
               bool useDots)
       {
-      return toDurationList(duration.fraction(), useDots, 1, false).size();
+      return int(toDurationList(duration.fraction(), useDots, 1, false).size());
       }
 
 bool isLessNoteCount(const ReducedFraction &t1,

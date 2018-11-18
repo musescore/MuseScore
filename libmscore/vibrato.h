@@ -32,17 +32,16 @@ class VibratoSegment final : public LineSegment {
 
    protected:
    public:
-      VibratoSegment(Score* s) : LineSegment(s)      {}
+      VibratoSegment(Score* s) : LineSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)      {}
       Vibrato* vibrato() const                       { return toVibrato(spanner()); }
       virtual ElementType type() const override      { return ElementType::VIBRATO_SEGMENT; }
       virtual VibratoSegment* clone() const override { return new VibratoSegment(*this); }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
-      virtual QVariant getProperty(Pid propertyId) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
-      Shape shape() const override;
 
+      virtual Element* propertyDelegate(Pid) override;
+
+      Shape shape() const override;
       std::vector<SymId> symbols() const           { return _symbols; }
       void setSymbols(const std::vector<SymId>& s) { _symbols = s; }
       };
@@ -85,10 +84,12 @@ class Vibrato final : public SLine {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
-      virtual void setYoff(qreal) override;
-
       virtual QString accessibleInfo() const override;
       };
+
+//---------------------------------------------------------
+//   VibratoTableItem
+//---------------------------------------------------------
 
 struct VibratoTableItem {
       Vibrato::Type type;

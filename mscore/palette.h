@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: palette.h 5395 2012-02-28 18:09:57Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
@@ -137,7 +136,7 @@ class Palette : public QWidget {
       virtual void leaveEvent(QEvent*) override;
       virtual bool event(QEvent*) override;
       virtual void resizeEvent(QResizeEvent*) override;
-      void applyPaletteElement(PaletteCell* cell);
+      void applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modifiers = 0);
 
       virtual void dragEnterEvent(QDragEnterEvent*) override;
       virtual void dragMoveEvent(QDragMoveEvent*) override;

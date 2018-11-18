@@ -80,12 +80,12 @@ EditStaffType::EditStaffType(QWidget* parent, Staff* st)
 
       // tab page configuration
       QList<QString> fontNames = StaffType::fontNames(false);
-      foreach (const QString& name, fontNames)   // fill fret font name combo
-            fretFontName->addItem(name);
+      foreach (const QString& fn, fontNames)   // fill fret font name combo
+            fretFontName->addItem(fn);
       fretFontName->setCurrentIndex(0);
       fontNames = StaffType::fontNames(true);
-      foreach(const QString& name, fontNames)   // fill duration font name combo
-            durFontName->addItem(name);
+      foreach(const QString& fn, fontNames)   // fill duration font name combo
+            durFontName->addItem(fn);
       durFontName->setCurrentIndex(0);
 
       for (auto i : noteHeadSchemes)
@@ -190,10 +190,10 @@ void EditStaffType::setValues()
       blockSignals(true);
 
       StaffGroup group = staffType.group();
-      int idx = int(group);
-      stack->setCurrentIndex(idx);
-      groupName->setText(qApp->translate("staff group header name", g_groupNames[idx]));
-//      groupCombo->setCurrentIndex(idx);
+      int i = int(group);
+      stack->setCurrentIndex(i);
+      groupName->setText(qApp->translate("staff group header name", g_groupNames[i]));
+//      groupCombo->setCurrentIndex(i);
 
       name->setText(staffType.name());
       lines->setValue(staffType.lines());
@@ -543,7 +543,7 @@ void EditStaffType::updatePreview()
       else if (staffType.group() == StaffGroup::STANDARD)
              preview = standardPreview;
       if (preview) {
-            preview->score()->staff(0)->setStaffType(0, &staffType);
+            preview->score()->staff(0)->setStaffType(0, staffType);
             preview->score()->doLayout();
             preview->updateAll();
             preview->update();
@@ -557,22 +557,22 @@ void EditStaffType::updatePreview()
 
 QString EditStaffType::createUniqueStaffTypeName(StaffGroup group)
       {
-      QString name;
+      QString sn;
       for (int idx = 1; ; ++idx) {
             switch (group) {
                   case StaffGroup::STANDARD:
-                        name = QString("Standard-%1 [*]").arg(idx);
+                        sn = QString("Standard-%1 [*]").arg(idx);
                         break;
                   case StaffGroup::PERCUSSION:
-                        name = QString("Perc-%1 [*]").arg(idx);
+                        sn = QString("Perc-%1 [*]").arg(idx);
                         break;
                   case StaffGroup::TAB:
-                        name = QString("Tab-%1 [*]").arg(idx);
+                        sn = QString("Tab-%1 [*]").arg(idx);
                         break;
                   }
             bool found = false;
             for (const StaffType& st : StaffType::presets()) {
-                  if (st.name() == name) {
+                  if (st.name() == sn) {
                         found = true;
                         break;
                         }
@@ -580,7 +580,7 @@ QString EditStaffType::createUniqueStaffTypeName(StaffGroup group)
             if (!found)
                   break;
             }
-      return name;
+      return sn;
       }
 
 //---------------------------------------------------------

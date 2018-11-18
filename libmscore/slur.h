@@ -32,7 +32,7 @@ class SlurSegment final : public SlurTieSegment {
       SlurSegment(const SlurSegment& ss) : SlurTieSegment(ss) {}
 
       virtual SlurSegment* clone() const override  { return new SlurSegment(*this); }
-      virtual ElementType type() const override  { return ElementType::SLUR_SEGMENT; }
+      virtual ElementType type() const override    { return ElementType::SLUR_SEGMENT; }
       virtual int subtype() const override         { return static_cast<int>(spanner()->type()); }
       virtual QString subtypeName() const override { return name(spanner()->type()); }
       virtual void draw(QPainter*) const override;
@@ -62,7 +62,6 @@ class Slur final : public SlurTie {
       virtual Slur* clone() const override        { return new Slur(*this); }
       virtual ElementType type() const override { return ElementType::SLUR; }
       virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
       virtual void layout() override;
       virtual SpannerSegment* layoutSystem(System*) override;
       virtual void setTrack(int val) override;

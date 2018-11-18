@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: musicxmlsupport.cpp 5595 2012-04-29 15:30:32Z lvinken $
 //
 //  Copyright (C) 2012 Werner Schweer and others
 //
@@ -202,8 +201,8 @@ static QString domElementPath(const QDomElement& e)
       QDomNode dn(e);
       while (!dn.parentNode().isNull()) {
             dn = dn.parentNode();
-            const QDomElement& e = dn.toElement();
-            const QString k(e.tagName());
+            const QDomElement& de = dn.toElement();
+            const QString k(de.tagName());
             if (!s.isEmpty())
                   s += ":";
             s += k;

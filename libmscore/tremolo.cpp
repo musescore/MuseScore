@@ -358,7 +358,7 @@ void Tremolo::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", tremoloTypeName());
       Element::writeProperties(xml);
       xml.etag();

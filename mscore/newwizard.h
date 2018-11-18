@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: newwizard.h 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2008-2009 Werner Schweer and others
 //
@@ -145,6 +144,7 @@ class NewWizardPage4 : public QWizardPage {
       virtual bool isComplete() const override;
       QString templatePath() const;
       virtual void initializePage();
+      void buildTemplatesList();
       };
 
 //---------------------------------------------------------
@@ -207,6 +207,7 @@ class NewWizard : public QWizard {
       double tempo() const                { return p5->tempo();       }
       bool createTempo() const            { return p5->createTempo(); }
       bool emptyScore() const;
+      void updateValues() const;
       };
 
 

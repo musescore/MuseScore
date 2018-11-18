@@ -25,9 +25,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 StaffTypeChange::StaffTypeChange(Score* score)
-   : Element(score)
+   : Element(score, ElementFlag::HAS_TAG)
       {
-      setFlag(ElementFlag::HAS_TAG, true);
       lw = spatium() * 0.3;
       }
 
@@ -43,7 +42,7 @@ StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
 
 void StaffTypeChange::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       if (_staffType)
             _staffType->write(xml);
       Element::writeProperties(xml);
@@ -62,7 +61,7 @@ void StaffTypeChange::read(XmlReader& e)
                   StaffType st;
                   st.read(e);
                   if (staff())
-                        _staffType = staff()->setStaffType(measure()->tick(), &st);
+                        _staffType = staff()->setStaffType(measure()->tick(), st);
                   else
                         _staffType = new StaffType(st);     // drag&drop operation
                   }

@@ -64,8 +64,7 @@ class MeasureBase;
 class Dynamic;
 class Selection;
 class Text;
-struct Channel;
-class TextStyle;
+class Channel;
 class Tuplet;
 class KeySig;
 class TimeSig;
@@ -120,8 +119,10 @@ class UndoCommand {
 class UndoStack {
       UndoCommand* curCmd;
       QList<UndoCommand*> list;
+      std::vector<int> stateList;
+      int nextState;
+      int cleanState;
       int curIdx;
-      int cleanIdx;
 
    public:
       UndoStack();
@@ -136,7 +137,8 @@ class UndoStack {
       void setClean();
       bool canUndo() const          { return curIdx > 0;           }
       bool canRedo() const          { return curIdx < list.size(); }
-      bool isClean() const          { return cleanIdx == curIdx;   }
+      int state() const             { return stateList[curIdx];    }
+      bool isClean() const          { return cleanState == state();     }
       int getCurIdx() const         { return curIdx; }
       void remove(int idx);
       bool empty() const            { return !canUndo() && !canRedo();  }
@@ -1182,39 +1184,6 @@ class Link : public LinkUnlink {
       UNDO_NAME("Link")
       };
 
-#if 0
-//---------------------------------------------------------
-//   LinkStaff
-//---------------------------------------------------------
-
-class LinkStaff : public UndoCommand {
-      Staff* s1;
-      Staff* s2;
-
-   public:
-      LinkStaff(Staff* _s1, Staff* _s2) : s1(_s1), s2(_s2) {}
-      virtual void undo(EditData*) override { s2->unlink(s1); } // s1 is removed
-      virtual void redo(EditData*) override { s1->linkTo(s2); } // s1 is added
-      UNDO_NAME("LinkStaff")
-      };
-
-
-//---------------------------------------------------------
-//   UnlinkStaff
-//---------------------------------------------------------
-
-class UnlinkStaff : public UndoCommand {
-      Staff* s1;
-      Staff* s2;
-
-   public:
-      UnlinkStaff(Staff* _s1, Staff* _s2) : s1(_s1), s2(_s2) {}
-      virtual void undo(EditData*) override { s2->linkTo(s1); } // s2 is added
-      virtual void redo(EditData*) override { s1->unlink(s2); } // s2 is removed
-      UNDO_NAME("UnlinkStaff")
-      };
-#endif
-
 //---------------------------------------------------------
 //   ChangeStartEndSpanner
 //---------------------------------------------------------
@@ -1274,6 +1243,38 @@ class ChangeGap : public UndoCommand {
    public:
       ChangeGap(Rest* r, bool v) : rest(r), v(v) {}
       UNDO_NAME("ChangeGap")
+      };
+
+//---------------------------------------------------------
+//   FretDot
+//---------------------------------------------------------
+
+class FretDot : public UndoCommand {
+      FretDiagram* fret;
+      int string;
+      int dot;
+
+      void flip(EditData*) override;
+
+   public:
+      FretDot(FretDiagram* f, int _string, int _dot) : fret(f), string(_string), dot(_dot) {}
+      UNDO_NAME("FretDot")
+      };
+
+//---------------------------------------------------------
+//   FretMarker
+//---------------------------------------------------------
+
+class FretMarker : public UndoCommand {
+      FretDiagram* fret;
+      int string;
+      int marker;
+
+      void flip(EditData*) override;
+
+   public:
+      FretMarker(FretDiagram* f, int _string, int _marker) : fret(f), string(_string), marker(_marker) {}
+      UNDO_NAME("FretMarker")
       };
 
 }     // namespace Ms

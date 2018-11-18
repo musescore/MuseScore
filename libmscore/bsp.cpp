@@ -85,16 +85,16 @@ static inline int intmaxlog(int n)
 //   initialize
 //---------------------------------------------------------
 
-void BspTree::initialize(const QRectF& rect, int n)
+void BspTree::initialize(const QRectF& rec, int n)
       {
       depth      = intmaxlog(n);
-      this->rect = rect;
+      this->rect = rec;
       leafCnt    = 0;
 
       nodes.resize((1 << (depth+1)) - 1);
       leaves.resize(1 << depth);
       leaves.fill(QList<Element*>());
-      initialize(rect, depth, 0);
+      initialize(rec, depth, 0);
       }
 
 //---------------------------------------------------------
@@ -134,14 +134,14 @@ void BspTree::remove(Element* element)
 //   items
 //---------------------------------------------------------
 
-QList<Element*> BspTree::items(const QRectF& rect)
+QList<Element*> BspTree::items(const QRectF& rec)
       {
       FindItemBspTreeVisitor findVisitor;
-      climbTree(&findVisitor, rect);
+      climbTree(&findVisitor, rec);
       QList<Element*> l;
       for (Element * e : findVisitor.foundItems) {
           e->itemDiscovered = false;
-          if (e->pageBoundingRect().intersects(rect))
+          if (e->pageBoundingRect().intersects(rec))
                 l.append(e);
           }
           return l;
@@ -176,11 +176,11 @@ QString BspTree::debug(int index) const
 
       QString tmp;
       if (node->type == Node::Type::LEAF) {
-            QRectF rect = rectForIndex(index);
+            QRectF rec = rectForIndex(index);
             if (!leaves[node->leafIndex].empty()) {
                   tmp += QString::fromLatin1("[%1, %2, %3, %4] contains %5 items\n")
-                   .arg(rect.left()).arg(rect.top())
-                   .arg(rect.width()).arg(rect.height())
+                   .arg(rec.left()).arg(rec.top())
+                   .arg(rec.width()).arg(rec.height())
                    .arg(leaves[node->leafIndex].size());
                   }
             }
@@ -202,30 +202,30 @@ QString BspTree::debug(int index) const
 //   initialize
 //---------------------------------------------------------
 
-void BspTree::initialize(const QRectF& rect, int depth, int index)
+void BspTree::initialize(const QRectF& rec, int dep, int index)
       {
       Node* node = &nodes[index];
       if (index == 0) {
             node->type = Node::Type::HORIZONTAL;
-            node->offset = rect.center().x();
+            node->offset = rec.center().x();
             }
 
-      if (depth) {
+      if (dep) {
             Node::Type type;
             QRectF rect1, rect2;
             qreal offset1, offset2;
 
             if (node->type == Node::Type::HORIZONTAL) {
                   type = Node::Type::VERTICAL;
-                  rect1.setRect(rect.left(), rect.top(), rect.width(), rect.height() * .5);
-                  rect2.setRect(rect1.left(), rect1.bottom(), rect1.width(), rect.height() - rect1.height());
+                  rect1.setRect(rec.left(), rec.top(), rec.width(), rec.height() * .5);
+                  rect2.setRect(rect1.left(), rect1.bottom(), rect1.width(), rec.height() - rect1.height());
                   offset1 = rect1.center().x();
                   offset2 = rect2.center().x();
                   }
             else {
                   type = Node::Type::HORIZONTAL;
-                  rect1.setRect(rect.left(), rect.top(), rect.width() * .5, rect.height());
-                  rect2.setRect(rect1.right(), rect1.top(), rect.width() - rect1.width(), rect1.height());
+                  rect1.setRect(rec.left(), rec.top(), rec.width() * .5, rec.height());
+                  rect2.setRect(rect1.right(), rect1.top(), rec.width() - rect1.width(), rect1.height());
                   offset1 = rect1.center().y();
                   offset2 = rect2.center().y();
                   }
@@ -240,8 +240,8 @@ void BspTree::initialize(const QRectF& rect, int depth, int index)
             child->offset = offset2;
             child->type   = type;
 
-            initialize(rect1, depth - 1, childIndex);
-            initialize(rect2, depth - 1, childIndex + 1);
+            initialize(rect1, dep - 1, childIndex);
+            initialize(rect2, dep - 1, childIndex + 1);
             }
       else {
             node->type      = Node::Type::LEAF;
@@ -284,7 +284,7 @@ void BspTree::climbTree(BspTreeVisitor* visitor, const QPointF& pos, int index)
 //   climbTree
 //---------------------------------------------------------
 
-void BspTree::climbTree(BspTreeVisitor* visitor, const QRectF& rect, int index)
+void BspTree::climbTree(BspTreeVisitor* visitor, const QRectF& rec, int index)
       {
       if (nodes.empty())
             return;
@@ -297,24 +297,23 @@ void BspTree::climbTree(BspTreeVisitor* visitor, const QRectF& rect, int index)
                   visitor->visit(&leaves[node->leafIndex]);
                   break;
             case Node::Type::VERTICAL:
-                  if (rect.left() < node->offset) {
-                        climbTree(visitor, rect, childIndex);
-                        if (rect.right() >= node->offset)
-                              climbTree(visitor, rect, childIndex + 1);
+                  if (rec.left() < node->offset) {
+                        climbTree(visitor, rec, childIndex);
+                        if (rec.right() >= node->offset)
+                              climbTree(visitor, rec, childIndex + 1);
                         }
                   else {
-                        climbTree(visitor, rect, childIndex + 1);
+                        climbTree(visitor, rec, childIndex + 1);
                         }
                   break;
             case Node::Type::HORIZONTAL:
-                  int childIndex = firstChildIndex(index);
-                  if (rect.top() < node->offset) {
-                        climbTree(visitor, rect, childIndex);
-                        if (rect.bottom() >= node->offset)
-                              climbTree(visitor, rect, childIndex + 1);
+                  if (rec.top() < node->offset) {
+                        climbTree(visitor, rec, childIndex);
+                        if (rec.bottom() >= node->offset)
+                              climbTree(visitor, rec, childIndex + 1);
                         }
                   else {
-                        climbTree(visitor, rect, childIndex + 1);
+                        climbTree(visitor, rec, childIndex + 1);
                         }
             }
       }
@@ -329,22 +328,22 @@ QRectF BspTree::rectForIndex(int index) const
             return rect;
 
       int parentIdx = parentIndex(index);
-      QRectF rect   = rectForIndex(parentIdx);
+      QRectF rec   = rectForIndex(parentIdx);
       const Node *parent = &nodes.at(parentIdx);
 
       if (parent->type == Node::Type::HORIZONTAL) {
             if (index & 1)
-                  rect.setRight(parent->offset);
+                  rec.setRight(parent->offset);
             else
-                  rect.setLeft(parent->offset);
+                  rec.setLeft(parent->offset);
             }
       else {
             if (index & 1)
-                  rect.setBottom(parent->offset);
+                  rec.setBottom(parent->offset);
             else
-                  rect.setTop(parent->offset);
+                  rec.setTop(parent->offset);
             }
-      return rect;
+      return rec;
       }
 
 }

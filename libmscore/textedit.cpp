@@ -24,8 +24,13 @@ void TextBase::editInsertText(TextCursor* cursor, const QString& s)
       Q_ASSERT(!layoutInvalid);
       textInvalid = true;
 
+      int col = 0;
+      for (const QChar& c : s) {
+            if (!c.isHighSurrogate())
+                  ++col;
+            }
       cursor->curLine().insert(cursor, s);
-      cursor->setColumn(cursor->column() + s.size());
+      cursor->setColumn(cursor->column() + col);
       cursor->clearSelection();
 
       triggerLayout();
@@ -130,7 +135,6 @@ void TextBase::insertSym(EditData& ed, SymId id)
 
       deleteSelectedText(ed);
       QString s = score()->scoreFont()->toString(id);
-
       CharFormat fmt = *_cursor->format();  // save format
 //      uint code = ScoreFont::fallbackFont()->sym(id).code();
       _cursor->format()->setFontFamily("ScoreText");
@@ -173,7 +177,16 @@ bool TextBase::edit(EditData& ed)
       if (hexState >= 0) {
             if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier | Qt::KeypadModifier)) {
                   switch (ed.key) {
-                        case Qt::Key_0 ... Qt::Key_9:
+                        case Qt::Key_0:
+                        case Qt::Key_1:
+                        case Qt::Key_2:
+                        case Qt::Key_3:
+                        case Qt::Key_4:
+                        case Qt::Key_5:
+                        case Qt::Key_6:
+                        case Qt::Key_7:
+                        case Qt::Key_8:
+                        case Qt::Key_9:
                               s = QChar::fromLatin1(ed.key);
                               ++hexState;
                               wasHex = true;
@@ -184,7 +197,12 @@ bool TextBase::edit(EditData& ed)
                   }
             else if (ed.modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
                   switch (ed.key) {
-                        case Qt::Key_A ... Qt::Key_F:
+                        case Qt::Key_A:
+                        case Qt::Key_B:
+                        case Qt::Key_C:
+                        case Qt::Key_D:
+                        case Qt::Key_E:
+                        case Qt::Key_F:
                               s = QChar::fromLatin1(ed.key);
                               ++hexState;
                               wasHex = true;
@@ -200,7 +218,9 @@ bool TextBase::edit(EditData& ed)
 
             switch (ed.key) {
                   case Qt::Key_Z:         // happens when the undo stack is empty
-                        return true;
+                        if (ed.modifiers == Qt::ControlModifier)
+                              return true;
+                        break;
 
                   case Qt::Key_Enter:
                   case Qt::Key_Return:
@@ -463,14 +483,14 @@ Element* TextBase::drop(EditData& ed)
       {
       TextCursor* _cursor = cursor(ed);
 
-      Element* e = ed.element;
+      Element* e = ed.dropElement;
+
       switch (e->type()) {
             case ElementType::SYMBOL:
                   {
                   SymId id = toSymbol(e)->sym();
                   delete e;
 
-                  deleteSelectedText(ed);
                   insertSym(ed, id);
                   }
                   break;
@@ -478,9 +498,8 @@ Element* TextBase::drop(EditData& ed)
             case ElementType::FSYMBOL:
                   {
                   uint code = toFSymbol(e)->code();
-                  delete e;
-
                   QString s = QString::fromUcs4(&code, 1);
+                  delete e;
 
                   deleteSelectedText(ed);
                   score()->undo(new InsertText(_cursor, s), &ed);
@@ -488,6 +507,7 @@ Element* TextBase::drop(EditData& ed)
                   break;
 
             default:
+                  qDebug("drop <%s> not handled", e->name());
                   break;
             }
       return 0;

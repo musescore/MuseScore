@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: measureproperties.cpp 5628 2012-05-15 07:46:43Z wschweer $
 //
 //  Copyright (C) 2007 Werner Schweer and others
 //

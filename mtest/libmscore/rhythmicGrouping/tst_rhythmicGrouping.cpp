@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -39,6 +38,7 @@ class TestRhythmicGrouping : public QObject, public MTest
       void groupVoices()             { group("groupVoices.mscx",            "groupVoices-ref.mscx");       }
       void groupConflicts()          { group("groupConflicts.mscx",         "groupConflicts-ref.mscx", 1); } // only group 1st staff
       void groupArticulationsTies()  { group("groupArticulationsTies.mscx", "groupArticulationsTies-ref.mscx"); } // test for articulations and forward/backward ties
+      void groupShortenNotes()       { group("groupShortenNotes.mscx",      "groupShortenNotes-ref.mscx"); } // test for regrouping rhythms when notes should be shortened
 
       };
 

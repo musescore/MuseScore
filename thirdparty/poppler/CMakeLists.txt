@@ -137,9 +137,26 @@ if (APPLE)
    set ( POPPLER_COMPILE_FLAGS "-O2 -Wno-unknown-warning-option -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-private-field -Wno-return-stack-address -Wno-shift-negative-value -std=c++11")
 else (APPLE)
    if (MINGW)
-      set (POPPLER_COMPILE_FLAGS "-O2 -Wall -Wextra -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -Wno-format -std=c++11")
+       if (BUILD_64)
+          set (POPPLER_COMPILE_FLAGS "-O2 -Wall -Wextra -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -Wno-format -Wno-shift-negative-value -Wno-stringop-overflow -std=c++11")
+       else (BUILD_64)
+          set (POPPLER_COMPILE_FLAGS "-O2 -Wall -Wextra -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -Wno-format -std=c++11")
+       endif (BUILD_64)
    else (MINGW)
-      set (POPPLER_COMPILE_FLAGS "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -std=c++11")
+      if (NOT MSVC)
+         set (POPPLER_COMPILE_FLAGS "-O2 -Wno-write-strings -ansi -Wnon-virtual-dtor -Woverloaded-virtual -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unused-but-set-variable -std=c++11")
+      else (NOT MSVC)
+         # For MSVC:
+         # -O2: controls optimization, not compatible with global options
+         # -ansi & -std=c++11 -> gloablly set /std:c++14 should take care.
+         # -Wno-write-strings    -> ???
+         # -Wno-unused-parameter -> Warning C4100: 'identifier' : unreferenced formal parameter
+         # -Wnon-virtual-dtor    -> /Wall enabled all warnings, no need to enable particularly (Warning C4265: 'classname': class has virtual functions, but destructor is not virtual\n instances of this class may not be destructed correctly)
+         # -Woverloaded-virtual  -> /Wall enabled all warnings, no need to enable particularly
+         # -Wno-missing-field-initializers -> ???
+         # -Wno-unused-but-set-variable -> Warning C4189: 'identifier': local variable is initialized but not referenced
+         set (POPPLER_COMPILE_FLAGS "/wd4065 /wd4100 /wd4121 /wd4127 /wd4189 /wd4244 /wd4245 /wd4310 /wd4255 /wd4267 /wd4309 /wd4334 /wd4456 /wd4458 /wd4459 /wd4701 /wd4702 /wd4703 /wd4706 /wd4805 /wd4996")
+      endif (NOT MSVC)
    endif(MINGW)
 endif(APPLE)
 

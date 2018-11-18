@@ -38,6 +38,7 @@ const char* tests[] = {
       "libmscore/measure/tst_measure",
       "libmscore/beam/tst_beam",
       "libmscore/layout/tst_benchmark",
+      "libmscore/layout_elements/tst_layout_elements",
       "libmscore/instrumentchange/tst_instrumentchange",
       "libmscore/join/tst_join",
       "libmscore/transpose/tst_transpose",
@@ -54,6 +55,7 @@ const char* tests[] = {
       "importmidi/tst_importmidi",
       "libmscore/selectionrangedelete/tst_selectionrangedelete",
       "libmscore/parts/tst_parts",
+      "testscript/tst_runscripts",
 #endif
 #if 0
       "libmscore/spanners/tst_spanners",              // FAIL

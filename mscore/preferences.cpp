@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: preferences.cpp 5660 2012-05-22 14:17:39Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -32,7 +31,6 @@ void Preferences::init(bool storeInMemoryOnly)
       if (!storeInMemoryOnly) {
             if (_settings)
                   delete _settings;
-
             _settings = new QSettings();
             }
 
@@ -40,8 +38,10 @@ void Preferences::init(bool storeInMemoryOnly)
 
 #if defined(Q_OS_MAC) || (defined(Q_OS_WIN) && !defined(FOR_WINSTORE))
       bool checkUpdateStartup = true;
+      bool checkExtensionsUpdateStartup = true;
 #else
       bool checkUpdateStartup = false;
+      bool checkExtensionsUpdateStartup = false;
 #endif
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
@@ -51,7 +51,6 @@ void Preferences::init(bool storeInMemoryOnly)
 #else
       bool nativeDialogs           = false;    // don't use system native file dialogs
 #endif
-
       bool defaultUsePortAudio = false;
       bool defaultUsePulseAudio = false;
       bool defaultUseJackAudio = false;
@@ -84,6 +83,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_PATHS_MYSHORTCUTS,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("shortcuts_directory", "Shortcuts"))).absoluteFilePath(), false)},
             {PREF_APP_PATHS_MYSTYLES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("styles_directory", "Styles"))).absoluteFilePath(), false)},
             {PREF_APP_PATHS_MYTEMPLATES,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("templates_directory", "Templates"))).absoluteFilePath(), false)},
+            {PREF_APP_PATHS_MYEXTENSIONS,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("extensions_directory", "Extensions"))).absoluteFilePath(), false)},
             {PREF_APP_PLAYBACK_FOLLOWSONG,                         new BoolPreference(true)},
             {PREF_APP_PLAYBACK_PANPLAYBACK,                        new BoolPreference(true)},
             {PREF_APP_PLAYBACK_PLAYREPEATS,                        new BoolPreference(true)},
@@ -91,7 +91,9 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_STARTUP_FIRSTSTART,                          new BoolPreference(true)},
             {PREF_APP_STARTUP_SESSIONSTART,                        new EnumPreference(QVariant::fromValue(SessionStart::SCORE), false)},
             {PREF_APP_STARTUP_STARTSCORE,                          new StringPreference(":/data/My_First_Score.mscz", false)},
+            {PREF_UI_APP_STARTUP_SHOWTOURS,                        new BoolPreference(true)},
             {PREF_APP_WORKSPACE,                                   new StringPreference("Basic", false)},
+            {PREF_EXPORT_AUDIO_NORMALIZE,                          new BoolPreference(true)},
             {PREF_EXPORT_AUDIO_SAMPLERATE,                         new IntPreference(44100, false)},
             {PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)},
             {PREF_EXPORT_MUSICXML_EXPORTBREAKS,                    new EnumPreference(QVariant::fromValue(MusicxmlExportBreaks::ALL), false)},
@@ -150,6 +152,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA,                new BoolPreference(false, false)},
             {PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION,            new BoolPreference(false, false)},
             {PREF_UI_APP_STARTUP_CHECKUPDATE,                      new BoolPreference(checkUpdateStartup, false)},
+            {PREF_UI_APP_STARTUP_CHECK_EXTENSIONS_UPDATE,          new BoolPreference(checkExtensionsUpdateStartup, false)},
             {PREF_UI_APP_STARTUP_SHOWNAVIGATOR,                    new BoolPreference(false, false)},
             {PREF_UI_APP_STARTUP_SHOWPLAYPANEL,                    new BoolPreference(false, false)},
             {PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN,                 new BoolPreference(true, false)},
@@ -170,10 +173,29 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_SCORE_VOICE3_COLOR,                           new ColorPreference(QColor("#c04400"))},    // orange
             {PREF_UI_SCORE_VOICE4_COLOR,                           new ColorPreference(QColor("#70167a"))},    // purple
             {PREF_UI_THEME_ICONWIDTH,                              new IntPreference(28, false)},
-            {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)}
+            {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)},
+            {PREF_UI_THEME_FONTFAMILY,                             new StringPreference(QApplication::font().family(), false) },
+            {PREF_UI_THEME_FONTSIZE,                               new IntPreference(QApplication::font().pointSize(), false) },
+            {PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR,           new ColorPreference(QColor("#0cebff"))},
+            {PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR,              new ColorPreference(QColor("#1dcca0"))},
+            {PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR,                new ColorPreference(QColor("#ffff00"))},
+            {PREF_UI_PIANOROLL_DARK_BG_BASE_COLOR,                 new ColorPreference(QColor("#3a3a3a"))},
+            {PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR,            new ColorPreference(QColor("#3a3a3a"))},
+            {PREF_UI_PIANOROLL_DARK_BG_KEY_BLACK_COLOR,            new ColorPreference(QColor("#262626"))},
+            {PREF_UI_PIANOROLL_DARK_BG_GRIDLINE_COLOR,             new ColorPreference(QColor("#111111"))},
+            {PREF_UI_PIANOROLL_DARK_BG_TEXT_COLOR,                 new ColorPreference(QColor("#999999"))},
+            {PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR,           new ColorPreference(QColor("#0cebff"))},
+            {PREF_UI_PIANOROLL_LIGHT_NOTE_UNSEL_COLOR,             new ColorPreference(QColor("#1dcca0"))},
+            {PREF_UI_PIANOROLL_LIGHT_NOTE_SEL_COLOR,               new ColorPreference(QColor("#ffff00"))},
+            {PREF_UI_PIANOROLL_LIGHT_BG_BASE_COLOR,                new ColorPreference(QColor("#e0e0e7"))},
+            {PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR,           new ColorPreference(QColor("#ffffff"))},
+            {PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR,           new ColorPreference(QColor("#e6e6e6"))},
+            {PREF_UI_PIANOROLL_LIGHT_BG_GRIDLINE_COLOR,            new ColorPreference(QColor("#a2a2a6"))},
+            {PREF_UI_PIANOROLL_LIGHT_BG_TEXT_COLOR,                new ColorPreference(QColor("#111111"))},
       });
 
       _initialized = true;
+      updateLocalPreferences();
       }
 
 void Preferences::save()
@@ -206,6 +228,8 @@ QVariant Preferences::get(const QString key) const
             return (_inMemorySettings.contains(key)) ? pref : QVariant(); // invalid QVariant returned when not found
       else if (_inMemorySettings.contains(key)) // if there exists a temporary value stored "in memory" return this value
             return pref;
+      else if (useLocalPrefs && localPreferences.contains(key))
+            return localPreferences.value(key);
       else
             return settings()->value(key);
       }
@@ -214,6 +238,8 @@ void Preferences::set(const QString key, QVariant value, bool temporary)
       {
       if (_storeInMemoryOnly || temporary)
             _inMemorySettings[key] = value;
+      else if (useLocalPrefs && localPreferences.contains(key))
+            localPreferences[key] = value;
       else
             settings()->setValue(key, value);
       }
@@ -227,7 +253,7 @@ void Preferences::remove(const QString key)
 
 bool Preferences::has(const QString key) const
       {
-      return _inMemorySettings.contains(key) > 0 || settings()->contains(key);
+      return _inMemorySettings.contains(key) || settings()->contains(key);
       }
 
 QVariant Preferences::preference(const QString key) const
@@ -246,7 +272,7 @@ bool Preferences::checkIfKeyExists(const QString key) const
       {
       bool exists = _allPreferences.contains(key);
       if (!exists) {
-            qWarning("Preference not found: %s", key.toStdString().c_str());
+            qWarning("Preference not found: %s", key.toUtf8().constData());
             Q_ASSERT(exists);
             }
       return exists;
@@ -264,7 +290,7 @@ QMetaType::Type Preferences::type(const QString key) const
 bool Preferences::checkType(const QString key, QMetaType::Type t) const
       {
       if (type(key) != t) {
-            qWarning("Preference is not of correct type: %s", key.toStdString().c_str());
+            qWarning("Preference is not of correct type: %s", key.toUtf8().constData());
             Q_ASSERT(type(key) == QMetaType::Bool);
             }
       return type(key) == t;
@@ -317,7 +343,7 @@ int Preferences::getInt(const QString key) const
       bool ok;
       int pref = v.toInt(&ok);
       if (!ok) {
-            qWarning("Can not convert preference %s to int. Returning default value.", key.toStdString().c_str());
+            qWarning("Can not convert preference %s to int. Returning default value.", key.toUtf8().constData());
             return defaultValue(key).toInt();
             }
       return pref;
@@ -330,7 +356,7 @@ double Preferences::getDouble(const QString key) const
       bool ok;
       double pref = v.toDouble(&ok);
       if (!ok) {
-            qWarning("Can not convert preference %s to double. Returning default value.", key.toStdString().c_str());
+            qWarning("Can not convert preference %s to double. Returning default value.", key.toUtf8().constData());
             return defaultValue(key).toDouble();
             }
       return pref;
@@ -356,7 +382,7 @@ bool Preferences::isThemeDark() const
       return globalStyle() == MuseScoreStyleType::DARK_FUSION;
       }
 
-void Preferences::revertToDefaultValue(const QString key)
+void Preferences::setToDefaultValue(const QString key)
       {
       set(key, defaultValue(key));
       }
@@ -404,6 +430,43 @@ void Preferences::clearMidiRemote(int recordId)
       remove(baseKey);
       }
 
+QHash<QString, QVariant> Preferences::getDefaultLocalPreferences() {
+      bool tmp = useLocalPrefs;
+      useLocalPrefs = false;
+      QHash<QString, QVariant> defaultLocalPreferences;
+      for (QString s : {PREF_UI_CANVAS_BG_USECOLOR,
+                        PREF_UI_CANVAS_FG_USECOLOR,
+                        PREF_UI_CANVAS_BG_COLOR,
+                        PREF_UI_CANVAS_FG_COLOR,
+                        PREF_UI_CANVAS_BG_WALLPAPER,
+                        PREF_UI_CANVAS_FG_WALLPAPER,
+                        PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING,
+                        PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY,
+                        PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA,
+                        PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION,
+                        PREF_UI_APP_SHOWSTATUSBAR,
+                        PREF_UI_APP_USENATIVEDIALOGS,
+                        PREF_UI_PIANO_HIGHLIGHTCOLOR,
+                        PREF_UI_SCORE_NOTE_DROPCOLOR,
+                        PREF_UI_SCORE_DEFAULTCOLOR,
+                        PREF_UI_SCORE_FRAMEMARGINCOLOR,
+                        PREF_UI_SCORE_LAYOUTBREAKCOLOR,
+                        PREF_UI_SCORE_VOICE1_COLOR,
+                        PREF_UI_SCORE_VOICE2_COLOR,
+                        PREF_UI_SCORE_VOICE3_COLOR,
+                        PREF_UI_SCORE_VOICE4_COLOR,
+                        PREF_UI_THEME_ICONWIDTH,
+                        PREF_UI_THEME_ICONHEIGHT,
+                        PREF_UI_THEME_FONTFAMILY,
+                        PREF_UI_THEME_FONTSIZE}) {
+            QVariant value = get(s);
+            if (!value.isValid())
+                  value = _allPreferences.value(s)->defaultValue();
+            defaultLocalPreferences.insert(s, value);
+            }
+      useLocalPrefs = tmp;
+      return defaultLocalPreferences;
+      }
 
 Preference::Preference(QVariant defaultValue, QMetaType::Type type, bool showInAdvancedList)
       : _defaultValue(defaultValue),

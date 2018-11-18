@@ -12,7 +12,10 @@
 
 #include "xml.h"
 #include "layoutbreak.h"
+#include "measure.h"
+#include "score.h"
 #include "spanner.h"
+#include "staff.h"
 #include "beam.h"
 #include "tuplet.h"
 #include "sym.h"
@@ -21,6 +24,24 @@
 #include "style.h"
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   ~XmlReader
+//---------------------------------------------------------
+
+XmlReader::~XmlReader()
+      {
+      if (!_connectors.isEmpty() || !_pendingConnectors.isEmpty()) {
+            qDebug("XmlReader::~XmlReader: there are unpaired connectors left");
+            for (ConnectorInfoReader& c : _connectors) {
+                  Element* conn = c.releaseConnector();
+                  if (conn && !conn->isTuplet()) // tuplets are added to score even when not finished
+                        delete conn;
+                  }
+            for (ConnectorInfoReader& c : _pendingConnectors)
+                  delete c.releaseConnector();
+            }
+      }
 
 //---------------------------------------------------------
 //   intAttribute
@@ -196,6 +217,83 @@ void XmlReader::unknown()
       }
 
 //---------------------------------------------------------
+//   rfrac
+//    return relative position in measure
+//---------------------------------------------------------
+
+Fraction XmlReader::rfrac() const
+      {
+      if (_currMeasure)
+            return Fraction::fromTicks(tick() - _currMeasure->tick());
+      return afrac();
+      }
+
+//---------------------------------------------------------
+//   afrac
+//    return absolute position
+//---------------------------------------------------------
+
+Fraction XmlReader::afrac() const
+      {
+      return Fraction::fromTicks(tick());
+      }
+
+//---------------------------------------------------------
+//   location
+//---------------------------------------------------------
+
+Location XmlReader::location(bool forceAbsFrac) const
+      {
+      Location l = Location::absolute();
+      fillLocation(l, forceAbsFrac);
+      return l;
+      }
+
+//---------------------------------------------------------
+//   fillLocation
+//    fills location fields which have default values with
+//    values relevant for the current reader's position.
+//    When in paste mode (or forceAbsFrac is true) absolute
+//    fraction values are used and measure number is set to
+//    zero.
+//---------------------------------------------------------
+
+void XmlReader::fillLocation(Location& l, bool forceAbsFrac) const
+      {
+      constexpr Location defaults = Location::absolute();
+      const bool absFrac = (pasteMode() || forceAbsFrac);
+      if (l.track() == defaults.track())
+            l.setTrack(track());
+      if (l.frac() == defaults.frac())
+            l.setFrac(absFrac ? afrac() : rfrac());
+      if (l.measure() == defaults.measure())
+            l.setMeasure(absFrac ? 0 : currentMeasureIndex());
+      }
+
+//---------------------------------------------------------
+//   setLocation
+//    sets a new reading location, taking into account its
+//    type (absolute or relative).
+//---------------------------------------------------------
+
+void XmlReader::setLocation(const Location& l)
+      {
+      if (l.isRelative()) {
+            Location newLoc = l;
+            newLoc.toAbsolute(location());
+            setLocation(newLoc); // recursion
+            return;
+            }
+      setTrack(l.track() - _trackOffset);
+      int tick = l.frac().ticks() - _tickOffset;
+      if (!pasteMode()) {
+            Q_ASSERT(l.measure() == currentMeasureIndex());
+            tick += currentMeasure()->tick();
+            }
+      initTick(tick);
+      }
+
+//---------------------------------------------------------
 //   addBeam
 //---------------------------------------------------------
 
@@ -263,6 +361,9 @@ void XmlReader::checkTuplets()
                   tuplet->sanitizeTuplet();
                   }
             }
+      // This requires a separate pass in case of nested tuplets that required sanitizing
+      for (Tuplet* tuplet : tuplets())
+            tuplet->addMissingElements();
       }
 
 //---------------------------------------------------------
@@ -309,14 +410,13 @@ QString XmlReader::readXml()
       {
       QString s;
       int level = 1;
-      for (;;) {
-            QXmlStreamReader::TokenType t = readNext();
+      for (QXmlStreamReader::TokenType t = readNext(); t != QXmlStreamReader::EndElement; t = readNext()) {
             switch(t) {
                   case QXmlStreamReader::StartElement:
                         htmlToString(level, &s);
                         break;
                   case QXmlStreamReader::EndElement:
-                        return s;
+                        break;
                   case QXmlStreamReader::Characters:
                         s += text().toString().toHtmlEscaped();
                         break;
@@ -428,25 +528,25 @@ int XmlReader::spannerId(const Spanner* s)
 //      (too many user text styles)
 //---------------------------------------------------------
 
-SubStyleId XmlReader::addUserTextStyle(const QString& name)
+Tid XmlReader::addUserTextStyle(const QString& name)
       {
       qDebug("%s", qPrintable(name));
-      SubStyleId id = SubStyleId::SUBSTYLES;
+      Tid id = Tid::TEXT_STYLES;
       if (userTextStyles.size() == 0)
-            id = SubStyleId::USER1;
+            id = Tid::USER1;
       else if (userTextStyles.size() == 1)
-            id = SubStyleId::USER2;
+            id = Tid::USER2;
       else if (userTextStyles.size() == 2)
-            id = SubStyleId::USER3;
+            id = Tid::USER3;
       else if (userTextStyles.size() == 3)
-            id = SubStyleId::USER4;
+            id = Tid::USER4;
       else if (userTextStyles.size() == 4)
-            id = SubStyleId::USER5;
+            id = Tid::USER5;
       else if (userTextStyles.size() == 5)
-            id = SubStyleId::USER6;
+            id = Tid::USER6;
       else
             qDebug("too many user defined textstyles");
-      if (id != SubStyleId::SUBSTYLES)
+      if (id != Tid::TEXT_STYLES)
             userTextStyles.push_back({name, id});
       return id;
       }
@@ -455,13 +555,193 @@ SubStyleId XmlReader::addUserTextStyle(const QString& name)
 //   lookupUserTextStyle
 //---------------------------------------------------------
 
-SubStyleId XmlReader::lookupUserTextStyle(const QString& name)
+Tid XmlReader::lookupUserTextStyle(const QString& name)
       {
       for (const auto& i : userTextStyles) {
             if (i.name == name)
                   return i.ss;
             }
-      return SubStyleId::SUBSTYLES;       // not found
+      return Tid::TEXT_STYLES;       // not found
+      }
+
+//---------------------------------------------------------
+//   addConnectorInfo
+//---------------------------------------------------------
+
+void XmlReader::addConnectorInfo(const ConnectorInfoReader& c)
+      {
+      _connectors.push_back(c);
+      ConnectorInfoReader& c1 = _connectors.back();
+      c1.update();
+      for (ConnectorInfoReader& c2 : _connectors) {
+            if (c2.connect(&c1)) {
+                  if (c2.finished()) {
+                        c2.addToScore(pasteMode());
+                        removeConnector(c2);
+                        }
+                  break;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   removeConnectorInfo
+//---------------------------------------------------------
+
+void XmlReader::removeConnectorInfo(const ConnectorInfoReader& c)
+      {
+      _connectors.removeOne(c);
+      }
+
+//---------------------------------------------------------
+//   removeConnector
+//---------------------------------------------------------
+
+void XmlReader::removeConnector(const ConnectorInfoReader& cref)
+      {
+      const ConnectorInfoReader* c = &cref;
+      while (c->prev())
+            c = c->prev();
+      while (c) {
+            ConnectorInfoReader* next = c->next();
+            removeConnectorInfo(*c);
+            c = next;
+            }
+      }
+
+//---------------------------------------------------------
+//   addConnectorInfoLater
+//---------------------------------------------------------
+
+void XmlReader::addConnectorInfoLater(const ConnectorInfoReader& c)
+      {
+      _pendingConnectors.push_back(c);
+      }
+
+//---------------------------------------------------------
+//   checkConnectors
+//---------------------------------------------------------
+
+void XmlReader::checkConnectors()
+      {
+      for (ConnectorInfoReader& c : _pendingConnectors) {
+            addConnectorInfo(c);
+            }
+      _pendingConnectors.clear();
+      }
+
+//---------------------------------------------------------
+//   distanceSort
+//---------------------------------------------------------
+
+static bool distanceSort(const QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>& p1, const QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>& p2)
+      {
+      return p1.first < p2.first;
+      }
+
+//---------------------------------------------------------
+//   reconnectBrokenConnectors
+//---------------------------------------------------------
+
+void XmlReader::reconnectBrokenConnectors()
+      {
+      if (_connectors.isEmpty())
+            return;
+      qDebug("Reconnecting broken connectors (%d nodes)", _connectors.size());
+      QList<QPair<int, QPair<ConnectorInfoReader*, ConnectorInfoReader*>>> brokenPairs;
+      for (int i = 1; i < _connectors.size(); ++i) {
+            for (int j = 0; j < i; ++j) {
+                  ConnectorInfoReader& c1 = _connectors[i];
+                  ConnectorInfoReader& c2 = _connectors[j];
+                  int d = c1.connectionDistance(c2);
+                  if (d >= 0)
+                        brokenPairs.append(qMakePair(d, qMakePair(&c1, &c2)));
+                  else
+                        brokenPairs.append(qMakePair(-d, qMakePair(&c2, &c1)));
+                  }
+            }
+      std::sort(brokenPairs.begin(), brokenPairs.end(), distanceSort);
+      for (auto& distPair : brokenPairs) {
+            if (distPair.first == INT_MAX)
+                  continue;
+            auto& pair = distPair.second;
+            if (pair.first->next() || pair.second->prev())
+                  continue;
+            pair.first->forceConnect(pair.second);
+            }
+      QSet<ConnectorInfoReader*> reconnected;
+      for (ConnectorInfoReader& c : _connectors) {
+            if (c.finished())
+                  reconnected.insert(static_cast<ConnectorInfoReader*>(c.start()));
+            }
+      for (ConnectorInfoReader* cptr : reconnected) {
+            cptr->addToScore(pasteMode());
+            removeConnector(*cptr);
+            }
+      qDebug("reconnected %d broken connectors", reconnected.count());
+      }
+
+//---------------------------------------------------------
+//   addLink
+//---------------------------------------------------------
+
+void XmlReader::addLink(Staff* s, LinkedElements* link)
+      {
+      int staff = s->idx();
+      const bool masterScore = s->score()->isMaster();
+      if (!masterScore)
+            staff *= -1;
+
+      QList<QPair<LinkedElements*, Location>>& staffLinks = _staffLinkedElements[staff];
+      if (!masterScore) {
+            if (!staffLinks.empty()
+               && (link->mainElement()->score() != staffLinks.front().first->mainElement()->score())
+               )
+                  staffLinks.clear();
+            }
+
+      Location l = location(true);
+      _linksIndexer.assignLocalIndex(l);
+      staffLinks.push_back(qMakePair(link, l));
+      }
+
+//---------------------------------------------------------
+//   getLink
+//---------------------------------------------------------
+
+LinkedElements* XmlReader::getLink(bool masterScore, const Location& l, int localIndexDiff)
+      {
+      int staff = l.staff();
+      if (!masterScore)
+            staff *= -1;
+      const int localIndex = _linksIndexer.assignLocalIndex(l) + localIndexDiff;
+      QList<QPair<LinkedElements*, Location>>& staffLinks = _staffLinkedElements[staff];
+      for (int i = 0; i < staffLinks.size(); ++i) {
+            if (staffLinks[i].second == l) {
+                  if (localIndex == 0)
+                        return staffLinks[i].first;
+                  i += localIndex;
+                  if ((i < 0) || (i >= staffLinks.size()))
+                        return nullptr;
+                  if (staffLinks[i].second == l)
+                        return staffLinks[i].first;
+                  return nullptr;
+                  }
+            }
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   assignLocalIndex
+//---------------------------------------------------------
+
+int LinksIndexer::assignLocalIndex(const Location& mainElementLocation)
+      {
+      if (_lastLinkedElementLoc == mainElementLocation)
+            return (++_lastLocalIndex);
+      _lastLocalIndex = 0;
+      _lastLinkedElementLoc = mainElementLocation;
+      return 0;
       }
 }
 

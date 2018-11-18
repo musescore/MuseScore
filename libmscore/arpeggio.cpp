@@ -36,6 +36,7 @@ Arpeggio::Arpeggio(Score* s)
       _userLen1 = 0.0;
       _userLen2 = 0.0;
       _playArpeggio = true;
+      _stretch = 1.0;
       }
 
 //---------------------------------------------------------
@@ -55,7 +56,7 @@ void Arpeggio::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("Arpeggio");
+      xml.stag(this);
       Element::writeProperties(xml);
       xml.tag("subtype", int(_arpeggioType));
       if (_userLen1 != 0.0)
@@ -65,6 +66,7 @@ void Arpeggio::write(XmlWriter& xml) const
       if (_span != 1)
             xml.tag("span", _span);
       writeProperty(xml, Pid::PLAY);
+      writeProperty(xml, Pid::TIME_STRETCH);
       xml.etag();
       }
 
@@ -86,6 +88,8 @@ void Arpeggio::read(XmlReader& e)
                   _span = e.readInt();
             else if (tag == "play")
                  _playArpeggio = e.readBool();
+            else if (tag == "timeStretch")
+                  _stretch = e.readDouble();
             else if (!Element::readProperties(e))
                   e.unknown();
             }
@@ -380,7 +384,7 @@ void Arpeggio::spatiumChanged(qreal oldValue, qreal newValue)
 
 bool Arpeggio::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::ARPEGGIO;
+      return data.dropElement->type() == ElementType::ARPEGGIO;
       }
 
 //---------------------------------------------------------
@@ -389,7 +393,7 @@ bool Arpeggio::acceptDrop(EditData& data) const
 
 Element* Arpeggio::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       switch(e->type()) {
             case ElementType::ARPEGGIO:
                   {
@@ -415,6 +419,8 @@ Element* Arpeggio::drop(EditData& data)
 QVariant Arpeggio::getProperty(Pid propertyId) const
       {
       switch(propertyId) {
+            case Pid::TIME_STRETCH:
+                  return Stretch();
             case Pid::ARP_USER_LEN1:
                   return userLen1();
             case Pid::ARP_USER_LEN2:
@@ -434,6 +440,9 @@ QVariant Arpeggio::getProperty(Pid propertyId) const
 bool Arpeggio::setProperty(Pid propertyId, const QVariant& val)
       {
       switch(propertyId) {
+            case Pid::TIME_STRETCH:
+                  setStretch(val.toDouble());
+                  break;
             case Pid::ARP_USER_LEN1:
                   setUserLen1(val.toDouble());
                   break;
@@ -463,6 +472,8 @@ QVariant Arpeggio::propertyDefault(Pid propertyId) const
                   return 0.0;
             case Pid::ARP_USER_LEN2:
                   return 0.0;
+            case Pid::TIME_STRETCH:
+                  return 1.0;
             case Pid::PLAY:
                   return true;
             default:

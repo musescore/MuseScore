@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: importbww.cpp 5427 2012-03-07 12:41:34Z wschweer $
 //
 //  Copyright (C) 2010 Werner Schweer and others
 //
@@ -53,10 +52,10 @@
 //   TODO: remove duplicate code
 //---------------------------------------------------------
 
-static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, Ms::SubStyleId stl)
+static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, Ms::Tid stl)
       {
       if (!strTxt.isEmpty()) {
-            Ms::Text* text = new Ms::Text(stl, s);
+            Ms::Text* text = new Ms::Text(s, stl);
             text->setPlainText(strTxt);
             if (vbx == 0)
                   vbx = new Ms::VBox(s);
@@ -430,11 +429,11 @@ void MsScWriter::header(const QString title, const QString type,
 
       //  score->setWorkTitle(title);
       Ms::VBox* vbox  = 0;
-      addText(vbox, score, title, Ms::SubStyleId::TITLE);
-      addText(vbox, score, type, Ms::SubStyleId::SUBTITLE);
-      addText(vbox, score, composer, Ms::SubStyleId::COMPOSER);
-      // addText(vbox, score, strPoet, Ms::SubStyleId::POET);
-      // addText(vbox, score, strTranslator, Ms::SubStyleId::TRANSLATOR);
+      addText(vbox, score, title, Ms::Tid::TITLE);
+      addText(vbox, score, type, Ms::Tid::SUBTITLE);
+      addText(vbox, score, composer, Ms::Tid::COMPOSER);
+      // addText(vbox, score, strPoet, Ms::Tid::POET);
+      // addText(vbox, score, strTranslator, Ms::Tid::TRANSLATOR);
       if (vbox) {
             vbox->setTick(0);
             score->measures()->add(vbox);

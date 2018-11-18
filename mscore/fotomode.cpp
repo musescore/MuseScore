@@ -96,6 +96,7 @@ void ScoreView::startFotomode()
             // convert to absolute position
             _foto->setbbox(toPhysical(r));
             }
+      _foto->setFlag(ElementFlag::MOVABLE, true);
       _foto->setVisible(true);
       _score->select(_foto);
       editData.element = _foto;
@@ -135,9 +136,13 @@ void ScoreView::startFotoDrag()
 
 void ScoreView::doDragFoto(QMouseEvent* ev)
       {
+      _foto->setOffset(QPointF(0.0, 0.0));
       QPointF p = toLogical(ev->pos());
+      QPointF sm = editData.startMove;
+
       QRectF r;
-      r.setCoords(editData.startMove.x(), editData.startMove.y(), p.x(), p.y());
+      r.setCoords(sm.x(), sm.y(), p.x(), p.y());
+
       _foto->setbbox(r.normalized());
 
       QRectF rr(_foto->bbox());

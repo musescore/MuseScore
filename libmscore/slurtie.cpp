@@ -118,7 +118,7 @@ void SlurTieSegment::endEdit(EditData&)
 void SlurTieSegment::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
-      for (auto i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::USER_OFF })
+      for (auto i : { Pid::SLUR_UOFF1, Pid::SLUR_UOFF2, Pid::SLUR_UOFF3, Pid::SLUR_UOFF4, Pid::OFFSET })
             eed->pushProperty(i);
       }
 
@@ -159,7 +159,7 @@ void SlurTieSegment::editDrag(EditData& ed)
                                     if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
                                           Chord* c = note->chord();
                                           ed.view->setDropTarget(note);
-                                          if (c != spanner->endChord())
+                                          if (c != spanner->endCR())
                                                 changeAnchor(ed, c);
                                           }
                                     }
@@ -178,7 +178,7 @@ void SlurTieSegment::editDrag(EditData& ed)
                   break;
             case Grip::DRAG:
                   ups(g).off = QPointF();
-                  setUserOff(userOff() + ed.delta);
+                  setOffset(offset() + ed.delta);
                   break;
             case Grip::NO_GRIP:
             case Grip::GRIPS:
@@ -280,17 +280,26 @@ void SlurTieSegment::reset()
 
 void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
       {
-      if (autoplace() && visible() && (color() == Qt::black))
+      if (visible()
+         && (color() == Qt::black)
+         && ups(Grip::START).off.isNull()
+         && ups(Grip::BEZIER1).off.isNull()
+         && ups(Grip::BEZIER2).off.isNull()
+         && ups(Grip::END).off.isNull()
+         )
             return;
 
-      xml.stag(QString("SlurSegment no=\"%1\"").arg(no));
+      xml.stag(this, QString("no=\"%1\"").arg(no));
 
       qreal _spatium = spatium();
-      xml.tag("o1", ups(Grip::START).off   / _spatium);
-      xml.tag("o2", ups(Grip::BEZIER1).off / _spatium);
-      xml.tag("o3", ups(Grip::BEZIER2).off / _spatium);
-      xml.tag("o4", ups(Grip::END).off     / _spatium);
-
+      if (!ups(Grip::START).off.isNull())
+            xml.tag("o1", ups(Grip::START).off / _spatium);
+      if (!ups(Grip::BEZIER1).off.isNull())
+            xml.tag("o2", ups(Grip::BEZIER1).off / _spatium);
+      if (!ups(Grip::BEZIER2).off.isNull())
+            xml.tag("o3", ups(Grip::BEZIER2).off / _spatium);
+      if (!ups(Grip::END).off.isNull())
+            xml.tag("o4", ups(Grip::END).off / _spatium);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -315,7 +324,6 @@ void SlurTieSegment::read(XmlReader& e)
             else if (!Element::readProperties(e))
                   e.unknown();
             }
-      setAutoplace(false);
       }
 
 //---------------------------------------------------------
@@ -337,7 +345,18 @@ void SlurTieSegment::drawEditMode(QPainter* p, EditData& ed)
 
       p->setPen(QPen(MScore::defaultColor, 0.0));
       for (int i = 0; i < ed.grips; ++i) {
-            p->setBrush(Grip(i) == ed.curGrip ? MScore::frameMarginColor : Qt::NoBrush);
+            // This must be done with an if-else statement rather than a ternary operator.
+            // This is because there are two setBrush methods that take different types
+            // of argument, either a Qt::BrushStyle or a QBrush. Since a QBrush can be
+            // constructed from a QColour, passing Mscore::frameMarginColor works.
+            // Qt::NoBrush is a Qt::BrushStyle, however, so if it is passed in a ternary
+            // operator with a QColor, a new QColor will be created from it, and from that
+            // a QBrush. Instead, what we really want to do is pass Qt::NoBrush as a
+            // Qt::BrushStyle, therefore this requires two seperate function calls:
+            if (Grip(i) == ed.curGrip)
+                  p->setBrush(MScore::frameMarginColor);
+            else
+                  p->setBrush(Qt::NoBrush);
             p->drawRect(ed.grip[i]);
             }
       }
@@ -377,8 +396,6 @@ SlurTie::~SlurTie()
 void SlurTie::writeProperties(XmlWriter& xml) const
       {
       Element::writeProperties(xml);
-      if (track() != track2() && track2() != -1)
-            xml.tag("track2", track2());
       int idx = 0;
       for (const SpannerSegment* ss : spannerSegments())
             ((SlurTieSegment*)ss)->writeSlur(xml, idx++);
@@ -398,7 +415,7 @@ bool SlurTie::readProperties(XmlReader& e)
             ;
       else if (tag == "lineType")
             _lineType = e.readInt();
-      else if (tag == "SlurSegment") {
+      else if (tag == "SlurSegment" || tag == "TieSegment") {
             SlurTieSegment* s = newSlurTieSegment();
             s->read(e);
             add(s);
@@ -406,6 +423,18 @@ bool SlurTie::readProperties(XmlReader& e)
       else if (!Element::readProperties(e))
             return false;
       return true;
+      }
+
+//---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+void SlurTie::read(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            if (!SlurTie::readProperties(e))
+                  e.unknown();
+            }
       }
 
 //---------------------------------------------------------

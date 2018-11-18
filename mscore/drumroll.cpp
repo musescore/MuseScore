@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2010 Werner Schweer and others
 //
@@ -89,8 +88,8 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
             QPalette p(b->palette());
             p.setColor(QPalette::Base, MScore::selectColor[i]);
             b->setPalette(p);
-            QAction* a = getAction(voiceActions[i]);
-            b->setDefaultAction(a);
+            QAction* aa = getAction(voiceActions[i]);
+            b->setDefaultAction(aa);
             tb->addWidget(b);
             }
 
@@ -366,9 +365,9 @@ void DrumrollEditor::velocityChanged(int val)
 //   keyPressed
 //---------------------------------------------------------
 
-void DrumrollEditor::keyPressed(int pitch)
+void DrumrollEditor::keyPressed(int p)
       {
-      seq->startNote(staff->part()->instrument()->channel(0)->channel, pitch, 80, 0, 0.0);
+      seq->startNote(staff->part()->instrument()->channel(0)->channel(), p, 80, 0, 0.0);
       }
 
 //---------------------------------------------------------
@@ -384,9 +383,9 @@ void DrumrollEditor::keyReleased(int /*pitch*/)
 //   heartBeat
 //---------------------------------------------------------
 
-void DrumrollEditor::heartBeat(Seq* seq)
+void DrumrollEditor::heartBeat(Seq* s)
       {
-      unsigned t = seq->getCurTick();
+      unsigned t = s->getCurTick();
       if (locator[0].tick() != t) {
             locator[0].setTick(t);
             gv->moveLocator(0);

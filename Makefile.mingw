@@ -1,7 +1,6 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2002-2007 by Werner Schweer and others
 #
@@ -22,6 +21,7 @@
 REVISION  = $(shell type mscore\revision.h)
 VERSION   = 3.0b-${REVISION}
 #VERSION = 3.0.0
+BUILD_NUMBER=""
 CPUS = %NUMBER_OF_PROCESSORS%
 BUILD_FOR_WINSTORE="OFF"     # Override with "ON" to enable.
 

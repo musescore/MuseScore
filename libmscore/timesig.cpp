@@ -23,6 +23,10 @@
 
 namespace Ms {
 
+static const ElementStyle timesigStyle {
+      { Sid::timesigScale,                       Pid::SCALE                   },
+      };
+
 //---------------------------------------------------------
 //   TimeSig
 //    Constructs an invalid time signature element.
@@ -34,7 +38,7 @@ namespace Ms {
 TimeSig::TimeSig(Score* s)
   : Element(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
       {
-      initSubStyle(SubStyleId::TIMESIG);
+      initElementStyle(&timesigStyle);
 
       _showCourtesySig = true;
       _stretch.set(1, 1);
@@ -72,7 +76,7 @@ void TimeSig::setSig(const Fraction& f, TimeSigType st)
 
 bool TimeSig::acceptDrop(EditData& data) const
       {
-      return data.element->isTimeSig();
+      return data.dropElement->isTimeSig();
       }
 
 //---------------------------------------------------------
@@ -81,7 +85,7 @@ bool TimeSig::acceptDrop(EditData& data) const
 
 Element* TimeSig::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       if (e->isTimeSig()) {
             // change timesig applies to all staves, can't simply set subtype
             // for this one only
@@ -121,7 +125,7 @@ void TimeSig::setDenominatorString(const QString& a)
 
 void TimeSig::write(XmlWriter& xml) const
       {
-      xml.stag("TimeSig");
+      xml.stag(this);
       writeProperty(xml, Pid::TIMESIG_TYPE);
       Element::writeProperties(xml);
 
@@ -214,6 +218,23 @@ void TimeSig::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid TimeSig::propertyId(const QStringRef& name) const
+      {
+      if (name == "subtype")
+            return Pid::TIMESIG_TYPE;
+      if (name == "sigN" || name == "sigD")
+            return Pid::TIMESIG;
+      if (name == "stretchN" || name == "stretchD")
+            return Pid::TIMESIG_STRETCH;
+      if (name == "Groups")
+            return Pid::GROUPS;
+      return Element::propertyId(name);
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
@@ -231,7 +252,7 @@ void TimeSig::layout()
       qreal lineDist;
       int   numOfLines;
       TimeSigType sigType = timeSigType();
-      Staff* _staff       = staff();
+      const Staff* _staff       = staff();
 
       if (_staff) {
             // if staff is without time sig, format as if no text at all

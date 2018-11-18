@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: importove.cpp 4287 2011-05-17 14:50:09Z vanferry $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -7343,9 +7342,9 @@ QByteArray getByteArray(const Block& block) {
       }
 
 bool TitleChunkParse::parse() {
-      Block* dataBlock = chunk_->getDataBlock();
+      Block* dataBlockP = chunk_->getDataBlock();
       unsigned int blockSize = chunk_->getSizeBlock()->toSize();
-      StreamHandle handle(dataBlock->data(), blockSize);
+      StreamHandle handle(dataBlockP->data(), blockSize);
       Block typeBlock;
       unsigned int titleType;
 

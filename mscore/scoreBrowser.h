@@ -61,7 +61,7 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       ScoreItem* genScoreItem(const QFileInfo&, ScoreListWidget*);
 
    private slots:
-      void scoreChanged(QListWidgetItem*);
+      void scoreClicked(QListWidgetItem*);
       void setScoreActivated(QListWidgetItem*);
 
    signals:

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -39,7 +38,8 @@ struct InspectorItem {
       Pid t;           // property id
       int parent;       // apply to parent() element level
       QWidget* w;
-      QToolButton* r;   // reset to default button (if any)
+      // QToolButton* r;   // reset to default button (if any)
+      QWidget* r;   // reset to default button (if any)
       };
 
 //---------------------------------------------------------
@@ -52,6 +52,7 @@ class InspectorBase : public QWidget {
       bool dirty() const;
       void checkDifferentValues(const InspectorItem&);
       bool compareValues(const InspectorItem& ii, QVariant a, QVariant b);
+      Element* effectiveElement(const InspectorItem&) const;
 
    private slots:
       void resetToStyle();

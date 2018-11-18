@@ -99,10 +99,9 @@ class Harmony final : public TextBase {
       ~Harmony();
       virtual Harmony* clone() const override     { return new Harmony(*this); }
       virtual ElementType type() const override   { return ElementType::HARMONY; }
-      virtual bool systemFlag() const override    { return false;  }
 
-      void setId(int d)                        { _id = d; }
-      int id() const                           { return _id;           }
+      void setId(int d)                        { _id = d;       }
+      int id() const                           { return _id;    }
 
       void setBaseCase(NoteCaseType c)         { _baseCase = c; }
       void setRootCase(NoteCaseType c)         { _rootCase = c; }
@@ -123,10 +122,6 @@ class Harmony final : public TextBase {
 
       void textChanged();
       virtual void layout() override;
-
-      const QRectF& bboxtight() const          { return _tbbox;        }
-      QRectF& bboxtight()                      { return _tbbox;        }
-      void setbboxtight(const QRectF& r) const { _tbbox = r;           }
 
       virtual bool isEditable() const override { return true; }
       virtual void startEdit(EditData&) override;
@@ -182,6 +177,8 @@ class Harmony final : public TextBase {
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
 
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
       };
 

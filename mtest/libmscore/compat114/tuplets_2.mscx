@@ -80,8 +80,6 @@ p, li { white-space: pre-wrap; }
       </VBox>
     <Measure number="1">
       <Tuplet id="0">
-        <numberType>0</numberType>
-        <bracketType>0</bracketType>
         <normalNotes>8</normalNotes>
         <actualNotes>9</actualNotes>
         <baseNote>16th</baseNote>

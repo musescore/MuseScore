@@ -375,6 +375,13 @@
         </property>
        </widget>
       </item>
+      <item row="8" column="7">
+       <widget class="QPushButton" name="dot4">
+        <property name="text">
+         <string notr="true">Dot4</string>
+        </property>
+       </widget>
+      </item>
       <item row="8" column="6">
        <widget class="QPushButton" name="dot3">
         <property name="text">

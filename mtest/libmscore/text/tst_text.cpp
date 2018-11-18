@@ -750,7 +750,7 @@ void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
       symbolSMUFL->setSym(SymId::noteheadWhole);
 
       EditData dropSMUFL;
-      dropSMUFL.element = symbolSMUFL;
+      dropSMUFL.dropElement = symbolSMUFL;
       text->drop(dropSMUFL);
 
       // the bug happened when cursor is in symbol mode
@@ -760,7 +760,7 @@ void TestText::testDropUnicodeAfterSMUFLwhenCursorSetToSymbol()
       EditData dropFSymbol;
       FSymbol* fsymbol = new FSymbol(score);
       fsymbol->setCode(0x0001D10E); // unicode hex code for '𝄎'
-      dropFSymbol.element = fsymbol;
+      dropFSymbol.dropElement = fsymbol;
       text->drop(dropFSymbol);
 
       text->endEdit(editData);
@@ -782,7 +782,7 @@ void TestText::testDropBasicUnicodeWhenNotInEditMode()
       EditData dropFSymbol;
       FSymbol* fsymbol = new FSymbol(score);
       fsymbol->setCode(0x4D); // Basic Unicode code for 'M'
-      dropFSymbol.element = fsymbol;
+      dropFSymbol.dropElement = fsymbol;
       text->drop(dropFSymbol);
 
       QCOMPARE(text->xmlText(), QString("M"));
@@ -803,7 +803,7 @@ void TestText::testDropSupplementaryUnicodeWhenNotInEditMode()
       EditData dropFSymbol;
       FSymbol* fsymbol = new FSymbol(score);
       fsymbol->setCode(0x0001D10E); // Supplementary Unicode code for '𝄎'
-      dropFSymbol.element = fsymbol;
+      dropFSymbol.dropElement = fsymbol;
       text->drop(dropFSymbol);
 
       QCOMPARE(text->xmlText(), QString("𝄎"));

@@ -32,6 +32,22 @@
 
 namespace Ms {
 
+static const ElementStyle headerStyle {
+      { Sid::headerFontFace,                     Pid::FONT_FACE              },
+      { Sid::headerFontSize,                     Pid::FONT_SIZE              },
+      { Sid::headerFontBold,                     Pid::FONT_BOLD              },
+      { Sid::headerFontItalic,                   Pid::FONT_ITALIC            },
+      { Sid::headerFontUnderline,                Pid::FONT_UNDERLINE         },
+      };
+
+static const ElementStyle footerStyle {
+      { Sid::footerFontFace,                     Pid::FONT_FACE              },
+      { Sid::footerFontSize,                     Pid::FONT_SIZE              },
+      { Sid::footerFontBold,                     Pid::FONT_BOLD              },
+      { Sid::footerFontItalic,                   Pid::FONT_ITALIC            },
+      { Sid::footerFontUnderline,                Pid::FONT_UNDERLINE         },
+      };
+
 //---------------------------------------------------------
 //   Page
 //---------------------------------------------------------
@@ -77,12 +93,12 @@ QList<Element*> Page::items(const QPointF& p)
 
 //---------------------------------------------------------
 //   appendSystem
-//--------e-------------------------------------------------
+//---------------------------------------------------------
 
 void Page::appendSystem(System* s)
       {
       s->setParent(this);
-      _systems.append(s);
+      _systems.push_back(s);
       }
 
 //---------------------------------------------------------
@@ -154,7 +170,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       if (area < 3) {
             text = score()->headerText();
             if (!text) {
-                  text = new Text(SubStyleId::HEADER, score());
+                  text = new Text(score(), Tid::HEADER);
                   text->setLayoutToParentWidth(true);
                   score()->setHeaderText(text);
                   }
@@ -162,7 +178,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       else {
             text = score()->footerText();
             if (!text) {
-                  text = new Text(SubStyleId::FOOTER, score());
+                  text = new Text(score(), Tid::FOOTER);
                   text->setLayoutToParentWidth(true);
                   score()->setFooterText(text);
                   }
@@ -183,6 +199,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       p->translate(text->pos());
       text->draw(p);
       p->translate(-text->pos());
+      text->setParent(0);
       }
 
 #if 0
@@ -299,8 +316,8 @@ QString Page::replaceTextMacros(const QString& s) const
       for (int i = 0, n = s.size(); i < n; ++i) {
             QChar c = s[i];
             if (c == '$' && (i < (n-1))) {
-                  QChar c = s[i+1];
-                  switch(c.toLatin1()) {
+                  QChar nc = s[i+1];
+                  switch(nc.toLatin1()) {
                         case 'p': // not on first page 1
                               if (_no) // FALLTHROUGH
                         case 'N': // on page 1 only if there are multiple pages
@@ -375,7 +392,7 @@ QString Page::replaceTextMacros(const QString& s) const
                               break;
                         default:
                               d += '$';
-                              d += c;
+                              d += nc;
                               break;
                         }
                   ++i;
@@ -401,7 +418,7 @@ bool Page::isOdd() const
 
 void Page::write(XmlWriter& xml) const
       {
-      xml.stag("Page");
+      xml.stag(this);
       foreach(System* system, _systems) {
             system->write(xml);
             }

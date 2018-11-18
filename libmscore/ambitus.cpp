@@ -13,6 +13,7 @@
 #include "ambitus.h"
 #include "chord.h"
 #include "measure.h"
+#include "read206.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -181,7 +182,7 @@ void Ambitus::setBottomTpc(int val)
 
 void Ambitus::write(XmlWriter& xml) const
       {
-      xml.stag("Ambitus");
+      xml.stag(this);
       xml.tag(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
       xml.tag(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
       xml.tag(Pid::MIRROR_HEAD,int(_dir),           int(DIR_DEFAULT));
@@ -225,15 +226,15 @@ bool Ambitus::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
       if (tag == "head")
-            setProperty(Pid::HEAD_GROUP, Ms::getProperty(Pid::HEAD_GROUP, e));
+            readProperty(e, Pid::HEAD_GROUP);
       else if (tag == "headType")
-            setProperty(Pid::HEAD_TYPE, Ms::getProperty(Pid::HEAD_TYPE, e));
+            readProperty(e, Pid::HEAD_TYPE);
       else if (tag == "mirror")
-            setProperty(Pid::MIRROR_HEAD, Ms::getProperty(Pid::MIRROR_HEAD, e).toInt());
+            readProperty(e, Pid::MIRROR_HEAD);
       else if (tag == "hasLine")
             setHasLine(e.readInt());
       else if (tag == "lineWidth")
-            setProperty(Pid::LINE_WIDTH, Ms::getProperty(Pid::LINE_WIDTH, e));
+            readProperty(e, Pid::LINE_WIDTH);
       else if (tag == "topPitch")
             _topPitch = e.readInt();
       else if (tag == "bottomPitch")
@@ -244,16 +245,24 @@ bool Ambitus::readProperties(XmlReader& e)
             _bottomTpc = e.readInt();
       else if (tag == "topAccidental") {
             while (e.readNextStartElement()) {
-                  if (e.name() == "Accidental")
-                        _topAccid.read(e);
+                  if (e.name() == "Accidental") {
+                        if (score()->mscVersion() < 301)
+                              readAccidental206(&_topAccid, e);
+                        else
+                              _topAccid.read(e);
+                        }
                   else
                         e.skipCurrentElement();
                   }
             }
       else if (tag == "bottomAccidental") {
             while (e.readNextStartElement()) {
-                  if (e.name() == "Accidental")
-                        _bottomAccid.read(e);
+                  if (e.name() == "Accidental") {
+                        if (score()->mscVersion() < 301)
+                              readAccidental206(&_bottomAccid, e);
+                        else
+                              _bottomAccid.read(e);
+                        }
                   else
                         e.skipCurrentElement();
                   }
@@ -563,7 +572,8 @@ void Ambitus::updateRange()
       int   lastTrack   = firstTrack + VOICES-1;
       int   pitchTop    = -1000;
       int   pitchBottom = 1000;
-      int   tpcTop, tpcBottom;
+      int   tpcTop      = 0;  // Initialized to prevent warning
+      int   tpcBottom   = 0;  // Initialized to prevent warning
       int   trk;
       Measure* meas     = segment()->measure();
       Segment* segm     = meas->findSegment(SegmentType::ChordRest, segment()->tick());

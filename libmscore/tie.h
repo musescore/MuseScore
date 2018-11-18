@@ -74,12 +74,11 @@ class Tie final : public SlurTie {
 
       void calculateDirection();
       virtual void write(XmlWriter& xml) const override;
-      virtual void read(XmlReader&) override;
 //      virtual void layout() override;
       virtual void slurPos(SlurPos*) override;
 
-      void layoutFor(System*);
-      void layoutBack(System*);
+      TieSegment* layoutFor(System*);
+      TieSegment* layoutBack(System*);
 
       bool readProperties(XmlReader&);
 

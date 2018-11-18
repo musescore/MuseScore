@@ -123,27 +123,27 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                   if (mode == QIcon::Disabled) {
                         if (Ms::preferences.isThemeDark()) {
                               if (state == QIcon::On)
-                                    ba.replace("#3b3f45", "#4171a2").replace("#3B3F45", "#4171a2");
+                                    ba.replace("#3b3f45", "#4171a2").replace("#3B3F45", "#4171a2").replace("rgb(59,63,69)", "#4171a2");
                               else
-                                    ba.replace("#3b3f45", "#a0a0a0").replace("#3B3F45", "#a0a0a0");
+                                    ba.replace("#3b3f45", "#a0a0a0").replace("#3B3F45", "#a0a0a0").replace("rgb(59,63,69)", "#a0a0a0");
                               }
                         else {
                               if (state == QIcon::On)
-                                    ba.replace("#3b3f45", "#8daac7").replace("#3B3F45", "#8daac7");
+                                    ba.replace("#3b3f45", "#8daac7").replace("#3B3F45", "#8daac7").replace("rgb(59,63,69)", "#8daac7");
                               else
-                                    ba.replace("#3b3f45", "#a0a0a0").replace("#3B3F45", "#a0a0a0");
+                                    ba.replace("#3b3f45", "#a0a0a0").replace("#3B3F45", "#a0a0a0").replace("rgb(59,63,69)", "#a0a0a0");
                               }
                         }
                   else {
                         if (Ms::preferences.isThemeDark()) {
                               if (state == QIcon::On)
-                                    ba.replace("#3b3f45", "#78afe6").replace("#3B3F45", "#78afe6");
+                                    ba.replace("#3b3f45", "#78afe6").replace("#3B3F45", "#78afe6").replace("rgb(59,63,69)", "#78afe6");
 			            else
-                                    ba.replace("#3b3f45", "#eff0f1").replace("#3B3F45", "#eff0f1");
+                                    ba.replace("#3b3f45", "#eff0f1").replace("#3B3F45", "#eff0f1").replace("rgb(59,63,69)", "#eff0f1");
                               }
                         else {
                               if (state == QIcon::On)
-                                    ba.replace("#3b3f45", "#4171a2").replace("#3B3F45", "#4171a2");
+                                    ba.replace("#3b3f45", "#4171a2").replace("#3B3F45", "#4171a2").replace("rgb(59,63,69)", "#4171a2");
                               }
                         }
                   renderer->load(ba);

@@ -24,22 +24,28 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   instrumentChangeStyle
+//---------------------------------------------------------
+
+static const ElementStyle instrumentChangeStyle {
+      { Sid::instrumentChangePlacement,          Pid::PLACEMENT              },
+      };
+
+//---------------------------------------------------------
 //   InstrumentChange
 //---------------------------------------------------------
 
 InstrumentChange::InstrumentChange(Score* s)
-   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+   : TextBase(s, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::INSTRUMENT_CHANGE);
-      setPlacement(Placement::ABOVE);
+      initElementStyle(&instrumentChangeStyle);
       _instrument = new Instrument();
       }
 
 InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
-   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+   : TextBase(s, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::INSTRUMENT_CHANGE);
-      setPlacement(Placement::ABOVE);
+      initElementStyle(&instrumentChangeStyle);
       _instrument = new Instrument(i);
       }
 
@@ -56,8 +62,9 @@ InstrumentChange::~InstrumentChange()
 
 void InstrumentChange::setInstrument(const Instrument& i)
       {
-      delete _instrument;
-      _instrument = new Instrument(i);
+      *_instrument = i;
+      //delete _instrument;
+      //_instrument = new Instrument(i);
       }
 
 //---------------------------------------------------------
@@ -66,7 +73,7 @@ void InstrumentChange::setInstrument(const Instrument& i)
 
 void InstrumentChange::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       _instrument->write(xml, part());
       TextBase::writeProperties(xml);
       xml.etag();
@@ -100,44 +107,27 @@ void InstrumentChange::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-QVariant InstrumentChange::getProperty(Pid propertyId) const
-      {
-      switch (propertyId) {
-            default:
-                  return TextBase::getProperty(propertyId);
-            }
-      }
-
-//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
 QVariant InstrumentChange::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
-            case Pid::PLACEMENT:
-                  return int(Placement::ABOVE);
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::INSTRUMENT_CHANGE);
+                  return int(Tid::INSTRUMENT_CHANGE);
             default:
                   return TextBase::propertyDefault(propertyId);
             }
       }
 
 //---------------------------------------------------------
-//   setProperty
+//   layout
 //---------------------------------------------------------
 
-bool InstrumentChange::setProperty(Pid propertyId, const QVariant& v)
+void InstrumentChange::layout()
       {
-      switch (propertyId) {
-            default:
-                  return TextBase::setProperty(propertyId, v);
-            }
-      return true;
+      TextBase::layout();
+      autoplaceSegmentElement(styleP(Sid::instrumentChangeMinDistance));
       }
 
 }

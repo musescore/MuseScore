@@ -19,13 +19,27 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   longInstrumentStyle
+//---------------------------------------------------------
+
+static const ElementStyle longInstrumentStyle {
+      };
+
+//---------------------------------------------------------
+//   shortInstrumentStyle
+//---------------------------------------------------------
+
+static const ElementStyle shortInstrumentStyle {
+      };
+
+//---------------------------------------------------------
 //   InstrumentName
 //---------------------------------------------------------
 
 InstrumentName::InstrumentName(Score* s)
-   : TextBase(s, ElementFlag::NOTHING | ElementFlag::NOT_SELECTABLE)
+   : TextBase(s, Tid::INSTRUMENT_LONG, ElementFlag::NOTHING | ElementFlag::NOT_SELECTABLE)
       {
-      setInstrumentNameType(InstrumentNameType::SHORT);
+      setInstrumentNameType(InstrumentNameType::LONG);
       }
 
 //---------------------------------------------------------
@@ -58,7 +72,14 @@ void InstrumentName::setInstrumentNameType(const QString& s)
 void InstrumentName::setInstrumentNameType(InstrumentNameType st)
       {
       _instrumentNameType = st;
-      initSubStyle(st == InstrumentNameType::SHORT ? SubStyleId::INSTRUMENT_SHORT : SubStyleId::INSTRUMENT_LONG);
+      if (st == InstrumentNameType::SHORT) {
+            setTid(Tid::INSTRUMENT_SHORT);
+            initElementStyle(&shortInstrumentStyle);
+            }
+      else {
+            setTid(Tid::INSTRUMENT_LONG);
+            initElementStyle(&longInstrumentStyle);
+            }
       }
 
 //---------------------------------------------------------
@@ -90,11 +111,6 @@ bool InstrumentName::setProperty(Pid id, const QVariant& v)
                   rv = TextBase::setProperty(id, v);
                   break;
             }
-      Sid sidx = getPropertyStyle(id);
-      if (sidx != Sid::NOSTYLE) {
-            score()->undoChangeStyleVal(sidx, getProperty(id));
-            }
-      score()->setLayoutAll();
       return rv;
       }
 

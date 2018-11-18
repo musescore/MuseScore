@@ -17,6 +17,7 @@
 #include "range.h"
 #include "tuplet.h"
 #include "spanner.h"
+#include "undo.h"
 
 namespace Ms {
 
@@ -54,12 +55,19 @@ void Score::splitMeasure(Segment* segment)
       int stick = measure->tick();
       int etick = measure->endTick();
 
+      std::list<std::tuple<Spanner*, int, int>> sl;
       for (auto i : spanner()) {
             Spanner* s = i.second;
+            Element* start = s->startElement();
+            Element* end = s->endElement();
             if (s->tick() >= stick && s->tick() < etick)
-                  s->setStartElement(0);
+                  start = nullptr;
             if (s->tick2() >= stick && s->tick2() < etick)
-                  s->setEndElement(0);
+                  end = nullptr;
+            if (start != s->startElement() || end != s->endElement())
+                  undo(new ChangeStartEndSpanner(s, start, end));
+            if (s->tick() < stick && s->tick2() > stick)
+                  sl.push_back(make_tuple(s, s->tick(), s->ticks()));
             }
 
       MeasureBase* nm = measure->next();
@@ -82,6 +90,16 @@ void Score::splitMeasure(Segment* segment)
       m1->adjustToLen(Fraction::fromTicks(ticks1), false);
       m2->adjustToLen(Fraction::fromTicks(ticks2), false);
       range.write(this, m1->tick());
+
+      for (auto i : sl) {
+            Spanner* s = std::get<0>(i);
+            int t      = std::get<1>(i);
+            int ticks  = std::get<2>(i);
+            if (s->tick() != t)
+                  s->undoChangeProperty(Pid::SPANNER_TICK, t);
+            if (s->ticks() != ticks)
+                  s->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
+            }
       }
 }
 

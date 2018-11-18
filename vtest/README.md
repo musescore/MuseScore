@@ -20,4 +20,8 @@ Add a new test
         mscore xxx.mscx -o -r 130 xxx-ref.png
 - add the file to `gen` and `gen.bat`
 
-
+How to use on Windows
+---
+- Install *Image Magick*, add it to PATH
+- Run `gen.bat`. It will use msvc.install as a default folder to search MuseScore.exe. If you use mingw build, specify the path to install folder manually:
+        `gen.bat win32install`

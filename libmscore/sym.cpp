@@ -2920,8 +2920,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       QT_TRANSLATE_NOOP("symUserNames", "Push"),
       QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 8' stop + upper tremolo 8' stop + 16' stop (accordion)"),
       QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, lower tremolo 8' stop + 8' stop + upper tremolo 8' stop (authentic musette)"),
-      //QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 8' stop + 16' stop (bandone\\u00f3n)"),
-      QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 8' stop + 16' stop (bandoneón)"), // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
+      QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 8' stop + 16' stop (bandone\\u00f3n)"),
       QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 16' stop (bassoon)"),
       QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, 8' stop (clarinet)"),
       QT_TRANSLATE_NOOP("symUserNames", "Right hand, 3 ranks, lower tremolo 8' stop + 8' stop + upper tremolo 8' stop + 16' stop"),
@@ -2970,10 +2969,8 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       "Bakiye (sharp)",
       "Accidental bracket, left",
       "Accidental bracket, right",
-      //QT_TRANSLATE_NOOP("symUserNames", "B\u00fcy\u00fck m\u00fccenneb (flat)"),
-      QT_TRANSLATE_NOOP("symUserNames", "Büyük mücenneb (flat)"),  // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
-      //QT_TRANSLATE_NOOP("symUserNames", "B\u00fcy\u00fck m\u00fccenneb (sharp)"),
-      QT_TRANSLATE_NOOP("symUserNames", "Büyük mücenneb (sharp)"), // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
+      QT_TRANSLATE_NOOP("symUserNames", "B\u00fcy\u00fck m\u00fccenneb (flat)"),
+      QT_TRANSLATE_NOOP("symUserNames", "B\u00fcy\u00fck m\u00fccenneb (sharp)"),
       "Combining close curly brace",
       "Combining lower by one 17-limit schisma",
       "Combining lower by one 19-limit schisma",
@@ -3046,8 +3043,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       "Koma (sharp)",
       QT_TRANSLATE_NOOP("symUserNames", "Koron (quarter tone flat)"),
       "K\u00fc\u00e7\u00fck m\u00fccenneb (flat)",
-      //QT_TRANSLATE_NOOP("symUserNames", "K\u00fc\u00e7\u00fck m\u00fccenneb (sharp)"),
-      QT_TRANSLATE_NOOP("symUserNames", "Küçük mücenneb (sharp)"), // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
+      QT_TRANSLATE_NOOP("symUserNames", "K\u00fc\u00e7\u00fck m\u00fccenneb (sharp)"),
       "Large double sharp",
       "Lower by one septimal comma",
       "Lower by one tridecimal quartertone",
@@ -3271,9 +3267,9 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       QT_TRANSLATE_NOOP("symUserNames", "Tenuto-accent below"),
       QT_TRANSLATE_NOOP("symUserNames", "Tenuto below"),
       //QT_TRANSLATE_NOOP("symUserNames", "Lour\\u00e9 (tenuto-staccato) above"),
-      QT_TRANSLATE_NOOP("symUserNames", "Louré (tenuto-staccato) above"), // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
+      QT_TRANSLATE_NOOP("symUserNames", "Louré (tenuto-staccato) above"),
       //QT_TRANSLATE_NOOP("symUserNames", "Lour\\u00e9 (tenuto-staccato) below"),
-      QT_TRANSLATE_NOOP("symUserNames", "Louré (tenuto-staccato) below"), // workaround for Qt lupdate bug https://bugreports.qt.io/browse/QTBUG-35164
+      QT_TRANSLATE_NOOP("symUserNames", "Louré (tenuto-staccato) below"),
       QT_TRANSLATE_NOOP("symUserNames", "Unstress above"),
       QT_TRANSLATE_NOOP("symUserNames", "Unstress below"),
       "Augmentation dot",
@@ -5663,9 +5659,9 @@ void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPoin
                   font->setFamily(_family);
                   font->setStyleStrategy(QFont::NoFontMerging);
                   font->setHintingPreference(QFont::PreferVerticalHinting);
-                  qreal size = 20.0 * MScore::pixelRatio;
-                  font->setPointSize(size);
                   }
+            qreal size = 20.0 * MScore::pixelRatio;
+            font->setPointSize(size);
             QSizeF imag = QSizeF(1.0 / mag.width(), 1.0 / mag.height());
             painter->scale(mag.width(), mag.height());
             painter->setFont(*font);
@@ -5706,7 +5702,7 @@ void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPoin
             FT_Bitmap* bm     = &gb->bitmap;
 
             if (bm->width == 0 || bm->rows == 0) {
-                  qDebug("zero glyph");
+                  qDebug("zero glyph, id %d", int(id));
                   return;
                   }
             QImage img(QSize(bm->width, bm->rows), QImage::Format_ARGB32);
@@ -5807,16 +5803,9 @@ void initScoreFonts()
 //   codeToString
 //---------------------------------------------------------
 
-static QString codeToString(int code)
+static QString codeToString(uint code)
       {
-      QString s;
-      if (code & 0xffff0000) {
-            s = QChar(QChar::highSurrogate(code));
-            s += QChar(QChar::lowSurrogate(code));
-            }
-      else
-            s = QChar(code);
-      return s;
+      return QString::fromUcs4(&code, 1);
       }
 
 //---------------------------------------------------------
@@ -5913,35 +5902,35 @@ void ScoreFont::load()
                   continue;
                   }
             Sym* sym = &_symbols[int(symId)];
-            for (auto i : ooo.keys()) {
-                  if (i == "stemDownNW") {
-                        qreal x = ooo.value(i).toArray().at(0).toDouble();
-                        qreal y = ooo.value(i).toArray().at(1).toDouble();
+            for (auto j : ooo.keys()) {
+                  if (j == "stemDownNW") {
+                        qreal x = ooo.value(j).toArray().at(0).toDouble();
+                        qreal y = ooo.value(j).toArray().at(1).toDouble();
                         sym->setStemDownNW(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
                         }
-                  else if (i == "stemUpSE") {
-                        qreal x = ooo.value(i).toArray().at(0).toDouble();
-                        qreal y = ooo.value(i).toArray().at(1).toDouble();
+                  else if (j == "stemUpSE") {
+                        qreal x = ooo.value(j).toArray().at(0).toDouble();
+                        qreal y = ooo.value(j).toArray().at(1).toDouble();
                         sym->setStemUpSE(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
                         }
-                  else if (i == "cutOutNE") {
-                        qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
-                        qreal y = ooo.value(i).toArray().at(1).toDouble() * scale;
+                  else if (j == "cutOutNE") {
+                        qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
+                        qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
                         sym->setCutOutNE(QPointF(x, -y));
                         }
-                  else if (i == "cutOutNW") {
-                        qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
-                        qreal y = ooo.value(i).toArray().at(1).toDouble() * scale;
+                  else if (j == "cutOutNW") {
+                        qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
+                        qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
                         sym->setCutOutNW(QPointF(x, -y));
                         }
-                  else if (i == "cutOutSE") {
-                        qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
-                        qreal y = ooo.value(i).toArray().at(1).toDouble() * scale;
+                  else if (j == "cutOutSE") {
+                        qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
+                        qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
                         sym->setCutOutSE(QPointF(x, -y));
                         }
-                  else if (i == "cutOutSW") {
-                        qreal x = ooo.value(i).toArray().at(0).toDouble() * scale;
-                        qreal y = ooo.value(i).toArray().at(1).toDouble() * scale;
+                  else if (j == "cutOutSW") {
+                        qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
+                        qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
                         sym->setCutOutSW(QPointF(x, -y));
                         }
                   }

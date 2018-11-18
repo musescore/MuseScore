@@ -29,7 +29,7 @@ class Beam;
 class Tuplet;
 class Staff;
 class Chord;
-class Text;
+class MeasureNumber;
 class ChordRest;
 class Score;
 class MuseScoreView;
@@ -90,6 +90,8 @@ class Measure final : public MeasureBase {
       void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch);
       void computeMinWidth(Segment* s, qreal x, bool isSystemHeader);
 
+      void readVoice(XmlReader& e, int staffIdx, bool irregular);
+
    public:
       Measure(Score* = 0);
       Measure(const Measure&);
@@ -101,6 +103,7 @@ class Measure final : public MeasureBase {
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
+      virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
       virtual void write(XmlWriter& xml) const override { Element::write(xml); }
       void write(XmlWriter&, int, bool writeSystemElements, bool forceTimeSig) const;
       void writeBox(XmlWriter&) const;
@@ -124,11 +127,9 @@ class Measure final : public MeasureBase {
       void setStaffSlashStyle(int staffIdx, bool slashStyle);
       bool corrupted(int staffIdx) const;
       void setCorrupted(int staffIdx, bool val);
-      void setNoText(int staffIdx, Text*);
-      Text* noText(int staffIdx) const;
+      void setNoText(int staffIdx, MeasureNumber*);
+      MeasureNumber* noText(int staffIdx) const;
 
-      const Shape& staffShape(int staffIdx) const;
-      Shape& staffShape(int staffIdx);
       void createStaves(int);
 
       MeasureNumberMode measureNumberMode() const     { return _noMode;      }
@@ -154,6 +155,7 @@ class Measure final : public MeasureBase {
       void setUserStretch(qreal v)              { _userStretch = v; }
 
       void stretchMeasure(qreal stretch);
+      int computeTicks();
       void layout2();
 
       Chord* findChord(int tick, int track);

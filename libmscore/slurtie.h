@@ -129,6 +129,8 @@ class SlurTie : public Spanner {
       virtual void layout2(const QPointF, int, struct UP&)  {}
       virtual bool contains(const QPointF&) const { return false; }  // not selectable
 
+      virtual void read(XmlReader&) override;
+
       void writeProperties(XmlWriter& xml) const;
       bool readProperties(XmlReader&);
 

@@ -48,9 +48,9 @@ class DurationElement : public Element {
 
       virtual Measure* measure() const    { return (Measure*)(parent()); }
 
-      virtual bool readProperties(XmlReader& e);
-      virtual void writeProperties(XmlWriter& xml) const;
-      void writeTuplet(XmlWriter& xml);
+      void readAddTuplet(Tuplet* t);
+      void writeTupletStart(XmlWriter& xml) const;
+      void writeTupletEnd(XmlWriter& xml) const;
 
       void setTuplet(Tuplet* t)           { _tuplet = t;      }
       Tuplet* tuplet() const              { return _tuplet;   }
@@ -58,6 +58,8 @@ class DurationElement : public Element {
       virtual Beam* beam() const          { return 0;         }
       int actualTicks() const;
       Fraction actualFraction() const;
+      Fraction afrac() const override;
+      Fraction rfrac() const override;
 
       virtual Fraction duration() const   { return _duration; }
       Fraction globalDuration() const;

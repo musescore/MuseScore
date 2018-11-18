@@ -390,10 +390,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             s1 = s1->measure()->first();
       Segment* s2 = _selection.endSegment();
       for (Segment* segment = s1; segment && segment != s2; segment = segment->next1()) {
-            for (int st : tracks) {
-                  if (staff(st/VOICES)->staffType(s1->tick())->group() == StaffGroup::PERCUSSION)
+            for (int track : tracks) {
+                  if (staff(track/VOICES)->staffType(s1->tick())->group() == StaffGroup::PERCUSSION)
                         continue;
-                  Element* e = segment->element(st);
+                  Element* e = segment->element(track);
                   if (!e)
                         continue;
 
@@ -421,8 +421,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         }
                   else if (e->isKeySig() && trKeys && mode != TransposeMode::DIATONICALLY) {
                         QList<ScoreElement*> ll = e->linkList();
-                        for (ScoreElement* e : ll) {
-                              KeySig* ks = toKeySig(e);
+                        for (ScoreElement* scoreElement : ll) {
+                              KeySig* ks = toKeySig(scoreElement);
                               if (!ks->isCustom() && !ks->isAtonal()) {
                                     Key nKey = transposeKey(ks->key(), interval);
                                     KeySigEvent ke = ks->keySigEvent();
@@ -453,8 +453,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                         // undoTransposeHarmony does not do links
                         // because it is also used to handle transposing instruments
                         // and score / parts could be in different concert pitch states
-                        for (ScoreElement* e : h->linkList())
-                              undoTransposeHarmony(toHarmony(e), rootTpc, baseTpc);
+                        for (ScoreElement* scoreElement : h->linkList())
+                              undoTransposeHarmony(toHarmony(scoreElement), rootTpc, baseTpc);
                         }
                   }
             }
@@ -465,14 +465,14 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 //            Segment* seg = firstMeasure()->findSegment(SegmentType::KeySig, 0);
             Key nKey = transposeKey(Key::C, interval);
 //            if (seg == 0) {
-                  for (int st : tracks) {
-                        if (st % VOICES)
+                  for (int track : tracks) {
+                        if (track % VOICES)
                               continue;
                         Segment* seg = firstMeasure()->undoGetSegment(SegmentType::KeySig, 0);
-                        KeySig* ks = toKeySig(seg->element(st));
+                        KeySig* ks = toKeySig(seg->element(track));
                         if (!ks) {
                               ks = new KeySig(this);
-                              ks->setTrack(st);
+                              ks->setTrack(track);
                               ks->setKey(nKey);
                               ks->setParent(seg);
                               undoAddElement(ks);
@@ -564,7 +564,7 @@ void Score::transposeSemitone(int step)
 
       int keyType = int(staff(0)->key(0)) + 7;   // ??
 
-      int intervalList[15][2] = {
+      int intervalListArray[15][2] = {
             // up - down
             { 1, 1 },  // Cb
             { 1, 1 },  // Gb
@@ -583,7 +583,7 @@ void Score::transposeSemitone(int step)
             { 1, 1 }   // C#
             };
 
-      int interval = intervalList[keyType][step > 0 ? 0 : 1];
+      const int interval = intervalListArray[keyType][step > 0 ? 0 : 1];
 
       cmdSelectAll();
       if (!transpose(TransposeMode::BY_INTERVAL, dir, Key::C, interval, true, true, false)) {
@@ -673,8 +673,18 @@ void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int t
       Interval diffV(oldV.chromatic + v.chromatic);
 
       // transpose keys first
-      if (!styleB(Sid::concertPitch))
-            transposeKeys(part->startTrack() / VOICES, part->endTrack() / VOICES, tickStart, tickEnd, diffV);
+      QList<Score*> scores;
+      for (Staff* ls : part->staff(0)->staffList()) {
+            // TODO: special handling for linked staves within a score
+            // could be useful for capo
+            Score* score = ls->score();
+            if (scores.contains(score))
+                  continue;
+            scores.append(score);
+            Part* lp = ls->part();
+            if (!score->styleB(Sid::concertPitch))
+                  score->transposeKeys(lp->startTrack() / VOICES, lp->endTrack() / VOICES, tickStart, tickEnd, diffV);
+            }
 
       // now transpose notes and chord symbols
       for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
@@ -703,15 +713,15 @@ void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int t
                                     }
                               }
                         // find chord symbols
-                        for (Element* e : s->annotations()) {
-                              if (e->track() != track || e->type() != ElementType::HARMONY)
+                        for (Element* element : s->annotations()) {
+                              if (element->track() != track || element->type() != ElementType::HARMONY)
                                     continue;
-                              Harmony* h  = toHarmony(e);
+                              Harmony* h  = toHarmony(element);
                               int rootTpc = transposeTpc(h->rootTpc(), diffV, false);
                               int baseTpc = transposeTpc(h->baseTpc(), diffV, false);
-                              for (ScoreElement* e : h->linkList()) {
-                                    if (!e->score()->styleB(Sid::concertPitch))
-                                          undoTransposeHarmony(toHarmony(e), rootTpc, baseTpc);
+                              for (ScoreElement* scoreElement : h->linkList()) {
+                                    if (!scoreElement->score()->styleB(Sid::concertPitch))
+                                          undoTransposeHarmony(toHarmony(scoreElement), rootTpc, baseTpc);
                                     }
                               }
                         }

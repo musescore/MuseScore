@@ -129,9 +129,8 @@ MasterScore* MTest::readCreatedScore(const QString& name)
       QFileInfo fi(name);
       score->setName(fi.completeBaseName());
       QString csl  = fi.suffix().toLower();
-      extern bool __loadScore;
 
-      __loadScore = true;
+      ScoreLoad sl;
       Score::FileError rv;
       if (csl == "cap") {
             rv = importCapella(score, name);
@@ -169,7 +168,6 @@ MasterScore* MTest::readCreatedScore(const QString& name)
             for (Score* s : score->scoreList())
                   s->doLayout();
             }
-      __loadScore = false;
       return score;
       }
 
@@ -323,6 +321,7 @@ bool MTest::saveCompareMimeData(QByteArray mimeData, const QString& saveName, co
 
 void MTest::initMTest()
       {
+      qputenv("QML_DISABLE_DISK_CACHE", "true");
       qSetMessagePattern("%{function}: %{message}");
       initMyResources();
 //      DPI  = 120;

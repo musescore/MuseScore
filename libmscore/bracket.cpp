@@ -276,6 +276,7 @@ void Bracket::draw(QPainter* painter) const
 void Bracket::startEdit(EditData& ed)
       {
       Element::startEdit(ed);
+      ay1 = pagePos().y();
       ed.grips   = 1;
       ed.curGrip = Grip::START;
       }
@@ -315,7 +316,6 @@ void Bracket::editDrag(EditData& ed)
 
 void Bracket::endEditDrag(EditData&)
       {
-      qreal ay1 = pagePos().y();
       qreal ay2 = ay1 + h2 * 2;
 
       int staffIdx1 = staffIdx();
@@ -350,7 +350,7 @@ void Bracket::endEditDrag(EditData&)
 
 bool Bracket::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::BRACKET;
+      return data.dropElement->type() == ElementType::BRACKET;
       }
 
 //---------------------------------------------------------
@@ -359,7 +359,7 @@ bool Bracket::acceptDrop(EditData& data) const
 
 Element* Bracket::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       Bracket* b = 0;
       if (e->isBracket()) {
             b = toBracket(e);
@@ -446,16 +446,16 @@ void Bracket::write(XmlWriter& xml) const
       {
       switch (_bi->bracketType()) {
             case BracketType::BRACE:
-                  xml.stag("Bracket type=\"Brace\"");
+                  xml.stag(this, "type=\"Brace\"");
                   break;
             case BracketType::NORMAL:
-                  xml.stag("Bracket");
+                  xml.stag(this);
                   break;
             case BracketType::SQUARE:
-                  xml.stag("Bracket type=\"Square\"");
+                  xml.stag(this, "type=\"Square\"");
                   break;
             case BracketType::LINE:
-                  xml.stag("Bracket type=\"Line\"");
+                  xml.stag(this, "type=\"Line\"");
                   break;
             case BracketType::NO_BRACKET:
                   break;

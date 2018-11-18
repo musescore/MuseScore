@@ -18,16 +18,24 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   jumpStyle
+//---------------------------------------------------------
+
+static const ElementStyle jumpStyle {
+      { Sid::repeatRightPlacement, Pid::PLACEMENT },
+      };
+
+//---------------------------------------------------------
 //   JumpTypeTable
 //---------------------------------------------------------
 
 const JumpTypeTable jumpTypeTable[] = {
-      { Jump::Type::DC,         SubStyleId::REPEAT_RIGHT, "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo")        },
-      { Jump::Type::DC_AL_FINE, SubStyleId::REPEAT_RIGHT, "D.C. al Fine", "start", "fine", "" ,     QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine")},
-      { Jump::Type::DC_AL_CODA, SubStyleId::REPEAT_RIGHT, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda")},
-      { Jump::Type::DS_AL_CODA, SubStyleId::REPEAT_RIGHT, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda")   },
-      { Jump::Type::DS_AL_FINE, SubStyleId::REPEAT_RIGHT, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine")   },
-      { Jump::Type::DS,         SubStyleId::REPEAT_RIGHT, "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.")           }
+      { Jump::Type::DC,         "D.C.",         "start", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "Da Capo")        },
+      { Jump::Type::DC_AL_FINE, "D.C. al Fine", "start", "fine", "" ,     QT_TRANSLATE_NOOP("jumpType", "Da Capo al Fine")},
+      { Jump::Type::DC_AL_CODA, "D.C. al Coda", "start", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "Da Capo al Coda")},
+      { Jump::Type::DS_AL_CODA, "D.S. al Coda", "segno", "coda", "codab", QT_TRANSLATE_NOOP("jumpType", "D.S. al Coda")   },
+      { Jump::Type::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "",      QT_TRANSLATE_NOOP("jumpType", "D.S. al Fine")   },
+      { Jump::Type::DS,         "D.S.",         "segno", "end",  "",      QT_TRANSLATE_NOOP("jumpType", "D.S.")           }
       };
 
 int jumpTypeTableSize()
@@ -40,9 +48,9 @@ int jumpTypeTableSize()
 //---------------------------------------------------------
 
 Jump::Jump(Score* s)
-   : TextBase(s, ElementFlag::MOVABLE)
+   : TextBase(s, Tid::REPEAT_RIGHT, ElementFlag::MOVABLE | ElementFlag::SYSTEM)
       {
-      initSubStyle(SubStyleId::REPEAT_RIGHT);
+      initElementStyle(&jumpStyle);
       setLayoutToParentWidth(true);
       _playRepeats = false;
       }
@@ -59,7 +67,7 @@ void Jump::setJumpType(Type t)
                   setJumpTo(p.jumpTo);
                   setPlayUntil(p.playUntil);
                   setContinueAt(p.continueAt);
-                  initSubStyle(p.subStyle);
+                  initTid(Tid::REPEAT_RIGHT);
                   break;
                   }
             }
@@ -92,33 +100,8 @@ QString Jump::jumpTypeUserName() const
 
 void Jump::layout()
       {
-      setPos(QPointF(0.0, score()->styleP(Sid::jumpPosAbove)));
-      TextBase::layout1();
-
-      if (parent() && autoplace()) {
-            setUserOff(QPointF());
-            int si             = staffIdx();
-            qreal minDistance  = 0.5 * spatium(); // score()->styleP(Sid::tempoMinDistance);
-            Shape& s1          = measure()->staffShape(si);
-            Shape s2           = shape().translated(pos());
-            if (placeAbove()) {
-                  qreal d = s2.minVerticalDistance(s1);
-                  if (d > -minDistance) {
-                        qreal yd       = -d - minDistance;
-                        rUserYoffset() = yd;
-                        s2.translate(QPointF(0.0, yd));
-                        }
-                  }
-            else {
-                  qreal d = s1.minVerticalDistance(s2);
-                  if (d > -minDistance) {
-                        qreal yd       = d + minDistance;
-                        rUserYoffset() = yd;
-                        s2.translate(QPointF(0.0, yd));
-                        }
-                  }
-            s1.add(s2);
-            }
+      TextBase::layout();
+      autoplaceMeasureElement(0.5 * spatium());
       }
 
 //---------------------------------------------------------
@@ -148,7 +131,7 @@ void Jump::read(XmlReader& e)
 
 void Jump::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       TextBase::writeProperties(xml);
       xml.tag("jumpTo", _jumpTo);
       xml.tag("playUntil", _playUntil);

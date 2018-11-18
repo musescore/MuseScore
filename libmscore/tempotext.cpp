@@ -28,13 +28,22 @@ namespace Ms {
 //TODO: textChanged() needs to be called during/after editing
 
 //---------------------------------------------------------
+//   tempoStyle
+//---------------------------------------------------------
+
+static const ElementStyle tempoStyle {
+      { Sid::tempoSystemFlag,                    Pid::SYSTEM_FLAG            },
+      { Sid::tempoPlacement,                     Pid::PLACEMENT              },
+      };
+
+//---------------------------------------------------------
 //   TempoText
 //---------------------------------------------------------
 
 TempoText::TempoText(Score* s)
-   : TextBase(s, ElementFlags(ElementFlag::SYSTEM))
+   : TextBase(s, Tid::TEMPO, ElementFlags(ElementFlag::SYSTEM))
       {
-      initSubStyle(SubStyleId::TEMPO);
+      initElementStyle(&tempoStyle);
       _tempo      = 2.0;      // propertyDefault(P_TEMPO).toDouble();
       _followText = false;
       _relative   = 1.0;
@@ -47,7 +56,7 @@ TempoText::TempoText(Score* s)
 
 void TempoText::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("tempo", _tempo);
       if (_followText)
             xml.tag("followText", _followText);
@@ -371,7 +380,7 @@ QVariant TempoText::propertyDefault(Pid id) const
       {
       switch(id) {
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::TEMPO);
+                  return int(Tid::TEMPO);
             case Pid::TEMPO:
                   return 2.0;
             case Pid::TEMPO_FOLLOW_TEXT:
@@ -388,9 +397,7 @@ QVariant TempoText::propertyDefault(Pid id) const
 
 void TempoText::layout()
       {
-      qreal y = placeAbove() ? styleP(Sid::tempoPosAbove) : styleP(Sid::tempoPosBelow) + staff()->height();
-      setPos(QPointF(0.0, y));
-      TextBase::layout1();
+      TextBase::layout();
 
       Segment* s = segment();
       if (!s)                       // for use in palette

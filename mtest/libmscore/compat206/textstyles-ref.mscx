@@ -19,6 +19,9 @@
       <minSystemDistance>9</minSystemDistance>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
+      <lyricsOddOffset x="0" y="6"/>
+      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
+      <lyricsEvenOffset x="0" y="6"/>
       <repeatBarTips>1</repeatBarTips>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
@@ -29,6 +32,9 @@
       <pedalPosBelow>0</pedalPosBelow>
       <pedalFontFace>MuseJazz Text</pedalFontFace>
       <trillPosAbove>0</trillPosAbove>
+      <chordSymbolAFontFace>MuseJazz Text</chordSymbolAFontFace>
+      <chordSymbolAFontSize>15</chordSymbolAFontSize>
+      <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
       <measureNumberSystem>0</measureNumberSystem>
       <chordStyle>jazz</chordStyle>
       <chordDescriptionFile>chords_jazz.xml</chordDescriptionFile>
@@ -39,12 +45,15 @@
       <oddFooterR></oddFooterR>
       <voltaY>-6</voltaY>
       <voltaFontFace>MuseJazz Text</voltaFontFace>
-      <voltaFontSize>8</voltaFontSize>
       <voltaFontBold>0</voltaFontBold>
       <ottavaFontFace>MuseJazz Text</ottavaFontFace>
       <ottavaFontSize>10</ottavaFontSize>
       <ottavaFontItalic>1</ottavaFontItalic>
       <tupletFontFace>MuseJazz Text</tupletFontFace>
+      <defaultAlign>center,bottom</defaultAlign>
+      <defaultFramePadding>0</defaultFramePadding>
+      <defaultFrameWidth>0</defaultFrameWidth>
+      <defaultOffset x="0" y="-2"/>
       <titleFontFace>MuseJazz Text</titleFontFace>
       <titleFontSize>28</titleFontSize>
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
@@ -76,6 +85,7 @@
       <tempoPosAbove>-4</tempoPosAbove>
       <metronomeFontFace>MuseJazz Text</metronomeFontFace>
       <measureNumberFontFace>MuseJazz Text</measureNumberFontFace>
+      <measureNumberAlign>center,bottom</measureNumberAlign>
       <translatorFontFace>MuseJazz Text</translatorFontFace>
       <systemFontFace>MuseJazz Text</systemFontFace>
       <systemFontSize>11</systemFontSize>
@@ -84,8 +94,6 @@
       <staffFontSize>11</staffFontSize>
       <staffAlign>left,top</staffAlign>
       <staffTextPosAbove>5.5</staffTextPosAbove>
-      <chordSymbolFontFace>MuseJazz Text</chordSymbolFontFace>
-      <chordSymbolFontSize>15</chordSymbolFontSize>
       <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
       <rehearsalMarkFontBold>0</rehearsalMarkFontBold>
       <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
@@ -259,6 +267,7 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
+            <layoutOffset x="0" y="0"/>
             <text>lyrics</text>
             </Lyrics>
           <Note>
@@ -484,6 +493,7 @@
           <duration>4/4</duration>
           </Rest>
         <BarLine>
+          <subtype>end</subtype>
           </BarLine>
         <endSpanner id="5"/>
         </Measure>

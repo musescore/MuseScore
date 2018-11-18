@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>712</width>
-    <height>538</height>
+    <width>834</width>
+    <height>569</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -122,6 +122,26 @@
             </property>
            </widget>
           </item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="showStartcenter">
+            <property name="text">
+             <string>Show start center</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="lastSession">
+            <property name="accessibleName">
+             <string>Continue last session</string>
+            </property>
+            <property name="text">
+             <string>Continue last session</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="0" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="spacing">
@@ -182,26 +202,6 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QCheckBox" name="showStartcenter">
-            <property name="text">
-             <string>Show start center</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="lastSession">
-            <property name="accessibleName">
-             <string>Continue last session</string>
-            </property>
-            <property name="text">
-             <string>Continue last session</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="0">
            <widget class="QRadioButton" name="newSession">
             <property name="accessibleName">
@@ -229,6 +229,13 @@
             </property>
             <property name="text">
              <string>Show navigator</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QCheckBox" name="showTours">
+            <property name="text">
+             <string>Show tours</string>
             </property>
            </widget>
           </item>
@@ -428,6 +435,19 @@
             </property>
            </widget>
           </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_extensions">
+            <property name="text">
+             <string>Extensions:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="indent">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_86">
             <property name="text">
@@ -588,6 +608,16 @@
             </property>
            </widget>
           </item>
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="myExtensions">
+            <property name="accessibleName">
+             <string>Extensions folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to extensions folder</string>
+            </property>
+           </widget>
+          </item>
           <item row="2" column="2">
            <widget class="QToolButton" name="myTemplatesButton">
             <property name="focusPolicy">
@@ -628,6 +658,26 @@
             </property>
            </widget>
           </item>
+          <item row="6" column="2">
+           <widget class="QToolButton" name="myExtensionsButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Extensions folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a folder dialog for selecting the extensions folder</string>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="2">
            <widget class="QToolButton" name="mySoundfontsButton">
             <property name="focusPolicy">
@@ -657,23 +707,6 @@
           <string>Theme</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
-          <item row="0" column="0" colspan="2">
-           <widget class="QComboBox" name="styleName">
-            <property name="accessibleName">
-             <string>Select style</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>Dark</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Light</string>
-             </property>
-            </item>
-           </widget>
-          </item>
           <item row="1" column="1">
            <widget class="QSpinBox" name="iconWidth">
             <property name="accessibleName">
@@ -717,6 +750,43 @@
             </property>
             <property name="value">
              <number>20</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QComboBox" name="styleName">
+            <property name="accessibleName">
+             <string>Select style</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Dark</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Light</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QSpinBox" name="fontSize"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QFontComboBox" name="fontFamily"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="fontFamilyLabel">
+            <property name="text">
+             <string>Font:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="fontSizeLabel">
+            <property name="text">
+             <string>Font size:</string>
             </property>
            </widget>
           </item>
@@ -1047,6 +1117,7 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
+              <width>0</width>
               <height>20</height>
              </size>
             </property>
@@ -3752,7 +3823,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           <string>Audio</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_15">
-          <item row="1" column="2">
+          <item row="2" column="2">
            <widget class="QComboBox" name="exportMp3BitRate">
             <property name="currentText">
              <string>128</string>
@@ -3832,14 +3903,14 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             </item>
            </widget>
           </item>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="label_18">
             <property name="text">
              <string>Sample rate:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
+          <item row="1" column="2">
            <widget class="QComboBox" name="exportAudioSampleRate">
             <property name="accessibleName">
              <string>Sample rate</string>
@@ -3867,21 +3938,21 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             </item>
            </widget>
           </item>
-          <item row="0" column="3">
+          <item row="1" column="3">
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string extracomment="Hertz">Hz</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="3">
+          <item row="2" column="3">
            <widget class="QLabel" name="exportMp3BitRateUnit">
             <property name="text">
              <string>kBit/s</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="4">
+          <item row="2" column="4">
            <spacer name="horizontalSpacer_19">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -3894,10 +3965,17 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             </property>
            </spacer>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="exportMp3BitRateLabel">
             <property name="text">
              <string>MP3 Bitrate:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="3">
+           <widget class="QCheckBox" name="normalize">
+            <property name="text">
+             <string>Normalize</string>
             </property>
            </widget>
           </item>
@@ -3936,6 +4014,9 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          </property>
          <property name="accessibleDescription">
           <string>Here you can configure shortcuts for actions</string>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
@@ -4109,7 +4190,20 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           <string>Automatic Update Check</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
-          <item row="1" column="0">
+          <item row="4" column="0">
+           <spacer name="verticalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
              <spacer name="horizontalSpacer_5">
@@ -4126,23 +4220,17 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             </item>
            </layout>
           </item>
-          <item row="2" column="0">
-           <spacer name="verticalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="0" column="0">
            <widget class="QCheckBox" name="checkUpdateStartup">
             <property name="text">
              <string>Check for new version of MuseScore</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="checkExtensionsUpdateStartup">
+            <property name="text">
+             <string>Check for new version of MuseScore extensions</string>
             </property>
            </widget>
           </item>
@@ -4218,7 +4306,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
    </item>
   </layout>
  </widget>
- <pixmapfunction>getPixmap</pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>Awl::ColorLabel</class>
@@ -4261,11 +4348,15 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>mySoundfontsButton</tabstop>
   <tabstop>myImages</tabstop>
   <tabstop>myImagesButton</tabstop>
+  <tabstop>myExtensions</tabstop>
+  <tabstop>myExtensionsButton</tabstop>
   <tabstop>language</tabstop>
   <tabstop>updateTranslation</tabstop>
   <tabstop>styleName</tabstop>
   <tabstop>iconWidth</tabstop>
   <tabstop>iconHeight</tabstop>
+  <tabstop>fontFamily</tabstop>
+  <tabstop>fontSize</tabstop>
   <tabstop>autoSave</tabstop>
   <tabstop>autoSaveTime</tabstop>
   <tabstop>oscServer</tabstop>
@@ -4378,6 +4469,19 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>limitScrollArea</tabstop>
   <tabstop>drawAntialiased</tabstop>
   <tabstop>proximity</tabstop>
+  <tabstop>pageHorizontal</tabstop>
+  <tabstop>pageVertical</tabstop>
+  <tabstop>realtimeDelay</tabstop>
+  <tabstop>playNotes</tabstop>
+  <tabstop>showMidiControls</tabstop>
+  <tabstop>expandRepeats</tabstop>
+  <tabstop>exportRPNs</tabstop>
+  <tabstop>exportPdfDpi</tabstop>
+  <tabstop>exportMp3BitRate</tabstop>
+  <tabstop>filterShortcuts</tabstop>
+  <tabstop>checkUpdateStartup</tabstop>
+  <tabstop>resetPreference</tabstop>
+  <tabstop>advancedSearch</tabstop>
  </tabstops>
  <resources>
   <include location="musescore.qrc"/>

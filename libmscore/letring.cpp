@@ -21,33 +21,37 @@
 
 namespace Ms {
 
+static const ElementStyle letRingStyle {
+      { Sid::letRingFontFace,                      Pid::BEGIN_FONT_FACE        },
+      { Sid::letRingFontFace,                      Pid::CONTINUE_FONT_FACE     },
+      { Sid::letRingFontFace,                      Pid::END_FONT_FACE          },
+      { Sid::letRingFontSize,                      Pid::BEGIN_FONT_SIZE        },
+      { Sid::letRingFontSize,                      Pid::CONTINUE_FONT_SIZE     },
+      { Sid::letRingFontSize,                      Pid::END_FONT_SIZE          },
+      { Sid::letRingFontBold,                      Pid::BEGIN_FONT_BOLD        },
+      { Sid::letRingFontBold,                      Pid::CONTINUE_FONT_BOLD     },
+      { Sid::letRingFontBold,                      Pid::END_FONT_BOLD          },
+      { Sid::letRingFontItalic,                    Pid::BEGIN_FONT_ITALIC      },
+      { Sid::letRingFontItalic,                    Pid::CONTINUE_FONT_ITALIC   },
+      { Sid::letRingFontItalic,                    Pid::END_FONT_ITALIC        },
+      { Sid::letRingFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE   },
+      { Sid::letRingFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE},
+      { Sid::letRingFontUnderline,                 Pid::END_FONT_UNDERLINE     },
+      { Sid::letRingTextAlign,                     Pid::BEGIN_TEXT_ALIGN       },
+      { Sid::letRingTextAlign,                     Pid::CONTINUE_TEXT_ALIGN    },
+      { Sid::letRingTextAlign,                     Pid::END_TEXT_ALIGN         },
+      { Sid::letRingHookHeight,                    Pid::BEGIN_HOOK_HEIGHT      },
+      { Sid::letRingHookHeight,                    Pid::END_HOOK_HEIGHT        },
+      };
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void LetRingSegment::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
       TextLineBaseSegment::layout();
-      if (parent()) {     // for palette
-            rypos() += score()->styleP(letRing()->placeBelow() ? Sid::letRingPosBelow : Sid::letRingPosAbove);
-            if (autoplace()) {
-                  qreal minDistance = spatium() * .7;
-                  Shape s1 = shape().translated(pos());
-
-                  if (letRing()->placeBelow()) {
-                        qreal d  = system()->bottomDistance(staffIdx(), s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = d + minDistance;
-                        }
-                  else {
-                        qreal d  = system()->topDistance(staffIdx(), s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = -(d + minDistance);
-                        }
-                  }
-            }
+      autoplaceSpannerSegment(spatium() * .7);
       }
 
 //---------------------------------------------------------
@@ -57,7 +61,7 @@ void LetRingSegment::layout()
 LetRing::LetRing(Score* s)
    : TextLineBase(s)
       {
-      initSubStyle(SubStyleId::LET_RING);
+      initElementStyle(&letRingStyle);
       resetProperty(Pid::LINE_VISIBLE);
       }
 
@@ -67,8 +71,8 @@ LetRing::LetRing(Score* s)
 
 void LetRing::read(XmlReader& e)
       {
-      int id = e.intAttribute("id", -1);
-      e.addSpanner(id, this);
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement()) {
             if (!TextLineBase::readProperties(e))
                   e.unknown();
@@ -83,10 +87,12 @@ void LetRing::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(this);
 
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties()) {
+            if (!isStyled(spp.pid))
+                  writeProperty(xml, spp.pid);
+            }
 
       Element::writeProperties(xml);
       xml.etag();
@@ -99,15 +105,6 @@ void LetRing::write(XmlWriter& xml) const
 LineSegment* LetRing::createLineSegment()
       {
       return new LetRingSegment(score());
-      }
-
-//---------------------------------------------------------
-//   setYoff
-//---------------------------------------------------------
-
-void LetRing::setYoff(qreal val)
-      {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::letRingPosAbove : Sid::letRingPosBelow);
       }
 
 //---------------------------------------------------------
@@ -197,7 +194,7 @@ Sid LetRing::getPropertyStyle(Pid id) const
 
 QPointF LetRing::linePos(Grip grip, System** sys) const
       {
-      qreal x;
+      qreal x = 0.0;
       qreal nhw = score()->noteHeadWidth();
       System* s = nullptr;
       if (grip == Grip::START) {

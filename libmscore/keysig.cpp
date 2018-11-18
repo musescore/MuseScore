@@ -107,7 +107,7 @@ void KeySig::layout()
       // determine current clef for this staff
       ClefType clef = ClefType::G;
       if (staff())
-            clef = staff()->clef(segment()->tick());
+            clef = staff()->clef(tick());
 
       int accidentals = 0, naturals = 0;
       int t1 = int(_sig.key());
@@ -141,7 +141,7 @@ void KeySig::layout()
 
       // Don't repeat naturals if shown in courtesy
       if (measure() && measure()->system() && measure() == measure()->system()->firstMeasure()
-          && prevMeasure && prevMeasure->findSegment(SegmentType::KeySigAnnounce, segment()->tick())
+          && prevMeasure && prevMeasure->findSegment(SegmentType::KeySigAnnounce, tick())
           && !segment()->isKeySigAnnounceType())
             naturalsOn = false;
       if (track() == -1)
@@ -150,7 +150,8 @@ void KeySig::layout()
       int coffset = 0;
       Key t2      = Key::C;
       if (naturalsOn) {
-            t2 = staff()->key(segment()->tick() - 1);
+            if (staff())
+                  t2 = staff()->key(tick() - 1);
             if (t2 == Key::C)
                   naturalsOn = false;
             else {
@@ -282,7 +283,7 @@ void KeySig::draw(QPainter* p) const
 
 bool KeySig::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::KEYSIG;
+      return data.dropElement->type() == ElementType::KEYSIG;
       }
 
 //---------------------------------------------------------
@@ -291,7 +292,7 @@ bool KeySig::acceptDrop(EditData& data) const
 
 Element* KeySig::drop(EditData& data)
       {
-      KeySig* ks = toKeySig(data.element);
+      KeySig* ks = toKeySig(data.dropElement);
       if (ks->type() != ElementType::KEYSIG) {
             delete ks;
             return 0;
@@ -328,7 +329,7 @@ void KeySig::setKey(Key key)
 
 void KeySig::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       Element::writeProperties(xml);
       if (_sig.isAtonal()) {
             xml.tag("custom", 1);
@@ -372,8 +373,8 @@ void KeySig::read(XmlReader& e)
             if (tag == "KeySym") {
                   KeySym ks;
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "sym") {
+                        const QStringRef& t(e.name());
+                        if (t == "sym") {
                               QString val(e.readElementText());
                               bool valid;
                               SymId id = SymId(val.toInt(&valid));
@@ -387,7 +388,7 @@ void KeySig::read(XmlReader& e)
                                     }
                               ks.sym = id;
                               }
-                        else if (tag == "pos")
+                        else if (t == "pos")
                               ks.spos = e.readPoint();
                         else
                               e.unknown();

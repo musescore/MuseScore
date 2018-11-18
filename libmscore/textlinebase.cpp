@@ -20,6 +20,7 @@
 #include "sym.h"
 #include "text.h"
 #include "mscore.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -72,7 +73,6 @@ void TextLineBaseSegment::setSelected(bool f)
 void TextLineBaseSegment::draw(QPainter* painter) const
       {
       TextLineBase* tl   = textLineBase();
-//      qreal _spatium = spatium();
 
       if (!_text->empty()) {
             painter->translate(_text->pos());
@@ -92,11 +92,14 @@ void TextLineBaseSegment::draw(QPainter* painter) const
             return;
 
       // color for line (text color comes from the text properties)
+#if 0
       QColor color;
       if ((selected() && !(score() && score()->printing())) || !tl->visible() || !tl->lineVisible())
             color = curColor(tl->visible() && tl->lineVisible());
       else
             color = tl->lineColor();
+#endif
+      QColor color = curColor(tl->visible(), tl->lineColor());
 
       qreal textlineLineWidth = tl->lineWidth();
       QPen pen(color, textlineLineWidth, tl->lineStyle());
@@ -154,8 +157,11 @@ void TextLineBaseSegment::layout()
       TextLineBase* tl = textLineBase();
       qreal _spatium = spatium();
 
+      if (spanner()->placeBelow())
+            rypos() = staff() ? staff()->height() : 0.0;
+
       if (!tl->diagonal())
-            _userOff2.setY(0);
+            _offset2.setY(0);
 
       switch (spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
@@ -181,6 +187,7 @@ void TextLineBaseSegment::layout()
                   _text->setUnderline(tl->continueFontUnderline());
                   break;
             }
+      _text->setPlacement(Placement::ABOVE);
       _text->setTrack(track());
       _text->layout();
 
@@ -193,6 +200,7 @@ void TextLineBaseSegment::layout()
             _endText->setBold(tl->endFontBold());
             _endText->setItalic(tl->endFontItalic());
             _endText->setUnderline(tl->endFontUnderline());
+            _endText->setPlacement(Placement::ABOVE);
             _endText->setTrack(track());
             _endText->layout();
             }
@@ -265,7 +273,7 @@ void TextLineBaseSegment::layout()
             return;
 
       if (tl->lineVisible() || !score()->printing()) {
-            QPointF pp1(l, 0.0);
+            pp1 = QPointF(l, 0.0);
 
             qreal beginHookWidth;
             qreal endHookWidth;
@@ -322,12 +330,7 @@ void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
       _endText->spatiumChanged(ov, nv);
       }
 
-//---------------------------------------------------------
-//   pids
-//---------------------------------------------------------
-
-static constexpr std::array<Pid, 34> pids = { {
-      Pid::LINE_WIDTH,
+static constexpr std::array<Pid, 32> pids = { {
       Pid::LINE_VISIBLE,
       Pid::BEGIN_HOOK_TYPE,
       Pid::BEGIN_HOOK_HEIGHT,
@@ -360,46 +363,20 @@ static constexpr std::array<Pid, 34> pids = { {
       Pid::END_FONT_ITALIC,
       Pid::END_FONT_UNDERLINE,
       Pid::END_TEXT_OFFSET,
-      Pid::PLACEMENT,
+//      Pid::PLACEMENT
       } };
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant TextLineBaseSegment::getProperty(Pid id) const
+Element* TextLineBaseSegment::propertyDelegate(Pid pid)
       {
-      for (Pid pid : pids) {
+      for (Pid id : pids) {
             if (pid == id)
-                  return textLineBase()->getProperty(id);
+                  return spanner();
             }
-      return LineSegment::getProperty(id);
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool TextLineBaseSegment::setProperty(Pid id, const QVariant& v)
-      {
-      for (Pid pid : pids) {
-            if (pid == id)
-                  return textLineBase()->setProperty(id, v);
-            }
-      return LineSegment::setProperty(id, v);
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant TextLineBaseSegment::propertyDefault(Pid id) const
-      {
-      for (Pid pid : pids) {
-            if (pid == id)
-                  return textLineBase()->propertyDefault(id);
-            }
-      return LineSegment::propertyDefault(id);
+      return LineSegment::propertyDelegate(pid);
       }
 
 //---------------------------------------------------------
@@ -421,7 +398,7 @@ void TextLineBase::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(this);
       writeProperties(xml);
       xml.etag();
       }
@@ -434,7 +411,9 @@ void TextLineBase::read(XmlReader& e)
       {
       qDeleteAll(spannerSegments());
       spannerSegments().clear();
-      e.addSpanner(e.intAttribute("id", -1), this);
+
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
 
       while (e.readNextStartElement()) {
             if (!readProperties(e))
@@ -476,6 +455,19 @@ bool TextLineBase::readProperties(XmlReader& e)
                   }
             }
       return SLine::readProperties(e);
+      }
+
+//---------------------------------------------------------
+//   TextLineBase::propertyId
+//---------------------------------------------------------
+
+Pid TextLineBase::propertyId(const QStringRef& name) const
+      {
+      for (Pid pid : pids) {
+            if (propertyName(pid) == name)
+                  return pid;
+            }
+      return SLine::propertyId(name);
       }
 
 //---------------------------------------------------------
@@ -667,17 +659,5 @@ bool TextLineBase::setProperty(Pid id, const QVariant& v)
       return true;
       }
 
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant TextLineBase::propertyDefault(Pid id) const
-      {
-      QVariant v = styledPropertyDefault(id);
-      if (!v.isValid())
-            v = SLine::propertyDefault(id);
-      return v;
-      }
-
-}
+ }
 

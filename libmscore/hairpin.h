@@ -47,6 +47,10 @@ class HairpinSegment final : public TextLineBaseSegment {
       virtual void updateGrips(EditData&) const override;
 
       virtual void draw(QPainter*) const override;
+      virtual Sid getPropertyStyle(Pid) const override;
+
+      bool acceptDrop(EditData&) const override;
+      Element* drop(EditData&);
 
    public:
       HairpinSegment(Score* s);
@@ -55,9 +59,7 @@ class HairpinSegment final : public TextLineBaseSegment {
 
       Hairpin* hairpin() const                       { return (Hairpin*)spanner();          }
 
-      virtual QVariant getProperty(Pid) const override;
-      virtual bool setProperty(Pid, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid) const override;
+      virtual Element* propertyDelegate(Pid) override;
 
       virtual void layout() override;
       virtual Shape shape() const override;
@@ -79,6 +81,8 @@ class Hairpin final : public TextLineBase {
       Spatium _hairpinHeight;
       Spatium _hairpinContHeight;
 
+      virtual Sid getPropertyStyle(Pid) const override;
+
    public:
       Hairpin(Score* s);
       virtual Hairpin* clone() const override   { return new Hairpin(*this); }
@@ -86,7 +90,6 @@ class Hairpin final : public TextLineBase {
 
       HairpinType hairpinType() const           { return _hairpinType; }
       void setHairpinType(HairpinType val);
-      void undoSetHairpinType(HairpinType);
 
       Segment* segment() const                  { return (Segment*)parent(); }
       virtual void layout() override;
@@ -97,11 +100,9 @@ class Hairpin final : public TextLineBase {
 
       int veloChange() const                    { return _veloChange; }
       void setVeloChange(int v)                 { _veloChange = v;    }
-      void undoSetVeloChange(int v);
 
       Dynamic::Range dynRange() const           { return _dynRange; }
       void setDynRange(Dynamic::Range t)        { _dynRange = t;    }
-      void undoSetDynRange(Dynamic::Range t);
 
       Spatium hairpinHeight() const             { return _hairpinHeight; }
       void setHairpinHeight(Spatium val)        { _hairpinHeight = val; }
@@ -116,11 +117,8 @@ class Hairpin final : public TextLineBase {
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
 
-      virtual void setYoff(qreal) override;
       virtual QString accessibleInfo() const override;
       };
-
-extern Dynamic* lookupDynamic(Element* e);
 
 }     // namespace Ms
 

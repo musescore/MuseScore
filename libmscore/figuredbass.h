@@ -287,7 +287,7 @@ class FiguredBass final : public TextBase {
                                                           return 0;   }
       qreal             printedLineLength() const     { return _printedLineLength; }
       bool              onNote() const          { return _onNote; }
-      int               numOfItems() const      { return items.size(); }
+      size_t            numOfItems() const      { return items.size(); }
       void              setOnNote(bool val)     { _onNote = val;  }
       Segment *         segment() const         { return (Segment*)(parent()); }
       int               ticks() const           { return _ticks;  }

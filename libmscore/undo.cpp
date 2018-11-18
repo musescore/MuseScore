@@ -76,6 +76,8 @@
 #include "glissando.h"
 #include "stafflines.h"
 #include "bracket.h"
+#include "fret.h"
+#include "textedit.h"
 
 namespace Ms {
 
@@ -184,7 +186,9 @@ UndoStack::UndoStack()
       {
       curCmd   = 0;
       curIdx   = 0;
-      cleanIdx = 0;
+      cleanState = 0;
+      stateList.push_back(cleanState);
+      nextState = 1;
       }
 
 //---------------------------------------------------------
@@ -220,10 +224,8 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
       {
       if (!curCmd) {
             // this can happen for layout() outside of a command (load)
-            extern bool __loadScore;
-
-            if (!__loadScore)
-                  qWarning("no active command, UndoStack");
+            if (!ScoreLoad::loading())
+                  qDebug("no active command, UndoStack");
 
             cmd->redo(ed);
             delete cmd;
@@ -249,7 +251,8 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 void UndoStack::push1(UndoCommand* cmd)
       {
       if (!curCmd) {
-            qWarning("no active command, UndoStack %p", this);
+            if (!ScoreLoad::loading())
+                  qWarning("no active command, UndoStack %p", this);
             return;
             }
       curCmd->appendChild(cmd);
@@ -262,20 +265,22 @@ void UndoStack::push1(UndoCommand* cmd)
 void UndoStack::remove(int idx)
       {
       Q_ASSERT(idx <= curIdx);
+      Q_ASSERT(curIdx >= 0);
       // remove redo stack
       while (list.size() > curIdx) {
             UndoCommand* cmd = list.takeLast();
+            stateList.pop_back();
             cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
             delete cmd;
-            --curIdx;
+//            --curIdx;
             }
       while (list.size() > idx) {
             UndoCommand* cmd = list.takeLast();
+            stateList.pop_back();
             cmd->cleanup(true);
             delete cmd;
             }
       curIdx = idx;
-      // TODO: handle cleanIdx
       }
 
 //---------------------------------------------------------
@@ -285,7 +290,8 @@ void UndoStack::remove(int idx)
 void UndoStack::pop()
       {
       if (!curCmd) {
-            qWarning("no active command");
+            if (!ScoreLoad::loading())
+                  qWarning("no active command");
             return;
             }
       UndoCommand* cmd = curCmd->removeChild();
@@ -322,10 +328,12 @@ void UndoStack::endMacro(bool rollback)
             // remove redo stack
             while (list.size() > curIdx) {
                   UndoCommand* cmd = list.takeLast();
+                  stateList.pop_back();
                   cmd->cleanup(false);  // delete elements for which UndoCommand() holds ownership
                   delete cmd;
                   }
             list.append(curCmd);
+            stateList.push_back(nextState++);
             ++curIdx;
             }
       curCmd = 0;
@@ -342,6 +350,7 @@ void UndoStack::reopen()
       Q_ASSERT(curIdx > 0);
       --curIdx;
       curCmd = list.takeAt(curIdx);
+      stateList.erase(stateList.begin() + curIdx);
       for (auto i : curCmd->commands()) {
             qDebug("   <%s>", i->name());
             }
@@ -353,7 +362,7 @@ void UndoStack::reopen()
 
 void UndoStack::setClean()
       {
-      cleanIdx = curIdx;
+      cleanState = state();
       }
 
 //---------------------------------------------------------
@@ -363,6 +372,13 @@ void UndoStack::setClean()
 void UndoStack::undo(EditData* ed)
       {
       qCDebug(undoRedo) << "===";
+      // Are we currently editing text?
+      if (ed && ed->element && ed->element->isTextBase()) {
+            TextEditData* ted = static_cast<TextEditData*>(ed->getData(ed->element));
+            if (ted && ted->startUndoIdx == curIdx)
+                  // No edits to undo, so do nothing
+                  return;
+            }
       if (curIdx) {
             --curIdx;
             Q_ASSERT(curIdx >= 0);
@@ -1257,13 +1273,13 @@ void EditText::undoRedo()
 void ChangePatch::flip(EditData*)
       {
       MidiPatch op;
-      op.prog          = channel->program;
-      op.bank          = channel->bank;
-      op.synti         = channel->synti;
+      op.prog          = channel->program();
+      op.bank          = channel->bank();
+      op.synti         = channel->synti();
 
-      channel->program = patch.prog;
-      channel->bank    = patch.bank;
-      channel->synti   = patch.synti;
+      channel->setProgram(patch.prog);
+      channel->setBank(patch.bank);
+      channel->setSynti(patch.synti);
 
       patch            = op;
 
@@ -1274,10 +1290,10 @@ void ChangePatch::flip(EditData*)
 
       NPlayEvent event;
       event.setType(ME_CONTROLLER);
-      event.setChannel(channel->channel);
+      event.setChannel(channel->channel());
 
-      int hbank = (channel->bank >> 7) & 0x7f;
-      int lbank = channel->bank & 0x7f;
+      int hbank = (channel->bank() >> 7) & 0x7f;
+      int lbank = channel->bank() & 0x7f;
 
       event.setController(CTRL_HBANK);
       event.setValue(hbank);
@@ -1288,7 +1304,7 @@ void ChangePatch::flip(EditData*)
       MScore::seq->sendEvent(event);
 
       event.setController(CTRL_PROGRAM);
-      event.setValue(channel->program);
+      event.setValue(channel->program());
 
       score->setInstrumentsChanged(true);
 
@@ -1363,7 +1379,7 @@ void ChangeStaffType::flip(EditData*)
       {
       StaffType st = *staff->staffType(0);      // TODO
 
-      staff->setStaffType(0, &staffType);
+      staff->setStaffType(0, staffType);
 
       staffType = st;
 
@@ -1614,8 +1630,8 @@ void InsertRemoveMeasures::removeMeasures()
                         }
                   auto i = std::find(system->measures().begin(), system->measures().end(), mb);
                   if (i != system->measures().end()) {
-                        system->measures().erase(i);
                         (*i)->setParent(0);
+                        system->measures().erase(i);
                         }
                   }
             if (mb == fm)
@@ -1657,10 +1673,10 @@ void InsertRemoveMeasures::removeMeasures()
                   Page* page = s->page();
                   if (page) {
                         // erase system from page
-                        QList<System*>& systemList = page->systems();
-                        auto i = std::find(systemList.begin(), systemList.end(), s);
-                        if (i != systemList.end())
-                              systemList.erase(i);
+                        QList<System*>& sl = page->systems();
+                        auto i = std::find(sl.begin(), sl.end(), s);
+                        if (i != sl.end())
+                              sl.erase(i);
                         // erase system from score
                         auto k = std::find(score->systems().begin(), score->systems().end(), s);
                         if (k != score->systems().end())
@@ -1792,23 +1808,21 @@ void ChangeNoteEvents::flip(EditData*)
 
 void ChangeInstrument::flip(EditData*)
       {
-      Instrument* oi = is->instrument();  //new Instrument(*is->instrument());
-      is->setInstrument(instrument);      //*instrument
-
-      // transpose
+      Part* part = is->staff()->part();
       int tickStart = is->segment()->tick();
-      auto i = is->staff()->part()->instruments()->find(tickStart);
-      ++i;
-      int tickEnd;
-      if (i == is->staff()->part()->instruments()->end())
-            tickEnd = -1;
-      else
-            tickEnd = i->first;
-      is->score()->transpositionChanged(is->staff()->part(), oi->transpose(), tickStart, tickEnd);
+      Instrument* oi = is->instrument();  //new Instrument(*is->instrument());
 
+      // set instrument in both part and instrument change element
+      is->setInstrument(instrument);      //*instrument
+      part->setInstrument(instrument, tickStart);
+
+      // update score
       is->masterScore()->rebuildMidiMapping();
+      is->masterScore()->updateChannel();
       is->score()->setInstrumentsChanged(true);
       is->score()->setLayoutAll();
+
+      // remember original instrument
       instrument = oi;
       }
 
@@ -1960,10 +1974,10 @@ ChangeEventList::ChangeEventList(Chord* c, const QList<NoteEventList> l)
 
 void ChangeEventList::flip(EditData*)
       {
-      int n = chord->notes().size();
-      for (int i = 0; i < n; ++i) {
+      size_t n = chord->notes().size();
+      for (size_t i = 0; i < n; ++i) {
             Note* note = chord->notes()[i];
-            note->playEvents().swap(events[i]);
+            note->playEvents().swap(events[int(i)]);
             }
       PlayEventType t = chord->playEventType();
       chord->setPlayEventType(eventListType);
@@ -2242,13 +2256,37 @@ void ChangeDrumset::flip(EditData*)
       }
 
 //---------------------------------------------------------
-//   undoChangeGap
+//   ChangeGap
 //---------------------------------------------------------
 
 void ChangeGap::flip(EditData*)
       {
       rest->setGap(v);
       v = !v;
+      }
+
+//---------------------------------------------------------
+//   FretDot
+//---------------------------------------------------------
+
+void FretDot::flip(EditData*)
+      {
+      int ov = fret->dot(string);
+      fret->setDot(string, dot);
+      dot = ov;
+      fret->triggerLayout();
+      }
+
+//---------------------------------------------------------
+//   FretMarker
+//---------------------------------------------------------
+
+void FretMarker::flip(EditData*)
+      {
+      int om = fret->marker(string);
+      fret->setMarker(string, marker);
+      marker = om;
+      fret->triggerLayout();
       }
 
 }

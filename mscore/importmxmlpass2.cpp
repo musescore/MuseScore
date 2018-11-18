@@ -435,12 +435,12 @@ static Instrument createInstrument(const MusicXMLDrumInstrument& mxmlInstr)
             // set articulations to default (global articulations)
             instr.setArticulation(articulation);
             // set default program
-            instr.channel(0)->program = mxmlInstr.midiProgram >= 0 ? mxmlInstr.midiProgram : 0;
+            instr.channel(0)->setProgram(mxmlInstr.midiProgram >= 0 ? mxmlInstr.midiProgram : 0);
             }
 
       // add / overrule with values read from MusicXML
-      instr.channel(0)->pan = mxmlInstr.midiPan;
-      instr.channel(0)->volume = mxmlInstr.midiVolume;
+      instr.channel(0)->setPan(mxmlInstr.midiPan);
+      instr.channel(0)->setVolume(mxmlInstr.midiVolume);
       instr.setTrackName(mxmlInstr.name);
 
       return instr;
@@ -494,10 +494,10 @@ static void setStaffTypePercussion(Part* part, Drumset* drumset)
       {
       for (int j = 0; j < part->nstaves(); ++j)
             if (part->staff(j)->lines(0) == 5 && !part->staff(j)->isDrumStaff(0))
-                  part->staff(j)->setStaffType(0, StaffType::preset(StaffTypes::PERC_DEFAULT));
+                  part->staff(j)->setStaffType(0, *StaffType::preset(StaffTypes::PERC_DEFAULT));
       // set drumset for instrument
       part->instrument()->setDrumset(drumset);
-      part->instrument()->channel(0)->bank = 128;
+      part->instrument()->channel(0)->setBank(128);
       part->instrument()->channel(0)->updateInitList();
       }
 
@@ -1298,11 +1298,11 @@ static NoteHead::Group convertNotehead(QString mxmlName)
  Add Text to Note.
  */
 
-static void addTextToNote(int l, int c, QString txt, SubStyleId style, Score* score, Note* note)
+static void addTextToNote(int l, int c, QString txt, Tid style, Score* score, Note* note)
       {
       if (note) {
             if (!txt.isEmpty()) {
-                  TextBase* t = new Fingering(style, score);
+                  TextBase* t = new Fingering(score, style);
                   t->setPlainText(txt);
                   note->add(t);
                   }
@@ -1782,8 +1782,8 @@ void MusicXMLParserPass2::part()
 
 static Measure* findMeasure(Score* score, const int tick)
       {
-      for (Measure* m = score->firstMeasure();; m = m->nextMeasure()) {
-            if (m && m->tick() == tick)
+      for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+            if (m->tick() == tick)
                   return m;
             }
       return 0;
@@ -2460,14 +2460,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   }
 
             if (_enclosure == "circle") {
-                  t->setHasFrame(true);
-                  t->setCircle(true);
+                  t->setFrameType(FrameType::CIRCLE);
                   }
             else if (_enclosure == "none") {
-                  t->setHasFrame(false);
+                  t->setFrameType(FrameType::NO_FRAME);
                   }
             else if (_enclosure == "rectangle") {
-                  t->setHasFrame(true);
+                  t->setFrameType(FrameType::SQUARE);
                   t->setFrameRound(0);
                   }
 
@@ -2735,11 +2734,11 @@ static Marker* findMarker(const QString& repeat, Score* score)
             m->setMarkerType(Marker::Type::CODA);
             }
       else if (repeat == "fine") {
-            m = new Marker(SubStyleId::REPEAT_RIGHT, score);
+            m = new Marker(score, Tid::REPEAT_RIGHT);
             m->setMarkerType(Marker::Type::FINE);
             }
       else if (repeat == "toCoda") {
-            m = new Marker(SubStyleId::REPEAT_RIGHT, score);
+            m = new Marker(score, Tid::REPEAT_RIGHT);
             m->setMarkerType(Marker::Type::TOCODA);
             }
       return m;
@@ -2968,7 +2967,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             // TBD: what happens when an unknown pedal type is found ?
             Symbol* s = new Symbol(_score);
             s->setAlign(Align::LEFT | Align::BASELINE);
-            s->setOffsetType(OffsetType::SPATIUM);
+            //s->setOffsetType(OffsetType::SPATIUM);
             if (type == "start")
                   s->setSym(SymId::keyboardPedalPed);
             else if (type == "stop")
@@ -3247,7 +3246,6 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                   int track = _pass1.trackForPart(partId);
                   if (barStyle == "tick") {
                         BarLine* b = new BarLine(measure->score());
-                        int track = _pass1.trackForPart(partId);
                         b->setTrack(track);
                         b->setBarLineType(BarLineType::NORMAL);
                         b->setSpanStaff(false);
@@ -3258,7 +3256,6 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure)
                         }
                   else if (barStyle == "short") {
                         BarLine* b = new BarLine(measure->score());
-                        int track = _pass1.trackForPart(partId);
                         b->setTrack(track);
                         b->setBarLineType(BarLineType::NORMAL);
                         b->setSpanStaff(0);
@@ -3644,7 +3641,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
       int staffIdx = _score->staffIdx(part) + clefno;
       int lines = _score->staff(staffIdx)->lines(0);
       if (st == StaffTypes::TAB_DEFAULT || (_hasDrumset && st == StaffTypes::PERC_DEFAULT)) {
-            _score->staff(staffIdx)->setStaffType(0, StaffType::preset(st));
+            _score->staff(staffIdx)->setStaffType(0, *StaffType::preset(st));
             _score->staff(staffIdx)->setLines(0, lines); // preserve previously set staff lines
             _score->staff(staffIdx)->setBarLineTo(0);    // default
             }
@@ -4049,7 +4046,7 @@ static void handleDisplayStep(ChordRest* cr, int step, int octave, int tick, qre
             //qDebug(" clef=%hhd po=%d step=%d", clef, po, step);
             int dp = 7 * (octave + 2) + step;
             //qDebug(" dp=%d po-dp=%d", dp, po-dp);
-            cr->setUserYoffset((po - dp + 3) * spatium / 2);
+            cr->ryoffset() = (po - dp + 3) * spatium / 2;
             }
       }
 
@@ -4836,8 +4833,8 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       double rx = 0.0;        // 0.1 * e.attribute("relative-x", "0").toDouble();
       double ry = 0.0;        // -0.1 * e.attribute("relative-y", "0").toDouble();
 
-      double styleYOff = _score->textStyle(SubStyleId::HARMONY).offset().y();
-      OffsetType offsetType = _score->textStyle(SubStyleId::HARMONY).offsetType();
+      double styleYOff = _score->textStyle(Tid::HARMONY).offset().y();
+      OffsetType offsetType = _score->textStyle(Tid::HARMONY).offsetType();
       if (offsetType == OffsetType::ABS) {
             styleYOff = styleYOff * DPMM / _score->spatium();
             }
@@ -5491,10 +5488,10 @@ void MusicXMLParserPass2::technical(Note* note, ChordRest* cr)
                   continue;
                   }
             else if (_e.name() == "fingering")
-                  // TODO: distinguish between keyboards (style SubStyleId::FINGERING)
-                  // and (plucked) strings (style SubStyleId::LH_GUITAR_FINGERING)
+                  // TODO: distinguish between keyboards (style Tid::FINGERING)
+                  // and (plucked) strings (style Tid::LH_GUITAR_FINGERING)
                   addTextToNote(_e.lineNumber(), _e.columnNumber(), _e.readElementText(),
-                                SubStyleId::FINGERING, _score, note);
+                                  Tid::FINGERING, _score, note);
             else if (_e.name() == "fret") {
                   int fret = _e.readElementText().toInt();
                   if (note) {
@@ -5506,7 +5503,7 @@ void MusicXMLParserPass2::technical(Note* note, ChordRest* cr)
                   }
             else if (_e.name() == "pluck")
                   addTextToNote(_e.lineNumber(), _e.columnNumber(), _e.readElementText(),
-                                SubStyleId::RH_GUITAR_FINGERING, _score, note);
+                                Tid::RH_GUITAR_FINGERING, _score, note);
             else if (_e.name() == "string") {
                   QString txt = _e.readElementText();
                   if (note) {
@@ -5514,7 +5511,7 @@ void MusicXMLParserPass2::technical(Note* note, ChordRest* cr)
                               note->setString(txt.toInt() - 1);
                         else
                               addTextToNote(_e.lineNumber(), _e.columnNumber(), txt,
-                                            SubStyleId::STRING_NUMBER, _score, note);
+                                            Tid::STRING_NUMBER, _score, note);
                         }
                   else
                         _logger->logError("no note for string", &_e);

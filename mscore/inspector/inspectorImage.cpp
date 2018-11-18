@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -27,8 +26,8 @@ InspectorImage::InspectorImage(QWidget* parent)
       {
       b.setupUi(addWidget());
 
-      Element* e = inspector->element();
-      bool inFrame = e->parent()->isHBox() || e->parent()->isVBox();
+      Element* el = inspector->element();
+      bool inFrame = el->parent()->isHBox() || el->parent()->isVBox();
       bool sameTypes = true;
 
       for (const auto& ee : *inspector->el()) {

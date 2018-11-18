@@ -42,6 +42,7 @@ struct ElementPattern {
       int voice;
       const System* system;
       bool subtypeValid;
+      int durationTicks;
       };
 
 //---------------------------------------------------------
@@ -129,6 +130,11 @@ class Selection {
       Segment* _startSegment;
       Segment* _endSegment;         // next segment after selection
 
+      int _plannedTick1 = -1; // Will be actually selected on updateSelectedElements() call.
+      int _plannedTick2 = -1; // Used by setRangeTicks() to restore proper selection after
+                              // command end in case some changes are expected to segments'
+                              // structure (e.g. MMRests reconstruction).
+
       Segment* _activeSegment;
       int _activeTrack;
 
@@ -180,6 +186,7 @@ class Selection {
       void setStartSegment(Segment* s)  { _startSegment = s; }
       void setEndSegment(Segment* s)    { _endSegment = s; }
       void setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd);
+      void setRangeTicks(int tick1, int tick2, int staffStart, int staffEnd);
       Segment* activeSegment() const    { return _activeSegment; }
       void setActiveSegment(Segment* s) { _activeSegment = s; }
       ChordRest* activeCR() const;

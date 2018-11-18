@@ -1,7 +1,6 @@
 #=============================================================================
 #  MuseScore
 #  Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2002-2008 by Werner Schweer and others
 #

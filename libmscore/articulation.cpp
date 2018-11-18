@@ -26,12 +26,21 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   articulationStyle
+//---------------------------------------------------------
+
+static const ElementStyle articulationStyle {
+//      { Sid::articulationOffset, Pid::OFFSET },
+      };
+
+//---------------------------------------------------------
 //   Articulation
 //---------------------------------------------------------
 
 Articulation::Articulation(Score* s)
    : Element(s, ElementFlag::MOVABLE)
       {
+      initElementStyle(&articulationStyle);
       _symId         = SymId::noSym;
       _anchor        = ArticulationAnchor::TOP_STAFF;
       _direction     = Direction::AUTO;
@@ -54,6 +63,19 @@ void Articulation::setSymId(SymId id)
       {
       _symId  = id;
       _anchor = ArticulationAnchor(propertyDefault(Pid::ARTICULATION_ANCHOR).toInt());
+      }
+
+//---------------------------------------------------------
+//   subtype
+//---------------------------------------------------------
+
+int Articulation::subtype() const
+      {
+      QString s = Sym::id2name(_symId);
+      if (s.endsWith("Below"))
+            return int(Sym::name2id(s.left(s.size() - 5) + "Above"));
+      else
+            return int(_symId);
       }
 
 //---------------------------------------------------------
@@ -107,10 +129,10 @@ bool Articulation::readProperties(XmlReader& e)
             }
       else if (tag == "anchor")
             _anchor = ArticulationAnchor(e.readInt());
-      else if (readProperty(tag, e, Pid::DIRECTION))
-            ;
+      else if (tag == "direction")
+            readProperty(e, Pid::DIRECTION);
       else if ( tag == "ornamentStyle")
-            setProperty(Pid::ORNAMENT_STYLE, Ms::getProperty(Pid::ORNAMENT_STYLE, e));
+            readProperty(e, Pid::ORNAMENT_STYLE);
       else if ( tag == "play")
             setPlayArticulation(e.readBool());
       else if (tag == "offset") {
@@ -134,7 +156,7 @@ void Articulation::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("Articulation");
+      xml.stag(this);
       if (!_channelName.isEmpty())
             xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
       writeProperty(xml, Pid::DIRECTION);
@@ -236,19 +258,15 @@ void Articulation::layout()
       }
 
 //---------------------------------------------------------
-//   reset
+//   layoutCloseToNote
+//    Needed to figure out the layout policy regarding
+//    distance to the note and placement in relation to
+//    slur.
 //---------------------------------------------------------
 
-void Articulation::reset()
+bool Articulation::layoutCloseToNote() const
       {
-#if 0
-      if (_direction != Direction::AUTO)
-            undoChangeProperty(Pid::DIRECTION, Direction::AUTO);
-      ArticulationAnchor a = score()->style()->articulationAnchor(int(articulationType()));
-      if (_anchor != a)
-            undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(a));
-#endif
-      Element::reset();
+      return (isStaccato() || isTenuto()) && !isDouble();
       }
 
 //---------------------------------------------------------
@@ -456,12 +474,8 @@ const char* Articulation::articulationName() const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid Articulation::getPropertyStyle(Pid id) const
+Sid Articulation::getPropertyStyle(Pid /*id*/) const
       {
-      switch (id) {
-            default:
-                  break;
-            }
       return Sid::NOSTYLE;
       }
 
@@ -513,6 +527,19 @@ bool Articulation::isAccent() const
           || _symId == SymId::articAccentStaccatoAbove  || _symId == SymId::articAccentStaccatoBelow;
       }
 
+bool Articulation::isMarcato() const
+      {
+      return _symId == SymId::articMarcatoAbove         || _symId == SymId::articMarcatoBelow
+          || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
+          || _symId == SymId::articMarcatoTenutoAbove   || _symId == SymId::articMarcatoTenutoBelow;
+      }
+
+bool Articulation::isDouble() const {
+      return _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
+          || _symId == SymId::articAccentStaccatoAbove  || _symId == SymId::articAccentStaccatoBelow
+          || _symId == SymId::articMarcatoTenutoAbove   || _symId == SymId::articMarcatoTenutoBelow;
+      }
+
 //---------------------------------------------------------
 //   isLuteFingering
 //---------------------------------------------------------
@@ -542,25 +569,34 @@ QString Articulation::accessibleInfo() const
 
 void Articulation::doAutoplace()
       {
-      Segment* s = segment();
-      if (!(s && autoplace()))
-            return;
-
-      setUserOff(QPointF());
-
       qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
-      const Shape& s1   = s->measure()->staffShape(staffIdx());
-      Shape s2          = shape().translated(s->pos() + pos());
+      if (autoplace() && parent()) {
+            Segment* s = segment();
+            Measure* m = measure();
+            int si     = staffIdx();
 
-      if (up()) {
-            qreal d = s2.minVerticalDistance(s1);
-            if (d > -minDistance)
-                  rUserYoffset() = -d - minDistance;
-            }
-      else {
-            qreal d = s1.minVerticalDistance(s2);
-            if (d > -minDistance)
-                  rUserYoffset() = d + minDistance;
+            SysStaff* ss = m->system()->staff(si);
+            QRectF r = bbox().translated(chordRest()->pos() + m->pos() + s->pos() + pos());
+
+            qreal d;
+            bool above = up(); // (anchor() == ArticulationAnchor::TOP_STAFF || anchor() == ArticulationAnchor::TOP_CHORD);
+            SkylineLine sk(!above);
+            if (above) {
+                  sk.add(r.x(), r.bottom(), r.width());
+                  d = sk.minDistance(ss->skyline().north());
+                  }
+            else {
+                  sk.add(r.x(), r.top(), r.width());
+                  d = ss->skyline().south().minDistance(sk);
+                  }
+
+            if (d > -minDistance) {
+                  qreal yd = d + minDistance;
+                  if (above)
+                        yd *= -1.0;
+                  rypos() += yd;
+                  r.translate(QPointF(0.0, yd));
+                  }
             }
       }
 

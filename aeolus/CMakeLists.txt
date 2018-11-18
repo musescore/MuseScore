@@ -1,7 +1,6 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2010 by Werner Schweer and others
 #
@@ -40,11 +39,19 @@ add_library (aeolus STATIC
       ${INCS}
       )
 
-set_target_properties (
+if (NOT MSVC)
+   set_target_properties (
       aeolus
       PROPERTIES
          COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+else (NOT MSVC)
+   set_target_properties (
+      aeolus
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE} ${PCH_FORCE_USE}"
+      )
+endif (NOT MSVC)   
 
 install(DIRECTORY
       stops

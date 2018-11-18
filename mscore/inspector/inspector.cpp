@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: inspector.cpp
 //
 //  Copyright (C) 2011-2016 Werner Schweer
 //
@@ -33,6 +32,14 @@
 #include "inspectorBarline.h"
 #include "inspectorFingering.h"
 #include "inspectorDynamic.h"
+#include "inspectorHarmony.h"
+#include "inspectorLetRing.h"
+#include "inspectorPedal.h"
+#include "inspectorPalmMute.h"
+#include "inspectorVibrato.h"
+#include "inspectorNoteDot.h"
+#include "inspectorInstrchange.h"
+#include "inspectorMeasureNumber.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -252,10 +259,16 @@ void Inspector::update(Score* s)
                               ie = new InspectorHairpin(this);
                               break;
                         case ElementType::TEXTLINE_SEGMENT:
-                        case ElementType::PEDAL_SEGMENT:
-                        case ElementType::LET_RING_SEGMENT:
-                        case ElementType::PALM_MUTE_SEGMENT:
                               ie = new InspectorTextLine(this);
+                              break;
+                        case ElementType::PEDAL_SEGMENT:
+                              ie = new InspectorPedal(this);
+                              break;
+                        case ElementType::LET_RING_SEGMENT:
+                              ie = new InspectorLetRing(this);
+                              break;
+                        case ElementType::PALM_MUTE_SEGMENT:
+                              ie = new InspectorPalmMute(this);
                               break;
                         case ElementType::SLUR_SEGMENT:
                         case ElementType::TIE_SEGMENT:
@@ -309,6 +322,9 @@ void Inspector::update(Score* s)
                         case ElementType::REHEARSAL_MARK:
                               ie = new InspectorStaffText(this);
                               break;
+                        case ElementType::MEASURE_NUMBER:
+                              ie = new InspectorMeasureNumber(this);
+                              break;
                         case ElementType::STAFFTYPE_CHANGE:
                               ie = new InspectorStaffTypeChange(this);
                               break;
@@ -323,6 +339,18 @@ void Inspector::update(Score* s)
                               break;
                         case ElementType::STEM:
                               ie = new InspectorStem(this);
+                              break;
+                        case ElementType::HARMONY:
+                              ie = new InspectorHarmony(this);
+                              break;
+                        case ElementType::VIBRATO_SEGMENT:
+                              ie = new InspectorVibrato(this);
+                              break;
+                        case ElementType::NOTEDOT:
+                              ie = new InspectorNoteDot(this);
+                              break;
+                        case ElementType::INSTRUMENT_CHANGE:
+                              ie = new InspectorInstrumentChange(this);
                               break;
                         default:
                               if (element()->isText())
@@ -596,6 +624,20 @@ InspectorRest::InspectorRest(QWidget* parent)
       _layout->addWidget(f);
 
       QHBoxLayout* hbox = new QHBoxLayout;
+      dot1 = new QToolButton(this);
+      dot1->setText(tr("Dot 1"));
+      hbox->addWidget(dot1);
+      dot2 = new QToolButton(this);
+      dot2->setText(tr("Dot 2"));
+      hbox->addWidget(dot2);
+      dot3 = new QToolButton(this);
+      dot3->setText(tr("Dot 3"));
+      hbox->addWidget(dot3);
+      dot4 = new QToolButton(this);
+      dot4->setText(tr("Dot 4"));
+      hbox->addWidget(dot4);
+      _layout->addLayout(hbox);
+      hbox = new QHBoxLayout;
       tuplet = new QToolButton(this);
       tuplet->setText(tr("Tuplet"));
       tuplet->setEnabled(false);
@@ -604,6 +646,10 @@ InspectorRest::InspectorRest(QWidget* parent)
 
 //TODO      e.offset->setSingleStep(1.0);        // step in spatium units
 
+      connect(dot1,     SIGNAL(clicked()),     SLOT(dot1Clicked()));
+      connect(dot2,     SIGNAL(clicked()),     SLOT(dot2Clicked()));
+      connect(dot3,     SIGNAL(clicked()),     SLOT(dot3Clicked()));
+      connect(dot4,     SIGNAL(clicked()),     SLOT(dot4Clicked()));
       connect(tuplet,   SIGNAL(clicked()),     SLOT(tupletClicked()));
       }
 
@@ -614,8 +660,66 @@ InspectorRest::InspectorRest(QWidget* parent)
 void InspectorRest::setElement()
       {
       Rest* rest = toRest(inspector->element());
+      int dots = rest->dots();
+      dot1->setEnabled(dots > 0);
+      dot2->setEnabled(dots > 1);
+      dot3->setEnabled(dots > 2);
+      dot4->setEnabled(dots > 3);
       tuplet->setEnabled(rest->tuplet());
       InspectorElementBase::setElement();
+      }
+
+//---------------------------------------------------------
+//   dotClicked
+//---------------------------------------------------------
+
+void InspectorRest::dotClicked(int n)
+      {
+      Rest* rest = toRest(inspector->element());
+      if (rest == 0)
+            return;
+      if (rest->dots() > n) {
+            NoteDot* dot = rest->dot(n);
+            dot->score()->select(dot);
+            dot->score()->update();
+            inspector->update();
+            }
+      }
+
+//---------------------------------------------------------
+//   dot1Clicked
+//---------------------------------------------------------
+
+void InspectorRest::dot1Clicked()
+      {
+      dotClicked(0);
+      }
+
+//---------------------------------------------------------
+//   dot2Clicked
+//---------------------------------------------------------
+
+void InspectorRest::dot2Clicked()
+      {
+      dotClicked(1);
+      }
+
+//---------------------------------------------------------
+//   dot3Clicked
+//---------------------------------------------------------
+
+void InspectorRest::dot3Clicked()
+      {
+      dotClicked(2);
+      }
+
+//---------------------------------------------------------
+//   dot4Clicked
+//---------------------------------------------------------
+
+void InspectorRest::dot4Clicked()
+      {
+      dotClicked(3);
       }
 
 //---------------------------------------------------------
@@ -627,9 +731,9 @@ void InspectorRest::tupletClicked()
       Rest* rest = toRest(inspector->element());
       if (rest == 0)
             return;
-      Tuplet* tuplet = rest->tuplet();
-      if (tuplet) {
-            rest->score()->select(tuplet);
+      Tuplet* t = rest->tuplet();
+      if (t) {
+            rest->score()->select(t);
             rest->score()->update();
             inspector->update();
             }
@@ -880,6 +984,17 @@ InspectorStem::InspectorStem(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   populatePlacement
+//---------------------------------------------------------
+
+void populatePlacement(QComboBox* b)
+      {
+      b->clear();
+      b->addItem(b->QObject::tr("Above"), int(Placement::ABOVE));
+      b->addItem(b->QObject::tr("Below"), int(Placement::BELOW));
+      }
+
+//---------------------------------------------------------
 //   InspectorTempoText
 //---------------------------------------------------------
 
@@ -896,9 +1011,7 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       const std::vector<InspectorPanel> ppList = {
             { tt.title, tt.panel }
             };
-      tt.placement->clear();
-      tt.placement->addItem(tr("Above"), 0);
-      tt.placement->addItem(tr("Below"), 1);
+      populatePlacement(tt.placement);
       mapSignals(il, ppList);
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
@@ -925,34 +1038,15 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       l.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,          0, l.placement, l.resetPlacement },
-            { Pid::VERSE,              0, l.verse,     l.resetVerse     }
+            { Pid::PLACEMENT,          0, l.placement,    l.resetPlacement    },
+            { Pid::VERSE,              0, l.verse,        l.resetVerse        }
             };
       const std::vector<InspectorPanel> ppList = {
             { l.title, l.panel }
             };
-      l.placement->clear();
-      l.placement->addItem(tr("Above"), 0);
-      l.placement->addItem(tr("Below"), 1);
+      populatePlacement(l.placement);
       mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
-      }
-
-//---------------------------------------------------------
-//   valueChanged
-//---------------------------------------------------------
-
-void InspectorLyric::valueChanged(int idx)
-      {
-      if (iList[idx].t == Pid::VERSE) {
-            int val    = getValue(iList[idx]).toInt();
-            Lyrics* l  = toLyrics(inspector->element());
-            Lyrics* nl = l->chordRest()->lyrics(val, l->placement());
-            if (nl) {
-                  nl->undoChangeProperty(Pid::VERSE, l->no());
-                  }
-            }
-      InspectorBase::valueChanged(idx);
       }
 
 //---------------------------------------------------------
@@ -964,35 +1058,55 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       {
       s.setupUi(addWidget());
 
-      Element* e = inspector->element();
+      Element* el = inspector->element();
       bool sameTypes = true;
 
       for (const auto& ee : *inspector->el()) {
-            if (e->isSystemText() != ee->isSystemText()) {
+            if (el->isSystemText() != ee->isSystemText()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            s.title->setText(e->isSystemText() ? tr("System Text") : tr("Staff Text"));
+            s.title->setText(el->isSystemText() ? tr("System Text") : tr("Staff Text"));
 
       const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, s.placement,    s.resetPlacement    },
-            { Pid::SUB_STYLE,  0, s.subStyle,     s.resetSubStyle     }
+            { Pid::PLACEMENT,  0, s.placement, s.resetPlacement },
+            { Pid::SUB_STYLE,  0, s.style,     s.resetStyle     }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel }
             };
-      s.placement->clear();
-      s.placement->addItem(tr("Above"), 0);
-      s.placement->addItem(tr("Below"), 1);
+      populatePlacement(s.placement);
 
-      s.subStyle->clear();
-      for (auto ss : { SubStyleId::SYSTEM, SubStyleId::STAFF, SubStyleId::TEMPO, SubStyleId::METRONOME,
-         SubStyleId::REHEARSAL_MARK, SubStyleId::EXPRESSION,
-         SubStyleId::REPEAT_LEFT, SubStyleId::REPEAT_RIGHT, SubStyleId::USER1, SubStyleId::USER2 } )
+      s.style->clear();
+      for (auto ss : {
+         Tid::SYSTEM,
+         Tid::STAFF,
+         Tid::TEMPO,
+         Tid::METRONOME,
+         Tid::REHEARSAL_MARK,
+         Tid::EXPRESSION,
+         Tid::REPEAT_LEFT,
+         Tid::REPEAT_RIGHT,
+         Tid::FRAME,
+         Tid::TITLE,
+         Tid::SUBTITLE,
+         Tid::COMPOSER,
+         Tid::POET,
+         Tid::INSTRUMENT_EXCERPT,
+         Tid::TRANSLATOR,
+         Tid::HEADER,
+         Tid::FOOTER,
+         Tid::USER1,
+         Tid::USER2,
+         Tid::USER3,
+         Tid::USER4,
+         Tid::USER5,
+         Tid::USER6
+         } )
             {
-            s.subStyle->addItem(subStyleUserName(ss), int(ss));
+            s.style->addItem(textStyleUserName(ss), int(ss));
             }
 
       mapSignals(il, ppList);
@@ -1007,17 +1121,17 @@ InspectorSlurTie::InspectorSlurTie(QWidget* parent)
       {
       s.setupUi(addWidget());
 
-      Element* e = inspector->element();
+      Element* el = inspector->element();
       bool sameTypes = true;
 
       for (const auto& ee : *inspector->el()) {
-            if (ee->accessibleInfo() != e->accessibleInfo()) {
+            if (ee->accessibleInfo() != el->accessibleInfo()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            s.title->setText(e->accessibleInfo());
+            s.title->setText(el->accessibleInfo());
 
       const std::vector<InspectorItem> iiList = {
             { Pid::LINE_TYPE,       0, s.lineType,      s.resetLineType      },

@@ -670,6 +670,34 @@ int updateVersion()
       }
 
 //---------------------------------------------------------
+//   updateVersion
+///  Up to 4 digits X.X.X.X
+///  Each digit can be double XX.XX.XX.XX
+///  return true if v1 < v2
+//---------------------------------------------------------
+
+bool compareVersion(QString v1, QString v2)
+      {
+      auto v1l = v1.split(".");
+      auto v2l = v2.split(".");
+      int ma = qPow(100,qMax(v1l.size(), v2l.size()));
+      int m = ma;
+      int vv1 = 0;
+      for (int i = 0; i < v1l.size(); i++) {
+            vv1 += (m * v1l[i].toInt());
+            m /= 100;
+            }
+      m = ma;
+      int vv2 = 0;
+      for (int i = 0; i < v2l.size(); i++) {
+            vv2 += (m * v2l[i].toInt());
+            m /= 100;
+            }
+
+      return vv1 < vv2;
+      }
+
+//---------------------------------------------------------
 //   diatonicUpDown
 //    used to find the second note of a trill, mordent etc.
 //    key  -7 ... +7
@@ -825,6 +853,11 @@ Note* searchTieNote(Note* note)
                   if (e == 0 || !e->isChord())
                         continue;
                   Chord* c = toChord(e);
+                  const int staffIdx = c->staffIdx() + c->staffMove();
+                  if (staffIdx != chord->staffIdx() + chord->staffMove()) {
+                        // this check is needed as we are iterating over all staves to capture cross-staff chords
+                        continue;
+                        }
                   // if there are grace notes before, try to tie to first one
                   QVector<Chord*> gnb = c->graceNotesBefore();
                   if (!gnb.empty()) {
@@ -833,9 +866,6 @@ Note* searchTieNote(Note* note)
                         if (gn2)
                               return gn2;
                         }
-                  int staffIdx = c->staffIdx() + c->staffMove();
-                  if (staffIdx != chord->staffIdx() + chord->staffMove())  // cannot happen?
-                        continue;
                   for (Note* n : c->notes()) {
                         if (n->pitch() == note->pitch()) {
                               if (note2 == 0 || c->track() == chord->track())

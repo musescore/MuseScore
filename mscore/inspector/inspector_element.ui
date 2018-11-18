@@ -84,8 +84,24 @@
       </property>
       <item row="4" column="0" colspan="3">
        <widget class="QCheckBox" name="autoplace">
+        <property name="accessibleName">
+         <string>Automatic placement</string>
+        </property>
         <property name="text">
          <string>Automatic placement</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1" colspan="2">
+       <widget class="Ms::OffsetSelect" name="offset" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Offset</string>
         </property>
        </widget>
       </item>
@@ -165,6 +181,9 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
+        <property name="accessibleName">
+         <string>Visible</string>
+        </property>
         <property name="text">
          <string>Visible</string>
         </property>
@@ -211,16 +230,6 @@
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1" colspan="2">
-       <widget class="Ms::OffsetSelect" name="offset" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
         </property>
        </widget>
       </item>

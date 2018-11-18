@@ -278,6 +278,14 @@ void StaffType::read(XmlReader& e)
                   setLines(e.readInt());
             else if (tag == "lineDistance")
                   setLineDistance(Spatium(e.readDouble()));
+            else if (tag == "yoffset")
+                  _yoffset = Spatium(e.readDouble());
+            else if (tag == "mag")
+                  _userMag = e.readDouble();
+            else if (tag == "small")
+                  _small = e.readBool();
+            else if (tag == "stepOffset")
+                  _stepOffset = e.readInt();
             else if (tag == "clef")
                   setGenClef(e.readInt());
             else if (tag == "slashStyle") {
@@ -285,12 +293,6 @@ void StaffType::read(XmlReader& e)
                   setSlashStyle(val);
                   setShowBackTied(!val);  // for compatibility with 2.0.2 scores where this prop
                   }                       // was lacking and controlled by "slashStyle" instead
-            else if (tag == "yoffset")
-                  _yoffset = Spatium(e.readDouble());
-            else if (tag == "mag")
-                  _userMag = e.readDouble();
-            else if (tag == "small")
-                  _small = e.readBool();
             else if (tag == "barlines")
                   setShowBarlines(e.readInt());
             else if (tag == "timesig")
@@ -411,7 +413,7 @@ void StaffType::setOnLines(bool val)
 //    checks whether the internally computed metrics are is still valid and re-computes them, if not
 //---------------------------------------------------------
 
-void StaffType::setDurationMetrics()
+void StaffType::setDurationMetrics() const
       {
       if (_durationMetricsValid && _refDPI == DPI)           // metrics are still valid
             return;
@@ -440,7 +442,7 @@ void StaffType::setDurationMetrics()
       _durationMetricsValid = true;
       }
 
-void StaffType::setFretMetrics()
+void StaffType::setFretMetrics() const
       {
       if (_fretMetricsValid && _refDPI == DPI)
             return;
@@ -519,7 +521,7 @@ void StaffType::setFretFontName(const QString& name)
 //   durationBoxH / durationBoxY
 //---------------------------------------------------------
 
-qreal StaffType::durationBoxH()
+qreal StaffType::durationBoxH() const
       {
       if (!_genDurations && !_slashStyle)
             return 0.0;
@@ -527,7 +529,7 @@ qreal StaffType::durationBoxH()
       return _durationBoxH;
       }
 
-qreal StaffType::durationBoxY()
+qreal StaffType::durationBoxY() const
       {
       if (!_genDurations && !_slashStyle)
             return 0.0;
@@ -865,7 +867,7 @@ TabDurationSymbol::TabDurationSymbol(Score* s)
       _text       = QString();
       }
 
-TabDurationSymbol::TabDurationSymbol(Score* s, StaffType* tab, TDuration::DurationType type, int dots)
+TabDurationSymbol::TabDurationSymbol(Score* s, const StaffType* tab, TDuration::DurationType type, int dots)
    : Element(s, ElementFlag::NOT_SELECTABLE)
       {
       setGenerated(true);
@@ -1044,16 +1046,16 @@ bool TablatureFretFont::read(XmlReader& e)
             else if (tag == "defaultYOffset")
                   defYOffset = e.readDouble();
             else if (tag == "mark") {
-                  QString     val = e.attribute("value");
-                  int         num = e.intAttribute("number", 1);
+                  QString     sval = e.attribute("value");
+                  int         num  = e.intAttribute("number", 1);
                   QString     txt(e.readElementText());
-                  if (val.size() < 1)
+                  if (sval.size() < 1)
                         return false;
-                  if (val == "x")
+                  if (sval == "x")
                         xChar = txt[0];
-                  else if (val == "ghost")
+                  else if (sval == "ghost")
                         ghostChar = txt[0];
-                  else if (val == "slash") {
+                  else if (sval == "slash") {
                         // limit within legal range
                         if (num < 1)
                               num = 1;
@@ -1209,16 +1211,16 @@ bool StaffType::readConfigFile(const QString& fileName)
                   while (e.readNextStartElement()) {
                         const QStringRef& tag(e.name());
                         if (tag == "fretFont") {
-                              TablatureFretFont f;
-                              if (f.read(e))
-                                    _fretFonts.append(f);
+                              TablatureFretFont ff;
+                              if (ff.read(e))
+                                    _fretFonts.append(ff);
                               else
                                     continue;
                               }
                         else if (tag == "durationFont") {
-                              TablatureDurationFont f;
-                              if (f.read(e))
-                                    _durationFonts.append(f);
+                              TablatureDurationFont df;
+                              if (df.read(e))
+                                    _durationFonts.append(df);
                               else
                                     continue;
                               }
@@ -1346,8 +1348,8 @@ static NoteHeadSchemeName noteHeadSchemeNames[] = {
       {"normal",              QT_TRANSLATE_NOOP("noteheadschemes", "Normal") },
       {"name-pitch",          QT_TRANSLATE_NOOP("noteheadschemes", "Pitch Name") },
       {"name-pitch-german",   QT_TRANSLATE_NOOP("noteheadschemes", "German Pitch Name") },
-      {"solfege-movable",     QT_TRANSLATE_NOOP("noteheadschemes", "Solfège Movable Do") },
-      {"solfege-fixed",       QT_TRANSLATE_NOOP("noteheadschemes", "Solfège Fixed Do") },
+      {"solfege-movable",     QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge Movable Do") }, // &egrave;
+      {"solfege-fixed",       QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge Fixed Do") },   // &egrave;
       {"shape-4",             QT_TRANSLATE_NOOP("noteheadschemes", "4-shape (Walker)") },
       {"shape-7-aikin",       QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Aikin)") },
       {"shape-7-funk",        QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Funk)") },
@@ -1387,7 +1389,8 @@ void StaffType::initStaffTypes()
       _presets = {
 //                       group,              xml-name,  human-readable-name,          lin stpOff  dist clef   bars stmless time  key    ledger
          StaffType(StaffGroup::STANDARD,   "stdNormal", QObject::tr("Standard"),        5, 0,     1,   true,  true, false, true, true,  true),
-         StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),    1, -4,    1,   true,  true, false, true, false, true),
+//         StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),    1, -4,    1,   true,  true, false, true, false, true),
+         StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),    1, 0,     1,   true,  true, false, true, false, true),
          StaffType(StaffGroup::PERCUSSION, "perc3Line", QObject::tr("Perc. 3 lines"),   3, 0,     2,   true,  true, false, true, false, true),
          StaffType(StaffGroup::PERCUSSION, "perc5Line", QObject::tr("Perc. 5 lines"),   5, 0,     1,   true,  true, false, true, false, true),
 //                 group            xml-name,     human-readable-name                  lin stpOff dist clef   bars stemless time      duration font     size off genDur     fret font          size off  duration symbol repeat      thru       minim style              onLin  rests  stmDn  stmThr upsDn  sTFing nums  bkTied

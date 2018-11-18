@@ -1,7 +1,7 @@
+
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: newwizard.cpp 5626 2012-05-13 18:33:52Z lasconic $
 //
 //  Copyright (C) 2008 Werner Schweer and others
 //
@@ -24,6 +24,7 @@
 #include "palette.h"
 #include "instrdialog.h"
 #include "scoreBrowser.h"
+#include "extension.h"
 
 #include "libmscore/instrtemplate.h"
 #include "libmscore/score.h"
@@ -274,18 +275,9 @@ NewWizardPage4::NewWizardPage4(QWidget* parent)
 
       templateFileBrowser = new ScoreBrowser;
       templateFileBrowser->setStripNumbers(true);
-      QDir dir(mscoreGlobalShare + "/templates");
-      QFileInfoList fil = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name);
-      if(fil.isEmpty()){
-          fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
-          }
-
-      QDir myTemplatesDir(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
-      fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
-
       templateFileBrowser->setShowCustomCategory(true);
-      templateFileBrowser->setScores(fil);
       templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
+      buildTemplatesList();
 
       QVBoxLayout* layout = new QVBoxLayout;
       QHBoxLayout* searchLayout = new QHBoxLayout;
@@ -315,6 +307,31 @@ void NewWizardPage4::initializePage()
       {
       templateFileBrowser->show();
       path.clear();
+      }
+
+//---------------------------------------------------------
+//   buildTemplatesList
+//---------------------------------------------------------
+
+void NewWizardPage4::buildTemplatesList()
+      {
+
+      QDir dir(mscoreGlobalShare + "/templates");
+      QFileInfoList fil = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name);
+      if(fil.isEmpty()){
+          fil.append(QFileInfo(QFile(":data/Empty_Score.mscz")));
+          }
+
+      QDir myTemplatesDir(preferences.getString(PREF_APP_PATHS_MYTEMPLATES));
+      fil.append(myTemplatesDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
+
+      // append templates directories from extensions
+      QStringList extensionsDir = Extension::getDirectoriesByType(Extension::templatesDir);
+      for (QString extDir : extensionsDir) {
+            QDir extTemplateDir(extDir);
+            fil.append(extTemplateDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Readable | QDir::Dirs | QDir::Files, QDir::Name));
+            }
+      templateFileBrowser->setScores(fil);
       }
 
 //---------------------------------------------------------
@@ -373,7 +390,7 @@ NewWizardPage5::NewWizardPage5(QWidget* parent)
       QGroupBox* b1 = new QGroupBox;
       b1->setTitle(tr("Key Signature"));
       b1->setAccessibleName(title());
-      sp = MuseScore::newKeySigPalette(PaletteType::ADVANCED);
+      sp = MuseScore::newKeySigPalette();
       sp->setMoreElements(false);
       sp->setShowContextMenu(false);
       sp->setSelectable(true);
@@ -435,7 +452,9 @@ NewWizard::NewWizard(QWidget* parent)
       setWindowTitle(tr("New Score Wizard"));
 
       setOption(QWizard::NoCancelButton, false);
+#ifdef Q_OS_MAC
       setOption(QWizard::CancelButtonOnLeft, true);
+#endif
       setOption(QWizard::HaveFinishButtonOnEarlyPages, true);
       setOption(QWizard::HaveNextButtonOnLastPage, true);
 

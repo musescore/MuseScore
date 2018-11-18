@@ -2,7 +2,6 @@
 //  BWW to MusicXML converter
 //  Part of MusE Score
 //  Linux Music Score Editor
-//  $Id: writer.cpp 3166 2010-06-14 15:31:37Z lasconic $
 //
 //  Copyright (C) 2010 Werner Schweer and others
 //

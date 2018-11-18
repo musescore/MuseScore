@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: editstyle.h 5403 2012-03-03 00:01:53Z miwarre $
 //
 //  Copyright (C) 2002-2010 Werner Schweer and others
 //
@@ -75,7 +74,9 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void systemMaxDistanceValueChanged(double);
       void resetStyleValue(int);
       void valueChanged(int);
-
+      void textStyleChanged(int);
+      void resetTextStyle(Pid);
+      void textStyleValueChanged(Pid, QVariant);
       void on_comboFBFont_currentIndexChanged(int index);
 
 public:

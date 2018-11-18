@@ -47,8 +47,8 @@ Zerberus::Zerberus()
             initialized = true;
             Voice::init();
             }
-      for (int i = 0; i < MAX_VOICES; ++i)
-            freeVoices.push(new Voice(this));
+      
+      freeVoices.init(this);
       for (int i = 0; i < MAX_CHANNEL; ++i)
             _channel[i] = new Channel(this, i);
       busy = true;      // no sf loaded yet
@@ -69,9 +69,9 @@ Zerberus::~Zerberus()
             i->setRefCount(i->refCount() - 1);
             if (i->refCount() <= 0) {
                   delete i;
-                  auto it = find(globalInstruments.begin(), globalInstruments.end(), i);
-                  if (it != globalInstruments.end())
-                        globalInstruments.erase(it);
+                  auto it1 = find(globalInstruments.begin(), globalInstruments.end(), i);
+                  if (it1 != globalInstruments.end())
+                        globalInstruments.erase(it1);
                   }
             }
       for (Channel* c : _channel)
@@ -175,6 +175,8 @@ void Zerberus::processNoteOn(Channel* cp, int key, int velo)
 void Zerberus::play(const Ms::PlayEvent& event)
       {
       if (busy)
+            return;
+      if (event.channel() >= MAX_CHANNEL)
             return;
       Channel* cp = _channel[int(event.channel())];
       if (cp->instrument() == 0) {
@@ -298,6 +300,19 @@ bool Zerberus::loadSoundFonts(const QStringList& sl)
       }
 
 //---------------------------------------------------------
+//   removeSoundFonts
+//---------------------------------------------------------
+
+bool Zerberus::removeSoundFonts(const QStringList& fileNames)
+      {
+      for (auto fileName : fileNames) {
+            if (!removeSoundFont(QFileInfo(fileName).absoluteFilePath()))
+                  return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   soundFonts
 //---------------------------------------------------------
 
@@ -315,6 +330,7 @@ QStringList Zerberus::soundFonts() const
 
 bool Zerberus::addSoundFont(const QString& s)
       {
+      QMutexLocker locker(&mutex);
       return loadInstrument(s);
       }
 
@@ -335,17 +351,17 @@ bool Zerberus::removeSoundFont(const QString& s)
                               _channel[k]->setInstrument(0);
                         }
                   if (!instruments.empty()) {
-                        for (int i = 0; i < MAX_CHANNEL; ++i) {
-                              if (_channel[i]->instrument() == 0)
-                                    _channel[i]->setInstrument(instruments.front());
+                        for (int ii = 0; ii < MAX_CHANNEL; ++ii) {
+                              if (_channel[ii]->instrument() == 0)
+                                    _channel[ii]->setInstrument(instruments.front());
                               }
                         }
                   i->setRefCount(i->refCount() - 1);
                   if (i->refCount() <= 0) {
-                        auto it = find(globalInstruments.begin(), globalInstruments.end(), i);
-                        if (it == globalInstruments.end())
+                        auto it1 = find(globalInstruments.begin(), globalInstruments.end(), i);
+                        if (it1 == globalInstruments.end())
                               return false;
-                        globalInstruments.erase(it);
+                        globalInstruments.erase(it1);
                         delete i;
                         }
                   return true;
@@ -454,6 +470,9 @@ bool Zerberus::loadInstrument(const QString& s)
             }
       catch (std::bad_alloc& a) {
             qDebug("Unable to allocate memory when loading Zerberus soundfont %s", qPrintable(s));
+
+            // Prevent "Unreferenced local variable" warning for a
+            Q_UNUSED(a);
             }
       catch (...) {
             }

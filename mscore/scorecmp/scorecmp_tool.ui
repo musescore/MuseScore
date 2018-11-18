@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ScoreComparisonTool</class>
+ <widget class="QDockWidget" name="ScoreComparisonTool">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>858</width>
+    <height>247</height>
+   </rect>
+  </property>
+  <property name="accessibleName">
+   <string>Score Comparison Tool</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>A tool to examine differences between the chosen scores</string>
+  </property>
+  <property name="windowTitle">
+   <string>Score Comparison Tool</string>
+  </property>
+  <widget class="QWidget" name="dockWidgetContents">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Choose scores to compare:</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="score1Label">
+         <property name="text">
+          <string>Score 1:</string>
+         </property>
+         <property name="buddy">
+          <cstring>score1ComboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="score1ComboBox">
+         <property name="accessibleName">
+          <string>Score 1</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Choose the first score to compare</string>
+         </property>
+         <property name="minimumContentsLength">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="score2Label">
+         <property name="text">
+          <string>Score 2:</string>
+         </property>
+         <property name="buddy">
+          <cstring>score2ComboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="score2ComboBox">
+         <property name="accessibleName">
+          <string>Score 2</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Choose the second score to compare</string>
+         </property>
+         <property name="minimumContentsLength">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QComboBox" name="version1ComboBox">
+         <property name="accessibleName">
+          <string>Score version 1</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Choose a version of the first score to compare</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QComboBox" name="version2ComboBox">
+         <property name="accessibleName">
+          <string>Score version 2</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Choose a version of the second score to compare</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="browseFileButton">
+         <property name="toolTip">
+          <string>Browse files for comparison</string>
+         </property>
+         <property name="text">
+          <string>Browse</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="2">
+        <widget class="QPushButton" name="compareButton">
+         <property name="toolTip">
+          <string>Perform comparison of chosen scores</string>
+         </property>
+         <property name="text">
+          <string>Compare</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Diff mode</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QRadioButton" name="rawModeRadioButton">
+         <property name="text">
+          <string>Raw</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="intelligentModeRadioButton">
+         <property name="text">
+          <string>Intelligent</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QGroupBox" name="diffWidgetBox">
+      <property name="title">
+       <string>Comparison</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QStackedWidget" name="diffWidget">
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <widget class="QWidget" name="pageRawDiff">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QListView" name="rawDiffView">
+             <property name="textElideMode">
+              <enum>Qt::ElideNone</enum>
+             </property>
+             <property name="verticalScrollMode">
+              <enum>QAbstractItemView::ScrollPerPixel</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="pageIntelligentDiff">
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QListView" name="intelligentDiffView"/>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>score1ComboBox</tabstop>
+  <tabstop>version1ComboBox</tabstop>
+  <tabstop>score2ComboBox</tabstop>
+  <tabstop>version2ComboBox</tabstop>
+  <tabstop>browseFileButton</tabstop>
+  <tabstop>compareButton</tabstop>
+  <tabstop>rawModeRadioButton</tabstop>
+  <tabstop>intelligentModeRadioButton</tabstop>
+  <tabstop>intelligentDiffView</tabstop>
+  <tabstop>rawDiffView</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

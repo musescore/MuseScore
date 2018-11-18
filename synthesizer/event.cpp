@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: event.cpp 4926 2011-10-29 18:13:35Z wschweer $
 //
 //  Copyright (C) 2008-2011 Werner Schweer
 //
@@ -200,7 +199,9 @@ bool MidiCoreEvent::isChannelEvent() const
             default:
                   return false;
             }
-      return false;
+
+      // Prevent "unreachable code" warning.
+      // return false;
       }
 
 //---------------------------------------------------------
@@ -370,5 +371,51 @@ void EventList::insert(const Event& e)
             }
       append(e);
       }
-}
 
+//---------------------------------------------------------
+//   class EventMap::fixupMIDI
+//---------------------------------------------------------
+
+void EventMap::fixupMIDI()
+      {
+      /* track info for each of the 128 possible MIDI notes */
+      struct channelInfo {
+            /* which event the first ME_NOTEON came from */
+            NPlayEvent *event[128];
+            /* how often is the note on right now? */
+            unsigned short nowPlaying[128];
+            };
+
+      /* track info for each channel (on the heap, 0-initialised) */
+      struct channelInfo *info = (struct channelInfo *)calloc(_highestChannel + 1, sizeof(struct channelInfo));
+
+      auto it = begin();
+      while (it != end()) {
+            /* ME_NOTEOFF is never emitted, no need to check for it */
+            if (it->second.type() == ME_NOTEON) {
+                  unsigned short np = info[it->second.channel()].nowPlaying[it->second.pitch()];
+                  if (it->second.velo() == 0) {
+                        /* already off (should not happen) or still playing? */
+                        if (np == 0 || --np > 0)
+                              it->second.setDiscard(1);
+                        else {
+                              /* hoist NOTEOFF to same track as NOTEON */
+                              it->second.setOriginatingStaff(info[it->second.channel()].event[it->second.pitch()]->getOriginatingStaff());
+                              }
+                        }
+                  else {
+                        if (++np > 1)
+                              /* restrike, possibly on different track */
+                              it->second.setDiscard(info[it->second.channel()].event[it->second.pitch()]->getOriginatingStaff() + 1);
+                        info[it->second.channel()].event[it->second.pitch()] = &(it->second);
+                        }
+                  info[it->second.channel()].nowPlaying[it->second.pitch()] = np;
+                  }
+
+            ++it;
+            }
+
+            free((void *)info);
+      }
+
+}

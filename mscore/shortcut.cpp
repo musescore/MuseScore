@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011-2016 Werner Schweer and others
 //
@@ -20,6 +19,7 @@
 namespace Ms {
 
 bool Shortcut::dirty = false;
+QString Shortcut::source;
 QHash<QByteArray, Shortcut*> Shortcut::_shortcuts;
 extern QString dataPath;
 
@@ -294,6 +294,17 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Perform the piece while tapping a key or pedal to set the tempo"),
          0,
          Icons::noteEntryRealtimeManual_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "note-input-timewise",
+         QT_TRANSLATE_NOOP("action","Timewise"),
+         QT_TRANSLATE_NOOP("action","Insert notes increasing measure duration"),
+         0,
+         Icons::noteTimewise_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
          },
@@ -687,6 +698,16 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Reset Beams"),
          QT_TRANSLATE_NOOP("action","Reset beams"),
          QT_TRANSLATE_NOOP("action","Reset beams of selected measures"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "reset-style",
+         QT_TRANSLATE_NOOP("action","Reset Style"),
+         QT_TRANSLATE_NOOP("action","Reset style"),
+         QT_TRANSLATE_NOOP("action","Reset all style values to default"),
          Icons::Invalid_ICON,
          Qt::WindowShortcut
          },
@@ -1882,6 +1903,13 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
+         "toggle-feedback",
+         QT_TRANSLATE_NOOP("action","Feedback"),
+         QT_TRANSLATE_NOOP("action","Toggle 'Feedback' toolbar"),
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
          "toggle-statusbar",
          QT_TRANSLATE_NOOP("action","Status Bar"),
          QT_TRANSLATE_NOOP("action","Toggle 'Status Bar'")
@@ -2477,8 +2505,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "edit-style",
-         QT_TRANSLATE_NOOP("action","General Style..."),
-         QT_TRANSLATE_NOOP("action","Edit general style"),
+         QT_TRANSLATE_NOOP("action","Style..."),
+         QT_TRANSLATE_NOOP("action","Edit style"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut
@@ -2697,6 +2725,13 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_FOTO | STATE_EDIT,
+         "toggle-scorecmp-tool",
+         QT_TRANSLATE_NOOP("action","Score Comparison Tool"),
+         QT_TRANSLATE_NOOP("action","Score comparison tool")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT  | STATE_PLAY | STATE_FOTO,
          "media",
          QT_TRANSLATE_NOOP("action","Additional Media..."),
@@ -2786,7 +2821,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_FOTO,
+         STATE_NORMAL | STATE_NOTE_ENTRY | STATE_PLAY | STATE_EDIT | STATE_FOTO | STATE_TEXT_EDIT,
          "inspector",
          QT_TRANSLATE_NOOP("action","Inspector"),
          QT_TRANSLATE_NOOP("action","Show inspector")
@@ -3528,6 +3563,38 @@ Shortcut Shortcut::_sc[] = {
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
          },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "report-bug",
+         QT_TRANSLATE_NOOP("action", "Report a Bug"),
+         QT_TRANSLATE_NOOP("action", "Report a bug"),
+         0,
+         Icons::bug_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "leave-feedback",
+         QT_TRANSLATE_NOOP("action", "Leave Feedback"),
+         QT_TRANSLATE_NOOP("action", "Leave feedback"),
+         0,
+         Icons::mail_ICON,
+         Qt::ApplicationShortcut
+         },
+#ifdef MSCORE_UNSTABLE
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_NORMAL,
+         "toggle-script-recorder",
+         "Script Recorder",
+         "Script recorder",
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+#endif
 #ifndef NDEBUG
       {
          MsWidget::MAIN_WINDOW,
@@ -3562,9 +3629,9 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
-         "show-measure-shapes",
-         "Show Measure Shapes",
-         "Show measure shapes",
+         "show-skylines",
+         "Show Skylines",
+         "Show Skylines",
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
@@ -3582,6 +3649,16 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
+         "show-system-bounding-rect",
+         "Show System Bounding Rectangles",
+         "Show bounding rectangles for systems",
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
          "show-corrupted-measures",
          "Show Corrupted Measures",
          "Show corrupted measures",
@@ -3591,7 +3668,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
-         STATE_ALL,
+         STATE_ALL & ~STATE_TEXT_EDIT,
          "relayout",
          "Re-Layout",
          "Re-layout",
@@ -3603,8 +3680,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "autoplace-slurs",
-         "autoplace slurs",
-         "autoplace slurs",
+         "Autoplace Slurs",
+         "Autoplace slurs",
          0,
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
@@ -3665,6 +3742,17 @@ void Shortcut::setStandardKey(QKeySequence::StandardKey k)
       _standardKey = k;
       if (_action && k != QKeySequence::UnknownKey)
             _action->setShortcuts(_standardKey);
+      }
+
+//---------------------------------------------------------
+//   setKeys
+//    Copies keys from the other Shortcut object
+//---------------------------------------------------------
+
+void Shortcut::setKeys(const Shortcut& sc)
+      {
+      setKeys(sc._keys);
+      setStandardKey(sc._standardKey);
       }
 
 //---------------------------------------------------------
@@ -3845,7 +3933,7 @@ bool Shortcut::compareKeys(const Shortcut& sc) const
             if (sc._keys[i] != _keys[i])
                   return false;
             }
-      return true;
+      return _standardKey == sc._standardKey;
       }
 
 //---------------------------------------------------------
@@ -3879,7 +3967,7 @@ void Shortcut::retranslate()
 
 void Shortcut::refreshIcons()
       {
-      foreach (Shortcut* s, _shortcuts) {
+      for (Shortcut* s : _shortcuts) {
             QAction* a = s->action();
             if (a && s->icon() != Icons::Invalid_ICON) {
                   a->setIcon(*icons[int(s->icon())]);
@@ -3933,7 +4021,7 @@ void Shortcut::write(XmlWriter& xml) const
       xml.tag("key", _key.data());
       if (_standardKey != QKeySequence::UnknownKey)
             xml.tag("std", QString("%1").arg(_standardKey));
-      foreach(QKeySequence ks, _keys)
+      for (QKeySequence ks : _keys)
             xml.tag("seq", Shortcut::keySeqToString(ks, QKeySequence::PortableText));
       xml.etag();
       }
@@ -3975,7 +4063,7 @@ void Shortcut::load()
       {
       QFile f(dataPath + "/shortcuts.xml");
       if (!f.exists())
-            f.setFileName(":/data/shortcuts.xml");
+            f.setFileName(defaultFileName);
       if (!f.open(QIODevice::ReadOnly)) {
             qDebug("Cannot open shortcuts <%s>", qPrintable(f.fileName()));
             return;
@@ -4021,6 +4109,7 @@ void Shortcut::load()
             else
                   e.unknown();
             }
+      source = f.fileName();
       dirty = false;
       }
 
@@ -4087,6 +4176,7 @@ void Shortcut::loadFromNewFile(QString fileLocation)
                   s->setStandardKey(sc.standardKey);
                   }
             }
+      source = fileLocation;
       dirty = true;
       }
 
@@ -4124,7 +4214,7 @@ QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w, Qt::ShortcutContext 
 
 void Shortcut::resetToDefault()
       {
-      QList<Shortcut1> sl = loadShortcuts(":/data/shortcuts.xml");
+      QList<Shortcut1> sl = loadShortcuts(defaultFileName);
       for (const Shortcut1& sc : sl) {
             Shortcut* s = getShortcut(sc.key);
             if (s) {
@@ -4132,6 +4222,7 @@ void Shortcut::resetToDefault()
                   s->setStandardKey(sc.standardKey);
                   }
             }
+      source = defaultFileName;
       dirty = true;
       }
 
@@ -4143,7 +4234,7 @@ void Shortcut::reset()
       {
       _standardKey = QKeySequence::UnknownKey;
       _keys.clear();
-      QList<Shortcut1> sl = loadShortcuts(":/data/shortcuts.xml");
+      QList<Shortcut1> sl = loadShortcuts(defaultFileName);
       for (const Shortcut1& sc : sl) {
             if (sc.key == _key) {
                   setKeys(sc.keys);

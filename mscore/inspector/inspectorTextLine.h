@@ -13,10 +13,8 @@
 #ifndef __INSPECTOR_TEXTLINE_H__
 #define __INSPECTOR_TEXTLINE_H__
 
-#include "inspector.h"
-#include "inspectorBase.h"
+#include "inspectorTextLineBase.h"
 #include "ui_inspector_textline.h"
-#include "ui_inspector_line.h"
 
 namespace Ms {
 
@@ -24,19 +22,14 @@ namespace Ms {
 //   InspectorTextLine
 //---------------------------------------------------------
 
-class InspectorTextLine : public InspectorElementBase {
+class InspectorTextLine : public InspectorTextLineBase {
       Q_OBJECT
 
-      Ui::InspectorLine l;
-      Ui::InspectorTextLine tl;
+      Ui::InspectorTextLine ttl;
 
    public:
       InspectorTextLine(QWidget* parent);
-      virtual void setElement() override;
       };
-
-extern void populateHookType(QComboBox* b);
-extern void populateTextPlace(QComboBox* b);
 
 } // namespace Ms
 #endif

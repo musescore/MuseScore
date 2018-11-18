@@ -10,6 +10,7 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "connector.h"
 #include "score.h"
 #include "spanner.h"
 #include "system.h"
@@ -19,8 +20,23 @@
 #include "measure.h"
 #include "undo.h"
 #include "staff.h"
+#include "musescoreCore.h"
 
 namespace Ms {
+
+//-----------------------------------------------------------------------------
+//   @@ SpannerWriter
+///   Helper class for writing Spanners
+//-----------------------------------------------------------------------------
+
+class SpannerWriter : public ConnectorInfoWriter {
+   protected:
+      const char* tagName() const override { return "Spanner"; }
+   public:
+      SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction frac, bool start);
+
+      static void fillSpannerPosition(Location& l, const Element* endpoint, int tick, bool clipboardmode);
+      };
 
 //---------------------------------------------------------
 //   SpannerSegment
@@ -36,17 +52,10 @@ SpannerSegment::SpannerSegment(Score* s, ElementFlags f)
 SpannerSegment::SpannerSegment(const SpannerSegment& s)
    : Element(s)
       {
-      _spanner = s._spanner;
+      _spanner            = s._spanner;
       _spannerSegmentType = s._spannerSegmentType;
-      }
-
-//---------------------------------------------------------
-//   system
-//---------------------------------------------------------
-
-System* SpannerSegment::system() const
-      {
-      return toSystem(parent());
+      _p2                 = s._p2;
+      _offset2            = s._offset2;
       }
 
 //---------------------------------------------------------
@@ -66,19 +75,29 @@ void SpannerSegment::setSystem(System* s)
       }
 
 //---------------------------------------------------------
+//   propertyDelegate
+//---------------------------------------------------------
+
+Element* SpannerSegment::propertyDelegate(Pid pid)
+      {
+      if (pid == Pid::COLOR || pid == Pid::VISIBLE || pid == Pid::PLACEMENT)
+            return spanner();
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SpannerSegment::getProperty(Pid id) const
+QVariant SpannerSegment::getProperty(Pid pid) const
       {
-      switch (id) {
-            case Pid::COLOR:
-            case Pid::VISIBLE:
-                  return spanner()->getProperty(id);
-            case Pid::USER_OFF2:
-                  return _userOff2;
+      if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
+            return e->getProperty(pid);
+      switch (pid) {
+            case Pid::OFFSET2:
+                  return _offset2;
             default:
-                  return Element::getProperty(id);
+                  return Element::getProperty(pid);
             }
       }
 
@@ -86,18 +105,17 @@ QVariant SpannerSegment::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SpannerSegment::setProperty(Pid id, const QVariant& v)
+bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
       {
-      switch (id) {
-            case Pid::COLOR:
-            case Pid::VISIBLE:
-                 return spanner()->setProperty(id, v);
-            case Pid::USER_OFF2:
-                  _userOff2 = v.toPointF();
+      if (Element* e = propertyDelegate(pid))
+            return e->setProperty(pid, v);
+      switch (pid) {
+            case Pid::OFFSET2:
+                  _offset2 = v.toPointF();
                   score()->setLayoutAll();
                   break;
             default:
-                  return Element::setProperty(id, v);
+                  return Element::setProperty(pid, v);
             }
       return true;
       }
@@ -106,16 +124,15 @@ bool SpannerSegment::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SpannerSegment::propertyDefault(Pid id) const
+QVariant SpannerSegment::propertyDefault(Pid pid) const
       {
-      switch (id) {
-            case Pid::COLOR:
-            case Pid::VISIBLE:
-                  return spanner()->propertyDefault(id);
-            case Pid::USER_OFF2:
+      if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
+            return e->propertyDefault(pid);
+      switch (pid) {
+            case Pid::OFFSET2:
                   return QVariant();
             default:
-                  return Element::propertyDefault(id);
+                  return Element::propertyDefault(pid);
             }
       }
 
@@ -123,31 +140,33 @@ QVariant SpannerSegment::propertyDefault(Pid id) const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid SpannerSegment::getPropertyStyle(Pid id) const
+Sid SpannerSegment::getPropertyStyle(Pid pid) const
       {
-      return spanner()->getPropertyStyle(id);
+      if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
+            return e->getPropertyStyle(pid);
+      return Element::getPropertyStyle(pid);
       }
 
 //---------------------------------------------------------
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags& SpannerSegment::propertyFlags(Pid id)
+PropertyFlags SpannerSegment::propertyFlags(Pid pid) const
       {
-      return spanner()->propertyFlags(id);
+      if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid))
+            return e->propertyFlags(pid);
+      return Element::propertyFlags(pid);
       }
 
 //---------------------------------------------------------
 //   resetProperty
 //---------------------------------------------------------
 
-void SpannerSegment::resetProperty(Pid id)
+void SpannerSegment::resetProperty(Pid pid)
       {
-      for (const StyledProperty* spp = spanner()->styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (spp->pid == id)
-                  return spanner()->resetProperty(id);
-            }
-      return Element::resetProperty(id);
+      if (Element* e = propertyDelegate(pid))
+            return e->resetProperty(pid);
+      return Element::resetProperty(pid);
       }
 
 //---------------------------------------------------------
@@ -165,7 +184,7 @@ void SpannerSegment::styleChanged()
 
 void SpannerSegment::reset()
       {
-      undoChangeProperty(Pid::USER_OFF2, QPointF());
+      undoChangeProperty(Pid::OFFSET2, QPointF());
       Element::reset();
       spanner()->reset();
       }
@@ -244,7 +263,8 @@ QString SpannerSegment::accessibleInfo() const
 
 void SpannerSegment::triggerLayout() const
       {
-      _spanner->triggerLayout();
+      if (_spanner)
+            _spanner->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -282,6 +302,7 @@ void Spanner::add(Element* e)
       ls->setSpanner(this);
       ls->setSelected(selected());
       ls->setTrack(track());
+//      ls->setAutoplace(autoplace());
       segments.append(ls);
       }
 
@@ -407,6 +428,16 @@ QVariant Spanner::getProperty(Pid propertyId) const
                   return track2();
             case Pid::ANCHOR:
                   return int(anchor());
+            case Pid::LOCATION_STAVES:
+                  return (track2() / VOICES) - (track() / VOICES);
+            case Pid::LOCATION_VOICES:
+                  return (track2() % VOICES) - (track() / VOICES);
+            case Pid::LOCATION_FRACTIONS:
+                  return Fraction::fromTicks(_ticks);
+            case Pid::LOCATION_MEASURES:
+            case Pid::LOCATION_GRACE:
+            case Pid::LOCATION_NOTE:
+                  return Location::getLocationProperty(propertyId, startElement(), endElement());
             default:
                   break;
             }
@@ -904,6 +935,27 @@ void Spanner::setTicks(int v)
       }
 
 //---------------------------------------------------------
+//   afrac
+//---------------------------------------------------------
+
+Fraction Spanner::afrac() const
+      {
+      return Fraction::fromTicks(_tick);
+      }
+
+//---------------------------------------------------------
+//   rfrac
+//---------------------------------------------------------
+
+Fraction Spanner::rfrac() const
+      {
+      const Measure* m = toMeasure(findMeasure());
+      if (m)
+            return Fraction::fromTicks(_tick - m->tick());
+      return afrac();
+      }
+
+//---------------------------------------------------------
 //   triggerLayout
 //---------------------------------------------------------
 
@@ -921,6 +973,200 @@ SpannerSegment* Spanner::layoutSystem(System*)
       {
       qDebug(" %s", name());
       return 0;
+      }
+
+//--------------------------------------------------
+//   Spanner::writeSpannerStart
+//---------------------------------------------------------
+
+void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac) const
+      {
+      SpannerWriter w(xml, current, this, track, frac, true);
+      w.write();
+      }
+
+//--------------------------------------------------
+//   Spanner::writeSpannerEnd
+//---------------------------------------------------------
+
+void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction frac) const
+      {
+      SpannerWriter w(xml, current, this, track, frac, false);
+      w.write();
+      }
+
+//--------------------------------------------------
+//   fraction
+//---------------------------------------------------------
+
+static Fraction fraction(const XmlWriter& xml, const Element* current, int tick) {
+      if (!xml.clipboardmode()) {
+            const Measure* m = toMeasure(current->findMeasure());
+            if (m)
+                  tick -= m->tick();
+            }
+      return Fraction::fromTicks(tick);
+      }
+
+//--------------------------------------------------
+//   Spanner::writeSpannerStart
+//---------------------------------------------------------
+
+void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, int tick) const
+      {
+      writeSpannerStart(xml, current, track, fraction(xml, current, tick));
+      }
+
+//--------------------------------------------------
+//   Spanner::writeSpannerEnd
+//---------------------------------------------------------
+
+void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, int tick) const
+      {
+      writeSpannerEnd(xml, current, track, fraction(xml, current, tick));
+      }
+
+//--------------------------------------------------
+//   Spanner::readSpanner
+//---------------------------------------------------------
+
+void Spanner::readSpanner(XmlReader& e, Element* current, int track)
+      {
+      ConnectorInfoReader info(e, current, track);
+      ConnectorInfoReader::readConnector(info, e);
+      }
+
+//--------------------------------------------------
+//   Spanner::readSpanner
+//---------------------------------------------------------
+
+void Spanner::readSpanner(XmlReader& e, Score* current, int track)
+      {
+      ConnectorInfoReader info(e, current, track);
+      ConnectorInfoReader::readConnector(info, e);
+      }
+
+//---------------------------------------------------------
+//   SpannerWriter::fillSpannerPosition
+//---------------------------------------------------------
+
+void SpannerWriter::fillSpannerPosition(Location& l, const Element* endpoint, int tick, bool clipboardmode)
+      {
+      if (clipboardmode) {
+            l.setMeasure(0);
+            l.setFrac(Fraction::fromTicks(tick));
+            }
+      else {
+            const MeasureBase* m = toMeasureBase(endpoint->findMeasure());
+            if (!m) {
+                  qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
+                  l.setMeasure(0);
+                  l.setFrac(Fraction::fromTicks(tick));
+                  return;
+                  }
+            // It may happen (hairpins!) that the spanner's end element is
+            // situated in the end of one measure but its end tick is in the
+            // beginning of the next measure. So we are to correct the found
+            // measure a bit.
+            while (tick >= m->endTick()) {
+                  const MeasureBase* next = m->next();
+                  if (next)
+                        m = next;
+                  else
+                        break;
+                  }
+            l.setMeasure(m->measureIndex());
+            l.setFrac(Fraction::fromTicks(tick - m->tick()));
+            }
+      }
+
+//---------------------------------------------------------
+//   SpannerWriter::SpannerWriter
+//---------------------------------------------------------
+
+SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* sp, int track, Fraction frac, bool start)
+   : ConnectorInfoWriter(xml, current, sp, track, frac)
+      {
+      const bool clipboardmode = xml.clipboardmode();
+      if (!sp->startElement() || !sp->endElement()) {
+            qWarning("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->name());
+            return;
+            }
+      if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {
+            // (The latter is the hairpins' case, for example, though they are
+            // covered by the other checks too.)
+            // We cannot determine position of the spanner from its start/end
+            // elements and will try to obtain this info from the spanner itself.
+            if (!start) {
+                  _prevLoc.setTrack(sp->track());
+                  fillSpannerPosition(_prevLoc, sp->startElement(), sp->tick(), clipboardmode);
+                  }
+            else {
+                  const int track2 = (sp->track2() != -1) ? sp->track2() : sp->track();
+                  _nextLoc.setTrack(track2);
+                  fillSpannerPosition(_nextLoc, sp->endElement(), sp->tick2(), clipboardmode);
+                  }
+            }
+      else {
+            // We can obtain the spanner position info from its start/end
+            // elements and will prefer this source of information.
+            // Reason: some spanners contain no or wrong information (e.g. Ties).
+            if (!start)
+                  updateLocation(sp->startElement(), _prevLoc, clipboardmode);
+            else
+                  updateLocation(sp->endElement(), _nextLoc, clipboardmode);
+            }
+      }
+
+//---------------------------------------------------------
+//   autoplaceSpannerSegment
+//---------------------------------------------------------
+
+void SpannerSegment::autoplaceSpannerSegment(qreal minDistance)
+      {
+      if (!parent()) {
+            setOffset(QPointF());
+            return;
+            }
+      if (isStyled(Pid::OFFSET))
+            setOffset(spanner()->propertyDefault(Pid::OFFSET).toPointF());
+
+      if (visible() && autoplace()) {
+            SkylineLine sl(!spanner()->placeAbove());
+            sl.add(shape().translated(pos()));
+            if (spanner()->placeAbove()) {
+                  qreal d  = system()->topDistance(staffIdx(), sl);
+                  if (d > -minDistance)
+                        rypos() += -(d + minDistance);
+                  }
+            else {
+                  qreal d  = system()->bottomDistance(staffIdx(), sl);
+                  if (d > -minDistance)
+                        rypos() += d + minDistance;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+      {
+      if (id == Pid::PLACEMENT) {
+            ScoreElement::undoChangeProperty(id, v, ps);
+            // change offset of all segments if styled
+
+            for (SpannerSegment* s : segments) {
+                  if (s->isStyled(Pid::OFFSET)) {
+                        s->setOffset(s->propertyDefault(Pid::OFFSET).toPointF());
+                        s->triggerLayout();
+                        }
+                  }
+            MuseScoreCore::mscoreCore->updateInspector();
+            return;
+            }
+      ScoreElement::undoChangeProperty(id, v, ps);
       }
 
 }

@@ -94,6 +94,34 @@ void XmlWriter::stag(const QString& s)
       }
 
 //---------------------------------------------------------
+//   stag
+//    <mops attribute="value">
+//---------------------------------------------------------
+
+void XmlWriter::stag(const ScoreElement* se, const QString& attributes)
+      {
+      stag(se->name(), se, attributes);
+      }
+
+//---------------------------------------------------------
+//   stag
+//    <mops attribute="value">
+//---------------------------------------------------------
+
+void XmlWriter::stag(const QString& name, const ScoreElement* se, const QString& attributes)
+      {
+      putLevel();
+      *this << '<' << name;
+      if (!attributes.isEmpty())
+            *this << ' ' << attributes;
+      *this << '>' << endl;
+      stack.append(name);
+
+      if (_recordElements)
+            _elements.emplace_back(se, name);
+      }
+
+//---------------------------------------------------------
 //   etag
 //    </mops>
 //---------------------------------------------------------
@@ -167,7 +195,6 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
 
       switch (propertyType(id)) {
             case P_TYPE::BOOL:
-            case P_TYPE::SUBTYPE:
             case P_TYPE::INT:
             case P_TYPE::ZERO_INT:
             case P_TYPE::SPATIUM:
@@ -176,12 +203,14 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
             case P_TYPE::SCALE:
             case P_TYPE::POINT:
             case P_TYPE::POINT_SP:
+            case P_TYPE::POINT_SP_MM:
             case P_TYPE::SIZE:
             case P_TYPE::COLOR:
             case P_TYPE::DIRECTION:
             case P_TYPE::STRING:
             case P_TYPE::FONT:
             case P_TYPE::ALIGN:
+            case P_TYPE::FRACTION:
                   tag(name, data);
                   break;
             case P_TYPE::ORNAMENT_STYLE:
@@ -258,6 +287,22 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
                               break;
                         }
                   break;
+            case P_TYPE::TEXT_PLACE:
+                  switch (PlaceText(data.toInt())) {
+                        case PlaceText::AUTO:
+                              tag(name, QVariant("auto"));
+                              break;
+                        case PlaceText::ABOVE:
+                              tag(name, QVariant("above"));
+                              break;
+                        case PlaceText::BELOW:
+                              tag(name, QVariant("below"));
+                              break;
+                        case PlaceText::LEFT:
+                              tag(name, QVariant("left"));
+                              break;
+                        }
+                  break;
             case P_TYPE::SYMID:
                   tag(name, Sym::id2name(SymId(data.toInt())));
                   break;
@@ -271,10 +316,8 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
                   tag(name, NoteHead::type2name(NoteHead::Type(data.toInt())));
                   break;
             case P_TYPE::SUB_STYLE:
-                  tag(name, subStyleName(SubStyleId(data.toInt())));
+                  tag(name, textStyleName(Tid(data.toInt())));
                   break;
-            case P_TYPE::FRACTION:
-                  qFatal("unknown: FRACTION");
             case P_TYPE::POINT_MM:
                   qFatal("unknown: POINT_MM");
             case P_TYPE::SIZE_MM:
@@ -408,6 +451,16 @@ void XmlWriter::tag(const char* name, const QWidget* g)
       }
 
 //---------------------------------------------------------
+//   comment
+//---------------------------------------------------------
+
+void XmlWriter::comment(const QString& text)
+      {
+      putLevel();
+      *this << "<!-- " << text << " -->" << endl;
+      }
+
+//---------------------------------------------------------
 //   xmlString
 //---------------------------------------------------------
 
@@ -526,6 +579,15 @@ int XmlWriter::spannerId(const Spanner* s)
                   return i.first;
             }
       return addSpanner(s);
+      }
+
+//---------------------------------------------------------
+//   assignLocalIndex
+//---------------------------------------------------------
+
+int XmlWriter::assignLocalIndex(const Location& mainElementLocation)
+      {
+      return _linksIndexer.assignLocalIndex(mainElementLocation);
       }
 
 //---------------------------------------------------------

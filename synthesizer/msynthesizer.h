@@ -33,7 +33,7 @@ class Xml;
 class MasterSynthesizer : public QObject {
       Q_OBJECT
 
-      float _gain             { 0.1   };     // -20dB
+      float _gain             { 0.1f  };     // -20dB
       float _boost            { 10.0  };     // +20dB
       double _masterTuning    { 440.0 };
 
@@ -82,6 +82,7 @@ class MasterSynthesizer : public QObject {
       QString name(unsigned) const;
 
       QList<MidiPatch*> getPatchInfo() const;
+      MidiPatch* getPatchInfo(QString synti, int bank, int program);
 
       SynthesizerState state() const;
       bool setState(const SynthesizerState&);
@@ -102,6 +103,8 @@ class MasterSynthesizer : public QObject {
       float gain() const     { return _gain; }
       float boost() const    { return _boost; }
       void setBoost(float v) { _boost = v; }
+
+      bool storeState();
       };
 
 }

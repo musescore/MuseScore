@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -84,41 +84,46 @@
           <text>A measure is considered anacrusis if it has beats missing and is irregular (excluded from measure count).</text>
           </Text>
         </VBox>
-      <Measure number="1" len="5/8">
+      <Measure len="5/8">
         <irregular>1</irregular>
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <StaffText>
-          <text>Anacrusis - incomplete and irregular
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <StaffText>
+            <text>Anacrusis - incomplete and irregular
 (Metronome plays beats 3 &amp; 4 only.)</text>
-          </StaffText>
-        <Rest>
-          <durationType>eighth</durationType>
-          </Rest>
-        <Rest>
-          <durationType>half</durationType>
-          </Rest>
+            </StaffText>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="1">
-        <Rest>
-          <durationType>measure</durationType>
-          <duration>4/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2" len="3/8">
-        <StaffText>
-          <text>Not anacrusis - incomplete but regular
+      <Measure len="3/8">
+        <voice>
+          <StaffText>
+            <text>Not anacrusis - incomplete but regular
 (Metronome plays beats 1 &amp; 2 only.)</text>
-          </StaffText>
-        <Rest>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <durationType>eighth</durationType>
-          </Rest>
+            </StaffText>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     </Score>

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: preferences.h 5660 2012-05-22 14:17:39Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -91,6 +90,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_APP_PATHS_MYSOUNDFONTS                         "application/paths/mySoundfonts"
 #define PREF_APP_PATHS_MYSTYLES                             "application/paths/myStyles"
 #define PREF_APP_PATHS_MYTEMPLATES                          "application/paths/myTemplates"
+#define PREF_APP_PATHS_MYEXTENSIONS                         "application/paths/myExtensions"
 #define PREF_APP_PLAYBACK_FOLLOWSONG                        "application/playback/followSong"
 #define PREF_APP_PLAYBACK_PANPLAYBACK                       "application/playback/panPlayback"
 #define PREF_APP_PLAYBACK_PLAYREPEATS                       "application/playback/playRepeats"
@@ -99,6 +99,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_APP_STARTUP_SESSIONSTART                       "application/startup/sessionStart"
 #define PREF_APP_STARTUP_STARTSCORE                         "application/startup/startScore"
 #define PREF_APP_WORKSPACE                                  "application/workspace"
+#define PREF_EXPORT_AUDIO_NORMALIZE                         "export/audio/normalize"
 #define PREF_EXPORT_AUDIO_SAMPLERATE                        "export/audio/sampleRate"
 #define PREF_EXPORT_MP3_BITRATE                             "export/mp3/bitRate"
 #define PREF_EXPORT_MUSICXML_EXPORTLAYOUT                   "export/musicXML/exportLayout"
@@ -158,10 +159,12 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION           "ui/canvas/scroll/verticalOrientation"
 #define PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA               "ui/canvas/scroll/limitScrollArea"
 #define PREF_UI_APP_STARTUP_CHECKUPDATE                     "ui/application/startup/checkUpdate"
+#define PREF_UI_APP_STARTUP_CHECK_EXTENSIONS_UPDATE         "ui/application/startup/checkExtensionsUpdate"
 #define PREF_UI_APP_STARTUP_SHOWNAVIGATOR                   "ui/application/startup/showNavigator"
 #define PREF_UI_APP_STARTUP_SHOWPLAYPANEL                   "ui/application/startup/showPlayPanel"
 #define PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN                "ui/application/startup/showSplashScreen"
 #define PREF_UI_APP_STARTUP_SHOWSTARTCENTER                 "ui/application/startup/showStartCenter"
+#define PREF_UI_APP_STARTUP_SHOWTOURS                       "ui/application/startup/showTours"
 #define PREF_UI_APP_GLOBALSTYLE                             "ui/application/globalStyle"
 #define PREF_UI_APP_LANGUAGE                                "ui/application/language"
 #define PREF_UI_APP_RASTER_HORIZONTAL                       "ui/application/raster/horizontal"
@@ -179,6 +182,24 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_UI_SCORE_VOICE4_COLOR                          "ui/score/voice4/color"
 #define PREF_UI_THEME_ICONHEIGHT                            "ui/theme/iconHeight"
 #define PREF_UI_THEME_ICONWIDTH                             "ui/theme/iconWidth"
+#define PREF_UI_THEME_FONTFAMILY                            "ui/theme/fontFamily"
+#define PREF_UI_THEME_FONTSIZE                              "ui/theme/fontSize"
+#define PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR          "ui/pianoroll/dark/selectionBox/color"
+#define PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR             "ui/pianoroll/dark/note/unselected/color"
+#define PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR               "ui/pianoroll/dark/note/selected/color"
+#define PREF_UI_PIANOROLL_DARK_BG_BASE_COLOR                "ui/pianoroll/dark/background/base/color"
+#define PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR           "ui/pianoroll/dark/background/keys/white/color"
+#define PREF_UI_PIANOROLL_DARK_BG_KEY_BLACK_COLOR           "ui/pianoroll/dark/background/keys/black/color"
+#define PREF_UI_PIANOROLL_DARK_BG_GRIDLINE_COLOR            "ui/pianoroll/dark/background/gridLine/color"
+#define PREF_UI_PIANOROLL_DARK_BG_TEXT_COLOR                "ui/pianoroll/dark/background/text/color"
+#define PREF_UI_PIANOROLL_LIGHT_SELECTION_BOX_COLOR         "ui/pianoroll/light/selectionBox/color"
+#define PREF_UI_PIANOROLL_LIGHT_NOTE_UNSEL_COLOR            "ui/pianoroll/light/note/unselected/color"
+#define PREF_UI_PIANOROLL_LIGHT_NOTE_SEL_COLOR              "ui/pianoroll/light/note/selected/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_BASE_COLOR               "ui/pianoroll/light/background/base/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR          "ui/pianoroll/light/background/keys/white/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR          "ui/pianoroll/light/background/keys/black/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_GRIDLINE_COLOR           "ui/pianoroll/light/background/gridLine/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_TEXT_COLOR               "ui/pianoroll/light/background/text/color"
 
 
 class PreferenceVisitor;
@@ -277,13 +298,18 @@ class Preferences {
       bool checkIfKeyExists(const QString key) const;
       bool checkType(const QString key, QMetaType::Type t) const;
 
+      // Used with workspace
+      QHash<QString, QVariant> localPreferences;
+      QHash<QString, QVariant> getDefaultLocalPreferences();
+      bool useLocalPrefs = false;
+
    public:
       Preferences();
       ~Preferences();
       void init(bool storeInMemoryOnly = false);
       void save();
       // set to true to let getters return default values instead of values from QSettings
-      void setReturnDefaultValues(bool returnDefaultValues) {_returnDefaultValues = returnDefaultValues;}
+      void setReturnDefaultValuesMode(bool returnDefaultValues) {_returnDefaultValues = returnDefaultValues;}
 
       const prefs_map_t& allPreferences() const {return _allPreferences;}
 
@@ -296,7 +322,7 @@ class Preferences {
       double getDouble(const QString key) const;
 
       // general setters
-      void revertToDefaultValue(const QString key);
+      void setToDefaultValue(const QString key);
       void setPreference(const QString key, QVariant value);
 
       // A temporary preference is stored "in memory" only and not written to file.
@@ -323,6 +349,11 @@ class Preferences {
       MidiRemote midiRemote(int recordId) const;
       void updateMidiRemote(int recordId, MidiRemoteType type, int data);
       void clearMidiRemote(int recordId);
+
+      QHash<QString, QVariant> getLocalPreferences()  { return localPreferences; }
+      void setUseLocalPreferences(bool value)         { useLocalPrefs = value;   }
+      bool getUseLocalPreferences()                   { return useLocalPrefs;    }
+      void updateLocalPreferences() { localPreferences = getDefaultLocalPreferences(); }
       };
 
 // singleton

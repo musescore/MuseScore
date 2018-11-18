@@ -112,6 +112,9 @@
         <property name="toolTip">
          <string>Font Size</string>
         </property>
+        <property name="accessibleName">
+         <string>Font size</string>
+        </property>
         <property name="suffix">
          <string>pt</string>
         </property>
@@ -126,6 +129,9 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
+         <string>Font face</string>
+        </property>
+        <property name="accessibleName">
          <string>Font face</string>
         </property>
        </widget>
@@ -495,7 +501,7 @@
       <item row="3" column="1">
        <widget class="QDoubleSpinBox" name="lineWidth">
         <property name="accessibleName">
-         <string>Height</string>
+         <string>Line width</string>
         </property>
         <property name="suffix">
          <string>sp</string>
@@ -511,7 +517,7 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Height' value</string>
+         <string>Reset 'Line width' value</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -529,12 +535,25 @@
  </widget>
  <tabstops>
   <tabstop>title</tabstop>
+  <tabstop>tupletFontFace</tabstop>
+  <tabstop>resetTupletFontFace</tabstop>
+  <tabstop>tupletFontSize</tabstop>
+  <tabstop>resetTupletFontSize</tabstop>
+  <tabstop>tupletBold</tabstop>
+  <tabstop>resetTupletBold</tabstop>
+  <tabstop>tupletItalic</tabstop>
+  <tabstop>resetTupletItalic</tabstop>
+  <tabstop>tupletUnderline</tabstop>
+  <tabstop>resetTupletUnderline</tabstop>
+  <tabstop>title_2</tabstop>
   <tabstop>direction</tabstop>
   <tabstop>resetDirection</tabstop>
   <tabstop>numberType</tabstop>
   <tabstop>resetNumberType</tabstop>
   <tabstop>bracketType</tabstop>
   <tabstop>resetBracketType</tabstop>
+  <tabstop>lineWidth</tabstop>
+  <tabstop>resetLineWidth</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

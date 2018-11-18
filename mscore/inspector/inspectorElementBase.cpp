@@ -29,7 +29,7 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
             { Pid::VISIBLE,   0, e.visible,    e.resetVisible   },
             { Pid::Z,         0, e.z,          e.resetZ         },
             { Pid::COLOR,     0, e.color,      e.resetColor     },
-            { Pid::USER_OFF,  0, e.offset,     e.resetOffset    },
+            { Pid::OFFSET,    0, e.offset,     e.resetOffset    },
             { Pid::AUTOPLACE, 0, e.autoplace,  e.resetAutoplace },
             };
       pList = { { e.title, e.panel } };
@@ -44,6 +44,10 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
 void InspectorElementBase::setElement()
       {
       InspectorBase::setElement();
+      if (inspector->element()->sizeIsSpatiumDependent())
+            e.offset->setSuffix("sp");
+      else
+            e.offset->setSuffix("mm");
       autoplaceChanged(inspector->element()->autoplace());
       }
 
@@ -51,11 +55,11 @@ void InspectorElementBase::setElement()
 //   autoplaceChanged
 //---------------------------------------------------------
 
-void InspectorElementBase::autoplaceChanged(bool val)
+void InspectorElementBase::autoplaceChanged(bool /*val*/)
       {
-      for (auto i : std::vector<QWidget*>{ e.offsetLabel, e.offset, e.resetOffset }) {
-            i->setVisible(!val);
-            }
+//      for (auto i : std::vector<QWidget*>{ e.offsetLabel, e.offset, e.resetOffset }) {
+//            i->setVisible(!val);
+//            }
       }
 
 //---------------------------------------------------------

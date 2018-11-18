@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: mixer.h 4388 2011-06-18 13:17:58Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -21,89 +20,87 @@
 #ifndef __ILEDIT_H__
 #define __ILEDIT_H__
 
+#include "ui_parteditbase.h"
 #include "ui_mixer.h"
 #include "libmscore/instrument.h"
 #include "enableplayforwidget.h"
+#include "mixertrackgroup.h"
+#include <QWidget>
+#include <QScrollArea>
+#include <QList>
+
 namespace Ms {
 
 class Score;
-struct Channel;
+class Channel;
 class Part;
+class PartEdit;
+class MixerDetails;
+class MixerTrack;
+struct MidiMapping;
 
-//---------------------------------------------------------
-//   PartEdit
-//---------------------------------------------------------
+double volumeToUserRange(char v);
+double panToUserRange(char v);
+double chorusToUserRange(char v);
+double reverbToUserRange(char v);
 
-class PartEdit : public QWidget, public Ui::PartEditBase {
-      Q_OBJECT
+//0 to 100
+char userRangeToVolume(double v);
+//-180 to 180
+char userRangeToPan(double v);
+//0 to 100
+char userRangeToChorus(double v);
+//0 to 100
+char userRangeToReverb(double v);
 
-      Channel* channel;
-      Part* part;
-
-      QList<QToolButton*> voiceButtons;
-
-
-   private slots:
-      void patchChanged(int, bool syncControls = true);
-      void volChanged(double, bool syncControls = true);
-      void panChanged(double, bool syncControls = true);
-      void reverbChanged(double, bool syncControls = true);
-      void chorusChanged(double, bool syncControls = true);
-      void muteChanged(bool, bool syncControls = true);
-      void soloToggled(bool, bool syncControls = true);
-      void drumsetToggled(bool, bool syncControls = true);
-      void midiChannelChanged(int);
-      void sync(bool syncControls);
-      void expandToggled(bool);
-      void playbackVoiceChanged();
-
-   public slots:
-
-   signals:
-      void soloChanged(bool);
-
-   public:
-      PartEdit(QWidget* parent = 0);
-      void setPart(Part*, Channel*);
-      };
 
 //---------------------------------------------------------
 //   Mixer
 //---------------------------------------------------------
 
-class Mixer : public QScrollArea
+class Mixer : public QWidget, public Ui::Mixer, public MixerTrackGroup
       {
       Q_OBJECT
-      MasterScore* cs;
+
+      MasterScore* _score;
       QScrollArea* sa;
-      QVBoxLayout* vb;
+      QHBoxLayout* trackAreaLayout;
       EnablePlayForWidget* enablePlay;
 
-      virtual void closeEvent(QCloseEvent*);
+      MixerDetails* mixerDetails;
+
+      bool showExpanded;
+      QSet<Part*> expandedParts;
+      QWidget* trackHolder;
+      QList<MixerTrack*> trackList;
+
+      virtual void closeEvent(QCloseEvent*) override;
       virtual void showEvent(QShowEvent*) override;
       virtual bool eventFilter(QObject*, QEvent*) override;
       virtual void keyPressEvent(QKeyEvent*) override;
       void readSettings();
 
-   private slots:
-      void updateSolo(bool);
-
    public slots:
-      void patchListChanged();
+      void updateTracks();
       void midiPrefsChanged(bool showMidiControls);
+      void masterVolumeChanged(double val);
+      void synthGainChanged(float val);
+
 
    signals:
       void closed(bool);
 
    protected:
-      virtual void changeEvent(QEvent *event);
+      virtual void changeEvent(QEvent *event) override;
       void retranslate(bool firstTime = false);
 
    public:
       Mixer(QWidget* parent);
-      void updateAll(MasterScore*);
-      PartEdit* partEdit(int index);
+      void setScore(MasterScore*);
+      PartEdit* getPartAtIndex(int index);
       void writeSettings();
+      void expandToggled(Part* part, bool expanded) override;
+      void notifyTrackSelected(MixerTrack* track) override;
       };
 
 

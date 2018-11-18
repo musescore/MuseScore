@@ -49,7 +49,7 @@ StaffState::~StaffState()
 
 void StaffState::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", int(_staffStateType));
       if (staffStateType() == StaffStateType::INSTRUMENT)
             _instrument->write(xml, nullptr);
@@ -196,7 +196,7 @@ bool StaffState::acceptDrop(EditData&) const
 
 Element* StaffState::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       score()->undoChangeElement(this, e);
       return e;
       }

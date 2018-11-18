@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: keyb.cpp 5658 2012-05-21 18:40:58Z wschweer $
 //
 //  Copyright (C) 2002-2011 Werner Schweer and others
 //
@@ -69,8 +68,12 @@ void MuseScore::updateInputState(Score* score)
       {
       InputState& is = score->inputState();
       if (is.noteEntryMode()) {
-            if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH))
-                  is.setDuration(is.cr()->durationType());
+            if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
+                  TDuration d = is.cr()->durationType();
+                  if (!d.isValid() || d.isZero() || d.isMeasure())
+                        d = TDuration::DurationType::V_QUARTER;
+                  is.setDuration(d);
+                  }
             Staff* staff = score->staff(is.track() / VOICES);
             switch (staff->staffType(is.tick())->group()) {
                   case StaffGroup::STANDARD:

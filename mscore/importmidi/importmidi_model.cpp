@@ -799,7 +799,7 @@ int TracksModel::rowCount(const QModelIndex &/*parent*/) const
 
 int TracksModel::columnCount(const QModelIndex &/*parent*/) const
       {
-      return _columns.size();
+      return int(_columns.size());
       }
 
 bool TracksModel::editableSingleTrack(int trackIndex, int column) const
@@ -905,7 +905,7 @@ QVariant TracksModel::data(const QModelIndex &index, int role) const
                               MidiOperations::Data &opers = midiImportOperations;
                               MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
 
-                              return MidiCharset::convertToCharset(value.toString().toStdString());
+                              return MidiCharset::convertToCharset(value.toString().toUtf8().constData());
                               }
                         }
                   break;
@@ -1032,7 +1032,7 @@ QVariant TracksModel::headerData(int section, Qt::Orientation orientation, int r
       if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
             if (!_columns.empty()) {
                   return QCoreApplication::translate("MIDI import: tracks model",
-                                      _columns[section]->headerName().toStdString().c_str());
+                                      _columns[section]->headerName().toUtf8().constData());
                   }
             }
       else if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
