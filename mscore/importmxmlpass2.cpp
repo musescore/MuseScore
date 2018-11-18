@@ -3619,7 +3619,9 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const in
             }
       else if (c == "percussion") {
             clef = ClefType::PERC;
-            st = StaffTypes::PERC_DEFAULT;
+            if (_hasDrumset) {
+                  st = StaffTypes::PERC_DEFAULT;
+                  }
             }
       else if (c == "TAB") {
             clef = ClefType::TAB;
