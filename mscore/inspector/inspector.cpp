@@ -275,7 +275,7 @@ void Inspector::update(Score* s)
                               ie = new InspectorSlurTie(this);
                               break;
                         case ElementType::BAR_LINE:
-                              ie = new InspectorBarLine(this);
+                              ie = new InspectorEmpty(this);
                               break;
                         case ElementType::JUMP:
                               ie = new InspectorJump(this);
