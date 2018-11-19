@@ -333,7 +333,8 @@ void PianorollEditor::setStaff(Staff* st)
       if (staff == st)
             return;
 
-      partLabel->setText("Part: " + st->partName());
+      if (st)
+            partLabel->setText("Part: " + st->partName());
 
       if ((st && st->score() != _score) || (!st && _score)) {
             if (_score) {
@@ -361,6 +362,8 @@ void PianorollEditor::setStaff(Staff* st)
             pos->setContext(tl, sl);
             showWave->setEnabled(_score->audio() != 0);
             }
+      else
+            setWindowTitle(tr("Piano roll editor"));
       ruler->setScore(_score, locator);
       pianoView->setStaff(staff, locator);
       pianoLevels->setScore(_score, locator);
@@ -636,20 +639,13 @@ void PianorollEditor::dataChanged(const QRectF&)
       }
 
 //---------------------------------------------------------
-//   adjustCanvasPosition
-//---------------------------------------------------------
-
-void PianorollEditor::adjustCanvasPosition(const Element*, bool)
-      {
-      }
-
-//---------------------------------------------------------
 //   removeScore
 //---------------------------------------------------------
 
 void PianorollEditor::removeScore()
       {
-      setStaff(0);
+      _score = nullptr;
+      setStaff(nullptr);
       }
 
 //---------------------------------------------------------
@@ -697,22 +693,6 @@ const QTransform& PianorollEditor::matrix() const
       }
 
 //---------------------------------------------------------
-//   setDropRectangle
-//---------------------------------------------------------
-
-void PianorollEditor::setDropRectangle(const QRectF&)
-      {
-      }
-
-//---------------------------------------------------------
-//   cmdAddSlur
-//---------------------------------------------------------
-
-void PianorollEditor::cmdAddSlur(Note*, Note*)
-      {
-      }
-
-//---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
 
@@ -744,6 +724,10 @@ Element* PianorollEditor::elementNear(QPointF)
 void PianorollEditor::updateAll()
       {
       startTimer(0);    // delayed update
+      if (staff && staff->idx() == -1) { // staff removed
+            removeScore();
+            return;
+            }
       pianoView->updateNotes();
       pianoLevels->updateNotes();
       }
