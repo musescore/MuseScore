@@ -3286,7 +3286,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   while (de->tuplet() && de->tuplet()->elements().front() == de) {
                         Tuplet* t = de->tuplet();
                         t->layout();
-                        system->staff(t->staffIdx())->skyline().add(t->shape().translated(t->measure()->pos()));
+                        system->staff(t->staffIdx())->skyline().add(t->shape().translated(t->pos() + t->measure()->pos()));
                         de = de->tuplet();
                         }
                   }
