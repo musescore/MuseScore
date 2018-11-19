@@ -1866,6 +1866,7 @@ void Chord::layoutPitched()
       if (_arpeggio) {
             qreal arpeggioDistance = score()->styleP(Sid::ArpeggioNoteDistance) * mag_;
             _arpeggio->layout();    // only for width() !
+            _arpeggio->setHeight(0.0);
             lll        += _arpeggio->width() + arpeggioDistance + chordX;
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
             _arpeggio->setPos(-lll, y1);
