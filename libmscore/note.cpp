@@ -3272,12 +3272,16 @@ Shape Note::shape() const
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->name());
       if (_accidental)
             shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->name());
+      for (auto e : _el)
+            shape.add(e->bbox().translated(e->pos()), e->name());
 #else
       Shape shape(bbox());
       for (NoteDot* dot : _dots)
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
       if (_accidental)
             shape.add(_accidental->bbox().translated(_accidental->pos()));
+      for (auto e : _el)
+            shape.add(e->bbox().translated(e->pos()));
 #endif
       return shape;
       }
