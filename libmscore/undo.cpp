@@ -1160,6 +1160,7 @@ void TransposeHarmony::flip(EditData*)
       harmony->setBaseTpc(baseTpc);
       harmony->setRootTpc(rootTpc);
       harmony->setXmlText(harmony->harmonyName());
+      harmony->render();
       rootTpc = rootTpc1;
       baseTpc = baseTpc1;
       }
