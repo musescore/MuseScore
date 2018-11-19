@@ -12,7 +12,7 @@
       <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
       <frameSystemDistance>13</frameSystemDistance>
       <measureSpacing>1.14</measureSpacing>
-      <voltaPosAbove>0</voltaPosAbove>
+      <voltaPosAbove x="0" y="0"/>
       <Spatium>1.564</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -827,7 +827,6 @@
         <voice>
           <Harmony>
             <root>14</root>
-            <name>hord</name>
             </Harmony>
           <Chord>
             <durationType>whole</durationType>
@@ -844,6 +843,15 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <location>
+            <fractions>-5/8</fractions>
+            </location>
+          <Harmony>
+            <root>16</root>
+            </Harmony>
+          <location>
+            <fractions>5/8</fractions>
+            </location>
           <Rest>
             <durationType>half</durationType>
             </Rest>

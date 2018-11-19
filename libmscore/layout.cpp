@@ -3448,8 +3448,15 @@ System* Score::collectSystem(LayoutContext& lc)
             for (Element* e : s->annotations()) {
                   if (e->isStaffText() || e->isSystemText() || e->isInstrumentChange())
                         e->layout();
-                  if (e->isHarmony())
+                  if (e->isHarmony()) {
+                        Harmony* h = toHarmony(e);
+                        // Layout of harmony seems to be bound currently
+                        // to ChordRest (see ChordRest::shape). But harmony
+                        // can exist without chord or rest too.
+                        if (h->isLayoutInvalid())
+                              h->layout();
                         toHarmony(e)->autoplaceSegmentElement(styleP(Sid::minHarmonyDistance));
+                        }
                   }
             }
 
