@@ -2883,7 +2883,37 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   }
             else if (tag == "Text" || tag == "StaffText") {
-                  StaffText* t = new StaffText(score);
+                  // MuseScore 3 has different types for system text and
+                  // staff text while MuseScore 2 didn't.
+                  // We need to decide first which one we should create.
+                  QIODevice* dev = e.device();
+                  QString styleName;
+                  if (dev && !dev->isSequential()) { // we want to be able to seek a position
+                        const auto pos = dev->pos();
+                        dev->seek(e.characterOffset());
+                        const QString closeTag = QString("</").append(tag).append(">");
+                        QByteArray arrLine = dev->readLine();
+                        while (!arrLine.isEmpty()) {
+                              QString line(arrLine);
+                              if (line.contains("<style>")) {
+                                    QRegExp re("<style>([A-z0-9]+)</style>");
+                                    if (re.indexIn(line) > -1)
+                                          styleName = re.cap(1);
+                                    break;
+                                    }
+                              if (line.contains(closeTag))
+                                    break;
+                              arrLine = dev->readLine();
+                              }
+                        dev->seek(pos);
+                        }
+                  StaffTextBase* t;
+                  if (styleName == "System"   || styleName == "Tempo"
+                     || styleName == "Marker" || styleName == "Jump"
+                     || styleName == "Volta") // TODO: is it possible to get it from style?
+                        t = new SystemText(score);
+                  else
+                        t = new StaffText(score);
                   t->setTrack(e.track());
                   readText206(e, t, t);
                   if (t->empty()) {
