@@ -161,7 +161,6 @@ void ScoreView::endEdit()
             else if (tp == ElementType::FIGURED_BASS)
                   figuredBassEndEdit();
             }
-
       editData.clearData();
       mscore->updateInspector();
       }
@@ -220,13 +219,13 @@ void ScoreView::doDragEdit(QMouseEvent* ev)
 void ScoreView::endDragEdit()
       {
       _score->addRefresh(editData.element->canvasBoundingRect());
+
       editData.element->endEditDrag(editData);
-      score()->endCmd();
-      setDropTarget(0);
       updateGrips();
-      _score->rebuildBspTree();
       _score->addRefresh(editData.element->canvasBoundingRect());
-      _score->update();
+      setDropTarget(0);
+      score()->endCmd();            // calls update()
+      _score->rebuildBspTree();
       }
 }
 

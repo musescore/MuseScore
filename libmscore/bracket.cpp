@@ -297,6 +297,7 @@ void Bracket::updateGrips(EditData& ed) const
 void Bracket::endEdit(EditData& ed)
       {
       endEditDrag(ed);
+      layout();
       }
 
 //---------------------------------------------------------
@@ -342,6 +343,9 @@ void Bracket::endEditDrag(EditData&)
       qreal ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
       h2 = (ey - sy) * .5;
       bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
+      // brackets do not survive layout
+      // make sure layout is not called:
+      score()->cmdState()._setUpdateMode(UpdateMode::Update);
       }
 
 //---------------------------------------------------------
