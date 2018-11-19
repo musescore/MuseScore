@@ -3043,7 +3043,7 @@ void Score::collectMatch(void* data, Element* e)
                   } while (ee);
             }
 
-      if (e->isRest()) {
+      if (e->isRest() && p->durationTicks != -1) {
             const Rest* r = toRest(e);
             if (p->durationTicks != r->actualTicks())
                   return;
