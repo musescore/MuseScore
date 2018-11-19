@@ -1323,6 +1323,8 @@ void TextBase::createLayout()
                         token += c;
                   }
             }
+      if (_layout.empty())
+            _layout.append(TextBlock());
       layoutInvalid = false;
       }
 

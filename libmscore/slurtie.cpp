@@ -46,7 +46,7 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
 
 QPointF SlurTieSegment::gripAnchor(Grip grip) const
       {
-      if (grip != Grip::START && grip != Grip::END)
+      if (!system() || (grip != Grip::START && grip != Grip::END))
             return QPointF();
 
       QPointF sp(system()->pagePos());

@@ -4068,6 +4068,7 @@ void Score::undoAddElement(Element* element)
                   tr.append(strack);
 
             // Some elements in voice 1 of a staff should be copied to every track which has a linked voice in this staff
+
             if (tr.isEmpty() && (element->isSymbol()
                 || element->isImage()
                 || element->isTremoloBar()
@@ -4078,9 +4079,11 @@ void Score::undoAddElement(Element* element)
                 || element->isHairpin()
                 || element->isOttava()
                 || element->isTrill()
+                || element->isSlur()
                 || element->isVibrato()
                 || element->isTextLine()
-                || element->isPedal())) {
+                || element->isPedal()
+                || element->isLyrics())) {
                   tr.append(staffIdx * VOICES);
                   }
 
