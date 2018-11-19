@@ -85,7 +85,7 @@
       <item row="18" column="0" colspan="3">
        <widget class="QPushButton" name="resetToStyle">
         <property name="text">
-         <string>Reset Text to Style</string>
+         <string>Remove Custom Formatting</string>
         </property>
        </widget>
       </item>
