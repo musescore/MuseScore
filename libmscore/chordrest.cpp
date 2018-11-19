@@ -307,7 +307,7 @@ bool ChordRest::readProperties(XmlReader& e)
 void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
       {
       const ElementType type = info->type();
-      switch(type) {
+      switch (type) {
             case ElementType::SLUR:
                   {
                   Spanner* spanner = toSpanner(info->connector());
@@ -322,13 +322,13 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                               for (ScoreElement* ee : spanner->linkList()) {
                                     if (ee == spanner)
                                           continue;
-                                    Spanner* ls = static_cast<Spanner*>(ee);
+                                    Spanner* ls = toSpanner(ee);
                                     ls->setTick(spanner->tick());
                                     for (ScoreElement* eee : linkList()) {
                                           ChordRest* cr = toChordRest(eee);
                                           if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack(cr->track());
-                                                if (ls->type() == ElementType::SLUR)
+                                                if (ls->isSlur())
                                                       ls->setStartElement(cr);
                                                 break;
                                                 }

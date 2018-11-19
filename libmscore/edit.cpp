@@ -4224,6 +4224,7 @@ void Score::undoAddElement(Element* element)
                         nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
                         nsp->setTrack(ntrack);
 
+#if 0 //whatdoesitdo?
                         QList<int> tl2;
                         if (staff->score()->excerpt() && element->isSlur()) {
                               nsp->setTrack(ntrack);
@@ -4236,6 +4237,7 @@ void Score::undoAddElement(Element* element)
                               }
                         else if (!element->isSlur())
                               nsp->setTrack(ntrack & ~3);
+#endif
 
                         // determine start/end element for slurs
                         // this is only necessary if start/end element is
