@@ -1856,6 +1856,9 @@ MuseScore::MuseScore()
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
             }
+
+      connect(this, SIGNAL(musescoreWindowWasShown()), this, SLOT(initSparkle()),
+            Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
       }
 
 MuseScore::~MuseScore()
@@ -2634,6 +2637,16 @@ void MuseScore::changeEvent(QEvent *e)
                   break;
             }
       }
+
+//---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void MuseScore::showEvent(QShowEvent* showEvent)
+{
+      QMainWindow::showEvent(showEvent);
+      emit musescoreWindowWasShown();
+}
 
 
 //---------------------------------------------------------
@@ -6076,6 +6089,21 @@ void MuseScore::mixerPreferencesChanged(bool showMidiControls)
       }
 
 //---------------------------------------------------------
+//   initSparkle
+//---------------------------------------------------------
+
+void MuseScore::initSparkle()
+{
+#ifdef WIN_SPARKLE_ENABLED
+      // Initialize WinSparkle as soon as the app itself is initialized, right
+      // before entering the event loop:
+      win_sparkle_set_appcast_url(WIN_SPARKLE_APPCAST_URL);
+      win_sparkle_set_app_details(L"musescore.org", L"MuseScore", L"3.0");
+      win_sparkle_init();
+#endif
+}
+
+//---------------------------------------------------------
 //   changeScore
 //    switch current score
 //    step = 1    switch to next score
@@ -7230,14 +7258,6 @@ int main(int argc, char* av[])
 
       if (!restoredSession || files)
             loadScores(argv);
-
-#ifdef WIN_SPARKLE_ENABLED
-      // Initialize WinSparkle as soon as the app itself is initialized, right
-      // before entering the event loop:
-      win_sparkle_set_appcast_url(WIN_SPARKLE_APPCAST_URL);
-      win_sparkle_set_app_details(L"musescore.org", L"MuseScore 3.0", L"3.0");
-      win_sparkle_init();
-#endif
 
 #ifndef MSCORE_NO_UPDATE_CHECKER
       if (mscore->hasToCheckForUpdate())

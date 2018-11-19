@@ -429,6 +429,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void dragEnterEvent(QDragEnterEvent*);
       virtual void dropEvent(QDropEvent*);
       virtual void changeEvent(QEvent *e);
+      virtual void showEvent(QShowEvent *event);
 
       void retranslate();
 
@@ -482,6 +483,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
    signals:
       void windowSplit(bool);
+      void musescoreWindowWasShown();
 
    private slots:
       void cmd(QAction* a, const QString& cmd);
@@ -562,6 +564,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void editWorkspace();
       void changeWorkspace(Workspace* p, bool first=false);
       void mixerPreferencesChanged(bool showMidiControls);
+      void initSparkle();
 
    public:
       MuseScore();
