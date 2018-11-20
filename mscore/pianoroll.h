@@ -98,22 +98,18 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       void focusOnPosition(Position* p);
       void heartBeat(Seq*);
 
-      virtual void dataChanged(const QRectF&);
-      virtual void updateAll();
-      virtual void adjustCanvasPosition(const Element*, bool);
-      virtual void removeScore();
-      virtual void changeEditElement(Element*);
-      virtual QCursor cursor() const;
-      virtual void setCursor(const QCursor&);
-      virtual int gripCount() const;
-      virtual const QTransform& matrix() const;
-      virtual void setDropRectangle(const QRectF&);
-      virtual void cmdAddSlur(Note*, Note*);
-      virtual void cmdAddHairpin(bool) {}
-      virtual void startEdit();
-      virtual void startEdit(Element*, Grip);
-      virtual Element* elementNear(QPointF);
-      virtual void drawBackground(QPainter* /*p*/, const QRectF& /*r*/) const {}
+      virtual void dataChanged(const QRectF&) override;
+      virtual void updateAll() override;
+      virtual void removeScore() override;
+      virtual void changeEditElement(Element*) override;
+      virtual QCursor cursor() const override;
+      virtual void setCursor(const QCursor&) override;
+      virtual int gripCount() const override;
+      const QTransform& matrix() const;
+      virtual void startEdit() override;
+      virtual void startEdit(Element*, Grip) override;
+      virtual Element* elementNear(QPointF) override;
+      virtual void drawBackground(QPainter* /*p*/, const QRectF& /*r*/) const override {}
 
       void setLocator(POS posi, int tick) { locator[int(posi)].setTick(tick); }
 

@@ -67,9 +67,13 @@ void PianoKeyboard::paintEvent(QPaintEvent* /*event*/)
       p.setFont(f);
 
       //Check for drumset, if any
-      Part* part = _staff->part();
-      Drumset* ds = part->instrument()->drumset();
-      Interval transp = part->instrument()->transpose();
+      Drumset* ds = nullptr;
+      Interval transp;
+      if (_staff) {
+            Part* part = _staff->part();
+            ds = part->instrument()->drumset();
+            transp = part->instrument()->transpose();
+            }
 
       p.setPen(QPen(Qt::black, 2));
       
