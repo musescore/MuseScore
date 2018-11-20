@@ -1142,9 +1142,9 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                               }
                         }
                   if (!ots) {
-                        // no time signature found; use measure length to construct one
+                        // no time signature found; use measure timesig to construct one
                         ots = new TimeSig(score());
-                        ots->setSig(len());
+                        ots->setSig(timesig());
                         constructed = true;
                         }
                   // do no replicate local time signatures
