@@ -3877,6 +3877,16 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
       bool first  = system()->firstMeasure() == this;
       const Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
 
+      if (isMMRest()) {
+            // Reset MM rest to initial size and position
+            Rest* mmRest = toRest(findChordRest(tick(), 0));
+            if (mmRest) {
+                  mmRest->rxpos() = 0;
+                  mmRest->layoutMMRest(score()->styleP(Sid::minMMRestWidth) * mag());
+                  mmRest->segment()->createShapes();
+                  }
+            }
+
       while (s) {
             s->rxpos() = x;
             if (!s->enabled()) {
