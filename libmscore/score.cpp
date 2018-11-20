@@ -3108,6 +3108,7 @@ void Score::selectSimilar(Element* e, bool sameStaff)
       pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : -1;
       pattern.voice   = -1;
       pattern.system  = 0;
+      pattern.durationTicks = -1;
 
       score->scanElements(&pattern, collectMatch);
 
@@ -3140,6 +3141,7 @@ void Score::selectSimilarInRange(Element* e)
       pattern.staffEnd = selection().staffEnd();
       pattern.voice   = -1;
       pattern.system  = 0;
+      pattern.durationTicks = -1;
 
       score->scanElementsInRange(&pattern, collectMatch);
 
