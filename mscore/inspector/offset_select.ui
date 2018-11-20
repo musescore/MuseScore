@@ -2,15 +2,10 @@
 <ui version="4.0">
  <class>OffsetSelect</class>
  <widget class="QWidget" name="OffsetSelect">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>228</width>
-    <height>22</height>
-   </rect>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -24,88 +19,111 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QDoubleSpinBox" name="xVal">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>2</number>
      </property>
-     <property name="accessibleName">
-      <string>Horizontal offset</string>
-     </property>
-     <property name="prefix">
-      <string extracomment="horizontal">X:</string>
-     </property>
-     <property name="suffix">
-      <string>sp</string>
-     </property>
-     <property name="minimum">
-      <double>-99.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.200000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="hRaster">
-     <property name="accessibleName">
-      <string>Snap to grid</string>
-     </property>
-     <property name="text">
-      <string notr="true"/>
-     </property>
-     <property name="icon">
-      <iconset resource="../musescore.qrc">
-       <normaloff>:/data/icons/raster-horizontal.svg</normaloff>:/data/icons/raster-horizontal.svg</iconset>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QDoubleSpinBox" name="yVal">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="accessibleName">
-      <string>Vertical offset</string>
-     </property>
-     <property name="prefix">
-      <string extracomment="vertical">Y:</string>
-     </property>
-     <property name="suffix">
-      <string>sp</string>
-     </property>
-     <property name="minimum">
-      <double>-99.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.200000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="vRaster">
-     <property name="accessibleName">
-      <string>Snap to grid</string>
-     </property>
-     <property name="text">
-      <string notr="true"/>
-     </property>
-     <property name="icon">
-      <iconset resource="../musescore.qrc">
-       <normaloff>:/data/icons/raster-vertical.svg</normaloff>:/data/icons/raster-vertical.svg</iconset>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>X:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="xVal">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Horizontal offset</string>
+         </property>
+         <property name="suffix">
+          <string>sp</string>
+         </property>
+         <property name="minimum">
+          <double>-99.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.200000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="hRaster">
+         <property name="accessibleName">
+          <string>Snap to grid</string>
+         </property>
+         <property name="text">
+          <string notr="true"/>
+         </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/raster-horizontal.svg</normaloff>:/data/icons/raster-horizontal.svg</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Y:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="yVal">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="accessibleName">
+          <string>Vertical offset</string>
+         </property>
+         <property name="suffix">
+          <string>sp</string>
+         </property>
+         <property name="minimum">
+          <double>-99.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.200000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="vRaster">
+         <property name="accessibleName">
+          <string>Snap to grid</string>
+         </property>
+         <property name="text">
+          <string notr="true"/>
+         </property>
+         <property name="icon">
+          <iconset resource="../musescore.qrc">
+           <normaloff>:/data/icons/raster-vertical.svg</normaloff>:/data/icons/raster-vertical.svg</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorDynamic</class>
  <widget class="QWidget" name="InspectorDynamic">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>176</width>
-    <height>111</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Dynamic Inspector</string>
   </property>
@@ -81,6 +73,9 @@
         <property name="text">
          <string>Dynamic range:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>dynRange</cstring>
         </property>
@@ -90,6 +85,9 @@
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Velocity:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>velocity</cstring>
@@ -136,9 +134,6 @@
         <property name="accessibleName">
          <string>Reset 'Dynamic range' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -152,9 +147,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Placement' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -183,6 +175,9 @@
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Placement:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>placement</cstring>

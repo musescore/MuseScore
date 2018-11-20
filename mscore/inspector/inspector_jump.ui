@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorJump</class>
  <widget class="QWidget" name="InspectorJump">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>205</width>
-    <height>129</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Jump Inspector</string>
   </property>
@@ -88,6 +80,9 @@
         <property name="text">
          <string>Jump to:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>jumpTo</cstring>
         </property>
@@ -98,6 +93,9 @@
         <property name="text">
          <string>Play until:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>playUntil</cstring>
         </property>
@@ -107,6 +105,9 @@
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Continue at:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>continueAt</cstring>
@@ -129,9 +130,6 @@
       </item>
       <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="playRepeats">
-        <property name="accessibleName">
-         <string>Play repeats</string>
-        </property>
         <property name="text">
          <string>Play repeats</string>
         </property>
@@ -144,9 +142,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Play repeats' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

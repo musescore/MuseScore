@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorClef</class>
  <widget class="QWidget" name="InspectorClef">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>127</width>
-    <height>69</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Clef Inspector</string>
   </property>
@@ -87,9 +79,6 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Show courtesy</string>
-        </property>
         <property name="text">
          <string>Show courtesy</string>
         </property>
@@ -102,9 +91,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Show courtesy' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

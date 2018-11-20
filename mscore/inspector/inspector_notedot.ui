@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorNoteDot</class>
  <widget class="QWidget" name="InspectorNoteDot">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>303</width>
-    <height>525</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Note Inspector</string>
   </property>
@@ -49,6 +41,19 @@
     </widget>
    </item>
    <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QWidget" name="panel" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
@@ -68,6 +73,9 @@
         <property name="text">
          <string>Dot position:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>dotPosition</cstring>
         </property>
@@ -77,12 +85,6 @@
        <widget class="QComboBox" name="dotPosition">
         <property name="accessibleName">
          <string>Dot position</string>
-        </property>
-        <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
         </property>
         <item>
          <property name="text">
@@ -103,20 +105,11 @@
       </item>
       <item row="1" column="2">
        <widget class="QToolButton" name="resetDotPosition">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
          <string>Reset 'Dot position' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

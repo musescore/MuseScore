@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorTuplet</class>
  <widget class="QWidget" name="InspectorTuplet">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>331</width>
-    <height>268</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Tuplet Inspector</string>
   </property>
@@ -49,19 +41,26 @@
     </widget>
    </item>
    <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QWidget" name="panel_2" native="true">
      <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0">
       <property name="leftMargin">
        <number>3</number>
       </property>
-      <property name="topMargin">
-       <number>1</number>
-      </property>
       <property name="rightMargin">
        <number>3</number>
-      </property>
-      <property name="bottomMargin">
-       <number>1</number>
       </property>
       <property name="horizontalSpacing">
        <number>3</number>
@@ -98,9 +97,6 @@
         <property name="accessibleName">
          <string>Reset 'Font size' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -122,12 +118,6 @@
       </item>
       <item row="0" column="0" colspan="2">
        <widget class="QFontComboBox" name="tupletFontFace">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Font face</string>
         </property>
@@ -144,16 +134,13 @@
         <property name="accessibleName">
          <string>Reset 'Font face' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="3">
+      <item row="2" column="0" colspan="2">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QPushButton" name="tupletBold">
@@ -180,9 +167,6 @@
           <property name="accessibleName">
            <string>Reset 'Bold' value</string>
           </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -193,12 +177,6 @@
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
           </property>
          </spacer>
         </item>
@@ -227,9 +205,6 @@
           <property name="accessibleName">
            <string>Reset 'Italic' value</string>
           </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -241,22 +216,10 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
          </spacer>
         </item>
         <item>
          <widget class="QToolButton" name="tupletUnderline">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="toolTip">
            <string>Font style: Underline</string>
           </property>
@@ -279,9 +242,6 @@
           </property>
           <property name="accessibleName">
            <string>Reset 'Underline' value</string>
-          </property>
-          <property name="text">
-           <string notr="true"/>
           </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
@@ -314,7 +274,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
+    <widget class="QFrame" name="frame_1">
      <property name="frameShape">
       <enum>QFrame::HLine</enum>
      </property>
@@ -349,9 +309,6 @@
         <property name="accessibleName">
          <string>Reset 'Number type' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -365,9 +322,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Bracket type' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -402,6 +356,9 @@
         <property name="text">
          <string>Number type:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>numberType</cstring>
         </property>
@@ -411,6 +368,9 @@
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Bracket type:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>bracketType</cstring>
@@ -443,6 +403,9 @@
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Direction:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>direction</cstring>
@@ -479,9 +442,6 @@
         <property name="accessibleName">
          <string>Reset 'Direction' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -492,6 +452,9 @@
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Line width:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>lineWidth</cstring>
@@ -519,9 +482,6 @@
         <property name="accessibleName">
          <string>Reset 'Line width' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -534,7 +494,7 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>title</tabstop>
+  <tabstop>title_2</tabstop>
   <tabstop>tupletFontFace</tabstop>
   <tabstop>resetTupletFontFace</tabstop>
   <tabstop>tupletFontSize</tabstop>
@@ -545,7 +505,7 @@
   <tabstop>resetTupletItalic</tabstop>
   <tabstop>tupletUnderline</tabstop>
   <tabstop>resetTupletUnderline</tabstop>
-  <tabstop>title_2</tabstop>
+  <tabstop>title</tabstop>
   <tabstop>direction</tabstop>
   <tabstop>resetDirection</tabstop>
   <tabstop>numberType</tabstop>

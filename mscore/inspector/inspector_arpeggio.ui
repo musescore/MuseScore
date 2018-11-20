@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorArpeggio</class>
  <widget class="QWidget" name="InspectorArpeggio">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>284</width>
-    <height>180</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Arpeggio Inspector</string>
   </property>
@@ -78,14 +70,8 @@
       </property>
       <item row="1" column="0" colspan="2">
        <widget class="QCheckBox" name="playArpeggio">
-        <property name="accessibleName">
-         <string>Play</string>
-        </property>
         <property name="text">
          <string>Play</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -93,6 +79,9 @@
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Stretch:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>stretch</cstring>
@@ -134,7 +123,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="stretch"/>
+       <widget class="QDoubleSpinBox" name="stretch">
+        <property name="accessibleName">
+         <string>Stretch</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -143,8 +136,10 @@
  </widget>
  <tabstops>
   <tabstop>title</tabstop>
+  <tabstop>stretch</tabstop>
   <tabstop>resetStretch</tabstop>
   <tabstop>playArpeggio</tabstop>
+  <tabstop>resetPlayArpeggio</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

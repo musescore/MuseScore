@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorHarmony</class>
  <widget class="QWidget" name="InspectorHarmony">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>209</width>
-    <height>119</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Chord Symbol Inspector</string>
   </property>
@@ -100,9 +92,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Style' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

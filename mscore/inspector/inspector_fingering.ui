@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorFingering</class>
  <widget class="QWidget" name="InspectorFingering">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>154</width>
-    <height>69</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Fingering Inspector</string>
   </property>
@@ -81,6 +73,9 @@
         <property name="text">
          <string>Style:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>style</cstring>
         </property>
@@ -100,9 +95,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Style' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

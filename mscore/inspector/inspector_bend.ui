@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorBend</class>
  <widget class="QWidget" name="InspectorBend">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>360</width>
-    <height>218</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string/>
   </property>
@@ -84,6 +76,9 @@
         <property name="text">
          <string>Font size:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>fontSize</cstring>
         </property>
@@ -97,14 +92,8 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="accessibleName">
-         <string>Play</string>
-        </property>
         <property name="text">
          <string>Play</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -123,9 +112,6 @@
         <property name="accessibleName">
          <string>Reset 'Play' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -137,25 +123,10 @@
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
        </spacer>
       </item>
       <item row="1" column="1">
        <widget class="QFontComboBox" name="fontFace">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="accessibleName">
          <string>Font face</string>
         </property>
@@ -165,6 +136,9 @@
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Font face:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>fontFace</cstring>
@@ -186,9 +160,6 @@
         <property name="accessibleName">
          <string>Reset 'Font size' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -203,9 +174,6 @@
         <property name="accessibleName">
          <string>Reset 'Font face' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -216,6 +184,43 @@
        <widget class="QLabel" name="label_9">
         <property name="text">
          <string>Font style:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Line width:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="lineWidth">
+        <property name="accessibleName">
+         <string>Line width</string>
+        </property>
+        <property name="suffix">
+         <string>sp</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QToolButton" name="resetLineWidth">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Font face' value</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -243,9 +248,6 @@
           <property name="accessibleName">
            <string>Reset 'Bold' value</string>
           </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -256,12 +258,6 @@
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
           </property>
          </spacer>
         </item>
@@ -287,9 +283,6 @@
           <property name="accessibleName">
            <string>Reset 'Italic' value</string>
           </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -301,22 +294,10 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
          </spacer>
         </item>
         <item>
          <widget class="QToolButton" name="underline">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="accessibleName">
            <string>Underline</string>
           </property>
@@ -337,63 +318,13 @@
           <property name="accessibleName">
            <string>Reset 'Underline' value</string>
           </property>
-          <property name="text">
-           <string notr="true"/>
-          </property>
           <property name="icon">
            <iconset resource="../musescore.qrc">
             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
           </property>
          </widget>
         </item>
-        <item>
-         <spacer name="horizontalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
        </layout>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Line width:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="lineWidth">
-        <property name="accessibleName">
-         <string>Line width</string>
-        </property>
-        <property name="suffix">
-         <string>sp</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetLineWidth">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font face' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>
@@ -402,6 +333,8 @@
  </widget>
  <tabstops>
   <tabstop>title</tabstop>
+  <tabstop>lineWidth</tabstop>
+  <tabstop>resetLineWidth</tabstop>
   <tabstop>fontFace</tabstop>
   <tabstop>resetFontFace</tabstop>
   <tabstop>fontSize</tabstop>

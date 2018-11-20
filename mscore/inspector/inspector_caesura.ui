@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorCaesura</class>
  <widget class="QWidget" name="InspectorCaesura">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>141</width>
-    <height>69</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Breath/Caesura Inspector</string>
   </property>
@@ -100,6 +92,9 @@
         <property name="text">
          <string>Pause:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>pause</cstring>
         </property>
@@ -112,9 +107,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Pause' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

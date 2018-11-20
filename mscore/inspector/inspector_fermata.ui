@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorFermata</class>
  <widget class="QWidget" name="InspectorFermata">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>284</width>
-    <height>180</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Fermata Inspector</string>
   </property>
@@ -81,6 +73,9 @@
         <property name="text">
          <string>Placement:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>placement</cstring>
         </property>
@@ -108,6 +103,9 @@
         <property name="text">
          <string>Time stretch:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>timeStretch</cstring>
         </property>
@@ -120,9 +118,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Direction' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -148,9 +143,6 @@
         <property name="accessibleName">
          <string>Reset 'Time stretch' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -165,9 +157,6 @@
         <property name="accessibleName">
          <string>Reset 'Play' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -176,14 +165,8 @@
       </item>
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="playArticulation">
-        <property name="accessibleName">
-         <string>Play</string>
-        </property>
         <property name="text">
          <string>Play</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
