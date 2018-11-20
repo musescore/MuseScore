@@ -897,9 +897,9 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                               Element* nel = el->clone();
                               addRefresh(target->abbox());   // layout() ?!
                               EditData ddata(view);
-                              ddata.view       = view;
-                              ddata.element    = nel;
-                              ddata.duration   = duration;
+                              ddata.view        = view;
+                              ddata.dropElement = nel;
+                              ddata.duration    = duration;
                               if (target->acceptDrop(ddata)) {
                                     target->drop(ddata);
                                     if (_selection.element())
