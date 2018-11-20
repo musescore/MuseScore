@@ -184,6 +184,8 @@ void AbstractSlider::mouseDoubleClickEvent(QMouseEvent* ev)
 
 void AbstractSlider::setValue(double val)
       {
+      double oldValue = _value;
+
       if (_log) {
             if (val == 0.0f)
                   _value = _minValue;
@@ -196,7 +198,9 @@ void AbstractSlider::setValue(double val)
       else
             _value = val;
 
-      emit valueChanged(val, __id);
+      if (oldValue != _value)
+            emit valueChanged(val, __id);
+
       update();
       }
 
