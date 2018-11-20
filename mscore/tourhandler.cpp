@@ -427,8 +427,8 @@ void TourHandler::displayTour(Tour* tour)
             mbox->setText(tourMessages[i].message);
 
             // Add "Do not show again" checkbox
-            QCheckBox* showToursBox = new QCheckBox(tr("Do not show me tours"), mbox);
-            showToursBox->setChecked(!showTours);
+            QCheckBox* showToursBox = new QCheckBox(tr("Show tours on startup"), mbox);
+            showToursBox->setChecked(showTours);
             mbox->setCheckBox(showToursBox);
 
             // Display the message box, position it if needed
@@ -443,7 +443,7 @@ void TourHandler::displayTour(Tour* tour)
             overlay->show();
             mbox->exec();
             overlay->hide();
-            showTours = !(showToursBox->isChecked());
+            showTours = (showToursBox->isChecked());
 
             // Handle the button presses
             if (mbox->clickedButton() == nextButton) {
