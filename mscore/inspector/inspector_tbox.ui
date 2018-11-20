@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorTBox</class>
  <widget class="QWidget" name="InspectorTBox">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>203</width>
-    <height>182</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Text Frame Inspector</string>
   </property>
@@ -81,6 +73,9 @@
         <property name="text">
          <string>Bottom gap:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>bottomGap</cstring>
         </property>
@@ -90,6 +85,9 @@
        <widget class="QLabel" name="label_6">
         <property name="text">
          <string>Top margin:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>topMargin</cstring>
@@ -107,9 +105,6 @@
         <property name="accessibleName">
          <string>Reset 'Top gap' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -123,9 +118,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Bottom gap' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -154,6 +146,9 @@
         <property name="text">
          <string>Bottom margin:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>bottomMargin</cstring>
         </property>
@@ -167,9 +162,6 @@
         <property name="accessibleName">
          <string>Reset 'Right margin' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -180,6 +172,9 @@
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Right margin:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>rightMargin</cstring>
@@ -209,9 +204,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Bottom margin' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -250,9 +242,6 @@
         <property name="accessibleName">
          <string>Reset 'Top margin' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -266,9 +255,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Left margin' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -303,6 +289,9 @@
         <property name="text">
          <string>Top gap:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>topGap</cstring>
         </property>
@@ -331,6 +320,9 @@
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Left margin:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>leftMargin</cstring>

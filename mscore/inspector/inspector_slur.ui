@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorSlur</class>
  <widget class="QWidget" name="InspectorSlur">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>177</width>
-    <height>91</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Slur/Tie Inspector</string>
   </property>
@@ -84,9 +76,6 @@
         <property name="accessibleName">
          <string>Reset 'Line type' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -97,6 +86,9 @@
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Line type:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>lineType</cstring>
@@ -138,9 +130,6 @@
         <property name="accessibleName">
          <string>Reset 'Direction' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -151,6 +140,9 @@
        <widget class="QLabel" name="label_1">
         <property name="text">
          <string>Direction:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>slurDirection</cstring>

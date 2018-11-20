@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorLyric</class>
  <widget class="QWidget" name="InspectorLyric">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>301</width>
-    <height>141</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Lyrics Inspector</string>
   </property>
@@ -81,6 +73,9 @@
         <property name="text">
          <string>Placement:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>placement</cstring>
         </property>
@@ -108,6 +103,9 @@
         <property name="text">
          <string>Verse:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>verse</cstring>
         </property>
@@ -131,9 +129,6 @@
         <property name="accessibleName">
          <string>Reset 'Direction' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -147,9 +142,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Verse' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

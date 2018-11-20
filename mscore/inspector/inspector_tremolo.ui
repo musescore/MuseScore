@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorTremoloBar</class>
  <widget class="QWidget" name="InspectorTremoloBar">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>151</width>
-    <height>152</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Tremolo Bar Inspector</string>
   </property>
@@ -106,6 +98,9 @@
         <property name="text">
          <string>Line Width:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>lineWidth</cstring>
         </property>
@@ -119,21 +114,12 @@
         <property name="sizeType">
          <enum>QSizePolicy::Fixed</enum>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
        </spacer>
       </item>
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="play">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Play</string>
         </property>
         <property name="text">
          <string>Play</string>
@@ -148,9 +134,6 @@
         <property name="accessibleName">
          <string>Reset 'Play' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -161,6 +144,9 @@
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Scale:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>mag</cstring>
@@ -174,9 +160,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Line width' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -217,9 +200,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Scale' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

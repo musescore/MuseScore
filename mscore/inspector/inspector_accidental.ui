@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorAccidental</class>
  <widget class="QWidget" name="InspectorAccidental">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>174</width>
-    <height>91</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Accidental Inspector</string>
   </property>
@@ -84,9 +76,6 @@
         <property name="accessibleName">
          <string>Reset 'Bracket type' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -100,9 +89,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Small' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -122,6 +108,9 @@
         <property name="text">
          <string>Bracket type:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>bracket</cstring>
         </property>
@@ -131,9 +120,6 @@
        <widget class="QCheckBox" name="small">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Small</string>
         </property>
         <property name="text">
          <string>Small</string>

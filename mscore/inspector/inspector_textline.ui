@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorTextLine</class>
  <widget class="QWidget" name="InspectorTextLine">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>353</width>
-    <height>215</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Text Line Inspector</string>
   </property>
@@ -60,12 +52,6 @@
    </item>
    <item>
     <widget class="QWidget" name="panel" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>0</number>
@@ -89,9 +75,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Placement' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -121,6 +104,9 @@
         <property name="text">
          <string>Placement:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>placement</cstring>
         </property>
@@ -133,6 +119,8 @@
  </widget>
  <tabstops>
   <tabstop>title</tabstop>
+  <tabstop>placement</tabstop>
+  <tabstop>resetPlacement</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

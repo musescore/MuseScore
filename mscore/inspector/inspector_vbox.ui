@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorVBox</class>
  <widget class="QWidget" name="InspectorVBox">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>203</width>
-    <height>202</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Vertical Frame Inspector</string>
   </property>
@@ -81,6 +73,9 @@
         <property name="text">
          <string>Right margin:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>rightMargin</cstring>
         </property>
@@ -97,9 +92,6 @@
         <property name="accessibleName">
          <string>Reset 'Top gap' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -114,9 +106,6 @@
         <property name="accessibleName">
          <string>Reset 'Bottom gap' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -128,6 +117,9 @@
         <property name="text">
          <string>Bottom margin:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>bottomMargin</cstring>
         </property>
@@ -135,12 +127,6 @@
       </item>
       <item row="4" column="1">
        <widget class="QDoubleSpinBox" name="leftMargin">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="accessibleName">
          <string>Left margin</string>
         </property>
@@ -182,6 +168,9 @@
         <property name="text">
          <string>Top gap:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>topGap</cstring>
         </property>
@@ -207,6 +196,9 @@
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Height:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>height</cstring>
@@ -237,6 +229,9 @@
         <property name="text">
          <string>Top margin:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>topMargin</cstring>
         </property>
@@ -247,6 +242,9 @@
         <property name="text">
          <string>Left margin:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>leftMargin</cstring>
         </property>
@@ -256,6 +254,9 @@
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Bottom gap:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>bottomGap</cstring>
@@ -318,9 +319,6 @@
         <property name="accessibleName">
          <string>Reset 'Left margin' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -334,9 +332,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Right margin' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -352,9 +347,6 @@
         <property name="accessibleName">
          <string>Reset 'Top margin' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -369,9 +361,6 @@
         <property name="accessibleName">
          <string>Reset 'Bottom margin' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -379,11 +368,7 @@
        </widget>
       </item>
       <item row="3" column="0" colspan="3">
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
+       <widget class="Line" name="line"/>
       </item>
      </layout>
     </widget>

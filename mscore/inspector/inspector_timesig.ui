@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorTimeSig</class>
  <widget class="QWidget" name="InspectorTimeSig">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>217</width>
-    <height>182</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Time Signature Inspector</string>
   </property>
@@ -78,20 +70,11 @@
       </property>
       <item row="0" column="2">
        <widget class="QToolButton" name="resetShowCourtesy">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
          <string>Reset 'Show courtesy' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -101,17 +84,8 @@
       </item>
       <item row="0" column="0" colspan="2">
        <widget class="QCheckBox" name="showCourtesy">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Show courtesy</string>
         </property>
         <property name="text">
          <string>Show courtesy</string>
@@ -123,24 +97,18 @@
         <property name="text">
          <string>Scale:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
        </widget>
       </item>
       <item row="1" column="2">
        <widget class="QToolButton" name="resetScale">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
          <string>Reset 'Scale' values</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

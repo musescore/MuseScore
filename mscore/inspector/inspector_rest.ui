@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorRest</class>
  <widget class="QWidget" name="InspectorRest">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>80</width>
-    <height>69</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Rest Inspector</string>
   </property>
@@ -84,9 +76,6 @@
         <property name="accessibleName">
          <string>Reset 'Small' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -97,9 +86,6 @@
        <widget class="QCheckBox" name="small">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Small</string>
         </property>
         <property name="text">
          <string>Small</string>

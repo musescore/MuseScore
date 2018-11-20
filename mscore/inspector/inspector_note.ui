@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorNote</class>
  <widget class="QWidget" name="InspectorNote">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>303</width>
-    <height>525</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Note Inspector</string>
   </property>
@@ -84,27 +76,15 @@
         <property name="maxVisibleItems">
          <number>14</number>
         </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
        </widget>
       </item>
       <item row="5" column="2">
        <widget class="QToolButton" name="resetTuning">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
          <string>Reset 'Tuning' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -132,9 +112,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Velocity' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -177,15 +154,15 @@
         <property name="accessibleName">
          <string>Head type</string>
         </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
        </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Mirror head:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>mirrorHead</cstring>
@@ -196,9 +173,6 @@
        <widget class="QComboBox" name="mirrorHead">
         <property name="accessibleName">
          <string>Mirror Head</string>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
         </property>
         <item>
          <property name="text">
@@ -238,6 +212,9 @@
         <property name="text">
          <string>Head type:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>noteHeadType</cstring>
         </property>
@@ -245,20 +222,11 @@
       </item>
       <item row="7" column="2">
        <widget class="QToolButton" name="resetVelocityType">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
          <string>Reset 'Velocity type' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -271,6 +239,9 @@
         <property name="text">
          <string>Head group:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>noteHeadGroup</cstring>
         </property>
@@ -281,6 +252,9 @@
         <property name="text">
          <string>Line:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>fixedLine</cstring>
         </property>
@@ -288,20 +262,11 @@
       </item>
       <item row="6" column="2">
        <widget class="QToolButton" name="resetPlay">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
          <string>Reset 'Play' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -311,20 +276,11 @@
       </item>
       <item row="1" column="2">
        <widget class="QToolButton" name="resetSmall">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
          <string>Reset 'Small' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -337,6 +293,9 @@
         <property name="text">
          <string>Velocity:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>velocity</cstring>
         </property>
@@ -347,6 +306,9 @@
         <property name="text">
          <string>Tuning:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>tuning</cstring>
         </property>
@@ -354,20 +316,11 @@
       </item>
       <item row="4" column="2">
        <widget class="QToolButton" name="resetMirrorHead">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
          <string>Reset 'Mirror head' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -380,6 +333,9 @@
         <property name="text">
          <string>Velocity type:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>velocityType</cstring>
         </property>
@@ -387,20 +343,11 @@
       </item>
       <item row="2" column="2">
        <widget class="QToolButton" name="resetNoteHeadGroup">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
          <string>Reset 'Head group' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -410,20 +357,11 @@
       </item>
       <item row="3" column="2">
        <widget class="QToolButton" name="resetNoteHeadType">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
          <string>Reset 'Head type' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -439,9 +377,6 @@
         <property name="accessibleName">
          <string>Reset 'Fix to line' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -456,9 +391,6 @@
         <property name="accessibleName">
          <string>Reset 'Line' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -470,9 +402,6 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Small</string>
-        </property>
         <property name="text">
          <string>Small</string>
         </property>
@@ -483,9 +412,6 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Play</string>
-        </property>
         <property name="text">
          <string>Play</string>
         </property>
@@ -495,9 +421,6 @@
        <widget class="QCheckBox" name="fixed">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Fix to line</string>
         </property>
         <property name="text">
          <string>Fix to line</string>
@@ -514,8 +437,8 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>40</height>
+       <width>0</width>
+       <height>0</height>
       </size>
      </property>
     </spacer>
@@ -623,6 +546,14 @@
   <tabstop>resetFixed</tabstop>
   <tabstop>fixedLine</tabstop>
   <tabstop>resetFixedLine</tabstop>
+  <tabstop>dot1</tabstop>
+  <tabstop>dot2</tabstop>
+  <tabstop>dot3</tabstop>
+  <tabstop>dot4</tabstop>
+  <tabstop>hook</tabstop>
+  <tabstop>stem</tabstop>
+  <tabstop>beam</tabstop>
+  <tabstop>tuplet</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

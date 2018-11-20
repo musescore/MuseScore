@@ -2,16 +2,8 @@
 <ui version="4.0">
  <class>InspectorTextLineBase</class>
  <widget class="QWidget" name="InspectorTextLineBase">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>361</width>
-    <height>814</height>
-   </rect>
-  </property>
   <property name="accessibleName">
-   <string>Text Line Inspector</string>
+   <string>Text Line Core Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -94,16 +86,13 @@
          <property name="bottomMargin">
           <number>10</number>
          </property>
-         <property name="horizontalSpacing">
-          <number>6</number>
-         </property>
          <property name="verticalSpacing">
           <number>0</number>
          </property>
          <item row="0" column="1">
           <widget class="QLineEdit" name="beginText">
            <property name="accessibleName">
-            <string>Text</string>
+            <string>Begin text</string>
            </property>
           </widget>
          </item>
@@ -142,6 +131,9 @@
            <property name="text">
             <string>Offset:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
            <property name="buddy">
             <cstring>beginTextOffset</cstring>
            </property>
@@ -154,9 +146,6 @@
            </property>
            <property name="accessibleName">
             <string>Reset 'Size' value</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
@@ -184,9 +173,6 @@
            </property>
            <property name="accessibleName">
             <string>Reset 'Placement' value</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
@@ -218,9 +204,6 @@
              <property name="accessibleName">
               <string>Reset 'Bold' value</string>
              </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -231,12 +214,6 @@
             <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
              </property>
             </spacer>
            </item>
@@ -262,9 +239,6 @@
              <property name="accessibleName">
               <string>Reset 'Italic' value</string>
              </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -276,22 +250,10 @@
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
             </spacer>
            </item>
            <item>
             <widget class="QToolButton" name="beginFontUnderline">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
              <property name="accessibleName">
               <string>Underline</string>
              </property>
@@ -312,27 +274,11 @@
              <property name="accessibleName">
               <string>Reset 'Underline' value</string>
              </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_4">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </item>
@@ -344,9 +290,6 @@
            <property name="accessibleName">
             <string>Reset 'Text' value</string>
            </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -355,12 +298,6 @@
          </item>
          <item row="1" column="1">
           <widget class="QFontComboBox" name="beginFontFace">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
            <property name="accessibleName">
             <string>Font face</string>
            </property>
@@ -380,9 +317,6 @@
            </property>
            <property name="accessibleName">
             <string>Reset 'Font face' value</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
@@ -408,6 +342,9 @@
            <property name="text">
             <string>Placement:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
            <property name="buddy">
             <cstring>beginTextPlacement</cstring>
            </property>
@@ -431,9 +368,6 @@
            <property name="accessibleName">
             <string>Reset 'Offset' value</string>
            </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -441,12 +375,19 @@
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="Ms::OffsetSelect" name="beginTextOffset" native="true"/>
+          <widget class="Ms::OffsetSelect" name="beginTextOffset" native="true">
+           <property name="accessibleName">
+            <string>Offset</string>
+           </property>
+          </widget>
          </item>
          <item row="4" column="1">
           <widget class="Ms::AlignSelect" name="beginTextAlign" native="true">
            <property name="toolTip">
-            <string>Text Alignment</string>
+            <string>Text alignment</string>
+           </property>
+           <property name="accessibleName">
+            <string>Alignment</string>
            </property>
           </widget>
          </item>
@@ -457,9 +398,6 @@
            </property>
            <property name="accessibleName">
             <string>Reset 'Alignment' values</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
@@ -488,9 +426,6 @@
         <property name="accessibleName">
          <string>Reset 'Begin hook' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -499,12 +434,6 @@
       </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="beginHookType">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="accessibleName">
          <string>Begin hook</string>
         </property>
@@ -517,9 +446,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Height' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -586,9 +512,6 @@
              <property name="accessibleName">
               <string>Reset 'Bold' value</string>
              </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -599,12 +522,6 @@
             <spacer name="horizontalSpacer_3">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
              </property>
             </spacer>
            </item>
@@ -630,9 +547,6 @@
              <property name="accessibleName">
               <string>Reset 'Italic' value</string>
              </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -644,22 +558,10 @@
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
             </spacer>
            </item>
            <item>
             <widget class="QToolButton" name="continueFontUnderline">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
              <property name="accessibleName">
               <string>Underline</string>
              </property>
@@ -680,27 +582,11 @@
              <property name="accessibleName">
               <string>Reset 'Underline' value</string>
              </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_6">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </item>
@@ -724,18 +610,12 @@
          <item row="0" column="1">
           <widget class="QLineEdit" name="continueText">
            <property name="accessibleName">
-            <string>Text</string>
+            <string>Continue text</string>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
           <widget class="QFontComboBox" name="continueFontFace">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
            <property name="accessibleName">
             <string>Font face</string>
            </property>
@@ -778,6 +658,9 @@
           <widget class="QLabel" name="label_14">
            <property name="text">
             <string>Placement:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <property name="buddy">
             <cstring>continueTextPlacement</cstring>
@@ -880,13 +763,20 @@
            <property name="text">
             <string>Offset:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
            <property name="buddy">
             <cstring>continueTextOffset</cstring>
            </property>
           </widget>
          </item>
          <item row="7" column="1">
-          <widget class="Ms::OffsetSelect" name="continueTextOffset" native="true"/>
+          <widget class="Ms::OffsetSelect" name="continueTextOffset" native="true">
+           <property name="accessibleName">
+            <string>Offset</string>
+           </property>
+          </widget>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_8">
@@ -901,7 +791,10 @@
          <item row="5" column="1">
           <widget class="Ms::AlignSelect" name="continueTextAlign" native="true">
            <property name="toolTip">
-            <string>Text Alignment</string>
+            <string>Text alignment</string>
+           </property>
+           <property name="accessibleName">
+            <string>Alignment</string>
            </property>
           </widget>
          </item>
@@ -933,9 +826,6 @@
         <property name="accessibleName">
          <string>Reset 'End hook' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -945,7 +835,7 @@
       <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="beginHookHeight">
         <property name="accessibleName">
-         <string>Height</string>
+         <string>Begin hook height</string>
         </property>
         <property name="suffix">
          <string>sp</string>
@@ -962,6 +852,9 @@
         </property>
         <property name="text">
          <string>End hook:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>endHookType</cstring>
@@ -986,16 +879,26 @@
         <property name="text">
          <string>Begin hook:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>beginHookType</cstring>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QComboBox" name="endHookType"/>
+       <widget class="QComboBox" name="endHookType">
+        <property name="accessibleName">
+         <string>End hook</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="endHookHeightLabel">
+        <property name="accessibleName">
+         <string>End hook height</string>
+        </property>
         <property name="text">
          <string>Height:</string>
         </property>
@@ -1028,9 +931,6 @@
         <property name="accessibleName">
          <string>Reset 'Height' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -1050,15 +950,15 @@
           <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>0</number>
+          <number>10</number>
          </property>
-         <property name="spacing">
+         <property name="verticalSpacing">
           <number>0</number>
          </property>
          <item row="0" column="1">
           <widget class="QLineEdit" name="endText">
            <property name="accessibleName">
-            <string>Text</string>
+            <string>End text</string>
            </property>
           </widget>
          </item>
@@ -1087,9 +987,6 @@
            <property name="accessibleName">
             <string>Reset 'Placement' value</string>
            </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -1100,6 +997,9 @@
           <widget class="QLabel" name="label_22">
            <property name="text">
             <string>Placement:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <property name="buddy">
             <cstring>endTextPlacement</cstring>
@@ -1120,7 +1020,11 @@
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="Ms::OffsetSelect" name="endTextOffset" native="true"/>
+          <widget class="Ms::OffsetSelect" name="endTextOffset" native="true">
+           <property name="accessibleName">
+            <string>Offset</string>
+           </property>
+          </widget>
          </item>
          <item row="3" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -1146,9 +1050,6 @@
              <property name="accessibleName">
               <string>Reset 'Bold' value</string>
              </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -1159,12 +1060,6 @@
             <spacer name="horizontalSpacer_7">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
              </property>
             </spacer>
            </item>
@@ -1190,9 +1085,6 @@
              <property name="accessibleName">
               <string>Reset 'Italic' value</string>
              </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -1204,22 +1096,10 @@
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
             </spacer>
            </item>
            <item>
             <widget class="QToolButton" name="endFontUnderline">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
              <property name="accessibleName">
               <string>Underline</string>
              </property>
@@ -1240,38 +1120,16 @@
              <property name="accessibleName">
               <string>Reset 'Underline' value</string>
              </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
              <property name="icon">
               <iconset resource="../musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
-           <item>
-            <spacer name="horizontalSpacer_9">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
           </layout>
          </item>
          <item row="1" column="1">
           <widget class="QFontComboBox" name="endFontFace">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
            <property name="accessibleName">
             <string>Font face</string>
            </property>
@@ -1301,9 +1159,6 @@
            </property>
            <property name="accessibleName">
             <string>Reset 'Font face' value</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
@@ -1345,9 +1200,6 @@
            <property name="accessibleName">
             <string>Reset 'Text' value</string>
            </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -1362,9 +1214,6 @@
            <property name="accessibleName">
             <string>Reset 'Size' value</string>
            </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
              <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -1375,6 +1224,9 @@
           <widget class="QLabel" name="label_16">
            <property name="text">
             <string>Offset:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <property name="buddy">
             <cstring>endTextOffset</cstring>
@@ -1388,9 +1240,6 @@
            </property>
            <property name="accessibleName">
             <string>Reset 'Offset' value</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
@@ -1411,7 +1260,10 @@
          <item row="4" column="1">
           <widget class="Ms::AlignSelect" name="endTextAlign" native="true">
            <property name="toolTip">
-            <string>Text Alignment</string>
+            <string>Text alignment</string>
+           </property>
+           <property name="accessibleName">
+            <string>Alignment</string>
            </property>
           </widget>
          </item>
@@ -1422,9 +1274,6 @@
            </property>
            <property name="accessibleName">
             <string>Reset 'Alignment' values</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="../musescore.qrc">
@@ -1443,9 +1292,6 @@
           <bold>true</bold>
          </font>
         </property>
-        <property name="accessibleName">
-         <string>End text</string>
-        </property>
         <property name="text">
          <string>End Text</string>
         </property>
@@ -1458,9 +1304,6 @@
           <weight>75</weight>
           <bold>true</bold>
          </font>
-        </property>
-        <property name="accessibleName">
-         <string>Continue text</string>
         </property>
         <property name="text">
          <string>Continue Text</string>
@@ -1475,9 +1318,6 @@
           <bold>true</bold>
          </font>
         </property>
-        <property name="accessibleName">
-         <string>Begin text</string>
-        </property>
         <property name="text">
          <string>Begin Text</string>
         </property>
@@ -1490,15 +1330,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Ms::OffsetSelect</class>
-   <extends>QWidget</extends>
-   <header>inspector/offsetSelect.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Ms::AlignSelect</class>
    <extends>QWidget</extends>
    <header>inspector/alignSelect.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::OffsetSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/offsetSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -1525,6 +1365,7 @@
   <tabstop>resetBeginFontItalic</tabstop>
   <tabstop>beginFontUnderline</tabstop>
   <tabstop>resetBeginFontUnderline</tabstop>
+  <tabstop>resetBeginTextAlign</tabstop>
   <tabstop>beginTextPlacement</tabstop>
   <tabstop>resetBeginTextPlacement</tabstop>
   <tabstop>resetBeginTextOffset</tabstop>
@@ -1541,6 +1382,7 @@
   <tabstop>resetContinueFontItalic</tabstop>
   <tabstop>continueFontUnderline</tabstop>
   <tabstop>resetContinueFontUnderline</tabstop>
+  <tabstop>resetContinueTextAlign</tabstop>
   <tabstop>continueTextPlacement</tabstop>
   <tabstop>resetContinueTextPlacement</tabstop>
   <tabstop>resetContinueTextOffset</tabstop>
@@ -1557,6 +1399,7 @@
   <tabstop>resetEndFontItalic</tabstop>
   <tabstop>endFontUnderline</tabstop>
   <tabstop>resetEndFontUnderline</tabstop>
+  <tabstop>resetEndTextAlign</tabstop>
   <tabstop>endTextPlacement</tabstop>
   <tabstop>resetEndTextPlacement</tabstop>
   <tabstop>resetEndTextOffset</tabstop>

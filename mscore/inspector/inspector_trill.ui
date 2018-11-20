@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorTrill</class>
  <widget class="QWidget" name="InspectorTrill">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>335</width>
-    <height>154</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Trill Inspector</string>
   </property>
@@ -81,6 +73,9 @@
         <property name="text">
          <string>Type:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>trillType</cstring>
         </property>
@@ -94,9 +89,6 @@
         <property name="accessibleName">
          <string>Reset 'Type' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -107,6 +99,9 @@
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Ornament style:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>ornamentStyle</cstring>
@@ -120,9 +115,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Ornament style' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -138,9 +130,6 @@
         <property name="accessibleName">
          <string>Reset 'Play' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -151,6 +140,9 @@
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Placement:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>placement</cstring>
@@ -164,9 +156,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Placement' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -237,14 +226,8 @@
       </item>
       <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="playArticulation">
-        <property name="accessibleName">
-         <string>Play</string>
-        </property>
         <property name="text">
          <string>Play</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
