@@ -506,6 +506,7 @@ QQmlEngine* MScore::qml()
             }
       return _qml;
       }
+#endif
 
 //---------------------------------------------------------
 //   paintDevice
@@ -543,6 +544,5 @@ QPaintEngine* MPaintDevice::paintEngine() const
       return 0;
       }
 
-#endif
 }
 
