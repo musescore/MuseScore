@@ -3386,8 +3386,8 @@ void ScoreView::cloneElement(Element* e)
             return;
       QDrag* drag = new QDrag(this);
       QMimeData* mimeData = new QMimeData;
-      if (e->isSegment())
-            e = static_cast<SpannerSegment*>(e)->spanner();
+      if (e->isSpannerSegment())
+            e = toSpannerSegment(e)->spanner();
       mimeData->setData(mimeSymbolFormat, e->mimeData(QPointF()));
       drag->setMimeData(mimeData);
       drag->setPixmap(QPixmap());
