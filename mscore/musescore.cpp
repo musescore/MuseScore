@@ -451,6 +451,7 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
       getAction("follow")->setChecked(preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG));
       getAction("midi-on")->setEnabled(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
       getAction("toggle-statusbar")->setChecked(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
+      getAction("show-tours")->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
       _statusBar->setVisible(preferences.getBool(PREF_UI_APP_SHOWSTATUSBAR));
 
       MuseScore::updateUiStyleAndTheme();
@@ -1733,6 +1734,13 @@ MuseScore::MuseScore()
       menuHelp->addAction(onlineHandbookAction);
       Workspace::addActionAndString(onlineHandbookAction, "online-handbook");
 
+      menuTours = new QMenu();
+      a = getAction("show-tours");
+      a->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS));
+      menuTours->addAction(a);
+      menuTours->addAction(getAction("reset-tours"));
+      menuHelp->addMenu(menuTours);
+
       menuHelp->addSeparator();
 
       aboutAction = new QAction("", 0);
@@ -1810,6 +1818,7 @@ MuseScore::MuseScore()
       Workspace::addMenuAndString(menuVoices, "menu-voices");
       Workspace::addMenuAndString(menuPlugins, "menu-plugins");
       Workspace::addMenuAndString(menuHelp, "menu-help");
+      Workspace::addMenuAndString(menuTours, "menu-tours");
 
       Workspace::writeGlobalMenuBar(mb);
 
@@ -1901,6 +1910,7 @@ void MuseScore::retranslate()
       menuVoices->setTitle(tr("&Voices"));
       menuPlugins->setTitle(tr("&Plugins"));
       menuHelp->setTitle(tr("&Help"));
+      menuTours->setTitle(tr("&Tours"));
 
       aboutAction->setText(tr("&About..."));
       aboutQtAction->setText(tr("About &Qt..."));
@@ -5865,6 +5875,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                         switchLayoutMode(LayoutMode::PAGE);
                   }
             }
+      else if (cmd == "show-tours")
+            preferences.setPreference(PREF_UI_APP_STARTUP_SHOWTOURS, a->isChecked());
+      else if (cmd == "reset-tours")
+            tourHandler()->resetCompletedTours();
       else if (cmd == "report-bug")
             reportBug("panel");
       else if (cmd == "leave-feedback")
