@@ -49,23 +49,28 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
                   s->setEndElement(0);
             }
 
-      undoRemoveMeasures(m1, m2);
-      Measure* m = new Measure(this);
-//TODO      m->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
-//         m2->endBarLineVisible(), m2->endBarLineColor());
+      deleteMeasures(m1, m2);
 
-      m->setTick(m1->tick());
-      m->setTimesig(m1->timesig());
-      Fraction f;
+      MeasureBase* next = m2->next();
+      const Fraction newTimesig = m1->timesig();
+      Fraction newLen;
       for (Measure* mm = m1; mm; mm = mm->nextMeasure())  {
-            f += mm->len();
+            newLen += mm->len();
             if (mm == m2)
                   break;
             }
-      m->setLen(f);
-      m->setNext(m2->next());
-      m->setPrev(m2->next() ? m2->next()->prev() : last());
-      undo(new InsertMeasures(m, m));
+      insertMeasure(ElementType::MEASURE, next, /* createEmptyMeasures*/ true);
+      // The loop since measures are not currently linked in MuseScore
+      for (Score* s : masterScore()->scoreList()) {
+            Measure* ins = s->tick2measure(tick1);
+            ins->undoChangeProperty(Pid::TIMESIG_NOMINAL, newTimesig);
+//             TODO: there was a commented chunk of code regarding setting bar
+//             line types. Should we handle them here too?
+//             m->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
+//             m2->endBarLineVisible(), m2->endBarLineColor());
+            }
+      Measure* inserted = (next ? next->prevMeasure() : lastMeasure());
+      inserted->adjustToLen(newLen, /* appendRests... */ false);
 
       range.write(this, m1->tick());
 
