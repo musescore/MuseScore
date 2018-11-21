@@ -30,7 +30,7 @@ python build/add-mc-keys.py %MC_CONSUMER_KEY% %MC_CONSUMER_SECRET%
 SET PATH=C:\Qt\5.9\msvc2017_64\bin;%PATH%
 call C:\MuseScore\msvc_build.bat revision
 ::git rev-parse --short=7 HEAD > mscore/revision.h
-SET /p MSversion=<mscore\revision.h
+SET /p MSREVISION=<mscore\revision.h
 
 :: set ccache dir
 SET CCACHE_DIR=C:\ccache\cache

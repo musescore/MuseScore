@@ -1,13 +1,12 @@
 # $1 - artifact name
-# $2 - build time
-# $3 - artifact ftp path
-# $4 - MuseScore version
-# $5 - Build number
+# $2 - artifact ftp path
+# $3 - MuseScore version
+# $4 - Build number
 
 export MSCORE_RELEASE_CHANNEL=$(grep '^[[:blank:]]*set *( *MSCORE_RELEASE_CHANNEL' CMakeLists.txt | awk -F \" '{print $2}')
-RSS_DATE="$2"
+RSS_DATE="$(LANG=C date +'%a, %d %b %Y %H:%M:%S %z')"
 FILESIZE="$(wc -c $1 | awk '{print $1}')"
-APPCAST_URL="https://sparkle.musescore.org/$MSCORE_RELEASE_CHANNEL/3/macos/appcast.xml"
+APPCAST_URL="https://sparkle.musescore.org/$MSCORE_RELEASE_CHANNEL/3/win/appcast.xml"
 GIT_LOG=$(C:/MuseScore/build/travis/job_macos/generateGitLog.sh)
 
 #use dummy values for now

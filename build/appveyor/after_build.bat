@@ -52,7 +52,7 @@ SET hh0=%time:~0,2%
 SET /a hh1=%hh0%+100
 SET hh=%hh1:~1,2%
 SET BUILD_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%-%hh%%time:~3,2%
-SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSversion%.7z
+SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSREVISION%.7z
 7z a C:\MuseScore\%ARTIFACT_NAME% C:\MuseScore\MuseScoreNightly
 
 :: create update file for S3
@@ -69,10 +69,10 @@ SET MUSESCORE_VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%.%APPVEYOR_
 (
 echo ^<update^>
 echo ^<version^>%MUSESCORE_VERSION%^</version^>
-echo ^<revision^>%MSversion%^</revision^>
+echo ^<revision^>%MSREVISION%^</revision^>
 echo ^<releaseType^>nightly^</releaseType^>
 echo ^<date^>%SHORT_DATE%^</date^>
-echo ^<description^>MuseScore %MUSESCORE_VERSION% %MSversion%^</description^>
+echo ^<description^>MuseScore %MUSESCORE_VERSION% %MSREVISION%^</description^>
 echo ^<downloadUrl^>https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%^</downloadUrl^>
 echo ^<infoUrl^>https://ftp.osuosl.org/pub/musescore-nightlies/windows/^</infoUrl^>
 echo ^</update^>
@@ -84,7 +84,7 @@ type C:\MuseScore\update_win_nightly.xml
 @echo off
 REM WinSparkle staff. Generate appcast.xml
 REM ------------------------------------------
-bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "%BUILD_DATE%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%APPVEYOR_BUILD_NUMBER%"
+bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%MSREVISION%"
 REM ------------------------------------------
 @echo on
 type C:\MuseScore\appcast.xml
@@ -103,7 +103,7 @@ IF DEFINED ENCRYPT_SECRET_SSH (
   ssh -oStrictHostKeyChecking=no -i %SSH_IDENTITY% musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
   rem notify IRC channel
   pip install irc
-  python build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSversion% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%"
+  python build/appveyor/irccat.py "%APPVEYOR_REPO_BRANCH%-%MSREVISION% (Win) compiled successfully https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%"
   )
 
 
