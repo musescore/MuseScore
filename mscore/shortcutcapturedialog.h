@@ -55,6 +55,9 @@ class ShortcutCaptureDialog : public QDialog, public Ui::ShortcutCaptureDialogBa
       ShortcutCaptureDialog(Shortcut* s, QMap<QString, Shortcut*> localShortcuts, QWidget* parent = 0);
       ~ShortcutCaptureDialog();
       QKeySequence getKey() const { return key; }
+
+    protected:
+      virtual void focusOutEvent (QFocusEvent*);
       };
 
 } // namespace Ms

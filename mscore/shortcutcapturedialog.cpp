@@ -49,6 +49,16 @@ ShortcutCaptureDialog::ShortcutCaptureDialog(Shortcut* _s, QMap<QString, Shortcu
 
       nshrtLabel->installEventFilter(this);
       MuseScore::restoreGeometry(this);
+
+      // Force the focus onto this dialog. This is required in osx to get command+backspace
+      setFocus();
+      }
+
+// We don't allow the dialog to loose focus as on osx. if we would allow, on osx command-backspace
+// couldn't be tracked.
+void ShortcutCaptureDialog::focusOutEvent (QFocusEvent* /*event*/)
+      {
+      setFocus();
       }
 
 //---------------------------------------------------------
