@@ -35,6 +35,8 @@ class MasterPalette : public QWidget, Ui::MasterPalette
       QTreeWidgetItem* timeItem;
       QTreeWidgetItem* symbolItem;
 
+      int idxAllSymbols = -1;
+
       virtual void closeEvent(QCloseEvent*);
       Palette* createPalette(int w, int h, bool grid, double mag = 1.0);
       void addPalette(Palette* sp);
