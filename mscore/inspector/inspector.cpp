@@ -868,9 +868,9 @@ InspectorBend::InspectorBend(QWidget* parent)
             { Pid::PLAY,           0, g.playBend,    g.resetPlayBend    },
             { Pid::FONT_FACE,      0, g.fontFace,    g.resetFontFace    },
             { Pid::FONT_SIZE,      0, g.fontSize,    g.resetFontSize    },
-            { Pid::FONT_BOLD,      0, g.bold,        g.resetBold        },
-            { Pid::FONT_ITALIC,    0, g.italic,      g.resetItalic      },
-            { Pid::FONT_UNDERLINE, 0, g.underline,   g.resetUnderline   },
+            { Pid::FONT_BOLD,      0, g.bold,        g.resetStyle       },
+            { Pid::FONT_ITALIC,    0, g.italic,      g.resetStyle       },
+            { Pid::FONT_UNDERLINE, 0, g.underline,   g.resetStyle       },
             };
       const std::vector<InspectorPanel> ppList = { {g.title, g.panel} };
       g.bold->setIcon(*icons[int(Icons::textBold_ICON)]);

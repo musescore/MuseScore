@@ -405,6 +405,12 @@
       </item>
       <item row="7" column="1">
        <widget class="QFontComboBox" name="fontFace">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>150</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Font face</string>
         </property>
@@ -484,6 +490,13 @@
       <item row="9" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QPushButton" name="fontBold">
           <property name="accessibleName">
            <string>Bold</string>
@@ -496,27 +509,6 @@
            <bool>true</bool>
           </property>
          </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="resetFontBold">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Bold' value</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </spacer>
         </item>
         <item>
          <widget class="QPushButton" name="fontItalic">
@@ -533,27 +525,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="resetFontItalic">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Italic' value</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </spacer>
-        </item>
-        <item>
          <widget class="QToolButton" name="fontUnderline">
           <property name="accessibleName">
            <string>Underline</string>
@@ -567,21 +538,21 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QToolButton" name="resetFontUnderline">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Underline' value</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-          </property>
-         </widget>
-        </item>
        </layout>
+      </item>
+      <item row="9" column="2">
+       <widget class="QToolButton" name="resetFontStyle">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Style' values</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -608,11 +579,9 @@
   <tabstop>fontSize</tabstop>
   <tabstop>resetFontSize</tabstop>
   <tabstop>fontBold</tabstop>
-  <tabstop>resetFontBold</tabstop>
   <tabstop>fontItalic</tabstop>
-  <tabstop>resetFontItalic</tabstop>
   <tabstop>fontUnderline</tabstop>
-  <tabstop>resetFontUnderline</tabstop>
+  <tabstop>resetFontStyle</tabstop>
   <tabstop>beginText</tabstop>
   <tabstop>resetBeginText</tabstop>
   <tabstop>endText</tabstop>
