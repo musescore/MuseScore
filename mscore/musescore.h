@@ -309,6 +309,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QMenu* menuPlugins;
       QMenu* menuHelp;
+      QMenu* menuTours;
       AlbumManager* albumManager           { 0 };
 
       QWidget* _searchDialog               { 0 };
