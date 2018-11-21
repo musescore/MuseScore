@@ -77,6 +77,7 @@ class Shape : public std::vector<ShapeElement> {
 
       bool contains(const QPointF&) const;
       bool intersects(const QRectF& rr) const;
+      bool intersects(const Shape&) const;
       void paint(QPainter&) const;
 
 #ifndef NDEBUG
