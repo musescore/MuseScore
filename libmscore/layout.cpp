@@ -3763,7 +3763,7 @@ void Score::doLayoutRange(int stick, int etick)
 
       if (lineMode()) {
             lc.prevMeasure = 0;
-            lc.nextMeasure = _measures.first();
+            lc.nextMeasure = _showVBox ? first() : firstMeasure();
             layoutLinear(layoutAll, lc);
             return;
             }
@@ -3778,7 +3778,7 @@ void Score::doLayoutRange(int stick, int etick)
             lc.systemList  = _systems.mid(systemIndex);
 
             if (systemIndex == 0)
-                  lc.nextMeasure = _measures.first();
+                  lc.nextMeasure = _showVBox ? first() : firstMeasure();
             else {
                   System* prevSystem = _systems[systemIndex-1];
                   lc.nextMeasure = prevSystem->measures().back()->next();
@@ -3826,7 +3826,7 @@ void Score::doLayoutRange(int stick, int etick)
             qDeleteAll(pages());
             pages().clear();
 
-            lc.nextMeasure = _measures.first();
+            lc.nextMeasure = _showVBox ? first() : firstMeasure();
             }
 
       lc.prevMeasure = 0;
