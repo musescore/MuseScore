@@ -495,7 +495,7 @@ void HBox::layout2()
 bool Box::acceptDrop(EditData& data) const
       {
       ElementType t = data.dropElement->type();
-      if (data.element->flag(ElementFlag::ON_STAFF))
+      if (data.dropElement->flag(ElementFlag::ON_STAFF))
             return false;
       switch (t) {
             case ElementType::LAYOUT_BREAK:
