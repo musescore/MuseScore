@@ -1169,6 +1169,16 @@ void FiguredBass::layoutLines()
       int sysIdx1 = systems.indexOf(s1);
       int sysIdx2 = systems.indexOf(s2);
 
+      if (sysIdx2 < sysIdx1) {
+            sysIdx2 = sysIdx1;
+            nextSegm = segment()->next1();
+            // TODO
+            // During layout of figured bass next systems' numbers may be still
+            // undefined (then sysIdx2 == -1) or change in the future.
+            // A layoutSystem() approach similar to that for spanners should
+            // probably be implemented.
+            }
+
       int i, len ,segIdx;
       for (i = sysIdx1, segIdx = 0; i <= sysIdx2; ++i, ++segIdx) {
             len = 0;
