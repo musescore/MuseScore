@@ -243,6 +243,19 @@ bool Shape::intersects(const QRectF& rr) const
       }
 
 //---------------------------------------------------------
+//   intersects
+//---------------------------------------------------------
+
+bool Shape::intersects(const Shape& other) const
+      {
+      for (const QRectF& r : other) {
+            if (intersects(r))
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   paint
 //---------------------------------------------------------
 
