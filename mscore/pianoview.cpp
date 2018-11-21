@@ -321,7 +321,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 
       switch (preferences.globalStyle()) {
             case MuseScoreStyleType::DARK_FUSION:
-                  colSelectionBox = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR));
+                  colSelectionBox = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR));
 
                   colWhiteKeyBg = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR));
                   colGutter = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_BASE_COLOR));
@@ -330,7 +330,7 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
                   colGridLine = QColor(preferences.getColor(PREF_UI_PIANOROLL_DARK_BG_GRIDLINE_COLOR));
                   break;
             default:
-                  colSelectionBox = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR));
+                  colSelectionBox = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_SELECTION_BOX_COLOR));
 
                   colWhiteKeyBg = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR));
                   colGutter = QColor(preferences.getColor(PREF_UI_PIANOROLL_LIGHT_BG_BASE_COLOR));
@@ -511,7 +511,32 @@ void PianoView::wheelEvent(QWheelEvent* event)
       {
       int step = event->delta() / 120;
 
-      if (event->modifiers() == Qt::ControlModifier) {
+      if (event->modifiers() == 0) {
+            //Vertical scroll
+            QGraphicsView::wheelEvent(event);
+            }
+      else if (event->modifiers() == Qt::ShiftModifier) {
+            //Horizontal scroll
+            QWheelEvent we(event->pos(), event->delta(), event->buttons(), 0, Qt::Horizontal);
+            QGraphicsView::wheelEvent(&we);
+            }
+      else if (event->modifiers() == Qt::ControlModifier) {
+            //Vertical zoom
+            QRectF viewRect = mapToScene(viewport()->geometry()).boundingRect();
+            qreal mouseYNote = (event->y() + (int)viewRect.y()) / (qreal)_noteHeight;
+
+            _noteHeight = qMax(qMin(_noteHeight + step, MAX_KEY_HEIGHT), MIN_KEY_HEIGHT);
+            emit noteHeightChanged(_noteHeight);
+
+            updateBoundingSize();
+            updateNotes();
+
+            int mousePixY = (int)(mouseYNote * _noteHeight);
+            verticalScrollBar()->setValue(mousePixY - event->y());
+
+            scene()->update();
+            }
+      else if (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
             //Horizontal zoom
             
             QRectF viewRect = mapToScene(viewport()->geometry()).boundingRect();
@@ -527,31 +552,6 @@ void PianoView::wheelEvent(QWheelEvent* event)
             int mousePixX = tickToPixelX(mouseXTick);
             horizontalScrollBar()->setValue(mousePixX - event->x());
 
-            scene()->update();
-            }
-      else if (event->modifiers() == Qt::ShiftModifier) {
-            //Horizontal scroll
-            QWheelEvent we(event->pos(), event->delta(), event->buttons(), 0, Qt::Horizontal);
-            QGraphicsView::wheelEvent(&we);
-            }
-      else if (event->modifiers() == 0) {
-            //Vertical scroll
-            QGraphicsView::wheelEvent(event);
-            }
-      else if (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
-            //Vertical zoom
-            QRectF viewRect = mapToScene(viewport()->geometry()).boundingRect();
-            qreal mouseYNote = (event->y() + (int)viewRect.y()) / (qreal)_noteHeight;
-            
-            _noteHeight = qMax(qMin(_noteHeight + step, MAX_KEY_HEIGHT), MIN_KEY_HEIGHT);
-            emit noteHeightChanged(_noteHeight);
-            
-            updateBoundingSize();
-            updateNotes();
-            
-            int mousePixY = (int)(mouseYNote * _noteHeight);
-            verticalScrollBar()->setValue(mousePixY - event->y());
-            
             scene()->update();
             }
       }
@@ -675,15 +675,22 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
                         NoteVal nv(pickPitch);
 
 
+                        Segment* seg = score->tick2segment(roundedTick);
+                        score->expandVoice(seg, track);
+
                         ChordRest* e = score->findCR(roundedTick, track);
                         if (e && !e->tuplet() && _tuplet == 1) {
                               //Ignore tuplets
                               score->startCmd();
-                              score->expandVoice(e->segment(), track);
 
                               ChordRest* cr0;
                               ChordRest* cr1;
                               Fraction frac = is.duration().fraction();
+
+                              //Default to quarter note if faction is invalid
+                              if (!frac.isValid() || frac.isZero())
+                                    frac.set(1, 4);
+
                               if (cutChordRest(e, track, roundedTick, cr0, cr1)) {
                                     score->setNoteRest(cr1->segment(), track, nv, frac);
                                     }
@@ -707,6 +714,9 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
 
                         //Find best chord to add to
                         int track = _staff->idx() * VOICES + voice;
+
+                        Segment* seg = score->tick2segment(pickTick);
+                        score->expandVoice(seg, track);
 
                         ChordRest* e = score->findCR(pickTick, track);
 
@@ -741,10 +751,12 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
                         int subbeatTicks = MScore::division / subbeats;
                         int roundedTick = (pickTick / subbeatTicks) * subbeatTicks;
 
+                        Segment* seg = score->tick2segment(roundedTick);
+                        score->expandVoice(seg, track);
+
                         ChordRest* e = score->findCR(roundedTick, track);
                         if (e && !e->tuplet() && _tuplet == 1) {
                               score->startCmd();
-                              score->expandVoice(e->segment(), track);
                               int startTick = e->tick();
 
                               if (roundedTick != startTick) {
