@@ -126,9 +126,6 @@
 #endif
 #ifdef Q_OS_MAC
 #include "macos/cocoabridge.h"
-#ifdef MAC_SPARKLE_ENABLED
-#include "macos/SparkleAutoUpdater.h"
-#endif
 #endif
 
 #ifdef AEOLUS
@@ -1759,7 +1756,7 @@ MuseScore::MuseScore()
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
 #if !defined(FOR_WINSTORE)
       checkForUpdateAction = new QAction("", 0);
-      connect(checkForUpdateAction, SIGNAL(triggered()), this, SLOT(checkForUpdateNow()));
+      connect(checkForUpdateAction, SIGNAL(triggered()), this, SLOT(checkForUpdatesUI()));
       menuHelp->addAction(checkForUpdateAction);
       Workspace::addActionAndString(checkForUpdateAction, "check-update");
 #endif
@@ -1859,7 +1856,7 @@ MuseScore::MuseScore()
 #elif defined(MAC_SPARKLE_ENABLED)
       autoUpdater.reset(new SparkleAutoUpdater);
 #endif
-      connect(this, SIGNAL(musescoreWindowWasShown()), this, SLOT(initSparkle()),
+      connect(this, SIGNAL(musescoreWindowWasShown()), this, SLOT(checkForUpdates()),
             Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
       }
 
@@ -3673,22 +3670,19 @@ bool MuseScore::hasToCheckForExtensionsUpdate()
 //         Doesn't show any messages if software is up to date
 //---------------------------------------------------------
 
-void MuseScore::checkForUpdate()
+void MuseScore::checkForUpdatesNoUI()
       {
-#if defined(MAC_SPARKLE_ENABLED)
-      SparkleAutoUpdater::checkUpdates();
-      return;
-#else
-      if (ucheck)
+      if (autoUpdater)
+            autoUpdater->checkUpdates();
+      else if (ucheck)
             ucheck->check(version(), sender() != 0);
-#endif
       }
 
 //---------------------------------------------------------
 //   checkForUpdateNow
 //          Show message like "Software is up to date" if software is up to date
 //---------------------------------------------------------
-void MuseScore::checkForUpdateNow()
+void MuseScore::checkForUpdatesUI()
       {
       if (autoUpdater)
             autoUpdater->checkForUpdatesNow();
@@ -6085,13 +6079,15 @@ void MuseScore::mixerPreferencesChanged(bool showMidiControls)
       }
 
 //---------------------------------------------------------
-//   initSparkle
+//   checkForUpdates
 //---------------------------------------------------------
 
-void MuseScore::initSparkle()
+void MuseScore::checkForUpdates()
       {
-      if (autoUpdater)
-            autoUpdater->checkUpdates();
+#ifndef MSCORE_NO_UPDATE_CHECKER
+      if (hasToCheckForUpdate())
+            checkForUpdatesNoUI();
+#endif
       }
 
 //---------------------------------------------------------
@@ -7250,10 +7246,6 @@ int main(int argc, char* av[])
       if (!restoredSession || files)
             loadScores(argv);
 
-#ifndef MSCORE_NO_UPDATE_CHECKER
-      if (mscore->hasToCheckForUpdate())
-            mscore->checkForUpdate();
-#endif
       if (mscore->hasToCheckForExtensionsUpdate())
             mscore->checkForExtensionsUpdate();
 

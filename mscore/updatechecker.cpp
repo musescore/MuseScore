@@ -182,6 +182,7 @@ bool UpdateCheckerBase::hasToCheck()
       if(!getUpdatePrefValue())
             return false;
 
+#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
       QSettings s;
       s.beginGroup("Update");
       QDateTime now = QDateTime::currentDateTime();
@@ -193,6 +194,9 @@ bool UpdateCheckerBase::hasToCheck()
             }
       s.endGroup();
       return now == lastUpdate || now > lastUpdate.addSecs(3600 * defaultPeriod()) ;
+#else
+      return true;
+#endif
       }
 
 ExtensionsUpdateChecker::ExtensionsUpdateChecker(QObject* parent)

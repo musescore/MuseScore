@@ -484,6 +484,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QString getUtmParameters(QString medium) const;
 
+      void checkForUpdatesNoUI();
+
    signals:
       void windowSplit(bool);
       void musescoreWindowWasShown();
@@ -555,8 +557,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setNormalState()    { changeState(STATE_NORMAL); }
       void setPlayState()      { changeState(STATE_PLAY); }
       void setNoteEntryState() { changeState(STATE_NOTE_ENTRY); }
-      void checkForUpdate();
-      void checkForUpdateNow();
+      void checkForUpdatesUI();
       void checkForExtensionsUpdate();
       void midiNoteReceived(int channel, int pitch, int velo);
       void midiNoteReceived(int pitch, bool ctrl, int velo);
@@ -567,7 +568,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void editWorkspace();
       void changeWorkspace(Workspace* p, bool first=false);
       void mixerPreferencesChanged(bool showMidiControls);
-      void initSparkle();
+      void checkForUpdates();
 
    public:
       MuseScore();
