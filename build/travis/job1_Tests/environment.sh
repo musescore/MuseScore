@@ -1,4 +1,4 @@
-#!/bin/bash (This file should be sourced rather than executed.)
+# (This file should be sourced rather than executed. It is for GNU bash.)
 # Sourcing allows environment variables to be used outside the script, but other
 # changes also persist. (If you change directory then remember to change back!)
 
