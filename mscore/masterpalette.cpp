@@ -12,6 +12,7 @@
 
 #include "musescore.h"
 #include "masterpalette.h"
+#include "menus.h"
 #include "symboldialog.h"
 #include "palette.h"
 #include "keyedit.h"
@@ -39,13 +40,6 @@
 #include "timedialog.h"
 
 namespace Ms {
-
-extern void populateIconPalette(Palette* p, const IconAction* a);
-extern Palette* newKeySigPalette();
-extern Palette* newBarLinePalette(bool);
-extern Palette* newLinesPalette(bool);
-extern Palette* newAccidentalsPalette();
-extern QMap<QString, QStringList>* smuflRanges();
 
 //---------------------------------------------------------
 //   showMasterPalette
@@ -196,11 +190,20 @@ MasterPalette::MasterPalette(QWidget* parent)
       addPalette(MuseScore::newBeamPalette());
 
       symbolItem = new QTreeWidgetItem();
-      symbolItem->setData(0, Qt::UserRole, -1);
+      idxAllSymbols = stack->count();
+      symbolItem->setData(0, Qt::UserRole, idxAllSymbols);
       symbolItem->setText(0, QT_TRANSLATE_NOOP("MasterPalette", "Symbols"));
       treeWidget->addTopLevelItem(symbolItem);
+      stack->addWidget(new SymbolDialog(SMUFL_ALL_SYMBOLS));
+
+      // Add "All symbols" entry to be first in the list of categories
+      QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(SMUFL_ALL_SYMBOLS));
+      child->setData(0, Qt::UserRole, idxAllSymbols);
+      symbolItem->addChild(child);
 
       for (const QString& s : smuflRanges()->keys()) {
+            if (s == SMUFL_ALL_SYMBOLS)
+                  continue;
             QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(s));
             child->setData(0, Qt::UserRole, stack->count());
             symbolItem->addChild(child);
@@ -245,8 +248,11 @@ void MasterPalette::currentChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
 void MasterPalette::clicked(QTreeWidgetItem* item, int)
       {
       int idx = item->data(0, Qt::UserRole).toInt();
-      if (idx == -1)
+      if (idx == idxAllSymbols) {
             item->setExpanded(!item->isExpanded());
+            if (idx != -1)
+                  stack->setCurrentIndex(idx);
+            }
       }
 
 //---------------------------------------------------------

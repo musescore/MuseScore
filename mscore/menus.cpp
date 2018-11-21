@@ -19,6 +19,7 @@
 
 // For menus in the menu bar, like File, Edit, and View, see mscore/musescore.cpp
 
+#include "menus.h"
 #include <tuple>
 #include "libmscore/score.h"
 #include "palette.h"
@@ -1506,6 +1507,7 @@ void MuseScore::addTempo()
 QMap<QString, QStringList>* smuflRanges()
       {
       static QMap<QString, QStringList> ranges;
+      QStringList allSymbols;
 
       if (ranges.empty()) {
             QFile fi(":fonts/smufl/ranges.json");
@@ -1526,8 +1528,10 @@ QMap<QString, QStringList>* smuflRanges()
                         for (QJsonValue g : glyphs)
                               glyphNames.append(g.toString());
                         ranges.insert(desc, glyphNames);
+                        allSymbols << glyphNames;
                         }
                   }
+            ranges.insert(SMUFL_ALL_SYMBOLS, allSymbols); // TODO: make translatable as well as ranges.json
             }
       return &ranges;
       }
