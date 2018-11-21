@@ -118,9 +118,10 @@ void Startcenter::newScore()
 //   closeEvent
 //---------------------------------------------------------
 
-void Startcenter::closeEvent(QCloseEvent*)
+void Startcenter::closeEvent(QCloseEvent* event)
       {
       emit closed(false);
+      AbstractDialog::closeEvent(event);
       }
 
 //---------------------------------------------------------
@@ -165,14 +166,28 @@ void Startcenter::readSettings()
       }
 
 //---------------------------------------------------------
+//   keyPressEvent
+//---------------------------------------------------------
+
+void Startcenter::keyPressEvent(QKeyEvent *event)
+      {
+      if(event->key() == Qt::Key_Escape)
+            event->ignore(); // will handle it on key release.
+      else
+            AbstractDialog::keyPressEvent(event);
+      }
+
+//---------------------------------------------------------
 //   keyReleaseEvent
 //---------------------------------------------------------
 
-void Startcenter::keyReleaseEvent(QKeyEvent *event) 
+void Startcenter::keyReleaseEvent(QKeyEvent *event)
       {
       if(event->key() == Qt::Key_Escape) {
             close();
             }
+      else
+            AbstractDialog::keyReleaseEvent(event);
       }
 
 #ifdef USE_WEBENGINE

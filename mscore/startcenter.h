@@ -94,7 +94,8 @@ class Startcenter : public AbstractDialog, public Ui::Startcenter {
       void updateRecentScores();
       void writeSettings();
       void readSettings();
-      virtual void keyReleaseEvent(QKeyEvent*);
+      void keyPressEvent(QKeyEvent*) override;
+      void keyReleaseEvent(QKeyEvent*) override;
       };
 }
 #endif //__STARTCENTER_H__
