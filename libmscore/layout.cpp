@@ -2900,18 +2900,6 @@ void Score::layoutLyrics(System* system)
                         }
                   break;
             }
-      // align lyrics line segments
-      for (SpannerSegment* ss : system->spannerSegments()) {
-            if (ss->isLyricsLineSegment()) {
-                  LyricsLineSegment* lls = toLyricsLineSegment(ss);
-                  lls->layout();
-                  if (ss->isSingleBeginType())
-                        lls->ryoffset() = lls->lyrics()->ryoffset();
-                  else {
-                        ;// how to align?
-                        }
-                  }
-            }
       }
 
 //---------------------------------------------------------
@@ -3390,12 +3378,6 @@ System* Score::collectSystem(LayoutContext& lc)
                   }
             }
 
-      for (Spanner* sp : _unmanagedSpanner) {
-            if (sp->tick() >= etick || sp->tick2() <= stick)
-                  continue;
-            sp->layoutSystem(system);
-            }
-
       //-------------------------------------------------------------
       // TempoText, Fermata, TremoloBar
       //-------------------------------------------------------------
@@ -3414,6 +3396,13 @@ System* Score::collectSystem(LayoutContext& lc)
             }
 
       layoutLyrics(system);
+
+      // here are lyrics dashes and melisma
+      for (Spanner* sp : _unmanagedSpanner) {
+            if (sp->tick() >= etick || sp->tick2() <= stick)
+                  continue;
+            sp->layoutSystem(system);
+            }
 
       //-------------------------------------------------------------
       // Jump, Marker

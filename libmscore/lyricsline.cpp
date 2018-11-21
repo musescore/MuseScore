@@ -424,15 +424,21 @@ void LyricsLineSegment::layout()
             }
 
       // VERTICAL POSITION: at the base line of the syllable text
-      if (!isEndType())
+      if (!isEndType()) {
             rypos() = lyr->ipos().y();
+            ryoffset() = lyr->offset().y();
+            }
       else {
             // use Y position of *next* syllable if there is one on same system
             Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
-            if (nextLyr1 && nextLyr1->segment()->system() == system())
+            if (nextLyr1 && nextLyr1->segment()->system() == system()) {
                   rypos() = nextLyr1->ipos().y();
-            else
+                  ryoffset() = nextLyr1->offset().y();
+                  }
+            else {
                   rypos() = lyr->ipos().y();
+                  ryoffset() = lyr->offset().y();
+                  }
             }
 
       // MELISMA vs. DASHES
