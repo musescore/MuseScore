@@ -57,8 +57,8 @@ class StaffState final : public Element {
       virtual void write(XmlWriter&) const;
       virtual void read(XmlReader&);
       Instrument* instrument() const           { return _instrument; }
-      void setInstrument(const Instrument* i)  { *_instrument = *i;    }
-      void setInstrument(const Instrument&& i) { *_instrument = i;    }
+      void setInstrument(Instrument* i)  { _instrument = i;    }
+//      void setInstrument(const Instrument&& i) { *_instrument = i;    }
       Segment* segment()                       { return (Segment*)parent(); }
       };
 

@@ -409,9 +409,9 @@ static void initDrumset(Drumset* drumset, const MusicXMLDrumset& mxmlDrumset)
  Create an Instrument based on the information in \a mxmlInstr.
  */
 
-static Instrument createInstrument(const MusicXMLDrumInstrument& mxmlInstr)
+static Instrument* createInstrument(const MusicXMLDrumInstrument& mxmlInstr)
       {
-      Instrument instr;
+      Instrument* instr;
 
       InstrumentTemplate* it {};
       if (!mxmlInstr.sound.isEmpty()) {
@@ -429,19 +429,19 @@ static Instrument createInstrument(const MusicXMLDrumInstrument& mxmlInstr)
             // initialize from template with matching MusicXmlId
             instr = Instrument::fromTemplate(it);
             // reset transpose, as it is determined later from MusicXML data
-            instr.setTranspose(Interval());
+            instr->setTranspose(Interval());
             }
       else {
             // set articulations to default (global articulations)
-            instr.setArticulation(articulation);
+            instr->setArticulation(articulation);
             // set default program
-            instr.channel(0)->setProgram(mxmlInstr.midiProgram >= 0 ? mxmlInstr.midiProgram : 0);
+            instr->channel(0)->setProgram(mxmlInstr.midiProgram >= 0 ? mxmlInstr.midiProgram : 0);
             }
 
       // add / overrule with values read from MusicXML
-      instr.channel(0)->setPan(mxmlInstr.midiPan);
-      instr.channel(0)->setVolume(mxmlInstr.midiVolume);
-      instr.setTrackName(mxmlInstr.name);
+      instr->channel(0)->setPan(mxmlInstr.midiPan);
+      instr->channel(0)->setVolume(mxmlInstr.midiVolume);
+      instr->setTrackName(mxmlInstr.name);
 
       return instr;
       }
@@ -471,7 +471,7 @@ static void setFirstInstrument(MxmlLogger* logger, const QXmlStreamReader* const
                   mxmlInstr = mxmlDrumset.first();
                   }
 
-            Instrument instr = createInstrument(mxmlInstr);
+            Instrument* instr = createInstrument(mxmlInstr);
             part->setInstrument(instr);
             if (mxmlInstr.midiChannel >= 0) part->setMidiChannel(mxmlInstr.midiChannel, mxmlInstr.midiPort);
             // note: setMidiProgram() does more than simply setting the MIDI program
@@ -566,7 +566,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                                                .arg(instrId).arg(tick).arg(partId), xmlreader);
                         else {
                               MusicXMLDrumInstrument mxmlInstr = mxmlDrumset.value(instrId);
-                              Instrument instr = createInstrument(mxmlInstr);
+                              Instrument* instr = createInstrument(mxmlInstr);
                               //qDebug("instr %p", &instr);
 
                               InstrumentChange* ic = new InstrumentChange(instr, score);

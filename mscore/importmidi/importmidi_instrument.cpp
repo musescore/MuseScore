@@ -170,10 +170,10 @@ const InstrumentTemplate* findClosestInstrument(const MTrack &track)
                   const bool isDrumTemplate = templ->useDrumset;
                   if (track.mtrack->drumTrack() != isDrumTemplate)
                         continue;
-                  for (const auto &channel: templ->channel) {
-                        if (channel.program() < track.program
-                                    && channel.program() > maxLessProgram) {
-                              maxLessProgram = channel.program();
+                  for (Channel* channel: templ->channel) {
+                        if (channel->program() < track.program
+                                    && channel->program() > maxLessProgram) {
+                              maxLessProgram = channel->program();
                               closestTemplate = templ;
                               break;
                               }
@@ -204,8 +204,8 @@ std::vector<const InstrumentTemplate *> findInstrumentsForProgram(const MTrack &
                   if (isDrumTemplate && templ->drumset)
                         findNotEmptyDrumPitches(drumPitches, templ);
 
-                  for (const auto &channel: templ->channel) {
-                        if (channel.program() == program) {
+                  for (Channel* channel: templ->channel) {
+                        if (channel->program() == program) {
                               if (isDrumTemplate && templ->drumset) {
                                     if (hasNotDefinedDrumPitch(trackPitches, drumPitches))
                                           break;

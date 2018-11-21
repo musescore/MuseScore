@@ -155,9 +155,11 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       score->setPageNumberOffset(oscore->pageNumberOffset());
 
       // Set instruments and create linked staffs
-      for (const Part* part : parts) {
+      for (Part* part : parts) {
             Part* p = new Part(score);
-            p->setInstrument(*part->instrument());
+            Instrument* newInstr = new Instrument(p);
+            newInstr->set(part->instrument());
+            p->setInstrument(newInstr);
             p->setPartName(part->partName());
 
             for (Staff* staff : *part->staves()) {

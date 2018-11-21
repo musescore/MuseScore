@@ -25,6 +25,8 @@
 #include "libmscore/instrument.h"
 #include "mixertrackitem.h"
 
+#include <QPointer>
+
 namespace Ms {
 
 
@@ -35,11 +37,11 @@ class MixerTrackItem;
 //   MixerDetails
 //---------------------------------------------------------
 
-class MixerDetails : public QWidget, public Ui::MixerDetails, public ChannelListener
+class MixerDetails : public QWidget, public Ui::MixerDetails
       {
       Q_OBJECT
 
-      MixerTrackItemPtr _mti;
+      QPointer<MixerTrackItem> _mti;
 
       void updateFromTrack();
 
@@ -54,14 +56,20 @@ public slots:
       void drumkitToggled(bool);
       void midiChannelChanged(int);
 
+      void notifyVolumeChanged(char);
+      void notifyPanChanged(char);
+      void notifyChorusChanged(char);
+      void notifyReverbChanged(char);
+      void notifyColorChanged(int);
+      void notifyPartNameChanged(QString);
 public:
       explicit MixerDetails(QWidget *parent);
       ~MixerDetails() override;
 
-      MixerTrackItemPtr track() { return _mti; }
-      void setTrack(MixerTrackItemPtr track);
-      void propertyChanged(Channel::Prop property) override;
-      void disconnectChannelListener() override;
+      MixerTrackItem* track() { return _mti; }
+      void setTrack(MixerTrackItem* track);
+//      void propertyChanged(Channel::Prop property) override;
+//      void disconnectChannelListener() override;
 
       };
 

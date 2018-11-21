@@ -2845,8 +2845,10 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             pscore->style().set(Sid::ArpeggioHiddenInStdIfTab, true);
 
             QList<int> stavesMap;
-            Part*   p = new Part(pscore);
-            p->setInstrument(*part->instrument());
+            Part* p = new Part(pscore);
+            Instrument* newInstr = new Instrument(p);
+            newInstr->set(part->instrument());
+            p->setInstrument(newInstr);
 //TODO-ws		pscore->tuning = gp->tunings[counter++];
 
 		Staff* staff = part->staves()->front();

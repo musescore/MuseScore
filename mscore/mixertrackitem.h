@@ -22,7 +22,7 @@
 #define __MIXERTRACKITEM_H__
 
 #include "libmscore/instrument.h"
-#include <memory>
+#include <QObject>
 
 namespace Ms {
 
@@ -32,17 +32,18 @@ class Channel;
 struct MidiMapping;
 class MixerTrackItem;
 
-typedef std::shared_ptr<MixerTrackItem> MixerTrackItemPtr;
-//typedef MixerTrackItem* MixerTrackItemPtr;
 
 //---------------------------------------------------------
 //   MixerTrackItem
 //---------------------------------------------------------
 
-class MixerTrackItem
+class MixerTrackItem : public QObject
       {
+      Q_OBJECT
+
 public:
       enum class TrackType { PART, CHANNEL };
+      Q_ENUM(TrackType)
 
 private:
       TrackType _trackType;
@@ -52,7 +53,7 @@ private:
       Channel* _chan;
 
 public:
-      MixerTrackItem(TrackType tt, Part* part, Instrument* _instr, Channel* _chan);
+      MixerTrackItem(TrackType tt, Part* part, Instrument* _instr, Channel* _chan, QObject* parent = nullptr);
 
       TrackType trackType() { return _trackType; }
       Part* part() { return _part; }
@@ -62,6 +63,7 @@ public:
       MidiMapping *midiMap();
       int color();
 
+public slots:
       void setColor(int valueRgb);
       void setVolume(char value);
       void setPan(char value);

@@ -260,7 +260,7 @@ void Mixer::setScore(MasterScore* score)
 
 void Mixer::updateTracks()
       {
-      MixerTrackItem* oldSel = mixerDetails->track().get();
+      MixerTrackItem* oldSel = mixerDetails->track();
 
       Part* selPart = oldSel ? oldSel->part() : 0;
       Channel* selChan = oldSel ? oldSel->chan() : 0;
@@ -276,12 +276,16 @@ void Mixer::updateTracks()
             }
 
 
+      //Delete old objects
       if (trackHolder) {
             trackAreaLayout->removeWidget(trackHolder);
             trackHolder->deleteLater();
             trackHolder = 0;
             }
 
+      for (MixerTrack* track: trackList) {
+            delete track->mti();
+            }
       trackList.clear();
       mixerDetails->setTrack(0);
 
@@ -309,8 +313,8 @@ void Mixer::updateTracks()
                   proxyChan = proxyInstr->channel(0);
                   }
 
-            MixerTrackItemPtr mti = std::make_shared<MixerTrackItem>(
-                              MixerTrackItem::TrackType::PART, part, proxyInstr, proxyChan);
+            MixerTrackItem* mti = new MixerTrackItem(
+                              MixerTrackItem::TrackType::PART, part, proxyInstr, proxyChan, this);
 
             MixerTrackPart* track = new MixerTrackPart(this, mti, expanded);
             track->setGroup(this);
@@ -330,8 +334,8 @@ void Mixer::updateTracks()
                         Instrument* instr = it->second;
                         for (int i = 0; i < instr->channel().size(); ++i) {
                               Channel *chan = instr->channel()[i];
-                              MixerTrackItemPtr mti1 = std::make_shared<MixerTrackItem>(
-                                                MixerTrackItem::TrackType::CHANNEL, part, instr, chan);
+                              MixerTrackItem* mti1 = new MixerTrackItem(
+                                                MixerTrackItem::TrackType::CHANNEL, part, instr, chan, this);
 //                              MixerTrackItemPtr mti = new MixerTrackItem(
 //                                                MixerTrackItem::TrackType::CHANNEL, part, instr, chan);
                               MixerTrackChannel* track1 = new MixerTrackChannel(this, mti1);

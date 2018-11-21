@@ -27,6 +27,8 @@
 #include "mixertrackitem.h"
 #include "libmscore/instrument.h"
 
+#include <QPointer>
+
 namespace Ms {
 
 struct MidiMapping;
@@ -36,11 +38,11 @@ class MixerTrackItem;
 //   MixerTrack
 //---------------------------------------------------------
 
-class MixerTrackChannel : public QWidget, public Ui::MixerTrackChannel, public ChannelListener, public MixerTrack
+class MixerTrackChannel : public QWidget, public Ui::MixerTrackChannel, public MixerTrack
       {
       Q_OBJECT
 
-      MixerTrackItemPtr _mti;
+      QPointer<MixerTrackItem> _mti;
 
       bool _selected;
       static const QString unselStyleLight;
@@ -65,19 +67,25 @@ public slots:
       void controlSelected();
       void applyStyle();
 
+      void notifyVolumeChanged(char);
+      void notifyPanChanged(char);
+      void notifyMuteChanged(bool);
+      void notifySoloChanged(bool);
+      void notifyColorChanged(int);
+
 protected:
       void mouseReleaseEvent(QMouseEvent * event) override;
-      void propertyChanged(Channel::Prop property) override;
-      void disconnectChannelListener() override;
+//      void propertyChanged(Channel::Prop property) override;
+//      void disconnectChannelListener() override;
 
 public:
-      explicit MixerTrackChannel(QWidget *parent, MixerTrackItemPtr trackItem);
+      explicit MixerTrackChannel(QWidget *parent, MixerTrackItem* trackItem);
       ~MixerTrackChannel() override;
 
       bool selected() override { return _selected; }
       QWidget* getWidget() override { return this; }
       MixerTrackGroup* group() override { return _group; }
-      MixerTrackItemPtr mti() override { return _mti; }
+      MixerTrackItem* mti() override { return _mti; }
       void setGroup(MixerTrackGroup* group) { _group = group; }
       void paintEvent(QPaintEvent* evt) override;
       };

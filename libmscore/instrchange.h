@@ -27,7 +27,7 @@ class InstrumentChange final : public TextBase  {
 
    public:
       InstrumentChange(Score*);
-      InstrumentChange(const Instrument&, Score*);
+      InstrumentChange(Instrument*, Score*);
       InstrumentChange(const InstrumentChange&);
       ~InstrumentChange();
 
@@ -39,8 +39,8 @@ class InstrumentChange final : public TextBase  {
 
       Instrument* instrument() const        { return _instrument;  }
       void setInstrument(Instrument* i)     { _instrument = i;     }
-      void setInstrument(Instrument&& i)    { *_instrument = i;    }
-      void setInstrument(const Instrument& i);
+//      void setInstrument(Instrument&& i)    { *_instrument = i;    }
+//      void setInstrument(const Instrument& i);
 
       Segment* segment() const              { return toSegment(parent()); }
 

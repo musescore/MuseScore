@@ -42,17 +42,19 @@ InstrumentChange::InstrumentChange(Score* s)
       _instrument = new Instrument();
       }
 
-InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
+InstrumentChange::InstrumentChange(Instrument* i, Score* s)
    : TextBase(s, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
       initElementStyle(&instrumentChangeStyle);
-      _instrument = new Instrument(i);
+      _instrument = new Instrument();
+      _instrument->set(i);
       }
 
 InstrumentChange::InstrumentChange(const InstrumentChange& is)
    : TextBase(is)
       {
-      _instrument = new Instrument(*is._instrument);
+      _instrument = new Instrument();
+      _instrument->set(is._instrument);
       }
 
 InstrumentChange::~InstrumentChange()
@@ -60,12 +62,12 @@ InstrumentChange::~InstrumentChange()
       delete _instrument;
       }
 
-void InstrumentChange::setInstrument(const Instrument& i)
-      {
-      *_instrument = i;
-      //delete _instrument;
-      //_instrument = new Instrument(i);
-      }
+//void InstrumentChange::setInstrument(const Instrument& i)
+//      {
+//      *_instrument = i;
+//      //delete _instrument;
+//      //_instrument = new Instrument(i);
+//      }
 
 //---------------------------------------------------------
 //   write

@@ -78,7 +78,7 @@ const QString MixerTrackChannel::selStyleDark = "#controlWidget {"
 //   MixerTrack
 //---------------------------------------------------------
 
-MixerTrackChannel::MixerTrackChannel(QWidget *parent, MixerTrackItemPtr mti) :
+MixerTrackChannel::MixerTrackChannel(QWidget *parent, MixerTrackItem* mti) :
       QWidget(parent), _mti(mti), _selected(false), _group(0)
       {
       setupUi(this);
@@ -90,10 +90,17 @@ MixerTrackChannel::MixerTrackChannel(QWidget *parent, MixerTrackItemPtr mti) :
 
       //set up rest
       Channel* chan = mti->chan();
+
+      connect(chan, &Channel::volumeChanged, this, &MixerTrackChannel::notifyVolumeChanged);
+      connect(chan, &Channel::panChanged, this, &MixerTrackChannel::notifyPanChanged);
+      connect(chan, &Channel::muteChanged, this, &MixerTrackChannel::notifyMuteChanged);
+      connect(chan, &Channel::soloChanged, this, &MixerTrackChannel::notifySoloChanged);
+      connect(chan, &Channel::colorChanged, this, &MixerTrackChannel::notifyColorChanged);
+
       soloBn->setChecked(chan->solo());
       muteBn->setChecked(chan->mute());
 
-      chan->addListener(this);
+//      chan->addListener(this);
       volumeSlider->setValue(chan->volume());
       volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
       volumeSlider->setMaxValue(127);
@@ -124,10 +131,10 @@ MixerTrackChannel::MixerTrackChannel(QWidget *parent, MixerTrackItemPtr mti) :
 
 MixerTrackChannel::~MixerTrackChannel()
       {
-      if (_mti) {
-            Channel* chan = _mti->chan();
-            chan->removeListener(this);
-            }
+//      if (_mti) {
+//            Channel* chan = _mti->chan();
+//            chan->removeListener(this);
+//            }
       }
 
 //---------------------------------------------------------
@@ -238,55 +245,99 @@ void MixerTrackChannel::paintEvent(QPaintEvent*)
 //   disconnectChannelListener
 //---------------------------------------------------------
 
-void MixerTrackChannel::disconnectChannelListener()
-      {
-      //Channel has been destroyed.  Don't remove listener when invoking destructor.
-      _mti = nullptr;
-      }
+//void MixerTrackChannel::disconnectChannelListener()
+//      {
+//      //Channel has been destroyed.  Don't remove listener when invoking destructor.
+//      _mti = nullptr;
+//      }
 
 //---------------------------------------------------------
 //   propertyChanged
 //---------------------------------------------------------
 
-void MixerTrackChannel::propertyChanged(Channel::Prop property)
+//void MixerTrackChannel::propertyChanged(Channel::Prop property)
+//      {
+//      Channel* chan = _mti->chan();
+
+//      switch (property) {
+//            case Channel::Prop::VOLUME: {
+//                  volumeSlider->blockSignals(true);
+//                  volumeSlider->setValue(chan->volume());
+//                  volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
+//                  volumeSlider->blockSignals(false);
+//                  break;
+//                  }
+//            case Channel::Prop::PAN: {
+//                  panSlider->blockSignals(true);
+//                  panSlider->setValue(chan->pan());
+//                  panSlider->setToolTip(tr("Pan: %1").arg(QString::number(chan->pan())));
+//                  panSlider->blockSignals(false);
+//                  break;
+//                  }
+//            case Channel::Prop::MUTE: {
+//                  muteBn->blockSignals(true);
+//                  muteBn->setChecked(chan->mute());
+//                  muteBn->blockSignals(false);
+//                  break;
+//                  }
+//            case Channel::Prop::SOLO: {
+//                  soloBn->blockSignals(true);
+//                  soloBn->setChecked(chan->solo());
+//                  soloBn->blockSignals(false);
+//                  break;
+//                  }
+//            case Channel::Prop::COLOR: {
+//                  updateNameLabel();
+//                  break;
+//                  }
+//            default:
+//                  break;
+//            }
+//      }
+
+void MixerTrackChannel::notifyVolumeChanged(char)
       {
       Channel* chan = _mti->chan();
 
-      switch (property) {
-            case Channel::Prop::VOLUME: {
-                  volumeSlider->blockSignals(true);
-                  volumeSlider->setValue(chan->volume());
-                  volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
-                  volumeSlider->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::PAN: {
-                  panSlider->blockSignals(true);
-                  panSlider->setValue(chan->pan());
-                  panSlider->setToolTip(tr("Pan: %1").arg(QString::number(chan->pan())));
-                  panSlider->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::MUTE: {
-                  muteBn->blockSignals(true);
-                  muteBn->setChecked(chan->mute());
-                  muteBn->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::SOLO: {
-                  soloBn->blockSignals(true);
-                  soloBn->setChecked(chan->solo());
-                  soloBn->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::COLOR: {
-                  updateNameLabel();
-                  break;
-                  }
-            default:
-                  break;
-            }
+      volumeSlider->blockSignals(true);
+      volumeSlider->setValue(chan->volume());
+      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
+      volumeSlider->blockSignals(false);
       }
+
+void MixerTrackChannel::notifyPanChanged(char)
+      {
+      Channel* chan = _mti->chan();
+
+      panSlider->blockSignals(true);
+      panSlider->setValue(chan->pan());
+      panSlider->setToolTip(tr("Pan: %1").arg(QString::number(chan->pan())));
+      panSlider->blockSignals(false);
+      }
+
+void MixerTrackChannel::notifyMuteChanged(bool)
+      {
+      Channel* chan = _mti->chan();
+
+      muteBn->blockSignals(true);
+      muteBn->setChecked(chan->mute());
+      muteBn->blockSignals(false);
+      }
+
+void MixerTrackChannel::notifySoloChanged(bool)
+      {
+      Channel* chan = _mti->chan();
+
+      soloBn->blockSignals(true);
+      soloBn->setChecked(chan->solo());
+      soloBn->blockSignals(false);
+      }
+
+void MixerTrackChannel::notifyColorChanged(int)
+      {
+      updateNameLabel();
+      }
+
 
 //---------------------------------------------------------
 //   volumeChanged

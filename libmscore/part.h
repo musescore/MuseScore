@@ -44,7 +44,9 @@ class InstrumentTemplate;
 //   @P volume          int
 //---------------------------------------------------------
 
-class Part final : public ScoreElement {
+class Part final : public QObject, public ScoreElement {
+      Q_OBJECT
+
       QString _partName;            ///< used in tracklist (mixer)
       InstrumentList _instruments;
       QList<Staff*> _staves;
@@ -118,17 +120,15 @@ class Part final : public ScoreElement {
       Instrument* instrument(int tick = -1);
       const Instrument* instrument(int tick = -1) const;
       void setInstrument(Instrument*, int tick = -1);       // transfer ownership
-      void setInstrument(const Instrument&&, int tick = -1);
-      void setInstrument(const Instrument&, int tick = -1);
+//      void setInstrument(const Instrument&&, int tick = -1);
+//      void setInstrument(const Instrument&, int tick = -1);
       void removeInstrument(int tick);
-      const InstrumentList* instruments() const   { return &_instruments;       }
+      const InstrumentList* instruments() const   { return &_instruments; }
 
       void insertTime(int tick, int len);
 
-      QString partName() const                 { return _partName; }
-      void setPartName(const QString& s)       { _partName = s; }
+      QString partName() const { return _partName; }
       int color() const { return _color; }
-      void setColor(int value) { _color = value; }
 
       QVariant getProperty(Pid) const override;
       bool setProperty(Pid, const QVariant&) override;
@@ -138,6 +138,14 @@ class Part final : public ScoreElement {
       bool hasPitchedStaff();
       bool hasTabStaff();
       bool hasDrumStaff();
+
+signals:
+      void colorChanged(int);
+      void partNameChanged(QString);
+
+public slots:
+      void setPartName(const QString& s);
+      void setColor(int value);
       };
 
 }     // namespace Ms

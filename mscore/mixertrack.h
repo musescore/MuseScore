@@ -33,7 +33,7 @@ public:
       virtual ~MixerTrack() {}
       virtual QWidget* getWidget() = 0;
       virtual MixerTrackGroup* group() = 0;
-      virtual MixerTrackItemPtr mti() = 0;
+      virtual MixerTrackItem* mti() = 0;
       virtual bool selected() = 0;
       virtual void setSelected(bool) = 0;
       };

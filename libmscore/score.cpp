@@ -3481,13 +3481,13 @@ void Score::appendPart(const QString& name)
             }
 
       if (t->channel.empty()) {
-            Channel a;
-            a.setChorus(0);
-            a.setReverb(0);
-            a.setName(Channel::DEFAULT_NAME);
-            a.setBank(0);
-            a.setVolume(90);
-            a.setPan(0);
+            Channel* a = new Channel();
+            a->setChorus(0);
+            a->setReverb(0);
+            a->setName(Channel::DEFAULT_NAME);
+            a->setBank(0);
+            a->setVolume(90);
+            a->setPan(0);
             t->channel.append(a);
             }
       Part* part = new Part(this);

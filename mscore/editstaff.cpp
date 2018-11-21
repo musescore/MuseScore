@@ -87,7 +87,7 @@ void EditStaff::setStaff(Staff* s)
 
       orgStaff = s;
       Part* part        = orgStaff->part();
-      instrument        = *part->instrument(/*tick*/);
+      instrument        = part->instrument(/*tick*/);
       Score* score      = part->score();
       staff             = new Staff(score);
       staff->setStaffType(0, *orgStaff->staffType(0));
@@ -165,33 +165,33 @@ void EditStaff::updateStaffType()
 
 void EditStaff::updateInstrument()
       {
-      updateInterval(instrument.transpose());
+      updateInterval(instrument->transpose());
 
-      QList<StaffName>& snl = instrument.shortNames();
+      QList<StaffName>& snl = instrument->shortNames();
       QString df = snl.isEmpty() ? "" : snl[0].name();
       shortName->setPlainText(df);
 
-      QList<StaffName>& lnl = instrument.longNames();
+      QList<StaffName>& lnl = instrument->longNames();
       df = lnl.isEmpty() ? "" : lnl[0].name();
 
       longName->setPlainText(df);
 
       if (partName->text() == instrumentName->text())    // Updates part name if no custom name has been set before
-            partName->setText(instrument.trackName());
+            partName->setText(instrument->trackName());
 
-      instrumentName->setText(instrument.trackName());
+      instrumentName->setText(instrument->trackName());
 
-      _minPitchA = instrument.minPitchA();
-      _maxPitchA = instrument.maxPitchA();
-      _minPitchP = instrument.minPitchP();
-      _maxPitchP = instrument.maxPitchP();
+      _minPitchA = instrument->minPitchA();
+      _maxPitchA = instrument->maxPitchA();
+      _minPitchP = instrument->minPitchP();
+      _maxPitchP = instrument->maxPitchP();
       minPitchA->setText(midiCodeToStr(_minPitchA));
       maxPitchA->setText(midiCodeToStr(_maxPitchA));
       minPitchP->setText(midiCodeToStr(_minPitchP));
       maxPitchP->setText(midiCodeToStr(_maxPitchP));
 
       // only show string data controls if instrument has strings
-      int numStr = instrument.stringData() ? instrument.stringData()->strings() : 0;
+      int numStr = instrument->stringData() ? instrument->stringData()->strings() : 0;
       stringDataFrame->setVisible(numStr > 0);
       numOfStrings->setText(QString::number(numStr));
       }
@@ -324,18 +324,18 @@ void EditStaff::apply()
 
       if (!upFlag)
             interval.flip();
-      instrument.setTranspose(interval);
+      instrument->setTranspose(interval);
 
-      instrument.setMinPitchA(_minPitchA);
-      instrument.setMaxPitchA(_maxPitchA);
-      instrument.setMinPitchP(_minPitchP);
-      instrument.setMaxPitchP(_maxPitchP);
+      instrument->setMinPitchA(_minPitchA);
+      instrument->setMaxPitchA(_maxPitchA);
+      instrument->setMinPitchP(_minPitchP);
+      instrument->setMaxPitchP(_maxPitchP);
 
-      instrument.setShortName(sn);
-      instrument.setLongName(ln);
+      instrument->setShortName(sn);
+      instrument->setLongName(ln);
 
       bool inv       = invisible->isChecked();
-      ClefTypeList clefType = instrument.clefType(orgStaff->rstaff());
+      ClefTypeList clefType = instrument->clefType(orgStaff->rstaff());
       qreal userDist = spinExtraDistance->value();
       bool ifEmpty   = showIfEmpty->isChecked();
       bool hideSystemBL = hideSystemBarLine->isChecked();
@@ -343,9 +343,9 @@ void EditStaff::apply()
       Staff::HideMode hideEmpty = Staff::HideMode(hideMode->currentIndex());
 
       QString newPartName = partName->text().simplified();
-      if (!(instrument == *part->instrument()) || part->partName() != newPartName) {
+      if (!(*instrument == *part->instrument()) || part->partName() != newPartName) {
             // instrument has changed
-            Interval v1 = instrument.transpose();
+            Interval v1 = instrument->transpose();
             Interval v2 = part->instrument()->transpose();
 
             score->undo(new ChangePart(part, new Instrument(instrument), newPartName));
@@ -385,7 +385,7 @@ void EditStaff::apply()
 void EditStaff::minPitchAClicked()
       {
       int         newCode;
-      EditPitch ep(this, instrument.minPitchA());
+      EditPitch ep(this, instrument->minPitchA());
       ep.setWindowModality(Qt::WindowModal);
       if ( (newCode = ep.exec()) != -1) {
             minPitchA->setText(midiCodeToStr(newCode));
@@ -396,7 +396,7 @@ void EditStaff::minPitchAClicked()
 void EditStaff::maxPitchAClicked()
       {
       int         newCode;
-      EditPitch ep(this, instrument.maxPitchA());
+      EditPitch ep(this, instrument->maxPitchA());
       ep.setWindowModality(Qt::WindowModal);
       if ( (newCode = ep.exec()) != -1) {
             maxPitchA->setText(midiCodeToStr(newCode));
@@ -407,7 +407,7 @@ void EditStaff::maxPitchAClicked()
 void EditStaff::minPitchPClicked()
       {
       int         newCode;
-      EditPitch ep(this, instrument.minPitchP());
+      EditPitch ep(this, instrument->minPitchP());
       ep.setWindowModality(Qt::WindowModal);
       if ( (newCode = ep.exec()) != -1) {
             minPitchP->setText(midiCodeToStr(newCode));
@@ -418,7 +418,7 @@ void EditStaff::minPitchPClicked()
 void EditStaff::maxPitchPClicked()
       {
       int         newCode;
-      EditPitch ep(this, instrument.maxPitchP());
+      EditPitch ep(this, instrument->maxPitchP());
       ep.setWindowModality(Qt::WindowModal);
       if ( (newCode = ep.exec()) != -1) {
             maxPitchP->setText(midiCodeToStr(newCode));
@@ -461,10 +461,10 @@ void EditStaff::showBarlinesChanged()
 
 void EditStaff::showInstrumentDialog()
       {
-      SelectInstrument si(&instrument, this);
+      SelectInstrument si(instrument, this);
       si.setWindowModality(Qt::WindowModal);
       if (si.exec()) {
-            instrument = Instrument::fromTemplate(si.instrTemplate());
+            instrument = Instrument::fromTemplate(si.instrTemplate(), this);
             updateInstrument();
             }
       }
@@ -475,8 +475,8 @@ void EditStaff::showInstrumentDialog()
 
 void EditStaff::editStringDataClicked()
       {
-      int                     frets = instrument.stringData()->frets();
-      QList<instrString>      stringList = instrument.stringData()->stringList();
+      int                     frets = instrument->stringData()->frets();
+      QList<instrString>      stringList = instrument->stringData()->stringList();
 
       EditStringData* esd = new EditStringData(this, &stringList, &frets);
       esd->setWindowModality(Qt::WindowModal);
@@ -495,28 +495,28 @@ void EditStaff::editStringDataClicked()
                         if (str.pitch < lowestStringPitch)  lowestStringPitch  = str.pitch;
                         }
                   // get old string range bottom
-                  for (const instrString& str : instrument.stringData()->stringList())
+                  for (const instrString& str : instrument->stringData()->stringList())
                         if (str.pitch > oldHighestStringPitch) oldHighestStringPitch = str.pitch;
                   // if there were no string, arbitrarely set old top to maxPitchA
                   if (oldHighestStringPitch == INT16_MIN)
-                        oldHighestStringPitch = instrument.maxPitchA();
+                        oldHighestStringPitch = instrument->maxPitchA();
 
                   // range bottom is surely the pitch of the lowest string
-                  instrument.setMinPitchA(lowestStringPitch);
-                  instrument.setMinPitchP(lowestStringPitch);
+                  instrument->setMinPitchA(lowestStringPitch);
+                  instrument->setMinPitchP(lowestStringPitch);
                   // range top should keep the same interval with the highest string it has now
-                  instrument.setMaxPitchA(instrument.maxPitchA() + highestStringPitch - oldHighestStringPitch);
-                  instrument.setMaxPitchP(instrument.maxPitchP() + highestStringPitch - oldHighestStringPitch);
+                  instrument->setMaxPitchA(instrument->maxPitchA() + highestStringPitch - oldHighestStringPitch);
+                  instrument->setMaxPitchP(instrument->maxPitchP() + highestStringPitch - oldHighestStringPitch);
                   // update dlg controls
-                  minPitchA->setText(midiCodeToStr(instrument.minPitchA()));
-                  maxPitchA->setText(midiCodeToStr(instrument.maxPitchA()));
-                  minPitchP->setText(midiCodeToStr(instrument.minPitchP()));
-                  maxPitchP->setText(midiCodeToStr(instrument.maxPitchP()));
+                  minPitchA->setText(midiCodeToStr(instrument->minPitchA()));
+                  maxPitchA->setText(midiCodeToStr(instrument->maxPitchA()));
+                  minPitchP->setText(midiCodeToStr(instrument->minPitchP()));
+                  maxPitchP->setText(midiCodeToStr(instrument->maxPitchP()));
                   // if no longer there is any string, leave everything as it is now
                   }
 
             // update instrument data and dlg controls
-            instrument.setStringData(stringData);
+            instrument->setStringData(stringData);
             numOfStrings->setText(QString::number(stringData.strings()));
             }
       }

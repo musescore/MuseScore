@@ -68,30 +68,46 @@ MixerDetails::MixerDetails(QWidget *parent) :
 
 MixerDetails::~MixerDetails()
       {
-      if (_mti) {
-            //Remove old attachment
-            _mti->midiMap()->articulation->removeListener(this);
-            }
+//      if (_mti) {
+//            //Remove old attachment
+//            _mti->midiMap()->articulation->removeListener(this);
+//            }
       }
 
 //---------------------------------------------------------
 //   setTrack
 //---------------------------------------------------------
 
-void MixerDetails::setTrack(MixerTrackItemPtr track)
+void MixerDetails::setTrack(MixerTrackItem* track)
       {
       if (_mti) {
             //Remove old attachment
+            Part* part = _mti->part();
             Channel* chan = _mti->focusedChan();
-            chan->removeListener(this);
+//            chan->removeListener(this);
+
+            disconnect(chan, &Channel::volumeChanged, this, &MixerDetails::notifyVolumeChanged);
+            disconnect(chan, &Channel::panChanged, this, &MixerDetails::notifyPanChanged);
+            disconnect(chan, &Channel::chorusChanged, this, &MixerDetails::notifyChorusChanged);
+            disconnect(chan, &Channel::reverbChanged, this, &MixerDetails::notifyReverbChanged);
+            disconnect(chan, &Channel::colorChanged, this, &MixerDetails::notifyColorChanged);
+            disconnect(part, &Part::partNameChanged, this, &MixerDetails::notifyPartNameChanged);
             }
 
       _mti = track;
-
+//vol pan rev cho color name
       if (_mti) {
             //Listen to new track
+            Part* part = _mti->part();
             Channel* chan = _mti->focusedChan();
-            chan->addListener(this);
+//            chan->addListener(this);
+
+            connect(chan, &Channel::volumeChanged, this, &MixerDetails::notifyVolumeChanged);
+            connect(chan, &Channel::panChanged, this, &MixerDetails::notifyPanChanged);
+            connect(chan, &Channel::chorusChanged, this, &MixerDetails::notifyChorusChanged);
+            connect(chan, &Channel::reverbChanged, this, &MixerDetails::notifyReverbChanged);
+            connect(chan, &Channel::colorChanged, this, &MixerDetails::notifyColorChanged);
+            connect(part, &Part::partNameChanged, this, &MixerDetails::notifyPartNameChanged);
             }
       updateFromTrack();
       }
@@ -289,17 +305,87 @@ void MixerDetails::trackColorChanged(QColor col)
 //   disconnectChannelListener
 //---------------------------------------------------------
 
-void MixerDetails::disconnectChannelListener()
-      {
-      //Channel has been destroyed.  Don't remove listener when invoking destructor.
-      _mti = nullptr;
-      }
+//void MixerDetails::disconnectChannelListener()
+//      {
+//      //Channel has been destroyed.  Don't remove listener when invoking destructor.
+//      _mti = nullptr;
+//      }
 
 //---------------------------------------------------------
 //   propertyChanged
 //---------------------------------------------------------
 
-void MixerDetails::propertyChanged(Channel::Prop property)
+//void MixerDetails::propertyChanged(Channel::Prop property)
+//      {
+//      if (!_mti)
+//            return;
+
+//      MidiMapping* _midiMap = _mti->midiMap();
+//      Channel* chan = _midiMap->articulation;
+
+//      switch (property) {
+//            case Channel::Prop::VOLUME: {
+//                  volumeSlider->blockSignals(true);
+//                  volumeSpinBox->blockSignals(true);
+
+//                  volumeSlider->setValue((int)chan->volume());
+//                  volumeSpinBox->setValue(chan->volume());
+
+//                  volumeSlider->blockSignals(false);
+//                  volumeSpinBox->blockSignals(false);
+//                  break;
+//                  }
+//            case Channel::Prop::PAN: {
+//                  panSlider->blockSignals(true);
+//                  panSpinBox->blockSignals(true);
+
+//                  panSlider->setValue((int)chan->pan());
+//                  panSpinBox->setValue(chan->pan());
+
+//                  panSlider->blockSignals(false);
+//                  panSpinBox->blockSignals(false);
+//                  break;
+//                  }
+//            case Channel::Prop::CHORUS: {
+//                  chorusSlider->blockSignals(true);
+//                  chorusSpinBox->blockSignals(true);
+
+//                  chorusSlider->setValue((int)chan->chorus());
+//                  chorusSpinBox->setValue(chan->chorus());
+
+//                  chorusSlider->blockSignals(false);
+//                  chorusSpinBox->blockSignals(false);
+//                  break;
+//                  }
+//            case Channel::Prop::REVERB: {
+//                  reverbSlider->blockSignals(true);
+//                  reverbSpinBox->blockSignals(true);
+
+//                  reverbSlider->setValue((int)chan->reverb());
+//                  reverbSpinBox->setValue(chan->reverb());
+
+//                  reverbSlider->blockSignals(false);
+//                  reverbSpinBox->blockSignals(false);
+//                  break;
+//                  }
+//            case Channel::Prop::COLOR: {
+//                  trackColorChanged(chan->color());
+//                  break;
+//                  }
+//            case Channel::Prop::NAME: {
+//                  partNameLineEdit->blockSignals(true);
+//                  Part* part = _mti->part();
+//                  QString partName = part->partName();
+//                  partNameLineEdit->setText(partName);
+//                  partNameLineEdit->blockSignals(false);
+//                  break;
+//                  }
+//            default:
+//                  break;
+//            }
+//      }
+
+void MixerDetails::notifyVolumeChanged(char)
       {
       if (!_mti)
             return;
@@ -307,66 +393,100 @@ void MixerDetails::propertyChanged(Channel::Prop property)
       MidiMapping* _midiMap = _mti->midiMap();
       Channel* chan = _midiMap->articulation;
 
-      switch (property) {
-            case Channel::Prop::VOLUME: {
-                  volumeSlider->blockSignals(true);
-                  volumeSpinBox->blockSignals(true);
+      volumeSlider->blockSignals(true);
+      volumeSpinBox->blockSignals(true);
 
-                  volumeSlider->setValue((int)chan->volume());
-                  volumeSpinBox->setValue(chan->volume());
+      volumeSlider->setValue((int)chan->volume());
+      volumeSpinBox->setValue(chan->volume());
 
-                  volumeSlider->blockSignals(false);
-                  volumeSpinBox->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::PAN: {
-                  panSlider->blockSignals(true);
-                  panSpinBox->blockSignals(true);
+      volumeSlider->blockSignals(false);
+      volumeSpinBox->blockSignals(false);
 
-                  panSlider->setValue((int)chan->pan());
-                  panSpinBox->setValue(chan->pan());
+      }
 
-                  panSlider->blockSignals(false);
-                  panSpinBox->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::CHORUS: {
-                  chorusSlider->blockSignals(true);
-                  chorusSpinBox->blockSignals(true);
+void MixerDetails::notifyPanChanged(char)
+      {
+      if (!_mti)
+            return;
 
-                  chorusSlider->setValue((int)chan->chorus());
-                  chorusSpinBox->setValue(chan->chorus());
+      MidiMapping* _midiMap = _mti->midiMap();
+      Channel* chan = _midiMap->articulation;
 
-                  chorusSlider->blockSignals(false);
-                  chorusSpinBox->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::REVERB: {
-                  reverbSlider->blockSignals(true);
-                  reverbSpinBox->blockSignals(true);
+      panSlider->blockSignals(true);
+      panSpinBox->blockSignals(true);
 
-                  reverbSlider->setValue((int)chan->reverb());
-                  reverbSpinBox->setValue(chan->reverb());
+      panSlider->setValue((int)chan->pan());
+      panSpinBox->setValue(chan->pan());
 
-                  reverbSlider->blockSignals(false);
-                  reverbSpinBox->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::COLOR: {
-                  trackColorChanged(chan->color());
-                  break;
-                  }
-            case Channel::Prop::NAME: {
-                  partNameLineEdit->blockSignals(true);
-                  Part* part = _mti->part();
-                  QString partName = part->partName();
-                  partNameLineEdit->setText(partName);
-                  partNameLineEdit->blockSignals(false);
-                  break;
-                  }
-            default:
-                  break;
-            }
+      panSlider->blockSignals(false);
+      panSpinBox->blockSignals(false);
+
+      }
+
+void MixerDetails::notifyChorusChanged(char)
+      {
+      if (!_mti)
+            return;
+
+      MidiMapping* _midiMap = _mti->midiMap();
+      Channel* chan = _midiMap->articulation;
+
+      chorusSlider->blockSignals(true);
+      chorusSpinBox->blockSignals(true);
+
+      chorusSlider->setValue((int)chan->chorus());
+      chorusSpinBox->setValue(chan->chorus());
+
+      chorusSlider->blockSignals(false);
+      chorusSpinBox->blockSignals(false);
+
+      }
+
+void MixerDetails::notifyReverbChanged(char)
+      {
+      if (!_mti)
+            return;
+
+      MidiMapping* _midiMap = _mti->midiMap();
+      Channel* chan = _midiMap->articulation;
+
+      reverbSlider->blockSignals(true);
+      reverbSpinBox->blockSignals(true);
+
+      reverbSlider->setValue((int)chan->reverb());
+      reverbSpinBox->setValue(chan->reverb());
+
+      reverbSlider->blockSignals(false);
+      reverbSpinBox->blockSignals(false);
+
+      }
+
+void MixerDetails::notifyColorChanged(int)
+      {
+      if (!_mti)
+            return;
+
+      MidiMapping* _midiMap = _mti->midiMap();
+      Channel* chan = _midiMap->articulation;
+
+      trackColorChanged(chan->color());
+
+      }
+
+void MixerDetails::notifyPartNameChanged(QString)
+      {
+      if (!_mti)
+            return;
+
+      MidiMapping* _midiMap = _mti->midiMap();
+      Channel* chan = _midiMap->articulation;
+
+      partNameLineEdit->blockSignals(true);
+      Part* part = _mti->part();
+      QString partName = part->partName();
+      partNameLineEdit->setText(partName);
+      partNameLineEdit->blockSignals(false);
+
       }
 
 //---------------------------------------------------------

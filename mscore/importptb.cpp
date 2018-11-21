@@ -1283,7 +1283,9 @@ Score::FileError PowerTab::read()
 
             QList<int> stavesMap;
             Part* p = new Part(pscore);
-            p->setInstrument(*part->instrument());
+            Instrument* newInstr = new Instrument(p);
+            newInstr->set(part->instrument());
+            p->setInstrument(newInstr);
 
             Staff* staff = part->staves()->front();
 

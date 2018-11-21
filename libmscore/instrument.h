@@ -20,6 +20,7 @@
 #include "clef.h"
 #include <QtGlobal>
 #include <QString>
+#include <QObject>
 
 namespace Ms {
 
@@ -95,7 +96,9 @@ struct MidiArticulation {
 //   Channel
 //---------------------------------------------------------
 
-class Channel {
+class Channel : public QObject {
+      Q_OBJECT
+
       // this are the indexes of controllers which are always present in
       // Channel init EventList (maybe zero)
       QString _name;
@@ -120,7 +123,7 @@ class Channel {
       bool _mute;
       bool _solo;
 
-      QList<ChannelListener *> listeners;
+//      QList<ChannelListener *> listeners;
 
 public:
       static const char* DEFAULT_NAME;
@@ -130,80 +133,107 @@ public:
             INIT_COUNT
             };
 
-      enum class Prop : char {
-            VOLUME, PAN, CHORUS, REVERB, NAME, DESCR, PROGRAM, BANK, COLOR,
-            SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL
-            };
-
-private:
-      void firePropertyChanged(Channel::Prop prop);
-
-public:
+//      enum class Prop : char {
+//            VOLUME, PAN, CHORUS, REVERB, NAME, DESCR, PROGRAM, BANK, COLOR,
+//            SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL
+//            };
 
       mutable std::vector<MidiCoreEvent> init;
 
+//private:
+//      void firePropertyChanged(Channel::Prop prop);
+
+public:
+      Channel(QObject* parent = nullptr);
+      ~Channel();
+
+      void set(Channel* c);
 
       QString name() const { return _name; }
-      void setName(const QString& value);
       QString descr() const { return _descr; }
-      void setDescr(const QString& value);
       QString synti() const { return _synti; }
-      void setSynti(const QString& value);
       int color() const { return _color; }
-      void setColor(int value);
 
       char volume() const { return _volume; }
-      void setVolume(char value);
       char pan() const { return _pan; }
-      void setPan(char value);
       char chorus() const { return _chorus; }
-      void setChorus(char value);
       char reverb() const { return _reverb; }
-      void setReverb(char value);
 
       int program() const { return _program; }
-      void setProgram(int value);
       int bank() const { return _bank; }
-      void setBank(int value);
       int channel() const { return _channel; }
-      void setChannel(int value);
 
       bool soloMute() const { return _soloMute; }
-      void setSoloMute(bool value);
       bool mute() const { return _mute; }
-      void setMute(bool value);
       bool solo() const { return _solo; }
-      void setSolo(bool value);
 
       QList<NamedEventList> midiActions;
       QList<MidiArticulation> articulation;
 
-      Channel();
-      ~Channel();
       void write(XmlWriter&, Part *part) const;
       void read(XmlReader&, Part *part);
       void updateInitList() const;
       bool operator==(const Channel& c) { return (_name == c._name) && (_channel == c._channel); }
 
-      void addListener(ChannelListener *l) { listeners.append(l); }
-      void removeListener(ChannelListener *l) { listeners.removeOne(l); }
+//      void addListener(ChannelListener *l) { listeners.append(l); }
+//      void removeListener(ChannelListener *l) { listeners.removeOne(l); }
+
+signals:
+      void nameChanged(QString);
+      void descrChanged(QString);
+      void syntiChanged(QString);
+      void colorChanged(int);
+
+      void volumeChanged(char);
+      void panChanged(char);
+      void chorusChanged(char);
+      void reverbChanged(char);
+
+      void programChanged(int);
+      void bankChanged(int);
+      void channelChanged(int);
+
+      void soloMuteChanged(bool);
+      void muteChanged(bool);
+      void soloChanged(bool);
+
+public slots:
+      void setName(const QString& value);
+      void setDescr(const QString& value);
+      void setSynti(const QString& value);
+      void setColor(int value);
+
+      void setVolume(char value);
+      void setPan(char value);
+      void setChorus(char value);
+      void setReverb(char value);
+
+      void setProgram(int value);
+      void setBank(int value);
+      void setChannel(int value);
+
+      void setSoloMute(bool value);
+      void setMute(bool value);
+      void setSolo(bool value);
       };
 
 //---------------------------------------------------------
 //   ChannelListener
 //---------------------------------------------------------
 
-class ChannelListener {
-public:
-      virtual void propertyChanged(Channel::Prop property) = 0;
-      virtual void disconnectChannelListener() = 0;
-      };
+//class ChannelListener {
+//public:
+//      virtual void propertyChanged(Channel::Prop property) = 0;
+//      virtual void disconnectChannelListener() = 0;
+//      };
 
 //---------------------------------------------------------
 //   Instrument
 //---------------------------------------------------------
 
-class Instrument {
+class Instrument : public QObject {
+      Q_OBJECT
+
       StaffNameList _longNames;
       StaffNameList _shortNames;
       QString _trackName;
@@ -222,11 +252,12 @@ class Instrument {
       QList<ClefTypeList> _clefType;
 
    public:
-      Instrument();
-      Instrument(const Instrument&);
-      void operator=(const Instrument&);
+      Instrument(QObject* parent = nullptr);
+//      Instrument(const Instrument&);
+//      void operator=(const Instrument&);
       ~Instrument();
 
+      void set(const Instrument* master);
       void read(XmlReader&, Part *part);
       bool readProperties(XmlReader&, Part* , bool* customDrumset);
       void write(XmlWriter& xml, Part *part) const;
@@ -289,7 +320,7 @@ class Instrument {
       QList<StaffName>& shortNames();
       QString trackName() const;
       void setTrackName(const QString& s);
-      static Instrument fromTemplate(const InstrumentTemplate* t);
+      static Instrument* fromTemplate(const InstrumentTemplate* t, QObject* parent = nullptr);
       };
 
 //---------------------------------------------------------

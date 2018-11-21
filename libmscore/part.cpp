@@ -46,7 +46,7 @@ Part::Part(Score* s)
 void Part::initFromInstrTemplate(const InstrumentTemplate* t)
       {
       _partName = t->trackName;
-      setInstrument(Instrument::fromTemplate(t));
+      setInstrument(Instrument::fromTemplate(t, this));
       }
 
 //---------------------------------------------------------
@@ -370,14 +370,15 @@ void Part::setInstrument(Instrument* i, int tick)
       _instruments.setInstrument(i, tick);
       }
 
-void Part::setInstrument(const Instrument&& i, int tick)
-      {
-      _instruments.setInstrument(new Instrument(i), tick);
-      }
-void Part::setInstrument(const Instrument& i, int tick)
-      {
-      _instruments.setInstrument(new Instrument(i), tick);
-      }
+//void Part::setInstrument(const Instrument&& i, int tick)
+//      {
+//      _instruments.setInstrument(new Instrument(i), tick);
+//      }
+
+//void Part::setInstrument(const Instrument& i, int tick)
+//      {
+//      _instruments.setInstrument(new Instrument(i), tick);
+//      }
 
 //---------------------------------------------------------
 //   removeInstrument
@@ -678,5 +679,30 @@ bool Part::hasDrumStaff()
             }
       return false;
       }
+
+//---------------------------------------------------------
+//   hasDrumStaff
+//---------------------------------------------------------
+
+void Part::setPartName(const QString& s)
+      {
+      if (s != _partName) {
+            _partName = s;
+            emit(partNameChanged(s));
+            }
+      }
+
+//---------------------------------------------------------
+//   hasDrumStaff
+//---------------------------------------------------------
+
+void Part::setColor(int value)
+      {
+      if (_color != value) {
+            _color = value;
+            emit(colorChanged(value));
+            }
+      }
+
 }
 

@@ -82,7 +82,8 @@ bool MidiArticulation::operator==(const MidiArticulation& i) const
 //   Instrument
 //---------------------------------------------------------
 
-Instrument::Instrument()
+Instrument::Instrument(QObject* parent)
+      :QObject(parent)
       {
       Channel* a = new Channel;
       a->setName(Channel::DEFAULT_NAME);
@@ -96,55 +97,55 @@ Instrument::Instrument()
       _drumset     = 0;
       }
 
-Instrument::Instrument(const Instrument& i)
-      {
-      _longNames    = i._longNames;
-      _shortNames   = i._shortNames;
-      _trackName    = i._trackName;
-      _minPitchA    = i._minPitchA;
-      _maxPitchA    = i._maxPitchA;
-      _minPitchP    = i._minPitchP;
-      _maxPitchP    = i._maxPitchP;
-      _transpose    = i._transpose;
-      _instrumentId = i._instrumentId;
-      _stringData   = i._stringData;
-      _drumset      = 0;
-      setDrumset(i._drumset);
-      _useDrumset   = i._useDrumset;
-      _stringData   = i._stringData;
-      _midiActions  = i._midiActions;
-      _articulation = i._articulation;
-      for (Channel* c : i._channel)
-            _channel.append(new Channel(*c));
-      _clefType     = i._clefType;
-      }
+//Instrument::Instrument(const Instrument& i)
+//      {
+//      _longNames    = i._longNames;
+//      _shortNames   = i._shortNames;
+//      _trackName    = i._trackName;
+//      _minPitchA    = i._minPitchA;
+//      _maxPitchA    = i._maxPitchA;
+//      _minPitchP    = i._minPitchP;
+//      _maxPitchP    = i._maxPitchP;
+//      _transpose    = i._transpose;
+//      _instrumentId = i._instrumentId;
+//      _stringData   = i._stringData;
+//      _drumset      = 0;
+//      setDrumset(i._drumset);
+//      _useDrumset   = i._useDrumset;
+//      _stringData   = i._stringData;
+//      _midiActions  = i._midiActions;
+//      _articulation = i._articulation;
+//      for (Channel* c : i._channel)
+//            _channel.append(new Channel(*c));
+//      _clefType     = i._clefType;
+//      }
 
-void Instrument::operator=(const Instrument& i)
-      {
-      qDeleteAll(_channel);
-      _channel.clear();
-      delete _drumset;
+//void Instrument::operator=(const Instrument& i)
+//      {
+//      qDeleteAll(_channel);
+//      _channel.clear();
+//      delete _drumset;
 
-      _longNames    = i._longNames;
-      _shortNames   = i._shortNames;
-      _trackName    = i._trackName;
-      _minPitchA    = i._minPitchA;
-      _maxPitchA    = i._maxPitchA;
-      _minPitchP    = i._minPitchP;
-      _maxPitchP    = i._maxPitchP;
-      _transpose    = i._transpose;
-      _instrumentId = i._instrumentId;
-      _stringData   = i._stringData;
-      _drumset      = 0;
-      setDrumset(i._drumset);
-      _useDrumset   = i._useDrumset;
-      _stringData   = i._stringData;
-      _midiActions  = i._midiActions;
-      _articulation = i._articulation;
-      for (Channel* c : i._channel)
-            _channel.append(new Channel(*c));
-      _clefType     = i._clefType;
-      }
+//      _longNames    = i._longNames;
+//      _shortNames   = i._shortNames;
+//      _trackName    = i._trackName;
+//      _minPitchA    = i._minPitchA;
+//      _maxPitchA    = i._maxPitchA;
+//      _minPitchP    = i._minPitchP;
+//      _maxPitchP    = i._maxPitchP;
+//      _transpose    = i._transpose;
+//      _instrumentId = i._instrumentId;
+//      _stringData   = i._stringData;
+//      _drumset      = 0;
+//      setDrumset(i._drumset);
+//      _useDrumset   = i._useDrumset;
+//      _stringData   = i._stringData;
+//      _midiActions  = i._midiActions;
+//      _articulation = i._articulation;
+//      for (Channel* c : i._channel)
+//            _channel.append(new Channel(*c));
+//      _clefType     = i._clefType;
+//      }
 
 //---------------------------------------------------------
 //   ~Instrument
@@ -154,6 +155,40 @@ Instrument::~Instrument()
       {
       qDeleteAll(_channel);
       delete _drumset;
+      }
+
+//---------------------------------------------------------
+//   set
+//---------------------------------------------------------
+
+void Instrument::set(const Instrument* i)
+      {
+      qDeleteAll(_channel);
+      _channel.clear();
+      delete _drumset;
+
+      _longNames    = i->_longNames;
+      _shortNames   = i->_shortNames;
+      _trackName    = i->_trackName;
+      _minPitchA    = i->_minPitchA;
+      _maxPitchA    = i->_maxPitchA;
+      _minPitchP    = i->_minPitchP;
+      _maxPitchP    = i->_maxPitchP;
+      _transpose    = i->_transpose;
+      _instrumentId = i->_instrumentId;
+      _stringData   = i->_stringData;
+      _drumset      = 0;
+      setDrumset(i->_drumset);
+      _useDrumset   = i->_useDrumset;
+      _stringData   = i->_stringData;
+      _midiActions  = i->_midiActions;
+      _articulation = i->_articulation;
+      for (Channel* c : i->_channel) {
+            Channel* nc = new Channel(this);
+            nc->set(c);
+            _channel.append(nc);
+            }
+      _clefType     = i->_clefType;
       }
 
 //---------------------------------------------------------
@@ -407,7 +442,8 @@ const char *Channel::DEFAULT_NAME = "normal";
 //   Channel
 //---------------------------------------------------------
 
-Channel::Channel()
+Channel::Channel(QObject* parent)
+      : QObject(parent)
       {
       for(int i = 0; i < int(A::INIT_COUNT); ++i)
             init.push_back(MidiCoreEvent());
@@ -428,75 +464,54 @@ Channel::Channel()
 //      qDebug("construct Channel ");
       }
 
+//---------------------------------------------------------
+//   ~Channel
+//---------------------------------------------------------
+
 Channel::~Channel()
       {
-      QList<ChannelListener *> list(listeners);
+//      QList<ChannelListener *> list(listeners);
 
-      for (ChannelListener * l: list) {
-            l->disconnectChannelListener();
-            }
+//      for (ChannelListener * l: list) {
+//            l->disconnectChannelListener();
+//            }
+//      listeners.clear();
+      }
+
+
+//---------------------------------------------------------
+//   set
+//---------------------------------------------------------
+
+void Channel::set(Channel* c)
+      {
+      _synti    = c->_synti;
+      _channel  = c->_channel;
+      _program  = c->_program;
+      _bank     = c->_bank;
+      _volume   = c->_volume;
+      _pan      = c->_pan;
+      _chorus   = c->_chorus;
+      _reverb   = c->_reverb;
+      _color    = c->_color;
+
+      _mute     = c->_mute;
+      _solo     = c->_solo;
+      _soloMute = c->_soloMute;
       }
 
 //---------------------------------------------------------
 //   firePropertyChanged
 //---------------------------------------------------------
 
-void Channel::firePropertyChanged(Channel::Prop prop)
-      {
-      QList<ChannelListener *> list(listeners);
+//void Channel::firePropertyChanged(Channel::Prop prop)
+//      {
+//      QList<ChannelListener *> list(listeners);
 
-      for (ChannelListener * l: list) {
-            l->propertyChanged(prop);
-            }
-      }
-
-//---------------------------------------------------------
-//   setVolume
-//---------------------------------------------------------
-
-void Channel::setVolume(char value)
-      {
-      if (_volume != value) {
-            _volume = value;
-            firePropertyChanged(Prop::VOLUME);
-            }
-      }
-
-//---------------------------------------------------------
-//   setPan
-//---------------------------------------------------------
-
-void Channel::setPan(char value)
-      {
-      if (_pan != value) {
-            _pan = value;
-            firePropertyChanged(Prop::PAN);
-            }
-      }
-
-//---------------------------------------------------------
-//   setChorus
-//---------------------------------------------------------
-
-void Channel::setChorus(char value)
-      {
-      if (_chorus != value) {
-            _chorus = value;
-            firePropertyChanged(Prop::CHORUS);
-            }
-      }
-
-//---------------------------------------------------------
-//   setReverb
-//---------------------------------------------------------
-
-void Channel::setReverb(char value)
-      {
-      if (_reverb != value) {
-            _reverb = value;
-            firePropertyChanged(Prop::REVERB);
-            }
-      }
+//      for (ChannelListener * l: list) {
+//            l->propertyChanged(prop);
+//            }
+//      }
 
 //---------------------------------------------------------
 //   setName
@@ -506,7 +521,8 @@ void Channel::setName(const QString& value)
       {
       if (_name != value) {
             _name = value;
-            firePropertyChanged(Prop::NAME);
+//            firePropertyChanged(Prop::NAME);
+            emit(nameChanged(value));
             }
       }
 
@@ -518,7 +534,8 @@ void Channel::setDescr(const QString& value)
       {
       if (_descr != value) {
             _descr = value;
-            firePropertyChanged(Prop::DESCR);
+//            firePropertyChanged(Prop::DESCR);
+            emit(descrChanged(value));
             }
       }
 
@@ -530,7 +547,8 @@ void Channel::setSynti(const QString& value)
       {
       if (_synti != value) {
             _synti = value;
-            firePropertyChanged(Prop::SYNTI);
+            emit(syntiChanged(value));
+//            firePropertyChanged(Prop::SYNTI);
             }
       }
 
@@ -542,7 +560,60 @@ void Channel::setColor(int value)
       {
       if (_color != value) {
             _color = value;
-            firePropertyChanged(Prop::COLOR);
+            emit(colorChanged(value));
+//            firePropertyChanged(Prop::COLOR);
+            }
+      }
+
+//---------------------------------------------------------
+//   setVolume
+//---------------------------------------------------------
+
+void Channel::setVolume(char value)
+      {
+      if (_volume != value) {
+            _volume = value;
+            emit(volumeChanged(value));
+//            firePropertyChanged(Prop::VOLUME);
+            }
+      }
+
+//---------------------------------------------------------
+//   setPan
+//---------------------------------------------------------
+
+void Channel::setPan(char value)
+      {
+      if (_pan != value) {
+            _pan = value;
+            emit(panChanged(value));
+//            firePropertyChanged(Prop::PAN);
+            }
+      }
+
+//---------------------------------------------------------
+//   setChorus
+//---------------------------------------------------------
+
+void Channel::setChorus(char value)
+      {
+      if (_chorus != value) {
+            _chorus = value;
+            emit(chorusChanged(value));
+//            firePropertyChanged(Prop::CHORUS);
+            }
+      }
+
+//---------------------------------------------------------
+//   setReverb
+//---------------------------------------------------------
+
+void Channel::setReverb(char value)
+      {
+      if (_reverb != value) {
+            _reverb = value;
+            emit(reverbChanged(value));
+//            firePropertyChanged(Prop::REVERB);
             }
       }
 
@@ -554,7 +625,8 @@ void Channel::setProgram(int value)
       {
       if (_program != value) {
             _program = value;
-            firePropertyChanged(Prop::PROGRAM);
+            emit(programChanged(value));
+//            firePropertyChanged(Prop::PROGRAM);
             }
       }
 
@@ -566,7 +638,8 @@ void Channel::setBank(int value)
       {
       if (_bank != value) {
             _bank = value;
-            firePropertyChanged(Prop::BANK);
+            emit(bankChanged(value));
+//            firePropertyChanged(Prop::BANK);
             }
       }
 
@@ -578,7 +651,8 @@ void Channel::setChannel(int value)
       {
       if (_channel != value) {
             _channel = value;
-            firePropertyChanged(Prop::CHANNEL);
+            emit(channelChanged(value));
+//            firePropertyChanged(Prop::CHANNEL);
             }
       }
 
@@ -590,7 +664,8 @@ void Channel::setSoloMute(bool value)
       {
       if (_soloMute != value) {
             _soloMute = value;
-            firePropertyChanged(Prop::SOLOMUTE);
+            emit(soloMuteChanged(value));
+//            firePropertyChanged(Prop::SOLOMUTE);
             }
       }
 
@@ -602,7 +677,8 @@ void Channel::setMute(bool value)
       {
       if (_mute != value) {
             _mute = value;
-            firePropertyChanged(Prop::MUTE);
+            emit(muteChanged(value));
+//            firePropertyChanged(Prop::MUTE);
             }
       }
 
@@ -614,7 +690,8 @@ void Channel::setSolo(bool value)
       {
       if (_solo != value) {
             _solo = value;
-            firePropertyChanged(Prop::SOLO);
+            emit(soloChanged(value));
+//            firePropertyChanged(Prop::SOLO);
             }
       }
 
@@ -1174,28 +1251,31 @@ void Instrument::setTrackName(const QString& s)
 //   fromTemplate
 //---------------------------------------------------------
 
-Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
+Instrument* Instrument::fromTemplate(const InstrumentTemplate* t, QObject* parent)
       {
-      Instrument instr;
-      instr.setAmateurPitchRange(t->minPitchA, t->maxPitchA);
-      instr.setProfessionalPitchRange(t->minPitchP, t->maxPitchP);
+      Instrument* instr = new Instrument(parent);
+      instr->setAmateurPitchRange(t->minPitchA, t->maxPitchA);
+      instr->setProfessionalPitchRange(t->minPitchP, t->maxPitchP);
       for (StaffName sn : t->longNames)
-            instr.addLongName(StaffName(sn.name(), sn.pos()));
+            instr->addLongName(StaffName(sn.name(), sn.pos()));
       for (StaffName sn : t->shortNames)
-            instr.addShortName(StaffName(sn.name(), sn.pos()));
-      instr.setTrackName(t->trackName);
-      instr.setTranspose(t->transpose);
-      instr.setInstrumentId(t->musicXMLid);
+            instr->addShortName(StaffName(sn.name(), sn.pos()));
+      instr->setTrackName(t->trackName);
+      instr->setTranspose(t->transpose);
+      instr->setInstrumentId(t->musicXMLid);
       if (t->useDrumset)
-            instr.setDrumset(t->drumset ? t->drumset : smDrumset);
+            instr->setDrumset(t->drumset ? t->drumset : smDrumset);
       for (int i = 0; i < t->nstaves(); ++i)
-            instr.setClefType(i, t->clefTypes[i]);
-      instr.setMidiActions(t->midiActions);
-      instr.setArticulation(t->articulation);
-      instr._channel.clear();
-      for (const Channel& c : t->channel)
-            instr._channel.append(new Channel(c));
-      instr.setStringData(t->stringData);
+            instr->setClefType(i, t->clefTypes[i]);
+      instr->setMidiActions(t->midiActions);
+      instr->setArticulation(t->articulation);
+      instr->_channel.clear();
+      for (Channel* c : t->channel) {
+            Channel* nc = new Channel(instr);
+            nc->set(c);
+            instr->_channel.append(c);
+            }
+      instr->setStringData(t->stringData);
       return instr;
       }
 

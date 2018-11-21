@@ -445,8 +445,8 @@ void InstrumentTemplate::read(XmlReader& e)
                   midiActions.append(a);
                   }
             else if (tag == "Channel" || tag == "channel") {
-                  Channel a;
-                  a.read(e, nullptr);
+                  Channel* a = new Channel();
+                  a->read(e, nullptr);
                   channel.append(a);
                   }
             else if (tag == "Articulation") {
@@ -500,20 +500,20 @@ void InstrumentTemplate::read(XmlReader& e)
                   e.unknown();
             }
       if (channel.empty()) {
-            Channel a;
-            a.setChorus(0);
-            a.setReverb(0);
-            a.setName("normal");
-            a.setProgram(0);
-            a.setBank(0);
-            a.setVolume(90);
-            a.setPan(0);
+            Channel* a = new Channel();
+            a->setChorus(0);
+            a->setReverb(0);
+            a->setName("normal");
+            a->setProgram(0);
+            a->setBank(0);
+            a->setVolume(90);
+            a->setPan(0);
             channel.append(a);
             }
       if (useDrumset) {
-            if (channel[0].bank() == 0 && channel[0].synti().toLower() != "zerberus")
-                  channel[0].setBank(128);
-            channel[0].updateInitList();
+            if (channel[0]->bank() == 0 && channel[0]->synti().toLower() != "zerberus")
+                  channel[0]->setBank(128);
+            channel[0]->updateInitList();
             }
       if (trackName.isEmpty() && !longNames.isEmpty())
             trackName = longNames[0].name();
@@ -790,7 +790,7 @@ ClefType defaultClef(int program)
 
       for (InstrumentGroup* g : instrumentGroups) {
             for (InstrumentTemplate* it : g->instrumentTemplates) {
-                  if (it->channel[0].bank() == 0 && it->channel[0].program() == program){
+                  if (it->channel[0]->bank() == 0 && it->channel[0]->program() == program){
                         return (it->clefTypes[0]._concertClef);
                         }
                   }

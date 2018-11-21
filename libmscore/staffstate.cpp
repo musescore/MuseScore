@@ -35,7 +35,8 @@ StaffState::StaffState(Score* score)
 StaffState::StaffState(const StaffState& ss)
    : Element(ss)
       {
-      _instrument = new Instrument(*ss._instrument);
+      _instrument = new Instrument();
+      _instrument->set(ss._instrument);
       }
 
 StaffState::~StaffState()

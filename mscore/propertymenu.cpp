@@ -499,7 +499,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         // change instrument in all linked scores
                         for (ScoreElement* se : ic->linkList()) {
                               InstrumentChange* lic = static_cast<InstrumentChange*>(se);
-                              Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
+                              Instrument* instrument = Instrument::fromTemplate(it);
                               lic->score()->undo(new ChangeInstrument(lic, instrument));
                               }
                         // transpose for current score only

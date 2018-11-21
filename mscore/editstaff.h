@@ -40,7 +40,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase {
 
       Staff*      staff;
       Staff*      orgStaff;
-      Instrument  instrument;
+      Instrument* instrument;
       int         _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
       int         _tickStart, _tickEnd;
 

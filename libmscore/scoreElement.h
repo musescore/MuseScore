@@ -16,6 +16,8 @@
 #include "types.h"
 #include "style.h"
 
+#include <QObject>
+
 namespace Ms {
 
 class ScoreElement;

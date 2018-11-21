@@ -72,7 +72,7 @@ class InstrumentTemplate {
 
       QList<NamedEventList>   midiActions;
       QList<MidiArticulation> articulation;
-      QList<Channel>          channel;
+      QList<Channel*>         channel;
       QList<InstrumentGenre*> genres;     //; list of genres this instrument belongs to
 
       ClefTypeList clefTypes[MAX_STAVES];
