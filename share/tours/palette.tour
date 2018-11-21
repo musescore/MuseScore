@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tour name="show-palette">
   <Message>
-    <Text>These are palettes.</Text>
+    <Text>Welcome to the palettes! Click "Next" to learn more.</Text>
     <Widget>palette-box</Widget>
     </Message>
   <Message>
@@ -9,7 +9,7 @@
     <Widget>palette</Widget>
     </Message>
   <Message>
-    <Text>To use them, select an element in the score and double click on the palette element.</Text>
+    <Text>To use them, select where in the score you want to add the element (e.g., select a measure or a note) and double click on the palette icon.</Text>
     <Widget>palette-cells</Widget>
     </Message>
   </Tour>

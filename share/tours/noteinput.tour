@@ -25,15 +25,15 @@
   <Event objectName="flat2">MouseButtonRelease</Event>
   <Event objectName="voice">MouseButtonRelease</Event>
   <Message>
-    <Text>This is the note input toolbar</Text>
+    <Text>Welcome to Note Input! Click "Next" to learn more.</Text>
     <Widget>entry-tools</Widget>
     </Message>
   <Message>
-    <Text>To get started, click the note input icon. Or you can press "N".</Text>
+    <Text>To enable note input mode, click the "Note input" icon, or press the shortcut "N".</Text>
     <Widget>note-entry-methods</Widget>
     </Message>
   <Message>
-    <Text>You can select a duration to add by clicking one of these icons.</Text>
+    <Text>Select a duration by clicking one of these icons. These are also assigned to the row of numbers 1–9 at the top of your keyboard. Then, to enter a note, type its letter name or click on the staff.</Text>
     <Widget>pad-note-128</Widget>
     <Widget>pad-note-64</Widget>
     <Widget>pad-note-32</Widget>
@@ -50,7 +50,7 @@
     <Widget>pad-dot4</Widget>
     </Message>
   <Message>
-    <Text>To enter rests, select this icon and a duration.</Text>
+    <Text>To enter a rest of the selected duration instead of a note, type "0" instead of a letter, or select this icon and click on the staff.</Text>
     <Widget>pad-rest</Widget>
     </Message>
   <Message>
@@ -62,7 +62,7 @@
     <Widget>flat2</Widget>
     </Message>
   <Message>
-    <Text>To change voices, click these number icons.</Text>
+    <Text>A single staff can hold up to four voices. Click these number icons to choose which voice to enter notes in (Voice 1 is the default).</Text>
     <Widget>voice</Widget>
     </Message>
   </Tour>

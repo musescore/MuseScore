@@ -4,14 +4,14 @@
     <Text>Welcome to MuseScore!</Text>
     </Message>
   <Message>
-    <Text>This tour will help guide you through the functionality of MuseScore.</Text>
+    <Text>This tour will guide you through the MuseScore user interface.</Text>
     </Message>
   <Message>
-    <Text>This is the score view. From here, you can visualize, navigate, and edit the score.</Text>
+    <Text>This is the score view, where you can edit and navigate the score.</Text>
     <Widget>scoreview</Widget>
     </Message>
   <Message>
-    <Text>These are the toolbars. The main three are: file operations, playback, and note input.</Text>
+    <Text>These are the toolbars. The main three are: File Operations, Playback Controls, and Note Input.</Text>
     <Widget>entry-tools</Widget>
     <Widget>file-operations</Widget>
     <Widget>pitch-tools</Widget>
@@ -19,23 +19,23 @@
     <Widget>transport-tools</Widget>
     </Message>
   <Message>
-    <Text>The file operations toolbar allows you to save/open/load files and undo/redo changes.
-    You can also save online if you go to File->Save Online</Text>
+    <Text>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to a MuseScore.com account if you go to File / Save Online.</Text>
     <Widget>file-operations</Widget>
     </Message>
   <Message>
-    <Text>The playback toolbar gives you the ability to playback the score.</Text>
+    <Text>The Playback Controls toolbar allows you to play/pause the score, with various other options.</Text>
     <Widget>transport-tools</Widget>
     </Message>
   <Message>
-    <Text>The note entry toolbar allows you to enter notes and other elements into the score.</Text>
+    <Text>The Note Input toolbar allows you to enter notes and rests into the score.</Text>
     <Widget>entry-tools</Widget>
     </Message>
   <Message>
-    <Text>These are the palettes. Use them to add different symbols to the score.</Text>
+    <Text>These are the palettes. Most notation elements can be found here and added to the score.</Text>
     <Widget>palette-box</Widget>
     </Message>
   <Message>
-    <Text>That's the end! As you use MuseScore, more tours will pop up to further explain functionality. \nTo disable those, select "Do not show me tours" before closing this window. \nYou can also turn these off in Preferences</Text>
+    <Text>That's the end! As you use MuseScore, more tours will pop up to further explain functionality. To disable those, uncheck "Show tours on startup" before closing this window. You can also turn tours off in MuseScore's Preferences.</Text>
     </Message>
   </Tour>
