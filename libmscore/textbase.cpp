@@ -1881,10 +1881,17 @@ QString TextBase::plainText() const
       {
       QString s;
 
-      if (layoutInvalid)
-            ((Text*)(this))->createLayout();  // ugh!
+      const TextBase* text = this;
+      std::unique_ptr<TextBase> tmpText;
+      if (layoutInvalid) {
+            // Create temporary text object to avoid side effects
+            // of createLayout() call.
+            tmpText.reset(toTextBase(this->clone()));
+            tmpText->createLayout();
+            text = tmpText.get();
+            }
 
-      for (const TextBlock& block : _layout) {
+      for (const TextBlock& block : text->_layout) {
             for (const TextFragment& f : block.fragments())
                   s += f.text;
             if (block.eol())
@@ -1899,9 +1906,16 @@ QString TextBase::plainText() const
 
 QString TextBase::xmlText() const
       {
-      if (textInvalid)
-            ((Text*)(this))->genText();    // ugh!
-      return _text;
+      const TextBase* text = this;
+      std::unique_ptr<TextBase> tmpText;
+      if (textInvalid) {
+            // Create temporary text object to avoid side effects
+            // of genText() call.
+            tmpText.reset(toTextBase(this->clone()));
+            tmpText->genText();
+            text = tmpText.get();
+            }
+      return text->_text;
       }
 
 //---------------------------------------------------------
