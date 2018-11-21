@@ -174,7 +174,7 @@ endif (BUILD_64 STREQUAL "ON")
 #
 #  Sparkle/WinSparkle routine
 #
-if (BUILD_AUTOUPDATE)
+if (BUILD_AUTOUPDATE STREQUAL "ON")
       if (APPLE)
              find_package(Sparkle) #needed for SPARKLE_FOUND variable
              if(SPARKLE_FOUND)
@@ -191,7 +191,7 @@ if (BUILD_AUTOUPDATE)
       else (APPLE)
              message("Sparkle is not supported on your system.")
       endif (APPLE)
-endif(BUILD_AUTOUPDATE)
+endif(BUILD_AUTOUPDATE STREQUAL "ON")
 
 #
 #     Check for gcc compiler >= 4.8

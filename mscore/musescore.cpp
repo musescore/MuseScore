@@ -119,8 +119,13 @@
 #include "extension.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
-#include "autoUpdater.h"
-
+#include "sparkle/autoUpdater.h"
+#if defined(WIN_SPARKLE_ENABLED)
+#include "sparkle/winSparkleAutoUpdater.h"
+#elif defined(MAC_SPARKLE_ENABLED)
+#include "sparkle/sparkleAutoUpdater.h"
+#endif
+ 
 #ifdef USE_LAME
 #include "exportmp3.h"
 #endif

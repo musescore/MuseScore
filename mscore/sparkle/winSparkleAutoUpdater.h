@@ -10,28 +10,14 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifdef WIN_SPARKLE_ENABLED
+#ifndef __WIN_SPARKLE_AUTO_UPDATER_H__
+#define __WIN_SPARKLE_AUTO_UPDATER_H__
+
 #include "winsparkle/winsparkle.h"
-#endif
+#include "sparkle/autoUpdater.h"
 
 namespace Ms
 {
-      class GeneralAutoUpdater
-      {
-      public:
-            virtual void checkUpdates() = 0;
-            virtual void checkForUpdatesNow() = 0;
-            virtual void cleanup() = 0;
-      };
-
-      class SparkleAutoUpdater : public GeneralAutoUpdater
-      {
-      public:
-            virtual void checkUpdates();
-            virtual void checkForUpdatesNow();
-            virtual void cleanup() {}
-      };
-
       class WinSparkleAutoUpdater : public GeneralAutoUpdater
       {
       public:
@@ -56,3 +42,5 @@ namespace Ms
       };
 
 } //Ms
+
+#endif

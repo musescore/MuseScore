@@ -275,8 +275,8 @@ add_executable ( ${ExecutableName}
       ${INCS}
 
       abstractdialog.h accessibletoolbutton.h albummanager.h
-      alsa.h alsamidi.h analyse.h articulationprop.h autoUpdater.h
-      bb.h bendcanvas.h bendproperties.h breaksdialog.h capella.h
+      alsa.h alsamidi.h analyse.h articulationprop.h bb.h
+      bendcanvas.h bendproperties.h breaksdialog.h capella.h
       chordview.h click.h continuouspanel.h downloadUtils.h
       driver.h drumroll.h drumtools.h drumview.h editdrumset.h
       editinstrument.h editpitch.h editraster.h editstaff.h
@@ -441,13 +441,14 @@ add_executable ( ${ExecutableName}
       ${MAC_SPARKLE_FILES}
       driver.h
       tremolobarcanvas.h bendcanvas.h fretcanvas.h keycanvas.h harmonycanvas.h
+
+      sparkle/autoUpdater.h sparkle/sparkleAutoUpdater.h sparkle/winSparkleAutoUpdater.h
       )
 
 
 
 if (MSVC)
 	target_link_libraries(mscore vorbisfiledll)
-        target_link_libraries(mscore WinSparkle)
 else (MSVC)
 	target_link_libraries(mscore vorbisfile)
 endif (MSVC)
@@ -860,13 +861,18 @@ else (MINGW)
       find_library( dll_vorbis      NAMES "libvorbis"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_vorbisfile  NAMES "libvorbisfile"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_portaudio   NAMES "portaudio"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-      find_library( dll_winsparkle  NAMES "WinSparkle"     PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
       list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} ${dll_winsparkle} "$<TARGET_FILE_DIR:mscore>/${MUSESCORE_NAME}.exe")
       set( output_dir_for_dlls "${PROJECT_BINARY_DIR}/../msvc.install${ARCH_TYPE}/bin")
 
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
 
+      if (WIN_SPARKLE_ENABLED)
+            target_link_libraries(mscore WinSparkle)
+            find_library( dll_winsparkle  NAMES "WinSparkle"     PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+            COPY_FILES_INTO_DIRECTORY_IF_CHANGED( ${dll_winsparkle} ${output_dir_for_dlls}  mscore)
+      endif (WIN_SPARKLE_ENABLED)
+      
       add_dependencies(mscore pluginDocumentation)
 
       # Keep dependencies in alphabetical order. Changes made to this list

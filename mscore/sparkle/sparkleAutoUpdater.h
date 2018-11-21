@@ -9,20 +9,19 @@
 //  as published by the Free Software Foundation and appearing in
 //  the file LICENCE.GPL
 //=============================================================================
+#ifndef __SPARKLE_AUTO_UPDATER_H__
+#define __SPARKLE_AUTO_UPDATER_H__
 
-#include "sparkle/sparkleAutoUpdater.h"
+#include "sparkle/autoUpdater.h"
 
-#include "Sparkle/Sparkle.h"
-#include <Sparkle/SUUpdater.h>
-
-static SUUpdater*  updater = [[SUUpdater sharedUpdater] retain];
-
-void Ms::SparkleAutoUpdater::checkUpdates()
+namespace Ms
+{
+      class SparkleAutoUpdater : public GeneralAutoUpdater
       {
-      [updater checkForUpdatesInBackground];
-      }
+      public:
+            virtual void checkUpdates();
+            virtual void checkForUpdatesNow();
+      };
 
-void Ms::SparkleAutoUpdater::checkForUpdatesNow()
-      {
-      [updater checkForUpdates:NULL];
-      }
+} //Ms
+#endif
