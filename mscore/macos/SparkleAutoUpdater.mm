@@ -17,12 +17,12 @@
 
 static SUUpdater*  updater = [[SUUpdater sharedUpdater] retain];
 
-void SparkleAutoUpdater::checkUpdates()
+void Ms::SparkleAutoUpdater::checkUpdates()
       {
       [updater checkForUpdatesInBackground];
       }
 
-void SparkleAutoUpdater::checkForUpdatesNow()
+void Ms::SparkleAutoUpdater::checkForUpdatesNow()
       {
       [updater checkForUpdates:NULL];
       }

@@ -119,6 +119,8 @@
 #include "extension.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
+#include "autoUpdater.h"
+
 #ifdef USE_LAME
 #include "exportmp3.h"
 #endif
@@ -127,10 +129,6 @@
 #ifdef MAC_SPARKLE_ENABLED
 #include "macos/SparkleAutoUpdater.h"
 #endif
-#endif
-
-#ifdef WIN_SPARKLE_ENABLED
-#include "winsparkle/winsparkle.h"
 #endif
 
 #ifdef AEOLUS
@@ -1856,16 +1854,20 @@ MuseScore::MuseScore()
             cornerLabel->setPixmap(QPixmap(":/data/mscore.png"));
             cornerLabel->setGeometry(width() - 48, 0, 48, 48);
             }
-
+#if defined(WIN_SPARKLE_ENABLED)
+      autoUpdater.reset(new WinSparkleAutoUpdater);
+#elif defined(MAC_SPARKLE_ENABLED)
+      autoUpdater.reset(new SparkleAutoUpdater);
+#endif
       connect(this, SIGNAL(musescoreWindowWasShown()), this, SLOT(initSparkle()),
             Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
       }
 
 MuseScore::~MuseScore()
       {
-#ifdef WIN_SPARKLE_ENABLED
-      win_sparkle_cleanup();
-#endif
+      if (autoUpdater)
+            autoUpdater->cleanup();
+
       delete synti;
       }
 
@@ -3688,16 +3690,10 @@ void MuseScore::checkForUpdate()
 //---------------------------------------------------------
 void MuseScore::checkForUpdateNow()
       {
-#if defined(MAC_SPARKLE_ENABLED)
-      SparkleAutoUpdater::checkForUpdatesNow();
-      return;
-#elif defined(WIN_SPARKLE_ENABLED)
-      win_sparkle_check_update_with_ui();
-      return;
-#else
-      if (ucheck)
+      if (autoUpdater)
+            autoUpdater->checkForUpdatesNow();
+      else if (ucheck)
             ucheck->check(version(), sender() != 0);
-#endif
       }
 
 //---------------------------------------------------------
@@ -6093,15 +6089,10 @@ void MuseScore::mixerPreferencesChanged(bool showMidiControls)
 //---------------------------------------------------------
 
 void MuseScore::initSparkle()
-{
-#ifdef WIN_SPARKLE_ENABLED
-      // Initialize WinSparkle as soon as the app itself is initialized, right
-      // before entering the event loop:
-      win_sparkle_set_appcast_url(WIN_SPARKLE_APPCAST_URL);
-      win_sparkle_set_app_details(L"musescore.org", L"MuseScore", L"3.0");
-      win_sparkle_init();
-#endif
-}
+      {
+      if (autoUpdater)
+            autoUpdater->checkUpdates();
+      }
 
 //---------------------------------------------------------
 //   changeScore

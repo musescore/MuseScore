@@ -275,8 +275,8 @@ add_executable ( ${ExecutableName}
       ${INCS}
 
       abstractdialog.h accessibletoolbutton.h albummanager.h
-      alsa.h alsamidi.h analyse.h articulationprop.h bb.h
-      bendcanvas.h bendproperties.h breaksdialog.h capella.h
+      alsa.h alsamidi.h analyse.h articulationprop.h autoUpdater.h
+      bb.h bendcanvas.h bendproperties.h breaksdialog.h capella.h
       chordview.h click.h continuouspanel.h downloadUtils.h
       driver.h drumroll.h drumtools.h drumview.h editdrumset.h
       editinstrument.h editpitch.h editraster.h editstaff.h

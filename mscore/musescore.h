@@ -102,6 +102,7 @@ class Startcenter;
 class HelpBrowser;
 class ToolbarEditor;
 class TourHandler;
+class GeneralAutoUpdater;
 
 struct PluginDescription;
 enum class SelState : char;
@@ -422,6 +423,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       QMessageBox* infoMsgBox;
       TourHandler* _tourHandler { 0 };
+
+      std::unique_ptr<GeneralAutoUpdater> autoUpdater;
 
       //---------------------
 
