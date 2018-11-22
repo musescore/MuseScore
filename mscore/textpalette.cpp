@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "palette.h"
+#include "menus.h"
 #include "textpalette.h"
 #include "icons.h"
 #include "libmscore/text.h"
@@ -29,8 +30,6 @@
 #include "musescore.h"
 
 namespace Ms {
-
-extern QMap<QString, QStringList>* smuflRanges();
 
 //const int buttonSize = 40;
 //const int iconSize   = 20;
