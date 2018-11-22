@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorStaffTypeChange</class>
  <widget class="QWidget" name="InspectorStaffTypeChange">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>266</width>
-    <height>428</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Staff Type Change Inspector</string>
   </property>
@@ -83,6 +75,9 @@
        <property name="text">
         <string>Lines:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
        <property name="buddy">
         <cstring>lines</cstring>
        </property>
@@ -109,9 +104,6 @@
        <property name="accessibleName">
         <string>Reset 'Lines' value</string>
        </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -122,6 +114,9 @@
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>Step offset:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>stepOffset</cstring>
@@ -149,9 +144,6 @@
        <property name="accessibleName">
         <string>Reset 'Step offset' value</string>
        </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -162,6 +154,9 @@
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Line distance:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>lineDistance</cstring>
@@ -198,9 +193,6 @@
        <property name="accessibleName">
         <string>Reset 'Line distance' value</string>
        </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -209,20 +201,13 @@
      </item>
      <item row="11" column="0" colspan="2">
       <widget class="QCheckBox" name="slashStyle">
-       <property name="accessibleName">
-        <string>Slash style</string>
-       </property>
        <property name="text">
         <string>Slash style</string>
        </property>
       </widget>
      </item>
      <item row="8" column="0" colspan="3">
-      <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
+      <widget class="Line" name="line_2"/>
      </item>
      <item row="12" column="1">
       <widget class="QComboBox" name="noteheadScheme">
@@ -239,9 +224,6 @@
        <property name="accessibleName">
         <string>Reset 'Notehead scheme' value</string>
        </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -255,9 +237,6 @@
        </property>
        <property name="accessibleName">
         <string>Reset 'Show barlines' value</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
@@ -273,9 +252,6 @@
        <property name="accessibleName">
         <string>Reset 'Show ledger lines' value</string>
        </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -289,9 +265,6 @@
        </property>
        <property name="accessibleName">
         <string>Reset 'Slash style' value</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
@@ -307,9 +280,6 @@
        <property name="accessibleName">
         <string>Reset 'Generate clefs' value</string>
        </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -323,9 +293,6 @@
        </property>
        <property name="accessibleName">
         <string>Reset 'Generate time signatures' value</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
@@ -341,9 +308,6 @@
        <property name="accessibleName">
         <string>Reset 'Generate key signatures' value</string>
        </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -355,6 +319,9 @@
        <property name="text">
         <string>Notehead scheme:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
        <property name="buddy">
         <cstring>noteheadScheme</cstring>
        </property>
@@ -362,9 +329,6 @@
      </item>
      <item row="9" column="0" colspan="2">
       <widget class="QCheckBox" name="showBarlines">
-       <property name="accessibleName">
-        <string>Show barlines</string>
-       </property>
        <property name="text">
         <string>Show barlines</string>
        </property>
@@ -372,9 +336,6 @@
      </item>
      <item row="10" column="0" colspan="2">
       <widget class="QCheckBox" name="showLedgerlines">
-       <property name="accessibleName">
-        <string>Show ledger lines</string>
-       </property>
        <property name="text">
         <string>Show ledger lines</string>
        </property>
@@ -382,9 +343,6 @@
      </item>
      <item row="13" column="0" colspan="2">
       <widget class="QCheckBox" name="genClefs">
-       <property name="accessibleName">
-        <string>Generate clefs</string>
-       </property>
        <property name="text">
         <string>Generate clefs</string>
        </property>
@@ -392,9 +350,6 @@
      </item>
      <item row="14" column="0" colspan="2">
       <widget class="QCheckBox" name="genTimesig">
-       <property name="accessibleName">
-        <string>Generate time signatures</string>
-       </property>
        <property name="text">
         <string>Generate time signatures</string>
        </property>
@@ -402,9 +357,6 @@
      </item>
      <item row="15" column="0" colspan="2">
       <widget class="QCheckBox" name="genKeysig">
-       <property name="accessibleName">
-        <string>Generate key signatures</string>
-       </property>
        <property name="text">
         <string>Generate key signatures</string>
        </property>
@@ -415,17 +367,16 @@
        <property name="text">
         <string>Scale:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
        <property name="buddy">
         <cstring>scale</cstring>
        </property>
       </widget>
      </item>
      <item row="4" column="0" colspan="3">
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
+      <widget class="Line" name="line"/>
      </item>
      <item row="3" column="1">
       <widget class="QDoubleSpinBox" name="scale">
@@ -454,9 +405,6 @@
        <property name="accessibleName">
         <string>Reset 'Scale' value</string>
        </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -467,6 +415,9 @@
       <widget class="QLabel" name="label_6">
        <property name="text">
         <string>Offset Y:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>yoffset</cstring>
@@ -481,9 +432,6 @@
        <property name="accessibleName">
         <string>Reset 'Small' value</string>
        </property>
-       <property name="text">
-        <string notr="true"/>
-       </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">
          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -492,9 +440,6 @@
      </item>
      <item row="2" column="0" colspan="2">
       <widget class="QCheckBox" name="small">
-       <property name="accessibleName">
-        <string>Small</string>
-       </property>
        <property name="text">
         <string>Small</string>
        </property>
@@ -532,9 +477,6 @@
        </property>
        <property name="accessibleName">
         <string>Reset 'Offset Y' value</string>
-       </property>
-       <property name="text">
-        <string notr="true"/>
        </property>
        <property name="icon">
         <iconset resource="../musescore.qrc">

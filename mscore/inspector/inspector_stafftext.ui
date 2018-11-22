@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorStaffText</class>
  <widget class="QWidget" name="InspectorStaffText">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>209</width>
-    <height>119</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Staff/System Text Inspector</string>
   </property>
@@ -81,6 +73,9 @@
         <property name="text">
          <string>Placement:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>placement</cstring>
         </property>
@@ -111,9 +106,6 @@
         <property name="accessibleName">
          <string>Reset 'Placement' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -124,6 +116,9 @@
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Style:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>style</cstring>
@@ -145,9 +140,6 @@
         <property name="accessibleName">
          <string>Reset 'Style' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -161,6 +153,8 @@
  </widget>
  <tabstops>
   <tabstop>title</tabstop>
+  <tabstop>style</tabstop>
+  <tabstop>resetStyle</tabstop>
   <tabstop>placement</tabstop>
   <tabstop>resetPlacement</tabstop>
  </tabstops>

@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>ScaleSelect</class>
  <widget class="QWidget" name="ScaleSelect">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>253</width>
-    <height>31</height>
-   </rect>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
     <number>0</number>
@@ -25,12 +17,6 @@
    </property>
    <item>
     <widget class="QDoubleSpinBox" name="xVal">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="accessibleName">
       <string>Horizontal scale</string>
      </property>
@@ -53,12 +39,6 @@
    </item>
    <item>
     <widget class="QDoubleSpinBox" name="yVal">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="accessibleName">
       <string>Vertical scale</string>
      </property>

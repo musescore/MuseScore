@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorBracket</class>
  <widget class="QWidget" name="InspectorBracket">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>115</width>
-    <height>69</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Bracket Inspector</string>
   </property>
@@ -100,9 +92,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Column' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

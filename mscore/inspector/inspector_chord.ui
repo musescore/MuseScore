@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorChord</class>
  <widget class="QWidget" name="InspectorChord">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>165</width>
-    <height>135</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Chord Inspector</string>
   </property>
@@ -81,6 +73,9 @@
         <property name="text">
          <string>Stem direction:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>stemDirection</cstring>
         </property>
@@ -116,9 +111,6 @@
         <property name="accessibleName">
          <string>Reset 'Offset' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -133,9 +125,6 @@
         <property name="accessibleName">
          <string>Reset 'Stem direction' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -146,6 +135,9 @@
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Offset:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>offset</cstring>
@@ -159,9 +151,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Small' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -177,9 +166,6 @@
         <property name="accessibleName">
          <string>Reset 'Stemless' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -191,9 +177,6 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Small</string>
-        </property>
         <property name="text">
          <string>Small</string>
         </property>
@@ -203,9 +186,6 @@
        <widget class="QCheckBox" name="stemless">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Stemless</string>
         </property>
         <property name="text">
          <string>Stemless</string>

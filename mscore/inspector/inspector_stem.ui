@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorStem</class>
  <widget class="QWidget" name="InspectorStem">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>228</width>
-    <height>97</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Stem Inspector</string>
   </property>
@@ -97,9 +89,6 @@
         <property name="accessibleName">
          <string>Reset 'Line width' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -111,6 +100,9 @@
         <property name="text">
          <string>Line width:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>lineWidth</cstring>
         </property>
@@ -120,6 +112,9 @@
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Length offset:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>userLength</cstring>
@@ -149,9 +144,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Length offset' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
