@@ -35,7 +35,8 @@ static int gcd(int a, int b)
 
 static unsigned lcm(int a, int b)
       {
-      return a * b / gcd(a, b);
+      const auto product = static_cast<int_least64_t>(a) * b;
+      return static_cast<int>(product / gcd(a, b));
       }
 
 //---------------------------------------------------------
@@ -182,7 +183,8 @@ int Fraction::ticks() const
       // MScore::division - ticks per quarter note
       // MScore::division * 4 - ticks per whole note
       // result: rounded (MScore::division * 4 * _numerator * 1.0 / _denominator) value
-      return (_numerator * MScore::division * 4 + (_denominator/2)) / _denominator;
+      const auto result = (static_cast<int_least64_t>(_numerator) * MScore::division * 4 + (_denominator/2)) / _denominator;
+      return static_cast<int>(result);
       }
 
 } // namespace Ms
