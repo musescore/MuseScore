@@ -19,11 +19,10 @@
 #include "libmscore/key.h"
 #include "libmscore/icon.h"
 #include "libmscore/staff.h"
+#include "menus.h"
 #include "musescore.h"
 
 namespace Ms {
-
-extern void populateIconPalette(Palette* p, const IconAction* a);
 
 //---------------------------------------------------------
 //   createScore

@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "editdrumset.h"
+#include "menus.h"
 #include "musescore.h"
 #include "libmscore/xml.h"
 #include "libmscore/utils.h"
@@ -27,8 +28,6 @@
 #include "libmscore/stem.h"
 
 namespace Ms {
-
-extern QMap<QString, QStringList>* smuflRanges();
 
 enum Column : char { PITCH, NOTE, SHORTCUT, NAME };
 

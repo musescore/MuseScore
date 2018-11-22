@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "symboldialog.h"
+#include "menus.h"
 #include "palette.h"
 #include "musescore.h"
 #include "libmscore/score.h"
@@ -30,7 +31,6 @@
 namespace Ms {
 
 extern MasterScore* gscore;
-extern QMap<QString, QStringList>* smuflRanges();
 
 //---------------------------------------------------------
 //   createSymbolPalette

@@ -26,12 +26,11 @@
 #include "libmscore/measure.h"
 #include "libmscore/part.h"
 #include "exampleview.h"
+#include "menus.h"
 #include "musescore.h"
 #include "icons.h"
 
 namespace Ms {
-
-extern void populateIconPalette(Palette* p, const IconAction* a);
 
 //---------------------------------------------------------
 //    TimeSigProperties
