@@ -1,7 +1,7 @@
 # $1 - artifact name
 # $2 - artifact ftp path
 # $3 - MuseScore version
-# $4 - Build number
+# $4 - Revision hash
 
 export MSCORE_RELEASE_CHANNEL=$(grep '^[[:blank:]]*set *( *MSCORE_RELEASE_CHANNEL' CMakeLists.txt | awk -F \" '{print $2}')
 RSS_DATE="$(LANG=C date +'%a, %d %b %Y %H:%M:%S %z')"
@@ -19,14 +19,14 @@ ${APPCAST_URL}
 <description>Most recent changes with links to updates.</description>
 <language>en</language>
 <item>
-<title>MuseScore $4 $5</title>
+<title>MuseScore $3 $4</title>
 <description>
 <![CDATA[
 ${GIT_LOG}
 ]]>
 </description>
 <pubDate>${RSS_DATE}</pubDate>
-<enclosure url=\"$3\" sparkle:version=\"$4\" length=\"${FILESIZE}\" type=\"application/octet-stream\"/>
+<enclosure url=\"$2\" sparkle:version=\"$3\" length=\"${FILESIZE}\" type=\"application/octet-stream\"/>
 </item>
 </channel>
 </rss>" >> appcast.xml
