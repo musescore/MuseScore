@@ -46,4 +46,4 @@ namespace Ms
 
 } //Ms
 
-#endif
+#endif //__WIN_SPARKLE_AUTO_UPDATER_H__

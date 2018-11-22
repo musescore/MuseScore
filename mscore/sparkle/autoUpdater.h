@@ -24,4 +24,4 @@ namespace Ms
 
 } //Ms
 
-#endif AUTO_UPDATER_H__
+#endif //__AUTO_UPDATER_H__

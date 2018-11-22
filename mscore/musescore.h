@@ -248,9 +248,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QSplitter* mainWindow;
 
       ScoreComparisonTool* scoreCmpTool    { 0 };
-#ifdef MSCORE_UNSTABLE
       ScriptRecorderWidget* scriptRecorder { nullptr };
-#endif
 
       MagBox* mag;
       QComboBox* viewModeCombo;

@@ -5591,10 +5591,8 @@ ScoreTab* MuseScore::createScoreTab()
 
 void MuseScore::cmd(QAction* a, const QString& cmd)
       {
-#ifdef MSCORE_UNSTABLE
       if (scriptRecorder)
             scriptRecorder->recordCommand(cmd);
-#endif
 
       if (cmd == "instruments") {
             editInstrList();

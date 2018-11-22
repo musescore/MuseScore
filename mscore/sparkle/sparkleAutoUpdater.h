@@ -24,4 +24,5 @@ namespace Ms
       };
 
 } //Ms
-#endif
+
+#endif //__SPARKLE_AUTO_UPDATER_H__

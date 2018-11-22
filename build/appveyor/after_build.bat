@@ -8,6 +8,13 @@ IF "%NIGHTLY_BUILD%" == "" (
   goto :UNSTABLE_LABEL
 )
 
+REM the code is used to generate MS version for both nightly and stable releases
+SET input=C:\MuseScore\CMakeLists.txt
+FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MAJOR" %input%') DO set VERSION_MAJOR=%%A
+FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MINOR" %input%') DO set VERSION_MINOR=%%A
+FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_PATCH" %input%') DO set VERSION_PATCH=%%A
+SET MUSESCORE_VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%.%APPVEYOR_BUILD_NUMBER%
+
 :STABLE_LABEL
 echo "Stable: Build MSI package"
 :: sign dlls and exe files
@@ -36,6 +43,15 @@ echo off
 :: prepare upload
 XCOPY %FILEPATH% C:\MuseScore /Y /Q
 SET ARTIFACT_NAME=%FILENAME%
+
+@echo off
+REM WinSparkle staff. Generate appcast.xml
+REM ------------------------------------------
+bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%MSREVISION%"
+REM ------------------------------------------
+@echo on
+type C:\MuseScore\appcast.xml
+
 goto :UPLOAD
 
 :UNSTABLE_LABEL
@@ -57,12 +73,6 @@ SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_DATE%-%APPVEYOR_REPO_BRANCH%-%MSREVISI
 
 :: create update file for S3
 SET SHORT_DATE=%Date:~10,4%-%Date:~4,2%-%Date:~7,2%
-SET input=C:\MuseScore\CMakeLists.txt
-FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MAJOR" %input%') DO set VERSION_MAJOR=%%A
-FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MINOR" %input%') DO set VERSION_MINOR=%%A
-FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_PATCH" %input%') DO set VERSION_PATCH=%%A
-SET MUSESCORE_VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%.%APPVEYOR_BUILD_NUMBER%
-
 
 @echo off
 
@@ -80,14 +90,6 @@ echo ^</update^>
 
 @echo on
 type C:\MuseScore\update_win_nightly.xml
-
-@echo off
-REM WinSparkle staff. Generate appcast.xml
-REM ------------------------------------------
-bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%ARTIFACT_NAME%" "https://ftp.osuosl.org/pub/musescore-nightlies/windows/%ARTIFACT_NAME%" "%MUSESCORE_VERSION%" "%MSREVISION%"
-REM ------------------------------------------
-@echo on
-type C:\MuseScore\appcast.xml
 
 :UPLOAD
 SET SSH_IDENTITY=C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp
