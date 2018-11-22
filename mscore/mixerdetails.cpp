@@ -78,7 +78,7 @@ MixerDetails::~MixerDetails()
 //   setTrack
 //---------------------------------------------------------
 
-void MixerDetails::setTrack(MixerTrackItemPtr track)
+void MixerDetails::setTrack(MixerTrackItem* track)
       {
       if (_mti) {
             //Remove old attachment

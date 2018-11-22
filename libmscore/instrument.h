@@ -20,6 +20,8 @@
 #include "clef.h"
 #include <QtGlobal>
 #include <QString>
+#include <QPointer>
+#include <QtPlugin>
 
 namespace Ms {
 
@@ -120,10 +122,13 @@ class Channel {
       bool _mute;
       bool _solo;
 
-      QList<ChannelListener *> listeners;
+//      QList<ChannelListener *> listeners;
+      QList<QPointer<QObject>> listeners;
 
 public:
       static const char* DEFAULT_NAME;
+
+      mutable std::vector<MidiCoreEvent> init;
 
       enum class A : char {
             HBANK, LBANK, PROGRAM, VOLUME, PAN, CHORUS, REVERB,
@@ -135,13 +140,10 @@ public:
             SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL
             };
 
-private:
-      void firePropertyChanged(Channel::Prop prop);
 
 public:
-
-      mutable std::vector<MidiCoreEvent> init;
-
+      Channel();
+      ~Channel();
 
       QString name() const { return _name; }
       void setName(const QString& value);
@@ -178,15 +180,16 @@ public:
       QList<NamedEventList> midiActions;
       QList<MidiArticulation> articulation;
 
-      Channel();
-      ~Channel();
       void write(XmlWriter&, Part *part) const;
       void read(XmlReader&, Part *part);
       void updateInitList() const;
       bool operator==(const Channel& c) { return (_name == c._name) && (_channel == c._channel); }
 
-      void addListener(ChannelListener *l) { listeners.append(l); }
-      void removeListener(ChannelListener *l) { listeners.removeOne(l); }
+      void addListener(QPointer<QObject> l) { listeners.append(l); }
+      void removeListener(QPointer<QObject> l) { listeners.removeOne(l); }
+
+private:
+      void firePropertyChanged(Channel::Prop prop);
       };
 
 //---------------------------------------------------------
@@ -195,9 +198,13 @@ public:
 
 class ChannelListener {
 public:
+      virtual ~ChannelListener() {}
+
       virtual void propertyChanged(Channel::Prop property) = 0;
       virtual void disconnectChannelListener() = 0;
       };
+
+//Q_DECLARE_INTERFACE(ChannelListener, "com.musecore/iface/ChannelListener")
 
 //---------------------------------------------------------
 //   Instrument

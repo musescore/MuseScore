@@ -30,8 +30,8 @@ namespace Ms {
 //   MixerTrackItem
 //---------------------------------------------------------
 
-MixerTrackItem::MixerTrackItem(TrackType tt, Part* part, Instrument* instr, Channel *chan)
-      :_trackType(tt), _part(part), _instr(instr), _chan(chan)
+MixerTrackItem::MixerTrackItem(TrackType tt, Part* part, Instrument* instr, Channel *chan, QObject* parent)
+      :QObject(parent), _trackType(tt), _part(part), _instr(instr), _chan(chan)
       {
       }
 

@@ -27,6 +27,8 @@
 #include "mixertrackitem.h"
 #include "libmscore/instrument.h"
 
+#include <QPointer>
+
 namespace Ms {
 
 struct MidiMapping;
@@ -40,7 +42,7 @@ class MixerTrackPart : public QWidget, public Ui::MixerTrackPart, public Channel
       {
       Q_OBJECT
 
-      MixerTrackItemPtr _mti;
+      QPointer<MixerTrackItem> _mti;
 
       bool _selected;
       static const QString unselStyleDark;
@@ -72,13 +74,13 @@ protected:
       void disconnectChannelListener() override;
 
 public:
-      explicit MixerTrackPart(QWidget *parent, MixerTrackItemPtr trackItem, bool expanded);
+      explicit MixerTrackPart(QWidget *parent, MixerTrackItem* trackItem, bool expanded);
       ~MixerTrackPart() override;
 
       bool selected() override { return _selected; }
       QWidget* getWidget() override { return this; }
       MixerTrackGroup* group() override { return _group; }
-      MixerTrackItemPtr mti() override { return _mti; }
+      MixerTrackItem* mti() override { return _mti; }
       void setGroup(MixerTrackGroup* group) { _group = group; }
       void paintEvent(QPaintEvent* evt) override;
       };

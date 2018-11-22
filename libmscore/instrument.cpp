@@ -430,11 +430,6 @@ Channel::Channel()
 
 Channel::~Channel()
       {
-      QList<ChannelListener *> list(listeners);
-
-      for (ChannelListener * l: list) {
-            l->disconnectChannelListener();
-            }
       }
 
 //---------------------------------------------------------
@@ -443,9 +438,14 @@ Channel::~Channel()
 
 void Channel::firePropertyChanged(Channel::Prop prop)
       {
-      QList<ChannelListener *> list(listeners);
+      QList<QPointer<QObject>> list(listeners);
 
-      for (ChannelListener * l: list) {
+      for (QPointer<QObject> ptr: list) {
+            ChannelListener *l = dynamic_cast<ChannelListener *>(ptr.data());
+            if (!l) {
+                  listeners.removeOne(ptr);
+                  continue;
+                  }
             l->propertyChanged(prop);
             }
       }

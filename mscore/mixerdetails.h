@@ -25,6 +25,8 @@
 #include "libmscore/instrument.h"
 #include "mixertrackitem.h"
 
+#include <QPointer>
+
 namespace Ms {
 
 
@@ -39,7 +41,7 @@ class MixerDetails : public QWidget, public Ui::MixerDetails, public ChannelList
       {
       Q_OBJECT
 
-      MixerTrackItemPtr _mti;
+      QPointer<MixerTrackItem> _mti;
 
       void updateFromTrack();
 
@@ -58,8 +60,8 @@ public:
       explicit MixerDetails(QWidget *parent);
       ~MixerDetails() override;
 
-      MixerTrackItemPtr track() { return _mti; }
-      void setTrack(MixerTrackItemPtr track);
+      MixerTrackItem* track() { return _mti; }
+      void setTrack(MixerTrackItem* track);
       void propertyChanged(Channel::Prop property) override;
       void disconnectChannelListener() override;
 
