@@ -87,6 +87,7 @@ public slots:
 public:
       TourHandler(QObject* parent) : QObject(parent) {}
       void loadTours();
+      void resetCompletedTours();
       void readCompletedTours();
       void writeCompletedTours();
 

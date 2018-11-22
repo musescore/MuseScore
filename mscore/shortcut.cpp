@@ -3566,6 +3566,27 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
+         "show-tours",
+         QT_TRANSLATE_NOOP("action", "Show Tours"),
+         QT_TRANSLATE_NOOP("action", "Show tours"),
+         QT_TRANSLATE_NOOP("action", "Toggle display of tours"),
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "reset-tours",
+         QT_TRANSLATE_NOOP("action", "Reset Tours"),
+         QT_TRANSLATE_NOOP("action", "Reset tours"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::WindowShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
          "report-bug",
          QT_TRANSLATE_NOOP("action", "Report a Bug"),
          QT_TRANSLATE_NOOP("action", "Report a bug"),
