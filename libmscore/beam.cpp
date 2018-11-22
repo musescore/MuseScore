@@ -1458,8 +1458,9 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
             bm.l = ll1 - l1;
             }
       else { // if (beamLevels > 4) {
-            static const int t[] = { 0, 0, 4, 4, 8, 12, 16 }; // spatium4 added to stem len
-            int n = t[beamLevels] + 12;
+            //static const int t[] = { 0, 0, 4, 4, 8, 12, 15, 18, 21 }; // spatium4 added to stem len
+            //int n = t[beamLevels] + 12;
+            int n = (3 * (beamLevels - 5)) + 24;
             bm.s = 0;
             if (_up) {
                   bm.l = -n;
