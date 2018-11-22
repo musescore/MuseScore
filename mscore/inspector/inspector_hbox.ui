@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorHBox</class>
  <widget class="QWidget" name="InspectorHBox">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>175</width>
-    <height>133</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Horizontal Frame Inspector</string>
   </property>
@@ -100,6 +92,9 @@
         <property name="text">
          <string>Width:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>width</cstring>
         </property>
@@ -145,6 +140,9 @@
         <property name="text">
          <string>Left gap:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>leftGap</cstring>
         </property>
@@ -154,6 +152,9 @@
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Right gap:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>rightGap</cstring>
@@ -167,9 +168,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Left gap' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -185,9 +183,6 @@
         <property name="accessibleName">
          <string>Reset 'Right gap' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -196,9 +191,6 @@
       </item>
       <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="createSystemHeader">
-        <property name="accessibleName">
-         <string>Create system header</string>
-        </property>
         <property name="text">
          <string>Create system header</string>
         </property>
@@ -211,9 +203,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Create system header' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">

@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorBeam</class>
  <widget class="QWidget" name="InspectorBeam">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>300</width>
-    <height>266</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Beam Inspector</string>
   </property>
@@ -63,9 +55,6 @@
    </item>
    <item>
     <widget class="QWidget" name="panel" native="true">
-     <property name="accessibleName">
-      <string>Local relayout</string>
-     </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>
@@ -79,32 +68,23 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="2" column="1" colspan="2">
-       <widget class="QComboBox" name="direction">
-        <property name="accessibleName">
-         <string>Direction</string>
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Position:</string>
         </property>
-        <item>
-         <property name="text">
-          <string>Auto</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Up</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Down</string>
-         </property>
-        </item>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
        </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Grow right:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>growRight</cstring>
@@ -116,6 +96,9 @@
         <property name="text">
          <string>Grow left:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>growLeft</cstring>
         </property>
@@ -126,15 +109,11 @@
         <property name="text">
          <string>Direction:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>direction</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Position:</string>
         </property>
        </widget>
       </item>
@@ -145,9 +124,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Direction' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -176,9 +152,6 @@
         <property name="accessibleName">
          <string>Reset 'Grow right' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -192,9 +165,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Grow left' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -223,9 +193,6 @@
         <property name="accessibleName">
          <string>Reset 'User position' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -239,9 +206,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Local relayout' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -257,9 +221,6 @@
         <property name="accessibleName">
          <string>Reset 'Horizontal' value</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
@@ -271,9 +232,6 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Local relayout</string>
-        </property>
         <property name="text">
          <string>Local relayout</string>
         </property>
@@ -284,21 +242,37 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Horizontal</string>
-        </property>
         <property name="text">
          <string>Horizontal</string>
         </property>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="2">
+       <widget class="QComboBox" name="direction">
+        <property name="accessibleName">
+         <string>Direction</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Auto</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Up</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Down</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="6" column="0" colspan="3">
        <widget class="QCheckBox" name="userPosition">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>User position</string>
         </property>
         <property name="text">
          <string>User position</string>

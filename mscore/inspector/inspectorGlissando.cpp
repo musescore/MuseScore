@@ -35,9 +35,9 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
             { Pid::PLAY,            0, g.playGlissando,  g.resetPlayGlissando  },
             { Pid::FONT_FACE,       0, g.fontFace,       g.resetFontFace       },
             { Pid::FONT_SIZE,       0, g.fontSize,       g.resetFontSize       },
-            { Pid::FONT_BOLD,       0, g.fontBold,       g.resetFontBold       },
-            { Pid::FONT_ITALIC,     0, g.fontItalic,     g.resetFontItalic     },
-            { Pid::FONT_UNDERLINE,  0, g.fontUnderline,  g.resetFontUnderline  },
+            { Pid::FONT_BOLD,       0, g.fontBold,       g.resetFontStyle      },
+            { Pid::FONT_ITALIC,     0, g.fontItalic,     g.resetFontStyle      },
+            { Pid::FONT_UNDERLINE,  0, g.fontUnderline,  g.resetFontStyle      },
             };
       const std::vector<InspectorPanel> ppList = {
             { g.title, g.panel }

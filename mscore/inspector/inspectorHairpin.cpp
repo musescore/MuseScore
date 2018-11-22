@@ -53,9 +53,9 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { Pid::HAIRPIN_CONT_HEIGHT,  0, h.hairpinContHeight,   h.resetHairpinContHeight },
             { Pid::BEGIN_FONT_FACE,      0, h.fontFace,            h.resetFontFace          },
             { Pid::BEGIN_FONT_SIZE,      0, h.fontSize,            h.resetFontSize          },
-            { Pid::BEGIN_FONT_BOLD,      0, h.fontBold,            h.resetFontBold          },
-            { Pid::BEGIN_FONT_ITALIC,    0, h.fontItalic,          h.resetFontItalic        },
-            { Pid::BEGIN_FONT_UNDERLINE, 0, h.fontUnderline,       h.resetFontUnderline     },
+            { Pid::BEGIN_FONT_BOLD,      0, h.fontBold,            h.resetFontStyle         },
+            { Pid::BEGIN_FONT_ITALIC,    0, h.fontItalic,          h.resetFontStyle         },
+            { Pid::BEGIN_FONT_UNDERLINE, 0, h.fontUnderline,       h.resetFontStyle         },
             { Pid::BEGIN_TEXT,           0, h.beginText,           h.resetBeginText         },
             { Pid::END_TEXT,             0, h.endText,             h.resetEndText           }
             };

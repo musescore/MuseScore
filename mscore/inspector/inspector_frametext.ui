@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorFrameText</class>
  <widget class="QWidget" name="InspectorFrameText">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>218</width>
-    <height>89</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Frame Text Inspector</string>
   </property>
@@ -81,6 +73,9 @@
         <property name="text">
          <string>Style:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>style</cstring>
         </property>
@@ -90,12 +85,6 @@
        <widget class="QComboBox" name="style">
         <property name="accessibleName">
          <string>Style</string>
-        </property>
-        <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToMinimumContentsLengthWithIcon</enum>
-        </property>
-        <property name="minimumContentsLength">
-         <number>10</number>
         </property>
        </widget>
       </item>
@@ -107,8 +96,6 @@
  <tabstops>
   <tabstop>title</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
