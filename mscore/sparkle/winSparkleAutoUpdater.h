@@ -18,6 +18,8 @@
 
 namespace Ms
 {
+      static const wchar_t* vendorName = L"musescore.org";
+      static const wchar_t* productName = L"MuseScore";
       class WinSparkleAutoUpdater : public GeneralAutoUpdater
       {
       public:
@@ -26,7 +28,8 @@ namespace Ms
                   // Initialize WinSparkle as soon as the app itself is initialized, right
                   // before entering the event loop:
                   win_sparkle_set_appcast_url(WIN_SPARKLE_APPCAST_URL);
-                  win_sparkle_set_app_details(L"musescore.org", L"MuseScore", L"3.0");
+                  auto msVersion = QString(VERSION) + QString(".") + QString(BUILD_NUMBER);
+                  win_sparkle_set_app_details(vendorName, productName, msVersion.toStdWString().c_str());
                   win_sparkle_init();
             }
 
