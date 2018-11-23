@@ -2889,6 +2889,8 @@ static bool experimentalPartsMedia(const QString& inFilePath)
 static bool experimentalMediaScore(const QString& inFilePath)
       {
       Score* score = mscore->readScore(inFilePath);
+      score->switchToPageMode();
+
       QJsonObject jsonForMedia;
       bool res = true;
 
@@ -2939,7 +2941,6 @@ static bool experimentalMediaScore(const QString& inFilePath)
       QJsonValue mposJson(QString::fromLatin1(partDataPos.toBase64()));
 
       //export score pdf
-      score->switchToPageMode();
       QByteArray pdfData;
       QBuffer pdfDevice(&pdfData);
       pdfDevice.open(QIODevice::ReadWrite);
