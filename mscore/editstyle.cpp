@@ -600,32 +600,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(mapper,  SIGNAL(mapped(int)), SLOT(resetStyleValue(int)));
       connect(mapper2, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
       textStyles->clear();
-      for (auto ss : {
-         Tid::SYSTEM,
-         Tid::STAFF,
-         Tid::TEMPO,
-         Tid::METRONOME,
-         Tid::REHEARSAL_MARK,
-         Tid::EXPRESSION,
-         Tid::REPEAT_LEFT,
-         Tid::REPEAT_RIGHT,
-         Tid::FRAME,
-         Tid::TITLE,
-         Tid::SUBTITLE,
-         Tid::COMPOSER,
-         Tid::POET,
-         Tid::INSTRUMENT_EXCERPT,
-         Tid::TRANSLATOR,
-         Tid::HEADER,
-         Tid::FOOTER,
-         Tid::USER1,
-         Tid::USER2,
-         Tid::USER3,
-         Tid::USER4,
-         Tid::USER5,
-         Tid::USER6
-         } )
-            {
+      for (auto ss : allTextStyles()) {
             QListWidgetItem* item = new QListWidgetItem(textStyleUserName(ss));
             item->setData(Qt::UserRole, int(ss));
             textStyles->addItem(item);
