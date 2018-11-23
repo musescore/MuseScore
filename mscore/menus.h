@@ -22,7 +22,7 @@
 
 namespace Ms {
 
-class IconAction;
+struct IconAction;
 class Palette;
 
 extern QMap<QString, QStringList>* smuflRanges();
