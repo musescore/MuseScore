@@ -81,6 +81,16 @@
           <midiPort>0</midiPort>
           <midiChannel>8</midiChannel>
           </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">

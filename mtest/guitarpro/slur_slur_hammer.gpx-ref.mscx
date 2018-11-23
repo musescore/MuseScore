@@ -82,6 +82,9 @@
         <Channel>
           <program value="24"/>
           </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
@@ -333,6 +336,9 @@
             </Articulation>
           <Channel>
             <program value="24"/>
+            </Channel>
+          <Channel name="mute">
+            <program value="28"/>
             </Channel>
           </Instrument>
         </Part>

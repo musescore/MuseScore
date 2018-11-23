@@ -1255,7 +1255,7 @@ Palette* MuseScore::newTempoPalette(bool defaultPalette)
 //   newTextPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newTextPalette()
+Palette* MuseScore::newTextPalette(bool defaultPalette)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Text"));
@@ -1291,6 +1291,33 @@ Palette* MuseScore::newTextPalette()
       stxt = new SystemText(gscore);
       stxt->setXmlText(tr("System Text"));
       sp->append(stxt, tr("System text"));
+
+      if (!defaultPalette) {
+            StaffText* pz = new StaffText(gscore, Tid::EXPRESSION);
+            pz->setXmlText(tr("pizz."));
+            pz->setChannelName(0, "pizzicato");
+            sp->append(pz, tr("pizz."));
+
+            StaffText* ar = new StaffText(gscore, Tid::EXPRESSION);
+            ar->setXmlText(tr("arco"));
+            ar->setChannelName(0, "arco"); // needs updated instruments.xml to work with strings too, not just acoustic bass
+            sp->append(ar, tr("arco"));
+
+            StaffText* tm = new StaffText(gscore, Tid::EXPRESSION);
+            tm->setXmlText(tr("tremolo"));
+            tm->setChannelName(0, "tremolo");
+            sp->append(tm, tr("tremolo"));
+
+            StaffText* mu = new StaffText(gscore, Tid::EXPRESSION);
+            mu->setXmlText(tr("mute"));
+            mu->setChannelName(0, "mute");
+            sp->append(mu, tr("mute"));
+
+            StaffText* no = new StaffText(gscore, Tid::EXPRESSION);
+            no->setXmlText(tr("open"));
+            no->setChannelName(0, "open");
+            sp->append(no, tr("open"));
+            }
 
       return sp;
       }
@@ -1422,7 +1449,7 @@ void MuseScore::setDefaultPalette()
       paletteBox->addPalette(newBarLinePalette());
       paletteBox->addPalette(newArpeggioPalette());
       paletteBox->addPalette(newTremoloPalette());
-      paletteBox->addPalette(newTextPalette());
+      paletteBox->addPalette(newTextPalette(true));
       paletteBox->addPalette(newTempoPalette(true));
       paletteBox->addPalette(newDynamicsPalette(true));
       paletteBox->addPalette(newFingeringPalette());
