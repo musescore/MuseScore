@@ -9,7 +9,7 @@ FILESIZE="$(wc -c $1 | awk '{print $1}')"
 APPCAST_URL="https://sparkle.musescore.org/$MSCORE_RELEASE_CHANNEL/3/win/appcast.xml"
 GIT_LOG=$(C:/MuseScore/build/travis/job_macos/generateGitLog.sh)
 
-MSCORE_RELEASE_CHANNEL >> MSCORE_RELEASE_CHANNEL.txt
+echo ${MSCORE_RELEASE_CHANNEL} >> MSCORE_RELEASE_CHANNEL.txt
 
 #use dummy values for now
 echo "<rss xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2.0\">

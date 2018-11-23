@@ -1,13 +1,6 @@
 :: Print ccache statistics
 ccache.exe -s
 
-:: Test MuseScore stability
-IF "%NIGHTLY_BUILD%" == "" (
-  goto :STABLE_LABEL
-) ELSE (
-  goto :UNSTABLE_LABEL
-)
-
 CD C:\MuseScore
 
 REM the code is used to generate MS version for both nightly and stable releases
@@ -16,6 +9,13 @@ FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MAJOR" %
 FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MINOR" %input%') DO set VERSION_MINOR=%%A
 FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_PATCH" %input%') DO set VERSION_PATCH=%%A
 SET MUSESCORE_VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%.%APPVEYOR_BUILD_NUMBER%
+
+:: Test MuseScore stability
+IF "%NIGHTLY_BUILD%" == "" (
+  goto :STABLE_LABEL
+) ELSE (
+  goto :UNSTABLE_LABEL
+)
 
 :STABLE_LABEL
 echo "Stable: Build MSI package"
