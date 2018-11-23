@@ -3725,7 +3725,7 @@ Score::FileError MasterScore::read206(XmlReader& e)
                   if (!b)
                         continue;
                   int sp = b->spanStaff();
-                  if (sp == 0)
+                  if (sp <= 0)
                         continue;
                   for (int span = 1; span <= sp; ++span) {
                         BarLine* nb = toBarLine(s->element((staffIdx + span) * VOICES));
@@ -3742,7 +3742,7 @@ Score::FileError MasterScore::read206(XmlReader& e)
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             Staff* s = staff(staffIdx);
             int sp = s->barLineSpan();
-            if (sp == 0)
+            if (sp <= 0)
                   continue;
             for (int span = 1; span <= sp; ++span) {
                   Staff* ns = staff(staffIdx + span);
