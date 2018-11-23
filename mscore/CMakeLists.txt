@@ -852,9 +852,16 @@ else (MINGW)
       if (USE_WEBENGINE)
          list(APPEND dlls_to_copy "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineCore.dll")
       endif(USE_WEBENGINE)
-
+      
       set(CMAKE_FIND_LIBRARY_PREFIX "")
       set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
+
+      if (WIN_SPARKLE_ENABLED)
+            target_link_libraries(mscore winsparkledll)
+            find_library( dll_winsparkle  NAMES "WinSparkle" PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+            list(APPEND dlls_to_copy ${dll_winsparkle})
+      endif (WIN_SPARKLE_ENABLED)
+
       find_library( dll_lame        NAMES "lame_enc"       PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_ogg         NAMES "libogg"         PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_sndfile     NAMES "libsndfile-1"   PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
@@ -862,17 +869,11 @@ else (MINGW)
       find_library( dll_vorbisfile  NAMES "libvorbisfile"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_portaudio   NAMES "portaudio"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
-      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} ${dll_winsparkle} "$<TARGET_FILE_DIR:mscore>/${MUSESCORE_NAME}.exe")
+      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} "$<TARGET_FILE_DIR:mscore>/${MUSESCORE_NAME}.exe")
       set( output_dir_for_dlls "${PROJECT_BINARY_DIR}/../msvc.install${ARCH_TYPE}/bin")
 
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
 
-      if (WIN_SPARKLE_ENABLED)
-            target_link_libraries(mscore WinSparkle)
-            find_library( dll_winsparkle  NAMES "WinSparkle"     PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
-            COPY_FILES_INTO_DIRECTORY_IF_CHANGED( ${dll_winsparkle} ${output_dir_for_dlls}  mscore)
-      endif (WIN_SPARKLE_ENABLED)
-      
       add_dependencies(mscore pluginDocumentation)
 
       # Keep dependencies in alphabetical order. Changes made to this list
@@ -880,7 +881,7 @@ else (MINGW)
       get_filename_component(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
       get_filename_component (MINGW_ROOT ${COMPILER_DIR} DIRECTORY)
 
-	  foreach (QtLibrary ${QT_LIBRARIES})
+      foreach (QtLibrary ${QT_LIBRARIES})
          message("Library ${QtLibrary}")
          # always use release libs
          set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
@@ -895,15 +896,16 @@ else (MINGW)
       add_dependencies(mscore lrelease)
 
       install( FILES
-		 ${dll_ogg}
-		 ${dll_lame}
-		 ${dll_sndfile}
-		 ${dll_portaudio}
-		 ${dll_vorbis}
-		 ${dll_vorbisfile}
-		 ${QtInstallLibraries}
-		 ${PROJECT_SOURCE_DIR}/build/qt.conf
-		 DESTINATION bin)
+            ${dll_ogg}
+            ${dll_lame}
+            ${dll_sndfile}
+            ${dll_portaudio}
+            ${dll_vorbis}
+            ${dll_vorbisfile}
+            ${dll_winsparkle}
+            ${QtInstallLibraries}
+            ${PROJECT_SOURCE_DIR}/build/qt.conf
+            DESTINATION bin)
 
       install(FILES
          ${QT_INSTALL_PREFIX}/plugins/iconengines/qsvgicon.dll

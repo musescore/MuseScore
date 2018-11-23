@@ -77,7 +77,7 @@ deploy:
     secret_access_key:
       secure: IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
     bucket: sparkle.musescore.org
-    folder: $(MSCORE_RELEASE_CHANNEL)/3/win/
+    folder: testing/3/win/
     region: us-east-1
     set_public: true
     artifact: appcast.xml
