@@ -15,6 +15,9 @@ FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MINOR" %
 FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_PATCH" %input%') DO set VERSION_PATCH=%%A
 SET MUSESCORE_VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%.%APPVEYOR_BUILD_NUMBER%
 
+echo "!!!! %MUSESCORE_VERSION%"
+echo "!!!! %MSREVISION%"
+
 :STABLE_LABEL
 echo "Stable: Build MSI package"
 :: sign dlls and exe files
@@ -26,12 +29,6 @@ for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') d
     )
 
 call C:\MuseScore\msvc_build.bat package 64 %APPVEYOR_BUILD_NUMBER%
-
-if exist C:\MuseScore\msvc.build_x64\MuseScore-3.0.0.msi (
-    echo "!!!! The file exists"
-) else (
-    echo "!!!! The file does not exist"    
-) 
 
 CD C:\MuseScore
 
