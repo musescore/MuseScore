@@ -81,8 +81,9 @@
           </Articulation>
         <Channel>
           <program value="24"/>
-          <midiPort>0</midiPort>
-          <midiChannel>0</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <program value="28"/>
           </Channel>
         </Instrument>
       </Part>
@@ -143,8 +144,6 @@
           </Articulation>
         <Channel>
           <program value="27"/>
-          <midiPort>0</midiPort>
-          <midiChannel>2</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -444,6 +443,9 @@
             </Articulation>
           <Channel>
             <program value="24"/>
+            </Channel>
+          <Channel name="mute">
+            <program value="28"/>
             </Channel>
           </Instrument>
         </Part>

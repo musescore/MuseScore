@@ -746,7 +746,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setMidiReopenInProgress(const QString &file);
 
       static Palette* newTempoPalette(bool defaultPalette = false);
-      static Palette* newTextPalette();
+      static Palette* newTextPalette(bool defaultPalette = false);
       static Palette* newTimePalette();
       static Palette* newRepeatsPalette();
       static Palette* newBreaksPalette();
