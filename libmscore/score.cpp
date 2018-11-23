@@ -4051,6 +4051,8 @@ int Score::keysig()
 int Score::duration()
       {
       updateRepeatList(true);
+      if (repeatList()->isEmpty())
+            return 0;
       RepeatSegment* rs = repeatList()->last();
       return lrint(utick2utime(rs->utick + rs->len()));
       }
