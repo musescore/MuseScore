@@ -8,15 +8,14 @@ IF "%NIGHTLY_BUILD%" == "" (
   goto :UNSTABLE_LABEL
 )
 
+CD C:\MuseScore
+
 REM the code is used to generate MS version for both nightly and stable releases
 SET input=C:\MuseScore\CMakeLists.txt
 FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MAJOR" %input%') DO set VERSION_MAJOR=%%A
 FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MINOR" %input%') DO set VERSION_MINOR=%%A
 FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_PATCH" %input%') DO set VERSION_PATCH=%%A
 SET MUSESCORE_VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%.%APPVEYOR_BUILD_NUMBER%
-
-echo "!!!! %MUSESCORE_VERSION%"
-echo "!!!! %MSREVISION%"
 
 :STABLE_LABEL
 echo "Stable: Build MSI package"
@@ -56,6 +55,8 @@ bash C:\MuseScore\build\appveyor\winsparkle_appcast_generator.sh "C:\MuseScore\%
 REM ------------------------------------------
 @echo on
 type C:\MuseScore\appcast.xml
+
+SET /p MSCORE_RELEASE_CHANNEL=<MSCORE_RELEASE_CHANNEL.xml
 
 goto :UPLOAD
 
