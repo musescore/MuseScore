@@ -28,12 +28,18 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
       const std::vector<InspectorItem> il = {
             { Pid::DYNAMIC_RANGE,    0, d.dynRange,     d.resetDynRange     },
             { Pid::VELOCITY,         0, d.velocity,     0                   },
+            { Pid::SUB_STYLE,        0, d.style,        d.resetStyle        },
             { Pid::PLACEMENT,        0, d.placement,    d.resetPlacement    }
             };
       const std::vector<InspectorPanel> ppList = {
             { d.title, d.panel }
             };
       populatePlacement(d.placement);
+
+      d.style->clear();
+      for (auto ss : primaryTextStyles())
+            d.style->addItem(textStyleUserName(ss), int(ss));
+
       mapSignals(il, ppList);
       }
 
