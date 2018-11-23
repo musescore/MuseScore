@@ -940,11 +940,11 @@ bool Segment::operator>(const Segment& s) const
       }
 
 //---------------------------------------------------------
-//   findAnnotationOrElement
+//   hasAnnotationOrElement
 ///  return true if an annotation of type type or and element is found in the track range
 //---------------------------------------------------------
 
-bool Segment::findAnnotationOrElement(ElementType type, int minTrack, int maxTrack)
+bool Segment::hasAnnotationOrElement(ElementType type, int minTrack, int maxTrack) const
       {
       for (const Element* e : _annotations)
             if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack)
@@ -957,15 +957,31 @@ bool Segment::findAnnotationOrElement(ElementType type, int minTrack, int maxTra
 
 //---------------------------------------------------------
 //   findAnnotation
-///  return true if an annotation of type type
+///  Returns the first found annotation of type type
+///  or nullptr if nothing was found.
 //---------------------------------------------------------
 
-bool Segment::findAnnotation(ElementType type, int minTrack, int maxTrack)
+Element* Segment::findAnnotation(ElementType type, int minTrack, int maxTrack)
       {
-      for (const Element* e : _annotations)
+      for (Element* e : _annotations)
             if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack)
-                  return true;
-      return false;
+                  return e;
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   findAnnotations
+///  Returns the list of found annotations
+///  or nullptr if nothing was found.
+//---------------------------------------------------------
+
+std::vector<Element*> Segment::findAnnotations(ElementType type, int minTrack, int maxTrack)
+      {
+      std::vector<Element*> found;
+      for (Element* e : _annotations)
+            if (e->type() == type && e->track() >= minTrack && e->track() <= maxTrack)
+                  found.push_back(e);
+      return found;
       }
 
 //---------------------------------------------------------
