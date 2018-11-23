@@ -7106,6 +7106,7 @@ int main(int argc, char* av[])
       mscore = new MuseScore();
       // create a score for internal use
       gscore = new MasterScore();
+      gscore->setPaletteMode(true);
       gscore->setMovements(new Movements());
       gscore->setStyle(MScore::baseStyle());
 

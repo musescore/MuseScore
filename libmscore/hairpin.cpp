@@ -88,7 +88,33 @@ Element* HairpinSegment::drop(EditData& data)
 
 void HairpinSegment::layout()
       {
-      qreal _spatium   = spatium();
+      const qreal _spatium = spatium();
+      const int _track = track();
+      if (autoplace() && !score()->isPalette()) {
+            // Try to fit between adjacent dynamics
+            if (isSingleType() || isBeginType()) {
+                  Segment* start = hairpin()->startSegment();
+                  Dynamic* sd = start ? toDynamic(start->findAnnotation(ElementType::DYNAMIC, _track, _track)) : nullptr;
+                  if (sd) {
+                        const qreal sdRight = sd->bbox().right() + sd->pos().x()
+                                              + sd->segment()->pos().x() + sd->measure()->pos().x();
+                        const qreal dist    = sdRight - pos().x() + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
+                        rxpos()  += dist;
+                        rxpos2() -= dist;
+                        }
+                  }
+            if (isSingleType() || isEndType()) {
+                  Segment* end = hairpin()->endSegment();
+                  Dynamic* ed = end ? toDynamic(end->findAnnotation(ElementType::DYNAMIC, _track, _track)) : nullptr;
+                  if (ed) {
+                        const qreal edLeft  = ed->bbox().left() + ed->pos().x()
+                                              + ed->segment()->pos().x() + ed->measure()->pos().x();
+                        const qreal dist    = edLeft - pos2().x() - pos().x() - score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
+                        rxpos2() += dist;
+                        }
+                  }
+            }
+
       HairpinType type = hairpin()->hairpinType();
       if (type == HairpinType::DECRESC_LINE || type == HairpinType::CRESC_LINE) {
             twoLines = false;
