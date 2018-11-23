@@ -27,6 +27,14 @@ for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') d
 
 call C:\MuseScore\msvc_build.bat package 64 %APPVEYOR_BUILD_NUMBER%
 
+if exist C:\MuseScore\msvc.build_x64\MuseScore-3.0.0.msi (
+    echo "!!!! The file exists"
+) else (
+    echo "!!!! The file does not exist"    
+) 
+
+CD C:\MuseScore
+
 :: find the MSI file without the hardcoded version
 for /r %%i in (msvc.build_x64\*.msi) do ( SET FILEPATH=%%i )
 echo on
