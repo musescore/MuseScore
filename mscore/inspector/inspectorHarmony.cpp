@@ -36,9 +36,8 @@ InspectorHarmony::InspectorHarmony(QWidget* parent)
             };
 
       h.style->clear();
-      for (auto ss : { Tid::HARMONY_A, Tid::HARMONY_B } ) {
+      for (auto ss : primaryTextStyles())
             h.style->addItem(textStyleUserName(ss), int(ss));
-            }
 
       t.resetToStyle->setVisible(false);
 
