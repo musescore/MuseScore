@@ -695,7 +695,6 @@ enum class Sid {
       tempoFontItalic,
       tempoFontUnderline,
       tempoAlign,
-      tempoOffset,
       tempoSystemFlag,
       tempoPlacement,
       tempoPosAbove,
@@ -1166,6 +1165,7 @@ class MStyle {
       void load(XmlReader& e);
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
+      bool readStyleValCompat(XmlReader&);
 
       void reset(Score*);
 
