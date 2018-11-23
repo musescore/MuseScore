@@ -3280,166 +3280,185 @@ static void loadScores(const QStringList& argv)
 //   doConvert
 //---------------------------------------------------------
 
-static bool doConvert(Score* cs, QString fn, QString plugin = "")
+static bool doConvert(Score *cs, const QString& fn);
+
+static bool doConvert(Score* cs, const QJsonArray& outFiles, QString plugin)
       {
-      bool rv = true;
       LayoutMode layoutMode = cs->layoutMode();
       cs->setLayoutMode(LayoutMode::PAGE);
-      if (cs->layoutMode() != layoutMode) {
-            cs->setLayoutMode(LayoutMode::PAGE);
+      if (cs->layoutMode() != layoutMode)
             cs->doLayout();
-            }
 
       if (!styleFile.isEmpty()) {
             QFile f(styleFile);
-            if (f.open(QIODevice::ReadOnly))
+            if (f.open(QIODevice::ReadOnly)) {
+                  fprintf(stderr, "\tusing style <%s>\n", qPrintable(styleFile));
                   cs->style().load(&f);
+                  }
             }
       if (!plugin.isEmpty()) {
-            mscore->setCurrentScore(cs);
-            LayoutMode layoutMode1 = cs->layoutMode();
-            if (layoutMode1 != LayoutMode::PAGE) {
-                  cs->setLayoutMode(LayoutMode::PAGE);
-                  cs->doLayout();
-                  }
-            if (mscore->loadPlugin(plugin))
+            if (mscore->loadPlugin(plugin)) {
+                  fprintf(stderr, "\tusing plugin <%s>\n", qPrintable(plugin));
                   mscore->pluginTriggered(0);
+                  }
             mscore->unloadPlugins();
-            if (layoutMode1 != cs->layoutMode()) {
-                  cs->setLayoutMode(layoutMode1);
-                  cs->doLayout();
+            }
+      for (const QJsonValue& outFile : outFiles) {
+            if (outFile.isArray()) {
+                  QJsonArray fns = outFile.toArray();
+                  if (fns.size() != 2 || !fns[0].isString() || !fns[1].isString()) {
+                        fprintf(stderr, "out element array length or type mismatch: %s\n",
+                                QJsonDocument(QJsonArray{outFile}).toJson().constData());
+                        return false;
+                        }
+                  if (cs->excerpts().size() == 0)
+                        // no parts, silently ignore
+                        continue;
+                  // convert parts
+                  QString fnbeg = fns[0].toString();
+                  QString fnend = fns[1].toString();
+                  for (Excerpt* e : cs->excerpts()) {
+                        Score* pScore = e->partScore();
+                        QString partfn = fnbeg + mscore->saveFilename(pScore->title()) + fnend;
+                        fprintf(stderr, "\tpart <%s>\n", qPrintable(partfn));
+                        QFileInfo fi(partfn);
+                        if (!mscore->saveAs(pScore, true, partfn, fi.suffix()))
+                              return false;
+                        }
+                  }
+            else if (!outFile.isString()) {
+                  fprintf(stderr, "out element type mismatch: %s\n",
+                          QJsonDocument(QJsonArray{outFile}).toJson().constData());
+                  return false;
+                  }
+            else {
+                  QString fn = outFile.toString();
+                  fprintf(stderr, "\tto <%s>\n", qPrintable(fn));
+                  if (!doConvert(cs, fn))
+                        return false;
                   }
             }
+      // don’t bother cleaning up layoutMode:
+      // cs is destroyed immediately after return anyway
+      return true;
+      }
+
+static bool doConvert(Score *cs, const QString& fn)
+      {
       if (fn.endsWith(".mscx")) {
             QFileInfo fi(fn);
-            if (!cs->saveFile(fi))
-                  return false;
-            return true;
+            return cs->saveFile(fi);
             }
       else if (fn.endsWith(".mscz")) {
             QFileInfo fi(fn);
-            if (!cs->saveCompressedFile(fi, false))
-                  return false;
-            return true;
+            return cs->saveCompressedFile(fi, false);
             }
-      else if (fn.endsWith(".xml") || fn.endsWith(".musicxml")) {
-            rv = saveXml(cs, fn);
-            }
-      else if (fn.endsWith(".mxl")) {
-            rv = saveMxl(cs, fn);
-            }
+      else if (fn.endsWith(".xml") || fn.endsWith(".musicxml"))
+            return saveXml(cs, fn);
+      else if (fn.endsWith(".mxl"))
+            return saveMxl(cs, fn);
       else if (fn.endsWith(".mid"))
             return mscore->saveMidi(cs, fn);
       else if (fn.endsWith(".pdf")) {
-            if (!exportScoreParts) {
-                  rv = mscore->savePdf(cs, fn);
-                  }
-            else {
-                  if (cs->excerpts().size() == 0) {
-                        auto excerpts = Excerpt::createAllExcerpt(cs->masterScore());
+            if (!exportScoreParts)
+                  return mscore->savePdf(cs, fn);
+            if (cs->excerpts().size() == 0) {
+                  auto excerpts = Excerpt::createAllExcerpt(cs->masterScore());
 
-                        for (Excerpt* e : excerpts) {
-                              Score* nscore = new Score(e->oscore());
-                              e->setPartScore(nscore);
-                              nscore->style().set(Sid::createMultiMeasureRests, true);
-                              Excerpt::createExcerpt(e);
-                              cs->startCmd();
-                              cs->undo(new AddExcerpt(e));
-                              cs->endCmd();
-                              }
+                  for (Excerpt* e : excerpts) {
+                        Score* nscore = new Score(e->oscore());
+                        e->setPartScore(nscore);
+                        nscore->style().set(Sid::createMultiMeasureRests, true);
+                        Excerpt::createExcerpt(e);
+                        cs->startCmd();
+                        cs->undo(new AddExcerpt(e));
+                        cs->endCmd();
                         }
-                  QList<Score*> scores;
-                  scores.append(cs);
-                  for (Excerpt* e : cs->excerpts())
-                        scores.append(e->partScore());
-                  return mscore->savePdf(scores, fn);
                   }
+            QList<Score*> scores;
+            scores.append(cs);
+            for (Excerpt* e : cs->excerpts())
+                  scores.append(e->partScore());
+            return mscore->savePdf(scores, fn);
             }
       else if (fn.endsWith(".png")) {
             if (!exportScoreParts)
                   return mscore->savePng(cs, fn);
-            else {
-                  if (cs->excerpts().size() == 0) {
-                        auto excerpts = Excerpt::createAllExcerpt(cs->masterScore());
+            if (cs->excerpts().size() == 0) {
+                  auto excerpts = Excerpt::createAllExcerpt(cs->masterScore());
 
-                        for (Excerpt* e: excerpts) {
-                              Score* nscore = new Score(e->oscore());
-                              e->setPartScore(nscore);
-                              nscore->setExcerpt(e);
-                              // nscore->setName(e->title()); // needed before AddExcerpt
-                              nscore->style().set(Sid::createMultiMeasureRests, true);
-                              Excerpt::createExcerpt(e);
-                              cs->startCmd();
-                              cs->undo(new AddExcerpt(e));
-                              cs->endCmd();
-                              }
+                  for (Excerpt* e: excerpts) {
+                        Score* nscore = new Score(e->oscore());
+                        e->setPartScore(nscore);
+                        nscore->setExcerpt(e);
+                        // nscore->setName(e->title()); // needed before AddExcerpt
+                        nscore->style().set(Sid::createMultiMeasureRests, true);
+                        Excerpt::createExcerpt(e);
+                        cs->startCmd();
+                        cs->undo(new AddExcerpt(e));
+                        cs->endCmd();
                         }
-                  if (!mscore->savePng(cs, fn))
-                        return false;
-                  int idx = 0;
-                  int padding = QString("%1").arg(cs->excerpts().size()).size();
-                  for (Excerpt* e: cs->excerpts()) {
-                        QString suffix = QString("__excerpt__%1.png").arg(idx, padding, 10, QLatin1Char('0'));
-                        QString excerptFn = fn.left(fn.size() - 4) + suffix;
-                        if (!mscore->savePng(e->partScore(), excerptFn))
-                              return false;
-                        idx++;
-                        }
-                  return true;
                   }
+            if (!mscore->savePng(cs, fn))
+                  return false;
+            int idx = 0;
+            int padding = QString("%1").arg(cs->excerpts().size()).size();
+            for (Excerpt* e: cs->excerpts()) {
+                  QString suffix = QString("__excerpt__%1.png").arg(idx, padding, 10, QLatin1Char('0'));
+                  QString excerptFn = fn.left(fn.size() - 4) + suffix;
+                  if (!mscore->savePng(e->partScore(), excerptFn))
+                        return false;
+                  idx++;
+                  }
+            return true;
             }
-      else if (fn.endsWith(".svg")) {
-            rv = mscore->saveSvg(cs, fn);
-            }
+      else if (fn.endsWith(".svg"))
+            return mscore->saveSvg(cs, fn);
 #ifdef HAS_AUDIOFILE
-            else if (fn.endsWith(".wav") || fn.endsWith(".ogg") || fn.endsWith(".flac"))
-                  return mscore->saveAudio(cs, fn);
+      else if (fn.endsWith(".wav") || fn.endsWith(".ogg") || fn.endsWith(".flac"))
+            return mscore->saveAudio(cs, fn);
 #endif
 #ifdef USE_LAME
-            else if (fn.endsWith(".mp3"))
-                  return mscore->saveMp3(cs, fn);
+      else if (fn.endsWith(".mp3"))
+            return mscore->saveMp3(cs, fn);
 #endif
-      else if (fn.endsWith(".spos")) {
-            rv = mscore->savePositions(cs, fn, true);
-            }
-      else if (fn.endsWith(".mpos")) {
-            rv = mscore->savePositions(cs, fn, false);
-            }
+      else if (fn.endsWith(".spos"))
+            return mscore->savePositions(cs, fn, true);
+      else if (fn.endsWith(".mpos"))
+            return mscore->savePositions(cs, fn, false);
       else if (fn.endsWith(".mlog"))
             return cs->sanityCheck(fn);
       else if (fn.endsWith(".metajson"))
-            rv = mscore->saveMetadataJSON(cs, fn);
-      else if (plugin.isEmpty()) {
-            qDebug("don't know how to convert to %s", qPrintable(outFileName));
-            return false;
-            }
-      if (layoutMode != cs->layoutMode()) {
-            cs->setLayoutMode(layoutMode);
-            cs->doLayout();
-            }
-      return rv;
+            return mscore->saveMetadataJSON(cs, fn);
+      // unknown file type
+      return false;
       }
 
 //---------------------------------------------------------
 //   convert
 //---------------------------------------------------------
 
-static bool convert(const QString& inFile, const QString& outFile, const QString& plugin = "")
+static bool convert(const QString& inFile, const QJsonArray& outFiles, const QString& plugin = "")
       {
-      if (inFile.isEmpty() || (outFile.isEmpty() && plugin.isEmpty())) {
-            fprintf(stderr, "cannot convert <%s> to <%s>\n", qPrintable(inFile), qPrintable(outFile));
+      if (inFile.isEmpty() || (outFiles.isEmpty() && plugin.isEmpty())) {
+            fprintf(stderr, "cannot convert <%s>: neither out nor plugin given\n", qPrintable(inFile));
             return false;
             }
-      fprintf(stderr, "convert <%s> to <%s>\n", qPrintable(inFile), qPrintable(outFile));
+      fprintf(stderr, "convert <%s>...\n", qPrintable(inFile));
       MasterScore* score = mscore->readScore(inFile);
       if (!score)
             return false;
-      if (!doConvert(score, outFile, plugin)) {
-            delete score;
-            return false;
-            }
+      mscore->setCurrentScore(score);
+      bool success = doConvert(score, outFiles, plugin);
+      fprintf(stderr, success ? "... success!\n" : "... failed!\n");
+      mscore->setCurrentScore(nullptr);
       delete score;
-      return true;
+      return success;
+      }
+
+static bool convert(const QString& inFile, const QString& outFile)
+      {
+      return convert(inFile, QJsonArray{ outFile });
       }
 
 //---------------------------------------------------------
@@ -3467,7 +3486,7 @@ static bool doProcessJob(QString jsonFile)
       QJsonArray a = doc.array();
       for (const auto i : a) {
             QString inFile;
-            QString outFile;
+            QJsonArray outFiles;
             QString plugin;
             if (!i.isObject()) {
                   fprintf(stderr, "array value is not an object\n");
@@ -3475,19 +3494,22 @@ static bool doProcessJob(QString jsonFile)
                   }
             QJsonObject obj = i.toObject();
             for (const auto& key : obj.keys()) {
-                  QString val = obj.value(key).toString();
                   if (key == "in")
-                        inFile = val;
-                  else if (key == "out")
-                        outFile = val;
+                        inFile = obj.value(key).toString();
+                  else if (key == "out") {
+                        if (obj.value(key).isArray())
+                              outFiles = obj.value(key).toArray();
+                        else
+                              outFiles.push_back(obj.value(key));
+                        }
                   else if (key == "plugin")
-                        plugin = val;
+                        plugin = obj.value(key).toString();
                   else {
                         fprintf(stderr, "unknown key <%s>\n", qPrintable(key));
                         return false;
                         }
                   }
-            if (!convert(inFile, outFile, plugin))
+            if (!convert(inFile, outFiles, plugin))
                   return false;
             }
       return true;
