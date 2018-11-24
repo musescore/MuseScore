@@ -1894,7 +1894,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
             rv = true;
             // store new file and path into score fileInfo
             // to have it accessible to resources
-            QString originalScoreFName(cs_->masterScore()->fileInfo()->canonicalFilePath());
+            QFileInfo originalScoreFileInfo(*cs_->masterScore()->fileInfo());
             cs_->masterScore()->fileInfo()->setFile(fn);
             if (!cs_->isMaster()) { // clone metaTags from masterScore
                   QMapIterator<QString, QString> j(cs_->masterScore()->metaTags());
@@ -1934,7 +1934,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
                               cs_->metaTags().remove(j.key());
                         }
                   }
-            cs_->masterScore()->fileInfo()->setFile(originalScoreFName);          // restore original file name
+            *cs_->masterScore()->fileInfo() = originalScoreFileInfo;          // restore original file info
 
             if (rv && !saveCopy) {
                   cs_->masterScore()->fileInfo()->setFile(fn);
