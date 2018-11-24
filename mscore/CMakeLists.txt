@@ -473,7 +473,7 @@ if (USE_SYSTEM_FREETYPE)
 endif (USE_SYSTEM_FREETYPE)
 
 if (MINGW OR MSVC)
-      set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME})
+      set(MSCORE_OUTPUT_NAME ${MUSESCORE_NAME}${MUSESCORE_VERSION_MAJOR})
 elseif (MSCORE_INSTALL_SUFFIX)
       set(MSCORE_OUTPUT_NAME "${ExecutableName}${MSCORE_INSTALL_SUFFIX}")
 endif (MINGW OR MSVC)
@@ -869,7 +869,7 @@ else (MINGW)
       find_library( dll_vorbisfile  NAMES "libvorbisfile"  PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
       find_library( dll_portaudio   NAMES "portaudio"      PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
 
-      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} "$<TARGET_FILE_DIR:mscore>/${MUSESCORE_NAME}.exe")
+      list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} "$<TARGET_FILE_DIR:mscore>/${MSCORE_OUTPUT_NAME}.exe")
       set( output_dir_for_dlls "${PROJECT_BINARY_DIR}/../msvc.install${ARCH_TYPE}/bin")
 
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
