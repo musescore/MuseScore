@@ -285,12 +285,12 @@ void MuseScore::loadFiles(bool switchTab, bool singleFile)
          tr("MIDI Files") + " (*.mid *.midi *.kar);;" +
          tr("MuseData Files") + " (*.md);;" +
          tr("Capella Files") + " (*.cap *.capx);;" +
-         tr("BB Files <experimental>") + " (*.mgu *.sgu);;" +
+         tr("BB Files (experimental)") + " (*.mgu *.sgu);;" +
 #ifdef OMR
-         tr("PDF Files <experimental OMR>") + " (*.pdf);;" +
+         tr("PDF Files (experimental OMR)") + " (*.pdf);;" +
 #endif
-         tr("Overture / Score Writer Files <experimental>") + " (*.ove *.scw);;" +
-         tr("Bagpipe Music Writer Files <experimental>") + " (*.bww);;" +
+         tr("Overture / Score Writer Files (experimental)") + " (*.ove *.scw);;" +
+         tr("Bagpipe Music Writer Files (experimental)") + " (*.bww);;" +
          tr("Guitar Pro") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx)",
          tr("Load Score"),
          singleFile
@@ -2458,7 +2458,7 @@ void MuseScore::addImage(Score* score, Element* e)
          tr("All Supported Files") + " (*.svg *.jpg *.jpeg *.png);;" +
          tr("Scalable Vector Graphics") + " (*.svg);;" +
          tr("JPEG") + " (*.jpg *.jpeg);;" +
-         tr("PNG") + " (*.png)",
+         tr("PNG Bitmap Graphic") + " (*.png)",
          0,
          preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );

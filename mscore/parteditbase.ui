@@ -298,7 +298,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Vol</string>
+           <string extracomment="volume">Vol.</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -354,7 +354,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Rev</string>
+           <string extracomment="reverb">Rev.</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -382,7 +382,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Cho</string>
+           <string extracomment="chorus">Cho.</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -403,7 +403,7 @@
         <item>
          <widget class="QToolButton" name="expand">
           <property name="statusTip">
-           <string>show details</string>
+           <string>Show details</string>
           </property>
           <property name="text">
            <string>+</string>
@@ -428,7 +428,7 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>mute</string>
+           <string>Mute</string>
           </property>
           <property name="accessibleName">
            <string>Mute</string>
@@ -456,7 +456,7 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>solo</string>
+           <string>Solo</string>
           </property>
           <property name="accessibleName">
            <string>Solo</string>
@@ -599,15 +599,15 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>Awl::Knob</class>
+   <extends>QWidget</extends>
+   <header>awl/knob.h</header>
+  </customwidget>
+  <customwidget>
    <class>Awl::MidiPanKnob</class>
    <extends>QWidget</extends>
    <header>awl/midipanknob.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Awl::Knob</class>
-   <extends>QWidget</extends>
-   <header>awl/knob.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

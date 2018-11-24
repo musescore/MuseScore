@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>910</width>
+    <width>912</width>
     <height>660</height>
    </rect>
   </property>
@@ -283,7 +283,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>33</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -1693,7 +1693,7 @@
               <item row="0" column="3">
                <widget class="QLabel" name="label_164">
                 <property name="text">
-                 <string>size:</string>
+                 <string>Size:</string>
                 </property>
                 <property name="indent">
                  <number>10</number>
@@ -1720,7 +1720,7 @@
               <item row="0" column="6">
                <widget class="QLabel" name="label_166">
                 <property name="text">
-                 <string>style:</string>
+                 <string>Style:</string>
                 </property>
                 <property name="indent">
                  <number>11</number>
@@ -2023,7 +2023,7 @@
               <item row="0" column="3">
                <widget class="QLabel" name="label_161">
                 <property name="text">
-                 <string>size:</string>
+                 <string>Size:</string>
                 </property>
                 <property name="indent">
                  <number>10</number>
@@ -2060,7 +2060,7 @@
               <item row="0" column="6">
                <widget class="QLabel" name="label_163">
                 <property name="text">
-                 <string>style:</string>
+                 <string>Style:</string>
                 </property>
                 <property name="indent">
                  <number>10</number>
@@ -2792,7 +2792,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Align' value</string>
+                 <string>Reset 'Align' values</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -3058,7 +3058,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Align' value</string>
+                 <string>Reset 'Align' values</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4421,7 +4421,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font size' value</string>
+              <string>Reset 'Offset' values</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -4445,7 +4445,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font size' value</string>
+              <string>Reset 'Align' values</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -4745,7 +4745,7 @@
               <item row="5" column="0">
                <widget class="QLabel" name="repeatBarlineDotSeparationLbl">
                 <property name="text">
-                 <string>Repeat barline dots distance:</string>
+                 <string>Repeat barline to dots distance:</string>
                 </property>
                </widget>
               </item>
@@ -6615,7 +6615,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_87">
              <property name="text">
-              <string>Hook height Above:</string>
+              <string>Hook height above:</string>
              </property>
              <property name="buddy">
               <cstring>ottavaHookAbove</cstring>
@@ -6661,7 +6661,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_81">
              <property name="text">
-              <string>Position Above:</string>
+              <string>Position above:</string>
              </property>
             </widget>
            </item>
@@ -6803,7 +6803,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_130">
              <property name="text">
-              <string>Position Below:</string>
+              <string>Position below:</string>
              </property>
             </widget>
            </item>
@@ -6833,7 +6833,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_185">
              <property name="text">
-              <string>Hook height Below:</string>
+              <string>Hook height below:</string>
              </property>
              <property name="buddy">
               <cstring>ottavaHookAbove</cstring>
@@ -7517,14 +7517,14 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_138">
              <property name="text">
-              <string>Position Above:</string>
+              <string>Position above:</string>
              </property>
             </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_141">
              <property name="text">
-              <string>Position Below:</string>
+              <string>Position below:</string>
              </property>
             </widget>
            </item>
@@ -7588,7 +7588,7 @@
              <item row="0" column="0">
               <widget class="QLabel" name="label_168">
                <property name="text">
-                <string>Position Above:</string>
+                <string>Position above:</string>
                </property>
               </widget>
              </item>
@@ -7612,7 +7612,7 @@
              <item row="1" column="0">
               <widget class="QLabel" name="label_167">
                <property name="text">
-                <string>Position Below:</string>
+                <string>Position below:</string>
                </property>
               </widget>
              </item>
@@ -8259,7 +8259,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Below:</string>
+              <string>Position below:</string>
              </property>
             </widget>
            </item>
@@ -8333,7 +8333,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Position Above:</string>
+              <string>Position above:</string>
              </property>
             </widget>
            </item>
@@ -8815,13 +8815,13 @@
            <item>
             <widget class="QGroupBox" name="groupBox_27">
              <property name="title">
-              <string>Capo</string>
+              <string extracomment="Capodastro">Capo</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_13">
               <item row="0" column="0">
                <widget class="QLabel" name="label_60">
                 <property name="text">
-                 <string>Capo fret position:</string>
+                 <string extracomment="Capodastro">Capo fret position:</string>
                 </property>
                 <property name="buddy">
                  <cstring>capoPosition</cstring>
@@ -9050,7 +9050,7 @@
            <item row="2" column="4">
             <widget class="QLabel" name="label_181">
              <property name="text">
-              <string>size:</string>
+              <string>Size:</string>
              </property>
              <property name="indent">
               <number>10</number>
@@ -9107,7 +9107,7 @@
            <item row="2" column="7">
             <widget class="QLabel" name="label_183">
              <property name="text">
-              <string>style:</string>
+              <string>Style:</string>
              </property>
              <property name="indent">
               <number>11</number>
@@ -10392,7 +10392,7 @@
               <item row="2" column="7">
                <widget class="QLabel" name="label_194">
                 <property name="text">
-                 <string>size:</string>
+                 <string>Size:</string>
                 </property>
                 <property name="indent">
                  <number>10</number>
@@ -10412,7 +10412,7 @@
               <item row="2" column="12" rowspan="2">
                <widget class="QLabel" name="label_192">
                 <property name="text">
-                 <string>style:</string>
+                 <string>Style:</string>
                 </property>
                 <property name="indent">
                  <number>11</number>
@@ -10608,7 +10608,7 @@
                <widget class="QComboBox" name="tupletDirection">
                 <item>
                  <property name="text">
-                  <string>Automatic</string>
+                  <string>Auto</string>
                  </property>
                 </item>
                 <item>
@@ -10668,7 +10668,7 @@
               <item row="0" column="3">
                <widget class="QLabel" name="label_115">
                 <property name="text">
-                 <string>Number Type:</string>
+                 <string>Number tType:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -10711,7 +10711,7 @@
                <widget class="QComboBox" name="tupletBracketType">
                 <item>
                  <property name="text">
-                  <string>Automatic</string>
+                  <string>Auto</string>
                  </property>
                 </item>
                 <item>
@@ -10729,7 +10729,7 @@
               <item row="0" column="6">
                <widget class="QLabel" name="label_116">
                 <property name="text">
-                 <string>Bracket Type:</string>
+                 <string>Bracket type:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -11350,7 +11350,7 @@
            <item row="7" column="0" colspan="2">
             <widget class="QCheckBox" name="lyricsAlignVerseNumber">
              <property name="text">
-              <string>Align Verse Number</string>
+              <string>Align verse number</string>
              </property>
             </widget>
            </item>
@@ -11360,7 +11360,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Align Verse Number' value</string>
+              <string>Reset 'Align verse number' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11621,7 +11621,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset 'Align' values</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11891,7 +11891,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset 'Align' values</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12166,7 +12166,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset 'Align' values</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12268,7 +12268,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset 'Foreground' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12285,7 +12285,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset 'Background' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12302,7 +12302,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset Border' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12319,7 +12319,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset Text margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12336,7 +12336,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset 'Border radius' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12353,7 +12353,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset 'Frame' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12380,7 +12380,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset 'Offset' values</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12394,7 +12394,7 @@
            <item row="6" column="1">
             <widget class="QCheckBox" name="textStyleSpatiumDependent">
              <property name="text">
-              <string>Size changes with spatium</string>
+              <string>Size changes with staff space setting</string>
              </property>
             </widget>
            </item>
@@ -12404,7 +12404,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset Size changes with staff space setting' value</string>
              </property>
              <property name="text">
               <string notr="true"/>

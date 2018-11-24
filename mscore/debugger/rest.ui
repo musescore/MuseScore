@@ -136,7 +136,7 @@
       <item row="0" column="5">
        <widget class="QCheckBox" name="gap">
         <property name="text">
-         <string>gap</string>
+         <string notr="true">gap</string>
         </property>
        </widget>
       </item>
