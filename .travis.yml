@@ -47,6 +47,7 @@ matrix:
             - ccache
             - libpulse-dev
             - libgtk2.0-bin
+            - mesa-common-dev
             - expect
             - dbus
       cache:
