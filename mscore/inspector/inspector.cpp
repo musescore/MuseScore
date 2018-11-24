@@ -320,6 +320,7 @@ void Inspector::update(Score* s)
                         case ElementType::STAFF_TEXT:
                         case ElementType::SYSTEM_TEXT:
                         case ElementType::REHEARSAL_MARK:
+                        case ElementType::INSTRUMENT_CHANGE:
                               ie = new InspectorStaffText(this);
                               break;
                         case ElementType::MEASURE_NUMBER:
@@ -348,9 +349,6 @@ void Inspector::update(Score* s)
                               break;
                         case ElementType::NOTEDOT:
                               ie = new InspectorNoteDot(this);
-                              break;
-                        case ElementType::INSTRUMENT_CHANGE:
-                              ie = new InspectorInstrumentChange(this);
                               break;
                         default:
                               if (element()->isText())
@@ -1006,12 +1004,18 @@ InspectorTempoText::InspectorTempoText(QWidget* parent)
       const std::vector<InspectorItem> il = {
             { Pid::TEMPO,             0, tt.tempo,       tt.resetTempo       },
             { Pid::TEMPO_FOLLOW_TEXT, 0, tt.followText,  tt.resetFollowText  },
+            { Pid::SUB_STYLE,         0, tt.style,       tt.resetStyle       },
             { Pid::PLACEMENT,         0, tt.placement,   tt.resetPlacement   }
             };
       const std::vector<InspectorPanel> ppList = {
             { tt.title, tt.panel }
             };
       populatePlacement(tt.placement);
+
+      tt.style->clear();
+      for (auto ss : primaryTextStyles())
+            tt.style->addItem(textStyleUserName(ss), int(ss));
+
       mapSignals(il, ppList);
       connect(tt.followText, SIGNAL(toggled(bool)), tt.tempo, SLOT(setDisabled(bool)));
       }
@@ -1038,13 +1042,19 @@ InspectorLyric::InspectorLyric(QWidget* parent)
       l.setupUi(addWidget());
 
       const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,          0, l.placement,    l.resetPlacement    },
-            { Pid::VERSE,              0, l.verse,        l.resetVerse        }
+            { Pid::VERSE,              0, l.verse,        l.resetVerse        },
+            { Pid::SUB_STYLE,          0, l.style,        l.resetStyle        },
+            { Pid::PLACEMENT,          0, l.placement,    l.resetPlacement    }
             };
       const std::vector<InspectorPanel> ppList = {
             { l.title, l.panel }
             };
       populatePlacement(l.placement);
+
+      l.style->clear();
+      for (auto ss : primaryTextStyles())
+            l.style->addItem(textStyleUserName(ss), int(ss));
+
       mapSignals(il, ppList);
       connect(t.resetToStyle, SIGNAL(clicked()), SLOT(resetToStyle()));
       }
@@ -1062,17 +1072,17 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       bool sameTypes = true;
 
       for (const auto& ee : *inspector->el()) {
-            if (el->isSystemText() != ee->isSystemText()) {
+            if (el->type() != ee->type() || el->isSystemText() != ee->isSystemText()) {
                   sameTypes = false;
                   break;
                   }
             }
       if (sameTypes)
-            s.title->setText(el->isSystemText() ? tr("System Text") : tr("Staff Text"));
+            s.title->setText(el->userName());
 
       const std::vector<InspectorItem> il = {
-            { Pid::PLACEMENT,  0, s.placement, s.resetPlacement },
-            { Pid::SUB_STYLE,  0, s.style,     s.resetStyle     }
+            { Pid::SUB_STYLE,  0, s.style,     s.resetStyle     },
+            { Pid::PLACEMENT,  0, s.placement, s.resetPlacement }
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel }
@@ -1080,34 +1090,8 @@ InspectorStaffText::InspectorStaffText(QWidget* parent)
       populatePlacement(s.placement);
 
       s.style->clear();
-      for (auto ss : {
-         Tid::SYSTEM,
-         Tid::STAFF,
-         Tid::TEMPO,
-         Tid::METRONOME,
-         Tid::REHEARSAL_MARK,
-         Tid::EXPRESSION,
-         Tid::REPEAT_LEFT,
-         Tid::REPEAT_RIGHT,
-         Tid::FRAME,
-         Tid::TITLE,
-         Tid::SUBTITLE,
-         Tid::COMPOSER,
-         Tid::POET,
-         Tid::INSTRUMENT_EXCERPT,
-         Tid::TRANSLATOR,
-         Tid::HEADER,
-         Tid::FOOTER,
-         Tid::USER1,
-         Tid::USER2,
-         Tid::USER3,
-         Tid::USER4,
-         Tid::USER5,
-         Tid::USER6
-         } )
-            {
+      for (auto ss : primaryTextStyles())
             s.style->addItem(textStyleUserName(ss), int(ss));
-            }
 
       mapSignals(il, ppList);
       }

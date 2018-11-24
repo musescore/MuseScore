@@ -1197,6 +1197,9 @@ const char* textStyleName(Tid);
 QString textStyleUserName(Tid);
 Tid textStyleFromName(const QString&);
 
+const std::vector<Tid>& allTextStyles();
+const std::vector<Tid>& primaryTextStyles();
+
 #ifndef NDEBUG
 extern void checkStyles();
 #endif

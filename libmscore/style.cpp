@@ -50,6 +50,13 @@ struct StyleType {
       const QVariant&  defaultValue() const { return _defaultValue; }
       };
 
+//---------------------------------------------------------
+//   styleTypes
+//
+//    Keep in sync with sid in style.h
+//---------------------------------------------------------
+
+
 static const StyleType styleTypes[] {
       { Sid::pageWidth,               "pageWidth",               210.0/INCH },
       { Sid::pageHeight,              "pageHeight",              297.0/INCH }, // A4
@@ -1171,7 +1178,7 @@ const TextStyle composerTextStyle {{
 const TextStyle lyricistTextStyle {{
       { Sid::lyricistFontFace,                   Pid::FONT_FACE              },
       { Sid::lyricistFontSize,                   Pid::FONT_SIZE              },
-      { Sid::defaultFontSpatiumDependent,        Pid::SIZE_SPATIUM_DEPENDENT },
+      { Sid::lyricistFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
       { Sid::lyricistFontBold,                   Pid::FONT_BOLD              },
       { Sid::lyricistFontItalic,                 Pid::FONT_ITALIC            },
       { Sid::lyricistFontUnderline,              Pid::FONT_UNDERLINE         },
@@ -1382,7 +1389,7 @@ const TextStyle tempoTextStyle {{
       { Sid::tempoFontItalic,                    Pid::FONT_ITALIC            },
       { Sid::tempoFontUnderline,                 Pid::FONT_UNDERLINE         },
       { Sid::tempoAlign,                         Pid::ALIGN                  },
-      { Sid::tempoOffset,                        Pid::OFFSET                 },
+      { Sid::tempoPosAbove,                      Pid::OFFSET                 },
       { Sid::tempoFrameType,                     Pid::FRAME_TYPE             },
       { Sid::tempoFramePadding,                  Pid::FRAME_PADDING          },
       { Sid::tempoFrameWidth,                    Pid::FRAME_WIDTH            },
@@ -2024,6 +2031,67 @@ QString textStyleUserName(Tid idx)
       {
       Q_ASSERT(idx == textStyles[int(idx)].tid);
       return qApp->translate("TextStyle", textStyleName(idx));
+      }
+
+static std::vector<Tid> _allTextStyles;
+
+static const std::vector<Tid> _primaryTextStyles = {
+      Tid::TITLE,
+      Tid::SUBTITLE,
+      Tid::COMPOSER,
+      Tid::POET,
+      Tid::TRANSLATOR,
+      Tid::FRAME,
+      Tid::HEADER,
+      Tid::FOOTER,
+      Tid::MEASURE_NUMBER,
+      Tid::INSTRUMENT_EXCERPT,
+      Tid::INSTRUMENT_CHANGE,
+      Tid::STAFF,
+      Tid::SYSTEM,
+      Tid::EXPRESSION,
+      Tid::DYNAMICS,
+      Tid::HAIRPIN,
+      Tid::TEMPO,
+      Tid::REHEARSAL_MARK,
+      Tid::REPEAT_LEFT,
+      Tid::REPEAT_RIGHT,
+      Tid::LYRICS_ODD,
+      Tid::LYRICS_EVEN,
+      Tid::HARMONY_A,
+      Tid::HARMONY_B,
+      Tid::USER1,
+      Tid::USER2,
+      Tid::USER3,
+      Tid::USER4,
+      Tid::USER5,
+      Tid::USER6
+      };
+
+//---------------------------------------------------------
+//   allTextStyles
+//---------------------------------------------------------
+
+const std::vector<Tid>& allTextStyles()
+      {
+      if (_allTextStyles.empty()) {
+            _allTextStyles.reserve(int(Tid::TEXT_STYLES));
+            for (const auto& s : textStyles) {
+                  if (s.tid == Tid::DEFAULT)
+                        continue;
+                  _allTextStyles.push_back(s.tid);
+                  }
+            }
+      return _allTextStyles;
+      }
+
+//---------------------------------------------------------
+//   primaryTextStyles
+//---------------------------------------------------------
+
+const std::vector<Tid>& primaryTextStyles()
+      {
+      return _primaryTextStyles;
       }
 
 //---------------------------------------------------------
