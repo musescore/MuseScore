@@ -1687,7 +1687,7 @@
           </Text>
         <Text>
           <style>Lyricist</style>
-          <text><font size="10.5833"/><font face="MuseJazz"/>Lyricist</text>
+          <text><font face="MuseJazz"/>Lyricist</text>
           </Text>
         </VBox>
       <Measure>
