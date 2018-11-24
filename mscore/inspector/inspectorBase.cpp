@@ -434,30 +434,38 @@ void InspectorBase::resetClicked(int i)
 
 void InspectorBase::setStyleClicked(int i)
       {
-      Element* e   = inspector->element();
       const InspectorItem& ii = iList[i];
+      const Pid id = ii.t;
+      Element* e   = inspector->element();
+      if (Element* delegate = e->propertyDelegate(id))
+            e = delegate;
+      Score* score = e->score();
 
       Sid sidx = e->getPropertyStyle(ii.t);
       if (sidx == Sid::NOSTYLE)
             return;
-      e->score()->startCmd();
       QVariant val = getValue(ii);
-      e->undoChangeProperty(ii.t, val, PropertyFlags::STYLED);
-      Pid id   = ii.t;
       P_TYPE t = propertyType(id);
       if (t == P_TYPE::SP_REAL)
-            val = val.toDouble() / e->score()->spatium();
+            val = val.toDouble() / score->spatium();
       else if (t == P_TYPE::POINT_SP)
-            val = val.toPointF() / e->score()->spatium();
+            val = val.toPointF() / score->spatium();
       else if (t == P_TYPE::POINT_SP_MM) {
             if (e->sizeIsSpatiumDependent())
-                  val = val.toPointF() / e->score()->spatium();
+                  val = val.toPointF() / score->spatium();
             else
                   val = val.toPointF() / DPMM;
             }
-      e->score()->undo(new ChangeStyleVal(e->score(), sidx, val));
+
+      score->startCmd();
+      for (Element* ee : *inspector->el()) {
+            if (Element* delegate = ee->propertyDelegate(ii.t))
+                  ee = delegate;
+            ee->undoChangeProperty(ii.t, val, PropertyFlags::STYLED);
+            }
+      score->undo(new ChangeStyleVal(score, sidx, val));
       checkDifferentValues(ii);
-      e->score()->endCmd();
+      score->endCmd();
       }
 
 //---------------------------------------------------------
