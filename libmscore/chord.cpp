@@ -3303,28 +3303,21 @@ void Chord::layoutArticulations()
       //
 
       for (Articulation* a : _articulations) {
-            if (a->direction() != Direction::AUTO)
-                  a->setUp(a->direction() == Direction::UP);
-            else {
-                  if (a->anchor() == ArticulationAnchor::CHORD)
-                        a->setUp(!up());
-                  else
-                        a->setUp(a->anchor() == ArticulationAnchor::TOP_STAFF || a->anchor() == ArticulationAnchor::TOP_CHORD);
+            if (a->anchor() == ArticulationAnchor::CHORD) {
+			if (measure()->hasVoices(a->staffIdx()))
+				a->setUp(up()); // if there are voices place articulation at stem 
+			else if (a->symId() >= SymId::articMarcatoAbove && a->symId() <= SymId::articMarcatoTenutoBelow)
+				a->setUp(true); // Gould, p. 117: strong accents above staff
+			else
+                        a->setUp(!up()); // place articulation at note head
                   }
+            else
+                  a->setUp(a->anchor() == ArticulationAnchor::TOP_STAFF || a->anchor() == ArticulationAnchor::TOP_CHORD);
+
             if (!a->layoutCloseToNote())
                   continue;
-
-            ArticulationAnchor aa = a->anchor();
-            if (aa != ArticulationAnchor::CHORD && aa != ArticulationAnchor::TOP_CHORD && aa != ArticulationAnchor::BOTTOM_CHORD)
-                  continue;
-            bool bottom;                // true: articulation is below chord;  false: articulation is above chord
-            // if there area voices, articulation is on stem side
-            // otherwise, look at specific anchor type (and at chord up/down if necessary)
-            if ((aa == ArticulationAnchor::CHORD) && measure()->hasVoices(a->staffIdx()))
-                  bottom = !up();
-            else
-                  bottom = (aa == ArticulationAnchor::BOTTOM_CHORD) || (aa == ArticulationAnchor::CHORD && up());
-            a->setUp(!bottom);
+                  
+            bool bottom = !a->up();  // true: articulation is below chord;  false: articulation is above chord
             a->layout();
 
             bool headSide = bottom == up();

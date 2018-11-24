@@ -306,7 +306,7 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articAccentAbove</subtype>
+              <subtype>articAccentBelow</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -722,7 +722,7 @@
             <linkedMain/>
             <durationType>quarter</durationType>
             <Articulation>
-              <subtype>articAccentAbove</subtype>
+              <subtype>articAccentBelow</subtype>
               <linkedMain/>
               </Articulation>
             <Note>
@@ -1236,7 +1236,7 @@
                 </linked>
               <durationType>quarter</durationType>
               <Articulation>
-                <subtype>articAccentBelow</subtype>
+                <subtype>articAccentAbove</subtype>
                 <linked>
                   <location>
                     <voices>1</voices>
