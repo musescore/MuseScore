@@ -332,8 +332,9 @@ void Arpeggio::startEdit(EditData& ed)
       Element::startEdit(ed);
       ed.grips   = 2;
       ed.curGrip = Grip::END;
-      undoPushProperty(Pid::ARP_USER_LEN1);
-      undoPushProperty(Pid::ARP_USER_LEN2);
+      ElementEditData* eed = ed.getData(this);
+      eed->pushProperty(Pid::ARP_USER_LEN1);
+      eed->pushProperty(Pid::ARP_USER_LEN2);
       }
 
 //---------------------------------------------------------
