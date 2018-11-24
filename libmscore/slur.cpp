@@ -525,6 +525,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             Segment* fs = system()->firstMeasure()->first();
             QPointF pp1 = ups(Grip::START).p;
             QPointF pp2 = ups(Grip::END).p;
+            bool intersection = false;
             for (Segment* s = fs; s && s != ls; s = s->next1()) {
                   if (!s->enabled())
                         continue;
@@ -534,20 +535,23 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                         continue;
                   if (pp2.x() < x1)
                         break;
+                  const Shape& segShape = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos());
+                  if (!intersection)
+                        intersection = segShape.intersects(_shape);
                   if (up) {
                         //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
-                        qreal dist = _shape.minVerticalDistance(s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()));
+                        qreal dist = _shape.minVerticalDistance(segShape);
                         if (dist > 0.0)
                               gdist = qMax(gdist, dist);
                         }
                   else {
                         //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
-                        qreal dist = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos()).minVerticalDistance(_shape);
+                        qreal dist = segShape.minVerticalDistance(_shape);
                         if (dist > 0.0)
                               gdist = qMax(gdist, dist);
                         }
                   }
-            if (gdist > 0.0) {
+            if (intersection && gdist > 0.0) {
                   if (up) {
                         ryoffset() -= (gdist + spatium() * .5);
                         }
