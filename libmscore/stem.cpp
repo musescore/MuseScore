@@ -268,7 +268,8 @@ void Stem::startEdit(EditData& ed)
       Element::startEdit(ed);
       ed.grips   = 1;
       ed.curGrip = Grip::START;
-      undoPushProperty(Pid::USER_LEN);
+      ElementEditData* eed = ed.getData(this);
+      eed->pushProperty(Pid::USER_LEN);
       }
 
 //---------------------------------------------------------
