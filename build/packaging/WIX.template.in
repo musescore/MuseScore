@@ -59,7 +59,7 @@
         </UI>
         <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch $(var.ProdName)"/>
         <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1"/>
-        <Property Id="WixShellExecTarget" Value="[#CM_FP_bin.$(var.CPACK_PACKAGE_NAME).exe]" />
+        <Property Id="WixShellExecTarget" Value="[#CM_FP_bin.$(var.ShortProdName).exe]" />
         <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
 
 
