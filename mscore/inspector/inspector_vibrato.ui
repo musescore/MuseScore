@@ -3,7 +3,7 @@
  <class>InspectorVibrato</class>
  <widget class="QWidget" name="InspectorVibrato">
   <property name="accessibleName">
-   <string>Trill Inspector</string>
+   <string>Vibrato Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

@@ -1918,7 +1918,7 @@ struct TextStyleName {
       };
 
 static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
-      { QT_TRANSLATE_NOOP("TextStyle", "default"),                 &defaultTextStyle,           Tid::DEFAULT },
+      { QT_TRANSLATE_NOOP("TextStyle", "Default"),                 &defaultTextStyle,           Tid::DEFAULT },
       { QT_TRANSLATE_NOOP("TextStyle", "Title"),                   &titleTextStyle,             Tid::TITLE },
       { QT_TRANSLATE_NOOP("TextStyle", "Subtitle"),                &subTitleTextStyle,          Tid::SUBTITLE },
       { QT_TRANSLATE_NOOP("TextStyle", "Composer"),                &composerTextStyle,          Tid::COMPOSER },

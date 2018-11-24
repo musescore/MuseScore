@@ -119,7 +119,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Vol</string>
+        <string extracomment="volume">Vol.</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

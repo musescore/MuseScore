@@ -54,7 +54,7 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       mainWidget->setLayout(layout);
       layout->setSpacing(0);
 
-      QToolBar* tb = addToolBar(tr("Toolbar 1"));
+      QToolBar* tb = addToolBar("Toolbar 1");
       if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
             tb->addAction(getAction("undo"));
             tb->addAction(getAction("redo"));
@@ -79,7 +79,7 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       tb->addSeparator();
 
       //-------------
-      tb = addToolBar(tr("Toolbar 3"));
+      tb = addToolBar("Toolbar 2");
       layout->addWidget(tb, 1, 0, 1, 2);
 
       for (int i = 0; i < VOICES; ++i) {
@@ -103,8 +103,8 @@ DrumrollEditor::DrumrollEditor(QWidget* parent)
       tb->addSeparator();
       tb->addWidget(new QLabel(tr("Velocity:")));
       veloType = new QComboBox;
-      veloType->addItem(tr("offset"), int(Note::ValueType::OFFSET_VAL));
-      veloType->addItem(tr("user"),   int(Note::ValueType::USER_VAL));
+      veloType->addItem(tr("Offset"), int(Note::ValueType::OFFSET_VAL));
+      veloType->addItem(tr("User"),   int(Note::ValueType::USER_VAL));
       tb->addWidget(veloType);
 
       velocity = new QSpinBox;

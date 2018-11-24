@@ -22,9 +22,6 @@
     <height>16777215</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <property name="styleSheet">
    <string notr="true">#controlWidget {
     background: #444;
@@ -88,7 +85,7 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Show Channels</string>
+           <string>Show channels</string>
           </property>
           <property name="text">
            <string/>
@@ -299,7 +296,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>Part Name</string>
+         <string>Part name</string>
         </property>
         <property name="styleSheet">
          <string notr="true">.QLabel {
@@ -309,9 +306,6 @@
     padding: 6px 0px;
 }
 </string>
-        </property>
-        <property name="text">
-         <string>Part Name</string>
         </property>
        </widget>
       </item>

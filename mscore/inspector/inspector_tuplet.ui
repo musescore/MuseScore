@@ -106,7 +106,7 @@
       <item row="1" column="0" colspan="2">
        <widget class="QSpinBox" name="tupletFontSize">
         <property name="toolTip">
-         <string>Font Size</string>
+         <string>Font size</string>
         </property>
         <property name="accessibleName">
          <string>Font size</string>
@@ -384,7 +384,7 @@
         </property>
         <item>
          <property name="text">
-          <string>Automatic</string>
+          <string>Auto</string>
          </property>
         </item>
         <item>

@@ -3,7 +3,7 @@
  <class>InspectorNoteDot</class>
  <widget class="QWidget" name="InspectorNoteDot">
   <property name="accessibleName">
-   <string>Note Inspector</string>
+   <string>Note Dot Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
