@@ -2009,6 +2009,8 @@ static bool breakMultiMeasureRest(Measure* m)
 
       if (m->repeatStart()
          || (m->prevMeasure() && m->prevMeasure()->repeatEnd())
+         || (m->isIrregular())
+         || (m->prevMeasure() && m->prevMeasure()->isIrregular())
          || (m->prevMeasure() && (m->prevMeasure()->sectionBreak())))
             return true;
 
