@@ -71,6 +71,7 @@ WorkspaceDialog::WorkspaceDialog(QWidget* parent)
 
 void WorkspaceDialog::display()
       {
+      mscore->getPaletteBox()->searchBox()->clear();
       if (editMode) {
             componentsCheck->setChecked(Workspace::currentWorkspace->getSaveComponents());
             toolbarsCheck->setChecked(Workspace::currentWorkspace->getSaveToolbars());
