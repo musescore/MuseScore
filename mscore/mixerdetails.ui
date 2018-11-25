@@ -380,8 +380,11 @@
          <property name="styleSheet">
           <string notr="true"/>
          </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
          <property name="maximum">
-          <number>128</number>
+          <number>127</number>
          </property>
          <property name="pageStep">
           <number>16</number>

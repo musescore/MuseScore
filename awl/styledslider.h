@@ -33,8 +33,8 @@ class StyledSlider : public QWidget
 
       QList<double> marks;
 
-      double _minValue;
-      double _maxValue = 100;
+      double _minValue = 0;
+      double _maxValue = 127;
       double _value;
       double _barThickness = 4;
       double _margin = 20;
