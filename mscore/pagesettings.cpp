@@ -528,8 +528,8 @@ void PageSettings::pageHeightChanged(double val)
             val2 /= INCH;
             }
       pageGroup->setCurrentIndex(0);      // custom
-      preview->score()->style().set(Sid::pageWidth, val);
-      preview->score()->style().set(Sid::pageHeight, val2);
+      preview->score()->style().set(Sid::pageHeight, val);
+      preview->score()->style().set(Sid::pageWidth, val2);
 
       updatePreview(1);
       }
