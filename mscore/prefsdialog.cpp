@@ -1027,7 +1027,7 @@ void PreferenceDialog::apply()
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Possible MIDI Loopback"));
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Warning: You used the same CoreMIDI IAC bus for input and output.  This will cause problematic loopback, whereby MuseScore's outputted MIDI messages will be sent back to MuseScore as input, causing confusion.  To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore's MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore's MIDI output.  Other programs may then use that dedicated virtual port to receive MuseScore's MIDI output."));
+            msgBox.setText(tr("Warning: You used the same CoreMIDI IAC bus for input and output.  This will cause problematic loopback, whereby MuseScore's output MIDI messages will be sent back to MuseScore as input, causing confusion.  To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore's MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore's MIDI output.  Other programs may then use that dedicated virtual port to receive MuseScore's MIDI output."));
             msgBox.exec();
             }
       preferences.setPreference(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS, portMidiOutputLatencyMilliseconds->value());

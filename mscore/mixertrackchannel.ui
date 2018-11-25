@@ -22,9 +22,6 @@
     <height>16777215</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>MixerTrackChannel</string>
-  </property>
   <property name="styleSheet">
    <string notr="true">#controlWidget {
     background: #444;
@@ -78,9 +75,6 @@
             <width>0</width>
             <height>28</height>
            </size>
-          </property>
-          <property name="text">
-           <string>TextLabel</string>
           </property>
          </widget>
         </item>
@@ -267,7 +261,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>Channel Name</string>
+         <string>Channel name</string>
         </property>
         <property name="styleSheet">
          <string notr="true">.QLabel {
@@ -278,9 +272,6 @@
     line-height:2px;
 }
 </string>
-        </property>
-        <property name="text">
-         <string>Part Name</string>
         </property>
        </widget>
       </item>

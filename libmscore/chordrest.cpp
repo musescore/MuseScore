@@ -688,7 +688,7 @@ QString ChordRest::durationUserName() const
                         tupletType = QObject::tr("Nonuplet");
                         break;
                   default:
-                        tupletType = QObject::tr("Custom Tuplet");
+                        tupletType = QObject::tr("Custom tuplet");
                   }
             }
       QString dotString = "";

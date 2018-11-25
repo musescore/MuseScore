@@ -290,7 +290,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                   break;
 
             case PaletteCommand::NEW:
-                  palette = newPalette(tr("new Palette"), slot);
+                  palette = newPalette(tr("New Palette"), slot);
                   item   = vbox->itemAt(slot);
                   b = static_cast<PaletteBoxButton*>(item->widget());
                   // fall through

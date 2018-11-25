@@ -121,7 +121,7 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
             if (a)
                   item = new QListWidgetItem(a->icon(), actionName);
             else if (actionName.isEmpty())
-                  item = new QListWidgetItem(tr("spacer"));
+                  item = new QListWidgetItem(tr("Spacer"));
             else
                   item = new QListWidgetItem(actionName);
             item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
@@ -149,7 +149,7 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
                         }
                   }
             }
-      QListWidgetItem* item = new QListWidgetItem(tr("spacer"));
+      QListWidgetItem* item = new QListWidgetItem(tr("Spacer"));
       item->setData(Qt::UserRole, QVariant::fromValue((void*)""));
       availableList->addItem(item);
       }

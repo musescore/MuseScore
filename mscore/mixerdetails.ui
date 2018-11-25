@@ -10,9 +10,6 @@
     <height>183</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
     <number>0</number>
@@ -145,7 +142,7 @@
               <item row="0" column="1">
                <widget class="QSpinBox" name="portSpinBox">
                 <property name="toolTip">
-                 <string>MIDI Port Number</string>
+                 <string>MIDI port number</string>
                 </property>
                 <property name="minimum">
                  <number>1</number>
@@ -165,7 +162,7 @@
               <item row="0" column="4">
                <widget class="QSpinBox" name="channelSpinBox">
                 <property name="toolTip">
-                 <string>MIDI Channel Number</string>
+                 <string>MIDI channel mumber</string>
                 </property>
                 <property name="minimum">
                  <number>1</number>
@@ -304,7 +301,7 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Patch Voice</string>
+          <string>Patch voice</string>
          </property>
         </widget>
        </item>
@@ -325,7 +322,7 @@
        <item row="1" column="1" colspan="2">
         <widget class="QLabel" name="channelLabel">
          <property name="toolTip">
-          <string>Channel Name</string>
+          <string>Channel name</string>
          </property>
          <property name="text">
           <string/>
@@ -349,7 +346,7 @@
        <item row="0" column="1">
         <widget class="QLineEdit" name="partNameLineEdit">
          <property name="toolTip">
-          <string>Part Name</string>
+          <string>Part name</string>
          </property>
         </widget>
        </item>
@@ -362,7 +359,7 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Track Color</string>
+          <string>Track color</string>
          </property>
         </widget>
        </item>

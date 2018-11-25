@@ -206,7 +206,7 @@
            <item>
             <widget class="QRadioButton" name="autoBracket">
              <property name="text">
-              <string>Auto bracket</string>
+              <string>Auto</string>
              </property>
              <property name="checked">
               <bool>true</bool>

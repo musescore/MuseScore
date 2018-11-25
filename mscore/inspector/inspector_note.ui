@@ -172,7 +172,7 @@
       <item row="4" column="1">
        <widget class="QComboBox" name="mirrorHead">
         <property name="accessibleName">
-         <string>Mirror Head</string>
+         <string>Mirror head</string>
         </property>
         <item>
          <property name="text">
