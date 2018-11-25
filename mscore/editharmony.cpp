@@ -154,7 +154,7 @@ void ScoreView::harmonyBeatsTab(bool noterest, bool back)
             if (noterest) {
                   int minTrack = (track / VOICES ) * VOICES;
                   int maxTrack = minTrack + (VOICES-1);
-                  if (segment->findAnnotationOrElement(ElementType::HARMONY, minTrack, maxTrack))
+                  if (segment->hasAnnotationOrElement(ElementType::HARMONY, minTrack, maxTrack))
                         break;
                   }
             }
