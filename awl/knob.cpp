@@ -120,7 +120,8 @@ void Knob::mousePressEvent(QMouseEvent* ev)
       if (_center) {
             QRect r(points->boundingRect().toRect());
             if (r.contains(ev->pos())) {
-                  setValue(.0f);
+                  auto centerVal = (maxValue() - minValue()) / 2 + 0.5;
+                  setValue(centerVal);
                   valueChange();
                   }
             }
