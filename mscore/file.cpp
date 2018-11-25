@@ -758,6 +758,7 @@ MasterScore* MuseScore::getNewFile()
       if (!copyright.isEmpty())
             score->setMetaTag("copyright", copyright);
 
+      // TODO: Can we exclude this for the thumbnail loading on startup?
       score->rebuildMidiMapping();
 
       {

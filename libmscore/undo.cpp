@@ -1368,7 +1368,7 @@ void ChangeStaff::flip(EditData*)
                   m->staffLines(staffIdx)->setVisible(!staff->invisible());
             }
       staff->score()->setLayoutAll();
-      staff->masterScore()->rebuildMidiMapping();
+      staff->score()->setInstrumentsChanged(true);
       staff->score()->setPlaylistDirty();
       }
 
@@ -1411,7 +1411,6 @@ void ChangePart::flip(EditData*)
       part->setPartName(partName);
 
       Score* score = part->score();
-      score->masterScore()->rebuildMidiMapping();
       score->setInstrumentsChanged(true);
       score->setPlaylistDirty();
 
@@ -1818,7 +1817,6 @@ void ChangeInstrument::flip(EditData*)
       part->setInstrument(instrument, tickStart);
 
       // update score
-      is->masterScore()->rebuildMidiMapping();
       is->masterScore()->updateChannel();
       is->score()->setInstrumentsChanged(true);
       is->score()->setLayoutAll();

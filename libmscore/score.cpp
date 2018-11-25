@@ -1387,7 +1387,6 @@ void Score::addElement(Element* element)
                   ic->part()->setInstrument(ic->instrument(), tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
 #endif
-                  masterScore()->rebuildMidiMapping();
                   cmdState()._instrumentsChanged = true;
                   }
                   break;
@@ -1553,7 +1552,6 @@ void Score::removeElement(Element* element)
                   ic->part()->removeInstrument(tickStart);
                   transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
 #endif
-                  masterScore()->rebuildMidiMapping();
                   cmdState()._instrumentsChanged = true;
                   }
                   break;
@@ -2130,7 +2128,6 @@ void Score::splitStaff(int staffIdx, int splitPoint)
 
       undoChangeKeySig(ns, 0, st->keySigEvent(0));
 
-      masterScore()->rebuildMidiMapping();
       cmdState()._instrumentsChanged = true;
       doLayout();
 
@@ -2265,6 +2262,7 @@ void Score::cmdRemovePart(Part* part)
             cmdRemoveStaff(sidx);
 
       undoRemovePart(part, sidx);
+      masterScore()->setInstrumentsChanged(true);
       }
 
 //---------------------------------------------------------
@@ -2282,6 +2280,7 @@ void Score::insertPart(Part* part, int idx)
             staff += (*i)->nstaves();
             }
       _parts.push_back(part);
+      masterScore()->setInstrumentsChanged(true);
       }
 
 //---------------------------------------------------------
@@ -3507,7 +3506,6 @@ void Score::appendPart(const QString& name)
       part->staves()->front()->setBarLineSpan(part->nstaves());
       undoInsertPart(part, n);
       fixTicks();
-      masterScore()->rebuildMidiMapping();
       }
 
 //---------------------------------------------------------

@@ -519,10 +519,9 @@ void MuseScore::editInstrList()
                         }
                   }
             }
-
       masterScore->setLayoutAll();
+      masterScore->setInstrumentsChanged(true);
       masterScore->endCmd();
-      masterScore->rebuildMidiMapping();
       seq->initInstruments();
       }
 

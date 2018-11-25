@@ -5519,6 +5519,7 @@ void MuseScore::endCmd()
                   if (!noSeq && (seq && seq->isRunning()))
                         seq->initInstruments();
                   instrumentChanged();                // update mixer
+                  ms->rebuildMidiMapping();
                   ms->setInstrumentsChanged(false);
                   }
             if (cs->selectionChanged()) {
