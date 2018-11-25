@@ -142,8 +142,21 @@ class Spanner : public Element {
       int _track2            { -1 };
       bool _broken           { false };
 
+      std::vector<SpannerSegment*> segments;
+      std::deque<SpannerSegment*> unusedSegments; // Currently unused segments which can be reused later.
+                                                  // We cannot just delete them as they can be referenced
+                                                  // in undo stack or other places already.
+
    protected:
-      QList<SpannerSegment*> segments;
+      void pushUnusedSegment(SpannerSegment* seg);
+      SpannerSegment* popUnusedSegment();
+      void reuse(SpannerSegment* seg);            // called when segment from unusedSegments
+                                                  // is added back to the spanner.
+      int reuseSegments(int number);
+      SpannerSegment* getNextLayoutSystemSegment(System* system, std::function<SpannerSegment*()> createSegment);
+      void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment*()> createSegment);
+
+      const std::vector<SpannerSegment*> spannerSegments() const { return segments; }
 
    public:
       Spanner(Score* s, ElementFlags = ElementFlag::NOTHING);
@@ -180,10 +193,19 @@ class Spanner : public Element {
       Anchor anchor() const    { return _anchor;   }
       void setAnchor(Anchor a) { _anchor = a;      }
 
-      const QList<SpannerSegment*>& spannerSegments() const { return segments; }
-      QList<SpannerSegment*>& spannerSegments()             { return segments; }
+      const std::vector<SpannerSegment*>& spannerSegments() { return segments; }
+      SpannerSegment* frontSegment()               { return segments.front(); }
+      const SpannerSegment* frontSegment() const   { return segments.front(); }
+      SpannerSegment* backSegment()                { return segments.back();  }
+      const SpannerSegment* backSegment() const    { return segments.back();  }
+      SpannerSegment* segmentAt(int n)             { return segments[n];      }
+      const SpannerSegment* segmentAt(int n) const { return segments[n];      }
+      int nsegments() const                        { return segments.size();  }
+      bool segmentsEmpty() const                   { return segments.empty(); }
+      void eraseSpannerSegments();
 
       virtual SpannerSegment* layoutSystem(System*);
+      virtual void layoutSystemsDone();
 
       virtual void triggerLayout() const override;
       virtual void add(Element*) override;

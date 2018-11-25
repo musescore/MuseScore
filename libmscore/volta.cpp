@@ -131,8 +131,7 @@ QString Volta::text() const
 
 void Volta::read(XmlReader& e)
       {
-      qDeleteAll(spannerSegments());
-      spannerSegments().clear();
+      eraseSpannerSegments();
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());

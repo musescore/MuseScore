@@ -1097,7 +1097,7 @@ class Score : public QObject, public ScoreElement {
 
       ChordRest* findCR(int tick, int track) const;
       ChordRest* findCRinStaff(int tick, int staffIdx) const;
-      void layoutSpanner();
+//       void layoutSpanner(); // unused
       void insertTime(int tickPos, int tickLen);
 
       ScoreFont* scoreFont() const            { return _scoreFont;     }

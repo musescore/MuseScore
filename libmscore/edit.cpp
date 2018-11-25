@@ -4332,10 +4332,7 @@ void Score::undoAddElement(Element* element)
 
                         // create tie
                         Tie* ntie = toTie(ne);
-                        QList<SpannerSegment*>& segments = ntie->spannerSegments();
-                        for (SpannerSegment* segment : segments)
-                              delete segment;
-                        segments.clear();
+                        ntie->eraseSpannerSegments();
                         ntie->setTrack(c1->track());
                         ntie->setStartNote(nn1);
                         ntie->setEndNote(nn2);

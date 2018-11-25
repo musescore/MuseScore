@@ -409,8 +409,7 @@ void TextLineBase::write(XmlWriter& xml) const
 
 void TextLineBase::read(XmlReader& e)
       {
-      qDeleteAll(spannerSegments());
-      spannerSegments().clear();
+      eraseSpannerSegments();
 
       if (score()->mscVersion() < 301)
             e.addSpanner(e.intAttribute("id", -1), this);

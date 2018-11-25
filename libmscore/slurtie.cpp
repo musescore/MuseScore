@@ -551,27 +551,7 @@ qreal SlurTie::firstNoteRestSegmentX(System* system)
 
 void SlurTie::fixupSegments(unsigned nsegs)
       {
-      unsigned onsegs = spannerSegments().size();
-      if (nsegs > onsegs) {
-            for (unsigned i = onsegs; i < nsegs; ++i) {
-                  SpannerSegment* s;
-                  if (!delSegments.empty()) {
-                        s = delSegments.dequeue();
-                        }
-                  else {
-                        s = newSlurTieSegment();
-                        }
-                  s->setTrack(track());
-                  add(s);
-                  }
-            }
-      else if (nsegs < onsegs) {
-            for (unsigned i = nsegs; i < onsegs; ++i) {
-                  SpannerSegment* s = spannerSegments().takeLast();
-                  s->setSystem(0);
-                  delSegments.enqueue(s);  // cannot delete: used in SlurSegment->edit()
-                  }
-            }
+      Spanner::fixupSegments(nsegs, [this]() { return newSlurTieSegment(); });
       }
 
 //---------------------------------------------------------

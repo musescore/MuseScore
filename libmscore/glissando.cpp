@@ -207,7 +207,7 @@ void Glissando::scanElements(void* data, void (*func)(void*, Element*), bool all
       {
       func(data, this);
       // don't scan segments belonging to systems; the systems themselves will scan them
-      for (SpannerSegment* seg : segments) {
+      for (SpannerSegment* seg : spannerSegments()) {
             if (!seg->parent() || !seg->parent()->isSystem())
                   seg->scanElements(data, func, all);
             }
@@ -307,7 +307,7 @@ void Glissando::layout()
       // interpolate y-coord of intermediate points across total width and height
       qreal xCurr = 0.0;
       qreal yCurr;
-      for (int i = 0; i < spannerSegments().count()-1; i++) {
+      for (int i = 0; i < int(spannerSegments().size()-1); i++) {
             SpannerSegment* segm = segmentAt(i);
             xCurr += segm->ipos2().x();
             yCurr = y0 + ratio * xCurr;
@@ -387,8 +387,7 @@ void Glissando::write(XmlWriter& xml) const
 
 void Glissando::read(XmlReader& e)
       {
-      qDeleteAll(spannerSegments());
-      spannerSegments().clear();
+      eraseSpannerSegments();
 
       if (score()->mscVersion() < 301)
             e.addSpanner(e.intAttribute("id", -1), this);
