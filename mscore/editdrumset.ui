@@ -50,7 +50,7 @@
        </attribute>
        <column>
         <property name="text">
-         <string>No.</string>
+         <string extracomment="Number">No.</string>
         </property>
        </column>
        <column>
@@ -173,7 +173,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Noteheads group:</string>
+          <string>Notehead group:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -215,7 +215,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="doubleWholeLbl">
             <property name="text">
-             <string>Double Whole note</string>
+             <string>Double whole note</string>
             </property>
            </widget>
           </item>

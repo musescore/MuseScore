@@ -352,7 +352,7 @@
            <item row="0" column="0">
             <widget class="QCheckBox" name="genKeysigPercussion">
              <property name="text">
-              <string>Show Key signature</string>
+              <string>Show key signature</string>
              </property>
             </widget>
            </item>

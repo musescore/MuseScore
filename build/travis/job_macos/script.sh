@@ -147,7 +147,6 @@ aws cloudfront create-invalidation --distribution-id E3VZY4YYZZG82P --paths "${A
 
 # Translation routins
 # update translation on transifex
-#rm share/locale/mscore_en_US.ts share/locale/instruments_en_US.ts 
 make -f Makefile.osx lupdate
 
 sudo pip install transifex-client

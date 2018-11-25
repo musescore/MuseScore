@@ -302,9 +302,9 @@ void PluginCreator::runClicked()
       component.setData(textEdit->toPlainText().toUtf8(), QUrl());
       QObject* obj = component.create();
       if (obj == 0) {
-            msg(tr("creating component failed\n"));
+            msg(tr("Creating component failed\n"));
             foreach(QQmlError e, component.errors())
-                  msg(QString("   line %1: %2\n").arg(e.line()).arg(e.description()));
+                  msg("   " + tr("line %1: %2\n").arg(e.line()).arg(e.description()));
             stop->setEnabled(false);
             return;
             }
@@ -317,7 +317,7 @@ void PluginCreator::runClicked()
       msg("  " + tr("Menu Path:") + " " + item->menuPath() + "\n");
       msg("  " + tr("Version:") + " " + item->version() + "\n");
       msg("  " + tr("Description:") + " " + item->description() + "\n");
-      if (item->requiresScore()) msg(tr("  Requires Score\n"));
+      if (item->requiresScore()) msg("  " + tr("Requires Score\n"));
       if(MuseScoreCore::mscoreCore->currentScore() == nullptr && item->requiresScore() == true) {
             QMessageBox::information(0,
                   tr("MuseScore"),
@@ -509,7 +509,7 @@ void PluginCreator::newPlugin()
             else if (n == QMessageBox::Cancel)
                   return;
             }
-      path    = tr("untitled");
+      path    = tr("Untitled");
       created = true;
       QString s(
          "import QtQuick 2.0\n"

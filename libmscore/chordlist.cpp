@@ -1753,7 +1753,7 @@ bool ChordList::write(const QString& name) const
       QFile f(info.filePath());
 
       if (!f.open(QIODevice::WriteOnly)) {
-            MScore::lastError = QObject::tr("Open Chord Description\n%1\nfailed: %2").arg(f.fileName()).arg(f.errorString());
+            MScore::lastError = QObject::tr("Open chord description\n%1\nfailed: %2").arg(f.fileName()).arg(f.errorString());
             return false;
             }
 
@@ -1764,7 +1764,7 @@ bool ChordList::write(const QString& name) const
       write(xml);
       xml.etag();
       if (f.error() != QFile::NoError) {
-            MScore::lastError = QObject::tr("Write Chord Description failed: %1").arg(f.errorString());
+            MScore::lastError = QObject::tr("Write chord description failed: %1").arg(f.errorString());
             }
       return true;
       }

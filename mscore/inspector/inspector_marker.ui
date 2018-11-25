@@ -91,7 +91,7 @@
       <item row="0" column="1">
        <widget class="QComboBox" name="markerType">
         <property name="accessibleName">
-         <string>Marker Type</string>
+         <string>Marker type</string>
         </property>
         <item>
          <property name="text">
@@ -100,7 +100,7 @@
         </item>
         <item>
          <property name="text">
-          <string>Segno variation</string>
+          <string>Segno Variation</string>
          </property>
         </item>
         <item>
@@ -110,7 +110,7 @@
         </item>
         <item>
          <property name="text">
-          <string>Varied coda</string>
+          <string>Varied Coda</string>
          </property>
         </item>
         <item>

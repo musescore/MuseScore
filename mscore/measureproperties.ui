@@ -406,7 +406,7 @@
            <widget class="QComboBox" name="measureNumberMode">
             <item>
              <property name="text">
-              <string>Automatic</string>
+              <string>Auto</string>
              </property>
             </item>
             <item>

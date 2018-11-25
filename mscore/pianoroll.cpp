@@ -50,7 +50,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       staff    = 0;
 
       QWidget* mainWidget = new QWidget;
-      QToolBar* tb = addToolBar(tr("Toolbar 1"));
+      QToolBar* tb = addToolBar("Toolbar 1");
       if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
             tb->addAction(getAction("undo"));
             tb->addAction(getAction("redo"));
@@ -104,7 +104,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
 
       //-------------
-      tb = addToolBar(tr("Toolbar 2"));
+      tb = addToolBar("Toolbar 2");
 
       tb->addWidget(new QLabel(tr("Cursor:")));
       pos = new Awl::PosLabel;

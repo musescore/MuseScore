@@ -27,7 +27,7 @@ ElementStyle const ScoreElement::emptyStyle;
 // list has to be synchronized with ElementType enum
 //
 static const ElementName elementNames[] = {
-      { ElementType::INVALID,              "invalid",              QT_TRANSLATE_NOOP("elementName", "invalid") },
+      { ElementType::INVALID,              "invalid",              QT_TRANSLATE_NOOP("elementName", "Invalid") },
       { ElementType::BRACKET_ITEM,         "BracketItem",          QT_TRANSLATE_NOOP("elementName", "Bracket") },
       { ElementType::PART,                 "Part",                 QT_TRANSLATE_NOOP("elementName", "Part") },
       { ElementType::STAFF,                "Staff",                QT_TRANSLATE_NOOP("elementName", "Staff") },

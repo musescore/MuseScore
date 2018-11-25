@@ -459,22 +459,22 @@ void PartEdit::midiChannelChanged(int)
                   // Show datails if parameters are different
                   QString detailedText;
                   if (patch->currentIndex() != pe->patch->currentIndex())
-                        detailedText += QString(tr("Sound: '%1'' vs '%2'\n")).arg(patch->itemText(patch->currentIndex()), pe->patch->itemText(pe->patch->currentIndex()));
+                        detailedText += QString(tr("Sound: '%1'' vs. '%2'\n")).arg(patch->itemText(patch->currentIndex()), pe->patch->itemText(pe->patch->currentIndex()));
                   if (this->volume->value() != pe->volume->value())
-                        detailedText += QString(tr("Volume: %1 vs %2\n")).arg(QString::number(volume->value()),  QString::number(pe->volume->value()));
+                        detailedText += QString(tr("Volume: %1 vs. %2\n")).arg(QString::number(volume->value()),  QString::number(pe->volume->value()));
                   if (this->pan->value() != pe->pan->value())
-                        detailedText += QString(tr("Pan: %1 vs %2\n")).arg(QString::number(pan->value()),  QString::number(pe->pan->value()));
+                        detailedText += QString(tr("Pan: %1 vs. %2\n")).arg(QString::number(pan->value()),  QString::number(pe->pan->value()));
                   if (this->reverb->value() != pe->reverb->value())
-                        detailedText += QString(tr("Reverb: %1 vs %2\n")).arg(QString::number(reverb->value()),  QString::number(pe->reverb->value()));
+                        detailedText += QString(tr("Reverb: %1 vs. %2\n")).arg(QString::number(reverb->value()),  QString::number(pe->reverb->value()));
                   if (this->chorus->value() != pe->chorus->value())
-                        detailedText += QString(tr("Chorus: %1 vs %2\n")).arg(QString::number(chorus->value()),  QString::number(pe->chorus->value()));
+                        detailedText += QString(tr("Chorus: %1 vs. %2\n")).arg(QString::number(chorus->value()),  QString::number(pe->chorus->value()));
                   if (this->solo->isChecked() != pe->solo->isChecked())
-                        detailedText += QString(tr("Solo: %1 vs %2\n")).arg(solo->isChecked()?"Yes":"No", pe->solo->isChecked()?"Yes":"No");
+                        detailedText += QString(tr("Solo: %1 vs. %2\n")).arg(solo->isChecked()?"Yes":"No", pe->solo->isChecked()?"Yes":"No");
                   if (this->mute->isChecked() != pe->mute->isChecked())
-                        detailedText += QString(tr("Mute: %1 vs %2\n")).arg(mute->isChecked()?"Yes":"No", pe->mute->isChecked()?"Yes":"No");
+                        detailedText += QString(tr("Mute: %1 vs. %2\n")).arg(mute->isChecked()?"Yes":"No", pe->mute->isChecked()?"Yes":"No");
 
                   if (!detailedText.isEmpty())
-                        detailedText = QString(tr("Instrument '%1'    Instrument '%2'\n")).arg(this->partName->text(), pe->partName->text())+ detailedText;
+                        detailedText = QString(tr("Instrument '%1'\tInstrument '%2'\n")).arg(this->partName->text(), pe->partName->text())+ detailedText;
                   QMessageBox msgBox;
                   msgBox.setIcon(QMessageBox::Warning);
                   QString text = QString(tr("There is already an instrument '%1' with MIDI port = %2 and channel = %3.")).arg(pe->partName->text(), QString::number(pe->portSpinBox->value()), QString::number(pe->channelSpinBox->value()));
