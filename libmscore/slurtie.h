@@ -107,7 +107,6 @@ class SlurTie : public Spanner {
    protected:
       bool _up;               // actual direction
 
-      QQueue<SpannerSegment*> delSegments;   // "deleted" segments
       Direction _slurDirection;
       qreal firstNoteRestSegmentX(System* system);
       void fixupSegments(unsigned nsegs);

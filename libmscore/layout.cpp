@@ -1172,6 +1172,7 @@ void Score::beamGraceNotes(Chord* mainNote, bool after)
             a1->removeDeleteBeam(false);
       }
 
+#if 0 // unused
 //---------------------------------------------------------
 //   layoutSpanner
 //    called after dragging a staff
@@ -1203,6 +1204,7 @@ void Score::layoutSpanner()
             }
       rebuildBspTree();
       }
+#endif
 
 //---------------------------------------------------------
 //   hideEmptyStaves
@@ -3295,6 +3297,7 @@ System* Score::collectSystem(LayoutContext& lc)
             Spanner* sp = interval.value;
             sp->computeStartElement();
             sp->computeEndElement();
+            lc.processedSpanners.insert(sp);
             if (sp->tick() < etick && sp->tick2() >= stick) {
                   if (sp->isSlur())
                         spanner.push_back(sp);
@@ -3862,4 +3865,13 @@ void LayoutContext::layout()
       score->systems().append(systemList);     // TODO
       }
 
+//---------------------------------------------------------
+//   LayoutContext::~LayoutContext
+//---------------------------------------------------------
+
+LayoutContext::~LayoutContext()
+      {
+      for (Spanner* s : processedSpanners)
+            s->layoutSystemsDone();
+      }
 }

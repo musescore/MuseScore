@@ -209,8 +209,7 @@ void Vibrato::write(XmlWriter& xml) const
 
 void Vibrato::read(XmlReader& e)
       {
-      qDeleteAll(spannerSegments());
-      spannerSegments().clear();
+      eraseSpannerSegments();
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());

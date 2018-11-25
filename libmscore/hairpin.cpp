@@ -508,9 +508,7 @@ void Hairpin::write(XmlWriter& xml) const
 
 void Hairpin::read(XmlReader& e)
       {
-      foreach(SpannerSegment* seg, spannerSegments())
-            delete seg;
-      spannerSegments().clear();
+      eraseSpannerSegments();
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());

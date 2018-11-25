@@ -109,11 +109,12 @@ class SLine : public Spanner {
       qreal dashGapLen() const            { return _dashGapLen; }
       void setDashGapLen(qreal val)       { _dashGapLen = val; }
 
-      LineSegment* frontSegment() const   { return (LineSegment*)spannerSegments().front(); }
-      LineSegment* backSegment() const    { return (LineSegment*)spannerSegments().back();  }
-      LineSegment* takeFirstSegment()     { return (LineSegment*)spannerSegments().takeFirst(); }
-      LineSegment* takeLastSegment()      { return (LineSegment*)spannerSegments().takeLast(); }
-      LineSegment* segmentAt(int n) const { return (LineSegment*)spannerSegments().at(n); }
+      LineSegment* frontSegment()               { return toLineSegment(Spanner::frontSegment()); }
+      const LineSegment* frontSegment() const   { return toLineSegment(Spanner::frontSegment()); }
+      LineSegment* backSegment()                { return toLineSegment(Spanner::backSegment());  }
+      const LineSegment* backSegment() const    { return toLineSegment(Spanner::backSegment());  }
+      LineSegment* segmentAt(int n)             { return toLineSegment(Spanner::segmentAt(n));   }
+      const LineSegment* segmentAt(int n) const { return toLineSegment(Spanner::segmentAt(n));   }
 
       virtual QVariant getProperty(Pid id) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;

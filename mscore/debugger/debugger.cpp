@@ -2116,7 +2116,7 @@ void VoltaView::setElement(Element* e)
 //      lb.rightElement->setText(QString("%1").arg((unsigned long)volta->endElement(), 8, 16));
 
       sp.segments->clear();
-      const QList<SpannerSegment*>& ele = volta->spannerSegments();
+      const std::vector<SpannerSegment*>& ele = volta->spannerSegments();
       for (const SpannerSegment* elm : ele) {
             QTreeWidgetItem* item = new QTreeWidgetItem;
             item->setText(0, QString("%1").arg((quintptr)elm, 8, 16));

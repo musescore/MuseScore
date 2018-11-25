@@ -174,11 +174,11 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
             spanner()->undoChangeProperty(Pid::SPANNER_TICKS,  element->tick() - spanner()->startElement()->tick());
             spanner()->undoChangeProperty(Pid::SPANNER_TRACK2, element->track());
             }
-      int segments  = spanner()->spannerSegments().size();
+      const size_t segments  = spanner()->spannerSegments().size();
       ups(ed.curGrip).off = QPointF();
       spanner()->layout();
       if (spanner()->spannerSegments().size() != segments) {
-            QList<SpannerSegment*>& ss = spanner()->spannerSegments();
+            const std::vector<SpannerSegment*>& ss = spanner()->spannerSegments();
             SlurSegment* newSegment = toSlurSegment(ed.curGrip == Grip::END ? ss.back() : ss.front());
             ed.view->startEdit(newSegment, ed.curGrip);
             triggerLayout();
@@ -1063,20 +1063,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
       int stick = system->firstMeasure()->tick();
       int etick = system->lastMeasure()->endTick();
 
-      SlurSegment* slurSegment = 0;
-      for (SpannerSegment* ss : segments) {
-            if (!ss->system()) {
-                  slurSegment = toSlurSegment(ss);
-                  break;
-                  }
-            }
-      if (!slurSegment) {
-//            printf("   create slur segment\n");
-            slurSegment = new SlurSegment(score());
-            add(slurSegment);
-            }
-      slurSegment->setSystem(system);
-      slurSegment->setSpanner(this);
+      SlurSegment* slurSegment = toSlurSegment(getNextLayoutSystemSegment(system, [this]() { return new SlurSegment(score()); }));
 
       SpannerSegmentType sst;
       if (tick() >= stick) {
@@ -1169,16 +1156,6 @@ SpannerSegment* Slur::layoutSystem(System* system)
                   break;
             }
 
-      QList<SpannerSegment*> sl;
-      for (SpannerSegment* ss : segments) {
-            if (ss->system())
-                  sl.push_back(ss);
-            else {
-                  qDebug("delete spanner segment %s", ss->name());
-                  delete ss;
-                  }
-            }
-      segments.swap(sl);
       return slurSegment;
       }
 
