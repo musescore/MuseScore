@@ -23,6 +23,8 @@
       <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
       <lyricsEvenOffset x="0" y="6"/>
       <repeatBarTips>1</repeatBarTips>
+      <doubleBarDistance>0.54</doubleBarDistance>
+      <endBarDistance>0.65</endBarDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <stemWidth>0.16</stemWidth>

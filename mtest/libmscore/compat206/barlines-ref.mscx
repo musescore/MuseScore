@@ -15,6 +15,8 @@
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <doubleBarDistance>0.46</doubleBarDistance>
+      <endBarDistance>0.65</endBarDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <barNoteDistance>1.2</barNoteDistance>
