@@ -111,6 +111,11 @@ void StaffLines::layoutForWidth(qreal w)
       qreal y  = pos().y();
       bbox().setRect(x1, -lw * .5 + y, w, (_lines-1) * dist + lw);
 
+      if (_lines == 1) {
+            qreal extraSize = _spatium;
+            bbox().adjust(0, -extraSize, 0, extraSize);
+      }
+
       lines.clear();
       for (int i = 0; i < _lines; ++i) {
             lines.push_back(QLineF(x1, y, x2, y));
