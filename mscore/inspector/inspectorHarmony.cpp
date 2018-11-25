@@ -28,7 +28,8 @@ InspectorHarmony::InspectorHarmony(QWidget* parent)
       h.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::SUB_STYLE, 0, h.style, h.resetStyle       },
+            { Pid::SUB_STYLE, 0, h.style,       h.resetStyle      },
+            { Pid::PLACEMENT, 0, h.placement,   h.resetPlacement  }
             };
 
       const std::vector<InspectorPanel> ppList = {
