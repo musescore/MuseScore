@@ -280,7 +280,7 @@ void SlurTieSegment::reset()
 
 void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
       {
-      if (visible()
+      if (visible() && autoplace()
          && (color() == Qt::black)
          && ups(Grip::START).off.isNull()
          && ups(Grip::BEZIER1).off.isNull()
@@ -416,6 +416,10 @@ bool SlurTie::readProperties(XmlReader& e)
       else if (tag == "lineType")
             _lineType = e.readInt();
       else if (tag == "SlurSegment" || tag == "TieSegment") {
+            const int idx = e.intAttribute("no", 0);
+            const int n = int(spannerSegments().size());
+            for (int i = n; i < idx; ++i)
+                  add(newSlurTieSegment());
             SlurTieSegment* s = newSlurTieSegment();
             s->read(e);
             add(s);
