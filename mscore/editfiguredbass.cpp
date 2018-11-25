@@ -85,7 +85,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
             int maxTrack = minTrack + (VOICES-1);
 
             while (nextSegm) {                   // look for a ChordRest in the compatible track range
-                  if(nextSegm->findAnnotationOrElement(ElementType::FIGURED_BASS, minTrack, maxTrack))
+                  if(nextSegm->hasAnnotationOrElement(ElementType::FIGURED_BASS, minTrack, maxTrack))
                         break;
                   nextSegm = bBack ? nextSegm->prev1(SegmentType::ChordRest) : nextSegm->next1(SegmentType::ChordRest);
                   }
