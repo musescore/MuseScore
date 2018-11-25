@@ -2149,18 +2149,11 @@ void MusicXMLParserPass1::clef(const QString& /* partId */)
                   n--;              // make zero-based
             }
 
-      StaffTypes staffType = StaffTypes::STANDARD;
-
       while (_e.readNextStartElement()) {
             if (_e.name() == "line")
                   _e.skipCurrentElement();  // skip but don't log
-            else if (_e.name() == "sign") {
+            else if (_e.name() == "sign")
                   QString sign = _e.readElementText();
-                  if (sign == "TAB")
-                        staffType = StaffTypes::TAB_DEFAULT;
-                  else if (sign == "percussion")
-                        staffType = StaffTypes::PERC_DEFAULT;
-                  }
             else
                   skipLogCurrElem();
             }
