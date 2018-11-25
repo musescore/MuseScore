@@ -204,9 +204,9 @@ MasterPalette::MasterPalette(QWidget* parent)
       for (const QString& s : smuflRanges()->keys()) {
             if (s == SMUFL_ALL_SYMBOLS)
                   continue;
-            QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(s));
-            child->setData(0, Qt::UserRole, stack->count());
-            symbolItem->addChild(child);
+            QTreeWidgetItem* chld = new QTreeWidgetItem(QStringList(s));
+            chld->setData(0, Qt::UserRole, stack->count());
+            symbolItem->addChild(chld);
             stack->addWidget(new SymbolDialog(s));
             }
 
