@@ -1330,28 +1330,5 @@ void Slur::setTrack(int n)
       for (SpannerSegment* ss : spannerSegments())
             ss->setTrack(n);
       }
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Slur::readProperties(XmlReader& e)
-      {
-      const QStringRef& tag(e.name());
-
-      if (tag == "SlurSegment") {
-            int idx = e.intAttribute("no", 0);
-            int n = spannerSegments().size();
-            for (int i = n; i < idx; ++i)
-                  add(new SlurSegment(score()));
-            SlurSegment* segment = new SlurSegment(score());
-            segment->read(e);
-            add(segment);
-            }
-      else if (!SlurTie::readProperties(e))
-            return false;
-      return true;
-      }
-
 }
 

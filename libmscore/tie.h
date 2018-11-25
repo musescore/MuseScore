@@ -80,8 +80,6 @@ class Tie final : public SlurTie {
       TieSegment* layoutFor(System*);
       TieSegment* layoutBack(System*);
 
-      bool readProperties(XmlReader&);
-
       TieSegment* frontSegment()               { return toTieSegment(Spanner::frontSegment()); }
       const TieSegment* frontSegment() const   { return toTieSegment(Spanner::frontSegment()); }
       TieSegment* backSegment()                { return toTieSegment(Spanner::backSegment());  }
