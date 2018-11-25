@@ -270,8 +270,25 @@ void SlurTieSegment::reset()
       undoResetProperty(Pid::SLUR_UOFF2);
       undoResetProperty(Pid::SLUR_UOFF3);
       undoResetProperty(Pid::SLUR_UOFF4);
-      undoResetProperty(Pid::AUTOPLACE);
       slurTie()->reset();
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void SlurTieSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+      {
+      if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
+            // Switching autoplacement on. Save user-defined
+            // placement properties to undo stack.
+            undoPushProperty(Pid::SLUR_UOFF1);
+            undoPushProperty(Pid::SLUR_UOFF2);
+            undoPushProperty(Pid::SLUR_UOFF3);
+            undoPushProperty(Pid::SLUR_UOFF4);
+            // other will be saved in base classes.
+            }
+      SpannerSegment::undoChangeProperty(pid, val, ps);
       }
 
 //---------------------------------------------------------
