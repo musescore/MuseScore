@@ -190,6 +190,21 @@ void SpannerSegment::reset()
       }
 
 //---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void SpannerSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+      {
+      if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
+            // Switching autoplacement on. Save user-defined
+            // placement properties to undo stack.
+            undoPushProperty(Pid::OFFSET2);
+            // other will be saved in Element::undoChangeProperty
+            }
+      Element::undoChangeProperty(pid, val, ps);
+      }
+
+//---------------------------------------------------------
 //   setSelected
 //---------------------------------------------------------
 
@@ -1313,7 +1328,7 @@ void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
             MuseScoreCore::mscoreCore->updateInspector();
             return;
             }
-      ScoreElement::undoChangeProperty(id, v, ps);
+      Element::undoChangeProperty(id, v, ps);
       }
 
 }

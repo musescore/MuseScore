@@ -1151,6 +1151,21 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void Element::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+      {
+      if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
+            // Switching autoplacement on. Save user-defined
+            // placement properties to undo stack.
+            undoPushProperty(Pid::PLACEMENT);
+            undoPushProperty(Pid::OFFSET);
+            }
+      ScoreElement::undoChangeProperty(pid, val, ps);
+      }
+
+//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
