@@ -5437,6 +5437,13 @@ bool saveMxl(Score* score, const QString& name)
       return true;
       }
 
+bool saveMxl(Score* score, QIODevice* device)
+      {
+      ExportMusicXml em(score);
+      em.write(device);
+      return true;
+      }
+
 double ExportMusicXml::getTenthsFromInches(double inches) const
       {
       return inches * INCH / millimeters * tenths;

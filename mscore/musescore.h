@@ -690,6 +690,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePdf(const QString& saveName);
       bool savePdf(Score* cs, const QString& saveName);
       bool savePdf(QList<Score*> cs, const QString& saveName);
+      bool savePdf(Score* cs, QPdfWriter& printer);
 
 
       MasterScore* readScore(const QString& name);
@@ -698,15 +699,23 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveSelection(Score*);
       void addImage(Score*, Element*);
 
-      bool savePng(Score*, const QString& name, bool screenshot, bool transparent, double convDpi, int trimMargin, QImage::Format format);
-      bool saveAudio(Score*, QIODevice *device, std::function<bool(float)> updateProgress = nullptr);
+      bool saveAudio(Score*, QIODevice*, std::function<bool(float)> updateProgress = nullptr);
       bool saveAudio(Score*, const QString& name);
       bool canSaveMp3();
       bool saveMp3(Score*, const QString& name);
+      bool saveMp3(Score*, QIODevice*, bool& wasCanceled);
       bool saveSvg(Score*, const QString& name);
+      bool saveSvg(Score*, QIODevice*, int pageNum = 0);
+      bool savePng(Score*, QIODevice*, int pageNum = 0);
       bool savePng(Score*, const QString& name);
-      bool saveMidi(Score* score, const QString& name);
-      bool saveMetadataJSON(Score* score, const QString& name);
+      bool saveMidi(Score*, const QString& name);
+      bool saveMidi(Score*, QIODevice*);
+      bool savePositions(Score*, const QString& name, bool segments);
+      bool savePositions(Score*, QIODevice*, bool segments);
+      bool saveMetadataJSON(Score*, const QString& name);
+      QJsonObject saveMetadataJSON(Score*);
+
+      bool exportAllMediaFiles(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
 
       virtual void closeScore(Score* score);
 
@@ -844,6 +853,7 @@ extern Shortcut* midiActionMap[128];
 extern void loadTranslation(QString fileName, QString localeName);
 extern void setMscoreLocale(QString localeName);
 extern bool saveMxl(Score*, const QString& name);
+extern bool saveMxl(Score*, QIODevice*);
 extern bool saveXml(Score*, const QString& name);
 
 struct PluginDescription;

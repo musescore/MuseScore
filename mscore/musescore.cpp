@@ -172,6 +172,7 @@ int trimMargin = -1;
 bool noWebView = false;
 bool exportScoreParts = false;
 bool ignoreWarnings = false;
+bool exportScoreMedia = false;
 
 QString mscoreGlobalShare;
 
@@ -250,7 +251,6 @@ const std::list<const char*> MuseScore::_allPlaybackControlEntries {
             "countin"
             };
 
-extern bool savePositions(Score*, const QString& name, bool segments );
 extern TextPalette* textPalette;
 
 static constexpr double SCALE_MAX  = 16.0;
@@ -3342,10 +3342,10 @@ static bool doConvert(Score* cs, QString fn, QString plugin = "")
                   return mscore->saveMp3(cs, fn);
 #endif
       else if (fn.endsWith(".spos")) {
-            rv = savePositions(cs, fn, true);
+            rv = mscore->savePositions(cs, fn, true);
             }
       else if (fn.endsWith(".mpos")) {
-            rv = savePositions(cs, fn, false);
+            rv = mscore->savePositions(cs, fn, false);
             }
       else if (fn.endsWith(".mlog"))
             return cs->sanityCheck(fn);
@@ -3441,6 +3441,8 @@ static bool doProcessJob(QString jsonFile)
 
 static bool processNonGui(const QStringList& argv)
       {
+      if (exportScoreMedia)
+            return mscore->exportAllMediaFiles(argv[0]);
       if (pluginMode) {
             loadScores(argv);
             QString pn(pluginName);
@@ -6384,6 +6386,26 @@ bool MuseScore::canSaveMp3()
 
 bool MuseScore::saveMp3(Score* score, const QString& name)
       {
+      QFile file(name);
+      if (!file.open(QIODevice::WriteOnly)) {
+            if (!MScore::noGui) {
+                  QMessageBox::warning(0,
+                                       tr("Encoding Error"),
+                                       tr("Unable to open target file for writing"),
+                                       QString::null, QString::null);
+                  }
+            return false;
+            }
+      bool wasCanceled = false;
+      bool res = saveMp3(score, &file, wasCanceled);
+      file.close();
+      if (wasCanceled || !res)
+            file.remove();
+      return res;
+      }
+
+bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
+      {
 #ifndef USE_LAME
       Q_UNUSED(score);
       Q_UNUSED(name);
@@ -6442,18 +6464,6 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                      QString::null, QString::null);
                   }
             qDebug("Unable to initialize MP3 stream");
-            MScore::sampleRate = oldSampleRate;
-            return false;
-            }
-
-      QFile file(name);
-      if (!file.open(QIODevice::WriteOnly)) {
-            if (!MScore::noGui) {
-                  QMessageBox::warning(0,
-                     tr("Encoding Error"),
-                     tr("Unable to open target file for writing"),
-                     QString::null, QString::null);
-                  }
             MScore::sampleRate = oldSampleRate;
             return false;
             }
@@ -6612,7 +6622,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                               break;
                               }
                         else
-                              file.write((char*)bufferOut, bytes);
+                              device->write((char*)bufferOut, bytes);
                         }
                   else {
                         for (int i = 0; i < FRAMES; ++i) {
@@ -6630,7 +6640,7 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
                         qApp->processEvents();
                         }
                   if (playTime >= et)
-                        synti->allNotesOff(-1);
+                        synth->allNotesOff(-1);
                   // create sound until the sound decays
                   if (playTime >= et && max * peak < 0.000001)
                         break;
@@ -6649,15 +6659,11 @@ bool MuseScore::saveMp3(Score* score, const QString& name)
 
       long bytes = exporter.finishStream(bufferOut);
       if (bytes > 0L)
-            file.write((char*)bufferOut, bytes);
+            device->write((char*)bufferOut, bytes);
 
-      bool wasCanceled = progress.wasCanceled();
       progress.close();
       delete synth;
       delete[] bufferOut;
-      file.close();
-      if (wasCanceled)
-            file.remove();
       MScore::sampleRate = oldSampleRate;
       return true;
 #endif
@@ -6811,6 +6817,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
       parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
+      parser.addOption(QCommandLineOption("score-media", "Export all media for a given score in a single JSON file and print it to std out"));
       parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
       parser.addOption(QCommandLineOption("diff", "Print a diff for the given scores"));
 
@@ -6950,6 +6957,13 @@ int main(int argc, char* av[])
             else
                   fprintf(stderr, "MP3 bitrate value '%s' not recognized, using default setting from preferences instead.\n", qPrintable(temp));
            }
+
+      if (parser.isSet("score-media")) {
+            exportScoreMedia = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+
       if (parser.isSet("raw-diff")) {
             MScore::noGui = true;
             rawDiffMode = true;
