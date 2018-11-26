@@ -3374,12 +3374,25 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (ss->isVoltaSegment() && ss->staffIdx() == staffIdx)
                         voltaSegments.push_back(ss);
                   }
-            if (voltaSegments.size() > 1) {
+            while (!voltaSegments.empty()) {
+                  // we assume voltas are sorted left to right (by tick values)
                   qreal y = 0;
-                  for (SpannerSegment* ss : voltaSegments)
+                  int idx = 0;
+                  Volta* prevVolta = 0;
+                  for (SpannerSegment* ss : voltaSegments) {
+                        Volta* volta = toVolta(ss->spanner());
+                        if (prevVolta && prevVolta != volta) {
+                              // check if volta is adjacent to prevVolta
+                              if (prevVolta->tick2() != volta->tick())
+                                    break;
+                              }
                         y = qMin(y, ss->rypos());
-                  for (SpannerSegment* ss : voltaSegments)
-                        ss->rypos() = y;
+                        ++idx;
+                        prevVolta = volta;
+                        }
+                  for (int i = 0; i < idx; ++i)
+                        voltaSegments[i]->rypos() = y;
+                  voltaSegments.erase(voltaSegments.begin(), voltaSegments.begin() + idx);
                   }
             }
 
