@@ -38,6 +38,7 @@
 #include <limits.h>
 #include <map>
 #include <set>
+#include <deque>
 #include <errno.h>
 #include <fcntl.h>
 // VStudio does not have <unistd.h>, <io.h> & <process.h> replace many functions from it...

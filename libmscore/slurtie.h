@@ -77,6 +77,7 @@ class SlurTieSegment : public SpannerSegment {
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
       virtual void reset() override;
+      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
       virtual void move(const QPointF& s) override;
       virtual bool isEditable() const override { return true; }
 
@@ -107,7 +108,6 @@ class SlurTie : public Spanner {
    protected:
       bool _up;               // actual direction
 
-      QQueue<SpannerSegment*> delSegments;   // "deleted" segments
       Direction _slurDirection;
       qreal firstNoteRestSegmentX(System* system);
       void fixupSegments(unsigned nsegs);

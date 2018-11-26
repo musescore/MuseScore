@@ -22,6 +22,7 @@ const char* tests[] = {
 #if 1
       "libmscore/element/tst_element",
       "libmscore/note/tst_note",
+      "libmscore/readwriteundoreset/tst_readwriteundoreset",
       "libmscore/keysig/tst_keysig",
       "libmscore/barline/tst_barline",
       "libmscore/clef/tst_clef",

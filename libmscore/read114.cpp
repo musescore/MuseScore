@@ -3098,7 +3098,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   else if (s->isTextLine()) {
                         yo = -5.0 * spatium();
                   }
-                  if (!s->spannerSegments().isEmpty()) {
+                  if (!s->spannerSegments().empty()) {
                         for (SpannerSegment* seg : s->spannerSegments()) {
                               if (!seg->offset().isNull())
                                     seg->ryoffset() = seg->offset().y() - yo;

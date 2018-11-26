@@ -2467,8 +2467,8 @@ void ScoreView::endNoteEntry()
       InputState& is = _score->inputState();
       is.setNoteEntryMode(false);
       if (is.slur()) {
-            const QList<SpannerSegment*>& el = is.slur()->spannerSegments();
-            if (!el.isEmpty())
+            const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
+            if (!el.empty())
                   el.front()->setSelected(false);
             is.setSlur(0);
             }
@@ -3090,8 +3090,8 @@ void ScoreView::addSlur()
       {
       InputState& is = _score->inputState();
       if (noteEntryMode() && is.slur()) {
-            const QList<SpannerSegment*>& el = is.slur()->spannerSegments();
-            if (!el.isEmpty())
+            const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
+            if (!el.empty())
                   el.front()->setSelected(false);
             is.setSlur(nullptr);
             return;
@@ -3238,9 +3238,9 @@ void ScoreView::cmdAddHairpin(HairpinType type)
 //          pin->layout();
             _score->endCmd();
 
-            const QList<SpannerSegment*>& el = pin->spannerSegments();
+            const std::vector<SpannerSegment*>& el = pin->spannerSegments();
             if (!noteEntryMode()) {
-                  if (!el.isEmpty()) {
+                  if (!el.empty()) {
                         editData.element = el.front();
                         changeState(ViewState::EDIT);
                         }

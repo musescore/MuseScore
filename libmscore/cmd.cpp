@@ -314,8 +314,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             spanner->setTick(m->tick());
             spanner->setTick2(m->endTick());
             }
-      qDeleteAll(spanner->spannerSegments());
-      spanner->spannerSegments().clear();
+      spanner->eraseSpannerSegments();
 
       undoAddElement(spanner);
       select(spanner, SelectType::SINGLE, 0);
