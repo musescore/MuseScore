@@ -102,7 +102,7 @@ void StyledSlider::mouseMoveEvent(QMouseEvent* e)
             double barLength = height() - (_margin * 2);
             double dy = dPixY * (_maxValue - _minValue) / barLength;
 
-            double val = qBound(_minValue, _value - dy, _maxValue);
+            double val = qBound(_minValue, _value - dy + 0.5, _maxValue);
 
             lastMousePos = p;
             setValue(val);
