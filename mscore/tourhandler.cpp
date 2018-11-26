@@ -95,7 +95,21 @@ void OverlayWidget::paintEvent(QPaintEvent *)
 
 void TourHandler::showWelcomeTour()
       {
-      startTour("welcome");
+      if (!delayedWelcomeTour)
+            startTour("welcome");
+      }
+
+//---------------------------------------------------------
+//   showDelayedWelcomeTour
+//   delays showing the welcome tour when the user
+//   attempts to open a score or create a new score
+//---------------------------------------------------------
+
+void TourHandler::showDelayedWelcomeTour()
+      {
+      if (delayedWelcomeTour)
+            startTour("welcome");
+      delayedWelcomeTour = false;
       }
 
 //---------------------------------------------------------

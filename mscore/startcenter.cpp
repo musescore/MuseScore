@@ -109,6 +109,7 @@ void Startcenter::loadScore(QString s)
 
 void Startcenter::newScore()
       {
+      mscore->tourHandler()->delayWelcomeTour();
       close();
       getAction("file-new")->trigger();
       }
@@ -142,6 +143,7 @@ void Startcenter::updateRecentScores()
 
 void Startcenter::openScoreClicked()
       {
+      mscore->tourHandler()->delayWelcomeTour();
       close();
       getAction("file-open")->trigger();
       }
