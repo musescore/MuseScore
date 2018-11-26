@@ -720,7 +720,6 @@ static const StyleType styleTypes[] {
       { Sid::tempoFontItalic,               "tempoFontItalic",              false },
       { Sid::tempoFontUnderline,            "tempoFontUnderline",           false },
       { Sid::tempoAlign,                    "tempoAlign",                   QVariant::fromValue(Align::LEFT | Align::BASELINE) },
-      { Sid::tempoOffset,                   "tempoOffset",                  QPointF(0.0, 0.0) },
       { Sid::tempoSystemFlag,               "tempoSystemFlag",              true },
       { Sid::tempoPlacement,                "tempoPlacement",               int(Placement::ABOVE)  },
       { Sid::tempoPosAbove,                 "tempoPosAbove",                QPointF(.0, -2.0) },
@@ -2295,6 +2294,29 @@ bool MStyle::readProperties(XmlReader& e)
                         }
                   return true;
                   }
+            }
+      if (readStyleValCompat(e))
+            return true;
+      return false;
+      }
+
+//---------------------------------------------------------
+//   readStyleValCompat
+//    Read obsolete style values which may appear in files
+//    produced by older versions of MuseScore.
+//---------------------------------------------------------
+
+bool MStyle::readStyleValCompat(XmlReader& e)
+      {
+      const QStringRef tag(e.name());
+      if (tag == "tempoOffset") { // pre-3.0-beta
+            const qreal x = e.doubleAttribute("x", 0.0);
+            const qreal y = e.doubleAttribute("y", 0.0);
+            const QPointF val(x, y);
+            set(Sid::tempoPosAbove, val);
+            set(Sid::tempoPosBelow, val);
+            e.readElementText();
+            return true;
             }
       return false;
       }
