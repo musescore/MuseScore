@@ -120,8 +120,8 @@ void Startcenter::newScore()
 
 void Startcenter::closeEvent(QCloseEvent* event)
       {
-      emit closed(false);
       AbstractDialog::closeEvent(event);
+      emit closed(false);
       }
 
 //---------------------------------------------------------
