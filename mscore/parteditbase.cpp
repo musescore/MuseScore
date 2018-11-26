@@ -459,7 +459,7 @@ void PartEdit::midiChannelChanged(int)
                   // Show datails if parameters are different
                   QString detailedText;
                   if (patch->currentIndex() != pe->patch->currentIndex())
-                        detailedText += QString(tr("Sound: '%1'' vs. '%2'\n")).arg(patch->itemText(patch->currentIndex()), pe->patch->itemText(pe->patch->currentIndex()));
+                        detailedText += QString(tr("Sound: '%1' vs. '%2'\n")).arg(patch->itemText(patch->currentIndex()), pe->patch->itemText(pe->patch->currentIndex()));
                   if (this->volume->value() != pe->volume->value())
                         detailedText += QString(tr("Volume: %1 vs. %2\n")).arg(QString::number(volume->value()),  QString::number(pe->volume->value()));
                   if (this->pan->value() != pe->pan->value())

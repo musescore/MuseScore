@@ -10668,7 +10668,7 @@
               <item row="0" column="3">
                <widget class="QLabel" name="label_115">
                 <property name="text">
-                 <string>Number tType:</string>
+                 <string>Number type:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -12302,7 +12302,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset Border' value</string>
+              <string>Reset 'Border' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12319,7 +12319,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset Text margin' value</string>
+              <string>Reset 'Text margin' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -12404,7 +12404,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset Size changes with staff space setting' value</string>
+              <string>Reset 'Size changes with staff space setting' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
