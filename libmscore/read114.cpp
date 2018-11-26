@@ -2506,6 +2506,7 @@ static void readPart(Part* part, XmlReader& e)
             if (tag == "Staff") {
                   Staff* staff = new Staff(_score);
                   staff->setPart(part);
+                  staff->setStaffType(0, StaffType()); // will reset later if needed
                   _score->staves().push_back(staff);
                   part->staves()->push_back(staff);
                   readStaff(staff, e);
