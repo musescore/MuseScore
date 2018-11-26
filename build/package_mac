@@ -40,11 +40,9 @@ function set_bundle_display_options() {
             delay 1 -- sync
             set icon size of the icon view options of container window to 128
             set arrangement of the icon view options of container window to not arranged
-            set position of item "${LONGER_NAME}.app" to {400,125}
+            set position of item "${LONGER_NAME}.app" to {400,110}
             close
-            open
-            set position of item "Applications" to {150,125}
-            close
+            set position of item "Applications" to {150,110}
             open
             set background picture of the icon view options of container window to file "background.tiff" of folder "Pictures"
             set the bounds of the container window to {0, 0, 540, 300}
