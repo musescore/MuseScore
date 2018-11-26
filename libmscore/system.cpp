@@ -73,6 +73,10 @@ System::~System()
       {
       for (SpannerSegment* ss : spannerSegments())
             ss->setParent(0);
+      for (MeasureBase* mb : measures()) {
+            if (mb->system() == this)
+                  mb->setSystem(nullptr);
+            }
       qDeleteAll(_staves);
       qDeleteAll(_brackets);
       delete _systemDividerLeft;
