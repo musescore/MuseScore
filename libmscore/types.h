@@ -193,14 +193,29 @@ enum class Align : char {
 constexpr Align operator| (Align a1, Align a2) {
       return static_cast<Align>(static_cast<char>(a1) | static_cast<char>(a2));
       }
-// constexpr Align operator& (Align a1, Align a2) {
-//      return static_cast<Align>(static_cast<char>(a1) & static_cast<char>(a2));
-//      }
 constexpr bool operator& (Align a1, Align a2) {
       return static_cast<char>(a1) & static_cast<char>(a2);
       }
 constexpr Align operator~ (Align a) {
       return static_cast<Align>(~static_cast<char>(a));
+      }
+
+//---------------------------------------------------------
+//   FontStyle
+//---------------------------------------------------------
+
+enum class FontStyle : char {
+      Normal = 0, Bold = 1, Italic = 2, Underline = 4
+      };
+
+constexpr FontStyle operator+ (FontStyle a1, FontStyle a2) {
+      return static_cast<FontStyle>(static_cast<char>(a1) | static_cast<char>(a2));
+      }
+constexpr FontStyle operator- (FontStyle a1, FontStyle a2) {
+      return static_cast<FontStyle>(static_cast<char>(a1) & ~static_cast<char>(a2));
+      }
+constexpr bool operator& (FontStyle a1, FontStyle a2) {
+      return static_cast<bool>(static_cast<char>(a1) & static_cast<char>(a2));
       }
 
 //---------------------------------------------------------

@@ -29,9 +29,7 @@ InspectorTextBase::InspectorTextBase(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { Pid::FONT_FACE,         0, t.fontFace,     t.resetFontFace     },
             { Pid::FONT_SIZE,         0, t.fontSize,     t.resetFontSize     },
-            { Pid::FONT_BOLD,         0, t.bold,         t.resetStyle        },
-            { Pid::FONT_ITALIC,       0, t.italic,       t.resetStyle        },
-            { Pid::FONT_UNDERLINE,    0, t.underline,    t.resetStyle        },
+            { Pid::FONT_STYLE,        0, t.fontStyle,    t.resetFontStyle    },
             { Pid::FRAME_TYPE,        0, t.frameType,    t.resetFrameType    },
             { Pid::FRAME_FG_COLOR,    0, t.frameColor,   t.resetFrameColor   },
             { Pid::FRAME_BG_COLOR,    0, t.bgColor,      t.resetBgColor      },
@@ -47,10 +45,6 @@ InspectorTextBase::InspectorTextBase(QWidget* parent)
             };
       for (auto& i : ppList)
             pList.push_back(i);
-      t.bold->setIcon(*icons[int(Icons::textBold_ICON)]);
-      t.underline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
-      t.italic->setIcon(*icons[int(Icons::textItalic_ICON)]);
-
       QComboBox* b = t.frameType;
       b->clear();
       b->addItem(b->QObject::tr("No frame"), int(FrameType::NO_FRAME));
@@ -80,6 +74,8 @@ void InspectorTextBase::valueChanged(int idx, bool b)
       Pid pid = iList[idx].t;
       if (pid == Pid::FRAME_TYPE)
             updateFrame();
+      TextBase* text = toTextBase(inspector->element());
+      t.resetToStyle->setEnabled(text->hasCustomFormatting());
       }
 
 //---------------------------------------------------------
@@ -90,6 +86,8 @@ void InspectorTextBase::setElement()
       {
       InspectorElementBase::setElement();
       updateFrame();
+      TextBase* text = toTextBase(inspector->element());
+      t.resetToStyle->setEnabled(text->hasCustomFormatting());
       }
 
 } // namespace Ms

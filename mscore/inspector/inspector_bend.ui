@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorBend</class>
  <widget class="QWidget" name="InspectorBend">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>365</width>
+    <height>207</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string/>
   </property>
@@ -122,6 +130,12 @@
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
         </property>
        </spacer>
       </item>
@@ -246,54 +260,28 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="bold">
-          <property name="accessibleName">
-           <string>Bold</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="italic">
-          <property name="accessibleName">
-           <string>Italic</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="underline">
-          <property name="accessibleName">
-           <string>Underline</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
+         <widget class="Ms::FontStyleSelect" name="fontStyle" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>10</width>
+            <height>0</height>
+           </size>
           </property>
          </widget>
         </item>
        </layout>
       </item>
       <item row="3" column="2">
-       <widget class="QToolButton" name="resetStyle">
+       <widget class="QToolButton" name="resetFontStyle">
         <property name="toolTip">
          <string>Reset to default</string>
         </property>
@@ -311,6 +299,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::FontStyleSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/fontStyleSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>lineWidth</tabstop>
@@ -319,10 +315,7 @@
   <tabstop>resetFontFace</tabstop>
   <tabstop>fontSize</tabstop>
   <tabstop>resetFontSize</tabstop>
-  <tabstop>bold</tabstop>
-  <tabstop>italic</tabstop>
-  <tabstop>underline</tabstop>
-  <tabstop>resetStyle</tabstop>
+  <tabstop>resetFontStyle</tabstop>
   <tabstop>playBend</tabstop>
   <tabstop>resetPlayBend</tabstop>
   <tabstop>properties</tabstop>

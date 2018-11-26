@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorTuplet</class>
  <widget class="QWidget" name="InspectorTuplet">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>279</width>
+    <height>287</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Tuplet Inspector</string>
   </property>
@@ -68,7 +76,21 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="14" column="0" colspan="3">
+      <item row="2" column="2">
+       <widget class="QToolButton" name="resetTupletFontStyle">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Font size' value</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0" colspan="3">
        <widget class="QWidget" name="frameWidget" native="true">
         <layout class="QGridLayout" name="gridLayout_3">
          <property name="leftMargin">
@@ -89,6 +111,19 @@
         </layout>
        </widget>
       </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QSpinBox" name="tupletFontSize">
+        <property name="toolTip">
+         <string>Font size</string>
+        </property>
+        <property name="accessibleName">
+         <string>Font size</string>
+        </property>
+        <property name="suffix">
+         <string>pt</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="2">
        <widget class="QToolButton" name="resetTupletFontSize">
         <property name="toolTip">
@@ -100,19 +135,6 @@
         <property name="icon">
          <iconset resource="../musescore.qrc">
           <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QSpinBox" name="tupletFontSize">
-        <property name="toolTip">
-         <string>Font size</string>
-        </property>
-        <property name="accessibleName">
-         <string>Font size</string>
-        </property>
-        <property name="suffix">
-         <string>pt</string>
         </property>
        </widget>
       </item>
@@ -140,116 +162,8 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QPushButton" name="tupletBold">
-          <property name="toolTip">
-           <string>Font style: Bold</string>
-          </property>
-          <property name="accessibleName">
-           <string>Bold</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="resetTupletBold">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Bold' value</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="tupletItalic">
-          <property name="toolTip">
-           <string>Font style: Italic</string>
-          </property>
-          <property name="accessibleName">
-           <string>Italic</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="resetTupletItalic">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Italic' value</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QToolButton" name="tupletUnderline">
-          <property name="toolTip">
-           <string>Font style: Underline</string>
-          </property>
-          <property name="accessibleName">
-           <string>Underline</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="resetTupletUnderline">
-          <property name="toolTip">
-           <string>Reset to default</string>
-          </property>
-          <property name="accessibleName">
-           <string>Reset 'Underline' value</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-          </property>
-         </widget>
-        </item>
-       </layout>
+      <item row="2" column="0">
+       <widget class="Ms::FontStyleSelect" name="tupletFontStyle" native="true"/>
       </item>
      </layout>
     </widget>
@@ -493,18 +407,20 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::FontStyleSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/fontStyleSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title_2</tabstop>
   <tabstop>tupletFontFace</tabstop>
   <tabstop>resetTupletFontFace</tabstop>
   <tabstop>tupletFontSize</tabstop>
   <tabstop>resetTupletFontSize</tabstop>
-  <tabstop>tupletBold</tabstop>
-  <tabstop>resetTupletBold</tabstop>
-  <tabstop>tupletItalic</tabstop>
-  <tabstop>resetTupletItalic</tabstop>
-  <tabstop>tupletUnderline</tabstop>
-  <tabstop>resetTupletUnderline</tabstop>
   <tabstop>title</tabstop>
   <tabstop>direction</tabstop>
   <tabstop>resetDirection</tabstop>

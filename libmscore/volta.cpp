@@ -31,15 +31,9 @@ static const ElementStyle voltaStyle {
       { Sid::voltaFontSize,                      Pid::BEGIN_FONT_SIZE         },
       { Sid::voltaFontSize,                      Pid::CONTINUE_FONT_SIZE      },
       { Sid::voltaFontSize,                      Pid::END_FONT_SIZE           },
-      { Sid::voltaFontBold,                      Pid::BEGIN_FONT_BOLD         },
-      { Sid::voltaFontBold,                      Pid::CONTINUE_FONT_BOLD      },
-      { Sid::voltaFontBold,                      Pid::END_FONT_BOLD           },
-      { Sid::voltaFontItalic,                    Pid::BEGIN_FONT_ITALIC       },
-      { Sid::voltaFontItalic,                    Pid::CONTINUE_FONT_ITALIC    },
-      { Sid::voltaFontItalic,                    Pid::END_FONT_ITALIC         },
-      { Sid::voltaFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE    },
-      { Sid::voltaFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE },
-      { Sid::voltaFontUnderline,                 Pid::END_FONT_UNDERLINE      },
+      { Sid::voltaFontStyle,                     Pid::BEGIN_FONT_STYLE        },
+      { Sid::voltaFontStyle,                     Pid::CONTINUE_FONT_STYLE     },
+      { Sid::voltaFontStyle,                     Pid::END_FONT_STYLE          },
       { Sid::voltaAlign,                         Pid::BEGIN_TEXT_ALIGN        },
       { Sid::voltaAlign,                         Pid::CONTINUE_TEXT_ALIGN     },
       { Sid::voltaAlign,                         Pid::END_TEXT_ALIGN          },
@@ -295,7 +289,7 @@ SpannerSegment * Volta::layoutSystem(System * system) {
 void Volta::setVelocity() const {
       Measure* startMeasure = Spanner::startMeasure();
       Measure* endMeasure = Spanner::endMeasure();
-      
+
       if (startMeasure && endMeasure) {
             if (!endMeasure->repeatEnd())
             return;

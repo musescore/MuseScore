@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorGlissando</class>
  <widget class="QWidget" name="InspectorGlissando">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>349</width>
+    <height>257</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Glissando Inspector</string>
   </property>
@@ -336,49 +344,16 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="fontBold">
-          <property name="accessibleName">
-           <string>Bold</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="fontItalic">
-          <property name="accessibleName">
-           <string>Italic</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="fontUnderline">
-          <property name="accessibleName">
-           <string>Underline</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../musescore.qrc">
-            <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
+         <widget class="Ms::FontStyleSelect" name="fontStyle" native="true"/>
         </item>
        </layout>
       </item>
@@ -401,6 +376,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::FontStyleSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/fontStyleSelect.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>type</tabstop>
@@ -413,9 +396,6 @@
   <tabstop>resetFontFace</tabstop>
   <tabstop>fontSize</tabstop>
   <tabstop>resetFontSize</tabstop>
-  <tabstop>fontBold</tabstop>
-  <tabstop>fontItalic</tabstop>
-  <tabstop>fontUnderline</tabstop>
   <tabstop>resetFontStyle</tabstop>
   <tabstop>glissandoStyle</tabstop>
   <tabstop>resetGlissandoStyle</tabstop>

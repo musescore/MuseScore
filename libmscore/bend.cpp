@@ -31,11 +31,8 @@ static const char* label[] = {
       };
 
 static const ElementStyle bendStyle {
-      { Sid::bendFontFace,                       Pid::FONT_FACE              },
       { Sid::bendFontSize,                       Pid::FONT_SIZE              },
-      { Sid::bendFontBold,                       Pid::FONT_BOLD              },
-      { Sid::bendFontItalic,                     Pid::FONT_ITALIC            },
-      { Sid::bendFontUnderline,                  Pid::FONT_UNDERLINE         },
+      { Sid::bendFontStyle,                      Pid::FONT_STYLE             },
       { Sid::bendLineWidth,                      Pid::LINE_WIDTH             },
       };
 
@@ -56,9 +53,9 @@ Bend::Bend(Score* s)
 QFont Bend::font(qreal sp) const
       {
       QFont f(_fontFace);
-      f.setBold(_fontBold);
-      f.setItalic(_fontItalic);
-      f.setUnderline(_fontUnderline);
+      f.setBold(_fontStyle & FontStyle::Bold);
+      f.setItalic(_fontStyle & FontStyle::Italic);
+      f.setUnderline(_fontStyle & FontStyle::Underline);
       qreal m = _fontSize;
       m *= sp / SPATIUM20;
 
@@ -328,12 +325,8 @@ QVariant Bend::getProperty(Pid id) const
                   return _fontFace;
             case Pid::FONT_SIZE:
                   return _fontSize;
-            case Pid::FONT_BOLD:
-                  return _fontBold;
-            case Pid::FONT_ITALIC:
-                  return _fontItalic;
-            case Pid::FONT_UNDERLINE:
-                  return _fontUnderline;
+            case Pid::FONT_STYLE:
+                  return int(_fontStyle);
             case Pid::PLAY:
                   return bool(playBend());
             case Pid::LINE_WIDTH:
@@ -356,14 +349,8 @@ bool Bend::setProperty(Pid id, const QVariant& v)
             case Pid::FONT_SIZE:
                   _fontSize = v.toReal();
                   break;
-            case Pid::FONT_BOLD:
-                  _fontBold = v.toBool();
-                  break;
-            case Pid::FONT_ITALIC:
-                  _fontItalic = v.toBool();
-                  break;
-            case Pid::FONT_UNDERLINE:
-                  _fontUnderline = v.toBool();
+            case Pid::FONT_STYLE:
+                  _fontStyle = FontStyle(v.toInt());
                   break;
             case Pid::PLAY:
                  setPlayBend(v.toBool());

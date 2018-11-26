@@ -22,6 +22,7 @@
 #include "offsetSelect.h"
 #include "scaleSelect.h"
 #include "sizeSelect.h"
+#include "fontStyleSelect.h"
 #include "scoreview.h"
 #include "resetButton.h"
 
@@ -72,6 +73,8 @@ QVariant InspectorBase::getValue(const InspectorItem& ii) const
             v = static_cast<Awl::ColorLabel*>(w)->color();
       else if (qobject_cast<Ms::AlignSelect*>(w))
             v = int(static_cast<Ms::AlignSelect*>(w)->align());
+      else if (qobject_cast<Ms::FontStyleSelect*>(w))
+            v = int(static_cast<Ms::FontStyleSelect*>(w)->fontStyle());
       else if (qobject_cast<Ms::OffsetSelect*>(w))
             v = static_cast<Ms::OffsetSelect*>(w)->offset();
       else if (qobject_cast<Ms::ScaleSelect*>(w))
@@ -222,6 +225,8 @@ void InspectorBase::setValue(const InspectorItem& ii, QVariant val)
             static_cast<Awl::ColorLabel*>(w)->setColor(val.value<QColor>());
       else if (qobject_cast<Ms::AlignSelect*>(w))
             static_cast<Ms::AlignSelect*>(w)->setAlign(Align(val.toInt()));
+      else if (qobject_cast<Ms::FontStyleSelect*>(w))
+            static_cast<Ms::FontStyleSelect*>(w)->setFontStyle(FontStyle(val.toInt()));
       else if (qobject_cast<Ms::OffsetSelect*>(w))
             static_cast<Ms::OffsetSelect*>(w)->setOffset(val.toPointF());
       else if (qobject_cast<Ms::ScaleSelect*>(w))
@@ -557,6 +562,8 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                   connect(qobject_cast<Awl::ColorLabel*>(w), QOverload<QColor>::of(&Awl::ColorLabel::colorChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::AlignSelect*>(w))
                   connect(qobject_cast<Ms::AlignSelect*>(w), QOverload<Align>::of(&Ms::AlignSelect::alignChanged), [=] { valueChanged(i); });
+            else if (qobject_cast<Ms::FontStyleSelect*>(w))
+                  connect(qobject_cast<Ms::FontStyleSelect*>(w), QOverload<FontStyle>::of(&Ms::FontStyleSelect::fontStyleChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::OffsetSelect*>(w))
                   connect(qobject_cast<Ms::OffsetSelect*>(w), QOverload<const QPointF&>::of(&Ms::OffsetSelect::offsetChanged), [=] { valueChanged(i); });
             else if (qobject_cast<Ms::ScaleSelect*>(w))

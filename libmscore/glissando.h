@@ -54,9 +54,7 @@ class Glissando final : public SLine {
       M_PROPERTY(qreal, fontSize, setFontSize)
       M_PROPERTY(bool, showText, setShowText)
       M_PROPERTY(bool, playGlissando, setPlayGlissando)
-      M_PROPERTY(bool, fontBold, setFontBold)
-      M_PROPERTY(bool, fontItalic, setFontItalic)
-      M_PROPERTY(bool, fontUnderline, setFontUnderline)
+      M_PROPERTY(FontStyle, fontStyle, setFontStyle)
 
    public:
       Glissando(Score* s);

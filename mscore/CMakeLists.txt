@@ -154,6 +154,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_frametext.ui
       inspector/inspector_fermata.ui
       inspector/align_select.ui
+      inspector/font_style_select.ui
       inspector/offset_select.ui
       inspector/scale_select.ui
       inspector/size_select.ui
@@ -375,6 +376,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorArpeggio.cpp
       inspector/inspectorFingering.cpp
       inspector/alignSelect.cpp
+      inspector/fontStyleSelect.cpp
       inspector/offsetSelect.cpp
       inspector/scaleSelect.cpp
       inspector/sizeSelect.cpp
@@ -852,7 +854,7 @@ else (MINGW)
       if (USE_WEBENGINE)
          list(APPEND dlls_to_copy "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineWidgets.dll" "${QT_INSTALL_PREFIX}/bin/Qt5WebEngineCore.dll")
       endif(USE_WEBENGINE)
-      
+
       set(CMAKE_FIND_LIBRARY_PREFIX "")
       set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
 

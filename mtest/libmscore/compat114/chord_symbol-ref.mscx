@@ -180,6 +180,7 @@
             <root>19</root>
             <extension>33</extension>
             <name>dim</name>
+            <family>FreeSerif</family>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>
@@ -194,6 +195,7 @@
           <Harmony>
             <root>14</root>
             <name>7</name>
+            <family>FreeSerif</family>
             </Harmony>
           <Rest>
             <durationType>measure</durationType>

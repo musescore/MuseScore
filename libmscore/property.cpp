@@ -38,8 +38,8 @@ struct PropertyMetaData {
 //
 // always: propertyList[subtype].id == subtype
 //
-//                                     
-                      
+//
+
 //keep this properties untranslatable for now until we put the same strings to all UI elements
 #define DUMMY_QT_TRANSLATE_NOOP(x, y) y
 static constexpr PropertyMetaData propertyList[] = {
@@ -255,14 +255,13 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BRACKET_COLUMN,          "bracket_column",          false, "level",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "level")            },
       { Pid::INAME_LAYOUT_POSITION,   "iname_layout_position",   false, "layoutPosition",        P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "layout position")  },
       { Pid::SUB_STYLE,               "sub_style",               false, "style",                 P_TYPE::SUB_STYLE,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "style")            },
+
       { Pid::FONT_FACE,               "font_face",               false, "family",                P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "family")           },
       { Pid::FONT_SIZE,               "font_size",               false, "size",                  P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "size")             },
-      { Pid::FONT_BOLD,               "font_bold",               false, "bold",                  P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "bold")             },
-      { Pid::FONT_ITALIC,             "font_italic",             false, "italic",                P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "italic")           },
-      { Pid::FONT_UNDERLINE,          "font_underline",          false, "underline",             P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "underlined")       },
+      { Pid::FONT_STYLE,              "font_style",              false, "fontStyle",             P_TYPE::INT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "bold")             },
+
       { Pid::FRAME_TYPE,              "frame_type",              false, "frameType",             P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame type")       },
       { Pid::FRAME_WIDTH,             "frame_width",             false, "frameWidth",            P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame width")      },
-//200
       { Pid::FRAME_PADDING,           "frame_padding",           false, "framePadding",          P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame padding")    },
       { Pid::FRAME_ROUND,             "frame_round",             false, "frameRound",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame round")      },
       { Pid::FRAME_FG_COLOR,          "frame_fg_color",          false, "frameFgColor",          P_TYPE::COLOR,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "frame foreground color") },
@@ -278,9 +277,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::BEGIN_HOOK_HEIGHT,       "begin_hook_height",       false, "beginHookHeight",       P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin hook height") },
       { Pid::BEGIN_FONT_FACE,         "begin_font_face",         false, "beginFontFace",         P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin font face")  },
       { Pid::BEGIN_FONT_SIZE,         "begin_font_size",         false, "beginFontSize",         P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin font size")  },
-      { Pid::BEGIN_FONT_BOLD,         "begin_font_bold",         false, "beginFontBold",         P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin font bold")  },
-      { Pid::BEGIN_FONT_ITALIC,       "begin_font_italic",       false, "beginFontItalic",       P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin font italic") },
-      { Pid::BEGIN_FONT_UNDERLINE,    "begin_font_underline",    false, "beginFontUnderline",    P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin font underlined") },
+      { Pid::BEGIN_FONT_STYLE,        "begin_font_style",        false, "beginFontStyle",        P_TYPE::INT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin font bold")  },
       { Pid::BEGIN_TEXT_OFFSET,       "begin_text_offset",       false, "beginTextOffset",       P_TYPE::POINT_SP,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "begin text offset")  },
 
       { Pid::CONTINUE_TEXT,           "continue_text",           false, "continueText",          P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue text")    },
@@ -288,9 +285,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::CONTINUE_TEXT_PLACE,     "continue_text_place",     false, "continueTextPlace",     P_TYPE::TEXT_PLACE,          DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue text place") },
       { Pid::CONTINUE_FONT_FACE,      "continue_font_face",      false, "continueFontFace",      P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue font face") },
       { Pid::CONTINUE_FONT_SIZE,      "continue_font_size",      false, "continueFontSize",      P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue font size") },
-      { Pid::CONTINUE_FONT_BOLD,      "continue_font_bold",      false, "continueFontBold",      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue font bold") },
-      { Pid::CONTINUE_FONT_ITALIC,    "continue_font_italic",    false, "continueFontItalic",    P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue font italic") },
-      { Pid::CONTINUE_FONT_UNDERLINE, "continue_font_underline", false, "continueFontUnderline", P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue font underlined") },
+      { Pid::CONTINUE_FONT_STYLE,     "continue_font_style",     false, "continueFontStyle",     P_TYPE::INT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue font bold") },
       { Pid::CONTINUE_TEXT_OFFSET,    "continue_text_offset",    false, "continueTextOffset",    P_TYPE::POINT_SP,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "continue text offset") },
       { Pid::END_TEXT,                "end_text",                false, "endText",               P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "end text")         },
 
@@ -300,9 +295,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::END_HOOK_HEIGHT,         "end_hook_height",         false, "endHookHeight",         P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "end hook height")  },
       { Pid::END_FONT_FACE,           "end_font_face",           false, "endFontFace",           P_TYPE::FONT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "end font face")    },
       { Pid::END_FONT_SIZE,           "end_font_size",           false, "endFontSize",           P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "end font size")    },
-      { Pid::END_FONT_BOLD,           "end_font_bold",           false, "endFontBold",           P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "end font bold")    },
-      { Pid::END_FONT_ITALIC,         "end_font_italic",         false, "endFontItalic",         P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "end font italic")  },
-      { Pid::END_FONT_UNDERLINE,      "end_font_underline",      false, "endFontUnderline",      P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "end font underlined") },
+      { Pid::END_FONT_STYLE,          "end_font_style",          false, "endFontStyle",          P_TYPE::INT,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "end font bold")    },
       { Pid::END_TEXT_OFFSET,         "end_text_offset",         false, "endTextOffset",         P_TYPE::POINT_SP,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "end text offset")  },
 
       { Pid::POS_ABOVE,               "pos_above",               false, "posAbove",              P_TYPE::SP_REAL,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "position above")   },

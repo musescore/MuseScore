@@ -30,7 +30,6 @@
       <longInstrumentFontSize>10</longInstrumentFontSize>
       <shortInstrumentFontSize>10</shortInstrumentFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
-      <dynamicsFontItalic>0</dynamicsFontItalic>
       <tempoFontSize>10</tempoFontSize>
       <metronomeFontSize>10</metronomeFontSize>
       <translatorFontSize>10</translatorFontSize>
