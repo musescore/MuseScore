@@ -583,7 +583,7 @@ class Score : public QObject, public ScoreElement {
       void getNextMeasure(LayoutContext&);      // get next measure for layout
 
       void cmdRemovePart(Part*);
-      void cmdAddTie();
+      void cmdAddTie(bool addToChord = false);
       void cmdAddOttava(OttavaType);
       void cmdAddStretch(qreal);
       void cmdResetNoteAndRestGroupings();
