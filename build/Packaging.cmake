@@ -50,16 +50,16 @@ IF(MINGW OR MSVC)
     SET(CPACK_STRIP_FILES "${MSCORE_EXECUTABLE_NAME}.exe")
 
     # File types association:
-    SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
+    # SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
 
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-        \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
-        \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
-    ")
-    SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
-        \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
-        \\\${unregisterExtension} \\\".mscz\\\" \\\"Compressed MuseScore File\\\"
-    ")
+    # SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+    #     \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+    #     \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+    # ")
+    # SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+    #     \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
+    #     \\\${unregisterExtension} \\\".mscz\\\" \\\"Compressed MuseScore File\\\"
+    # ")
 
     file(TO_CMAKE_PATH $ENV{PROGRAMFILES} PROGRAMFILES)
     SET(CPACK_WIX_ROOT "${PROGRAMFILES}/WiX Toolset v3.11")
