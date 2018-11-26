@@ -157,9 +157,14 @@ class UndoStack {
 class SaveState : public UndoCommand {
       InputState undoInputState;
       InputState redoInputState;
-      Selection  undoSelection;
-      Selection  redoSelection;
+      Element* undoSelectedElement = nullptr;
+      Element* redoSelectedElement = nullptr;
+//       Selection  undoSelection;
+//       Selection  redoSelection;
       Score* score;
+      bool first = true; // first redo operation.
+
+      static Element* selectedElement(const Selection&);
 
    public:
       SaveState(Score*);
