@@ -135,7 +135,7 @@ export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
 export ARTIFACTS_PERMISSIONS=public-read
 export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3"
 export ARTIFACTS_PATHS=appcast.xml
-artifacts upload
+#artifacts upload
 
 pip install awscli
 export AWS_ACCESS_KEY_ID=$UPDATE_S3_KEY
