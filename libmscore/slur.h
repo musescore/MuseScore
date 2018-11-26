@@ -67,12 +67,12 @@ class Slur final : public SlurTie {
       virtual void setTrack(int val) override;
       virtual void slurPos(SlurPos*) override;
 
-      bool readProperties(XmlReader&);
-
-      SlurSegment* frontSegment() const   { return (SlurSegment*)spannerSegments().front(); }
-      SlurSegment* backSegment() const    { return (SlurSegment*)spannerSegments().back();  }
-      SlurSegment* takeLastSegment()      { return (SlurSegment*)spannerSegments().takeLast(); }
-      SlurSegment* segmentAt(int n) const { return (SlurSegment*)spannerSegments().at(n); }
+      SlurSegment* frontSegment()               { return toSlurSegment(Spanner::frontSegment()); }
+      const SlurSegment* frontSegment() const   { return toSlurSegment(Spanner::frontSegment()); }
+      SlurSegment* backSegment()                { return toSlurSegment(Spanner::backSegment());  }
+      const SlurSegment* backSegment() const    { return toSlurSegment(Spanner::backSegment());  }
+      SlurSegment* segmentAt(int n)             { return toSlurSegment(Spanner::segmentAt(n));   }
+      const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n));   }
       virtual SlurTieSegment* newSlurTieSegment() override { return new SlurSegment(score()); }
       };
 

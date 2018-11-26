@@ -123,11 +123,11 @@ void TieSegment::changeAnchor(EditData& ed, Element* element)
                   }
             }
 
-      int segments  = spanner()->spannerSegments().size();
+      const size_t segments  = spanner()->spannerSegments().size();
       ups(ed.curGrip).off = QPointF();
       spanner()->layout();
       if (spanner()->spannerSegments().size() != segments) {
-            QList<SpannerSegment*>& ss = spanner()->spannerSegments();
+            const std::vector<SpannerSegment*>& ss = spanner()->spannerSegments();
 
             TieSegment* newSegment = toTieSegment(ed.curGrip == Grip::END ? ss.back() : ss.front());
             score()->endCmd();
@@ -739,29 +739,5 @@ Note* Tie::endNote() const
       {
       return toNote(endElement());
       }
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Tie::readProperties(XmlReader& e)
-      {
-      const QStringRef& tag(e.name());
-
-      if (tag == "TieSegment") {
-            int idx = e.intAttribute("no", 0);
-            int n = spannerSegments().size();
-            for (int i = n; i < idx; ++i)
-                  add(new TieSegment(score()));
-            TieSegment* segment = new TieSegment(score());
-            segment->read(e);
-            add(segment);
-            }
-      else if (!SlurTie::readProperties(e))
-            return false;
-      return true;
-      }
-
-
 }
 

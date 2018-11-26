@@ -289,14 +289,6 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v)
 void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
       {
       bool doUpdateInspector = false;
-      if (isBracket()) {
-            // brackets do not survive layout() and therefore cannot be on
-            // the undo stack; delegate to BracketItem:
-
-            BracketItem* bi = toBracket(this)->bracketItem();
-            bi->undoChangeProperty(id, v, ps);
-            return;
-            }
       if (id == Pid::PLACEMENT) {
             // first set placment, then set offset for above/below if styled
             changeProperties(this, id, v, ps);

@@ -2251,7 +2251,7 @@ void readHairpin206(XmlReader& e, Hairpin* h)
             h->setContinueText("");
             h->setEndText("");
             }
-      h->spannerSegments().clear();
+      h->eraseSpannerSegments();
 #if 0
       for (auto ss : h->spannerSegments()) {
             ss->setOffset(QPointF());
@@ -2733,8 +2733,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Spanner* sp = toSpanner(Element::name2Element(tag, score));
                   sp->setTrack(e.track());
                   sp->setTick(e.tick());
-                  qDeleteAll(sp->spannerSegments());
-                  sp->spannerSegments().clear();
+                  sp->eraseSpannerSegments();
                   e.addSpanner(e.intAttribute("id", -1), sp);
 
                   if (tag == "Volta")

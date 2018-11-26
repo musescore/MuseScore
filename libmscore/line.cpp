@@ -740,19 +740,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
       int stick = system->firstMeasure()->tick();
       int etick = system->lastMeasure()->endTick();
 
-      LineSegment* lineSegm = 0;
-      for (SpannerSegment* ss : segments) {
-            if (!ss->system()) {
-                  lineSegm = toLineSegment(ss);
-                  break;
-                  }
-            }
-      if (!lineSegm) {
-            lineSegm = createLineSegment();
-            add(lineSegm);
-            }
-      lineSegm->setSystem(system);
-      lineSegm->setSpanner(this);
+      LineSegment* lineSegm = toLineSegment(getNextLayoutSystemSegment(system, [this]() { return createLineSegment(); }));
 
       SpannerSegmentType sst;
       if (tick() >= stick) {
@@ -822,35 +810,10 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   qreal len = p2.x() - x1;
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
                   lineSegm->setPos2(QPointF(len, 0.0));
-#if 1
-                  QList<SpannerSegment*> sl;
-                  for (SpannerSegment* ss : segments) {
-                        if (ss->system())
-                              sl.push_back(ss);
-                        else {
-                              qDebug("delete spanner segment %s", ss->name());
-                              score()->selection().remove(ss);
-                              delete ss;
-                              }
-                        }
-                  segments.swap(sl);
-#endif
                   }
                   break;
             }
       lineSegm->layout();
-#if 0
-      QList<SpannerSegment*> sl;
-      for (SpannerSegment* ss : segments) {
-            if (ss->system())
-                  sl.push_back(ss);
-            else {
-                  qDebug("delete spanner segment %s", ss->name());
-                  delete ss;
-                  }
-            }
-      segments.swap(sl);
-#endif
       return lineSegm;
       }
 
@@ -903,30 +866,15 @@ void SLine::layout()
       int segCount = spannerSegments().size();
 
       if (segmentsNeeded != segCount) {
+            fixupSegments(segmentsNeeded, [this]() { return createLineSegment(); });
             if (segmentsNeeded > segCount) {
-                  int n = segmentsNeeded - segCount;
-                  for (int i = 0; i < n; ++i) {
-                        LineSegment* lineSegm = createLineSegment();
-                        add(lineSegm);
+                  for (int i = segCount; i < segmentsNeeded; ++i) {
+                        LineSegment* lineSegm = segmentAt(i);
                         // set user offset to previous segment's offset
                         if (segCount > 0)
-                              lineSegm->setOffset(QPointF(0, segmentAt(segCount+i-1)->offset().y()));
+                              lineSegm->setOffset(QPointF(0, segmentAt(i-1)->offset().y()));
                         else
                               lineSegm->setOffset(QPointF(0, offset().y()));
-                        }
-                  }
-            else {
-                  int n = segCount - segmentsNeeded;
-//                  qDebug("SLine: segments %d needed %d, remove %d", segCount, segmentsNeeded, n);
-                  for (int i = 0; i < n; ++i) {
-                        if (spannerSegments().empty()) {
-                              qDebug("SLine::layout(): no segment %d, %d expected", i, n);
-                              break;
-                              }
-                        else {
-                              /*LineSegment* lineSegm =*/ takeLastSegment();
-//                              delete lineSegm;
-                              }
                         }
                   }
             }
@@ -1018,7 +966,7 @@ void SLine::writeProperties(XmlWriter& xml) const
       if (score() == gscore) {
             // when used as icon
             if (!spannerSegments().empty()) {
-                  LineSegment* s = frontSegment();
+                  const LineSegment* s = frontSegment();
                   xml.tag("length", s->pos2().x());
                   }
             else
@@ -1142,9 +1090,7 @@ void SLine::write(XmlWriter& xml) const
 
 void SLine::read(XmlReader& e)
       {
-      foreach(SpannerSegment* seg, spannerSegments())
-            delete seg;
-      spannerSegments().clear();
+      eraseSpannerSegments();
 
       if (score()->mscVersion() < 301)
             e.addSpanner(e.intAttribute("id", -1), this);

@@ -190,6 +190,21 @@ void SpannerSegment::reset()
       }
 
 //---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void SpannerSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+      {
+      if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
+            // Switching autoplacement on. Save user-defined
+            // placement properties to undo stack.
+            undoPushProperty(Pid::OFFSET2);
+            // other will be saved in Element::undoChangeProperty
+            }
+      Element::undoChangeProperty(pid, val, ps);
+      }
+
+//---------------------------------------------------------
 //   setSelected
 //---------------------------------------------------------
 
@@ -289,7 +304,8 @@ Spanner::Spanner(const Spanner& s)
 
 Spanner::~Spanner()
       {
-      qDeleteAll(spannerSegments());
+      qDeleteAll(segments);
+      qDeleteAll(unusedSegments);
       }
 
 //---------------------------------------------------------
@@ -303,7 +319,7 @@ void Spanner::add(Element* e)
       ls->setSelected(selected());
       ls->setTrack(track());
 //      ls->setAutoplace(autoplace());
-      segments.append(ls);
+      segments.push_back(ls);
       }
 
 //---------------------------------------------------------
@@ -315,7 +331,7 @@ void Spanner::remove(Element* e)
       SpannerSegment* ss = toSpannerSegment(e);
       if (ss->system())
             ss->system()->remove(ss);
-      segments.removeOne(ss);
+      segments.erase(std::remove(segments.begin(), segments.end(), ss), segments.end());
       }
 
 //---------------------------------------------------------
@@ -966,6 +982,107 @@ void Spanner::triggerLayout() const
       }
 
 //---------------------------------------------------------
+//   pushUnusedSegment
+//---------------------------------------------------------
+
+void Spanner::pushUnusedSegment(SpannerSegment* seg)
+      {
+      if (!seg)
+            return;
+      seg->setSystem(nullptr);
+      unusedSegments.push_back(seg);
+      }
+
+//---------------------------------------------------------
+//   popUnusedSegment
+//    Take the next unused segment for reusing it.
+//    If there is no unused segments left returns nullptr.
+//---------------------------------------------------------
+
+SpannerSegment* Spanner::popUnusedSegment()
+      {
+      if (unusedSegments.empty())
+            return nullptr;
+      SpannerSegment* seg = unusedSegments.front();
+      unusedSegments.pop_front();
+      return seg;
+      }
+
+//---------------------------------------------------------
+//   reuse
+//    called when segment from unusedSegments is added
+//    back to the spanner.
+//---------------------------------------------------------
+
+void Spanner::reuse(SpannerSegment* seg)
+      {
+      add(seg);
+      }
+
+//---------------------------------------------------------
+//   reuseSegments
+//    Adds \p number segments from unusedSegments to this
+//    spanner via reuse() call. Returns number of new
+//    segments that still need to be created, that is,
+//    returns (number - nMovedSegments).
+//---------------------------------------------------------
+
+int Spanner::reuseSegments(int number)
+      {
+      while (number > 0) {
+            SpannerSegment* seg = popUnusedSegment();
+            if (!seg)
+                  break;
+            reuse(seg);
+            --number;
+            }
+      return number;
+      }
+
+//---------------------------------------------------------
+//   fixupSegments
+//    Makes number of segments match targetNumber.
+//    Tries to reuse unused segments. If there are no
+//    unused segments left, uses \p createSegment to create
+//    the needed segments.
+//    Previously unused segments are added via reuse() call
+//---------------------------------------------------------
+
+void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment*()> createSegment)
+      {
+      const int diff = targetNumber - segments.size();
+      if (diff == 0)
+            return;
+      if (diff > 0) {
+            const int ncreate = reuseSegments(diff);
+            for (int i = 0; i < ncreate; ++i)
+                  add(createSegment());
+            }
+      else { // diff < 0
+            const int nremove = -diff;
+            for (int i = 0; i < nremove; ++i) {
+                  SpannerSegment* seg = segments.back();
+                  segments.pop_back();
+                  pushUnusedSegment(seg);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   eraseSpannerSegments
+//    Completely erase all spanner segments, both used and
+//    unused.
+//---------------------------------------------------------
+
+void Spanner::eraseSpannerSegments()
+      {
+      qDeleteAll(segments);
+      qDeleteAll(unusedSegments);
+      segments.clear();
+      unusedSegments.clear();
+      }
+
+//---------------------------------------------------------
 //   layoutSystem
 //---------------------------------------------------------
 
@@ -973,6 +1090,51 @@ SpannerSegment* Spanner::layoutSystem(System*)
       {
       qDebug(" %s", name());
       return 0;
+      }
+
+//---------------------------------------------------------
+//   getNextLayoutSystemSegment
+//---------------------------------------------------------
+
+SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::function<SpannerSegment*()> createSegment)
+      {
+      SpannerSegment* seg = nullptr;
+      for (SpannerSegment* ss : spannerSegments()) {
+            if (!ss->system()) {
+                  seg = ss;
+                  break;
+                  }
+            }
+      if (!seg) {
+            if ((seg = popUnusedSegment()))
+                  reuse(seg);
+            else {
+                  seg = createSegment();
+                  Q_ASSERT(seg);
+                  add(seg);
+                  }
+            }
+      seg->setSystem(system);
+      seg->setSpanner(this);
+      return seg;
+      }
+
+//---------------------------------------------------------
+//   layoutSystemsDone
+//    Called after layout of all systems is done so precise
+//    number of systems for this spanner becomes available.
+//---------------------------------------------------------
+
+void Spanner::layoutSystemsDone()
+      {
+      std::vector<SpannerSegment*> validSegments;
+      for (SpannerSegment* seg : segments) {
+            if (seg->system())
+                  validSegments.push_back(seg);
+            else // TODO: score()->selection().remove(ss); needed?
+                  pushUnusedSegment(seg);
+            }
+      segments = std::move(validSegments);
       }
 
 //--------------------------------------------------
@@ -1166,7 +1328,7 @@ void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
             MuseScoreCore::mscoreCore->updateInspector();
             return;
             }
-      ScoreElement::undoChangeProperty(id, v, ps);
+      Element::undoChangeProperty(id, v, ps);
       }
 
 }

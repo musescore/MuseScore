@@ -179,19 +179,7 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
 
 //      qDebug("%s %p %d-%d %d-%d", name(), this, stick, etick, tick(), tick2());
 
-      LyricsLineSegment* lineSegm = 0;
-      for (SpannerSegment* ss : segments) {
-            if (!ss->system()) {
-                  lineSegm = toLyricsLineSegment(ss);
-                  break;
-                  }
-            }
-      if (!lineSegm) {
-            lineSegm = toLyricsLineSegment(createLineSegment());
-            add(lineSegm);
-            }
-      lineSegm->setSystem(system);
-      lineSegm->setSpanner(this);
+      LyricsLineSegment* lineSegm = toLyricsLineSegment(getNextLayoutSystemSegment(system, [this]() { return createLineSegment(); }));
 
       SpannerSegmentType sst;
       if (tick() >= stick) {
@@ -265,19 +253,6 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
                   qreal len = p2.x() - x1;
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
                   lineSegm->setPos2(QPointF(len, 0.0));
-#if 1
-                  QList<SpannerSegment*> sl;
-                  for (SpannerSegment* ss : segments) {
-                        if (ss->system())
-                              sl.push_back(ss);
-                        else {
-                              qDebug("delete spanner segment %s", ss->name());
-                              score()->selection().remove(ss);
-                              delete ss;
-                              }
-                        }
-                  segments.swap(sl);
-#endif
                   }
                   break;
             }
@@ -286,20 +261,8 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
       // after the lyrics syllable (otherwise the melisma segment
       // will be too short).
       const bool tempMelismaTicks = (lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
-      if (tempMelismaTicks && segments.size() > 0 && segments.front() == lineSegm)
+      if (tempMelismaTicks && spannerSegments().size() > 0 && spannerSegments().front() == lineSegm)
             lineSegm->rxpos2() += lyrics()->width();
-#if 0
-      QList<SpannerSegment*> sl;
-      for (SpannerSegment* ss : segments) {
-            if (ss->system())
-                  sl.push_back(ss);
-            else {
-                  qDebug("delete spanner segment %s", ss->name());
-                  delete ss;
-                  }
-            }
-      segments.swap(sl);
-#endif
       return lineSegm;
       }
 

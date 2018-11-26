@@ -432,6 +432,18 @@ QVariant Bracket::propertyDefault(Pid id) const
       }
 
 //---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void Bracket::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+      {
+      // brackets do not survive layout() and therefore cannot be on
+      // the undo stack; delegate to BracketItem:
+      BracketItem* bi = bracketItem();
+      bi->undoChangeProperty(id, v, ps);
+      }
+
+//---------------------------------------------------------
 //   setSelected
 //---------------------------------------------------------
 

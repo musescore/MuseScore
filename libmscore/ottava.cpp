@@ -268,8 +268,7 @@ void Ottava::write(XmlWriter& xml) const
 
 void Ottava::read(XmlReader& e)
       {
-      qDeleteAll(spannerSegments());
-      spannerSegments().clear();
+      eraseSpannerSegments();
       if (score()->mscVersion() < 301)
             e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement())
