@@ -335,11 +335,6 @@ void LayoutContext::layoutLinear()
                   for (SpannerSegment* ss : voltaSegments)
                         ss->ryoffset() = y;
                   }
-            for (Spanner* sp : score->unmanagedSpanners()) {
-                  if (sp->tick() >= etick || sp->tick2() < stick)
-                        continue;
-                  sp->layout();
-                  }
             }
 
       //
@@ -406,6 +401,12 @@ void LayoutContext::layoutLinear()
             }
 
       score->layoutLyrics(system);
+
+      for (Spanner* sp : score->unmanagedSpanners()) {
+            if (sp->tick() >= etick || sp->tick2() <= stick)
+                  continue;
+            sp->layoutSystem(system);
+            }
 
       system->layout2();   // compute staff distances
 
