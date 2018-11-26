@@ -461,6 +461,11 @@ void Selection::updateSelectedElements()
                                       // are needed to prevent bug #173381.
                                       // This should exclude any segments belonging
                                       // to MM-rest range from the selection.
+            if (s1 && s2 && s1->tick() + s1->ticks() > s2->tick()) {
+                  // can happen with MM rests as tick2measure returns only
+                  // the first segment for them.
+                  return;
+                  }
             setRange(s1, s2, staffStart, staffEnd);
             _plannedTick1 = -1;
             _plannedTick2 = -1;
