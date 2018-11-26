@@ -76,6 +76,7 @@
 #include "scorePreview.h"
 #include "scorecmp/scorecmp.h"
 #include "extension.h"
+#include "tourhandler.h"
 
 #ifdef OMR
 #include "omr/omr.h"
@@ -296,6 +297,7 @@ void MuseScore::loadFiles(bool switchTab, bool singleFile)
          );
       for (const QString& s : files)
             openScore(s, switchTab);
+      mscore->tourHandler()->showDelayedWelcomeTour();
       }
 
 //---------------------------------------------------------
@@ -786,6 +788,7 @@ void MuseScore::newFile()
       MasterScore* score = getNewFile();
       if (score)
             setCurrentScoreView(appendScore(score));
+      mscore->tourHandler()->showDelayedWelcomeTour();
       }
 
 //---------------------------------------------------------
