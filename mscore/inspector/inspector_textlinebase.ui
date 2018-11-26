@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorTextLineBase</class>
  <widget class="QWidget" name="InspectorTextLineBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>355</width>
+    <height>769</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Text Line Core Inspector</string>
   </property>
@@ -487,47 +495,21 @@
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="endFontBold">
-             <property name="accessibleName">
-              <string>Bold</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../musescore.qrc">
-               <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="endFontItalic">
-             <property name="accessibleName">
-              <string>Italic</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../musescore.qrc">
-               <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="endFontUnderline">
-             <property name="accessibleName">
-              <string>Underline</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../musescore.qrc">
-               <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
+            <widget class="Ms::FontStyleSelect" name="endFontStyle" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>0</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -829,47 +811,21 @@
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="continueFontBold">
-             <property name="accessibleName">
-              <string>Bold</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../musescore.qrc">
-               <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="continueFontItalic">
-             <property name="accessibleName">
-              <string>Italic</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../musescore.qrc">
-               <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="continueFontUnderline">
-             <property name="accessibleName">
-              <string>Underline</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../musescore.qrc">
-               <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
+            <widget class="Ms::FontStyleSelect" name="continueFontStyle" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>0</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -1156,47 +1112,21 @@
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="beginFontBold">
-             <property name="accessibleName">
-              <string>Bold</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../musescore.qrc">
-               <normaloff>:/data/icons/format-text-bold.svg</normaloff>:/data/icons/format-text-bold.svg</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="beginFontItalic">
-             <property name="accessibleName">
-              <string>Italic</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../musescore.qrc">
-               <normaloff>:/data/icons/format-text-italic.svg</normaloff>:/data/icons/format-text-italic.svg</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="beginFontUnderline">
-             <property name="accessibleName">
-              <string>Underline</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../musescore.qrc">
-               <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
+            <widget class="Ms::FontStyleSelect" name="beginFontStyle" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>0</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -1278,6 +1208,12 @@
    <header>inspector/offsetSelect.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>Ms::FontStyleSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/fontStyleSelect.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
@@ -1296,9 +1232,6 @@
   <tabstop>resetBeginFontFace</tabstop>
   <tabstop>beginFontSize</tabstop>
   <tabstop>resetBeginFontSize</tabstop>
-  <tabstop>beginFontBold</tabstop>
-  <tabstop>beginFontItalic</tabstop>
-  <tabstop>beginFontUnderline</tabstop>
   <tabstop>resetBeginFontStyle</tabstop>
   <tabstop>resetBeginTextAlign</tabstop>
   <tabstop>beginTextPlacement</tabstop>
@@ -1311,9 +1244,6 @@
   <tabstop>resetContinueFontFace</tabstop>
   <tabstop>continueFontSize</tabstop>
   <tabstop>resetContinueFontSize</tabstop>
-  <tabstop>continueFontBold</tabstop>
-  <tabstop>continueFontItalic</tabstop>
-  <tabstop>continueFontUnderline</tabstop>
   <tabstop>resetContinueFontStyle</tabstop>
   <tabstop>resetContinueTextAlign</tabstop>
   <tabstop>continueTextPlacement</tabstop>
@@ -1326,9 +1256,6 @@
   <tabstop>resetEndFontFace</tabstop>
   <tabstop>endFontSize</tabstop>
   <tabstop>resetEndFontSize</tabstop>
-  <tabstop>endFontBold</tabstop>
-  <tabstop>endFontItalic</tabstop>
-  <tabstop>endFontUnderline</tabstop>
   <tabstop>resetEndFontStyle</tabstop>
   <tabstop>resetEndTextAlign</tabstop>
   <tabstop>endTextPlacement</tabstop>

@@ -273,7 +273,7 @@ struct StyleVal2 {
       { Sid::scaleBarlines,               QVariant(true) },
       { Sid::barGraceDistance,            QVariant(.6) },
       { Sid::rehearsalMarkFrameRound,     QVariant(20)    },
-      { Sid::dynamicsFontItalic,          QVariant(false) },
+      { Sid::dynamicsFontStyle,           int(FontStyle::Normal) },
 
 //      { Sid::staffTextFontFace,           "FreeSerif" },
 //      { Sid::staffTextFontSize,           10.0 },
@@ -417,9 +417,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
       QString family = "FreeSerif";
       double size = 10;
       bool sizeIsSpatiumDependent = false;
-      bool bold = false;
-      bool italic = false;
-      bool underline = false;
+      FontStyle fontStyle = FontStyle::Normal;
       Align align = Align::LEFT;
       QPointF offset;
       OffsetType offsetType = OffsetType::SPATIUM;
@@ -448,12 +446,18 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   family = e.readElementText();
             else if (tag == "size")
                   size = e.readDouble();
-            else if (tag == "bold")
-                  bold = e.readInt();
-            else if (tag == "italic")
-                  italic = e.readInt();
-            else if (tag == "underline")
-                  underline = e.readInt();
+            else if (tag == "bold") {
+                  if (e.readInt())
+                        fontStyle = fontStyle + FontStyle::Bold;
+                  }
+            else if (tag == "italic") {
+                  if (e.readInt())
+                        fontStyle = fontStyle + FontStyle::Italic;
+                  }
+            else if (tag == "underline") {
+                  if (e.readInt())
+                        fontStyle = fontStyle + FontStyle::Underline;
+                  }
             else if (tag == "align")
                   align = Align(e.readInt());
             else if (tag == "anchor")     // obsolete
@@ -633,23 +637,11 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   case Pid::FONT_SIZE:
                         value = size;
                         break;
-                  case Pid::BEGIN_FONT_BOLD:
-                  case Pid::CONTINUE_FONT_BOLD:
-                  case Pid::END_FONT_BOLD:
-                  case Pid::FONT_BOLD:
-                        value = bold;
-                        break;
-                  case Pid::BEGIN_FONT_ITALIC:
-                  case Pid::CONTINUE_FONT_ITALIC:
-                  case Pid::END_FONT_ITALIC:
-                  case Pid::FONT_ITALIC:
-                        value = italic;
-                        break;
-                  case Pid::BEGIN_FONT_UNDERLINE:
-                  case Pid::CONTINUE_FONT_UNDERLINE:
-                  case Pid::END_FONT_UNDERLINE:
-                  case Pid::FONT_UNDERLINE:
-                        value = underline;
+                  case Pid::BEGIN_FONT_STYLE:
+                  case Pid::CONTINUE_FONT_STYLE:
+                  case Pid::END_FONT_STYLE:
+                  case Pid::FONT_STYLE:
+                        value = int(fontStyle);
                         break;
                   case Pid::FRAME_TYPE:
                         value = int(frameType);
@@ -1556,7 +1548,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
                   _number->setVisible(tuplet->visible());     //?? override saved property
                   _number->setTrack(tuplet->track());
                   // move property flags from _number
-                  for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+                  for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN })
                         tuplet->setPropertyFlags(p, _number->propertyFlags(p));
                   }
             else if (!readTupletProperties206(e, tuplet))
@@ -1662,13 +1654,13 @@ bool readTupletProperties206(XmlReader& e, Tuplet* de)
             _number->setParent(de);
 //            _number->setSubStyleId(SubStyleId::TUPLET);
 //            initSubStyle(SubStyleId::TUPLET);   // hack: initialize number
-            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN })
                   _number->resetProperty(p);
             readText206(e, _number, de);
             _number->setVisible(de->visible());     //?? override saved property
             _number->setTrack(de->track());
             // move property flags from _number
-            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN })
                   de->setPropertyFlags(p, _number->propertyFlags(p));
             }
       else if (!readDurationProperties206(e, de))

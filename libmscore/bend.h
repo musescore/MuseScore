@@ -25,12 +25,10 @@ namespace Ms {
 //---------------------------------------------------------
 
 class Bend final : public Element {
-      M_PROPERTY(QString, fontFace,      setFontFace)
-      M_PROPERTY(qreal,   fontSize,      setFontSize)
-      M_PROPERTY(bool,    fontBold,      setFontBold)
-      M_PROPERTY(bool,    fontItalic,    setFontItalic)
-      M_PROPERTY(bool,    fontUnderline, setFontUnderline)
-      M_PROPERTY(Spatium, lineWidth,     setLineWidth)
+      M_PROPERTY(QString,   fontFace,  setFontFace)
+      M_PROPERTY(qreal,     fontSize,  setFontSize)
+      M_PROPERTY(FontStyle, fontStyle, setFontStyle)
+      M_PROPERTY(Spatium,   lineWidth, setLineWidth)
 
       bool _playBend     { true };
       QList<PitchValue> _points;

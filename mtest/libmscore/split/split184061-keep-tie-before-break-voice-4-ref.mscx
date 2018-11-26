@@ -21,7 +21,6 @@
       <pedalPosBelow x="0" y="0"/>
       <trillPosAbove x="0" y="0"/>
       <minMMRestWidth>0</minMMRestWidth>
-      <dynamicsFontItalic>0</dynamicsFontItalic>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

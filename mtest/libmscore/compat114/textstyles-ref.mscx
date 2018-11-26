@@ -1675,18 +1675,23 @@
         <bottomMargin>5</bottomMargin>
         <Text>
           <style>Title</style>
+          <family>FreeSerif</family>
+          <size>24</size>
           <text><font size="28"/><font face="MuseJazz"/><b>Title</b></text>
           </Text>
         <Text>
           <style>Subtitle</style>
+          <family>FreeSerif</family>
           <text><font face="MuseJazz"/>Subtitle</text>
           </Text>
         <Text>
           <style>Composer</style>
+          <family>FreeSerif</family>
           <text><font face="MuseJazz"/>Composer</text>
           </Text>
         <Text>
           <style>Lyricist</style>
+          <family>FreeSerif</family>
           <text><font face="MuseJazz"/>Lyricist</text>
           </Text>
         </VBox>

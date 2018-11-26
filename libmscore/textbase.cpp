@@ -46,9 +46,7 @@ static const qreal superScriptOffset = -.9;      // of x-height
 
 bool CharFormat::operator==(const CharFormat& cf) const
       {
-      return cf.bold()      == bold()
-         && cf.italic()     == italic()
-         && cf.underline()  == underline()
+      return cf.style()     == style()
          && cf.preedit()    == preedit()
          && cf.valign()     == valign()
          && cf.fontSize()   == fontSize()
@@ -73,9 +71,7 @@ void TextCursor::init()
       {
       _format.setFontFamily(_text->family());
       _format.setFontSize(_text->size());
-      _format.setBold(_text->bold());
-      _format.setItalic(_text->italic());
-      _format.setUnderline(_text->underline());
+      _format.setStyle(_text->fontStyle());
       _format.setPreedit(false);
       _format.setValign(VerticalAlignment::AlignNormal);
       }
@@ -973,13 +969,13 @@ void CharFormat::setFormat(FormatId id, QVariant data)
       {
       switch (id) {
             case FormatId::Bold:
-                  _bold = data.toBool();
+                  setBold(data.toBool());
                   break;
             case FormatId::Italic:
-                  _italic = data.toBool();
+                  setItalic(data.toBool());
                   break;
             case FormatId::Underline:
-                  _underline = data.toBool();
+                  setUnderline(data.toBool());
                   break;
             case FormatId::Valign:
                   _valign = static_cast<VerticalAlignment>(data.toInt());
@@ -1073,9 +1069,7 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
       _tid                    = tid;
       _family                 = "FreeSerif";
       _size                   = 10.0;
-      _bold                   = false;
-      _italic                 = false;
-      _underline              = false;
+      _fontStyle              = FontStyle::Normal;
       _bgColor                = QColor(255, 255, 255, 0);
       _frameColor             = QColor(0, 0, 0, 255);
       _align                  = Align::LEFT;
@@ -1104,9 +1098,7 @@ TextBase::TextBase(const TextBase& st)
       _tid                         = st._tid;
       _family                      = st._family;
       _size                        = st._size;
-      _bold                        = st._bold;
-      _italic                      = st._italic;
-      _underline                   = st._underline;
+      _fontStyle                   = st._fontStyle;
       _bgColor                     = st._bgColor;
       _frameColor                  = st._frameColor;
       _align                       = st._align;
@@ -1245,17 +1237,24 @@ void TextBase::createLayout()
                   }
             else if (state == 1) {
                   if (c == '>') {
+                        bool unstyleFontStyle = false;
                         state = 0;
-                        if (token == "b")
+                        if (token == "b") {
                               cursor.format()->setBold(true);
+                              unstyleFontStyle = true;
+                              }
                         else if (token == "/b")
                               cursor.format()->setBold(false);
-                        else if (token == "i")
+                        else if (token == "i") {
                               cursor.format()->setItalic(true);
+                              unstyleFontStyle = true;
+                              }
                         else if (token == "/i")
                               cursor.format()->setItalic(false);
-                        else if (token == "u")
+                        else if (token == "u") {
                               cursor.format()->setUnderline(true);
+                              unstyleFontStyle = true;
+                              }
                         else if (token == "/u")
                               cursor.format()->setUnderline(false);
                         else if (token == "sub")
@@ -1289,17 +1288,22 @@ void TextBase::createLayout()
                               }
                         else if (token.startsWith("font ")) {
                               token = token.mid(5);
-                              if (token.startsWith("size=\""))
+                              if (token.startsWith("size=\"")) {
                                     cursor.format()->setFontSize(parseNumProperty(token.mid(6)));
+                                    setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
+                                    }
                               else if (token.startsWith("face=\"")) {
                                     QString face = parseStringProperty(token.mid(6));
                                     face = unEscape(face);
                                     cursor.format()->setFontFamily(face);
+                                    setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
                                     }
                               else
                                     qDebug("cannot parse html property <%s> in text <%s>",
                                        qPrintable(token), qPrintable(_text));
                               }
+                        if (unstyleFontStyle)
+                              setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
                         }
                   else
                         token += c;
@@ -1562,9 +1566,7 @@ void TextBase::genText()
       CharFormat fmt;
       fmt.setFontFamily(family());
       fmt.setFontSize(size());
-      fmt.setBold(bold());
-      fmt.setItalic(italic());
-      fmt.setUnderline(underline());
+      fmt.setStyle(fontStyle());
       fmt.setPreedit(false);
       fmt.setValign(VerticalAlignment::AlignNormal);
 
@@ -1693,9 +1695,7 @@ static constexpr std::array<Pid, 18> pids { {
       Pid::SUB_STYLE,
       Pid::FONT_FACE,
       Pid::FONT_SIZE,
-      Pid::FONT_BOLD,
-      Pid::FONT_ITALIC,
-      Pid::FONT_UNDERLINE,
+      Pid::FONT_STYLE,
       Pid::FRAME_TYPE,
       Pid::FRAME_WIDTH,
       Pid::FRAME_PADDING,
@@ -1718,6 +1718,33 @@ bool TextBase::readProperties(XmlReader& e)
             }
       if (tag == "text")
             setXmlText(e.readXml());
+      else if (tag == "bold") {
+            bool val = e.readInt();
+            if (val)
+                  _fontStyle = _fontStyle + FontStyle::Bold;
+            else
+                  _fontStyle = _fontStyle - FontStyle::Bold;
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "italic") {
+            bool val = e.readInt();
+            if (val)
+                  _fontStyle = _fontStyle + FontStyle::Italic;
+            else
+                  _fontStyle = _fontStyle - FontStyle::Italic;
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "underline") {
+            bool val = e.readInt();
+            if (val)
+                  _fontStyle = _fontStyle + FontStyle::Underline;
+            else
+                  _fontStyle = _fontStyle - FontStyle::Underline;
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
       else if (!Element::readProperties(e))
             return false;
       return true;
@@ -2225,9 +2252,9 @@ QFont TextBase::font() const
       qreal m = _size;
       if (sizeIsSpatiumDependent())
             m *= spatium() / SPATIUM20;
-      QFont f(_family, m, _bold ? QFont::Bold : QFont::Normal, _italic);
-      if (_underline)
-            f.setUnderline(_underline);
+      QFont f(_family, m, bold() ? QFont::Bold : QFont::Normal, italic());
+      if (underline())
+            f.setUnderline(underline());
       return f;
       }
 
@@ -2253,12 +2280,8 @@ QVariant TextBase::getProperty(Pid propertyId) const
                   return family();
             case Pid::FONT_SIZE:
                   return size();
-            case Pid::FONT_BOLD:
-                  return bold();
-            case Pid::FONT_ITALIC:
-                  return italic();
-            case Pid::FONT_UNDERLINE:
-                  return underline();
+            case Pid::FONT_STYLE:
+                  return int(fontStyle());
             case Pid::FRAME_TYPE:
                   return int(frameType());
             case Pid::FRAME_WIDTH:
@@ -2299,14 +2322,8 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
             case Pid::FONT_SIZE:
                   setSize(v.toReal());
                   break;
-            case Pid::FONT_BOLD:
-                  setBold(v.toBool());
-                  break;
-            case Pid::FONT_ITALIC:
-                  setItalic(v.toBool());
-                  break;
-            case Pid::FONT_UNDERLINE:
-                  setUnderline(v.toBool());
+            case Pid::FONT_STYLE:
+                  setFontStyle(FontStyle(v.toInt()));
                   break;
             case Pid::FRAME_TYPE:
                   setFrameType(FrameType(v.toInt()));
@@ -2628,6 +2645,157 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
 
       p->drawRect(r);
       pen = QPen(MScore::defaultColor, 0.0);
+      }
+
+//---------------------------------------------------------
+//   hasCustomFormatting
+//---------------------------------------------------------
+
+bool TextBase::hasCustomFormatting() const
+      {
+      CharFormat fmt;
+      fmt.setFontFamily(family());
+      fmt.setFontSize(size());
+      fmt.setStyle(fontStyle());
+      fmt.setPreedit(false);
+      fmt.setValign(VerticalAlignment::AlignNormal);
+
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  if (f.text.isEmpty())                     // skip empty fragments, not to
+                        continue;                           // insert extra HTML formatting
+                  const CharFormat& format = f.format;
+                  if (fmt.style() != format.style())
+                        return true;
+                  if (format.fontSize() != fmt.fontSize())
+                        return true;
+                  if (format.fontFamily() != fmt.fontFamily())
+                        return true;
+
+                  VerticalAlignment va = format.valign();
+                  VerticalAlignment cva = fmt.valign();
+                  if (cva != va)
+                        return true;
+                  }
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   stripText
+//    remove some custom text formatting and return
+//    result as xml string
+//---------------------------------------------------------
+
+QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) const
+      {
+      printf("===strip style %d size %d face %d\n", removeStyle, removeSize, removeFace);
+      QString _text;
+      bool bold_      = false;
+      bool italic_    = false;
+      bool underline_ = false;
+
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  if (!f.format.bold() && bold())
+                        bold_ = true;
+                  if (!f.format.italic() && italic())
+                        italic_ = true;
+                  if (!f.format.underline() && underline())
+                        underline_ = true;
+                  }
+            }
+      CharFormat fmt;
+      fmt.setFontFamily(family());
+      fmt.setFontSize(size());
+      fmt.setStyle(fontStyle());
+      fmt.setPreedit(false);
+      fmt.setValign(VerticalAlignment::AlignNormal);
+
+      XmlNesting xmlNesting(&_text);
+      if (!removeStyle) {
+            if (bold_)
+                  xmlNesting.pushB();
+            if (italic_)
+                  xmlNesting.pushI();
+            if (underline_)
+                  xmlNesting.pushU();
+            }
+
+      for (const TextBlock& block : _layout) {
+            for (const TextFragment& f : block.fragments()) {
+                  if (f.text.isEmpty())                     // skip empty fragments, not to
+                        continue;                           // insert extra HTML formatting
+                  const CharFormat& format = f.format;
+                  if (!removeStyle) {
+                        if (fmt.bold() != format.bold()) {
+                              if (format.bold())
+                                    xmlNesting.pushB();
+                              else
+                                    xmlNesting.popB();
+                              }
+                        if (fmt.italic() != format.italic()) {
+                              if (format.italic())
+                                    xmlNesting.pushI();
+                              else
+                                    xmlNesting.popI();
+                              }
+                        if (fmt.underline() != format.underline()) {
+                              if (format.underline())
+                                    xmlNesting.pushU();
+                              else
+                                    xmlNesting.popU();
+                              }
+                        }
+
+                  if (!removeSize && (format.fontSize() != fmt.fontSize()))
+                        _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
+                  if (!removeFace && (format.fontFamily() != fmt.fontFamily()))
+                        _text += QString("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
+
+                  VerticalAlignment va = format.valign();
+                  VerticalAlignment cva = fmt.valign();
+                  if (cva != va) {
+                        switch (va) {
+                              case VerticalAlignment::AlignNormal:
+                                    xmlNesting.popToken(cva == VerticalAlignment::AlignSuperScript ? "sup" : "sub");
+                                    break;
+                              case VerticalAlignment::AlignSuperScript:
+                                    xmlNesting.pushToken("sup");
+                                    break;
+                              case VerticalAlignment::AlignSubScript:
+                                    xmlNesting.pushToken("sub");
+                                    break;
+                              }
+                        }
+                  _text += XmlWriter::xmlString(f.text);
+                  fmt = format;
+                  }
+            if (block.eol())
+                  _text += QChar::LineFeed;
+            }
+      while (!xmlNesting.empty())
+            xmlNesting.popToken();
+      return _text;
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void TextBase::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+      {
+      if (ps == PropertyFlags::STYLED && v == propertyDefault(id)) {
+            // this is a reset
+            // remove some custom formatting
+            if (id == Pid::FONT_STYLE)
+                  undoChangeProperty(Pid::TEXT, stripText(true, false, false), propertyFlags(id));
+            else if (id == Pid::FONT_SIZE)
+                  undoChangeProperty(Pid::TEXT, stripText(false, true, false), propertyFlags(id));
+            else if (id == Pid::FONT_FACE)
+                  undoChangeProperty(Pid::TEXT, stripText(false, false, true), propertyFlags(id));
+            }
+      Element::undoChangeProperty(id, v, ps);
       }
 
 }

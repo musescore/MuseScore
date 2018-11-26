@@ -28,15 +28,9 @@ static const ElementStyle letRingStyle {
       { Sid::letRingFontSize,                      Pid::BEGIN_FONT_SIZE        },
       { Sid::letRingFontSize,                      Pid::CONTINUE_FONT_SIZE     },
       { Sid::letRingFontSize,                      Pid::END_FONT_SIZE          },
-      { Sid::letRingFontBold,                      Pid::BEGIN_FONT_BOLD        },
-      { Sid::letRingFontBold,                      Pid::CONTINUE_FONT_BOLD     },
-      { Sid::letRingFontBold,                      Pid::END_FONT_BOLD          },
-      { Sid::letRingFontItalic,                    Pid::BEGIN_FONT_ITALIC      },
-      { Sid::letRingFontItalic,                    Pid::CONTINUE_FONT_ITALIC   },
-      { Sid::letRingFontItalic,                    Pid::END_FONT_ITALIC        },
-      { Sid::letRingFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE   },
-      { Sid::letRingFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE},
-      { Sid::letRingFontUnderline,                 Pid::END_FONT_UNDERLINE     },
+      { Sid::letRingFontStyle,                     Pid::BEGIN_FONT_STYLE       },
+      { Sid::letRingFontStyle,                     Pid::CONTINUE_FONT_STYLE    },
+      { Sid::letRingFontStyle,                     Pid::END_FONT_STYLE         },
       { Sid::letRingTextAlign,                     Pid::BEGIN_TEXT_ALIGN       },
       { Sid::letRingTextAlign,                     Pid::CONTINUE_TEXT_ALIGN    },
       { Sid::letRingTextAlign,                     Pid::END_TEXT_ALIGN         },
@@ -138,8 +132,8 @@ QVariant LetRing::propertyDefault(Pid propertyId) const
             case Pid::END_HOOK_HEIGHT:
                   return score()->styleV(Sid::letRingHookHeight);
 
-            case Pid::BEGIN_FONT_ITALIC:
-                  return score()->styleV(Sid::letRingFontItalic);
+            case Pid::BEGIN_FONT_STYLE:
+                  return score()->styleV(Sid::letRingFontStyle);
 
             case Pid::BEGIN_TEXT:
                   return score()->styleV(Sid::letRingText);
@@ -165,12 +159,8 @@ Sid LetRing::getPropertyStyle(Pid id) const
                   return Sid::letRingFontFace;
             case Pid::BEGIN_FONT_SIZE:
                   return Sid::letRingFontSize;
-            case Pid::BEGIN_FONT_BOLD:
-                  return Sid::letRingFontBold;
-            case Pid::BEGIN_FONT_ITALIC:
-                  return Sid::letRingFontItalic;
-            case Pid::BEGIN_FONT_UNDERLINE:
-                  return Sid::letRingFontUnderline;
+            case Pid::BEGIN_FONT_STYLE:
+                  return Sid::letRingFontStyle;
             case Pid::BEGIN_TEXT_ALIGN:
             case Pid::CONTINUE_TEXT_ALIGN:
             case Pid::END_TEXT_ALIGN:

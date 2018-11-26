@@ -28,15 +28,9 @@ static const ElementStyle palmMuteStyle {
       { Sid::palmMuteFontSize,                      Pid::BEGIN_FONT_SIZE        },
       { Sid::palmMuteFontSize,                      Pid::CONTINUE_FONT_SIZE     },
       { Sid::palmMuteFontSize,                      Pid::END_FONT_SIZE          },
-      { Sid::palmMuteFontBold,                      Pid::BEGIN_FONT_BOLD        },
-      { Sid::palmMuteFontBold,                      Pid::CONTINUE_FONT_BOLD     },
-      { Sid::palmMuteFontBold,                      Pid::END_FONT_BOLD          },
-      { Sid::palmMuteFontItalic,                    Pid::BEGIN_FONT_ITALIC      },
-      { Sid::palmMuteFontItalic,                    Pid::CONTINUE_FONT_ITALIC   },
-      { Sid::palmMuteFontItalic,                    Pid::END_FONT_ITALIC        },
-      { Sid::palmMuteFontUnderline,                 Pid::BEGIN_FONT_UNDERLINE   },
-      { Sid::palmMuteFontUnderline,                 Pid::CONTINUE_FONT_UNDERLINE},
-      { Sid::palmMuteFontUnderline,                 Pid::END_FONT_UNDERLINE     },
+      { Sid::palmMuteFontStyle,                     Pid::BEGIN_FONT_STYLE       },
+      { Sid::palmMuteFontStyle,                     Pid::CONTINUE_FONT_STYLE    },
+      { Sid::palmMuteFontStyle,                     Pid::END_FONT_STYLE         },
       { Sid::palmMuteTextAlign,                     Pid::BEGIN_TEXT_ALIGN       },
       { Sid::palmMuteTextAlign,                     Pid::CONTINUE_TEXT_ALIGN    },
       { Sid::palmMuteTextAlign,                     Pid::END_TEXT_ALIGN         },
@@ -161,8 +155,8 @@ QVariant PalmMute::propertyDefault(Pid propertyId) const
             case Pid::END_HOOK_HEIGHT:
                   return score()->styleV(Sid::palmMuteHookHeight);
 
-            case Pid::BEGIN_FONT_ITALIC:
-                  return score()->styleV(Sid::palmMuteFontItalic);
+//TODOws            case Pid::BEGIN_FONT_ITALIC:
+//                  return score()->styleV(Sid::palmMuteFontItalic);
 
             case Pid::BEGIN_TEXT:
                   return score()->styleV(Sid::palmMuteText);

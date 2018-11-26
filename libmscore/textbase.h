@@ -54,9 +54,7 @@ enum class FormatId : char {
 //---------------------------------------------------------
 
 class CharFormat {
-      bool _bold                { false };
-      bool _italic              { false };
-      bool _underline           { false };
+      FontStyle _style          { FontStyle::Normal };
       bool _preedit             { false };
       VerticalAlignment _valign { VerticalAlignment::AlignNormal };
       qreal _fontSize           { 12.0  };
@@ -65,17 +63,20 @@ class CharFormat {
    public:
       CharFormat() {}
       bool operator==(const CharFormat&) const;
-      bool bold() const                      { return _bold;        }
-      bool italic() const                    { return _italic;      }
-      bool underline() const                 { return _underline;   }
+
+      FontStyle style() const                { return _style;                         }
+      void setStyle(FontStyle s)             { _style = s;                            }
+      bool bold() const                      { return _style & FontStyle::Bold;       }
+      bool italic() const                    { return _style & FontStyle::Italic;     }
+      bool underline() const                 { return _style & FontStyle::Underline;  }
+      void setBold(bool val)                 { _style = val ? _style + FontStyle::Bold      : _style - FontStyle::Bold;      }
+      void setItalic(bool val)               { _style = val ? _style + FontStyle::Italic    : _style - FontStyle::Italic;    }
+      void setUnderline(bool val)            { _style = val ? _style + FontStyle::Underline : _style - FontStyle::Underline; }
+
       bool preedit() const                   { return _preedit;     }
       VerticalAlignment valign() const       { return _valign;      }
       qreal fontSize() const                 { return _fontSize;    }
       QString fontFamily() const             { return _fontFamily;  }
-
-      void setBold(bool val)                 { _bold        = val;  }
-      void setItalic(bool val)               { _italic      = val;  }
-      void setUnderline(bool val)            { _underline   = val;  }
       void setPreedit(bool val)              { _preedit     = val;  }
       void setValign(VerticalAlignment val)  { _valign      = val;  }
       void setFontSize(qreal val)            { Q_ASSERT(val > 0.0); _fontSize = val; }
@@ -206,9 +207,7 @@ class TextBlock {
 
 class TextBase : public Element {
       // sorted by size to allow for most compact memory layout
-      M_PROPERTY(bool,       bold,                   setBold)
-      M_PROPERTY(bool,       italic,                 setItalic)
-      M_PROPERTY(bool,       underline,              setUnderline)
+      M_PROPERTY(FontStyle,  fontStyle,              setFontStyle)
       M_PROPERTY(Align,      align,                  setAlign)
       M_PROPERTY(FrameType,  frameType,              setFrameType)
       M_PROPERTY(QString,    family,                 setFamily)
@@ -237,6 +236,7 @@ class TextBase : public Element {
       void insert(TextCursor*, uint code);
       void genText();
       virtual int getPropertyFlagsIdx(Pid id) const override;
+      QString stripText(bool, bool, bool) const;
 
    protected:
       QColor textColor() const;
@@ -333,10 +333,10 @@ class TextBase : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
+      virtual void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
       virtual Pid propertyId(const QStringRef& xmlName) const override;
       virtual Sid getPropertyStyle(Pid) const;
       virtual void styleChanged();
-
       void editInsertText(TextCursor*, const QString&);
 
       TextCursor* cursor(const EditData&);
@@ -360,7 +360,17 @@ class TextBase : public Element {
       void initTid(Tid id, bool preserveDifferent);
       virtual void initElementStyle(const ElementStyle*) override;
 
+      bool bold() const                      { return _fontStyle & FontStyle::Bold;       }
+      bool italic() const                    { return _fontStyle & FontStyle::Italic;     }
+      bool underline() const                 { return _fontStyle & FontStyle::Underline;  }
+      void setBold(bool val)                 { _fontStyle = val ? _fontStyle + FontStyle::Bold      : _fontStyle - FontStyle::Bold;      }
+      void setItalic(bool val)               { _fontStyle = val ? _fontStyle + FontStyle::Italic    : _fontStyle - FontStyle::Italic;    }
+      void setUnderline(bool val)            { _fontStyle = val ? _fontStyle + FontStyle::Underline : _fontStyle - FontStyle::Underline; }
+
+      bool hasCustomFormatting() const;
+
       friend class TextCursor;
+      using ScoreElement::undoChangeProperty;
       };
 
 }     // namespace Ms

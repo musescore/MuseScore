@@ -34,9 +34,7 @@ namespace Ms {
 static const std::vector<StyledProperty> figuredBassTextStyle {
       { Sid::figuredBassFontFace,                Pid::FONT_FACE              },
       { Sid::figuredBassFontSize,                Pid::FONT_SIZE              },
-      { Sid::figuredBassFontBold,                Pid::FONT_BOLD              },
-      { Sid::figuredBassFontItalic,              Pid::FONT_ITALIC            },
-      { Sid::figuredBassFontUnderline,           Pid::FONT_UNDERLINE         },
+      { Sid::figuredBassFontStyle,               Pid::FONT_STYLE             },
       };
 
 static constexpr qreal  FB_CONTLINE_HEIGHT            = 0.875;    // the % of font EM to raise the cont. line at

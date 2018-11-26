@@ -815,18 +815,13 @@ InspectorTuplet::InspectorTuplet(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { Pid::FONT_FACE,      0, t.tupletFontFace,  t.resetTupletFontFace    },
             { Pid::FONT_SIZE,      0, t.tupletFontSize,  t.resetTupletFontSize    },
-            { Pid::FONT_BOLD,      0, t.tupletBold,      t.resetTupletBold        },
-            { Pid::FONT_ITALIC,    0, t.tupletItalic,    t.resetTupletItalic      },
-            { Pid::FONT_UNDERLINE, 0, t.tupletUnderline, t.resetTupletUnderline   },
+            { Pid::FONT_STYLE,     0, t.tupletFontStyle, t.resetTupletFontStyle   },
             { Pid::DIRECTION,      0, t.direction,       t.resetDirection         },
             { Pid::NUMBER_TYPE,    0, t.numberType,      t.resetNumberType        },
             { Pid::BRACKET_TYPE,   0, t.bracketType,     t.resetBracketType       },
             { Pid::LINE_WIDTH,     0, t.lineWidth,       t.resetLineWidth         }
             };
       const std::vector<InspectorPanel> ppList = { {t.title, t.panel} };
-      t.tupletBold->setIcon(*icons[int(Icons::textBold_ICON)]);
-      t.tupletUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
-      t.tupletItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       mapSignals(iiList, ppList);
       }
 
@@ -866,14 +861,9 @@ InspectorBend::InspectorBend(QWidget* parent)
             { Pid::PLAY,           0, g.playBend,    g.resetPlayBend    },
             { Pid::FONT_FACE,      0, g.fontFace,    g.resetFontFace    },
             { Pid::FONT_SIZE,      0, g.fontSize,    g.resetFontSize    },
-            { Pid::FONT_BOLD,      0, g.bold,        g.resetStyle       },
-            { Pid::FONT_ITALIC,    0, g.italic,      g.resetStyle       },
-            { Pid::FONT_UNDERLINE, 0, g.underline,   g.resetStyle       },
+            { Pid::FONT_STYLE,     0, g.fontStyle,   g.resetFontStyle   },
             };
       const std::vector<InspectorPanel> ppList = { {g.title, g.panel} };
-      g.bold->setIcon(*icons[int(Icons::textBold_ICON)]);
-      g.underline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
-      g.italic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       mapSignals(iiList, ppList);
       connect(g.properties, SIGNAL(clicked()), SLOT(propertiesClicked()));
       }

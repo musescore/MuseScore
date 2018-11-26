@@ -32,22 +32,6 @@
 
 namespace Ms {
 
-static const ElementStyle headerStyle {
-      { Sid::headerFontFace,                     Pid::FONT_FACE              },
-      { Sid::headerFontSize,                     Pid::FONT_SIZE              },
-      { Sid::headerFontBold,                     Pid::FONT_BOLD              },
-      { Sid::headerFontItalic,                   Pid::FONT_ITALIC            },
-      { Sid::headerFontUnderline,                Pid::FONT_UNDERLINE         },
-      };
-
-static const ElementStyle footerStyle {
-      { Sid::footerFontFace,                     Pid::FONT_FACE              },
-      { Sid::footerFontSize,                     Pid::FONT_SIZE              },
-      { Sid::footerFontBold,                     Pid::FONT_BOLD              },
-      { Sid::footerFontItalic,                   Pid::FONT_ITALIC            },
-      { Sid::footerFontUnderline,                Pid::FONT_UNDERLINE         },
-      };
-
 //---------------------------------------------------------
 //   Page
 //---------------------------------------------------------

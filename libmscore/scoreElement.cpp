@@ -219,7 +219,7 @@ void ScoreElement::resetProperty(Pid pid)
       if (v.isValid()) {
             setProperty(pid, v);
             PropertyFlags p = propertyFlags(pid);
-            if (p != PropertyFlags::NOSTYLE)
+            if (p == PropertyFlags::UNSTYLED)
                   setPropertyFlags(pid, PropertyFlags::STYLED);
             }
       }
@@ -232,9 +232,8 @@ void ScoreElement::undoResetProperty(Pid id)
       {
       PropertyFlags f = propertyFlags(id);
       if (f == PropertyFlags::UNSTYLED)
-            undoChangeProperty(id, propertyDefault(id), PropertyFlags::STYLED);
-      else
-            undoChangeProperty(id, propertyDefault(id), f);
+            f = PropertyFlags::STYLED;
+      undoChangeProperty(id, propertyDefault(id), f);
       }
 
 //---------------------------------------------------------
@@ -296,7 +295,7 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
                   ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * score()->spatium());
             doUpdateInspector = true;
             }
-      if (id == Pid::SUB_STYLE) {
+      else if (id == Pid::SUB_STYLE) {
             //
             // change a list of properties
             //
@@ -380,8 +379,19 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
             return;
             }
       PropertyFlags f = propertyFlags(pid);
-
       QVariant d = (f == PropertyFlags::NOSTYLE) ? propertyDefault(pid) : QVariant();
+
+      if (pid == Pid::FONT_STYLE) {
+            FontStyle ds = FontStyle(d.isValid() ? d.toInt() : 0);
+            FontStyle fs = FontStyle(p.toInt());
+            if ((fs & FontStyle::Bold) !=  (ds & FontStyle::Bold))
+                  xml.tag("bold", fs & FontStyle::Bold);
+            if ((fs & FontStyle::Italic) && (ds & FontStyle::Italic))
+                  xml.tag("italic", fs & FontStyle::Bold);
+            if ((fs & FontStyle::Underline) && (ds & FontStyle::Underline))
+                  xml.tag("underline", fs & FontStyle::Underline);
+            return;
+            }
 
       if (propertyType(pid) == P_TYPE::SP_REAL) {
             qreal f1 = p.toReal();

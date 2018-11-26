@@ -45,14 +45,6 @@
 
 namespace Ms {
 
-static const ElementStyle partInstrumentStyle {
-      { Sid::partInstrumentFontFace,             Pid::FONT_FACE              },
-      { Sid::partInstrumentFontSize,             Pid::FONT_SIZE              },
-      { Sid::partInstrumentFontBold,             Pid::FONT_BOLD              },
-      { Sid::partInstrumentFontItalic,           Pid::FONT_ITALIC            },
-      { Sid::partInstrumentFontUnderline,        Pid::FONT_UNDERLINE         },
-      };
-
 //---------------------------------------------------------
 //   ~Excerpt
 //---------------------------------------------------------

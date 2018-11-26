@@ -37,9 +37,7 @@ static const ElementStyle tupletStyle {
       { Sid::tupletBracketWidth,                 Pid::LINE_WIDTH              },
       { Sid::tupletFontFace,                     Pid::FONT_FACE               },
       { Sid::tupletFontSize,                     Pid::FONT_SIZE               },
-      { Sid::tupletFontBold,                     Pid::FONT_BOLD               },
-      { Sid::tupletFontItalic,                   Pid::FONT_ITALIC             },
-      { Sid::tupletFontUnderline,                Pid::FONT_UNDERLINE          },
+      { Sid::tupletFontStyle,                    Pid::FONT_STYLE              },
       { Sid::tupletAlign,                        Pid::ALIGN                   },
       };
 
@@ -120,7 +118,7 @@ void Tuplet::setVisible(bool f)
 
 void Tuplet::resetNumberProperty()
       {
-      for (auto p : { Pid::FONT_FACE, Pid::FONT_ITALIC, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_UNDERLINE, Pid::ALIGN })
+      for (auto p : { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN })
             _number->resetProperty(p);
       }
 
@@ -775,7 +773,7 @@ bool Tuplet::readProperties(XmlReader& e)
             _number->setVisible(visible());     //?? override saved property
             _number->setTrack(track());
             // move property flags from _number back to tuplet
-            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_BOLD, Pid::FONT_ITALIC, Pid::FONT_UNDERLINE, Pid::ALIGN })
+            for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN })
                   setPropertyFlags(p, _number->propertyFlags(p));
             }
       else if (!DurationElement::readProperties(e))
@@ -1013,9 +1011,7 @@ QVariant Tuplet::getProperty(Pid propertyId) const
                   return _p2;
             case Pid::FONT_SIZE:
             case Pid::FONT_FACE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
+            case Pid::FONT_STYLE:
             case Pid::ALIGN:
                   return _number ? _number->getProperty(propertyId) : QVariant();
             default:
@@ -1057,9 +1053,7 @@ bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::FONT_SIZE:
             case Pid::FONT_FACE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
+            case Pid::FONT_STYLE:
             case Pid::ALIGN:
                   if (_number)
                         _number->setProperty(propertyId, v);
@@ -1099,12 +1093,8 @@ QVariant Tuplet::propertyDefault(Pid id) const
                   return score()->styleV(Sid::tupletFontFace);
             case Pid::FONT_SIZE:
                   return score()->styleV(Sid::tupletFontSize);
-            case Pid::FONT_BOLD:
-                  return score()->styleV(Sid::tupletFontBold);
-            case Pid::FONT_ITALIC:
-                  return score()->styleV(Sid::tupletFontItalic);
-            case Pid::FONT_UNDERLINE:
-                  return score()->styleV(Sid::tupletFontUnderline);
+            case Pid::FONT_STYLE:
+                  return score()->styleV(Sid::tupletFontStyle);
             default:
                   {
                   QVariant v = ScoreElement::propertyDefault(id, Tid::DEFAULT);
