@@ -23,17 +23,22 @@ namespace Ms {
 //   showStartcenter
 //---------------------------------------------------------
 
-void MuseScore::showStartcenter(bool val)
+void MuseScore::showStartcenter(bool show)
       {
       QAction* a = getAction("startcenter");
-      if (val && startcenter == nullptr) {
+      if (show && startcenter == nullptr) {
             startcenter = new Startcenter;
             startcenter->addAction(a);
             startcenter->readSettings();
             connect(startcenter, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             connect(startcenter, SIGNAL(closed(bool)), tourHandler(), SLOT(showWelcomeTour()), Qt::QueuedConnection);
             }
-      startcenter->setVisible(val);
+      if (!startcenter)
+            return;
+      if (show)
+            startcenter->setVisible(true);
+      else
+            startcenter->close();
       }
 
 //---------------------------------------------------------
