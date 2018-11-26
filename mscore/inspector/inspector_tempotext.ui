@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorTempoText</class>
  <widget class="QWidget" name="InspectorTempoText">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>161</width>
+    <height>135</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Tempo Text Inspector</string>
   </property>
@@ -118,7 +126,7 @@
          <string>BPM</string>
         </property>
         <property name="decimals">
-         <number>1</number>
+         <number>2</number>
         </property>
         <property name="minimum">
          <double>5.000000000000000</double>
