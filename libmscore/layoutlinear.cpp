@@ -122,6 +122,7 @@ void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
  void Score::collectLinearSystem(LayoutContext& lc)
       {
       System* system = systems().front();
+      system->setInstrumentNames(/* longNames */ true);
       // we need to reset tempo because fermata is setted
       //inside getNextMeasure and it lead to twice timeStretch
       resetTempo();
