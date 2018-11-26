@@ -450,6 +450,10 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
+      if (_state != SelState::RANGE) {
+            update();
+            return;
+            }
       if (_state == SelState::RANGE && _plannedTick1 != -1 && _plannedTick2 != -1) {
             const int staffStart = _staffStart;
             const int staffEnd = _staffEnd;

@@ -149,7 +149,6 @@ void Score::undoRedo(bool undo, EditData* ed)
       {
       if (readOnly())
             return;
-      deselectAll();
       cmdState().reset();
       if (undo)
             undoStack()->undo(ed);
