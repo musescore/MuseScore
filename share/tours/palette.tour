@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tour name="show-palette">
   <Message>
-    <Text>These are palettes.</Text>
+    <Text>Welcome to the Palettes, where you will add various elements to your score. Click "Next" to learn more.</Text>
     <Widget>palette-box</Widget>
     </Message>
   <Message>
-    <Text>Each palette contains elements that can be added to the score.</Text>
+    <Text>Each palette contains items that can be added to the score.</Text>
     <Widget>palette</Widget>
     </Message>
   <Message>
-    <Text>To use them, select an element in the score and double click on the palette element.</Text>
+    <Text>There are different workspaces available with different sets of palettes.
+    The "Advanced" workspace contains more items than the "Basic" workspace.</Text>
+    <Widget>workspace-list</Widget>
+    </Message>
+  <Message>
+    <Text>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
+    You can also use drag an item from the palette and drop it on a specific element in your score.</Text>
     <Widget>palette-cells</Widget>
     </Message>
   </Tour>
