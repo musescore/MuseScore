@@ -408,20 +408,38 @@ SaveState::SaveState(Score* s)
 //      redoSelection  = score->selection();
       }
 
+Element* SaveState::selectedElement(const Selection& sel)
+      {
+      if (sel.isSingle()) {
+            Element* e = sel.element();
+            Q_ASSERT(e); // otherwise it shouldn't be "single" selection
+            if (e->isNote() || e->isChordRest())
+                  return e;
+            }
+      return nullptr;
+      }
+
 void SaveState::undo(EditData*)
       {
       redoInputState = score->inputState();
 //      redoSelection  = score->selection();
+      redoSelectedElement = selectedElement(score->selection());
       score->setInputState(undoInputState);
 //      score->setSelection(undoSelection);
+      score->select(undoSelectedElement);
       }
 
 void SaveState::redo(EditData*)
       {
       undoInputState = score->inputState();
 //      undoSelection  = score->selection();
+      undoSelectedElement = selectedElement(score->selection());
       score->setInputState(redoInputState);
 //      score->setSelection(redoSelection);
+      if (first)
+            first = false;
+      else
+            score->select(redoSelectedElement);
       }
 
 //---------------------------------------------------------
