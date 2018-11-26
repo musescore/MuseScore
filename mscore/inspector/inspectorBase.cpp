@@ -34,6 +34,7 @@ namespace Ms {
 InspectorBase::InspectorBase(QWidget* parent)
    : QWidget(parent)
       {
+      setObjectName("inspector");
       setAccessibleName(tr("Inspector"));
       inspector = static_cast<Inspector*>(parent);
       _layout    = new QVBoxLayout(this);
