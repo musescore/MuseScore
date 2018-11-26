@@ -5796,7 +5796,7 @@ void initScoreFonts()
             uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().mid(2).toUInt(&ok, 16);
             if (ok)
                   ScoreFont::_mainSymCodeTable[i] = code;
-            else
+            else if (MScore::debugMode)
                   qDebug("codepoint not recognized for glyph %s", qPrintable(name));
             }
       for (oldName i : oldNames)

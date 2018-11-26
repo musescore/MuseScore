@@ -208,12 +208,8 @@ void ExportMidi::writeHeader()
 //    return false on error
 //---------------------------------------------------------
 
-bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportRPNs)
+bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs)
       {
-      f.setFileName(name);
-      if (!f.open(QIODevice::WriteOnly))
-            return false;
-
       mf.setDivision(MScore::division);
       mf.setFormat(1);
       QList<MidiTrack>& tracks = mf.tracks();
@@ -326,7 +322,15 @@ bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportR
                   }
             ++staffIdx;
             }
-      return !mf.write(&f);
+      return !mf.write(device);
+      }
+
+bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportRPNs)
+      {
+      f.setFileName(name);
+      if (!f.open(QIODevice::WriteOnly))
+            return false;
+       return write(&f, midiExpandRepeats, exportRPNs);
       }
 
 //---------------------------------------------------------
