@@ -161,6 +161,10 @@
     <seq>Shift+G</seq>
     </SC>
   <SC>
+    <key>chord-tie</key>
+    <seq>Alt++</seq>
+    </SC>
+  <SC>
     <key>insert-a</key>
     <seq>Ctrl+Shift+A</seq>
     </SC>
