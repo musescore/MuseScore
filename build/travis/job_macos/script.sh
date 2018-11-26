@@ -40,15 +40,13 @@ if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
 then # Build is marked UNSTABLE inside CMakeLists.txt
 build/package_mac $BRANCH-$REVISION
 PACKAGE_NAME=MuseScoreNightly
+DMGFILE=applebuild/$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
+mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
 else
 build/package_mac
 PACKAGE_NAME=MuseScore
+DMGFILE=applebuild/$PACKAGE_NAME-*.dmg
 fi
-
-DMGFILENAME=$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
-DMGFILE=applebuild/$DMGFILENAME
-
-mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
 
 SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
 
