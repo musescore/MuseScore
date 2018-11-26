@@ -2,15 +2,9 @@
 <Tour name="mmrest">
   <Shortcut>toggle-mmrest</Shortcut>
   <Message>
-    <Text>You have activate multimeasure rests.</Text>
-    <Widget>scoreview</Widget>
-    </Message>
-  <Message>
-    <Text>This will replace multiple measures of rests into a multimeasure rest of the same length.</Text>
-    <Widget>scoreview</Widget>
-    </Message>
-  <Message>
-    <Text>To undo this, click the multimeasure shortcut "M".</Text>
+    <Text>You have toggled multimeasure rests in this score.
+    This combines multiple measures of rests into a single multimeasure rest.
+    To toggle this setting again, press the shortcut "M".</Text>
     <Widget>scoreview</Widget>
     </Message>
   </Tour>
