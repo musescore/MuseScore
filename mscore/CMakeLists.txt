@@ -1030,8 +1030,8 @@ endif (NOT MSVC)
 # Don't install awlplugin on default
 #install( TARGETS inspectorplugin DESTINATION ${designerPlugins}/plugins/designer/ )
 
-add_executable(itest inspector/itest.cpp)
-target_link_libraries (itest inspectorplugin ${QT_LIBRARIES})
+# add_executable(itest inspector/itest.cpp)
+# target_link_libraries (itest inspectorplugin ${QT_LIBRARIES})
 
 target_link_libraries (inspectorplugin ${QT_LIBRARIES})
 
