@@ -996,3 +996,44 @@ if (NOT MSVC)
    ADD_DEPENDENCIES(${ExecutableName} mops1)
    ADD_DEPENDENCIES(${ExecutableName} mops2)
 endif (NOT MSVC)
+
+add_library(
+      inspectorplugin SHARED
+      inspector/inspectorplugin.cpp
+      inspector/inspectorplugin.h
+#      inspector/alignSelect.cpp
+      inspector/fontStyleSelect.cpp
+#      inspector/offsetSelect.cpp
+#      inspector/scaleSelect.cpp
+#      inspector/sizeSelect.cpp
+      inspector/resetButton.cpp
+      icons.cpp
+      miconengine.cpp
+      ${qrc_files}
+      )
+
+if (NOT MSVC)
+   set_target_properties(inspectorplugin
+      PROPERTIES
+      COMPILE_FLAGS
+         "-fPIC -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SVG_LIB -DQT_SHARED -DQT_NO_DEBUG -include ${PROJECT_SOURCE_DIR}/all.h"
+      )
+else (NOT MSVC)
+   # x86 archictecture does not support position-independent code, the -fPIC option is not relevant for this processor.
+   set_target_properties (
+      inspectorplugin
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE} -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SVG_LIB -DQT_SHARED -DQT_NO_DEBUG"
+      )
+endif (NOT MSVC)
+
+# Don't install awlplugin on default
+#install( TARGETS inspectorplugin DESTINATION ${designerPlugins}/plugins/designer/ )
+
+add_executable(itest inspector/itest.cpp)
+target_link_libraries (itest inspectorplugin ${QT_LIBRARIES})
+
+target_link_libraries (inspectorplugin ${QT_LIBRARIES})
+
+set_target_properties(inspectorplugin PROPERTIES EXCLUDE_FROM_ALL 1)
+set_target_properties(itest PROPERTIES EXCLUDE_FROM_ALL 1)
