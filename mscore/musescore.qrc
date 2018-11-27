@@ -172,5 +172,7 @@
         <file>data/icons/mixer-solo-on.svg</file>
         <file>data/icons/mixer-dial.svg</file>
         <file>data/icons/mixer-slider-handle-vertical.svg</file>
+        <file>data/icons/triangleDown.svg</file>
+        <file>data/icons/triangleUp.svg</file>
     </qresource>
 </RCC>

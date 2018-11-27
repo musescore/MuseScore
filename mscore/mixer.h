@@ -67,8 +67,9 @@ class Mixer : public QWidget, public Ui::Mixer, public MixerTrackGroup
       EnablePlayForWidget* enablePlay;
 
       MixerDetails* mixerDetails;
+      QGridLayout* detailsLayout;
 
-      bool showExpanded;
+      bool showDetails;
       QSet<Part*> expandedParts;
       QWidget* trackHolder;
       QList<MixerTrack*> trackList;
@@ -105,6 +106,7 @@ class Mixer : public QWidget, public Ui::Mixer, public MixerTrackGroup
       void writeSettings();
       void expandToggled(Part* part, bool expanded) override;
       void notifyTrackSelected(MixerTrack* track) override;
+      void showDetailsToggled(bool shown);
       };
 
 

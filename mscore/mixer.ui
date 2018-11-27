@@ -10,20 +10,8 @@
     <x>0</x>
     <y>0</y>
     <width>648</width>
-    <height>620</height>
+    <height>431</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>0</width>
-    <height>620</height>
-   </size>
   </property>
   <property name="focusPolicy">
    <enum>Qt::ClickFocus</enum>
@@ -39,6 +27,36 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="toggleDetailsButton">
+     <property name="toolTip">
+      <string>Show/hide details</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">padding: 2px</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="musescore.qrc">
+       <normaloff>:/data/icons/triangleDown.svg</normaloff>
+       <normalon>:/data/icons/triangleUp.svg</normalon>:/data/icons/triangleDown.svg</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>10</width>
+       <height>10</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -90,6 +108,18 @@
      </item>
      <item>
       <widget class="QScrollArea" name="tracks_scrollArea">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>370</height>
+        </size>
+       </property>
        <property name="widgetResizable">
         <bool>true</bool>
        </property>
@@ -99,7 +129,7 @@
           <x>0</x>
           <y>0</y>
           <width>554</width>
-          <height>582</height>
+          <height>371</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -144,6 +174,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="musescore.qrc"/>
+  <include location="musescore.qrc"/>
+ </resources>
  <connections/>
 </ui>
