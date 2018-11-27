@@ -1809,7 +1809,7 @@ void Score::createPlayEvents(Chord* chord)
             for (int i = 0; i < n; ++i)
                   chord->notes()[i]->setPlayEvents(el[i]);
             }
-      // dont change event list if type is PlayEventType::User
+      // don’t change event list if type is PlayEventType::User
       }
 
 void Score::createPlayEvents()

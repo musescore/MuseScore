@@ -1075,7 +1075,7 @@ void ExportMusicXml::calcDivisions()
                   for (int st = strack; st < etrack; ++st) {
                         // sstaff - xml staff number, counting from 1 for this
                         // instrument
-                        // special number 0 -> dont show staff number in
+                        // special number 0 -> don’t show staff number in
                         // xml output (because there is only one staff)
 
                         int sstaff = (staves > 1) ? st - strack + VOICES : 0;
@@ -4781,7 +4781,7 @@ void ExportMusicXml::findAndExportClef(Measure* m, const int staves, const int s
             for (int st = strack; st < etrack; st += VOICES) {
                   // sstaff - xml staff number, counting from 1 for this
                   // instrument
-                  // special number 0 -> dont show staff number in
+                  // special number 0 -> don’t show staff number in
                   // xml output (because there is only one staff)
 
                   int sstaff = (staves > 1) ? st - strack + VOICES : 0;
@@ -5280,7 +5280,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   for (int st = strack; st < etrack; ++st) {
                         // sstaff - xml staff number, counting from 1 for this
                         // instrument
-                        // special number 0 -> dont show staff number in
+                        // special number 0 -> don’t show staff number in
                         // xml output (because there is only one staff)
 
                         int sstaff = (staves > 1) ? st - strack + VOICES : 0;

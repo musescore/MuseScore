@@ -334,7 +334,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
 
 static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
       {
-      // dont clone voltas for track != 0
+      // don’t clone voltas for track != 0
       if (s->type() == ElementType::VOLTA && s->track() != 0)
             return;
       Spanner* ns = toSpanner(s->linkedClone());

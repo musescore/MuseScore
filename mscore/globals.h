@@ -23,8 +23,8 @@
 namespace Ms {
 
 extern bool enableExperimental;
-extern bool noSeq;            ///< Dont use sequencer; cmd line option.
-extern bool noMidi;           ///< Dont use midi; cmd line option.
+extern bool noSeq;            ///< Don’t use sequencer; cmd line option.
+extern bool noMidi;           ///< Don’t use midi; cmd line option.
 extern bool midiInputTrace;   ///< debug option: dump midi input
 extern bool midiOutputTrace;  ///< debug option: dump midi output
 extern bool converterMode;

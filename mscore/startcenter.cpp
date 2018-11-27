@@ -70,7 +70,7 @@ Startcenter::Startcenter()
 #endif
 
       if (enableExperimental)
-// right now dont know how it use in WebEngine @handrok
+// right now don’t know how it use in WebEngine @handrok
 //            QWebSettings::globalSettings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 //      QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, false);
       recentPage->setBoldTitle(false);

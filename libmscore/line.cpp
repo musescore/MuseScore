@@ -493,7 +493,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     int endTrack   = startTrack + VOICES;
                                     qreal width    = 0.0;
 
-                                    // dont consider full measure rests, which are centered
+                                    // don’t consider full measure rests, which are centered
                                     // (TODO: what if there is only a full measure rest?)
 
                                     for (int track = startTrack; track < endTrack; ++track) {

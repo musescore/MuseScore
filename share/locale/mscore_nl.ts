@@ -3441,12 +3441,12 @@ space unit</extracomment>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="47"/>
         <source>Move SoundFont up</source>
-        <translation>Verplaats SoundDont omhoog</translation>
+        <translation>Verplaats SoundFont omhoog</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="69"/>
         <source>Move SoundFont down</source>
-        <translation>Verplaats SoundDont omlaag</translation>
+        <translation>Verplaats SoundFont omlaag</translation>
     </message>
     <message>
         <location filename="../../fluid/fluid_gui.ui" line="101"/>
