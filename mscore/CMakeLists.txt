@@ -1032,8 +1032,7 @@ endif (NOT MSVC)
 
 # add_executable(itest inspector/itest.cpp)
 # target_link_libraries (itest inspectorplugin ${QT_LIBRARIES})
+# set_target_properties(itest PROPERTIES EXCLUDE_FROM_ALL 1)
 
 target_link_libraries (inspectorplugin ${QT_LIBRARIES})
-
 set_target_properties(inspectorplugin PROPERTIES EXCLUDE_FROM_ALL 1)
-set_target_properties(itest PROPERTIES EXCLUDE_FROM_ALL 1)
