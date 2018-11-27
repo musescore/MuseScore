@@ -27,10 +27,15 @@ for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') d
     "C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe" sign /f "C:\MuseScore\build\appveyor\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p "%CERTIFICATE_PASSWORD%" "%%f"
     )
 
+CD C:\MuseScore
+
 :: generate unique GUID
-bash -c "uuidgen -c" > uuid.txt
+"C:\cygwin64\bin\uuidgen.exe" > uuid.txt
 SET /p PACKAGE_UUID=<uuid.txt
-bash -c "sed -i 's/00000000-0000-0000-0000-000000000000/%PACKAGE_UUID%/' ../Packaging.cmake"
+echo on
+echo %PACKAGE_UUID%
+echo off
+bash -c "sed -i 's/00000000-0000-0000-0000-000000000000/%PACKAGE_UUID%/' C:/MuseScore/build/Packaging.cmake"
 
 call C:\MuseScore\msvc_build.bat package 64 %APPVEYOR_BUILD_NUMBER%
 
