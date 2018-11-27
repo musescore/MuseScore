@@ -24,13 +24,13 @@ enum class Sid : int;
 //
 //    usage example:
 //    class Text : public Element {
-//          M_PROPERTY(bool, bold, setBold)
+//          M_PROPERTY(QColor, color, setColor)
 //          ...
 //          };
 //    this defines:
-//          bool _bold;
-//          const bool& bold() const { return _bold; }
-//          void setBold(const a& val) { _bold = val; }
+//          QColor _color;
+//          const QColor& color() const { return _color; }
+//          void setColor(const QColor& val) { _color = val; }
 //---------------------------------------------------------
 
 #define M_PROPERTY(a,b,c)                                      \
