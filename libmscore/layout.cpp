@@ -3247,7 +3247,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
 
       //-------------------------------------------------------------
-      // layout beams
+      // layout beams + fingering
       //-------------------------------------------------------------
 
       for (Segment* s : sl) {
@@ -3259,6 +3259,18 @@ System* Score::collectSystem(LayoutContext& lc)
                         if (isTopBeam(cr)) {
                               cr->beam()->layout();
                               cr->beam()->addSkyline(system->staff(cr->beam()->staffIdx())->skyline());
+
+                             // layout fingering a second time (first layout called in note->layout2())
+                             // to finally place fingerings above or below a beam
+
+                             if (e->isChord()) {
+                                   for (Note* note : toChord(e)->notes()) {
+                                         for (Element* e : note->el()) {
+                                               if (e->isFingering())
+                                                     e->layout();
+                                               }
+                                         }
+                                   }
                               }
                         }
                   }

@@ -2073,7 +2073,6 @@ void Note::layout2()
             if (e->isSymbol()) {
                   qreal w = headWidth();
                   Symbol* sym = toSymbol(e);
-//                  QPointF rp = e->readPos();
                   e->layout();
                   if (sym->sym() == SymId::noteheadParenthesisRight) {
                         if (staff()->isTabStaff(chord()->tick())) {
@@ -2086,11 +2085,6 @@ void Note::layout2()
                   else if (sym->sym() == SymId::noteheadParenthesisLeft) {
                         e->rxpos() -= symWidth(SymId::noteheadParenthesisLeft);
                         }
-/*                  if (sym->sym() == SymId::noteheadParenthesisLeft || sym->sym() == SymId::noteheadParenthesisRight) {
-                        if (!rp.isNull())
-                              e->setOffset(QPointF());
-                        }
- */
                   }
             else
                   e->layout();
