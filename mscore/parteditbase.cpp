@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: mixer.cpp 5651 2012-05-19 15:57:26Z lasconic $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
