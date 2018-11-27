@@ -1070,6 +1070,7 @@ class MStyle {
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);
       bool readStyleValCompat(XmlReader&);
+      bool readTextStyleValCompat(XmlReader&);
 
       void reset(Score*);
 

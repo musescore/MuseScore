@@ -2126,7 +2126,56 @@ bool MStyle::readStyleValCompat(XmlReader& e)
             e.readElementText();
             return true;
             }
+      if (readTextStyleValCompat(e))
+            return true;
       return false;
+      }
+
+//---------------------------------------------------------
+//   readTextStyleValCompat
+//    Handle transition from separate bold, underline and
+//    italic style properties to the single *FontStyle
+//    property set.
+//---------------------------------------------------------
+
+bool MStyle::readTextStyleValCompat(XmlReader& e)
+      {
+      constexpr std::array<std::pair<const char*, FontStyle>, 3> styleNamesEndings {{
+            { "FontBold",      FontStyle::Bold      },
+            { "FontItalic",    FontStyle::Italic    },
+            { "FontUnderline", FontStyle::Underline }
+            }};
+
+      const QStringRef tag(e.name());
+      FontStyle readFontStyle = FontStyle::Normal;
+      QStringRef typeName;
+      for (auto& fontStyle : styleNamesEndings) {
+            if (tag.endsWith(fontStyle.first)) {
+                  readFontStyle = fontStyle.second;
+                  typeName = tag.mid(0, tag.length() - strlen(fontStyle.first));
+                  break;
+                  }
+            }
+      if (readFontStyle == FontStyle::Normal)
+            return false;
+
+      const QString newFontStyleName = typeName.toString() + "FontStyle";
+      const Sid sid = MStyle::styleIdx(newFontStyleName);
+      if (sid == Sid::NOSTYLE) {
+            qWarning() << "readFontStyleValCompat: couldn't read text readFontStyle value:" << tag;
+            return false;
+            }
+
+      const bool readVal = bool(e.readElementText().toInt());
+      const QVariant val = value(sid);
+      FontStyle newFontStyle = (val == QVariant()) ? FontStyle::Normal : FontStyle(val.toInt());
+      if (readVal)
+            newFontStyle = newFontStyle + readFontStyle;
+      else
+            newFontStyle = newFontStyle - readFontStyle;
+
+      set(sid, int(newFontStyle));
+      return true;
       }
 
 //---------------------------------------------------------
