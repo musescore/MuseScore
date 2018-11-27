@@ -284,6 +284,7 @@
         <barNoteDistance>1.2</barNoteDistance>
         <pedalPosBelow x="0" y="0"/>
         <trillPosAbove x="0" y="0"/>
+        <dynamicsFontStyle>0</dynamicsFontStyle>
         <Spatium>1.76389</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
