@@ -56,13 +56,10 @@ public slots:
 
 public:
       explicit MixerDetails(QWidget *parent);
-      ~MixerDetails() override;
 
       MixerTrackItemPtr track() { return _mti; }
       void setTrack(MixerTrackItemPtr track);
       void propertyChanged(Channel::Prop property) override;
-      void disconnectChannelListener() override;
-
       };
 
 }

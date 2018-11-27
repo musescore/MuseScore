@@ -428,28 +428,6 @@ Channel::Channel()
 //      qDebug("construct Channel ");
       }
 
-Channel::~Channel()
-      {
-      QList<ChannelListener *> list(listeners);
-
-      for (ChannelListener * l: list) {
-            l->disconnectChannelListener();
-            }
-      }
-
-//---------------------------------------------------------
-//   firePropertyChanged
-//---------------------------------------------------------
-
-void Channel::firePropertyChanged(Channel::Prop prop)
-      {
-      QList<ChannelListener *> list(listeners);
-
-      for (ChannelListener * l: list) {
-            l->propertyChanged(prop);
-            }
-      }
-
 //---------------------------------------------------------
 //   setVolume
 //---------------------------------------------------------
@@ -804,6 +782,24 @@ void Channel::updateInitList() const
       e.setData(ME_CONTROLLER, CTRL_REVERB_SEND, reverb());
       init[int(A::REVERB)] = e;
 
+      }
+
+//---------------------------------------------------------
+//   addListener
+//---------------------------------------------------------
+
+void Channel::addListener(ChannelListener* l)
+      {
+      _notifier.addListener(l);
+      }
+
+//---------------------------------------------------------
+//   removeListener
+//---------------------------------------------------------
+
+void Channel::removeListener(ChannelListener* l)
+      {
+      _notifier.removeListener(l);
       }
 
 //---------------------------------------------------------
