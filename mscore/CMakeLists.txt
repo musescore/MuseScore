@@ -904,6 +904,10 @@ else (MINGW)
             ${dll_vorbisfile}
             ${dll_winsparkle}
             ${QtInstallLibraries}
+            ${QT_INSTALL_PREFIX}/bin/libEGL.dll
+            ${QT_INSTALL_PREFIX}/bin/libGLESv2.dll
+            ${QT_INSTALL_PREFIX}/bin/Qt5Positioning.dll
+            ${QT_INSTALL_PREFIX}/bin/Qt5WebChannel.dll
             ${PROJECT_SOURCE_DIR}/build/qt.conf
             DESTINATION bin)
 
