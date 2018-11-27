@@ -525,7 +525,9 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                               QMenu* menu = new QMenu(this);
                               resetButton->setMenu(menu);
                               resetButton->setPopupMode(QToolButton::MenuButtonPopup);
-                              QAction* a = menu->addAction(tr("Set as style"));
+                              QAction* a = menu->addAction(tr("Reset to default"));
+                              connect(a, &QAction::triggered, [=] { resetClicked(i); });
+                              a = menu->addAction(tr("Set as style"));
                               connect(a, &QAction::triggered, [=] { setStyleClicked(i); });
                               }
                         }

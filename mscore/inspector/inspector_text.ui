@@ -247,12 +247,6 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <widget class="Ms::ResetButton" name="resetFontFace" native="true"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="Ms::ResetButton" name="resetFontSize" native="true"/>
-         </item>
          <item row="4" column="0" colspan="2">
           <widget class="Ms::AlignSelect" name="align" native="true">
            <property name="toolTip">
@@ -475,6 +469,34 @@
            </layout>
           </widget>
          </item>
+         <item row="0" column="2">
+          <widget class="QToolButton" name="resetFontFace">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Font face' value</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QToolButton" name="resetFontSize">
+           <property name="toolTip">
+            <string>Reset to default</string>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Font size' value</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../musescore.qrc">
+             <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
@@ -497,12 +519,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Ms::ResetButton</class>
-   <extends>QWidget</extends>
-   <header>inspector/resetButton.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Ms::FontStyleSelect</class>
    <extends>QWidget</extends>
    <header>inspector/fontStyleSelect.h</header>
@@ -514,6 +530,7 @@
   <tabstop>resetFontFace</tabstop>
   <tabstop>fontSize</tabstop>
   <tabstop>resetFontSize</tabstop>
+  <tabstop>fontStyle</tabstop>
   <tabstop>resetFontStyle</tabstop>
   <tabstop>align</tabstop>
   <tabstop>resetAlign</tabstop>
