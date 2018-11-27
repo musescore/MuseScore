@@ -30,12 +30,12 @@ for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') d
 CD C:\MuseScore
 
 :: generate unique GUID
-bash -c "uuidgen -c" > uuid.txt
+uuidgen -c > uuid.txt
 SET /p PACKAGE_UUID=<uuid.txt
 echo on
 echo %PACKAGE_UUID%
 echo off
-bash -c "sed -i 's/00000000-0000-0000-0000-000000000000/%PACKAGE_UUID%/' C:\MuseScore\build\Packaging.cmake"
+bash -c "sed -i 's/00000000-0000-0000-0000-000000000000/%PACKAGE_UUID%/' C:/MuseScore/build/Packaging.cmake"
 
 call C:\MuseScore\msvc_build.bat package 64 %APPVEYOR_BUILD_NUMBER%
 
