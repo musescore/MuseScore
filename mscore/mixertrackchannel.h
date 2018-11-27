@@ -68,11 +68,9 @@ public slots:
 protected:
       void mouseReleaseEvent(QMouseEvent * event) override;
       void propertyChanged(Channel::Prop property) override;
-      void disconnectChannelListener() override;
 
 public:
       explicit MixerTrackChannel(QWidget *parent, MixerTrackItemPtr trackItem);
-      ~MixerTrackChannel() override;
 
       bool selected() override { return _selected; }
       QWidget* getWidget() override { return this; }
