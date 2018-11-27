@@ -30,7 +30,7 @@ for /f "delims=" %%f in ('dir /a-d /b /s "%dSource%\*.dll" "%dSource%\*.exe"') d
 CD C:\MuseScore
 
 :: generate unique GUID
-uuidgen -c > uuid.txt
+"C:\cygwin64\bin\uuidgen.exe" -c > uuid.txt
 SET /p PACKAGE_UUID=<uuid.txt
 echo on
 echo %PACKAGE_UUID%
