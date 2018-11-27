@@ -166,7 +166,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               // no paste into local time signature
                               if (staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
                                     MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
-                                    if (oldTuplet->elements().empty())
+                                    if (oldTuplet && oldTuplet->elements().empty())
                                           delete oldTuplet;
                                     return false;
                                     }
@@ -180,7 +180,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               int rticks = measure->endTick() - tick;
                               if (rticks < ticks) {
                                     delete tuplet;
-                                    if (oldTuplet->elements().empty())
+                                    if (oldTuplet && oldTuplet->elements().empty())
                                           delete oldTuplet;
                                     MScore::setError(TUPLET_CROSSES_BAR);
                                     return false;
