@@ -1985,7 +1985,7 @@
                </widget>
               </item>
               <item row="0" column="7">
-               <widget class="QWidget" name="headerFontStyle" native="true"/>
+               <widget class="Ms::FontStyleSelect" name="headerFontStyle" native="true"/>
               </item>
               <item row="0" column="8">
                <widget class="QToolButton" name="resetHeaderFontStyle">
@@ -8718,7 +8718,7 @@
             </widget>
            </item>
            <item row="2" column="9">
-            <widget class="QWidget" name="bendFontStyle" native="true"/>
+            <widget class="Ms::FontStyleSelect" name="bendFontStyle" native="true"/>
            </item>
            <item row="2" column="10">
             <widget class="QToolButton" name="resetBendFontStyle">

@@ -557,6 +557,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
                   connect(qobject_cast<AlignSelect*>(sw.widget), SIGNAL(alignChanged(Align)), mapper2, SLOT(map()));
             else if (qobject_cast<OffsetSelect*>(sw.widget))
                   connect(qobject_cast<OffsetSelect*>(sw.widget), SIGNAL(offsetChanged(const QPointF&)), mapper2, SLOT(map()));
+            else if (FontStyleSelect* fontStyle = qobject_cast<FontStyleSelect*>(sw.widget))
+                  connect(fontStyle, &FontStyleSelect::fontStyleChanged, mapper2, QOverload<>::of(&QSignalMapper::map));
             else {
                   qFatal("unhandled gui widget type %s valueType %s",
                      sw.widget->metaObject()->className(),
@@ -796,6 +798,8 @@ QVariant EditStyle::getValue(Sid idx)
                   QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
                   return bg->checkedId();
                   }
+            else if (FontStyleSelect* fontStyle = qobject_cast<FontStyleSelect*>(sw.widget))
+                  return int(fontStyle->fontStyle());
             else
                   qFatal("unhandled int");
             }
@@ -888,6 +892,8 @@ void EditStyle::setValues()
                                     }
                               }
                         }
+                  else if (FontStyleSelect* fontStyle = qobject_cast<FontStyleSelect*>(sw.widget))
+                        fontStyle->setFontStyle(FontStyle(val.toInt()));
                   else
                         unhandledType(&sw);
                   }
