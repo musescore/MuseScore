@@ -1291,12 +1291,19 @@ MuseScore::MuseScore()
             "file-close",
             "",
             "parts",
-            "album" }) {
+            "album"}) {
             if (!*i)
                   menuFile->addSeparator();
-            else if ((MuseScore::unstable() && enableExperimental) || strcmp(i,"file-save-online") != 0)
+            if (strcmp(i, "album") == 0) { //enable Album feature in experimental mode
+                  if (enableExperimental)
+                        menuFile->addAction(getAction(i));
+                  continue;
+                  }
+            else if ( (MuseScore::unstable() && enableExperimental) || //unstable + experimental enables all menu items
+                      strcmp(i,"file-save-online") != 0) //Save Online is disabled for now
                   menuFile->addAction(getAction(i));
             }
+
       if (enableExperimental)
             menuFile->addAction(getAction("layer"));
       menuFile->addSeparator();
