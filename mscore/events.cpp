@@ -710,7 +710,7 @@ void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
                   // select(ev);
                   }
             if (seq)
-                  seq->stopNotes();       // stop now because we dont get a mouseRelease event
+                  seq->stopNotes();       // stop now because we don’t get a mouseRelease event
             objectPopup(gp, e);
             }
       else {

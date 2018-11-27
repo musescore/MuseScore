@@ -126,7 +126,7 @@ class Segment final : public Element {
       Segment* prevEnabled() const;
       void setPrev(Segment* e)            { _prev = e;      }
 
-      // dont stop at measure boundary:
+      // don’t stop at measure boundary:
       Segment* next1() const;
       Segment* next1enabled() const;
       Segment* next1MM() const;

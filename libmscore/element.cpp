@@ -1665,7 +1665,7 @@ bool Element::isUserModified() const
             QVariant defaultValue = propertyDefault(pid);
 
             if (propertyType(pid) == P_TYPE::SP_REAL) {
-                  if (qAbs(val.toReal() - defaultValue.toReal()) > 0.0001)    // we dont care spatium diffs that small
+                  if (qAbs(val.toReal() - defaultValue.toReal()) > 0.0001)    // we don’t care spatium diffs that small
                         return true;
                   }
             else  {

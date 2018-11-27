@@ -207,7 +207,7 @@ void Segment::init()
 
 //---------------------------------------------------------
 //   next1
-///   return next \a Segment, dont stop searching at end
+///   return next \a Segment, don’t stop searching at end
 ///   of \a Measure
 //---------------------------------------------------------
 
@@ -291,7 +291,7 @@ Segment* Segment::prev(SegmentType types) const
 
 //---------------------------------------------------------
 //   prev1
-///   return previous \a Segment, dont stop searching at
+///   return previous \a Segment, don’t stop searching at
 ///   \a Measure begin
 //---------------------------------------------------------
 

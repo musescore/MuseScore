@@ -50,7 +50,7 @@ void assignKeyListToStaff(const KeyList &kl, Staff *staff)
       for (auto it = kl.begin(); it != kl.end(); ++it) {
             const int tick = it->first;
             Key key  = it->second.key();
-            if ((key == Key::C) && (key == pkey))     // dont insert uneccessary C key
+            if ((key == Key::C) && (key == pkey))     // don’t insert unnecessary C key
                   continue;
             pkey = key;
             KeySig* ks = new KeySig(score);

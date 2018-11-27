@@ -51,7 +51,7 @@ class MStaff;
 enum class MeasureNumberMode : char {
       AUTO,       // show measure number depending on style
       SHOW,       // always show measure number
-      HIDE        // dont show measure number
+      HIDE        // don’t show measure number
       };
 
 //---------------------------------------------------------
