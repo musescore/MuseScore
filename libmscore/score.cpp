@@ -2115,6 +2115,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       Staff* st = staff(staffIdx);
       Part*  p  = st->part();
       Staff* ns = new Staff(this);
+      ns->init(st);
       ns->setPart(p);
       // convert staffIdx from score-relative to part-relative
       int staffIdxPart = staffIdx - p->staff(0)->idx();
