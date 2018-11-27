@@ -15,6 +15,7 @@
 
 #include "stringdata.h"
 #include "mscore.h"
+#include "notifier.hpp"
 #include "synthesizer/event.h"
 #include "interval.h"
 #include "clef.h"
@@ -90,7 +91,6 @@ struct MidiArticulation {
       bool operator==(const MidiArticulation& i) const;
       };
 
-
 //---------------------------------------------------------
 //   Channel
 //---------------------------------------------------------
@@ -120,8 +120,6 @@ class Channel {
       bool _mute;
       bool _solo;
 
-      QList<ChannelListener *> listeners;
-
 public:
       static const char* DEFAULT_NAME;
 
@@ -136,7 +134,8 @@ public:
             };
 
 private:
-      void firePropertyChanged(Channel::Prop prop);
+      Notifier<Channel::Prop> _notifier;
+      void firePropertyChanged(Channel::Prop prop) { _notifier.notify(prop); }
 
 public:
 
@@ -179,24 +178,26 @@ public:
       QList<MidiArticulation> articulation;
 
       Channel();
-      ~Channel();
       void write(XmlWriter&, Part *part) const;
       void read(XmlReader&, Part *part);
       void updateInitList() const;
       bool operator==(const Channel& c) { return (_name == c._name) && (_channel == c._channel); }
 
-      void addListener(ChannelListener *l) { listeners.append(l); }
-      void removeListener(ChannelListener *l) { listeners.removeOne(l); }
+      void addListener(ChannelListener* l);
+      void removeListener(ChannelListener* l);
       };
 
 //---------------------------------------------------------
 //   ChannelListener
 //---------------------------------------------------------
 
-class ChannelListener {
-public:
+class ChannelListener : public Listener<Channel::Prop> {
+   public:
       virtual void propertyChanged(Channel::Prop property) = 0;
-      virtual void disconnectChannelListener() = 0;
+      void setNotifier(Channel* ch) { Listener::setNotifier(nullptr); if (ch) ch->addListener(this); }
+
+   private:
+      void receive(Channel::Prop prop) override { propertyChanged(prop); }
       };
 
 //---------------------------------------------------------

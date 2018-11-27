@@ -136,18 +136,6 @@ MixerTrackPart::MixerTrackPart(QWidget *parent, MixerTrackItemPtr mti, bool expa
       }
 
 //---------------------------------------------------------
-//   ~MixerTrack
-//---------------------------------------------------------
-
-MixerTrackPart::~MixerTrackPart()
-      {
-      if (_mti) {
-            Channel* chan = _mti->focusedChan();
-            chan->removeListener(this);
-            }
-      }
-
-//---------------------------------------------------------
 //   expandToggled
 //---------------------------------------------------------
 
@@ -229,17 +217,6 @@ void MixerTrackPart::updateNameLabel()
 void MixerTrackPart::paintEvent(QPaintEvent*)
       {
       applyStyle();
-      }
-
-
-//---------------------------------------------------------
-//   disconnectChannelListener
-//---------------------------------------------------------
-
-void MixerTrackPart::disconnectChannelListener()
-      {
-      //Channel has been destroyed.  Don't remove listener when invoking destructor.
-      _mti = nullptr;
       }
 
 //---------------------------------------------------------
