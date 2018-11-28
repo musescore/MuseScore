@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorSlur</class>
  <widget class="QWidget" name="InspectorSlur">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>220</width>
+    <height>104</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Slur/Tie Inspector</string>
   </property>
@@ -68,33 +76,6 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetLineType">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Line type' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Line type:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>lineType</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QComboBox" name="lineType">
         <property name="accessibleName">
@@ -122,17 +103,16 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QToolButton" name="resetSlurDirection">
-        <property name="toolTip">
-         <string>Reset to default</string>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Line type:</string>
         </property>
-        <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        <property name="buddy">
+         <cstring>lineType</cstring>
         </property>
        </widget>
       </item>
@@ -171,17 +151,29 @@
         </item>
        </widget>
       </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetLineType"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetSlurDirection"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>lineType</tabstop>
-  <tabstop>resetLineType</tabstop>
   <tabstop>slurDirection</tabstop>
-  <tabstop>resetSlurDirection</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

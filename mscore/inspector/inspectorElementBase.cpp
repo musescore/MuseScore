@@ -33,8 +33,6 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
             { Pid::AUTOPLACE, 0, e.autoplace,  e.resetAutoplace },
             };
       pList = { { e.title, e.panel } };
-      connect(e.resetAutoplace, SIGNAL(clicked()), SLOT(resetAutoplace()));
-      connect(e.autoplace, SIGNAL(toggled(bool)),  SLOT(autoplaceChanged(bool)));
       }
 
 //---------------------------------------------------------
@@ -48,27 +46,6 @@ void InspectorElementBase::setElement()
             e.offset->setSuffix("sp");
       else
             e.offset->setSuffix("mm");
-      autoplaceChanged(inspector->element()->autoplace());
-      }
-
-//---------------------------------------------------------
-//   autoplaceChanged
-//---------------------------------------------------------
-
-void InspectorElementBase::autoplaceChanged(bool /*val*/)
-      {
-//      for (auto i : std::vector<QWidget*>{ e.offsetLabel, e.offset, e.resetOffset }) {
-//            i->setVisible(!val);
-//            }
-      }
-
-//---------------------------------------------------------
-//   resetAutoplace
-//---------------------------------------------------------
-
-void InspectorElementBase::resetAutoplace()
-      {
-      autoplaceChanged(true);
       }
 
 } // namespace Ms

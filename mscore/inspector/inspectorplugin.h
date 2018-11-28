@@ -44,11 +44,7 @@ class InspectorPlugin : public QDesignerCustomWidgetInterface {
     	QString whatsThis() const    { return QString();     }
     	QString toolTip() const      { return QString();     }
     	QString group() const        { return "MuseScore Inspector Widgets"; }
-	void initialize(QDesignerFormEditorInterface *) {
-		if (m_initialized)
-			return;
-		m_initialized = true;
-		}
+	void initialize(QDesignerFormEditorInterface *);
       };
 
 //---------------------------------------------------------

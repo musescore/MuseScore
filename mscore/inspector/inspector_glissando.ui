@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>349</width>
-    <height>257</height>
+    <height>260</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -115,20 +115,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetType">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Type' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="9" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
@@ -139,20 +125,6 @@
         </property>
         <property name="buddy">
          <cstring>glissandoStyle</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="2">
-       <widget class="QToolButton" name="resetGlissandoStyle">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Style' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -198,34 +170,6 @@
           <string>Wavy</string>
          </property>
         </item>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QToolButton" name="resetShowText">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Show text' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="2">
-       <widget class="QToolButton" name="resetPlayGlissando">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Play' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
        </widget>
       </item>
       <item row="2" column="0" colspan="2">
@@ -278,20 +222,6 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="2">
-       <widget class="QToolButton" name="resetFontFace">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font face' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="7" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
@@ -309,20 +239,6 @@
         </property>
         <property name="accessibleName">
          <string>Reset 'Font size' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QToolButton" name="resetText">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Text' value</string>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -353,9 +269,21 @@
          </spacer>
         </item>
         <item>
-         <widget class="Ms::FontStyleSelect" name="fontStyle" native="true"/>
+         <widget class="Ms::FontStyleSelect" name="fontStyle"/>
         </item>
        </layout>
+      </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetType"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetShowText"/>
+      </item>
+      <item row="4" column="2">
+       <widget class="Ms::ResetButton" name="resetText"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetFontFace"/>
       </item>
       <item row="7" column="2">
        <widget class="QToolButton" name="resetFontStyle">
@@ -363,7 +291,35 @@
          <string>Reset to default</string>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Style' values</string>
+         <string>Reset 'Font size' value</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="2">
+       <widget class="QToolButton" name="resetGlissandoStyle">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Font size' value</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../musescore.qrc">
+          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="2">
+       <widget class="QToolButton" name="resetPlayGlissando">
+        <property name="toolTip">
+         <string>Reset to default</string>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Font size' value</string>
         </property>
         <property name="icon">
          <iconset resource="../musescore.qrc">
@@ -383,24 +339,23 @@
    <header>inspector/fontStyleSelect.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>type</tabstop>
-  <tabstop>resetType</tabstop>
   <tabstop>showText</tabstop>
-  <tabstop>resetShowText</tabstop>
   <tabstop>text</tabstop>
-  <tabstop>resetText</tabstop>
   <tabstop>fontFace</tabstop>
-  <tabstop>resetFontFace</tabstop>
   <tabstop>fontSize</tabstop>
   <tabstop>resetFontSize</tabstop>
-  <tabstop>resetFontStyle</tabstop>
   <tabstop>glissandoStyle</tabstop>
-  <tabstop>resetGlissandoStyle</tabstop>
   <tabstop>playGlissando</tabstop>
-  <tabstop>resetPlayGlissando</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorStaffText</class>
  <widget class="QWidget" name="InspectorStaffText">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>198</width>
+    <height>104</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Staff/System Text Inspector</string>
   </property>
@@ -98,20 +106,6 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetPlacement">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
@@ -133,30 +127,28 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QToolButton" name="resetStyle">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Style' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetStyle"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetPlacement"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>style</tabstop>
-  <tabstop>resetStyle</tabstop>
   <tabstop>placement</tabstop>
-  <tabstop>resetPlacement</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorBeam</class>
  <widget class="QWidget" name="InspectorBeam">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>181</width>
+    <height>223</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Beam Inspector</string>
   </property>
@@ -117,20 +125,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
-       <widget class="QToolButton" name="resetDirection">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="1" colspan="2">
        <widget class="QDoubleSpinBox" name="growLeft">
         <property name="accessibleName">
@@ -144,34 +138,6 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="3">
-       <widget class="QToolButton" name="resetGrowRight">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Grow right' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QToolButton" name="resetGrowLeft">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Grow left' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="1" colspan="2">
        <widget class="QDoubleSpinBox" name="growRight">
         <property name="accessibleName">
@@ -182,48 +148,6 @@
         </property>
         <property name="value">
          <double>1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="3">
-       <widget class="QToolButton" name="resetUserPosition">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'User position' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="resetDistribute">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Local relayout' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="3">
-       <widget class="QToolButton" name="resetNoSlope">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Horizontal' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -282,12 +206,35 @@
       <item row="8" column="1" colspan="2">
        <widget class="Ms::OffsetSelect" name="pos" native="true"/>
       </item>
+      <item row="1" column="3">
+       <widget class="Ms::ResetButton" name="resetDistribute"/>
+      </item>
+      <item row="2" column="3">
+       <widget class="Ms::ResetButton" name="resetDirection"/>
+      </item>
+      <item row="3" column="3">
+       <widget class="Ms::ResetButton" name="resetGrowLeft"/>
+      </item>
+      <item row="4" column="3">
+       <widget class="Ms::ResetButton" name="resetGrowRight"/>
+      </item>
+      <item row="5" column="3">
+       <widget class="Ms::ResetButton" name="resetNoSlope"/>
+      </item>
+      <item row="6" column="3">
+       <widget class="Ms::ResetButton" name="resetUserPosition"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+  </customwidget>
   <customwidget>
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
@@ -298,17 +245,11 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>distribute</tabstop>
-  <tabstop>resetDistribute</tabstop>
   <tabstop>direction</tabstop>
-  <tabstop>resetDirection</tabstop>
   <tabstop>growLeft</tabstop>
-  <tabstop>resetGrowLeft</tabstop>
   <tabstop>growRight</tabstop>
-  <tabstop>resetGrowRight</tabstop>
   <tabstop>noSlope</tabstop>
-  <tabstop>resetNoSlope</tabstop>
   <tabstop>userPosition</tabstop>
-  <tabstop>resetUserPosition</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

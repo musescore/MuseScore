@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorVibrato</class>
  <widget class="QWidget" name="InspectorVibrato">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>291</width>
+    <height>129</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Vibrato Inspector</string>
   </property>
@@ -81,34 +89,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="resetPlacement">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="QToolButton" name="resetPlayArticulation">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Play' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QComboBox" name="placement">
         <property name="accessibleName">
@@ -174,32 +154,32 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="QToolButton" name="resetVibratoType">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Type' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetVibratoType"/>
+      </item>
+      <item row="1" column="3">
+       <widget class="Ms::ResetButton" name="resetPlacement"/>
+      </item>
+      <item row="2" column="3">
+       <widget class="Ms::ResetButton" name="resetPlayArticulation"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>vibratoType</tabstop>
-  <tabstop>resetVibratoType</tabstop>
   <tabstop>placement</tabstop>
-  <tabstop>resetPlacement</tabstop>
   <tabstop>playArticulation</tabstop>
-  <tabstop>resetPlayArticulation</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

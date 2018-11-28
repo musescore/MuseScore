@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>365</width>
-    <height>207</height>
+    <height>210</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -112,20 +112,6 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="2">
-       <widget class="QToolButton" name="resetPlayBend">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Play' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="0">
        <spacer name="verticalSpacer">
         <property name="orientation">
@@ -178,34 +164,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QToolButton" name="resetFontSize">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font size' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetFontFace">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font face' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
@@ -239,20 +197,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetLineWidth">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font face' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
@@ -269,7 +213,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="Ms::FontStyleSelect" name="fontStyle" native="true">
+         <widget class="Ms::FontStyleSelect" name="fontStyle">
           <property name="minimumSize">
            <size>
             <width>10</width>
@@ -280,19 +224,20 @@
         </item>
        </layout>
       </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetLineWidth"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetFontFace"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetFontSize"/>
+      </item>
       <item row="3" column="2">
-       <widget class="QToolButton" name="resetFontStyle">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Style' values</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetFontStyle"/>
+      </item>
+      <item row="4" column="2">
+       <widget class="Ms::ResetButton" name="resetPlayBend"/>
       </item>
      </layout>
     </widget>
@@ -306,18 +251,18 @@
    <header>inspector/fontStyleSelect.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>lineWidth</tabstop>
-  <tabstop>resetLineWidth</tabstop>
   <tabstop>fontFace</tabstop>
-  <tabstop>resetFontFace</tabstop>
   <tabstop>fontSize</tabstop>
-  <tabstop>resetFontSize</tabstop>
-  <tabstop>resetFontStyle</tabstop>
   <tabstop>playBend</tabstop>
-  <tabstop>resetPlayBend</tabstop>
   <tabstop>properties</tabstop>
  </tabstops>
  <resources>

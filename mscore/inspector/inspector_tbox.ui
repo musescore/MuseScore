@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorTBox</class>
  <widget class="QWidget" name="InspectorTBox">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>265</width>
+    <height>213</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Text Frame Inspector</string>
   </property>
@@ -94,37 +102,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetTopGap">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="whatsThis">
-         <string/>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Top gap' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetBottomGap">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Bottom gap' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="1">
        <widget class="QDoubleSpinBox" name="leftMargin">
         <property name="accessibleName">
@@ -151,20 +128,6 @@
         </property>
         <property name="buddy">
          <cstring>bottomMargin</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QToolButton" name="resetRightMargin">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Right margin' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -197,20 +160,6 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="2">
-       <widget class="QToolButton" name="resetBottomMargin">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Bottom margin' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="1">
        <widget class="QDoubleSpinBox" name="bottomMargin">
         <property name="accessibleName">
@@ -231,34 +180,6 @@
        <widget class="Line" name="line">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QToolButton" name="resetTopMargin">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Top margin' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QToolButton" name="resetLeftMargin">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Left margin' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -345,25 +266,45 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetTopGap"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetBottomGap"/>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetLeftMargin"/>
+      </item>
+      <item row="4" column="2">
+       <widget class="Ms::ResetButton" name="resetRightMargin"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetTopMargin"/>
+      </item>
+      <item row="6" column="2">
+       <widget class="Ms::ResetButton" name="resetBottomMargin"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>topGap</tabstop>
-  <tabstop>resetTopGap</tabstop>
   <tabstop>bottomGap</tabstop>
-  <tabstop>resetBottomGap</tabstop>
   <tabstop>leftMargin</tabstop>
-  <tabstop>resetLeftMargin</tabstop>
   <tabstop>rightMargin</tabstop>
-  <tabstop>resetRightMargin</tabstop>
   <tabstop>topMargin</tabstop>
-  <tabstop>resetTopMargin</tabstop>
   <tabstop>bottomMargin</tabstop>
-  <tabstop>resetBottomMargin</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorOttava</class>
  <widget class="QWidget" name="InspectorOttava">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>183</width>
+    <height>129</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Ottava Inspector</string>
   </property>
@@ -148,20 +156,6 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="resetPlacement">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="numbersOnly">
         <property name="focusPolicy">
@@ -172,32 +166,30 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="3">
+       <widget class="Ms::ResetButton" name="resetPlacement"/>
+      </item>
       <item row="2" column="3">
-       <widget class="QToolButton" name="resetNumbersOnly">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Numbers only' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetNumbersOnly"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>ottavaType</tabstop>
   <tabstop>placement</tabstop>
-  <tabstop>resetPlacement</tabstop>
   <tabstop>numbersOnly</tabstop>
-  <tabstop>resetNumbersOnly</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
