@@ -381,9 +381,29 @@ void FretDiagram::layout()
             setPos(QPointF());
             return;
             }
-      autoplaceSegmentElement(styleP(Sid::fretMinDistance));
+      qreal minDistance = styleP(Sid::fretMinDistance);
+      autoplaceSegmentElement(minDistance);
       if (_harmony)
             _harmony->layout();
+      if (_harmony && _harmony->visible() && _harmony->autoplace() && _harmony->parent()) {
+            Segment* s = toSegment(parent());
+            Measure* m = s->measure();
+            int si     = staffIdx();
+
+            SysStaff* ss = m->system()->staff(si);
+            QRectF r     = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos());
+
+            SkylineLine sk(false);
+            sk.add(r.x(), r.bottom(), r.width());
+            qreal d = sk.minDistance(ss->skyline().north());
+            if (d > -minDistance) {
+                  qreal yd = d + minDistance;
+                  yd *= -1.0;
+                  _harmony->rypos() += yd;
+                  r.translate(QPointF(0.0, yd));
+                  }
+            ss->skyline().add(r);
+            }
       }
 
 //---------------------------------------------------------
