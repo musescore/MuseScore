@@ -3493,7 +3493,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
             bool needKeysig = isFirstSystem || score()->styleB(Sid::genKeysig);
 
             // If we need a Key::C KeySig (which would be invisible) and there is
-            // a courtesy key sig, dont create it and switch generated flags.
+            // a courtesy key sig, don’t create it and switch generated flags.
             // This avoids creating an invisible KeySig which can distort layout.
 
             KeySigEvent keyIdx = staff->keySigEvent(tick());

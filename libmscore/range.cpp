@@ -464,7 +464,7 @@ static void checkRest(Fraction& rest, Measure*& m, const Fraction& d)
 
 bool TrackList::write(Score* score, int tick) const
       {
-      if ((_track % VOICES) && size() == 1 && at(0)->isRest())     // dont write rests in voice > 0
+      if ((_track % VOICES) && size() == 1 && at(0)->isRest())     // don’t write rests in voice > 0
             return true;
       Measure* measure = score->tick2measure(tick);
       Measure* m       = measure;

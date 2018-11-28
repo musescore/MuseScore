@@ -3626,7 +3626,7 @@ void ScoreView::triggerCmdRealtimeAdvance()
             allowRealtimeRests = true;
             return;
             }
-      // give audible feedback immediately to indicate a beat, but dont advance just yet.
+      // give audible feedback immediately to indicate a beat, but don’t advance just yet.
       seq->playMetronomeBeat(_score->tick2beatType(is.tick()));
       // The user will want to press notes "on the beat" and not before the beat, so wait a
       // little in case midi input event is received just after realtime-advance was called.

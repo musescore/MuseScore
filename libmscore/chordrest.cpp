@@ -180,7 +180,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
                   t /= staff()->timeStretch(xml.curTick());
             xml.incCurTick(t.ticks());
             }
-      for (auto i : score()->spanner()) {     // TODO: dont search whole list
+      for (auto i : score()->spanner()) {     // TODO: don’t search whole list
             Spanner* s = i.second;
             if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.canWrite(s))
                   continue;

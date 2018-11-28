@@ -138,7 +138,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
                   }
             }
       int n = _layer.size();
-      for (int i = 1; i < n; ++i) {       // dont save default variant
+      for (int i = 1; i < n; ++i) {       // don’t save default variant
             const Layer& l = _layer[i];
             xml.tagE(QString("Layer name=\"%1\" mask=\"%2\"").arg(l.name).arg(l.tags));
             }
