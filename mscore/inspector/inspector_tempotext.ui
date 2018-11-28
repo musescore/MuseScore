@@ -98,7 +98,7 @@
          <string>BPM</string>
         </property>
         <property name="decimals">
-         <number>1</number>
+         <number>2</number>
         </property>
         <property name="minimum">
          <double>5.000000000000000</double>
@@ -172,16 +172,16 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetFollowText"/>
+       <widget class="Ms::ResetButton" name="resetFollowText" native="true"/>
       </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetTempo"/>
+       <widget class="Ms::ResetButton" name="resetTempo" native="true"/>
       </item>
       <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetStyle"/>
+       <widget class="Ms::ResetButton" name="resetStyle" native="true"/>
       </item>
       <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetPlacement"/>
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true"/>
       </item>
      </layout>
     </widget>
