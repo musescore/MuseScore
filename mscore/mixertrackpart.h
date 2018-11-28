@@ -77,7 +77,7 @@ public:
       MixerTrackGroup* group() override { return _group; }
       MixerTrackItemPtr mti() override { return _mti; }
       void setGroup(MixerTrackGroup* group) { _group = group; }
-      void paintEvent(QPaintEvent* evt) override;
+      void showEvent(QShowEvent*) override;
       };
 
 }
