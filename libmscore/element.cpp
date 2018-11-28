@@ -2154,9 +2154,9 @@ void Element::autoplaceSegmentElement(qreal minDistance)
 void Element::autoplaceSegmentElement(qreal minDistance)
       {
       if (visible() && autoplace() && parent()) {
-            Segment* s        = toSegment(parent());
-            Measure* m        = s->measure();
-            int si            = staffIdx();
+            Segment* s = toSegment(parent());
+            Measure* m = s->measure();
+            int si     = staffIdx();
 
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + s->pos() + pos());
