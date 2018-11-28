@@ -6170,6 +6170,8 @@ void MuseScore::switchLayoutMode(LayoutMode mode)
       cv->pageTop();
       if (m && m != cs->firstMeasureMM())
             cv->adjustCanvasPosition(m, false);
+      if (cv->noteEntryMode())
+            cv->moveCursor();
       }
 
 //---------------------------------------------------------
