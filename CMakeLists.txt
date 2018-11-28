@@ -216,7 +216,7 @@ if (APPLE)
    # This is necessary for genManual to be executed during the build phase,
    # it needs to be able to get the Qt libs.
    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-   SET(CMAKE_INSTALL_RPATH "${QT_INSTALL_PREFIX}/lib")
+   SET(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
 else (APPLE)
    if (MSVC)
       if (BUILD_64 STREQUAL "ON")
