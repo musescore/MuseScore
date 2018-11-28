@@ -37,6 +37,6 @@
 { "in": "07-Band_and_Percussion/07-Large_Pit_Percussion.mscx", "out": "07-Band_and_Percussion/07-Large_Pit_Percussion.mscz"},
 { "in": "07-Band_and_Percussion/08-Small_Pit_Percussion.mscx", "out": "07-Band_and_Percussion/08-Small_Pit_Percussion.mscz"},
 { "in": "08-Orchestral/01-Classical_Orchestra.mscx",           "out": "08-Orchestral/01-Classical_Orchestra.mscz"},
-{ "in": "08-Orchestral/02-Concert_Orchestra.mscx",             "out": "08-Orchestral/02-Concert_Orchestra.mscz"},
+{ "in": "08-Orchestral/02-Symphony_Orchestra.mscx",            "out": "08-Orchestral/02-Symphony_Orchestra.mscz"},
 { "in": "08-Orchestral/03-String_Orchestra.mscx",              "out": "08-Orchestral/03-String_Orchestra.mscz"}
 ]
