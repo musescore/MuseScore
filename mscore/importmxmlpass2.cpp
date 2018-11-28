@@ -1161,7 +1161,10 @@ static void addFermataToChord(ChordRest* cr, SymId articSym, bool up)
       Fermata* na = new Fermata(articSym, cr->score());
       na->setTrack(cr->track());
       na->setPlacement(up ? Placement::ABOVE : Placement::BELOW);
-      cr->segment()->add(na);
+      if (cr->segment() == nullptr && cr->isGrace())
+            cr->el().push_back(na);       // store for later move to segment
+      else
+            cr->segment()->add(na);
       }
 
 //---------------------------------------------------------
@@ -1962,8 +1965,17 @@ static void addGraceChordsAfter(Chord* c, GraceChordList& gcl, int& gac)
 
 static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
       {
-      for (int i = gcl.size() - 1; i >= 0; i--)
-            c->add(gcl.at(i));        // TODO check if same voice ?
+      for (int i = gcl.size() - 1; i >= 0; i--) {
+            Chord* gc = gcl.at(i);
+            for (Element* e : gc->el()) {
+                  if (e->isFermata()) {
+                        c->segment()->add(e);
+                        gc->el().remove(e);
+                        break;                  // out of the door, line on the left, one cross each
+                        }
+                  }
+            c->add(gc);        // TODO check if same voice ?
+            }
       gcl.clear();
       }
 
