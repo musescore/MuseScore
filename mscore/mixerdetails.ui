@@ -162,7 +162,7 @@
               <item row="0" column="4">
                <widget class="QSpinBox" name="channelSpinBox">
                 <property name="toolTip">
-                 <string>MIDI channel mumber</string>
+                 <string>MIDI channel number</string>
                 </property>
                 <property name="minimum">
                  <number>1</number>

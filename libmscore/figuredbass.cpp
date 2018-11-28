@@ -1104,7 +1104,7 @@ void FiguredBass::layout()
       // if element could be parsed into items, layout each element
       if (items.size() > 0) {
             layoutLines();
-            bbox().setRect(0, 0, _lineLenghts.at(0), 0);
+            bbox().setRect(0, 0, _lineLengths.at(0), 0);
             // layout each item and enlarge bbox to include items bboxes
             for (FiguredBassItem* item : items) {
                   item->layout();
@@ -1123,8 +1123,8 @@ void FiguredBass::layout()
 void FiguredBass::layoutLines()
       {
       if (_ticks <= 0 || !segment()) {
-            _lineLenghts.resize(1);                         // be sure to always have
-            _lineLenghts[0] = 0;                            // at least 1 item in array
+            _lineLengths.resize(1);                         // be sure to always have
+            _lineLengths[0] = 0;                            // at least 1 item in array
             return;
             }
 
@@ -1151,8 +1151,8 @@ void FiguredBass::layoutLines()
             }
       if (!m || !nextSegm) {
             qDebug("FiguredBass layout: no segment found for tick %d", nextTick);
-            _lineLenghts.resize(1);                         // be sure to always have
-            _lineLenghts[0] = 0;                            // at least 1 item in array
+            _lineLengths.resize(1);                         // be sure to always have
+            _lineLengths[0] = 0;                            // at least 1 item in array
             return;
             }
 
@@ -1199,14 +1199,14 @@ qDebug("FiguredBass: duration indicator middle line not implemented");
 qDebug("FiguredBass: duration indicator end line not implemented");
                   }
             // store length item, reusing array items if already present
-            if (_lineLenghts.size() <= segIdx)
-                  _lineLenghts.append(len);
+            if (_lineLengths.size() <= segIdx)
+                  _lineLengths.append(len);
             else
-                  _lineLenghts[segIdx] = len;
+                  _lineLengths[segIdx] = len;
             }
       // if more array items than needed, truncate array
-      if (_lineLenghts.size() > segIdx)
-            _lineLenghts.resize(segIdx);
+      if (_lineLengths.size() > segIdx)
+            _lineLengths.resize(segIdx);
       }
 
 //---------------------------------------------------------
@@ -1217,7 +1217,7 @@ void FiguredBass::draw(QPainter* painter) const
       {
       // if not printing, draw duration line(s)
       if (!score()->printing() && score()->showUnprintable()) {
-            for (qreal len : _lineLenghts) {
+            for (qreal len : _lineLengths) {
                   if (len > 0) {
                         painter->setPen(QPen(Qt::lightGray, 1));
                         painter->drawLine(0.0, -2, len, -2);      // -2: 2 rast. un. above digits

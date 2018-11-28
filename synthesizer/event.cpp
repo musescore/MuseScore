@@ -118,7 +118,7 @@ Event::Event(const Event& e)
       _voice      = e._voice;
       _notes      = e._notes;
       if (e._edata) {
-            _edata = new unsigned char[e._len + 1];  // dont forget trailing zero
+            _edata = new unsigned char[e._len + 1];  // don’t forget trailing zero
             memcpy(_edata, e._edata, e._len+1);
             }
       else

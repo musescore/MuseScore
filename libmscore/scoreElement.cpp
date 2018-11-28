@@ -511,7 +511,7 @@ void ScoreElement::linkTo(ScoreElement* element)
             }
       else {
             if (isStaff())
-                  _links = new LinkedElements(score(), -1); // dont use lid
+                  _links = new LinkedElements(score(), -1); // don’t use lid
             else
                   _links = new LinkedElements(score());
             _links->append(element);

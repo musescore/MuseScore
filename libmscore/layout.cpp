@@ -1287,7 +1287,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                         }
                   }
             }
-      // dont allow a complete empty system
+      // don’t allow a complete empty system
       if (systemIsEmpty) {
             Staff* staff = _staves.front();
             SysStaff* ss = system->staff(staff->idx());
@@ -2105,7 +2105,7 @@ int LayoutContext::adjustMeasureNo(MeasureBase* m)
       {
       measureNo += m->noOffset();
       m->setNo(measureNo);
-      if (!m->irregular())          // dont count measure
+      if (!m->irregular())          // don’t count measure
             ++measureNo;
       if (m->sectionBreak())
             measureNo = 0;
@@ -2124,7 +2124,7 @@ void Score::createBeams(Measure* measure)
       for (int track = 0; track < ntracks(); ++track) {
             Staff* stf = staff(track2staff(track));
 
-            // dont compute beams for invisible staffs and tablature without stems
+            // don’t compute beams for invisible staffs and tablature without stems
             if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->slashStyle()))
                   continue;
 
@@ -3168,7 +3168,7 @@ System* Score::collectSystem(LayoutContext& lc)
 #endif
             rest = systemWidth - minWidth;
             //
-            // dont stretch last system row, if accumulated minWidth is <= lastSystemFillLimit
+            // don’t stretch last system row, if accumulated minWidth is <= lastSystemFillLimit
             //
             if (lc.curMeasure == 0 && ((minWidth / systemWidth) <= styleD(Sid::lastSystemFillLimit))) {
                   if (minWidth > rest)
@@ -3773,7 +3773,7 @@ void Score::doLayoutRange(int stick, int etick)
       // rest which replaces the measure range
 
       if (!m->system() && m->isMeasure() && toMeasure(m)->hasMMRest()) {
-            qDebug("  dont start with mmrest");
+            qDebug("  don’t start with mmrest");
             m = toMeasure(m)->mmRest();
             }
 
