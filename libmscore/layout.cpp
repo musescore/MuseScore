@@ -2491,7 +2491,13 @@ void Score::getNextMeasure(LayoutContext& lc)
                               staff(staffIdx)->addTimeSig(ts);
                         }
                   }
-            else if (isMaster() && segment.isChordRestType()) {
+            else if (segment.isChordRestType()) {
+                  for (Element* e : segment.annotations()) {
+                        if (e->isSymbol())
+                              e->layout();
+                        }
+                  if (!isMaster())
+                        continue;
 #if 0 // ws
                   for (Element* e : segment.annotations()) {
                         if (!(e->isTempoText()
