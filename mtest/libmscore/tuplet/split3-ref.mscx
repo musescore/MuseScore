@@ -135,7 +135,7 @@
                 <next>
                   <location>
                     <measures>1</measures>
-                    <fractions>-2/3</fractions>
+                    <fractions>-11/12</fractions>
                     </location>
                   </next>
                 </Spanner>
@@ -168,7 +168,7 @@
                 <prev>
                   <location>
                     <measures>-1</measures>
-                    <fractions>2/3</fractions>
+                    <fractions>11/12</fractions>
                     </location>
                   </prev>
                 </Spanner>

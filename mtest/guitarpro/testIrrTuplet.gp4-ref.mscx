@@ -447,10 +447,12 @@
               </Beam>
             <Chord>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <durationType>16th</durationType>
               <Note>
                 <linked>
+                  <indexDiff>1</indexDiff>
                   </linked>
                 <Spanner type="Tie">
                   <Tie>

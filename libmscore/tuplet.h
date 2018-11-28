@@ -119,8 +119,6 @@ class Tuplet final : public DurationElement {
       Direction direction() const          { return _direction; }
       bool isUp() const                    { return _isUp; }
       virtual int tick() const override    { return _tick; }
-      virtual Fraction afrac() const override;
-      virtual Fraction rfrac() const override;
       void setTick(int val)                { _tick = val; }
       Fraction elementsDuration();
       void sortElements();

@@ -952,27 +952,6 @@ void Tuplet::sortElements()
       }
 
 //---------------------------------------------------------
-//   afrac
-//---------------------------------------------------------
-
-Fraction Tuplet::afrac() const
-      {
-      return Fraction::fromTicks(tick());
-      }
-
-//---------------------------------------------------------
-//   rfrac
-//---------------------------------------------------------
-
-Fraction Tuplet::rfrac() const
-      {
-      const Measure* m = measure();
-      if (m)
-            return Fraction::fromTicks(tick() - m->tick());
-      return afrac();
-      }
-
-//---------------------------------------------------------
 //   elementsDuration
 ///  Get the sum of the element fraction in the tuplet,
 ///  even if the tuplet is not complete yet
