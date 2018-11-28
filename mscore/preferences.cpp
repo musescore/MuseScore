@@ -468,6 +468,12 @@ QHash<QString, QVariant> Preferences::getDefaultLocalPreferences() {
       return defaultLocalPreferences;
       }
 
+void Preferences::setLocalPreference(QString key, QVariant value)
+      {
+      if (localPreferences.contains(key))
+            localPreferences[key] = value;
+      }
+
 Preference::Preference(QVariant defaultValue, QMetaType::Type type, bool showInAdvancedList)
       : _defaultValue(defaultValue),
         _showInAdvancedList(showInAdvancedList),

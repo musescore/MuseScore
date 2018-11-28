@@ -351,6 +351,7 @@ class Preferences {
       void clearMidiRemote(int recordId);
 
       QHash<QString, QVariant> getLocalPreferences()  { return localPreferences; }
+      void setLocalPreference(QString key, QVariant value);
       void setUseLocalPreferences(bool value)         { useLocalPrefs = value;   }
       bool getUseLocalPreferences()                   { return useLocalPrefs;    }
       void updateLocalPreferences() { localPreferences = getDefaultLocalPreferences(); }
