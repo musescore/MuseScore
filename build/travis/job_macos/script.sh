@@ -133,13 +133,14 @@ export ARTIFACTS_REGION=us-east-1
 export ARTIFACTS_BUCKET=sparkle.musescore.org
 export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
 export ARTIFACTS_PERMISSIONS=public-read
-export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3"
+export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/macos"
 export ARTIFACTS_PATHS=appcast.xml
 artifacts upload
 
 pip install awscli
 export AWS_ACCESS_KEY_ID=$UPDATE_S3_KEY
 export AWS_SECRET_ACCESS_KEY=$UPDATE_S3_SECRET
+export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3"
 aws configure set preview.cloudfront true
 aws cloudfront create-invalidation --distribution-id E3VZY4YYZZG82P --paths "${ARTIFACTS_TARGET_PATHS}/*"
 
