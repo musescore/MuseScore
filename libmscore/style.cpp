@@ -2140,7 +2140,7 @@ bool MStyle::readStyleValCompat(XmlReader& e)
 
 bool MStyle::readTextStyleValCompat(XmlReader& e)
       {
-      constexpr std::array<std::pair<const char*, FontStyle>, 3> styleNamesEndings {{
+      static const std::array<std::pair<const char*, FontStyle>, 3> styleNamesEndings {{
             { "FontBold",      FontStyle::Bold      },
             { "FontItalic",    FontStyle::Italic    },
             { "FontUnderline", FontStyle::Underline }
