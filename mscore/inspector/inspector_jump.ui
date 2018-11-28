@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorJump</class>
  <widget class="QWidget" name="InspectorJump">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>260</width>
+    <height>154</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Jump Inspector</string>
   </property>
@@ -128,39 +136,35 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
+      <item row="5" column="0" colspan="2">
        <widget class="QCheckBox" name="playRepeats">
         <property name="text">
          <string>Play repeats</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="QToolButton" name="resetPlayRepeats">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Play repeats' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetPlayRepeats"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>jumpTo</tabstop>
   <tabstop>playUntil</tabstop>
   <tabstop>continueAt</tabstop>
   <tabstop>playRepeats</tabstop>
-  <tabstop>resetPlayRepeats</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

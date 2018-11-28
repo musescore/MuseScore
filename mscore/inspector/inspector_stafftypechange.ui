@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorStaffTypeChange</class>
  <widget class="QWidget" name="InspectorStaffTypeChange">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>248</width>
+    <height>372</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Staff Type Change Inspector</string>
   </property>
@@ -96,20 +104,6 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="2">
-      <widget class="QToolButton" name="resetLines">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Lines' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
      <item row="7" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
@@ -133,20 +127,6 @@
        </property>
        <property name="maximum">
         <number>8</number>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="2">
-      <widget class="QToolButton" name="resetStepOffset">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Step offset' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -185,20 +165,6 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="2">
-      <widget class="QToolButton" name="resetLineDistance">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Line distance' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
      <item row="11" column="0" colspan="2">
       <widget class="QCheckBox" name="slashStyle">
        <property name="text">
@@ -213,104 +179,6 @@
       <widget class="QComboBox" name="noteheadScheme">
        <property name="accessibleName">
         <string>Notehead scheme</string>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="2">
-      <widget class="QToolButton" name="resetNoteheadScheme">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Notehead scheme' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="2">
-      <widget class="QToolButton" name="resetShowBarlines">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Show barlines' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="2">
-      <widget class="QToolButton" name="resetShowLedgerlines">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Show ledger lines' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="2">
-      <widget class="QToolButton" name="resetSlashStyle">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Slash style' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="13" column="2">
-      <widget class="QToolButton" name="resetGenClefs">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Generate clefs' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="14" column="2">
-      <widget class="QToolButton" name="resetGenTimesig">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Generate time signatures' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item row="15" column="2">
-      <widget class="QToolButton" name="resetGenKeysig">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Generate key signatures' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -397,20 +265,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="2">
-      <widget class="QToolButton" name="resetScale">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Scale' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
@@ -421,20 +275,6 @@
        </property>
        <property name="buddy">
         <cstring>yoffset</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QToolButton" name="resetSmall">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Small' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
        </property>
       </widget>
      </item>
@@ -471,51 +311,71 @@
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="QToolButton" name="resetYoffset">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
-       <property name="accessibleName">
-        <string>Reset 'Offset Y' value</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../musescore.qrc">
-         <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-       </property>
-      </widget>
+      <widget class="Ms::ResetButton" name="resetYoffset"/>
+     </item>
+     <item row="2" column="2">
+      <widget class="Ms::ResetButton" name="resetSmall"/>
+     </item>
+     <item row="3" column="2">
+      <widget class="Ms::ResetButton" name="resetScale"/>
+     </item>
+     <item row="5" column="2">
+      <widget class="Ms::ResetButton" name="resetLines"/>
+     </item>
+     <item row="6" column="2">
+      <widget class="Ms::ResetButton" name="resetLineDistance"/>
+     </item>
+     <item row="7" column="2">
+      <widget class="Ms::ResetButton" name="resetStepOffset"/>
+     </item>
+     <item row="9" column="2">
+      <widget class="Ms::ResetButton" name="resetShowBarlines"/>
+     </item>
+     <item row="10" column="2">
+      <widget class="Ms::ResetButton" name="resetShowLedgerlines"/>
+     </item>
+     <item row="11" column="2">
+      <widget class="Ms::ResetButton" name="resetSlashStyle"/>
+     </item>
+     <item row="12" column="2">
+      <widget class="Ms::ResetButton" name="resetNoteheadScheme"/>
+     </item>
+     <item row="13" column="2">
+      <widget class="Ms::ResetButton" name="resetGenClefs"/>
+     </item>
+     <item row="14" column="2">
+      <widget class="Ms::ResetButton" name="resetGenTimesig"/>
+     </item>
+     <item row="15" column="2">
+      <widget class="Ms::ResetButton" name="resetGenKeysig"/>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>yoffset</tabstop>
-  <tabstop>resetYoffset</tabstop>
   <tabstop>small</tabstop>
-  <tabstop>resetSmall</tabstop>
   <tabstop>scale</tabstop>
-  <tabstop>resetScale</tabstop>
   <tabstop>lines</tabstop>
-  <tabstop>resetLines</tabstop>
   <tabstop>lineDistance</tabstop>
-  <tabstop>resetLineDistance</tabstop>
   <tabstop>stepOffset</tabstop>
-  <tabstop>resetStepOffset</tabstop>
   <tabstop>showBarlines</tabstop>
-  <tabstop>resetShowBarlines</tabstop>
   <tabstop>showLedgerlines</tabstop>
-  <tabstop>resetShowLedgerlines</tabstop>
   <tabstop>slashStyle</tabstop>
-  <tabstop>resetSlashStyle</tabstop>
   <tabstop>noteheadScheme</tabstop>
-  <tabstop>resetNoteheadScheme</tabstop>
   <tabstop>genClefs</tabstop>
-  <tabstop>resetGenClefs</tabstop>
   <tabstop>genTimesig</tabstop>
-  <tabstop>resetGenTimesig</tabstop>
   <tabstop>genKeysig</tabstop>
-  <tabstop>resetGenKeysig</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

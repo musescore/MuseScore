@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorImage</class>
  <widget class="QWidget" name="InspectorImage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>215</width>
+    <height>154</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Image Inspector</string>
   </property>
@@ -68,20 +76,6 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="resetAutoscale">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Scale to frame size' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
@@ -89,20 +83,6 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="QToolButton" name="resetLockAspectRatio">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Lock aspect ratio' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -133,34 +113,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
-       <widget class="QToolButton" name="resetSize">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Size' values</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QToolButton" name="resetSizeIsSpatium">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Size in staff space units' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0" colspan="3">
        <widget class="QCheckBox" name="sizeIsSpatium">
         <property name="focusPolicy">
@@ -174,12 +126,30 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="3">
+       <widget class="Ms::ResetButton" name="resetAutoscale"/>
+      </item>
+      <item row="2" column="3">
+       <widget class="Ms::ResetButton" name="resetSize"/>
+      </item>
+      <item row="3" column="3">
+       <widget class="Ms::ResetButton" name="resetSizeIsSpatium"/>
+      </item>
+      <item row="4" column="3">
+       <widget class="Ms::ResetButton" name="resetLockAspectRatio"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>Ms::SizeSelect</class>
    <extends>QWidget</extends>
@@ -190,12 +160,8 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>autoscale</tabstop>
-  <tabstop>resetAutoscale</tabstop>
-  <tabstop>resetSize</tabstop>
   <tabstop>sizeIsSpatium</tabstop>
-  <tabstop>resetSizeIsSpatium</tabstop>
   <tabstop>lockAspectRatio</tabstop>
-  <tabstop>resetLockAspectRatio</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

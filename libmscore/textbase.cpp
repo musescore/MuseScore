@@ -2689,7 +2689,6 @@ bool TextBase::hasCustomFormatting() const
 
 QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) const
       {
-      printf("===strip style %d size %d face %d\n", removeStyle, removeSize, removeFace);
       QString _text;
       bool bold_      = false;
       bool italic_    = false;

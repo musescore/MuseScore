@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorNoteDot</class>
  <widget class="QWidget" name="InspectorNoteDot">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>199</width>
+    <height>79</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Note Dot Inspector</string>
   </property>
@@ -104,28 +112,24 @@
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QToolButton" name="resetDotPosition">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Dot position' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetDotPosition"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>dotPosition</tabstop>
-  <tabstop>resetDotPosition</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

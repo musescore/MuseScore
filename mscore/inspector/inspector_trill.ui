@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorTrill</class>
  <widget class="QWidget" name="InspectorTrill">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>243</width>
+    <height>154</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Trill Inspector</string>
   </property>
@@ -81,20 +89,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="resetTrillType">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Type' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -108,34 +102,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="3">
-       <widget class="QToolButton" name="resetOrnamentStyle">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Ornament style' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QToolButton" name="resetPlayArticulation">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Play' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
@@ -146,20 +112,6 @@
         </property>
         <property name="buddy">
          <cstring>placement</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="resetPlacement">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -231,21 +183,37 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="3">
+       <widget class="Ms::ResetButton" name="resetTrillType"/>
+      </item>
+      <item row="1" column="3">
+       <widget class="Ms::ResetButton" name="resetPlacement"/>
+      </item>
+      <item row="2" column="3">
+       <widget class="Ms::ResetButton" name="resetOrnamentStyle"/>
+      </item>
+      <item row="3" column="3">
+       <widget class="Ms::ResetButton" name="resetPlayArticulation"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>trillType</tabstop>
-  <tabstop>resetTrillType</tabstop>
   <tabstop>placement</tabstop>
-  <tabstop>resetPlacement</tabstop>
   <tabstop>ornamentStyle</tabstop>
-  <tabstop>resetOrnamentStyle</tabstop>
   <tabstop>playArticulation</tabstop>
-  <tabstop>resetPlayArticulation</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

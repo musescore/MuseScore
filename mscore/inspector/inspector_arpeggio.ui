@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorArpeggio</class>
  <widget class="QWidget" name="InspectorArpeggio">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>159</width>
+    <height>105</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Arpeggio Inspector</string>
   </property>
@@ -88,40 +96,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetPlayArpeggio">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Play' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetStretch">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Stretch' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="stretch">
         <property name="accessibleName">
@@ -129,17 +103,28 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetStretch"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetPlayArpeggio"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>stretch</tabstop>
-  <tabstop>resetStretch</tabstop>
   <tabstop>playArpeggio</tabstop>
-  <tabstop>resetPlayArpeggio</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

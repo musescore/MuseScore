@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorFretDiagram</class>
  <widget class="QWidget" name="InspectorFretDiagram">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>183</width>
+    <height>459</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Fretboard Diagram Inspector</string>
   </property>
@@ -139,40 +147,6 @@
         </item>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetMag">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Scale' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetPlacement">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
@@ -203,23 +177,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QToolButton" name="resetStrings">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Strings' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="1">
        <widget class="QSpinBox" name="frets">
         <property name="accessibleName">
@@ -247,40 +204,6 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="QToolButton" name="resetFrets">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Frets' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QToolButton" name="resetBarre">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Barré' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
@@ -295,23 +218,6 @@
        <widget class="QSpinBox" name="offset">
         <property name="accessibleName">
          <string>Offset</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="2">
-       <widget class="QToolButton" name="resetOffset">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Offset' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -334,12 +240,36 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetMag"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetPlacement"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetStrings"/>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetFrets"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetBarre"/>
+      </item>
+      <item row="6" column="2">
+       <widget class="Ms::ResetButton" name="resetOffset"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>Ms::FretCanvas</class>
    <extends>QFrame</extends>
@@ -350,17 +280,11 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>mag</tabstop>
-  <tabstop>resetMag</tabstop>
   <tabstop>placement</tabstop>
-  <tabstop>resetPlacement</tabstop>
   <tabstop>strings</tabstop>
-  <tabstop>resetStrings</tabstop>
   <tabstop>frets</tabstop>
-  <tabstop>resetFrets</tabstop>
   <tabstop>barre</tabstop>
-  <tabstop>resetBarre</tabstop>
   <tabstop>offset</tabstop>
-  <tabstop>resetOffset</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

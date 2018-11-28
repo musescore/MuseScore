@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>279</width>
-    <height>287</height>
+    <height>288</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -76,20 +76,6 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="2" column="2">
-       <widget class="QToolButton" name="resetTupletFontStyle">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font size' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="12" column="0" colspan="3">
        <widget class="QWidget" name="frameWidget" native="true">
         <layout class="QGridLayout" name="gridLayout_3">
@@ -124,20 +110,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetTupletFontSize">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font size' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0" colspan="2">
        <widget class="QFontComboBox" name="tupletFontFace">
         <property name="toolTip">
@@ -148,22 +120,17 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetTupletFontFace">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font face' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
-       <widget class="Ms::FontStyleSelect" name="tupletFontStyle" native="true"/>
+       <widget class="Ms::FontStyleSelect" name="tupletFontStyle"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetTupletFontFace"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetTupletFontSize"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetTupletFontStyle"/>
       </item>
      </layout>
     </widget>
@@ -215,34 +182,6 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetNumberType">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Number type' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QToolButton" name="resetBracketType">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Bracket type' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QComboBox" name="numberType">
         <property name="accessibleName">
@@ -315,6 +254,12 @@
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>Direction:</string>
         </property>
@@ -348,20 +293,6 @@
         </item>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetDirection">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Direction' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
@@ -388,19 +319,17 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetDirection"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetNumberType"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetBracketType"/>
+      </item>
       <item row="3" column="2">
-       <widget class="QToolButton" name="resetLineWidth">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Line width' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetLineWidth"/>
       </item>
      </layout>
     </widget>
@@ -414,22 +343,22 @@
    <header>inspector/fontStyleSelect.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>title_2</tabstop>
   <tabstop>tupletFontFace</tabstop>
-  <tabstop>resetTupletFontFace</tabstop>
   <tabstop>tupletFontSize</tabstop>
-  <tabstop>resetTupletFontSize</tabstop>
   <tabstop>title</tabstop>
   <tabstop>direction</tabstop>
-  <tabstop>resetDirection</tabstop>
   <tabstop>numberType</tabstop>
-  <tabstop>resetNumberType</tabstop>
   <tabstop>bracketType</tabstop>
-  <tabstop>resetBracketType</tabstop>
   <tabstop>lineWidth</tabstop>
-  <tabstop>resetLineWidth</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

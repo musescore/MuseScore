@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorChord</class>
  <widget class="QWidget" name="InspectorChord">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>205</width>
+    <height>154</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Chord Inspector</string>
   </property>
@@ -103,34 +111,6 @@
         </item>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetOffset">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Offset' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QToolButton" name="resetStemDirection">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Stem direction' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
@@ -141,34 +121,6 @@
         </property>
         <property name="buddy">
          <cstring>offset</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetSmall">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Small' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QToolButton" name="resetStemless">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Stemless' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -195,12 +147,29 @@
       <item row="0" column="1">
        <widget class="Ms::OffsetSelect" name="offset" native="true"/>
       </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetOffset"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetSmall"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetStemless"/>
+      </item>
+      <item row="4" column="2">
+       <widget class="Ms::ResetButton" name="resetStemDirection"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+  </customwidget>
   <customwidget>
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
@@ -210,13 +179,9 @@
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
-  <tabstop>resetOffset</tabstop>
   <tabstop>small</tabstop>
-  <tabstop>resetSmall</tabstop>
   <tabstop>stemless</tabstop>
-  <tabstop>resetStemless</tabstop>
   <tabstop>stemDirection</tabstop>
-  <tabstop>resetStemDirection</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

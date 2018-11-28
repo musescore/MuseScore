@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>391</width>
-    <height>360</height>
+    <height>363</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -142,20 +142,6 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="2">
-       <widget class="QToolButton" name="resetHairpinHeight">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Height' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
@@ -166,20 +152,6 @@
         </property>
         <property name="buddy">
          <cstring>hairpinContHeight</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QToolButton" name="resetVeloChange">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Velocity change' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -196,20 +168,6 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="2">
-       <widget class="QToolButton" name="resetHairpinContHeight">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Continue height' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="1">
        <widget class="QDoubleSpinBox" name="hairpinHeight">
         <property name="accessibleName">
@@ -223,20 +181,6 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="QToolButton" name="resetDynRange">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Dynamic range' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
@@ -247,20 +191,6 @@
         </property>
         <property name="buddy">
          <cstring>hairpinType</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetHairpinCircledTip">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Circled tip' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -329,20 +259,6 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QToolButton" name="resetPlacement">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0" colspan="2">
        <widget class="QCheckBox" name="hairpinCircledTip">
         <property name="focusPolicy">
@@ -376,38 +292,10 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="2">
-       <widget class="QToolButton" name="resetFontFace">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font face' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="8" column="1">
        <widget class="QSpinBox" name="fontSize">
         <property name="accessibleName">
          <string>Font size</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="2">
-       <widget class="QToolButton" name="resetFontSize">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Font size' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -467,34 +355,6 @@
         </property>
        </widget>
       </item>
-      <item row="10" column="2">
-       <widget class="QToolButton" name="resetBeginText">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Begin text' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="2">
-       <widget class="QToolButton" name="resetEndText">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'End text' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="9" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
@@ -511,23 +371,42 @@
          </spacer>
         </item>
         <item>
-         <widget class="Ms::FontStyleSelect" name="fontStyle" native="true"/>
+         <widget class="Ms::FontStyleSelect" name="fontStyle"/>
         </item>
        </layout>
       </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetHairpinCircledTip"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetPlacement"/>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetDynRange"/>
+      </item>
+      <item row="4" column="2">
+       <widget class="Ms::ResetButton" name="resetVeloChange"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetHairpinHeight"/>
+      </item>
+      <item row="6" column="2">
+       <widget class="Ms::ResetButton" name="resetHairpinContHeight"/>
+      </item>
+      <item row="7" column="2">
+       <widget class="Ms::ResetButton" name="resetFontFace"/>
+      </item>
+      <item row="8" column="2">
+       <widget class="Ms::ResetButton" name="resetFontSize"/>
+      </item>
       <item row="9" column="2">
-       <widget class="QToolButton" name="resetFontStyle">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Style' values</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetFontStyle"/>
+      </item>
+      <item row="10" column="2">
+       <widget class="Ms::ResetButton" name="resetBeginText"/>
+      </item>
+      <item row="11" column="2">
+       <widget class="Ms::ResetButton" name="resetEndText"/>
       </item>
      </layout>
     </widget>
@@ -541,31 +420,26 @@
    <header>inspector/fontStyleSelect.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>hairpinCircledTip</tabstop>
-  <tabstop>resetHairpinCircledTip</tabstop>
   <tabstop>hairpinType</tabstop>
   <tabstop>placement</tabstop>
-  <tabstop>resetPlacement</tabstop>
   <tabstop>dynRange</tabstop>
-  <tabstop>resetDynRange</tabstop>
   <tabstop>veloChange</tabstop>
-  <tabstop>resetVeloChange</tabstop>
   <tabstop>hairpinHeight</tabstop>
-  <tabstop>resetHairpinHeight</tabstop>
   <tabstop>hairpinContHeight</tabstop>
-  <tabstop>resetHairpinContHeight</tabstop>
   <tabstop>fontFace</tabstop>
-  <tabstop>resetFontFace</tabstop>
   <tabstop>fontSize</tabstop>
-  <tabstop>resetFontSize</tabstop>
-  <tabstop>resetFontStyle</tabstop>
   <tabstop>beginText</tabstop>
-  <tabstop>resetBeginText</tabstop>
   <tabstop>endText</tabstop>
-  <tabstop>resetEndText</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

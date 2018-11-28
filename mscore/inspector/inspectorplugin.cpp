@@ -37,6 +37,15 @@ namespace Ms {
       bool Preferences::isThemeDark() const { return false; }
       }
 
+void InspectorPlugin::initialize(QDesignerFormEditorInterface *)
+      {
+      if (m_initialized)
+	      return;
+      m_initialized = true;
+      Ms::MScore::init();
+      Ms::genIcons();
+	}
+
 QWidget* FontStyleSelectPlugin::createWidget(QWidget* parent)
 	{
       return new Ms::FontStyleSelect(parent);
@@ -63,8 +72,8 @@ QList<QDesignerCustomWidgetInterface*> InspectorPlugins::customWidgets() const
 
 InspectorPlugins::InspectorPlugins()
       {
-      Ms::MScore::init();
-      Ms::genIcons();
+//      Ms::MScore::init();
+//      Ms::genIcons();
       }
 
 

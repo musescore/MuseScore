@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>InspectorKeySig</class>
  <widget class="QWidget" name="InspectorKeySig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>157</width>
+    <height>79</height>
+   </rect>
+  </property>
   <property name="accessibleName">
    <string>Key Signature Inspector</string>
   </property>
@@ -79,28 +87,24 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QToolButton" name="resetShowCourtesy">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Show courtesy' value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetShowCourtesy"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>showCourtesy</tabstop>
-  <tabstop>resetShowCourtesy</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
