@@ -130,8 +130,6 @@ MixerTrackPart::MixerTrackPart(QWidget *parent, MixerTrackItemPtr mti, bool expa
 
       connect(volumeSlider, SIGNAL(sliderPressed()),    SLOT(controlSelected()));
       connect(panSlider,    SIGNAL(sliderPressed(int)), SLOT(controlSelected()));
-
-      applyStyle();
       }
 
 //---------------------------------------------------------
@@ -213,9 +211,11 @@ void MixerTrackPart::updateNameLabel()
 //   paintEvent
 //---------------------------------------------------------
 
-void MixerTrackPart::paintEvent(QPaintEvent*)
+void MixerTrackPart::showEvent(QShowEvent* event)
       {
-      applyStyle();
+      if (!event->spontaneous())
+            applyStyle();
+      QWidget::showEvent(event);
       }
 
 //---------------------------------------------------------
@@ -328,7 +328,6 @@ void MixerTrackPart::setSelected(bool sel)
             return;
 
       _selected = sel;
-      applyStyle();
 
       emit(selectedChanged(sel));
 
