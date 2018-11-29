@@ -331,7 +331,7 @@ void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
       _endText->spatiumChanged(ov, nv);
       }
 
-static constexpr std::array<Pid, 32> pids = { {
+static constexpr std::array<Pid, 26> pids = { {
       Pid::LINE_VISIBLE,
       Pid::BEGIN_HOOK_TYPE,
       Pid::BEGIN_HOOK_HEIGHT,
@@ -358,7 +358,6 @@ static constexpr std::array<Pid, 32> pids = { {
       Pid::END_FONT_SIZE,
       Pid::END_FONT_STYLE,
       Pid::END_TEXT_OFFSET,
-//      Pid::PLACEMENT
       } };
 
 //---------------------------------------------------------

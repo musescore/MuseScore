@@ -375,7 +375,7 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
             return;
       QVariant p = getProperty(pid);
       if (!p.isValid()) {
-            qDebug("%s invalid property <%s><%s>", name(), propertyName(pid), propertyQmlName(pid));
+            qDebug("%s invalid property %d <%s><%s>", name(), int(pid), propertyName(pid), propertyQmlName(pid));
             return;
             }
       PropertyFlags f = propertyFlags(pid);
