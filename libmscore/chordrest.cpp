@@ -1180,13 +1180,14 @@ Shape ChordRest::shape() const
       for (Element* e : segment()->annotations()) {
             if (e->isHarmony() && e->staffIdx() == staffIdx()) {
                   e->layout();
-                  x1 = qMin(x1, e->bbox().x() + e->pos().x());
-                  x2 = qMax(x2, x1 + e->bbox().width());
+                  qreal hx = e->bbox().x() - e->pos().x();
+                  x1 = qMin(x1, hx);
+                  x2 = qMax(x2, hx + e->bbox().width());
                   adjustWidth = true;
                   }
             }
       if (adjustWidth)
-            shape.add(QRectF(x1, 0.0, x2-x1, 1.0));
+            shape.add(QRectF(x1, 0.0, x2-x1, 0.0));
 
       return shape;
       }
