@@ -76,14 +76,13 @@ void Bend::layout()
       qreal _spatium = spatium();
 
       if (staff() && !staff()->isTabStaff(tick())) {
-            setbbox(QRectF());
             if (!parent()) {
                   noteWidth = -_spatium*2;
                   notePos   = QPointF(0.0, _spatium*3);
                   }
             }
 
-      qreal _lw = _lineWidth.val() * _spatium;
+      qreal _lw = _lineWidth;
       Note* note = toNote(parent());
       if (note == 0) {
             noteWidth = 0.0;
@@ -95,7 +94,7 @@ void Bend::layout()
             }
       QRectF bb;
 
-      QFontMetricsF fm(font(_spatium));
+      QFontMetricsF fm(font(_spatium), MScore::paintDevice());
 
       int n   = _points.size();
       qreal x = noteWidth;
@@ -143,7 +142,6 @@ void Bend::layout()
                   path.moveTo(x, y);
                   path.cubicTo(x+dx/2, y, x2, y+dy/4, x2, y2);
                   bb |= path.boundingRect();
-
                   bb |= arrowUp.translated(x2, y2 + _spatium * .2).boundingRect();
 
                   int idx = (_points[pt+1].pitch + 12)/25;
@@ -181,7 +179,7 @@ void Bend::layout()
 void Bend::draw(QPainter* painter) const
       {
       qreal _spatium = spatium();
-      qreal _lw = _lineWidth.val();
+      qreal _lw = _lineWidth;
 
       QPen pen(curColor(), _lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
       painter->setPen(pen);
@@ -189,7 +187,7 @@ void Bend::draw(QPainter* painter) const
 
       QFont f = font(_spatium * MScore::pixelRatio);
       painter->setFont(f);
-      QFontMetrics fm(f);
+      QFontMetrics fm(f, MScore::paintDevice());
 
       qreal x  = noteWidth + _spatium * .2;
       qreal y  = -_spatium * .8;
@@ -356,7 +354,7 @@ bool Bend::setProperty(Pid id, const QVariant& v)
                  setPlayBend(v.toBool());
                  break;
             case Pid::LINE_WIDTH:
-                  _lineWidth = v.value<Spatium>();
+                  _lineWidth = v.toReal();
                   break;
             default:
                   return Element::setProperty(id, v);

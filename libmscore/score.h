@@ -1304,7 +1304,7 @@ class MasterScore : public Score {
       void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
       void updateChannel();
       void setSoloMute();
-      
+
       void addExcerpt(Excerpt*);
       void removeExcerpt(Excerpt*);
       void deleteExcerpt(Excerpt*);
@@ -1331,12 +1331,12 @@ class MasterScore : public Score {
 //---------------------------------------------------------
 
 class ScoreLoad {
-      static bool _loading;
+      static int _loading;
 
    public:
-      ScoreLoad()  { _loading = true;  }
-      ~ScoreLoad() { _loading = false; }
-      static bool loading() { return _loading; }
+      ScoreLoad()  { ++_loading;  }
+      ~ScoreLoad() { --_loading; }
+      static bool loading() { return _loading > 0; }
       };
 
 inline UndoStack* Score::undoStack() const             { return _masterScore->undoStack();      }
