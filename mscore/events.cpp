@@ -695,6 +695,10 @@ void ScoreView::keyReleaseEvent(QKeyEvent* ev)
 
 void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
       {
+      if (state == ViewState::NOTE_ENTRY) {
+            // Do not show context menu in note input mode.
+            return;
+            }
       if (state == ViewState::FOTO) {
             fotoContextPopup(ev);
             return;
