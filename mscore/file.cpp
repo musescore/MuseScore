@@ -3031,6 +3031,7 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
       json.insert("poet", poet);
 
       json.insert("mscoreVersion", score->mscoreVersion());
+      json.insert("fileVersion", score->mscVersion());
 
       json.insert("pages", score->npages());
       json.insert("measures", score->nmeasures());
