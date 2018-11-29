@@ -232,7 +232,7 @@ void TextLineBaseSegment::layout()
       qreal l = 0.0;
       if (!_text->empty()) {
             qreal textlineTextDistance = _spatium * .5;
-            if (((isSingleType() || isBeginType()) && (tl->beginTextPlace() == PlaceText::LEFT)) || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == PlaceText::LEFT)))
+            if (((isSingleType() || isBeginType()) && (tl->beginTextPlace() == PlaceText::LEFT || tl->beginTextPlace() == PlaceText::AUTO)) || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == PlaceText::LEFT)))
                   l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
             qreal h = _text->height();
             if (textLineBase()->beginTextPlace() == PlaceText::ABOVE)
