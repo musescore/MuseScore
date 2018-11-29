@@ -813,7 +813,7 @@
                   <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>72-93</aPitchRange>
-                  <pPitchRange>72-98</pPitchRange>
+                  <pPitchRange>72-103</pPitchRange>
                   <Channel>
                         <program value="74"/>
                   </Channel>
@@ -827,7 +827,7 @@
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>65-88</aPitchRange>
-                  <pPitchRange>65-91</pPitchRange>
+                  <pPitchRange>64-96</pPitchRange>
                   <Channel>
                         <program value="74"/>
                   </Channel>
@@ -841,7 +841,7 @@
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>60-81</aPitchRange>
-                  <pPitchRange>60-86</pPitchRange>
+                  <pPitchRange>60-91</pPitchRange>
                   <Channel>
                         <program value="74"/>
                   </Channel>
