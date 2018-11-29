@@ -3260,8 +3260,15 @@ void Note::setAccidentalType(AccidentalType type)
 
 Shape Note::shape() const
       {
+      QRectF r(bbox());
+      qreal extraTieDistance = spatium() * .5;       // make room for ties
+      if (_tieFor)
+            r.adjust(0.0, 0.0, extraTieDistance, 0.0);
+      if (_tieBack)
+            r.adjust(-extraTieDistance, 0.0, 0.0, 0.0);
+
 #ifndef NDEBUG
-      Shape shape(bbox(), name());
+      Shape shape(r, name());
       for (NoteDot* dot : _dots)
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->name());
       if (_accidental)
@@ -3269,7 +3276,7 @@ Shape Note::shape() const
       for (auto e : _el)
             shape.add(e->bbox().translated(e->pos()), e->name());
 #else
-      Shape shape(bbox());
+      Shape shape(r);
       for (NoteDot* dot : _dots)
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
       if (_accidental)
