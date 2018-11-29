@@ -124,6 +124,7 @@ MixerTrackPart::MixerTrackPart(QWidget *parent, MixerTrackItemPtr mti, bool expa
       panSlider->setToolTip(tr("Pan: %1").arg(QString::number(chan->pan())));
       panSlider->setMaxValue(127);
       panSlider->setMinValue(0);
+      panSlider->setDclickValue1(64);
 
       connect(volumeSlider, SIGNAL(valueChanged(double)),      SLOT(volumeChanged(double)));
       connect(panSlider,    SIGNAL(valueChanged(double, int)), SLOT(panChanged(double)));
