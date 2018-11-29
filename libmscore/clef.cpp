@@ -224,7 +224,7 @@ void Clef::layout()
 
 void Clef::draw(QPainter* painter) const
       {
-      if (symId == SymId::noSym || (staff() && !staff()->staffType(tick())->genClef()))
+      if (symId == SymId::noSym || (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genClef()))
             return;
       painter->setPen(curColor());
       drawSymbol(symId, painter);

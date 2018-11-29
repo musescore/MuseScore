@@ -1621,8 +1621,10 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                   else if (currentNode.nodeName() == "Dynamic") {}
                   else if (!currentNode.nodeName().compare("Chord")) {
                         int k = currentNode.toElement().text().toInt();
-                        if (fretDiagrams[k])
-                              segment->add(fretDiagrams[k]);
+                        if (fretDiagrams[k]) {
+                              // TODO: free fretDiagrams
+                              segment->add(new FretDiagram(*fretDiagrams[k]));
+                              }
                         }
                   else if (currentNode.nodeName() == "Timer") {
                         //int time    = currentNode.toElement().text().toInt();

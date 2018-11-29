@@ -26,6 +26,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>E-Gt</trackName>
@@ -181,6 +182,7 @@
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="0" span="2" col="0"/>
           </Staff>
