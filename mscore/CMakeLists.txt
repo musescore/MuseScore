@@ -1016,6 +1016,10 @@ add_library(
       ${qrc_files}
       )
 
+if (APPLE)
+      set_property(SOURCE inspector/inspectorplugin.cpp inspector/inspectorplugin.h PROPERTY SKIP_AUTOGEN ON)
+endif (APPLE)
+
 if (NOT MSVC)
    set_target_properties(inspectorplugin
       PROPERTIES
