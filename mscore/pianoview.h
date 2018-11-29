@@ -98,6 +98,7 @@ private:
       bool dragStarted;
       QPointF mouseDownPos;
       QPointF lastMousePos;
+      QPointF popupMenuPos;
       DragStyle dragStyle;
       int lastDragPitch;
       bool inProgressUndoEvent;
@@ -110,8 +111,9 @@ private:
       void updateBoundingSize();
       void clearNoteData();
       void selectNotes(int startTick, int endTick, int lowPitch, int highPitch, NoteSelectType selType);
-      void showPopupMenu(const QPoint& pos);
+      void showPopupMenu(const QPoint& posGlobal);
       bool cutChordRest(ChordRest* e, int track, int cutTick, ChordRest*& cr0, ChordRest*& cr1);
+      void addNote(int startTick, Fraction frac, int pitch, int track);
 
       QAction* getAction(const char* id);
 
@@ -140,6 +142,8 @@ private:
       void setTuplet(int);
       void setSubdiv(int);
       void setBarPattern(int);
+      void copyNotes();
+      void pasteNotesAtCursor();
 
    public:
       PianoView();

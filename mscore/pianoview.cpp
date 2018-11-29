@@ -31,9 +31,14 @@
 #include "libmscore/segment.h"
 #include "libmscore/noteevent.h"
 
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
+
 namespace Ms {
 
 extern MuseScore* mscore;
+
+static const QString PIANO_NOTE_MIME_TYPE = "application/musescore/pianorollnotes";
 
 static const qreal MIN_DRAG_DIST_SQ = 9;
 
@@ -561,16 +566,22 @@ void PianoView::wheelEvent(QWheelEvent* event)
 //   showPopupMenu
 //---------------------------------------------------------
 
-void PianoView::showPopupMenu(const QPoint& pos)
+void PianoView::showPopupMenu(const QPoint& posGlobal)
       {
       QMenu popup(this);
-//      popup.addAction(getAction("cut"));
-//      popup.addAction(getAction("copy"));
-      popup.addAction(getAction("paste"));
-//      popup.addAction(getAction("swap"));
+      {
+            QAction* act = new QAction(tr("Copy notes"));
+            connect(act, SIGNAL(triggered(bool)), this, SLOT(copyNotes()));
+            popup.addAction(act);
+      }
+      {
+            QAction* act = new QAction(tr("Paste notes here"));
+            connect(act, SIGNAL(triggered(bool)), this, SLOT(pasteNotesAtCursor()));
+            popup.addAction(act);
+      }
       popup.addAction(getAction("delete"));
 
-      popup.exec(pos);
+      popup.exec(posGlobal);
       }
 
 //---------------------------------------------------------
@@ -579,6 +590,8 @@ void PianoView::showPopupMenu(const QPoint& pos)
 
 void PianoView::contextMenuEvent(QContextMenuEvent *event)
       {
+      popupMenuPos = mapToScene(event->pos());
+
       showPopupMenu(event->globalPos());
       }
 
@@ -671,42 +684,9 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
                         InputState& is = score->inputState();
                         int voice = score->inputState().voice();
                         int track = _staff->idx() * VOICES + voice;
+                        Fraction frac = is.duration().fraction();
 
-                        NoteVal nv(pickPitch);
-
-
-                        Segment* seg = score->tick2segment(roundedTick);
-                        score->expandVoice(seg, track);
-
-                        ChordRest* e = score->findCR(roundedTick, track);
-                        if (e && !e->tuplet() && _tuplet == 1) {
-                              //Ignore tuplets
-                              score->startCmd();
-
-                              ChordRest* cr0;
-                              ChordRest* cr1;
-                              Fraction frac = is.duration().fraction();
-
-                              //Default to quarter note if faction is invalid
-                              if (!frac.isValid() || frac.isZero())
-                                    frac.set(1, 4);
-
-                              if (cutChordRest(e, track, roundedTick, cr0, cr1)) {
-                                    score->setNoteRest(cr1->segment(), track, nv, frac);
-                                    }
-                              else {
-                                    if (cr0->isChord() && cr0->duration().ticks() == frac.ticks()) {
-                                          Chord* ch = toChord(cr0);
-                                          score->addNote(ch, nv);
-                                          }
-                                    else {
-                                          score->setNoteRest(cr0->segment(), track, nv, frac);
-                                          }
-                                    }
-
-                              score->endCmd();
-                              }
-
+                        addNote(roundedTick, frac, pickPitch, track);
                         }
                   else if (bnShift && !bnCtrl) {
                         //Append a pitch to our curent chord/rest
@@ -777,6 +757,47 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
       }
 
 
+//---------------------------------------------------------
+//   addNote
+//---------------------------------------------------------
+
+void PianoView::addNote(int startTick, Fraction frac, int pitch, int track)
+      {
+      NoteVal nv(pitch);
+
+      Score* score = _staff->score();
+      Segment* seg = score->tick2segment(startTick);
+      score->expandVoice(seg, track);
+
+      ChordRest* e = score->findCR(startTick, track);
+      if (e && !e->tuplet() && _tuplet == 1) {
+            //Ignore tuplets
+            score->startCmd();
+
+            ChordRest* cr0;
+            ChordRest* cr1;
+
+            //Default to quarter note if faction is invalid
+            if (!frac.isValid() || frac.isZero())
+                  frac.set(1, 4);
+
+            if (cutChordRest(e, track, startTick, cr0, cr1)) {
+                  score->setNoteRest(cr1->segment(), track, nv, frac);
+                  }
+            else {
+                  if (cr0->isChord() && cr0->duration().ticks() == frac.ticks()) {
+                        Chord* ch = toChord(cr0);
+                        score->addNote(ch, nv);
+                        }
+                  else {
+                        score->setNoteRest(cr0->segment(), track, nv, frac);
+                        }
+                  }
+
+            score->endCmd();
+            }
+
+      }
 
 //---------------------------------------------------------
 //   mouseMoveEvent
@@ -886,7 +907,6 @@ bool PianoView::cutChordRest(ChordRest* e, int track, int cutTick, ChordRest*& c
       score->setNoteRest(e->segment(), track, nv, Fraction::fromTicks(cutTick - e->tick()));
       ChordRest *nextCR = score->findCR(cutTick, track);
 
-//      nextCR->segment()->setTick(cutTick);
       Chord* ch0 = 0;
 
       if (nextCR->isChord()) {
@@ -1238,6 +1258,121 @@ void PianoView::setSubdiv(int value)
             scene()->update();
             emit subdivChanged(_subdiv);
             }
+      }
+
+//---------------------------------------------------------
+//   copyNotes
+//---------------------------------------------------------
+
+void PianoView::copyNotes()
+      {
+      //Custom note copy routine based on Selection::staffMimeData()
+      int firstTick = -1;
+      for (int i = 0; i < noteList.size(); ++i) {
+            if (noteList[i]->note()->selected()) {
+                  Note* note = noteList[i]->note();
+                  int startTick = note->chord()->tick();
+
+                  if (firstTick == -1 || firstTick > startTick)
+                        firstTick = startTick;
+                  }
+            }
+
+      //No valid notes
+      if (firstTick == -1)
+            return;
+
+      QString xmlStrn;
+      QXmlStreamWriter xml(&xmlStrn);
+//      xml.setAutoFormatting(true);
+      xml.writeStartDocument();
+
+      xml.writeStartElement("notes");
+      xml.writeAttribute("firstTick", QString::number(firstTick));
+
+      //bundle notes into XML file & send to clipboard.
+      //This is only affects pianoview and is not part of the regular copy/paste process
+      for (int i = 0; i < noteList.size(); ++i) {
+            if (noteList[i]->note()->selected()) {
+                  Note* note = noteList[i]->note();
+
+                  Chord* chord = note->chord();
+
+                  int ticks = chord->duration().ticks();
+                  int tieLen = note->playTicks() - ticks;
+                  int len = ticks + tieLen;
+
+                  int startTick = note->chord()->tick();
+                  int pitch = note->pitch();
+
+                  int voice = note->voice();
+
+                  xml.writeStartElement("note");
+                  xml.writeAttribute("startTick", QString::number(startTick));
+                  xml.writeAttribute("tickLen", QString::number(len));
+                  xml.writeAttribute("pitch", QString::number(pitch));
+                  xml.writeAttribute("voice", QString::number(voice));
+                  xml.writeEndElement();
+                  }
+            }
+
+      xml.writeEndElement();
+      xml.writeEndDocument();
+
+      QMimeData* mimeData = new QMimeData;
+      mimeData->setData(PIANO_NOTE_MIME_TYPE, xmlStrn.toUtf8());
+      QApplication::clipboard()->setMimeData(mimeData);
+      }
+
+//---------------------------------------------------------
+//   pasteNotesAtCursor
+//---------------------------------------------------------
+
+void PianoView::pasteNotesAtCursor()
+      {
+      //ScoreView::normalPaste();
+      const QMimeData* ms = QApplication::clipboard()->mimeData();
+      if (!ms)
+            return;
+
+      int pickTick = pixelXToTick(popupMenuPos.x());
+      int pickPitch = pixelYToPitch(popupMenuPos.y());
+//      int pickTick = pixelXToTick(mouseDownPos.x());
+//      int pickPitch = pixelYToPitch(mouseDownPos.y());
+      int subbeats = _tuplet * (1 << _subdiv);
+      int subbeatTicks = MScore::division / subbeats;
+      int roundedTick = (pickTick / subbeatTicks) * subbeatTicks;
+
+      Score* score = _staff->score();
+      score->startCmd();
+
+      if (ms->hasFormat(PIANO_NOTE_MIME_TYPE)) {
+            //Decode our XML format and recreate the notes
+            QByteArray data = ms->data(PIANO_NOTE_MIME_TYPE);
+            QXmlStreamReader xml(data);
+            int firstTick = 0;
+
+            while (!xml.atEnd()) {
+                  QXmlStreamReader::TokenType tt = xml.readNext();
+                  if (tt == QXmlStreamReader::StartElement){
+                        if (xml.name().toString() == "notes") {
+                              firstTick = xml.attributes().value("firstTick").toString().toInt();
+                              }
+                        if (xml.name().toString() == "note") {
+                              int startTick = xml.attributes().value("startTick").toString().toInt();
+                              int tickLen = xml.attributes().value("tickLen").toString().toInt();
+                              int pitch = xml.attributes().value("pitch").toString().toInt();
+                              int voice = xml.attributes().value("voice").toString().toInt();
+
+                              int track = _staff->idx() * VOICES + voice;
+
+                              addNote(startTick - firstTick + roundedTick, Fraction::fromTicks(tickLen), pitch, track);
+                              }
+                        }
+                  }
+            }
+
+      score->endCmd();
       }
 
 }
