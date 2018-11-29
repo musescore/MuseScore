@@ -2227,6 +2227,8 @@ void importExtension(QString name)
 
 Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionError)
       {
+      ScoreLoad sl;
+
       QFileInfo info(name);
       QString suffix  = info.suffix().toLower();
       score->setName(info.completeBaseName());
@@ -2311,8 +2313,6 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             score->setCreated(true); // force save as for imported files
             }
 
-      {
-      ScoreLoad sl;
       score->rebuildMidiMapping();
       score->setSoloMute();
       for (Score* s : score->scoreList()) {
@@ -2323,7 +2323,6 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
       score->updateChannel();
       score->setSaved(false);
       score->update();
-      }
 
       if (!ignoreVersionError && !MScore::noGui)
             if (!score->sanityCheck(QString()))

@@ -352,7 +352,7 @@ void TimeSig::layout()
 
 void TimeSig::draw(QPainter* painter) const
       {
-      if (staff() && !staff()->staffType(tick())->genTimesig())
+      if (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genTimesig())
             return;
       painter->setPen(curColor());
 

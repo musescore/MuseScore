@@ -25,6 +25,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
         <bracket type="1" span="2" col="0"/>
@@ -32,6 +33,7 @@
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>

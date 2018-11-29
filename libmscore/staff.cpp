@@ -49,7 +49,7 @@ namespace Ms {
 Staff::Staff(Score* score)
    : ScoreElement(score)
       {
-//      initFromStaffType(0);
+      initFromStaffType(0);
       }
 
 //---------------------------------------------------------
@@ -986,10 +986,14 @@ void Staff::staffTypeListChanged(int tick)
 
 StaffType* Staff::setStaffType(int tick, const StaffType& nst)
       {
+#if 0
+#ifndef NDEBUG
       auto i = _staffTypeList.find(tick);
       if (i != _staffTypeList.end()) {
             qDebug("there is already a type at %d", tick);
             }
+#endif
+#endif
       return _staffTypeList.setStaffType(tick, nst);
       }
 

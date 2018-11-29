@@ -129,8 +129,8 @@ void InspectorNote::setElement()
       n.beam->setEnabled(note->chord()->beam());
       n.tuplet->setEnabled(note->chord()->tuplet());
 
-      bool isNHGroupEnabled = note->chord()->staff()->isPitchedStaff(note->tick())
-         && note->chord()->staff()->staffType(note->tick())->noteHeadScheme() == NoteHeadScheme::HEAD_NORMAL;
+      const StaffType* st = const_cast<const Staff*>(note->chord()->staff())->staffType(note->tick());
+      bool isNHGroupEnabled = (st->group() == StaffGroup::STANDARD) && (st->noteHeadScheme() == NoteHeadScheme::HEAD_NORMAL);
       n.noteHeadGroup->setEnabled(isNHGroupEnabled);
 
       InspectorElementBase::setElement();
