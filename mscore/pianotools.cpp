@@ -184,7 +184,7 @@ void HPiano::releasePitch(int pitch)
 //   changeSelection
 //---------------------------------------------------------
 
-void HPiano::changeSelection(Selection selection)
+void HPiano::changeSelection(const Selection& selection)
       {
       for (PianoKeyItem* key : keys) {
             key->setHighlighted(false);
@@ -533,7 +533,7 @@ bool HPiano::gestureEvent(QGestureEvent *event)
 //   changeSelection
 //---------------------------------------------------------
 
-void PianoTools::changeSelection(Selection selection)
+void PianoTools::changeSelection(const Selection& selection)
       {
       _piano->changeSelection(selection);
       }

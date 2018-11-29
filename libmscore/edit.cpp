@@ -1254,7 +1254,7 @@ void Score::cmdAddTie()
 
 void Score::cmdAddOttava(OttavaType type)
       {
-      Selection sel = selection();
+      const Selection& sel = selection();
       // add on each staff if possible
       if (sel.isRange() && sel.staffStart() != sel.staffEnd() - 1) {
             for (int staffIdx = sel.staffStart() ; staffIdx < sel.staffEnd(); ++staffIdx) {
