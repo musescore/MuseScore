@@ -1434,7 +1434,10 @@ static void checkDivider(bool left, System* s, qreal yOffset)
 
 static void layoutPage(Page* page, qreal restHeight)
       {
-//      Q_ASSERT(restHeight >= 0);
+      if (restHeight < 0.0) {
+            qDebug("restHeight < 0.0: %f\n", restHeight);
+            restHeight = 0;
+            }
 
       Score* score = page->score();
       int gaps     = page->systems().size() - 1;

@@ -1385,11 +1385,13 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
             QString s = e.readElementText();
             if (!be->isTuplet()) {      // Hack
                   Tid ss;
+                  QPointF p = t->offset();            // offset maybe already set, setting style resets it
                   ss = e.lookupUserTextStyle(s);
                   if (ss == Tid::TEXT_STYLES)
                         ss = textStyleFromName(s);
                   if (ss != Tid::TEXT_STYLES)
                         t->initTid(ss);
+                  t->setOffset(p);
                   }
             }
       else if (tag == "foregroundColor")  // same as "color" ?
