@@ -880,6 +880,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
             else
                   els.append(_selection.elements());
 
+            deselectAll();
             if (type != ElementType::INVALID) {
                   Element* el = Element::create(type, this);
                   if (el) {
@@ -897,6 +898,8 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                                     if (_selection.element())
                                           addRefresh(_selection.element()->abbox());
                                     }
+                              else
+                                    delete nel;
                               }
                         }
                   delete el;
