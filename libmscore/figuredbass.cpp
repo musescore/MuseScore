@@ -984,6 +984,7 @@ FiguredBass::FiguredBass(Score* s)
       setElementStyle(st);
 #endif
       setTicks(0);
+      qDeleteAll(items);
       items.clear();
       }
 
@@ -1074,8 +1075,6 @@ void FiguredBass::read(XmlReader& e)
 
 void FiguredBass::layout()
       {
-      qreal yOff  = score()->styleD(Sid::figuredBassYOffset);
-      qreal _sp   = spatium();
       // if 'our' style, force 'our' style data from FiguredBass parameters
 #if 0
       if (textStyleType() == StyledPropertyListIdx::FIGURED_BASS) {
@@ -1086,22 +1085,16 @@ void FiguredBass::layout()
             setTextStyle(st);
             }
 #endif
-      // if in edit mode or if style has been changed,
-      // do nothing else, keeping default laying out and formatting
-//      if (editMode() || items.size() < 1 || subStyle() != ElementStyle::FIGURED_BASS) {
-//      if (items.size() < 1 || tid() != Tid::FIGURED_BASS) {
-      if (items.size() < 1) {
-            TextBase::layout();
-            return;
-            }
 
       // VERTICAL POSITION:
-      yOff *= _sp;                                    // convert spatium value to raster units
-      setPos(QPointF(0.0, yOff));
+      const qreal y = score()->styleD(Sid::figuredBassYOffset) * spatium();
+      setPos(QPointF(0.0, y));
 
       // BOUNDING BOX and individual item layout (if required)
-      createLayout();                                 // prepare structs and data expected by Text methods
+      TextBase::layout1(); // prepare structs and data expected by Text methods
       // if element could be parsed into items, layout each element
+      // Items list will be empty in edit mode (see FiguredBass::startEdit).
+      // TODO: consider disabling specific layout in case text style is changed (tid() != Tid::FIGURED_BASS).
       if (items.size() > 0) {
             layoutLines();
             bbox().setRect(0, 0, _lineLengths.at(0), 0);
@@ -1252,7 +1245,9 @@ void FiguredBass::draw(QPainter* painter) const
 
 void FiguredBass::startEdit(EditData& ed)
       {
-      TextBase::layout();               // convert layout to standard Text conventions
+      qDeleteAll(items);
+      items.clear();
+      layout(); // re-layout without F.B.-specific formatting.
       TextBase::startEdit(ed);
       }
 
@@ -1271,14 +1266,16 @@ void FiguredBass::endEdit(EditData& ed)
 
       // split text into lines and create an item for each line
       QStringList list = txt.split('\n', QString::SkipEmptyParts);
+      qDeleteAll(items);
       items.clear();
       QString normalizedText = QString();
       idx = 0;
       foreach(QString str, list) {
             FiguredBassItem* pItem = new FiguredBassItem(score(), idx++);
             if(!pItem->parse(str)) {            // if any item fails parsing
+                  qDeleteAll(items);
                   items.clear();                // clear item list
-                  TextBase::layout();               // keeping text as entered by user
+                  layout();
                   return;
                   }
             pItem->setTrack(track());
