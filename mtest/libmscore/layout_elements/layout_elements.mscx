@@ -505,6 +505,11 @@
               <subtype>0</subtype>
               </Arpeggio>
             </Chord>
+          <Symbol>
+            <name>accdnRH3RanksAccordion</name>
+            <font>Bravura</font>
+            <offset x="0" y="-2"/>
+            </Symbol>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
