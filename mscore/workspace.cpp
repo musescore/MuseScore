@@ -646,25 +646,25 @@ void Workspace::read(XmlReader& e)
                               case QVariant::Int:
                                     {
                                     int new_int = e.readInt();
-                                    preferences.getLocalPreferences()[preference_name] = QVariant(new_int);
+                                    preferences.setLocalPreference(preference_name, QVariant(new_int));
                                     }
                                     break;
                               case QVariant::Color:
                                     {
                                     QColor new_color = e.readColor();
-                                    preferences.getLocalPreferences()[preference_name] = QVariant(new_color);
+                                    preferences.setLocalPreference(preference_name, QVariant(new_color));
                                     }
                                     break;
                               case QVariant::String:
                                     {
                                     QString new_string = e.readXml();
-                                    preferences.getLocalPreferences()[preference_name] = QVariant(new_string);
+                                    preferences.setLocalPreference(preference_name, QVariant(new_string));
                                     }
                                     break;
                               case QVariant::Bool:
                                     {
                                     bool new_bool = e.readBool();
-                                    preferences.getLocalPreferences()[preference_name] = QVariant(new_bool);
+                                    preferences.setLocalPreference(preference_name, QVariant(new_bool));
                                     }
                                     break;
                               default:
