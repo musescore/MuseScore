@@ -28,7 +28,7 @@ class Bend final : public Element {
       M_PROPERTY(QString,   fontFace,  setFontFace)
       M_PROPERTY(qreal,     fontSize,  setFontSize)
       M_PROPERTY(FontStyle, fontStyle, setFontStyle)
-      M_PROPERTY(Spatium,   lineWidth, setLineWidth)
+      M_PROPERTY(qreal,     lineWidth, setLineWidth)
 
       bool _playBend     { true };
       QList<PitchValue> _points;
