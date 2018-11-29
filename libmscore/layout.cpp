@@ -84,6 +84,18 @@ void Score::rebuildBspTree()
       }
 
 //---------------------------------------------------------
+//   layoutSegmentElements
+//---------------------------------------------------------
+
+static void layoutSegmentElements(Segment* segment, int startTrack, int endTrack)
+      {
+      for (int track = startTrack; track < endTrack; ++track) {
+            if (Element* e = segment->element(track))
+                  e->layout();
+            }
+      }
+
+//---------------------------------------------------------
 //   layoutChords1
 //    - layout upstem and downstem chords
 //    - offset as necessary to avoid conflict
@@ -92,16 +104,18 @@ void Score::rebuildBspTree()
 void Score::layoutChords1(Segment* segment, int staffIdx)
       {
       const Staff* staff = Score::staff(staffIdx);
+      const int startTrack = staffIdx * VOICES;
+      const int endTrack   = startTrack + VOICES;
 
-      if (staff->isTabStaff(segment->tick()))
+      if (staff->isTabStaff(segment->tick())) {
+            layoutSegmentElements(segment, startTrack, endTrack);
             return;
+            }
 
       std::vector<Note*> upStemNotes;
       std::vector<Note*> downStemNotes;
       int upVoices       = 0;
       int downVoices     = 0;
-      int startTrack     = staffIdx * VOICES;
-      int endTrack       = startTrack + VOICES;
       qreal nominalWidth = noteHeadWidth() * staff->mag(segment->tick());
       qreal maxUpWidth   = 0.0;
       qreal maxDownWidth = 0.0;
@@ -510,11 +524,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             layoutChords3(notes, staff, segment);
             }
 
-      for (int track = startTrack; track < endTrack; ++track) {
-            Element* e = segment->element(track);
-            if (e)
-                  e->layout();
-            }
+      layoutSegmentElements(segment, startTrack, endTrack);
       }
 
 //---------------------------------------------------------

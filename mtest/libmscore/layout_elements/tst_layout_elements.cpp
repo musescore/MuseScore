@@ -15,16 +15,13 @@
 #include "libmscore/measure.h"
 #include "libmscore/page.h"
 #include "libmscore/score.h"
+#include "libmscore/staff.h"
 #include "libmscore/system.h"
 #include "libmscore/tuplet.h"
 
 #define DIR QString("libmscore/layout_elements/")
 
 using namespace Ms;
-
-//namespace Ms {
-//extern void dumpTags();
-//};
 
 //---------------------------------------------------------
 //   TestBechmark
@@ -41,6 +38,7 @@ class TestLayoutElements : public QObject, public MTest
    private slots:
       void initTestCase();
       void tstLayoutElements()  { tstLayoutAll("layout_elements.mscx"); }
+      void tstLayoutTablature() { tstLayoutAll("layout_elements_tab.mscx"); }
       void tstLayoutMoonlight() { tstLayoutAll("moonlight.mscx");       }
       // FIXME goldberg.mscx does not pass the test because of some
       // TimeSig and Clef elements. Need to check it later!
@@ -73,6 +71,14 @@ static void isLayoutDone(void* data, Element* e)
                   // in this case tuplet will not have valid bbox.
                   // TODO: how to check this case?
                   return;
+            }
+      if (e->isTimeSig()) {
+            const Staff* st = e->staff();
+            if (!st->staffType(e->tick())->genTimesig()) {
+                  // Some staff types require not to have a time
+                  // signature displayed. This is a valid exception.
+                  return;
+                  }
             }
       // If layout of element is done it (usually?) has a valid
       // bounding box (bbox).
