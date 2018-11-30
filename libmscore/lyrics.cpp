@@ -270,13 +270,13 @@ void Lyrics::layout()
             styleDidChange    = true;
             }
 
+      if (styleDidChange)
+            styleChanged();
+
       if (isMelisma() || hasNumber)
             if (isStyled(Pid::ALIGN)) {
                   setAlign(score()->styleV(Sid::lyricsMelismaAlign).value<Align>());
             }
-      if (styleDidChange)
-            styleChanged();
-
       QPointF o(propertyDefault(Pid::OFFSET).toPointF());
       rxpos() = o.x();
       qreal x = pos().x();
