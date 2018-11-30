@@ -90,6 +90,7 @@
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <baseDots>1</baseDots>
             <Number>
               <style>Tuplet</style>
               <text>3</text>
@@ -282,6 +283,7 @@
               <normalNotes>2</normalNotes>
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
+              <baseDots>1</baseDots>
               <Number>
                 <style>Tuplet</style>
                 <text>3</text>
@@ -394,6 +396,7 @@
               <normalNotes>2</normalNotes>
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
+              <baseDots>1</baseDots>
               <Number>
                 <style>Tuplet</style>
                 <text>3</text>

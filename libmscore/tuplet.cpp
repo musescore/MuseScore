@@ -718,6 +718,8 @@ void Tuplet::write(XmlWriter& xml) const
       writeProperty(xml, Pid::P2);
 
       xml.tag("baseNote", _baseLen.name());
+      if (int dots = _baseLen.dots())
+            xml.tag("baseDots", dots);
 
       if (_number) {
             xml.stag("Number", _number);
@@ -740,7 +742,7 @@ void Tuplet::read(XmlReader& e)
             else
                   e.unknown();
             }
-      Fraction f(_ratio.denominator(), _baseLen.fraction().denominator());
+      Fraction f = _baseLen.fraction() * _ratio.denominator();
       setDuration(f.reduced());
       }
 
@@ -764,6 +766,8 @@ bool Tuplet::readProperties(XmlReader& e)
             _p2 = e.readPoint() * score()->spatium();
       else if (tag == "baseNote")
             _baseLen = TDuration(e.readElementText());
+      else if (tag == "baseDots")
+            _baseLen.setDots(e.readInt());
       else if (tag == "Number") {
             _number = new Text(score(), Tid::TUPLET);
             _number->setComposition(true);
