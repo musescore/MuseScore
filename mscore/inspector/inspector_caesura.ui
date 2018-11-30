@@ -82,7 +82,7 @@
          <string>Pause</string>
         </property>
         <property name="suffix">
-         <string extracomment="seconds">sec</string>
+         <string extracomment="seconds">s</string>
         </property>
         <property name="minimum">
          <double>0.000000000000000</double>

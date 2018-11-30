@@ -746,7 +746,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="fontFamilyLabel">
             <property name="text">
-             <string>Font:</string>
+             <string>Font face:</string>
             </property>
            </widget>
           </item>

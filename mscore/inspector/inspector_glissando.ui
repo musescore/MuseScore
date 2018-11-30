@@ -220,6 +220,9 @@
         <property name="accessibleName">
          <string>Font size</string>
         </property>
+        <property name="suffix">
+         <string>pt</string>
+        </property>
        </widget>
       </item>
       <item row="7" column="0">
