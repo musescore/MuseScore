@@ -223,6 +223,7 @@ enum class Sid {
       harmonyPlacement,
 
       chordSymbolPosAbove,
+      chordSymbolPosBelow,
 
       chordSymbolAFontFace,
       chordSymbolAFontSize,

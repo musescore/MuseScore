@@ -113,8 +113,6 @@ class Dynamic final : public TextBase {
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
       void doAutoplace();
-
-//      using ScoreElement::undoChangeProperty;
       };
 
 }     // namespace Ms
