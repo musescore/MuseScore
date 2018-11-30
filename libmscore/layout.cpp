@@ -3825,8 +3825,7 @@ void Score::doLayoutRange(int stick, int etick)
             for (System* s : _systems) {
                   for (Bracket* b : s->brackets()) {
                         if (b->selected()) {
-                              _selection.elements().removeOne(b);
-                              _selection.updateState();
+                              _selection.remove(b);
                               setSelectionChanged(true);
                               }
                         }

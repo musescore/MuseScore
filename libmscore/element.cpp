@@ -186,14 +186,7 @@ Element::Element(const Element& e)
 
 Element::~Element()
       {
-#if 0
-      if (score() &&  flag(ElementFlag::SELECTED)) {
-            if (score()->selection().elements().removeOne(this))
-                  printf("remove element from selection\n");
-            else
-                  printf("element not in selection\n");
-            }
-#endif
+      Score::onElementDestruction(this);
       }
 
 //---------------------------------------------------------
