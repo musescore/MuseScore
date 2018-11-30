@@ -3240,7 +3240,8 @@ System* Score::collectSystem(LayoutContext& lc)
 
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             SysStaff* ss = system->staff(staffIdx);
-            ss->skyline().clear();
+            Skyline& skyline = ss->skyline();
+            skyline.clear();
             for (MeasureBase* mb : system->measures()) {
                   if (!mb->isMeasure())
                         continue;
@@ -3248,12 +3249,29 @@ System* Score::collectSystem(LayoutContext& lc)
                   for (Segment& s : m->segments()) {
                         if (!s.enabled() || s.isTimeSigType())       // hack: ignore time signatures
                               continue;
-                        ss->skyline().add(s.staffShape(staffIdx).translated(s.pos() + m->pos()));
+                        QPointF pos(s.pos() + m->pos());
+                        if (s.segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
+                              BarLine* bl = toBarLine(s.element(0));
+                              if (bl) {
+                                    qreal w = BarLine::layoutWidth(score(), bl->barLineType());
+                                    skyline.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos() + pos));
+                                    }
+                              }
+                        else {
+                              int strack = staffIdx * VOICES;
+                              int etrack = strack + VOICES;
+                              for (Element* e : s.elist()) {
+                                    if (!e || !e->visible())
+                                          continue;
+                                    int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
+                                    if (effectiveTrack >= strack && effectiveTrack < etrack)
+                                          skyline.add(e->shape().translated(e->pos() + pos));
+                                    }
+                              }
                         }
                   ss->skyline().add(m->staffLines(staffIdx)->bbox().translated(m->pos()));
                   }
             }
-
 
       //-------------------------------------------------------------
       // layout beams + fingering
