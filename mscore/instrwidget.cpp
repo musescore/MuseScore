@@ -39,6 +39,10 @@
 
 namespace Ms {
 
+int StaffListItem::customStandardIdx;
+int StaffListItem::customPercussionIdx;
+int StaffListItem::customTablatureIdx;
+
 void filterInstruments(QTreeWidget *instrumentList, const QString &searchPhrase = QString());
 
 //---------------------------------------------------------
@@ -137,6 +141,13 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
                   }
             ++idx;
             }
+      customStandardIdx = _staffTypeCombo->count();
+      _staffTypeCombo->addItem(tr("Custom Standard"), 0);
+      customPercussionIdx = _staffTypeCombo->count();
+      _staffTypeCombo->addItem(tr("Custom Percussion"), 0);
+      customTablatureIdx = _staffTypeCombo->count();
+      _staffTypeCombo->addItem(tr("Custom Tablature"), 0);
+
       treeWidget()->setItemWidget(this, 4, _staffTypeCombo);
       connect(_staffTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(staffTypeChanged(int)) );
       }
@@ -196,8 +207,19 @@ void StaffListItem::setStaffType(const StaffType* st)
                         return;
                         }
                   }
-            qDebug("StaffListItem::setStaffType: not found\n");
-            _staffTypeCombo->setCurrentIndex(0);      // if none found, default to standard staff type
+            int idx = 0;
+            switch (st->group()) {
+                  case StaffGroup::STANDARD:
+                        idx = customStandardIdx;
+                        break;
+                  case StaffGroup::PERCUSSION:
+                        idx = customPercussionIdx;
+                        break;
+                  case StaffGroup::TAB:
+                        idx = customTablatureIdx;
+                        break;
+                  }
+            _staffTypeCombo->setCurrentIndex(idx);
             }
       }
 
