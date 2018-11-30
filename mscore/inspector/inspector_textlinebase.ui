@@ -246,6 +246,9 @@
            <property name="accessibleName">
             <string>Font size</string>
            </property>
+           <property name="suffix">
+            <string>pt</string>
+           </property>
           </widget>
          </item>
          <item row="5" column="0">
@@ -488,6 +491,9 @@
           <widget class="QSpinBox" name="continueFontSize">
            <property name="accessibleName">
             <string>Font size</string>
+           </property>
+           <property name="suffix">
+            <string>pt</string>
            </property>
           </widget>
          </item>
@@ -755,6 +761,9 @@
           <widget class="QSpinBox" name="beginFontSize">
            <property name="accessibleName">
             <string>Font size</string>
+           </property>
+           <property name="suffix">
+            <string>pt</string>
            </property>
           </widget>
          </item>

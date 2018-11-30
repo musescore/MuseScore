@@ -176,7 +176,7 @@
   </action>
   <action name="actionReload">
    <property name="text">
-    <string>R</string>
+    <string>Reload</string>
    </property>
    <property name="toolTip">
     <string>Reload current plugin source</string>

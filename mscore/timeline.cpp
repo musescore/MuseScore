@@ -1185,7 +1185,7 @@ void Timeline::key_meta(Segment* seg, int* stagger, int pos)
             }
       else if (new_key == Key::NUM_OF) {
             key_text = "?";
-            tooltip = tr("Custom Key");
+            tooltip = tr("Custom Key Signature");
             }
       else if (int(new_key) == 0) {
             key_text = "\u266E";
