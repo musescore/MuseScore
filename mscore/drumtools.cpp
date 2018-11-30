@@ -95,9 +95,9 @@ DrumTools::DrumTools(QWidget* parent)
 
 void DrumTools::retranslate()
       {
-      setWindowTitle(tr("Drum Tools"));
+      setWindowTitle(tr("Drumset Tools"));
       editButton->setText(tr("Edit Drumset"));
-      drumPalette->setName(tr("Drums"));
+      drumPalette->setName(tr("Drumset"));
       }
 
 //---------------------------------------------------------
