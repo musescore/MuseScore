@@ -283,7 +283,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>33</number>
+       <number>25</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -1647,7 +1647,7 @@
                </widget>
               </item>
               <item row="0" column="7">
-               <widget class="Ms::FontStyleSelect" name="footerFontStyle" native="true"/>
+               <widget class="Ms::FontStyleSelect" name="footerFontStyle"/>
               </item>
               <item row="0" column="8">
                <widget class="QToolButton" name="resetFooterFontStyle">
@@ -1990,7 +1990,7 @@
                </widget>
               </item>
               <item row="0" column="7">
-               <widget class="Ms::FontStyleSelect" name="headerFontStyle" native="true"/>
+               <widget class="Ms::FontStyleSelect" name="headerFontStyle"/>
               </item>
               <item row="0" column="8">
                <widget class="QToolButton" name="resetHeaderFontStyle">
@@ -2511,7 +2511,7 @@
                <widget class="Ms::AlignSelect" name="longInstrumentAlign" native="true"/>
               </item>
               <item row="2" column="1">
-               <widget class="Ms::FontStyleSelect" name="longInstrumentFontStyle" native="true"/>
+               <widget class="Ms::FontStyleSelect" name="longInstrumentFontStyle"/>
               </item>
               <item row="1" column="3">
                <spacer name="horizontalSpacer_18">
@@ -2674,7 +2674,7 @@
                </spacer>
               </item>
               <item row="2" column="1">
-               <widget class="Ms::FontStyleSelect" name="shortInstrumentFontStyle" native="true"/>
+               <widget class="Ms::FontStyleSelect" name="shortInstrumentFontStyle"/>
               </item>
               <item row="2" column="2">
                <widget class="QToolButton" name="resetShortInstrumentFontStyle">
@@ -3929,7 +3929,7 @@
             </spacer>
            </item>
            <item row="5" column="1">
-            <widget class="Ms::FontStyleSelect" name="measureNumberFontStyle" native="true"/>
+            <widget class="Ms::FontStyleSelect" name="measureNumberFontStyle"/>
            </item>
            <item row="5" column="2">
             <widget class="QToolButton" name="resetMeasureNumberFontStyle">
@@ -8153,13 +8153,6 @@
                <number>3</number>
               </property>
               <item row="0" column="0">
-               <widget class="QLabel" name="label_17">
-                <property name="text">
-                 <string>Default vertical position:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
                <widget class="QLabel" name="label_79">
                 <property name="text">
                  <string>Distance to fretboard diagram:</string>
@@ -8169,7 +8162,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
+              <item row="0" column="1">
                <widget class="QDoubleSpinBox" name="harmonyFretDist">
                 <property name="enabled">
                  <bool>true</bool>
@@ -8191,7 +8184,7 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="0">
+              <item row="1" column="0">
                <widget class="QLabel" name="label_1001">
                 <property name="text">
                  <string>Minimum chord spacing:</string>
@@ -8201,7 +8194,7 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
+              <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="minHarmonyDistance">
                 <property name="suffix">
                  <string>sp</string>
@@ -8220,7 +8213,7 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="3">
+              <item row="1" column="2">
                <widget class="QLabel" name="label_1002">
                 <property name="text">
                  <string>Maximum barline distance:</string>
@@ -8230,7 +8223,7 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="4">
+              <item row="1" column="3">
                <widget class="QDoubleSpinBox" name="maxHarmonyBarDistance">
                 <property name="suffix">
                  <string>sp</string>
@@ -8249,7 +8242,7 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="5">
+              <item row="1" column="4">
                <spacer name="horizontalSpacer_11">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -8261,26 +8254,6 @@
                  </size>
                 </property>
                </spacer>
-              </item>
-              <item row="0" column="2">
-               <widget class="QToolButton" name="resetChordSymbolPosAbove">
-                <property name="toolTip">
-                 <string>Reset to default</string>
-                </property>
-                <property name="accessibleName">
-                 <string>Reset 'Default vertical position' value</string>
-                </property>
-                <property name="text">
-                 <string notr="true"/>
-                </property>
-                <property name="icon">
-                 <iconset resource="musescore.qrc">
-                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="Ms::OffsetSelect" name="chordSymbolPosAbove" native="true"/>
               </item>
              </layout>
             </widget>
@@ -8723,7 +8696,7 @@
             </widget>
            </item>
            <item row="2" column="9">
-            <widget class="Ms::FontStyleSelect" name="bendFontStyle" native="true"/>
+            <widget class="Ms::FontStyleSelect" name="bendFontStyle"/>
            </item>
            <item row="2" column="10">
             <widget class="QToolButton" name="resetBendFontStyle">
@@ -10866,10 +10839,10 @@
             <widget class="QDoubleSpinBox" name="textStyleFrameBorder"/>
            </item>
            <item row="8" column="1">
-            <widget class="Awl::ColorLabel" name="textStyleFrameForeground" native="true"/>
+            <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
            </item>
            <item row="9" column="1">
-            <widget class="Awl::ColorLabel" name="textStyleFrameBackground" native="true"/>
+            <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
            </item>
            <item row="12" column="0">
             <widget class="QLabel" name="label_212">
@@ -11052,7 +11025,7 @@
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="Ms::FontStyleSelect" name="textStyleFontStyle" native="true"/>
+            <widget class="Ms::FontStyleSelect" name="textStyleFontStyle"/>
            </item>
           </layout>
          </widget>
@@ -11067,8 +11040,14 @@
  <customwidgets>
   <customwidget>
    <class>Awl::ColorLabel</class>
-   <extends>QWidget</extends>
+   <extends>QFrame</extends>
    <header>awl/colorlabel.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::FontStyleSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/fontStyleSelect.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -11081,12 +11060,6 @@
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
    <header>inspector/offsetSelect.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Ms::FontStyleSelect</class>
-   <extends>QWidget</extends>
-   <header>inspector/fontStyleSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
