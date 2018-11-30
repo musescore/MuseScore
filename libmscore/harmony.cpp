@@ -1044,12 +1044,6 @@ void Harmony::layout()
 
       setPos(xx, yy);
 
-//      if (parent()->isFretDiagram() && parent()->parent()->isSegment()) {
-//            MStaff* mstaff = toSegment(parent()->parent())->measure()->mstaff(staffIdx());
-//WS            qreal dist = -(bbox().top());
-//            mstaff->distanceUp = qMax(mstaff->distanceUp, dist + _spatium);
-//            }
-
       if (hasFrame())
             layoutFrame();
       }
@@ -1640,5 +1634,17 @@ QVariant Harmony::propertyDefault(Pid id) const
             }
       return v;
       }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid Harmony::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::chordSymbolPosAbove : Sid::chordSymbolPosBelow;
+      return TextBase::getPropertyStyle(pid);
+      }
+
 
 }

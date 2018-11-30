@@ -416,7 +416,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
       {
       QString family = "FreeSerif";
       double size = 10;
-      bool sizeIsSpatiumDependent = false;
+      bool sizeIsSpatiumDependent = true;
       FontStyle fontStyle = FontStyle::Normal;
       Align align = Align::LEFT;
       QPointF offset;
@@ -3322,10 +3322,22 @@ static void readStyle(MStyle* style, XmlReader& e)
                         }
                   chordListTag = true;
                   }
-            else
+            else if (tag == "harmonyY") {
+                  qreal val = -e.readDouble();
+                  if (val > 0.0) {
+                        style->set(Sid::harmonyPlacement, int(Placement::BELOW));
+                        style->set(Sid::chordSymbolPosBelow,  QPointF(.0, val));
+                        }
+                  else {
+                        style->set(Sid::harmonyPlacement, int(Placement::ABOVE));
+                        style->set(Sid::chordSymbolPosBelow,  QPointF(.0, val));
+                        }
+                  }
+            else {
                   if (!style->readProperties(e)) {
                         e.skipCurrentElement();
                         }
+                  }
             }
 
       // if we just specified a new chord description file
