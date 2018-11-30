@@ -2150,6 +2150,9 @@
                     <height>0</height>
                    </size>
                   </property>
+                  <property name="suffix">
+                   <string>sp</string>
+                  </property>
                  </widget>
                 </item>
                 <item row="1" column="0">
@@ -2172,6 +2175,9 @@
                     <width>80</width>
                     <height>0</height>
                    </size>
+                  </property>
+                  <property name="suffix">
+                   <string>sp</string>
                   </property>
                  </widget>
                 </item>
