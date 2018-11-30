@@ -222,8 +222,11 @@ enum class Sid {
       maxHarmonyBarDistance,
       harmonyPlacement,
 
-      chordSymbolPosAbove,
-      chordSymbolPosBelow,
+      chordSymbolAPosAbove,
+      chordSymbolAPosBelow,
+
+      chordSymbolBPosAbove,
+      chordSymbolBPosBelow,
 
       chordSymbolAFontFace,
       chordSymbolAFontSize,

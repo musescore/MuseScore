@@ -250,8 +250,11 @@ static const StyleType styleTypes[] {
       { Sid::maxHarmonyBarDistance,    "maxHarmonyBarDistance",  Spatium(3.0) },
       { Sid::harmonyPlacement,         "harmonyPlacement",       int(Placement::ABOVE) },
 
-      { Sid::chordSymbolPosAbove,       "chordSymbolPosAbove",       QPointF(.0, -2.5) },
-      { Sid::chordSymbolPosBelow,       "chordSymbolPosBelow",       QPointF(.0, 3.5) },
+      { Sid::chordSymbolAPosAbove,      "chordSymbolPosAbove",       QPointF(.0, -2.5) },
+      { Sid::chordSymbolAPosBelow,      "chordSymbolPosBelow",       QPointF(.0, 3.5) },
+
+      { Sid::chordSymbolBPosAbove,      "chordSymbolPosAbove",       QPointF(.0, -2.5) },
+      { Sid::chordSymbolBPosBelow,      "chordSymbolPosBelow",       QPointF(.0, 3.5) },
 
       { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "FreeSerif" },
       { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      12.0 },
@@ -1362,7 +1365,7 @@ const TextStyle chordSymbolTextStyleA {{
       { Sid::defaultFontSpatiumDependent,        Pid::SIZE_SPATIUM_DEPENDENT },
       { Sid::chordSymbolAFontStyle,              Pid::FONT_STYLE             },
       { Sid::chordSymbolAAlign,                  Pid::ALIGN                  },
-      { Sid::chordSymbolPosAbove,                Pid::OFFSET                 },
+      { Sid::chordSymbolAPosAbove,               Pid::OFFSET                 },
       { Sid::chordSymbolAFrameType,              Pid::FRAME_TYPE             },
       { Sid::chordSymbolAFramePadding,           Pid::FRAME_PADDING          },
       { Sid::chordSymbolAFrameWidth,             Pid::FRAME_WIDTH            },
@@ -1377,7 +1380,7 @@ const TextStyle chordSymbolTextStyleB {{
       { Sid::defaultFontSpatiumDependent,        Pid::SIZE_SPATIUM_DEPENDENT },
       { Sid::chordSymbolBFontStyle,              Pid::FONT_STYLE             },
       { Sid::chordSymbolBAlign,                  Pid::ALIGN                  },
-      { Sid::chordSymbolPosAbove,                Pid::OFFSET                 },
+      { Sid::chordSymbolBPosAbove,               Pid::OFFSET                 },
       { Sid::chordSymbolBFrameType,              Pid::FRAME_TYPE             },
       { Sid::chordSymbolBFramePadding,           Pid::FRAME_PADDING          },
       { Sid::chordSymbolBFrameWidth,             Pid::FRAME_WIDTH            },

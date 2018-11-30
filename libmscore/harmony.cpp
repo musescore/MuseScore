@@ -1641,10 +1641,13 @@ QVariant Harmony::propertyDefault(Pid id) const
 
 Sid Harmony::getPropertyStyle(Pid pid) const
       {
-      if (pid == Pid::OFFSET)
-            return placeAbove() ? Sid::chordSymbolPosAbove : Sid::chordSymbolPosBelow;
+      if (pid == Pid::OFFSET) {
+            if (tid() == Tid::HARMONY_A)
+                  return placeAbove() ? Sid::chordSymbolAPosAbove : Sid::chordSymbolAPosBelow;
+            else
+                  return placeAbove() ? Sid::chordSymbolBPosAbove : Sid::chordSymbolBPosBelow;
+            }
       return TextBase::getPropertyStyle(pid);
       }
-
 
 }

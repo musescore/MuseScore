@@ -3326,11 +3326,11 @@ static void readStyle(MStyle* style, XmlReader& e)
                   qreal val = -e.readDouble();
                   if (val > 0.0) {
                         style->set(Sid::harmonyPlacement, int(Placement::BELOW));
-                        style->set(Sid::chordSymbolPosBelow,  QPointF(.0, val));
+                        style->set(Sid::chordSymbolAPosBelow,  QPointF(.0, val));
                         }
                   else {
                         style->set(Sid::harmonyPlacement, int(Placement::ABOVE));
-                        style->set(Sid::chordSymbolPosBelow,  QPointF(.0, val));
+                        style->set(Sid::chordSymbolAPosBelow,  QPointF(.0, val));
                         }
                   }
             else {

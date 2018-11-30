@@ -244,7 +244,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::vibratoPosAbove,         false, vibratoLinePosAbove,       resetVibratoLinePosAbove   },
       { Sid::vibratoPosBelow,         false, vibratoLinePosBelow,       resetVibratoLinePosBelow   },
 
-      { Sid::chordSymbolPosAbove,     false, chordSymbolPosAbove,     resetChordSymbolPosAbove },
       { Sid::harmonyFretDist,         false, harmonyFretDist,         0 },
       { Sid::minHarmonyDistance,      false, minHarmonyDistance,      0 },
       { Sid::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
