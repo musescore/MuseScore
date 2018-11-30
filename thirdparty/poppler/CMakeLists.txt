@@ -1,5 +1,5 @@
 
-add_library(poppler STATIC
+add_library(poppler-qt5 STATIC
    poppler/Annot.cc
    poppler/Array.cc
    poppler/BuiltinFont.cc
@@ -160,7 +160,7 @@ else (APPLE)
    endif(MINGW)
 endif(APPLE)
 
-set_target_properties(poppler
+set_target_properties(poppler-qt5
       PROPERTIES
          COMPILE_FLAGS
             ${POPPLER_COMPILE_FLAGS}
