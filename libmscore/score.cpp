@@ -74,6 +74,7 @@
 namespace Ms {
 
 MasterScore* gscore;                 ///< system score, used for palettes etc.
+std::set<Score*> Score::validScores;
 
 bool scriptDebug     = false;
 bool noSeq           = false;
@@ -244,6 +245,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 Score::Score()
    : ScoreElement(this), _is(this), _selection(this), _selectionFilter(this)
       {
+      Score::validScores.insert(this);
       _masterScore = 0;
       Layer l;
       l.name          = "default";
@@ -265,6 +267,7 @@ Score::Score()
 Score::Score(MasterScore* parent)
    : Score{}
       {
+      Score::validScores.insert(this);
       _masterScore = parent;
       if (MScore::defaultStyleForParts())
             _style = *MScore::defaultStyleForParts();
@@ -301,6 +304,7 @@ Score::Score(MasterScore* parent)
 Score::Score(MasterScore* parent, const MStyle& s)
    : Score{parent}
       {
+      Score::validScores.erase(this);
       _style  = s;
       }
 
@@ -351,6 +355,22 @@ Score* Score::clone()
       score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
       return score;
+      }
+
+//---------------------------------------------------------
+//   Score::onElementDestruction
+//    Ensure correct state of the score after destruction
+//    of the element (e.g. remove invalid pointers etc.).
+//---------------------------------------------------------
+
+void Score::onElementDestruction(Element* e)
+      {
+      Score* score = e->score();
+      if (!score || Score::validScores.find(score) == Score::validScores.end()) {
+            // No score or the score is already deleted
+            return;
+            }
+      score->selection().remove(e);
       }
 
 //---------------------------------------------------------
