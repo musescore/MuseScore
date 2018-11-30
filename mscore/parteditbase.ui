@@ -434,7 +434,7 @@
            <string>Mute</string>
           </property>
           <property name="text">
-           <string>M</string>
+           <string extracomment="mute">M</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -462,7 +462,7 @@
            <string>Solo</string>
           </property>
           <property name="text">
-           <string>S</string>
+           <string extracomment="solo">S</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -512,7 +512,7 @@
          <item row="0" column="1">
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Midi:  </string>
+            <string>MIDI:</string>
            </property>
           </widget>
          </item>

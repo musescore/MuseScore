@@ -365,17 +365,22 @@
               <widget class="QComboBox" name="musicalTextFont">
                <item>
                 <property name="text">
-                 <string>Bravura Text</string>
+                 <string notr="true">Bravura Text</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Emmentaler Text</string>
+                 <string notr="true">Emmentaler Text</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>Gonville Text</string>
+                 <string notr="true">Gonville Text</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string notr="true">MuseJazz Text</string>
                 </property>
                </item>
                <item>
@@ -1560,7 +1565,7 @@
               <item row="0" column="4">
                <widget class="QDoubleSpinBox" name="footerFontSize">
                 <property name="suffix">
-                 <string>sp</string>
+                 <string>pt</string>
                 </property>
                 <property name="minimum">
                  <double>1.000000000000000</double>
@@ -1967,7 +1972,7 @@
               <item row="0" column="4">
                <widget class="QDoubleSpinBox" name="headerFontSize">
                 <property name="suffix">
-                 <string>sp</string>
+                 <string>pt</string>
                 </property>
                 <property name="minimum">
                  <double>1.000000000000000</double>
@@ -2471,7 +2476,7 @@
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="longInstrumentFontSize">
                 <property name="suffix">
-                 <string>sp</string>
+                 <string>pt</string>
                 </property>
                 <property name="minimum">
                  <double>1.000000000000000</double>
@@ -2527,7 +2532,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Align' values</string>
+                 <string>Reset 'Font style' values</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -2553,7 +2558,7 @@
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="shortInstrumentFontSize">
                 <property name="suffix">
-                 <string>sp</string>
+                 <string>pt</string>
                 </property>
                 <property name="minimum">
                  <double>1.000000000000000</double>
@@ -2677,7 +2682,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Align' values</string>
+                 <string>Reset 'Font style' values</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -3815,7 +3820,7 @@
            <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="measureNumberFontSize">
              <property name="suffix">
-              <string>sp</string>
+              <string>pt</string>
              </property>
              <property name="minimum">
               <double>1.000000000000000</double>
@@ -3932,7 +3937,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Align' values</string>
+              <string>Reset 'Font style' values</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -4008,7 +4013,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Always force dash' setting</string>
+                 <string>Reset 'Repeat barline to dots distance' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4045,7 +4050,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Always force dash' setting</string>
+                 <string>Reset 'Double barline distance' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4062,7 +4067,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Always force dash' setting</string>
+                 <string>Reset 'Double barline thickness' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4079,7 +4084,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Always force dash' setting</string>
+                 <string>Reset 'Thick barline distance' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4179,7 +4184,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Always force dash' setting</string>
+                 <string>Reset 'Thick barline thickness' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4253,7 +4258,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Always force dash' setting</string>
+                 <string>Reset 'Thin barline thickness' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4270,7 +4275,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Always force dash' setting</string>
+                 <string>Reset 'Scale barlines to staff size' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4287,7 +4292,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Always force dash' setting</string>
+                 <string>Reset 'Barline at start of multiple staves' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4304,7 +4309,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Always force dash' setting</string>
+                 <string>Reset 'Barline at start of single staff' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4321,7 +4326,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Always force dash' setting</string>
+                 <string>Reset 'Show repeat barline tips (&quot;winged&quot; repeats)' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -4528,7 +4533,7 @@
              <item row="3" column="0">
               <widget class="QLabel" name="label_22">
                <property name="text">
-                <string>Note dot distance:</string>
+                <string>Note to dot distance:</string>
                </property>
                <property name="buddy">
                 <cstring>noteDotDistance</cstring>
@@ -4554,7 +4559,7 @@
              <item row="4" column="0">
               <widget class="QLabel" name="label_23">
                <property name="text">
-                <string>Dot dot distance:</string>
+                <string>Dot to dot distance:</string>
                </property>
                <property name="buddy">
                 <cstring>dotDotDistance</cstring>
@@ -5935,7 +5940,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Default vertical position' value</string>
+              <string>Reset 'Default position' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6004,7 +6009,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Line style' setting</string>
+              <string>Reset 'Line style' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6214,7 +6219,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Line style' setting</string>
+              <string>Reset 'Line style' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6257,7 +6262,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Numbers only' setting</string>
+              <string>Reset 'Numbers only' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6445,7 +6450,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Line style' setting</string>
+              <string>Reset 'Line style' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -7457,7 +7462,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_180">
              <property name="text">
-              <string>Autoplace min. Distance:</string>
+              <string>Autoplace min. distance:</string>
              </property>
             </widget>
            </item>
@@ -7522,7 +7527,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_144">
              <property name="text">
-              <string>Autoplace min. Distance:</string>
+              <string>Autoplace min. distance:</string>
              </property>
             </widget>
            </item>
@@ -8263,7 +8268,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Autoplace min. distance' value</string>
+                 <string>Reset 'Default vertical position' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -8541,7 +8546,7 @@
            <item row="2" column="5">
             <widget class="QDoubleSpinBox" name="bendFontSize">
              <property name="suffix">
-              <string>sp</string>
+              <string>pt</string>
              </property>
              <property name="minimum">
               <double>1.000000000000000</double>
@@ -8660,7 +8665,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset 'Arrow width' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -8706,7 +8711,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font face' value</string>
+              <string>Reset 'Line thickness' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -8726,7 +8731,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font size' value</string>
+              <string>Reset 'Font style' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -9680,7 +9685,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Tuplet bracket thickness' value</string>
+                 <string>Reset 'Bracket hook height' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -9748,7 +9753,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Tuplet bracket thickness' value</string>
+                 <string>Reset 'Bracket thickness' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -9818,7 +9823,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Direction' setting</string>
+                 <string>Reset 'Direction' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -9879,7 +9884,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Bracket Type' setting</string>
+                 <string>Reset 'Bracket type' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -9940,7 +9945,7 @@
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Number Type' setting</string>
+                 <string>Reset 'Number type' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -10151,7 +10156,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Always force dash' setting</string>
+              <string>Reset 'Always force dash' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10294,14 +10299,14 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_188">
              <property name="text">
-              <string>Pad:</string>
+              <string>Melisma pad:</string>
              </property>
             </widget>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_80">
              <property name="text">
-              <string>Thickness:</string>
+              <string>Melisma thickness:</string>
              </property>
             </widget>
            </item>
@@ -10344,7 +10349,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Melisma pad' value</string>
+              <string>Reset 'Align' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -10375,6 +10380,13 @@
             <widget class="QLabel" name="label_198">
              <property name="text">
               <string>Align:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0" colspan="2">
+            <widget class="QCheckBox" name="textStyleSpatiumDependent">
+             <property name="text">
+              <string>Size changes with staff space setting</string>
              </property>
             </widget>
            </item>
@@ -10687,7 +10699,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="pageTextStyles">
+      <widget class="QWidget" name="PageTextStyles">
        <layout class="QGridLayout" name="gridLayout_41">
         <item row="0" column="0">
          <widget class="QListWidget" name="textStyles"/>
@@ -10749,10 +10761,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_209">
              <property name="text">
-              <string>Style:</string>
-             </property>
-             <property name="indent">
-              <number>11</number>
+              <string>Font style:</string>
              </property>
             </widget>
            </item>
@@ -10803,10 +10812,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_207">
              <property name="text">
-              <string>Size:</string>
-             </property>
-             <property name="indent">
-              <number>10</number>
+              <string>Font size:</string>
              </property>
             </widget>
            </item>
@@ -10833,7 +10839,7 @@
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="textStyleFontSize">
              <property name="suffix">
-              <string>sp</string>
+              <string>pt</string>
              </property>
              <property name="minimum">
               <double>1.000000000000000</double>
@@ -10860,10 +10866,10 @@
             <widget class="QDoubleSpinBox" name="textStyleFrameBorder"/>
            </item>
            <item row="8" column="1">
-            <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
+            <widget class="Awl::ColorLabel" name="textStyleFrameForeground" native="true"/>
            </item>
            <item row="9" column="1">
-            <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
+            <widget class="Awl::ColorLabel" name="textStyleFrameBackground" native="true"/>
            </item>
            <item row="12" column="0">
             <widget class="QLabel" name="label_212">
@@ -11011,13 +11017,6 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="1">
-            <widget class="QCheckBox" name="textStyleSpatiumDependent">
-             <property name="text">
-              <string>Size changes with staff space setting</string>
-             </property>
-            </widget>
-           </item>
            <item row="6" column="2">
             <widget class="QToolButton" name="resetTextStyleSpatiumDependent">
              <property name="toolTip">
@@ -11041,7 +11040,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Underline' value</string>
+              <string>Reset 'Font style' values</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -11067,6 +11066,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>Awl::ColorLabel</class>
+   <extends>QWidget</extends>
+   <header>awl/colorlabel.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>Ms::AlignSelect</class>
    <extends>QWidget</extends>
    <header>inspector/alignSelect.h</header>
@@ -11076,12 +11081,6 @@
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
    <header>inspector/offsetSelect.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
-   <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

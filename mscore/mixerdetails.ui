@@ -308,7 +308,7 @@
        <item row="3" column="0" colspan="3">
         <widget class="QCheckBox" name="drumkitCheck">
          <property name="text">
-          <string>Drumkit</string>
+          <string>Drumset</string>
          </property>
         </widget>
        </item>
