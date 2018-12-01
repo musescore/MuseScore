@@ -2533,15 +2533,6 @@ void Score::getNextMeasure(LayoutContext& lc)
                               setTempo(etick, otempo);
                         }
                   }
-#if 0 // ws
-            else if (segment.isChordRestType()) {
-                  // chord symbols need to be layouted in parts too
-                  for (Element* e : segment.annotations()) {
-                        if (e->isHarmony())
-                              e->layout();
-                        }
-                  }
-#endif
             }
 
       // update time signature map
