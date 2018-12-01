@@ -385,13 +385,13 @@ void ConnectorInfoReader::addToScore(bool pasteMode)
 //   ConnectorInfoReader::readConnector
 //---------------------------------------------------------
 
-void ConnectorInfoReader::readConnector(ConnectorInfoReader& info, XmlReader& e)
+void ConnectorInfoReader::readConnector(std::unique_ptr<ConnectorInfoReader> info, XmlReader& e)
       {
-      if (!info.read()) {
+      if (!info->read()) {
             e.skipCurrentElement();
             return;
             }
-      e.addConnectorInfoLater(info);
+      e.addConnectorInfoLater(std::move(info));
       }
 
 //---------------------------------------------------------
@@ -427,22 +427,6 @@ Element* ConnectorInfoReader::releaseConnector()
       if (prev())
             return prev()->releaseConnector();
       return c;
-      }
-
-//---------------------------------------------------------
-//   ConnectorInfoReader::operator==
-//---------------------------------------------------------
-
-bool ConnectorInfoReader::operator==(const ConnectorInfoReader& other) const {
-      if (this == &other)
-            return true;
-      if ((_type != other._type)
-         || (_connectorReceiver != other._connectorReceiver)
-         || (connector() != other.connector())
-         || (_currentLoc != other._currentLoc)
-         )
-            return false;
-      return true;
       }
 
 }

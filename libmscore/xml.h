@@ -83,8 +83,8 @@ class XmlReader : public QXmlStreamReader {
       QList<std::pair<int,Spanner*>> _spanner;
       QList<StaffType> _staffTypes;
 
-      QList<ConnectorInfoReader> _connectors;
-      QList<ConnectorInfoReader> _pendingConnectors; // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
+      std::vector<std::unique_ptr<ConnectorInfoReader>> _connectors;
+      std::vector<std::unique_ptr<ConnectorInfoReader>> _pendingConnectors; // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
 
       void htmlToString(int level, QString*);
       Interval _transpose;
@@ -94,6 +94,9 @@ class XmlReader : public QXmlStreamReader {
       QMultiMap<int, int> _tracks;
 
       QList<TextStyleMap> userTextStyles;
+
+      void addConnectorInfo(std::unique_ptr<ConnectorInfoReader>);
+      void removeConnector(const ConnectorInfoReader*); // Removes the whole ConnectorInfo chain from the connectors list.
 
    public:
       XmlReader(QFile* f) : QXmlStreamReader(f), docName(f->fileName()) {}
@@ -173,12 +176,9 @@ class XmlReader : public QXmlStreamReader {
       void addSpannerValues(const SpannerValues& sv) { _spannerValues.append(sv); }
       const SpannerValues* spannerValues(int id) const;
 
-      void addConnectorInfo(const ConnectorInfoReader&);
-      void addConnectorInfoLater(const ConnectorInfoReader&); // add connector info to be checked after calling checkConnectors()
+      void addConnectorInfoLater(std::unique_ptr<ConnectorInfoReader> c) { _pendingConnectors.push_back(std::move(c)); } // add connector info to be checked after calling checkConnectors()
       void checkConnectors();
       void reconnectBrokenConnectors();
-      void removeConnectorInfo(const ConnectorInfoReader&);
-      void removeConnector(const ConnectorInfoReader&); // Removes the whole ConnectorInfo chain from the connectors list.
 
       QList<StaffType>& staffType()     { return _staffTypes; }
       Interval transpose() const        { return _transpose; }
