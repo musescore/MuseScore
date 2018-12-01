@@ -738,7 +738,6 @@ bool Harmony::edit(EditData& ed)
 void Harmony::endEdit(EditData& ed)
       {
       TextBase::endEdit(ed);
-      layout();
 
       if (links()) {
             for (ScoreElement* e : *links()) {
@@ -768,7 +767,6 @@ void Harmony::endEdit(EditData& ed)
                         }
                   }
             }
-      triggerLayout();
       }
 
 //---------------------------------------------------------
