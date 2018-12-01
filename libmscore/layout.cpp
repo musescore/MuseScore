@@ -2061,7 +2061,7 @@ static bool breakMultiMeasureRest(Measure* m)
             for (Element* e : s->annotations()) {
                   if (e->isRehearsalMark() ||
                       e->isTempoText() ||
-                      ((e->isHarmony() || e->isStaffText() || e->isSystemText()) && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
+                      ((e->isHarmony() || e->isStaffText() || e->isSystemText()) && (e->systemFlag() || (m->score()->staff(e->staffIdx())->show() && e->visible()))))
                         return true;
                   }
             for (int staffIdx = 0; staffIdx < m->score()->nstaves(); ++staffIdx) {
