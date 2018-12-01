@@ -111,9 +111,7 @@ class ConnectorInfoReader final : public ConnectorInfo {
       void update();
       void addToScore(bool pasteMode);
 
-      static void readConnector(ConnectorInfoReader& info, XmlReader& e);
-
-      bool operator==(const ConnectorInfoReader& other) const;
+      static void readConnector(std::unique_ptr<ConnectorInfoReader> info, XmlReader& e);
       };
 
 //---------------------------------------------------------
