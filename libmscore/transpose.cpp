@@ -492,12 +492,14 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
       {
       Interval firstInterval = interval;
       Interval segmentInterval = interval;
+      if (tickStart < 0)            // -1 and 0 are valid values to indicate start of score
+            tickStart = 0;
       for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
             Staff* st = staff(staffIdx);
             if (st->staffType(tickStart)->group() == StaffGroup::PERCUSSION)
                   continue;
 
-            bool createKey = tickStart <= 0;    // 0 and -1 are both valid values to indicate start of score
+            bool createKey = tickStart == 0;
             for (Segment* s = firstSegment(SegmentType::KeySig); s; s = s->next1(SegmentType::KeySig)) {
                   if (s->tick() < tickStart)
                         continue;
@@ -666,6 +668,8 @@ void Note::transposeDiatonic(int interval, bool keepAlterations, bool useDoubleA
 
 void Score::transpositionChanged(Part* part, Interval oldV, int tickStart, int tickEnd)
       {
+      if (tickStart == -1)
+            tickStart = 0;
       Interval v = part->instrument(tickStart)->transpose();
       v.flip();
       Interval diffV(oldV.chromatic + v.chromatic);
