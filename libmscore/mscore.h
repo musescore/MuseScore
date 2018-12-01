@@ -66,7 +66,7 @@ static constexpr int MSCVERSION = 301;
 class MStyle;
 class Sequencer;
 
-enum class HairpinType : char;
+enum class HairpinType : signed char;
 
 #ifndef VOICES
 #define VOICES 4

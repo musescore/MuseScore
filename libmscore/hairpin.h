@@ -24,7 +24,7 @@ namespace Ms {
 class Score;
 class Hairpin;
 
-enum class HairpinType : char {
+enum class HairpinType : signed char {
       INVALID = -1,
       CRESC_HAIRPIN,
       DECRESC_HAIRPIN,
