@@ -92,7 +92,7 @@ enum class ClefType : signed char;
 enum class BeatType : char;
 enum class SymId;
 enum class Key;
-enum class HairpinType : char;
+enum class HairpinType : signed char;
 enum class SegmentType;
 enum class OttavaType : char;
 
