@@ -33,7 +33,7 @@ namespace Ms {
 
 bool Workspace::workspacesRead = false;
 //std::unordered_map<std::string, QVariant> Workspace::localPreferences {};
-Workspace* Workspace::currentWorkspace;
+Workspace* Workspace::currentWorkspace = nullptr;
 
 QList<Workspace*> Workspace::_workspaces {};
 
