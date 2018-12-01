@@ -22,7 +22,7 @@ class Page;
 class ChordRest;
 
 enum class Grip : int;
-enum class HairpinType : char;
+enum class HairpinType : signed char;
 
 //---------------------------------------------------------
 //   MuseScoreView
