@@ -1609,6 +1609,8 @@ QVariant Harmony::getProperty(Pid pid) const
 bool Harmony::setProperty(Pid pid, const QVariant& v)
       {
       if (TextBase::setProperty(pid, v)) {
+            if (pid == Pid::TEXT)
+                  setHarmony(v.toString());
             render();
             return true;
             }
