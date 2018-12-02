@@ -2059,6 +2059,8 @@ static bool breakMultiMeasureRest(Measure* m)
 
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
+                  if (!e->visible())
+                        continue;
                   if (e->isRehearsalMark() ||
                       e->isTempoText() ||
                       ((e->isHarmony() || e->isStaffText() || e->isSystemText()) && (e->systemFlag() || m->score()->staff(e->staffIdx())->show())))
