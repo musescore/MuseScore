@@ -3013,7 +3013,7 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                                     }
 
                               if (cr->isFullMeasureRest()) {
-                                    // do nothing
+                                    cr->setDuration(cr->duration() - f);
                                     }
                               // inside deleted area
                               else if (s->rtick() >= tick && cetick <= etick) {
