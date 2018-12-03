@@ -52,6 +52,16 @@ Fingering::Fingering(Score* s, ElementFlags ef)
 
 void Fingering::layout()
       {
+      if (parent()) {
+            const int tick = parent()->tick();
+            const Staff* st = staff();
+            if (st && st->isTabStaff(tick)
+               && !st->staffType(tick)->showTabFingering()) {
+                  setbbox(QRectF());
+                  return;
+                  }
+            }
+
       TextBase::layout();
 
       if (autoplace() && note()) {
