@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cmake --version
 export QT_SHORT_VERSION=5.9
 export QT_LONG_VERSION=5.9.3
 export QT_INSTALLER_ROOT=qt-opensource-mac-x64-clang-${QT_LONG_VERSION}
