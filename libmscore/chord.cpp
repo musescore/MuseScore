@@ -1211,6 +1211,7 @@ void Chord::setScore(Score* s)
 //      2. It was too general to produce good results for all combinations of factors.
 //    This provides a way to take a number of factors into account. Further tweaking may be in order.
 //-----------------------------------------------------------------------------
+
 qreal hookAdjustment(QString font, int hooks, bool up, bool small)
       {
       bool fallback = MScore::useFallbackFont && (hooks > 5);

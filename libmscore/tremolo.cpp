@@ -230,7 +230,7 @@ void Tremolo::layout()
                      },
                   };
             int idx = _chord1->hook() ? 1 : (_chord1->beam() ? 2 : 0);
-            y = (line + t[idx][up][_lines-1][line & 1]) * spatium() * .5;
+            y = (line + t[idx][up][_lines-1][line & 1]) * spatium() * .5 / mag();
 
             QTransform shearTransform;
             shearTransform.shear(0.0, -(lw / 2.0) / w2);
