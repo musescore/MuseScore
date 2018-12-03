@@ -128,7 +128,7 @@ class System final : public Element {
       void removeStaff(int);
 
       int y2staff(qreal y) const;
-      void setInstrumentNames(bool longName);
+      void setInstrumentNames(bool longName, int tick = 0);
       int snap(int tick, const QPointF p) const;
       int snapNote(int tick, const QPointF p, int staff) const;
 
