@@ -64,7 +64,7 @@ function change_rpath() {
       if [[ "$P" == *@rpath* ]]
       then
          if [[ "$P" == *Qt* ]]
-         then  
+         then
             PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
             FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
             install_name_tool -change $P $PSLASH $1
@@ -177,23 +177,31 @@ done
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 otool -L ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Versions/5/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
 
+echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"
 mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 
+
+echo "Copy in background image"
 # copy in background image
 mkdir -p ${VOLUME}/Pictures
 # fixme: path
 cp  ${BACKGROUND} ${VOLUME}/Pictures/background.tiff
 
-# symlink applications
+echo "symlink application"
+# nssymlink applicatio
 ln -s /Applications/ ${VOLUME}/Applications
 set_bundle_display_options ${VOLUME}
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 
 #codesign
+echo "Codesign"
 codesign --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+echo "spctl"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
+echo "Codesign verify"
 codesign --verify --deep --strict --verbose=2 "${VOLUME}/${LONGER_NAME}.app"
 
+echo "Unmount"
 # Unmount the disk image
 hdiutil detach $DEV
 
