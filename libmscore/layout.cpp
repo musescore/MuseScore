@@ -2973,6 +2973,7 @@ System* Score::collectSystem(LayoutContext& lc)
       system->setInstrumentNames(lc.startWithLongNames);
 
       qreal minWidth    = 0;
+      qreal layoutSystemMinWidth = 0;
       bool firstMeasure = true;
       bool createHeader = false;
       qreal systemWidth = styleD(Sid::pagePrintableWidth) * DPI;
@@ -2987,7 +2988,7 @@ System* Score::collectSystem(LayoutContext& lc)
             if (lc.curMeasure->isMeasure()) {
                   Measure* m = toMeasure(lc.curMeasure);
                   if (firstMeasure) {
-                        hideEmptyStaves(system, lc.firstSystem);
+                        layoutSystemMinWidth = minWidth;
                         system->layoutSystem(minWidth);
                         minWidth += system->leftMargin();
                         if (m->repeatStart()) {
@@ -3122,6 +3123,22 @@ System* Score::collectSystem(LayoutContext& lc)
       if (lc.prevMeasure && lc.prevMeasure->isMeasure()) {
             qreal w = toMeasure(lc.prevMeasure)->createEndBarLines(true);
             minWidth += w;
+            }
+
+      hideEmptyStaves(system, lc.firstSystem);
+      bool allShown = true;
+      for (const SysStaff* ss : *system->staves()) {
+            if (!ss->show()) {
+                  allShown = false;
+                  break;
+                  }
+            }
+      if (!allShown) {
+            // Relayout system decorations to reuse space properly for
+            // hidden staves' instrument names or other hidden elements.
+            minWidth -= system->leftMargin();
+            system->layoutSystem(layoutSystemMinWidth);
+            minWidth += system->leftMargin();
             }
 
       //-------------------------------------------------------
