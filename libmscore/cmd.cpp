@@ -1907,6 +1907,8 @@ void Score::cmdResetNoteAndRestGroupings()
 
 static void resetElementPosition(void*, Element* e)
       {
+      if (e->generated())
+            return;
       e->undoResetProperty(Pid::AUTOPLACE);
       e->undoResetProperty(Pid::OFFSET);
       if (e->isSpanner())
