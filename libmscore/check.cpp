@@ -321,7 +321,9 @@ bool Score::checkClefs()
 
 void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch)
       {
-//      qDebug("measure %6d pos %d, len %d, track %d", tick(), pos.ticks(), len.ticks(), track);
+      qDebug("measure %6d pos %d, len %d/%d, stretch %d/%d track %d",
+         tick(), pos.ticks(), len.numerator(), len.denominator(), stretch.numerator(), stretch.denominator(),
+         track);
       TDuration d;
       d.setVal(len.ticks());
       if (d.isValid()) {
