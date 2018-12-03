@@ -231,22 +231,42 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
 
       if (dta->hasUrls()) {
             QList<QUrl>ul = dta->urls();
-            for (const QUrl& u : ul) {
-                  if (MScore::debugMode)
-                        qDebug("drag Url: %s", qPrintable(u.toString()));
-                  if (u.scheme() == "file" || u.scheme() == "http" || u.scheme() == "https") {
-                        QFileInfo fi(u.path());
-                        QString suffix = fi.suffix().toLower();
-                        if (suffix == "svg"
-                           || suffix == "jpg"
-                           || suffix == "jpeg"
-                           || suffix == "png"
-                           ) {
-                              qDebug("accept <%s>\n", qPrintable(u.toString()));
-                              event->accept();
-                              break;
-                              }
+
+            QUrl u = ul.front();
+            Image* image = 0;
+            if (u.scheme() == "file") {
+                  QFileInfo fi(u.path());
+                  image = new Image(score());
+                  QString str(u.toLocalFile());
+                  image->load(str);
+                  }
+            else if (u.scheme() == "http" || u.scheme() == "https") {
+                  QNetworkAccessManager manager;
+                  QNetworkReply* reply = manager.get(QNetworkRequest(u));
+
+                  // TODO:
+                  //    feed progress bar in loop
+                  //    implement timeout/abort
+
+                  QMutex mutex;
+                  QWaitCondition wc;
+                  while (!reply->isFinished()) {
+                        mutex.lock();
+                        wc.wait(&mutex, 100);
+                        qApp->processEvents();
+                        mutex.unlock();
                         }
+                  QByteArray ba = reply->readAll();
+
+                  image = new Image(score());
+                  image->loadFromData(u.path(), ba);
+                  delete reply;
+                  }
+            if (image) {
+                  editData.dropElement = image;
+                  editData.dropElement->setParent(0);
+                  editData.dropElement->layout();
+                  event->accept();
                   }
             return;
             }
@@ -288,165 +308,85 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       // we always accept the drop action
       // to get a "drop" Event:
 
-      if (mscore->state() == STATE_PLAY) {  // no editing during play
+      if (MScore::debugMode) {
+            if (!editData.dropElement)
+                  qDebug("no drop element");
+            else
+                  qDebug("<%s>", editData.dropElement->name());
+            }
+
+      if (!editData.dropElement || mscore->state() == STATE_PLAY) {  // no editing during play
             event->ignore();
             return;
             }
 
       // convert window to canvas position
       QPointF pos(imatrix.map(QPointF(event->pos())));
+      editData.pos       = pos;
+      editData.modifiers = event->keyboardModifiers();
 
-      if (editData.dropElement) {
-            switch (editData.dropElement->type()) {
-                  case ElementType::IMAGE:
-                  case ElementType::SYMBOL:
-                        {
-                        // dragSymbol(pos);
-                        const QList<Element*> el = elementsAt(pos);
-                        const Element* e = el.isEmpty() ? 0 : el[0];
-                        if (!e) {
-                              int staffIdx;
-                              e = _score->pos2measure(pos, &staffIdx, 0, 0, 0);
-                              }
-                        if (e && (e->isNote() || e->isSymbol() || e->isImage() || e->isTextBase())) {
-                              editData.pos         = pos;
-                              editData.modifiers  = 0;
-
-                              if (e->acceptDrop(editData)) {
-                                    setDropTarget(e);
-                                    event->accept();
-                                    }
-                              else {
-                                    setDropTarget(0);
-                                    event->ignore();
-                                    }
-                              return;
-                              }
-                        }
-                        // fall through
-
-                  case ElementType::VOLTA:
-                  case ElementType::PEDAL:
-                  case ElementType::LET_RING:
-                  case ElementType::VIBRATO:
-                  case ElementType::PALM_MUTE:
-                  case ElementType::OTTAVA:
-                  case ElementType::TRILL:
-                  case ElementType::HAIRPIN:
-                  case ElementType::TEXTLINE:
-                        if (dragTimeAnchorElement(pos))
-                              event->accept();
-                        else
-                              event->ignore();
-                        break;
-                  case ElementType::DYNAMIC:
-                  case ElementType::KEYSIG:
-                  case ElementType::CLEF:
-                  case ElementType::TIMESIG:
-                  case ElementType::BAR_LINE:
-                  case ElementType::ARPEGGIO:
-                  case ElementType::BREATH:
-                  case ElementType::GLISSANDO:
-                  case ElementType::BRACKET:
-                  case ElementType::ARTICULATION:
-                  case ElementType::FERMATA:
-                  case ElementType::CHORDLINE:
-                  case ElementType::BEND:
-                  case ElementType::ACCIDENTAL:
-                  case ElementType::TEXT:
-                  case ElementType::FINGERING:
-                  case ElementType::TEMPO_TEXT:
-                  case ElementType::STAFF_TEXT:
-                  case ElementType::SYSTEM_TEXT:
-                  case ElementType::NOTEHEAD:
-                  case ElementType::TREMOLO:
-                  case ElementType::LAYOUT_BREAK:
-                  case ElementType::MARKER:
-                  case ElementType::STAFF_STATE:
-                  case ElementType::INSTRUMENT_CHANGE:
-                  case ElementType::REHEARSAL_MARK:
-                  case ElementType::JUMP:
-                  case ElementType::REPEAT_MEASURE:
-                  case ElementType::ICON:
-                  case ElementType::CHORD:
-                  case ElementType::SPACER:
-                  case ElementType::SLUR:
-                  case ElementType::HARMONY:
-                  case ElementType::BAGPIPE_EMBELLISHMENT:
-                  case ElementType::AMBITUS:
-                  case ElementType::TREMOLOBAR:
-                  case ElementType::FIGURED_BASS:
-                  case ElementType::LYRICS:
-                  case ElementType::FRET_DIAGRAM:
-                  case ElementType::STAFFTYPE_CHANGE: {
-                        editData.pos = pos;
-                        editData.modifiers = event->keyboardModifiers();
-
-                        if (getDropTarget(editData))
-                              event->accept();
-                        else
-                              event->ignore();
-                        }
-                        break;
-                  default:
-                        event->ignore();
-                        break;
-                  }
-
-            return;
+      switch (editData.dropElement->type()) {
+            case ElementType::VOLTA:
+            case ElementType::PEDAL:
+            case ElementType::LET_RING:
+            case ElementType::VIBRATO:
+            case ElementType::PALM_MUTE:
+            case ElementType::OTTAVA:
+            case ElementType::TRILL:
+            case ElementType::HAIRPIN:
+            case ElementType::TEXTLINE:
+                  event->setAccepted(dragTimeAnchorElement(pos));
+                  break;
+            case ElementType::IMAGE:
+            case ElementType::SYMBOL:
+            case ElementType::DYNAMIC:
+            case ElementType::KEYSIG:
+            case ElementType::CLEF:
+            case ElementType::TIMESIG:
+            case ElementType::BAR_LINE:
+            case ElementType::ARPEGGIO:
+            case ElementType::BREATH:
+            case ElementType::GLISSANDO:
+            case ElementType::BRACKET:
+            case ElementType::ARTICULATION:
+            case ElementType::FERMATA:
+            case ElementType::CHORDLINE:
+            case ElementType::BEND:
+            case ElementType::ACCIDENTAL:
+            case ElementType::TEXT:
+            case ElementType::FINGERING:
+            case ElementType::TEMPO_TEXT:
+            case ElementType::STAFF_TEXT:
+            case ElementType::SYSTEM_TEXT:
+            case ElementType::NOTEHEAD:
+            case ElementType::TREMOLO:
+            case ElementType::LAYOUT_BREAK:
+            case ElementType::MARKER:
+            case ElementType::STAFF_STATE:
+            case ElementType::INSTRUMENT_CHANGE:
+            case ElementType::REHEARSAL_MARK:
+            case ElementType::JUMP:
+            case ElementType::REPEAT_MEASURE:
+            case ElementType::ICON:
+            case ElementType::CHORD:
+            case ElementType::SPACER:
+            case ElementType::SLUR:
+            case ElementType::HARMONY:
+            case ElementType::BAGPIPE_EMBELLISHMENT:
+            case ElementType::AMBITUS:
+            case ElementType::TREMOLOBAR:
+            case ElementType::FIGURED_BASS:
+            case ElementType::LYRICS:
+            case ElementType::FRET_DIAGRAM:
+            case ElementType::STAFFTYPE_CHANGE:
+                  event->setAccepted(getDropTarget(editData));
+                  break;
+            default:
+                  if (MScore::debugMode)
+                        qDebug("no target");
+                  event->ignore();
+                  break;
             }
-
-      const QMimeData* md = event->mimeData();
-      if (md->hasUrls()) {
-            QList<QUrl>ul = md->urls();
-            QUrl u = ul.front();
-            if (u.scheme() == "file" || u.scheme() == "http") {
-                  QFileInfo fi(u.path());
-                  QString suffix(fi.suffix().toLower());
-                  if (suffix != "svg"
-                     && suffix != "jpg"
-                     && suffix != "jpeg"
-                     && suffix != "png"
-                     ) {
-                        return;
-                        }
-                  //
-                  // special drop target Note
-                  //
-                  Element* el = elementAt(pos);
-                  if (el && (el->isNote() || el->isRest()))
-                        setDropTarget(el);
-                  else
-                        setDropTarget(0);
-                  event->accept();
-                  }
-            return;
-            }
-      QByteArray dta;
-      ElementType etype;
-      if (md->hasFormat(mimeSymbolListFormat)) {
-            etype = ElementType::ELEMENT_LIST;
-            dta = md->data(mimeSymbolListFormat);
-            }
-      else if (md->hasFormat(mimeStaffListFormat)) {
-            etype = ElementType::STAFF_LIST;
-            dta = md->data(mimeStaffListFormat);
-            }
-      else {
-            return;
-            }
-      Element* el = elementAt(pos);
-      if (el == 0 || el->type() != ElementType::MEASURE) {
-//            _score->update();
-            return;
-            }
-      else if (etype == ElementType::ELEMENT_LIST) {
-            qDebug("accept drop element list");
-            }
-      else if (etype == ElementType::STAFF_LIST || etype == ElementType::MEASURE_LIST) {
-//TODO            el->acceptDrop(this, pos, etype, e);
-            }
-//      _score->update();
       }
 
 //---------------------------------------------------------
@@ -531,6 +471,8 @@ void ScoreView::dropEvent(QDropEvent* event)
                         }
                         event->acceptProposedAction();
                         break;
+                  case ElementType::HBOX:
+                  case ElementType::VBOX:
                   case ElementType::KEYSIG:
                   case ElementType::CLEF:
                   case ElementType::TIMESIG:
@@ -606,68 +548,6 @@ void ScoreView::dropEvent(QDropEvent* event)
             // update input cursor position (must be done after layout)
             if (noteEntryMode())
                   moveCursor();
-            return;
-            }
-
-      if (event->mimeData()->hasUrls()) {
-            QList<QUrl>ul = event->mimeData()->urls();
-            QUrl u = ul.front();
-            if (u.scheme() == "file") {
-                  QFileInfo fi(u.path());
-                  Image* s = new Image(score());
-                  _score->startCmd();
-                  QString str(u.toLocalFile());
-                  s->load(str);
-                  qDebug("drop image <%s> <%s>", qPrintable(str), qPrintable(str));
-
-                  Element* el = elementAt(pos);
-                  if (el) {
-                        editData.dropElement = s;
-                        if (el->acceptDrop(editData)) {
-                              el->drop(editData);
-                              }
-                        }
-                  event->acceptProposedAction();
-                  score()->endCmd();
-                  setDropTarget(0); // this also resets dropRectangle and dropAnchor
-                  return;
-                  }
-            else if (u.scheme() == "http" || u.scheme() == "https") {
-                  QNetworkAccessManager manager;
-                  QNetworkReply* reply = manager.get(QNetworkRequest(u));
-
-                  // TODO:
-                  //    feed progress bar in loop
-                  //    implement timeout/abort
-
-                  QMutex mutex;
-                  QWaitCondition wc;
-                  while (!reply->isFinished()) {
-                        mutex.lock();
-                        wc.wait(&mutex, 100);
-                        qApp->processEvents();
-                        mutex.unlock();
-                        }
-                  QByteArray ba = reply->readAll();
-
-                  Image* s = new Image(score());
-                  s->loadFromData(u.path(), ba);
-                  delete reply;
-
-                  _score->startCmd();
-
-                  Element* el = elementAt(pos);
-                  if (el) {
-                        editData.dropElement = s;
-                        if (el->acceptDrop(editData)) {
-                              el->drop(editData);
-                              }
-                        }
-                  event->acceptProposedAction();
-                  score()->endCmd();
-                  setDropTarget(0); // this also resets dropRectangle and dropAnchor
-                  return;
-                  }
             return;
             }
 
