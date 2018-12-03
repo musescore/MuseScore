@@ -595,7 +595,7 @@ void System::layout2()
 //   setInstrumentNames
 //---------------------------------------------------------
 
-void System::setInstrumentNames(bool longName)
+void System::setInstrumentNames(bool longName, int tick)
       {
       //
       // remark: add/remove instrument names is not undo/redoable
@@ -612,10 +612,6 @@ void System::setInstrumentNames(bool longName)
             return;
             }
 
-      // TODO: ml is normally empty here, so we are unable to retrieve tick
-      // thus, staff name does not reflect current instrument
-
-      int tick = ml.empty() ? 0 : ml.front()->tick();
       int staffIdx = 0;
       for (SysStaff* staff : _staves) {
             Staff* s = score()->staff(staffIdx);
