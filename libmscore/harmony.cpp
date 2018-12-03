@@ -1123,7 +1123,7 @@ void Harmony::drawEditMode(QPainter* p, EditData& ed)
       {
       TextBase::drawEditMode(p, ed);
 
-      QPointF pos(pagePos());
+      QPointF pos(canvasPos());
       p->translate(pos);
       TextBase::draw(p);
       p->translate(-pos);
