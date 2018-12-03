@@ -1168,6 +1168,8 @@ Shape ChordRest::shape() const
       qreal x2 = -1000000.0;
       bool adjustWidth = false;
       for (Lyrics* l : _lyrics) {
+            if (!l->visible())
+                  continue;
             static const qreal margin = spatium() * .5;
             // for horizontal spacing we only need the lyrics width:
             x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
@@ -1178,11 +1180,11 @@ Shape ChordRest::shape() const
             }
 
       for (Element* e : segment()->annotations()) {
-            if (e->isHarmony() && e->staffIdx() == staffIdx()) {
+            if (e->isHarmony() && e->staffIdx() == staffIdx() && e->visible()) {
                   e->layout();
-                  qreal hx = e->bbox().x() - e->pos().x();
-                  x1 = qMin(x1, hx);
-                  x2 = qMax(x2, hx + e->bbox().width());
+                  const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
+                  x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
+                  x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
                   adjustWidth = true;
                   }
             }
