@@ -379,16 +379,16 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
             return;
             }
       PropertyFlags f = propertyFlags(pid);
-      QVariant d = (f == PropertyFlags::NOSTYLE) ? propertyDefault(pid) : QVariant();
+      QVariant d = (f != PropertyFlags::STYLED) ? propertyDefault(pid) : QVariant();
 
       if (pid == Pid::FONT_STYLE) {
             FontStyle ds = FontStyle(d.isValid() ? d.toInt() : 0);
             FontStyle fs = FontStyle(p.toInt());
-            if ((fs & FontStyle::Bold) !=  (ds & FontStyle::Bold))
+            if ((fs & FontStyle::Bold) != (ds & FontStyle::Bold))
                   xml.tag("bold", fs & FontStyle::Bold);
-            if ((fs & FontStyle::Italic) && (ds & FontStyle::Italic))
-                  xml.tag("italic", fs & FontStyle::Bold);
-            if ((fs & FontStyle::Underline) && (ds & FontStyle::Underline))
+            if ((fs & FontStyle::Italic) != (ds & FontStyle::Italic))
+                  xml.tag("italic", fs & FontStyle::Italic);
+            if ((fs & FontStyle::Underline) != (ds & FontStyle::Underline))
                   xml.tag("underline", fs & FontStyle::Underline);
             return;
             }

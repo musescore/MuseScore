@@ -89,7 +89,6 @@
         <bottomMargin>5</bottomMargin>
         <Text>
           <style>Title</style>
-          <family>FreeSerif</family>
           <text><font face="Times New Roman"/>Tuplet 1.3 file</text>
           </Text>
         </VBox>

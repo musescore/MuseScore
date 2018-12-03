@@ -96,22 +96,18 @@
         <bottomMargin>5</bottomMargin>
         <Text>
           <style>Title</style>
-          <family>FreeSerif</family>
           <text><font face="Times New Roman"/>title</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <family>FreeSerif</family>
           <text><font face="Times New Roman"/>subtitle</text>
           </Text>
         <Text>
           <style>Composer</style>
-          <family>FreeSerif</family>
           <text><font face="Times New Roman"/>Composer</text>
           </Text>
         <Text>
           <style>Lyricist</style>
-          <family>FreeSerif</family>
           <text><font face="Times New Roman"/>Lyrics</text>
           </Text>
         </VBox>
