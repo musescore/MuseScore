@@ -15,8 +15,9 @@ rm bottles/freetype*
 brew update
 
 # additional dependencies
-brew install jack lame
+brew install jack lame cmake
 #brew install libogg libvorbis flac libsndfile portaudio
+cmake --version
 
 BREW_CELLAR=$(brew --cellar)
 BREW_PREFIX=$(brew --prefix)
