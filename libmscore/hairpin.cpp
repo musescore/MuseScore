@@ -86,9 +86,12 @@ void HairpinSegment::layout()
       const int _track = track();
       if (autoplace() && !score()->isPalette()) {
             // Try to fit between adjacent dynamics
+            const System* sys = system();
             if (isSingleType() || isBeginType()) {
                   Segment* start = hairpin()->startSegment();
-                  Dynamic* sd = start ? toDynamic(start->findAnnotation(ElementType::DYNAMIC, _track, _track)) : nullptr;
+                  Dynamic* sd = nullptr;
+                  if (start && start->system() == sys)
+                        sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _track, _track));
                   if (sd) {
                         const qreal sdRight = sd->bbox().right() + sd->pos().x()
                                               + sd->segment()->pos().x() + sd->measure()->pos().x();
@@ -99,7 +102,12 @@ void HairpinSegment::layout()
                   }
             if (isSingleType() || isEndType()) {
                   Segment* end = hairpin()->endSegment();
-                  Dynamic* ed = end ? toDynamic(end->findAnnotation(ElementType::DYNAMIC, _track, _track)) : nullptr;
+                  Dynamic* ed = nullptr;
+                  if (end && end->tick() < sys->endTick()) {
+                        // checking ticks rather than systems since latter
+                        // systems may be unknown at layout stage.
+                        ed = toDynamic(end->findAnnotation(ElementType::DYNAMIC, _track, _track));
+                        }
                   if (ed) {
                         const qreal edLeft  = ed->bbox().left() + ed->pos().x()
                                               + ed->segment()->pos().x() + ed->measure()->pos().x();
