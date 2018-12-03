@@ -335,7 +335,7 @@ void EditStaff::apply()
       instrument.setLongName(ln);
 
       bool inv       = invisible->isChecked();
-      ClefTypeList clefType = instrument.clefType(orgStaff->rstaff());
+      ClefTypeList clefType = orgStaff->defaultClefType();
       qreal userDist = spinExtraDistance->value();
       bool ifEmpty   = showIfEmpty->isChecked();
       bool hideSystemBL = hideSystemBarLine->isChecked();
@@ -353,6 +353,8 @@ void EditStaff::apply()
 
             if (v1 != v2)
                   score->transpositionChanged(part, v2, _tickStart, _tickEnd);
+
+            clefType = instrument.clefType(orgStaff->rstaff());
             }
       orgStaff->undoChangeProperty(Pid::MAG, mag->value() / 100.0);
       orgStaff->undoChangeProperty(Pid::COLOR, color->color());
