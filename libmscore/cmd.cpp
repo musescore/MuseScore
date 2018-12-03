@@ -2481,16 +2481,14 @@ void Score::cmdExplode()
                   lastStaff = qMin(nstaves(), srcStaff + n);
                   }
 
-            // make our own copy of selection, since pasting modifies actual selection
-            Selection srcSelection(selection());
-
+            const QByteArray mimeData(selection().mimeData());
             // copy to all destination staves
             Segment* firstCRSegment = startMeasure->tick2segment(startMeasure->tick());
             for (int i = 1; srcStaff + i < lastStaff; ++i) {
                   int track = (srcStaff + i) * VOICES;
                   ChordRest* cr = toChordRest(firstCRSegment->element(track));
                   if (cr) {
-                        XmlReader e(srcSelection.mimeData());
+                        XmlReader e(mimeData);
                         e.setPasteMode(true);
                         pasteStaff(e, cr->segment(), cr->staffIdx());
                         }

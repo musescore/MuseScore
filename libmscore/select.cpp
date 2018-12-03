@@ -319,9 +319,10 @@ void Selection::clear()
 
 void Selection::remove(Element* el)
       {
-      _el.removeOne(el);
+      const bool removed = _el.removeOne(el);
       el->setSelected(false);
-      updateState();
+      if (removed)
+            updateState();
       }
 
 //---------------------------------------------------------

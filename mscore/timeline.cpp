@@ -1726,8 +1726,8 @@ void Timeline::drawSelection()
 
       std::set<std::tuple<Measure*, int, ElementType>> meta_labels_set;
 
-      const Selection selection = _score->selection();
-      QList<Element*> el = selection.elements();
+      const Selection& selection = _score->selection();
+      const QList<Element*>& el = selection.elements();
       for (Element* element : el) {
             if (element->tick() == -1)
                   continue;

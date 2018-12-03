@@ -387,6 +387,7 @@ class Score : public QObject, public ScoreElement {
             };
 
    private:
+      static std::set<Score*> validScores;
       int _linkId { 0 };
       MasterScore* _masterScore { 0 };
       QList<MuseScoreView*> viewer;
@@ -559,6 +560,8 @@ class Score : public QObject, public ScoreElement {
 
       virtual bool isMaster() const  { return false;        }
       virtual bool readOnly() const;
+
+      static void onElementDestruction(Element* se);
 
       virtual inline QList<Excerpt*>& excerpts();
       virtual inline const QList<Excerpt*>& excerpts() const;
@@ -758,7 +761,7 @@ class Score : public QObject, public ScoreElement {
       bool saveFile(QFileInfo& info);
       bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
       bool saveCompressedFile(QFileInfo&, bool onlySelection);
-      bool saveCompressedFile(QIODevice*, QFileInfo&, bool onlySelection, bool createThumbnail = true);
+      bool saveCompressedFile(QFileDevice*, QFileInfo&, bool onlySelection, bool createThumbnail = true);
       bool exportFile();
 
       void print(QPainter* printer, int page);

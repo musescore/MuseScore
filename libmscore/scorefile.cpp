@@ -546,7 +546,7 @@ QImage Score::createThumbnail()
 //    file is already opened
 //---------------------------------------------------------
 
-bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection, bool doCreateThumbnail)
+bool Score::saveCompressedFile(QFileDevice* f, QFileInfo& info, bool onlySelection, bool doCreateThumbnail)
       {
       MQZipWriter uz(f);
 
@@ -571,6 +571,14 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       cbuf.seek(0);
       //uz.addDirectory("META-INF");
       uz.addFile("META-INF/container.xml", cbuf.data());
+
+      QBuffer dbuf;
+      dbuf.open(QIODevice::ReadWrite);
+      saveFile(&dbuf, true, onlySelection);
+      dbuf.seek(0);
+      uz.addFile(fn, dbuf.data());
+      f->flush(); // flush to preserve score data in case of
+                  // any failures on the further operations.
 
       // save images
       //uz.addDirectory("Pictures");
@@ -620,11 +628,6 @@ bool Score::saveCompressedFile(QIODevice* f, QFileInfo& info, bool onlySelection
       if (_audio)
             uz.addFile("audio.ogg", _audio->data());
 
-      QBuffer dbuf;
-      dbuf.open(QIODevice::ReadWrite);
-      saveFile(&dbuf, true, onlySelection);
-      dbuf.seek(0);
-      uz.addFile(fn, dbuf.data());
       uz.close();
       return true;
       }
