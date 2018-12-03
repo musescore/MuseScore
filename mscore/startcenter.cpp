@@ -68,7 +68,8 @@ Startcenter::Startcenter()
             page->profile()->setRequestInterceptor(wuri);
             _webView->setPage(page);
 
-            _webView->setUrl(QUrl(QString("https://connect2.musescore.com/?version=%1").arg(VERSION)));
+            auto extendedVer = QString(VERSION) + "." + QString(BUILD_NUMBER);
+            _webView->setUrl(QUrl(QString("https://connect2.musescore.com/?version=%1").arg(extendedVer)));
 
             horizontalLayout->addWidget(_webView);
             }
