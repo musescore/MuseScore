@@ -1787,8 +1787,11 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                         break;
                         }
                   }
-            if (!found)
-                  mmr->add(e->clone());
+            if (!found) {
+                  Element* e1 = e->clone();
+                  e1->setParent(mmr);
+                  undo(new AddElement(e1));
+                  }
             }
       for (Element* e : oldList)
             delete e;
