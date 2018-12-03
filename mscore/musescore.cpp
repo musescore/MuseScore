@@ -1292,15 +1292,17 @@ MuseScore::MuseScore()
             "",
             "parts",
             "album"}) {
-            if (!*i)
+            if (!*i) {
                   menuFile->addSeparator();
-            if (strcmp(i, "album") == 0) { //enable Album feature in experimental mode
-                  if (enableExperimental)
-                        menuFile->addAction(getAction(i));
                   continue;
                   }
-            else if ( (MuseScore::unstable() && enableExperimental) || //unstable + experimental enables all menu items
-                      strcmp(i,"file-save-online") != 0) //Save Online is disabled for now
+
+            if (strcmp(i, "album") == 0) { //enable Album feature in experimental mode
+                  if (enableExperimental)
+                        menuFile->addAction(getAction("album"));
+                  continue;
+                  }
+            else
                   menuFile->addAction(getAction(i));
             }
 
@@ -5655,7 +5657,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             loadFiles();
       else if (cmd == "file-save")
             saveFile();
-      else if (cmd == "file-save-online" && MuseScore::unstable() && enableExperimental)
+      else if (cmd == "file-save-online")
             showUploadScoreDialog();
       else if (cmd == "file-export")
             exportFile();
