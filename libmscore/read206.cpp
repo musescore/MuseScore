@@ -1364,6 +1364,10 @@ bool readNoteProperties206(Note* note, XmlReader& e)
                   note->addSpannerFor(sp);
                   sp->setParent(note);
                   }
+            for (auto a : sp->spannerSegments()) {
+                  a->setProperty(Pid::PLACEMENT, a->offset().y() > 0.0 ? int(Placement::BELOW) : int(Placement::ABOVE));
+                  printf("====%f\n", a->offset().y());
+                  }
             }
       else if (tag == "offset")
             note->Element::readProperties(e);
@@ -2152,6 +2156,15 @@ static void readVolta206(XmlReader& e, Volta* volta)
             else if (!readTextLineProperties(e, volta))
                   e.unknown();
             }
+      for (auto a : volta->spannerSegments()) {
+            qreal belowThreshold = a->spatium() * 4.0;
+            if (a->offset().y() >= belowThreshold) {
+                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
+                  a->ryoffset() -= a->spatium() * 4.0;
+                  }
+            else
+                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
+            }
       }
 
 //---------------------------------------------------------
@@ -2163,6 +2176,15 @@ static void readPedal(XmlReader& e, Pedal* pedal)
       while (e.readNextStartElement()) {
             if (!readTextLineProperties(e, pedal))
                   e.unknown();
+            }
+      for (auto a : pedal->spannerSegments()) {
+            qreal belowThreshold = a->spatium() * 4.0;
+            if (a->offset().y() >= belowThreshold) {
+                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
+                  a->ryoffset() -= a->spatium() * 4.0;
+                  }
+            else
+                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
             }
       }
 
@@ -2197,6 +2219,15 @@ static void readOttava(XmlReader& e, Ottava* ottava)
                   }
             else if (!readTextLineProperties(e, ottava))
                   e.unknown();
+            }
+      for (auto a : ottava->spannerSegments()) {
+            qreal belowThreshold = a->spatium() * 4.0;
+            if (a->offset().y() >= belowThreshold) {
+                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
+                  a->ryoffset() -= a->spatium() * 4.0;
+                  }
+            else
+                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
             }
       }
 
@@ -2252,6 +2283,15 @@ void readHairpin206(XmlReader& e, Hairpin* h)
             ss->setUserOff2(QPointF());
             }
 #endif
+      for (auto a : h->spannerSegments()) {
+            qreal belowThreshold = a->spatium() * 4.0;
+            if (a->offset().y() >= belowThreshold) {
+                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
+                  a->ryoffset() -= a->spatium() * 4.0;
+                  }
+            else
+                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
+            }
       }
 
 //---------------------------------------------------------
@@ -2288,6 +2328,15 @@ void readTextLine206(XmlReader& e, TextLineBase* tlb)
       while (e.readNextStartElement()) {
             if (!readTextLineProperties(e, tlb))
                   e.unknown();
+            }
+      for (auto a : tlb->spannerSegments()) {
+            qreal belowThreshold = a->spatium() * 4.0;
+            if (a->offset().y() >= belowThreshold) {
+                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
+                  a->ryoffset() -= a->spatium() * 4.0;
+                  }
+            else
+                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
             }
       }
 
