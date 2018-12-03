@@ -937,7 +937,8 @@ void PianoView::selectNotes(int startTick, int endTick, int lowPitch, int highPi
       //score->masterScore()->cmdState().reset();      // DEBUG: should not be necessary
       score->startCmd();
 
-      Selection selection(score);
+      Selection& selection = score->selection();
+      selection.deselectAll();
 
       for (int i = 0; i < noteList.size(); ++i) {
             PianoItem* pi = noteList[i];
@@ -967,7 +968,6 @@ void PianoView::selectNotes(int startTick, int endTick, int lowPitch, int highPi
                   selection.add(pi->note());
             }
 
-      score->setSelection(selection);
       for (MuseScoreView* view : score->getViewer())
             view->updateAll();
       

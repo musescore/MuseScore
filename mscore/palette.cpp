@@ -451,7 +451,7 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
       Score* score = mscore->currentScore();
       if (score == 0)
             return;
-      Selection sel = score->selection();       // make a copy of the list
+      const Selection& sel = score->selection();       // make a copy of the list
       if (sel.isNone())
             return;
 
@@ -753,8 +753,7 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
       Score* score = mscore->currentScore();
       if (score == 0)
             return;
-      Selection sel = score->selection();       // make a copy of the list
-      if (sel.isNone())
+      if (score->selection().isNone())
             return;
 
       applyPaletteElement(cellAt(i), ev->modifiers());

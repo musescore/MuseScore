@@ -3308,7 +3308,7 @@ void ScoreView::cmdAddNoteLine()
 void ScoreView::cmdChangeEnharmonic(bool both)
       {
       _score->startCmd();
-      Selection selection = _score->selection();
+      Selection& selection = _score->selection();
       QList<Note*> notes = selection.uniqueNotes();
       for (Note* n : notes) {
             Staff* staff = n->staff();
