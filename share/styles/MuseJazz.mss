@@ -35,9 +35,7 @@
     <lyricsDashYposRatio>0.67</lyricsDashYposRatio>
     <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
     <lyricsOddFontSize>11</lyricsOddFontSize>
-    <lyricsOddFontBold>0</lyricsOddFontBold>
-    <lyricsOddFontItalic>0</lyricsOddFontItalic>
-    <lyricsOddFontUnderline>0</lyricsOddFontUnderline>
+    <lyricsOddFontStyle>0</lyricsOddFontStyle>
     <lyricsOddFrameType>0</lyricsOddFrameType>
     <lyricsOddFramePadding>0.2</lyricsOddFramePadding>
     <lyricsOddFrameWidth>0.1</lyricsOddFrameWidth>
@@ -46,9 +44,7 @@
     <lyricsOddFrameBgColor r="255" g="255" b="255" a="0"/>
     <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
     <lyricsEvenFontSize>11</lyricsEvenFontSize>
-    <lyricsEvenFontBold>0</lyricsEvenFontBold>
-    <lyricsEvenFontItalic>0</lyricsEvenFontItalic>
-    <lyricsEventFontUnderline>0</lyricsEventFontUnderline>
+    <lyricsEvenFontStyle>0</lyricsEvenFontStyle>
     <lyricsOddFrameType>0</lyricsOddFrameType>
     <lyricsOddFramePadding>0.2</lyricsOddFramePadding>
     <lyricsOddFrameWidth>0.1</lyricsOddFrameWidth>
@@ -136,9 +132,7 @@
     <hairpinWidth>0.2</hairpinWidth>
     <hairpinFontFace>MuseJazz Text</hairpinFontFace>
     <hairpinFontSize>12</hairpinFontSize>
-    <hairpinFontBold>0</hairpinFontBold>
-    <hairpinFontItalic>1</hairpinFontItalic>
-    <hairpinFontUnderline>0</hairpinFontUnderline>
+    <hairpinFontStyle>2</hairpinFontStyle>
     <hairpinFrameType>0</hairpinFrameType>
     <hairpinFramePadding>0.2</hairpinFramePadding>
     <hairpinFrameWidth>0.1</hairpinFrameWidth>
@@ -154,9 +148,7 @@
     <pedalHookHeight>-1.2</pedalHookHeight>
     <pedalFontFace>MuseJazz Text</pedalFontFace>
     <pedalFontSize>12</pedalFontSize>
-    <pedalFontBold>0</pedalFontBold>
-    <pedalFontItalic>0</pedalFontItalic>
-    <pedalFontUnderline>0</pedalFontUnderline>
+    <pedalFontStyle>0</pedalFontStyle>
     <pedalFrameType>0</pedalFrameType>
     <pedalFramePadding>0.2</pedalFramePadding>
     <pedalFrameWidth>0.1</pedalFrameWidth>
@@ -174,12 +166,12 @@
     <maxHarmonyBarDistance>3</maxHarmonyBarDistance>
     <harmonyPlacement>0</harmonyPlacement>
     <chordSymbolPosAbove x="0" y="-2.5"/>
+    <chordSymbolPosBelow x="0" y="3.5"/>
+    <chordSymbolBPosAbove x="0" y="-5.5"/>
+    <chordSymbolBPosBelow x="0" y="3.5"/>
     <chordSymbolAFontFace>MuseJazz Text</chordSymbolAFontFace>
     <chordSymbolAFontSize>15</chordSymbolAFontSize>
-    <chordSymbolAFontBold>0</chordSymbolAFontBold>
-    <chordSymbolAFontItalic>0</chordSymbolAFontItalic>
-    <chordSymbolAFontUnderline>0</chordSymbolAFontUnderline>
-    <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
+    <chordSymbolAFontStyle>0</chordSymbolAFontStyle>
     <chordSymbolAFrameType>0</chordSymbolAFrameType>
     <chordSymbolAFramePadding>0.2</chordSymbolAFramePadding>
     <chordSymbolAFrameWidth>0.1</chordSymbolAFrameWidth>
@@ -188,10 +180,7 @@
     <chordSymbolAFrameBgColor r="255" g="255" b="255" a="0"/>
     <chordSymbolBFontFace>MuseJazz Text</chordSymbolBFontFace>
     <chordSymbolBFontSize>12</chordSymbolBFontSize>
-    <chordSymbolBFontBold>0</chordSymbolBFontBold>
-    <chordSymbolBFontItalic>0</chordSymbolBFontItalic>
-    <chordSymbolBFontUnderline>0</chordSymbolBFontUnderline>
-    <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
+    <chordSymbolBFontStyle>2</chordSymbolBFontStyle>
     <chordSymbolBFrameType>0</chordSymbolBFrameType>
     <chordSymbolBFramePadding>0.2</chordSymbolBFramePadding>
     <chordSymbolBFrameWidth>0.1</chordSymbolBFrameWidth>
@@ -287,9 +276,7 @@
     <voltaLineStyle>1</voltaLineStyle>
     <voltaFontFace>MuseJazz Text</voltaFontFace>
     <voltaFontSize>11</voltaFontSize>
-    <voltaFontBold>1</voltaFontBold>
-    <voltaFontItalic>0</voltaFontItalic>
-    <voltaFontUnderline>0</voltaFontUnderline>
+    <voltaFontStyle>1</voltaFontStyle>
     <voltaOffset x="0.5" y="1.9"/>
     <voltaFrameType>0</voltaFrameType>
     <voltaFramePadding>0.2</voltaFramePadding>
@@ -324,9 +311,7 @@
     <ottavaNumbersOnly>1</ottavaNumbersOnly>
     <ottavaFontFace>MuseJazz Text</ottavaFontFace>
     <ottavaFontSize>12</ottavaFontSize>
-    <ottavaFontBold>0</ottavaFontBold>
-    <ottavaFontItalic>0</ottavaFontItalic>
-    <ottavaFontUnderline>0</ottavaFontUnderline>
+    <ottavaFontStyle>0</ottavaFontStyle>
     <ottavaFrameType>0</ottavaFrameType>
     <ottavaFramePadding>0.2</ottavaFramePadding>
     <ottavaFrameWidth>0.1</ottavaFrameWidth>
@@ -355,9 +340,7 @@
     <tupletBracketType>0</tupletBracketType>
     <tupletFontFace>MuseJazz Text</tupletFontFace>
     <tupletFontSize>10</tupletFontSize>
-    <tupletFontBold>0</tupletFontBold>
-    <tupletFontItalic>1</tupletFontItalic>
-    <tupletFontUnderline>0</tupletFontUnderline>
+    <tupletFontStyle>2</tupletFontStyle>
     <tupletBracketHookHeight>1</tupletBracketHookHeight>
     <tupletOffset x="0" y="0"/>
     <tupletFrameType>0</tupletFrameType>
@@ -392,9 +375,7 @@
     <defaultFontFace>MuseJazz Text</defaultFontFace>
     <defaultFontSize>10</defaultFontSize>
     <defaultFontSpatiumDependent>1</defaultFontSpatiumDependent>
-    <defaultFontBold>0</defaultFontBold>
-    <defaultFontItalic>0</defaultFontItalic>
-    <defaultFontUnderline>0</defaultFontUnderline>
+    <defaultFontStyle>0</defaultFontStyle>
     <defaultFrameType>0</defaultFrameType>
     <defaultFramePadding>0.2</defaultFramePadding>
     <defaultFrameWidth>0.1</defaultFrameWidth>
@@ -408,9 +389,7 @@
     <titleFontFace>MuseJazz Text</titleFontFace>
     <titleFontSize>28</titleFontSize>
     <titleFontSpatiumDependent>0</titleFontSpatiumDependent>
-    <titleFontBold>0</titleFontBold>
-    <titleFontItalic>0</titleFontItalic>
-    <titleFontUnderline>0</titleFontUnderline>
+    <titleFontStyle>0</titleFontStyle>
     <titleOffset x="0" y="0"/>
     <titleOffsetType>0</titleOffsetType>
     <titleFrameType>0</titleFrameType>
@@ -422,9 +401,7 @@
     <subTitleFontFace>MuseJazz Text</subTitleFontFace>
     <subTitleFontSize>14</subTitleFontSize>
     <subTitleFontSpatiumDependent>0</subTitleFontSpatiumDependent>
-    <subTitleFontBold>0</subTitleFontBold>
-    <subTtitleFontItalic>0</subTtitleFontItalic>
-    <subTitleFontUnderline>0</subTitleFontUnderline>
+    <subTitleFontStyle>0</subTitleFontStyle>
     <subTitleOffset x="0" y="10"/>
     <subTitleOffsetType>0</subTitleOffsetType>
     <subTitleFrameType>0</subTitleFrameType>
@@ -436,9 +413,7 @@
     <composerFontFace>MuseJazz Text</composerFontFace>
     <composerFontSize>12</composerFontSize>
     <composerFontSpatiumDependent>0</composerFontSpatiumDependent>
-    <composerFontBold>0</composerFontBold>
-    <composerFontItalic>0</composerFontItalic>
-    <composerFontUnderline>0</composerFontUnderline>
+    <composerFontStyle>0</composerFontStyle>
     <composerOffset x="0" y="0"/>
     <composerOffsetType>0</composerOffsetType>
     <composerFrameType>0</composerFrameType>
@@ -450,9 +425,7 @@
     <lyricistFontFace>MuseJazz Text</lyricistFontFace>
     <lyricistFontSize>12</lyricistFontSize>
     <lyricistFontSpatiumDependent>0</lyricistFontSpatiumDependent>
-    <lyricistFontBold>0</lyricistFontBold>
-    <lyricistFontItalic>0</lyricistFontItalic>
-    <lyricistFontUnderline>0</lyricistFontUnderline>
+    <lyricistFontStyle>0</lyricistFontStyle>
     <lyricistOffset x="0" y="0"/>
     <lyricistOffsetType>0</lyricistOffsetType>
     <lyricistFrameType>0</lyricistFrameType>
@@ -463,9 +436,7 @@
     <lyricistFrameBgColor r="255" g="255" b="255" a="0"/>
     <fingeringFontFace>MuseJazz Text</fingeringFontFace>
     <fingeringFontSize>8</fingeringFontSize>
-    <fingeringFontBold>0</fingeringFontBold>
-    <fingeringFontItalic>0</fingeringFontItalic>
-    <fingeringFontUnderline>0</fingeringFontUnderline>
+    <fingeringFontStyle>0</fingeringFontStyle>
     <fingeringFrameType>0</fingeringFrameType>
     <fingeringFramePadding>0.2</fingeringFramePadding>
     <fingeringFrameWidth>0.1</fingeringFrameWidth>
@@ -475,9 +446,7 @@
     <fingeringOffset x="0" y="0"/>
     <lhGuitarFingeringFontFace>MuseJazz Text</lhGuitarFingeringFontFace>
     <lhGuitarFingeringFontSize>8</lhGuitarFingeringFontSize>
-    <lhGuitarFingeringFontBold>0</lhGuitarFingeringFontBold>
-    <lhGuitarFingeringFontItalic>0</lhGuitarFingeringFontItalic>
-    <lhGuitarFingeringFontUnderline>0</lhGuitarFingeringFontUnderline>
+    <lhGuitarFingeringFontStyle>0</lhGuitarFingeringFontStyle>
     <lhGuitarFingeringFrameType>0</lhGuitarFingeringFrameType>
     <lhGuitarFingeringFramePadding>0.2</lhGuitarFingeringFramePadding>
     <lhGuitarFingeringFrameWidth>0.1</lhGuitarFingeringFrameWidth>
@@ -487,9 +456,7 @@
     <lhGuitarFingeringOffset x="-0.5" y="0"/>
     <rhGuitarFingeringFontFace>MuseJazz Text</rhGuitarFingeringFontFace>
     <rhGuitarFingeringFontSize>8</rhGuitarFingeringFontSize>
-    <rhGuitarFingeringFontBold>0</rhGuitarFingeringFontBold>
-    <rhGuitarFingeringFontItalic>0</rhGuitarFingeringFontItalic>
-    <rhGuitarFingeringFontUnderline>0</rhGuitarFingeringFontUnderline>
+    <rhGuitarFingeringFontStyle>0</rhGuitarFingeringFontStyle>
     <rhGuitarFingeringFrameType>0</rhGuitarFingeringFrameType>
     <rhGuitarFingeringFramePadding>0.2</rhGuitarFingeringFramePadding>
     <rhGuitarFingeringFrameWidth>0.1</rhGuitarFingeringFrameWidth>
@@ -499,9 +466,7 @@
     <rhGuitarFingeringOffset x="0" y="0"/>
     <stringNumberFontFace>MuseJazz Text</stringNumberFontFace>
     <stringNumberFontSize>8</stringNumberFontSize>
-    <stringNumberFontBold>0</stringNumberFontBold>
-    <stringNumberFontItalic>0</stringNumberFontItalic>
-    <stringNumberFontUnderline>0</stringNumberFontUnderline>
+    <stringNumberFontStyle>0</stringNumberFontStyle>
     <stringNumberFrameType>2</stringNumberFrameType>
     <stringNumberFramePadding>0.2</stringNumberFramePadding>
     <stringNumberFrameWidth>0.1</stringNumberFrameWidth>
@@ -511,9 +476,7 @@
     <stringNumberOffset x="0" y="-2"/>
     <longInstrumentFontFace>MuseJazz Text</longInstrumentFontFace>
     <longInstrumentFontSize>12</longInstrumentFontSize>
-    <longInstrumentFontBold>0</longInstrumentFontBold>
-    <longInstrumentFontItalic>0</longInstrumentFontItalic>
-    <longInstrumentFontUnderline>0</longInstrumentFontUnderline>
+    <longInstrumentFontStyle>0</longInstrumentFontStyle>
     <longInstrumentOffset x="0" y="0"/>
     <longInstrumentFrameType>0</longInstrumentFrameType>
     <longInstrumentFramePadding>0.2</longInstrumentFramePadding>
@@ -523,9 +486,7 @@
     <longInstrumentFrameBgColor r="255" g="255" b="255" a="0"/>
     <shortInstrumentFontFace>MuseJazz Text</shortInstrumentFontFace>
     <shortInstrumentFontSize>12</shortInstrumentFontSize>
-    <shortInstrumentFontBold>0</shortInstrumentFontBold>
-    <shortInstrumentFontItalic>0</shortInstrumentFontItalic>
-    <shortInstrumentFontUnderline>0</shortInstrumentFontUnderline>
+    <shortInstrumentFontStyle>0</shortInstrumentFontStyle>
     <shortInstrumentOffset x="0" y="0"/>
     <shortInstrumentFrameType>0</shortInstrumentFrameType>
     <shortInstrumentFramePadding>0.2</shortInstrumentFramePadding>
@@ -535,9 +496,7 @@
     <shortInstrumentFrameBgColor r="255" g="255" b="255" a="0"/>
     <partInstrumentFontFace>MuseJazz Text</partInstrumentFontFace>
     <partInstrumentFontSize>18</partInstrumentFontSize>
-    <partInstrumentFontBold>0</partInstrumentFontBold>
-    <partInstrumentFontItalic>0</partInstrumentFontItalic>
-    <partInstrumentFontUnderline>0</partInstrumentFontUnderline>
+    <partInstrumentFontStyle>0</partInstrumentFontStyle>
     <partInstrumentOffset x="0" y="0"/>
     <partInstrumentFrameType>0</partInstrumentFrameType>
     <partInstrumentFramePadding>0.2</partInstrumentFramePadding>
@@ -547,9 +506,7 @@
     <partInstrumentFrameBgColor r="255" g="255" b="255" a="0"/>
     <dynamicsFontFace>MuseJazz Text</dynamicsFontFace>
     <dynamicsFontSize>12</dynamicsFontSize>
-    <dynamicsFontBold>0</dynamicsFontBold>
-    <dynamicsFontItalic>1</dynamicsFontItalic>
-    <dynamicsFontUnderline>0</dynamicsFontUnderline>
+    <dynamicsFontStyle>2</dynamicsFontStyle>
     <dynamicsFrameType>0</dynamicsFrameType>
     <dynamicsFramePadding>0.2</dynamicsFramePadding>
     <dynamicsFrameWidth>0.1</dynamicsFrameWidth>
@@ -558,9 +515,7 @@
     <dynamicsFrameBgColor r="255" g="255" b="255" a="0"/>
     <expressionFontFace>MuseJazz Text</expressionFontFace>
     <expressionFontSize>11</expressionFontSize>
-    <expressionFontBold>0</expressionFontBold>
-    <expressionFontItalic>1</expressionFontItalic>
-    <expressionFontUnderline>0</expressionFontUnderline>
+    <expressionFontStyle>2</expressionFontStyle>
     <expressionPlacement>0</expressionPlacement>
     <expressionOffset x="0" y="0"/>
     <expressionFrameType>0</expressionFrameType>
@@ -571,9 +526,7 @@
     <expressionFrameBgColor r="255" g="255" b="255" a="0"/>
     <tempoFontFace>MuseJazz Text</tempoFontFace>
     <tempoFontSize>12</tempoFontSize>
-    <tempoFontBold>1</tempoFontBold>
-    <tempoFontItalic>0</tempoFontItalic>
-    <tempoFontUnderline>0</tempoFontUnderline>
+    <tempoFontStyle>1</tempoFontStyle>
     <tempoSystemFlag>1</tempoSystemFlag>
     <tempoPlacement>0</tempoPlacement>
     <tempoPosAbove x="0" y="-2"/>
@@ -587,9 +540,7 @@
     <tempoFrameBgColor r="255" g="255" b="255" a="0"/>
     <metronomeFontFace>MuseJazz Text</metronomeFontFace>
     <metronomeFontSize>12</metronomeFontSize>
-    <metronomeFontBold>1</metronomeFontBold>
-    <metronomeFontItalic>0</metronomeFontItalic>
-    <metronomeFontUnderline>0</metronomeFontUnderline>
+    <metronomeFontStyle>1</metronomeFontStyle>
     <metronomePlacement>0</metronomePlacement>
     <metronomeOffset x="0" y="0"/>
     <metronomeFrameType>0</metronomeFrameType>
@@ -600,9 +551,7 @@
     <metronomeFrameBgColor r="255" g="255" b="255" a="0"/>
     <measureNumberFontFace>MuseJazz Text</measureNumberFontFace>
     <measureNumberFontSize>8</measureNumberFontSize>
-    <measureNumberFontBold>0</measureNumberFontBold>
-    <measureNumberFontItalic>0</measureNumberFontItalic>
-    <measureNumberFontUnderline>0</measureNumberFontUnderline>
+    <measureNumberFontStyle>0</measureNumberFontStyle>
     <measureNumberOffset x="0" y="-2"/>
     <measureNumberOffsetType>1</measureNumberOffsetType>
     <measureNumberFrameType>0</measureNumberFrameType>
@@ -613,9 +562,7 @@
     <measureNumberFrameBgColor r="255" g="255" b="255" a="0"/>
     <translatorFontFace>MuseJazz Text</translatorFontFace>
     <translatorFontSize>11</translatorFontSize>
-    <translatorFontBold>0</translatorFontBold>
-    <translatorFontItalic>0</translatorFontItalic>
-    <translatorFontUnderline>0</translatorFontUnderline>
+    <translatorFontStyle>0</translatorFontStyle>
     <translatorOffset x="0" y="0"/>
     <translatorFrameType>0</translatorFrameType>
     <translatorFramePadding>0.2</translatorFramePadding>
@@ -625,9 +572,7 @@
     <translatorFrameBgColor r="255" g="255" b="255" a="0"/>
     <systemFontFace>MuseJazz Text</systemFontFace>
     <systemFontSize>10</systemFontSize>
-    <systemFontBold>0</systemFontBold>
-    <systemFontItalic>0</systemFontItalic>
-    <systemFontUnderline>0</systemFontUnderline>
+    <systemFontStyle>0</systemFontStyle>
     <systemOffsetType>1</systemOffsetType>
     <systemPlacement>0</systemPlacement>
     <systemPosAbove x="0" y="-2"/>
@@ -641,9 +586,7 @@
     <systemFrameBgColor r="255" g="255" b="255" a="0"/>
     <staffFontFace>MuseJazz Text</staffFontFace>
     <staffFontSize>10</staffFontSize>
-    <staffFontBold>0</staffFontBold>
-    <staffFontItalic>0</staffFontItalic>
-    <staffFontUnderline>0</staffFontUnderline>
+    <staffFontStyle>0</staffFontStyle>
     <systemOffsetType>1</systemOffsetType>
     <staffPlacement>1</staffPlacement>
     <staffPosAbove x="0" y="-2"/>
@@ -657,9 +600,7 @@
     <staffFrameBgColor r="255" g="255" b="255" a="0"/>
     <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
     <rehearsalMarkFontSize>14</rehearsalMarkFontSize>
-    <rehearsalMarkFontBold>1</rehearsalMarkFontBold>
-    <rehearsalMarkFontItalic>0</rehearsalMarkFontItalic>
-    <rehearsalMarkFontUnderline>0</rehearsalMarkFontUnderline>
+    <rehearsalMarkFontStyle>1</rehearsalMarkFontStyle>
     <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
     <rehearsalMarkFrameType>1</rehearsalMarkFrameType>
     <rehearsalMarkFramePadding>0.5</rehearsalMarkFramePadding>
@@ -673,9 +614,7 @@
     <rehearsalMarkMinDistance>0.5</rehearsalMarkMinDistance>
     <repeatLeftFontFace>MuseJazz Text</repeatLeftFontFace>
     <repeatLeftFontSize>20</repeatLeftFontSize>
-    <repeatLeftFontBold>0</repeatLeftFontBold>
-    <repeatLeftFontItalic>0</repeatLeftFontItalic>
-    <repeatLeftFontUnderline>0</repeatLeftFontUnderline>
+    <repeatLeftFontStyle>0</repeatLeftFontStyle>
     <repeatLeftPlacement>0</repeatLeftPlacement>
     <repeatLeftFrameType>0</repeatLeftFrameType>
     <repeatLeftFramePadding>0.2</repeatLeftFramePadding>
@@ -685,9 +624,7 @@
     <repeatLeftFrameBgColor r="255" g="255" b="255" a="0"/>
     <repeatRightFontFace>MuseJazz Text</repeatRightFontFace>
     <repeatRightFontSize>12</repeatRightFontSize>
-    <repeatRightFontBold>0</repeatRightFontBold>
-    <repeatRightFontItalic>0</repeatRightFontItalic>
-    <repeatRightFontUnderline>0</repeatRightFontUnderline>
+    <repeatRightFontStyle>0</repeatRightFontStyle>
     <repeatRightPlacement>0</repeatRightPlacement>
     <repeatRightFrameType>0</repeatRightFrameType>
     <repeatRightFramePadding>0.2</repeatRightFramePadding>
@@ -697,9 +634,7 @@
     <repeatRightFrameBgColor r="255" g="255" b="255" a="0"/>
     <frameFontFace>MuseJazz Text</frameFontFace>
     <frameFontSize>12</frameFontSize>
-    <frameFontBold>0</frameFontBold>
-    <frameFontItalic>0</frameFontItalic>
-    <frameFontUnderline>0</frameFontUnderline>
+    <frameFontStyle>0</frameFontStyle>
     <frameOffset x="0" y="0"/>
     <frameFrameType>0</frameFrameType>
     <frameFramePadding>0.2</frameFramePadding>
@@ -709,14 +644,10 @@
     <frameFrameBgColor r="255" g="255" b="255" a="0"/>
     <textLineFontFace>MuseJazz Text</textLineFontFace>
     <textLineFontSize>12</textLineFontSize>
-    <textLineFontBold>0</textLineFontBold>
-    <textLineFontItalic>0</textLineFontItalic>
-    <textLineFontUnderline>0</textLineFontUnderline>
+    <textLineFontStyle>0</textLineFontStyle>
     <glissandoFontFace>MuseJazz Text</glissandoFontFace>
     <glissandoFontSize>8</glissandoFontSize>
-    <glissandoFontBold>0</glissandoFontBold>
-    <glissandoFontItalic>1</glissandoFontItalic>
-    <glissandoFontUnderline>0</glissandoFontUnderline>
+    <glissandoFontStyle>2</glissandoFontStyle>
     <glissandoOffset x="0" y="0"/>
     <glissandoFrameType>0</glissandoFrameType>
     <glissandoFramePadding>0.2</glissandoFramePadding>
@@ -728,9 +659,7 @@
     <glissandoText>gliss.</glissandoText>
     <bendFontFace>MuseJazz Text</bendFontFace>
     <bendFontSize>8</bendFontSize>
-    <bendFontBold>0</bendFontBold>
-    <bendFontItalic>0</bendFontItalic>
-    <bendFontUnderline>0</bendFontUnderline>
+    <bendFontStyle>0</bendFontStyle>
     <bendOffset x="0" y="0"/>
     <bendFrameType>0</bendFrameType>
     <bendFramePadding>0.2</bendFramePadding>
@@ -742,9 +671,7 @@
     <bendArrowWidth>0.5</bendArrowWidth>
     <headerFontFace>MuseJazz Text</headerFontFace>
     <headerFontSize>8</headerFontSize>
-    <headerFontBold>0</headerFontBold>
-    <headerFontItalic>0</headerFontItalic>
-    <headerFontUnderline>0</headerFontUnderline>
+    <headerFontStyle>0</headerFontStyle>
     <headerOffset x="0" y="0"/>
     <headerFrameType>0</headerFrameType>
     <headerFramePadding>0.2</headerFramePadding>
@@ -754,9 +681,7 @@
     <headerFrameBgColor r="255" g="255" b="255" a="0"/>
     <footerFontFace>MuseJazz Text</footerFontFace>
     <footerFontSize>8</footerFontSize>
-    <footerFontBold>0</footerFontBold>
-    <footerFontItalic>0</footerFontItalic>
-    <footerFontUnderline>0</footerFontUnderline>
+    <footerFontStyle>0</footerFontStyle>
     <footerOffset x="0" y="0"/>
     <footerFrameType>0</footerFrameType>
     <footerFramePadding>0.2</footerFramePadding>
@@ -766,9 +691,7 @@
     <footerFrameBgColor r="255" g="255" b="255" a="0"/>
     <instrumentChangeFontFace>MuseJazz Text</instrumentChangeFontFace>
     <instrumentChangeFontSize>12</instrumentChangeFontSize>
-    <instrumentChangeFontBold>1</instrumentChangeFontBold>
-    <instrumentChangeFontItalic>0</instrumentChangeFontItalic>
-    <instrumentChangeFontUnderline>0</instrumentChangeFontUnderline>
+    <instrumentChangeFontStyle>1</instrumentChangeFontStyle>
     <instrumentChangeOffset x="0" y="0"/>
     <instrumentChangePlacement>0</instrumentChangePlacement>
     <instrumentChangePosAbove x="0" y="-2"/>
@@ -782,14 +705,10 @@
     <instrumentChangeFrameBgColor r="255" g="255" b="255" a="0"/>
     <figuredBassFontFace>MScoreBC</figuredBassFontFace>
     <figuredBassFontSize>8</figuredBassFontSize>
-    <figuredBassFontBold>0</figuredBassFontBold>
-    <figuredBassFontItalic>0</figuredBassFontItalic>
-    <figuredBassFontUnderline>0</figuredBassFontUnderline>
+    <figuredBassFontStyle>0</figuredBassFontStyle>
     <user1FontFace>MuseJazz Text</user1FontFace>
     <user1FontSize>10</user1FontSize>
-    <user1FontBold>0</user1FontBold>
-    <user1FontItalic>0</user1FontItalic>
-    <user1FontUnderline>0</user1FontUnderline>
+    <user1FontStyle>0</user1FontStyle>
     <user1Offset>0</user1Offset>
     <user1OffsetType>1</user1OffsetType>
     <user1FrameType>0</user1FrameType>
@@ -800,9 +719,7 @@
     <user1FrameBgColor r="255" g="255" b="255" a="0"/>
     <user2FontFace>MuseJazz Text</user2FontFace>
     <user2FontSize>10</user2FontSize>
-    <user2FontBold>0</user2FontBold>
-    <user2FontItalic>0</user2FontItalic>
-    <user2FontUnderline>0</user2FontUnderline>
+    <user2FontStyle>0</user2FontStyle>
     <user2Offset>0</user2Offset>
     <user2OffsetType>1</user2OffsetType>
     <user2FrameType>0</user2FrameType>
@@ -813,9 +730,7 @@
     <user2FrameBgColor r="255" g="255" b="255" a="0"/>
     <user3FontFace>MuseJazz Text</user3FontFace>
     <user3FontSize>10</user3FontSize>
-    <user3FontBold>0</user3FontBold>
-    <user3FontItalic>0</user3FontItalic>
-    <user3FontUnderline>0</user3FontUnderline>
+    <user3FontStyle>0</user3FontStyle>
     <user3Offset>0</user3Offset>
     <user3OffsetType>1</user3OffsetType>
     <user3FrameType>0</user3FrameType>
@@ -826,9 +741,7 @@
     <user3FrameBgColor r="255" g="255" b="255" a="0"/>
     <user4FontFace>MuseJazz Text</user4FontFace>
     <user4FontSize>10</user4FontSize>
-    <user4FontBold>0</user4FontBold>
-    <user4FontItalic>0</user4FontItalic>
-    <user4FontUnderline>0</user4FontUnderline>
+    <user4FontStyle>0</user4FontStyle>
     <user4Offset>0</user4Offset>
     <user4OffsetType>1</user4OffsetType>
     <user4FrameType>0</user4FrameType>
@@ -839,9 +752,7 @@
     <user4FrameBgColor r="255" g="255" b="255" a="0"/>
     <user5FontFace>MuseJazz Text</user5FontFace>
     <user5FontSize>10</user5FontSize>
-    <user5FontBold>0</user5FontBold>
-    <user5FontItalic>0</user5FontItalic>
-    <user5FontUnderline>0</user5FontUnderline>
+    <user5FontStyle>0</user5FontStyle>
     <user5Offset>0</user5Offset>
     <user5OffsetType>1</user5OffsetType>
     <user5FrameType>0</user5FrameType>
@@ -852,9 +763,7 @@
     <user5FrameBgColor r="255" g="255" b="255" a="0"/>
     <user6FontFace>MuseJazz Text</user6FontFace>
     <user6FontSize>10</user6FontSize>
-    <user6FontBold>0</user6FontBold>
-    <user6FontItalic>0</user6FontItalic>
-    <user6FontUnderline>0</user6FontUnderline>
+    <user6FontStyle>0</user6FontStyle>
     <user6Offset>0</user6Offset>
     <user6OffsetType>1</user6OffsetType>
     <user6FrameType>0</user6FrameType>
@@ -865,9 +774,7 @@
     <user6FrameBgColor r="255" g="255" b="255" a="0"/>
     <letRingFontFace>MuseJazz Text</letRingFontFace>
     <letRingFontSize>10</letRingFontSize>
-    <letRingFontBold>0</letRingFontBold>
-    <letRingFontItalic>1</letRingFontItalic>
-    <letRingFontUnderline>0</letRingFontUnderline>
+    <letRingFontStyle>0</letRingFontStyle>
     <letRingHookHeight>0.6</letRingHookHeight>
     <letRingPlacement>1</letRingPlacement>
     <letRingPosAbove x="0" y="-4"/>
@@ -884,9 +791,7 @@
     <letRingFrameBgColor r="255" g="255" b="255" a="0"/>
     <palmMuteFontFace>MuseJazz Text</palmMuteFontFace>
     <palmMuteFontSize>10</palmMuteFontSize>
-    <palmMuteFontBold>0</palmMuteFontBold>
-    <palmMuteFontItalic>1</palmMuteFontItalic>
-    <palmMuteFontUnderline>0</palmMuteFontUnderline>
+    <palmMuteFontStyle>0</palmMuteFontStyle>
     <palmMuteHookHeight>0.6</palmMuteHookHeight>
     <palmMutePlacement>1</palmMutePlacement>
     <palmMutePosAbove x="0" y="-4"/>
@@ -904,6 +809,6 @@
     <fermataPosAbove x="0" y="-1"/>
     <fermataPosBelow x="0" y="1"/>
     <fermataMinDistance>0.4</fermataMinDistance>
-    <Spatium>1.85</Spatium>
+    <Spatium>1.76389</Spatium>
     </Style>
   </museScore>
