@@ -56,6 +56,11 @@ class ConnectorInfo {
       bool currentUpdated() const         { return _currentUpdated; }
       void setCurrentUpdated(bool v)      { _currentUpdated = v;    }
 
+      ConnectorInfo* findFirst();
+      const ConnectorInfo* findFirst() const;
+      ConnectorInfo* findLast();
+      const ConnectorInfo* findLast() const;
+
    public:
       ConnectorInfo(const Element* current, int track = -1, Fraction frac = -1);
       ConnectorInfo(const Location& currentLocation);
