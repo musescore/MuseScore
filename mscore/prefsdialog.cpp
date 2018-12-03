@@ -610,7 +610,6 @@ void PreferenceDialog::updateSCListView()
                             && !s->key().startsWith("debugger")
 #endif
                             && !s->key().startsWith("edit_harmony")
-                            && !(MuseScore::unstable() && s->key().startsWith("file-save-online"))
                             && !s->key().startsWith("insert-fretframe"))) {
                   shortcutList->addTopLevelItem(newItem);
                   }
