@@ -494,9 +494,11 @@ void HBox::layout2()
 
 bool Box::acceptDrop(EditData& data) const
       {
-      ElementType t = data.dropElement->type();
       if (data.dropElement->flag(ElementFlag::ON_STAFF))
             return false;
+      if (MScore::debugMode)
+            qDebug("<%s>", data.dropElement->name());
+      ElementType t = data.dropElement->type();
       switch (t) {
             case ElementType::LAYOUT_BREAK:
             case ElementType::TEXT:
@@ -532,6 +534,8 @@ Element* Box::drop(EditData& data)
       Element* e = data.dropElement;
       if (e->flag(ElementFlag::ON_STAFF))
             return 0;
+      if (MScore::debugMode)
+            qDebug("<%s>", e->name());
       switch (e->type()) {
             case ElementType::LAYOUT_BREAK:
                   {
