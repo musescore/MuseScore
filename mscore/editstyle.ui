@@ -8710,7 +8710,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Font style' value</string>
+              <string>Reset 'Font style' values</string>
              </property>
              <property name="text">
               <string notr="true"/>
