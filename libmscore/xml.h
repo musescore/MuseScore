@@ -82,6 +82,7 @@ class XmlReader : public QXmlStreamReader {
       QList<SpannerValues> _spannerValues;
       QList<std::pair<int,Spanner*>> _spanner;
       QList<StaffType> _staffTypes;
+      QList<std::pair<Element*, QPointF>> _fixOffsets;
 
       QList<ConnectorInfoReader> _connectors;
       QList<ConnectorInfoReader> _pendingConnectors; // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
@@ -193,6 +194,8 @@ class XmlReader : public QXmlStreamReader {
       void checkTuplets();
       Tid addUserTextStyle(const QString& name);
       Tid lookupUserTextStyle(const QString& name);
+
+      QList<std::pair<Element*, QPointF>>& fixOffsets() { return  _fixOffsets; }
       };
 
 //---------------------------------------------------------
