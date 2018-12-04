@@ -2237,6 +2237,7 @@ static void readOttava(XmlReader& e, Ottava* ottava)
 
 void readHairpin206(XmlReader& e, Hairpin* h)
       {
+printf("=====read hairpin\n");
       bool useText = false;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -2276,13 +2277,6 @@ void readHairpin206(XmlReader& e, Hairpin* h)
             h->setContinueText("");
             h->setEndText("");
             }
-      h->eraseSpannerSegments();
-#if 0
-      for (auto ss : h->spannerSegments()) {
-            ss->setOffset(QPointF());
-            ss->setUserOff2(QPointF());
-            }
-#endif
       for (auto a : h->spannerSegments()) {
             qreal belowThreshold = a->spatium() * 4.0;
             if (a->offset().y() >= belowThreshold) {
@@ -2291,6 +2285,7 @@ void readHairpin206(XmlReader& e, Hairpin* h)
                   }
             else
                   a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
+            a->rxoffset() = 0;
             }
       }
 
