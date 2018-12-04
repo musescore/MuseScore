@@ -141,22 +141,3 @@ export AWS_SECRET_ACCESS_KEY=$UPDATE_S3_SECRET
 export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3"
 aws configure set preview.cloudfront true
 aws cloudfront create-invalidation --distribution-id E3VZY4YYZZG82P --paths "${ARTIFACTS_TARGET_PATHS}/*"
-
-
-
-# Translation routins
-# update translation on transifex
-make -f Makefile.osx lupdate
-
-sudo pip install transifex-client
-
-cat > ~/.transifexrc <<EOL
-[https://www.transifex.com]
-hostname = https://www.transifex.com
-password = $TRANSIFEX_PASSWORD
-token =
-username = $TRANSIFEX_USER
-EOL
-
-cp share/locale/mscore_en_US.ts share/locale/mscore_en.ts
-tx push -s
