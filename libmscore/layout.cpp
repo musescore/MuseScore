@@ -1658,13 +1658,14 @@ void LayoutContext::getNextPage()
             page = score->pages()[curPage];
             QList<System*>& systems = page->systems();
             const int i = systems.indexOf(curSystem);
-            if (i <= -1) // system is not on the current page
-                  systems.clear();
-            else {
-                  // system is on the current page,
-                  // erase only the current and the following systems
+            if (i > 0 && systems[i-1]->page() == page) {
+                  // Current and previous systems are on the current page.
+                  // Erase only the current and the following systems
+                  // as the previous one will not participate in layout.
                   systems.erase(systems.begin() + i, systems.end());
                   }
+            else // system is not on the current page (or will be the first one)
+                  systems.clear();
             prevSystem = systems.empty() ? nullptr : systems.back();
             }
       page->bbox().setRect(0.0, 0.0, score->loWidth(), score->loHeight());
