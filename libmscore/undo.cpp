@@ -426,7 +426,9 @@ void SaveState::undo(EditData*)
       redoSelectedElement = selectedElement(score->selection());
       score->setInputState(undoInputState);
 //      score->setSelection(undoSelection);
-      score->select(undoSelectedElement);
+      score->deselectAll();
+      if (undoSelectedElement)
+            score->selection().add(undoSelectedElement);
       }
 
 void SaveState::redo(EditData*)
@@ -438,8 +440,11 @@ void SaveState::redo(EditData*)
 //      score->setSelection(redoSelection);
       if (first)
             first = false;
-      else
-            score->select(redoSelectedElement);
+      else {
+            score->deselectAll();
+            if (redoSelectedElement)
+                  score->selection().add(redoSelectedElement);
+            }
       }
 
 //---------------------------------------------------------
