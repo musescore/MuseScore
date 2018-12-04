@@ -11,11 +11,11 @@ XCOPY Jack "C:\Program Files (x86)\Jack" /E /I /Y
 XCOPY ccache "C:\ccache" /E /I /Y
 
 CD C:\MuseScore
-mkdir dependencies
-cd dependencies
 IF NOT EXIST dependencies.zip ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dependencies.7z" -O dependencies.zip )
+:: assumung dependencies.zip to contain the dependencies directory (with is subdirs)
 START " " /wait "7z" x -y dependencies.zip > nul
-CD include
+:: test
+CD dependencies\include
 CD C:\MuseScore
 
 :: is MuseScore stable? Check here, no grep in PATH later on
