@@ -1067,6 +1067,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
       QRectF fr = imatrix.mapRect(QRectF(r));
 
       Element* editElement = 0;
+      Element* lassoToDraw = 0;
       if (editData.element) {
             switch (state) {
                   case ViewState::NORMAL:
@@ -1084,7 +1085,11 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   case ViewState::FOTO_DRAG_EDIT:
                   case ViewState::FOTO_DRAG_OBJECT:
                   case ViewState::FOTO_LASSO:
-                        editData.element->drawEditMode(&p, editData);
+                        if (editData.element->_name() == "Lasso") // There is no isLasso() method
+                              lassoToDraw = editData.element;
+                        else
+                              editData.element->drawEditMode(&p, editData);
+
                         if (editData.element->isHarmony())
                               editElement = editData.element;     // do not call paint() method
                         break;
@@ -1298,6 +1303,11 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             //
             p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
             }
+
+      // Draw foto lasso to ensure that it is above everything else
+      if (lassoToDraw)
+            lassoToDraw->drawEditMode(&p, editData);
+
       p.setMatrixEnabled(false);
       if (_score->layoutMode() != LayoutMode::LINE && _score->layoutMode() != LayoutMode::SYSTEM && !r1.isEmpty()) {
             p.setClipRegion(r1);  // only background
