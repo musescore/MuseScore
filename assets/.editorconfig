@@ -1,0 +1,19 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# Text editors and IDEs that support the EditorConfig standard will format and
+# indent text files according to the rules in this file. You can use `eclint`
+# <https://github.com/jedmao/eclint> to check code files against these rules
+# and flag any violations: simply run `eclint check` from this directory. You
+# could set up a pre-commit hook to run the check each time you commit.
+
+# top-most EditorConfig file (treat assets as independent project)
+root = true
+
+# Formatting rules for all text files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2

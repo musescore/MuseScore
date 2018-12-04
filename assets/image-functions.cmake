@@ -1,165 +1,182 @@
-# TLDR: CMakes's add_custom_command() gives unexpected results if relative
-# paths are used for its DEPENDS argument, hence we must use absolute paths.
-#
-# All path arguments to add_custom_command() are relative to the current
-# binary dir, except for some reason DEPENDS is relative to the source dir.
-# However, if the named dependency was generated as OUTPUT to a previous
-# add_custom_command() then DEPENDS becomes relative to the binary dir again!
-function(make_path_absolute VAR_NAME)
-  set(FILE_PATH "${${VAR_NAME}}")
-  if(NOT IS_ABSOLUTE "${FILE_PATH}")
-    set("${VAR_NAME}" "${CMAKE_CURRENT_BINARY_DIR}/${FILE_PATH}" PARENT_SCOPE)
-  endif(NOT IS_ABSOLUTE "${FILE_PATH}")
-endfunction(make_path_absolute)
+required_program(INKSCAPE "SVG vector graphics editing program - https://inkscape.org/" "inkscape")
+required_program(XMLLINT "Tool for parsing XML files - http://xmlsoft.org/xmllint.html" "xmllint")
 
-function(required_program VARIABLE COMMAND DESCRIPTION)
-  # ARGN alternative names for the command
-  if(BUILD_ASSETS)
-    find_program("${VARIABLE}" NAMES ${COMMAND} ${ARGN} DOC "${DESCRIPTION}")
-    if(NOT ${VARIABLE} OR NOT EXISTS "${${VARIABLE}}")
-      set(MSG_TYPE FATAL_ERROR) # fail build due to missing dependency
-      if(DOWNLOAD_ASSETS)
-        set(MSG_TYPE WARNING) # don't fail the build
-        set(BUILD_ASSETS OFF PARENT_SCOPE) # download assets instead of building them
-      endif(DOWNLOAD_ASSETS)
-      message("${MSG_TYPE}" "Not found: ${COMMAND} - ${DESCRIPTION}")
-      message("A build dependency is missing so assets will be downloaded.")
-    endif(NOT ${VARIABLE} OR NOT EXISTS "${${VARIABLE}}")
-  endif(BUILD_ASSETS)
-endfunction(required_program)
+if(BUILD_WINDOWS_ICONS)
+  set(CONVERT "convert") # old name of ImageMagick's command line tool
+  if(WIN32)
+    # ImageMagick's convert conflicts with a Windows system tool of the same
+    # name. A common solution is to rename ImageMagick's convert binary:
+    set(CONVERT "imconvert") # name commonly used for "convert" on Windows
+  endif(WIN32)
+  required_program(IMAGEMAGICK "ImageMagick image tool - https://www.imagemagick.org" "magick" "${CONVERT}")
+endif(BUILD_WINDOWS_ICONS)
 
-required_program(INKSCAPE "inkscape" "SVG vector graphics editing program - https://inkscape.org/")
-required_program(XMLLINT "xmllint" "Tool for parsing XML files - http://xmlsoft.org/xmllint.html")
-
-set(CONVERT "convert") # old name of ImageMagick's command line tool
-if(WIN32)
-  # Windows has a system tool called "convert" that conflicts with ImageMagick
-  set(CONVERT "imconvert") # common solution is to rename ImageMagick's binary
-endif(WIN32)
-required_program(IMAGEMAGICK "magick" "ImageMagick image tool - https://www.imagemagick.org" "${CONVERT}")
-
-# NOTE: Very few programs support the ICNS icon format used on macOS. On Linux
-# we can use PNG2ICNS, but it doesn't support adding separate images for retina
-# displays https://sourceforge.net/p/icns/bugs/12/. This is not currently a
-# problem since we don't have separate images for retina displays anyway.
-required_program(PNG2ICNS "png2icns" "Tool to create macOS icons (libicns)- https://icns.sourceforge.io/")
-required_program(ICNS2PNG "icns2png" "If this is missing then you have the wrong png2icns")
+if(BUILD_MACOS_ICONS)
+  # NOTE: macOS has a built-in tool to convert PNG to ICNS called "iconutils".
+  # On Linux we can use PNG2ICNS, but it doesn't support creating icons
+  # optimized for retina displays https://sourceforge.net/p/icns/bugs/12/.
+  required_program(PNG2ICNS "Tool to create macOS icons (libicns) - https://icns.sourceforge.io/" "png2icns")
+  # There's more than one program called "png2icns". Do we have the right one?
+  required_program(ICNS2PNG "You have the wrong png2icns. You need libicns from https://icns.sourceforge.io/" "icns2png")
+endif(BUILD_MACOS_ICONS)
 
 if(OPTIMIZE_SVGS)
-  required_program(SVGO "svgo" "Tool for optimizing SVG vector graphics files")
+  required_program(SVGO "Tool for optimizing SVG vector graphics files" "svgo")
 endif(OPTIMIZE_SVGS)
 
 if(OPTIMIZE_PNGS)
-  required_program(PNGCRUSH "pngcrush" "Tool for optimizing PNG image files losslessly")
+  required_program(PNGCRUSH "Tool for optimizing PNG image files losslessly" "pngcrush")
 endif(OPTIMIZE_PNGS)
 
-function(standalone_svg SVG_FILE_IN SVG_FILE_OUT)
-  if(BUILD_ASSETS)
-    make_path_absolute(SVG_FILE_IN) # absolute path needed for add_custom_command
-    add_custom_command(
-      OUTPUT "${SVG_FILE_OUT}"
-      DEPENDS "${SVG_FILE_IN}" # absolute path required
-      COMMAND "${XMLLINT}" "${SVG_FILE_IN}" --xinclude --pretty 1 --output "${SVG_FILE_OUT}"
-      COMMAND "${INKSCAPE}" "${SVG_FILE_OUT}" --verb=EditSelectAll --verb=EditUnlinkClone --verb=EditSelectAll --verb=org.ekips.filter.embedselectedimages --verb=FileSave --verb=FileQuit
-      COMMAND "${INKSCAPE}" -z "${SVG_FILE_OUT}" --export-text-to-path --vacuum-defs --export-plain-svg "${SVG_FILE_OUT}"
-      VERBATIM
-      )
-  endif(BUILD_ASSETS)
+# Need a function to convert relative paths to absolute paths:
+#
+#  1. CMake's add_custom_command() gives inconsistent results if relative
+#     paths are used for its DEPENDS argument (see below).
+#  2. Inkscape must be called with absolute paths on macOS. See
+#     https://bugs.launchpad.net/inkscape/+bug/181639.
+#
+# All path arguments to add_custom_command() are relative to the current build
+# directory (CMAKE_CURRENT_BINARY_DIR), except for some reason DEPENDS is
+# relative to the source directory (CMAKE_CURRENT_SOURCE_DIR). However, if the
+# named dependency was generated as OUTPUT to a previous add_custom_command()
+# then DEPENDS becomes relative to build directory again!
+function(absolute_path # prepend CMAKE_CURRENT_BINARY_DIR to relative paths
+  ABS_PATHV # absolute path is returned through this variable
+  PATH # input path - can be relative or absolute
+  )
+  if(IS_ABSOLUTE "${PATH}")
+    set("${ABS_PATHV}" "${PATH}" PARENT_SCOPE)
+  else(IS_ABSOLUTE "${PATH}")
+    set("${ABS_PATHV}" "${CMAKE_CURRENT_BINARY_DIR}/${PATH}" PARENT_SCOPE)
+  endif(IS_ABSOLUTE "${PATH}")
+endfunction(absolute_path)
+
+function(copy_during_build # copy a file at build time
+  SOURCE_FILE # path to file being copied
+  DEST_FILE # path to new location
+  )
+  absolute_path(SOURCE_FILE_ABS "${SOURCE_FILE}") # needed for DEPENDS
+  add_custom_command(
+    OUTPUT "${DEST_FILE}" # relative path required
+    DEPENDS "${SOURCE_FILE_ABS}" # absolute path required
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${SOURCE_FILE}" "${DEST_FILE}"
+    VERBATIM
+    )
+endfunction(copy_during_build)
+
+function(standalone_svg # resolve and embed an SVG's external dependencies
+  SVG_FILE_IN # path to the input SVG
+  SVG_FILE_OUT # path where the output SVG will be written
+  # ARGN remaining arguments are additional dependencies
+  )
+  absolute_path(SVG_FILE_IN_ABS "${SVG_FILE_IN}") # needed for DEPENDS
+  absolute_path(SVG_FILE_OUT_ABS "${SVG_FILE_OUT}") # needed for Inkscape on macOS
+  set(DEPENDENCIES "") # empty list
+  foreach(DEPENDENCY ${ARGN})
+    absolute_path(DEPENDENCY_ABS "${DEPENDENCY}") # needed for DEPENDS
+    list(APPEND DEPENDENCIES "${DEPENDENCY_ABS}")
+  endforeach(DEPENDENCY)
+  add_custom_command(
+    OUTPUT "${SVG_FILE_OUT}" # relative path required
+    DEPENDS "${SVG_FILE_IN_ABS}" ${DEPENDENCIES} # absolute paths required
+    COMMAND "${XMLLINT}" "${SVG_FILE_IN}" --xinclude --pretty 1 --output "${SVG_FILE_OUT}"
+    COMMAND "${INKSCAPE}" "${SVG_FILE_OUT_ABS}" --verb=EditSelectAll --verb=org.ekips.filter.embedselectedimages --verb=FileSave --verb=FileQuit
+    COMMAND "${INKSCAPE}" -z "${SVG_FILE_OUT_ABS}" --export-text-to-path --vacuum-defs --export-plain-svg "${SVG_FILE_OUT_ABS}"
+    VERBATIM
+    )
 endfunction(standalone_svg)
 
-function(optimize_svg SVG_FILE_IN SVG_FILE_OUT)
-  if(BUILD_ASSETS)
-    if(OPTIMIZE_SVGS)
-      make_path_absolute(SVG_FILE_IN) # absolute path needed for add_custom_command
-      add_custom_command(
-        OUTPUT "${SVG_FILE_OUT}"
-        DEPENDS "${SVG_FILE_IN}" # absolute path required
-        COMMAND "${SVGO}" "${SVG_FILE_IN}" -o "${SVG_FILE_OUT}"
-        VERBATIM
-        )
-    else(OPTIMIZE_SVGS)
-      copy_during_build("${SVG_FILE_IN}" "${SVG_FILE_OUT}")
-    endif(OPTIMIZE_SVGS)
-  endif(BUILD_ASSETS)
-endfunction(optimize_svg)
-
-function(vectorize_svg SVG_FILE_IN SVG_FILE_OUT)
-  if(BUILD_ASSETS)
-    make_path_absolute(SVG_FILE_IN) # absolute path needed for add_custom_command
-    add_custom_command(
-      OUTPUT "${SVG_FILE_OUT}"
-      DEPENDS "${SVG_FILE_IN}" # absolute path required
-      COMMAND "${INKSCAPE}" -z "${SVG_FILE_IN}" --export-text-to-path --vacuum-defs --export-plain-svg "${SVG_FILE_OUT}"
-      VERBATIM
-      )
-  endif(BUILD_ASSETS)
+function(vectorize_svg # convert text to paths to remove font dependencies
+  SVG_FILE_IN # path to the input SVG
+  SVG_FILE_OUT # path where the output SVG will be written
+  )
+  absolute_path(SVG_FILE_IN_ABS "${SVG_FILE_IN}") # needed for DEPENDS
+  absolute_path(SVG_FILE_OUT_ABS "${SVG_FILE_OUT}") # needed for Inkscape on macOS
+  add_custom_command(
+    OUTPUT "${SVG_FILE_OUT}" # relative path required
+    DEPENDS "${SVG_FILE_IN_ABS}" # absolute path required
+    COMMAND "${INKSCAPE}" -z "${SVG_FILE_IN_ABS}" --export-text-to-path --vacuum-defs --export-plain-svg "${SVG_FILE_OUT_ABS}"
+    VERBATIM
+    )
 endfunction(vectorize_svg)
 
-function(rasterize_svg SVG_FILE_IN PNG_FILE_OUT)
-  if(BUILD_ASSETS)
-    # any additional arguments will be passed to inkscape (see ${ARGN})
-    make_path_absolute(SVG_FILE_IN) # absolute path needed for add_custom_command
+function(optimize_svg # reduce size of an SVG without changing its appearance
+  SVG_FILE_IN # path to the input SVG
+  SVG_FILE_OUT # path where the output SVG will be written
+  )
+  if(OPTIMIZE_SVGS)
+    absolute_path(SVG_FILE_IN_ABS "${SVG_FILE_IN}") # needed for DEPENDS
     add_custom_command(
-      OUTPUT "${PNG_FILE_OUT}"
-      DEPENDS "${SVG_FILE_IN}" # absolute path required
-      COMMAND "${INKSCAPE}" -z "${SVG_FILE_IN}" ${ARGN} --export-png "${PNG_FILE_OUT}"
+      OUTPUT "${SVG_FILE_OUT}" # relative path required
+      DEPENDS "${SVG_FILE_IN_ABS}" # absolute path required
+      COMMAND "${SVGO}" "${SVG_FILE_IN}" -o "${SVG_FILE_OUT}"
       VERBATIM
       )
-  endif(BUILD_ASSETS)
+  else(OPTIMIZE_SVGS)
+    copy_during_build("${SVG_FILE_IN}" "${SVG_FILE_OUT}")
+  endif(OPTIMIZE_SVGS)
+endfunction(optimize_svg)
+
+function(rasterize_svg # convert SVG to PNG
+  SVG_FILE_IN # path to the input SVG
+  PNG_FILE_OUT # path where the output PNG will be written
+  # ARGN any additional arguments will be passed to inkscape
+  )
+  absolute_path(SVG_FILE_IN_ABS "${SVG_FILE_IN}") # needed for DEPENDS
+  absolute_path(PNG_FILE_OUT_ABS "${PNG_FILE_OUT}") # needed for Inkscape on macOS
+  add_custom_command(
+    OUTPUT "${PNG_FILE_OUT}" # relative path required
+    DEPENDS "${SVG_FILE_IN_ABS}" # absolute path required
+    COMMAND "${INKSCAPE}" -z "${SVG_FILE_IN_ABS}" ${ARGN} --export-png "${PNG_FILE_OUT_ABS}"
+    VERBATIM
+    )
 endfunction(rasterize_svg)
 
-function(optimize_png PNG_FILE_IN PNG_FILE_OUT)
-  if(BUILD_ASSETS)
-    if(OPTIMIZE_PNGS)
-      set(OPTS -rem allb)
-      if (OPTIMIZE_PNGS_BRUTE)
-        list(APPEND OPTS -brute)
-      endif(OPTIMIZE_PNGS_BRUTE)
-      make_path_absolute(PNG_FILE_IN) # absolute path needed for add_custom_command
-      add_custom_command(
-        OUTPUT "${PNG_FILE_OUT}"
-        DEPENDS "${PNG_FILE_IN}" # absolute path required
-        COMMAND "${PNGCRUSH}" ${OPTS} "${PNG_FILE_IN}" "${PNG_FILE_OUT}"
-        VERBATIM
-        )
-    else(OPTIMIZE_PNGS)
-      copy_during_build("${PNG_FILE_IN}" "${PNG_FILE_OUT}")
-    endif(OPTIMIZE_PNGS)
-  endif(BUILD_ASSETS)
+function(optimize_png # reduce size of a PNG without changing its appearance
+  PNG_FILE_IN # path to the input PNG
+  PNG_FILE_OUT # path where the output PNG will be written
+  )
+  if(OPTIMIZE_PNGS)
+    set(OPTS -rem allb)
+    if (OPTIMIZE_PNGS_BRUTE)
+      list(APPEND OPTS -brute)
+    endif(OPTIMIZE_PNGS_BRUTE)
+    absolute_path(PNG_FILE_IN_ABS "${PNG_FILE_IN}") # needed for DEPENDS
+    add_custom_command(
+      OUTPUT "${PNG_FILE_OUT}" # relative path required
+      DEPENDS "${PNG_FILE_IN_ABS}" # absolute path required
+      COMMAND "${PNGCRUSH}" ${OPTS} "${PNG_FILE_IN}" "${PNG_FILE_OUT}"
+      VERBATIM
+      )
+  else(OPTIMIZE_PNGS)
+    copy_during_build("${PNG_FILE_IN}" "${PNG_FILE_OUT}")
+  endif(OPTIMIZE_PNGS)
 endfunction(optimize_png)
 
-function(create_icon_ico ICO_FILE_OUT)
-  # ARGN additional arguments are PNG input files for ImageMagick
-  if(BUILD_ASSETS)
+function(create_icon_ico # convert multiple PNG files into a single ICO icon
+  ICO_FILE_OUT # path where the output ICO file will be written
+  # ARGN remaining arguments are PNG input files
+  )
+  if(BUILD_WINDOWS_ICONS)
     add_custom_command(
       OUTPUT "${ICO_FILE_OUT}"
       DEPENDS ${ARGN} # paths can be relative since all PNGs are generated
       COMMAND "${IMAGEMAGICK}" ${ARGN} "${ICO_FILE_OUT}"
       VERBATIM
       )
-  endif(BUILD_ASSETS)
+  endif(BUILD_WINDOWS_ICONS)
 endfunction(create_icon_ico)
 
-function(create_icon_icns ICNS_FILE_OUT)
-  # ARGN additional arguments are PNG input files for ImageMagick
-  if(BUILD_ASSETS)
+function(create_icon_icns # convert multiple PNG files into a single ICNS icon
+  ICNS_FILE_OUT # path where the output ICNS file will be written
+  # ARGN remaining arguments are PNG input files
+  )
+  if(BUILD_MACOS_ICONS)
     add_custom_command(
       OUTPUT "${ICNS_FILE_OUT}"
       DEPENDS ${ARGN} # paths can be relative since all PNGs are generated
       COMMAND "${PNG2ICNS}" "${ICNS_FILE_OUT}" ${ARGN}
       VERBATIM
       )
-  endif(BUILD_ASSETS)
+  endif(BUILD_MACOS_ICONS)
 endfunction(create_icon_icns)
-
-function(copy_during_build SOURCE_FILE DEST_FILE)
-  if(BUILD_ASSETS)
-    make_path_absolute(SOURCE_FILE) # absolute path needed for add_custom_command
-    add_custom_command(
-      OUTPUT "${DEST_FILE}"
-      DEPENDS "${SOURCE_FILE}" # absolute path required
-      COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${SOURCE_FILE}" "${DEST_FILE}"
-      VERBATIM
-      )
-  endif(BUILD_ASSETS)
-endfunction(copy_during_build)

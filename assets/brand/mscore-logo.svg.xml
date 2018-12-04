@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 512 512">
+  <g transform="translate(88,120)">
+    <xi:include href="../resources/mscore.svg" xpointer="xpointer(//*[@id='logo'])" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+  </g>
+</svg>

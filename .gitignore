@@ -39,7 +39,7 @@ vtest/Pictures
 .vs
 dependencies
 
-# Files From Build Process
+# Files generated or downloaded during build process
 MS_General.sf3
 MS_General-License.md
 MS_General-changelog.txt

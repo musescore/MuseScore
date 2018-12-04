@@ -21,7 +21,6 @@
         <file>data/tab_sample.mscx</file>
         <file>data/std_sample.mscx</file>
         <file>data/style.qss</file>
-        <file>data/mscore.svg</file>
         <file>data/icons/window-close.svg</file>
         <file>data/icons/png/window-close.png</file>
         <file>data/icons/png/window-close@2x.png</file>
@@ -54,7 +53,6 @@
         <file>data/icons/grace16after.svg</file>
         <file>data/icons/grace32after.svg</file>
         <file>data/icons/clef.svg</file>
-        <file>data/icons/mscore.svg</file>
         <file>data/icons/raster-horizontal.svg</file>
         <file>data/icons/raster-vertical.svg</file>
         <file>data/icons/edit-reset.svg</file>

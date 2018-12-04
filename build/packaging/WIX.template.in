@@ -44,7 +44,7 @@
         <?ifdef CPACK_WIX_UI_DIALOG?>
         <WixVariable Id="WixUIDialogBmp" Value="$(var.CPACK_WIX_UI_DIALOG)"/>
         <?endif?>
-        
+
         <Property Id='ARPCONTACT'>http://musescore.org</Property>
         <Property Id='ARPHELPLINK'>http://musescore.org</Property>
         <Property Id='ARPURLINFOABOUT'>http://musescore.org</Property>
@@ -53,8 +53,8 @@
         <UI>
             <UIRef Id='WixUI_InstallDir'/>
             <Publish Dialog="ExitDialog"
-                Control="Finish" 
-                Event="DoAction" 
+                Control="Finish"
+                Event="DoAction"
                 Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
         </UI>
         <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch $(var.ProdName)"/>
@@ -71,12 +71,12 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities" Name="ApplicationIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),0" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities" Name="ApplicationName" Value="$(var.ProdName)" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\DefaultIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),1" Type="string" />
-            
+
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscz" Value="MuseScore.mscz" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscx" Value="MuseScore.mscx" Type="string" />
-            
+
             <!-- TODO add more types?-->
-            
+
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\MIMEAssociations" Name="application/x-musescore" Value="MuseScore.mscz" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\MIMEAssociations" Name="application/x-musescore+xml" Value="MuseScore.mscx" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
@@ -109,14 +109,14 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".gpx" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".sf2" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".sf3" Value="" Type="string" />
-            
+
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)" Name="FriendlyAppName" Value="$(var.ProdName)" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\shell\open" Name="FriendlyAppName" Value="$(var.ProdName)" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
 
             <!-- MyApp.Document ProgIDs -->
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscz" Value="Compressed MuseScore File" Type="string"/>
-            <ProgId Id="MuseScore.mscz" Description="Compressed MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="1">
+            <ProgId Id="MuseScore.mscz" Description="Compressed MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="2">
                 <Extension Id="mscz" Advertise="no">
                     <Verb Id="open" TargetFile="$(var.ExeId)" Command="Open" Argument="&quot;%1&quot;" />
                     <MIME Advertise="no" ContentType="application/x-musescore" Default="yes" />

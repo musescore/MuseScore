@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 622 378">
+  <defs>
+    <text id="musescore_name" x="309" y="260" font-family="Raleway-SemiBold" font-size="36" text-anchor="middle">@MUSESCORE_NAME@</text>
+  </defs>
+  <image xlink:href="../resources/splash-background.jpg" width="622" height="378"/>
+  <g id="musescore-icon" transform="translate(247,90) scale(0.25)">
+    <xi:include href="../platform/app-icons/musescore-icon-round.svg" xpointer="xpointer(*/*)" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+  </g>
+  <rect y="328" width="622" height="50" fill="#404756"/>
+  <g id="musescore-icon" transform="translate(10,276) scale(0.2)">
+    <xi:include href="../resources/cymbals.svg" xpointer="xpointer(*/*)" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+  </g>
+  <!--
+    Solid text is difficult to read against a textured background, so we give
+    it a contrasting outline (stroke). Ordinarily, strokes are draw on top of
+    fills, so they eat into the fill making the letters look thinner than they
+    should. The "paint-order" style attribute can be use to force the stroke
+    to be drawn below the fill so that the letters are the right thinkness,
+    but this attribute is not supported by Qt's SVG renderer.
+      HACK: Create two clones of the text. Give one clone a stroke and the
+    other a fill. Draw the stroked clone first. Note that the fill covers half
+    of the stroke, so the apparant stroke-width is half of that specified.
+  -->
+  <use xlink:href="#musescore_name" fill="none" stroke="#000" stroke-width="2"/>
+  <use xlink:href="#musescore_name" fill="#fff"/>
+  <text x="607" y="362" fill="#fff" font-family="Roboto-Bold" font-size="24" text-anchor="end">@MUSESCORE_VERSION_FULL@</text>
+  <text x="326" y="360" fill="#fff" font-family="Roboto-Bold" font-size="18" text-anchor="middle">@BUILD@ BUILD - FOR TESTING ONLY</text>
+</svg>

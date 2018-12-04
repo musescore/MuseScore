@@ -5,5 +5,7 @@
     <stop offset="1" stop-color="#1c5fb5"/>
   </linearGradient>
   <rect width="512" height="512" fill="url(#g)"/>
-  <use x="88" y="120" stroke="#fff" xlink:href="../../resources/mu.svg#mu-logo"/>
+  <g fill="#fff" stroke="#fff" transform="translate(88,120)">
+    <xi:include href="../../resources/mscore.svg" xpointer="xpointer(//*[@id='logo']/*)" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+  </g>
 </svg>

@@ -85,7 +85,6 @@ static const char* iconNames[] = {
       "document-new.svg",
       "document-save.svg",
       "document-save-as.svg",
-      "mscore.svg",
       "acciaccatura.svg",
       "appoggiatura.svg",
       "grace4.svg",
@@ -161,19 +160,29 @@ static const char* iconNames[] = {
       };
 
 //---------------------------------------------------------
+//   iconFromFile
+//---------------------------------------------------------
+QIcon* iconFromFile(QString iconFilePath)
+      {
+      QIcon* icon = new QIcon(new MIconEngine);
+      icon->addFile(iconFilePath);
+      if (icon->isNull() || icon->pixmap(12).isNull()) {
+            qDebug("cannot load Icon <%s>", qPrintable(iconFilePath));
+            }
+      return icon;
+      }
+
+//---------------------------------------------------------
 //   genIcons
 //---------------------------------------------------------
 
 void genIcons()
       {
-      for (int i = 0; i < int(Icons::voice1_ICON); ++i) {
-            QIcon* icon = new QIcon(new MIconEngine);
-            icon->addFile(iconPath + iconNames[i]);
-            icons[i] = icon;
-            if (icon->isNull() || icon->pixmap(12).isNull()) {
-                  qDebug("cannot load Icon <%s>", qPrintable(iconPath + iconNames[i]));
-                  }
+      for (int i = 0; i < int(Icons::window_ICON); ++i) {
+            icons[i] = iconFromFile(iconPath + iconNames[i]);
             }
+
+      icons[int(Icons::window_ICON)] = iconFromFile(":/assets/mscore-icon.svg");
 
       static const char* vtext[VOICES] = { "1","2","3","4" };
       int iw = preferences.getInt(PREF_UI_THEME_ICONHEIGHT) * 2 / 3; // 16;

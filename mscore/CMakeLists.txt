@@ -178,28 +178,83 @@ QT5_WRAP_UI (ui_headers
       ${SCRIPT_UI}
       )
 
-if (APPLE)
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc musescorefonts-Mac.qrc shortcut-Mac.qrc)
-else (APPLE)
-      QT5_ADD_RESOURCES (qrc_files musescore.qrc
-            musescorefonts-MScore.qrc
-            musescorefonts-Gootville.qrc
-            musescorefonts-Bravura.qrc
-            musescorefonts-MuseJazz.qrc
-            musescorefonts-FreeSerif.qrc
-            musescorefonts-Free.qrc
-            shortcut.qrc)
-endif (APPLE)
+# process files generated during the assets build (icons and images, etc)
+# use an appropriate file for the app icon (file extension depends on platform)
+if (MSCORE_UNSTABLE)
+    # square icon on development builds
+    set(MSCORE_ICON_BASE "${ASSETS_BINARY_DIR}/platform/app-icons/musescore-icon-square")
+else (MSCORE_UNSTABLE)
+    # round icon on stable releases
+    set(MSCORE_ICON_BASE "${ASSETS_BINARY_DIR}/platform/app-icons/musescore-icon-round")
+endif (MSCORE_UNSTABLE)
 
+# Add the appropriate splash screen for the build
+if(MSCORE_UNSTABLE)
+    # use a special splash screen on unstable builds
+    if(ENV{MSCORE_UNSTABLE_BUILDS_USE_NIGHTLY_SPLASH} STREQUAL TRUE)
+        set(SPLASH_IMAGE "${ASSETS_BINARY_DIR}/splash/splash-nightly.svg")
+    else(ENV{MSCORE_UNSTABLE_BUILDS_USE_NIGHTLY_SPLASH} STREQUAL TRUE)
+        set(SPLASH_IMAGE "${ASSETS_BINARY_DIR}/splash/splash-development.svg")
+    endif(ENV{MSCORE_UNSTABLE_BUILDS_USE_NIGHTLY_SPLASH} STREQUAL TRUE)
+else(MSCORE_UNSTABLE)
+    # use the normal splash image on stable releases
+    set(SPLASH_IMAGE "${ASSETS_BINARY_DIR}/splash/splash-stable.svg")
+endif(MSCORE_UNSTABLE)
+
+# Use Qt's Resource System to embed files into the mscore executable at
+# compile time so that they are guaranteed to be available at runtime.
+# See https://doc.qt.io/qt-5/resources.html.
+configure_file(musescoreassets.qrc.in musescoreassets.qrc) # substitute some variables
+set(qt_resources_files
+    musescore.qrc
+    ${CMAKE_CURRENT_BINARY_DIR}/musescoreassets.qrc
+    )
+if (APPLE)
+    list(APPEND qt_resources_files
+        musescorefonts-Mac.qrc
+        shortcut-Mac.qrc
+        )
+else (APPLE)
+    list(APPEND qt_resources_files
+        musescorefonts-MScore.qrc
+        musescorefonts-Gootville.qrc
+        musescorefonts-Bravura.qrc
+        musescorefonts-MuseJazz.qrc
+        musescorefonts-FreeSerif.qrc
+        musescorefonts-Free.qrc
+        shortcut.qrc
+        )
+endif (APPLE)
+QT5_ADD_RESOURCES (qrc_files ${qt_resources_files})
+
+# Windows has its own resources system which is used to embed resources that
+# need to be accessed by the operating system rather than by MuseScore or Qt.
+set(windows_resource_file "") # empty unless on Windows
+if (WIN32)
+    set(windows_resource_file "${CMAKE_CURRENT_BINARY_DIR}/musescoreassets-windows.rc")
+    configure_file(musescoreassets-windows.rc.in "${windows_resource_file}") # substitute some variables
+    # MSVC: job done! MSVC recognizes a *.rc file and will compile and link it automatically
+    if (MINGW)
+        # Must manually compile resource file into an object file in order to link it
+        set(intermediate_resource_file  "${CMAKE_CURRENT_BINARY_DIR}/musescoreassets-windows.res")
+        set(compiled_resource_file      "${CMAKE_CURRENT_BINARY_DIR}/musescoreassets-windows.o")
+        set(QT_WRC_EXECUTABLE           "${PROJECT_SOURCE_DIR}/build/wrc.bat")
+        set(QT_WINE_EXECUTABLE          "${PROJECT_SOURCE_DIR}/build/wine.bat")
+        add_custom_command(
+            OUTPUT "${compiled_resource_file}"
+            COMMAND "${QT_WRC_EXECUTABLE}" -i "${windows_resource_file}" -o "${intermediate_resource_file}"
+            COMMAND "${QT_WINE_EXECUTABLE}" "/home/ws/.wine/drive_c/MingW/bin/windres.exe" "${intermediate_resource_file}" -o "${compiled_resource_file}"
+            DEPENDS "${windows_resource_file}"
+            )
+        set_source_files_properties(
+            "${compiled_resource_file}"
+            PROPERTIES generated true
+            )
+        set (windows_resource_file "${compiled_resource_file}")
+    endif (MINGW)
+endif (WIN32)
 
 set (AUDIO "")
-if (MINGW)
-      set (resource_file ${PROJECT_BINARY_DIR}/resfile.o)
-endif (MINGW)
-if (MSVC)
-      # MSVC recognizes a *.rc file and will invoke the resource compiler to link it
-      set (resource_file ${PROJECT_SOURCE_DIR}/mscore/data/mscore.rc)
-endif ( MSVC )
 if ( NOT MINGW AND NOT MSVC )
       if (USE_ALSA)
             set (AUDIO ${AUDIO} alsa.cpp)
@@ -288,7 +343,7 @@ add_executable ( ${ExecutableName}
       ${ui_headers}
       ${_all_h_file}
       ${PCH}
-      ${resource_file}
+      ${windows_resource_file}
       ${INCS}
 
       abstractdialog.h accessibletoolbutton.h albummanager.h
@@ -546,19 +601,6 @@ if (OSC)
 endif (OSC)
 
 if (MINGW)
-   set (QT_WRC_EXECUTABLE        ${PROJECT_SOURCE_DIR}/build/wrc.bat)
-   set (QT_WINE_EXECUTABLE       ${PROJECT_SOURCE_DIR}/build/wine.bat)
-   add_custom_command(
-      OUTPUT ${PROJECT_BINARY_DIR}/resfile.o
-      COMMAND ${QT_WRC_EXECUTABLE} -i mscore.rc -o ${PROJECT_BINARY_DIR}/mscore.res
-      COMMAND ${QT_WINE_EXECUTABLE} /home/ws/.wine/drive_c/MingW/bin/windres.exe ${PROJECT_BINARY_DIR}/mscore.res -o ${PROJECT_BINARY_DIR}/resfile.o
-      DEPENDS ${PROJECT_SOURCE_DIR}/mscore/data/mscore.rc
-      WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/mscore/data
-      )
-   set_source_files_properties(
-      ${PROJECT_BINARY_DIR}/resfile.o
-      PROPERTIES generated true
-      )
    string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
    # Windows: Add -mconsole to LINK_FLAGS to get a console window for debug output
    if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
@@ -779,24 +821,18 @@ else (MINGW)
                )
         endif (LN_EXECUTABLE)
         # Install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
-        set(ASSETS_ICONS_DIR "${PROJECT_BINARY_DIR}/assets/icons")
-        if (MSCORE_UNSTABLE)
-            set(MSCORE_ICON_BASE "app/musescore-icon-square") # Square icons on development builds
-        else (MSCORE_UNSTABLE)
-            set(MSCORE_ICON_BASE "app/musescore-icon-round") # Round icons on stable releases
-        endif (MSCORE_UNSTABLE)
         function(install_icon_freedesktop BASEPATH_IN NAME_OUT DIR_OUT)
-          install(FILES "${ASSETS_ICONS_DIR}/${BASEPATH_IN}.svg" RENAME "${NAME_OUT}.svg" DESTINATION "share/icons/hicolor/scalable/${DIR_OUT}")
+          install(FILES "${BASEPATH_IN}.svg" RENAME "${NAME_OUT}.svg" DESTINATION "share/icons/hicolor/scalable/${DIR_OUT}")
           foreach(SIZE 16 22 24 32 48 64 96 128 256 512)
-            install(FILES "${ASSETS_ICONS_DIR}/${BASEPATH_IN}-${SIZE}.png" RENAME "${NAME_OUT}.png" DESTINATION "share/icons/hicolor/${SIZE}x${SIZE}/${DIR_OUT}")
+            install(FILES "${BASEPATH_IN}-${SIZE}.png" RENAME "${NAME_OUT}.png" DESTINATION "share/icons/hicolor/${SIZE}x${SIZE}/${DIR_OUT}")
           endforeach(SIZE)
         endfunction(install_icon_freedesktop)
         install_icon_freedesktop("${MSCORE_ICON_BASE}" "mscore${MSCORE_INSTALL_SUFFIX}" "apps")
-        install_icon_freedesktop("file/mscx" "application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml" "mimetypes")
-        install_icon_freedesktop("file/mscz" "application-x-musescore${MSCORE_INSTALL_SUFFIX}"     "mimetypes")
+        install_icon_freedesktop("${ASSETS_BINARY_DIR}/platform/file-icons/mscx" "application-x-musescore${MSCORE_INSTALL_SUFFIX}+xml" "mimetypes")
+        install_icon_freedesktop("${ASSETS_BINARY_DIR}/platform/file-icons/mscz" "application-x-musescore${MSCORE_INSTALL_SUFFIX}"     "mimetypes")
         # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
-        install_icon_freedesktop("file/xml"  "application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml" "mimetypes")
-        install_icon_freedesktop("file/mxl"  "application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}"     "mimetypes")
+        install_icon_freedesktop("${ASSETS_BINARY_DIR}/platform/file-icons/xml"  "application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml" "mimetypes")
+        install_icon_freedesktop("${ASSETS_BINARY_DIR}/platform/file-icons/mxl"  "application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}"     "mimetypes")
         # Note: Must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
       endif (APPLE)
    else ( NOT MSVC )

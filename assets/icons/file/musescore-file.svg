@@ -1,4 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 512 512">
-  <use xlink:href="../../resources/mu.svg#mu-logo" stroke="#1f74bd" transform="translate(128,164) scale(0.761904762)"/>
-  <text x="255" y="456" font-size="96" font-weight="bold" font-family="Roboto" text-anchor="middle" fill="#989898">@TYPE@</text>
-</svg>

@@ -1,0 +1,34 @@
+/* Windows Resources File - embed files into the MuseScore.exe executable
+
+Use this file to embed resouces that must be accessed by the Windows operating
+system, such as the application icon and filetype icons.
+
+Helpful links:
+- https://en.wikipedia.org/wiki/Resource_(Windows)
+- https://docs.microsoft.com/en-us/windows/desktop/menurc/about-resource-files
+- https://doc.qt.io/qt-5/appicon.html#setting-the-application-icon-on-windows
+
+Do not use this file to embed resources that must be accessible within
+MuseScore itself; use the Qt Resources System instead.
+*/
+
+//-------------------------
+//  ICON RESOURCES
+//
+//  Tip: to see the icons embedded in an executable (.exe) file:
+//    1. Right-click on the EXE and choose "Create Shortcut".
+//    2. Right-click on the newly created shortcut and choose "Properties".
+//    3. Click the button labelled "Change Icon".
+//  This will display the icons embedded inside the EXE ordered by icon index.
+//-------------------------
+
+// The first icon mentioned in this file has index 0 and is used as the application icon
+IDI_ICON1 ICON DISCARDABLE "@MSCORE_ICON_BASE@.ico" // icon index 0
+
+// The index increases by 1 for each icon subsequently mentioned in this file.
+// These can be used as filetype icons by setting the appropriate keys in the
+// Windows Registry. This is usually done by the application's installer.
+IDI_ICON2 ICON DISCARDABLE "@ASSETS_BINARY_DIR@/platform/file-icons/mscx.ico"  // icon index 1
+IDI_ICON3 ICON DISCARDABLE "@ASSETS_BINARY_DIR@/platform/file-icons/mscz.ico"  // icon index 2
+IDI_ICON4 ICON DISCARDABLE "@ASSETS_BINARY_DIR@/platform/file-icons/xml.ico"   // etc.
+IDI_ICON5 ICON DISCARDABLE "@ASSETS_BINARY_DIR@/platform/file-icons/mxl.ico"

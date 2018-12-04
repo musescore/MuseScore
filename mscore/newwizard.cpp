@@ -449,7 +449,7 @@ NewWizard::NewWizard(QWidget* parent)
 #endif
       setWizardStyle(wizardStyleValue);
 
-      QPixmap pm = SvgRenderer(":/data/mscore.svg").hdpiPixmap(QSize(64,64));
+      QPixmap pm = SvgRenderer(":/assets/mscore-logo.svg").hdpiPixmap(QSize(64,64));
       setPixmap(QWizard::LogoPixmap, pm);
       setPixmap(QWizard::WatermarkPixmap, QPixmap());
       setWindowTitle(tr("New Score Wizard"));

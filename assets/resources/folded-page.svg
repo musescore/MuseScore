@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 512 512">
+  <!--
+    Document Icon Template by Peter Jonas - CC0 1.0 Universal
+    https://github.com/shoogle/document-icon-template
+  -->
   <defs>
     <linearGradient id="lgrad-shadow">
       <stop offset="0" stop-opacity="0.5"/>
@@ -48,7 +52,7 @@
 
     <path id="page" d="m 80,16 0,464 352,0 0,-224 c 0,-48 1,-81 -19,-101 l -120,-120 c -20,-20 -53,-19 -101,-19 z"/>
     <path id="fold" d="m 293,35 c 20,20 19,53 19,101 c 48,0 81,-1 101,19 z"/>
-    
+
     <g id="folded-page-background">
       <use xlink:href="#page" fill="#FFF" filter="url(#filter-page)"/>
       <use xlink:href="#page" fill="url(#lgrad-page)"/>

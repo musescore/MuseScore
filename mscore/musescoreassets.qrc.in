@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/assets">
+        <file alias="mscore-logo.svg">@ASSETS_BINARY_DIR@/brand/mscore-logo.svg</file>
+        <file alias="mscore-icon.svg">@MSCORE_ICON_BASE@.svg</file>
+        <file alias="splash.svg">@SPLASH_IMAGE@</file>
+    </qresource>
+</RCC>

@@ -37,7 +37,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="musescore.qrc">:/data/mscore.svg</pixmap>
+        <pixmap>:/assets/mscore-logo.svg</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -190,8 +190,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
