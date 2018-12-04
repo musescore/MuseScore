@@ -1971,7 +1971,10 @@ bool readChordProperties206(XmlReader& e, Chord* ch)
       else if (tag == "ChordLine") {
             ChordLine* cl = new ChordLine(ch->score());
             cl->read(e);
+            QPointF o = cl->offset();
+            cl->setOffset(0.0, 0.0);
             ch->add(cl);
+            e.fixOffsets().append({cl, o});
             }
       else
             return false;
@@ -3727,7 +3730,6 @@ void PageFormat::read(XmlReader& e)
       _printableWidth = qMin(w1, w2);     // silently adjust right margins
       }
 
-
 //---------------------------------------------------------
 //   read206
 //    import old version > 1.3  and < 3.x files
@@ -3735,11 +3737,8 @@ void PageFormat::read(XmlReader& e)
 
 Score::FileError MasterScore::read206(XmlReader& e)
       {
-//      qDebug("read206");
-
       for (unsigned int i = 0; i < sizeof(style206)/sizeof(*style206); ++i)
             style().set(style206[i].idx, style206[i].val);
-
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -3798,6 +3797,13 @@ Score::FileError MasterScore::read206(XmlReader& e)
                   ns->setBarLineSpan(sp - span);
                   }
             staffIdx += sp;
+            }
+
+      // fix positions
+      //    offset = saved offset - layout position
+      doLayout();
+      for (auto i : e.fixOffsets()) {
+            i.first->setOffset(i.second - i.first->pos());
             }
 
       // treat reading a 2.06 file as import
