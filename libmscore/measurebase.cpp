@@ -421,7 +421,8 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
             LayoutBreak* lb = new LayoutBreak(score());
             lb->setLayoutBreakType(type);
             lb->setTrack(-1);       // this are system elements
-            lb->setParent(this);
+            MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
+            lb->setParent(mb);
             score()->undoAddElement(lb);
             }
       cleanupLayoutBreaks(true);
