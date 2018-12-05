@@ -1164,6 +1164,7 @@ QString ChordRest::accessibleExtraInfo() const
 Shape ChordRest::shape() const
       {
       Shape shape;
+      {
       qreal x1 = 1000000.0;
       qreal x2 = -1000000.0;
       bool adjustWidth = false;
@@ -1178,7 +1179,14 @@ Shape ChordRest::shape() const
                   x2 += spatium();
             adjustWidth = true;
             }
+      if (adjustWidth)
+            shape.addHorizontalSpacing(Shape::SPACING_LYRICS, x1, x2);
+      }
 
+      {
+      qreal x1 = 1000000.0;
+      qreal x2 = -1000000.0;
+      bool adjustWidth = false;
       for (Element* e : segment()->annotations()) {
             if (!e || !e->visible() || !e->autoplace())
                   continue;
@@ -1191,7 +1199,8 @@ Shape ChordRest::shape() const
                   }
             }
       if (adjustWidth)
-            shape.add(QRectF(x1, 0.0, x2-x1, 0.0));
+            shape.addHorizontalSpacing(Shape::SPACING_HARMONY, x1, x2);
+      }
 
       return shape;
       }

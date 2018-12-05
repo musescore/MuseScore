@@ -16,6 +16,20 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   addHorizontalSpacing
+//    Currently implemented by adding rectangles of zero
+//    height to the Y position corresponding to the type.
+//    This is a simple solution but has its drawbacks too.
+//---------------------------------------------------------
+
+void Shape::addHorizontalSpacing(HorizontalSpacingType type, qreal leftEdge, qreal rightEdge)
+      {
+      constexpr qreal eps = 100 * std::numeric_limits<qreal>::epsilon();
+      const qreal y = eps * int(type);
+      add(QRectF(leftEdge, y, rightEdge - leftEdge, 0));
+      }
+
+//---------------------------------------------------------
 //   translate
 //---------------------------------------------------------
 
