@@ -903,7 +903,16 @@ Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
       for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
             // chordrest ends at afrac+actualFraction
             // we return the segment at or after the end of the chordrest
-            if (s->afrac() >= afrac() + actualFraction())
+            // Segment::afrac() is based on ticks; use DurationElement::afrac() if possible
+            Element* e = s;
+            if (s->segmentType() == SegmentType::ChordRest)
+                  // Find the first non-NULL element in the segment
+                  for (Element* ee : s->elist())
+                        if (ee) {
+                              e = ee;
+                              break;
+                              }
+            if (e->afrac() >= afrac() + actualFraction())
                   return s;
             }
       return 0;
