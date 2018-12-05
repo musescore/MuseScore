@@ -552,11 +552,12 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                         }
                   }
             if (intersection && gdist > 0.0) {
+                  qreal min = score()->styleP(Sid::SlurMinDistance);
                   if (up) {
-                        ryoffset() -= (gdist + spatium() * .5);
+                        ryoffset() -= (gdist + min);
                         }
                   else
-                        ryoffset() += (gdist + spatium() * .5);
+                        ryoffset() += (gdist + min);
                   }
             }
       setbbox(path.boundingRect());
