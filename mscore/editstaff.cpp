@@ -343,7 +343,12 @@ void EditStaff::apply()
       Staff::HideMode hideEmpty = Staff::HideMode(hideMode->currentIndex());
 
       QString newPartName = partName->text().simplified();
-      if (!(instrument == *part->instrument()) || part->partName() != newPartName) {
+
+      bool instrumentFieldChanged = !(instrument == *part->instrument());
+      if (instrumentFieldChanged)
+            clefType = instrument.clefType(orgStaff->rstaff());
+
+      if (instrumentFieldChanged || part->partName() != newPartName) {
             // instrument has changed
             Interval v1 = instrument.transpose();
             Interval v2 = part->instrument()->transpose();
@@ -353,8 +358,6 @@ void EditStaff::apply()
 
             if (v1 != v2)
                   score->transpositionChanged(part, v2, _tickStart, _tickEnd);
-
-            clefType = instrument.clefType(orgStaff->rstaff());
             }
       orgStaff->undoChangeProperty(Pid::MAG, mag->value() / 100.0);
       orgStaff->undoChangeProperty(Pid::COLOR, color->color());
