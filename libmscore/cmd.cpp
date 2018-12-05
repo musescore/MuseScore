@@ -2654,19 +2654,17 @@ void Score::cmdImplode()
                                     undoRemoveElement(src);
                               }
                         }
-#if 1
                   // TODO - use first voice that actually has a note and implode remaining voices on it?
                   // see https://musescore.org/en/node/174111
                   else if (dst) {
                         // destination track has something, but it isn't a chord
-                        // remove everything from other voices if in "voice mode"
+                        // remove rests from other voices if in "voice mode"
                         for (int i = 1; i < VOICES; ++i) {
                               Element* e = s->element(dstTrack + i);
-                              if (e)
+                              if (e && e->isRest())
                                     undoRemoveElement(e);
                               }
                         }
-#endif
                   }
             }
       else {
