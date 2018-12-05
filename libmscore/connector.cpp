@@ -167,6 +167,58 @@ int ConnectorInfo::connectionDistance(const ConnectorInfo& other) const
       }
 
 //---------------------------------------------------------
+//   ConnectorInfo::findFirst
+//---------------------------------------------------------
+
+ConnectorInfo* ConnectorInfo::findFirst()
+      {
+      ConnectorInfo* i = this;
+      while (i->_prev) {
+            i = i->_prev;
+            if (i == this) {
+                  qWarning("ConnectorInfo::findFirst: circular connector %p", this);
+                  return nullptr;
+                  }
+            }
+      return i;
+      }
+
+//---------------------------------------------------------
+//   ConnectorInfo::findFirst
+//---------------------------------------------------------
+
+const ConnectorInfo* ConnectorInfo::findFirst() const
+      {
+      return const_cast<ConnectorInfo*>(this)->findFirst();
+      }
+
+//---------------------------------------------------------
+//   ConnectorInfo::findLast
+//---------------------------------------------------------
+
+ConnectorInfo* ConnectorInfo::findLast()
+      {
+      ConnectorInfo* i = this;
+      while (i->_next) {
+            i = i->_next;
+            if (i == this) {
+                  qWarning("ConnectorInfo::findLast: circular connector %p", this);
+                  return nullptr;
+                  }
+            }
+      return i;
+      }
+
+//---------------------------------------------------------
+//   ConnectorInfo::findLast
+//---------------------------------------------------------
+
+const ConnectorInfo* ConnectorInfo::findLast() const
+      {
+      return const_cast<ConnectorInfo*>(this)->findLast();
+      }
+
+//---------------------------------------------------------
 //   ConnectorInfo::finished
 //---------------------------------------------------------
 
@@ -181,10 +233,8 @@ bool ConnectorInfo::finished() const
 
 bool ConnectorInfo::finishedLeft() const
       {
-      const ConnectorInfo* i = this;
-      while (i->_prev)
-            i = i->_prev;
-      return (!i->hasPrevious());
+      const ConnectorInfo* i = findFirst();
+      return (i && !i->hasPrevious());
       }
 
 //---------------------------------------------------------
@@ -193,10 +243,8 @@ bool ConnectorInfo::finishedLeft() const
 
 bool ConnectorInfo::finishedRight() const
       {
-      const ConnectorInfo* i = this;
-      while (i->_next)
-            i = i->_next;
-      return (!i->hasNext());
+      const ConnectorInfo* i = findLast();
+      return (i && !i->hasNext());
       }
 
 //---------------------------------------------------------
@@ -205,10 +253,8 @@ bool ConnectorInfo::finishedRight() const
 
 ConnectorInfo* ConnectorInfo::start()
       {
-      ConnectorInfo* i = this;
-      while (i->_prev)
-            i = i->_prev;
-      if (i->hasPrevious())
+      ConnectorInfo* i = findFirst();
+      if (i && i->hasPrevious())
             return nullptr;
       return i;
       }
@@ -219,10 +265,8 @@ ConnectorInfo* ConnectorInfo::start()
 
 ConnectorInfo* ConnectorInfo::end()
       {
-      ConnectorInfo* i = this;
-      while (i->_next)
-            i = i->_next;
-      if (i->hasNext())
+      ConnectorInfo* i = findLast();
+      if (i && i->hasNext())
             return nullptr;
       return i;
       }
@@ -400,10 +444,10 @@ void ConnectorInfoReader::readConnector(ConnectorInfoReader& info, XmlReader& e)
 
 Element* ConnectorInfoReader::connector()
       {
-      if (_connector)
-            return _connector;
-      if (prev())
-            return prev()->connector();
+      // connector should be contained in the first node normally.
+      ConnectorInfo* i = findFirst();
+      if (i)
+            return static_cast<ConnectorInfoReader*>(i)->_connector;
       return nullptr;
       }
 
@@ -422,10 +466,24 @@ const Element* ConnectorInfoReader::connector() const
 
 Element* ConnectorInfoReader::releaseConnector()
       {
-      Element* c = _connector;
-      _connector = nullptr;
-      if (prev())
-            return prev()->releaseConnector();
+      ConnectorInfoReader* i = static_cast<ConnectorInfoReader*>(findFirst());
+      if (!i) {
+            // circular connector?
+            ConnectorInfoReader* ii = this;
+            Element* c = nullptr;
+            while (ii->prev()) {
+                  if (ii->_connector) {
+                        c = ii->_connector;
+                        ii->_connector = nullptr;
+                        }
+                  ii = ii->prev();
+                  if (ii == this)
+                        break;
+                  }
+            return c;
+            }
+      Element* c = i->_connector;
+      i->_connector = nullptr;
       return c;
       }
 
