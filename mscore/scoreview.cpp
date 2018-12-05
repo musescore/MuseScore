@@ -2078,6 +2078,10 @@ void ScoreView::cmd(const char* s)
             _score->cmdAddTie();
             moveCursor();
             }
+      else if (cmd == "chord-tie") {
+            _score->cmdAddTie(true);
+            moveCursor();
+            }
       else if (cmd == "duplet")
             cmdTuplet(2);
       else if (cmd == "triplet")
