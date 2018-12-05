@@ -1571,8 +1571,10 @@ void ScoreView::editCopy()
 
 void ScoreView::editCut()
       {
+      _score->startCmd();
       if (editData.element)
             editData.element->editCut(editData);
+      _score->endCmd();
       }
 
 //---------------------------------------------------------
