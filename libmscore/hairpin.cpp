@@ -495,6 +495,7 @@ void Hairpin::write(XmlWriter& xml) const
       writeProperty(xml, Pid::BEGIN_TEXT);
       writeProperty(xml, Pid::END_TEXT);
       writeProperty(xml, Pid::CONTINUE_TEXT);
+      writeProperty(xml, Pid::LINE_VISIBLE);
 
       for (const StyledProperty& spp : *styledProperties()) {
             if (!isStyled(spp.pid))
