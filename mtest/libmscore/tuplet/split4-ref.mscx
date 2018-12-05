@@ -174,7 +174,7 @@
                 <next>
                   <location>
                     <measures>1</measures>
-                    <fractions>-237/320</fractions>
+                    <fractions>-107/108</fractions>
                     </location>
                   </next>
                 </Spanner>
@@ -227,7 +227,7 @@
                 <prev>
                   <location>
                     <measures>-1</measures>
-                    <fractions>237/320</fractions>
+                    <fractions>107/108</fractions>
                     </location>
                   </prev>
                 </Spanner>

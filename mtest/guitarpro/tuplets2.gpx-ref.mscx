@@ -273,7 +273,7 @@ solo concert</text>
                 </Slur>
               <next>
                 <location>
-                  <fractions>-1/1</fractions>
+                  <fractions>1/4</fractions>
                   </location>
                 </next>
               </Spanner>
@@ -313,7 +313,7 @@ solo concert</text>
             <Spanner type="Slur">
               <prev>
                 <location>
-                  <fractions>1/1</fractions>
+                  <fractions>-1/4</fractions>
                   </location>
                 </prev>
               </Spanner>
@@ -1036,7 +1036,7 @@ solo concert</text>
                   </Slur>
                 <next>
                   <location>
-                    <fractions>-1/1</fractions>
+                    <fractions>1/4</fractions>
                     </location>
                   </next>
                 </Spanner>
@@ -1079,7 +1079,7 @@ solo concert</text>
               <Spanner type="Slur">
                 <prev>
                   <location>
-                    <fractions>1/1</fractions>
+                    <fractions>-1/4</fractions>
                     </location>
                   </prev>
                 </Spanner>
@@ -1710,7 +1710,7 @@ solo concert</text>
                   </Slur>
                 <next>
                   <location>
-                    <fractions>-1/1</fractions>
+                    <fractions>1/4</fractions>
                     </location>
                   </next>
                 </Spanner>
@@ -1753,7 +1753,7 @@ solo concert</text>
               <Spanner type="Slur">
                 <prev>
                   <location>
-                    <fractions>1/1</fractions>
+                    <fractions>-1/4</fractions>
                     </location>
                   </prev>
                 </Spanner>

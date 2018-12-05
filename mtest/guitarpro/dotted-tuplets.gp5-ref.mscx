@@ -392,6 +392,7 @@
               </Rest>
             <Tuplet>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <normalNotes>2</normalNotes>
               <actualNotes>3</actualNotes>
@@ -408,11 +409,13 @@
               </Beam>
             <Chord>
               <linked>
+                <indexDiff>1</indexDiff>
                 </linked>
               <dots>1</dots>
               <durationType>eighth</durationType>
               <Note>
                 <linked>
+                  <indexDiff>1</indexDiff>
                   </linked>
                 <pitch>71</pitch>
                 <tpc>19</tpc>
