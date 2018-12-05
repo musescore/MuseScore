@@ -412,10 +412,10 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                   endStaff = nstaves();
             //check and add truly invisible rests insted of gaps
             //TODO: look if this could be done different
-            Measure* dstM = tick2measureMM(dstTick);
-            Measure* endM = tick2measureMM(dstTick + tickLen);
+            Measure* dstM = tick2measure(dstTick);
+            Measure* endM = tick2measure(dstTick + tickLen);
             for (int i = dstStaff; i < endStaff; i++) {
-                  for (Measure* m = dstM; m && m != endM->nextMeasureMM(); m = m->nextMeasureMM())
+                  for (Measure* m = dstM; m && m != endM->nextMeasure(); m = m->nextMeasure())
                         m->checkMeasure(i);
                   }
             _selection.setRangeTicks(dstTick, dstTick + tickLen, dstStaff, endStaff);
