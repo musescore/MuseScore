@@ -317,6 +317,8 @@ Score::~Score()
       foreach(MuseScoreView* v, viewer)
             v->removeScore();
       // deselectAll();
+      qDeleteAll(_systems); // systems are layout-only objects so we delete
+                            // them prior to measures.
       for (MeasureBase* m = _measures.first(); m;) {
             MeasureBase* nm = m->next();
             delete m;
@@ -324,7 +326,6 @@ Score::~Score()
             }
       qDeleteAll(_parts);
       qDeleteAll(_staves);
-      qDeleteAll(_systems);
 //      qDeleteAll(_pages);         // TODO: check
       _masterScore = 0;
       }
