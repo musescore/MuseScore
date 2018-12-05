@@ -3103,6 +3103,8 @@ Shape Chord::shape() const
       shape.add(ChordRest::shape());      // add lyrics
       for (LedgerLine* l = _ledgerLines; l; l = l->next())
             shape.add(l->shape().translated(l->pos()));
+      if (_spaceLw || _spaceRw)
+            shape.addHorizontalSpacing(Shape::SPACING_GENERAL, -_spaceLw, _spaceRw);
       return shape;
       }
 
