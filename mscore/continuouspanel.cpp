@@ -159,10 +159,10 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   Segment* parent = _score->tick2segment(tick);
 
                   // Find maximum width for the staff name
-                  QList<StaffName>& staffNamesLong = currentStaff->part()->instrument()->longNames();
+                  QList<StaffName>& staffNamesLong = currentStaff->part()->instrument(tick)->longNames();
                   QString staffName = staffNamesLong.isEmpty() ? " " : staffNamesLong[0].name();
                   if (staffName == "") {
-                        QList<StaffName>& staffNamesShort = currentStaff->part()->instrument()->shortNames();
+                        QList<StaffName>& staffNamesShort = currentStaff->part()->instrument(tick)->shortNames();
                         staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name();
                         }
                   Text* newName = new Text(_score);
@@ -345,10 +345,10 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
                   barLine.draw(&painter);
 
                   // Draw the current staff name
-                  QList<StaffName>& staffNamesLong = currentStaff->part()->instrument()->longNames();
+                  QList<StaffName>& staffNamesLong = currentStaff->part()->instrument(tick)->longNames();
                   QString staffName = staffNamesLong.isEmpty() ? " " : staffNamesLong[0].name();
                   if (staffName == "") {
-                        QList<StaffName>& staffNamesShort = currentStaff->part()->instrument()->shortNames();
+                        QList<StaffName>& staffNamesShort = currentStaff->part()->instrument(tick)->shortNames();
                         staffName = staffNamesShort.isEmpty() ? "" : staffNamesShort[0].name();
                         }
 
