@@ -431,15 +431,18 @@ void ScoreView::fotoModeCopy()
       int w = lrint(r.width()  * mag);
       int h = lrint(r.height() * mag);
 
+      double pr = MScore::pixelRatio;
       QImage::Format f;
       f = QImage::Format_ARGB32_Premultiplied;
       QImage printer(w, h, f);
       printer.setDotsPerMeterX(lrint(DPMM * 1000.0));
       printer.setDotsPerMeterY(lrint(DPMM * 1000.0));
       printer.fill(transparent ? 0 : 0xffffffff);
+      MScore::pixelRatio = 1.0;
       QPainter p(&printer);
       paintRect(true, p, r, mag);
       QApplication::clipboard()->setImage(printer);
+      MScore::pixelRatio = pr;
       }
 
 //---------------------------------------------------------
