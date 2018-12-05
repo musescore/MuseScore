@@ -31,9 +31,9 @@ endif (CI)
 # Libraries linked via full path no longer produce linker search paths.
 cmake_policy(SET CMP0003 NEW)
 
-# Apperently needed on Mac only (?)
+# Apparently needed on Mac only (?)
 if (APPLE)
-    # Issue no warning non-existent target argument to get_targer_property()
+    # Issue no warning non-existent target argument to get_target_property()
     # and set the result variable to a -NOTFOUND value rather than issuing a FATAL_ERROR 40
     if(POLICY CMP0045)
         cmake_policy(SET CMP0045 OLD)
