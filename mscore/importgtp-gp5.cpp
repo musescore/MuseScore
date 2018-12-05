@@ -296,6 +296,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   Tuplet* tuplet = tuplets[staffIdx * 2 + voice];
                   if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                         tuplet = new Tuplet(score);
+                        tuplet->setTick(tick);
                         // int track = staffIdx * 2 + voice;
                         tuplets[staffIdx * 2 + voice] = tuplet;
                         tuplet->setTrack(cr->track());

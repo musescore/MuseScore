@@ -915,6 +915,7 @@ bool GuitarPro4::read(QFile* fp)
                               Tuplet* tuplet = tuplets[staffIdx];
                               if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                                     tuplet = new Tuplet(score);
+                                    tuplet->setTick(tick);
                                     tuplet->setTrack(cr->track());
                                     tuplets[staffIdx] = tuplet;
                                     setTuplet(tuplet, tuple);

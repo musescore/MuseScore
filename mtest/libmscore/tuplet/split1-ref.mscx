@@ -155,7 +155,7 @@
                 <next>
                   <location>
                     <measures>1</measures>
-                    <fractions>-1387/1920</fractions>
+                    <fractions>-35/36</fractions>
                     </location>
                   </next>
                 </Spanner>
@@ -198,7 +198,7 @@
                 <prev>
                   <location>
                     <measures>-1</measures>
-                    <fractions>1387/1920</fractions>
+                    <fractions>35/36</fractions>
                     </location>
                   </prev>
                 </Spanner>

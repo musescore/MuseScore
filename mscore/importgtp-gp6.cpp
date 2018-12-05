@@ -1653,6 +1653,7 @@ int GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* measure,
                                     cr->setTrack(track);
                                     if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                                           tuplet                           = new Tuplet(score);
+                                          tuplet->setTick(currentTick);
                                           tuplets[staffIdx * VOICES + voiceNum] = tuplet;
                                           tuplet->setParent(measure);
                                           }

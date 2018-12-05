@@ -1711,15 +1711,10 @@ int Element::rtick() const
 
 Fraction Element::rfrac() const
       {
-      const Element* e = this;
-      while (e) {
-            if (e->isSegment())
-                  return toSegment(e)->rfrac();
-            else if (e->isMeasureBase())
-                  return toMeasureBase(e)->rfrac();
-            e = e->parent();
-            }
-      return -1;
+      if (parent())
+            return parent()->rfrac();
+      else
+            return -1;
       }
 
 //---------------------------------------------------------
@@ -1729,15 +1724,10 @@ Fraction Element::rfrac() const
 
 Fraction Element::afrac() const
       {
-      const Element* e = this;
-      while (e) {
-            if (e->isSegment())
-                  return toSegment(e)->afrac();
-            else if (e->isMeasureBase())
-                  return toMeasureBase(e)->afrac();
-            e = e->parent();
-            }
-      return -1;
+      if (parent())
+            return parent()->afrac();
+      else
+            return -1;
       }
 
 //---------------------------------------------------------
