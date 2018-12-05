@@ -2480,6 +2480,10 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
             else if (tag == "timeStretch") {
                   if (el && el->isFermata())
                         el->setProperty(Pid::TIME_STRETCH ,e.readDouble());
+                  else {
+                        qDebug("line %lld: read206: skipping <timeStretch>", e.lineNumber());
+                        e.skipCurrentElement();
+                        }
                   }
             else {
                   if (!el) {
