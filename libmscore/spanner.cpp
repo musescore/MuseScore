@@ -1201,8 +1201,8 @@ void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track,
 
 void Spanner::readSpanner(XmlReader& e, Element* current, int track)
       {
-      ConnectorInfoReader info(e, current, track);
-      ConnectorInfoReader::readConnector(info, e);
+      std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, track));
+      ConnectorInfoReader::readConnector(std::move(info), e);
       }
 
 //--------------------------------------------------
@@ -1211,8 +1211,8 @@ void Spanner::readSpanner(XmlReader& e, Element* current, int track)
 
 void Spanner::readSpanner(XmlReader& e, Score* current, int track)
       {
-      ConnectorInfoReader info(e, current, track);
-      ConnectorInfoReader::readConnector(info, e);
+      std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, track));
+      ConnectorInfoReader::readConnector(std::move(info), e);
       }
 
 //---------------------------------------------------------
