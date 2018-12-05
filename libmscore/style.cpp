@@ -253,13 +253,13 @@ static const StyleType styleTypes[] {
       { Sid::chordSymbolAPosAbove,      "chordSymbolPosAbove",       QPointF(.0, -2.5) },
       { Sid::chordSymbolAPosBelow,      "chordSymbolPosBelow",       QPointF(.0, 3.5) },
 
-      { Sid::chordSymbolBPosAbove,      "chordSymbolPosAbove",       QPointF(.0, -2.5) },
-      { Sid::chordSymbolBPosBelow,      "chordSymbolPosBelow",       QPointF(.0, 3.5) },
+      { Sid::chordSymbolBPosAbove,      "chordSymbolBPosAbove",      QPointF(.0, -5.0) },
+      { Sid::chordSymbolBPosBelow,      "chordSymbolBPosBelow",      QPointF(.0, 3.5) },
 
       { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "FreeSerif" },
       { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      12.0 },
       { Sid::chordSymbolAFontStyle,     "chordSymbolAFontStyle",     int(FontStyle::Normal) },
-      { Sid::chordSymbolAAlign,         "chordSymbolAAlign",         QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::chordSymbolAAlign,         "chordSymbolAAlign",         QVariant::fromValue(Align::LEFT | Align::BASELINE) },
       { Sid::chordSymbolAFrameType,     "chordSymbolAFrameType",     int(FrameType::NO_FRAME) },
       { Sid::chordSymbolAFramePadding,  "chordSymbolAFramePadding",  0.2 },
       { Sid::chordSymbolAFrameWidth,    "chordSymbolAFrameWidth",    0.1 },
@@ -268,9 +268,9 @@ static const StyleType styleTypes[] {
       { Sid::chordSymbolAFrameBgColor,  "chordSymbolAFrameBgColor",  QColor(255, 255, 255, 0) },
 
       { Sid::chordSymbolBFontFace,      "chordSymbolBFontFace",      "FreeSerif" },
-      { Sid::chordSymbolBFontSize,      "chordSymbolBFontSize",      18.0 },
-      { Sid::chordSymbolBFontStyle,     "chordSymbolBFontStyle",     int(FontStyle::Normal) },
-      { Sid::chordSymbolBAlign,         "chordSymbolBAlign",         QVariant::fromValue(Align::HCENTER | Align::BASELINE) },
+      { Sid::chordSymbolBFontSize,      "chordSymbolBFontSize",      12.0 },
+      { Sid::chordSymbolBFontStyle,     "chordSymbolBFontStyle",     int(FontStyle::Italic) },
+      { Sid::chordSymbolBAlign,         "chordSymbolBAlign",         QVariant::fromValue(Align::LEFT | Align::BASELINE) },
       { Sid::chordSymbolBFrameType,     "chordSymbolBFrameType",     int(FrameType::NO_FRAME) },
       { Sid::chordSymbolBFramePadding,  "chordSymbolBFramePadding",  0.2 },
       { Sid::chordSymbolBFrameWidth,    "chordSymbolBFrameWidth",    0.1 },
@@ -1756,8 +1756,8 @@ static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
 
       { QT_TRANSLATE_NOOP("TextStyle", "System"),                  &systemTextStyle,            Tid::SYSTEM },
       { QT_TRANSLATE_NOOP("TextStyle", "Staff"),                   &staffTextStyle,             Tid::STAFF },
-      { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol A"),          &chordSymbolTextStyleA,      Tid::HARMONY_A },
-      { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol B"),          &chordSymbolTextStyleB,      Tid::HARMONY_B },
+      { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol"),            &chordSymbolTextStyleA,      Tid::HARMONY_A },
+      { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol (Alternate)"),&chordSymbolTextStyleB,      Tid::HARMONY_B },
       { QT_TRANSLATE_NOOP("TextStyle", "Rehearsal Mark"),          &rehearsalMarkTextStyle,     Tid::REHEARSAL_MARK },
 
       { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Left"),        &repeatLeftTextStyle,        Tid::REPEAT_LEFT },
