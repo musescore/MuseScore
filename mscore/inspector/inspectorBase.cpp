@@ -501,6 +501,7 @@ void InspectorBase::mapSignals(const std::vector<InspectorItem>& il, const std::
                               }});
                   title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
                   title->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+                  title->setStyleSheet("font: bold;");
                   QSettings s;
                   QString key = title->parent()->objectName();
                   bool visible = s.value(QString("inspector/%1_visible").arg(key), true).toBool();
