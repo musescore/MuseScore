@@ -1346,8 +1346,8 @@ struct NoteHeadSchemeName {
 
 static NoteHeadSchemeName noteHeadSchemeNames[] = {
       {"normal",              QT_TRANSLATE_NOOP("noteheadschemes", "Normal") },
-      {"name-pitch",          QT_TRANSLATE_NOOP("noteheadschemes", "Pitch Name") },
-      {"name-pitch-german",   QT_TRANSLATE_NOOP("noteheadschemes", "German Pitch Name") },
+      {"name-pitch",          QT_TRANSLATE_NOOP("noteheadschemes", "Pitch Names") },
+      {"name-pitch-german",   QT_TRANSLATE_NOOP("noteheadschemes", "German Pitch Names") },
       {"solfege-movable",     QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge Movable Do") }, // &egrave;
       {"solfege-fixed",       QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge Fixed Do") },   // &egrave;
       {"shape-4",             QT_TRANSLATE_NOOP("noteheadschemes", "4-shape (Walker)") },
