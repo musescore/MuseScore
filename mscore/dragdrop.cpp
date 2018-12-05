@@ -231,8 +231,14 @@ void ScoreView::dragEnterEvent(QDragEnterEvent* event)
 
       if (dta->hasUrls()) {
             QList<QUrl>ul = dta->urls();
-
             QUrl u = ul.front();
+
+            QMimeDatabase db;
+            if (!QImageReader::supportedMimeTypes().contains(db.mimeTypeForUrl(u).name().toLatin1())) {
+                  event->ignore();
+                  return;
+                  }
+
             Image* image = 0;
             if (u.scheme() == "file") {
                   QFileInfo fi(u.path());
