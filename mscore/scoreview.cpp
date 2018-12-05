@@ -407,6 +407,9 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       menuAdd->addAction(getAction("insert-vbox"));
       menuAdd->addAction(getAction("insert-textframe"));
 
+      a = popup->addAction(tr("Delete Selected Measures"));
+      a->setData("delete-selected-measures");
+      
       popup->addSeparator();
 
       a = popup->addAction(tr("Measure Properties..."));
@@ -471,6 +474,9 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       else if (cmd == "props") {
             MeasureProperties im(obj);
             im.exec();
+            }
+      else if (cmd == "delete-selected-measures") {
+            _score->cmdTimeDelete();
             }
       if (_score->undoStack()->active())
             _score->endCmd();
