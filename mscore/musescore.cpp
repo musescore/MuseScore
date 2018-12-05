@@ -1743,6 +1743,7 @@ MuseScore::MuseScore()
       //menuHelp->addAction(getAction("help"));
       onlineHandbookAction = new QAction("", 0);
       connect(onlineHandbookAction, SIGNAL(triggered()), this, SLOT(helpBrowser1()));
+      onlineHandbookAction->setMenuRole(QAction::NoRole);
       menuHelp->addAction(onlineHandbookAction);
       Workspace::addActionAndString(onlineHandbookAction, "online-handbook");
 
@@ -1778,6 +1779,7 @@ MuseScore::MuseScore()
 #if !defined(FOR_WINSTORE)
       checkForUpdateAction = new QAction("", 0);
       connect(checkForUpdateAction, SIGNAL(triggered()), this, SLOT(checkForUpdatesUI()));
+      checkForUpdateAction->setMenuRole(QAction::NoRole);
       menuHelp->addAction(checkForUpdateAction);
       Workspace::addActionAndString(checkForUpdateAction, "check-update");
 #endif
@@ -1786,16 +1788,19 @@ MuseScore::MuseScore()
 
       askForHelpAction = new QAction("", 0);
       connect(askForHelpAction, SIGNAL(triggered()), this, SLOT(askForHelp()));
+      askForHelpAction->setMenuRole(QAction::NoRole);
       menuHelp->addAction(askForHelpAction);
       Workspace::addActionAndString(askForHelpAction, "ask-help");
 
       reportBugAction = new QAction("", 0);
       connect(reportBugAction, &QAction::triggered, this, [this]{ reportBug("menu"); });
+      reportBugAction->setMenuRole(QAction::NoRole);
       menuHelp->addAction(reportBugAction);
       Workspace::addActionAndString(reportBugAction, "report-bug");
 
       leaveFeedbackAction = new QAction("", 0);
       connect(leaveFeedbackAction, &QAction::triggered, this, [this]{ leaveFeedback("menu"); });
+      leaveFeedbackAction->setMenuRole(QAction::NoRole);
       menuHelp->addAction(leaveFeedbackAction);
       Workspace::addActionAndString(leaveFeedbackAction, "leave-feedback");
 
@@ -1805,6 +1810,7 @@ MuseScore::MuseScore()
 
       revertToFactoryAction = new QAction("", 0);
       connect(revertToFactoryAction, SIGNAL(triggered()), this, SLOT(resetAndRestart()));
+      revertToFactoryAction->setMenuRole(QAction::NoRole);
       menuHelp->addAction(revertToFactoryAction);
       Workspace::addActionAndString(revertToFactoryAction, "revert-factory");
 
