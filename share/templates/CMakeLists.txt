@@ -89,7 +89,7 @@ install(FILES
 
 install(FILES
       08-Orchestral/01-Classical_Orchestra.mscx
-      08-Orchestral/02-Concert_Orchestra.mscx
+      08-Orchestral/02-Symphony_Orchestra.mscx
       08-Orchestral/03-String_Orchestra.mscx
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/08-Orchestral
       )

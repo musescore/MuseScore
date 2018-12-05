@@ -10,7 +10,6 @@
     <Division>480</Division>
     <Style>
       <staffUpperBorder>10</staffUpperBorder>
-      <concertPitch>1</concertPitch>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
