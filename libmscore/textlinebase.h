@@ -37,7 +37,7 @@ class TextLineBaseSegment : public LineSegment {
       bool twoLines { false };
 
    public:
-      TextLineBaseSegment(Score* s, ElementFlags f = ElementFlag::NOTHING);
+      TextLineBaseSegment(Spanner*, Score* s, ElementFlags f = ElementFlag::NOTHING);
       TextLineBaseSegment(const TextLineBaseSegment&);
       ~TextLineBaseSegment();
 

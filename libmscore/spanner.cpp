@@ -42,6 +42,13 @@ class SpannerWriter : public ConnectorInfoWriter {
 //   SpannerSegment
 //---------------------------------------------------------
 
+SpannerSegment::SpannerSegment(Spanner* sp, Score* s, ElementFlags f)
+   : Element(s, f)
+      {
+      _spanner = sp;
+      setSpannerSegmentType(SpannerSegmentType::SINGLE);
+      }
+
 SpannerSegment::SpannerSegment(Score* s, ElementFlags f)
    : Element(s, f)
       {

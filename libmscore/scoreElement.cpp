@@ -206,7 +206,8 @@ void ScoreElement::initElementStyle(const ElementStyle* ss)
       for (size_t i = 0; i < n; ++i)
             _propertyFlagsList[i] = PropertyFlags::STYLED;
       for (const StyledProperty& spp : *_elementStyle)
-            setProperty(spp.pid, styleValue(spp.pid, spp.sid));
+//            setProperty(spp.pid, styleValue(spp.pid, spp.sid));
+            setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
       }
 
 //---------------------------------------------------------
@@ -689,7 +690,7 @@ void ScoreElement::styleChanged()
       for (const StyledProperty& spp : *_elementStyle) {
             PropertyFlags f = propertyFlags(spp.pid);
             if (f == PropertyFlags::STYLED)
-                  setProperty(spp.pid, styleValue(spp.pid, spp.sid));
+                  setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
             }
       }
 

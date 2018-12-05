@@ -106,7 +106,7 @@ class LyricsLine final : public SLine {
       Lyrics* _nextLyrics;
 
    public:
-      LyricsLine(Score* s);
+      LyricsLine(Score*);
       LyricsLine(const LyricsLine&);
 
       virtual LyricsLine* clone() const override      { return new LyricsLine(*this); }
@@ -132,7 +132,7 @@ class LyricsLineSegment final : public LineSegment {
       qreal _dashLength;
 
    public:
-      LyricsLineSegment(Score* s);
+      LyricsLineSegment(Spanner*, Score*);
 
       virtual LyricsLineSegment* clone() const override     { return new LyricsLineSegment(*this); }
       virtual ElementType type() const override             { return ElementType::LYRICSLINE_SEGMENT; }

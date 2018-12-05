@@ -119,7 +119,7 @@ static const ElementStyle palmMuteSegmentStyle {
 
 LineSegment* PalmMute::createLineSegment()
       {
-      PalmMuteSegment* pms = new PalmMuteSegment(score());
+      PalmMuteSegment* pms = new PalmMuteSegment(this, score());
       pms->initElementStyle(&palmMuteSegmentStyle);
       return pms;
       }

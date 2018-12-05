@@ -182,7 +182,7 @@ void Vibrato::layout()
 
 LineSegment* Vibrato::createLineSegment()
       {
-      VibratoSegment* seg = new VibratoSegment(score());
+      VibratoSegment* seg = new VibratoSegment(this, score());
       seg->setTrack(track());
       seg->setColor(color());
       return seg;
