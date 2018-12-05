@@ -42,6 +42,14 @@ int trillTableSize() {
       }
 
 //---------------------------------------------------------
+//   trillStyle
+//---------------------------------------------------------
+
+static const ElementStyle trillStyle {
+      { Sid::trillPlacement, Pid::PLACEMENT },
+      };
+
+//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
@@ -227,6 +235,24 @@ void TrillSegment::scanElements(void* data, void (*func)(void*, Element*), bool 
       }
 
 //---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid TrillSegment::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return spanner()->placeAbove() ? Sid::trillPosAbove : Sid::trillPosBelow;
+      return LineSegment::getPropertyStyle(pid);
+      }
+
+Sid Trill::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::trillPosAbove : Sid::trillPosBelow;
+      return SLine::getPropertyStyle(pid);
+      }
+
+//---------------------------------------------------------
 //   Trill
 //---------------------------------------------------------
 
@@ -237,7 +263,8 @@ Trill::Trill(Score* s)
       _accidental    = 0;
       _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
       setPlayArticulation(true);
-      setPlacement(Placement::ABOVE);
+      initElementStyle(&trillStyle);
+      resetProperty(Pid::OFFSET);
       }
 
 Trill::~Trill()
@@ -291,11 +318,16 @@ void Trill::layout()
 //   createLineSegment
 //---------------------------------------------------------
 
+static const ElementStyle trillSegmentStyle {
+      { Sid::trillPosAbove, Pid::OFFSET },
+      };
+
 LineSegment* Trill::createLineSegment()
       {
       TrillSegment* seg = new TrillSegment(score());
       seg->setTrack(track());
       seg->setColor(color());
+      seg->initElementStyle(&trillSegmentStyle);
       return seg;
       }
 
@@ -460,19 +492,11 @@ QVariant Trill::propertyDefault(Pid propertyId) const
             case Pid::PLAY:
                   return true;
             case Pid::PLACEMENT:
-                  return int(Placement::ABOVE);
+                  return score()->styleV(Sid::trillPlacement);
+
             default:
                   return SLine::propertyDefault(propertyId);
             }
-      }
-
-//---------------------------------------------------------
-//   undoSetTrillType
-//---------------------------------------------------------
-
-void Trill::undoSetTrillType(Type val)
-      {
-      undoChangeProperty(Pid::TRILL_TYPE, int(val));
       }
 
 //---------------------------------------------------------

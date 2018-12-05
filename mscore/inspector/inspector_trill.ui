@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>243</width>
-    <height>154</height>
+    <width>347</width>
+    <height>178</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -117,6 +117,12 @@
       </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="trillType">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Type</string>
         </property>
@@ -144,6 +150,12 @@
       </item>
       <item row="1" column="1">
        <widget class="QComboBox" name="placement">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Placement</string>
         </property>
@@ -161,6 +173,12 @@
       </item>
       <item row="2" column="1">
        <widget class="QComboBox" name="ornamentStyle">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Direction</string>
         </property>
