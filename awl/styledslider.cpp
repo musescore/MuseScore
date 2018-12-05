@@ -75,7 +75,7 @@ void StyledSlider::mousePressEvent(QMouseEvent* e)
       {
       draggingMouse = true;
       mouseDownPos = e->pos();
-      lastMousePos = mouseDownPos;
+      mouseDownVal = _value;
       emit(sliderPressed());
       }
 
@@ -97,13 +97,12 @@ void StyledSlider::mouseMoveEvent(QMouseEvent* e)
       {
       if (draggingMouse) {
             QPoint p = e->pos();
-            double dPixY = p.y() - lastMousePos.y();
+            double dPixY = p.y() - mouseDownPos.y();
             double barLength = height() - (_margin * 2);
             double dy = dPixY * (_maxValue - _minValue) / barLength;
 
-            double val = qBound(_minValue, _value - dy + 0.5, _maxValue);
+            double val = qBound(_minValue, mouseDownVal - dy, _maxValue);
 
-            lastMousePos = p;
             setValue(val);
             update();
             }

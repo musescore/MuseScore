@@ -48,7 +48,7 @@ class StyledSlider : public QWidget
 
       bool draggingMouse;
       QPoint mouseDownPos;
-      QPoint lastMousePos;
+      double mouseDownVal;
 
       QIcon _sliderHeadIcon;
 
