@@ -28,7 +28,7 @@ class PedalSegment final : public TextLineBaseSegment {
       virtual Sid getPropertyStyle(Pid) const override;
 
    public:
-      PedalSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+      PedalSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
       virtual ElementType type() const override       { return ElementType::PEDAL_SEGMENT; }
       virtual PedalSegment* clone() const override    { return new PedalSegment(*this);    }
       Pedal* pedal() const                            { return toPedal(spanner());          }

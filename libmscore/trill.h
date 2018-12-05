@@ -33,6 +33,7 @@ class TrillSegment final : public LineSegment {
 
    protected:
    public:
+      TrillSegment(Spanner* sp, Score* s) : LineSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)      {}
       TrillSegment(Score* s) : LineSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)      {}
       Trill* trill() const                         { return (Trill*)spanner(); }
       virtual ElementType type() const override  { return ElementType::TRILL_SEGMENT; }

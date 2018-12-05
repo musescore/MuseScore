@@ -272,7 +272,7 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
 
 LineSegment* LyricsLine::createLineSegment()
       {
-      LyricsLineSegment* seg = new LyricsLineSegment(score());
+      LyricsLineSegment* seg = new LyricsLineSegment(this, score());
       seg->setTrack(track());
       seg->setColor(color());
       return seg;
@@ -321,8 +321,8 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
 //   LyricsLineSegment
 //=========================================================
 
-LyricsLineSegment::LyricsLineSegment(Score* s)
-      : LineSegment(s, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
+LyricsLineSegment::LyricsLineSegment(Spanner* sp, Score* s)
+      : LineSegment(sp, s, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
       {
       setGenerated(true);
       }

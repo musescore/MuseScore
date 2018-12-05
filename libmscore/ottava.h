@@ -73,7 +73,7 @@ class OttavaSegment final : public TextLineBaseSegment {
       virtual Sid getPropertyStyle(Pid) const override;
 
    public:
-      OttavaSegment(Score* s) : TextLineBaseSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)  { }
+      OttavaSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)  { }
       virtual ElementType type() const override     { return ElementType::OTTAVA_SEGMENT; }
       virtual OttavaSegment* clone() const override { return new OttavaSegment(*this); }
       Ottava* ottava() const                        { return (Ottava*)spanner(); }
@@ -87,12 +87,12 @@ class OttavaSegment final : public TextLineBaseSegment {
 //---------------------------------------------------------
 
 class Ottava final : public TextLineBase {
-      ElementStyle _ottavaStyle;
       OttavaType _ottavaType;
       bool _numbersOnly;
 
       void updateStyledProperties();
       virtual Sid getPropertyStyle(Pid) const override;
+      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
    protected:
       friend class OttavaSegment;
@@ -105,8 +105,6 @@ class Ottava final : public TextLineBase {
 
       void setOttavaType(OttavaType val);
       OttavaType ottavaType() const             { return _ottavaType; }
-
-      virtual const ElementStyle* styledProperties() const override { return &_ottavaStyle; }
 
       bool numbersOnly() const                  { return _numbersOnly; }
       void setNumbersOnly(bool val);

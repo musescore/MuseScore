@@ -32,7 +32,7 @@ class VibratoSegment final : public LineSegment {
 
    protected:
    public:
-      VibratoSegment(Score* s) : LineSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)      {}
+      VibratoSegment(Spanner* sp, Score* s) : LineSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)      {}
       Vibrato* vibrato() const                       { return toVibrato(spanner()); }
       virtual ElementType type() const override      { return ElementType::VIBRATO_SEGMENT; }
       virtual VibratoSegment* clone() const override { return new VibratoSegment(*this); }

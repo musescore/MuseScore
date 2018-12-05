@@ -911,7 +911,6 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::OTTAVA:            return new Ottava(score);
             case ElementType::TEXTLINE:          return new TextLine(score);
             case ElementType::NOTELINE:          return new NoteLine(score);
-            case ElementType::LYRICSLINE:        return new LyricsLine(score);
             case ElementType::TRILL:             return new Trill(score);
             case ElementType::LET_RING:          return new LetRing(score);
             case ElementType::VIBRATO:           return new Vibrato(score);
@@ -977,6 +976,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(score);
             case ElementType::AMBITUS:           return new Ambitus(score);
 
+            case ElementType::LYRICSLINE:
             case ElementType::TEXTLINE_BASE:
             case ElementType::TEXTLINE_SEGMENT:
             case ElementType::GLISSANDO_SEGMENT:

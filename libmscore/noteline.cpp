@@ -32,7 +32,7 @@ NoteLine::NoteLine(const NoteLine& nl)
 
 LineSegment* NoteLine::createLineSegment()
       {
-      TextLineSegment* seg = new TextLineSegment(score());
+      TextLineSegment* seg = new TextLineSegment(this, score());
       return seg;
       }
 

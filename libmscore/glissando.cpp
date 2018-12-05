@@ -186,8 +186,7 @@ Glissando::Glissando(const Glissando& g)
 
 LineSegment* Glissando::createLineSegment()
       {
-      GlissandoSegment* seg = new GlissandoSegment(score());
-//      seg->setFlag(ElementFlag::ON_STAFF, false);
+      GlissandoSegment* seg = new GlissandoSegment(this, score());
       seg->setTrack(track());
       seg->setColor(color());
       return seg;

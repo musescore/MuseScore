@@ -32,7 +32,7 @@ enum class GlissandoType;
 
 class GlissandoSegment final : public LineSegment {
    public:
-      GlissandoSegment(Score* s) : LineSegment(s) {}
+      GlissandoSegment(Spanner* sp, Score* s) : LineSegment(sp, s) {}
       Glissando* glissando() const                          { return toGlissando(spanner()); }
       virtual ElementType type() const override             { return ElementType::GLISSANDO_SEGMENT; }
       virtual GlissandoSegment* clone() const override      { return new GlissandoSegment(*this); }

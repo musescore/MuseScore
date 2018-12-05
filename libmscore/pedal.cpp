@@ -146,7 +146,7 @@ static const ElementStyle pedalSegmentStyle {
 
 LineSegment* Pedal::createLineSegment()
       {
-      PedalSegment* p = new PedalSegment(score());
+      PedalSegment* p = new PedalSegment(this, score());
       p->initElementStyle(&pedalSegmentStyle);
       return p;
       }

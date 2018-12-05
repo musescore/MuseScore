@@ -25,7 +25,7 @@ class Note;
 
 class TextLineSegment final : public TextLineBaseSegment {
    public:
-      TextLineSegment(Score* s);
+      TextLineSegment(Spanner* sp, Score* s);
       virtual ElementType type() const override       { return ElementType::TEXTLINE_SEGMENT; }
       virtual TextLineSegment* clone() const override { return new TextLineSegment(*this); }
       TextLine* textLine() const                      { return toTextLine(spanner()); }
