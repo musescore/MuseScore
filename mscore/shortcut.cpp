@@ -538,6 +538,13 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
+         "chord-tie",
+         QT_TRANSLATE_NOOP("action","Add Tied Note to Chord"),
+         QT_TRANSLATE_NOOP("action","Add tied note to chord")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY_STAFF_PITCHED | STATE_NOTE_ENTRY_STAFF_DRUM,
          "insert-a",
          QT_TRANSLATE_NOOP("action","Insert A"),
          QT_TRANSLATE_NOOP("action","Insert note A")

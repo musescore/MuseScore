@@ -1134,7 +1134,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
 //   cmdAddTie
 //---------------------------------------------------------
 
-void Score::cmdAddTie()
+void Score::cmdAddTie(bool addToChord)
       {
       std::vector<Note*> noteList;
       Element* el = selection().element();
@@ -1189,7 +1189,7 @@ void Score::cmdAddTie()
 
                   // try to re-use existing note or chord
                   Note* n = nullptr;
-                  if (cr->isChord()) {
+                  if (addToChord && cr->isChord()) {
                         Chord* chord = toChord(cr);
                         Note* nn = chord->findNote(note->pitch());
                         if (nn && nn->tpc() == note->tpc())
