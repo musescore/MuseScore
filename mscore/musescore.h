@@ -305,6 +305,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuFormat;
       QMenu* menuTools;
       QMenu* menuVoices;
+      QMenu* menuMeasure;
 
       QMenu* menuPlugins;
       QMenu* menuHelp;

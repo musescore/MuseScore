@@ -1647,6 +1647,13 @@ MuseScore::MuseScore()
       for (auto i : { "voice-x12", "voice-x13", "voice-x14", "voice-x23", "voice-x24", "voice-x34" })
             menuVoices->addAction(getAction(i));
       menuTools->addMenu(menuVoices);
+      
+      menuMeasure = new QMenu("");
+      for (auto i : { "split-measure", "join-measures" })
+            menuMeasure->addAction(getAction(i));
+      menuTools->addMenu(menuMeasure);
+      menuTools->addAction(getAction("time-delete"));
+      
       menuTools->addSeparator();
 
       menuTools->addAction(getAction("slash-fill"));
@@ -1834,6 +1841,7 @@ MuseScore::MuseScore()
       Workspace::addMenuAndString(menuFormat, "menu-format");
       Workspace::addMenuAndString(menuTools, "menu-tools");
       Workspace::addMenuAndString(menuVoices, "menu-voices");
+      Workspace::addMenuAndString(menuMeasure, "menu-measure");
       Workspace::addMenuAndString(menuPlugins, "menu-plugins");
       Workspace::addMenuAndString(menuHelp, "menu-help");
       Workspace::addMenuAndString(menuTours, "menu-tours");
@@ -1936,6 +1944,7 @@ void MuseScore::retranslate()
       menuFormat->setTitle(tr("F&ormat"));
       menuTools->setTitle(tr("&Tools"));
       menuVoices->setTitle(tr("&Voices"));
+      menuMeasure->setTitle(tr("&Measure"));
       menuPlugins->setTitle(tr("&Plugins"));
       menuHelp->setTitle(tr("&Help"));
       menuTours->setTitle(tr("&Tours"));
