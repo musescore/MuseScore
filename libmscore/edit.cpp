@@ -3154,7 +3154,9 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
                               for (size_t i = 0; i < n; ++i) {
                                     Note* on = och->notes().at(i);
                                     Note* nn = nch->notes().at(i);
-                                    Interval v = staff(dtrack) ? staff(dtrack)->part()->instrument(dtrack)->transpose() : Interval();
+                                    int idx = track2staff(dtrack);
+                                    int tick = oseg->tick();
+                                    Interval v = staff(idx) ? staff(idx)->part()->instrument(tick)->transpose() : Interval();
                                     nn->setTpc1(on->tpc1());
                                     if (v.isZero())
                                           nn->setTpc2(on->tpc1());

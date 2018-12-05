@@ -2654,12 +2654,14 @@ void Score::cmdImplode()
                                     undoRemoveElement(src);
                               }
                         }
+                  // TODO - use first voice that actually has a note and implode remaining voices on it?
+                  // see https://musescore.org/en/node/174111
                   else if (dst) {
                         // destination track has something, but it isn't a chord
-                        // remove everything from other voices if in "voice mode"
+                        // remove rests from other voices if in "voice mode"
                         for (int i = 1; i < VOICES; ++i) {
                               Element* e = s->element(dstTrack + i);
-                              if (e)
+                              if (e && e->isRest())
                                     undoRemoveElement(e);
                               }
                         }
@@ -2675,23 +2677,19 @@ void Score::cmdImplode()
                   lTick = endSegment->tick();
             else
                   lTick = lastMeasure()->endTick();
-            for (Segment* seg = startSegment; seg && seg->tick() < lTick; seg = seg->next1()) {
-                  for (int i = startTrack; i < endTrack && full != VOICES; i++) {
-                        bool t = true;
-                        for (int j = 0; j < VOICES; j++) {
-                              if (i == tracks[j]) {
-                                    t = false;
-                                    break;
-                                    }
-                              }
 
-                        if (!seg->measure()->hasVoice(i) || seg->measure()->isOnlyRests(i) || !t)
-                              continue;
-                        tracks[full] = i;
-                        full++;
+            // identify tracks to combine, storing the source track numbers in tracks[]
+            // first four non-empty tracks to win
+            for (int track = startTrack; track < endTrack && full < VOICES; ++track) {
+                  for (Measure* m = startMeasure; m && m != endMeasure; m = m->nextMeasure()) {
+                        if (m->hasVoice(track) && !m->isOnlyRests(track)) {
+                              tracks[full++] = track;
+                              break;
+                              }
                         }
                   }
 
+            // clone source tracks into destination
             for (int i = dstTrack; i < dstTrack + VOICES; i++) {
                   int strack = tracks[i % VOICES];
                   if (strack != -1 && strack != i) {
