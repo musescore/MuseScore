@@ -42,6 +42,12 @@ struct ShapeElement : public QRectF {
 class Shape : public std::vector<ShapeElement> {
 // class Shape : std::vector<ShapeElement> {
    public:
+      enum HorizontalSpacingType {
+            SPACING_GENERAL = 0,
+            SPACING_LYRICS,
+            SPACING_HARMONY,
+            };
+
       Shape() {}
 #ifndef NDEBUG
       Shape(const QRectF& r, const char* s = 0) { add(r, s); }
@@ -56,6 +62,8 @@ class Shape : public std::vector<ShapeElement> {
 #endif
       void remove(const QRectF&);
       void remove(const Shape&);
+
+      void addHorizontalSpacing(HorizontalSpacingType type, qreal left, qreal right);
 
       void translate(const QPointF&);
       void translateX(qreal);
