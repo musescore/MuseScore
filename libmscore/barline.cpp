@@ -371,7 +371,11 @@ bool BarLine::isTop() const
 
 bool BarLine::isBottom() const
       {
-      return !_spanStaff;      // TODO
+      int nstaves = score()->nstaves();
+      if (!_spanStaff || staffIdx() == nstaves - 1)
+            return true;
+      // TODO: check if spanned-to staves are visible on this system
+      return false;
       }
 
 //---------------------------------------------------------
