@@ -429,13 +429,13 @@ void LyricsLineSegment::layout()
                   else                                                        //   if within system or dash not forced
                         _numOfDashes = 0;                                     //     draw no dash
                   }
-            else if (len < (maxDashDist * 2.0)) {                           // if no room for two dashes
+            else if (len < (maxDashDist * 1.5)) {                             // if no room for two dashes
                   _numOfDashes = 1;                                           //    draw one dash
                   if (_dashLength > len)                                      // if no room for a full dash
                         _dashLength = len;                                    //    shorten it
                   }
             else
-                  _numOfDashes = len / (maxDashDist);                         // draw several dashes
+                  _numOfDashes = len / maxDashDist + 1;                       // draw several dashes
 
             // adjust next lyrics horiz. position if too little a space forced to skip the dash
             if (_numOfDashes == 0 && nextLyr != nullptr && len > 0)
@@ -464,8 +464,8 @@ void LyricsLineSegment::draw(QPainter* painter) const
       if (lyricsLine()->lyrics()->ticks() > 0)           // melisma
             painter->drawLine(QPointF(), pos2());
       else {                                          // dash(es)
-            qreal step  = pos2().x() / (_numOfDashes+1);
-            qreal x     = step - _dashLength * .5;
+            qreal step  = pos2().x() / _numOfDashes;
+            qreal x     = step * .5 - _dashLength * .5;
             for (int i = 0; i < _numOfDashes; i++, x += step)
                   painter->drawLine(QPointF(x, 0.0), QPointF(x + _dashLength, 0.0));
             }
