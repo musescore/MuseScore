@@ -1,3 +1,3 @@
 @echo off
-start bin/nightly.exe
+start bin/MuseScore3.exe
 exit
