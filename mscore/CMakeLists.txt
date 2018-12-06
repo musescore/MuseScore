@@ -850,7 +850,6 @@ else (MINGW)
                   "${QT_INSTALL_BINS}/Qt5WebChannel.dll"
                   "${QT_INSTALL_BINS}/Qt5QuickWidgets.dll" "${QT_INSTALL_BINS}/Qt5Positioning.dll"
                   "${QT_INSTALL_BINS}/libEGL.dll" "${QT_INSTALL_BINS}/libGLESv2.dll"
-                  "${QT_INSTALL_BINS}/libeay32.dll" "${QT_INSTALL_BINS}/libsslay32.dll"
                   )
       if (USE_WEBENGINE)
          list(APPEND dlls_to_copy "${QT_INSTALL_BINS}/Qt5WebEngineWidgets.dll" "${QT_INSTALL_BINS}/Qt5WebEngineCore.dll")
