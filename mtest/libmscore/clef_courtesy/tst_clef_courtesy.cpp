@@ -137,7 +137,7 @@ void TestClefCourtesy::clef_courtesy02()
       clef = new Clef(score); // create a new element, as Measure::drop() will eventually delete it
       clef->setClefType(ClefType::G);
       dropData.pos = m2->pagePos();
-      dropData.element = clef;
+      dropData.dropElement = clef;
       m2->drop(dropData);
       score->doLayout();
 
