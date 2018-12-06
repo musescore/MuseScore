@@ -234,6 +234,8 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       int i = idx(event->pos());
       if (i == -1) {
             // palette context menu
+            if (!_moreElements)
+                  return;
             QMenu menu;
             QAction* moreAction = menu.addAction(tr("More Elements..."));
             moreAction->setEnabled(_moreElements);
@@ -251,8 +253,11 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
       QAction* moreAction    = menu.addAction(tr("More Elements..."));
       moreAction->setEnabled(_moreElements);
 
-      if (cellAt(i) && cellAt(i)->readOnly)
+      if (filterActive || (cellAt(i) && cellAt(i)->readOnly))
             clearAction->setEnabled(false);
+
+      if (!clearAction->isEnabled() && !contextAction->isEnabled() && !moreAction->isEnabled())
+            return;
 
       QAction* action = menu.exec(mapToGlobal(event->pos()));
 
