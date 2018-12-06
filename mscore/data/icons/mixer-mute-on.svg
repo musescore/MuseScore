@@ -49,7 +49,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="8"
-     inkscape:cx="7.6303127"
+     inkscape:cx="-20.057187"
      inkscape:cy="13.350232"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -73,7 +73,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -125,16 +125,14 @@
        cy="292.76666"
        r="3.7041667"
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.26458332;stroke-opacity:1" />
-    <text
-       xml:space="preserve"
+    <g
+       aria-label="M"
        style="font-style:normal;font-weight:normal;font-size:3.89016056px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.097254"
-       x="2.3482678"
-       y="294.27344"
-       id="text4641"><tspan
-         sodipodi:role="line"
-         id="tspan4639"
-         x="2.3482678"
-         y="294.27344"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.89016056px;font-family:Academico;-inkscape-font-specification:'Academico, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.097254">M</tspan></text>
+       id="text4641">
+      <path
+         d="m 2.4610824,294.13728 v 0.13616 H 3.515316 v -0.13616 c -0.2022884,-0.0156 -0.4473685,-0.0661 -0.4473685,-0.29954 v -2.17849 l 0.9842106,2.61419 h 0.1361556 l 0.9297484,-2.64142 v 2.38078 c 0,0.0467 -0.081693,0.1167 -0.1244851,0.1167 H 4.6823641 v 0.14394 H 5.9583368 V 294.1295 H 5.6587944 c -0.038902,0 -0.1167048,-0.0545 -0.1167048,-0.10503 v -2.32632 c 0,-0.0739 0.093364,-0.11281 0.143936,-0.11281 0.038902,0 0.2334096,0 0.2723112,0 v -0.1206 H 5.0052475 l -0.7819223,2.18627 -0.8324944,-2.18627 H 2.4610824 v 0.1206 c 0.038902,0 0.2295195,0 0.2723113,0 0.054462,0.004 0.1594966,0.0428 0.1594966,0.12448 v 2.03845 c 0,0.26453 -0.2061785,0.36178 -0.4318079,0.38901 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.89016056px;font-family:Academico;-inkscape-font-specification:'Academico, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.097254"
+         id="path4758" />
+    </g>
   </g>
 </svg>

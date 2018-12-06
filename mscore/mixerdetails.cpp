@@ -39,7 +39,9 @@ namespace Ms {
 //---------------------------------------------------------
 
 MixerDetails::MixerDetails(QWidget *parent) :
-      QWidget(parent), _mti(0)
+      QWidget(parent),
+      _mti(nullptr),
+      mutePerVoiceHolder(nullptr)
       {
       setupUi(this);
 
@@ -79,6 +81,11 @@ void MixerDetails::setTrack(MixerTrackItemPtr track)
 
 void MixerDetails::updateFromTrack()
       {
+      if (mutePerVoiceHolder) {
+            mutePerVoiceHolder->deleteLater();
+            mutePerVoiceHolder = nullptr;
+            }
+
       if (!_mti) {
             drumkitCheck->setChecked(false);
             patchCombo->clear();
@@ -186,7 +193,6 @@ void MixerDetails::updateFromTrack()
       partNameLineEdit->setToolTip(partName);
 
 
-
       trackColorLabel->blockSignals(true);
       volumeSlider->blockSignals(true);
       volumeSpinBox->blockSignals(true);
@@ -221,7 +227,60 @@ void MixerDetails::updateFromTrack()
       chorusSlider->blockSignals(false);
       chorusSpinBox->blockSignals(false);
 
+      //Set up mute per voice buttons
+      mutePerVoiceHolder = new QWidget();
+      mutePerVoiceArea->addWidget(mutePerVoiceHolder);
+
+      mutePerVoiceGrid = new QGridLayout();
+      mutePerVoiceHolder->setLayout(mutePerVoiceGrid);
+      mutePerVoiceGrid->setContentsMargins(0, 0, 0, 0);
+      mutePerVoiceGrid->setSpacing(7);
+
+      for (int staffIdx = 0; staffIdx < (*part->staves()).length(); ++staffIdx) {
+            Staff* staff = (*part->staves())[staffIdx];
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  QPushButton* tb = new QPushButton;
+                  tb->setStyleSheet(
+                        QString("QPushButton{padding: 4px 8px 4px 8px;}QPushButton:checked{background-color:%1}")
+                        .arg(MScore::selectColor[voice].name()));
+                  tb->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+                  tb->setText(QString("%1").arg(voice + 1));
+                  tb->setCheckable(true);
+                  tb->setChecked(!staff->playbackVoice(voice));
+                  tb->setToolTip(QString(tr("Staff #%1")).arg(staffIdx + 1));
+
+                  mutePerVoiceGrid->addWidget(tb, staffIdx, voice);
+                  MixerDetailsVoiceButtonHandler* handler =
+                              new MixerDetailsVoiceButtonHandler(this, staffIdx, voice, tb);
+                  connect(tb, SIGNAL(toggled(bool)), handler, SLOT(setVoiceMute(bool)));
+                  }
+            }
       }
+
+//---------------------------------------------------------
+//   setVoiceMute
+//---------------------------------------------------------
+
+void MixerDetails::setVoiceMute(int staffIdx, int voice, bool shouldMute)
+      {
+      Part* part = _mti->part();
+      Staff* staff = part->staff(staffIdx);
+      switch (voice) {
+            case 0:
+                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE1, !shouldMute);
+                  break;
+            case 1:
+                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE2, !shouldMute);
+                  break;
+            case 2:
+                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE3, !shouldMute);
+                  break;
+            case 3:
+                  staff->undoChangeProperty(Pid::PLAYBACK_VOICE4, !shouldMute);
+                  break;
+            }
+      }
+
 
 //---------------------------------------------------------
 //   partNameChanged
