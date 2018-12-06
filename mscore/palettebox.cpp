@@ -123,9 +123,6 @@ void PaletteBox::filterPalettes(const QString& text)
                  }
             else
                  b->showPalette(false);
-
-            // disable editing while palette is filtered
-            b->enableEditing(text.isEmpty());
             }
       }
 
