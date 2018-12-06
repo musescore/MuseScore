@@ -583,6 +583,7 @@ class Score : public QObject, public ScoreElement {
       void setExcerpt(Excerpt* e)   { _excerpt = e;     }
 
       System* collectSystem(LayoutContext&);
+      void layoutSystemElements(System* system, LayoutContext& lc);
       void getNextMeasure(LayoutContext&);      // get next measure for layout
 
       void cmdRemovePart(Part*);
