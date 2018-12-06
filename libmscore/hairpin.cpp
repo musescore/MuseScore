@@ -92,7 +92,7 @@ void HairpinSegment::layout()
                   Dynamic* sd = nullptr;
                   if (start && start->system() == sys)
                         sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _track, _track));
-                  if (sd) {
+                  if (sd && sd->visible() && sd->autoplace()) {
                         const qreal sdRight = sd->bbox().right() + sd->pos().x()
                                               + sd->segment()->pos().x() + sd->measure()->pos().x();
                         const qreal dist    = sdRight - pos().x() + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
@@ -108,11 +108,13 @@ void HairpinSegment::layout()
                         // systems may be unknown at layout stage.
                         ed = toDynamic(end->findAnnotation(ElementType::DYNAMIC, _track, _track));
                         }
-                  if (ed) {
+                  if (ed && ed->visible() && ed->autoplace()) {
                         const qreal edLeft  = ed->bbox().left() + ed->pos().x()
                                               + ed->segment()->pos().x() + ed->measure()->pos().x();
                         const qreal dist    = edLeft - pos2().x() - pos().x() - score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
                         rxpos2() += dist;
+                        // TODO - don't extend hairpin across barline to reach dynamic in next measure?
+                        // or only if there is also a key signature? see Gould
                         }
                   }
             }
