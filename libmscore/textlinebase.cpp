@@ -88,7 +88,7 @@ void TextLineBaseSegment::draw(QPainter* painter) const
             painter->translate(-_endText->pos());
             }
 
-      if ((npoints == 0) || (score() && score()->printing() && !tl->lineVisible()))
+      if ((npoints == 0) || (score() && (score()->printing() || !score()->showInvisible()) && !tl->lineVisible()))
             return;
 
       // color for line (text color comes from the text properties)
