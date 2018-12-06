@@ -4411,6 +4411,16 @@ void Score::undoAddElement(Element* element)
 void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
       {
       Q_ASSERT(!cr->isChord() || !(toChord(cr)->notes()).empty());
+      if (!cr->lyrics().empty()) {
+            // Add chordrest and lyrics separately for correct
+            // handling of adding lyrics to linked staves.
+            std::vector<Lyrics*> lyrics;
+            std::swap(lyrics, cr->lyrics());
+            undoAddCR(cr, measure, tick);
+            for (Lyrics* l : lyrics)
+                  undoAddElement(l);
+            return;
+            }
 
       Staff* ostaff = cr->staff();
       int strack    = ostaff->idx() * VOICES + cr->voice();
