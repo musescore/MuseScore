@@ -1147,18 +1147,13 @@ void ChangeMeasureLen::flip(EditData*)
       // to end of measure:
       //
 
-      Segment* s = measure->first();
       std::list<Segment*> sl;
-      for (; s;) {
-            Segment* ns = s->next();
-            if (!s->isEndBarLineType() && !s->isTimeSigAnnounceType()) {
-                  s = ns;
+      for (Segment* s = measure->first(); s; s = s->next()) {
+            if (!s->isEndBarLineType() && !s->isTimeSigAnnounceType())
                   continue;
-                  }
             s->setRtick(len.ticks());
             sl.push_back(s);
             measure->remove(s);
-            s = ns;
             }
       measure->setLen(len);
       measure->score()->fixTicks();
