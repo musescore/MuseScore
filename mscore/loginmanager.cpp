@@ -452,6 +452,7 @@ void LoginManager::mediaUploadFinished()
       QNetworkReply::NetworkError e = reply->error();
       reply->deleteLater();
       _progressDialog->hide();
+      _progressDialog->reset();
       if ((statusCode == 200 && reply->error() == QNetworkReply::NoError) || _progressDialog->wasCanceled()) {
             _mp3File->remove();
             delete _mp3File;
