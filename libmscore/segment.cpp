@@ -940,6 +940,21 @@ bool Segment::operator>(const Segment& s) const
       }
 
 //---------------------------------------------------------
+//   hasElements
+///  Returns true if the segment has at least one element.
+///  Annotations are not considered.
+//---------------------------------------------------------
+
+bool Segment::hasElements() const
+      {
+      for (const Element* e : _elist) {
+            if (e)
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
 //   hasAnnotationOrElement
 ///  return true if an annotation of type type or and element is found in the track range
 //---------------------------------------------------------

@@ -2989,9 +2989,9 @@ void Score::localTimeDelete()
 
 void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
       {
-      int tick  = startSegment->rtick();
-      int len   = f.ticks();
-      int etick = tick + len;
+      const int tick  = startSegment->rtick();
+      const int len   = f.ticks();
+      const int etick = tick + len;
 
 //      printf("time delete %d at %d, start %s\n", len, tick, startSegment->subTypeName());
 
@@ -3040,15 +3040,30 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                         }
                   }
             }
-      tick = startSegment->tick();
-      undoInsertTime(tick, -len);
-      undo(new InsertTime(this, tick, -len));
+      const int abstick = startSegment->tick();
+      undoInsertTime(abstick, -len);
+      undo(new InsertTime(this, abstick, -len));
 
-      for (Segment* s = startSegment->next(); s; s = s->next()) {
-            if (s->isTimeSigType() || s->isKeySigType())
-                  continue;
-//            printf("   change segment %s tick %d -> %d\n", s->subTypeName(), s->tick(), s->tick() - len),
-            s->undoChangeProperty(Pid::TICK, s->rtick() - len);
+      int updatedTick = tick;
+      for (Segment* s = startSegment; s; s = s->next()) {
+            if (s->rtick() >= etick && s->rtick() != updatedTick) {
+//                  printf("   change segment %s tick %d -> %d\n", s->subTypeName(), s->tick(), m->tick() + updatedTick),
+                  s->undoChangeProperty(Pid::TICK, updatedTick);
+                  updatedTick += s->ticks();
+                  }
+            if (s->isChordRestType() && !s->hasElements()) {
+                  if (Segment* ns = s->next(CR_TYPE)) {
+                        // Move annotations from the empty segment.
+                        // TODO: do we need to preserve annotations at all?
+                        // Maybe only some types (Tempo etc.)?
+                        for (Element* a : s->annotations()) {
+                              Element* a1 = a->clone();
+                              a1->setParent(ns);
+                              undoRemoveElement(a);
+                              undoAddElement(a1);
+                              }
+                        }
+                  }
             }
 
       undo(new ChangeMeasureLen(m, m->len() - f));
