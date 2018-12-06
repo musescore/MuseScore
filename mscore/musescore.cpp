@@ -6676,7 +6676,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
       long bytes = exporter.finishStream(bufferOut);
       if (bytes > 0L)
             device->write((char*)bufferOut, bytes);
-
+      wasCanceled = progress.wasCanceled();
       progress.close();
       delete synth;
       delete[] bufferOut;
