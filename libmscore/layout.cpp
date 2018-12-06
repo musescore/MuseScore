@@ -3239,10 +3239,24 @@ System* Score::collectSystem(LayoutContext& lc)
             }
       system->setWidth(pos.x());
 
-      //#############################################################
-      //    layout system elements
-      //#############################################################
+      layoutSystemElements(system, lc);
+      system->layout2();   // compute staff distances
 
+      lm  = system->lastMeasure();
+      if (lm) {
+            lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
+            lc.startWithLongNames = lc.firstSystem && lm->sectionBreakElement()->startWithLongNames();
+            }
+
+      return system;
+      }
+
+//---------------------------------------------------------
+//   layoutSystemElements
+//---------------------------------------------------------
+
+void Score::layoutSystemElements(System* system, LayoutContext& lc)
+      {
       //-------------------------------------------------------------
       //    create cr segment list to speed up computations
       //-------------------------------------------------------------
@@ -3541,16 +3555,6 @@ System* Score::collectSystem(LayoutContext& lc)
                         e->layout();
                   }
             }
-
-      system->layout2();   // compute staff distances
-
-      lm  = system->lastMeasure();
-      if (lm) {
-            lc.firstSystem        = lm->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
-            lc.startWithLongNames = lc.firstSystem && lm->sectionBreakElement()->startWithLongNames();
-            }
-
-      return system;
       }
 
 //---------------------------------------------------------
