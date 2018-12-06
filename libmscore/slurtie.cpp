@@ -299,6 +299,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
       {
       if (visible() && autoplace()
          && (color() == Qt::black)
+         && offset().isNull()
          && ups(Grip::START).off.isNull()
          && ups(Grip::BEZIER1).off.isNull()
          && ups(Grip::BEZIER2).off.isNull()

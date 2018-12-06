@@ -58,7 +58,7 @@ class Slur final : public SlurTie {
 
    public:
       Slur(Score* = 0);
-      ~Slur();
+      ~Slur() {}
       virtual Slur* clone() const override        { return new Slur(*this); }
       virtual ElementType type() const override { return ElementType::SLUR; }
       virtual void write(XmlWriter& xml) const override;
