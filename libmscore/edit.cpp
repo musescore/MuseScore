@@ -3455,6 +3455,8 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
                   continue;
                   }
             Segment* s   = measure->undoGetSegment(SegmentType::KeySig, tick);
+            if (s && !s->enabled())
+                s->setEnabled(true);
 
             int staffIdx = staff->idx();
             int track    = staffIdx * VOICES;
