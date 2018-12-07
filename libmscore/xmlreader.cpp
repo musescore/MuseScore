@@ -411,7 +411,7 @@ QString XmlReader::readXml()
       QString s;
       int level = 1;
       for (QXmlStreamReader::TokenType t = readNext(); t != QXmlStreamReader::EndElement; t = readNext()) {
-            switch(t) {
+            switch (t) {
                   case QXmlStreamReader::StartElement:
                         htmlToString(level, &s);
                         break;

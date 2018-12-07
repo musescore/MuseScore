@@ -1546,7 +1546,7 @@ class XmlNesting : public QStack<QString> {
 //   genText
 //---------------------------------------------------------
 
-void TextBase::genText()
+void TextBase::genText() const
       {
       _text.clear();
       bool bold_      = false;
@@ -1933,6 +1933,11 @@ QString TextBase::plainText() const
 
 QString TextBase::xmlText() const
       {
+#if 1
+      // this is way too expensive
+      // what side effects has genText() ?
+      // this method is const by design
+
       const TextBase* text = this;
       std::unique_ptr<TextBase> tmpText;
       if (textInvalid) {
@@ -1943,6 +1948,11 @@ QString TextBase::xmlText() const
             text = tmpText.get();
             }
       return text->_text;
+#else
+      if (textInvalid)
+            genText();
+      return _text;
+#endif
       }
 
 //---------------------------------------------------------

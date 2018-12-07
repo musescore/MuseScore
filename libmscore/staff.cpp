@@ -83,8 +83,10 @@ void Staff::fillBrackets(int idx)
 
 void Staff::cleanBrackets()
       {
-      while (!_brackets.empty() && (_brackets.last()->bracketType() == BracketType::NO_BRACKET))
-            delete _brackets.takeLast();
+      while (!_brackets.empty() && (_brackets.last()->bracketType() == BracketType::NO_BRACKET)) {
+            BracketItem* bi = _brackets.takeLast();
+            delete bi;
+            }
       }
 
 //---------------------------------------------------------

@@ -232,9 +232,9 @@ void System::layoutSystem(qreal xo1)
                                     b->setTrack(track);
                                     }
                               add(b);
-                              if (bi->selected() != b->selected()) {
-                                    bi->selected() ? score()->select(b) : score()->deselect(b);
-                                    }
+//                              if (bi->selected() != b->selected()) {
+//                                    bi->selected() ? score()->select(b) : score()->deselect(b);
+//                                    }
                               b->setStaffSpan(firstStaff, lastStaff);
                               bracketWidth[i] = qMax(bracketWidth[i], b->width());
                               }

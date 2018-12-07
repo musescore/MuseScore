@@ -296,8 +296,10 @@ void Bracket::updateGrips(EditData& ed) const
 
 void Bracket::endEdit(EditData& ed)
       {
-      endEditDrag(ed);
-      layout();
+//      endEditDrag(ed);
+      score()->setLayoutAll();
+      score()->update();
+      ed.element = 0;         // score layout invalidates element
       }
 
 //---------------------------------------------------------
@@ -449,7 +451,7 @@ void Bracket::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 
 void Bracket::setSelected(bool f)
       {
-      _bi->setSelected(f);
+//      _bi->setSelected(f);
       Element::setSelected(f);
       }
 

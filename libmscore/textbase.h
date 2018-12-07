@@ -221,9 +221,10 @@ class TextBase : public Element {
       // there are two representations of text; only one
       // might be valid and the other can be constructed from it
 
-      QString _text;
+      mutable QString _text;                          // cached
+      mutable bool textInvalid      { true  };
+
       QList<TextBlock> _layout;
-      bool textInvalid              { true  };
       bool layoutInvalid            { true  };
       Tid _tid;         // text style id
 
@@ -234,7 +235,7 @@ class TextBase : public Element {
 
       void drawSelection(QPainter*, const QRectF&) const;
       void insert(TextCursor*, uint code);
-      void genText();
+      void genText() const;
       virtual int getPropertyFlagsIdx(Pid id) const override;
       QString stripText(bool, bool, bool) const;
 

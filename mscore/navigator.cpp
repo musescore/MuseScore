@@ -346,7 +346,7 @@ void Navigator::paintEvent(QPaintEvent* ev)
       QRect r(ev->rect());
       p.fillRect(r, palette().color(QPalette::Window));
 
-      qDebug("navigator paint x %d w %d h %d", r.x(), r.width(), r.height());
+//      qDebug("navigator paint x %d w %d h %d", r.x(), r.width(), r.height());
 
       if (!_score)
             return;
