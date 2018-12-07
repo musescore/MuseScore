@@ -9,7 +9,12 @@ fi
 
 # Translation routines
 # update translation on transifex
-make -f Makefile.osx lupdate
+./build/gen-qt-projectfile . > mscore.pro
+lupdate -no-obsolete mscore.pro
+./build/gen-instruments-projectfile ./share/instruments > instruments.pro
+lupdate -no-obsolete instruments.pro
+rm mscore.pro
+rm instruments.pro
 
 sudo pip install transifex-client
 
