@@ -1225,7 +1225,7 @@ Element* Segment::firstInNextSegments(int activeStaff)
       Element* re = 0;
       Segment* seg = this;
       while (!re) {
-            seg = seg->next1MM(SegmentType::All);
+            seg = seg->next1enabled();
             if (!seg) //end of staff, or score
                   break;
 
@@ -1493,12 +1493,12 @@ Element* Segment::nextElement(int activeStaff)
                         if (s)
                               return s->spannerSegments().front();
                         }
-                  Segment* nextSegment = this->next1();
+                  Segment* nextSegment = this->next1enabled();
                   while (nextSegment) {
                         Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
-                        nextSegment = nextSegment->next1();
+                        nextSegment = nextSegment->next1enabled();
                         }
                   break;
                   }
@@ -1512,12 +1512,12 @@ Element* Segment::nextElement(int activeStaff)
                   if (sp)
                         return sp->spannerSegments().front();
 
-                  Segment* nextSegment = this->next1();
+                  Segment* nextSegment = this->next1enabled();
                   while (nextSegment) {
                         Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
-                        nextSegment = nextSegment->next1();
+                        nextSegment = nextSegment->next1enabled();
                         }
                   break;
                   }
@@ -1552,12 +1552,12 @@ Element* Segment::nextElement(int activeStaff)
                   Spanner* s = firstSpanner(activeStaff);
                   if (s)
                         return s->spannerSegments().front();
-                  Segment* nextSegment =  seg->next1();
+                  Segment* nextSegment =  seg->next1enabled();
                   while (nextSegment) {
                         nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
-                        nextSegment = nextSegment->next1();
+                        nextSegment = nextSegment->next1enabled();
                         }
                   }
                   break;
@@ -1607,6 +1607,8 @@ Element* Segment::prevElement(int activeStaff)
                          if (track == 0) {
                                track = score()->nstaves() * VOICES - 1;
                                s = s->prev1();
+                               while (s && !s->enabled())
+                                     s = s->prev1();
                                }
                          }
                    if (el->staffIdx() != activeStaff)
@@ -1677,12 +1679,16 @@ Element* Segment::prevElement(int activeStaff)
                               }
                         }
                    Segment* prevSeg = seg->prev1();
+                   while (prevSeg && !prevSeg->enabled())
+                         prevSeg = prevSeg->prev1();
                    if (!prevSeg)
                          return score()->lastElement();
 
                    prev = lastElementOfSegment(prevSeg, activeStaff);
                    while (!prev && prevSeg) {
                          prevSeg = prevSeg->prev1();
+                         while (prevSeg && !prevSeg->enabled())
+                               prevSeg = prevSeg->prev1();
                          prev = lastElementOfSegment(prevSeg, activeStaff);
                          }
                    if (!prevSeg)
@@ -1742,6 +1748,8 @@ Element* Segment::lastInPrevSegments(int activeStaff)
 
       while (!re) {
             seg = seg->prev1MM(SegmentType::All);
+            while (seg && !seg->enabled())
+                  seg = seg->prev1MM(SegmentType::All);
             if (!seg) //end of staff, or score
                   break;
 
@@ -1765,6 +1773,9 @@ Element* Segment::lastInPrevSegments(int activeStaff)
                         return re;
 
                   seg = seg->prev1(SegmentType::All);
+                  while (seg && !seg->enabled())
+                        seg = seg->prev1(SegmentType::All);
+
                   }
             }
 
