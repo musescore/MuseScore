@@ -23,12 +23,8 @@ matrix:
       dist: xenial
       addons:
         apt:
-          sources:
-            - ubuntu-toolchain-r-test
           packages:
-            - g++-4.9
             # not white listed - alsa
-            - libsndfile1
             - wget
             - make
             - ant
@@ -36,6 +32,7 @@ matrix:
             - libasound2-dev
             - portaudio19-dev
             - libportmidi-dev
+            - libsndfile1
             - libsndfile1-dev
             - zlib1g-dev
             - libfreetype6-dev
