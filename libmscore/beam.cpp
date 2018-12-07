@@ -286,6 +286,7 @@ bool Beam::twoBeamedNotes()
 //---------------------------------------------------------
 //   layout1
 //    - remove beam segments
+//    - detach from system
 //    - calculate stem direction and set chord
 //---------------------------------------------------------
 
@@ -294,6 +295,8 @@ void Beam::layout1()
       //delete old segments
       qDeleteAll(beamSegments);
       beamSegments.clear();
+
+      setParent(nullptr); // parent is System
 
       maxDuration.setType(TDuration::DurationType::V_INVALID);
       Chord* c1 = 0;
