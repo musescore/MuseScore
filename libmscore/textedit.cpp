@@ -663,6 +663,7 @@ void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
                   editInsertText(_cursor, preEdit);
                   setTextInvalid();
                   layout1();
+                  score()->update();
                   }
             }
       ie->accept();
