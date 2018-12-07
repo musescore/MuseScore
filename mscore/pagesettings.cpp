@@ -36,7 +36,7 @@ PageSettings::PageSettings(QWidget* parent)
 
       NScrollArea* sa = new NScrollArea;
       preview = new Navigator(sa, this);
-      preview->setPreviewOnly(true);
+//      preview->setPreviewOnly(true);
 
       static_cast<QVBoxLayout*>(previewGroup->layout())->insertWidget(0, sa);
 
