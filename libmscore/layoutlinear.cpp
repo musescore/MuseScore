@@ -311,29 +311,13 @@ void LayoutContext::layoutLinear()
                               ottavas.push_back(sp);
                         else if (sp->isPedal())
                               pedal.push_back(sp);
-                        else if (!sp->isSlur())             // slurs are already handled
+                        else if (!sp->isSlur() && !sp->isVolta())    // slurs are already, voltas will be later handled
                               spanner.push_back(sp);
                         }
                   }
             processLines(system, ottavas, false);
             processLines(system, pedal, true);
             processLines(system, spanner, false);
-
-            //
-            // vertical align volta segments
-            //
-            std::vector<SpannerSegment*> voltaSegments;
-            for (SpannerSegment* ss : system->spannerSegments()) {
-                  if (ss->isVoltaSegment())
-                       voltaSegments.push_back(ss);
-                 }
-            if (voltaSegments.size() > 1) {
-                  qreal y = 0;
-                  for (SpannerSegment* ss : voltaSegments)
-                        y = qMin(y, ss->offset().y());
-                  for (SpannerSegment* ss : voltaSegments)
-                        ss->ryoffset() = y;
-                  }
             }
 
       //
@@ -356,6 +340,41 @@ void LayoutContext::layoutLinear()
                         else if (e->isFermata())
                               e->layout();
                         }
+                  }
+            }
+
+      //
+      // Volta
+      //
+
+      if (etick > stick) {    // ignore vbox
+            auto spanners = score->spannerMap().findOverlapping(stick, etick);
+
+            std::vector<Spanner*> voltas;
+
+            for (auto interval : spanners) {
+                  Spanner* sp = interval.value;
+                  if (sp->tick() < etick && sp->tick2() > stick) {
+                        if (sp->isVolta())
+                              voltas.push_back(sp);
+                        }
+                  }
+            processLines(system, voltas, false);
+
+            //
+            // vertical align volta segments
+            //
+            std::vector<SpannerSegment*> voltaSegments;
+            for (SpannerSegment* ss : system->spannerSegments()) {
+                  if (ss->isVoltaSegment())
+                       voltaSegments.push_back(ss);
+                 }
+            if (voltaSegments.size() > 1) {
+                  qreal y = 0;
+                  for (SpannerSegment* ss : voltaSegments)
+                        y = qMin(y, ss->offset().y());
+                  for (SpannerSegment* ss : voltaSegments)
+                        ss->ryoffset() = y;
                   }
             }
 
