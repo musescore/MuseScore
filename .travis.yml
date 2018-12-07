@@ -25,6 +25,7 @@ matrix:
         apt:
           packages:
             # not white listed - alsa
+            - g++
             - wget
             - make
             - ant
