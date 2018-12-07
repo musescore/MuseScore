@@ -37,10 +37,10 @@ class BracketItem final : public ScoreElement {
       virtual bool setProperty(Pid, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
 
-      bool selected() const              { return _selected;    }
+//      bool selected() const              { return _selected;    }
       int bracketSpan() const            { return _bracketSpan; }
       BracketType bracketType() const    { return _bracketType; }
-      void setSelected(bool v)           { _selected = v;       }
+//      void setSelected(bool v)           { _selected = v;       }
       void setBracketSpan(int v)         { _bracketSpan = v;    }
       void setBracketType(BracketType v) { _bracketType = v;    }
       Staff* staff()                     { return _staff;       }

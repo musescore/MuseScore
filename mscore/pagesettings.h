@@ -32,7 +32,9 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
       Navigator* preview;
       bool mmUnit;
       Score* cs;
-      std::unique_ptr<Score> clonedScoreForNavigator;
+      Score* clonedScore;
+
+//      std::unique_ptr<Score> clonedScoreForNavigator;
 
       virtual void hideEvent(QHideEvent*);
       void updateValues();

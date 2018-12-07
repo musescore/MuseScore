@@ -30,8 +30,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle ottavaStyle {
-      { Sid::ottava8VAPlacement,                 Pid::PLACEMENT               },
       { Sid::ottavaNumbersOnly,                  Pid::NUMBERS_ONLY            },
+      { Sid::ottava8VAPlacement,                 Pid::PLACEMENT               },
       { Sid::ottava8VAText,                      Pid::BEGIN_TEXT              },
       { Sid::ottava8VAText,                      Pid::CONTINUE_TEXT           },
       { Sid::ottavaHookAbove,                    Pid::END_HOOK_HEIGHT         },
@@ -173,20 +173,25 @@ Sid Ottava::getPropertyStyle(Pid pid) const
             Sid::ottava22MBText,
             };
 
-      int idx = int(_ottavaType) * 2 + (_numbersOnly ? 0 : 12);
       switch (pid) {
             case Pid::OFFSET:
                   return placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
-            case Pid::PLACEMENT:
+            case Pid::PLACEMENT: {
+                  int idx = int(_ottavaType) * 2 + (_numbersOnly ? 0 : 12);
                   return ss[idx];
+                  }
             case Pid::BEGIN_TEXT:
-            case Pid::CONTINUE_TEXT:
+            case Pid::CONTINUE_TEXT: {
+                  int idx = int(_ottavaType) * 2 + (_numbersOnly ? 0 : 12);
                   return ss[idx+1];       // BEGIN_TEXT
-            case Pid::END_HOOK_HEIGHT:
+                  }
+            case Pid::END_HOOK_HEIGHT: {
+                  int idx = int(_ottavaType) * 2 + (_numbersOnly ? 0 : 12);
                   if (isStyled(Pid::PLACEMENT))
                         return score()->styleI(ss[idx]) == int(Placement::ABOVE) ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
                   else
                         return placeAbove() ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
+                  }
             default:
                   return TextLineBase::getPropertyStyle(pid);
             }

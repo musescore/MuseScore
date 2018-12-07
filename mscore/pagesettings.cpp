@@ -29,6 +29,7 @@ namespace Ms {
 PageSettings::PageSettings(QWidget* parent)
    : AbstractDialog(parent)
       {
+      clonedScore = 0;
       setObjectName("PageSettings");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -81,6 +82,7 @@ PageSettings::PageSettings(QWidget* parent)
 
 PageSettings::~PageSettings()
       {
+      delete clonedScore;
       }
 
 //---------------------------------------------------------
@@ -100,8 +102,12 @@ void PageSettings::hideEvent(QHideEvent* ev)
 void PageSettings::setScore(Score* s)
       {
       cs = s;
-      clonedScoreForNavigator.reset(s->clone());
-      preview->setScore(clonedScoreForNavigator.get());
+      delete clonedScore;
+      clonedScore = s->clone();
+      clonedScore->setLayoutMode(LayoutMode::PAGE);
+
+      clonedScore->doLayout();
+      preview->setScore(clonedScore);
       buttonApplyToAllParts->setEnabled(!cs->isMaster());
       updateValues();
       updatePreview(0);

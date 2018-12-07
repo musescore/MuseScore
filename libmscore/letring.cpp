@@ -177,7 +177,7 @@ Sid LetRing::getPropertyStyle(Pid id) const
             default:
                   break;
             }
-      return Sid::NOSTYLE;
+      return TextLineBase::getPropertyStyle(id);
       }
 
 
