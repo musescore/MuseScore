@@ -21,7 +21,7 @@ mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL
 export PATH=${PWD}/cmake/bin:${PATH}
 
 # Get Qt
-mkdir qt5 && travis_retry wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt597.zip
+mkdir qt5 && travis_retry wget -q -O qt5.zip http://utils.musescore.org.s3.amazonaws.com/qt5120.zip
 unzip -qq qt5.zip -d qt5
 export PATH="${PWD}/qt5/bin:$PATH"
 export QT_PLUGIN_PATH="${PWD}/qt5/plugins"
