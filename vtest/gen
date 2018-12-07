@@ -98,7 +98,7 @@ done
 echo "{}]" >> $JSON_FILE
 
 echo "Generate PNG files"
-$MSCORE -j $JSON_FILE -r $DPI >LOG 2<&1
+$MSCORE -j $JSON_FILE -r $DPI >LOG 2>&1
 
 echo "Compare PNG files and references"
 for src in $SRC; do
