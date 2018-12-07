@@ -99,7 +99,7 @@ function change_rpath_QWebEngine() {
 rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
 #tip: increase the size if error on copy or macdeployqt
-hdiutil create -size 410m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
+hdiutil create -size 500m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
 
 # Mount the disk image
 hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME}
