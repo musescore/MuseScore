@@ -3430,13 +3430,54 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         ottavas.push_back(sp);
                   else if (sp->isPedal())
                         pedal.push_back(sp);
-                  else if (!sp->isSlur())             // slurs are already handled
+                  else if (!sp->isSlur() && !sp->isVolta())    // slurs are already, voltas will be later handled
                         spanner.push_back(sp);
                   }
             }
       processLines(system, ottavas, false);
       processLines(system, pedal,   true);
       processLines(system, spanner, false);
+
+      //-------------------------------------------------------------
+      // TempoText, Fermata, TremoloBar
+      //-------------------------------------------------------------
+
+      for (const Segment* s : sl) {
+            for (Element* e : s->annotations()) {
+                  if (e->isTempoText()) {
+                        TempoText* tt = toTempoText(e);
+                        if (score()->isMaster())
+                              setTempo(tt->segment(), tt->tempo());
+                        tt->layout();
+                        }
+                  else if (e->isFermata() || e->isTremoloBar())
+                        e->layout();
+                  }
+            }
+
+      layoutLyrics(system);
+
+      // here are lyrics dashes and melisma
+      for (Spanner* sp : _unmanagedSpanner) {
+            if (sp->tick() >= etick || sp->tick2() <= stick)
+                  continue;
+            sp->layoutSystem(system);
+            }
+
+      //-------------------------------------------------------------
+      // layout Voltas for current sytem
+      //-------------------------------------------------------------
+
+      std::vector<Spanner*> voltas;
+
+      for (auto interval : spanners) {
+            Spanner* sp = interval.value;
+            if (sp->tick() < etick && sp->tick2() > stick) {
+                  if (sp->isVolta())
+                        voltas.push_back(sp);
+                  }
+            }
+      processLines(system, voltas, false);
 
       //
       // vertical align volta segments
@@ -3467,32 +3508,6 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         voltaSegments[i]->rypos() = y;
                   voltaSegments.erase(voltaSegments.begin(), voltaSegments.begin() + idx);
                   }
-            }
-
-      //-------------------------------------------------------------
-      // TempoText, Fermata, TremoloBar
-      //-------------------------------------------------------------
-
-      for (const Segment* s : sl) {
-            for (Element* e : s->annotations()) {
-                  if (e->isTempoText()) {
-                        TempoText* tt = toTempoText(e);
-                        if (score()->isMaster())
-                              setTempo(tt->segment(), tt->tempo());
-                        tt->layout();
-                        }
-                  else if (e->isFermata() || e->isTremoloBar())
-                        e->layout();
-                  }
-            }
-
-      layoutLyrics(system);
-
-      // here are lyrics dashes and melisma
-      for (Spanner* sp : _unmanagedSpanner) {
-            if (sp->tick() >= etick || sp->tick2() <= stick)
-                  continue;
-            sp->layoutSystem(system);
             }
 
       //-------------------------------------------------------------
