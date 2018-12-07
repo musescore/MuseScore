@@ -106,8 +106,14 @@ void ScoreView::startEdit(Element* element, Grip startGrip)
             qDebug("The element cannot be edited");
             return;
             }
+
+      const bool forceStartEdit = (state == ViewState::EDIT && element != editData.element);
       editData.element = element;
-      changeState(ViewState::EDIT);
+      if (forceStartEdit) // call startEdit() forcibly to reinitialize edit mode.
+            startEdit();
+      else
+            changeState(ViewState::EDIT);
+
       if (startGrip != Grip::NO_GRIP)
             editData.curGrip = startGrip;
       }

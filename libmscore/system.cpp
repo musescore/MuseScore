@@ -71,8 +71,10 @@ System::System(Score* s)
 
 System::~System()
       {
-      for (SpannerSegment* ss : spannerSegments())
-            ss->setParent(0);
+      for (SpannerSegment* ss : spannerSegments()) {
+            if (ss->system() == this)
+                  ss->setParent(nullptr);
+            }
       for (MeasureBase* mb : measures()) {
             if (mb->system() == this)
                   mb->setSystem(nullptr);
