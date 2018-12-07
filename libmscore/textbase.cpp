@@ -2165,7 +2165,7 @@ QString TextBase::subtypeName() const
 //   fragmentList
 //---------------------------------------------------------
 
-/**
+/*
  Return the text as a single list of TextFragment
  Used by the MusicXML formatted export to avoid parsing the xml text format
  */
