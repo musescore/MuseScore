@@ -1452,6 +1452,15 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
             t->readProperty(e, Pid::OFFSET);
             if ((char(t->align()) & char(Align::VMASK)) == char(Align::TOP))
                   t->ryoffset() += .5 * t->score()->spatium();     // HACK: bbox is different in 2.x
+            if (t->staff()) {
+                  qreal staffHeight = t->staff()->height();
+                  if (t->offset().y() >= staffHeight) {
+                        t->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
+                        t->ryoffset() -= staffHeight;
+                        }
+                  else
+                        t->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
+                  }
             }
       else if (!t->readProperties(e))
             return false;
@@ -3034,6 +3043,16 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   // for symbols attached to anything but a measure
                   el->setTrack(e.track());
                   el->read(e);
+                  if (el->staff() && (el->isHarmony() || el->isFretDiagram() || el->isInstrumentChange())) {
+                        qreal staffHeight = el->staff()->height();
+                        if (el->offset().y() >= staffHeight) {
+                              el->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
+                              el->ryoffset() -= staffHeight;
+                              }
+                        else
+                              el->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
+                        }
+
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
