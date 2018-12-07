@@ -58,11 +58,11 @@ xcode:
     xcodebuild -project ${XCODEPROJ} -target lrelease;
 
 lupdate:
-	mkdir build.release;
-    cd build.release;
+	mkdir build.release;        \
+    cd build.release;          \
     cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DCMAKE_BUILD_TYPE=RELEASE \
           -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"  \
-          .. -G Xcode;
+          .. -G Xcode;       \
     xcodebuild -project ${XCODEPROJ} -target lupdate;
 
 lrelease:
