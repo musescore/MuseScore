@@ -1366,7 +1366,6 @@ bool readNoteProperties206(Note* note, XmlReader& e)
                   }
             for (auto a : sp->spannerSegments()) {
                   a->setProperty(Pid::PLACEMENT, a->offset().y() > 0.0 ? int(Placement::BELOW) : int(Placement::ABOVE));
-                  printf("====%f\n", a->offset().y());
                   }
             }
       else if (tag == "offset")
@@ -2240,7 +2239,6 @@ static void readOttava(XmlReader& e, Ottava* ottava)
 
 void readHairpin206(XmlReader& e, Hairpin* h)
       {
-printf("=====read hairpin\n");
       bool useText = false;
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
