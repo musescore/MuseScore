@@ -420,7 +420,8 @@ void Mixer::notifyTrackSelected(MixerTrack* track)
       {
       for (MixerTrack *mt: trackList) {
             if (!(mt->mti()->part() == track->mti()->part() &&
-                mt->mti()->chan() == track->mti()->chan())) {
+                  mt->mti()->chan() == track->mti()->chan() &&
+                  mt->mti()->trackType() == track->mti()->trackType())) {
                   mt->setSelected(false);
                   }
             }
