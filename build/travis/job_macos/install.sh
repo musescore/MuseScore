@@ -135,6 +135,8 @@ then
     # see http://www.egeek.me/2013/02/23/jenkins-and-xcode-user-interaction-is-not-allowed/
     security set-keychain-settings -t 3600 -l $KEYCHAIN
     security import $CERTIFICATE_P12 -k $KEYCHAIN -P "$CERTIFICATE_OSX_PASSWORD" -T /usr/bin/codesign
+
+    security set-key-partition-list -S apple-tool:,apple: -s -k travis $KEYCHAIN
 fi
 
 
