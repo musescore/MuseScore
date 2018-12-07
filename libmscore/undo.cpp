@@ -1586,7 +1586,7 @@ void InsertRemoveMeasures::insertMeasures()
             fs = toMeasure(fm)->first();
             ls = toMeasure(lm)->last();
             for (Segment* s = fs; s && s != ls; s = s->next1()) {
-                  if (!(s->segmentType() & (SegmentType::Clef | SegmentType::KeySig)))
+                  if (!s->enabled() || !(s->segmentType() & (SegmentType::Clef | SegmentType::KeySig)))
                         continue;
                   for (int track = 0; track < score->ntracks(); track += VOICES) {
                         Element* e = s->element(track);
