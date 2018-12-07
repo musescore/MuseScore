@@ -3861,7 +3861,8 @@ void Score::doLayoutRange(int stick, int etick)
                   lc.tick      = 0;
                   }
             else {
-                  lc.measureNo = lc.nextMeasure->no();
+                  lc.measureNo = lc.nextMeasure->prevMeasure()->no() + 1; // will be adjusted later with respect
+                                                                          // to the user-defined offset.
                   lc.tick      = lc.nextMeasure->tick();
                   }
             }
