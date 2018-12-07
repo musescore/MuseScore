@@ -17,9 +17,15 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-install(FILES
-      Basic.workspace
-      Advanced.workspace
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}workspaces
-      PERMISSIONS OWNER_READ GROUP_READ WORLD_READ
-      )
+add_custom_target(basicWorkspace
+    COMMAND tar "cvf" "Basic.workspace" --format=zip
+    "${CMAKE_CURRENT_SOURCE_DIR}/Basic"
+    "${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}workspaces"
+    VERBATIM)
+
+add_custom_target(advancedWorkspace
+    COMMAND tar "cvf" "Advanced.workspace" --format=zip
+    "${CMAKE_CURRENT_SOURCE_DIR}/Advanced"
+    "${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}workspaces"
+    VERBATIM)
+

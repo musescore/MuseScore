@@ -1,0 +1,4071 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.00">
+  <Workspace>
+    <PaletteBox>
+      <Palette name="Clefs">
+        <gridWidth>35</gridWidth>
+        <gridHeight>50</gridHeight>
+        <mag>0.8</mag>
+        <moreElements>1</moreElements>
+        <yoffset>1</yoffset>
+        <Cell name="Treble clef">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Treble clef 8va">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>G8va</concertClefType>
+            <transposingClefType>G8va</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Treble clef 15ma">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>G15ma</concertClefType>
+            <transposingClefType>G15ma</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Treble clef 8vb">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Treble clef 15mb">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>G15mb</concertClefType>
+            <transposingClefType>G15mb</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Double treble clef 8vb on 2nd line">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>G8vbo</concertClefType>
+            <transposingClefType>G8vbo</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Treble clef optional 8vb">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>G8vbp</concertClefType>
+            <transposingClefType>G8vbp</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="French violin clef">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>G1</concertClefType>
+            <transposingClefType>G1</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Soprano clef">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>C1</concertClefType>
+            <transposingClefType>C1</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Mezzo-soprano clef">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>C2</concertClefType>
+            <transposingClefType>C2</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Alto clef">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>C3</concertClefType>
+            <transposingClefType>C3</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Tenor clef">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>C4</concertClefType>
+            <transposingClefType>C4</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Baritone clef (C clef)">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>C5</concertClefType>
+            <transposingClefType>C5</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Bass clef">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Bass clef 8va">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>F8va</concertClefType>
+            <transposingClefType>F8va</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Bass clef 15ma">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>F15ma</concertClefType>
+            <transposingClefType>F15ma</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Bass clef 8vb">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>F8vb</concertClefType>
+            <transposingClefType>F8vb</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Bass clef 15mb">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>F15mb</concertClefType>
+            <transposingClefType>F15mb</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Baritone clef (F clef)">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>F3</concertClefType>
+            <transposingClefType>F3</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Subbass clef">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>F5</concertClefType>
+            <transposingClefType>F5</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Percussion">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>PERC</concertClefType>
+            <transposingClefType>PERC</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Percussion 2">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>PERC2</concertClefType>
+            <transposingClefType>PERC2</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Tablature">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>TAB</concertClefType>
+            <transposingClefType>TAB</transposingClefType>
+            </Clef>
+          </Cell>
+        <Cell name="Tablature 4 lines">
+          <staff>1</staff>
+          <Clef>
+            <concertClefType>TAB4</concertClefType>
+            <transposingClefType>TAB4</transposingClefType>
+            </Clef>
+          </Cell>
+        </Palette>
+      <Palette name="Key Signatures">
+        <gridWidth>56</gridWidth>
+        <gridHeight>55</gridHeight>
+        <mag>1</mag>
+        <moreElements>0</moreElements>
+        <yoffset>1</yoffset>
+        <Cell name="G major, E minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>1</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="D major, B minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>2</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="A major, F♯ minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>3</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="E major, C♯ minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>4</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="B major, G♯ minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>5</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="F♯ major, D♯ minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>6</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="C♯ major, A♯ minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>7</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="C♭ major / A♭ minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>-7</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="G♭ major, E♭ minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>-6</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="D♭ major, B♭ minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>-5</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="A♭ major, F minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>-4</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="E♭ major, C minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>-3</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="B♭ major, G minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>-2</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="F major, D minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>-1</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="C major, A minor">
+          <staff>1</staff>
+          <KeySig>
+            <accidental>0</accidental>
+            </KeySig>
+          </Cell>
+        <Cell name="Open/Atonal">
+          <staff>1</staff>
+          <KeySig>
+            <custom>1</custom>
+            <mode>none</mode>
+            </KeySig>
+          </Cell>
+        </Palette>
+      <Palette name="Time Signatures">
+        <gridWidth>42</gridWidth>
+        <gridHeight>38</gridHeight>
+        <mag>0.8</mag>
+        <moreElements>0</moreElements>
+        <Cell name="2/4">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="3/4">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>3</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="4/4">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="5/4">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>5</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="6/4">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>6</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="3/8">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>3</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="6/8">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>6</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="9/8">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>9</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="12/8">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>12</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="4/4 common time">
+          <staff>1</staff>
+          <TimeSig>
+            <subtype>1</subtype>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="2/2 alla breve">
+          <staff>1</staff>
+          <TimeSig>
+            <subtype>2</subtype>
+            <sigN>2</sigN>
+            <sigD>2</sigD>
+            </TimeSig>
+          </Cell>
+        </Palette>
+      <Palette name="Brackets">
+        <gridWidth>40</gridWidth>
+        <gridHeight>60</gridHeight>
+        <mag>0.7</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Bracket">
+          <Bracket>
+            </Bracket>
+          </Cell>
+        <Cell name="Brace">
+          <Bracket type="Brace">
+            </Bracket>
+          </Cell>
+        <Cell name="Square">
+          <Bracket type="Square">
+            </Bracket>
+          </Cell>
+        <Cell name="Line">
+          <Bracket type="Line">
+            </Bracket>
+          </Cell>
+        </Palette>
+      <Palette name="Accidentals">
+        <gridWidth>33</gridWidth>
+        <gridHeight>36</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>1</moreElements>
+        <Cell name="No symbol">
+          <Accidental>
+            <subtype>noSym</subtype>
+            </Accidental>
+          </Cell>
+        <Cell name="Flat">
+          <Accidental>
+            <subtype>accidentalFlat</subtype>
+            </Accidental>
+          </Cell>
+        <Cell name="Natural">
+          <Accidental>
+            <subtype>accidentalNatural</subtype>
+            </Accidental>
+          </Cell>
+        <Cell name="Sharp">
+          <Accidental>
+            <subtype>accidentalSharp</subtype>
+            </Accidental>
+          </Cell>
+        <Cell name="Double sharp">
+          <Accidental>
+            <subtype>accidentalDoubleSharp</subtype>
+            </Accidental>
+          </Cell>
+        <Cell name="Double flat">
+          <Accidental>
+            <subtype>accidentalDoubleFlat</subtype>
+            </Accidental>
+          </Cell>
+        <Cell name="Natural flat">
+          <Accidental>
+            <subtype>accidentalNaturalFlat</subtype>
+            </Accidental>
+          </Cell>
+        <Cell name="Natural sharp">
+          <Accidental>
+            <subtype>accidentalNaturalSharp</subtype>
+            </Accidental>
+          </Cell>
+        <Cell name="Add brackets to element">
+          <Icon>
+            <subtype>21</subtype>
+            <action>add-brackets</action>
+            </Icon>
+          </Cell>
+        <Cell name="Add parentheses to element">
+          <Icon>
+            <subtype>22</subtype>
+            <action>add-parentheses</action>
+            </Icon>
+          </Cell>
+        </Palette>
+      <Palette name="Articulations">
+        <gridWidth>42</gridWidth>
+        <gridHeight>25</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Fermata above">
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            </Fermata>
+          </Cell>
+        <Cell name="Short fermata above">
+          <Fermata>
+            <subtype>fermataShortAbove</subtype>
+            </Fermata>
+          </Cell>
+        <Cell name="Long fermata above">
+          <Fermata>
+            <subtype>fermataLongAbove</subtype>
+            </Fermata>
+          </Cell>
+        <Cell name="Long fermata (Henze) above">
+          <Fermata>
+            <subtype>fermataLongHenzeAbove</subtype>
+            </Fermata>
+          </Cell>
+        <Cell name="Short fermata (Henze) above">
+          <Fermata>
+            <subtype>fermataShortHenzeAbove</subtype>
+            </Fermata>
+          </Cell>
+        <Cell name="Very long fermata above">
+          <Fermata>
+            <subtype>fermataVeryLongAbove</subtype>
+            </Fermata>
+          </Cell>
+        <Cell name="Very short fermata above">
+          <Fermata>
+            <subtype>fermataVeryShortAbove</subtype>
+            </Fermata>
+          </Cell>
+        <Cell name="Accent above">
+          <Articulation>
+            <subtype>articAccentAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Staccato above">
+          <Articulation>
+            <subtype>articStaccatoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Staccatissimo above">
+          <Articulation>
+            <subtype>articStaccatissimoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Tenuto above">
+          <Articulation>
+            <subtype>articTenutoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Louré (tenuto-staccato) above">
+          <Articulation>
+            <subtype>articTenutoStaccatoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Marcato above">
+          <Articulation>
+            <subtype>articMarcatoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Accent-staccato above">
+          <Articulation>
+            <subtype>articAccentStaccatoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Laissez vibrer (l.v.) above">
+          <Articulation>
+            <subtype>articLaissezVibrerAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Marcato-staccato above">
+          <Articulation>
+            <subtype>articMarcatoStaccatoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Marcato-tenuto above">
+          <Articulation>
+            <subtype>articMarcatoTenutoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Staccatissimo stroke above">
+          <Articulation>
+            <subtype>articStaccatissimoStrokeAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Staccatissimo wedge above">
+          <Articulation>
+            <subtype>articStaccatissimoWedgeAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Stress above">
+          <Articulation>
+            <subtype>articStressAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Tenuto-accent above">
+          <Articulation>
+            <subtype>articTenutoAccentAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Unstress above">
+          <Articulation>
+            <subtype>articUnstressAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Soft accent above">
+          <Articulation>
+            <subtype>articSoftAccentAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Soft accent-staccato above">
+          <Articulation>
+            <subtype>articSoftAccentStaccatoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Soft accent-tenuto above">
+          <Articulation>
+            <subtype>articSoftAccentTenutoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Soft accent-tenuto-staccato above">
+          <Articulation>
+            <subtype>articSoftAccentTenutoStaccatoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Fade in">
+          <Articulation>
+            <subtype>guitarFadeIn</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Fade out">
+          <Articulation>
+            <subtype>guitarFadeOut</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Volume swell">
+          <Articulation>
+            <subtype>guitarVolumeSwell</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Sawtooth line segment">
+          <Articulation>
+            <subtype>wiggleSawtooth</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Wide sawtooth line segment">
+          <Articulation>
+            <subtype>wiggleSawtoothWide</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Vibrato large, faster">
+          <Articulation>
+            <subtype>wiggleVibratoLargeFaster</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Vibrato large, slowest">
+          <Articulation>
+            <subtype>wiggleVibratoLargeSlowest</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Open">
+          <Articulation>
+            <subtype>brassMuteOpen</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Muted (closed)">
+          <Articulation>
+            <subtype>brassMuteClosed</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Harmonic">
+          <Articulation>
+            <subtype>stringsHarmonic</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Up bow">
+          <Articulation>
+            <subtype>stringsUpBow</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Down bow">
+          <Articulation>
+            <subtype>stringsDownBow</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Snap pizzicato above">
+          <Articulation>
+            <subtype>pluckedSnapPizzicatoAbove</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Bend">
+          <Bend>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="15" pitch="100" vibrato="0"/>
+            <point time="60" pitch="100" vibrato="0"/>
+            </Bend>
+          </Cell>
+        <Cell name="Tremolo bar">
+          <TremoloBar>
+            <point time="0" pitch="0" vibrato="0"/>
+            <point time="30" pitch="-100" vibrato="0"/>
+            <point time="60" pitch="0" vibrato="0"/>
+            </TremoloBar>
+          </Cell>
+        </Palette>
+      <Palette name="Ornaments">
+        <gridWidth>42</gridWidth>
+        <gridHeight>25</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Inverted turn">
+          <Articulation>
+            <subtype>ornamentTurnInverted</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Turn">
+          <Articulation>
+            <subtype>ornamentTurn</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Trill">
+          <Articulation>
+            <subtype>ornamentTrill</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Mordent">
+          <Articulation>
+            <subtype>ornamentMordent</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Inverted mordent">
+          <Articulation>
+            <subtype>ornamentMordentInverted</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Tremblement">
+          <Articulation>
+            <subtype>ornamentTremblement</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Prall mordent">
+          <Articulation>
+            <subtype>ornamentPrallMordent</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Up prall">
+          <Articulation>
+            <subtype>ornamentUpPrall</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Mordent with upper prefix">
+          <Articulation>
+            <subtype>ornamentPrecompMordentUpperPrefix</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Up mordent">
+          <Articulation>
+            <subtype>ornamentUpMordent</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Down prall">
+          <Articulation>
+            <subtype>ornamentDownMordent</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Prall down">
+          <Articulation>
+            <subtype>ornamentPrallDown</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Down mordent">
+          <Articulation>
+            <subtype>ornamentPrallUp</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Prall up">
+          <Articulation>
+            <subtype>ornamentLinePrall</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Slide">
+          <Articulation>
+            <subtype>ornamentPrecompSlide</subtype>
+            </Articulation>
+          </Cell>
+        </Palette>
+      <Palette name="Breaths &amp;&amp; Pauses">
+        <gridWidth>42</gridWidth>
+        <gridHeight>40</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Breath mark (comma)">
+          <Breath>
+            <symbol>breathMarkComma</symbol>
+            </Breath>
+          </Cell>
+        <Cell name="Breath mark (tick-like)">
+          <Breath>
+            <symbol>breathMarkTick</symbol>
+            </Breath>
+          </Cell>
+        <Cell name="Breath mark (Salzedo)">
+          <Breath>
+            <symbol>breathMarkSalzedo</symbol>
+            </Breath>
+          </Cell>
+        <Cell name="Breath mark (upbow-like)">
+          <Breath>
+            <symbol>breathMarkUpbow</symbol>
+            </Breath>
+          </Cell>
+        <Cell name="Curved caesura">
+          <Breath>
+            <symbol>caesuraCurved</symbol>
+            </Breath>
+          </Cell>
+        <Cell name="Caesura">
+          <Breath>
+            <symbol>caesura</symbol>
+            </Breath>
+          </Cell>
+        <Cell name="Short caesura">
+          <Breath>
+            <symbol>caesuraShort</symbol>
+            </Breath>
+          </Cell>
+        <Cell name="Thick caesura">
+          <Breath>
+            <symbol>caesuraThick</symbol>
+            </Breath>
+          </Cell>
+        </Palette>
+      <Palette name="Grace Notes">
+        <gridWidth>32</gridWidth>
+        <gridHeight>40</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Acciaccatura">
+          <Icon>
+            <subtype>0</subtype>
+            <action>acciaccatura</action>
+            </Icon>
+          </Cell>
+        <Cell name="Appoggiatura">
+          <Icon>
+            <subtype>1</subtype>
+            <action>appoggiatura</action>
+            </Icon>
+          </Cell>
+        <Cell name="Grace: quarter">
+          <Icon>
+            <subtype>2</subtype>
+            <action>grace4</action>
+            </Icon>
+          </Cell>
+        <Cell name="Grace: 16th">
+          <Icon>
+            <subtype>3</subtype>
+            <action>grace16</action>
+            </Icon>
+          </Cell>
+        <Cell name="Grace: 32nd">
+          <Icon>
+            <subtype>4</subtype>
+            <action>grace32</action>
+            </Icon>
+          </Cell>
+        <Cell name="Grace: eighth after">
+          <Icon>
+            <subtype>5</subtype>
+            <action>grace8after</action>
+            </Icon>
+          </Cell>
+        <Cell name="Grace: 16th after">
+          <Icon>
+            <subtype>6</subtype>
+            <action>grace16after</action>
+            </Icon>
+          </Cell>
+        <Cell name="Grace: 32nd after">
+          <Icon>
+            <subtype>7</subtype>
+            <action>grace32after</action>
+            </Icon>
+          </Cell>
+        </Palette>
+      <Palette name="Noteheads">
+        <gridWidth>33</gridWidth>
+        <gridHeight>36</gridHeight>
+        <mag>1.3</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Normal">
+          <NoteHead>
+            <name>noteheadHalf</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Cross">
+          <NoteHead>
+            <name>noteheadXHalf</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Plus">
+          <NoteHead>
+            <name>noteheadPlusHalf</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="XCircle">
+          <NoteHead>
+            <name>noteheadCircleXHalf</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="With X">
+          <NoteHead>
+            <name>noteheadHalfWithX</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Triangle Up">
+          <NoteHead>
+            <name>noteheadTriangleUpHalf</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Triangle Down">
+          <NoteHead>
+            <name>noteheadTriangleDownHalf</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Slashed (Forwards)">
+          <NoteHead>
+            <name>noteheadSlashedHalf1</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Slashed (Backwards)">
+          <NoteHead>
+            <name>noteheadSlashedHalf2</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Diamond">
+          <NoteHead>
+            <name>noteheadDiamondHalf</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Diamond (Old)">
+          <NoteHead>
+            <name>noteheadDiamondHalfOld</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Circled">
+          <NoteHead>
+            <name>noteheadCircledHalf</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Circled Large">
+          <NoteHead>
+            <name>noteheadCircledHalfLarge</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Large Arrow">
+          <NoteHead>
+            <name>noteheadLargeArrowUpHalf</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Alt. Brevis">
+          <NoteHead>
+            <name>noteheadDoubleWholeSquare</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Slash">
+          <NoteHead>
+            <name>noteheadSlashWhiteHalf</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Sol">
+          <NoteHead>
+            <name>noteShapeRoundWhite</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="La">
+          <NoteHead>
+            <name>noteShapeSquareWhite</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Fa">
+          <NoteHead>
+            <name>noteShapeTriangleRightWhite</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Mi">
+          <NoteHead>
+            <name>noteShapeDiamondWhite</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Do">
+          <NoteHead>
+            <name>noteShapeTriangleUpWhite</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Re">
+          <NoteHead>
+            <name>noteShapeMoonWhite</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Ti">
+          <NoteHead>
+            <name>noteShapeTriangleRoundWhite</name>
+            </NoteHead>
+          </Cell>
+        <Cell name="Add parentheses to element">
+          <Icon>
+            <subtype>22</subtype>
+            <action>add-parentheses</action>
+            </Icon>
+          </Cell>
+        </Palette>
+      <Palette name="Lines">
+        <gridWidth>75</gridWidth>
+        <gridHeight>28</gridHeight>
+        <mag>0.8</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Slur">
+          <Slur id="2">
+            </Slur>
+          </Cell>
+        <Cell name="Crescendo hairpin">
+          <HairPin id="3">
+            <subtype>0</subtype>
+            <track>0</track>
+            </HairPin>
+          </Cell>
+        <Cell name="Diminuendo hairpin">
+          <HairPin id="4">
+            <subtype>1</subtype>
+            <track>0</track>
+            </HairPin>
+          </Cell>
+        <Cell name="Crescendo line">
+          <HairPin id="5">
+            <subtype>2</subtype>
+            <beginText>cresc.</beginText>
+            <continueText>(cresc.)</continueText>
+            <track>0</track>
+            </HairPin>
+          </Cell>
+        <Cell name="Diminuendo line">
+          <HairPin id="6">
+            <subtype>3</subtype>
+            <beginText>dim.</beginText>
+            <continueText>(dim.)</continueText>
+            <track>0</track>
+            </HairPin>
+          </Cell>
+        <Cell name="Dynamic + hairpin">
+          <HairPin id="7">
+            <subtype>0</subtype>
+            <beginText>&lt;sym&gt;dynamicMezzo&lt;/sym&gt;&lt;sym&gt;dynamicForte&lt;/sym&gt;</beginText>
+            <beginTextAlign>left,center</beginTextAlign>
+            <track>0</track>
+            </HairPin>
+          </Cell>
+        <Cell name="Prima volta">
+          <Volta id="8">
+            <endHookType>1</endHookType>
+            <beginText>1.</beginText>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            <endings>1</endings>
+            </Volta>
+          </Cell>
+        <Cell name="Seconda volta">
+          <Volta id="9">
+            <endHookType>1</endHookType>
+            <beginText>2.</beginText>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            <endings>2</endings>
+            </Volta>
+          </Cell>
+        <Cell name="Terza volta">
+          <Volta id="10">
+            <endHookType>1</endHookType>
+            <beginText>3.</beginText>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            <endings>3</endings>
+            </Volta>
+          </Cell>
+        <Cell name="Seconda volta, open">
+          <Volta id="11">
+            <beginText>2.</beginText>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            <endings>2</endings>
+            </Volta>
+          </Cell>
+        <Cell name="8va">
+          <Ottava id="12">
+            <subtype>8va</subtype>
+            <track>0</track>
+            </Ottava>
+          </Cell>
+        <Cell name="8vb">
+          <Ottava id="13">
+            <subtype>8vb</subtype>
+            <track>0</track>
+            </Ottava>
+          </Cell>
+        <Cell name="15ma">
+          <Ottava id="14">
+            <subtype>15ma</subtype>
+            <track>0</track>
+            </Ottava>
+          </Cell>
+        <Cell name="15mb">
+          <Ottava id="15">
+            <subtype>15mb</subtype>
+            <track>0</track>
+            </Ottava>
+          </Cell>
+        <Cell name="22ma">
+          <Ottava id="16">
+            <subtype>22ma</subtype>
+            <track>0</track>
+            </Ottava>
+          </Cell>
+        <Cell name="22mb">
+          <Ottava id="17">
+            <subtype>22mb</subtype>
+            <track>0</track>
+            </Ottava>
+          </Cell>
+        <Cell name="Pedal">
+          <Pedal id="18">
+            <endHookType>1</endHookType>
+            <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+            <track>0</track>
+            </Pedal>
+          </Cell>
+        <Cell name="Pedal">
+          <Pedal id="19">
+            <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+            <endText>&lt;sym&gt;keyboardPedalUp&lt;/sym&gt;</endText>
+            <track>0</track>
+            </Pedal>
+          </Cell>
+        <Cell name="Pedal">
+          <Pedal id="20">
+            <endHookType>1</endHookType>
+            <beginHookType>1</beginHookType>
+            <track>0</track>
+            </Pedal>
+          </Cell>
+        <Cell name="Pedal">
+          <Pedal id="21">
+            <endHookType>2</endHookType>
+            <beginHookType>1</beginHookType>
+            <track>0</track>
+            </Pedal>
+          </Cell>
+        <Cell name="Pedal">
+          <Pedal id="22">
+            <endHookType>2</endHookType>
+            <beginHookType>2</beginHookType>
+            <track>0</track>
+            </Pedal>
+          </Cell>
+        <Cell name="Pedal">
+          <Pedal id="23">
+            <endHookType>1</endHookType>
+            <beginHookType>2</beginHookType>
+            <track>0</track>
+            </Pedal>
+          </Cell>
+        <Cell name="Trill line">
+          <Trill id="24">
+            <subtype>trill</subtype>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            </Trill>
+          </Cell>
+        <Cell name="Upprall line">
+          <Trill id="25">
+            <subtype>upprall</subtype>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            </Trill>
+          </Cell>
+        <Cell name="Downprall line">
+          <Trill id="26">
+            <subtype>downprall</subtype>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            </Trill>
+          </Cell>
+        <Cell name="Prallprall line">
+          <Trill id="27">
+            <subtype>prallprall</subtype>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            </Trill>
+          </Cell>
+        <Cell name="Text line">
+          <TextLine id="28">
+            <endHookType>1</endHookType>
+            <beginText>VII</beginText>
+            <beginTextPlace>3</beginTextPlace>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            </TextLine>
+          </Cell>
+        <Cell name="Line">
+          <TextLine id="29">
+            <beginTextPlace>3</beginTextPlace>
+            <ticks>0</ticks>
+            <track>0</track>
+            <diagonal>1</diagonal>
+            <length>200</length>
+            </TextLine>
+          </Cell>
+        <Cell name="Ambitus">
+          <Ambitus>
+            <topPitch>-1</topPitch>
+            <topTpc>-2</topTpc>
+            <bottomPitch>-1</bottomPitch>
+            <bottomTpc>-2</bottomTpc>
+            </Ambitus>
+          </Cell>
+        <Cell name="Let Ring">
+          <LetRing id="30">
+            <track>0</track>
+            </LetRing>
+          </Cell>
+        <Cell name="Guitar vibrato">
+          <Vibrato id="31">
+            <subtype>guitarVibrato</subtype>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            </Vibrato>
+          </Cell>
+        <Cell name="Guitar vibrato wide">
+          <Vibrato id="32">
+            <subtype>guitarVibratoWide</subtype>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            </Vibrato>
+          </Cell>
+        <Cell name="Vibrato sawtooth">
+          <Vibrato id="33">
+            <subtype>vibratoSawtooth</subtype>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            </Vibrato>
+          </Cell>
+        <Cell name="tremolo sawtooth wide">
+          <Vibrato id="34">
+            <subtype>vibratoSawtoothWide</subtype>
+            <ticks>0</ticks>
+            <track>0</track>
+            <length>200</length>
+            </Vibrato>
+          </Cell>
+        <Cell name="Palm Mute">
+          <PalmMute id="35">
+            <track>0</track>
+            </PalmMute>
+          </Cell>
+        </Palette>
+      <Palette name="Barlines">
+        <gridWidth>42</gridWidth>
+        <gridHeight>38</gridHeight>
+        <mag>0.8</mag>
+        <moreElements>0</moreElements>
+        <Cell name="Normal barline">
+          <staff>1</staff>
+          <BarLine>
+            </BarLine>
+          </Cell>
+        <Cell name="Double barline">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>double</subtype>
+            </BarLine>
+          </Cell>
+        <Cell name="Start repeat">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>start-repeat</subtype>
+            </BarLine>
+          </Cell>
+        <Cell name="End repeat">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>end-repeat</subtype>
+            </BarLine>
+          </Cell>
+        <Cell name="Dashed barline">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>dashed</subtype>
+            </BarLine>
+          </Cell>
+        <Cell name="Final barline">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </Cell>
+        <Cell name="Dotted barline">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>dotted</subtype>
+            </BarLine>
+          </Cell>
+        <Cell name="Tick 1 span">
+          <staff>1</staff>
+          <BarLine>
+            <spanFromOffset>-1</spanFromOffset>
+            <spanToOffset>-7</spanToOffset>
+            </BarLine>
+          </Cell>
+        <Cell name="Tick 2 span">
+          <staff>1</staff>
+          <BarLine>
+            <spanFromOffset>-2</spanFromOffset>
+            <spanToOffset>-6</spanToOffset>
+            </BarLine>
+          </Cell>
+        <Cell name="Short 1 span">
+          <staff>1</staff>
+          <BarLine>
+            <spanFromOffset>2</spanFromOffset>
+            <spanToOffset>-2</spanToOffset>
+            </BarLine>
+          </Cell>
+        <Cell name="Short 2 span">
+          <staff>1</staff>
+          <BarLine>
+            <spanFromOffset>1</spanFromOffset>
+            <spanToOffset>-1</spanToOffset>
+            </BarLine>
+          </Cell>
+        </Palette>
+      <Palette name="Arpeggios &amp;&amp; Glissandos">
+        <gridWidth>27</gridWidth>
+        <gridHeight>50</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Arpeggio">
+          <Arpeggio>
+            <subtype>0</subtype>
+            </Arpeggio>
+          </Cell>
+        <Cell name="Arpeggio">
+          <Arpeggio>
+            <subtype>1</subtype>
+            </Arpeggio>
+          </Cell>
+        <Cell name="Arpeggio">
+          <Arpeggio>
+            <subtype>2</subtype>
+            </Arpeggio>
+          </Cell>
+        <Cell name="Arpeggio">
+          <Arpeggio>
+            <subtype>3</subtype>
+            </Arpeggio>
+          </Cell>
+        <Cell name="Arpeggio">
+          <Arpeggio>
+            <subtype>4</subtype>
+            </Arpeggio>
+          </Cell>
+        <Cell name="Arpeggio">
+          <Arpeggio>
+            <subtype>5</subtype>
+            </Arpeggio>
+          </Cell>
+        <Cell name="Glissando">
+          <Glissando id="36">
+            <text>gliss.</text>
+            <ticks>0</ticks>
+            <track>0</track>
+            <diagonal>1</diagonal>
+            <anchor>3</anchor>
+            <length>100</length>
+            </Glissando>
+          </Cell>
+        <Cell name="Glissando">
+          <Glissando id="37">
+            <text>gliss.</text>
+            <subtype>1</subtype>
+            <ticks>0</ticks>
+            <track>0</track>
+            <diagonal>1</diagonal>
+            <anchor>3</anchor>
+            <length>100</length>
+            </Glissando>
+          </Cell>
+        <Cell name="Fall">
+          <ChordLine>
+            <subtype>1</subtype>
+            </ChordLine>
+          </Cell>
+        <Cell name="Doit">
+          <ChordLine>
+            <subtype>2</subtype>
+            </ChordLine>
+          </Cell>
+        <Cell name="Plop">
+          <ChordLine>
+            <subtype>3</subtype>
+            </ChordLine>
+          </Cell>
+        <Cell name="Scoop">
+          <ChordLine>
+            <subtype>4</subtype>
+            </ChordLine>
+          </Cell>
+        <Cell name="Slide out down">
+          <ChordLine>
+            <subtype>1</subtype>
+            <straight>1</straight>
+            </ChordLine>
+          </Cell>
+        <Cell name="Slide out up">
+          <ChordLine>
+            <subtype>2</subtype>
+            <straight>1</straight>
+            </ChordLine>
+          </Cell>
+        <Cell name="Slide in above">
+          <ChordLine>
+            <subtype>3</subtype>
+            <straight>1</straight>
+            </ChordLine>
+          </Cell>
+        <Cell name="Slide in below">
+          <ChordLine>
+            <subtype>4</subtype>
+            <straight>1</straight>
+            </ChordLine>
+          </Cell>
+        </Palette>
+      <Palette name="Tremolo">
+        <gridWidth>27</gridWidth>
+        <gridHeight>40</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Eighth through stem">
+          <Tremolo>
+            <subtype>r8</subtype>
+            </Tremolo>
+          </Cell>
+        <Cell name="16th through stem">
+          <Tremolo>
+            <subtype>r16</subtype>
+            </Tremolo>
+          </Cell>
+        <Cell name="32nd through stem">
+          <Tremolo>
+            <subtype>r32</subtype>
+            </Tremolo>
+          </Cell>
+        <Cell name="64th through stem">
+          <Tremolo>
+            <subtype>r64</subtype>
+            </Tremolo>
+          </Cell>
+        <Cell name="Buzz roll">
+          <Tremolo>
+            <subtype>buzzroll</subtype>
+            </Tremolo>
+          </Cell>
+        <Cell name="Eighth between notes">
+          <Tremolo>
+            <subtype>c8</subtype>
+            </Tremolo>
+          </Cell>
+        <Cell name="16th between notes">
+          <Tremolo>
+            <subtype>c16</subtype>
+            </Tremolo>
+          </Cell>
+        <Cell name="32nd between notes">
+          <Tremolo>
+            <subtype>c32</subtype>
+            </Tremolo>
+          </Cell>
+        <Cell name="64th between notes">
+          <Tremolo>
+            <subtype>c64</subtype>
+            </Tremolo>
+          </Cell>
+        </Palette>
+      <Palette name="Text">
+        <gridWidth>84</gridWidth>
+        <gridHeight>28</gridHeight>
+        <mag>0.85</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Staff text">
+          <StaffText>
+            <text>Staff Text</text>
+            </StaffText>
+          </Cell>
+        <Cell name="Expression text">
+          <StaffText>
+            <placement>below</placement>
+            <style>Expression</style>
+            <text>Expression</text>
+            </StaffText>
+          </Cell>
+        <Cell name="Instrument change">
+          <InstrumentChange>
+            <Instrument>
+              <trackName></trackName>
+              <Channel>
+                <synti>Fluid</synti>
+                </Channel>
+              </Instrument>
+            <text>Change Instr.</text>
+            </InstrumentChange>
+          </Cell>
+        <Cell name="Staff type change">
+          <StaffTypeChange>
+            </StaffTypeChange>
+          </Cell>
+        <Cell name="Rehearsal mark">
+          <RehearsalMark>
+            <text>B1</text>
+            </RehearsalMark>
+          </Cell>
+        <Cell name="Swing">
+          <SystemText>
+            <swing unit="eighth" ratio= "60"/>
+            <style>Tempo</style>
+            <text>Swing</text>
+            </SystemText>
+          </Cell>
+        <Cell name="System text">
+          <SystemText>
+            <placement>above</placement>
+            <text>System Text</text>
+            </SystemText>
+          </Cell>
+        </Palette>
+      <Palette name="Tempo">
+        <gridWidth>66</gridWidth>
+        <gridHeight>28</gridHeight>
+        <mag>0.65</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Tempo text">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>2.66667</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteHalfUp</sym> = 80</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>1.33333</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = 80</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>0.666667</tempo>
+            <followText>1</followText>
+            <text><sym>metNote8thUp</sym> = 80</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>4</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>1</tempo>
+            <followText>1</followText>
+            <text><sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.3</mag>
+          <Tempo>
+            <tempo>0.583333</tempo>
+            <text>Grave</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.3</mag>
+          <Tempo>
+            <tempo>0.833333</tempo>
+            <text>Largo</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.3</mag>
+          <Tempo>
+            <tempo>0.875</tempo>
+            <text>Lento</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.3</mag>
+          <Tempo>
+            <tempo>1.18333</tempo>
+            <text>Adagio</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.3</mag>
+          <Tempo>
+            <tempo>1.53333</tempo>
+            <text>Andante</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.3</mag>
+          <Tempo>
+            <tempo>1.9</tempo>
+            <text>Moderato</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.3</mag>
+          <Tempo>
+            <tempo>1.93333</tempo>
+            <text>Allegretto</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.3</mag>
+          <Tempo>
+            <tempo>2.4</tempo>
+            <text>Allegro</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.3</mag>
+          <Tempo>
+            <tempo>2.86667</tempo>
+            <text>Vivace</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Tempo text">
+          <mag>1.3</mag>
+          <Tempo>
+            <tempo>3.11667</tempo>
+            <text>Presto</text>
+            </Tempo>
+          </Cell>
+        <Cell name="Metric modulation">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym></text>
+            </Tempo>
+          </Cell>
+        <Cell name="Metric modulation">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym></text>
+            </Tempo>
+          </Cell>
+        <Cell name="Metric modulation">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym></text>
+            </Tempo>
+          </Cell>
+        <Cell name="Metric modulation">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym></text>
+            </Tempo>
+          </Cell>
+        <Cell name="Metric modulation">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
+            <text><sym>metNote8thUp</sym> = <sym>metNote8thUp</sym></text>
+            </Tempo>
+          </Cell>
+        <Cell name="Metric modulation">
+          <mag>1.5</mag>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym></text>
+            </Tempo>
+          </Cell>
+        </Palette>
+      <Palette name="Dynamics">
+        <gridWidth>42</gridWidth>
+        <gridHeight>28</gridHeight>
+        <mag>0.8</mag>
+        <grid>1</grid>
+        <moreElements>1</moreElements>
+        <Cell name="ppp">
+          <Dynamic>
+            <subtype>ppp</subtype>
+            <velocity>16</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="pp">
+          <Dynamic>
+            <subtype>pp</subtype>
+            <velocity>33</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="p">
+          <Dynamic>
+            <subtype>p</subtype>
+            <velocity>49</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="mp">
+          <Dynamic>
+            <subtype>mp</subtype>
+            <velocity>64</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="mf">
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="f">
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="ff">
+          <Dynamic>
+            <subtype>ff</subtype>
+            <velocity>112</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="fff">
+          <Dynamic>
+            <subtype>fff</subtype>
+            <velocity>126</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="fp">
+          <Dynamic>
+            <subtype>fp</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="sf">
+          <Dynamic>
+            <subtype>sf</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="sfz">
+          <Dynamic>
+            <subtype>sfz</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="sff">
+          <Dynamic>
+            <subtype>sff</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="sffz">
+          <Dynamic>
+            <subtype>sffz</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="sfp">
+          <Dynamic>
+            <subtype>sfp</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="sfpp">
+          <Dynamic>
+            <subtype>sfpp</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="rfz">
+          <Dynamic>
+            <subtype>rfz</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="rf">
+          <Dynamic>
+            <subtype>rf</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="fz">
+          <Dynamic>
+            <subtype>fz</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="m">
+          <Dynamic>
+            <subtype>m</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="r">
+          <Dynamic>
+            <subtype>r</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="s">
+          <Dynamic>
+            <subtype>s</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="z">
+          <Dynamic>
+            <subtype>z</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        <Cell name="n">
+          <Dynamic>
+            <subtype>n</subtype>
+            <velocity>0</velocity>
+            </Dynamic>
+          </Cell>
+        </Palette>
+      <Palette name="Fingering">
+        <gridWidth>28</gridWidth>
+        <gridHeight>30</gridHeight>
+        <mag>1.5</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Fingering 0">
+          <Fingering>
+            <text>0</text>
+            </Fingering>
+          </Cell>
+        <Cell name="Fingering 1">
+          <Fingering>
+            <text>1</text>
+            </Fingering>
+          </Cell>
+        <Cell name="Fingering 2">
+          <Fingering>
+            <text>2</text>
+            </Fingering>
+          </Cell>
+        <Cell name="Fingering 3">
+          <Fingering>
+            <text>3</text>
+            </Fingering>
+          </Cell>
+        <Cell name="Fingering 4">
+          <Fingering>
+            <text>4</text>
+            </Fingering>
+          </Cell>
+        <Cell name="Fingering 5">
+          <Fingering>
+            <text>5</text>
+            </Fingering>
+          </Cell>
+        <Cell name="RH Guitar Fingering p">
+          <Fingering>
+            <style>RH Guitar Fingering</style>
+            <text>p</text>
+            </Fingering>
+          </Cell>
+        <Cell name="RH Guitar Fingering i">
+          <Fingering>
+            <style>RH Guitar Fingering</style>
+            <text>i</text>
+            </Fingering>
+          </Cell>
+        <Cell name="RH Guitar Fingering m">
+          <Fingering>
+            <style>RH Guitar Fingering</style>
+            <text>m</text>
+            </Fingering>
+          </Cell>
+        <Cell name="RH Guitar Fingering a">
+          <Fingering>
+            <style>RH Guitar Fingering</style>
+            <text>a</text>
+            </Fingering>
+          </Cell>
+        <Cell name="RH Guitar Fingering c">
+          <Fingering>
+            <style>RH Guitar Fingering</style>
+            <text>c</text>
+            </Fingering>
+          </Cell>
+        <Cell name="LH Guitar Fingering 0">
+          <Fingering>
+            <style>LH Guitar Fingering</style>
+            <text>0</text>
+            </Fingering>
+          </Cell>
+        <Cell name="LH Guitar Fingering 1">
+          <Fingering>
+            <style>LH Guitar Fingering</style>
+            <text>1</text>
+            </Fingering>
+          </Cell>
+        <Cell name="LH Guitar Fingering 2">
+          <Fingering>
+            <style>LH Guitar Fingering</style>
+            <text>2</text>
+            </Fingering>
+          </Cell>
+        <Cell name="LH Guitar Fingering 3">
+          <Fingering>
+            <style>LH Guitar Fingering</style>
+            <text>3</text>
+            </Fingering>
+          </Cell>
+        <Cell name="LH Guitar Fingering 4">
+          <Fingering>
+            <style>LH Guitar Fingering</style>
+            <text>4</text>
+            </Fingering>
+          </Cell>
+        <Cell name="LH Guitar Fingering 5">
+          <Fingering>
+            <style>LH Guitar Fingering</style>
+            <text>5</text>
+            </Fingering>
+          </Cell>
+        <Cell name="LH Guitar Fingering T">
+          <Fingering>
+            <style>LH Guitar Fingering</style>
+            <text>T</text>
+            </Fingering>
+          </Cell>
+        <Cell name="String number 0">
+          <Fingering>
+            <style>String Number</style>
+            <text>0</text>
+            </Fingering>
+          </Cell>
+        <Cell name="String number 1">
+          <Fingering>
+            <style>String Number</style>
+            <text>1</text>
+            </Fingering>
+          </Cell>
+        <Cell name="String number 2">
+          <Fingering>
+            <style>String Number</style>
+            <text>2</text>
+            </Fingering>
+          </Cell>
+        <Cell name="String number 3">
+          <Fingering>
+            <style>String Number</style>
+            <text>3</text>
+            </Fingering>
+          </Cell>
+        <Cell name="String number 4">
+          <Fingering>
+            <style>String Number</style>
+            <text>4</text>
+            </Fingering>
+          </Cell>
+        <Cell name="String number 5">
+          <Fingering>
+            <style>String Number</style>
+            <text>5</text>
+            </Fingering>
+          </Cell>
+        <Cell name="String number 6">
+          <Fingering>
+            <style>String Number</style>
+            <text>6</text>
+            </Fingering>
+          </Cell>
+        <Cell name="Thumb position">
+          <Articulation>
+            <subtype>stringsThumbPosition</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Right-hand fingering, thumb">
+          <Articulation>
+            <subtype>luteFingeringRHThumb</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Right-hand fingering, first finger">
+          <Articulation>
+            <subtype>luteFingeringRHFirst</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Right-hand fingering, second finger">
+          <Articulation>
+            <subtype>luteFingeringRHSecond</subtype>
+            </Articulation>
+          </Cell>
+        <Cell name="Right-hand fingering, third finger">
+          <Articulation>
+            <subtype>luteFingeringRHThird</subtype>
+            </Articulation>
+          </Cell>
+        </Palette>
+      <Palette name="Repeats &amp;&amp; Jumps">
+        <gridWidth>75</gridWidth>
+        <gridHeight>28</gridHeight>
+        <mag>0.65</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Repeat measure sign">
+          <RepeatMeasure>
+            </RepeatMeasure>
+          </Cell>
+        <Cell name="Segno">
+          <Marker>
+            <style>Repeat Text Left</style>
+            <text><sym>segno</sym></text>
+            <label>segno</label>
+            </Marker>
+          </Cell>
+        <Cell name="Segno variation">
+          <Marker>
+            <style>Repeat Text Left</style>
+            <text><sym>segnoSerpent1</sym></text>
+            <label>varsegno</label>
+            </Marker>
+          </Cell>
+        <Cell name="Coda">
+          <Marker>
+            <style>Repeat Text Left</style>
+            <text><sym>coda</sym></text>
+            <label>codab</label>
+            </Marker>
+          </Cell>
+        <Cell name="Varied coda">
+          <Marker>
+            <style>Repeat Text Left</style>
+            <text><sym>codaSquare</sym></text>
+            <label>varcoda</label>
+            </Marker>
+          </Cell>
+        <Cell name="Fine">
+          <Marker>
+            <style>Repeat Text Left</style>
+            <text>Fine</text>
+            <label>fine</label>
+            </Marker>
+          </Cell>
+        <Cell name="To Coda">
+          <Marker>
+            <style>Repeat Text Left</style>
+            <text>To Coda</text>
+            <label>coda</label>
+            </Marker>
+          </Cell>
+        <Cell name="Da Capo">
+          <Jump>
+            <style>Repeat Text Right</style>
+            <text>D.C.</text>
+            <jumpTo>start</jumpTo>
+            <playUntil>end</playUntil>
+            <continueAt></continueAt>
+            </Jump>
+          </Cell>
+        <Cell name="Da Capo al Fine">
+          <Jump>
+            <style>Repeat Text Right</style>
+            <text>D.C. al Fine</text>
+            <jumpTo>start</jumpTo>
+            <playUntil>fine</playUntil>
+            <continueAt></continueAt>
+            </Jump>
+          </Cell>
+        <Cell name="Da Capo al Coda">
+          <Jump>
+            <style>Repeat Text Right</style>
+            <text>D.C. al Coda</text>
+            <jumpTo>start</jumpTo>
+            <playUntil>coda</playUntil>
+            <continueAt>codab</continueAt>
+            </Jump>
+          </Cell>
+        <Cell name="D.S. al Coda">
+          <Jump>
+            <style>Repeat Text Right</style>
+            <text>D.S. al Coda</text>
+            <jumpTo>segno</jumpTo>
+            <playUntil>coda</playUntil>
+            <continueAt>codab</continueAt>
+            </Jump>
+          </Cell>
+        <Cell name="D.S. al Fine">
+          <Jump>
+            <style>Repeat Text Right</style>
+            <text>D.S. al Fine</text>
+            <jumpTo>segno</jumpTo>
+            <playUntil>fine</playUntil>
+            <continueAt></continueAt>
+            </Jump>
+          </Cell>
+        <Cell name="D.S.">
+          <Jump>
+            <style>Repeat Text Right</style>
+            <text>D.S.</text>
+            <jumpTo>segno</jumpTo>
+            <playUntil>end</playUntil>
+            <continueAt></continueAt>
+            </Jump>
+          </Cell>
+        <Cell name="Start repeat">
+          <BarLine>
+            <subtype>start-repeat</subtype>
+            </BarLine>
+          </Cell>
+        <Cell name="End repeat">
+          <BarLine>
+            <subtype>end-repeat</subtype>
+            </BarLine>
+          </Cell>
+        </Palette>
+      <Palette name="Fretboard Diagrams">
+        <gridWidth>42</gridWidth>
+        <gridHeight>45</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="C">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <dot>3</dot>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <marker>79</marker>
+              </string>
+            <string no="4">
+              <dot>1</dot>
+              </string>
+            <string no="5">
+              <marker>79</marker>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="Cm">
+          <FretDiagram>
+            <frets>4</frets>
+            <fretOffset>2</fretOffset>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <dot>1</dot>
+              </string>
+            <string no="2">
+              <dot>3</dot>
+              </string>
+            <string no="3">
+              <dot>3</dot>
+              </string>
+            <string no="4">
+              <dot>2</dot>
+              </string>
+            <barre>1</barre>
+            </FretDiagram>
+          </Cell>
+        <Cell name="C7">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <dot>3</dot>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <dot>3</dot>
+              </string>
+            <string no="4">
+              <dot>1</dot>
+              </string>
+            <string no="5">
+              <marker>79</marker>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="D">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <marker>88</marker>
+              </string>
+            <string no="2">
+              <marker>79</marker>
+              </string>
+            <string no="3">
+              <dot>2</dot>
+              </string>
+            <string no="4">
+              <dot>3</dot>
+              </string>
+            <string no="5">
+              <dot>2</dot>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="Dm">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <marker>88</marker>
+              </string>
+            <string no="2">
+              <marker>79</marker>
+              </string>
+            <string no="3">
+              <dot>2</dot>
+              </string>
+            <string no="4">
+              <dot>3</dot>
+              </string>
+            <string no="5">
+              <dot>1</dot>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="D7">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <marker>88</marker>
+              </string>
+            <string no="2">
+              <marker>79</marker>
+              </string>
+            <string no="3">
+              <dot>2</dot>
+              </string>
+            <string no="4">
+              <dot>1</dot>
+              </string>
+            <string no="5">
+              <dot>2</dot>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="E">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>79</marker>
+              </string>
+            <string no="1">
+              <dot>2</dot>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <dot>1</dot>
+              </string>
+            <string no="4">
+              <marker>79</marker>
+              </string>
+            <string no="5">
+              <marker>79</marker>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="Em">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>79</marker>
+              </string>
+            <string no="1">
+              <dot>2</dot>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <marker>79</marker>
+              </string>
+            <string no="4">
+              <marker>79</marker>
+              </string>
+            <string no="5">
+              <marker>79</marker>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="E7">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>79</marker>
+              </string>
+            <string no="1">
+              <dot>2</dot>
+              </string>
+            <string no="2">
+              <marker>79</marker>
+              </string>
+            <string no="3">
+              <dot>1</dot>
+              </string>
+            <string no="4">
+              <marker>79</marker>
+              </string>
+            <string no="5">
+              <marker>79</marker>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="F">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <dot>1</dot>
+              </string>
+            <string no="1">
+              <dot>3</dot>
+              </string>
+            <string no="2">
+              <dot>3</dot>
+              </string>
+            <string no="3">
+              <dot>2</dot>
+              </string>
+            <barre>1</barre>
+            </FretDiagram>
+          </Cell>
+        <Cell name="Fm">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <dot>1</dot>
+              </string>
+            <string no="1">
+              <dot>3</dot>
+              </string>
+            <string no="2">
+              <dot>3</dot>
+              </string>
+            <barre>1</barre>
+            </FretDiagram>
+          </Cell>
+        <Cell name="F7">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <dot>1</dot>
+              </string>
+            <string no="1">
+              <dot>3</dot>
+              </string>
+            <string no="3">
+              <dot>2</dot>
+              </string>
+            <barre>1</barre>
+            </FretDiagram>
+          </Cell>
+        <Cell name="G">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <dot>3</dot>
+              </string>
+            <string no="1">
+              <dot>2</dot>
+              </string>
+            <string no="2">
+              <marker>79</marker>
+              </string>
+            <string no="3">
+              <marker>79</marker>
+              </string>
+            <string no="4">
+              <marker>79</marker>
+              </string>
+            <string no="5">
+              <dot>3</dot>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="Gm">
+          <FretDiagram>
+            <frets>4</frets>
+            <fretOffset>2</fretOffset>
+            <string no="0">
+              <dot>1</dot>
+              </string>
+            <string no="1">
+              <dot>3</dot>
+              </string>
+            <string no="2">
+              <dot>3</dot>
+              </string>
+            <barre>1</barre>
+            </FretDiagram>
+          </Cell>
+        <Cell name="G7">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <dot>3</dot>
+              </string>
+            <string no="1">
+              <dot>2</dot>
+              </string>
+            <string no="2">
+              <marker>79</marker>
+              </string>
+            <string no="3">
+              <marker>79</marker>
+              </string>
+            <string no="4">
+              <marker>79</marker>
+              </string>
+            <string no="5">
+              <dot>1</dot>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="A">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <marker>79</marker>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <dot>2</dot>
+              </string>
+            <string no="4">
+              <dot>2</dot>
+              </string>
+            <string no="5">
+              <marker>79</marker>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="Am">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <marker>79</marker>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <dot>2</dot>
+              </string>
+            <string no="4">
+              <dot>1</dot>
+              </string>
+            <string no="5">
+              <marker>79</marker>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="A7">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <marker>79</marker>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <marker>79</marker>
+              </string>
+            <string no="4">
+              <dot>2</dot>
+              </string>
+            <string no="5">
+              <marker>79</marker>
+              </string>
+            </FretDiagram>
+          </Cell>
+        <Cell name="B">
+          <FretDiagram>
+            <frets>4</frets>
+            <fretOffset>1</fretOffset>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <dot>1</dot>
+              </string>
+            <string no="2">
+              <dot>3</dot>
+              </string>
+            <string no="3">
+              <dot>3</dot>
+              </string>
+            <string no="4">
+              <dot>3</dot>
+              </string>
+            <barre>1</barre>
+            </FretDiagram>
+          </Cell>
+        <Cell name="Bm">
+          <FretDiagram>
+            <frets>4</frets>
+            <fretOffset>1</fretOffset>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <dot>1</dot>
+              </string>
+            <string no="2">
+              <dot>3</dot>
+              </string>
+            <string no="3">
+              <dot>3</dot>
+              </string>
+            <string no="4">
+              <dot>2</dot>
+              </string>
+            <barre>1</barre>
+            </FretDiagram>
+          </Cell>
+        <Cell name="B7">
+          <FretDiagram>
+            <frets>4</frets>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <dot>2</dot>
+              </string>
+            <string no="2">
+              <dot>1</dot>
+              </string>
+            <string no="3">
+              <dot>2</dot>
+              </string>
+            <string no="4">
+              <marker>79</marker>
+              </string>
+            <string no="5">
+              <dot>2</dot>
+              </string>
+            </FretDiagram>
+          </Cell>
+        </Palette>
+      <Palette name="Bagpipe Embellishments">
+        <gridWidth>55</gridWidth>
+        <gridHeight>55</gridHeight>
+        <mag>0.8</mag>
+        <moreElements>0</moreElements>
+        <yoffset>2</yoffset>
+        <Cell name="Single grace low G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>0</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Single grace low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>1</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Single grace B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>2</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Single grace C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>3</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Single grace D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>4</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Single grace E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>5</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Single grace F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>6</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Single grace high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>7</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Single grace high A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>8</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>9</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>10</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>11</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>12</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>13</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>14</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>15</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>16</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>17</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>18</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>19</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>20</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>21</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>22</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>23</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>24</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>25</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>26</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>27</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>28</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>29</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>30</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>31</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>32</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>33</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>34</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>35</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>36</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>37</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double grace">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>38</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half doubling on low G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>39</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half doubling on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>40</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half doubling on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>41</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half doubling on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>42</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half doubling on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>43</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half doubling on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>44</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half doubling on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>45</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Doubling on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>46</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Doubling on high A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>47</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half strike on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>48</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half strike on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>49</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half strike on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>50</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>51</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>52</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half strike on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>53</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half strike on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>54</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half strike on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>55</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Grip">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>56</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half D throw">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>57</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Doubling on low G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>58</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Doubling on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>59</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Doubling on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>60</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Doubling on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>61</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Doubling on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>62</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Doubling on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>63</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Doubling on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>64</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb doubling on low G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>65</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb doubling on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>66</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb doubling on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>67</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb doubling on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>68</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb doubling on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>69</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb doubling on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>70</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb doubling on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>71</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>72</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>73</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>74</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>75</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>76</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>77</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>78</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double strike on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>79</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double strike on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>80</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double strike on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>81</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>82</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>83</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double strike on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>84</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double strike on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>85</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double strike on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>86</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Double strike on high A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>87</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb strike on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>88</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb strike on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>89</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb strike on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>90</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>91</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>92</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb strike on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>93</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb strike on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>94</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb strike on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>95</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Grip">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>96</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Grip">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>97</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Birl">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>98</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="D throw">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>99</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half heavy D throw">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>100</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Taorluath">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>101</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Birl">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>102</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Bubbly">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>103</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Heavy D throw">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>104</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Taorluath">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>105</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Taorluath">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>106</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half double strike on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>107</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half double strike on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>108</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half double strike on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>109</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half double strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>110</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half double strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>111</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half double strike on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>112</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half double strike on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>113</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half double strike on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>114</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half double strike on high A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>115</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half grip on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>116</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half grip on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>117</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half grip on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>118</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half grip on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>119</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half grip on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>120</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half grip on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>121</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half grip on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>122</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half grip on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>123</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half grip on high A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>124</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half pele on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>125</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half pele on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>126</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half pele on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>127</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half pele on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>128</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half pele on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>129</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half pele on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>130</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half pele on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>131</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half pele on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>132</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note grip on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>133</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note grip on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>134</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note grip on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>135</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note grip on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>136</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note grip on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>137</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note grip on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>138</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note grip on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>139</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grip on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>140</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grip on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>141</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grip on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>142</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grip on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>143</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grip on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>144</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grip on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>145</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grip on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>146</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grip on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>147</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Bubbly">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>148</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Birl">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>149</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Birl">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>150</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Pele on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>151</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Pele on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>152</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Pele on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>153</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Pele on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>154</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Pele on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>155</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Pele on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>156</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Pele on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>157</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grace note pele on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>158</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grace note pele on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>159</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grace note pele on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>160</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grace note pele on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>161</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grace note pele on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>162</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grace note pele on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>163</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grace note pele on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>164</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb grace note pele on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>165</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note double strike on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>166</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note double strike on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>167</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note double strike on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>168</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note double strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>169</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note double strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>170</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note double strike on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>171</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note double strike on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>172</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb double strike on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>173</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb double strike on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>174</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb double strike on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>175</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb double strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>176</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb double strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>177</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb double strike on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>178</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb double strike on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>179</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb double strike on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>180</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Triple strike on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>181</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Triple strike on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>182</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Triple strike on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>183</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Triple strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>184</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Triple strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>185</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Triple strike on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>186</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Triple strike on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>187</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Triple strike on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>188</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Triple strike on high A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>189</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half triple strike on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>190</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half triple strike on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>191</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half triple strike on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>192</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half triple strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>193</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half triple strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>194</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half triple strike on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>195</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half triple strike on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>196</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half triple strike on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>197</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Half triple strike on high A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>198</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note triple strike on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>199</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note triple strike on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>200</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note triple strike on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>201</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note triple strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>202</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note triple strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>203</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note triple strike on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>204</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="G grace note triple strike on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>205</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb triple strike on low A">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>206</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb triple strike on B">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>207</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb triple strike on C">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>208</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb triple strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>209</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb triple strike on D">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>210</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb triple strike on E">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>211</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb triple strike on F">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>212</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        <Cell name="Thumb triple strike on high G">
+          <staff>1</staff>
+          <BagpipeEmbellishment>
+            <subtype>213</subtype>
+            </BagpipeEmbellishment>
+          </Cell>
+        </Palette>
+      <Palette name="Breaks &amp;&amp; Spacers">
+        <gridWidth>42</gridWidth>
+        <gridHeight>36</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="System break">
+          <mag>1.2</mag>
+          <LayoutBreak>
+            <subtype>line</subtype>
+            </LayoutBreak>
+          </Cell>
+        <Cell name="Page break">
+          <mag>1.2</mag>
+          <LayoutBreak>
+            <subtype>page</subtype>
+            </LayoutBreak>
+          </Cell>
+        <Cell name="Section break">
+          <mag>1.2</mag>
+          <LayoutBreak>
+            <subtype>section</subtype>
+            </LayoutBreak>
+          </Cell>
+        <Cell name="Staff spacer down">
+          <mag>0.7</mag>
+          <Spacer>
+            <subtype>1</subtype>
+            <space>3</space>
+            </Spacer>
+          </Cell>
+        <Cell name="Staff spacer up">
+          <mag>0.7</mag>
+          <Spacer>
+            <subtype>0</subtype>
+            <space>3</space>
+            </Spacer>
+          </Cell>
+        <Cell name="Staff spacer fixed down">
+          <mag>0.7</mag>
+          <Spacer>
+            <subtype>2</subtype>
+            <space>3</space>
+            </Spacer>
+          </Cell>
+        </Palette>
+      <Palette name="Frames &amp;&amp; Measures">
+        <gridWidth>27</gridWidth>
+        <gridHeight>40</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Insert vertical frame">
+          <Icon>
+            <subtype>16</subtype>
+            <action>insert-vbox</action>
+            </Icon>
+          </Cell>
+        <Cell name="Insert horizontal frame">
+          <Icon>
+            <subtype>17</subtype>
+            <action>insert-hbox</action>
+            </Icon>
+          </Cell>
+        <Cell name="Insert text frame">
+          <Icon>
+            <subtype>18</subtype>
+            <action>insert-textframe</action>
+            </Icon>
+          </Cell>
+        <Cell name="Insert one measure">
+          <Icon>
+            <subtype>20</subtype>
+            <action>insert-measure</action>
+            </Icon>
+          </Cell>
+        </Palette>
+      <Palette name="Beam Properties">
+        <gridWidth>27</gridWidth>
+        <gridHeight>40</gridHeight>
+        <mag>1</mag>
+        <grid>1</grid>
+        <moreElements>0</moreElements>
+        <Cell name="Beam start">
+          <Icon>
+            <subtype>8</subtype>
+            <action>beam-start</action>
+            </Icon>
+          </Cell>
+        <Cell name="Beam middle">
+          <Icon>
+            <subtype>9</subtype>
+            <action>beam-mid</action>
+            </Icon>
+          </Cell>
+        <Cell name="No beam">
+          <Icon>
+            <subtype>10</subtype>
+            <action>no-beam</action>
+            </Icon>
+          </Cell>
+        <Cell name="Beam 16th sub">
+          <Icon>
+            <subtype>11</subtype>
+            <action>beam32</action>
+            </Icon>
+          </Cell>
+        <Cell name="Beam 32nd sub">
+          <Icon>
+            <subtype>12</subtype>
+            <action>beam64</action>
+            </Icon>
+          </Cell>
+        <Cell name="Auto beam">
+          <Icon>
+            <subtype>13</subtype>
+            <action>auto-beam</action>
+            </Icon>
+          </Cell>
+        <Cell name="Feathered beam, slower">
+          <Icon>
+            <subtype>14</subtype>
+            <action>fbeam1</action>
+            </Icon>
+          </Cell>
+        <Cell name="Feathered beam, faster">
+          <Icon>
+            <subtype>15</subtype>
+            <action>fbeam2</action>
+            </Icon>
+          </Cell>
+        </Palette>
+      </PaletteBox>
+    <Toolbar name="noteInput">
+      <action>note-input</action>
+      <action>pad-note-128</action>
+      <action>pad-note-64</action>
+      <action>pad-note-32</action>
+      <action>pad-note-16</action>
+      <action>pad-note-8</action>
+      <action>pad-note-4</action>
+      <action>pad-note-2</action>
+      <action>pad-note-1</action>
+      <action>note-breve</action>
+      <action>note-longa</action>
+      <action>pad-dot</action>
+      <action>pad-dotdot</action>
+      <action>pad-dot3</action>
+      <action>pad-dot4</action>
+      <action>tie</action>
+      <action></action>
+      <action>pad-rest</action>
+      <action></action>
+      <action>sharp2</action>
+      <action>sharp</action>
+      <action>nat</action>
+      <action>flat</action>
+      <action>flat2</action>
+      <action>flip</action>
+      <action></action>
+      <action>voice-1</action>
+      <action>voice-2</action>
+      <action>voice-3</action>
+      <action>voice-4</action>
+      </Toolbar>
+    <Toolbar name="fileOperation">
+      <action>file-new</action>
+      <action>file-open</action>
+      <action>file-save</action>
+      <action>print</action>
+      <action>undo</action>
+      <action>redo</action>
+      </Toolbar>
+    <Toolbar name="playbackControl">
+      <action>midi-on</action>
+      <action></action>
+      <action>rewind</action>
+      <action>play</action>
+      <action>loop</action>
+      <action></action>
+      <action>repeat</action>
+      <action>pan</action>
+      <action>metronome</action>
+      </Toolbar>
+    </Workspace>
+  </museScore>
