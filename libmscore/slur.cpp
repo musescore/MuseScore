@@ -951,7 +951,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                   }
             sst = tick2() < etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
             }
-      else if (tick() < stick && tick2() > etick)
+      else if (tick() < stick && tick2() >= etick)
             sst = SpannerSegmentType::MIDDLE;
       else
             sst = SpannerSegmentType::END;
