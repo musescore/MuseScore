@@ -12,11 +12,11 @@ set -e # exit on error
 set -x # echo commands
 
 # Set compilers
-export CC=/usr/bin/gcc-4.9
-export CXX=/usr/bin/g++-4.9
+export CC=/usr/bin/gcc
+export CXX=/usr/bin/g++
 
 #install cmake
-CMAKE_URL="https://cmake.org/files/v3.10/cmake-3.10.1-Linux-x86_64.tar.gz"
+CMAKE_URL="https://github.com/Kitware/CMake/releases/download/v3.13.1/cmake-3.13.1-Linux-x86_64.tar.gz"
 mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
 export PATH=${PWD}/cmake/bin:${PATH}
 
