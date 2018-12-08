@@ -126,4 +126,6 @@ To run the debug version, type:
     ./build.debug/mscore/mscore
 
 ### Testing
-See [mtest/README.md](/mtest/README.md) or https://musescore.org/en/developers-handbook/testing for instructions on how to run the test suite.
+See [mtest/README.md](/mtest/README.md) or [the developer handbook](https://musescore.org/handbook/developers-handbook/finding-your-way-around/automated-tests) for instructions on how to run the test suite.
+
+The new [script testing facility](https://musescore.org/node/278278) is also available to create your own automated tests. Please try it out!
