@@ -2888,7 +2888,6 @@ static bool experimentalPartsMedia(const QString& inFilePath)
 
 static bool experimentalMediaScore(const QString& inFilePath)
       {
-      qDebug() << inFilePath;
       Score* score = mscore->readScore(inFilePath);
       if (!score)
             return false;
@@ -2910,32 +2909,22 @@ static bool experimentalMediaScore(const QString& inFilePath)
       //export score pngs and svgs
       QJsonArray pngsJsonArray;
       QJsonArray svgsJsonArray;
-      qDebug() << "Start generating pngs/svgs";
       for (int i = 0; i < score->pages().size(); ++i) {
-            qDebug() << "Page " << i;
             QByteArray pngData;
             QBuffer pngDevice(&pngData);
             pngDevice.open(QIODevice::ReadWrite);
-            qDebug() << "Created pngData and device";
             //QString fileName2 = QString("D:\\123") + QString(i) + ".png";
             res &= mscore->savePng(score, &pngDevice, i);
-            qDebug() << "Write pngJson";
             QJsonValue pngJson(QString::fromLatin1(pngData.toBase64()));
             pngsJsonArray.append(pngJson);
-            qDebug() << pngJson;
             
-            qDebug() << "SVG";
             QByteArray svgData;
             QBuffer svgDevice(&svgData);
             svgDevice.open(QIODevice::ReadWrite);
-            qDebug() << "Created svgData and device";
             //QString fileName2 = QString("D:\\123") + QString(i) + ".svg";
             res &= mscore->saveSvg(score, &svgDevice, i);
-            qDebug() << "Write svgJson";
-            qDebug() << "svgData is " << svgData;
             QJsonValue svgJson(QString::fromLatin1(svgData.toBase64()));
             svgsJsonArray.append(svgJson);
-            qDebug() << svgJson;
             }
 
       //export score .spos
@@ -2943,7 +2932,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
       QBuffer partPosDevice(&partDataPos);
       partPosDevice.open(QIODevice::ReadWrite);
       //QString fileName3 = QString("D:\\123\\sposfile.spos");
-//      savePositions(score, &partPosDevice, true);
+      savePositions(score, &partPosDevice, true);
       QJsonValue sposJson(QString::fromLatin1(partDataPos.toBase64()));
       partPosDevice.close();
       partDataPos.clear();
@@ -2951,7 +2940,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
       //export score .mpos
       partPosDevice.open(QIODevice::ReadWrite);
       //QString fileName4 = QString("D:\\123\\mposfile.mpos");
-//      savePositions(score, &partPosDevice, false);
+      savePositions(score, &partPosDevice, false);
       QJsonValue mposJson(QString::fromLatin1(partDataPos.toBase64()));
 
       //export score pdf
@@ -2960,7 +2949,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
       pdfDevice.open(QIODevice::ReadWrite);
       QPdfWriter writer(&pdfDevice);
       //QString fileName5 = QString("D:\\123\\score.pdf");
- //     res &= mscore->savePdf(score, writer);
+      res &= mscore->savePdf(score, writer);
       QJsonValue pdfJson(QString::fromLatin1(pdfData.toBase64()));
 
       //export score midi
@@ -2968,7 +2957,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
       QBuffer midiDevice(&midiData);
       midiDevice.open(QIODevice::ReadWrite);
       //QString fileName5 = QString("D:\\123\\score.pdf");
-//      res &= mscore->saveMidi(score, &midiDevice);
+      res &= mscore->saveMidi(score, &midiDevice);
       QJsonValue midiJson(QString::fromLatin1(midiData.toBase64()));
 
       //export musicxml
@@ -2976,7 +2965,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
       QBuffer mxmlDevice(&mxmlData);
       mxmlDevice.open(QIODevice::ReadWrite);
       //QString fileName5 = QString("D:\\123\\score.pdf");
-//      res &= saveMxl(score, &mxmlDevice);
+      res &= saveMxl(score, &mxmlDevice);
       QJsonValue mxmlJson(QString::fromLatin1(mxmlData.toBase64()));
 
       //export metadata
