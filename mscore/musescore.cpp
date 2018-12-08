@@ -2903,7 +2903,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
       mp3Device.open(QIODevice::ReadWrite);
       bool dummy = false;
       //QString fileName1 = QString("D:\\123\\score.mp3");
-//      res &= mscore->saveMp3(score, &mp3Device, dummy);//mscore->saveMp3(score, fileName1);
+      res &= mscore->saveMp3(score, &mp3Device, dummy);//mscore->saveMp3(score, fileName1);
       QJsonValue mp3Json(QString::fromLatin1(mp3Data.toBase64()));
 
       //export score pngs and svgs
