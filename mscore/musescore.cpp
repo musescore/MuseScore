@@ -2888,6 +2888,19 @@ static bool experimentalPartsMedia(const QString& inFilePath)
 
 static bool experimentalMediaScore(const QString& inFilePath)
       {
+      
+      //// JSON specification ///////////////////////////
+      //jsonForMedia["mp3"] = mp3Json;
+      //jsonForMedia["pngs"] = pngsJsonArray;
+      //jsonForMedia["mposXML"] = mposJson;
+      //jsonForMedia["sposXML"] = sposJson;
+      //jsonForMedia["pdf"] = pdfJson;
+      //jsonForMedia["svgs"] = svgsJsonArray;
+      //jsonForMedia["midi"] = midiJson;
+      //jsonForMedia["mxml"] = mxmlJson;
+      //jsonForMedia["metadata"] = mdJson;
+      ///////////////////////////////////////////////////
+
       Score* score = mscore->readScore(inFilePath);
       if (!score)
             return false;
@@ -2897,6 +2910,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
       QJsonObject jsonForMedia;
       bool res = true;
 
+      {
       //export score pngs and svgs
       QJsonArray pngsJsonArray;
       QJsonArray svgsJsonArray;
@@ -2917,23 +2931,29 @@ static bool experimentalMediaScore(const QString& inFilePath)
             QJsonValue svgJson(QString::fromLatin1(svgData.toBase64()));
             svgsJsonArray.append(svgJson);
             }
-
+      jsonForMedia["pngs"] = pngsJsonArray;
+      jsonForMedia["svgs"] = svgsJsonArray;
+      }
+      
+      {
       //export score .spos
       QByteArray partDataPos;
       QBuffer partPosDevice(&partDataPos);
       partPosDevice.open(QIODevice::ReadWrite);
       //QString fileName3 = QString("D:\\123\\sposfile.spos");
       savePositions(score, &partPosDevice, true);
-      QJsonValue sposJson(QString::fromLatin1(partDataPos.toBase64()));
+      jsonForMedia["sposXML"] = QString::fromLatin1(partDataPos.toBase64());
       partPosDevice.close();
       partDataPos.clear();
-
+      
       //export score .mpos
       partPosDevice.open(QIODevice::ReadWrite);
       //QString fileName4 = QString("D:\\123\\mposfile.mpos");
       savePositions(score, &partPosDevice, false);
-      QJsonValue mposJson(QString::fromLatin1(partDataPos.toBase64()));
-
+      jsonForMedia["mposXML"] = QString::fromLatin1(partDataPos.toBase64());
+      }
+      
+      {
       //export score pdf
       QByteArray pdfData;
       QBuffer pdfDevice(&pdfData);
@@ -2941,27 +2961,33 @@ static bool experimentalMediaScore(const QString& inFilePath)
       QPdfWriter writer(&pdfDevice);
       //QString fileName5 = QString("D:\\123\\score.pdf");
       res &= mscore->savePdf(score, writer);
-      QJsonValue pdfJson(QString::fromLatin1(pdfData.toBase64()));
-
+      jsonForMedia["pdf"] = QString::fromLatin1(pdfData.toBase64());
+      }
+      
+      {
       //export score midi
       QByteArray midiData;
       QBuffer midiDevice(&midiData);
       midiDevice.open(QIODevice::ReadWrite);
       //QString fileName5 = QString("D:\\123\\score.pdf");
       res &= mscore->saveMidi(score, &midiDevice);
-      QJsonValue midiJson(QString::fromLatin1(midiData.toBase64()));
-
+      jsonForMedia["midi"] = QString::fromLatin1(midiData.toBase64());
+      }
+      
+      {
       //export musicxml
       QByteArray mxmlData;
       QBuffer mxmlDevice(&mxmlData);
       mxmlDevice.open(QIODevice::ReadWrite);
       //QString fileName5 = QString("D:\\123\\score.pdf");
       res &= saveMxl(score, &mxmlDevice);
-      QJsonValue mxmlJson(QString::fromLatin1(mxmlData.toBase64()));
-
+      jsonForMedia["mxml"] = QString::fromLatin1(mxmlData.toBase64());
+      }
+      
       //export metadata
-      QJsonObject mdJson = mscore->saveMetadataJSON(score);
+      jsonForMedia["metadata"] = mscore->saveMetadataJSON(score);
 
+      {
       //export score audio
       QByteArray mp3Data;
       QBuffer mp3Device(&mp3Data);
@@ -2969,20 +2995,9 @@ static bool experimentalMediaScore(const QString& inFilePath)
       bool dummy = false;
       //QString fileName1 = QString("D:\\123\\score.mp3");
       res &= mscore->saveMp3(score, &mp3Device, dummy);//mscore->saveMp3(score, fileName1);
-      QJsonValue mp3Json(QString::fromLatin1(mp3Data.toBase64()));
+      jsonForMedia["mp3"] = QString::fromLatin1(mp3Data.toBase64());
+      }
       
-      //// JSON specification ///////////////////////////
-      jsonForMedia["mp3"] = mp3Json;
-      jsonForMedia["pngs"] = pngsJsonArray;
-      jsonForMedia["mposXML"] = mposJson;
-      jsonForMedia["sposXML"] = sposJson;
-      jsonForMedia["pdf"] = pdfJson;
-      jsonForMedia["svgs"] = svgsJsonArray;
-      jsonForMedia["midi"] = midiJson;
-      jsonForMedia["mxml"] = mxmlJson;
-      jsonForMedia["metadata"] = mdJson;
-      ///////////////////////////////////////////////////
-
       QJsonDocument jsonDoc(jsonForMedia);
       const QString& jsonPath{"/dev/stdout"}; //{"D:\\123\\score.json"};
       QFile file(jsonPath);
