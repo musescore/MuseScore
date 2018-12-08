@@ -2897,15 +2897,6 @@ static bool experimentalMediaScore(const QString& inFilePath)
       QJsonObject jsonForMedia;
       bool res = true;
 
-      //export score audio
-      QByteArray mp3Data;
-      QBuffer mp3Device(&mp3Data);
-      mp3Device.open(QIODevice::ReadWrite);
-      bool dummy = false;
-      //QString fileName1 = QString("D:\\123\\score.mp3");
-      res &= mscore->saveMp3(score, &mp3Device, dummy);//mscore->saveMp3(score, fileName1);
-      QJsonValue mp3Json(QString::fromLatin1(mp3Data.toBase64()));
-
       //export score pngs and svgs
       QJsonArray pngsJsonArray;
       QJsonArray svgsJsonArray;
@@ -2971,6 +2962,15 @@ static bool experimentalMediaScore(const QString& inFilePath)
       //export metadata
       QJsonObject mdJson = mscore->saveMetadataJSON(score);
 
+      //export score audio
+      QByteArray mp3Data;
+      QBuffer mp3Device(&mp3Data);
+      mp3Device.open(QIODevice::ReadWrite);
+      bool dummy = false;
+      //QString fileName1 = QString("D:\\123\\score.mp3");
+      res &= mscore->saveMp3(score, &mp3Device, dummy);//mscore->saveMp3(score, fileName1);
+      QJsonValue mp3Json(QString::fromLatin1(mp3Data.toBase64()));
+      
       //// JSON specification ///////////////////////////
       jsonForMedia["mp3"] = mp3Json;
       jsonForMedia["pngs"] = pngsJsonArray;
@@ -2984,7 +2984,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
       ///////////////////////////////////////////////////
 
       QJsonDocument jsonDoc(jsonForMedia);
-      const QString& jsonPath{"/tmp/test.json"}; //{"D:\\123\\score.json"};
+      const QString& jsonPath{"/dev/stdout"}; //{"D:\\123\\score.json"};
       QFile file(jsonPath);
       file.open(QIODevice::WriteOnly);
       file.write(jsonDoc.toJson(QJsonDocument::Compact));
