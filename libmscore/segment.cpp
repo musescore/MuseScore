@@ -844,6 +844,8 @@ QVariant Segment::getProperty(Pid propertyId) const
                   return _tick;
             case Pid::LEADING_SPACE:
                   return extraLeadingSpace();
+            case Pid::VISIBLE:
+                  return enabled();
             default:
                   return Element::getProperty(propertyId);
             }
@@ -875,6 +877,9 @@ bool Segment::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::LEADING_SPACE:
                   setExtraLeadingSpace(v.value<Spatium>());
+                  break;
+            case Pid::VISIBLE:
+                  setEnabled(v.toBool());
                   break;
             default:
                   return Element::setProperty(propertyId, v);
