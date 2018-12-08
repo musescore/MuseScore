@@ -145,7 +145,7 @@ if (APPLE)
       # of MacOSX.
       #set(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk)
 
-      set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)      # Min version required
+      set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)      # Min version required
       set(HAS_AUDIOFILE TRUE)            # Requires libsndfile
       set(MAC_APPCAST_URL "")
 
