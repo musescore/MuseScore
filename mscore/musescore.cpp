@@ -2917,7 +2917,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
 
             QByteArray svgData;
             QBuffer svgDevice(&svgData);
-            pngDevice.open(QIODevice::ReadWrite);
+            svgDevice.open(QIODevice::ReadWrite);
             //QString fileName2 = QString("D:\\123") + QString(i) + ".svg";
             res &= mscore->saveSvg(score, &svgDevice, i);
             QJsonValue svgJson(QString::fromLatin1(svgData.toBase64()));
