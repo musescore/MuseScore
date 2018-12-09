@@ -333,10 +333,7 @@ void TieSegment::computeBezier(QPointF p6o)
 
 void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
-      if (autoplace()) {
-            for (UP& up : _ups)
-                  up.off = QPointF();
-            }
+      setPos(QPointF());
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
       computeBezier();
@@ -387,13 +384,11 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                               else
                                     offY = (lineY + minDistance) - bottomY;
                               setAutoAdjust(0.0, offY * sp);
-                              bbox = path.boundingRect();
                               }
                         }
                   }
             }
-
-      setbbox(bbox);
+      setbbox(path.boundingRect());
       }
 
 //---------------------------------------------------------
