@@ -62,6 +62,7 @@
 #include "bracket.h"
 #include "spacer.h"
 #include "fermata.h"
+#include "measurenumber.h"
 
 namespace Ms {
 
@@ -3236,6 +3237,7 @@ System* Score::collectSystem(LayoutContext& lc)
             if (!mb->isMeasure())
                   continue;
             Measure* m = toMeasure(mb);
+            m->layoutMeasureNumber();
             for (Segment* s = m->first(); s; s = s->next()) {
                   if (!s->isChordRestType())
                         continue;
@@ -3279,6 +3281,9 @@ System* Score::collectSystem(LayoutContext& lc)
                               }
                         }
                   ss->skyline().add(m->staffLines(staffIdx)->bbox().translated(m->pos()));
+                  MeasureNumber* mno = m->noText(staffIdx);
+                  if (mno)
+                        ss->skyline().add(mno->bbox().translated(m->pos() + mno->pos()));
                   }
             }
 
