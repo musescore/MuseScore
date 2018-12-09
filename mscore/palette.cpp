@@ -456,7 +456,7 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
       Score* score = mscore->currentScore();
       if (score == 0)
             return;
-      const Selection& sel = score->selection();       // make a copy of the list
+      const Selection sel = score->selection(); // make a copy of selection state before applying the operation.
       if (sel.isNone())
             return;
 
