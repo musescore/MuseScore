@@ -2942,11 +2942,11 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
             }
 
       if (align && segments.size() > 1) {
-            qreal y = segments[0]->offset().y();
+            qreal y = segments[0]->rypos();
             for (unsigned i = 1; i < segments.size(); ++i)
-                  y = qMax(y, segments[i]->offset().y());
+                  y = qMax(y, segments[i]->rypos());
             for (auto ss : segments)
-                  ss->ryoffset() = y;
+                  ss->rypos() = y;
             }
 
       //
