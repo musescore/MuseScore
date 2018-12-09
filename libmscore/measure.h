@@ -157,6 +157,7 @@ class Measure final : public MeasureBase {
       void stretchMeasure(qreal stretch);
       int computeTicks();
       void layout2();
+      void layoutMeasureNumber();
 
       Chord* findChord(int tick, int track);
       ChordRest* findChordRest(int tick, int track);

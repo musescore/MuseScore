@@ -64,8 +64,12 @@ void Skyline::add(const Shape& s)
 void SkylineLine::add(qreal x, qreal y, qreal w)
       {
 //      Q_ASSERT(w >= 0.0);
-      if (x < 0.0)
-            return;
+      if (x < 0.0) {
+            w -= -x;
+            x = 0.0;
+            if (w <= 0.0)
+                  return;
+            }
 
       DP("===add  %f %f %f\n", x, y, w);
       qreal cx = 0.0;
