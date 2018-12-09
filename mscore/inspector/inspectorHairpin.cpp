@@ -11,11 +11,12 @@
 //=============================================================================
 
 #include "inspector.h"
+#include "inspectorTextLine.h"
 #include "inspectorHairpin.h"
 #include "musescore.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/score.h"
-#include "icons.h"
+// #include "icons.h"
 
 namespace Ms {
 
@@ -24,10 +25,11 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorHairpin::InspectorHairpin(QWidget* parent)
-   : InspectorElementBase(parent)
+//   : InspectorElementBase(parent)
+   : InspectorTextLineBase(parent)
       {
-      l.setupUi(addWidget());
-      setupLineStyle(l.lineStyle);
+//      l.setupUi(addWidget());
+//      setupLineStyle(l.lineStyle);
       h.setupUi(addWidget());
 
       h.hairpinType->clear();
@@ -37,13 +39,14 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
       h.hairpinType->addItem(tr("Decrescendo Line"),    int(HairpinType::DECRESC_LINE));
 
       const std::vector<InspectorItem> il = {
-            { Pid::LINE_VISIBLE,         0, l.lineVisible,         l.resetLineVisible       },
+/*            { Pid::LINE_VISIBLE,         0, l.lineVisible,         l.resetLineVisible       },
             { Pid::DIAGONAL,             0, l.diagonal,            l.resetDiagonal          },
             { Pid::LINE_COLOR,           0, l.lineColor,           l.resetLineColor         },
             { Pid::LINE_WIDTH,           0, l.lineWidth,           l.resetLineWidth         },
             { Pid::LINE_STYLE,           0, l.lineStyle,           l.resetLineStyle         },
             { Pid::DASH_LINE_LEN,        0, l.dashLineLength,      l.resetDashLineLength    },
             { Pid::DASH_GAP_LEN,         0, l.dashGapLength,       l.resetDashGapLength     },
+*/
             { Pid::HAIRPIN_CIRCLEDTIP,   0, h.hairpinCircledTip,   h.resetHairpinCircledTip },
             { Pid::HAIRPIN_TYPE,         0, h.hairpinType,         0                        },
             { Pid::PLACEMENT,            0, h.placement,           h.resetPlacement         },
@@ -58,10 +61,10 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { Pid::END_TEXT,             0, h.endText,             h.resetEndText           }
             };
       const std::vector<InspectorPanel> ppList = {
-            { l.title, l.panel },
+//            { l.title, l.panel },
             { h.title, h.panel }
             };
-      populatePlacement(h.placement);
+//      populatePlacement(h.placement);
       mapSignals(il, ppList);
       }
 

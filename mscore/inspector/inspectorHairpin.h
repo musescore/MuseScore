@@ -14,7 +14,8 @@
 #define __INSPECTOR_HAIRPIN_H__
 
 #include "inspector.h"
-#include "inspectorBase.h"
+// #include "inspectorBase.h"
+#include "inspectorTextLineBase.h"
 #include "ui_inspector_hairpin.h"
 #include "ui_inspector_line.h"
 
@@ -24,10 +25,11 @@ namespace Ms {
 //   InspectorHairpin
 //---------------------------------------------------------
 
-class InspectorHairpin : public InspectorElementBase {
+// class InspectorHairpin : public InspectorElementBase {
+class InspectorHairpin : public InspectorTextLineBase {
       Q_OBJECT
 
-      Ui::InspectorLine l;
+//      Ui::InspectorLine l;
       Ui::InspectorHairpin h;
 
       void updateLineType();
