@@ -3330,8 +3330,7 @@ void ScoreView::cmdAddNoteLine()
 void ScoreView::cmdChangeEnharmonic(bool both)
       {
       _score->startCmd();
-      Selection& selection = _score->selection();
-      QList<Note*> notes = selection.uniqueNotes();
+      QList<Note*> notes = _score->selection().uniqueNotes();
       for (Note* n : notes) {
             Staff* staff = n->staff();
             if (staff->part()->instrument()->useDrumset())
@@ -3392,6 +3391,7 @@ void ScoreView::cmdChangeEnharmonic(bool both)
                   }
             }
 
+      Selection& selection = _score->selection();
       selection.clear();
       for (Note* n : notes)
             selection.add(n);
