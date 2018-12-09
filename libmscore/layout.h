@@ -69,6 +69,8 @@ enum class VerticalAlignRange {
       SEGMENT, MEASURE, SYSTEM
       };
 
+extern bool isTopBeam(ChordRest* cr);
+extern bool notTopBeam(ChordRest* cr);
 
 }     // namespace Ms
 #endif
