@@ -40,8 +40,6 @@
 
 namespace Ms {
 
-extern bool isTopBeam(ChordRest* cr);
-extern bool notTopBeam(ChordRest* cr);
 extern void layoutTies(Chord* ch, System* system, int stick);
 extern void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, qreal spatium);
 

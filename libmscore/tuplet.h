@@ -58,6 +58,8 @@ class Tuplet final : public DurationElement {
       QPointF bracketL[4];
       QPointF bracketR[3];
 
+      Fraction addMissingElement(int startTick, int endTick);
+
    public:
       Tuplet(Score*);
       Tuplet(const Tuplet&);
@@ -133,9 +135,6 @@ class Tuplet final : public DurationElement {
 
       void sanitizeTuplet();
       void addMissingElements();
-
-   private:
-      Fraction addMissingElement(int startTick, int endTick);
       };
 
 

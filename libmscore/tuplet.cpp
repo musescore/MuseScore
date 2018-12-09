@@ -1133,7 +1133,9 @@ void Tuplet::sanitizeTuplet()
             if (TDuration::isValid(fbl)) {
                   setDuration(testDuration);
                   setBaseLen(fbl);
-                  qDebug("Tuplet %p sanitized",this);
+                  qDebug("Tuplet %p sanitized duration %d/%d   baseLen %d/%d",this,
+                        testDuration.numerator(), testDuration.denominator(),
+                        1, fbl.denominator());
                   }
             else {
                   qDebug("Impossible to sanitize the tuplet");

@@ -96,7 +96,7 @@ class Beam final : public Element {
 
       virtual void reset() override;
 
-      System* system() const { return (System*)parent(); }
+      System* system() const { return toSystem(parent()); }
 
       void layout1();
       void layoutGraceNotes();
