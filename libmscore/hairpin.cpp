@@ -414,6 +414,7 @@ Hairpin::Hairpin(Score* s)
       initElementStyle(&hairpinStyle);
 
       resetProperty(Pid::BEGIN_TEXT_PLACE);
+      resetProperty(Pid::CONTINUE_TEXT_PLACE);
       resetProperty(Pid::HAIRPIN_TYPE);
       resetProperty(Pid::LINE_VISIBLE);
 
@@ -621,6 +622,7 @@ QVariant Hairpin::propertyDefault(Pid id) const
                   return QString("");
 
             case Pid::BEGIN_TEXT_PLACE:
+            case Pid::CONTINUE_TEXT_PLACE:
                   return int(PlaceText::LEFT);
 
             case Pid::LINE_VISIBLE:
