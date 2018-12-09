@@ -1254,7 +1254,7 @@ void Score::cmdAddTie(bool addToChord)
 
 void Score::cmdAddOttava(OttavaType type)
       {
-      const Selection& sel = selection();
+      const Selection sel = selection(); // copy selection state before the operation.
       // add on each staff if possible
       if (sel.isRange() && sel.staffStart() != sel.staffEnd() - 1) {
             for (int staffIdx = sel.staffStart() ; staffIdx < sel.staffEnd(); ++staffIdx) {
