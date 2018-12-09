@@ -1878,8 +1878,18 @@ MuseScore::MuseScore()
       initOsc();
       startAutoSave();
 
+#ifndef NDEBUG
+      // for debugging, but possible may need
       QInputMethod* im = QGuiApplication::inputMethod();
+      connect(im, SIGNAL(anchorRectangleChanged()), SLOT(inputMethodAnchorRectangleChanged()));
+      connect(im, SIGNAL(animatingChanged()), SLOT(inputMethodAnimatingChanged()));
+      connect(im, SIGNAL(cursorRectangleChanged()), SLOT(inputMethodCursorRectangleChanged()));
+      connect(im, SIGNAL(inputDirectionChanged(Qt::LayoutDirection newDirection)), SLOT(inputMethodInputDirectionChanged(Qt::LayoutDirection newDirection)));
+      connect(im, SIGNAL(inputItemClipRectangleChanged()), SLOT(inputMethodInputItemClipRectangleChanged()));
+      connect(im, SIGNAL(keyboardRectangleChanged()), SLOT(inputMethodKeyboardRectangleChanged()));
       connect(im, SIGNAL(localeChanged()), SLOT(inputMethodLocaleChanged()));
+      connect(im, SIGNAL(visibleChanged()), SLOT(inputMethodVisibleChanged()));
+#endif
 
       if (enableExperimental) {
             cornerLabel = new QLabel(this);
@@ -3806,12 +3816,79 @@ void MuseScore::clipboardChanged()
       }
 
 //---------------------------------------------------------
+//   inputMethodAnchorRectangleChanged
+//---------------------------------------------------------
+
+void MuseScore::inputMethodAnchorRectangleChanged()
+      {
+      QRectF r =  QGuiApplication::inputMethod()->anchorRectangle();
+      qDebug("inputMethod AnchorRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+      }
+
+//---------------------------------------------------------
+//   inputMethodAnimatingChanged
+//---------------------------------------------------------
+
+void MuseScore::inputMethodAnimatingChanged()
+      {
+      qDebug("inputMethod Animating Changed: %d", QGuiApplication::inputMethod()->isAnimating());
+      }
+
+//---------------------------------------------------------
+//   inputMethodCursorRectangleChanged
+//---------------------------------------------------------
+
+void MuseScore::inputMethodCursorRectangleChanged()
+      {
+      QRectF r =  QGuiApplication::inputMethod()->cursorRectangle();
+      qDebug("inputMethod CursorRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+      }
+
+//---------------------------------------------------------
+//   inputMethodInputDirectionChanged
+//---------------------------------------------------------
+
+void MuseScore::inputMethodInputDirectionChanged(Qt::LayoutDirection newDirection)
+      {
+      qDebug("inputMethod InputDirection Changed: (QLocale::LayoutDirection enum) #%d", newDirection);
+      }
+
+//---------------------------------------------------------
+//   inputMethodInputItemClipRectangleChanged
+//---------------------------------------------------------
+
+void MuseScore::inputMethodInputItemClipRectangleChanged()
+      {
+      QRectF r =  QGuiApplication::inputMethod()->inputItemClipRectangle();
+      qDebug("inputMethod InputItemClipRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+      }
+
+//---------------------------------------------------------
+//   inputMethodKeyboardRectangleChanged
+//---------------------------------------------------------
+
+void MuseScore::inputMethodKeyboardRectangleChanged()
+      {
+      QRectF r =  QGuiApplication::inputMethod()->keyboardRectangle();
+      qDebug("inputMethod KeyboardRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+      }
+
+//---------------------------------------------------------
 //   inputMethodLocaleChanged
 //---------------------------------------------------------
 
 void MuseScore::inputMethodLocaleChanged()
       {
-      qDebug("Input method QLocale::Script enum now #%d.", QGuiApplication::inputMethod()->locale().script());
+      qDebug("inputMethod Locale Changed: (QLocale::Script enum) #%d.", QGuiApplication::inputMethod()->locale().script());
+      }
+
+//---------------------------------------------------------
+//   inputMethodVisibleChanged
+//---------------------------------------------------------
+
+void MuseScore::inputMethodVisibleChanged()
+      {
+      qDebug("inputMethodVisibleChanged: %d", QGuiApplication::inputMethod()->isVisible());
       }
 
 //---------------------------------------------------------
