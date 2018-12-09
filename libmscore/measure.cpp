@@ -3632,8 +3632,13 @@ void Measure::addSystemHeader(bool isFirstSystem)
                                     }
                               }
 
-                        if (disable)
-                              kSegment->setEnabled(false);
+                        if (disable) {
+                              // TODO
+                              // disabling key signatures requires a lot of care making sure we ignore them everywhere else
+                              // for now, just remove them
+                              //kSegment->setEnabled(false);
+                              score()->undo(new RemoveElement(kSegment));
+                              }
                         else {
                               Element* e = kSegment->element(track);
                               if (e && e->isKeySig()) {
@@ -3679,8 +3684,11 @@ void Measure::addSystemHeader(bool isFirstSystem)
                   cSegment->setEnabled(true);
                   }
             else {
-                  if (cSegment)
-                        cSegment->setEnabled(false);
+                  if (cSegment) {
+                        // TODO
+                        //cSegment->setEnabled(false);
+                        score()->undo(new RemoveElement(cSegment));
+                        }
                   }
             ++staffIdx;
             }
@@ -3712,8 +3720,11 @@ void Measure::addSystemHeader(bool isFirstSystem)
             s->setHeader(true);
             setHeader(true);
             }
-      else if (s)
-            s->setEnabled(false);
+      else if (s) {
+            // TODO
+            //s->setEnabled(false);
+            score()->undo(new RemoveElement(s));
+            }
       checkHeader();
       }
 
@@ -3766,7 +3777,9 @@ void Measure::addSystemTrailer(Measure* nm)
             }
       if (!showCourtesySig && s) {
             // remove any existing time signatures
+            // TODO
             s->setEnabled(false);
+            //score()->undo(new RemoveElement(s));
             }
 
       // courtesy key signatures
@@ -3807,8 +3820,11 @@ void Measure::addSystemTrailer(Measure* nm)
                   }
             else {
                   // remove any existent courtesy key signature
-                  if (s)
+                  if (s) {
+                        // TODO
                         s->setEnabled(false);
+                        //score()->undo(new RemoveElement(s));
+                        }
                   }
             if (clefSegment) {
                   Clef* clef = toClef(clefSegment->element(track));
@@ -3833,7 +3849,9 @@ void Measure::removeSystemHeader()
       for (Segment* seg = first(); seg; seg = seg->next()) {
             if (!seg->header())
                   break;
-            seg->setEnabled(false);
+            // TODO
+            //seg->setEnabled(false);
+            score()->undo(new RemoveElement(seg));
             }
       setHeader(false);
       }
@@ -3848,8 +3866,11 @@ void Measure::removeSystemTrailer()
       for (Segment* seg = last(); seg != first(); seg = seg->prev()) {
             if (!seg->trailer())
                   break;
-            if (seg->enabled())
+            if (seg->enabled()) {
+                  // TODO
                   seg->setEnabled(false);
+                  //score()->undo(new RemoveElement(seg));
+                  }
             changed = true;
             }
       setTrailer(false);

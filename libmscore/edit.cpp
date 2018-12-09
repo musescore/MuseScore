@@ -4570,8 +4570,11 @@ void Score::undoRemoveElement(Element* element)
             }
       for (Segment* s : segments) {
             if (s->empty()) {
-                  if (s->header() || s->trailer())    // probably more segment types (system header)
+                  if (s->header() || s->trailer()) {  // probably more segment types (system header)
+                        // TODO
                         s->setEnabled(false);
+                        //undo(new RemoveElement(s));
+                        }
                   else
                         undo(new RemoveElement(s));
                   }
