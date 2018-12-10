@@ -29,6 +29,7 @@ InspectorTextBase::InspectorTextBase(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { Pid::FONT_FACE,         0, t.fontFace,     t.resetFontFace     },
             { Pid::FONT_SIZE,         0, t.fontSize,     t.resetFontSize     },
+            { Pid::SIZE_SPATIUM_DEPENDENT,        0,  t.spatiumDependent,    t.resetSpatiumDependent    },
             { Pid::FONT_STYLE,        0, t.fontStyle,    t.resetFontStyle    },
             { Pid::FRAME_TYPE,        0, t.frameType,    t.resetFrameType    },
             { Pid::FRAME_FG_COLOR,    0, t.frameColor,   t.resetFrameColor   },
