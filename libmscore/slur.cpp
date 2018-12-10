@@ -360,6 +360,8 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             qreal gdist = 0.0;
             Segment* ls = system()->lastMeasure()->last();
             Segment* fs = system()->firstMeasure()->first();
+            Segment* ss = slur()->startSegment();
+            Segment* es = slur()->endSegment();
             QPointF pp1 = ups(Grip::START).p;
             QPointF pp2 = ups(Grip::END).p;
             bool intersection = false;
@@ -372,6 +374,11 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                         continue;
                   if (pp2.x() < x1)
                         break;
+                  // skip start and end segments on assumption start and end points were placed well already
+                  // this avoids overcorrection on collision with own ledger lines and accidentals
+                  // it also avoids issues where slur appears to be attached to a note in a different voice
+                  if (s == ss || s == es)
+                        continue;
                   const Shape& segShape = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos());
                   if (!intersection)
                         intersection = segShape.intersects(_shape);
@@ -580,6 +587,13 @@ void Slur::slurPos(SlurPos* sp)
             if (stem2)
                   sa2 = SlurAnchor::STEM;
             }
+      // also link start of slur to stem if start chord & slur are in same direction and there is a hook
+      if (scr->up() == _up && stem1 && sc->hook()) {
+            sa1 = SlurAnchor::STEM;
+            // if end chord is in same direction, link end of slur to stem too
+            if (ecr->up() == scr->up() && stem2)
+                  sa2 = SlurAnchor::STEM;
+            }
 
       qreal __up = _up ? -1.0 : 1.0;
       qreal hw1 = note1 ? note1->tabHeadWidth(stt) : scr->width();      // if stt == 0, tabHeadWidth()
@@ -587,23 +601,35 @@ void Slur::slurPos(SlurPos* sp)
       QPointF pt;
       switch (sa1) {
             case SlurAnchor::STEM:        //sc can't be null
-                  // place slur starting point at stem base point
+                  {
+                  // place slur starting point at stem end point
                   pt = sc->stemPos() - sc->pagePos() + sc->stem()->p2();
                   if (useTablature)                   // in tabs, stems are centred on note:
                         pt.rx() = hw1 * 0.5 + (note1 ? note1->bboxXShift() : 0.0);          // skip half notehead to touch stem, anatoly-os: incorrect. half notehead width is not always the stem position
                   sp->p1 += pt;
-                  sp->p1 += QPointF(0.35 * _spatium, 0.25 * _spatium);  // clear the stem (x) and the notehead (y)
+                  // clear the stem (x)
+                  // allow slight overlap (y) as per Gould
+                  // don't allow overlap with hook if not disabling the autoplace checks against start/end segments in SlurSegment::layoutSegment()
+                  qreal yadj = -0.25;     // sc->hook() ? 0.25 : -0.25;
+                  yadj *= _spatium * __up;
+                  sp->p1 += QPointF(0.35 * _spatium, yadj);
+                  }
                   break;
             case SlurAnchor::NONE:
                   break;
             }
       switch (sa2) {
             case SlurAnchor::STEM:        //ec can't be null
+                  {
                   pt = ec->stemPos() - ec->pagePos() + ec->stem()->p2();
                   if (useTablature)
                         pt.rx() = hw2 * 0.5;
                   sp->p2 += pt;
-                  sp->p2 += QPointF(-0.35 * _spatium, 0.25 * _spatium);
+                  // don't allow overlap with beam
+                  qreal yadj = ec->beam() ? 0.75 : -0.25;
+                  yadj *= _spatium * __up;
+                  sp->p2 += QPointF(-0.35 * _spatium, yadj);
+                  }
                   break;
             case SlurAnchor::NONE:
                   break;
