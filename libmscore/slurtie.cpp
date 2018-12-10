@@ -129,6 +129,7 @@ void SlurTieSegment::startEditDrag(EditData& ed)
 void SlurTieSegment::endEditDrag(EditData& ed)
       {
       Element::endEditDrag(ed);
+      triggerLayout();
       }
 
 //---------------------------------------------------------
