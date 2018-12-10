@@ -472,7 +472,7 @@ static const StyleType styleTypes[] {
       { Sid::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
 
       { Sid::dynamicsPlacement,       "dynamicsPlacement",       int(Placement::BELOW)  },
-      { Sid::dynamicsPosAbove,        "dynamicsPosAbove",        QPointF(.0, -2.0) },
+      { Sid::dynamicsPosAbove,        "dynamicsPosAbove",        QPointF(.0, -3.0) },
       { Sid::dynamicsPosBelow,        "dynamicsPosBelow",        QPointF(.0, 4.0) },
 
       { Sid::dynamicsMinDistance,         "dynamicsMinDistance",               Spatium(0.5) },
