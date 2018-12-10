@@ -4458,7 +4458,7 @@
              <item row="0" column="0">
               <widget class="QLabel" name="label_25">
                <property name="text">
-                <string>Accidental note distance:</string>
+                <string>Accidental to note distance:</string>
                </property>
                <property name="buddy">
                 <cstring>accidentalNoteDistance</cstring>
