@@ -604,6 +604,8 @@ void LinkedElements::setLid(Score* score, int id)
 
 //---------------------------------------------------------
 //   mainElement
+//    Returns "main" linked element which is expected to
+//    be written to the file prior to others.
 //---------------------------------------------------------
 
 ScoreElement* LinkedElements::mainElement()
@@ -611,11 +613,24 @@ ScoreElement* LinkedElements::mainElement()
       if (isEmpty())
             return nullptr;
       MasterScore* ms = at(0)->masterScore();
-      for (ScoreElement* se : *this) {
-            if (se->score() == ms)
-                  return se;
-            }
-      return front();
+      const bool elements = at(0)->isElement();
+      return *std::min_element(begin(), end(), [ms, elements](ScoreElement* s1, ScoreElement* s2) {
+            if (s1->score() == ms && s2->score() != ms)
+                  return true;
+            if (elements) {
+                  if (s1->score() != s2->score())
+                        return false;
+                  // Now we compare either two elements from master score
+                  // or two elements from excerpt.
+                  Element* e1 = toElement(s1);
+                  Element* e2 = toElement(s2);
+                  if (e1->track() < e2->track())
+                        return true;
+                  if (e1->track() == e2->track() && e1->tick() < e2->tick())
+                        return true;
+                  }
+            return false;
+            });
       }
 
 //---------------------------------------------------------
