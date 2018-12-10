@@ -4653,11 +4653,8 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
 
             // determine if layout information is required
             bool doLayout = false;
-            if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
-                  if (currentSystem == TopSystem
-                      || (preferences.musicxmlExportBreaks() == MusicxmlExportBreaks::ALL && newThing != "")) {
-                        doLayout = true;
-                        }
+            if (currentSystem == TopSystem || newThing != "") {
+                  doLayout = true;
                   }
 
             if (doLayout) {
@@ -4718,12 +4715,7 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
                         }
 
                   _xml.etag();
-                  }
-            else {
-                  // !doLayout
-                  if (newThing != "")
-                        _xml.tagE(QString("print%1").arg(newThing));
-                  }
+                  } // if (!doLayout) ...
 
             } // if (currentSystem ...
 

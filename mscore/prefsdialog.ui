@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>834</width>
+    <width>900</width>
     <height>569</height>
    </rect>
   </property>
@@ -93,7 +93,7 @@
       <string>Preferences Tab Manager</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="accessibleName">
@@ -3605,39 +3605,31 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
-           <widget class="QGroupBox" name="exportLayout">
-            <property name="title">
-             <string>Export layout</string>
+           <widget class="QRadioButton" name="exportAllLayouts">
+            <property name="text">
+             <string>Export all layouts</string>
             </property>
-            <property name="checkable">
-             <bool>true</bool>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="exportAllBreaks">
+            <property name="text">
+             <string>Export all system and page breaks</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_11">
-             <item>
-              <widget class="QRadioButton" name="exportAllBreaks">
-               <property name="text">
-                <string>Export all system and page breaks</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="exportManualBreaks">
-               <property name="text">
-                <string>Export manually added system and page breaks only</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="exportNoBreaks">
-               <property name="text">
-                <string>Do not export system or page breaks</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-            <zorder>exportNoBreaks</zorder>
-            <zorder>exportAllBreaks</zorder>
-            <zorder>exportManualBreaks</zorder>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="exportManualBreaks">
+            <property name="text">
+             <string>Export manually added system and page breaks only</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="exportNoBreaks">
+            <property name="text">
+             <string>Do not export system or page breaks</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -4312,10 +4304,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>pngResolution</tabstop>
   <tabstop>pngTransparent</tabstop>
   <tabstop>exportAudioSampleRate</tabstop>
-  <tabstop>exportLayout</tabstop>
-  <tabstop>exportAllBreaks</tabstop>
-  <tabstop>exportManualBreaks</tabstop>
-  <tabstop>exportNoBreaks</tabstop>
   <tabstop>shortcutList</tabstop>
   <tabstop>resetShortcut</tabstop>
   <tabstop>saveShortcutList</tabstop>
