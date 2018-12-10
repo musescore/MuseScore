@@ -4360,12 +4360,23 @@ void MuseScore::play(Element* e, int pitch) const
             return;
       if (preferences.getBool(PREF_SCORE_NOTE_PLAYONCLICK) && e->isNote()) {
             Note* note = static_cast<Note*>(e);
-            int tick = note->chord()->tick();
+
+            Note* masterNote = note;
+            if (note->linkList().size() > 1) {
+                  for (ScoreElement* se : note->linkList()) {
+                        if (se->score() == note->masterScore() && se->isNote()) {
+                              masterNote = toNote(se);
+                              break;
+                              }
+                        }
+                  }
+
+            int tick = masterNote->chord()->tick();
             if (tick < 0)
                   tick = 0;
-            Instrument* instr = note->part()->instrument(tick);
-            const Channel* channel = instr->channel(note->subchannel());
-            seq->startNote(channel->channel(), pitch, 80, MScore::defaultPlayDuration, note->tuning());
+            Instrument* instr = masterNote->part()->instrument(tick);
+            const Channel* channel = instr->channel(masterNote->subchannel());
+            seq->startNote(channel->channel(), pitch, 80, MScore::defaultPlayDuration, masterNote->tuning());
             }
       }
 

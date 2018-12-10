@@ -1496,17 +1496,27 @@ void Seq::heartBeatTimeout()
                   const Note* note1 = n.note();
                   if (n.velo()) {
                         while (note1) {
-                              note1->setMark(true);
-                              markedNotes.append(note1);
-                              r |= note1->canvasBoundingRect();
+                              for (ScoreElement* se : note1->linkList()) {
+                                    if (!se->isNote())
+                                          continue;
+                                    Note* currentNote = toNote(se);
+                                    currentNote->setMark(true);
+                                    markedNotes.append(currentNote);
+                                    r |= currentNote->canvasBoundingRect();
+                                    }
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
                               }
                         }
                   else {
                         while (note1) {
-                              note1->setMark(false);
-                              r |= note1->canvasBoundingRect();
-                              markedNotes.removeOne(note1);
+                              for (ScoreElement* se : note1->linkList()) {
+                                    if (!se->isNote())
+                                          continue;
+                                    Note* currentNote = toNote(se);
+                                    currentNote->setMark(false);
+                                    r |= currentNote->canvasBoundingRect();
+                                    markedNotes.removeOne(currentNote);
+                                    }
                               note1 = note1->tieFor() ? note1->tieFor()->endNote() : 0;
                               }
                         }
