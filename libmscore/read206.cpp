@@ -1151,6 +1151,8 @@ static void readNote(Note* note, XmlReader& e)
                         note->setTpc1(Ms::transposeTpc(note->tpc2(), v, true));
                   }
             }
+#if 0
+      // TODO - adapt this code
 
       // check consistency of pitch, tpc1, tpc2, and transposition
       // see note in InstrumentChange::read() about a known case of tpc corruption produced in 2.0.x
@@ -1158,25 +1160,35 @@ static void readNote(Note* note, XmlReader& e)
       // including perhaps some we don't know about yet,
       // we will attempt to fix some problems here regardless of version
 
-      if (!e.pasteMode() && !MScore::testMode) {
-            int tpc1Pitch = (tpc2pitch(note->tpc1()) + 12) % 12;
-            int tpc2Pitch = (tpc2pitch(note->tpc2()) + 12) % 12;
-            int concertPitch = note->pitch() % 12;
-            if (tpc1Pitch != concertPitch) {
-                  qDebug("bad tpc1 - concertPitch = %d, tpc1 = %d", concertPitch, tpc1Pitch);
-                  note->setPitch(note->pitch() + tpc1Pitch - concertPitch);
+      if (staff() && !staff()->isDrumStaff(e.tick()) && !e.pasteMode() && !MScore::testMode) {
+            int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
+            int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
+            int soundingPitch = _pitch % 12;
+            if (tpc1Pitch != soundingPitch) {
+                  qDebug("bad tpc1 - soundingPitch = %d, tpc1 = %d", soundingPitch, tpc1Pitch);
+                  _pitch += tpc1Pitch - soundingPitch;
                   }
-            Interval v = note->staff()->part()->instrument(e.tick())->transpose();
-            int transposedPitch = (note->pitch() - v.chromatic) % 12;
-            if (tpc2Pitch != transposedPitch) {
-                  qDebug("bad tpc2 - transposedPitch = %d, tpc2 = %d", transposedPitch, tpc2Pitch);
-                  // just in case the staff transposition info is not reliable here,
-                  // do not attempt to correct tpc
-                  // except for older scores where we know there are tpc problems
-                  v.flip();
-                  note->setTpc2(Ms::transposeTpc(note->tpc1(), v, true));
+            if (staff()) {
+                  Interval v = staff()->part()->instrument(e.tick())->transpose();
+                  int writtenPitch = (_pitch - v.chromatic) % 12;
+                  if (tpc2Pitch != writtenPitch) {
+                        qDebug("bad tpc2 - writtenPitch = %d, tpc2 = %d", writtenPitch, tpc2Pitch);
+                        if (concertPitch()) {
+                              // assume we want to keep sounding pitch
+                              // so fix written pitch (tpc only)
+                              v.flip();
+                              _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
+                              }
+                        else {
+                              // assume we want to keep written pitch
+                              // so fix sounding pitch (both tpc and pitch)
+                              _tpc[0] = Ms::transposeTpc(_tpc[1], v, true);
+                              _pitch += tpc2Pitch - writtenPitch;
+                              }
+                        }
                   }
             }
+#endif
       }
 
 //---------------------------------------------------------
