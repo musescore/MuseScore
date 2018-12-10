@@ -202,6 +202,7 @@ void LayoutContext::layoutLinear()
       {
       System* system = score->systems().front();
 
+#if 0 // replaced by layoutSystemElements()
       //
       // layout
       //    - beams
@@ -405,6 +406,9 @@ void LayoutContext::layoutLinear()
                   continue;
             sp->layoutSystem(system);
             }
+#endif
+
+      score->layoutSystemElements(system, *this);
 
       system->layout2();   // compute staff distances
 
