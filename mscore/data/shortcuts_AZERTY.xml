@@ -71,38 +71,47 @@
   <SC>
     <key>interval1</key>
     <seq>Alt+1</seq>
+    <seq>Alt+&amp;</seq> <!-- AZERTY for 1 -->
     </SC>
   <SC>
     <key>interval2</key>
     <seq>Alt+2</seq>
+    <seq>Alt+É</seq> <!-- AZERTY for 2 -->
     </SC>
   <SC>
     <key>interval3</key>
     <seq>Alt+3</seq>
+    <seq>Alt+&quot;</seq> <!-- AZERTY for 3 -->
     </SC>
   <SC>
     <key>interval4</key>
     <seq>Alt+4</seq>
+    <seq>Alt+'</seq> <!-- AZERTY for 4 -->
     </SC>
   <SC>
     <key>interval5</key>
     <seq>Alt+5</seq>
+    <seq>Alt+(</seq> <!-- AZERTY for 5 -->
     </SC>
   <SC>
     <key>interval6</key>
     <seq>Alt+6</seq>
+    <seq>Alt+-</seq> <!-- AZERTY for 6 -->
     </SC>
   <SC>
     <key>interval7</key>
     <seq>Alt+7</seq>
+    <seq>Alt+È</seq> <!-- AZERTY for 7 -->
     </SC>
   <SC>
     <key>interval8</key>
     <seq>Alt+8</seq>
+    <seq>Alt+_</seq> <!-- AZERTY for 8 -->
     </SC>
   <SC>
     <key>interval9</key>
     <seq>Alt+9</seq>
+    <seq>Alt+Ç</seq> <!-- AZERTY for 9 -->
     </SC>
   <SC>
     <key>note-a</key>
@@ -426,34 +435,42 @@
   <SC>
     <key>duplet</key>
     <seq>Ctrl+2</seq>
+    <seq>Ctrl+É</seq> <!-- AZERTY for 2 -->
     </SC>
   <SC>
     <key>triplet</key>
     <seq>Ctrl+3</seq>
+    <seq>Ctrl+&quot;</seq> <!-- AZERTY for 3 -->
     </SC>
   <SC>
     <key>quadruplet</key>
     <seq>Ctrl+4</seq>
+    <seq>Ctrl+'</seq> <!-- AZERTY for 4 -->
     </SC>
   <SC>
     <key>quintuplet</key>
     <seq>Ctrl+5</seq>
+    <seq>Ctrl+(</seq> <!-- AZERTY for 5 -->
     </SC>
   <SC>
     <key>sextuplet</key>
     <seq>Ctrl+6</seq>
+    <seq>Ctrl+-</seq> <!-- AZERTY for 6 -->
     </SC>
   <SC>
     <key>septuplet</key>
     <seq>Ctrl+7</seq>
+    <seq>Ctrl+È</seq> <!-- AZERTY for 7 -->
     </SC>
   <SC>
     <key>octuplet</key>
     <seq>Ctrl+8</seq>
+    <seq>Ctrl+_</seq> <!-- AZERTY for 8 -->
     </SC>
   <SC>
     <key>nonuplet</key>
     <seq>Ctrl+9</seq>
+    <seq>Ctrl+Ç</seq> <!-- AZERTY for 9 -->
     </SC>
   <SC>
     <key>note-longa</key>
@@ -915,38 +932,47 @@
   <SC>
     <key>advance-longa</key>
     <seq>Ctrl+9</seq>
+    <seq>Ctrl+Ç</seq> <!-- AZERTY for 9 -->
     </SC>
   <SC>
     <key>advance-breve</key>
     <seq>Ctrl+8</seq>
+    <seq>Ctrl+_</seq> <!-- AZERTY for 8 -->
     </SC>
   <SC>
     <key>advance-1</key>
     <seq>Ctrl+7</seq>
+    <seq>Ctrl+È</seq> <!-- AZERTY for 7 -->
     </SC>
   <SC>
     <key>advance-2</key>
     <seq>Ctrl+6</seq>
+    <seq>Ctrl+-</seq> <!-- AZERTY for 6 -->
     </SC>
   <SC>
     <key>advance-4</key>
     <seq>Ctrl+5</seq>
+    <seq>Ctrl+(</seq> <!-- AZERTY for 5 -->
     </SC>
   <SC>
     <key>advance-8</key>
     <seq>Ctrl+4</seq>
+    <seq>Ctrl+'</seq> <!-- AZERTY for 4 -->
     </SC>
   <SC>
     <key>advance-16</key>
     <seq>Ctrl+3</seq>
+    <seq>Ctrl+&quot;</seq> <!-- AZERTY for 3 -->
     </SC>
   <SC>
     <key>advance-32</key>
     <seq>Ctrl+2</seq>
+    <seq>Ctrl+É</seq> <!-- AZERTY for 2 -->
     </SC>
   <SC>
     <key>advance-64</key>
     <seq>Ctrl+1</seq>
+    <seq>Ctrl+&amp;</seq> <!-- AZERTY for 1 -->
     </SC>
   <SC>
     <key>prev-measure-TEXT</key>
