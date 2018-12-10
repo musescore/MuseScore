@@ -1,0 +1,37 @@
+init init/Guitar-tab-parts.mscx
+cmd note-input
+cmd note-c
+cmd note-d
+cmd note-e
+cmd note-f
+cmd note-g
+cmd note-f
+cmd note-e
+cmd note-d
+
+# Delete empty measures to reduce test file size
+cmd voice-1
+cmd note-a
+cmd escape
+cmd select-end-score
+cmd time-delete
+cmd note-input
+cmd escape
+
+cmd prev-measure
+cmd next-chord
+cmd next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd add-hairpin
+cmd escape
+cmd escape
+cmd prev-measure
+cmd note-input
+cmd escape
+cmd prev-measure
+cmd next-chord
+cmd insert-b
+test score #120271-parts-spanners-elongation.mscx
