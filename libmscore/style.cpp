@@ -2156,7 +2156,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
       for (auto& fontStyle : styleNamesEndings) {
             if (tag.endsWith(fontStyle.first)) {
                   readFontStyle = fontStyle.second;
-                  typeName = tag.mid(0, tag.length() - strlen(fontStyle.first));
+                  typeName = tag.mid(0, tag.length() - int(strlen(fontStyle.first)));
                   break;
                   }
             }
