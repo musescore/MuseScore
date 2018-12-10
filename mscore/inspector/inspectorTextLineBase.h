@@ -26,7 +26,6 @@ namespace Ms {
 class InspectorTextLineBase : public InspectorElementBase {
       Q_OBJECT
 
-      virtual void valueChanged(int) override;
       void updateBeginHookType();
       void updateEndHookType();
       void updateLineType();
@@ -38,6 +37,7 @@ class InspectorTextLineBase : public InspectorElementBase {
    public:
       InspectorTextLineBase(QWidget* parent);
       virtual void setElement() override;
+      virtual void valueChanged(int) override;
       };
 
 } // namespace Ms

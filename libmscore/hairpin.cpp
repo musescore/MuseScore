@@ -617,13 +617,36 @@ QVariant Hairpin::propertyDefault(Pid id) const
                   return int(Qt::CustomDashLine);
 
             case Pid::BEGIN_TEXT:
-            case Pid::END_TEXT:
+                  if (_hairpinType == HairpinType::CRESC_LINE)
+                        return QString("cresc.");
+                  if (_hairpinType == HairpinType::CRESC_LINE)
+                        return QString("dim.");
+                  return QString();
+
             case Pid::CONTINUE_TEXT:
+            case Pid::END_TEXT:
+                  if (_hairpinType == HairpinType::CRESC_LINE)
+                        return QString("(cresc.)");
+                  if (_hairpinType == HairpinType::CRESC_LINE)
+                        return QString("(dim.)");
                   return QString("");
 
             case Pid::BEGIN_TEXT_PLACE:
             case Pid::CONTINUE_TEXT_PLACE:
                   return int(PlaceText::LEFT);
+
+            case Pid::BEGIN_TEXT_OFFSET:
+            case Pid::CONTINUE_TEXT_OFFSET:
+            case Pid::END_TEXT_OFFSET:
+                  return QPointF();
+
+            case Pid::BEGIN_HOOK_TYPE:
+            case Pid::END_HOOK_TYPE:
+                  return int(HookType::NONE);
+
+            case Pid::BEGIN_HOOK_HEIGHT:
+            case Pid::END_HOOK_HEIGHT:
+                  return Spatium(0.0);
 
             case Pid::LINE_VISIBLE:
                   return true;

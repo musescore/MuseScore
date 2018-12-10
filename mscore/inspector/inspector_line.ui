@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>285</width>
+    <width>447</width>
     <height>232</height>
    </rect>
   </property>
@@ -127,6 +127,12 @@
       </item>
       <item row="2" column="1">
        <widget class="Awl::ColorLabel" name="lineColor">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Line color</string>
         </property>
@@ -137,6 +143,12 @@
       </item>
       <item row="5" column="1">
        <widget class="QComboBox" name="lineStyle">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Line style</string>
         </property>
@@ -210,6 +222,12 @@
       </item>
       <item row="4" column="1">
        <widget class="QDoubleSpinBox" name="lineWidth">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Line thickness</string>
         </property>

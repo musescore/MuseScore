@@ -28,8 +28,6 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
 //   : InspectorElementBase(parent)
    : InspectorTextLineBase(parent)
       {
-//      l.setupUi(addWidget());
-//      setupLineStyle(l.lineStyle);
       h.setupUi(addWidget());
 
       h.hairpinType->clear();
@@ -39,14 +37,6 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
       h.hairpinType->addItem(tr("Decrescendo Line"),    int(HairpinType::DECRESC_LINE));
 
       const std::vector<InspectorItem> il = {
-/*            { Pid::LINE_VISIBLE,         0, l.lineVisible,         l.resetLineVisible       },
-            { Pid::DIAGONAL,             0, l.diagonal,            l.resetDiagonal          },
-            { Pid::LINE_COLOR,           0, l.lineColor,           l.resetLineColor         },
-            { Pid::LINE_WIDTH,           0, l.lineWidth,           l.resetLineWidth         },
-            { Pid::LINE_STYLE,           0, l.lineStyle,           l.resetLineStyle         },
-            { Pid::DASH_LINE_LEN,        0, l.dashLineLength,      l.resetDashLineLength    },
-            { Pid::DASH_GAP_LEN,         0, l.dashGapLength,       l.resetDashGapLength     },
-*/
             { Pid::HAIRPIN_CIRCLEDTIP,   0, h.hairpinCircledTip,   h.resetHairpinCircledTip },
             { Pid::HAIRPIN_TYPE,         0, h.hairpinType,         0                        },
             { Pid::PLACEMENT,            0, h.placement,           h.resetPlacement         },
@@ -54,17 +44,10 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { Pid::VELO_CHANGE,          0, h.veloChange,          h.resetVeloChange        },
             { Pid::HAIRPIN_HEIGHT,       0, h.hairpinHeight,       h.resetHairpinHeight     },
             { Pid::HAIRPIN_CONT_HEIGHT,  0, h.hairpinContHeight,   h.resetHairpinContHeight },
-            { Pid::BEGIN_FONT_FACE,      0, h.fontFace,            h.resetFontFace          },
-            { Pid::BEGIN_FONT_SIZE,      0, h.fontSize,            h.resetFontSize          },
-            { Pid::BEGIN_FONT_STYLE,     0, h.fontStyle,           h.resetFontStyle         },
-            { Pid::BEGIN_TEXT,           0, h.beginText,           h.resetBeginText         },
-            { Pid::END_TEXT,             0, h.endText,             h.resetEndText           }
             };
       const std::vector<InspectorPanel> ppList = {
-//            { l.title, l.panel },
             { h.title, h.panel }
             };
-//      populatePlacement(h.placement);
       mapSignals(il, ppList);
       }
 
@@ -92,7 +75,7 @@ void InspectorHairpin::updateLineType()
 
 void InspectorHairpin::valueChanged(int idx)
       {
-      InspectorBase::valueChanged(idx);
+      InspectorTextLineBase::valueChanged(idx);
       if (iList[idx].t == Pid::LINE_STYLE)
             updateLineType();
       }
@@ -103,7 +86,7 @@ void InspectorHairpin::valueChanged(int idx)
 
 void InspectorHairpin::setElement()
       {
-      InspectorElementBase::setElement();
+      InspectorTextLineBase::setElement();
       updateLineType();
       }
 

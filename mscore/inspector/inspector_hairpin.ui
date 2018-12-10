@@ -76,21 +76,14 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="10" column="0">
-       <widget class="QLabel" name="label_10">
-        <property name="text">
-         <string>Begin text:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>beginText</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="1">
        <widget class="QSpinBox" name="veloChange">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Velocity change</string>
         </property>
@@ -114,6 +107,12 @@
       </item>
       <item row="1" column="1">
        <widget class="QComboBox" name="hairpinType">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Type</string>
         </property>
@@ -269,115 +268,6 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Font face:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>fontFace</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>Style:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="1">
-       <widget class="QSpinBox" name="fontSize">
-        <property name="accessibleName">
-         <string>Font size</string>
-        </property>
-        <property name="suffix">
-         <string>pt</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="1">
-       <widget class="QFontComboBox" name="fontFace">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>150</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Font face</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="accessibleName">
-         <string>Font size</string>
-        </property>
-        <property name="text">
-         <string>Font size:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>fontSize</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="0">
-       <widget class="QLabel" name="label_11">
-        <property name="text">
-         <string>End text:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>endText</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="1">
-       <widget class="QLineEdit" name="endText">
-        <property name="accessibleName">
-         <string>End text</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="1">
-       <widget class="QLineEdit" name="beginText">
-        <property name="accessibleName">
-         <string>Begin text</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="Ms::FontStyleSelect" name="fontStyle"/>
-        </item>
-       </layout>
-      </item>
       <item row="0" column="2">
        <widget class="Ms::ResetButton" name="resetHairpinCircledTip"/>
       </item>
@@ -396,33 +286,12 @@
       <item row="6" column="2">
        <widget class="Ms::ResetButton" name="resetHairpinContHeight"/>
       </item>
-      <item row="7" column="2">
-       <widget class="Ms::ResetButton" name="resetFontFace"/>
-      </item>
-      <item row="8" column="2">
-       <widget class="Ms::ResetButton" name="resetFontSize"/>
-      </item>
-      <item row="9" column="2">
-       <widget class="Ms::ResetButton" name="resetFontStyle"/>
-      </item>
-      <item row="10" column="2">
-       <widget class="Ms::ResetButton" name="resetBeginText"/>
-      </item>
-      <item row="11" column="2">
-       <widget class="Ms::ResetButton" name="resetEndText"/>
-      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>Ms::FontStyleSelect</class>
-   <extends>QWidget</extends>
-   <header>inspector/fontStyleSelect.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
@@ -439,10 +308,6 @@
   <tabstop>veloChange</tabstop>
   <tabstop>hairpinHeight</tabstop>
   <tabstop>hairpinContHeight</tabstop>
-  <tabstop>fontFace</tabstop>
-  <tabstop>fontSize</tabstop>
-  <tabstop>beginText</tabstop>
-  <tabstop>endText</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
