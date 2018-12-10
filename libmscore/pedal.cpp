@@ -124,6 +124,7 @@ void Pedal::write(XmlWriter& xml) const
          Pid::END_TEXT,
          Pid::LINE_WIDTH,
          Pid::LINE_STYLE,
+         Pid::LINE_VISIBLE,
          Pid::BEGIN_HOOK_TYPE
          }) {
             writeProperty(xml, i);
