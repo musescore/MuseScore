@@ -332,14 +332,15 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       iconWidth->setValue(preferences.getInt(PREF_UI_THEME_ICONWIDTH));
       iconHeight->setValue(preferences.getInt(PREF_UI_THEME_ICONHEIGHT));
-      
-      //macOS default fonts are not in QFontCombobox because they are "private":
-      //https://code.woboq.org/qt5/qtbase/src/widgets/widgets/qfontcombobox.cpp.html#329
-      auto currFontFamily = preferences.getString(PREF_UI_THEME_FONTFAMILY);
-      if (-1 == fontFamily->findText(currFontFamily))
-            fontFamily->addItem(currFontFamily);
-      fontFamily->setCurrentIndex(fontFamily->findText(currFontFamily));
-      
+
+      QFontDatabase qfd;
+      int curr = 0;
+      for (QString family : qfd.families()) {
+            fontFamily->addItem(family);
+            if (preferences.getString(PREF_UI_THEME_FONTFAMILY) == family)
+                  fontFamily->setCurrentIndex(curr);
+            curr++;
+      }
       fontSize->setValue(preferences.getInt(PREF_UI_THEME_FONTSIZE));
 
       enableMidiInput->setChecked(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
@@ -956,7 +957,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA, limitScrollArea->isChecked());
       preferences.setPreference(PREF_UI_THEME_ICONWIDTH, iconWidth->value());
       preferences.setPreference(PREF_UI_THEME_ICONHEIGHT, iconHeight->value());
-      preferences.setPreference(PREF_UI_THEME_FONTFAMILY, fontFamily->currentFont().family());
+      preferences.setPreference(PREF_UI_THEME_FONTFAMILY, QFont(fontFamily->currentText()));
       preferences.setPreference(PREF_UI_THEME_FONTSIZE, fontSize->value());
 
       bool wasJack = (preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_JACK_USEJACKAUDIO));

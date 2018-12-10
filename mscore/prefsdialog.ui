@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>834</width>
-    <height>569</height>
+    <width>879</width>
+    <height>572</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -740,9 +740,6 @@
           <item row="2" column="3">
            <widget class="QSpinBox" name="fontSize"/>
           </item>
-          <item row="2" column="1">
-           <widget class="QFontComboBox" name="fontFamily"/>
-          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="fontFamilyLabel">
             <property name="text">
@@ -756,6 +753,9 @@
              <string>Font size:</string>
             </property>
            </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="fontFamily"/>
           </item>
          </layout>
         </widget>
@@ -4214,7 +4214,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>styleName</tabstop>
   <tabstop>iconWidth</tabstop>
   <tabstop>iconHeight</tabstop>
-  <tabstop>fontFamily</tabstop>
   <tabstop>fontSize</tabstop>
   <tabstop>autoSave</tabstop>
   <tabstop>autoSaveTime</tabstop>
