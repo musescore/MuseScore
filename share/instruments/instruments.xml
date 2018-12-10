@@ -1001,6 +1001,7 @@
                   <Channel>
                         <program value="68"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="oboe-da-caccia">
                   <longName>Oboe da caccia</longName>
@@ -1047,6 +1048,23 @@
                   <Channel>
                         <program value="68"/>
                   </Channel>
+            </Instrument>
+			<Instrument id="bass-oboe">
+                  <longName>Bass Oboe</longName>
+                  <shortName>Bass Ob.</shortName>
+                  <description>Bass Oboe</description>
+                  <musicXMLid>wind.reed.oboe.bass</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>47-76</aPitchRange>
+                  <pPitchRange>47-78</pPitchRange>
+				  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
+                  <Channel>
+                        <program value="68"/>
+                  </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="piccolo-heckelphone">
                   <longName>Piccolo Heckelphone</longName>
@@ -1671,6 +1689,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="d-clarinet">
                   <longName>D Clarinet</longName>
@@ -1786,6 +1805,7 @@
                   <Channel>
                         <program value="71"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="basset-horn">
                   <longName>Basset Horn</longName>
@@ -1906,7 +1926,6 @@
                         <program value="71"/>
                   </Channel>
                   <genre>jazz</genre>
-                  <genre>orchestra</genre>
                   <genre>concertband</genre>
             </Instrument>
             <Instrument id="chalumeau">
@@ -2893,6 +2912,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="a-horn">
                   <longName>Horn in A</longName>
@@ -2938,6 +2958,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="e-horn">
                   <longName>E Horn</longName>
@@ -2953,6 +2974,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="eb-horn">
                   <longName>Horn in E♭</longName>
@@ -2968,6 +2990,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="d-horn">
                   <longName>Horn in D</longName>
@@ -2983,6 +3006,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="low-c-horn">
                   <longName>Horn in C</longName>
@@ -2996,6 +3020,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="vienna-horn">
                   <longName>Vienna Horn</longName>
@@ -3026,6 +3051,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="eb-cornet">
                   <longName>E♭ Cornet</longName>
@@ -3082,6 +3108,7 @@
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>concertband</genre>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="a-cornet">
                   <longName>A Cornet</longName>
@@ -3296,6 +3323,7 @@
                   <Channel name="mute">
                         <program value="59"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="e-trumpet">
                   <longName>E Trumpet</longName>
@@ -3314,6 +3342,7 @@
                   <Channel name="mute">
                         <program value="59"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="eb-trumpet">
                   <longName>E♭ Trumpet</longName>
@@ -3332,6 +3361,7 @@
                   <Channel name="mute">
                         <program value="59"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="d-trumpet">
                   <longName>D Trumpet</longName>
@@ -3350,6 +3380,7 @@
                   <Channel name="mute">
                         <program value="59"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="c-trumpet">
                   <longName>C Trumpet</longName>
@@ -3408,6 +3439,7 @@
                   <Channel name="mute">
                         <program value="59"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="pocket-trumpet">
                   <longName>Pocket Trumpet</longName>
@@ -3825,6 +3857,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="f-alto-ophicleide">
                   <longName>F Alto Ophicleide</longName>
@@ -4092,6 +4125,7 @@
                   <Channel>
                         <program value="57"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="bass-trombone">
                   <longName>Bass Trombone</longName>
@@ -4136,6 +4170,7 @@
                   <Channel>
                         <program value="58"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="euphonium">
                   <longName>Euphonium</longName>
@@ -4390,6 +4425,7 @@
                   <Channel>
                         <program value="60"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="f-wagner-tuba">
                   <longName>F Wagner Tuba</longName>
@@ -4405,6 +4441,7 @@
                   <Channel>
                         <program value="56"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="conch">
                   <longName>Conch</longName>
@@ -6114,6 +6151,7 @@
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
+				  <genre>orchestra</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
                   <genre>classroom</genre>
@@ -6164,6 +6202,7 @@
                   </Channel>
                   <genre>world</genre>
                   <genre>jazz</genre>
+				  <genre>orchestra</genre>
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="maracas">
@@ -6329,6 +6368,7 @@
                         <controller ctrl="0" value="1"/>
                         <program value="0"/>
                   </Channel>
+				  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="thundersheet">
                   <longName>Thundersheet</longName>
