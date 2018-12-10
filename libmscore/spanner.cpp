@@ -1057,7 +1057,7 @@ int Spanner::reuseSegments(int number)
 
 void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment*()> createSegment)
       {
-      const int diff = targetNumber - segments.size();
+      const int diff = targetNumber - int(nsegments());
       if (diff == 0)
             return;
       if (diff > 0) {

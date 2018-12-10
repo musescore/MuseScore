@@ -47,6 +47,7 @@ extern void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
 //   processLines
 //---------------------------------------------------------
 
+#if 0
 static void processLines(System* system, std::vector<Spanner*> lines, bool align)
       {
       std::vector<SpannerSegment*> segments;
@@ -64,6 +65,7 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
                   ss->ryoffset() = y;
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   resetSystems

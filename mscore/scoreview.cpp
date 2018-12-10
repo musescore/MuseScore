@@ -1132,8 +1132,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                     QPointF pt(system->ipos());
                                     qreal h = system->minBottom() + system->minTop();
                                     p.translate(pt);
-                                    QRectF r(0.0, -system->minTop(), system->width(), h);
-                                    p.drawRect(r);
+                                    QRectF rect(0.0, -system->minTop(), system->width(), h);
+                                    p.drawRect(rect);
                                     p.translate(-pt);
                                     }
                               }

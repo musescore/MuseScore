@@ -83,7 +83,7 @@ Element* HairpinSegment::drop(EditData& data)
 void HairpinSegment::layout()
       {
       const qreal _spatium = spatium();
-      const int _track = track();
+      const int _trck = track();
       if (autoplace() && !score()->isPalette()) {
             // Try to fit between adjacent dynamics
             const System* sys = system();
@@ -91,7 +91,7 @@ void HairpinSegment::layout()
                   Segment* start = hairpin()->startSegment();
                   Dynamic* sd = nullptr;
                   if (start && start->system() == sys)
-                        sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _track, _track));
+                        sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
                   if (sd && sd->visible() && sd->autoplace()) {
                         const qreal sdRight = sd->bbox().right() + sd->pos().x()
                                               + sd->segment()->pos().x() + sd->measure()->pos().x();
@@ -106,7 +106,7 @@ void HairpinSegment::layout()
                   if (end && end->tick() < sys->endTick()) {
                         // checking ticks rather than systems since latter
                         // systems may be unknown at layout stage.
-                        ed = toDynamic(end->findAnnotation(ElementType::DYNAMIC, _track, _track));
+                        ed = toDynamic(end->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
                         }
                   if (ed && ed->visible() && ed->autoplace()) {
                         const qreal edLeft  = ed->bbox().left() + ed->pos().x()
