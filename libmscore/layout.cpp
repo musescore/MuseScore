@@ -1255,10 +1255,14 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                         for (int i = 0; i < part->nstaves(); ++i) {
                               int st = idx + i;
 
-                              foreach (MeasureBase* mb, system->measures()) {
+                              for (MeasureBase* mb : system->measures()) {
                                     if (!mb->isMeasure())
                                           continue;
                                     Measure* m = toMeasure(mb);
+                                    if (staff->hideWhenEmpty() == Staff::HideMode::INSTRUMENT && !m->isMeasureRest(st)) {
+                                          hideStaff = false;
+                                          break;
+                                          }
                                     for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                                           for (int voice = 0; voice < VOICES; ++voice) {
                                                 ChordRest* cr = s->cr(st * VOICES + voice);
