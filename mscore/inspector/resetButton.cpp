@@ -35,8 +35,8 @@ ResetButton::ResetButton(QWidget* parent)
       QHBoxLayout* l = new QHBoxLayout;
       l->setSpacing(0);
       l->setContentsMargins(0, 0, 0, 0);
-      l->addWidget(reset);
-      l->addWidget(setStyle);
+      l->addWidget(reset, 0, Qt::AlignLeft);
+      l->addWidget(setStyle, 0, Qt::AlignLeft);
       setLayout(l);
       setStyle->hide();
       show();
