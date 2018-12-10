@@ -336,6 +336,8 @@ void MixerTrackChannel::setSelected(bool sel)
 
       if (_selected && _group)
             _group->notifyTrackSelected(this);
+
+      applyStyle();
       }
 
 }
