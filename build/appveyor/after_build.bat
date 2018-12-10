@@ -73,7 +73,7 @@ goto :UPLOAD
 :UNSTABLE_LABEL
 echo "Unstable: build 7z package"
 CD C:\MuseScore
-RENAME C:\MuseScore\msvc.install_x64\bin\musescore.exe nightly.exe
+RENAME C:\MuseScore\msvc.install_x64\bin\MuseScore3.exe nightly.exe
 RENAME C:\MuseScore\msvc.install_x64 MuseScoreNightly
 XCOPY C:\MuseScore\build\appveyor\special C:\MuseScore\MuseScoreNightly\special /I /E /Y /Q
 COPY C:\MuseScore\build\appveyor\support\README.txt C:\MuseScore\MuseScoreNightly\README.txt /Y
