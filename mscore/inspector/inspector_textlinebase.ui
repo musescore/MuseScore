@@ -78,6 +78,12 @@
       </property>
       <item row="3" column="1">
        <widget class="QDoubleSpinBox" name="endHookHeight">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Height</string>
         </property>
@@ -107,6 +113,12 @@
       </item>
       <item row="2" column="1">
        <widget class="QComboBox" name="endHookType">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>End hook</string>
         </property>
