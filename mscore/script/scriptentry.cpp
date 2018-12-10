@@ -26,12 +26,10 @@ namespace Ms {
 
 std::unique_ptr<ScriptEntry> ScriptEntry::deserialize(const QString& line)
       {
+      if (line.isEmpty() || line.startsWith('#')) // comment or empty line
+            return nullptr;
       QStringList tokens = line.split(' ');
       const QString& type = tokens[0];
-      if (tokens.empty()) {
-            qWarning("Script line is empty");
-            return nullptr;
-            }
       if (type == SCRIPT_CMD) {
             if (tokens.size() != 2) {
                   qWarning("Unexpected number of tokens in command: %d", tokens.size());
