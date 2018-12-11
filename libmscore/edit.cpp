@@ -3706,77 +3706,88 @@ void Score::undoTransposeHarmony(Harmony* h, int rootTpc, int baseTpc)
 //   undoExchangeVoice
 //---------------------------------------------------------
 
-void Score::undoExchangeVoice(Measure* measure, int v1, int v2, int staff1, int staff2)
+void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int srcStaff, int dstStaff)
       {
       int tick = measure->tick();
 
-      for (int staffIdx = staff1; staffIdx < staff2; ++staffIdx) {
-            QSet<Staff*> sl;
+      for (int staffIdx = srcStaff; staffIdx < dstStaff; ++staffIdx) {
+            QSet<Staff*> staffList;
             for (Staff* s : staff(staffIdx)->staffList())
-                  sl.insert(s);
+                  staffList.insert(s);
 
-            int sTrack = staffIdx * VOICES;
-            int s = sTrack + v1;
-            int d = sTrack + v2;
-            int diff = v2 - v1;
+            int srcStaffTrack = staffIdx * VOICES;
+            int srcTrack = srcStaffTrack + srcVoice;
+            int dstTrack = srcStaffTrack + dstVoice;
+            int trackDiff = dstVoice - srcVoice;
 
             //handle score and complete measures first
-            undo(new ExchangeVoice(measure, s, d, staffIdx));
+            undo(new ExchangeVoice(measure, srcTrack, dstTrack, staffIdx));
 
-            for (Staff* st : sl) {
-                  int stTrack = st->idx() * VOICES;
-                  Measure* m = st->score()->tick2measure(tick);
+            for (Staff* st : staffList) {
+                  int staffTrack = st->idx() * VOICES;
+                  Measure* measure2 = st->score()->tick2measure(tick);
                   Excerpt* ex = st->score()->excerpt();
+
                   if (ex) {
-                        QMultiMap<int, int> t = ex->tracks();
-                        QList<int> ts = t.values(s);
-                        QList<int> td = t.values(d);
+                        QMultiMap<int, int> tracks = ex->tracks();
+                        QList<int> srcTrackList = tracks.values(srcTrack);
+                        QList<int> dstTrackList = tracks.values(dstTrack);
 
-                        for (int tss : ts) {
-                              if (!(stTrack <= tss) || !(tss < stTrack + VOICES))
+                        for (int srcTrack2 : srcTrackList) {
+                              // don't care about other linked staves
+                              if (!(staffTrack <= srcTrack2) || !(srcTrack2 < staffTrack + VOICES))
                                     continue;
 
-                              int temp = t.key(tss);
-                              QList<int> test = t.values(temp + diff);
+                              int tempTrack = tracks.key(srcTrack2);
+                              QList<int> testTracks = tracks.values(tempTrack + trackDiff);
                               bool hasVoice = false;
-                              for (int te : test) {
-                                    if (stTrack <= te && te < stTrack + VOICES && td.contains(te))
+                              for (int testTrack : testTracks) {
+                                    if (staffTrack <= testTrack && testTrack < staffTrack + VOICES && dstTrackList.contains(testTrack)) {
                                           hasVoice = true;
+                                          // voice is simply exchangable now (deal directly)
+                                          undo(new ExchangeVoice(measure2, srcTrack2, testTrack, staffTrack / 4));
+                                          }
                                     }
 
+                              // only source voice is in this staff
                               if (!hasVoice) {
-                                    undo(new CloneVoice(measure->first(), m->endTick(), m->first(), temp, tss, temp + diff));
-                                    ts.removeOne(tss);
+                                    undo(new CloneVoice(measure->first(), measure2->endTick(), measure2->first(), tempTrack, srcTrack2, tempTrack + trackDiff));
+                                    srcTrackList.removeOne(srcTrack2);
                                     }
                               }
 
-                        for (int tdd : td) {
-                              if (!(stTrack <= tdd) || !(tdd < stTrack + VOICES))
+                        for (int dstTrack2 : dstTrackList) {
+                              // don't care about other linked staves
+                              if (!(staffTrack <= dstTrack2) || !(dstTrack2 < staffTrack + VOICES))
                                     continue;
 
-                              int temp = t.key(tdd);
-                              QList<int> test = t.values(temp - diff);
+                              int tempTrack = tracks.key(dstTrack2);
+                              QList<int> testTracks = tracks.values(tempTrack - trackDiff);
                               bool hasVoice = false;
-                              for (int te : test) {
-                                    if (stTrack <= te && te < stTrack + VOICES &&
-                                        ts.contains(te))
+                              for (int testTrack : testTracks) {
+                                    if (staffTrack <= testTrack && testTrack < staffTrack + VOICES &&
+                                        srcTrackList.contains(testTrack))
                                           hasVoice = true;
                                     }
 
+                              // only destination voice is in this staff
                               if (!hasVoice) {
-                                    undo(new CloneVoice(measure->first(), m->endTick(), m->first(), temp, tdd, temp - diff));
-                                    td.removeOne(tdd);
+                                    undo(new CloneVoice(measure->first(), measure2->endTick(), measure2->first(), tempTrack, dstTrack2, tempTrack - trackDiff));
+                                    dstTrackList.removeOne(dstTrack2);
                                     }
                               }
-                        }
+                        } else if (srcStaffTrack != staffTrack) {
+                              // linked staff in same score (all voices present can be assumed)
+                              undo(new ExchangeVoice(measure2, staffTrack + srcVoice, staffTrack + dstVoice, st->idx()));
+                              }
 
                   }
             }
 
       // make sure voice 0 is complete
 
-      if (v1 == 0 || v2 == 0) {
-            for (int staffIdx = staff1; staffIdx < staff2; ++staffIdx) {
+      if (srcVoice == 0 || dstVoice == 0) {
+            for (int staffIdx = srcStaff; staffIdx < dstStaff; ++staffIdx) {
                   // check for complete timeline of voice 0
                   int ctick  = measure->tick();
                   int track = staffIdx * VOICES;
