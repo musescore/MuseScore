@@ -1777,7 +1777,8 @@ MuseScore::MuseScore()
       Workspace::addActionAndString(aboutQtAction, "about-qt");
 
       aboutMusicXMLAction = new QAction("", 0);
-      aboutMusicXMLAction->setMenuRole(QAction::ApplicationSpecificRole);
+      //aboutMusicXMLAction->setMenuRole(QAction::ApplicationSpecificRole);
+      aboutMusicXMLAction->setMenuRole(QAction::NoRole);
       connect(aboutMusicXMLAction, SIGNAL(triggered()), this, SLOT(aboutMusicXML()));
       menuHelp->addAction(aboutMusicXMLAction);
       Workspace::addActionAndString(aboutMusicXMLAction, "about-musicxml");
