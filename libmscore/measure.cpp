@@ -3634,10 +3634,8 @@ void Measure::addSystemHeader(bool isFirstSystem)
 
                         if (disable) {
                               // TODO
-                              // disabling key signatures requires a lot of care making sure we ignore them everywhere else
-                              // for now, just remove them
-                              //kSegment->setEnabled(false);
-                              score()->undo(new RemoveElement(kSegment));
+                              kSegment->setEnabled(false);
+                              //score()->undo(new RemoveElement(kSegment));
                               }
                         else {
                               Element* e = kSegment->element(track);
@@ -3686,8 +3684,8 @@ void Measure::addSystemHeader(bool isFirstSystem)
             else {
                   if (cSegment) {
                         // TODO
-                        //cSegment->setEnabled(false);
-                        score()->undo(new RemoveElement(cSegment));
+                        cSegment->setEnabled(false);
+                        //score()->undo(new RemoveElement(cSegment));
                         }
                   }
             ++staffIdx;
@@ -3722,8 +3720,8 @@ void Measure::addSystemHeader(bool isFirstSystem)
             }
       else if (s) {
             // TODO
-            //s->setEnabled(false);
-            score()->undo(new RemoveElement(s));
+            s->setEnabled(false);
+            //score()->undo(new RemoveElement(s));
             }
       checkHeader();
       }
