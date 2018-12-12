@@ -109,20 +109,37 @@ ZerberusGui::ZerberusGui(Ms::Synthesizer* s)
       updateButtons();
       }
 
+//---------------------------------------------------------
+//   moveSoundfontInTheList
+//---------------------------------------------------------
+
+void ZerberusGui::moveSoundfontInTheList(int currentIdx, int targetIdx)
+      {
+      QStringList sfonts = zerberus()->soundFonts();
+      sfonts.swap(currentIdx, targetIdx);
+      zerberus()->removeSoundFonts(zerberus()->soundFonts());
+      
+      loadSoundFontsAsync(sfonts);
+      files->setCurrentRow(targetIdx);
+      emit sfChanged();
+      }
+
+//---------------------------------------------------------
+//   soundFontUpClicked
+//---------------------------------------------------------
+
 void ZerberusGui::soundFontUpClicked()
       {
       int row = files->currentRow();
       if (row <= 0)
             return;
 
-      QStringList sfonts = zerberus()->soundFonts();
-      sfonts.swap(row, row-1);
-      zerberus()->removeSoundFonts(zerberus()->soundFonts());
-
-      loadSoundFontsAsync(sfonts);
-      files->setCurrentRow(row-1);
-      emit sfChanged();
+      moveSoundfontInTheList(row, row - 1);
       }
+
+//---------------------------------------------------------
+//   soundFontDownClicked
+//---------------------------------------------------------
 
 void ZerberusGui::soundFontDownClicked()
       {
@@ -131,13 +148,7 @@ void ZerberusGui::soundFontDownClicked()
       if (row + 1 >= rows)
             return;
 
-      QStringList sfonts = zerberus()->soundFonts();
-      sfonts.swap(row, row + 1);
-      zerberus()->removeSoundFonts(zerberus()->soundFonts());
-
-      loadSoundFontsAsync(sfonts);
-      files->setCurrentRow(row + 1);
-      emit sfChanged();
+      moveSoundfontInTheList(row, row + 1);
       }
 
 //---------------------------------------------------------
