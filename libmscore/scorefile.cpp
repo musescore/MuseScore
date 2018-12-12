@@ -816,6 +816,8 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
                   }
             }
       XmlReader e(dbuf);
+      QBuffer readAheadBuf(&dbuf);
+      e.setReadAheadDevice(&readAheadBuf);
       e.setDocName(masterScore()->fileInfo()->completeBaseName());
 
       FileError retval = read1(e, ignoreVersionError);
@@ -873,6 +875,7 @@ Score::FileError MasterScore::loadMsc(QString name, QIODevice* io, bool ignoreVe
             return loadCompressedMsc(io, ignoreVersionError);
       else {
             XmlReader r(io);
+            r.setReadAheadDevice(io);
             return read1(r, ignoreVersionError);
             }
       }
