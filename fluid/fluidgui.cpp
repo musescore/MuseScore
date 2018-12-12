@@ -140,6 +140,25 @@ void FluidGui::synthesizerChanged()
       }
 
 //---------------------------------------------------------
+//   moveSoundfontInTheList
+//---------------------------------------------------------
+
+void FluidGui::moveSoundfontInTheList(int currentIdx, int targetIdx)
+      {
+      QStringList sfonts = fluid()->soundFonts();
+      for (auto sfName : sfonts)
+            fluid()->removeSoundFont(sfName);
+      
+      sfonts.swap(currentIdx, targetIdx);
+      fluid()->loadSoundFonts(sfonts);
+      sfonts = fluid()->soundFonts();
+      soundFonts->clear();
+      soundFonts->addItems(sfonts);
+      soundFonts->setCurrentRow(targetIdx);
+      emit sfChanged();
+      }
+
+//---------------------------------------------------------
 //   soundFontUpClicked
 //---------------------------------------------------------
 
@@ -148,14 +167,8 @@ void FluidGui::soundFontUpClicked()
       int row = soundFonts->currentRow();
       if (row <= 0)
             return;
-      QStringList sfonts = fluid()->soundFonts();
-      sfonts.swap(row, row - 1);
-      fluid()->loadSoundFonts(sfonts);
-      sfonts = fluid()->soundFonts();
-      soundFonts->clear();
-      soundFonts->addItems(sfonts);
-      soundFonts->setCurrentRow(row - 1);
-      emit sfChanged();
+      
+      moveSoundfontInTheList(row, row - 1);
       }
 
 //---------------------------------------------------------
@@ -169,14 +182,7 @@ void FluidGui::soundFontDownClicked()
       if (row + 1 >= rows)
             return;
 
-      QStringList sfonts = fluid()->soundFonts();
-      sfonts.swap(row, row + 1);
-      fluid()->loadSoundFonts(sfonts);
-      sfonts = fluid()->soundFonts();
-      soundFonts->clear();
-      soundFonts->addItems(sfonts);
-      soundFonts->setCurrentRow(row + 1);
-      emit sfChanged();
+      moveSoundfontInTheList(row, row + 1);
       }
 
 //---------------------------------------------------------
