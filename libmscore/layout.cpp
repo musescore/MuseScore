@@ -1321,6 +1321,7 @@ void Score::connectTies(bool silent)
       Measure* m = firstMeasure();
       if (!m)
             return;
+
       SegmentType st = SegmentType::ChordRest;
       for (Segment* s = m->first(st); s; s = s->next1(st)) {
             for (int i = 0; i < tracks; ++i) {
@@ -1377,6 +1378,7 @@ void Score::connectTies(bool silent)
                                     }
                               }
                         }
+#if 0    // chords are set in tremolo->layout()
                   // connect two note tremolos
                   Tremolo* tremolo = c->tremolo();
                   if (tremolo && tremolo->twoNotes() && !tremolo->chord2()) {
@@ -1399,6 +1401,7 @@ void Score::connectTies(bool silent)
                               break;
                               }
                         }
+#endif
                   }
             }
       }
@@ -2596,8 +2599,8 @@ void Score::getNextMeasure(LayoutContext& lc)
                         if (e && e->isChord()) {
                               Chord* chord = toChord(e);
                               chord->layout();
-                              if (chord->tremolo())            // debug
-                                    chord->tremolo()->layout();
+//                              if (chord->tremolo())            // debug
+//                                    chord->tremolo()->layout();
                               }
                         }
                   }
@@ -3295,6 +3298,10 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                     int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
                                     if (effectiveTrack >= strack && effectiveTrack < etrack)
                                           skyline.add(e->shape().translated(e->pos() + pos));
+                                    if (e->isChord() && toChord(e)->tremolo()) {
+                                          Tremolo* t = toChord(e)->tremolo();
+                                          skyline.add(t->shape().translated(t->pos() + pos));
+                                          }
                                     }
                               }
                         }
@@ -3321,14 +3328,15 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                        // layout fingering a second time (first layout called in note->layout2())
                        // to finally place fingerings above or below a beam
 
-                       if (e->isChord()) {
-                             for (Note* note : toChord(e)->notes()) {
-                                   for (Element* e : note->el()) {
-                                         if (e->isFingering())
-                                               e->layout();
-                                         }
-                                   }
-                             }
+                        if (e->isChord()) {
+                              Chord* c = toChord(e);
+                              for (Note* note : c->notes()) {
+                                    for (Element* e : note->el()) {
+                                          if (e->isFingering())
+                                                e->layout();
+                                          }
+                                    }
+                              }
                         }
                   }
             }
@@ -3789,7 +3797,7 @@ void Score::doLayoutRange(int stick, int etick)
             }
 //      if (!_systems.isEmpty())
 //            return;
-// qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Part", int(_systems.size()));
+ qDebug("%p %d-%d %s systems %d", this, stick, etick, isMaster() ? "Master" : "Part", int(_systems.size()));
       bool layoutAll = stick <= 0 && (etick < 0 || etick >= last()->endTick());
       if (stick < 0)
             stick = 0;

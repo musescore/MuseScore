@@ -1523,8 +1523,8 @@ void Chord::layoutStem()
       //    process tremolo
       //-----------------------------------------
 
-      if (_tremolo)
-            _tremolo->layout();
+//      if (_tremolo)
+//            _tremolo->layout();
       }
 
 //---------------------------------------------------------
@@ -2843,15 +2843,13 @@ void Chord::toGraceAfter()
 
 TremoloChordType Chord::tremoloChordType() const
       {
-      if (_tremolo) {
-            if (_tremolo->twoNotes()) {
-                  if (_tremolo->chord1() == this)
-                        return TremoloChordType::TremoloFirstNote;
-                  else if (_tremolo->chord2() == this)
-                        return TremoloChordType::TremoloSecondNote;
-                  else
-                        qDebug("Chord::tremoloChordType(): inconsistency %p - %p", _tremolo->chord1(), _tremolo->chord2());
-                  }
+      if (_tremolo && _tremolo->twoNotes()) {
+            if (_tremolo->chord1() == this)
+                  return TremoloChordType::TremoloFirstNote;
+            else if (_tremolo->chord2() == this)
+                  return TremoloChordType::TremoloSecondNote;
+            else
+                  qFatal("Chord::tremoloChordType(): inconsistency %p - %p", _tremolo->chord1(), _tremolo->chord2());
             }
       return TremoloChordType::TremoloSingle;
       }
@@ -3092,8 +3090,8 @@ Shape Chord::shape() const
             shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
       if (_arpeggio)
             shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
-      if (_tremolo)
-            shape.add(_tremolo->shape().translated(_tremolo->pos()));
+//      if (_tremolo)
+//            shape.add(_tremolo->shape().translated(_tremolo->pos()));
       for (Note* note : _notes)
             shape.add(note->shape().translated(note->pos()));
       for (Element* e : el())

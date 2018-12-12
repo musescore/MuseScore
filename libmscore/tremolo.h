@@ -52,7 +52,7 @@ class Tremolo final : public Element {
       static TremoloType name2Type(const QString& s);
       static QString type2name(TremoloType t);
 
-      Chord* chord() const { return (Chord*)parent(); }
+      Chord* chord() const { return toChord(parent()); }
 
       void setTremoloType(TremoloType t);
       TremoloType tremoloType() const      { return _tremoloType; }

@@ -260,7 +260,7 @@ bool Score::read(XmlReader& e)
       fixTicks();
       masterScore()->rebuildMidiMapping();
       masterScore()->updateChannel();
-      createPlayEvents();
+//      createPlayEvents();
       return true;
       }
 
