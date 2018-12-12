@@ -98,7 +98,9 @@ void LetRing::write(XmlWriter& xml) const
 
 LineSegment* LetRing::createLineSegment()
       {
-      return new LetRingSegment(this, score());
+      LetRingSegment* lr = new LetRingSegment(this, score());
+      lr->setTrack(track());
+      return lr;
       }
 
 //---------------------------------------------------------

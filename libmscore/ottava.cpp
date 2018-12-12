@@ -242,6 +242,7 @@ static const ElementStyle ottavaSegmentStyle {
 LineSegment* Ottava::createLineSegment()
       {
       OttavaSegment* os = new OttavaSegment(this, score());
+      os->setTrack(track());
       os->initElementStyle(&ottavaSegmentStyle);
       return os;
       }

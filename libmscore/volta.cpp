@@ -172,6 +172,7 @@ static const ElementStyle voltaSegmentStyle {
 LineSegment* Volta::createLineSegment()
       {
       VoltaSegment* vs = new VoltaSegment(this, score());
+      vs->setTrack(track());
       vs->initElementStyle(&voltaSegmentStyle);
       return vs;
       }
