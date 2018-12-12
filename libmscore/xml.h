@@ -67,6 +67,10 @@ class LinksIndexer {
 class XmlReader : public QXmlStreamReader {
       QString docName;  // used for error reporting
 
+      // For readahead possibility.
+      // If needed, must be explicitly set by setReadAheadDevice.
+      QIODevice* _readAheadDevice = nullptr;
+
       // Score read context (for read optimizations):
       int _tick             { 0       };
       int _tickOffset       { 0       };
@@ -105,6 +109,7 @@ class XmlReader : public QXmlStreamReader {
       XmlReader(QIODevice* d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
       XmlReader(const QString& d, const QString& st = QString()) : QXmlStreamReader(d), docName(st) {}
       XmlReader(const XmlReader&) = delete;
+      XmlReader& operator=(const XmlReader&) = delete;
       ~XmlReader();
 
       bool hasAccidental;                     // used for userAccidental backward compatibility
@@ -194,6 +199,11 @@ class XmlReader : public QXmlStreamReader {
       void checkTuplets();
       Tid addUserTextStyle(const QString& name);
       Tid lookupUserTextStyle(const QString& name);
+
+      // Ownership on read ahead device is NOT transfered to XmlReader.
+      void setReadAheadDevice(QIODevice* dev) { if (!dev->isSequential()) _readAheadDevice = dev; }
+      bool readAheadAvailable() const { return bool(_readAheadDevice); }
+      void performReadAhead(std::function<void(QIODevice&)> readAheadRoutine);
 
       QList<std::pair<Element*, QPointF>>& fixOffsets() { return  _fixOffsets; }
       };
