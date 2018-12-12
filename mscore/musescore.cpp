@@ -4350,9 +4350,9 @@ void MuseScore::play(Element* e, int pitch) const
 
             Note* masterNote = note;
             if (note->linkList().size() > 1) {
-                  for (ScoreElement* se : note->linkList()) {
-                        if (se->score() == note->masterScore() && se->isNote()) {
-                              masterNote = toNote(se);
+                  for (ScoreElement* se_ : note->linkList()) {
+                        if (se_->score() == note->masterScore() && se_->isNote()) {
+                              masterNote = toNote(se_);
                               break;
                               }
                         }

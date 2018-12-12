@@ -2704,7 +2704,7 @@ bool TextBase::hasCustomFormatting() const
 
 QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) const
       {
-      QString _text;
+      QString _txt;
       bool bold_      = false;
       bool italic_    = false;
       bool underline_ = false;
@@ -2726,7 +2726,7 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
       fmt.setPreedit(false);
       fmt.setValign(VerticalAlignment::AlignNormal);
 
-      XmlNesting xmlNesting(&_text);
+      XmlNesting xmlNesting(&_txt);
       if (!removeStyle) {
             if (bold_)
                   xmlNesting.pushB();
@@ -2763,9 +2763,9 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
                         }
 
                   if (!removeSize && (format.fontSize() != fmt.fontSize()))
-                        _text += QString("<font size=\"%1\"/>").arg(format.fontSize());
+                        _txt += QString("<font size=\"%1\"/>").arg(format.fontSize());
                   if (!removeFace && (format.fontFamily() != fmt.fontFamily()))
-                        _text += QString("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
+                        _txt += QString("<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
 
                   VerticalAlignment va = format.valign();
                   VerticalAlignment cva = fmt.valign();
@@ -2782,15 +2782,15 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
                                     break;
                               }
                         }
-                  _text += XmlWriter::xmlString(f.text);
+                  _txt += XmlWriter::xmlString(f.text);
                   fmt = format;
                   }
             if (block.eol())
-                  _text += QChar::LineFeed;
+                  _txt += QChar::LineFeed;
             }
       while (!xmlNesting.empty())
             xmlNesting.popToken();
-      return _text;
+      return _txt;
       }
 
 //---------------------------------------------------------

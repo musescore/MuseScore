@@ -203,7 +203,7 @@ class Spanner : public Element {
       const SpannerSegment* backSegment() const    { return segments.back();  }
       SpannerSegment* segmentAt(int n)             { return segments[n];      }
       const SpannerSegment* segmentAt(int n) const { return segments[n];      }
-      int nsegments() const                        { return segments.size();  }
+      size_t nsegments() const                     { return segments.size();  }
       bool segmentsEmpty() const                   { return segments.empty(); }
       void eraseSpannerSegments();
 
