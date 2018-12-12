@@ -67,9 +67,12 @@ class PianorollEditor : public QMainWindow, public MuseScoreView {
       QSplitter* split;
       QList<QAction*> actions;
 
+      bool updateScheduled = false;
+
       void updateVelocity(Note* note);
       void updateSelection();
       void readSettings();
+      void doUpdate();
 
    private slots:
       void selectionChanged();
