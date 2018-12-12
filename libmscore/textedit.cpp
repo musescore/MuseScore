@@ -463,6 +463,7 @@ void SplitJoinText::split(EditData* ed)
 
       CharFormat* charFmt = c.format();         // take current format
       t->textBlockList().insert(line + 1, c.curLine().split(c.column()));
+      c.curLine().setEol(true);
 
       c.setRow(line+1);
       c.curLine().setEol(true);
