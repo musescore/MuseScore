@@ -478,6 +478,7 @@ static const ElementStyle hairpinSegmentStyle {
 LineSegment* Hairpin::createLineSegment()
       {
       HairpinSegment* h = new HairpinSegment(this, score());
+      h->setTrack(track());
       h->initElementStyle(&hairpinSegmentStyle);
       return h;
       }

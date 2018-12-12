@@ -96,6 +96,7 @@ TextLine::TextLine(const TextLine& tl)
 LineSegment* TextLine::createLineSegment()
       {
       TextLineSegment* seg = new TextLineSegment(this, score());
+      seg->setTrack(track());
       // note-anchored line segments are relative to system not to staff
       if (anchor() == Spanner::Anchor::NOTE)
             seg->setFlag(ElementFlag::ON_STAFF, false);
