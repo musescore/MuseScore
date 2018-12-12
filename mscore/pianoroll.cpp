@@ -723,21 +723,6 @@ Element* PianorollEditor::elementNear(QPointF)
 
 void PianorollEditor::updateAll()
       {
-      if (updateScheduled)
-            return;
-
-      QTimer::singleShot(0, this, &PianorollEditor::doUpdate);
-      updateScheduled = true;
-      }
-
-//---------------------------------------------------------
-//   doUpdate
-//---------------------------------------------------------
-
-void PianorollEditor::doUpdate()
-      {
-      updateScheduled = false;
-
       if (staff && staff->idx() == -1) { // staff removed
             removeScore();
             return;
