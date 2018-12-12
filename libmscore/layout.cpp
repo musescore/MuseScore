@@ -3619,6 +3619,7 @@ void LayoutContext::collectPage()
             //
             //  check for page break or if next system will fit on page
             //
+            const bool rangeWasDone = rangeDone;
             if (rangeDone) {
                   // take next system unchanged
                   if (systemIdx > 0) {
@@ -3690,6 +3691,9 @@ void LayoutContext::collectPage()
             if (breakPage) {
                   qreal dist = qMax(prevSystem->minBottom(), slb);
                   layoutPage(page, ey - (y + dist));
+                  // We don't accept current system to this page
+                  // so rollback rangeDone variable as well.
+                  rangeDone = rangeWasDone;
                   break;
                   }
             }
