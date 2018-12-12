@@ -22,9 +22,8 @@ namespace Ms {
 //   SystemDivider
 //---------------------------------------------------------
 
-SystemDivider::SystemDivider(Score* s) : Symbol(s)
+SystemDivider::SystemDivider(Score* s) : Symbol(s, ElementFlag::SYSTEM | ElementFlag::NOT_SELECTABLE)
       {
-      setSystemFlag(true);
       // default value, but not valid until setDividerType()
       _dividerType = SystemDivider::Type::LEFT;
       _sym = SymId::systemDivider;

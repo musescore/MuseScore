@@ -79,7 +79,8 @@ static void transposeChord(Chord* c, Interval srcTranspose, int tick)
 
 bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
       {
-      Q_ASSERT(dst->segmentType() == SegmentType::ChordRest);
+      Q_ASSERT(dst->isChordRestType());
+
       QList<Chord*> graceNotes;
       Beam* startingBeam = nullptr;
       Tuplet* tuplet = nullptr;
