@@ -1722,7 +1722,6 @@ bool ChordList::read(const QString& name)
             return false;
             }
       XmlReader e(&f);
-      docName = f.fileName();
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {

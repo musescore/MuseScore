@@ -56,8 +56,8 @@ struct BarLineTableItem {
 
 class BarLine final : public Element {
       int _spanStaff          { 0 };       // span barline to next staff if true, values > 1 are used for importing from 2.x
-      char _spanFrom          { 0 };       // line number on start and end staves
-      char _spanTo            { 0 };
+      int _spanFrom           { 0 };       // line number on start and end staves
+      int _spanTo             { 0 };
       BarLineType _barLineType { BarLineType::NORMAL };
       mutable qreal y1;
       mutable qreal y2;
