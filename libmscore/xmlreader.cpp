@@ -432,15 +432,6 @@ QString XmlReader::readXml()
       }
 
 //---------------------------------------------------------
-//   compareProperty
-//---------------------------------------------------------
-
-template <class T> bool compareProperty(void* val, void* defaultVal)
-      {
-      return (defaultVal == 0) || (*(T*)val != *(T*)defaultVal);
-      }
-
-//---------------------------------------------------------
 //   readPlacement
 //---------------------------------------------------------
 
