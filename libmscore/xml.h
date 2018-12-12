@@ -207,10 +207,8 @@ class XmlWriter : public QTextStream {
 
       Score* _score;
       QList<QString> stack;
-      QList<std::pair<int,const Spanner*>> _spanner;
       SelectionFilter _filter;
 
-      int _spannerId      = { 1 };
       int _curTick        = { 0 };       // used to optimize output
       int _curTrack       = { -1 };
       int _tickDiff       = { 0 };
@@ -221,8 +219,6 @@ class XmlWriter : public QTextStream {
       bool _writeOmr      = { true };    // false if writing into *.msc file
       bool _writeTrack    = { false };
       bool _writePosition = { false };
-      int _tupletId       = { 1 };
-      int _beamId         = { 1 };
 
       LinksIndexer _linksIndexer;
       QMap<int, int> _lidLocalIndices;
@@ -236,7 +232,6 @@ class XmlWriter : public QTextStream {
       XmlWriter(Score*);
       XmlWriter(Score* s, QIODevice* dev);
 
-      int spannerId() const         { return _spannerId; }
       int curTick() const           { return _curTick; }
       Fraction afrac() const        { return Fraction::fromTicks(_curTick); }
       int curTrack() const          { return _curTrack; }
@@ -248,27 +243,18 @@ class XmlWriter : public QTextStream {
       bool writeOmr() const         { return _writeOmr;   }
       bool writeTrack() const       { return _writeTrack;    }
       bool writePosition() const    { return _writePosition; }
-      int nextTupletId()            { return _tupletId++;   }
-      int nextBeamId()              { return _beamId++; }
 
       void setClipboardmode(bool v) { _clipboardmode = v; }
       void setExcerptmode(bool v)   { _excerptmode = v;   }
       void setWriteOmr(bool v)      { _writeOmr = v;      }
       void setWriteTrack(bool v)    { _writeTrack= v;     }
       void setWritePosition(bool v) { _writePosition = v; }
-      void setTupletId(int v)       { _tupletId = v;      }
-      void setBeamId(int v)         { _beamId = v;        }
-      void setSpannerId(int v)      { _spannerId = v; }
       void setCurTick(int v)        { _curTick   = v; }
       void setCurTrack(int v)       { _curTrack  = v; }
       void setTickDiff(int v)       { _tickDiff  = v; }
       void setTrackDiff(int v)      { _trackDiff = v; }
 
       void incCurTick(int v)        { _curTick += v; }
-
-      int addSpanner(const Spanner*);     // returns allocated id
-      const Spanner* findSpanner(int id);
-      int spannerId(const Spanner*);      // returns spanner id, allocates new one if none exists
 
       int assignLocalIndex(const Location& mainElementLocation);
       void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }
@@ -315,8 +301,6 @@ class XmlWriter : public QTextStream {
       };
 
 extern PlaceText readPlacement(XmlReader&);
-extern QString docName;
-
 }     // namespace Ms
 #endif
 
