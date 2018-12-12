@@ -113,12 +113,35 @@ class UndoCommand {
       };
 
 //---------------------------------------------------------
+//   UndoMacro
+//    A root element for undo macro which is stored
+//    directly in UndoStack
+//---------------------------------------------------------
+
+class UndoMacro : public UndoCommand {
+      InputState undoInputState;
+      InputState redoInputState;
+      Element* undoSelectedElement = nullptr;
+      Element* redoSelectedElement = nullptr;
+      Score* score;
+
+      static Element* selectedElement(const Selection&);
+
+   public:
+      UndoMacro(Score* s);
+      virtual void undo(EditData*) override;
+      virtual void redo(EditData*) override;
+      bool empty() const { return childCount() == 0; }
+      UNDO_NAME("UndoMacro");
+      };
+
+//---------------------------------------------------------
 //   UndoStack
 //---------------------------------------------------------
 
 class UndoStack {
-      UndoCommand* curCmd;
-      QList<UndoCommand*> list;
+      UndoMacro* curCmd;
+      QList<UndoMacro*> list;
       std::vector<int> stateList;
       int nextState;
       int cleanState;
@@ -129,7 +152,7 @@ class UndoStack {
       ~UndoStack();
 
       bool active() const           { return curCmd != 0; }
-      void beginMacro();
+      void beginMacro(Score*);
       void endMacro(bool rollback);
       void push(UndoCommand*, EditData*);      // push & execute
       void push1(UndoCommand*);
@@ -142,35 +165,12 @@ class UndoStack {
       int getCurIdx() const         { return curIdx; }
       void remove(int idx);
       bool empty() const            { return !canUndo() && !canRedo();  }
-      UndoCommand* current() const  { return curCmd;               }
-      UndoCommand* last() const     { return curIdx > 0 ? list[curIdx-1] : 0; }
+      UndoMacro* current() const    { return curCmd;               }
+      UndoMacro* last() const       { return curIdx > 0 ? list[curIdx-1] : 0; }
       void undo(EditData*);
       void redo(EditData*);
       void rollback();
       void reopen();
-      };
-
-//---------------------------------------------------------
-//   SaveState
-//---------------------------------------------------------
-
-class SaveState : public UndoCommand {
-      InputState undoInputState;
-      InputState redoInputState;
-      Element* undoSelectedElement = nullptr;
-      Element* redoSelectedElement = nullptr;
-//       Selection  undoSelection;
-//       Selection  redoSelection;
-      Score* score;
-      bool first = true; // first redo operation.
-
-      static Element* selectedElement(const Selection&);
-
-   public:
-      SaveState(Score*);
-      virtual void undo(EditData*) override;
-      virtual void redo(EditData*) override;
-      UNDO_NAME("SaveState")
       };
 
 //---------------------------------------------------------

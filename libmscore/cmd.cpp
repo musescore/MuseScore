@@ -132,13 +132,11 @@ void Score::startCmd()
 
       // Start collecting low-level undo operations for a
       // user-visible undo action.
-
       if (undoStack()->active()) {
             qDebug("Score::startCmd(): cmd already active");
             return;
             }
-      undoStack()->beginMacro();
-      undo(new SaveState(this));
+      undoStack()->beginMacro(this);
       }
 
 //---------------------------------------------------------
@@ -181,7 +179,7 @@ void Score::endCmd(bool rollback)
 
       if (MScore::debugMode)
             qDebug("===endCmd() %d", undoStack()->current()->childCount());
-      bool noUndo = undoStack()->current()->childCount() <= 1;       // nothing to undo?
+      const bool noUndo = undoStack()->current()->empty();       // nothing to undo?
       undoStack()->endMacro(noUndo);
 
       if (dirty()) {

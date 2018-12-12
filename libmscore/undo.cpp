@@ -207,13 +207,13 @@ UndoStack::~UndoStack()
 //   beginMacro
 //---------------------------------------------------------
 
-void UndoStack::beginMacro()
+void UndoStack::beginMacro(Score* score)
       {
       if (curCmd) {
             qWarning("already active");
             return;
             }
-      curCmd = new UndoCommand();
+      curCmd = new UndoMacro(score);
       }
 
 //---------------------------------------------------------
@@ -398,17 +398,10 @@ void UndoStack::redo(EditData* ed)
       }
 
 //---------------------------------------------------------
-//   SaveState
+//   UndoMacro
 //---------------------------------------------------------
 
-SaveState::SaveState(Score* s)
-   : undoInputState(s), redoInputState(s->inputState())
-      {
-      score = s;
-//      redoSelection  = score->selection();
-      }
-
-Element* SaveState::selectedElement(const Selection& sel)
+Element* UndoMacro::selectedElement(const Selection& sel)
       {
       if (sel.isSingle()) {
             Element* e = sel.element();
@@ -419,31 +412,41 @@ Element* SaveState::selectedElement(const Selection& sel)
       return nullptr;
       }
 
-void SaveState::undo(EditData*)
+UndoMacro::UndoMacro(Score* s)
+   : undoInputState(s->inputState()), redoInputState(s),
+   undoSelectedElement(selectedElement(s->selection())), score(s)
       {
-      redoInputState = score->inputState();
-//      redoSelection  = score->selection();
-      redoSelectedElement = selectedElement(score->selection());
-      score->setInputState(undoInputState);
-//      score->setSelection(undoSelection);
-      score->deselectAll();
-      if (undoSelectedElement)
-            score->selection().add(undoSelectedElement);
       }
 
-void SaveState::redo(EditData*)
+void UndoMacro::undo(EditData* ed)
+      {
+      redoInputState = score->inputState();
+      redoSelectedElement = selectedElement(score->selection());
+      score->deselectAll();
+
+      // Undo for child commands.
+      UndoCommand::undo(ed);
+
+      score->setInputState(undoInputState);
+      if (undoSelectedElement) {
+            score->deselectAll();
+            score->selection().add(undoSelectedElement);
+            }
+      }
+
+void UndoMacro::redo(EditData* ed)
       {
       undoInputState = score->inputState();
-//      undoSelection  = score->selection();
       undoSelectedElement = selectedElement(score->selection());
+      score->deselectAll();
+
+      // Redo for child commands.
+      UndoCommand::redo(ed);
+
       score->setInputState(redoInputState);
-//      score->setSelection(redoSelection);
-      if (first)
-            first = false;
-      else {
+      if (redoSelectedElement) {
             score->deselectAll();
-            if (redoSelectedElement)
-                  score->selection().add(redoSelectedElement);
+            score->selection().add(redoSelectedElement);
             }
       }
 
