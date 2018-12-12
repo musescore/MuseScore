@@ -307,9 +307,9 @@ void DrumrollEditor::veloTypeChanged(int val)
       if ((note == 0) || (Note::ValueType(val) == note->veloType()))
             return;
 
-      _score->undoStack()->beginMacro();
+      _score->startCmd();
       _score->undo(new ChangeVelocity(note, Note::ValueType(val), note->veloOffset()));
-      _score->undoStack()->endMacro(_score->undoStack()->current()->childCount() == 0);
+      _score->endCmd();
       updateVelocity(note);
       }
 
@@ -356,9 +356,9 @@ void DrumrollEditor::velocityChanged(int val)
       if (vt == Note::ValueType::OFFSET_VAL)
             return;
 
-      _score->undoStack()->beginMacro();
+      _score->startCmd();
       _score->undo(new ChangeVelocity(note, vt, val));
-      _score->undoStack()->endMacro(_score->undoStack()->current()->childCount() == 0);
+      _score->endCmd();
       }
 
 //---------------------------------------------------------

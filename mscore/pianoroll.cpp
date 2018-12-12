@@ -513,9 +513,9 @@ void PianorollEditor::veloTypeChanged(int val)
                   break;
             }
 
-      _score->undoStack()->beginMacro();
+      _score->startCmd();
       _score->undo(new ChangeVelocity(note, Note::ValueType(val), newVelocity));
-      _score->undoStack()->endMacro(_score->undoStack()->current()->childCount() == 0);
+      _score->endCmd();
       updateVelocity(note);
       }
 
@@ -566,9 +566,9 @@ void PianorollEditor::velocityChanged(int val)
       if (val == note->veloOffset())
             return;
 
-      _score->undoStack()->beginMacro();
+      _score->startCmd();
       _score->undo(new ChangeVelocity(note, vt, val));
-      _score->undoStack()->endMacro(_score->undoStack()->current()->childCount() == 0);
+      _score->endCmd();
 
       pianoLevels->update();
       }
