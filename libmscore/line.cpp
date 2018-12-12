@@ -863,7 +863,7 @@ void SLine::layout()
             ++segmentsNeeded;
             }
 
-      int segCount = spannerSegments().size();
+      int segCount = int(spannerSegments().size());
 
       if (segmentsNeeded != segCount) {
             fixupSegments(segmentsNeeded, [this]() { return createLineSegment(); });

@@ -3281,12 +3281,12 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   for (Segment& s : m->segments()) {
                         if (!s.enabled() || s.isTimeSigType())       // hack: ignore time signatures
                               continue;
-                        QPointF pos(s.pos() + m->pos());
+                        QPointF p(s.pos() + m->pos());
                         if (s.segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
                               BarLine* bl = toBarLine(s.element(0));
                               if (bl) {
                                     qreal w = BarLine::layoutWidth(score(), bl->barLineType());
-                                    skyline.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos() + pos));
+                                    skyline.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos() + p));
                                     }
                               }
                         else {
@@ -3297,10 +3297,10 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                           continue;
                                     int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
                                     if (effectiveTrack >= strack && effectiveTrack < etrack)
-                                          skyline.add(e->shape().translated(e->pos() + pos));
+                                          skyline.add(e->shape().translated(e->pos() + p));
                                     if (e->isChord() && toChord(e)->tremolo()) {
                                           Tremolo* t = toChord(e)->tremolo();
-                                          skyline.add(t->shape().translated(t->pos() + pos));
+                                          skyline.add(t->shape().translated(t->pos() + p));
                                           }
                                     }
                               }
@@ -3331,9 +3331,9 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         if (e->isChord()) {
                               Chord* c = toChord(e);
                               for (Note* note : c->notes()) {
-                                    for (Element* e : note->el()) {
-                                          if (e->isFingering())
-                                                e->layout();
+                                    for (Element* el : note->el()) {
+                                          if (el->isFingering())
+                                                el->layout();
                                           }
                                     }
                               }
