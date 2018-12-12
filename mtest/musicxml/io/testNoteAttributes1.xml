@@ -285,8 +285,8 @@
         <notations>
           <slur type="stop" number="2"/>
           <articulations>
-            <accent/>
             <staccato/>
+            <accent/>
             </articulations>
           </notations>
         </note>
