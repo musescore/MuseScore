@@ -26,6 +26,7 @@
 #include "pa.h"
 #include "shortcut.h"
 #include "workspace.h"
+#include "palettebox.h"
 
 #ifdef USE_PORTMIDI
 #include "pm.h"
@@ -1120,7 +1121,12 @@ void PreferenceDialog::apply()
             preferences.setPreference(PREF_SCORE_STYLE_PARTSTYLEFILE, partStyle->text());
             MScore::defaultStyleForPartsHasChanged();
             }
-
+      
+      Workspace::retranslate();
+      preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
+      mscore->changeWorkspace(Workspace::currentWorkspace);
+      mscore->getPaletteBox()->updateWorkspaces();
+      
       emit preferencesChanged();
       preferences.save();
       mscore->startAutoSave();
