@@ -120,23 +120,21 @@ void Tremolo::setTremoloType(TremoloType t)
 
 void Tremolo::layout()
       {
+      printf("tremolo layout\n");
+//      ABORTN(1);
       qreal _spatium  = spatium() * mag();
 
       qreal w2  = _spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
       qreal lw  = _spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
       qreal td  = _spatium * score()->styleS(Sid::tremoloDistance).val();
-      path      = QPainterPath();
 
-      qreal ty   = 0.0;
+      path      = QPainterPath();
+      qreal ty  = 0.0;
 
       for (int i = 0; i < _lines; i++) {
             path.addRect(-w2, ty, 2.0 * w2, lw);
             ty += td;
             }
-
-      // QRectF rect = path.boundingRect();
-      // if ((parent() == 0) && !twoNotes())
-      //       rect.setHeight(rect.height() + _spatium);
 
       _chord1 = toChord(parent());
       if (_chord1 == 0) {
@@ -148,6 +146,7 @@ void Tremolo::layout()
             addbbox(QRectF(bbox().x(), bbox().bottom(), bbox().width(), _spatium));
             return;
             }
+
       Note* anchor1 = _chord1->upNote();
       Stem* stem    = _chord1->stem();
       qreal x, y, h;
@@ -246,7 +245,7 @@ void Tremolo::layout()
       //
       Segment* s = _chord1->segment()->next();
       while (s) {
-            if (s->element(track()) && (s->element(track())->type() == ElementType::CHORD))
+            if (s->element(track()) && (s->element(track())->isChord()))
                   break;
             s = s->next();
             }
@@ -279,8 +278,7 @@ void Tremolo::layout()
             }
 
       // improve the case when one stem is up and another is down
-      if (_chord1->beams() == 0 && _chord2->beams() == 0 &&
-          _chord1->up() != _chord2->up()) {
+      if (_chord1->beams() == 0 && _chord2->beams() == 0 && _chord1->up() != _chord2->up()) {
             qreal meanNote1Y = .5 * (_chord1->upNote()->pagePos().y() - firstChordStaffY + _chord1->downNote()->pagePos().y() - firstChordStaffY);
             qreal meanNote2Y = .5 * (_chord2->upNote()->pagePos().y() - firstChordStaffY + _chord2->downNote()->pagePos().y() - firstChordStaffY);
             y1 = .5 * (y1 + meanNote1Y);
@@ -330,20 +328,17 @@ void Tremolo::layout()
                   beamYOffset = -beamYOffset;
                   }
             }
-
       QTransform shearTransform;
+      qreal dy = y2 - y1;
+      qreal dx = x2 - x1;
+      qreal ds = dy / dx;
       if (_chord1->beams() == 0 && _chord2->beams() == 0) {
             if (_chord1->up() && !_chord2->up())
-                  shearTransform.shear(0.0, (y2 - y1 - path.boundingRect().height()) / (x2 - x1));
+                  ds = (dy - path.boundingRect().height()) / dx;
             else if (!_chord1->up() && _chord2->up())
-                  shearTransform.shear(0.0, (y2 - y1 + path.boundingRect().height()) / (x2 - x1));
-            else
-                  shearTransform.shear(0.0, (y2 - y1) / (x2 - x1));
+                  ds = (dy + path.boundingRect().height()) / dx;
             }
-      else {
-            shearTransform.shear(0.0, (y2 - y1) / (x2 - x1));
-            }
-
+      shearTransform.shear(0.0, ds);
       path = shearTransform.map(path);
 
       setbbox(path.boundingRect());
