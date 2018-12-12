@@ -546,59 +546,48 @@ void Score::insertChord(const Position& pos)
 
 void Score::localInsertChord(const Position& pos)
       {
-      TDuration duration = _is.duration();
-      Fraction fraction  = duration.fraction();
-      int len            = fraction.ticks();
-      Segment* seg       = pos.segment;
-      int tick           = seg->tick();
-      Measure* m         = seg->measure();
+      const TDuration duration = _is.duration();
+      const Fraction fraction  = duration.fraction();
+      const int len            = fraction.ticks();
+      Segment* seg             = pos.segment;
+      const int tick           = seg->tick();
+      Measure* measure         = seg->measure();
+      const Fraction targetMeasureLen = measure->len() + fraction;
 
+      // Shift spanners, enlarge the measure.
+      // The approach is similar to that in Measure::adjustToLen() but does
+      // insert time to the middle of the measure rather than to the end.
       undoInsertTime(tick, len);
       undo(new InsertTime(this, tick, len));
 
-      for (Segment* s = pos.segment; s; s = s-> next())
-            s->undoChangeProperty(Pid::TICK, s->rtick() + len);
-      undo(new ChangeMeasureLen(m, m->len() + fraction));
+      for (Score* score : scoreList()) {
+            Measure* m = score->tick2measure(tick);
+            undo(new ChangeMeasureLen(m, targetMeasureLen));
+            Segment* scoreSeg = m->tick2segment(tick);
+            for (Segment* s = scoreSeg; s; s = s->next())
+                  s->undoChangeProperty(Pid::TICK, s->rtick() + len);
+            }
 
-      Segment* s = m->undoGetSegment(SegmentType::ChordRest, tick);
+      // Fill the inserted time with rests.
+      // This is better to be done in master score to cover all staves.
+      MasterScore* ms = masterScore();
+      Measure* msMeasure = ms->tick2measure(tick);
+      const int msTracks = ms->ntracks();
+
+      for (int track = 0; track < msTracks; ++track) {
+            // Insert rest only if there is no full-measure rest here.
+            Element* maybeRest = msMeasure->findFirst(SegmentType::ChordRest, /* rel. tick */ 0)->element(track);
+            if (maybeRest && maybeRest->isRest() && toRest(maybeRest)->durationType().isMeasure())
+                  toRest(maybeRest)->undoChangeProperty(Pid::DURATION, targetMeasureLen);
+            else if (msMeasure->hasVoice(track))
+                  ms->setRest(tick, track, fraction, /* useDots */ false, /* tuplet */ nullptr);
+            }
+
+      // Put the note itself.
+      Segment* s = measure->undoGetSegment(SegmentType::ChordRest, tick);
       Position p(pos);
       p.segment = s;
-
-      int trackI = p.staffIdx * VOICES + _is.voice();
-      for (int track = 0; track < _staves.size() * VOICES; ++track) {
-            if (track == trackI)
-                  putNote(p, true);
-            else {
-                  Segment* fs = m->first(SegmentType::ChordRest);
-                  if (fs->tick() == tick && m->hasVoice(track)) {
-                        setRest(fs->tick(),  track, fraction, false, nullptr, false);
-                        continue;
-                        }
-                  Segment* seg1 = 0;
-                  for (Segment* ns = fs; ns; ns = ns->next(SegmentType::ChordRest)) {
-                        if (ns->element(track)) {
-                              ChordRest* cr = toChordRest(ns->element(track));
-                              if (ns->tick() > tick)
-                                    break;
-                              if (ns->tick() + cr->duration().ticks() < tick)
-                                    continue;
-                              seg1 = ns;
-                              break;
-                              }
-                        }
-                  if (seg1) {
-                        ChordRest* cr = toChordRest(seg1->element(track));
-                        if (seg1->tick() + cr->duration().ticks() == tick) {
-                              addRest(s, track, duration, nullptr);
-                              }
-                        else if (cr->isFullMeasureRest()) {
-                              // do nothing
-                              }
-                        else
-                              changeCRlen(cr, fraction + cr->duration());
-                        }
-                  }
-            }
+      putNote(p, true);
       }
 
 //---------------------------------------------------------
