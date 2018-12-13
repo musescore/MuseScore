@@ -729,9 +729,9 @@ QPointF Rest::stemPosBeam() const
       {
       QPointF p(pagePos());
       if (_up)
-            p.ry() += bbox().top() + spatium() * 2;
+            p.ry() += bbox().top() + spatium() * 1.5;
       else
-            p.ry() += bbox().bottom() - spatium() * 2;
+            p.ry() += bbox().bottom() - spatium() * 1.5;
       return p;
       }
 
