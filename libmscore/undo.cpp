@@ -1483,6 +1483,8 @@ void ChangeStyleVal::flip(EditData*)
             score->style().set(idx, value);
             if (idx == Sid::chordDescriptionFile) {
                   score->style().chordList()->unload();
+                  if (score->styleB(Sid::chordsXmlFile))
+                      score->style().chordList()->read("chords.xml");
                   score->style().chordList()->read(value.toString());
                   }
             score->styleChanged();

@@ -504,6 +504,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(chordsStandard,      SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
       connect(chordsJazz,          SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
       connect(chordsCustom,        SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
+      connect(chordsXmlFile,       SIGNAL(toggled(bool)),             SLOT(setChordStyle(bool)));
+      connect(chordDescriptionFile,&QLineEdit::editingFinished,       [=]() { setChordStyle(true); });
+      //chordDescriptionFile->setEnabled(false);
 
       connect(SwingOff,            SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
       connect(swingEighth,         SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
@@ -1019,6 +1022,7 @@ void EditStyle::selectChordDescriptionFile()
       if (fn.isEmpty())
             return;
       chordDescriptionFile->setText(fn);
+      setChordStyle(true);
       }
 
 //---------------------------------------------------------
@@ -1056,24 +1060,31 @@ void EditStyle::setChordStyle(bool checked)
             return;
       QVariant val;
       QString file;
+      bool chordsXml;
       if (chordsStandard->isChecked()) {
             val  = QString("std");
             file = "chords_std.xml";
+            chordsXml = false;
             }
       else if (chordsJazz->isChecked()) {
             val  = QString("jazz");
             file = "chords_jazz.xml";
+            chordsXml = false;
             }
       else {
             val = QString("custom");
             chordDescriptionGroup->setEnabled(true);
+            file = chordDescriptionFile->text();
+            chordsXml = chordsXmlFile->isChecked();
             }
-      cs->undo(new ChangeStyleVal(cs, Sid::chordStyle, val));
-      if (!file.isEmpty()) {
-            cs->undo(new ChangeStyleVal(cs, Sid::chordsXmlFile, false));
-            chordsXmlFile->setChecked(false);
+      if (val != "custom") {
+            chordsXmlFile->setChecked(chordsXml);
             chordDescriptionGroup->setEnabled(false);
             chordDescriptionFile->setText(file);
+            }
+      cs->undo(new ChangeStyleVal(cs, Sid::chordsXmlFile, chordsXml));
+      cs->undo(new ChangeStyleVal(cs, Sid::chordStyle, val));
+      if (!file.isEmpty()) {
             cs->undo(new ChangeStyleVal(cs, Sid::chordDescriptionFile, file));
             cs->update();
             }
