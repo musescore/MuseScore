@@ -2660,7 +2660,13 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
             if (type == ElementType::MEASURE) {
                   Measure* m  = toMeasure(mb);  // new measure
                   ticks       = m->ticks();
-                  Measure* mi = toMeasure(im);  // insert before
+                  Measure* mi = nullptr;        // insert before
+                  if (im) {
+                        if (im->isMeasure())
+                              mi = toMeasure(im);
+                        else
+                              mi = score->tick2measure(im->tick());
+                        }
 
                   if (score->isMaster())
                         om = m;
