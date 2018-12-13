@@ -59,6 +59,64 @@ Staff* Part::staff(int idx) const
       }
 
 //---------------------------------------------------------
+//   Part::masterPart
+//---------------------------------------------------------
+
+const Part* Part::masterPart() const
+      {
+      if (score()->isMaster())
+            return this;
+      if (_staves.empty())
+            return this;
+
+      Staff* st = _staves[0];
+      LinkedElements* links = st->links();
+      if (!links)
+            return this;
+
+      for (ScoreElement* le : *links) {
+            if (le->isStaff() && toStaff(le)->score()->isMaster()) {
+                  if (Part* p = toStaff(le)->part())
+                        return p;
+                  }
+            }
+      return this;
+      }
+
+//---------------------------------------------------------
+//   Part::masterPart
+//---------------------------------------------------------
+
+Part* Part::masterPart()
+      {
+      return const_cast<Part*>(const_cast<const Part*>(this)->masterPart());
+      }
+
+//---------------------------------------------------------
+//   Part::redirectPart
+//---------------------------------------------------------
+
+const Part* Part::redirectPart() const
+      {
+      const Part* p = masterPart();
+      if (p != this)
+            return p;
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   Part::redirectPart
+//---------------------------------------------------------
+
+Part* Part::redirectPart()
+      {
+      Part* p = masterPart();
+      if (p != this)
+            return p;
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
 
@@ -399,6 +457,8 @@ void Part::removeInstrument(int tick)
 
 Instrument* Part::instrument(int tick)
       {
+      if (Part* p = redirectPart())
+            return p->instrument(tick);
       return _instruments.instrument(tick);
       }
 
@@ -408,7 +468,20 @@ Instrument* Part::instrument(int tick)
 
 const Instrument* Part::instrument(int tick) const
       {
+      if (const Part* p = redirectPart())
+            return p->instrument(tick);
       return _instruments.instrument(tick);
+      }
+
+//---------------------------------------------------------
+//   instruments
+//---------------------------------------------------------
+
+const InstrumentList* Part::instruments() const
+      {
+      if (const Part* p = redirectPart())
+            return p->instruments();
+      return &_instruments;
       }
 
 //---------------------------------------------------------
