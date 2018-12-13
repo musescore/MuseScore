@@ -78,7 +78,7 @@ bool QmlPlugin::writeScore(Score* s, const QString& name, const QString& ext)
 
 Score* QmlPlugin::readScore(const QString& name, bool noninteractive)
       {
-      Score * score = msc->openScore(name);
+      Score * score = msc->openScore(name, true);
       // tell QML not to garbage collect this score
       if (score) {
             QQmlEngine::setObjectOwnership(score, QQmlEngine::CppOwnership);
