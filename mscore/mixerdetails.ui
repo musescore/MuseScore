@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>909</width>
-    <height>183</height>
+    <height>234</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
@@ -32,7 +32,7 @@
       <number>0</number>
      </property>
      <item row="0" column="3">
-      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0">
+      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0">
        <property name="spacing">
         <number>11</number>
        </property>
@@ -225,6 +225,72 @@
          </layout>
         </widget>
        </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="mutePerVoiceBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Mute Per Voice</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <layout class="QVBoxLayout" name="mutePerVoiceArea">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>11</number>
+              </property>
+              <property name="topMargin">
+               <number>11</number>
+              </property>
+              <property name="rightMargin">
+               <number>11</number>
+              </property>
+              <property name="bottomMargin">
+               <number>11</number>
+              </property>
+             </layout>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </item>
      <item row="0" column="2">
@@ -232,7 +298,20 @@
        <property name="spacing">
         <number>11</number>
        </property>
-       <item row="5" column="2">
+       <item row="0" column="2">
+        <widget class="Awl::ColorLabel" name="trackColorLabel" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Track color</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
         <widget class="QDoubleSpinBox" name="panSpinBox">
          <property name="toolTip">
           <string>Pan</string>
@@ -248,7 +327,14 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelChannel">
+         <property name="text">
+          <string>Channel:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
         <widget class="QSlider" name="panSlider">
          <property name="minimumSize">
           <size>
@@ -279,47 +365,30 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QDoubleSpinBox" name="volumeSpinBox">
-         <property name="toolTip">
-          <string>Volume</string>
-         </property>
-         <property name="decimals">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <double>127.000000000000000</double>
+       <item row="6" column="0">
+        <widget class="QLabel" name="labelPan">
+         <property name="text">
+          <string>Pan:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1" colspan="2">
-        <widget class="QComboBox" name="patchCombo">
-         <property name="minimumSize">
+       <item row="7" column="1">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
           <size>
-           <width>200</width>
-           <height>0</height>
+           <width>20</width>
+           <height>40</height>
           </size>
          </property>
-         <property name="toolTip">
-          <string>Patch voice</string>
-         </property>
-        </widget>
+        </spacer>
        </item>
-       <item row="3" column="0" colspan="3">
-        <widget class="QCheckBox" name="drumkitCheck">
-         <property name="text">
-          <string>Drumset</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelPatch">
-         <property name="text">
-          <string>Patch:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="2">
+       <item row="1" column="1">
         <widget class="QLabel" name="channelLabel">
          <property name="toolTip">
           <string>Channel name</string>
@@ -329,10 +398,10 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="labelChannel">
+       <item row="1" column="2">
+        <widget class="QCheckBox" name="drumkitCheck">
          <property name="text">
-          <string>Channel:</string>
+          <string>Drumset</string>
          </property>
         </widget>
        </item>
@@ -350,20 +419,34 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="Awl::ColorLabel" name="trackColorLabel" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Track color</string>
+       <item row="2" column="0" rowspan="2">
+        <widget class="QLabel" name="labelPatch">
+         <property name="text">
+          <string>Patch:</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="2" column="1" rowspan="2" colspan="2">
+        <widget class="QComboBox" name="patchCombo">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Patch voice</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" rowspan="2">
+        <widget class="QLabel" name="labelVolume">
+         <property name="text">
+          <string>Volume:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" rowspan="2">
         <widget class="QSlider" name="volumeSlider">
          <property name="minimumSize">
           <size>
@@ -397,83 +480,20 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="labelVolume">
-         <property name="text">
-          <string>Volume:</string>
+       <item row="4" column="2" rowspan="2">
+        <widget class="QDoubleSpinBox" name="volumeSpinBox">
+         <property name="toolTip">
+          <string>Volume</string>
          </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="labelPan">
-         <property name="text">
-          <string>Pan:</string>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <double>127.000000000000000</double>
          </property>
         </widget>
        </item>
       </layout>
-     </item>
-     <item row="0" column="4">
-      <widget class="QGroupBox" name="mutePerVoiceBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="title">
-        <string>Mute Per Voice</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <layout class="QVBoxLayout" name="mutePerVoiceArea">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>11</number>
-          </property>
-          <property name="topMargin">
-           <number>11</number>
-          </property>
-          <property name="rightMargin">
-           <number>11</number>
-          </property>
-          <property name="bottomMargin">
-           <number>11</number>
-          </property>
-         </layout>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
      </item>
     </layout>
    </item>
