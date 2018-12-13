@@ -297,18 +297,16 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
 
       // unlink the staves in the excerpt
       for (Staff* st : partScore->staves()) {
-            Staff* staff = nullptr;
-            // find staff in the main score
+            bool hasLinksInMaster = false;
             if (st->links()) {
                   for (auto le : *st->links()) {
-                        Staff* s2 = toStaff(le);
-                        if ((s2->score() == this) && s2->primaryStaff()) {
-                              staff = s2;
+                        if (le->score() == this) {
+                              hasLinksInMaster = true;
                               break;
                               }
                         }
                   }
-            if (staff) {
+            if (hasLinksInMaster) {
                   int staffIdx = st->idx();
                   // unlink the spanners
                   for (auto i = partScore->spanner().begin(); i != partScore->spanner().cend(); ++i) {
@@ -331,7 +329,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
                               }
                         }
                   // unlink the staff
-                  undo(new Unlink(staff));
+                  undo(new Unlink(st));
                   }
             }
       undo(new RemoveExcerpt(excerpt));
