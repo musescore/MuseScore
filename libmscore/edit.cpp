@@ -1677,7 +1677,7 @@ void Score::deleteItem(Element* el)
                         else if (bl->barLineType() == BarLineType::END_REPEAT)
                               m->undoChangeProperty(Pid::REPEAT_END, false);
                         else
-                              undoRemoveElement(el);
+                              bl->undoChangeProperty(Pid::BARLINE_TYPE, QVariant::fromValue(BarLineType::NORMAL));
                         }
                   }
                   break;
