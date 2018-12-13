@@ -72,7 +72,7 @@ void Symbol::layout()
             p.setX(-w);
       else if (align() & Align::HCENTER)
             p.setX(-(w * .5));
-      setPos(p + o);
+      setPos(p);
       BSymbol::layout();
       }
 
