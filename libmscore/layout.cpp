@@ -2951,7 +2951,7 @@ void layoutHarmonies(const std::vector<Segment*>& sl)
                         // can exist without chord or rest too.
                         if (h->isLayoutInvalid())
                               h->layout();
-                        toHarmony(e)->autoplaceSegmentElement(s->score()->styleP(Sid::minHarmonyDistance));
+                        h->autoplaceSegmentElement(s->score()->styleP(Sid::minHarmonyDistance));
                         }
                   }
             }
