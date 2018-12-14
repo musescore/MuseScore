@@ -73,6 +73,7 @@ class Harmony final : public TextBase {
       QString _userName;                  // name as typed by user if applicable
       QString _textName;                  // name recognized from chord list, read from score file, or constructed from imported source
       ParsedChord* _parsedForm;           // parsed form of chord
+      bool showSpell = false;             // show spell check warning
 
       QList<HDegree> _degreeList;
       QList<QFont> fontList;              // temp values used in render()
