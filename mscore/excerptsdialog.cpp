@@ -405,6 +405,7 @@ void ExcerptsDialog::titleChanged(const QString& s)
       ExcerptItem* cur = static_cast<ExcerptItem*>(excerptList->currentItem());
       if (cur == 0)
             return;
+      cur->excerpt()->setTitle(s);
       cur->setText(s);
       }
 
