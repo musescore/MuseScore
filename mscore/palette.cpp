@@ -246,22 +246,22 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             }
 
       QMenu menu;
-      QAction* clearAction   = menu.addAction(tr("Clear"));
+      QAction* deleteCellAction   = menu.addAction(tr("Delete"));
       QAction* contextAction = menu.addAction(tr("Properties..."));
-      clearAction->setEnabled(!_readOnly);
+      deleteCellAction->setEnabled(!_readOnly);
       contextAction->setEnabled(!_readOnly);
       QAction* moreAction    = menu.addAction(tr("More Elements..."));
       moreAction->setEnabled(_moreElements);
 
       if (filterActive || (cellAt(i) && cellAt(i)->readOnly))
-            clearAction->setEnabled(false);
+            deleteCellAction->setEnabled(false);
 
-      if (!clearAction->isEnabled() && !contextAction->isEnabled() && !moreAction->isEnabled())
+      if (!deleteCellAction->isEnabled() && !contextAction->isEnabled() && !moreAction->isEnabled())
             return;
 
-      QAction* action = menu.exec(mapToGlobal(event->pos()));
+      const QAction* action = menu.exec(mapToGlobal(event->pos()));
 
-      if (action == clearAction) {
+      if (action == deleteCellAction) {
             PaletteCell* cell = cellAt(i);
             if (cell) {
                   int ret = QMessageBox::warning(this, QWidget::tr("Delete palette cell"),
@@ -274,7 +274,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
                         _moreElements = false;
                   delete cell;
                   }
-            cells[i] = 0;
+            cells[i] = nullptr;
             emit changed();
             }
       else if (action == contextAction) {
@@ -289,9 +289,11 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             emit displayMore(_name);
 
       bool sizeChanged = false;
-      while (!cells.isEmpty() && cells.back() == 0) {
-            cells.removeLast();
-            sizeChanged = true;
+      for (int i = 0; i < cells.size(); ++i) {
+            if (!cellAt(i)) {
+                  cells.removeAt(i);
+                  sizeChanged = true;
+                  }
             }
       if (sizeChanged) {
             setFixedHeight(heightForWidth(width()));
