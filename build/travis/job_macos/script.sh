@@ -41,6 +41,7 @@ then # Build is marked UNSTABLE inside CMakeLists.txt
 build/package_mac $BRANCH-$REVISION
 PACKAGE_NAME=MuseScoreNightly
 DMGFILE=applebuild/$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
+DMGFILENAME=$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
 mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
 else
 build/package_mac
