@@ -3118,7 +3118,7 @@ Shape Chord::shape() const
 
 //---------------------------------------------------------
 //   layoutArticulations
-//    layout tenuto and staccatao
+//    layout tenuto and staccato
 //    called before layouting slurs
 //---------------------------------------------------------
 
@@ -3227,8 +3227,9 @@ void Chord::layoutArticulations()
 
 //---------------------------------------------------------
 //   layoutArticulations2
-//    Called after layouting slurs.
-//    Layout all articulations outside of slur start/end.
+//    Called after layouting systems
+//    Tentatively layout all articulations
+//    To be finished after laying out slurs
 //---------------------------------------------------------
 
 void Chord::layoutArticulations2()
@@ -3311,14 +3312,56 @@ void Chord::layoutArticulations2()
                   }
             }
       for (Articulation* a : _articulations) {
-            if (a->autoplace()) {
+            if (a->autoplace() && a->visible()) {
                   Segment* s = segment();
                   Measure* m = s->measure();
-                  QRectF r = a->bbox().translated(a->pos() + pos() + s->pos() + m->pos());
-                  m->system()->staff(a->staffIdx())->skyline().add(r);
+                  QRectF r = a->bbox().translated(a->pos() + pos());
+                  s->staffShape(staffIdx()).add(r);
+                  r = a->bbox().translated(a->pos() + pos() + s->pos() + m->pos());
+                  m->system()->staff(staffIdx())->skyline().add(r);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   layoutArticulations3
+//    Called after layouting slurs
+//    Fix up articulations that need to go outside the slur
+//---------------------------------------------------------
+
+void Chord::layoutArticulations3(Slur* slur)
+      {
+      SlurSegment* ss;
+      if (this == slur->startCR())
+            ss = slur->frontSegment();
+      else if (this == slur->endCR())
+            ss = slur->backSegment();
+      else
+            return;
+      Segment* s = segment();
+      Measure* m = measure();
+      SysStaff* sstaff = m->system() ? m->system()->staff(staffIdx()) : nullptr;
+      for (Articulation* a : _articulations) {
+            if (a->layoutCloseToNote() || !a->autoplace() || !slur->autoplace() || !slur->visible())
+                  continue;
+            Shape aShape = a->shape().translated(a->pos() + pos() + s->pos() + m->pos());
+            Shape sShape = ss->shape().translated(ss->pos());
+            if (aShape.intersects(sShape)) {
+                  qreal d = score()->styleP(Sid::dynamicsMinDistance);
+                  if (slur->up()) {
+                        d += qMax(aShape.minVerticalDistance(sShape), 0.0);
+                        a->rypos() -= d;
+                        aShape.translateY(-d);
+                        }
+                  else {
+                        d += qMax(sShape.minVerticalDistance(aShape), 0.0);
+                        a->rypos() += d;
+                        aShape.translateY(d);
+                        }
+                  if (sstaff)
+                        sstaff->skyline().add(aShape);
                   }
             }
       }
 
 }
-

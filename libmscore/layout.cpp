@@ -3364,7 +3364,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             }
 
       //-------------------------------------------------------------
-      // layout tuplet
+      // layout articulations, tuplet
       //-------------------------------------------------------------
 
       for (Segment* s : sl) {
@@ -3372,6 +3372,10 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show())
                         continue;
                   ChordRest* cr = toChordRest(e);
+                  // articulations
+                  if (cr->isChord())
+                        toChord(cr)->layoutArticulations2();
+                  // tuplets
                   // sanity check
                   if (cr->beam() && !isTopBeam(cr))
                         continue;
@@ -3407,6 +3411,15 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   }
             }
       processLines(system, spanner, false);
+      for (auto s : spanner) {
+            Slur* slur = toSlur(s);
+            ChordRest* scr = s->startCR();
+            ChordRest* ecr = s->endCR();
+            if (scr->isChord())
+                  toChord(scr)->layoutArticulations3(slur);
+            if (ecr->isChord())
+                  toChord(ecr)->layoutArticulations3(slur);
+            }
 
       std::vector<Dynamic*> dynamics;
       for (Segment* s : sl) {
@@ -3418,7 +3431,6 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         for (Chord* ch : c->graceNotes())
                               layoutTies(ch, system, stick);
                         layoutTies(c, system, stick);
-                        c->layoutArticulations2();
                         }
                   }
             for (Element* e : s->annotations()) {
@@ -3524,7 +3536,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
       // above the volta, therefore we delay the layout.
       //-------------------------------------------------------------
 
-      if (!hasFretDiagram) 
+      if (!hasFretDiagram)
             layoutHarmonies(sl);
 
       //-------------------------------------------------------------
