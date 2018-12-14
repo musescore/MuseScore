@@ -37,7 +37,7 @@
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
       <ChordList>
-        <font id="0" family="MuseJazz">
+        <font id="0" family="MuseJazz Text">
           <mag>1</mag>
           <sym name="#" code="0xe10c"/>
           <sym name="(" code="0x28"/>
@@ -80,7 +80,7 @@
           <sym name="sus4" code="0xe18d"/>
           <sym name="triangle" code="0xe18a"/>
           </font>
-        <font id="1" family="MuseJazz">
+        <font id="1" family="MuseJazz Text">
           <mag>1.25</mag>
           <sym name="0" code="0xe190"/>
           <sym name="1" code="0xe191"/>
@@ -97,7 +97,7 @@
           <sym name="add" code="0xe18b"/>
           <sym name="add11" code="0xe18c"/>
           </font>
-        <font id="2" family="MuseJazz">
+        <font id="2" family="MuseJazz Text">
           <mag>0.8</mag>
           <sym name="a" code="0x61"/>
           <sym name="c" code="0x63"/>
@@ -130,7 +130,7 @@
           <sym name="y" code="0x79"/>
           <sym name="z" code="0x7a"/>
           </font>
-        <font id="3" family="MuseJazz">
+        <font id="3" family="MuseJazz Text">
           <mag>0.55</mag>
           </font>
         <renderRoot>:n :a</renderRoot>

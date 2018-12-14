@@ -202,7 +202,7 @@
       configured text style font family is used.
 -->
 
-  <font id="0" family="MuseJazz">
+  <font id="0" family="MuseJazz Text">
 
     <sym code="0x28" name="("/>
     <sym code="0x29" name=")"/>
@@ -264,7 +264,7 @@
 
     </font>
 
-  <font id="2" family="MuseJazz">
+  <font id="2" family="MuseJazz Text">
     <mag>1.25</mag>
 
     <sym code="0xe190" name="0"/>
@@ -286,7 +286,7 @@
 
     </font>
 
-  <font id="108" family="MuseJazz">
+  <font id="108" family="MuseJazz Text">
     <mag>0.8</mag>
 
     <sym code="0x28" name="s("/>
@@ -326,7 +326,7 @@
 
     </font>
 
-  <font id="106" family="MuseJazz">
+  <font id="106" family="MuseJazz Text">
     <mag>0.55</mag>
 
 <!-- small caps letters
