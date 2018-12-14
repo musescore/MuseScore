@@ -2852,6 +2852,9 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber)
                         continue;  // ignore invisible staves
                   if (s->staves()->isEmpty() || !s->staff(i)->show())
                         continue;
+                  Measure* fm = s->firstMeasure();
+                  if (!fm) // only boxes, hence no staff lines
+                        continue;
 
                   // The goal here is to draw SVG staff lines more efficiently.
                   // MuseScore draws staff lines by measure, but for SVG they can
@@ -2866,17 +2869,15 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber)
                   // are drawn by measure.
                   //
                   bool byMeasure = false;
-                  for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
-                        if (mb->isHBox() || mb->isVBox() || !toMeasure(mb)->visible(i)) {
+                  for (MeasureBase* mb = fm; mb; mb = s->nextMeasure(mb)) {
+                        if (!mb->isMeasure() || !toMeasure(mb)->visible(i)) {
                               byMeasure = true;
                               break;
                               }
                         }
                   if (byMeasure) { // Draw visible staff lines by measure
-                        for (MeasureBase* mb = s->firstMeasure(); mb != 0; mb = s->nextMeasure(mb)) {
-                              if (mb->type() != ElementType::HBOX
-                               && mb->type() != ElementType::VBOX
-                               && static_cast<Measure*>(mb)->visible(i)) {
+                        for (MeasureBase* mb = fm; mb; mb = s->nextMeasure(mb)) {
+                              if (mb->isMeasure() && toMeasure(mb)->visible(i)) {
                                     StaffLines* sl = toMeasure(mb)->staffLines(i);
                                     printer.setElement(sl);
                                     paintElement(p, sl);
