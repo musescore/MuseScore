@@ -2560,6 +2560,7 @@ void Score::sortStaves(QList<int>& dst)
                         sp->setTrack2(idx * VOICES +(sp->track2() % VOICES)); // at least keep the voice...
                   }
             }
+      setLayoutAll();
       }
 
 //---------------------------------------------------------
