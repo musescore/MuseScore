@@ -49,7 +49,8 @@ set(ASSETS_MANIFEST "assets-manifest.txt") # used for archiving and CI tests.
 # and compared to the one generated during the build to ensure they match.
 # This will catch simple errors, but assets must still be compared visually.
 
-file(WRITE "${PROJECT_BINARY_DIR}/${ASSETS_MANIFEST}" "") # empty file to append to
+# create empty manifest file to append to
+file(WRITE "${PROJECT_BINARY_DIR}/${ASSETS_MANIFEST}" "# DO NOT EDIT!!! This file is generated during the build.\n")
 
 function(add_to_manifest # add assets to the manifest file
   ASSET # name of asset file to be added to manifest
@@ -69,11 +70,19 @@ add_subdirectory(brand)
 add_subdirectory(platform)
 add_subdirectory(splash)
 
+# Read in the manifest we just created (ignore lines that begin with '#')
+file(STRINGS "${PROJECT_BINARY_DIR}/${ASSETS_MANIFEST}" ASSET_FILES REGEX "^[^#]")
+set(ASSET_FILES_ABS "")
+foreach(ASSET ${ASSET_FILES})
+  list(APPEND ASSET_FILES_ABS "${PROJECT_BINARY_DIR}/${ASSET}")
+endforeach(ASSET)
+
 # optional target to create a compressed ZIP archive containing all assets
 add_custom_target("assets_archive" DEPENDS "${ASSETS_ARCHIVE_NAME}")
+add_dependencies("assets_archive" "assets") # assets must be built first
 add_custom_command(
   OUTPUT "${ASSETS_ARCHIVE_NAME}"
-  DEPENDS "assets"
-  COMMAND "${CMAKE_COMMAND}" -E tar "cfv" "${ASSETS_ARCHIVE_NAME}" --format=zip "--files-from=${ASSETS_MANIFEST}"
+  DEPENDS ${ASSET_FILES_ABS} # rebuild if any of these files have changed (absolute paths required)
+  COMMAND "${CMAKE_COMMAND}" -E tar "cfv" "${ASSETS_ARCHIVE_NAME}" --format=zip ${ASSET_FILES}
   VERBATIM
   )

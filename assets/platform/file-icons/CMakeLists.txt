@@ -15,9 +15,11 @@ function(filetype_icon # create filetype/mimetype icons from a source SVG
   standalone_svg("${TYPE_LOWER}-raw.svg" "${TYPE_LOWER}-vector.svg" ${ARGN})
   optimize_svg("${TYPE_LOWER}-vector.svg" "${TYPE_LOWER}.svg")
   list(APPEND GENERATED_FILES "${TYPE_LOWER}.svg")
-  rasterize_svg_sizes("${TYPE_LOWER}" ${ALL_ICON_SIZES})
+  rasterize_svg_sizes("${TYPE_LOWER}" 1 GENERATED_PNGS ${ALL_ICON_SIZES})
+  rasterize_svg_sizes("${TYPE_LOWER}" 2 GENERATED_PNGS_2X ${MACOS_ICNS_SIZES})
   create_icon_ico_sizes("${TYPE_LOWER}" ${WINDOWS_ICO_SIZES})
   create_icon_icns_sizes("${TYPE_LOWER}" ${MACOS_ICNS_SIZES})
+  list(APPEND GENERATED_FILES "${GENERATED_PNGS};${GENERATED_PNGS_2X}")
   set(GENERATED_FILES "${GENERATED_FILES}" PARENT_SCOPE)
 endfunction(filetype_icon)
 

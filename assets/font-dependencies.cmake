@@ -17,6 +17,7 @@ function(required_font # ensure that a font dependency is installed
   )
   unset(${CACHEV}) # expose cached value (if any)
   if(NOT DEFINED ${CACHEV})
+    message(STATUS "Checking font '${FONT_NAME}' is installed.")
     if(WIN32)
       execute_process(
         COMMAND "${REG}" query "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts"
@@ -52,5 +53,5 @@ endfunction(required_font)
 
 # Keep this list up-to-date. Run "grep -r font-family ." from the assets
 # source directory to list fonts used in SVGs anywhere in the project.
-required_font(ROBOTO_FONT "https://fonts.google.com/specimen/Roboto" "Times New Roman")
+required_font(ROBOTO_FONT "https://fonts.google.com/specimen/Roboto" "Roboto")
 required_font(RALEWAY_FONT "https://fonts.google.com/specimen/Raleway" "Raleway")

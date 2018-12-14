@@ -113,7 +113,6 @@ option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF)          # requires freetype >= 2.5.2, does not work on win
 option(BUILD_LAME    "Enable MP3 export" ON)                   # Requires libmp3lame, call CMake with -DBUILD_LAME="OFF" to disable
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
-option(DOWNLOAD_ASSETS "Download pre-built assets (icons and images) rather than attempting to build from source SVGs." ON)
 
 # licence incompatibility, must never be distributed
 set(OCR OFF)
@@ -132,7 +131,9 @@ option(COVERAGE "Build with instrumentation to record code coverage." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
 
-# set options for assets build (overrides the defaults set in assets/CMakeLists.txt)
+# set options for assets build (overrides defaults set in assets/CMakeLists.txt)
+option(DOWNLOAD_ASSETS "Download pre-built assets (icons and images) rather than attempting to build from source SVGs." ON)
+option(ONLY_BUILD_ASSETS "Only build the assets (icons and images), don't compile MuseScore." OFF)
 if(MSCORE_UNSTABLE)
   option(OPTIMIZE_PNGS_BRUTE "Use maximum PNG compression for assets (takes time)" OFF)
 else(MSCORE_UNSTABLE)
@@ -319,6 +320,10 @@ else (DOWNLOAD_ASSETS)
   # not be available until the build takes place. This affects which CMake
   # commands can be used to interact with them. See assets/README.md.
 endif (DOWNLOAD_ASSETS)
+
+if (ONLY_BUILD_ASSETS)
+  return() # exit here
+endif (ONLY_BUILD_ASSETS)
 
 if (BUILD_WEBENGINE)
    if (MINGW)

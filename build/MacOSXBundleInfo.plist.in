@@ -65,7 +65,7 @@
 				<string>mscx</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>musescoreDocument.icns</string>
+			<string>mscx.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/x-musescore+xml</string>
@@ -87,7 +87,7 @@
 				<string>mscz</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>musescoreDocument.icns</string>
+			<string>mscz.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/x-musescore</string>
@@ -106,26 +106,11 @@
 			<string>Uncompressed MusicXML File</string>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>xml</string>
+        <string>xml</string>
+        <string>musicxml</string>
 			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.recordare.musicxml+xml</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSTypeIsPackage</key>
-			<false/>
-			<key>NSPersistentStoreTypeKey</key>
-			<string>XML</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string>Uncompressed MusicXML File</string>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>musicxml</string>
-			</array>
+      <key>CFBundleTypeIconFile</key>
+			<string>xml.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/vnd.recordare.musicxml+xml</string>
@@ -144,6 +129,8 @@
 			<array>
 				<string>mxl</string>
 			</array>
+      <key>CFBundleTypeIconFile</key>
+			<string>mxl.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/vnd.recordare.musicxml</string>

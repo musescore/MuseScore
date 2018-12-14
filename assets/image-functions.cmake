@@ -1,25 +1,6 @@
 required_program(INKSCAPE "SVG vector graphics editing program - https://inkscape.org/" "inkscape")
 required_program(XMLLINT "Tool for parsing XML files - http://xmlsoft.org/xmllint.html" "xmllint")
 
-if(BUILD_WINDOWS_ICONS)
-  set(CONVERT "convert") # old name of ImageMagick's command line tool
-  if(WIN32)
-    # ImageMagick's convert conflicts with a Windows system tool of the same
-    # name. A common solution is to rename ImageMagick's convert binary:
-    set(CONVERT "imconvert") # name commonly used for "convert" on Windows
-  endif(WIN32)
-  required_program(IMAGEMAGICK "ImageMagick image tool - https://www.imagemagick.org" "magick" "${CONVERT}")
-endif(BUILD_WINDOWS_ICONS)
-
-if(BUILD_MACOS_ICONS)
-  # NOTE: macOS has a built-in tool to convert PNG to ICNS called "iconutils".
-  # On Linux we can use PNG2ICNS, but it doesn't support creating icons
-  # optimized for retina displays https://sourceforge.net/p/icns/bugs/12/.
-  required_program(PNG2ICNS "Tool to create macOS icons (libicns) - https://icns.sourceforge.io/" "png2icns")
-  # There's more than one program called "png2icns". Do we have the right one?
-  required_program(ICNS2PNG "You have the wrong png2icns. You need libicns from https://icns.sourceforge.io/" "icns2png")
-endif(BUILD_MACOS_ICONS)
-
 if(OPTIMIZE_SVGS)
   required_program(SVGO "Tool for optimizing SVG vector graphics files" "svgo")
 endif(OPTIMIZE_SVGS)
@@ -152,31 +133,3 @@ function(optimize_png # reduce size of a PNG without changing its appearance
     copy_during_build("${PNG_FILE_IN}" "${PNG_FILE_OUT}")
   endif(OPTIMIZE_PNGS)
 endfunction(optimize_png)
-
-function(create_icon_ico # convert multiple PNG files into a single ICO icon
-  ICO_FILE_OUT # path where the output ICO file will be written
-  # ARGN remaining arguments are PNG input files
-  )
-  if(BUILD_WINDOWS_ICONS)
-    add_custom_command(
-      OUTPUT "${ICO_FILE_OUT}"
-      DEPENDS ${ARGN} # paths can be relative since all PNGs are generated
-      COMMAND "${IMAGEMAGICK}" ${ARGN} "${ICO_FILE_OUT}"
-      VERBATIM
-      )
-  endif(BUILD_WINDOWS_ICONS)
-endfunction(create_icon_ico)
-
-function(create_icon_icns # convert multiple PNG files into a single ICNS icon
-  ICNS_FILE_OUT # path where the output ICNS file will be written
-  # ARGN remaining arguments are PNG input files
-  )
-  if(BUILD_MACOS_ICONS)
-    add_custom_command(
-      OUTPUT "${ICNS_FILE_OUT}"
-      DEPENDS ${ARGN} # paths can be relative since all PNGs are generated
-      COMMAND "${PNG2ICNS}" "${ICNS_FILE_OUT}" ${ARGN}
-      VERBATIM
-      )
-  endif(BUILD_MACOS_ICONS)
-endfunction(create_icon_icns)
