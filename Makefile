@@ -32,7 +32,9 @@ LABEL=""# E.g.: LABEL="Development Build" --> "MuseScore 2" becomes "MuseScore 2
 BUILD_LAME="ON" # Non-free, required for MP3 support. Override with "OFF" to disable.
 BUILD_PULSEAUDIO="ON" # Override with "OFF" to disable.
 BUILD_JACK="ON"       # Override with "OFF" to disable.
+BUILD_ALSA="ON"       # Override with "OFF" to disable.
 BUILD_PORTAUDIO="ON"  # Override with "OFF" to disable.
+BUILD_PORTMIDI="ON"   # Override with "OFF" to disable.
 BUILD_WEBENGINE="ON"  # Override with "OFF" to disable.
 USE_SYSTEM_FREETYPE="OFF" # Override with "ON" to enable. Requires freetype >= 2.5.2.
 COVERAGE="OFF"        # Override with "ON" to enable.
@@ -58,7 +60,9 @@ release:
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"   \
   	  -DBUILD_LAME="${BUILD_LAME}"             \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}" \
+  	  -DBUILD_PULSEMIDI="${DBUILD_PULSEMIDI}"  \
   	  -DBUILD_JACK="${BUILD_JACK}"             \
+  	  -BUILD_ALSA="${BUILD_ALSA}"              \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"   \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"   \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}" \
@@ -86,7 +90,9 @@ debug:
   	  -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}"              \
   	  -DBUILD_LAME="${BUILD_LAME}"                        \
   	  -DBUILD_PULSEAUDIO="${BUILD_PULSEAUDIO}"            \
+  	  -DBUILD_PULSEMIDI="${DBUILD_PULSEMIDI}"             \
   	  -DBUILD_JACK="${BUILD_JACK}"                        \
+  	  -BUILD_ALSA="${BUILD_ALSA}"                         \
    	  -DBUILD_PORTAUDIO="${BUILD_PORTAUDIO}"              \
    	  -DBUILD_WEBENGINE="${BUILD_WEBENGINE}"              \
    	  -DUSE_SYSTEM_FREETYPE="${USE_SYSTEM_FREETYPE}"      \
