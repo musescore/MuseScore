@@ -58,7 +58,7 @@ class PianoLevelFilterOnTime : public PianoLevelsFilter
 public:
       QString name() override { return "On Time"; }
       int maxRange() override { return 1000; }
-      int minRange() override { return 0; }
+      int minRange() override { return -1000; }
       int divisionGap() override { return 250; }
       bool isPerEvent() override { return true; }
       int value(Staff* staff, Note* note, NoteEvent* evt) override;
