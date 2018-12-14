@@ -420,29 +420,44 @@ bool SlurSegment::isEdited() const
 //   fixArticulations
 //---------------------------------------------------------
 
-static qreal fixArticulations(qreal yo, Chord* c, qreal _up)
+static qreal fixArticulations(qreal yo, Chord* c, qreal _up, bool stemSide = false)
       {
       //
-      // handle special case of tenuto and staccato;
+      // handle special case of tenuto and staccato
+      // yo = current offset of slur from chord position
+      // return unchanged position, or position of outmost "close" articulation
       //
 #if 1
+      for (Articulation* a : c->articulations()) {
+            if (!a->layoutCloseToNote() || !a->autoplace() || !a->visible())
+                  continue;
+            // skip if articulation on stem side but slur is not or vice versa
+            if ((a->up() == c->up()) != stemSide)
+                  continue;
+            if (a->up())
+                  yo = qMin(yo, a->y() + (a->height() + c->score()->spatium() * .3) * _up);
+            else
+                  yo = qMax(yo, a->y() + (a->height() + c->score()->spatium() * .3) * _up);
+            }
+      return yo;
+#else
       const QVector<Articulation*>& al = c->articulations();
       if (al.size() >= 2) {
             Articulation* a = al.at(1);
-            if (a->up() == c->up())
+            if (a->up() == c->up() && !stemSide)
                   return yo;
             else if (a->layoutCloseToNote())
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
       else if (al.size() >= 1) {
             Articulation* a = al.at(0);
-            if (a->up() == c->up())
+            if (a->up() == c->up() && !stemSide)
                   return yo;
             else if (a->layoutCloseToNote())
                   return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
             }
-#endif
       return yo;
+#endif
       }
 
 //---------------------------------------------------------
@@ -606,13 +621,15 @@ void Slur::slurPos(SlurPos* sp)
                   pt = sc->stemPos() - sc->pagePos() + sc->stem()->p2();
                   if (useTablature)                   // in tabs, stems are centred on note:
                         pt.rx() = hw1 * 0.5 + (note1 ? note1->bboxXShift() : 0.0);          // skip half notehead to touch stem, anatoly-os: incorrect. half notehead width is not always the stem position
-                  sp->p1 += pt;
                   // clear the stem (x)
                   // allow slight overlap (y) as per Gould
                   // don't allow overlap with hook if not disabling the autoplace checks against start/end segments in SlurSegment::layoutSegment()
                   qreal yadj = -0.25;     // sc->hook() ? 0.25 : -0.25;
                   yadj *= _spatium * __up;
-                  sp->p1 += QPointF(0.35 * _spatium, yadj);
+                  pt += QPointF(0.35 * _spatium, yadj);
+                  // account for articulations
+                  pt.ry() = fixArticulations(pt.y(), sc, __up, true);
+                  sp->p1 += pt;
                   }
                   break;
             case SlurAnchor::NONE:
@@ -624,11 +641,13 @@ void Slur::slurPos(SlurPos* sp)
                   pt = ec->stemPos() - ec->pagePos() + ec->stem()->p2();
                   if (useTablature)
                         pt.rx() = hw2 * 0.5;
-                  sp->p2 += pt;
                   // don't allow overlap with beam
                   qreal yadj = ec->beam() ? 0.75 : -0.25;
                   yadj *= _spatium * __up;
-                  sp->p2 += QPointF(-0.35 * _spatium, yadj);
+                  pt += QPointF(-0.35 * _spatium, yadj);
+                  // account for articulations
+                  pt.ry() = fixArticulations(pt.y(), ec, __up, true);
+                  sp->p2 += pt;
                   }
                   break;
             case SlurAnchor::NONE:
@@ -671,6 +690,9 @@ void Slur::slurPos(SlurPos* sp)
                         else
                               yo = sc->upNote()->pos().y() + sh;
                         xo       = stem1->pos().x();
+
+                        // account for articulations
+                        yo = fixArticulations(yo, sc, __up, true);
 
                         // force end of slur to layout to stem as well,
                         // if start and end chords have same stem direction
@@ -717,22 +739,23 @@ void Slur::slurPos(SlurPos* sp)
                               else if (!_up && yd > 0.0)
                                     yo = qMin(yo + yd, sc->upNote()->pos().y() + sh + _spatium);
 
+                              // account for articulations
+                              yo = fixArticulations(yo, sc, __up, true);
+
                               // we may wish to force end to align to stem as well,
                               // if it is in same direction
                               // (but it won't be, so this assignment should have no effect)
                               stemPos = true;
                               }
-                        else if (sc->up() != _up) {
-                              // slur opposite direction from chord
+                        else {
                               // avoid articulations
-                              yo = fixArticulations(yo, sc, __up);
+                              yo = fixArticulations(yo, sc, __up, sc->up() == _up);
                               }
                         }
                   }
-            else if (sc && sc->up() != _up) {
-                  // slur opposite direction from chord
+            else if (sc) {
                   // avoid articulations
-                  yo = fixArticulations(yo, sc, __up);
+                  yo = fixArticulations(yo, sc, __up, sc->up() == _up);
                   }
 
             if (sa1 == SlurAnchor::NONE)
@@ -778,6 +801,9 @@ void Slur::slurPos(SlurPos* sp)
                               else
                                     yo = ec->upNote()->pos().y() + sh;
                               xo = stem2->pos().x();
+
+                              // account for articulations
+                              yo = fixArticulations(yo, ec, __up, true);
                               }
                         else
                               {
@@ -816,19 +842,20 @@ void Slur::slurPos(SlurPos* sp)
                                           yo = qMax(yo - yd, ec->downNote()->pos().y() - mh - _spatium);
                                     else if (!_up && yd < 0.0)
                                           yo = qMin(yo - yd, ec->upNote()->pos().y() + mh + _spatium);
+
+                                    // account for articulations
+                                    yo = fixArticulations(yo, ec, __up, true);
                                     }
-                              else if (ec->up() != _up) {
-                                    // slur opposite direction from chord
+                              else {
                                     // avoid articulations
-                                    yo = fixArticulations(yo, ec, __up);
+                                    yo = fixArticulations(yo, ec, __up, ec->up() == _up);
                                     }
 
                               }
                         }
-                  else if (ec && ec->up() != _up) {
-                        // slur opposite direction from chord
+                  else if (ec) {
                         // avoid articulations
-                        yo = fixArticulations(yo, ec, __up);
+                        yo = fixArticulations(yo, ec, __up, ec->up() == _up);
                         }
 
                   sp->p2 += QPointF(xo, yo);

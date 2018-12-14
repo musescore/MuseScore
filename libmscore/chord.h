@@ -198,6 +198,7 @@ class Chord final : public ChordRest {
 
       void layoutArticulations();
       void layoutArticulations2();
+      void layoutArticulations3(Slur* s);
 
       QVector<Articulation*>& articulations()             { return _articulations; }
       const QVector<Articulation*>& articulations() const { return _articulations; }
