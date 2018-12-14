@@ -1200,7 +1200,9 @@ Shape ChordRest::shape() const
             if (!e || !e->visible() || !e->autoplace())
                   continue;
             if (e->isHarmony() && e->staffIdx() == staffIdx()) {
-                  e->layout();
+                  Harmony* h = toHarmony(e);
+                  if (h->isLayoutInvalid())
+                        h->layout();
                   const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
                   x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
                   x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
