@@ -581,7 +581,7 @@ void ExcerptsDialog::accept()
       // The reference is the excerpt list. So we iterate following it and swap parts in the score accordingly
 
       for (int j = 0; j < excerptList->count(); ++j) {
-            excerptList->setCurrentRow(i);
+            excerptList->setCurrentRow(j);
             QListWidgetItem* cur = excerptList->currentItem();
             if (cur == 0)
                   continue;
