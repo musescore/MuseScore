@@ -452,7 +452,6 @@ NewWizard::NewWizard(QWidget* parent)
       setOption(QWizard::CancelButtonOnLeft, true);
 #endif
       setWizardStyle(wizardStyleValue);
-      qDebug() << int(wizardStyle());
       
       setPixmap(QWizard::LogoPixmap, QPixmap(":/data/mscore.png"));
       setPixmap(QWizard::WatermarkPixmap, QPixmap());
