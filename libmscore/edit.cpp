@@ -4456,6 +4456,8 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                   tracks.append(staffIdx * VOICES + (strack % VOICES));
             else if (staff->score()->excerpt() && !staff->score()->excerpt()->tracks().isEmpty())
                   tracks = staff->score()->excerpt()->tracks().values(strack);
+            else if (!staff->score()->excerpt())
+                  tracks.append(staffIdx * VOICES + (strack % VOICES));
             else
                   tracks.append(staffIdx * VOICES + cr->voice());
 
