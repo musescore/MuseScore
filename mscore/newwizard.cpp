@@ -446,15 +446,19 @@ NewWizard::NewWizard(QWidget* parent)
       {
       setObjectName("NewWizard");
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      setWizardStyle(QWizard::ClassicStyle);
+      auto wizardStyleValue = QWizard::ModernStyle; //Modern Winsows look
+#ifdef Q_OS_MAC
+      wizardStyleValue = QWizard::MacStyle;
+      setOption(QWizard::CancelButtonOnLeft, true);
+#endif
+      setWizardStyle(wizardStyleValue);
+      qDebug() << int(wizardStyle());
+      
       setPixmap(QWizard::LogoPixmap, QPixmap(":/data/mscore.png"));
       setPixmap(QWizard::WatermarkPixmap, QPixmap());
       setWindowTitle(tr("New Score Wizard"));
 
       setOption(QWizard::NoCancelButton, false);
-#ifdef Q_OS_MAC
-      setOption(QWizard::CancelButtonOnLeft, true);
-#endif
       setOption(QWizard::HaveFinishButtonOnEarlyPages, true);
       setOption(QWizard::HaveNextButtonOnLastPage, true);
 

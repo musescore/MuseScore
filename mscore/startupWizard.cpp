@@ -178,7 +178,7 @@ StartupWizardFinalPage::StartupWizardFinalPage(QWidget* parent)
       : QWizardPage(parent)
       {
       setTitle(tr("Thank you!"));
-      QLabel* label = new QLabel(tr("Your preferences have been saved. Click \"Finish\" to start using MuseScore."), this);
+      QLabel* label = new QLabel(tr("Your preferences have been successfully saved. Enjoy MuseScore!"), this);
       QVBoxLayout* layout = new QVBoxLayout(this);
       layout->addWidget(label);
       setLayout(layout);
@@ -188,7 +188,12 @@ StartupWizard::StartupWizard(QWidget* parent)
       : QWizard(parent)
       {
       setObjectName("StartupWizard");
-      setWizardStyle(QWizard::ClassicStyle);
+      auto wizardStyleValue = QWizard::ModernStyle; //Modern Windows look
+#ifdef Q_OS_MAC
+      wizardStyleValue = QWizard::MacStyle;
+      setOption(QWizard::CancelButtonOnLeft, true);
+#endif
+      setWizardStyle(wizardStyleValue);
       setWindowTitle(tr("Startup Wizard"));
 
       p0 = new StartupWizardIntroPage(this);
