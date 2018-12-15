@@ -1201,6 +1201,10 @@ Shape ChordRest::shape() const
                   continue;
             if (e->isHarmony() && e->staffIdx() == staffIdx()) {
                   Harmony* h = toHarmony(e);
+                  // this layout is needed just to calculate the correct bbox
+                  // so only do it if necessary, as it will reset position to default
+                  // and there might not be an autoplace after this
+                  // since ChordRest::shape() can be called at several points
                   if (h->isLayoutInvalid())
                         h->layout();
                   const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;

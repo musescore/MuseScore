@@ -2946,11 +2946,12 @@ void layoutHarmonies(const std::vector<Segment*>& sl)
             for (Element* e : s->annotations()) {
                   if (e->isHarmony()) {
                         Harmony* h = toHarmony(e);
-                        // Layout of harmony seems to be bound currently
-                        // to ChordRest (see ChordRest::shape). But harmony
-                        // can exist without chord or rest too.
-                        if (h->isLayoutInvalid())
-                              h->layout();
+                        // For chord symbols that coincide with a chord or rest,
+                        // a partial layout can also happen (if needed) during ChordRest layout
+                        // in order to calculate a bbox and allocate its shape to the ChordRest.
+                        // But that layout (if it happens at all) does not do autoplace,
+                        // so we need the full layout here.
+                        h->layout();
                         h->autoplaceSegmentElement(s->score()->styleP(Sid::minHarmonyDistance));
                         }
                   }
