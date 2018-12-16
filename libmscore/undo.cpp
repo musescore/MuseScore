@@ -1108,25 +1108,41 @@ void RemoveStaves::redo(EditData*)
       }
 
 //---------------------------------------------------------
-//   ChangeKeySig::flip
+//   ChangeKeySig
 //---------------------------------------------------------
+
+ChangeKeySig::ChangeKeySig(KeySig* k, KeySigEvent newKeySig, bool sc, bool addEvtToStaff)
+   : keysig(k), ks(newKeySig), showCourtesy(sc), evtInStaff(addEvtToStaff)
+      {}
 
 void ChangeKeySig::flip(EditData*)
       {
-      KeySigEvent oe = keysig->keySigEvent();
-      bool sc        = keysig->showCourtesy();
+      Segment* segment = keysig->segment();
+      const int tick = segment->tick();
+      Staff* staff = keysig->staff();
+
+      const bool curEvtInStaff = (staff->currentKeyTick(tick) == tick);
+      KeySigEvent curKey = keysig->keySigEvent();
+      const bool curShowCourtesy = keysig->showCourtesy();
 
       keysig->setKeySigEvent(ks);
       keysig->setShowCourtesy(showCourtesy);
 
-      int tick = keysig->segment()->tick();
+      // Add/remove the corresponding key events, if appropriate.
+      if (evtInStaff)
+            staff->setKey(tick, ks); // replace
+      else if (curEvtInStaff)
+            staff->removeKey(tick); // if nothing to add instead, just remove.
 
-      // update keys if keysig was not generated
-      if (!keysig->generated())
-            keysig->staff()->setKey(tick, ks);
+      // If no keysig event corresponds to the key signature then this keysig
+      // is probably generated. Otherwise it is probably added manually.
+      // Set segment flags according to this, layout will change it if needed.
+      segment->setEnabled(evtInStaff);
+      segment->setHeader(!evtInStaff && segment->rtick() == 0);
 
-      showCourtesy = sc;
-      ks           = oe;
+      showCourtesy = curShowCourtesy;
+      ks           = curKey;
+      evtInStaff   = curEvtInStaff;
       keysig->score()->setLayout(tick);
       keysig->score()->setLayout(keysig->staff()->nextKeyTick(tick));
       }
