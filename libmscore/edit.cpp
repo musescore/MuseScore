@@ -725,10 +725,15 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             int n = nstaves();
             for (int si = 0; si < n; ++si) {
                   TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
-                  nsig->undoChangeProperty(Pid::TIMESIG_TYPE,       int(ts->timeSigType()));
-                  nsig->undoChangeProperty(Pid::NUMERATOR_STRING,   ts->numeratorString());
+                  nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
+                  nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
+                  nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
+                  nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
                   nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
-                  nsig->undoChangeProperty(Pid::GROUPS,             QVariant::fromValue(ts->groups()));
+                  nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
+                  nsig->undoChangeProperty(Pid::GROUPS,  QVariant::fromValue(ts->groups()));
+                  nsig->setSelected(false);
+                  nsig->setDropTarget(0);
                   }
             }
       else {
@@ -740,7 +745,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //
             if (mf == mScore->firstMeasure() && mf->nextMeasure() && (mf->len() != mf->timesig())) {
                   // handle upbeat
-				  mf->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                  mf->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                   Measure* m = mf->nextMeasure();
                   Segment* s = m->findSegment(SegmentType::TimeSig, m->tick());
                   mf = s ? 0 : mf->nextMeasure();
