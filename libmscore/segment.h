@@ -130,11 +130,14 @@ class Segment final : public Element {
       Segment* next1() const;
       Segment* next1enabled() const;
       Segment* next1MM() const;
+      Segment* next1MMenabled() const;
       Segment* next1(SegmentType) const;
       Segment* next1MM(SegmentType) const;
 
       Segment* prev1() const;
+      Segment* prev1enabled() const;
       Segment* prev1MM() const;
+      Segment* prev1MMenabled() const;
       Segment* prev1(SegmentType) const;
       Segment* prev1MM(SegmentType) const;
 
