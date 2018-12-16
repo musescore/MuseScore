@@ -3104,8 +3104,10 @@ Shape Chord::shape() const
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
       for (Note* note : _notes)
             shape.add(note->shape().translated(note->pos()));
-      for (Element* e : el())
-            shape.add(e->shape().translated(e->pos()));
+      for (Element* e : el()) {
+            if (e->autoplace() && e->visible())
+                  shape.add(e->shape().translated(e->pos()));
+            }
       for (Chord* chord : _graceNotes)    // process grace notes last, needed for correct shape calculation
             shape.add(chord->shape().translated(chord->pos()));
       shape.add(ChordRest::shape());      // add lyrics
