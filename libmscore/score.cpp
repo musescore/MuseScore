@@ -3020,8 +3020,11 @@ void Score::selectRange(Element* e, int staffIdx)
       _selection.setActiveTrack(activeTrack);
 
       // doing this in note entry mode can clear selection
-      if (_selection.startSegment() && !noteEntryMode())
-            setPlayPos(_selection.startSegment()->tick());
+      if (_selection.startSegment() && !noteEntryMode()) {
+            int tick = _selection.startSegment()->tick();
+            if (masterScore()->playPos() != tick)
+                  masterScore()->setPlayPos(tick);
+            }
 
       _selection.updateSelectedElements();
       }
