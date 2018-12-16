@@ -261,6 +261,14 @@ Segment* Segment::next1MM(SegmentType types) const
       return 0;
       }
 
+Segment* Segment::next1MMenabled() const
+      {
+      Segment* s = next1MM();
+      while (s && !s->enabled())
+            s = s->next1MM();
+      return s;
+      }
+
 //---------------------------------------------------------
 //   next
 //    got to next segment which has subtype in types
@@ -303,12 +311,28 @@ Segment* Segment::prev1() const
       return m ? m->last() : 0;
       }
 
+Segment* Segment::prev1enabled() const
+      {
+      Segment* s = prev1();
+      while (s && !s->enabled())
+            s = s->prev1();
+      return s;
+      }
+
 Segment* Segment::prev1MM() const
       {
       if (prev())
             return prev();
       Measure* m = measure()->prevMeasureMM();
       return m ? m->last() : 0;
+      }
+
+Segment* Segment::prev1MMenabled() const
+      {
+      Segment* s = prev1MM();
+      while (s && !s->enabled())
+            s = s->prev1MM();
+      return s;
       }
 
 Segment* Segment::prev1(SegmentType types) const
