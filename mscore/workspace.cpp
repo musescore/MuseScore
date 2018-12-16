@@ -922,6 +922,11 @@ void Workspace::readGlobalGUIState()
 
 void Workspace::save()
       {
+      if (!saveComponents)
+            writeGlobalGUIState();
+      if (!saveToolbars)
+            writeGlobalToolBar();
+
       if (_readOnly)
             return;
       PaletteBox* pb = mscore->getPaletteBox();
