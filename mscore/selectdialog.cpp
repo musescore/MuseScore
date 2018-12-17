@@ -79,7 +79,7 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
 void SelectDialog::setPattern(ElementPattern* p)
       {
       p->type    = int(e->type());
-      p->subtype = int(e->subtype());
+      p->subtype = e->subtype();
       if (e->isSlurSegment())
             p->subtype = int(toSlurSegment(e)->spanner()->type());
 
