@@ -174,6 +174,7 @@ bool exportScoreParts = false;
 bool ignoreWarnings = false;
 bool exportScoreMedia = false;
 bool exportScoreMp3 = false;
+bool exportScorePartsPdf = false;
       
 QString mscoreGlobalShare;
 
@@ -3466,6 +3467,8 @@ static bool processNonGui(const QStringList& argv)
             return mscore->exportAllMediaFiles(argv[0]);
       else if (exportScoreMp3)
             return mscore->exportMp3AsJSON(argv[0]);
+      else if (exportScorePartsPdf)
+            return mscore->exportPartsPdfsToJSON(argv[0]);
       
       if (pluginMode) {
             loadScores(argv);
@@ -6923,6 +6926,7 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
       parser.addOption(QCommandLineOption("score-media", "Export all media (excepting mp3) for a given score in a single JSON file and print it to std out"));
       parser.addOption(QCommandLineOption("score-mp3", "Generates mp3 for the given score and export the data to a single JSON file, print it to std out"));
+      parser.addOption(QCommandLineOption("score-parts-pdf", "Generates parts data for the given score and export the data to a single JSON file, print it to std out"));
       parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
       parser.addOption(QCommandLineOption("diff", "Print a diff for the given scores"));
 
@@ -7075,6 +7079,12 @@ int main(int argc, char* av[])
             converterMode = true;
             }
 
+      if (parser.isSet("score-parts-pdf")) {
+            exportScorePartsPdf = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+      
       if (parser.isSet("raw-diff")) {
             MScore::noGui = true;
             rawDiffMode = true;
@@ -7443,3 +7453,89 @@ int main(int argc, char* av[])
       return qApp->exec();
       }
 
+//---------------------------------------------------------
+//   exportPartsPdfsToJSON
+//---------------------------------------------------------
+
+bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath)
+{
+      MasterScore* score = mscore->readScore(inFilePath);
+      if (!score)
+            return false;
+      
+      QString outPath = QFileInfo(inFilePath).path() + "/";
+      
+      QJsonObject jsonForPdfs;
+      QString outName = outPath + QFileInfo(inFilePath).baseName() + ".pdf";
+      jsonForPdfs["score"] = outName;
+      
+      //save score pdf
+      if (!styleFile.isEmpty()) {
+            QFile f(styleFile);
+            if (f.open(QIODevice::ReadOnly))
+                  score->style().load(&f);
+      }
+      score->switchToPageMode();
+      
+      QByteArray pdfData;
+      QBuffer scoreDevice(&pdfData);
+      scoreDevice.open(QIODevice::ReadWrite);
+      QPdfWriter writer(&scoreDevice);
+      bool res = mscore->savePdf(score, writer);
+      jsonForPdfs["scoreBin"] = QString::fromLatin1(pdfData.toBase64());
+      
+      //save extended score+parts and separate parts pdfs
+      //if no parts, generate parts from existing instruments
+      if (score->excerpts().size() == 0) {
+            auto excerpts = Excerpt::createAllExcerpt(score);
+            for (Excerpt* e : excerpts) {
+                  Score* nscore = new Score(e->oscore());
+                  e->setPartScore(nscore);
+                  nscore->style().set(Sid::createMultiMeasureRests, true);
+                  Excerpt::createExcerpt(e);
+                  auto excerptCmdFake = new AddExcerpt(e);
+                  excerptCmdFake->redo(nullptr);
+            }
+      }
+      
+      QList<Score*> scores;
+      scores.append(score);
+      QJsonArray partsArray;
+      QJsonArray partsNamesArray;
+      for (Excerpt* e : score->excerpts()) {
+            scores.append(e->partScore());
+            QJsonValue partNameVal(e->title());
+            partsNamesArray.append(partNameVal);
+            QByteArray partData;
+            QBuffer partDevice(&partData);
+            partDevice.open(QIODevice::ReadWrite);
+            QPdfWriter partWriter(&partDevice);
+            res &= mscore->savePdf(e->partScore(), partWriter);
+            QJsonValue partVal(QString::fromLatin1(partData.toBase64()));
+            partsArray.append(partVal);
+      }
+      jsonForPdfs["parts"] = partsNamesArray;
+      jsonForPdfs["partsBin"] = partsArray;
+      
+      jsonForPdfs["scoreFullPostfix"] = QString("-Score_and_parts") + ".pdf";
+      
+      QString tempFileName = outPath + "tempPdf.pdf";
+      res &= mscore->savePdf(scores, tempFileName);
+      QFile tempPdf(tempFileName);
+      tempPdf.open(QIODevice::ReadWrite);
+      QByteArray fullScoreData = tempPdf.readAll();
+      tempPdf.remove();
+      jsonForPdfs["scoreFullBin"] = QString::fromLatin1(fullScoreData.toBase64());
+      
+      QJsonDocument jsonDoc(jsonForPdfs);
+      const QString& jsonPath{outFilePath};
+      QFile file(jsonPath);
+      res &= file.open(QIODevice::WriteOnly);
+      if (res) {
+            file.write(jsonDoc.toJson(QJsonDocument::Compact));
+            file.close();
+      }
+      
+      delete score;
+      return res;
+      }

@@ -723,8 +723,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool saveMetadataJSON(Score*, const QString& name);
       QJsonObject saveMetadataJSON(Score*);
 
+      /////The methods are used in the musescore.com backend
       bool exportAllMediaFiles(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       bool exportMp3AsJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
+      bool exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
+      /////////////////////////////////////////////////
       
       virtual void closeScore(Score* score);
 
