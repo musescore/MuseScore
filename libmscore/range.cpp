@@ -174,8 +174,7 @@ void TrackList::append(Element* e)
                                    }
                               if (akkumulateChord && back()->isChord()) {
                                     Chord* bc   = toChord(back());
-                                    Fraction du = bc->duration();
-                                    du += bc->duration();
+                                    const Fraction du = bc->duration() + chord->duration();
                                     bc->setDuration(du);
 
                                     // forward ties
