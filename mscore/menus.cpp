@@ -1001,7 +1001,7 @@ Palette* MuseScore::newLinesPalette()
       gabel4->setBeginText("<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
       gabel4->setBeginTextAlign(Align::VCENTER);
       gabel4->setLen(w);
-      sp->append(gabel4, qApp->translate("lines", "Dynamics + hairpin"));
+      sp->append(gabel4, qApp->translate("lines", "Dynamic + hairpin"));
 
       Volta* volta = new Volta(gscore);
       volta->setVoltaType(Volta::Type::CLOSED);
@@ -1037,7 +1037,7 @@ Palette* MuseScore::newLinesPalette()
       il.clear();
       il.append(2);
       volta->setEndings(il);
-      sp->append(volta, QT_TRANSLATE_NOOP("Palette", "Seconda volta 2"));
+      sp->append(volta, QT_TRANSLATE_NOOP("Palette", "Seconda volta, open"));
 
       Ottava* ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_8VA);

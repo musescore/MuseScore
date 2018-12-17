@@ -121,16 +121,16 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="Ms::FontStyleSelect" name="tupletFontStyle"/>
+       <widget class="Ms::FontStyleSelect" name="tupletFontStyle" native="true"/>
       </item>
       <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetTupletFontFace"/>
+       <widget class="Ms::ResetButton" name="resetTupletFontFace" native="true"/>
       </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetTupletFontSize"/>
+       <widget class="Ms::ResetButton" name="resetTupletFontSize" native="true"/>
       </item>
       <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetTupletFontStyle"/>
+       <widget class="Ms::ResetButton" name="resetTupletFontStyle" native="true"/>
       </item>
      </layout>
     </widget>
@@ -199,7 +199,7 @@
         </item>
         <item>
          <property name="text">
-          <string>Nothing</string>
+          <string>None</string>
          </property>
         </item>
        </widget>
@@ -247,7 +247,7 @@
         </item>
         <item>
          <property name="text">
-          <string>Nothing</string>
+          <string>None</string>
          </property>
         </item>
        </widget>
@@ -320,16 +320,16 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetDirection"/>
+       <widget class="Ms::ResetButton" name="resetDirection" native="true"/>
       </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetNumberType"/>
+       <widget class="Ms::ResetButton" name="resetNumberType" native="true"/>
       </item>
       <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetBracketType"/>
+       <widget class="Ms::ResetButton" name="resetBracketType" native="true"/>
       </item>
       <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetLineWidth"/>
+       <widget class="Ms::ResetButton" name="resetLineWidth" native="true"/>
       </item>
      </layout>
     </widget>
@@ -360,8 +360,6 @@
   <tabstop>bracketType</tabstop>
   <tabstop>lineWidth</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
