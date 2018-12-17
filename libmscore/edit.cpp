@@ -4308,7 +4308,10 @@ void Score::undoAddElement(Element* element)
                                           }
                                     }
                               }
-                        undo(new AddElement(nsp));
+                        if (!alreadyInList(nsp))
+                              undo(new AddElement(nsp));
+                        else
+                              qDebug("%s already there", nsp->name());
                         }
                   else if (et == ElementType::GLISSANDO)
                         undo(new AddElement(toSpanner(ne)));

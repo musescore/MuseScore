@@ -1090,6 +1090,7 @@ class Score : public QObject, public ScoreElement {
       bool isSpannerStartEnd(int tick, int track) const;
       void removeSpanner(Spanner*);
       void addSpanner(Spanner*);
+      bool alreadyInList(Spanner*) const;
       void cmdAddSpanner(Spanner* spanner, const QPointF& pos);
       void cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment, Segment* endSegment);
       void checkSpanner(int startTick, int lastTick);

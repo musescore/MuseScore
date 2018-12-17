@@ -42,6 +42,8 @@ class SpannerMap : std::multimap<int, Spanner*> {
       bool removeSpanner(Spanner* s);
       void update() const;
       void setDirty() const { dirty = true; }   // must be called if a spanner changes start/length
+      bool alreadyInList(Spanner* s) const;
+
 #ifndef NDEBUG
       void dump() const;
 #endif
