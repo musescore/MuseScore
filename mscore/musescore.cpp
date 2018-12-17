@@ -155,7 +155,8 @@ bool ignoreWarnings = false;
 bool experimentalPrintParts = false;
 bool experimentalMediaParts = false;
 bool experimentalScoreMedia = false;
-      
+bool experimentalScoreMp3 = false;
+
 QString mscoreGlobalShare;
 
 static QString outFileName;
@@ -2714,7 +2715,7 @@ static bool doProcessJob(QString jsonFile)
       }
 
 //---------------------------------------------------------
-//   processNonGui
+//   experimentalPartsPrint
 //---------------------------------------------------------
 
 static bool experimentalPartsPrint(const QString& inFilePath)
@@ -2885,12 +2886,37 @@ static bool experimentalPartsMedia(const QString& inFilePath)
       delete score;
       return true;
       }
-
+      
+static bool exportScoreMp3AsJSON(const QString& inFilePath)
+      {
+      std::unique_ptr<Score> score(mscore->readScore(inFilePath));
+      if (!score)
+            return false;
+      
+      QJsonObject jsonForMedia;
+      //export score audio
+      QByteArray mp3Data;
+      QBuffer mp3Device(&mp3Data);
+      mp3Device.open(QIODevice::ReadWrite);
+      bool dummy = false;
+      bool res = mscore->saveMp3(score.get(), &mp3Device, dummy);
+      jsonForMedia["mp3"] = QString::fromLatin1(mp3Data.toBase64());
+      
+      QJsonDocument jsonDoc(jsonForMedia);
+      const QString& jsonPath{"/dev/test.json"};//stdout"};
+      QFile file(jsonPath);
+      if (!file.open(QIODevice::WriteOnly))
+            return false;
+      
+      file.write(jsonDoc.toJson(QJsonDocument::Compact));
+      file.close();
+      return res;
+      }
+      
 static bool experimentalMediaScore(const QString& inFilePath)
       {
       
       //// JSON specification ///////////////////////////
-      //jsonForMedia["mp3"] = mp3Json;
       //jsonForMedia["pngs"] = pngsJsonArray;
       //jsonForMedia["mposXML"] = mposJson;
       //jsonForMedia["sposXML"] = sposJson;
@@ -2987,17 +3013,6 @@ static bool experimentalMediaScore(const QString& inFilePath)
       //export metadata
       jsonForMedia["metadata"] = mscore->saveMetadataJSON(score);
 
-      {
-      //export score audio
-      QByteArray mp3Data;
-      QBuffer mp3Device(&mp3Data);
-      mp3Device.open(QIODevice::ReadWrite);
-      bool dummy = false;
-      //QString fileName1 = QString("D:\\123\\score.mp3");
-      res &= mscore->saveMp3(score, &mp3Device, dummy);//mscore->saveMp3(score, fileName1);
-      jsonForMedia["mp3"] = QString::fromLatin1(mp3Data.toBase64());
-      }
-      
       QJsonDocument jsonDoc(jsonForMedia);
       const QString& jsonPath{"/dev/stdout"}; //{"D:\\123\\score.json"};
       QFile file(jsonPath);
@@ -3019,6 +3034,9 @@ static bool processNonGui(const QStringList& argv)
 
       if (experimentalScoreMedia)
             return experimentalMediaScore(argv[0]);
+
+      if (experimentalScoreMp3)
+            return exportScoreMp3AsJSON(argv[0]);
             
       if (pluginMode) {
             loadScores(argv);
@@ -6108,7 +6126,8 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
       parser.addOption(QCommandLineOption("parts-pdf", "Experimental export of score and parts as separate files"));
       parser.addOption(QCommandLineOption("parts-media", "Experimental export of media for parts"));
-      parser.addOption(QCommandLineOption("score-media", "Experimental exporting media of whole score"));
+      parser.addOption(QCommandLineOption("score-media", "Experimental exporting media (excepting mp3) of a whole score to JSON"));
+      parser.addOption(QCommandLineOption("score-mp3", "Experimental exporting mp3 of whole score to JSON"));
             
       parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
@@ -6260,6 +6279,12 @@ int main(int argc, char* av[])
 
       if (parser.isSet("score-media")) {
             experimentalScoreMedia = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+
+      if (parser.isSet("score-mp3")) {
+            experimentalScoreMp3 = true;
             MScore::noGui = true;
             converterMode = true;
             }
