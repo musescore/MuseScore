@@ -575,10 +575,20 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(mapper2, SIGNAL(mapped(int)), SLOT(valueChanged(int)));
       textStyles->clear();
       for (auto ss : allTextStyles()) {
-            QListWidgetItem* item = new QListWidgetItem(textStyleUserName(ss));
+            QListWidgetItem* item = new QListWidgetItem(s->getTextStyleUserName(ss));
             item->setData(Qt::UserRole, int(ss));
             textStyles->addItem(item);
             }
+
+      textStyleFrameType->clear();
+      textStyleFrameType->addItem(tr("No frame"), int(FrameType::NO_FRAME));
+      textStyleFrameType->addItem(tr("Square"),   int(FrameType::SQUARE));
+      textStyleFrameType->addItem(tr("Circle"),   int(FrameType::CIRCLE));
+
+      resetTextStyleName->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleName, &QToolButton::clicked, [=](){ resetUserStyleName(); });
+      connect(styleName, &QLineEdit::textEdited, [=]() { editUserStyleName(); });
+      connect(styleName, &QLineEdit::editingFinished, [=]() { endEditUserStyleName(); });
 
       // font face
       resetTextStyleFontFace->setIcon(*icons[int(Icons::reset_ICON)]);
@@ -1346,7 +1356,10 @@ void EditStyle::textStyleChanged(int row)
                         break;
                   }
             }
-      }
+      styleName->setText(cs->getTextStyleUserName(tid));
+      styleName->setEnabled(int(tid) >= int(Tid::USER1));
+      resetTextStyleName->setEnabled(styleName->text() != textStyleUserName(tid));
+     }
 
 //---------------------------------------------------------
 //   textStyleValueChanged
@@ -1385,5 +1398,52 @@ void EditStyle::resetTextStyle(Pid pid)
       textStyleChanged(textStyles->currentRow());     // update GUI
       cs->update();
       }
+
+//---------------------------------------------------------
+//   editUserStyleName
+//---------------------------------------------------------
+
+void EditStyle::editUserStyleName()
+      {
+      int row = textStyles->currentRow();
+      Tid tid = Tid(textStyles->item(row)->data(Qt::UserRole).toInt());
+      textStyles->item(row)->setText(styleName->text());
+      resetTextStyleName->setEnabled(styleName->text() != textStyleUserName(tid));
+      }
+
+//---------------------------------------------------------
+//   endEditUserStyleName
+//---------------------------------------------------------
+
+void EditStyle::endEditUserStyleName()
+      {
+      int row = textStyles->currentRow();
+      Tid tid = Tid(textStyles->item(row)->data(Qt::UserRole).toInt());
+      int idx = int(tid) - int(Tid::USER1);
+      if ((idx < 0) || (idx > 5)) {
+            qDebug("User style index %d outside of range [0,5].", idx);
+            return;
+            }
+      Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name };
+      QString name = styleName->text();
+      cs->undoChangeStyleVal(sid[idx], name);
+      if (name == "") {
+            name = textStyleUserName(tid);
+            styleName->setText(name);
+            textStyles->item(row)->setText(name);
+            resetTextStyleName->setEnabled(false);
+            }
+      MuseScoreCore::mscoreCore->updateInspector();
+      }
+//---------------------------------------------------------
+//   resetUserStyleName
+//---------------------------------------------------------
+
+void EditStyle::resetUserStyleName()
+      {
+      styleName->clear();
+      endEditUserStyleName();
+      }
+
 } //namespace Ms
 

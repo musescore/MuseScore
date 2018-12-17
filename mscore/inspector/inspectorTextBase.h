@@ -27,6 +27,7 @@ class InspectorTextBase : public InspectorElementBase {
 
       virtual void valueChanged(int, bool) override;
       void updateFrame();
+      QComboBox* style;
 
    protected:
       Ui::InspectorText t;
@@ -34,6 +35,7 @@ class InspectorTextBase : public InspectorElementBase {
    public:
       InspectorTextBase(QWidget* parent);
       virtual void setElement() override;
+      void populateStyle(QComboBox* style);
       };
 
 } // namespace Ms

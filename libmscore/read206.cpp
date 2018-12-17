@@ -615,6 +615,13 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   qDebug("unhandled substyle <%s>", qPrintable(name));
                   return;
                   }
+            int idx = int(ss) - int(Tid::USER1);
+            if ((idx < 0) || (idx > 5)) {
+                  qDebug("User style index %d outside of range [0,5].", idx);
+                  return;
+                  }
+            Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name };
+            style->set(sid[idx], name);
             }
 
       for (const auto& i : *textStyle(ss)) {
