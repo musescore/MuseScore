@@ -173,7 +173,8 @@ bool noWebView = false;
 bool exportScoreParts = false;
 bool ignoreWarnings = false;
 bool exportScoreMedia = false;
-
+bool exportScoreMp3 = false;
+      
 QString mscoreGlobalShare;
 
 static QString outFileName;
@@ -3463,6 +3464,9 @@ static bool processNonGui(const QStringList& argv)
       {
       if (exportScoreMedia)
             return mscore->exportAllMediaFiles(argv[0]);
+      else if (exportScoreMp3)
+            return mscore->exportMp3AsJSON(argv[0]);
+      
       if (pluginMode) {
             loadScores(argv);
             QString pn(pluginName);
@@ -6917,7 +6921,8 @@ int main(int argc, char* av[])
       parser.addOption(QCommandLineOption({"f", "force"}, "Used with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
       parser.addOption(QCommandLineOption({"b", "bitrate"}, "Used with '-o <file>.mp3', sets bitrate, in kbps", "bitrate"));
       parser.addOption(QCommandLineOption({"E", "install-extension"}, "Install an extension, load soundfont as default unless if -e is passed too", "extension file"));
-      parser.addOption(QCommandLineOption("score-media", "Export all media for a given score in a single JSON file and print it to std out"));
+      parser.addOption(QCommandLineOption("score-media", "Export all media (excepting mp3) for a given score in a single JSON file and print it to std out"));
+      parser.addOption(QCommandLineOption("score-mp3", "Generates mp3 for the given score and export the data to a single JSON file, print it to std out"));
       parser.addOption(QCommandLineOption("raw-diff", "Print a raw diff for the given scores"));
       parser.addOption(QCommandLineOption("diff", "Print a diff for the given scores"));
 
@@ -7060,6 +7065,12 @@ int main(int argc, char* av[])
 
       if (parser.isSet("score-media")) {
             exportScoreMedia = true;
+            MScore::noGui = true;
+            converterMode = true;
+            }
+      
+      if (parser.isSet("score-mp3")) {
+            exportScoreMp3 = true;
             MScore::noGui = true;
             converterMode = true;
             }
