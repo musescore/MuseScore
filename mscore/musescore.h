@@ -724,7 +724,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QJsonObject saveMetadataJSON(Score*);
 
       bool exportAllMediaFiles(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
-
+      bool exportMp3AsJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
+      
       virtual void closeScore(Score* score);
 
       void addTempo();
