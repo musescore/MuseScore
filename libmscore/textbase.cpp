@@ -2149,7 +2149,7 @@ QString TextBase::screenReaderInfo() const
 
 int TextBase::subtype() const
       {
-      return int(Tid());
+      return int(tid());
       }
 
 //---------------------------------------------------------
