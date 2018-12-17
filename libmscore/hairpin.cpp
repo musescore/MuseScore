@@ -112,9 +112,8 @@ void HairpinSegment::layout()
                         const qreal edLeft  = ed->bbox().left() + ed->pos().x()
                                               + ed->segment()->pos().x() + ed->measure()->pos().x();
                         const qreal dist    = edLeft - pos2().x() - pos().x() - score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
-                        rxpos2() += dist;
-                        // TODO - don't extend hairpin across barline to reach dynamic in next measure?
-                        // or only if there is also a key signature? see Gould
+                        if (dist < 0.0 || dist >= 3.0 * spatium())
+                              rxpos2() += dist;
                         }
                   }
             }
