@@ -138,6 +138,9 @@
            <property name="suffix">
             <string>pt</string>
            </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
           </widget>
          </item>
          <item row="0" column="1">
