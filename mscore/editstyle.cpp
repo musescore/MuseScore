@@ -401,12 +401,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       tupletNumberType->clear();
       tupletNumberType->addItem(tr("Number"), int(TupletNumberType::SHOW_NUMBER));
       tupletNumberType->addItem(tr("Ratio"), int(TupletNumberType::SHOW_RELATION));
-      tupletNumberType->addItem(tr("Nothing"), int(TupletNumberType::NO_TEXT));
+      tupletNumberType->addItem(tr("None"), int(TupletNumberType::NO_TEXT));
 
       tupletBracketType->clear();
       tupletBracketType->addItem(tr("Automatic"), int(TupletBracketType::AUTO_BRACKET));
       tupletBracketType->addItem(tr("Bracket"), int(TupletBracketType::SHOW_BRACKET));
-      tupletBracketType->addItem(tr("Nothing"), int(TupletBracketType::SHOW_NO_BRACKET));
+      tupletBracketType->addItem(tr("None"), int(TupletBracketType::SHOW_NO_BRACKET));
 
       pageList->setCurrentRow(0);
       accidentalsGroup->setVisible(false); // disable, not yet implemented
