@@ -6,25 +6,20 @@
     <glob pattern="*.mscz"/>
   </mime-type>
   <mime-type type="application/x-musescore@MSCORE_INSTALL_SUFFIX@+xml">
-    <comment>uncompressed MuseScore file</comment>
+    <comment>Uncompressed MuseScore file</comment>
     <sub-class-of type="application/xml"/>
     <glob pattern="*.mscx" />
   </mime-type>
   <mime-type type="application/vnd.recordare.musicxml@MSCORE_INSTALL_SUFFIX@">
     <!-- http://www.musicxml.com/for-developers/musicxml-dtd/ -->
-    <_comment>compressed MusicXML file</_comment>
+    <comment>Compressed MusicXML file</comment>
     <sub-class-of type="application/zip"/>
-<!-- Note: a custom icon is used for MusicXML files. You can change this below -->
-<!--  <icon name="application-x-musescore"/> Uncomment to use MuseScore file icon -->
-<!--  <generic-icon name="audio-x-generic"/> Uncomment to use generic audio file icon -->
     <glob pattern="*.mxl"/>
   </mime-type>
   <mime-type type="application/vnd.recordare.musicxml@MSCORE_INSTALL_SUFFIX@+xml">
     <!-- http://www.musicxml.com/for-developers/musicxml-dtd/ -->
-    <_comment>uncompressed MusicXML file</_comment>
+    <comment>Uncompressed MusicXML file</comment>
     <sub-class-of type="application/xml"/>
-<!--  <icon name="application-x-musescore"/> Uncomment to use MuseScore file icon -->
-<!--  <generic-icon name="audio-x-generic"/> Uncomment to use generic audio file icon -->
     <magic>
       <match type="string" value="&lt;?xml" offset="0">
         <match type="string" value="score-partwise" offset="0:128"/>
@@ -35,24 +30,7 @@
         <match type="string" value="score-timewise" offset="0:128"/>
       </match>
     </magic>
-    <glob pattern="*.xml" weight="40"/>
-  </mime-type>
-  <mime-type type="application/vnd.recordare.musicxml@MSCORE_INSTALL_SUFFIX@+xml">
-        <!-- http://www.musicxml.com/for-developers/musicxml-dtd/ -->
-        <_comment>uncompressed MusicXML file</_comment>
-        <sub-class-of type="application/xml"/>
-        <!--  <icon name="application-x-musescore"/> Uncomment to use MuseScore file icon -->
-        <!--  <generic-icon name="audio-x-generic"/> Uncomment to use generic audio file icon -->
-        <magic>
-              <match type="string" value="&lt;?xml" offset="0">
-                    <match type="string" value="score-partwise" offset="0:128"/>
-                    <match type="string" value="score-timewise" offset="0:128"/>
-              </match>
-              <match type="string" value="&lt;!--" offset="0">
-                    <match type="string" value="score-partwise" offset="0:128"/>
-                    <match type="string" value="score-timewise" offset="0:128"/>
-              </match>
-        </magic>
-        <glob pattern="*.musicxml" weight="40"/>
+    <glob pattern="*.musicxml"/>
+    <glob pattern="*.xml" weight="40"/><!-- Default weight is 50. Decrease for .xml to prevent ordinary XML files being identified as MusicXML -->
   </mime-type>
 </mime-info>

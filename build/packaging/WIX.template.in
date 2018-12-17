@@ -72,13 +72,17 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities" Name="ApplicationName" Value="$(var.ProdName)" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\DefaultIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),1" Type="string" />
 
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscz" Value="MuseScore.mscz" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscx" Value="MuseScore.mscx" Type="string" />
-
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mscz" Value="MuseScore.mscz" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".musicxml" Value="MuseScore.musicxml" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".xml" Value="MuseScore.xml" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\FileAssociations" Name=".mxl" Value="MuseScore.mxl" Type="string" />
             <!-- TODO add more types?-->
 
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\MIMEAssociations" Name="application/x-musescore" Value="MuseScore.mscz" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\MIMEAssociations" Name="application/x-musescore+xml" Value="MuseScore.mscx" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\MIMEAssociations" Name="application/x-musescore" Value="MuseScore.mscz" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\MIMEAssociations" Name="application/vnd.recordare.musicxml+xml" Value="MuseScore.musicxml" Type="string" /><!-- NOTE: Cannot now register to MuseScore.xml or it would overwrite this value. -->
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\MIMEAssociations" Name="application/vnd.recordare.musicxml" Value="MuseScore.mxl" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\$(var.ShortProdName)\Capabilities\shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\RegisteredApplications" Name="$(var.ProdName)" Value="SOFTWARE\$(var.ShortProdName)\Capabilities" Type="string" />
 
@@ -87,10 +91,10 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.ExeKey)" Name="Path" Value="[INSTALL_ROOT]bin" Type="string" />
 
             <!-- Extend to the "open with" list + Win7 jump menu pinning  -->
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mscz" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mscx" Value="" Type="string" />
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".xml" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mscz" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".musicxml" Value="" Type="string" />
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".xml" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".mxl" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".cap" Value="" Type="string" />
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\SupportedTypes" Name=".capx" Value="" Type="string" />
@@ -115,6 +119,14 @@
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\Applications\$(var.ExeKey)\shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
 
             <!-- MyApp.Document ProgIDs -->
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscx" Value="MuseScore File" Type="string" />
+            <ProgId Id="MuseScore.mscx" Description="MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="1">
+                <Extension Id="mscx" Advertise="no">
+                    <Verb Id="open" TargetFile="$(var.ExeId)" Command="Open" Argument="&quot;%1&quot;" />
+                    <MIME Advertise="no" ContentType="application/x-musescore+xml" Default="yes" />
+                </Extension>
+            </ProgId>
+
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscz" Value="Compressed MuseScore File" Type="string"/>
             <ProgId Id="MuseScore.mscz" Description="Compressed MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="2">
                 <Extension Id="mscz" Advertise="no">
@@ -123,11 +135,42 @@
                 </Extension>
             </ProgId>
 
-            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscx" Value="MuseScore File" Type="string" />
-            <ProgId Id="MuseScore.mscx" Description="MuseScore File" Advertise="no" Icon="$(var.ExeId)" IconIndex="1">
-                <Extension Id="mscx" Advertise="no">
+            <!--
+              The following ProgIds are named MuseScore.extention even though
+              the extension doesn't belong to MuseScore. This is correct. It
+              allows other programs to install their own icons for these files
+              and then the system will display the icons for whichever program
+              the user chooses to be the default Open With program for this
+              type of file.
+            -->
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.musicxml" Value="Uncompressed MusicXML File" Type="string" />
+            <ProgId Id="MuseScore.musicxml" Description="Uncompressed MusicXML File" Advertise="no" Icon="$(var.ExeId)" IconIndex="3">
+                <Extension Id="musicxml" Advertise="no">
                     <Verb Id="open" TargetFile="$(var.ExeId)" Command="Open" Argument="&quot;%1&quot;" />
-                    <MIME Advertise="no" ContentType="application/x-musescore+xml" Default="no" />
+                    <MIME Advertise="no" ContentType="application/vnd.recordare.musicxml+xml" Default="yes" />
+                </Extension>
+            </ProgId>
+
+            <!--
+              Here we set a MusicXML icon for .xml files even though not all XML files are MusicXML.
+              As in all the other cases, the icon will only be displayed in these circumstances:
+                - The user explicity chooses MuseScore to be the default program for this type of file, or;
+                - No other programs are installed that can handle this type of file.
+            -->
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.xml" Value="Uncompressed MusicXML File" Type="string" />
+            <ProgId Id="MuseScore.xml" Description="Uncompressed MusicXML File" Advertise="no" Icon="$(var.ExeId)" IconIndex="3">
+                <Extension Id="xml" Advertise="no">
+                    <Verb Id="open" TargetFile="$(var.ExeId)" Command="Open" Argument="&quot;%1&quot;" />
+                    <!-- MIME: set Default="no" so that standard XML ContentType takes precedence for .xml files -->
+                    <MIME Advertise="no" ContentType="application/vnd.recordare.musicxml+xml" Default="no" />
+                </Extension>
+            </ProgId>
+
+            <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mxl" Value="Compressed MusicXML File" Type="string" />
+            <ProgId Id="MuseScore.mxl" Description="Compressed MusicXML File" Advertise="no" Icon="$(var.ExeId)" IconIndex="4">
+                <Extension Id="mxl" Advertise="no">
+                    <Verb Id="open" TargetFile="$(var.ExeId)" Command="Open" Argument="&quot;%1&quot;" />
+                    <MIME Advertise="no" ContentType="application/vnd.recordare.musicxml" Default="yes" />
                 </Extension>
             </ProgId>
         </Component>

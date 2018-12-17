@@ -106,10 +106,10 @@
 			<string>Uncompressed MusicXML File</string>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-        <string>xml</string>
-        <string>musicxml</string>
+				<string>musicxml</string>
+				<string>xml</string>
 			</array>
-      <key>CFBundleTypeIconFile</key>
+			<key>CFBundleTypeIconFile</key>
 			<string>xml.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
@@ -129,7 +129,7 @@
 			<array>
 				<string>mxl</string>
 			</array>
-      <key>CFBundleTypeIconFile</key>
+			<key>CFBundleTypeIconFile</key>
 			<string>mxl.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
