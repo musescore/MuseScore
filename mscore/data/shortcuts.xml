@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shortcuts>
+ <!-- ~/.local/share/MuseScore/MuseScore3Development/shortcuts.xml -->
+ <!-- for MuseScore 3.0 (Alpha) -->
   <SC>
     <key>plugin-creator</key>
     <seq>Ctrl+Shift+P</seq>
@@ -227,6 +229,26 @@
   <SC>
     <key>flip</key>
     <seq>X</seq>
+    </SC>
+  <SC>
+    <key>sharp</key>
+    <seq>#</seq>
+    </SC>
+  <SC>
+    <key>nat</key>
+    <seq>=</seq>
+    </SC>
+  <SC>
+    <key>flat</key>
+    <seq>-</seq>
+    </SC>
+  <SC>
+    <key>add-brackets</key>
+    <seq>(</seq>
+    </SC>
+  <SC>
+    <key>no-beam</key>
+    <seq>)</seq>
     </SC>
   <SC>
     <key>pitch-up</key>
@@ -618,9 +640,9 @@
     <key>clef-bass</key>
     <seq>Ctrl+Y,Ctrl+2</seq>
     </SC>
-   <SC>
+  <SC>
     <key>system-break</key>
-   <seq>Return</seq>
+    <seq>Return</seq>
     </SC>
   <SC>
     <key>page-break</key>
@@ -1002,6 +1024,4 @@
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
     </SC>
-
   </Shortcuts>
-
