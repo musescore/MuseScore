@@ -4619,6 +4619,8 @@ void MuseScore::undoRedo(bool undo)
       endCmd();
       if (_inspector)
             _inspector->update();
+      if (pianorollEditor)
+            pianorollEditor->update();
       }
 
 //---------------------------------------------------------

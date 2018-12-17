@@ -319,23 +319,78 @@ int PianoLevels::pixelYToVal(int pix) {
       return (int)(frac * range + filter->minRange());
       }
 
+//---------------------------------------------------------
+//   pickNoteEvent
+//---------------------------------------------------------
+
+bool PianoLevels::pickNoteEvent(int x, int y, bool selectedOnly, Note*& pickedNote, NoteEvent*& pickedNoteEvent)
+      {
+      PianoLevelsFilter* filter = PianoLevelsFilter::FILTER_LIST[_levelsIndex];
+
+      for (int i = 0; i < noteList.size(); ++i) {
+            Note* note = noteList[i];
+            if (selectedOnly && !note->selected())
+                  continue;
+
+            if (filter->isPerEvent()) {
+                  for (NoteEvent& e : note->playEvents()) {
+                        int noteX = tickToPixelX(noteStartTick(note, &e));
+                        int noteY = valToPixelY(filter->value(_staff, note, &e));
+                        int dx = noteX - x;
+                        int dy = noteY - y;
+
+                        if (dx * dx + dy * dy < pickRadius * pickRadius) {
+                              pickedNote = note;
+                              pickedNoteEvent = &e;
+                              return true;
+                              }
+                        }
+                  }
+            else {
+                  int noteX = tickToPixelX(noteStartTick(note, nullptr));
+                  int noteY = valToPixelY(filter->value(_staff, note, nullptr));
+                  int dx = noteX - x;
+                  int dy = noteY - y;
+
+                  if (dx * dx + dy * dy < pickRadius * pickRadius) {
+                        pickedNote = note;
+                        pickedNoteEvent = nullptr;
+                        return true;
+                        }
+                  }
+            }
+
+      pickedNote = nullptr;
+      pickedNoteEvent = nullptr;
+      return false;
+      }
 
 //---------------------------------------------------------
-//   mousePressEvent
+//   adjustLevelLerp
+//---------------------------------------------------------
+
+void PianoLevels::adjustLevel(Note* note, NoteEvent* noteEvt, int value)
+      {
+      PianoLevelsFilter* filter = PianoLevelsFilter::FILTER_LIST[_levelsIndex];
+
+      filter->setValue(_staff, note, noteEvt, value);
+
+      update();
+      emit noteLevelsChanged();
+      }
+
+
+//---------------------------------------------------------
+//   adjustLevelLerp
 //       For all points between tick0 and tick1, linearly interploate between value0 and value1 and
 //       use it to set the value of the level.
 //---------------------------------------------------------
 
-void PianoLevels::adjustLevel(int tick0, int value0, int tick1, int value1, bool selectedOnly)
+void PianoLevels::adjustLevelLerp(int tick0, int value0, int tick1, int value1, bool selectedOnly)
       {
       if (tick1 < tick0) {
-            int tmp = tick0;
-            tick0 = tick1;
-            tick1 = tmp;
-
-            tmp = value0;
-            value0 = value1;
-            value1 = tmp;
+            std::swap(tick0, tick1);
+            std::swap(value0, value1);
             }
 
       PianoLevelsFilter* filter = PianoLevelsFilter::FILTER_LIST[_levelsIndex];
@@ -385,6 +440,13 @@ void PianoLevels::mousePressEvent(QMouseEvent* e)
             mouseDown = true;
             mouseDownPos = e->pos();
             lastMousePos = mouseDownPos;
+
+            if (pickNoteEvent(mouseDownPos.x(), mouseDownPos.y(), true, singleNoteDrag, singleNoteEventDrag)) {
+                  dragStyle = DragStyle::OFFSET;
+                  }
+            else {
+                  dragStyle = DragStyle::LERP;
+                  }
             }
       }
 
@@ -404,7 +466,7 @@ void PianoLevels::mouseReleaseEvent(QMouseEvent* e)
                   int tick0 = pixelXToTick(lastMousePos.x() - 4);
                   int tick1 = pixelXToTick(lastMousePos.x() + 4);
                   int val = pixelYToVal(lastMousePos.y());
-                  adjustLevel(tick0, val, tick1, val);
+                  adjustLevelLerp(tick0, val, tick1, val);
             }
 
             mouseDown = false;
@@ -425,31 +487,38 @@ void PianoLevels::mouseMoveEvent(QMouseEvent* e)
             if (!dragging) {
                   int dx = e->x() - mouseDownPos.x();
                   int dy = e->y() - mouseDownPos.y();
-                  if (dx * dx + dy * dy > 4) {
+                  if (dx * dx + dy * dy > pickRadius * pickRadius) {
                         //Start dragging
                         dragging = true;
                         }
                   }
 
             if (dragging) {
-                  int tick0 = pixelXToTick(lastMousePos.x());
-                  int tick1 = pixelXToTick(e->x());
-
-                  int val0;
-                  int val1;
-
-                  if (bnShift) {
-                        //If shift is held, set to value at mousedown
-                        val0 = pixelYToVal(mouseDownPos.y());
-                        val1 = pixelYToVal(mouseDownPos.y());
+                  if (dragStyle == DragStyle::OFFSET) {
+                        int val = pixelYToVal(lastMousePos.y());
+                        adjustLevel(singleNoteDrag, singleNoteEventDrag, val);
                         }
                   else {
-                        val0 = pixelYToVal(lastMousePos.y());
-                        val1 = pixelYToVal(e->y());
+                        int tick0 = pixelXToTick(lastMousePos.x());
+                        int tick1 = pixelXToTick(e->x());
+
+                        int val0;
+                        int val1;
+
+                        if (bnShift) {
+                              //If shift is held, set to value at mousedown
+                              val0 = pixelYToVal(mouseDownPos.y());
+                              val1 = pixelYToVal(mouseDownPos.y());
+                              }
+                        else {
+                              val0 = pixelYToVal(lastMousePos.y());
+                              val1 = pixelYToVal(e->y());
+                              }
+
+                        adjustLevelLerp(tick0, val0, tick1, val1);
                         }
 
                   lastMousePos = e->pos();
-                  adjustLevel(tick0, val0, tick1, val1);
                   }
 
             }
