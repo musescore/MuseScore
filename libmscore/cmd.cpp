@@ -327,6 +327,8 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
       int track = staffIdx * VOICES;
       spanner->setTrack(track);
       spanner->setTrack2(track);
+      for (auto ss : spanner->spannerSegments())
+            ss->setTrack(track);
       spanner->setTick(startSegment->tick());
       int tick2;
       if (!endSegment)

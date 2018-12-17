@@ -1288,6 +1288,9 @@ void SpannerSegment::autoplaceSpannerSegment(qreal minDistance)
       if (isStyled(Pid::OFFSET))
             setOffset(spanner()->propertyDefault(Pid::OFFSET).toPointF());
 
+      if (spanner()->anchor() == Spanner::Anchor::NOTE)
+            return;
+
       if (visible() && autoplace()) {
             SkylineLine sl(!spanner()->placeAbove());
             sl.add(shape().translated(pos()));
