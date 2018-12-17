@@ -35,11 +35,7 @@ InspectorDynamic::InspectorDynamic(QWidget* parent)
             { d.title, d.panel }
             };
       populatePlacement(d.placement);
-
-      d.style->clear();
-      for (auto ss : primaryTextStyles())
-            d.style->addItem(textStyleUserName(ss), int(ss));
-
+      populateStyle(d.style);
       mapSignals(il, ppList);
       }
 

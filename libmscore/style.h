@@ -861,6 +861,7 @@ enum class Sid {
       figuredBassFontSize,
       figuredBassFontStyle,
 
+      user1Name,
       user1FontFace,
       user1FontSize,
       user1FontStyle,
@@ -874,6 +875,7 @@ enum class Sid {
       user1FrameFgColor,
       user1FrameBgColor,
 
+      user2Name,
       user2FontFace,
       user2FontSize,
       user2FontStyle,
@@ -887,6 +889,7 @@ enum class Sid {
       user2FrameFgColor,
       user2FrameBgColor,
 
+      user3Name,
       user3FontFace,
       user3FontSize,
       user3FontStyle,
@@ -900,6 +903,7 @@ enum class Sid {
       user3FrameFgColor,
       user3FrameBgColor,
 
+      user4Name,
       user4FontFace,
       user4FontSize,
       user4FontStyle,
@@ -913,6 +917,7 @@ enum class Sid {
       user4FrameFgColor,
       user4FrameBgColor,
 
+      user5Name,
       user5FontFace,
       user5FontSize,
       user5FontStyle,
@@ -926,6 +931,7 @@ enum class Sid {
       user5FrameFgColor,
       user5FrameBgColor,
 
+      user6Name,
       user6FontFace,
       user6FontSize,
       user6FontStyle,

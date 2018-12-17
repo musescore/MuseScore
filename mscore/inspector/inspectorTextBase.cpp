@@ -13,6 +13,7 @@
 #include "inspector.h"
 #include "inspectorTextBase.h"
 #include "libmscore/text.h"
+#include "libmscore/score.h"
 #include "icons.h"
 
 namespace Ms {
@@ -25,6 +26,7 @@ InspectorTextBase::InspectorTextBase(QWidget* parent)
    : InspectorElementBase(parent)
       {
       t.setupUi(addWidget());
+      style = nullptr;
 
       const std::vector<InspectorItem> iiList = {
             { Pid::FONT_FACE,         0, t.fontFace,     t.resetFontFace     },
@@ -89,6 +91,26 @@ void InspectorTextBase::setElement()
       updateFrame();
       TextBase* text = toTextBase(inspector->element());
       t.resetToStyle->setEnabled(text->hasCustomFormatting());
+      populateStyle(style);
+      }
+
+//---------------------------------------------------------
+//   populateStyle
+//---------------------------------------------------------
+
+void InspectorTextBase::populateStyle(QComboBox* style)
+      {
+      if (style) {
+            this->style = style;
+            Score* score = inspector->element()->score();
+            style->blockSignals(true);
+            int idx = style->currentIndex();
+            style->clear();
+            for (auto ss : primaryTextStyles())
+                  style->addItem(score->getTextStyleUserName(ss), int(ss));
+            style->setCurrentIndex(idx);
+            style->blockSignals(false);
+            }
       }
 
 } // namespace Ms
