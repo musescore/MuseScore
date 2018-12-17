@@ -172,7 +172,7 @@ void TrackList::append(Element* e)
                                           break;
                                           }
                                    }
-                              if (akkumulateChord && back()->isChord()) {
+                              if (akkumulateChord && !empty() && back()->isChord()) {
                                     Chord* bc   = toChord(back());
                                     Fraction du = bc->duration();
                                     du += bc->duration();
