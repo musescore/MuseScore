@@ -596,7 +596,7 @@
             </Instrument>
             <Instrument id="bb-soprano-ocarina">
                   <longName>B♭ Soprano Ocarina</longName>
-                  <shortName>B♭­ S. Oc.</shortName>
+                  <shortName>B♭ S. Oc.</shortName>
                   <description>B♭ Soprano Ocarina</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
                   <clef>G8va</clef>
@@ -651,9 +651,9 @@
                   <genre>world</genre>
             </Instrument>
             <Instrument id="bb-alto-ocarina">
-                  <longName>B♭­ Alto Ocarina</longName>
-                  <shortName>B♭­ A. Oc.</shortName>
-                  <description>B♭­ Alto Ocarina</description>
+                  <longName>B♭ Alto Ocarina</longName>
+                  <shortName>B♭ A. Oc.</shortName>
+                  <description>B♭ Alto Ocarina</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
