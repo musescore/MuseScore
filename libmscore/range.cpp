@@ -726,8 +726,16 @@ bool ScoreRange::write(Score* score, int tick) const
 
 void ScoreRange::fill(const Fraction& f)
       {
+      const Fraction oldDuration = duration();
+      const int oldEndTick = _first->tick() + oldDuration.ticks();
       for (auto t : tracks)
             t->appendGap(f);
+
+      const int diff = (duration() - oldDuration).ticks();
+      for (Spanner* sp : spanner) {
+            if (sp->tick2() >= oldEndTick && sp->tick() < oldEndTick)
+                  sp->setTicks(sp->ticks() + diff);
+            }
       }
 
 //---------------------------------------------------------
