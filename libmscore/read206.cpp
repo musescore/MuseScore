@@ -2457,6 +2457,8 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
       SymId sym = SymId::fermataAbove;          // default -- backward compatibility (no type = ufermata in 1.2)
       ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
       Direction direction = Direction::AUTO;
+      double timeStretch = 0.0;
+      bool useDefaultPlacement = true;
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
@@ -2506,6 +2508,8 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                                           sym       = al[i].id;
                                           bool up   = al[i].up;
                                           direction = up ? Direction::UP : Direction::DOWN;
+                                          if ((direction == Direction::DOWN) != (cr->track() & 1))
+                                                useDefaultPlacement = false;
                                           break;
                                           }
                                     }
@@ -2526,7 +2530,6 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                         case SymId::fermataVeryLongAbove:
                         case SymId::fermataVeryLongBelow:
                               el = new Fermata(sym, cr->score());
-                              setFermataPlacement(el, anchor, direction);
                               break;
                         default:
                               el = new Articulation(sym, cr->score());
@@ -2535,32 +2538,21 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                         };
                   }
             else if (tag == "anchor") {
-                  if (!el)
+                  useDefaultPlacement = false;
+                  if (!el || el->isFermata())
                         anchor = ArticulationAnchor(e.readInt());
-                  else {
-                        if (el->isFermata()) {
-                              anchor = ArticulationAnchor(e.readInt());
-                              setFermataPlacement(el, anchor, direction);
-                              }
-                        else
-                              el->readProperties(e);
-                        }
+                  else
+                        el->readProperties(e);
                   }
             else  if (tag == "direction") {
-                  if (!el)
+                  useDefaultPlacement = false;
+                  if (!el || el->isFermata())
                         direction = toDirection(e.readElementText());
-                  else {
-                        if (!el->isFermata())
-                              el->readProperties(e);
-                        }
+                  else
+                        el->readProperties(e);
                   }
             else if (tag == "timeStretch") {
-                  if (el && el->isFermata())
-                        el->setProperty(Pid::TIME_STRETCH ,e.readDouble());
-                  else {
-                        qDebug("line %lld: read206: skipping <timeStretch>", e.lineNumber());
-                        e.skipCurrentElement();
-                        }
+                  timeStretch = e.readDouble();
                   }
             else {
                   if (!el) {
@@ -2571,9 +2563,15 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                   }
             }
       // Special case for "no type" = ufermata, with missing subtype tag
-      if (!el) {
+      if (!el)
             el = new Fermata(sym, cr->score());
-            setFermataPlacement(el, anchor, direction);
+      if (el->isFermata()) {
+            if (timeStretch != 0.0)
+                  el->setProperty(Pid::TIME_STRETCH, timeStretch);
+            if (useDefaultPlacement)
+                  el->setPlacement(cr->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+            else
+                  setFermataPlacement(el, anchor, direction);
             }
       el->setTrack(cr->track());
       return el;
