@@ -1293,6 +1293,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
 
             ++staffIdx;
             }
+      Staff* firstVisible = nullptr;
       if (systemIsEmpty) {
             for (Staff* staff : _staves) {
                   SysStaff* ss  = system->staff(staff->idx());
@@ -1300,11 +1301,14 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                         ss->setShow(true);
                         systemIsEmpty = false;
                         }
+                  else if (!firstVisible && staff->show()) {
+                        firstVisible = staff;
+                        }
                   }
             }
       // don’t allow a complete empty system
       if (systemIsEmpty) {
-            Staff* staff = _staves.front();
+            Staff* staff = firstVisible ? firstVisible : _staves.front();
             SysStaff* ss = system->staff(staff->idx());
             ss->setShow(true);
             }
