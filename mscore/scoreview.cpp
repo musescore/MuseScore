@@ -4406,6 +4406,16 @@ Element* ScoreView::getEditElement()
       }
 
 //---------------------------------------------------------
+//   onElementDestruction
+//---------------------------------------------------------
+
+void ScoreView::onElementDestruction(Element* e)
+      {
+      if (editData.element == e)
+            editData.element = nullptr;
+      }
+
+//---------------------------------------------------------
 //   startNoteEntryMode
 //---------------------------------------------------------
 
