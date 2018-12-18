@@ -3096,6 +3096,7 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
             jsonPart.insert("hasPitchedStaff", boolToString(p->hasPitchedStaff()));
             jsonPart.insert("hasTabStaff", boolToString(p->hasTabStaff()));
             jsonPart.insert("hasDrumStaff", boolToString(p->hasDrumStaff()));
+            jsonPart.insert("isVisible", boolToString(p->show()));
             jsonPartsArray.append(jsonPart);
             }
       json.insert("parts", jsonPartsArray);
