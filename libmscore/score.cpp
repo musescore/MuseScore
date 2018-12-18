@@ -3047,7 +3047,8 @@ void Score::collectMatch(void* data, Element* e)
       else if (p->subtypeValid && p->subtype != e->subtype())
             return;
 
-      if ((p->staffStart != -1) && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
+      if ((p->staffStart != -1)
+         && ((p->staffStart > e->staffIdx()) || (p->staffEnd <= e->staffIdx())))
             return;
 
       if (p->voice != -1 && p->voice != e->voice())
