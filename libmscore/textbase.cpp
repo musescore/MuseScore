@@ -2561,9 +2561,10 @@ TextCursor* TextBase::cursor(const EditData& ed)
 void TextBase::draw(QPainter* p) const
       {
       if (hasFrame()) {
+            qreal baseSpatium = MScore::baseStyle().value(Sid::spatium).toDouble();
             if (frameWidth().val() != 0.0) {
                   QColor fColor = curColor(visible(), frameColor());
-                  qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : 1);
+                  qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
 
                   QPen pen(fColor, frameWidthVal, Qt::SolidLine,
                      Qt::SquareCap, Qt::MiterJoin);
@@ -2576,7 +2577,6 @@ void TextBase::draw(QPainter* p) const
             if (circle())
                   p->drawEllipse(frame);
             else {
-                  qreal baseSpatium = MScore::baseStyle().value(Sid::spatium).toDouble();
                   qreal frameRoundFactor = (sizeIsSpatiumDependent() ? (spatium()/baseSpatium) / 2 : 0.5f);
 
                   int r2 = frameRound() * frameRoundFactor;
