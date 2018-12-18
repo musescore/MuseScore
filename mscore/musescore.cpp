@@ -2899,7 +2899,7 @@ static bool exportScoreMp3AsJSON(const QString& inFilePath)
       QBuffer mp3Device(&mp3Data);
       mp3Device.open(QIODevice::ReadWrite);
       bool dummy = false;
-      bool res = mscore->saveMp3(score.get(), &mp3Device, dummy);
+      bool res = mscore->saveMp3(score, &mp3Device, dummy);
       jsonForMedia["mp3"] = QString::fromLatin1(mp3Data.toBase64());
       
       QJsonDocument jsonDoc(jsonForMedia);
