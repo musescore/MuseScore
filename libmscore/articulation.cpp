@@ -569,7 +569,7 @@ QString Articulation::accessibleInfo() const
 void Articulation::doAutoplace()
       {
       qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
-      if (autoplace() && parent()) {
+      if (autoplace() && visible() && parent()) {
             Segment* s = segment();
             Measure* m = measure();
             int si     = staffIdx();
