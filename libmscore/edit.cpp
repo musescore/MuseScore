@@ -2684,7 +2684,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                               Measure* pm = mi->prevMeasure();
                               if (pm) {
                                     Segment* ps = pm->findSegment(SegmentType::Clef, tick);
-                                    if (ps) {
+                                    if (ps && ps->enabled()) {
                                           Element* pc = ps->element(staffIdx * VOICES);
                                           if (pc) {
                                                 pcl.push_back(toClef(pc));
@@ -2695,7 +2695,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                                           }
                                     }
                               for (Segment* s = mi->first(); s && s->rtick() == 0; s = s->next()) {
-                                    if (s->isHeaderClefType())
+                                    if (s->isHeaderClefType() || !s->enabled())
                                           continue;
                                     Element* e = s->element(staffIdx * VOICES);
                                     if (!e)
@@ -3461,6 +3461,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
                   continue;
                   }
             Segment* s   = measure->undoGetSegment(SegmentType::KeySig, tick);
+
             int staffIdx = staff->idx();
             int track    = staffIdx * VOICES;
             KeySig* ks   = toKeySig(s->element(track));
