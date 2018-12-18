@@ -73,6 +73,8 @@ class MuseScoreView {
       virtual void lyricsMinus()  {}
       virtual void lyricsUnderscore()  {}
 
+      virtual void onElementDestruction(Element*) {}
+
       virtual const QRect geometry() const = 0;
       };
 

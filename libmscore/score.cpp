@@ -372,6 +372,8 @@ void Score::onElementDestruction(Element* e)
             return;
             }
       score->selection().remove(e);
+      for (MuseScoreView* v : score->viewer)
+            v->onElementDestruction(e);
       }
 
 //---------------------------------------------------------
