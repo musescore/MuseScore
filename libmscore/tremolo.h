@@ -42,10 +42,10 @@ class Tremolo final : public Element {
       Tremolo(Score*);
       Tremolo(const Tremolo&);
       Tremolo &operator=(const Tremolo&) = delete;
-      virtual Tremolo* clone() const     { return new Tremolo(*this); }
-      virtual ElementType type() const   { return ElementType::TREMOLO; }
-      virtual int subtype() const        { return (int) _tremoloType; }
-      virtual QString subtypeName() const;
+      virtual Tremolo* clone() const       { return new Tremolo(*this); }
+      virtual ElementType type() const     { return ElementType::TREMOLO; }
+      virtual int subtype() const override { return (int) _tremoloType; }
+      virtual QString subtypeName() const override;
 
       QString tremoloTypeName() const;
       void setTremoloType(const QString& s);

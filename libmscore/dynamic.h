@@ -84,12 +84,12 @@ class Dynamic final : public TextBase {
       Segment* segment() const                    { return (Segment*)parent(); }
       Measure* measure() const                    { return (Measure*)parent()->parent(); }
 
-      void setDynamicType(Type val)      { _dynamicType = val;   }
+      void setDynamicType(Type val)               { _dynamicType = val;   }
       void setDynamicType(const QString&);
       QString dynamicTypeName() const;
-      Type dynamicType() const            { return _dynamicType; }
-      virtual int subtype() const         { return (int) _dynamicType; }
-      virtual QString subtypeName() const { return dynamicTypeName(); }
+      Type dynamicType() const                     { return _dynamicType; }
+      virtual int subtype() const override         { return (int) _dynamicType; }
+      virtual QString subtypeName() const override { return dynamicTypeName(); }
 
       virtual void layout() override;
       virtual void write(XmlWriter& xml) const override;
