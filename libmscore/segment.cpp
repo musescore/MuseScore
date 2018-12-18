@@ -261,6 +261,14 @@ Segment* Segment::next1MM(SegmentType types) const
       return 0;
       }
 
+Segment* Segment::next1MMenabled() const
+      {
+      Segment* s = next1MM();
+      while (s && !s->enabled())
+            s = s->next1MM();
+      return s;
+      }
+
 //---------------------------------------------------------
 //   next
 //    got to next segment which has subtype in types
@@ -303,12 +311,28 @@ Segment* Segment::prev1() const
       return m ? m->last() : 0;
       }
 
+Segment* Segment::prev1enabled() const
+      {
+      Segment* s = prev1();
+      while (s && !s->enabled())
+            s = s->prev1();
+      return s;
+      }
+
 Segment* Segment::prev1MM() const
       {
       if (prev())
             return prev();
       Measure* m = measure()->prevMeasureMM();
       return m ? m->last() : 0;
+      }
+
+Segment* Segment::prev1MMenabled() const
+      {
+      Segment* s = prev1MM();
+      while (s && !s->enabled())
+            s = s->prev1MM();
+      return s;
       }
 
 Segment* Segment::prev1(SegmentType types) const
@@ -1225,7 +1249,7 @@ Element* Segment::firstInNextSegments(int activeStaff)
       Element* re = 0;
       Segment* seg = this;
       while (!re) {
-            seg = seg->next1MM(SegmentType::All);
+            seg = seg->next1MMenabled();
             if (!seg) //end of staff, or score
                   break;
 
@@ -1493,12 +1517,12 @@ Element* Segment::nextElement(int activeStaff)
                         if (s)
                               return s->spannerSegments().front();
                         }
-                  Segment* nextSegment = this->next1();
+                  Segment* nextSegment = this->next1enabled();
                   while (nextSegment) {
                         Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
-                        nextSegment = nextSegment->next1();
+                        nextSegment = nextSegment->next1enabled();
                         }
                   break;
                   }
@@ -1512,12 +1536,12 @@ Element* Segment::nextElement(int activeStaff)
                   if (sp)
                         return sp->spannerSegments().front();
 
-                  Segment* nextSegment = this->next1();
+                  Segment* nextSegment = this->next1enabled();
                   while (nextSegment) {
                         Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
-                        nextSegment = nextSegment->next1();
+                        nextSegment = nextSegment->next1enabled();
                         }
                   break;
                   }
@@ -1552,12 +1576,12 @@ Element* Segment::nextElement(int activeStaff)
                   Spanner* s = firstSpanner(activeStaff);
                   if (s)
                         return s->spannerSegments().front();
-                  Segment* nextSegment =  seg->next1();
+                  Segment* nextSegment =  seg->next1enabled();
                   while (nextSegment) {
                         nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
                         if (nextEl)
                               return nextEl;
-                        nextSegment = nextSegment->next1();
+                        nextSegment = nextSegment->next1enabled();
                         }
                   }
                   break;
@@ -1606,7 +1630,7 @@ Element* Segment::prevElement(int activeStaff)
                          el = s->element(--track);
                          if (track == 0) {
                                track = score()->nstaves() * VOICES - 1;
-                               s = s->prev1();
+                               s = s->prev1enabled();
                                }
                          }
                    if (el->staffIdx() != activeStaff)
@@ -1676,13 +1700,13 @@ Element* Segment::prevElement(int activeStaff)
                               return prev;
                               }
                         }
-                   Segment* prevSeg = seg->prev1();
+                   Segment* prevSeg = seg->prev1enabled();
                    if (!prevSeg)
                          return score()->lastElement();
 
                    prev = lastElementOfSegment(prevSeg, activeStaff);
                    while (!prev && prevSeg) {
-                         prevSeg = prevSeg->prev1();
+                         prevSeg = prevSeg->prev1enabled();
                          prev = lastElementOfSegment(prevSeg, activeStaff);
                          }
                    if (!prevSeg)
@@ -1741,7 +1765,7 @@ Element* Segment::lastInPrevSegments(int activeStaff)
       Segment* seg = this;
 
       while (!re) {
-            seg = seg->prev1MM(SegmentType::All);
+            seg = seg->prev1MMenabled();
             if (!seg) //end of staff, or score
                   break;
 
@@ -1764,7 +1788,7 @@ Element* Segment::lastInPrevSegments(int activeStaff)
                   if ((re = seg->lastElement(activeStaff -1)) != 0)
                         return re;
 
-                  seg = seg->prev1(SegmentType::All);
+                  seg = seg->prev1enabled();
                   }
             }
 
