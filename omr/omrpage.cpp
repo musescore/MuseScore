@@ -474,7 +474,7 @@ OmrClef OmrPage::searchClef(OmrSystem* system, OmrStaff* staff)
             Omr::bassclefPattern
             };
       const OmrMeasure& m = system->measures().front();
-      printf("search clef %d   %d-%d\n", staff->y(), m.x1(), m.x2());
+//printf("search clef %d   %d-%d\n", staff->y(), m.x1(), m.x2());
 
       int x1 = m.x1() + 2;
       int x2 = x1 + (m.x2() - x1) / 2;
@@ -517,7 +517,7 @@ OmrPattern OmrPage::searchPattern(const std::vector<Pattern*>& pl, int y, int x1
                   p.sym = pattern->id();
                   p.prob = val;
                   }
-            printf("Pattern found %d %f %d\n", int(pattern->id()), val, xx);
+//printf("Pattern found %d %f %d\n", int(pattern->id()), val, xx);
             }
       return p;
       }
@@ -559,7 +559,7 @@ OmrTimesig* OmrPage::searchTimeSig(OmrSystem* system)
                   zval = val;
                   rz = r;
                   }
-            //            printf("   found %d %f\n", i, val);
+//printf("   found %d %f\n", i, val);
             }
 
       if (z < 0)
@@ -589,12 +589,12 @@ OmrTimesig* OmrPage::searchTimeSig(OmrSystem* system)
                   nval = val;
                   rn = r;
                   }
-            //            printf("   found %d %f\n", i, val);
+//printf("   found %d %f\n", i, val);
             }
       if (n > 0) {
             ts = new OmrTimesig(rz | rn);
             ts->timesig = Fraction(z, n);
-            printf("timesig  %d/%d\n", z, n);
+//printf("timesig  %d/%d\n", z, n);
             }
       return ts;
       }
@@ -637,7 +637,7 @@ void OmrPage::searchKeySig(OmrSystem* system, OmrStaff* staff)
                   key.type = i == 0 ? 1 : -1;
                   staff->setKeySig(key);
                   }
-            printf(" key found %d %f\n", i, val);
+//printf(" key found %d %f\n", i, val);
             }
       }
 
@@ -1239,7 +1239,7 @@ void OmrPage::crop()
             if (cropR)
                   break;
             }
-      //      printf("*** crop: T%d B%d L%d R:%d\n", cropT, cropB, cropL, cropR);
+//printf("*** crop: T%d B%d L%d R:%d\n", cropT, cropB, cropL, cropR);
       }
 
 //---------------------------------------------------------
@@ -1495,7 +1495,7 @@ void OmrPage::getStaffLines()
       staves.clear();
       int h = height();
       int wl = wordsPerLine();
-      // printf("getStaffLines %d %d  crop %d %d\n", h, wl, cropT, cropB);
+//printf("getStaffLines %d %d  crop %d %d\n", h, wl, cropT, cropB);
       if (h < 1)
             return;
 
@@ -1549,7 +1549,7 @@ void OmrPage::getStaffLines()
                   }
             }
       if (_spatium == 0) {
-            printf("*** no staff lines found\n");
+//printf("*** no staff lines found\n");
             return;
             }
 

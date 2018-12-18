@@ -424,7 +424,7 @@ int main(int argc, char* argv[])
                      argv[0], qPrintable(infile));
                   return -2;
                   }
-            printf("ScanFile %s\n", qPrintable(infile));
+//printf("ScanFile %s\n", qPrintable(infile));
             QString in = inFile.readAll();
             scanFile(in);
             inFile.close();

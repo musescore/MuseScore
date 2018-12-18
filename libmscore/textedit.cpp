@@ -214,7 +214,7 @@ bool TextBase::edit(EditData& ed)
             }
 
       if (!wasHex) {
-            // printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
+//printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
 
             switch (ed.key) {
                   case Qt::Key_Z:         // happens when the undo stack is empty

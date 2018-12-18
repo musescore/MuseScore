@@ -486,7 +486,7 @@ NewWizard::NewWizard(QWidget* parent)
 
 void NewWizard::idChanged(int /*id*/)
       {
-      // printf("\n===\nWizard: id changed %d\n", id);
+//printf("\n===\nWizard: id changed %d\n", id);
       }
 
 //---------------------------------------------------------

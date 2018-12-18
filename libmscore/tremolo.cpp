@@ -120,8 +120,8 @@ void Tremolo::setTremoloType(TremoloType t)
 
 void Tremolo::layout()
       {
-      printf("tremolo layout\n");
-//      ABORTN(1);
+//printf("tremolo layout\n");
+//ABORTN(1);
       qreal _spatium  = spatium() * mag();
 
       qreal w2  = _spatium * score()->styleS(Sid::tremoloWidth).val() * .5;

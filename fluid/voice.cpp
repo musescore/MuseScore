@@ -586,7 +586,7 @@ bool Voice::generateDataForDSPChain(unsigned framesBufCount)
                         b1 = b1_temp;
                         filter_coeff_incr_count = 0;
                         filter_startup = 0;
-                        //       printf("Setting initial filter coefficients.\n");
+//printf("Setting initial filter coefficients.\n");
                         }
                   else {
                         /* The filter frequency is changed.  Calculate an increment
@@ -644,7 +644,7 @@ void Voice::write(unsigned n, float* out, float* reverb, float* chorus)
       if (!PLAYING())
             return;
       if (!sample) {
-            printf("!sample\n");
+//printf("!sample\n");
             off();
             return;
             }
@@ -1551,7 +1551,7 @@ void Voice::add_mod(const Mod* _mod, int mode)
             /* if identical modulator exists, add them */
             for (int i = 0; i < mod_count; i++) {
                   if (test_identity(&mod[i], _mod)) {
-                        //		printf("Adding modulator...\n");
+//printf("Adding modulator...\n");
                         mod[i].amount += _mod->amount;
                         return;
                         }
@@ -1561,7 +1561,7 @@ void Voice::add_mod(const Mod* _mod, int mode)
             /* if identical modulator exists, replace it (only the amount has to be changed) */
             for (int i = 0; i < mod_count; i++) {
                   if (test_identity(&mod[i], _mod)) {
-                        //  printf("Replacing modulator...amount is %f\n",mod->amount);
+//printf("Replacing modulator...amount is %f\n",mod->amount);
                         mod[i].amount = _mod->amount;
                         return;
                         }
@@ -1649,10 +1649,10 @@ void Voice::check_sample_sanity()
 	      return;
 
 #if 0
-      printf("Sample from %i to %i\n", sample->start, sample->end);
-      printf("Sample loop from %i %i\n", sample->loopstart, sample->loopend);
-      printf("Playback from %i to %i\n", start, end);
-      printf("Playback loop from %i to %i\n", loopstart, loopend);
+printf("Sample from %i to %i\n", sample->start, sample->end);
+printf("Sample loop from %i %i\n", sample->loopstart, sample->loopend);
+printf("Playback from %i to %i\n", start, end);
+printf("Playback loop from %i to %i\n", loopstart, loopend);
 #endif
 
       /* Keep the start point within the sample data */
