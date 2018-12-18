@@ -34,6 +34,7 @@ class TestTimesig : public QObject, public MTest
       void timesig02();
       void timesig03();
       void timesig04();
+      void timesig05();
       void timesig_78216();
       };
 
@@ -129,6 +130,29 @@ void TestTimesig::timesig04()
       delete score;
       }
 
+//---------------------------------------------------------
+///   timesig05
+///   Add a 3/4 time signature to the first measure.
+///   Test that spanners are preserved, especially those
+///   that span across time signature change border.
+///   Inspired by the issue #279593 where such spanners
+///   caused crashes.
+//---------------------------------------------------------
+
+void TestTimesig::timesig05()
+      {
+      MasterScore* score = readScore(DIR + "timesig-05.mscx");
+      QVERIFY(score);
+      Measure* m = score->firstMeasure();
+      TimeSig* ts = new TimeSig(score);
+      ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
+
+      score->cmdAddTimeSig(m, 0, ts, false);
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, "timesig-05.mscx", DIR + "timesig-05-ref.mscx"));
+      delete score;
+      }
 
 //---------------------------------------------------------
 //   timesig_78216
