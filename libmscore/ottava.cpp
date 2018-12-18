@@ -274,6 +274,8 @@ void Ottava::read(XmlReader& e)
             e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement())
             readProperties(e);
+      if (_ottavaType != OttavaType::OTTAVA_8VA || _numbersOnly != propertyDefault(Pid::NUMBERS_ONLY).toBool())
+            styleChanged();
       }
 
 //---------------------------------------------------------
@@ -289,9 +291,9 @@ bool Ottava::readProperties(XmlReader& e)
             int idx = s.toInt(&ok);
             if (!ok) {
                   _ottavaType = OttavaType::OTTAVA_8VA;
-                  for (unsigned i = 0; i < sizeof(ottavaDefault)/sizeof(*ottavaDefault); ++i) {
-                        if (s == ottavaDefault[i].name) {
-                              _ottavaType = ottavaDefault[i].type;
+                  for (OttavaDefault d : ottavaDefault) {
+                        if (s == d.name) {
+                              _ottavaType = d.type;
                               break;
                               }
                         }
@@ -304,6 +306,8 @@ bool Ottava::readProperties(XmlReader& e)
                         idx = 1;
                   _ottavaType = OttavaType(idx);
                   }
+            else
+                  _ottavaType = OttavaType(idx);
             }
       else  if (readStyledProperty(e, tag))
             return true;
