@@ -334,6 +334,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                            ) {
                               Element* el = Element::name2Element(tag, this);
                               el->setTrack(e.track());      // a valid track might be necessary for el->read() to work
+                              if (el->isFermata())
+                                    el->setPlacement(el->track() & 1 ? Placement::BELOW : Placement::ABOVE);
                               el->read(e);
 
                               Measure* m = tick2measure(e.tick());

@@ -472,6 +472,7 @@ Element* ChordRest::drop(EditData& data)
                         }
 
             case ElementType::FERMATA:
+                  e->setPlacement(track() & 1 ? Placement::BELOW : Placement::ABOVE);
                   for (Element* el: segment()->annotations())
                         if (el->isFermata() && (el->track() == track())) {
                               if (el->subtype() == e->subtype()) {
@@ -479,8 +480,7 @@ Element* ChordRest::drop(EditData& data)
                                     return el;
                                     }
                               else {
-                                    if (el->placeBelow())
-                                          e->setPlacement(Placement::BELOW);
+                                    e->setPlacement(el->placement());
                                     e->setTrack(track());
                                     e->setParent(segment());
                                     score()->undoChangeElement(el, e);
