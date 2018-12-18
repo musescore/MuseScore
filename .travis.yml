@@ -134,6 +134,7 @@ matrix:
       install:
         - source ./build/travis/job_macos_lupdate/install.sh
       script:
+        - "./build/travis/job_macos_lupdate/build-assets.sh"
         - "./build/travis/job_macos_lupdate/script.sh"
 
 notifications:

@@ -47,7 +47,7 @@ function(rasterize_svg_sizes # convert an SVG to PNGs at at various sizes
     size_suffix(SIZE_SUFFIX "${SIZE}" "${SCALE}")
     set(PNG_FILE_OUT "${FILE_BASE}${SIZE_SUFFIX}.png")
     set(PNG_NOT_OPTIMIZED "${FILE_BASE}${SIZE_SUFFIX}-bloated.png")
-    math(EXPR PIXELS "${SIZE} * ${SCALE}" OUTPUT_FORMAT DECIMAL)
+    math(EXPR PIXELS "${SIZE} * ${SCALE}")
     rasterize_svg("${SVG_FILE_IN}" "${PNG_NOT_OPTIMIZED}" "--export-width=${PIXELS}" "--export-height=${PIXELS}")
     optimize_png("${PNG_NOT_OPTIMIZED}" "${PNG_FILE_OUT}")
     list(APPEND PNG_PATHS_OUT "${PNG_FILE_OUT}")
