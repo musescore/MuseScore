@@ -233,6 +233,7 @@ void SynthControl::effectAChanged(int idx)
       {
       synti->setEffect(0, idx);
       effectStackA->setCurrentIndex(idx);
+      setDirty();
       }
 
 //---------------------------------------------------------
@@ -243,6 +244,7 @@ void SynthControl::effectBChanged(int idx)
       {
       synti->setEffect(1, idx);
       effectStackB->setCurrentIndex(idx);
+      setDirty();
       }
 
 //---------------------------------------------------------
