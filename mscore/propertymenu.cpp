@@ -233,7 +233,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             QAction* b = popup->actions()[0];
             QAction* a = popup->insertSeparator(b);
             a->setText(tr("Staff"));
-            a = new QAction(tr("Staff Properties..."), 0);
+            a = new QAction(tr("Staff/Part Properties..."), 0);
             a->setData("staff-props");
             popup->insertAction(b, a);
 
@@ -251,7 +251,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             QAction* b = popup->actions()[0];
             QAction* a = popup->insertSeparator(b);
             a->setText(tr("Staff"));
-            a = new QAction(tr("Staff Properties..."), 0);
+            a = new QAction(tr("Staff/Part Properties..."), 0);
             a->setData("staff-props");
             popup->insertAction(b, a);
 
@@ -280,7 +280,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
 //      else if (e->isFretDiagram())
 //            popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
       else if (e->isInstrumentName())
-            popup->addAction(tr("Staff Properties..."))->setData("staff-props");
+            popup->addAction(tr("Staff/Part Properties..."))->setData("staff-props");
       else
             genPropertyMenu1(e, popup);
       }
