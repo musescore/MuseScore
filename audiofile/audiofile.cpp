@@ -141,7 +141,7 @@ sf_count_t AudioFile::read(void* ptr, sf_count_t count)
 
 sf_count_t AudioFile::write(const void* /*ptr*/, sf_count_t /*count*/)
       {
-      printf("write\n");
+//printf("write\n");
       return 0;
       }
 

@@ -99,7 +99,7 @@ void HelpQuery::textChanged(const QString& ss)
       for (auto i = list.begin(); i != list.end(); ++i) {
             QAction* action = new QAction(i.key(), this);
             action->setData(i.value());
-// printf("add action <%s> <%s>\n", qPrintable(i.key()), qPrintable(i.value().toString()));
+//printf("add action <%s> <%s>\n", qPrintable(i.key()), qPrintable(i.value().toString()));
             menu->addAction(action);
             connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
             mapper->setMapping(action, action);

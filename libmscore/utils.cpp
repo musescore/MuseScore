@@ -808,7 +808,7 @@ Note* searchTieNote(Note* note)
                   if (c->graceIndex() == index + 1) {
                         note2 = c->findNote(note->pitch());
                         if (note2) {
-                              printf("found grace-grace tie\n");
+//printf("found grace-grace tie\n");
                               return note2;
                               }
                         }

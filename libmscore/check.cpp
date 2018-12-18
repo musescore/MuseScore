@@ -209,7 +209,7 @@ bool Score::sanityCheck(const QString& name)
                               // fmrest0->setDuration(mLen * fmrest0->staff()->timeStretch(fmrest0->tick()));
                               fmrest0->setDuration(mLen);
                               if (fmrest0->actualFraction() != mLen)
-                                    printf("whoo???\n");
+                                    fprintf(stderr,"whoo???\n");
                               }
                         }
                   for (int v = 1; v < VOICES; ++v) {
