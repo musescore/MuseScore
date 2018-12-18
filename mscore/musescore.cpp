@@ -125,7 +125,7 @@
 #elif defined(MAC_SPARKLE_ENABLED)
 #include "sparkle/sparkleAutoUpdater.h"
 #endif
-
+ 
 #ifdef USE_LAME
 #include "exportmp3.h"
 #endif
@@ -1632,13 +1632,13 @@ MuseScore::MuseScore()
       for (auto i : { "voice-x12", "voice-x13", "voice-x14", "voice-x23", "voice-x24", "voice-x34" })
             menuVoices->addAction(getAction(i));
       menuTools->addMenu(menuVoices);
-
+      
       menuMeasure = new QMenu("");
       for (auto i : { "split-measure", "join-measures" })
             menuMeasure->addAction(getAction(i));
       menuTools->addMenu(menuMeasure);
       menuTools->addAction(getAction("time-delete"));
-
+      
       menuTools->addSeparator();
 
       menuTools->addAction(getAction("slash-fill"));
@@ -1890,7 +1890,7 @@ MuseScore::MuseScore()
 #endif
       connect(this, SIGNAL(musescoreWindowWasShown()), this, SLOT(checkForUpdates()),
             Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
-
+      
       if (!converterMode && !pluginMode)
             _loginManager = new LoginManager(getAction(saveOnlineMenuItem), this);
       }
@@ -3815,8 +3815,8 @@ void MuseScore::clipboardChanged()
 
 void MuseScore::inputMethodAnchorRectangleChanged()
       {
-//      QRectF r =  QGuiApplication::inputMethod()->anchorRectangle();
-//      qDebug("inputMethod AnchorRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+      QRectF r =  QGuiApplication::inputMethod()->anchorRectangle();
+      qDebug("inputMethod AnchorRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
       }
 
 //---------------------------------------------------------
@@ -3825,7 +3825,7 @@ void MuseScore::inputMethodAnchorRectangleChanged()
 
 void MuseScore::inputMethodAnimatingChanged()
       {
-//      qDebug("inputMethod Animating Changed: %d", QGuiApplication::inputMethod()->isAnimating());
+      qDebug("inputMethod Animating Changed: %d", QGuiApplication::inputMethod()->isAnimating());
       }
 
 //---------------------------------------------------------
@@ -3834,8 +3834,8 @@ void MuseScore::inputMethodAnimatingChanged()
 
 void MuseScore::inputMethodCursorRectangleChanged()
       {
-//      QRectF r =  QGuiApplication::inputMethod()->cursorRectangle();
-//      qDebug("inputMethod CursorRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+      QRectF r =  QGuiApplication::inputMethod()->cursorRectangle();
+      qDebug("inputMethod CursorRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
       }
 
 //---------------------------------------------------------
@@ -3844,7 +3844,7 @@ void MuseScore::inputMethodCursorRectangleChanged()
 
 void MuseScore::inputMethodInputDirectionChanged(Qt::LayoutDirection newDirection)
       {
-//      qDebug("inputMethod InputDirection Changed: (QLocale::LayoutDirection enum) #%d", newDirection);
+      qDebug("inputMethod InputDirection Changed: (QLocale::LayoutDirection enum) #%d", newDirection);
       }
 
 //---------------------------------------------------------
@@ -3853,8 +3853,8 @@ void MuseScore::inputMethodInputDirectionChanged(Qt::LayoutDirection newDirectio
 
 void MuseScore::inputMethodInputItemClipRectangleChanged()
       {
-//      QRectF r =  QGuiApplication::inputMethod()->inputItemClipRectangle();
-//      qDebug("inputMethod InputItemClipRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+      QRectF r =  QGuiApplication::inputMethod()->inputItemClipRectangle();
+      qDebug("inputMethod InputItemClipRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
       }
 
 //---------------------------------------------------------
@@ -3863,8 +3863,8 @@ void MuseScore::inputMethodInputItemClipRectangleChanged()
 
 void MuseScore::inputMethodKeyboardRectangleChanged()
       {
-//      QRectF r =  QGuiApplication::inputMethod()->keyboardRectangle();
-//      qDebug("inputMethod KeyboardRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+      QRectF r =  QGuiApplication::inputMethod()->keyboardRectangle();
+      qDebug("inputMethod KeyboardRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
       }
 
 //---------------------------------------------------------
@@ -3873,7 +3873,7 @@ void MuseScore::inputMethodKeyboardRectangleChanged()
 
 void MuseScore::inputMethodLocaleChanged()
       {
-//      qDebug("inputMethod Locale Changed: (QLocale::Script enum) #%d.", QGuiApplication::inputMethod()->locale().script());
+      qDebug("inputMethod Locale Changed: (QLocale::Script enum) #%d.", QGuiApplication::inputMethod()->locale().script());
       }
 
 //---------------------------------------------------------
@@ -3882,7 +3882,7 @@ void MuseScore::inputMethodLocaleChanged()
 
 void MuseScore::inputMethodVisibleChanged()
       {
-//      qDebug("inputMethodVisibleChanged: %d", QGuiApplication::inputMethod()->isVisible());
+      qDebug("inputMethodVisibleChanged: %d", QGuiApplication::inputMethod()->isVisible());
       }
 
 //---------------------------------------------------------
