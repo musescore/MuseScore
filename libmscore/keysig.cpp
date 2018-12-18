@@ -134,9 +134,12 @@ void KeySig::layout()
       Measure* prevMeasure = measure() ? measure()->prevMeasure() : 0;
 
       // If we're not force hiding naturals (Continuous panel), use score style settings
-      if (!_hideNaturals)
-            naturalsOn = (prevMeasure && !prevMeasure->sectionBreak()
-               && (score()->styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE))) || (t1 == 0);
+      if (!_hideNaturals) {
+            const bool newSection = (!segment()
+               || (segment()->rtick() == 0 && (!prevMeasure || prevMeasure->sectionBreak()))
+               );
+            naturalsOn = !newSection && (score()->styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
+            }
 
 
       // Don't repeat naturals if shown in courtesy
