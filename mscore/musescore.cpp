@@ -2889,7 +2889,7 @@ static bool experimentalPartsMedia(const QString& inFilePath)
       
 static bool exportScoreMp3AsJSON(const QString& inFilePath)
       {
-      std::unique_ptr<Score> score(mscore->readScore(inFilePath));
+      Score* score = mscore->readScore(inFilePath);
       if (!score)
             return false;
       
@@ -2903,13 +2903,15 @@ static bool exportScoreMp3AsJSON(const QString& inFilePath)
       jsonForMedia["mp3"] = QString::fromLatin1(mp3Data.toBase64());
       
       QJsonDocument jsonDoc(jsonForMedia);
-      const QString& jsonPath{"/dev/test.json"};//stdout"};
+      const QString& jsonPath{"/dev/stdout"};
       QFile file(jsonPath);
-      if (!file.open(QIODevice::WriteOnly))
-            return false;
+      res &= file.open(QIODevice::WriteOnly);
+      if (res) {
+            file.write(jsonDoc.toJson(QJsonDocument::Compact));
+            file.close();
+            }
       
-      file.write(jsonDoc.toJson(QJsonDocument::Compact));
-      file.close();
+      delete score;
       return res;
       }
       
