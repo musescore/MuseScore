@@ -4457,7 +4457,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
 
       Tuplet* t = cr->tuplet();
 
-      foreach (Staff* staff, ostaff->staffList()) {
+      for (const Staff* staff : ostaff->staffList()) {
             QList<int> tracks;
             int staffIdx = staff->idx();
             if ((strack & ~3) != staffIdx) // linked staff ?
@@ -4562,6 +4562,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
                                           qWarning("linked tuplet not found");
                                     }
                               newcr->setTuplet(nt);
+                              nt->setParent(newcr->measure());
                               }
                         }
 
