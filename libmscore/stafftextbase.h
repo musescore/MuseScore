@@ -47,8 +47,6 @@ class StaffTextBase : public TextBase  {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual bool readProperties(XmlReader&) override;
-      virtual int subtype() const                         { return 0; }       // TODO::ws
-      virtual QString subtypeName() const                 { return "??"; }
 
       Segment* segment() const;
       QString channelName(int voice) const                { return _channelNames[voice]; }
