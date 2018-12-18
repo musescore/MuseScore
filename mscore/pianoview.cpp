@@ -937,6 +937,13 @@ void PianoView::selectNotes(int startTick, int endTick, int lowPitch, int highPi
       //score->masterScore()->cmdState().reset();      // DEBUG: should not be necessary
       score->startCmd();
 
+      QList<PianoItem*> oldSel;
+      for (int i = 0; i < noteList.size(); ++i) {
+            PianoItem* pi = noteList[i];
+            if (pi->note()->selected())
+                  oldSel.append(pi);
+            }
+
       Selection& selection = score->selection();
       selection.deselectAll();
 
@@ -951,13 +958,13 @@ void PianoView::selectNotes(int startTick, int endTick, int lowPitch, int highPi
                         sel = inBounds;
                         break;
                   case NoteSelectType::XOR:
-                        sel = inBounds != pi->note()->selected();
+                        sel = inBounds != oldSel.contains(pi);
                         break;
                   case NoteSelectType::ADD:
-                        sel = inBounds || pi->note()->selected();
+                        sel = inBounds || oldSel.contains(pi);
                         break;
                   case NoteSelectType::SUBTRACT:
-                        sel = !inBounds && pi->note()->selected();
+                        sel = !inBounds && oldSel.contains(pi);
                         break;
                   case NoteSelectType::FIRST:
                         sel = inBounds && selection.elements().empty();
@@ -970,11 +977,6 @@ void PianoView::selectNotes(int startTick, int endTick, int lowPitch, int highPi
 
       for (MuseScoreView* view : score->getViewer())
             view->updateAll();
-      
-//      _selection.setActiveSegment(0);
-//      _selection.setActiveTrack(0);
-
-//      _selection.setState(selState);
 
       scene()->update();
       score->setUpdateAll();
