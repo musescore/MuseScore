@@ -3273,8 +3273,10 @@ Shape Note::shape() const
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot->name());
       if (_accidental)
             shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->name());
-      for (auto e : _el)
-            shape.add(e->bbox().translated(e->pos()), e->name());
+      for (auto e : _el) {
+            if (e->autoplace() && e->visible())
+                  shape.add(e->bbox().translated(e->pos()), e->name());
+            }
 #else
       Shape shape(r);
       for (NoteDot* dot : _dots)

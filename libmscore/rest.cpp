@@ -1009,6 +1009,10 @@ Shape Rest::shape() const
             for (NoteDot* dot : _dots)
                   shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
             }
+      for (Element* e : el()) {
+            if (e->autoplace() && e->visible())
+                  shape.add(e->shape().translated(e->pos()));
+            }
       return shape;
       }
 
