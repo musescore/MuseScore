@@ -43,6 +43,7 @@ class KeySig final : public Element {
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
       virtual void layout() override;
+      virtual Shape shape() const override;
       virtual qreal mag() const override;
 
       //@ sets the key of the key signature
