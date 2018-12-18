@@ -426,10 +426,12 @@ Palette* MuseScore::newBreaksPalette()
       cell = sp->append(lb, tr("Section break"));
       cell->mag = 1.2;
 
+#if 0
       lb = new LayoutBreak(gscore);
       lb->setLayoutBreakType(LayoutBreak::Type::NOBREAK);
       cell = sp->append(lb, tr("Don't break"));
       cell->mag = 1.2;
+#endif
 
       Spacer* spacer = new Spacer(gscore);
       spacer->setSpacerType(SpacerType::DOWN);
