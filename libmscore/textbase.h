@@ -318,8 +318,8 @@ class TextBase : public Element {
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
 
-      virtual int subtype() const override;
-      virtual QString subtypeName() const override;
+      virtual int subtype() const;
+      virtual QString subtypeName() const;
 
       QList<TextFragment> fragmentList() const; // for MusicXML formatted export
 
