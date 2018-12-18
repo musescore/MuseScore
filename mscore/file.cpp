@@ -151,7 +151,7 @@ static QString createDefaultFileName(QString fn)
 
 static bool readScoreError(const QString& name, Score::FileError error, bool ask)
       {
-printf("<%s> %d\n", qPrintable(name), int(error));
+//printf("<%s> %d\n", qPrintable(name), int(error));
       QString msg = QObject::tr("Cannot read file %1:\n").arg(name);
       QString detailedMsg;
       bool canIgnore = false;

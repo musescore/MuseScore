@@ -1203,8 +1203,8 @@ qreal System::minBottom() const
 
 void System::moveBracket(int /*staffIdx*/, int /*srcCol*/, int /*dstCol*/)
       {
-      printf("System::moveBracket\n");
 #if 0
+printf("System::moveBracket\n");
       if (vbox())
             return;
       for (Bracket* b : _brackets) {

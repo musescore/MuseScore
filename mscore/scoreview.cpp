@@ -2937,7 +2937,7 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
                         .adjusted(-border, -border, border, border);
             }
       else {
-            //find a box for the individual stave in a system
+            // find a box for the individual stave in a system
             QRectF stave = QRectF(sys->canvasBoundingRect().left(),
                                   sys->staffCanvasYpage(staff),
                                   sys->width(),
@@ -2945,12 +2945,12 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
             showRect = mRect.intersected(stave).adjusted(-border, -border, border, border);
             }
 
-/*      printf("%f %f %f %f   %f %f %f %f  %d\n",
-            showRect.x(), showRect.y(), showRect.width(), showRect.height(),
-            r.x(), r.y(), r.width(), r.height(),
-            r.contains(showRect)
-            );
-  */
+/*printf("%f %f %f %f   %f %f %f %f  %d\n",
+   showRect.x(), showRect.y(), showRect.width(), showRect.height(),
+   r.x(), r.y(), r.width(), r.height(),
+   r.contains(showRect)
+   );
+*/
       // canvas is not as wide as measure, track note instead
       if (r.width() < showRect.width()) {
             showRect.setX(p.x());

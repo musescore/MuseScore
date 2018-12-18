@@ -149,7 +149,7 @@ int main(int argc, char* argv[])
                                  );
                               break;
                         default:
-                              printf("unknown event\n");
+                              fprintf(stderr,"unknown event\n");
                               xml.tagE(QString("Event   tick=\"%1\" t=\"%2\" c=\"%3\" a=\"%4\" b=\"%5\"")
                                  .arg(i->first)
                                  .arg(int(i->second.type()), 2, 16)

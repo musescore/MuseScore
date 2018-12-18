@@ -647,7 +647,7 @@ void Sample::load()
             std::vector<char> p;
             p.resize(size);
             if (fd.read(p.data(), size) != size) {
-                  printf("  read %d failed\n", size);
+                  qDebug("read %d failed", size);
                   return;
                   }
             decompressOggVorbis(p.data(), size);
