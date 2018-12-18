@@ -941,10 +941,12 @@ void EditStyle::setValues()
                   OffsetSelect* as = qobject_cast<Ms::OffsetSelect*>(sw.widget);
                   if (as)
                         as->setOffset(val.value<QPointF>());
+#if 0  // debug
                   else {
                         printf("no widget for QPointF <%s><%s>\n",
-                           sw.widget->metaObject()->className(), MStyle::valueName(sw.idx));
+                               sw.widget->metaObject()->className(), MStyle::valueName(sw.idx));
                         }
+#endif
                   }
             else
                   unhandledType(&sw);

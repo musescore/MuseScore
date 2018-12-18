@@ -159,8 +159,8 @@ void Zerberus::processNoteOn(Channel* cp, int key, int velo)
       for (Voice* v = activeVoices; v; v = v->next()) {
             if (v->channel() == cp && v->key() == key) {
                   if (v->isSustained()) {
-                        // if (v->isPlaying())
-                        // printf("retrigger (stop) %p\n", v);
+//if (v->isPlaying())
+//printf("retrigger (stop) %p\n", v);
                         v->stop(100);     // fast stop
                         }
                   }

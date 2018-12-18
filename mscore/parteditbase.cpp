@@ -163,7 +163,7 @@ void PartEdit::playbackVoiceChanged()
                   if (val != staff->playbackVoice(voice)) {
                         switch (voice) {
                               case 0:
-                              printf("undo\n");
+//printf("undo\n");
                                     staff->undoChangeProperty(Pid::PLAYBACK_VOICE1, val);
                                     break;
                               case 1:

@@ -78,7 +78,7 @@ bool NoteList::stavesOverlap(const int staff1, const int staff2) const
       for (int i = 0; i < _staffNoteLists.at(staff1).size(); ++i)
             for (int j = 0; j < _staffNoteLists.at(staff2).size(); ++j)
                   if (notesOverlap(_staffNoteLists.at(staff1).at(i), _staffNoteLists.at(staff2).at(j))) {
-                        // printf(" %d-%d", staff1, staff2);
+//printf(" %d-%d", staff1, staff2);
                         return true;
                         }
       return false;

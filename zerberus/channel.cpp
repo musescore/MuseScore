@@ -56,7 +56,7 @@ void Channel::controller(int c, int val)
             if (val < 0x40) {
                   for (Voice* v = _msynth->getActiveVoices(); v; v = v->next()) {
                         if (v->isSustained()) {
-                              // printf("sustain off %p\n", v);
+//printf("sustain off %p\n", v);
                               v->stop();
                               }
                         }

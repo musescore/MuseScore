@@ -431,7 +431,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
             // use same code path as drag&drop
 
             QByteArray a = e->mimeData(QPointF());
-printf("<<%s>>\n", a.data());
+//printf("<<%s>>\n", a.data());
 
             XmlReader n(a);
             Fraction duration;  // dummy

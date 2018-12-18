@@ -197,7 +197,7 @@ bool Omr::omrActions(int &ID, int page)
                   return false;
                   }
             int n = _doc->numPages();
-            printf("readPdf: %d pages\n", n);
+//printf("readPdf: %d pages\n", n);
             for (int i = 0; i < n; ++i) {
                   OmrPage* page1 = new OmrPage(this);
                   QImage image = _doc->page(i);

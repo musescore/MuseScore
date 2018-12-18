@@ -171,7 +171,7 @@ void ZerberusGui::loadSoundFontsAsync(QStringList sfonts)
 
 static void collectFiles(QFileInfoList* l, const QString& path)
       {
-      // printf("collect files <%s>\n", qPrintable(path));
+//printf("collect files <%s>\n", qPrintable(path));
 
       QDir dir(path);
       foreach (const QFileInfo& s, dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {

@@ -529,7 +529,7 @@ int MPaintDevice::metric(PaintDeviceMetric m) const
             case QPaintDevice::PdmDpiY:
                   return int(DPI);
             default:
-                  printf("debug: metric %d\n", int(m));
+//printf("debug: metric %d\n", int(m));
                   return 1;
             }
       }
@@ -540,7 +540,7 @@ int MPaintDevice::metric(PaintDeviceMetric m) const
 
 QPaintEngine* MPaintDevice::paintEngine() const
       {
-      printf("paint engine\n");
+//printf("paint engine\n");
       return 0;
       }
 

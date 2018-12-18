@@ -2808,7 +2808,7 @@ void Score::checkSpanner(int startTick, int endTick)
       QList<Spanner*> sl;     // spanners to remove
       QList<Spanner*> sl2;    // spanners to shorten
       auto spanners = _spanner.findOverlapping(startTick, endTick);
-// printf("checkSpanner %d %d\n", startTick, endTick);
+//printf("checkSpanner %d %d\n", startTick, endTick);
 //      for (auto i = spanners.begin(); i < spanners.end(); i++) {
 
       // DEBUG: check all spanner
@@ -3006,7 +3006,7 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
       const int len   = f.ticks();
       const int etick = tick + len;
 
-//      printf("time delete %d at %d, start %s\n", len, tick, startSegment->subTypeName());
+//printf("time delete %d at %d, start %s\n", len, tick, startSegment->subTypeName());
 
       Segment* fs = m->first(CR_TYPE);
 
@@ -3060,7 +3060,7 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
       int updatedTick = tick;
       for (Segment* s = startSegment; s; s = s->next()) {
             if (s->rtick() >= etick && s->rtick() != updatedTick) {
-//                  printf("   change segment %s tick %d -> %d\n", s->subTypeName(), s->tick(), m->tick() + updatedTick),
+//printf("   change segment %s tick %d -> %d\n", s->subTypeName(), s->tick(), m->tick() + updatedTick),
                   s->undoChangeProperty(Pid::TICK, updatedTick);
                   updatedTick += s->ticks();
                   }

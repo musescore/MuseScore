@@ -36,11 +36,11 @@ class Benchmark {
       Benchmark(const char* p) {
             msg = p;
             startTime = curTime();
-            printf("===%s start\n", msg);
+//printf("===%s start\n", msg);
             }
       ~Benchmark() {
-            double elapsed = curTime() - startTime;
-            printf("===%s elapsed %f\n", msg, elapsed);
+//double elapsed = curTime() - startTime;
+//printf("===%s elapsed %f\n", msg, elapsed);
             }
       };
 
