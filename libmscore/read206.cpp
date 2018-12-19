@@ -1397,6 +1397,63 @@ bool readNoteProperties206(Note* note, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   readTextPropertyStyle206
+//    This reads only the 'style' tag, so that it can be read
+//    before setting anything else.
+//---------------------------------------------------------
+
+static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be)
+      {
+      QString s;
+      if (e.readAheadAvailable()) {
+            e.performReadAhead([&s](QIODevice& dev) {
+                  QByteArray arrLine = dev.readLine();
+                  int depth = 0;
+                  while (!arrLine.isEmpty()) {
+                        QString line(arrLine);
+                        if (line.contains("<style>")) {
+                              QRegExp re("<style>([^<]+)</style>");
+                              if (re.indexIn(line) > -1)
+                                    s = re.cap(1);
+                              return;
+                              }
+                        else {
+                              // Check for start tag
+                              QRegExp startRe("<[A-z0-9]+>");
+                              if (startRe.indexIn(line) > -1)
+                                    depth++;
+
+                              // Check for end tag
+                              QRegExp endRe("</[A-z0-9]+>");
+                              if (endRe.indexIn(line) > -1)
+                                    depth--;
+                              }
+
+                        if (depth < 0)
+                              return;
+                        arrLine = dev.readLine();
+                        }
+                  });
+            }
+      else
+            return false;
+
+      if (s.isEmpty())
+            return true;
+
+      if (!be->isTuplet()) {      // Hack
+            Tid ss;
+            ss = e.lookupUserTextStyle(s);
+            if (ss == Tid::TEXT_STYLES)
+                  ss = textStyleFromName(s);
+            if (ss != Tid::TEXT_STYLES)
+                  t->initTid(ss);
+            }
+
+      return true;
+      }
+
+//---------------------------------------------------------
 //   readTextProperties206
 //---------------------------------------------------------
 
@@ -1404,17 +1461,7 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
       {
       const QStringRef& tag(e.name());
       if (tag == "style") {
-            QString s = e.readElementText();
-            if (!be->isTuplet()) {      // Hack
-                  Tid ss;
-                  QPointF p = t->offset();            // offset maybe already set, setting style resets it
-                  ss = e.lookupUserTextStyle(s);
-                  if (ss == Tid::TEXT_STYLES)
-                        ss = textStyleFromName(s);
-                  if (ss != Tid::TEXT_STYLES)
-                        t->initTid(ss);
-                  t->setOffset(p);
-                  }
+            e.skipCurrentElement(); // read in readTextPropertyStyle206
             }
       else if (tag == "foregroundColor")  // same as "color" ?
             e.skipCurrentElement();
@@ -1491,6 +1538,7 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
 
 static void readText206(XmlReader& e, TextBase* t, Element* be)
       {
+      readTextPropertyStyle206(e, t, be);
       while (e.readNextStartElement()) {
             if (!readTextProperties206(e, t, be))
                   e.unknown();
@@ -1503,6 +1551,7 @@ static void readText206(XmlReader& e, TextBase* t, Element* be)
 
 static void readTempoText(TempoText* t, XmlReader& e)
       {
+      readTextPropertyStyle206(e, t, t);
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "tempo")
@@ -1527,6 +1576,7 @@ static void readTempoText(TempoText* t, XmlReader& e)
 
 static void readMarker(Marker* m, XmlReader& e)
       {
+      readTextPropertyStyle206(e, m, m);
       Marker::Type mt = Marker::Type::SEGNO;
 
       while (e.readNextStartElement()) {
@@ -1548,6 +1598,7 @@ static void readMarker(Marker* m, XmlReader& e)
 
 static void readDynamic(Dynamic* d, XmlReader& e)
       {
+      readTextPropertyStyle206(e, d, d);
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
             if (tag == "subtype")
