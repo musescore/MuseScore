@@ -2057,8 +2057,12 @@ bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
       printer.setPaperSize(size, QPrinter::Inch);
       printer.setFullPage(true);
       printer.setColorMode(QPrinter::Color);
+#if defined(Q_OS_MAC)
       printer.setOutputFormat(QPrinter::NativeFormat);
-      
+#else
+      printer.setOutputFormat(QPrinter::PdfFormat);
+#endif
+
       printer.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
       printer.setCreator("MuseScore Version: " VERSION);
