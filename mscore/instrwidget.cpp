@@ -142,11 +142,11 @@ void StaffListItem::initStaffTypeCombo(bool forceRecreate)
             ++idx;
             }
       customStandardIdx = _staffTypeCombo->count();
-      _staffTypeCombo->addItem(tr("Custom Standard"), 0);
+      _staffTypeCombo->addItem(tr("Custom Standard"), CUSTOM_STAFF_TYPE_IDX);
       customPercussionIdx = _staffTypeCombo->count();
-      _staffTypeCombo->addItem(tr("Custom Percussion"), 0);
+      _staffTypeCombo->addItem(tr("Custom Percussion"), CUSTOM_STAFF_TYPE_IDX);
       customTablatureIdx = _staffTypeCombo->count();
-      _staffTypeCombo->addItem(tr("Custom Tablature"), 0);
+      _staffTypeCombo->addItem(tr("Custom Tablature"), CUSTOM_STAFF_TYPE_IDX);
 
       treeWidget()->setItemWidget(this, 4, _staffTypeCombo);
       connect(_staffTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(staffTypeChanged(int)) );
@@ -240,7 +240,20 @@ void StaffListItem::setStaffType(int idx)
 
 const StaffType* StaffListItem::staffType() const
       {
-      return StaffType::preset(StaffTypes((staffTypeIdx())));
+      int typeIdx = staffTypeIdx();
+      Q_ASSERT(typeIdx != CUSTOM_STAFF_TYPE_IDX);
+      if (typeIdx == CUSTOM_STAFF_TYPE_IDX)
+            typeIdx = 0;
+      return StaffType::preset(StaffTypes(typeIdx));
+      }
+
+//---------------------------------------------------------
+//   staffTypeIdx
+//---------------------------------------------------------
+
+int StaffListItem::staffTypeIdx(int idx) const
+      {
+      return _staffTypeCombo->itemData(idx).toInt();
       }
 
 //---------------------------------------------------------
@@ -249,7 +262,7 @@ const StaffType* StaffListItem::staffType() const
 
 int StaffListItem::staffTypeIdx() const
       {
-      return _staffTypeCombo->itemData(_staffTypeCombo->currentIndex()).toInt();
+      return staffTypeIdx(_staffTypeCombo->currentIndex());
       }
 
 //---------------------------------------------------------
@@ -259,8 +272,11 @@ int StaffListItem::staffTypeIdx() const
 void StaffListItem::staffTypeChanged(int idx)
       {
       // check current clef matches new staff type
-      int staffTypeIdx = _staffTypeCombo->itemData(idx).toInt();
-      const StaffType* stfType = StaffType::preset(StaffTypes(staffTypeIdx));
+      const int typeIdx = staffTypeIdx(idx);
+      if (typeIdx == CUSTOM_STAFF_TYPE_IDX) // consider it not changed
+            return;
+
+      const StaffType* stfType = StaffType::preset(StaffTypes(typeIdx));
 
       PartListItem* pli = static_cast<PartListItem*>(QTreeWidgetItem::parent());
       pli->updateClefs();
