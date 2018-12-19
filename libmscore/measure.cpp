@@ -1515,7 +1515,9 @@ Element* Measure::drop(EditData& data)
                   if (spacer->spacerType() == SpacerType::FIXED) {
                         qreal gap = spatium() * 10;
                         System* s = system();
-                        if (staffIdx == score()->nstaves()-1) {
+                        const int nextVisStaffIdx = s->nextVisibleStaff(staffIdx);
+                        const bool systemEnd = (nextVisStaffIdx == score()->nstaves());
+                        if (systemEnd) {
                               System* ns = 0;
                               for (System* ts : score()->systems()) {
                                     if (ns) {
@@ -1525,7 +1527,7 @@ Element* Measure::drop(EditData& data)
                                     if (ts  == s)
                                           ns = ts;
                                     }
-                              if (ns) {
+                              if (ns && ns->page() == s->page()) {
                                     qreal y1 = s->staffYpage(staffIdx);
                                     qreal y2 = ns->staffYpage(0);
                                     gap = y2 - y1 - score()->staff(staffIdx)->height();
@@ -1533,7 +1535,7 @@ Element* Measure::drop(EditData& data)
                               }
                         else {
                               qreal y1 = s->staffYpage(staffIdx);
-                              qreal y2 = s->staffYpage(staffIdx+1);
+                              qreal y2 = s->staffYpage(nextVisStaffIdx);
                               gap = y2 - y1 - score()->staff(staffIdx)->height();
                               }
                         spacer->setGap(gap);
