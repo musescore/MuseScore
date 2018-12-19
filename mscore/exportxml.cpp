@@ -4649,83 +4649,82 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                         newThing = " new-page=\"yes\"";
                   }
 
-            // determine if layout information is required
-            bool doLayout = false;
-            if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
-                  if (currentSystem == TopSystem
-                      || (preferences.musicxmlExportBreaks() == MusicxmlExportBreaks::ALL && newThing != "")) {
-                        doLayout = true;
-                        }
+            // determine if break and layout information is required
+            bool doBreak = false;
+            if (currentSystem == TopSystem || newThing != "") {
+                  doBreak = true;
                   }
+            bool doLayout = preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT);
 
-            if (doLayout) {
-                  _xml.stag(QString("print%1").arg(newThing));
-                  const double pageWidth  = getTenthsFromInches(score()->styleD(Sid::pageWidth));
-                  const double lm = getTenthsFromInches(score()->styleD(Sid::pageOddLeftMargin));
-                  const double rm = getTenthsFromInches(score()->styleD(Sid::pageWidth)
-                                                        - score()->styleD(Sid::pagePrintableWidth) - score()->styleD(Sid::pageOddLeftMargin));
-                  const double tm = getTenthsFromInches(score()->styleD(Sid::pageOddTopMargin));
-
-                  // System Layout
-
-                  // For a multi-meaure rest positioning is valid only
-                  // in the replacing measure
-                  // note: for a normal measure, mmRest1 is the measure itself,
-                  // for a multi-meaure rest, it is the replacing measure
-                  const Measure* mmR1 = m->mmRest1();
-                  const System* system = mmR1->system();
-
-                  // Put the system print suggestions only for the first part in a score...
-                  if (partNr == 0) {
-
-                        // Find the right margin of the system.
-                        double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
-                        double systemRM = pageWidth - rm - (getTenthsFromDots(system->bbox().width()) + lm);
-
-                        _xml.stag("system-layout");
-                        _xml.stag("system-margins");
-                        _xml.tag("left-margin", QString("%1").arg(QString::number(systemLM,'f',2)));
-                        _xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)) );
-                        _xml.etag();
-
-                        if (currentSystem == NewPage || currentSystem == TopSystem) {
-                              const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
-                              _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
+            if (doBreak) {
+                  if (doLayout) {
+                        _xml.stag(QString("print%1").arg(newThing));
+                        const double pageWidth  = getTenthsFromInches(score()->styleD(Sid::pageWidth));
+                        const double lm = getTenthsFromInches(score()->styleD(Sid::pageOddLeftMargin));
+                        const double rm = getTenthsFromInches(score()->styleD(Sid::pageWidth)
+                                                              - score()->styleD(Sid::pagePrintableWidth) - score()->styleD(Sid::pageOddLeftMargin));
+                        const double tm = getTenthsFromInches(score()->styleD(Sid::pageOddTopMargin));
+      
+                        // System Layout
+      
+                        // For a multi-meaure rest positioning is valid only
+                        // in the replacing measure
+                        // note: for a normal measure, mmRest1 is the measure itself,
+                        // for a multi-meaure rest, it is the replacing measure
+                        const Measure* mmR1 = m->mmRest1();
+                        const System* system = mmR1->system();
+      
+                        // Put the system print suggestions only for the first part in a score...
+                        if (partNr == 0) {
+      
+                              // Find the right margin of the system.
+                              double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
+                              double systemRM = pageWidth - rm - (getTenthsFromDots(system->bbox().width()) + lm);
+      
+                              _xml.stag("system-layout");
+                              _xml.stag("system-margins");
+                              _xml.tag("left-margin", QString("%1").arg(QString::number(systemLM,'f',2)));
+                              _xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)) );
+                              _xml.etag();
+      
+                              if (currentSystem == NewPage || currentSystem == TopSystem) {
+                                    const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
+                                    _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)) );
+                                    }
+                              if (currentSystem == NewSystem) {
+                                    // see System::layout2() for the factor 2 * score()->spatium()
+                                    const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
+                                                                             - previousMeasure->pagePos().y()
+                                                                             - previousMeasure->bbox().height()
+                                                                             + 2 * score()->spatium()
+                                                                             );
+                                    _xml.tag("system-distance",
+                                            QString("%1").arg(QString::number(sysDist,'f',2)));
+                                    }
+      
+                              _xml.etag();
                               }
-                        if (currentSystem == NewSystem) {
-                              // see System::layout2() for the factor 2 * score()->spatium()
-                              const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
-                                                                       - previousMeasure->pagePos().y()
-                                                                       - previousMeasure->bbox().height()
-                                                                       + 2 * score()->spatium()
-                                                                       );
-                              _xml.tag("system-distance",
-                                      QString("%1").arg(QString::number(sysDist,'f',2)));
+      
+                        // Staff layout elements.
+                        for (int staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
+
+                              // calculate distance between this and previous staff using the bounding boxes
+                              const auto staffNr = firstStaffOfPart + staffIdx;
+                              const auto prevBbox = system->staff(staffNr - 1)->bbox();
+                              const auto staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
+
+                              _xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
+                              _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist),'f',2)));
+                              _xml.etag();
                               }
 
                         _xml.etag();
                         }
-
-                  // Staff layout elements.
-                  for (int staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
-
-                        // calculate distance between this and previous staff using the bounding boxes
-                        const auto staffNr = firstStaffOfPart + staffIdx;
-                        const auto prevBbox = system->staff(staffNr - 1)->bbox();
-                        const auto staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
-
-                        _xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
-                        _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist),'f',2)));
-                        _xml.etag();
-                        }
-
-                  _xml.etag();
-                  }
-            else {
-                  // !doLayout
-                  if (newThing != "")
+                  else if (newThing != "") {
                         _xml.tagE(QString("print%1").arg(newThing));
-                  }
+                        }
+
+                  } // if (!doBreak) ...
 
             } // if (currentSystem ...
 

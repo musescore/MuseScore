@@ -26,7 +26,6 @@
 #include "pa.h"
 #include "shortcut.h"
 #include "workspace.h"
-#include "palettebox.h"
 
 #ifdef USE_PORTMIDI
 #include "pm.h"
@@ -334,14 +333,7 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       iconWidth->setValue(preferences.getInt(PREF_UI_THEME_ICONWIDTH));
       iconHeight->setValue(preferences.getInt(PREF_UI_THEME_ICONHEIGHT));
-      
-      //macOS default fonts are not in QFontCombobox because they are "private":
-      //https://code.woboq.org/qt5/qtbase/src/widgets/widgets/qfontcombobox.cpp.html#329
-      auto currFontFamily = preferences.getString(PREF_UI_THEME_FONTFAMILY);
-      if (-1 == fontFamily->findText(currFontFamily))
-            fontFamily->addItem(currFontFamily);
-      fontFamily->setCurrentIndex(fontFamily->findText(currFontFamily));
-      
+      fontFamily->setCurrentFont(QFont(preferences.getString(PREF_UI_THEME_FONTFAMILY)));
       fontSize->setValue(preferences.getInt(PREF_UI_THEME_FONTSIZE));
 
       enableMidiInput->setChecked(preferences.getBool(PREF_IO_MIDI_ENABLEINPUT));
@@ -392,11 +384,15 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
 
       importLayout->setChecked(preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT));
       importBreaks->setChecked(preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTBREAKS));
-      exportLayout->setChecked(preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT));
-      switch(preferences.musicxmlExportBreaks()) {
-            case MusicxmlExportBreaks::ALL:     exportAllBreaks->setChecked(true); break;
-            case MusicxmlExportBreaks::MANUAL:  exportManualBreaks->setChecked(true); break;
-            case MusicxmlExportBreaks::NO:      exportNoBreaks->setChecked(true); break;
+      if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
+            exportAllLayouts->setChecked(true);
+            }
+      else {
+            switch(preferences.musicxmlExportBreaks()) {
+                  case MusicxmlExportBreaks::ALL:     exportAllBreaks->setChecked(true); break;
+                  case MusicxmlExportBreaks::MANUAL:  exportManualBreaks->setChecked(true); break;
+                  case MusicxmlExportBreaks::NO:      exportNoBreaks->setChecked(true); break;
+                  }
             }
 
       rememberLastMidiConnections->setChecked(preferences.getBool(PREF_IO_JACK_REMEMBERLASTCONNECTIONS));
@@ -923,7 +919,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_APP_STARTUP_STARTSCORE, sessionScore->text());
       preferences.setPreference(PREF_EXPORT_AUDIO_SAMPLERATE, exportAudioSampleRate->currentData().toInt());
       preferences.setPreference(PREF_EXPORT_MP3_BITRATE, exportMp3BitRate->currentData().toInt());
-      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, exportLayout->isChecked());
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, exportAllLayouts->isChecked());
       preferences.setPreference(PREF_EXPORT_PDF_DPI, exportPdfDpi->value());
       preferences.setPreference(PREF_EXPORT_PNG_RESOLUTION, pngResolution->value());
       preferences.setPreference(PREF_EXPORT_PNG_USETRANSPARENCY, pngTransparent->isChecked());
@@ -1028,7 +1024,7 @@ void PreferenceDialog::apply()
       preferences.setPreference(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS, portMidiOutputLatencyMilliseconds->value());
 #endif
 
-      if (exportAllBreaks->isChecked())
+      if (exportAllLayouts->isChecked() || exportAllBreaks->isChecked())
             preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::ALL);
       else if (exportManualBreaks->isChecked())
             preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
@@ -1109,12 +1105,7 @@ void PreferenceDialog::apply()
             preferences.setPreference(PREF_SCORE_STYLE_PARTSTYLEFILE, partStyle->text());
             MScore::defaultStyleForPartsHasChanged();
             }
-      
-      Workspace::retranslate();
-      preferences.setPreference(PREF_APP_WORKSPACE, Workspace::currentWorkspace->name());
-      mscore->changeWorkspace(Workspace::currentWorkspace);
-      mscore->getPaletteBox()->updateWorkspaces();
-      
+
       emit preferencesChanged();
       preferences.save();
       mscore->startAutoSave();
