@@ -3748,7 +3748,7 @@ static bool readScore(Score* score, XmlReader& e)
                   ms->setShowOmr(false);
             ms->rebuildMidiMapping();
             ms->updateChannel();
-            ms->createPlayEvents();
+ //           ms->createPlayEvents();
             }
       return true;
       }
