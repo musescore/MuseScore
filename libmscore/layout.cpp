@@ -2629,6 +2629,7 @@ bool isTopBeam(ChordRest* cr)
                         return true;
                   }
             }
+
       return false;
       }
 
@@ -2639,8 +2640,16 @@ bool isTopBeam(ChordRest* cr)
 bool notTopBeam(ChordRest* cr)
       {
       Beam* b = cr->beam();
-      if (b)
-            return !isTopBeam(cr);
+      if (b && b->elements().front() == cr) {
+            if (b->cross())
+                  return true;
+
+            for (ChordRest* cr1 : b->elements()) {
+                  if (cr1->staffMove() >= 0)
+                        return false;
+            }
+      }
+
       return false;
       }
 
