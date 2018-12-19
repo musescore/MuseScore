@@ -289,9 +289,10 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v)
 void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
       {
       bool doUpdateInspector = false;
-      if (id == Pid::PLACEMENT) {
-            // first set placment, then set offset for above/below if styled
+      if (id == Pid::PLACEMENT || id == Pid::HAIRPIN_TYPE) {
+            // first set property, then set offset for above/below if styled
             changeProperties(this, id, v, ps);
+
             if (isStyled(Pid::OFFSET))
                   ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * score()->spatium());
             doUpdateInspector = true;

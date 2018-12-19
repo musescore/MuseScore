@@ -147,6 +147,7 @@ void Dynamic::read(XmlReader& e)
             else if (!TextBase::readProperties(e))
                   e.unknown();
             }
+      styleChanged();
       }
 
 //---------------------------------------------------------

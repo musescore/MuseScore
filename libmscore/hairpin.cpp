@@ -33,10 +33,12 @@ static const ElementStyle hairpinStyle {
       { Sid::hairpinFontFace,                    Pid::BEGIN_FONT_FACE            },
       { Sid::hairpinFontSize,                    Pid::BEGIN_FONT_SIZE            },
       { Sid::hairpinFontStyle,                   Pid::BEGIN_FONT_STYLE           },
+      { Sid::hairpinText,                        Pid::BEGIN_TEXT                 },
       { Sid::hairpinTextAlign,                   Pid::BEGIN_TEXT_ALIGN           },
       { Sid::hairpinFontFace,                    Pid::CONTINUE_FONT_FACE         },
       { Sid::hairpinFontSize,                    Pid::CONTINUE_FONT_SIZE         },
       { Sid::hairpinFontStyle,                   Pid::CONTINUE_FONT_STYLE        },
+      { Sid::hairpinText,                        Pid::CONTINUE_TEXT              },
       { Sid::hairpinTextAlign,                   Pid::CONTINUE_TEXT_ALIGN        },
       { Sid::hairpinFontFace,                    Pid::END_FONT_FACE              },
       { Sid::hairpinFontSize,                    Pid::END_FONT_SIZE              },
@@ -47,6 +49,7 @@ static const ElementStyle hairpinStyle {
       { Sid::hairpinContHeight,                  Pid::HAIRPIN_CONT_HEIGHT        },
       { Sid::hairpinPlacement,                   Pid::PLACEMENT                  },
       { Sid::hairpinPosAbove,                    Pid::OFFSET                     },
+      { Sid::hairpinLineStyle,                   Pid::LINE_STYLE                 },
       };
 
 //---------------------------------------------------------
@@ -119,7 +122,7 @@ void HairpinSegment::layout()
             }
 
       HairpinType type = hairpin()->hairpinType();
-      if (type == HairpinType::DECRESC_LINE || type == HairpinType::CRESC_LINE) {
+      if (hairpin()->isLineType()) {
             twoLines = false;
             TextLineBaseSegment::layout();
             drawCircledTip   = false;
@@ -380,8 +383,7 @@ Element* HairpinSegment::propertyDelegate(Pid pid)
          || pid == Pid::HAIRPIN_HEIGHT
          || pid == Pid::HAIRPIN_CONT_HEIGHT
          || pid == Pid::DYNAMIC_RANGE
-         || pid == Pid::BEGIN_TEXT
-         || pid == Pid::END_TEXT
+         || pid == Pid::LINE_STYLE
             )
             return spanner();
       return TextLineBaseSegment::propertyDelegate(pid);
@@ -393,15 +395,71 @@ Element* HairpinSegment::propertyDelegate(Pid pid)
 
 Sid HairpinSegment::getPropertyStyle(Pid pid) const
       {
-      if (pid == Pid::OFFSET)
-            return spanner()->placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow;
+      switch (pid) {
+            case Pid::OFFSET:
+                  if (hairpin()->isLineType())
+                        return spanner()->placeAbove() ? Sid::hairpinLinePosAbove : Sid::hairpinLinePosBelow;
+                  return spanner()->placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow;
+            case Pid::BEGIN_TEXT:
+                  switch (hairpin()->hairpinType()) {
+                        default:
+                              return Sid::hairpinText;
+                        case HairpinType::CRESC_LINE:
+                              return Sid::hairpinCrescText;
+                        case HairpinType::DECRESC_LINE:
+                              return Sid::hairpinDecrescText;
+                        }
+                  break;
+            case Pid::CONTINUE_TEXT:
+                  switch (hairpin()->hairpinType()) {
+                        default:
+                              return Sid::hairpinText;
+                        case HairpinType::CRESC_LINE:
+                              return Sid::hairpinCrescContText;
+                        case HairpinType::DECRESC_LINE:
+                              return Sid::hairpinDecrescContText;
+                        }
+                  break;
+            case Pid::LINE_STYLE:
+                  return hairpin()->isLineType() ? Sid::hairpinLineLineStyle : Sid::hairpinLineStyle;
+            default:
+                  break;
+            }
       return TextLineBaseSegment::getPropertyStyle(pid);
       }
 
 Sid Hairpin::getPropertyStyle(Pid pid) const
       {
-      if (pid == Pid::OFFSET)
-            return placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow;
+      switch (pid) {
+            case Pid::OFFSET:
+                  if (isLineType())
+                        return placeAbove() ? Sid::hairpinLinePosAbove : Sid::hairpinLinePosBelow;
+                  return placeAbove() ? Sid::hairpinPosAbove : Sid::hairpinPosBelow;
+            case Pid::BEGIN_TEXT:
+                  switch (hairpinType()) {
+                        default:
+                              return Sid::hairpinText;
+                        case HairpinType::CRESC_LINE:
+                              return Sid::hairpinCrescText;
+                        case HairpinType::DECRESC_LINE:
+                              return Sid::hairpinDecrescText;
+                        }
+                  break;
+            case Pid::CONTINUE_TEXT:
+                  switch (hairpinType()) {
+                        default:
+                              return Sid::hairpinText;
+                        case HairpinType::CRESC_LINE:
+                              return Sid::hairpinCrescContText;
+                        case HairpinType::DECRESC_LINE:
+                              return Sid::hairpinDecrescContText;
+                        }
+                  break;
+            case Pid::LINE_STYLE:
+                  return isLineType() ? Sid::hairpinLineLineStyle : Sid::hairpinLineStyle;
+            default:
+                  break;
+            }
       return TextLineBase::getPropertyStyle(pid);
       }
 
@@ -433,6 +491,7 @@ void Hairpin::setHairpinType(HairpinType val)
       if (_hairpinType == val)
             return;
       _hairpinType = val;
+#if 0
       switch (_hairpinType) {
             case HairpinType::CRESC_HAIRPIN:
             case HairpinType::DECRESC_HAIRPIN:
@@ -453,6 +512,8 @@ void Hairpin::setHairpinType(HairpinType val)
             case HairpinType::INVALID:
                   break;
             };
+#endif
+      styleChanged();
       }
 
 //---------------------------------------------------------
@@ -495,9 +556,9 @@ void Hairpin::write(XmlWriter& xml) const
       writeProperty(xml, Pid::VELO_CHANGE);
       writeProperty(xml, Pid::HAIRPIN_CIRCLEDTIP);
       writeProperty(xml, Pid::DYNAMIC_RANGE);
-      writeProperty(xml, Pid::BEGIN_TEXT);
+//      writeProperty(xml, Pid::BEGIN_TEXT);
       writeProperty(xml, Pid::END_TEXT);
-      writeProperty(xml, Pid::CONTINUE_TEXT);
+//      writeProperty(xml, Pid::CONTINUE_TEXT);
       writeProperty(xml, Pid::LINE_VISIBLE);
 
       for (const StyledProperty& spp : *styledProperties()) {
@@ -538,6 +599,7 @@ void Hairpin::read(XmlReader& e)
             else if (!TextLineBase::readProperties(e))
                   e.unknown();
             }
+      styleChanged();
       }
 
 //---------------------------------------------------------
@@ -576,7 +638,6 @@ bool Hairpin::setProperty(Pid id, const QVariant& v)
                 break;
             case Pid::HAIRPIN_TYPE:
                   setHairpinType(HairpinType(v.toInt()));
-                  setGenerated(false);
                   break;
             case Pid::VELO_CHANGE:
                   _veloChange = v.toInt();
@@ -614,14 +675,14 @@ QVariant Hairpin::propertyDefault(Pid id) const
                   return int(Dynamic::Range::PART);
 
             case Pid::LINE_STYLE:
-                  if (_hairpinType == HairpinType::CRESC_HAIRPIN || _hairpinType == HairpinType::DECRESC_HAIRPIN)
-                        return int(Qt::SolidLine);
-                  return int(Qt::CustomDashLine);
+                  if (isLineType())
+                        return int(Qt::CustomDashLine);
+                  return int(Qt::SolidLine);
 
             case Pid::BEGIN_TEXT:
                   if (_hairpinType == HairpinType::CRESC_LINE)
                         return QString("cresc.");
-                  if (_hairpinType == HairpinType::CRESC_LINE)
+                  if (_hairpinType == HairpinType::DECRESC_LINE)
                         return QString("dim.");
                   return QString();
 
@@ -629,7 +690,7 @@ QVariant Hairpin::propertyDefault(Pid id) const
             case Pid::END_TEXT:
                   if (_hairpinType == HairpinType::CRESC_LINE)
                         return QString("(cresc.)");
-                  if (_hairpinType == HairpinType::CRESC_LINE)
+                  if (_hairpinType == HairpinType::DECRESC_LINE)
                         return QString("(dim.)");
                   return QString("");
 
