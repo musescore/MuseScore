@@ -3392,8 +3392,6 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   // sanity check
                   if (cr->beam() && !isTopBeam(cr))
                         continue;
-                  if (notTopBeam(cr))
-                        continue;
                   DurationElement* de = cr;
                   while (de->tuplet() && de->tuplet()->elements().front() == de) {
                         Tuplet* t = de->tuplet();
