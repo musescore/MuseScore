@@ -551,6 +551,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void onLongOperationFinished();
 
       virtual QMenu* createPopupMenu() override;
+      
+      QJsonValue exportPdfAsJSON(Score*);
 
    public slots:
       virtual void cmd(QAction* a);
@@ -698,7 +700,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool savePdf(const QString& saveName);
       bool savePdf(Score* cs, const QString& saveName);
       bool savePdf(QList<Score*> cs, const QString& saveName);
-      bool savePdf(Score* cs, QPdfWriter& printer);
+      bool savePdf(Score* cs, QPrinter& printer);
 
 
       MasterScore* readScore(const QString& name);
