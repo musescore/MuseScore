@@ -7477,12 +7477,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       }
       score->switchToPageMode();
       
-      QByteArray pdfData;
-      QBuffer scoreDevice(&pdfData);
-      scoreDevice.open(QIODevice::ReadWrite);
-      QPdfWriter writer(&scoreDevice);
-      bool res = mscore->savePdf(score, writer);
-      jsonForPdfs["scoreBin"] = QString::fromLatin1(pdfData.toBase64());
+      jsonForPdfs["scoreBin"] = mscore->exportPdfAsJSON(score);
       
       //save extended score+parts and separate parts pdfs
       //if no parts, generate parts from existing instruments
@@ -7506,12 +7501,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
             scores.append(e->partScore());
             QJsonValue partNameVal(e->title());
             partsNamesArray.append(partNameVal);
-            QByteArray partData;
-            QBuffer partDevice(&partData);
-            partDevice.open(QIODevice::ReadWrite);
-            QPdfWriter partWriter(&partDevice);
-            res &= mscore->savePdf(e->partScore(), partWriter);
-            QJsonValue partVal(QString::fromLatin1(partData.toBase64()));
+            QJsonValue partVal(exportPdfAsJSON(e->partScore()));
             partsArray.append(partVal);
       }
       jsonForPdfs["parts"] = partsNamesArray;
@@ -7520,7 +7510,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       jsonForPdfs["scoreFullPostfix"] = QString("-Score_and_parts") + ".pdf";
       
       QString tempFileName = outPath + "tempPdf.pdf";
-      res &= mscore->savePdf(scores, tempFileName);
+      bool res = mscore->savePdf(scores, tempFileName);
       QFile tempPdf(tempFileName);
       tempPdf.open(QIODevice::ReadWrite);
       QByteArray fullScoreData = tempPdf.readAll();

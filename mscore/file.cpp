@@ -2042,23 +2042,27 @@ bool MuseScore::savePdf(const QString& saveName)
 
 bool MuseScore::savePdf(Score* cs_, const QString& saveName)
       {
-      QPdfWriter printerDev(saveName);
-      return savePdf(cs_, printerDev);
+      QPrinter printer;
+      printer.setOutputFileName(saveName);
+      return savePdf(cs_, printer);
       }
 
-bool MuseScore::savePdf(Score* cs_, QPdfWriter& pdfWriter)
+bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
       {
       cs_->setPrinting(true);
       MScore::pdfPrinting = true;
 
-      pdfWriter.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
+      printer.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
       QSizeF size(cs_->styleD(Sid::pageWidth), cs_->styleD(Sid::pageHeight));
-      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
-      pdfWriter.setPageSize(ps);
-      pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
+      printer.setPaperSize(size, QPrinter::Inch);
+      printer.setFullPage(true);
+      printer.setColorMode(QPrinter::Color);
+      printer.setOutputFormat(QPrinter::NativeFormat);
+      
+      printer.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
-      pdfWriter.setCreator("MuseScore Version: " VERSION);
-      if (!pdfWriter.setPageMargins(QMarginsF()))
+      printer.setCreator("MuseScore Version: " VERSION);
+      if (!printer.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
 
       QString title = cs_->metaTag("workTitle");
@@ -2070,27 +2074,27 @@ bool MuseScore::savePdf(Score* cs_, QPdfWriter& pdfWriter)
                   partname = cs_->title(); // fall back to excerpt's tab title
             title += " - " + partname;
             }
-      pdfWriter.setTitle(title); // set PDF's meta data for Title
+      printer.setDocName(title); // set PDF's meta data for Title
 
       QPainter p;
-      if (!p.begin(&pdfWriter))
+      if (!p.begin(&printer))
             return false;
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
 
-      p.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
-         size.height() * pdfWriter.logicalDpiY()));
+      p.setViewport(QRect(0.0, 0.0, size.width() * printer.logicalDpiX(),
+         size.height() * printer.logicalDpiY()));
       p.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
 
       double pr = MScore::pixelRatio;
-      MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
+      MScore::pixelRatio = DPI / printer.logicalDpiX();
 
       const QList<Page*> pl = cs_->pages();
       int pages = pl.size();
       bool firstPage = true;
       for (int n = 0; n < pages; ++n) {
             if (!firstPage)
-                  pdfWriter.newPage();
+                  printer.newPage();
             firstPage = false;
             cs_->print(&p, n);
             }
@@ -3140,6 +3144,23 @@ bool MuseScore::exportMp3AsJSON(const QString& inFilePath, const QString& outFil
       return true;
       }
       
+QJsonValue MuseScore::exportPdfAsJSON(Score* score)
+      {
+      QPrinter printer;
+      auto tempPdfFileName = "/tmp/MUTempPdf.pdf";
+      printer.setOutputFileName(tempPdfFileName);
+      mscore->savePdf(score, printer);
+      QFile tempPdfFile(tempPdfFileName);
+      QByteArray pdfData;
+      if (tempPdfFile.open(QIODevice::ReadWrite)) {
+            pdfData = tempPdfFile.readAll();
+            tempPdfFile.close();
+            tempPdfFile.remove();
+            }
+      
+      return QString::fromLatin1(pdfData.toBase64());
+      }
+      
 //---------------------------------------------------------
 //   exportAllMediaFiles
 //---------------------------------------------------------
@@ -3203,12 +3224,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       jsonForMedia["mposXML"] = QString::fromLatin1(partDataPos.toBase64());
 
       //export score pdf
-      QByteArray pdfData;
-      QBuffer pdfDevice(&pdfData);
-      pdfDevice.open(QIODevice::ReadWrite);
-      QPdfWriter writer(&pdfDevice);
-      res &= mscore->savePdf(score.get(), writer);
-      jsonForMedia["pdf"] = QString::fromLatin1(pdfData.toBase64());
+      jsonForMedia["pdf"] = exportPdfAsJSON(score.get());
 
       //export score midi
       QByteArray midiData;
