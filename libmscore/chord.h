@@ -102,7 +102,7 @@ class Chord final : public ChordRest {
       virtual Element* linkedClone()     { return new Chord(*this, true); }
       virtual void undoUnlink() override;
 
-      virtual void setScore(Score* s);
+      virtual void setScore(Score* s) override;
       virtual ElementType type() const         { return ElementType::CHORD; }
       virtual qreal mag() const;
 

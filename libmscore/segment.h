@@ -114,7 +114,7 @@ class Segment final : public Element {
       virtual Segment* clone() const      { return new Segment(*this); }
       virtual ElementType type() const    { return ElementType::SEGMENT; }
 
-      virtual void setScore(Score*);
+      virtual void setScore(Score*) override;
 
       Segment* next() const               { return _next;   }
       Segment* next(SegmentType) const;
