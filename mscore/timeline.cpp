@@ -2446,7 +2446,8 @@ QColor Timeline::colorBox(QGraphicsRectItem* item)
             for (int track = stave * VOICES; track < stave * VOICES + VOICES; track++) {
                   ChordRest* chord_rest = seg->cr(track);
                   if (chord_rest) {
-                        if (chord_rest->type() == ElementType::CHORD)
+                        ElementType crt = chord_rest->type();
+                        if (crt == ElementType::CHORD || crt == ElementType::REPEAT_MEASURE)
                               return QColor(Qt::gray);
                         }
                   }
