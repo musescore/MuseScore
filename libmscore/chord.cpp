@@ -274,8 +274,12 @@ Chord::Chord(const Chord& c, bool link)
             Tremolo* t = new Tremolo(*(c._tremolo));
             if (link) {
                   score()->undo(new Link(t, const_cast<Tremolo*>(c._tremolo)));
-                  if (c._tremolo->twoNotes())
-                        t->setChords(0, 0);
+                  if (c._tremolo->twoNotes()) {
+                        if (c._tremolo->chord1() == &c)
+                              t->setChords(this, nullptr);
+                        else
+                              t->setChords(nullptr, this);
+                        }
                   }
             add(t);
             }
@@ -421,6 +425,60 @@ QPointF Chord::stemPosBeam() const
       }
 
 //---------------------------------------------------------
+//   setTremolo
+//---------------------------------------------------------
+
+void Chord::setTremolo(Tremolo* tr)
+      {
+      if (tr == _tremolo)
+            return;
+
+      if (_tremolo) {
+            if (_tremolo->twoNotes()) {
+                  TDuration d;
+                  const Fraction f = duration();
+                  if (f.numerator() > 0)
+                        d = TDuration(f);
+                  else {
+                        d = _tremolo->durationType();
+                        const int dots = d.dots();
+                        d = d.shift(1);
+                        d.setDots(dots);
+                        }
+
+                  setDurationType(d);
+                  Chord* other = _tremolo->chord1() == this ? _tremolo->chord2() : _tremolo->chord1();
+                  _tremolo = nullptr;
+                  if (other)
+                        other->setTremolo(nullptr);
+                  }
+            else
+                  _tremolo = nullptr;
+            }
+
+      if (tr) {
+            if (tr->twoNotes()) {
+                  TDuration d = tr->durationType();
+                  if (!d.isValid()) {
+                        d = durationType();
+                        const int dots = d.dots();
+                        d = d.shift(-1);
+                        d.setDots(dots);
+                        tr->setDurationType(d);
+                        }
+
+                  setDurationType(d);
+                  Chord* other = tr->chord1() == this ? tr->chord2() : tr->chord1();
+                  _tremolo = tr;
+                  if (other)
+                        other->setTremolo(tr);
+                  }
+            else
+                  _tremolo = tr;
+            }
+      }
+
+//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
@@ -459,24 +517,7 @@ void Chord::add(Element* e)
                   _arpeggio = toArpeggio(e);
                   break;
             case ElementType::TREMOLO:
-                  {
-                  Tremolo* tr = toTremolo(e);
-                  if (tr->twoNotes()) {
-                        if (!(_tremolo && _tremolo->twoNotes())) {
-                              TDuration d = durationType();
-                              int dots = d.dots();
-                              d  = d.shift(-1);
-                              d.setDots(dots);
-                              if (tr->chord1())
-                                    tr->chord1()->setDurationType(d);
-                              if (tr->chord2())
-                                    tr->chord2()->setDurationType(d);
-                              }
-                        if (tr->chord2())
-                              tr->chord2()->setTremolo(tr);
-                        }
-                  _tremolo = tr;
-                  }
+                  setTremolo(toTremolo(e));
                   break;
             case ElementType::GLISSANDO:
                   _endsGlissando = true;
@@ -559,25 +600,7 @@ void Chord::remove(Element* e)
                   _arpeggio = 0;
                   break;
             case ElementType::TREMOLO:
-                  {
-                  Tremolo* tremolo = toTremolo(e);
-                  if (tremolo->twoNotes()) {
-                        TDuration d = durationType();
-                        int dots = d.dots();
-                        d          = d.shift(1);
-                        d.setDots(dots);
-                        Fraction f = duration();
-                        if (f.numerator() > 0)
-                              d = TDuration(f);
-                        if (tremolo->chord1())
-                              tremolo->chord1()->setDurationType(d);
-                        if (tremolo->chord2()) {
-                              tremolo->chord2()->setDurationType(d);
-                              tremolo->chord2()->setTremolo(0);
-                              }
-                        }
-                  _tremolo = 0;
-                  }
+                  setTremolo(nullptr);
                   break;
             case ElementType::GLISSANDO:
                   _endsGlissando = false;
@@ -1075,6 +1098,7 @@ bool Chord::readProperties(XmlReader& e)
             _tremolo->setTrack(track());
             _tremolo->read(e);
             _tremolo->setParent(this);
+            _tremolo->setDurationType(durationType());
             }
       else if (tag == "tickOffset")       // obsolete
             ;

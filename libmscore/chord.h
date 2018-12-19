@@ -138,7 +138,7 @@ class Chord final : public ChordRest {
       Stem* stem() const                     { return _stem; }
       Arpeggio* arpeggio() const             { return _arpeggio;  }
       Tremolo* tremolo() const               { return _tremolo;   }
-      void setTremolo(Tremolo* t)            { _tremolo = t;      }
+      void setTremolo(Tremolo* t);
       bool endsGlissando() const             { return _endsGlissando; }
       void setEndsGlissando (bool val)       { _endsGlissando = val; }
       void updateEndsGlissando();

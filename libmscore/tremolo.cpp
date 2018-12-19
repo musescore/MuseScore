@@ -53,6 +53,7 @@ Tremolo::Tremolo(const Tremolo& t)
       setTremoloType(t.tremoloType());
       _chord1  = t.chord1();
       _chord2  = t.chord2();
+      _durationType = t._durationType;
       }
 
 //---------------------------------------------------------
@@ -243,6 +244,8 @@ void Tremolo::layout()
       //
       // two chord tremolo
       //
+
+#if 0 // Needs to be done earlier, see connectTremolo in layout.cpp
       Segment* s = _chord1->segment()->next();
       while (s) {
             if (s->element(track()) && (s->element(track())->isChord()))
@@ -256,6 +259,7 @@ void Tremolo::layout()
 
       _chord2 = toChord(s->element(track()));
       _chord2->setTremolo(this);
+#endif
 
       Stem* stem1 = _chord1->stem();
       Stem* stem2 = _chord2->stem();
