@@ -1175,12 +1175,10 @@ void Chord::processSiblings(std::function<void(Element*)> func) const
             func(_tremolo);
       for (LedgerLine* ll = _ledgerLines; ll; ll = ll->next())
             func(ll);
-
       for (Articulation* a : _articulations)
             func(a);
       for (Note* note : _notes)
             func(note);
-
       for (Element* e : el())
             func(e);
       for (Chord* chord : _graceNotes)    // process grace notes last, needed for correct shape calculation

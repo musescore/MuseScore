@@ -562,7 +562,6 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                           if (!(ne->track() % VOICES) && ne->isRest())
                                                 toRest(ne)->setGap(false);
 
-                                          ne->scanElements(score, localSetScore);   //necessary?
                                           ne->setScore(score);
                                           if (oe->type() == ElementType::BAR_LINE && adjustedBarlineSpan) {
                                                 BarLine* nbl = toBarLine(ne);
