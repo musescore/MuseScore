@@ -1124,38 +1124,37 @@ void ExportMusicXml::calcDivisions()
 #endif
       }
 
-#if 0
 //---------------------------------------------------------
 //   writePageFormat
 //---------------------------------------------------------
 
-static void writePageFormat(const PageFormat* pf, XmlWriter& xml, double conversion)
+static void writePageFormat(const Score* const s, XmlWriter& xml, double conversion)
       {
       xml.stag("page-layout");
 
-      xml.tag("page-height", pf->size().height() * conversion);
-      xml.tag("page-width", pf->size().width() * conversion);
+      xml.tag("page-height", s->styleD(Sid::pageHeight) * conversion);
+      xml.tag("page-width", s->styleD(Sid::pageWidth) * conversion);
+
       QString type("both");
-      if (pf->twosided()) {
+      if (s->styleB(Sid::pageTwosided)) {
             type = "even";
             xml.stag(QString("page-margins type=\"%1\"").arg(type));
-            xml.tag("left-margin",   pf->evenLeftMargin() * conversion);
-            xml.tag("right-margin",  pf->evenRightMargin() * conversion);
-            xml.tag("top-margin",    pf->evenTopMargin() * conversion);
-            xml.tag("bottom-margin", pf->evenBottomMargin() * conversion);
+            xml.tag("left-margin",   s->styleD(Sid::pageEvenLeftMargin) * conversion);
+            xml.tag("right-margin",  s->styleD(Sid::pageOddLeftMargin) * conversion);
+            xml.tag("top-margin",    s->styleD(Sid::pageEvenTopMargin)  * conversion);
+            xml.tag("bottom-margin", s->styleD(Sid::pageEvenBottomMargin) * conversion);
             xml.etag();
             type = "odd";
             }
       xml.stag(QString("page-margins type=\"%1\"").arg(type));
-      xml.tag("left-margin",   pf->oddLeftMargin() * conversion);
-      xml.tag("right-margin",  pf->oddRightMargin() * conversion);
-      xml.tag("top-margin",    pf->oddTopMargin() * conversion);
-      xml.tag("bottom-margin", pf->oddBottomMargin() * conversion);
+      xml.tag("left-margin",   s->styleD(Sid::pageOddLeftMargin) * conversion);
+      xml.tag("right-margin",  s->styleD(Sid::pageEvenLeftMargin) * conversion);
+      xml.tag("top-margin",    s->styleD(Sid::pageOddTopMargin) * conversion);
+      xml.tag("bottom-margin", s->styleD(Sid::pageOddBottomMargin) * conversion);
       xml.etag();
 
       xml.etag();
       }
-#endif
 
 //---------------------------------------------------------
 //   defaults
@@ -1163,16 +1162,15 @@ static void writePageFormat(const PageFormat* pf, XmlWriter& xml, double convers
 
 // _spatium = DPMM * (millimeter * 10.0 / tenths);
 
-static void defaults(XmlWriter& xml, Score* s, double& millimeters, const int& tenths)
+static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, const int& tenths)
       {
       xml.stag("defaults");
       xml.stag("scaling");
       xml.tag("millimeters", millimeters);
       xml.tag("tenths", tenths);
       xml.etag();
-//TODO:ws      const PageFormat* pf = s->pageFormat();
-//      if (pf)
-//            writePageFormat(pf, xml, INCH / millimeters * tenths);
+
+      writePageFormat(s, xml, INCH / millimeters * tenths);
 
       // TODO: also write default system layout here
       // when exporting only manual or no breaks, system-distance is not written at all
