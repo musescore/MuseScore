@@ -1065,6 +1065,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e)
                   }
             else if (tag == "Tremolo") {
                   Tremolo* tremolo = new Tremolo(chord->score());
+                  tremolo->setDurationType(chord->durationType());
                   chord->setTremolo(tremolo);
                   tremolo->setTrack(chord->track());
                   readTremolo(tremolo, e);

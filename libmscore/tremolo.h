@@ -13,6 +13,7 @@
 #ifndef __TREMOLO_H__
 #define __TREMOLO_H__
 
+#include "durationtype.h"
 #include "symbol.h"
 
 namespace Ms {
@@ -34,6 +35,7 @@ class Tremolo final : public Element {
       TremoloType _tremoloType;
       Chord* _chord1;
       Chord* _chord2;
+      TDuration _durationType;
       QPainterPath path;
 
       int _lines;       // derived from _subtype
@@ -66,6 +68,9 @@ class Tremolo final : public Element {
 
       Chord* chord1() const { return _chord1; }
       Chord* chord2() const { return _chord2; }
+
+      TDuration durationType() const { return _durationType; }
+      void setDurationType(TDuration d) { _durationType = d; }
 
       void setChords(Chord* c1, Chord* c2) {
             _chord1 = c1;

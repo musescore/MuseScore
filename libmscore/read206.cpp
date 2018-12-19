@@ -1991,6 +1991,7 @@ bool readChordProperties206(XmlReader& e, Chord* ch)
             tremolo->setTrack(ch->track());
             tremolo->read(e);
             tremolo->setParent(ch);
+            tremolo->setDurationType(ch->durationType());
             ch->setTremolo(tremolo);
             }
       else if (tag == "tickOffset")       // obsolete
