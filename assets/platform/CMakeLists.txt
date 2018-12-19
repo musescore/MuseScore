@@ -10,11 +10,7 @@ endif(BUILD_WINDOWS_ICONS)
 
 if(BUILD_MACOS_ICONS)
   # https://stackoverflow.com/a/11788723
-  set(MACOS_ICNS_SIZES 16 32 128 256 512) # sizes doubled for retina displays
-  if(NOT APPLE)
-    # retina sizes not supported by libicns except for 512 @ 2x = 1024px
-    list(APPEND MACOS_ICNS_SIZES 1024)
-  endif(NOT APPLE)
+  set(MACOS_ICNS_SIZES 16 32 128 256 512) # sizes in "points" not pixels
   assert_ascending(MACOS_ICNS_SIZES)
 else(BUILD_MACOS_ICONS)
   set(MACOS_ICNS_SIZES "")

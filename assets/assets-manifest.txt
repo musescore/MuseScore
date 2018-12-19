@@ -49,11 +49,6 @@ platform/file-icons/mscx_96x96.png
 platform/file-icons/mscx_128x128.png
 platform/file-icons/mscx_256x256.png
 platform/file-icons/mscx_512x512.png
-platform/file-icons/mscx_16x16@2x.png
-platform/file-icons/mscx_32x32@2x.png
-platform/file-icons/mscx_128x128@2x.png
-platform/file-icons/mscx_256x256@2x.png
-platform/file-icons/mscx_512x512@2x.png
 platform/file-icons/mscz.svg
 platform/file-icons/mscz.ico
 platform/file-icons/mscz.icns
@@ -67,11 +62,6 @@ platform/file-icons/mscz_96x96.png
 platform/file-icons/mscz_128x128.png
 platform/file-icons/mscz_256x256.png
 platform/file-icons/mscz_512x512.png
-platform/file-icons/mscz_16x16@2x.png
-platform/file-icons/mscz_32x32@2x.png
-platform/file-icons/mscz_128x128@2x.png
-platform/file-icons/mscz_256x256@2x.png
-platform/file-icons/mscz_512x512@2x.png
 platform/file-icons/xml.svg
 platform/file-icons/xml.ico
 platform/file-icons/xml.icns
@@ -85,11 +75,6 @@ platform/file-icons/xml_96x96.png
 platform/file-icons/xml_128x128.png
 platform/file-icons/xml_256x256.png
 platform/file-icons/xml_512x512.png
-platform/file-icons/xml_16x16@2x.png
-platform/file-icons/xml_32x32@2x.png
-platform/file-icons/xml_128x128@2x.png
-platform/file-icons/xml_256x256@2x.png
-platform/file-icons/xml_512x512@2x.png
 platform/file-icons/mxl.svg
 platform/file-icons/mxl.ico
 platform/file-icons/mxl.icns
@@ -103,11 +88,6 @@ platform/file-icons/mxl_96x96.png
 platform/file-icons/mxl_128x128.png
 platform/file-icons/mxl_256x256.png
 platform/file-icons/mxl_512x512.png
-platform/file-icons/mxl_16x16@2x.png
-platform/file-icons/mxl_32x32@2x.png
-platform/file-icons/mxl_128x128@2x.png
-platform/file-icons/mxl_256x256@2x.png
-platform/file-icons/mxl_512x512@2x.png
 splash/splash-stable.svg
 splash/splash-nightly.svg
 splash/splash-development.svg
