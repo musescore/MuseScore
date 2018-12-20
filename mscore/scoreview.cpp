@@ -1928,7 +1928,7 @@ void ScoreView::cmd(const char* s)
          || cmd == "next-measure"
          || cmd == "prev-measure") {
             Element* el = score()->selection().element();
-            if (el && (el->isText())) {
+            if (el && (el->isTextBase())) {
                   score()->startCmd();
                   if (cmd == "prev-chord")
                         el->undoChangeProperty(Pid::OFFSET, el->offset() - QPointF (MScore::nudgeStep * el->spatium(), 0.0));
