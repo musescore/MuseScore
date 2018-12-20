@@ -39,6 +39,9 @@ class ScoreListWidget : public QListWidget
       int cellHeight() const { return CELLH; }
       int space() const { return SPACE; }
       QSize cellSize() const { return QSize(CELLW, CELLH); }
+
+      // override so we pass wheel event to the parent scroll area
+      virtual void wheelEvent(QWheelEvent *e) {};
       };
 
 //---------------------------------------------------------
