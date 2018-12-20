@@ -126,8 +126,8 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL,    0,    SymId::accidentalQuarterSharpEqualTempered),
 
       // Persian
-      Acc(AccidentalVal::NATURAL, 50,   SymId::accidentalSori),                          // SORI
-      Acc(AccidentalVal::NATURAL, -50,  SymId::accidentalKoron),                         // KORON
+      Acc(AccidentalVal::NATURAL, 33,   SymId::accidentalSori),                          // SORI
+      Acc(AccidentalVal::NATURAL, -67,  SymId::accidentalKoron),                         // KORON
       };
 
 //---------------------------------------------------------
