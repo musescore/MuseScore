@@ -1018,8 +1018,8 @@ void Harmony::layout()
             setOffset(0.0, 0.0);
             return;
             }
-      if (isStyled(Pid::OFFSET))
-            setOffset(propertyDefault(Pid::OFFSET).toPointF());
+      //if (isStyled(Pid::OFFSET))
+      //      setOffset(propertyDefault(Pid::OFFSET).toPointF());
 
       qreal yy = 0.0;
       qreal xx = 0.0;

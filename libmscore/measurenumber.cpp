@@ -60,8 +60,8 @@ void MeasureNumber::layout()
       setPos(QPointF());
       if (!parent())
             setOffset(0.0, 0.0);
-      else if (isStyled(Pid::OFFSET))
-            setOffset(propertyDefault(Pid::OFFSET).toPointF());
+      //else if (isStyled(Pid::OFFSET))
+      //      setOffset(propertyDefault(Pid::OFFSET).toPointF());
 
       const StaffType* st = staff()->constStaffType(measure()->tick());
       if (st->lines() == 1 && staff())
