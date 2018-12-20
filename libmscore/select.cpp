@@ -175,7 +175,8 @@ ChordRest* Selection::activeCR() const
 
 Segment* Selection::firstChordRestSegment() const
       {
-      if (!isRange()) return 0;
+      if (!isRange())
+            return 0;
 
       for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
             if (!s->enabled())
@@ -564,6 +565,7 @@ void Selection::updateSelectedElements()
 void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd)
       {
       Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
+      Q_ASSERT(!(endSegment && !startSegment));
 
       _startSegment  = startSegment;
       _endSegment    = endSegment;
@@ -1291,6 +1293,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
             }
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
       _score->setSelectionChanged(true);
+      Q_ASSERT(!(_endSegment && !_startSegment));
       }
 
 //---------------------------------------------------------
