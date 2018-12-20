@@ -76,6 +76,8 @@ Zerberus::~Zerberus()
             }
       for (Channel* c : _channel)
             delete c;
+      
+      qDeleteAll(patches);
       }
 
 //---------------------------------------------------------
@@ -249,18 +251,16 @@ const char* Zerberus::name() const
 //   getPatchInfo
 //---------------------------------------------------------
 
-const QList<Ms::MidiPatch*>& Zerberus::getPatchInfo() const
+void Zerberus::updatePatchList()
       {
-      static QList<Ms::MidiPatch*> pl;
-      qDeleteAll(pl);
-      pl.clear();
+      qDeleteAll(patches);
+      patches.clear();
       int idx = 0;
       for (ZInstrument* i : instruments) {
             Ms::MidiPatch* p = new Ms::MidiPatch { false, name(), 0, idx, i->name() };
-            pl.append(p);
+            patches.append(p);
             ++idx;
             }
-      return pl;
       }
 
 //---------------------------------------------------------
@@ -296,6 +296,7 @@ bool Zerberus::loadSoundFonts(const QStringList& sl)
             if (!loadInstrument(s))
                   return false;
             }
+      updatePatchList();
       return true;
       }
 
@@ -309,6 +310,7 @@ bool Zerberus::removeSoundFonts(const QStringList& fileNames)
             if (!removeSoundFont(QFileInfo(fileName).absoluteFilePath()))
                   return false;
             }
+      updatePatchList();
       return true;
       }
 
@@ -331,7 +333,9 @@ QStringList Zerberus::soundFonts() const
 bool Zerberus::addSoundFont(const QString& s)
       {
       QMutexLocker locker(&mutex);
-      return loadInstrument(s);
+      bool res = loadInstrument(s);
+      updatePatchList();
+      return res;
       }
 
 //---------------------------------------------------------
@@ -364,9 +368,13 @@ bool Zerberus::removeSoundFont(const QString& s)
                         globalInstruments.erase(it1);
                         delete i;
                         }
+                  
+                  updatePatchList();
                   return true;
                   }
             }
+      
+      updatePatchList();
       return false;
       }
 

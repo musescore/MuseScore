@@ -341,7 +341,7 @@ void PartEdit::drumsetToggled(bool val, bool syncControls)
 
       part->undoChangeProperty(Pid::USE_DRUMSET, val);
       patch->clear();
-      const QList<MidiPatch*> pl = synti->getPatchInfo();
+      const auto& pl = synti->getPatchInfo();
       for (const MidiPatch* p : pl) {
             if (p->drum == val)
                   patch->addItem(p->name, QVariant::fromValue<void*>((void*)p));

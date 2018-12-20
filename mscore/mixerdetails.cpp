@@ -170,7 +170,7 @@ void MixerDetails::updateFromTrack()
       //Populate patch combo
       patchCombo->blockSignals(true);
       patchCombo->clear();
-      const QList<MidiPatch*> pl = synti->getPatchInfo();
+      const auto& pl = synti->getPatchInfo();
       int patchIndex = 0;
 
       for (const MidiPatch* p : pl) {
