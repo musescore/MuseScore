@@ -2037,6 +2037,14 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 //                  qreal dd = minRight() + ns->minLeft() + spatium();
 //                  w = qMax(d, dd);
                   w += score()->styleP(Sid::barNoteDistance);
+
+                  if (st == SegmentType::StartRepeatBarLine) {
+                        if (Element* barLine = element(0)) {
+                              const qreal blWidth = barLine->width();
+                              if (w < blWidth)
+                                    w += blWidth;
+                              }
+                        }
                   }
             // d -= ns->minLeft() * .7;      // hack
             // d = qMax(d, ns->minLeft());
