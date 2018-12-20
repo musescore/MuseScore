@@ -2948,6 +2948,8 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber)
 
 static QPixmap createThumbnail(const QString& name)
       {
+      if (!(name.endsWith(".mscx") || name.endsWith(".mscz")))
+            return QPixmap();
       MasterScore* score = new MasterScore(MScore::defaultStyle());
       Score::FileError error = readScore(score, name, true);
       if (error != Score::FileError::FILE_NO_ERROR || !score->firstMeasure()) {
@@ -2984,7 +2986,7 @@ QPixmap MuseScore::extractThumbnail(const QString& name)
 //---------------------------------------------------------
 //   saveMetadataJSON
 //---------------------------------------------------------
-      
+
 bool MuseScore::saveMetadataJSON(Score* score, const QString& name)
       {
       QFile f(name);
@@ -2997,7 +2999,7 @@ bool MuseScore::saveMetadataJSON(Score* score, const QString& name)
       f.close();
       return true;
       }
-      
+
 QJsonObject MuseScore::saveMetadataJSON(Score* score)
       {
       auto boolToString = [](bool b) { return b ? "true" : "false"; };
@@ -3122,23 +3124,23 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
 //---------------------------------------------------------
 //   exportMp3AsJSON
 //---------------------------------------------------------
-      
+
 bool MuseScore::exportMp3AsJSON(const QString& inFilePath, const QString& outFilePath)
       {
       std::unique_ptr<MasterScore> score(mscore->readScore(inFilePath));
       if (!score)
             return false;
-      
+
       //export score audio
       QByteArray mp3Data;
       QBuffer mp3Device(&mp3Data);
       mp3Device.open(QIODevice::ReadWrite);
       bool dummy = false;
       mscore->saveMp3(score.get(), &mp3Device, dummy);
-      
+
       QJsonObject jsonForMedia;
       jsonForMedia["mp3"] = QString::fromLatin1(mp3Data.toBase64());
-      
+
       QJsonDocument jsonDoc(jsonForMedia);
       const QString& jsonPath{outFilePath};
       QFile file(jsonPath);
@@ -3147,7 +3149,7 @@ bool MuseScore::exportMp3AsJSON(const QString& inFilePath, const QString& outFil
       file.close();
       return true;
       }
-      
+
 QJsonValue MuseScore::exportPdfAsJSON(Score* score)
       {
       QPrinter printer;
@@ -3161,20 +3163,20 @@ QJsonValue MuseScore::exportPdfAsJSON(Score* score)
             tempPdfFile.close();
             tempPdfFile.remove();
             }
-      
+
       return QString::fromLatin1(pdfData.toBase64());
       }
-      
+
 //---------------------------------------------------------
 //   exportAllMediaFiles
 //---------------------------------------------------------
-      
+
 bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& outFilePath)
       {
       std::unique_ptr<MasterScore> score(mscore->readScore(inFilePath));
       if (!score)
             return false;
-      
+
       score->switchToPageMode();
 
       //// JSON specification ///////////////////////////
@@ -3187,7 +3189,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       //jsonForMedia["mxml"] = mxmlJson;
       //jsonForMedia["metadata"] = mdJson;
       ///////////////////////////////////////////////////
-      
+
       QJsonObject jsonForMedia;
       bool res = true;
 
@@ -3212,7 +3214,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       jsonForMedia["pngs"] = pngsJsonArray;
       jsonForMedia["svgs"] = svgsJsonArray;
       }
-      
+
       //export score .spos
       QByteArray partDataPos;
       QBuffer partPosDevice(&partDataPos);
@@ -3252,10 +3254,10 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       QFile file(jsonPath);
       if (!file.open(QIODevice::WriteOnly))
             return false;
-      
+
       file.write(jsonDoc.toJson(QJsonDocument::Compact));
       file.close();
-      
+
       return res;
       }
 
