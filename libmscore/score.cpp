@@ -2902,44 +2902,37 @@ void Score::selectRange(Element* e, int staffIdx)
       int activeTrack = e->track();
       // current selection is range extending to end of score?
       bool endRangeSelected = selection().isRange() && selection().endSegment() == nullptr;
-      if (e->type() == ElementType::MEASURE) {
-            Measure* m = toMeasure(e);
-            int tick  = m->tick();
-            int etick = tick + m->ticks();
+      if (e->isMeasure()) {
+            Measure* m  = toMeasure(e);
+            int tick    = m->tick();
+            int etick   = tick + m->ticks();
             activeTrack = staffIdx * VOICES;
-            if (_selection.isNone()
-               || (_selection.isList() && !_selection.isSingle())) {
-                        if (_selection.isList())
-                              deselectAll();
-                  _selection.setRange(m->tick2segment(tick),
-                                      m == lastMeasure() ? 0 : m->last(),
-                                      staffIdx,
-                                      staffIdx + 1);
+            Segment* s1 = m->tick2segment(tick);
+            if (!s1)                      // m is corrupted!
+                  s1 = m->first(SegmentType::ChordRest);
+            Segment* s2 = m == lastMeasure() ? 0 : m->last();
+            if (_selection.isNone() || (_selection.isList() && !_selection.isSingle())) {
+                  if (_selection.isList())
+                        deselectAll();
+                  _selection.setRange(s1, s2, staffIdx, staffIdx + 1);
                   }
-            else if (_selection.isRange()) {
-                  _selection.extendRangeSelection(m->tick2segment(tick),
-                                                  m == lastMeasure() ? 0 : m->last(),
-                                                  staffIdx,
-                                                  tick,
-                                                  etick);
-                  }
+            else if (_selection.isRange())
+                  _selection.extendRangeSelection(s1, s2, staffIdx, tick, etick);
             else if (_selection.isSingle()) {
                   Element* oe = selection().element();
                   if (oe->isNote() || oe->isChordRest()) {
                         if (oe->isNote())
                               oe = oe->parent();
-
                         ChordRest* cr = toChordRest(oe);
                         int oetick = cr->segment()->tick();
                         Segment* startSegment = cr->segment();
                         Segment* endSegment = m->last();
                         if (tick < oetick) {
                               startSegment = m->tick2segment(tick);
-                              if (etick <= oetick)
-                                    endSegment = cr->nextSegmentAfterCR(SegmentType::ChordRest
-                                                                                    | SegmentType::EndBarLine
-                                                                                    | SegmentType::Clef);
-
+                              if (etick <= oetick) {
+                                    SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
+                                    endSegment = cr->nextSegmentAfterCR(st);
+                                    }
                               }
                         int staffStart = staffIdx;
                         int endStaff = staffIdx + 1;
@@ -2951,10 +2944,7 @@ void Score::selectRange(Element* e, int staffIdx)
                         }
                   else {
                         deselectAll();
-                        _selection.setRange(m->tick2segment(tick),
-                                            m == lastMeasure() ? 0 : m->last(),
-                                            staffIdx,
-                                            staffIdx + 1);
+                        _selection.setRange(s1, s2, staffIdx, staffIdx + 1);
                         }
                   }
             else {
@@ -2962,27 +2952,22 @@ void Score::selectRange(Element* e, int staffIdx)
                   return;
                   }
             }
-      else if (e->type() == ElementType::NOTE || e->isChordRest()) {
-            if (e->type() == ElementType::NOTE)
+      else if (e->isNote() || e->isChordRest()) {
+            if (e->isNote())
                   e = e->parent();
             ChordRest* cr = toChordRest(e);
 
-            if (_selection.isNone()
-                || (_selection.isList() && !_selection.isSingle())) {
+            if (_selection.isNone() || (_selection.isList() && !_selection.isSingle())) {
                   if (_selection.isList())
                         deselectAll();
-                  _selection.setRange(cr->segment(),
-                                      cr->nextSegmentAfterCR(SegmentType::ChordRest
-                                                             | SegmentType::EndBarLine
-                                                             | SegmentType::Clef),
-                                      e->staffIdx(),
-                                      e->staffIdx() + 1);
+                  SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
+                  _selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), e->staffIdx(), e->staffIdx() + 1);
                   activeTrack = cr->track();
                   }
             else if (_selection.isSingle()) {
                   Element* oe = _selection.element();
-                  if (oe && (oe->type() == ElementType::NOTE || oe->type() == ElementType::REST)) {
-                        if (oe->type() == ElementType::NOTE)
+                  if (oe && (oe->isNote() || oe->isRest())) {
+                        if (oe->isNote())
                               oe = oe->parent();
                         ChordRest* ocr = toChordRest(oe);
 
@@ -2990,12 +2975,8 @@ void Score::selectRange(Element* e, int staffIdx)
                         if (!endSeg)
                               endSeg = ocr->segment()->next();
 
-                        _selection.setRange(ocr->segment(),
-                                            endSeg,
-                                            oe->staffIdx(),
-                                            oe->staffIdx() + 1);
+                        _selection.setRange(ocr->segment(), endSeg, oe->staffIdx(), oe->staffIdx() + 1);
                         _selection.extendRangeSelection(cr);
-
                         }
                   else {
                         select(e, SelectType::SINGLE, 0);
