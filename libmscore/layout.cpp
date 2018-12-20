@@ -855,8 +855,11 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
             qreal ny = (note->line() + stepOffset) * stepDistance;
             if (note->rypos() != ny) {
                   note->rypos() = ny;
-                  if (chord->stem())
+                  if (chord->stem()) {
                         chord->stem()->layout();
+                        if (chord->hook())
+                              chord->hook()->rypos() = chord->stem()->hookPos().y();
+                        }
                   }
             note->rxpos()  = x;
 
