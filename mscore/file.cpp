@@ -1686,6 +1686,7 @@ void MuseScore::exportFile()
       fl.append(tr("Standard MIDI File") + " (*.mid)");
       fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
       fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
+      fl.append(tr("Uncompressed MusicXML File (outdated)") + " (*.xml)");
       fl.append(tr("Uncompressed MuseScore 3 File") + " (*.mscx)");     // for debugging purposes
 
       QString saveDialogTitle = tr("Export");
@@ -1767,6 +1768,7 @@ bool MuseScore::exportParts()
       fl.append(tr("Standard MIDI File") + " (*.mid)");
       fl.append(tr("Compressed MusicXML File") + " (*.mxl)");
       fl.append(tr("Uncompressed MusicXML File") + " (*.musicxml)");
+      fl.append(tr("Uncompressed MusicXML File (outdated)") + " (*.xml)");
       fl.append(tr("MuseScore 3 File") + " (*.mscz)");
       fl.append(tr("Uncompressed MuseScore 3 File") + " (*.mscx)");     // for debugging purposes
 
@@ -1960,7 +1962,7 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
                   writeSessionFile(false);
                   }
             }
-      else if (ext == "musicxml") {
+      else if ((ext == "musicxml") || (ext == "xml")) {
             // save as MusicXML *.musicxml file
             rv = saveXml(cs_, fn);
             }
