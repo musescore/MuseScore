@@ -64,6 +64,9 @@ class StaffListItem : public QObject, public QTreeWidgetItem {
       static int customStandardIdx;
       static int customPercussionIdx;
       static int customTablatureIdx;
+      static constexpr int CUSTOM_STAFF_TYPE_IDX = -1000;
+
+      int staffTypeIdx(int idx) const;
 
    private slots:
       void staffTypeChanged(int);
