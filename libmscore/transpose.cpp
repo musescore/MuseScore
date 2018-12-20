@@ -503,7 +503,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
 
             bool createKey = tickStart == 0;
             for (Segment* s = firstSegment(SegmentType::KeySig); s; s = s->next1(SegmentType::KeySig)) {
-                  if (s->tick() < tickStart)
+                  if (!s->enabled() || s->tick() < tickStart)
                         continue;
                   if (tickEnd != -1 && s->tick() >= tickEnd)
                         break;
@@ -513,7 +513,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                               segmentInterval.flip();
                         }
                   KeySig* ks = toKeySig(s->element(staffIdx * VOICES));
-                  if (!ks || (ks->generated() && ks->segment()->rtick() > 0))
+                  if (!ks || ks->generated())
                         continue;
                   if (s->tick() == 0)
                         createKey = false;
