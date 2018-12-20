@@ -3390,7 +3390,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         toChord(cr)->layoutArticulations2();
                   // tuplets
                   // sanity check
-                  if (cr->beam() && !isTopBeam(cr))
+                  if (notTopBeam(cr))
                         continue;
                   DurationElement* de = cr;
                   while (de->tuplet() && de->tuplet()->elements().front() == de) {
