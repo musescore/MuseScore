@@ -628,12 +628,12 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   const Measure* m;
                   if (grip == Grip::START) {
                         m = startMeasure();
-                        // start after clef/key
+                        // start after clef/keysig/timesig/barline
                         qreal offset = 0.0;
                         Segment* s = m->first(SegmentType::ChordRest);
                         if (s) {
                               s = s->prev();
-                              if (s) {
+                              if (s && s->enabled()) {
                                     offset = s->x();
                                     Element* e = s->element(staffIdx() * VOICES);
                                     if (e)
