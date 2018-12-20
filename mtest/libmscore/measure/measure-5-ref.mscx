@@ -57,6 +57,10 @@
     <Staff id="1">
       <Measure>
         <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -69,10 +73,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
           <Chord>
             <durationType>quarter</durationType>
             <Note>

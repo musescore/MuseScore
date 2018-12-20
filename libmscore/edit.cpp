@@ -2702,7 +2702,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                                           }
                                     }
                               for (Segment* s = mi->first(); s && s->rtick() == 0; s = s->next()) {
-                                    if (s->isHeaderClefType() || !s->enabled())
+                                    if (!s->enabled())
                                           continue;
                                     Element* e = s->element(staffIdx * VOICES);
                                     if (!e)
@@ -2750,7 +2750,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                         }
                   for (Clef* clef : cl) {
                         Clef* nClef = new Clef(*clef);
-                        Segment* s  = m->undoGetSegmentR(SegmentType::Clef, 0);
+                        Segment* s  = m->undoGetSegmentR(SegmentType::HeaderClef, 0);
                         nClef->setParent(s);
                         undoAddElement(nClef);
                         }
