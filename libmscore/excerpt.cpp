@@ -485,9 +485,10 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                           Element* ne = e->linkedClone();
                                           // reset offset as most likely it will not fit
                                           PropertyFlags f = ne->propertyFlags(Pid::OFFSET);
-                                          if (f == PropertyFlags::UNSTYLED)
+                                          if (f == PropertyFlags::UNSTYLED) {
                                                 ne->setPropertyFlags(Pid::OFFSET, PropertyFlags::STYLED);
-                                          ne->setOffset(QPointF());
+                                                ne->resetProperty(Pid::OFFSET);
+                                                }
                                           ne->setTrack(strack == -1 ? 0 : strack);
                                           ne->setScore(score);
                                           if (!ns)
