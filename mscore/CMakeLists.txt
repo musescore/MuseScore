@@ -761,11 +761,7 @@ else (MINGW)
                )
         endif (LN_EXECUTABLE)
         # Install MuseScore icons (use SVGs where possible, but install PNGs as backup for systems that don't support SVG)
-        if (MSCORE_UNSTABLE)
-            set(MSCORE_ICON_BASE ../assets/musescore-icon-square) # Square icons on development builds
-        else (MSCORE_UNSTABLE)
-            set(MSCORE_ICON_BASE ../assets/musescore-icon-round) # Round icons on stable releases
-        endif (MSCORE_UNSTABLE)
+        set(MSCORE_ICON_BASE ../assets/musescore-icon-round)
         install(FILES ${MSCORE_ICON_BASE}.svg RENAME mscore${MSCORE_INSTALL_SUFFIX}.svg DESTINATION share/icons/hicolor/scalable/apps)
         install(FILES ${MSCORE_ICON_BASE}-16.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/16x16/apps)
         install(FILES ${MSCORE_ICON_BASE}-24.png RENAME mscore${MSCORE_INSTALL_SUFFIX}.png DESTINATION share/icons/hicolor/24x24/apps)
