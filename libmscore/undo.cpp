@@ -1668,11 +1668,7 @@ void InsertRemoveMeasures::removeMeasures()
                   if (!systemList.contains(system)) {
                         systemList.push_back(system);
                         }
-                  auto i = std::find(system->measures().begin(), system->measures().end(), mb);
-                  if (i != system->measures().end()) {
-                        (*i)->setParent(0);
-                        system->measures().erase(i);
-                        }
+                  system->removeMeasure(mb);
                   }
             if (mb == fm)
                   break;
