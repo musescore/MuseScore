@@ -368,17 +368,20 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             for (Segment* s = fs; s && s != ls; s = s->next1()) {
                   if (!s->enabled())
                         continue;
+                  // skip start and end segments on assumption start and end points were placed well already
+                  // this avoids overcorrection on collision with own ledger lines and accidentals
+                  // it also avoids issues where slur appears to be attached to a note in a different voice
+                  if (s == ss || s == es)
+                        continue;
+                  // allow slurs to cross barlines
+                  if (s->segmentType() & SegmentType::BarLineType)
+                        continue;
                   qreal x1 = s->x() + s->measure()->x();
                   qreal x2 = x1 + s->width();
                   if (pp1.x() > x2)
                         continue;
                   if (pp2.x() < x1)
                         break;
-                  // skip start and end segments on assumption start and end points were placed well already
-                  // this avoids overcorrection on collision with own ledger lines and accidentals
-                  // it also avoids issues where slur appears to be attached to a note in a different voice
-                  if (s == ss || s == es)
-                        continue;
                   const Shape& segShape = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos());
                   if (!intersection)
                         intersection = segShape.intersects(_shape);
