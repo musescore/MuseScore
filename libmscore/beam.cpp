@@ -1949,7 +1949,8 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
 
             Stem* stem = c->stem();
             if (stem) {
-                  qreal sw2  = stem->lineWidth() * .5;
+                  bool useTablature = staff() && staff()->isTabStaff(cr->tick());
+                  qreal sw2  = useTablature ? 0.f : stem->lineWidth() * .5;
                   if (c->up())
                         sw2 = -sw2;
                   stem->rxpos() = c->stemPosX() + sw2;
