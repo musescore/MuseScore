@@ -175,9 +175,11 @@ void MixerDetails::updateFromTrack()
 
       for (const MidiPatch* p : pl) {
             if (p->drum == drum || p->synti != "Fluid") {
-                      patchCombo->addItem(p->name, QVariant::fromValue<void*>((void*)p));
-                      if (p->bank == chan->bank() && p->prog == chan->program())
-                              patchIndex = patchCombo->count() - 1;
+                  patchCombo->addItem(p->name, QVariant::fromValue<void*>((void*)p));
+                  if (p->synti == chan->synti() &&
+                      p->bank == chan->bank() &&
+                      p->prog == chan->program())
+                        patchIndex = patchCombo->count() - 1;
                   }
             }
       patchCombo->setCurrentIndex(patchIndex);
