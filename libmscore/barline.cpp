@@ -618,7 +618,7 @@ Element* BarLine::drop(EditData& data)
                         int spanTo     = bl->spanTo();
                         undoChangeProperty(Pid::BARLINE_SPAN, false);
                         undoChangeProperty(Pid::BARLINE_SPAN_FROM, spanFrom);
-                        undoChangeProperty(Pid::BARLINE_SPAN_FROM, spanTo);
+                        undoChangeProperty(Pid::BARLINE_SPAN_TO, spanTo);
                         }
                   // if drop refers to subtype, update this bar line subtype
                   else
