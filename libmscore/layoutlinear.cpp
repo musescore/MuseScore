@@ -13,6 +13,7 @@
 #include "score.h"
 #include "page.h"
 #include "system.h"
+#include "tremolo.h"
 #include "measure.h"
 #include "layout.h"
 #include "bracket.h"

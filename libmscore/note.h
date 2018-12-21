@@ -23,7 +23,6 @@
 #include "noteevent.h"
 #include "pitchspelling.h"
 #include "shape.h"
-#include "tremolo.h"
 #include "key.h"
 
 namespace Ms {
