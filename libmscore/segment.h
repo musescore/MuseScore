@@ -83,8 +83,8 @@ constexpr bool operator& (const SegmentType t1, const SegmentType t2) {
 
 class Segment final : public Element {
       SegmentType _segmentType { SegmentType::Invalid };
-      int _tick = 0;                          // tick offset to measure
-      int _ticks = 0;
+      Fraction _tick;  // { Fraction(0, 1) };
+      Fraction _ticks; // { Fraction(0, 1) };
       Spatium _extraLeadingSpace;
       qreal _stretch;
 
@@ -187,14 +187,15 @@ class Segment final : public Element {
 
       qreal stretch() const                      { return _stretch; }
       void setStretch(qreal v)                   { _stretch = v;    }
-      void setTick(int t)                        { _tick = t - parent()->tick(); }
-      virtual int tick() const override          { return _tick + parent()->tick(); }
-      virtual int rtick() const override         { return _tick;  } // tickposition relative to measure start
+
+      void setTick(int t);
+      virtual int tick() const override;
+      virtual int rtick() const override;
       Fraction rfrac() const;
       Fraction afrac() const;
-      void setRtick(int val)                     { _tick = val;   }
-      int ticks() const                          { return _ticks; }
-      void setTicks(int val)                     { _ticks = val;  }
+      void setRtick(int val);
+      int ticks() const;
+      void setTicks(int val);
 
       bool splitsTuplet() const;
 

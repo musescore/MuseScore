@@ -121,7 +121,7 @@ Segment::Segment(Measure* m, SegmentType st, int t)
       {
       setParent(m);
       _segmentType = st;
-      _tick = t;
+      setRtick(t);
       init();
       }
 
@@ -788,26 +788,6 @@ void Segment::checkEmpty() const
       }
 
 //---------------------------------------------------------
-//   rfrac
-//    return relative position of segment in measure
-//---------------------------------------------------------
-
-Fraction Segment::rfrac() const
-      {
-      return Fraction::fromTicks(_tick);
-      }
-
-//---------------------------------------------------------
-//   afrac
-//    return absolute position of segment
-//---------------------------------------------------------
-
-Fraction Segment::afrac() const
-      {
-      return Fraction::fromTicks(tick());
-      }
-
-//---------------------------------------------------------
 //   swapElements
 //---------------------------------------------------------
 
@@ -865,7 +845,7 @@ QVariant Segment::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::TICK:
-                  return _tick;
+                  return _tick.ticks();
             case Pid::LEADING_SPACE:
                   return extraLeadingSpace();
             default:
@@ -895,7 +875,7 @@ bool Segment::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case Pid::TICK:
-                  _tick = v.toInt();
+                  setRtick(v.toInt());
                   break;
             case Pid::LEADING_SPACE:
                   setExtraLeadingSpace(v.value<Spatium>());
@@ -2089,6 +2069,84 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       if (ns)
             w += ns->extraLeadingSpace().val() * spatium();
       return w;
+      }
+
+//---------------------------------------------------------
+//   setTick
+//    *** deprecated ***
+//---------------------------------------------------------
+
+void Segment::setTick(int t)
+      {
+      setRtick(t - measure()->tick());
+      }
+
+//---------------------------------------------------------
+//   tick
+//    *** deprecated ***
+//---------------------------------------------------------
+
+int Segment::tick() const
+      {
+      return rtick() + measure()->tick();
+      }
+
+//---------------------------------------------------------
+//   ticks
+//---------------------------------------------------------
+
+int Segment::ticks() const
+      {
+      return _ticks.ticks();
+      }
+
+//---------------------------------------------------------
+//   setTicks
+//---------------------------------------------------------
+
+void Segment::setTicks(int val)
+      {
+      _ticks = Fraction::fromTicks(val);
+      }
+
+//---------------------------------------------------------
+//   rtick
+//    tickposition relative to measure start
+//---------------------------------------------------------
+
+int Segment::rtick() const
+      {
+      return _tick.ticks();
+      }
+
+//---------------------------------------------------------
+//   setRtick
+//---------------------------------------------------------
+
+void Segment::setRtick(int val)
+      {
+      _tick = Fraction::fromTicks(val);
+      }
+
+//---------------------------------------------------------
+//   rfrac
+//    return relative position of segment in measure
+//---------------------------------------------------------
+
+Fraction Segment::rfrac() const
+      {
+      return _tick;
+      }
+
+//---------------------------------------------------------
+//   afrac
+//    return absolute position of segment
+//    *** deprecated ***
+//---------------------------------------------------------
+
+Fraction Segment::afrac() const
+      {
+      return _tick + Fraction::fromTicks(measure()->tick());
       }
 
 }           // namespace Ms
