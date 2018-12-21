@@ -352,6 +352,11 @@ void XmlWriter::tag(const QString& name, QVariant data)
                   *this << data.toInt();
                   *this << "</" << ename << ">\n";
                   break;
+            case QVariant::LongLong:
+                  *this << "<" << name << ">";
+                  *this << data.toLongLong();
+                  *this << "</" << ename << ">\n";
+                  break;
             case QVariant::Double:
                   *this << "<" << name << ">";
                   *this << data.value<double>();
