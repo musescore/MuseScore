@@ -1222,7 +1222,6 @@ MuseScore::MuseScore()
       spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
       feedbackTools->addWidget(spacer);
       // And, finally, add the buttons themselves.
-      feedbackTools->addWidget(new AccessibleToolButton(feedbackTools, getAction("report-bug")));
       AccessibleToolButton* feedbackButton = new AccessibleToolButton(feedbackTools, getAction("leave-feedback"));
       feedbackButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
       feedbackTools->addWidget(feedbackButton);
