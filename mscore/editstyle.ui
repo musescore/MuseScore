@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Edit General Style</string>
+   <string>Style</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_39">
    <item row="0" column="0">
@@ -10654,7 +10654,7 @@
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Name'</string>
+              <string>Reset 'Name' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
