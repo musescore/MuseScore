@@ -1402,13 +1402,13 @@ bool readNoteProperties206(Note* note, XmlReader& e)
 //    before setting anything else.
 //---------------------------------------------------------
 
-static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be)
+static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be, QStringRef elementName)
       {
       QString s;
       if (e.readAheadAvailable()) {
-            e.performReadAhead([&s](QIODevice& dev) {
+            e.performReadAhead([&s, &elementName](QIODevice& dev) {
+                  const QString closeTag = QString("</").append(elementName.toString()).append(">");
                   QByteArray arrLine = dev.readLine();
-                  int depth = 0;
                   while (!arrLine.isEmpty()) {
                         QString line(arrLine);
                         if (line.contains("<style>")) {
@@ -1417,20 +1417,10 @@ static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be)
                                     s = re.cap(1);
                               return;
                               }
-                        else {
-                              // Check for start tag
-                              QRegExp startRe("<[A-z0-9]+>");
-                              if (startRe.indexIn(line) > -1)
-                                    depth++;
-
-                              // Check for end tag
-                              QRegExp endRe("</[A-z0-9]+>");
-                              if (endRe.indexIn(line) > -1)
-                                    depth--;
+                        else if (line.contains(closeTag)) {
+                              return;
                               }
 
-                        if (depth < 0)
-                              return;
                         arrLine = dev.readLine();
                         }
                   });
@@ -1538,7 +1528,7 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
 
 static void readText206(XmlReader& e, TextBase* t, Element* be)
       {
-      readTextPropertyStyle206(e, t, be);
+      readTextPropertyStyle206(e, t, be, e.name());
       while (e.readNextStartElement()) {
             if (!readTextProperties206(e, t, be))
                   e.unknown();
@@ -1551,7 +1541,7 @@ static void readText206(XmlReader& e, TextBase* t, Element* be)
 
 static void readTempoText(TempoText* t, XmlReader& e)
       {
-      readTextPropertyStyle206(e, t, t);
+      readTextPropertyStyle206(e, t, t, e.name());
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "tempo")
@@ -1576,7 +1566,7 @@ static void readTempoText(TempoText* t, XmlReader& e)
 
 static void readMarker(Marker* m, XmlReader& e)
       {
-      readTextPropertyStyle206(e, m, m);
+      readTextPropertyStyle206(e, m, m, e.name());
       Marker::Type mt = Marker::Type::SEGNO;
 
       while (e.readNextStartElement()) {
@@ -1598,7 +1588,7 @@ static void readMarker(Marker* m, XmlReader& e)
 
 static void readDynamic(Dynamic* d, XmlReader& e)
       {
-      readTextPropertyStyle206(e, d, d);
+      readTextPropertyStyle206(e, d, d, e.name());
       while (e.readNextStartElement()) {
             const QStringRef& tag = e.name();
             if (tag == "subtype")
