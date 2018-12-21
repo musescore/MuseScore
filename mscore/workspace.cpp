@@ -40,6 +40,8 @@ QList<Workspace*> Workspace::_workspaces {};
 QList<QPair<QAction*, QString>> Workspace::actionToStringList {};
 QList<QPair<QMenu*  , QString>> Workspace::menuToStringList   {};
 
+const char* Workspace::advancedWorkspaceTranslatableName{ QT_TRANSLATE_NOOP("Ms::Workspace", "Advanced") };
+const char* Workspace::basicWorkspaceTranslatableName{ QT_TRANSLATE_NOOP("Ms::Workspace", "Basic") };
 
 //---------------------------------------------------------
 //   undoWorkspace
@@ -208,12 +210,6 @@ void Workspace::initWorkspace()
       Q_ASSERT(!Workspace::workspaces().empty());
       if (currentWorkspace == 0)
             currentWorkspace = Workspace::workspaces().at(0);
-      
-      //dummy strings for the translations
-      QString advancedWorkspaceName = tr("Advanced");
-      QString basicWorkspaceName = tr("Basic");
-      Q_UNUSED(advancedWorkspaceName);
-      Q_UNUSED(basicWorkspaceName);
       }
 
 //---------------------------------------------------------
@@ -995,7 +991,7 @@ QList<Workspace*>& Workspace::workspaces()
                   }
             // hack
             for (int i = 0; i < _workspaces.size(); i++) {
-                  if (_workspaces[i]->translatableName() == "Basic") {
+                  if (_workspaces[i]->translatableName() == basicWorkspaceTranslatableName) {
                         _workspaces.move(i, 0);
                         break;
                         }
