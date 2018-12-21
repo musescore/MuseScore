@@ -358,6 +358,7 @@ void Inspector::update(Score* s)
                               break;
                         }
                   }
+            connect(ie, &InspectorBase::elementChanged, this, QOverload<>::of(&Inspector::update), Qt::QueuedConnection);
             sa->setWidget(ie);      // will destroy previous set widget
 
             //focus policies were set by hand in each inspector_*.ui. this code just helps keeping them like they are
