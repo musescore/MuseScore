@@ -125,7 +125,7 @@
 #elif defined(MAC_SPARKLE_ENABLED)
 #include "sparkle/sparkleAutoUpdater.h"
 #endif
- 
+
 #ifdef USE_LAME
 #include "exportmp3.h"
 #endif
@@ -175,7 +175,7 @@ bool ignoreWarnings = false;
 bool exportScoreMedia = false;
 bool exportScoreMp3 = false;
 bool exportScorePartsPdf = false;
-      
+
 QString mscoreGlobalShare;
 
 static QString outFileName;
@@ -1631,13 +1631,13 @@ MuseScore::MuseScore()
       for (auto i : { "voice-x12", "voice-x13", "voice-x14", "voice-x23", "voice-x24", "voice-x34" })
             menuVoices->addAction(getAction(i));
       menuTools->addMenu(menuVoices);
-      
+
       menuMeasure = new QMenu("");
       for (auto i : { "split-measure", "join-measures" })
             menuMeasure->addAction(getAction(i));
       menuTools->addMenu(menuMeasure);
       menuTools->addAction(getAction("time-delete"));
-      
+
       menuTools->addSeparator();
 
       menuTools->addAction(getAction("slash-fill"));
@@ -1869,7 +1869,8 @@ MuseScore::MuseScore()
       connect(im, SIGNAL(anchorRectangleChanged()), SLOT(inputMethodAnchorRectangleChanged()));
       connect(im, SIGNAL(animatingChanged()), SLOT(inputMethodAnimatingChanged()));
       connect(im, SIGNAL(cursorRectangleChanged()), SLOT(inputMethodCursorRectangleChanged()));
-      connect(im, SIGNAL(inputDirectionChanged(Qt::LayoutDirection newDirection)), SLOT(inputMethodInputDirectionChanged(Qt::LayoutDirection newDirection)));
+//signal does not exist:
+//      connect(im, SIGNAL(inputDirectionChanged(Qt::LayoutDirection newDirection)), SLOT(inputMethodInputDirectionChanged(Qt::LayoutDirection newDirection)));
       connect(im, SIGNAL(inputItemClipRectangleChanged()), SLOT(inputMethodInputItemClipRectangleChanged()));
       connect(im, SIGNAL(keyboardRectangleChanged()), SLOT(inputMethodKeyboardRectangleChanged()));
       connect(im, SIGNAL(localeChanged()), SLOT(inputMethodLocaleChanged()));
@@ -1889,7 +1890,7 @@ MuseScore::MuseScore()
 #endif
       connect(this, SIGNAL(musescoreWindowWasShown()), this, SLOT(checkForUpdates()),
             Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
-      
+
       if (!converterMode && !pluginMode)
             _loginManager = new LoginManager(getAction(saveOnlineMenuItem), this);
       }
@@ -3468,7 +3469,7 @@ static bool processNonGui(const QStringList& argv)
             return mscore->exportMp3AsJSON(argv[0]);
       else if (exportScorePartsPdf)
             return mscore->exportPartsPdfsToJSON(argv[0]);
-      
+
       if (pluginMode) {
             loadScores(argv);
             QString pn(pluginName);
@@ -3814,8 +3815,8 @@ void MuseScore::clipboardChanged()
 
 void MuseScore::inputMethodAnchorRectangleChanged()
       {
-      QRectF r =  QGuiApplication::inputMethod()->anchorRectangle();
-      qDebug("inputMethod AnchorRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+//      QRectF r =  QGuiApplication::inputMethod()->anchorRectangle();
+//      qDebug("inputMethod AnchorRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
       }
 
 //---------------------------------------------------------
@@ -3824,7 +3825,7 @@ void MuseScore::inputMethodAnchorRectangleChanged()
 
 void MuseScore::inputMethodAnimatingChanged()
       {
-      qDebug("inputMethod Animating Changed: %d", QGuiApplication::inputMethod()->isAnimating());
+//      qDebug("inputMethod Animating Changed: %d", QGuiApplication::inputMethod()->isAnimating());
       }
 
 //---------------------------------------------------------
@@ -3833,17 +3834,17 @@ void MuseScore::inputMethodAnimatingChanged()
 
 void MuseScore::inputMethodCursorRectangleChanged()
       {
-      QRectF r =  QGuiApplication::inputMethod()->cursorRectangle();
-      qDebug("inputMethod CursorRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+//      QRectF r =  QGuiApplication::inputMethod()->cursorRectangle();
+//      qDebug("inputMethod CursorRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
       }
 
 //---------------------------------------------------------
 //   inputMethodInputDirectionChanged
 //---------------------------------------------------------
 
-void MuseScore::inputMethodInputDirectionChanged(Qt::LayoutDirection newDirection)
+void MuseScore::inputMethodInputDirectionChanged(Qt::LayoutDirection /*newDirection*/)
       {
-      qDebug("inputMethod InputDirection Changed: (QLocale::LayoutDirection enum) #%d", newDirection);
+//      qDebug("inputMethod InputDirection Changed: (QLocale::LayoutDirection enum) #%d", newDirection);
       }
 
 //---------------------------------------------------------
@@ -3852,8 +3853,8 @@ void MuseScore::inputMethodInputDirectionChanged(Qt::LayoutDirection newDirectio
 
 void MuseScore::inputMethodInputItemClipRectangleChanged()
       {
-      QRectF r =  QGuiApplication::inputMethod()->inputItemClipRectangle();
-      qDebug("inputMethod InputItemClipRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+//      QRectF r =  QGuiApplication::inputMethod()->inputItemClipRectangle();
+//      qDebug("inputMethod InputItemClipRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
       }
 
 //---------------------------------------------------------
@@ -3862,8 +3863,8 @@ void MuseScore::inputMethodInputItemClipRectangleChanged()
 
 void MuseScore::inputMethodKeyboardRectangleChanged()
       {
-      QRectF r =  QGuiApplication::inputMethod()->keyboardRectangle();
-      qDebug("inputMethod KeyboardRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
+//      QRectF r =  QGuiApplication::inputMethod()->keyboardRectangle();
+//      qDebug("inputMethod KeyboardRectangle Changed: (%f, %f) + (%f, %f)", r.x(), r.y(), r.width(), r.height());
       }
 
 //---------------------------------------------------------
@@ -3872,7 +3873,7 @@ void MuseScore::inputMethodKeyboardRectangleChanged()
 
 void MuseScore::inputMethodLocaleChanged()
       {
-      qDebug("inputMethod Locale Changed: (QLocale::Script enum) #%d.", QGuiApplication::inputMethod()->locale().script());
+//      qDebug("inputMethod Locale Changed: (QLocale::Script enum) #%d.", QGuiApplication::inputMethod()->locale().script());
       }
 
 //---------------------------------------------------------
@@ -3881,7 +3882,7 @@ void MuseScore::inputMethodLocaleChanged()
 
 void MuseScore::inputMethodVisibleChanged()
       {
-      qDebug("inputMethodVisibleChanged: %d", QGuiApplication::inputMethod()->isVisible());
+//      qDebug("inputMethodVisibleChanged: %d", QGuiApplication::inputMethod()->isVisible());
       }
 
 //---------------------------------------------------------
@@ -7071,7 +7072,7 @@ int main(int argc, char* av[])
             MScore::noGui = true;
             converterMode = true;
             }
-      
+
       if (parser.isSet("score-mp3")) {
             exportScoreMp3 = true;
             MScore::noGui = true;
@@ -7083,7 +7084,7 @@ int main(int argc, char* av[])
             MScore::noGui = true;
             converterMode = true;
             }
-      
+
       if (parser.isSet("raw-diff")) {
             MScore::noGui = true;
             rawDiffMode = true;
@@ -7461,13 +7462,13 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       MasterScore* score = mscore->readScore(inFilePath);
       if (!score)
             return false;
-      
+
       QString outPath = QFileInfo(inFilePath).path() + "/";
-      
+
       QJsonObject jsonForPdfs;
       QString outName = outPath + QFileInfo(inFilePath).baseName() + ".pdf";
       jsonForPdfs["score"] = outName;
-      
+
       //save score pdf
       if (!styleFile.isEmpty()) {
             QFile f(styleFile);
@@ -7475,9 +7476,9 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
                   score->style().load(&f);
       }
       score->switchToPageMode();
-      
+
       jsonForPdfs["scoreBin"] = mscore->exportPdfAsJSON(score);
-      
+
       //save extended score+parts and separate parts pdfs
       //if no parts, generate parts from existing instruments
       if (score->excerpts().size() == 0) {
@@ -7491,7 +7492,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
                   excerptCmdFake->redo(nullptr);
             }
       }
-      
+
       QList<Score*> scores;
       scores.append(score);
       QJsonArray partsArray;
@@ -7505,9 +7506,9 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       }
       jsonForPdfs["parts"] = partsNamesArray;
       jsonForPdfs["partsBin"] = partsArray;
-      
+
       jsonForPdfs["scoreFullPostfix"] = QString("-Score_and_parts") + ".pdf";
-      
+
       QString tempFileName = outPath + "tempPdf.pdf";
       bool res = mscore->savePdf(scores, tempFileName);
       QFile tempPdf(tempFileName);
@@ -7515,7 +7516,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       QByteArray fullScoreData = tempPdf.readAll();
       tempPdf.remove();
       jsonForPdfs["scoreFullBin"] = QString::fromLatin1(fullScoreData.toBase64());
-      
+
       QJsonDocument jsonDoc(jsonForPdfs);
       const QString& jsonPath{outFilePath};
       QFile file(jsonPath);
@@ -7524,7 +7525,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
             file.write(jsonDoc.toJson(QJsonDocument::Compact));
             file.close();
       }
-      
+
       delete score;
       return res;
       }
