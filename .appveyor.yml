@@ -9,6 +9,7 @@ image: Visual Studio 2017
 branches:
   only:
   - master
+  - 3.0rc
 
 # build cache to preserve files/folders between builds
 cache:
@@ -71,14 +72,14 @@ deploy:
     artifact: update_win_nightly.xml
 
 # uncomment in stable release
-#  - provider: S3
-#    access_key_id:
-#      secure: k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
-#    secret_access_key:
-#      secure: IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
-#    bucket: sparkle.musescore.org
-#    folder: testing/3/win/
-#    region: us-east-1
-#    set_public: true
-#    artifact: appcast.xml
+  - provider: S3
+    access_key_id:
+      secure: k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
+    secret_access_key:
+      secure: IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
+    bucket: sparkle.musescore.org
+    folder: testing/3/prebuild/win/
+    region: us-east-1
+    set_public: true
+    artifact: appcast.xml
 
