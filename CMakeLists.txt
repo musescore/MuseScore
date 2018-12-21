@@ -831,6 +831,8 @@ add_custom_target(lupdate
    COMMAND Qt5::lupdate ${PROJECT_BINARY_DIR}/mscore.pro
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-instruments-projectfile ${PROJECT_SOURCE_DIR}/share/instruments > instruments.pro
    COMMAND Qt5::lupdate ${PROJECT_BINARY_DIR}/instruments.pro
+   COMMAND ${PROJECT_SOURCE_DIR}/build/gen-tours-projectfile ${PROJECT_SOURCE_DIR}/share/tours > tours.pro
+   COMMAND Qt5::lupdate ${PROJECT_BINARY_DIR}/tours.pro
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 
@@ -842,6 +844,9 @@ file(GLOB INSTRUMENTS_TS_FILES
 file(GLOB MSCORE_TS_FILES
    "share/locale/mscore*.ts"
 )
+file(GLOB TOURS_TS_FILES
+   "share/locale/tours*.ts"
+)
 file(GLOB QT_TS_FILES
    "share/locale/qt*.ts"
 )
@@ -849,6 +854,7 @@ file(GLOB QT_TS_FILES
 add_custom_target(lrelease
    COMMAND Qt5::lrelease ${INSTRUMENTS_TS_FILES}
    COMMAND Qt5::lrelease ${MSCORE_TS_FILES}
+   COMMAND Qt5::lrelease ${TOURS_TS_FILES}
    COMMAND Qt5::lrelease ${QT_TS_FILES}
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
 )
