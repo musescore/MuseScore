@@ -448,11 +448,11 @@ void FretDiagram::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "strings")
-                  _strings = e.readInt();
+                  readProperty(e, Pid::FRET_STRINGS);
             else if (tag == "frets")
-                  _frets = e.readInt();
+                  readProperty(e, Pid::FRET_FRETS);
             else if (tag == "fretOffset")
-                  _fretOffset = e.readInt();
+                  readProperty(e, Pid::FRET_OFFSET);
             else if (tag == "string") {
                   int no = e.intAttribute("no");
                   while (e.readNextStartElement()) {
@@ -468,9 +468,9 @@ void FretDiagram::read(XmlReader& e)
                         }
                   }
             else if (tag == "barre")
-                  setBarre(e.readInt());
+                  readProperty(e, Pid::FRET_BARRE);
             else if (tag == "mag")
-                  _userMag = e.readDouble(0.1, 10.0);
+                  readProperty(e, Pid::MAG);
             else if (tag == "Harmony") {
                   Harmony* h = new Harmony(score());
                   h->read(e);
