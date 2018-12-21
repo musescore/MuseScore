@@ -1571,6 +1571,29 @@ void ChangeMStaffProperties::flip(EditData*)
       }
 
 //---------------------------------------------------------
+//   getCourtesyClefs
+//    remember clefs at the end of previous measure
+//---------------------------------------------------------
+
+std::vector<Clef*> InsertRemoveMeasures::getCourtesyClefs(Measure* m)
+      {
+      Score* score = m->score();
+      std::vector<Clef*> startClefs;
+      if (m->prev() && m->prev()->isMeasure()) {
+            Measure* prevMeasure = toMeasure(m->prev());
+            const Segment* clefSeg = prevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, prevMeasure->ticks());
+            if (clefSeg) {
+                  for (int st = 0; st < score->nstaves(); ++st) {
+                        Element* clef = clefSeg->element(staff2track(st));
+                        if (clef->isClef())
+                              startClefs.push_back(toClef(clef));
+                        }
+                  }
+            }
+      return startClefs;
+      }
+
+//---------------------------------------------------------
 //   insertMeasures
 //---------------------------------------------------------
 
@@ -1578,6 +1601,7 @@ void InsertRemoveMeasures::insertMeasures()
       {
       Score* score = fm->score();
       QList<Clef*> clefs;
+      std::vector<Clef*> prevMeasureClefs;
       QList<KeySig*> keys;
       Segment* fs = 0;
       Segment* ls = 0;
@@ -1586,7 +1610,7 @@ void InsertRemoveMeasures::insertMeasures()
             fs = toMeasure(fm)->first();
             ls = toMeasure(lm)->last();
             for (Segment* s = fs; s && s != ls; s = s->next1()) {
-                  if (!s->enabled() || !(s->segmentType() & (SegmentType::Clef | SegmentType::KeySig)))
+                  if (!s->enabled() || !(s->segmentType() & (SegmentType::Clef | SegmentType::HeaderClef | SegmentType::KeySig)))
                         continue;
                   for (int track = 0; track < score->ntracks(); track += VOICES) {
                         Element* e = s->element(track);
@@ -1598,6 +1622,7 @@ void InsertRemoveMeasures::insertMeasures()
                               keys.append(toKeySig(e));
                         }
                   }
+            prevMeasureClefs = getCourtesyClefs(toMeasure(fm));
             }
       score->measures()->insert(fm, lm);
 
@@ -1613,6 +1638,8 @@ void InsertRemoveMeasures::insertMeasures()
                               }
                         }
                   }
+            for (Clef* clef : prevMeasureClefs)
+                  clef->staff()->setClef(clef);
             for (Clef* clef : clefs)
                   clef->staff()->setClef(clef);
             for (KeySig* key : keys)
@@ -1693,8 +1720,18 @@ void InsertRemoveMeasures::removeMeasures()
                               }
                         }
                   }
+
+            // remember clefs at the end of previous measure
+            const auto clefs = getCourtesyClefs(toMeasure(fm));
+
             if (score->firstMeasure())
                   score->insertTime(tick1, -(tick2 - tick1));
+
+            // Restore clefs that were backed up. Events for them could be lost
+            // as a result of the recent insertTime() call.
+            for (Clef* clef : clefs)
+                  clef->staff()->setClef(clef);
+
             for (Spanner* sp : score->unmanagedSpanners()) {
                   if ((sp->tick() >= tick1 && sp->tick() < tick2) || (sp->tick2() >= tick1 && sp->tick2() < tick2))
                         sp->removeUnmanaged();
