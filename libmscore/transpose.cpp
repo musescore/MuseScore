@@ -390,6 +390,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             s1 = s1->measure()->first();
       Segment* s2 = _selection.endSegment();
       for (Segment* segment = s1; segment && segment != s2; segment = segment->next1()) {
+            if (!segment->enabled())
+                  continue;
             for (int track : tracks) {
                   if (staff(track/VOICES)->staffType(s1->tick())->group() == StaffGroup::PERCUSSION)
                         continue;
@@ -503,7 +505,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
 
             bool createKey = tickStart == 0;
             for (Segment* s = firstSegment(SegmentType::KeySig); s; s = s->next1(SegmentType::KeySig)) {
-                  if (s->tick() < tickStart)
+                  if (!s->enabled() || s->tick() < tickStart)
                         continue;
                   if (tickEnd != -1 && s->tick() >= tickEnd)
                         break;
@@ -513,7 +515,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, int tickStart, int tickE
                               segmentInterval.flip();
                         }
                   KeySig* ks = toKeySig(s->element(staffIdx * VOICES));
-                  if (!ks || (ks->generated() && ks->segment()->rtick() > 0))
+                  if (!ks || ks->generated())
                         continue;
                   if (s->tick() == 0)
                         createKey = false;
