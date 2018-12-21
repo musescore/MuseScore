@@ -43,6 +43,10 @@ class PianoLevels : public QWidget
 {
       Q_OBJECT
 
+      enum DragStyle {
+            LERP, OFFSET
+            };
+
       Score* _score;
       int _xpos;
       qreal _xZoom;
@@ -54,11 +58,15 @@ class PianoLevels : public QWidget
       int _levelsIndex;
       int vMargin;
       int levelLen;
+      int pickRadius = 4;
 
       bool mouseDown;
       QPointF mouseDownPos;
       QPointF lastMousePos;
-      int dragging;
+      int dragging = false;
+      DragStyle dragStyle = DragStyle::OFFSET;
+      Note* singleNoteDrag = nullptr;
+      NoteEvent* singleNoteEventDrag = nullptr;
 
       int minBeatGap;
 
@@ -79,7 +87,10 @@ class PianoLevels : public QWidget
       void addChord(Chord* chord, int voice);
       void clearNoteData();
 
-      void adjustLevel(int tick0, int value0, int tick1, int value1, bool selectedOnly = true);
+      bool pickNoteEvent(int x, int y, bool selectedOnly,
+                         Note*& pickedNote, NoteEvent*& pickedNoteEvent);
+      void adjustLevelLerp(int tick0, int value0, int tick1, int value1, bool selectedOnly = true);
+      void adjustLevel(Note* note, NoteEvent* noteEvt, int value);
 
 signals:
       void posChanged(const Pos&);
