@@ -155,6 +155,7 @@ std::vector<MScoreError> MScore::errorList {
       { NO_MIME,                         "p6", TR("Nothing to paste")                                                      },
       { DEST_NO_CR,                      "p7", TR("Destination is not a chord or rest")                                    },
       { CANNOT_CHANGE_LOCAL_TIMESIG,     "l1", TR("Cannot change local time signature:\nMeasure is not empty")             },
+      { CANNOT_INSERT_START_OF_MMREST,   "m3", TR("Cannot do timewise insert into a multi-measure rest:\nPlease untoggle multi-measure rests and retry") },
       };
 #undef TR
 

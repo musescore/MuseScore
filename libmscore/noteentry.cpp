@@ -530,6 +530,14 @@ void Score::insertChord(const Position& pos)
       if (!el || !(el->isNote() || el->isRest()))
             return;
       Segment* seg = pos.segment;
+
+      // Don't insert if in a multi-measure rest.  TODO: actually allow this case
+      Measure* m = seg->measure();
+      if (m->isMMRest()) {
+            MScore::setError(CANNOT_INSERT_START_OF_MMREST);
+            return;
+            }
+
       if (seg->splitsTuplet()) {
             MScore::setError(CANNOT_INSERT_TUPLET);
             return;
@@ -576,7 +584,7 @@ void Score::localInsertChord(const Position& pos)
 
       for (int track = 0; track < msTracks; ++track) {
             // Insert rest only if there is no full-measure rest here.
-            Element* maybeRest = msMeasure->findFirst(SegmentType::ChordRest, /* rel. tick */ 0)->element(track);
+            Element* maybeRest = msMeasure->first(SegmentType::ChordRest)->element(track);
             if (maybeRest && maybeRest->isRest() && toRest(maybeRest)->durationType().isMeasure())
                   toRest(maybeRest)->undoChangeProperty(Pid::DURATION, targetMeasureLen);
             else if (msMeasure->hasVoice(track))

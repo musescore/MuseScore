@@ -275,6 +275,7 @@ enum MsError {
       NO_MIME,
       DEST_NO_CR,
       CANNOT_CHANGE_LOCAL_TIMESIG,
+      CANNOT_INSERT_START_OF_MMREST,
       };
 
 struct MScoreError {
