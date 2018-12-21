@@ -208,6 +208,12 @@ void Workspace::initWorkspace()
       Q_ASSERT(!Workspace::workspaces().empty());
       if (currentWorkspace == 0)
             currentWorkspace = Workspace::workspaces().at(0);
+      
+      //dummy strings for the translations
+      QString advancedWorkspaceName = tr("Advanced");
+      QString basicWorkspaceName = tr("Basic");
+      Q_UNUSED(advancedWorkspaceName);
+      Q_UNUSED(basicWorkspaceName);
       }
 
 //---------------------------------------------------------
