@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="navigate-tour">
+  <Shortcut>page-top</Shortcut>
+  <Shortcut>page-end</Shortcut>
+  <Shortcut>page-prev</Shortcut>
+  <Shortcut>page-next</Shortcut>
+  <Shortcut>toggle-navigator</Shortcut>
+  <Message>
+    <Text>MuseScore provides many ways to navigate through your score.
+    Click "Next" to learn more.</Text>
+    </Message>
+  <Message>
+    <Text>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
+    To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
+    to move between pages.
+    Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>You can move the score short distances by clicking an empty area of the page and dragging.
+    By the way, you can also select regions by holding Shift while dragging.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</Text>
+    <Widget>Timeline</Widget>
+    <Widget>Navigator</Widget>
+    </Message>
+  </Tour>
