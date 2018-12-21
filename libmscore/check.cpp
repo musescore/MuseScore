@@ -358,7 +358,7 @@ void Measure::checkMeasure(int staffIdx)
             Fraction expectedPos = 0;
             Fraction currentPos  = 0;
 
-            printf("Check measure==\n");
+//            printf("Check measure==\n");
             for (Segment* seg = first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
                   Element* e = seg->element(track);
                   if (!e)
@@ -366,8 +366,8 @@ void Measure::checkMeasure(int staffIdx)
 
                   ChordRest* cr = toChordRest(e);
                   currentPos    = seg->rfrac() * stretch;
-                  printf("   %d/%d  ", seg->rfrac().numerator(), seg->rfrac().denominator());
-                  fflush(stdout);
+//                  printf("   %d/%d  ", seg->rfrac().numerator(), seg->rfrac().denominator());
+//                  fflush(stdout);
 
                   if (currentPos < expectedPos)
                         qDebug("overlap measure %6d at %d-%d track %d", tick(), (currentPos/stretch).ticks(), (expectedPos/stretch).ticks(), track);
@@ -380,7 +380,7 @@ void Measure::checkMeasure(int staffIdx)
                         seg = skipTuplet(tuplet);
                         de  = tuplet;
                         }
-                  printf("   + %d/%d\n", de->duration().numerator(), de->duration().denominator());
+//                  printf("   + %d/%d\n", de->duration().numerator(), de->duration().denominator());
                   expectedPos = currentPos + de->duration();
                   }
             if (f > expectedPos) {
