@@ -384,7 +384,8 @@ void InspectorBase::valueChanged(int idx, bool reset)
       const InspectorItem& ii = iList[idx];
       Pid id       = ii.t;
       QVariant val2 = getValue(ii);                   // get new value from UI
-      Score* score  = inspector->element()->score();
+      Element* iElement = inspector->element();
+      Score* score  = iElement->score();
 
       score->startCmd();
       for (Element* e : *inspector->el()) {
@@ -413,6 +414,14 @@ void InspectorBase::valueChanged(int idx, bool reset)
       checkDifferentValues(ii);
       score->endCmd();
       inspector->setInspectorEdit(false);
+
+      if (iElement != inspector->element()) {
+            // Something changed in selection as a result of value change.
+            recursion = false;
+            emit elementChanged();
+            return;
+            }
+
       postInit();
 
       // a subStyle change may change several other values:
