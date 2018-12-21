@@ -390,6 +390,8 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             s1 = s1->measure()->first();
       Segment* s2 = _selection.endSegment();
       for (Segment* segment = s1; segment && segment != s2; segment = segment->next1()) {
+            if (!segment->enabled())
+                  continue;
             for (int track : tracks) {
                   if (staff(track/VOICES)->staffType(s1->tick())->group() == StaffGroup::PERCUSSION)
                         continue;
