@@ -52,16 +52,19 @@ InspectorGroupElement::InspectorGroupElement(QWidget* parent)
       notes = new QToolButton(this);
       notes->setText(tr("Notes"));
       notes->setEnabled(true);
+      notes->setObjectName("notes");
       hbox->addWidget(notes);
 
       graceNotes = new QToolButton(this);
       graceNotes->setText(tr("Grace Notes"));
       graceNotes->setEnabled(true);
+      graceNotes->setObjectName("graceNotes");
       hbox->addWidget(graceNotes);
 
       rests = new QToolButton(this);
       rests->setText(tr("Rests"));
       rests->setEnabled(true);
+      rests->setObjectName("rests");
       hbox->addWidget(rests);
 
       _layout->addLayout(hbox);
