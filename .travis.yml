@@ -145,3 +145,5 @@ notifications:
   webhooks:
     # trigger Buildtime Trend Service to parse Travis CI log
     - https://buildtimetrend.herokuapp.com/travis
+    # telegram webhooks
+    - http://jamespi.hopto.org/testwebhooks/travishooks.php
