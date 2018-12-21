@@ -2262,6 +2262,8 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                   // hack - needed because tick tags are unreliable in 1.3 scores
                   // for symbols attached to anything but a measure
                   el->setTrack(e.track());
+                  if (el->isFermata())
+                        el->setPlacement(el->track() & 1 ? Placement::BELOW : Placement::ABOVE);
                   el->read(e);
                   segment = getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);

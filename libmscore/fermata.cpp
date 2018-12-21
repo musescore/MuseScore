@@ -309,7 +309,7 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::PLACEMENT:
-                  return int(Placement::ABOVE);
+                  return int(track() & 1 ? Placement::BELOW : Placement::ABOVE);
             case Pid::TIME_STRETCH:
                   return 1.0; // articulationList[int(articulationType())].timeStretch;
             case Pid::PLAY:
