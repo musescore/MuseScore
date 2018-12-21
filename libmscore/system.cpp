@@ -92,6 +92,10 @@ System::~System()
 
 void System::clear()
       {
+      for (MeasureBase* mb : measures()) {
+            if (mb->system() == this)
+                  mb->setSystem(nullptr);
+            }
       ml.clear();
       for (SpannerSegment* ss : _spannerSegments) {
             if (ss->system() == this)
@@ -109,6 +113,31 @@ void System::appendMeasure(MeasureBase* mb)
       {
       mb->setSystem(this);
       ml.push_back(mb);
+      }
+
+//---------------------------------------------------------
+//   removeMeasure
+//---------------------------------------------------------
+
+void System::removeMeasure(MeasureBase* mb)
+      {
+      ml.erase(std::remove(ml.begin(), ml.end(), mb), ml.end());
+      if (mb->system() == this)
+            mb->setSystem(nullptr);
+      }
+
+//---------------------------------------------------------
+//   removeLastMeasure
+//---------------------------------------------------------
+
+void System::removeLastMeasure()
+      {
+      if (ml.empty())
+            return;
+      MeasureBase* mb = ml.back();
+      ml.pop_back();
+      if (mb->system() == this)
+            mb->setSystem(nullptr);
       }
 
 //---------------------------------------------------------

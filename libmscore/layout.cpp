@@ -3082,8 +3082,8 @@ System* Score::collectSystem(LayoutContext& lc)
                   if (lc.prevMeasure->noBreak() && system->measures().size() > 2) {
                         // remove last two measures
                         // TODO: check more measures for noBreak()
-                        system->measures().pop_back();
-                        system->measures().pop_back();
+                        system->removeLastMeasure();
+                        system->removeLastMeasure();
                         lc.curMeasure->setSystem(oldSystem);
                         lc.prevMeasure->setSystem(oldSystem);
                         lc.nextMeasure = lc.curMeasure;
@@ -3093,7 +3093,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   else if (!lc.prevMeasure->noBreak()) {
                         // remove last measure
-                        system->measures().pop_back();
+                        system->removeLastMeasure();
                         lc.curMeasure->setSystem(oldSystem);
                         break;
                         }

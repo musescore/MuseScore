@@ -148,7 +148,7 @@ void Clef::layout()
 
             Measure* meas = clefSeg->measure();
             if (meas && meas->system() && !score()->lineMode()) {
-                  auto ml = meas->system()->measures();
+                  const auto& ml = meas->system()->measures();
                   bool found = (std::find(ml.begin(), ml.end(), meas) != ml.end());
                   bool courtesy = (tick == meas->endTick() && (meas == meas->system()->lastMeasure() || !found));
                   if (courtesy && (!showCourtesy() || !score()->styleB(Sid::genCourtesyClef) || meas->isFinalMeasureOfSection()))
