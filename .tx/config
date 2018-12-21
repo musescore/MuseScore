@@ -14,4 +14,11 @@ source_file = share/locale/instruments_en_US.ts
 source_lang = en_US
 type = QT
 
+[musescore.tours]
+file_filter = share/locale/tours_<lang>.ts
+source_file = share/locale/tours_en_US.ts
+source_lang = en_US
+type = QT
+
+
 
