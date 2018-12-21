@@ -114,6 +114,7 @@ void ViewRect::paintEvent(QPaintEvent* ev)
 Navigator::Navigator(NScrollArea* sa, QWidget* parent)
   : QWidget(parent)
       {
+      setObjectName("Navigator");
       setAttribute(Qt::WA_NoBackground);
       _score         = 0;
       scrollArea     = sa;
