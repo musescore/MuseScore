@@ -705,6 +705,8 @@ class InsertRemoveMeasures : public UndoCommand {
       MeasureBase* fm;
       MeasureBase* lm;
 
+      static std::vector<Clef*> getCourtesyClefs(Measure* m);
+
    protected:
       void removeMeasures();
       void insertMeasures();

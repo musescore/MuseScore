@@ -1791,6 +1791,27 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                   }
             }
 
+      Segment* clefSeg = lm->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, lm->ticks());
+      if (clefSeg) {
+            Segment* mmrClefSeg = mmr->undoGetSegment(clefSeg->segmentType(), lm->endTick());
+            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                  const int track = staff2track(staffIdx);
+                  Element* e = clefSeg->element(track);
+                  if (e && e->isClef()) {
+                        Clef* clef = toClef(e);
+                        if (!mmrClefSeg->element(track)) {
+                              Clef* mmrClef = clef->clone();
+                              mmrClef->setParent(mmrClefSeg);
+                              undoAddElement(mmrClef);
+                              }
+                        else {
+                              Clef* mmrClef = toClef(mmrClefSeg->element(track));
+                              mmrClef->setClefType(clef->clefType());
+                              }
+                        }
+                  }
+            }
+
       mmr->setRepeatStart(m->repeatStart() || lm->repeatStart());
       mmr->setRepeatEnd(m->repeatEnd() || lm->repeatEnd());
 
