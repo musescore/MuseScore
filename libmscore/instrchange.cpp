@@ -92,7 +92,7 @@ void InstrumentChange::read(XmlReader& e)
             else if (!TextBase::readProperties(e))
                   e.unknown();
             }
-      if (score()->mscVersion() <= 206) {
+      if (score()->mscVersion() < 206) {
             // previous versions did not honor transposition of instrument change
             // except in ways that it should not have
             // notes entered before the instrument change was added would not be altered,
@@ -100,6 +100,8 @@ void InstrumentChange::read(XmlReader& e)
             // notes added afterwards would be transposed by both intervals, resulting in tpc corruption
             // here we set the instrument change to inherit the staff transposition to emulate previous versions
             // in Note::read(), we attempt to fix the tpc corruption
+            // There is also code in read206 to try to deal with this, but it is out of date and therefore disabled
+            // What this means is, scores created in 2.1 or later should be fine, scores created in 2.0 maybe not so much
 
             Interval v = staff() ? staff()->part()->instrument()->transpose() : 0;
             _instrument->setTranspose(v);
