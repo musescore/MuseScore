@@ -2599,6 +2599,12 @@ void Score::getNextMeasure(LayoutContext& lc)
                   for (Element* e : segment.annotations()) {
                         if (e->isFermata())
                               stretch = qMax(stretch, toFermata(e)->timeStretch());
+                        else if (e->isTempoText()) {
+                              if (score()->isMaster()) {
+                                    TempoText* tt = toTempoText(e);
+                                    setTempo(tt->segment(), tt->tempo());
+                                    }
+                              }
                         }
                   if (stretch != 0.0 && stretch != 1.0) {
                         qreal otempo = tempomap()->tempo(segment.tick());
@@ -3630,12 +3636,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
 
       for (const Segment* s : sl) {
             for (Element* e : s->annotations()) {
-                  if (e->isTempoText()) {
-                        TempoText* tt = toTempoText(e);
-                        if (score()->isMaster())
-                              setTempo(tt->segment(), tt->tempo());
-                        tt->layout();
-                        }
+                  if (e->isTempoText())
+                        e->layout();
                   }
             }
 
