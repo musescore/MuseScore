@@ -17,6 +17,7 @@
 #include "libmscore/utils.h"
 #include "libmscore/undo.h"
 #include "libmscore/part.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -43,6 +44,8 @@ void ScoreView::startDrag()
 void ScoreView::doDragElement(QMouseEvent* ev)
       {
       QPointF delta = toLogical(ev->pos()) - editData.startMove;
+
+      TourHandler::startTour("autoplace-tour");
 
       QPointF pt(delta);
       if (qApp->keyboardModifiers() == Qt::ShiftModifier)

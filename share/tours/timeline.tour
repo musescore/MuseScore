@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Tour name="timeline-tour">
   <Message>
-    <Text>Welcome to the Timeline, where you can view a reduction of the score for easier navigation.
+    <Text>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
     Click "Next" to learn more.</Text>
     <Widget>Timeline</Widget>
     </Message>
   <Message>
-    <Text>Each box represents a measure of a specific instrument.
-    If it is highlighted, then there are notes in that measure.
-    The timeline also shows rehearsal marks, changes of tempo, key, or time signature, and other points of interest.
-    Boxes within the thin blue outline represent measures that are currently in view.
+    <Text>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
     You can click anywhere to jump to the corresponding location in your score.</Text>
+    <Widget>Timeline</Widget>
+    </Message>
+  <Message>
+    <Text>The section below contains a row for each instrument.
+    Each box within the row represents a measure for that instrument.
+    If the box is highlighted, then there are notes in that measure.
+    Boxes with a thin blue outline represent measures that are currently in view.</Text>
     <Widget>Timeline</Widget>
     </Message>
   </Tour>

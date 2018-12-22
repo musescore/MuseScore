@@ -16,6 +16,7 @@
 #include "seq.h"
 #include "texttools.h"
 #include "fotomode.h"
+#include "tourhandler.h"
 #include "libmscore/score.h"
 #include "libmscore/keysig.h"
 #include "libmscore/segment.h"
@@ -330,6 +331,7 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                         r.translate(0.0, -m->spatium());
                         }
                   if (r.contains(editData.startMove)) {
+                        //TourHandler::startTour("select-tour");
                         _score->select(m, st, staffIdx);
                         _score->setUpdateAll();
                         clickOffElement = false;
