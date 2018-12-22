@@ -725,6 +725,7 @@ bool GuitarPro4::read(QFile* fp)
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instrument();
             instr->setStringData(stringData);
+            instr->setSingleNoteDynamics(false);
             part->setPartName(name);
             part->setPlainLongName(name);
 
@@ -772,7 +773,6 @@ bool GuitarPro4::read(QFile* fp)
             ch->setReverb(channelDefaults[midiChannel].reverb);
             staff->part()->setMidiChannel(midiChannel, midiPort);
             // missing: phase, tremolo
-            ch->updateInitList();
             }
 
       slurs = new Slur*[staves];

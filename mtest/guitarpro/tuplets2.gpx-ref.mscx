@@ -43,6 +43,7 @@
         <instrumentId>pluck.guitar.nylon-string</instrumentId>
         <concertClef>G8vb</concertClef>
         <transposingClef>G</transposingClef>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
           <string>52</string>
@@ -785,6 +786,7 @@ solo concert</text>
           <instrumentId>pluck.guitar.nylon-string</instrumentId>
           <concertClef>G8vb</concertClef>
           <transposingClef>G</transposingClef>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>24</frets>
             <string>52</string>

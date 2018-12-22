@@ -110,6 +110,7 @@
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/synthesizergui.h"
 #include "synthesizer/msynthesizer.h"
+#include "synthesizer/event.h"
 #include "fluid/fluid.h"
 #include "plugin/qmlplugin.h"
 #include "accessibletoolbutton.h"
@@ -4440,6 +4441,12 @@ void MuseScore::play(Element* e, int pitch) const
                   tick = Fraction(0,1);
             Instrument* instr = masterNote->part()->instrument(tick);
             const int channel = instr->channel(masterNote->subchannel())->channel();
+
+            // reset the cc that is used for single note dynamics, if any
+            int cc = synthesizerState().ccToUse();
+            if (cc != -1)
+                  seq->sendEvent(NPlayEvent(ME_CONTROLLER, channel, cc, 80));
+
             seq->startNote(channel, pitch, 80, MScore::defaultPlayDuration, masterNote->tuning());
             }
       }
@@ -6553,7 +6560,7 @@ QMenu* MuseScore::createPopupMenu()
 //   synthesizerState
 //---------------------------------------------------------
 
-SynthesizerState MuseScore::synthesizerState()
+SynthesizerState MuseScore::synthesizerState() const
       {
       SynthesizerState state;
       return synti ? synti->state() : state;
@@ -6614,7 +6621,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
       return false;
 #else
       EventMap events;
-      score->renderMidi(&events);
+      score->renderMidi(&events, synthesizerState());
       if(events.size() == 0)
             return false;
 
@@ -6719,11 +6726,10 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
             //
             for (Part* part : score->parts()) {
                   const InstrumentList* il = part->instruments();
-                  for(auto i = il->begin(); i!= il->end(); i++) {
+                  for (auto i = il->begin(); i!= il->end(); i++) {
                         for (const Channel* channel : i->second->channel()) {
                               const Channel* a = score->masterScore()->playbackChannel(channel);
-                              a->updateInitList();
-                              for (MidiCoreEvent e : a->init) {
+                              for (MidiCoreEvent e : a->initList()) {
                                     if (e.type() == ME_INVALID)
                                           continue;
                                     e.setChannel(a->channel());

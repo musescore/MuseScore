@@ -268,7 +268,7 @@ void ExcerptsDialog::addButtonClicked()
 
       Excerpt* cur = ((ExcerptItem*)(excerptList->currentItem()))->excerpt();
 
-      foreach(QListWidgetItem* i, instrumentList->selectedItems()) {
+      for (QListWidgetItem* i : instrumentList->selectedItems()) {
             InstrumentItem* item = static_cast<InstrumentItem*>(i);
             const PartItem* it   = item->partItem();
             if (it == 0)

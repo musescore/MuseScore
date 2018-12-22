@@ -1099,6 +1099,7 @@ bool GuitarPro1::read(QFile* fp)
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instrument();
             instr->setStringData(stringData);
+            instr->setSingleNoteDynamics(false);
             }
 
       measures = readInt();
@@ -1565,6 +1566,7 @@ bool GuitarPro2::read(QFile* fp)
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instrument();
             instr->setStringData(stringData);
+            instr->setSingleNoteDynamics(false);
             part->setPartName(name);
             part->setPlainLongName(name);
             createTuningString(strings, &tuning2[0]);
@@ -1613,7 +1615,6 @@ bool GuitarPro2::read(QFile* fp)
             ch->setChorus(channelDefaults[midiChannel].chorus);
             ch->setReverb(channelDefaults[midiChannel].reverb);
             // missing: phase, tremolo
-            ch->updateInitList();
             }
 
       previousTempo = temp;
@@ -2258,6 +2259,7 @@ bool GuitarPro3::read(QFile* fp)
             Part* part = score->staff(i)->part();
             Instrument* instr = part->instrument();
             instr->setStringData(stringData);
+            instr->setSingleNoteDynamics(false);
             part->setPartName(name);
             part->setPlainLongName(name);
             createTuningString(strings, &tuning2[0]);
@@ -2305,7 +2307,6 @@ bool GuitarPro3::read(QFile* fp)
             ch->setChorus(channelDefaults[midiChannel].chorus);
             ch->setReverb(channelDefaults[midiChannel].reverb);
             // missing: phase, tremolo
-            ch->updateInitList();
             }
 
       previousTempo = temp;

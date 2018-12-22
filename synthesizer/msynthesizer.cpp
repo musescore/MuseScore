@@ -339,6 +339,12 @@ bool MasterSynthesizer::setState(const SynthesizerState& ss)
                               case 3:
                                     setMasterTuning(v.data.toDouble());
                                     break;
+                              case 4:
+                                    setDynamicsMethod(v.data.toInt());
+                                    break;
+                              case 5:
+                                    setCcToUseIndex(v.data.toInt());
+                                    break;
                               default:
                                     qDebug("MasterSynthesizer::setState: unknown master id <%d>", v.id);
                               }
@@ -376,6 +382,8 @@ SynthesizerState MasterSynthesizer::state() const
       g.push_back(IdValue(1, QString("%1").arg(_effect[1] ? _effect[1]->name() : "NoEffect")));
       g.push_back(IdValue(2, QString("%1").arg(gain())));
       g.push_back(IdValue(3, QString("%1").arg(masterTuning())));
+      g.push_back(IdValue(4, QString("%1").arg(dynamicsMethod())));
+      g.push_back(IdValue(5, QString("%1").arg(ccToUseIndex())));
       ss.push_back(g);
       for (Synthesizer* s : _synthesizer)
             ss.push_back(s->state());
@@ -426,5 +434,4 @@ void MasterSynthesizer::setMasterTuning(double val)
       for (Synthesizer* s : _synthesizer)
             s->setMasterTuning(_masterTuning);
       }
-}
-
+} // namespace Ms

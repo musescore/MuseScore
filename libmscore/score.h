@@ -27,6 +27,7 @@
 #include "spannermap.h"
 #include "layoutbreak.h"
 #include "property.h"
+#include "synthesizer/msynthesizer.h"
 
 namespace Ms {
 
@@ -95,6 +96,7 @@ enum class Key;
 enum class HairpinType : signed char;
 enum class SegmentType;
 enum class OttavaType : char;
+enum class DynamicsRenderMethod : signed char;
 
 extern bool showRubberBand;
 
@@ -515,7 +517,7 @@ class Score : public QObject, public ScoreElement {
       void resetTempo();
       void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
 
-      void renderStaff(EventMap* events, Staff*);
+      void renderStaff(EventMap* events, Staff*, DynamicsRenderMethod method, int cc);
       void renderSpanners(EventMap* events);
       void renderMetronome(EventMap* events, Measure* m, const Fraction& tickOffset);
       void updateVelo();
@@ -877,8 +879,8 @@ class Score : public QObject, public ScoreElement {
       bool pasteStaff(XmlReader&, Segment* dst, int staffIdx);
       void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
       void pasteSymbols(XmlReader& e, ChordRest* dst);
-      void renderMidi(EventMap* events);
-      void renderMidi(EventMap* events, bool metronome, bool expandRepeats);
+      void renderMidi(EventMap* events, const SynthesizerState& synthState);
+      void renderMidi(EventMap* events, bool metronome, bool expandRepeats, const SynthesizerState& synthState);
 
       BeatType tick2beatType(const Fraction& tick);
 
@@ -1311,6 +1313,8 @@ class MasterScore : public Score {
       int getNextFreeDrumMidiMapping();
       void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
       void updateChannel();
+      void updateExpressive(MasterSynthesizer* m);
+      void updateExpressive(MasterSynthesizer* m, bool expressive, bool force = false);
       void setSoloMute();
 
       void addExcerpt(Excerpt*);

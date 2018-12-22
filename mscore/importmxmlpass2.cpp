@@ -498,7 +498,6 @@ static void setStaffTypePercussion(Part* part, Drumset* drumset)
       // set drumset for instrument
       part->instrument()->setDrumset(drumset);
       part->instrument()->channel(0)->setBank(128);
-      part->instrument()->channel(0)->updateInitList();
       }
 
 //---------------------------------------------------------

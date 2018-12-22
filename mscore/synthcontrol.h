@@ -43,6 +43,9 @@ class SynthControl : public QWidget, Ui::SynthControl {
       virtual void keyPressEvent(QKeyEvent*) override;
       void updateGui();
       void readSettings();
+      void updateExpressivePatches();
+      void updateMixer();
+      void setAllUserBankController(bool val);
 
    private slots:
       void gainChanged(double, int);
@@ -54,6 +57,11 @@ class SynthControl : public QWidget, Ui::SynthControl {
       void saveButtonClicked();
       void storeButtonClicked();
       void recallButtonClicked();
+      void dynamicsMethodChanged(int);
+      void ccToUseChanged(int);
+      void switchExprButtonClicked();
+      void switchNonExprButtonClicked();
+      void resetExprButtonClicked();
       void setDirty();
 
    signals:

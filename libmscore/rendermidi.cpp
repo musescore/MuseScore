@@ -51,6 +51,7 @@
 #include "undo.h"
 #include "utils.h"
 #include "sym.h"
+#include "synthesizerstate.h"
 
 namespace Ms {
 
@@ -70,6 +71,12 @@ namespace Ms {
     //    }
     //    return 0;
     //}
+
+enum class DynamicsRenderMethod : signed char {
+      FIXED_MAX,
+      SEG_START,
+      SIMPLE
+      };
 
 bool graceNotesMerged(Chord *chord);
 
@@ -390,61 +397,18 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMa
       }
 
 //---------------------------------------------------------
-//   collectMeasureEvents
+//   collectProgramChanges
 //---------------------------------------------------------
 
-static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int tickOffset)
+static void collectProgramChanges(EventMap* events, Measure* m, Staff* staff, int tickOffset)
       {
       int firstStaffIdx = staff->idx();
       int nextStaffIdx  = firstStaffIdx + 1;
-
-      SegmentType st = SegmentType::ChordRest;
-      int strack = firstStaffIdx * VOICES;
-      int etrack = nextStaffIdx * VOICES;
-
-      for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-            int tick = seg->tick().ticks();
-            for (int track = strack; track < etrack; ++track) {
-                  // skip linked staves, except primary
-                  if (!m->score()->staff(track / VOICES)->primaryStaff()) {
-                        track += VOICES-1;
-                        continue;
-                        }
-                  Element* cr = seg->element(track);
-                  if (cr == 0 || cr->type() != ElementType::CHORD)
-                        continue;
-
-                  Chord* chord = toChord(cr);
-                  Staff* st1   = chord->staff();
-                  int staffIdx = st1->idx();
-                  int velocity = st1->velocities().velo(seg->tick().ticks());
-                  Instrument* instr = chord->part()->instrument(Fraction::fromTicks(tick));
-                  int channel = instr->channel(chord->upNote()->subchannel())->channel();
-                  events->registerChannel(channel);
-
-                  for (Articulation* a : chord->articulations())
-                        instr->updateVelocity(&velocity,channel, a->articulationName());
-
-                  if ( !graceNotesMerged(chord))
-                      for (Chord* c : chord->graceNotesBefore())
-                          for (const Note* note : c->notes())
-                              collectNote(events, channel, note, velocity, tickOffset, staffIdx);
-
-                  for (const Note* note : chord->notes())
-                        collectNote(events, channel, note, velocity, tickOffset, staffIdx);
-
-                  if ( !graceNotesMerged(chord))
-                      for (Chord* c : chord->graceNotesAfter())
-                          for (const Note* note : c->notes())
-                              collectNote(events, channel, note, velocity, tickOffset, staffIdx);
-                 }
-            }
 
       //
       // collect program changes and controller
       //
       for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-            // int tick = s->tick();
             for (Element* e : s->annotations()) {
                   if (!e->isStaffTextBase() || e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
                         continue;
@@ -482,6 +446,521 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         }
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   getControllerFromCC
+//---------------------------------------------------------
+
+static int getControllerFromCC(int cc)
+      {
+      int controller = -1;
+
+      switch (cc) {
+            case 1:
+                  controller = CTRL_MODULATION;
+                  break;
+            case 2:
+                  controller = CTRL_BREATH;
+                  break;
+            case 4:
+                  controller = CTRL_FOOT;
+                  break;
+            case 11:
+                  controller = CTRL_EXPRESSION;
+                  break;
+            default:
+                  break;
+            }
+
+      return controller;
+      }
+
+//---------------------------------------------------------
+//   collectMeasureEventsSimple
+//    the original, velocity-only method of collecting events.
+//---------------------------------------------------------
+
+static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staff, int tickOffset)
+      {
+      int firstStaffIdx = staff->idx();
+      int nextStaffIdx  = firstStaffIdx + 1;
+
+      SegmentType st = SegmentType::ChordRest;
+      int strack = firstStaffIdx * VOICES;
+      int etrack = nextStaffIdx * VOICES;
+
+      for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+            int tick = seg->tick().ticks();
+            int tick2 = seg->tick().ticks() + seg->ticks().ticks() - 1;
+            for (int track = strack; track < etrack; ++track) {
+                  // skip linked staves, except primary
+                  if (!m->score()->staff(track / VOICES)->primaryStaff()) {
+                        track += VOICES-1;
+                        continue;
+                        }
+                  Element* cr = seg->element(track);
+                  if (cr == 0 || cr->type() != ElementType::CHORD)
+                        continue;
+
+                  Chord* chord = toChord(cr);
+                  Staff* st1   = chord->staff();
+                  int staffIdx = st1->idx();
+                  int velocity = st1->velocities().velo(seg->tick().ticks());
+                  Instrument* instr = chord->part()->instrument(Fraction::fromTicks(tick));
+                  int channel = instr->channel(chord->upNote()->subchannel())->channel();
+                  events->registerChannel(channel);
+
+                  for (Articulation* a : chord->articulations())
+                        instr->updateVelocity(&velocity,channel, a->articulationName());
+
+                  if ( !graceNotesMerged(chord))
+                      for (Chord* c : chord->graceNotesBefore())
+                          for (const Note* note : c->notes())
+                              collectNote(events, channel, note, velocity, tickOffset, staffIdx);
+
+                  for (const Note* note : chord->notes())
+                        collectNote(events, channel, note, velocity, tickOffset, staffIdx);
+
+                  if ( !graceNotesMerged(chord))
+                      for (Chord* c : chord->graceNotesAfter())
+                          for (const Note* note : c->notes())
+                              collectNote(events, channel, note, velocity, tickOffset, staffIdx);
+                 }
+            }
+      }
+
+//---------------------------------------------------------
+//   changeCCBetween
+//---------------------------------------------------------
+
+static void changeCCBetween(EventMap* events, int stick, int etick, int startExpr, int endExpr, int channel, int controller, VeloChangeMethod changeMethod, int tickOffset)
+      {
+      // Prevent zero-division error, but add single event
+      if (startExpr == endExpr || stick == etick) {
+            NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, controller, abs(startExpr));
+            events->insert(std::pair<int, NPlayEvent>(stick + tickOffset, cc11event));
+            return;
+            }
+
+      // Ticks to change expression over
+      int exprTicks = etick - stick;
+      int exprDiff = endExpr - startExpr;
+
+      // The lambdas are in the format:
+      //    func(precalculated values, current tick)
+      // The precalculated values are for values that stay constant, involving
+      // total ticks or total expression. Although it seems messy,
+      // it saves some 13% processing time.
+
+      // NOTE:JT - hardcoded, todo change?
+      int tickInc = 1;
+
+      // See these functions graphically at: https://www.desmos.com/calculator/kk89ficmjk
+      std::function<int(std::vector<double>&, int)> valueFunction;
+      std::vector<double> preCalculated;
+      switch (changeMethod) {
+            case VeloChangeMethod::EXPONENTIAL:
+                  // Due to the nth-root, exponential functions do not flip with negative values, and cause errors,
+                  // so treat it as a piecewise function.
+                  if (exprDiff > 0) {
+                        preCalculated.push_back(
+                              pow((exprDiff + 1), 1.0 / double(exprTicks))    // the exprTicks root of d+1
+                              );
+                        valueFunction = [](std::vector<double>& pc, int ct) { return int(
+                              pow(
+                                    pc[0],
+                                    double(ct)        // to the power of the current tick (exponential)
+                                    ) - 1
+                              ); };
+                        }
+                  else {
+                        preCalculated.push_back(
+                              pow((-exprDiff + 1), 1.0 / double(exprTicks))    // the exprTicks root of 1-d
+                              );
+                        valueFunction = [](std::vector<double>& pc, int ct) { return -int(
+                              pow(
+                                    pc[0],
+                                    double(ct)        // again to the power of ct
+                                    ) + 1
+                              ); };
+                        }
+                  break;
+            // Uses sin x transformed, which _does_ flip with negative numbers
+            case VeloChangeMethod::EASE_IN_OUT:
+                  preCalculated.push_back(double(exprDiff) / 2.0);
+                  preCalculated.push_back(double(M_PI / double(exprTicks)));
+                  preCalculated.push_back(double(M_PI / 2.0));
+                  valueFunction = [](std::vector<double>& pc, int ct) { return int(
+                        pc[0] * (
+                              sin(
+                                    double(ct) * (
+                                          pc[1]
+                                          ) - pc[2]
+                                    ) + 1
+                              )
+                        ); };
+                  break;
+            case VeloChangeMethod::EASE_IN:
+                  preCalculated.push_back(double(exprDiff));
+                  preCalculated.push_back(double(exprTicks));
+                  preCalculated.push_back(double(M_PI / double(2 * exprTicks)));
+                  valueFunction = [](std::vector<double>& pc, int ct) { return int(
+                        pc[0] * (
+                              sin(
+                                    double(ct - pc[1]) * (
+                                          pc[2]
+                                          )
+                                    ) + 1
+                              )
+                        ); };
+                  break;
+            case VeloChangeMethod::EASE_OUT:
+                  preCalculated.push_back(double(exprDiff));
+                  preCalculated.push_back(double(M_PI / double(2 * exprTicks)));
+                  valueFunction = [](std::vector<double>& pc, int ct) { return int(
+                        pc[0] * sin(
+                              double(ct) * (
+                                    pc[1]
+                                    )
+                              )
+                        ); };
+                  break;
+            case VeloChangeMethod::NORMAL:
+            default:
+                  // We can calculate how to increase the ticks, since it is linear
+                  tickInc = exprTicks / abs(exprDiff);
+                  preCalculated.push_back(double(exprDiff));
+                  preCalculated.push_back(double(exprTicks));
+                  valueFunction = [](std::vector<double>& pc, int ct) { return int(pc[0] * (double(ct) / pc[1])); };
+                  break;
+            }
+
+      // prevent possible infinite loop
+      if (tickInc < 1)
+            tickInc = 1;
+
+      int lastVal = -1;
+      for (int i = stick; i < etick; i += tickInc) {
+            int valueToAdd = valueFunction(preCalculated, i - stick);
+            if (lastVal == valueToAdd)
+                  continue;
+            lastVal = valueToAdd;
+            int exprVal = startExpr + valueToAdd;
+            NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, controller, abs(exprVal));
+            events->insert(std::pair<int, NPlayEvent>(i + tickOffset, cc11event));
+            }
+      }
+
+//---------------------------------------------------------
+//   collectMeasureEventsDefault
+//    this uses only CC events to control note velocity, and sets the
+//    note-on velocity to always be 127 (max). This is the best method
+//    of single note dynamics, but only works if the soundfont supports it.
+//    Method is one of:
+//          FIXED_MAX - default: velocity is fixed at 127
+//          SEG_START - note-on velocity is the same as the start velocity of the seg
+//---------------------------------------------------------
+
+static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* staff, int tickOffset, DynamicsRenderMethod method, int cc)
+      {
+      int controller = getControllerFromCC(cc);
+      
+      if (controller == -1) {
+            qWarning("controller for CC %d not valid", cc);
+            return;
+            }
+
+      int firstStaffIdx = staff->idx();
+      int nextStaffIdx  = firstStaffIdx + 1;
+
+      SegmentType st = SegmentType::ChordRest;
+      int strack = firstStaffIdx * VOICES;
+      int etrack = nextStaffIdx * VOICES;
+
+
+      static const VeloChangeMethod defaultChangeMethod = VeloChangeMethod::NORMAL;
+
+      int lastSubchannel = -1;
+      for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+            int tick = seg->tick().ticks();
+            int tick2 = tick + seg->ticks().ticks() - 1;
+
+            int highestVelocity = 0;
+            for (int track = strack; track < etrack; ++track) {
+                  // Skip linked staves, except primary
+                  Staff* st1 = m->score()->staff(track / VOICES);
+                  if (!st1->primaryStaff()) {
+                        track += VOICES - 1;
+                        continue;
+                        }
+                  Element* cr = seg->element(track);
+                        
+                  Chord* chord = nullptr;
+                  if (cr != 0) {
+                        if (cr->isChord())
+                              chord = toChord(cr);
+                        }
+
+                  // We need to be able to add CC events even if there isn't a note,
+                  // since in multi-stave scores, some segments will have no notes in
+                  // them for a stave, despite a note being held. So, if there isn't
+                  // a chord, at least try to add CC events.
+                  if (!chord && !seg->isChordRestType())
+                        continue;
+
+                  int staffIdx = st1->idx();
+                  int velocity = st1->velocities().velo(seg->tick());
+
+                  Instrument* instr = st1->part()->instrument(tick);
+                  int channel;
+                  if (chord != 0)
+                        lastSubchannel = chord->upNote()->subchannel();
+
+                  // This is a slightly hacky way of always getting a channel, no matter
+                  // if there are notes or not.
+                  if (lastSubchannel != -1)
+                        channel = instr->channel(lastSubchannel)->channel();
+                  else
+                        continue;
+
+                  events->registerChannel(channel);
+
+                  // 
+                  // Decide whether to add CC events or not
+                  //
+
+                  if (instr->singleNoteDynamics()) {
+                        int hairpinStartTick = -1;
+                        int hairpinStopTick = -1;
+                        
+                        bool singleNoteDynamics = false;
+                        Hairpin* h = nullptr;
+                        VeloChangeMethod changeMethod = VeloChangeMethod::NORMAL;
+
+                        // Check for hairpin crossing segment
+                        for (auto it : staff->score()->spannerMap().findOverlapping(tick, tick2)) {
+                              Spanner *s = it.value;
+                              if (it.stop == tick)
+                                    continue;
+
+                              if (s->isHairpin() && s->staff() == st1) {
+                                    h = toHairpin(s);
+                                    singleNoteDynamics = h->singleNoteDynamics() || singleNoteDynamics;
+                                    if (singleNoteDynamics) {
+                                          hairpinStartTick = it.start;
+                                          hairpinStopTick = it.stop;
+                                          changeMethod = h->veloChangeMethod();
+                                          break;
+                                          }
+                                    }
+                              }
+
+                        bool hasHairpin = (hairpinStartTick != -1 && hairpinStopTick != -1);
+
+                        // From this, work out a start and end tick to apply CC events for
+                        int stick;
+                        int etick;
+                        if (hasHairpin) {
+                              stick = hairpinStartTick;
+                              etick = hairpinStopTick;  
+                              }
+                        else {
+                              stick = 0;
+                              etick = seg->tick() + seg->ticks() + 1;
+                              }
+
+                        if (stick < seg->tick())
+                              stick = seg->tick();
+                        if (etick > seg->tick() + seg->ticks())
+                              etick = seg->tick() + seg->ticks();
+
+                        // Check if there is a fortepiano / similar dynamic
+                        bool hasChangingDynamic = false;
+                        Dynamic* changingDyn;
+                        if (chord != 0) {
+                              for (Element* e : seg->annotations()) {
+                                    if (!e)
+                                          continue;
+                                    if (!e->isDynamic())
+                                          continue;
+                                    Dynamic* d = toDynamic(e);
+                                    if (d->changeInVelocity() == 0)
+                                          continue;
+
+                                    switch (d->dynRange()) {
+                                          case Dynamic::Range::STAFF:
+                                                if (d->staff()->idx() != staffIdx)
+                                                      continue;
+                                                break;
+                                          case Dynamic::Range::PART:
+                                                if (d->part() != chord->part())
+                                                      continue;
+                                                break;
+                                          case Dynamic::Range::SYSTEM:
+                                          default:
+                                                break;
+                                          }
+
+                                    hasChangingDynamic = true;
+                                    changingDyn = d;
+                                    }
+                              }
+
+                        // We have a start and end tick, so get the velocities at these points
+                        int velocityStart = staff->velocities().velo(stick);
+                        int velocityMiddle = hasChangingDynamic ? velocityStart + changingDyn->changeInVelocity() : -1;
+                        int velocityEnd = staff->velocities().velo(etick);
+
+                        // Attempt to fix invalid hairpin
+                        int hairpinStartVel = velocityMiddle == -1 ? velocityStart : velocityMiddle;
+                        if (hasHairpin) {
+                              if (h->isCrescendo() && hairpinStartVel > velocityEnd)
+                                    singleNoteDynamics = false;
+                              else if (h->isDecrescendo() && hairpinStartVel < velocityEnd)
+                                    singleNoteDynamics = false;
+                              }
+
+                        // Check for articulations
+                        bool hasArticulations = false;
+                        if (chord)
+                              hasArticulations = chord->articulations().count() > 0;
+
+                        //
+                        // Add CC events
+                        //
+
+                        if (singleNoteDynamics || hasArticulations || hasChangingDynamic) {
+                              if (chord != 0 && hasArticulations) {
+                                    for (Articulation* a : chord->articulations()) {
+                                          if (velocityMiddle == -1)
+                                                velocityMiddle = velocityStart;
+                                          instr->updateVelocity(&velocityStart, channel, a->articulationName());
+                                          }
+>>>>>>> Add single-note dynamics
+                                    }
+
+                              // Highest velocity is a hack to stop weird, sudden changes in velocity
+                              // for the same segment and staff. We only add dynamics for one track
+                              // and the loudest track wins(?)
+                              if (velocityStart > highestVelocity) {
+                                    if (hasArticulations || hasChangingDynamic) {
+                                          int startExpr = velocityStart;
+                                          int endExpr = velocityMiddle;
+
+                                          int accentTicks = MScore::division / 4;
+                                          if (hasChangingDynamic)
+                                                accentTicks = changingDyn->velocityChangeLength();
+
+                                          // Determine how long to 'hold' the initial velocity
+                                          // This is shorter with a dynamic than an articulation
+                                          int stickToUse = stick + accentTicks / (hasChangingDynamic ? 4 : 2);
+                                          int etickToUse = stick + accentTicks;
+
+                                          stickToUse = qMin(stickToUse, etick);
+                                          etickToUse = qMin(etickToUse, etick);
+
+                                          // First, add an initial accent velocity
+                                          // stick is the seg start tick, stickToUse is where we should dim to the rest velocity
+                                          changeCCBetween(events, stick, stickToUse, startExpr, startExpr, channel, controller, defaultChangeMethod, tickOffset);
+
+                                          // Then dimenuendo back down to normal
+                                          // eticktouse is the end of the dim back to normal for an accent,
+                                          // but etick is the segment end tick.
+                                          changeCCBetween(events, stickToUse, etickToUse, startExpr, endExpr, channel, controller, defaultChangeMethod, tickOffset);
+
+                                          if (etickToUse != etick) {
+                                                startExpr = velocityMiddle;
+                                                endExpr = velocityEnd;
+
+                                                stickToUse = qMin(stick + accentTicks + 1, etick);
+
+                                                changeCCBetween(events, stickToUse, etick, startExpr, endExpr, channel, controller, changeMethod, tickOffset);
+                                                }
+                                          }
+                                    else {
+                                          int startExpr = velocityStart;
+                                          int endExpr = velocityEnd;
+                                          changeCCBetween(events, stick, etick, startExpr, endExpr, channel, controller, changeMethod, tickOffset);
+                                          }
+
+                                    highestVelocity = velocityStart;
+                                    }
+                              }
+                        else if (velocityStart >= highestVelocity) {
+                              // Add a single expression value to match the velocity, since there is no hairpin
+                              int exprVal = velocityStart;
+                              changeCCBetween(events, seg->tick(), seg->tick(), exprVal, exprVal, channel, controller, defaultChangeMethod, tickOffset);
+                              }
+
+                        } // if instr->singleNoteDynamics()
+                  else {
+                        if (chord != 0) {
+                              for (Articulation* a : chord->articulations())
+                                    instr->updateVelocity(&velocity, channel, a->articulationName());
+                              }
+                        // Add a single expression value to match the velocity, since this instrument should
+                        // not use single note dynamics.
+                        changeCCBetween(events, seg->tick(), seg->tick(), velocity, velocity, channel, controller, defaultChangeMethod, tickOffset);
+                        }
+
+                  //
+                  // Add normal note events
+                  //
+
+                  if (chord != 0) {
+                        int velocityToUse = 0;
+                        switch (method) {
+                              case DynamicsRenderMethod::FIXED_MAX:
+                                    velocityToUse = 127;
+                                    break;
+                              case DynamicsRenderMethod::SEG_START:
+                              default:
+                                    velocityToUse = velocity;
+                                    break;
+                              }
+
+                        if (!graceNotesMerged(chord))
+                              for (Chord* c : chord->graceNotesBefore())
+                                    for (const Note* note : c->notes())
+                                          collectNote(events, channel, note, velocityToUse, tickOffset, staffIdx);
+
+                        for (const Note* note : chord->notes())
+                              collectNote(events, channel, note, velocityToUse, tickOffset, staffIdx);
+
+                        if (!graceNotesMerged(chord))
+                              for (Chord* c : chord->graceNotesAfter())
+                                    for (const Note* note : c->notes())
+                                          collectNote(events, channel, note, velocityToUse, tickOffset, staffIdx);
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   collectMeasureEvents
+//    methods:
+//          0 - default velocity/CC simultaneously
+//          1 - velocity only
+//          2 - cc only with constant velocity
+//---------------------------------------------------------
+
+static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int tickOffset, DynamicsRenderMethod method, int cc)
+      {
+      switch (method) {
+            case DynamicsRenderMethod::SIMPLE:
+                  collectMeasureEventsSimple(events, m, staff, tickOffset);
+                  break;
+            case DynamicsRenderMethod::SEG_START:
+            case DynamicsRenderMethod::FIXED_MAX:
+                  collectMeasureEventsDefault(events, m, staff, tickOffset, method, cc);
+                  break;
+            default:
+                  qWarning("Unrecognized dynamics method: %d", method);
+                  break;
+            }
+      
+      collectProgramChanges(events, m, staff, tickOffset);
       }
 
 //---------------------------------------------------------
@@ -524,9 +1003,44 @@ void Score::updateHairpin(Hairpin* h)
       {
       Staff* st = h->staff();
       Fraction tick  = h->tick();
+
+      Segment* seg = st->score()->tick2segment(tick);
+
+      // Find any changing dynamics
+      // If there are any, then start the hairpin from after them
+      for (Element* e : seg->annotations()) {
+            if (!e)
+                  continue;
+            if (!e->isDynamic())
+                  continue;
+            Dynamic* d = toDynamic(e);
+            if (d->changeInVelocity() == 0)
+                  continue;
+
+            switch (d->dynRange()) {
+                  case Dynamic::Range::STAFF:
+                        if (d->staff()->idx() != st->idx())
+                              continue;
+                        break;
+                  case Dynamic::Range::PART:
+                        if (d->part() != h->part())
+                              continue;
+                        break;
+                  case Dynamic::Range::SYSTEM:
+                  default:
+                        break;
+                  }
+
+            // start hairpin after the dynamic stops
+            tick = seg->tick() + d->velocityChangeLength();
+            break;
+            }
+
       int velo  = st->velocities().velo(tick.ticks());
       int incr  = h->veloChange();
       Fraction tick2 = h->tick2();
+      if (tick > tick2)
+            tick = tick2;
 
       //
       // If velocity increase/decrease is zero, then assume
@@ -535,7 +1049,7 @@ void Score::updateHairpin(Hairpin* h)
       //
 
       int endVelo = velo;
-      if (h->hairpinType() == HairpinType::CRESC_HAIRPIN || h->hairpinType() == HairpinType::CRESC_LINE) {
+      if (h->isCrescendo()) {
             if (incr == 0 && velo < st->velocities().nextVelo(tick2.ticks()-1))
                   endVelo = st->velocities().nextVelo(tick2.ticks()-1);
             else
@@ -635,25 +1149,43 @@ void Score::updateVelo()
                               continue;
                         if (e->type() != ElementType::DYNAMIC)
                               continue;
-                        const Dynamic* d = static_cast<const Dynamic*>(e);
+                        const Dynamic* d = toDynamic(e);
                         int v            = d->velocity();
-                        if (v < 1)     //  illegal value
-                              continue;
+                        v = qBound(1, v, 127);     //  illegal values
+
+                        // If a dynamic has 'velocity change' update its ending
+                        int v2 = 0;
+                        if (d->changeInVelocity() != 0) {
+                              v2 = d->velocity() + d->changeInVelocity();
+                              v2 = qBound(1, v2, 127);     //  illegal values
+                              }
+
+                        Fraction tick2 = tick + d->velocityChangeLength();
+
                         int dStaffIdx = d->staffIdx();
                         switch(d->dynRange()) {
                               case Dynamic::Range::STAFF:
-                                    if (dStaffIdx == staffIdx)
+                                    if (dStaffIdx == staffIdx) {
                                           velo.setVelo(tick.ticks(), v);
+                                          if (v2 > 0)
+                                                velo.setVelo(tick2.ticks(), v2);
+                                          }
                                     break;
                               case Dynamic::Range::PART:
                                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff+partStaves) {
-                                          for (int i = partStaff; i < partStaff+partStaves; ++i)
+                                          for (int i = partStaff; i < partStaff+partStaves; ++i) {
                                                 staff(i)->velocities().setVelo(tick.ticks(), v);
+                                                if (v2 > 0)
+                                                      velo.setVelo(tick2.ticks(), v2);
+                                                }
                                           }
                                     break;
                               case Dynamic::Range::SYSTEM:
-                                    for (int i = 0; i < nstaves(); ++i)
+                                    for (int i = 0; i < nstaves(); ++i) {
                                           staff(i)->velocities().setVelo(tick.ticks(), v);
+                                          if (v2 > 0)
+                                                velo.setVelo(tick2.ticks(), v2);
+                                          }
                                     break;
                               }
                         }
@@ -680,7 +1212,7 @@ void Score::updateVelo()
 //   renderStaff
 //---------------------------------------------------------
 
-void Score::renderStaff(EventMap* events, Staff* staff)
+void Score::renderStaff(EventMap* events, Staff* staff, DynamicsRenderMethod method, int cc)
       {
       Measure* lastMeasure = 0;
       for (const RepeatSegment* rs : *repeatList()) {
@@ -690,11 +1222,11 @@ void Score::renderStaff(EventMap* events, Staff* staff)
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                   if (lastMeasure && m->isRepeatMeasure(staff)) {
                         int offset = (m->tick() - lastMeasure->tick()).ticks();
-                        collectMeasureEvents(events, lastMeasure, staff, tickOffset + offset);
+                        collectMeasureEvents(events, lastMeasure, staff, tickOffset + offset, method, cc);
                         }
                   else {
                         lastMeasure = m;
-                        collectMeasureEvents(events, lastMeasure, staff, tickOffset);
+                        collectMeasureEvents(events, lastMeasure, staff, tickOffset, method, cc);
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;
@@ -1889,12 +2421,12 @@ void Score::renderMetronome(EventMap* events, Measure* m, const Fraction& tickOf
 //    export score to event list
 //---------------------------------------------------------
 
-void Score::renderMidi(EventMap* events)
+void Score::renderMidi(EventMap* events, const SynthesizerState& synthState)
       {
-      renderMidi(events, true, MScore::playRepeats);
+      renderMidi(events, true, MScore::playRepeats, synthState);
       }
 
-void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats)
+void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, const SynthesizerState& synthState)
       {
       updateSwing();
       updateCapo();
@@ -1904,9 +2436,44 @@ void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats)
       masterScore()->updateChannel();
       updateVelo();
 
+      SynthesizerState s = synthesizerState();
+      int method = s.method();
+      int cc = s.ccToUse();
+
+      // check if the score synth settings are actually set
+      // if not, use the global synth state
+      if (method == -1) {
+            method = synthState.method();
+            cc = synthState.ccToUse();
+            
+            if (method == -1) {
+                  // fall back to defaults - this may be needed to pass tests,
+                  // since sometimes the synth state is not init
+                  method = 1;
+                  cc = 2;
+                  qWarning("Had to fall back to defaults to render measure");
+                  }
+            }
+
+      DynamicsRenderMethod renderMethod = DynamicsRenderMethod::SIMPLE;
+      switch (method) {
+            case 0:
+                  renderMethod = DynamicsRenderMethod::SIMPLE;
+                  break;
+            case 1:
+                  renderMethod = DynamicsRenderMethod::SEG_START;
+                  break;
+            case 2:
+                  renderMethod = DynamicsRenderMethod::FIXED_MAX;
+                  break;
+            default:
+                  qWarning("Unrecognized dynamics method: %d", method);
+                  break;
+            }
+
       // create note & other events
       for (Staff* part : _staves)
-            renderStaff(events, part);
+            renderStaff(events, part, renderMethod, cc);
       events->fixupMIDI();
 
       // create sustain pedal events
