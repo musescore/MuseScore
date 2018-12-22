@@ -1359,6 +1359,15 @@ void Voice::update_param(int _gen)
 
 void Voice::modulate(bool _cc, int _ctrl)
       {
+      // For our purposes in MuseScore, we don't need to be able to control all
+      // modulators in the release phase. In fact, we don't want these modulators to
+      // have an effect, since it can lead to 'volume bumps' for single note
+      // dynamics, when there is a sudden change from quiet to loud sounds.
+      // So, if the voice is in release phase, don't apply these modulators.
+      if (volenv_section == FLUID_VOICE_ENVRELEASE && _cc &&
+            (_ctrl == BREATH_MSB || _ctrl == FOOT_MSB || _ctrl == EXPRESSION_MSB))
+            return;
+
       for (int i = 0; i < mod_count; i++) {
             Mod* m = &mod[i];
 

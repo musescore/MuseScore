@@ -20,6 +20,8 @@
 #include "mscore.h"
 #include "part.h"
 #include "score.h"
+#include "synthesizer/msynthesizer.h"
+#include "synthesizer/midipatch.h"
 
 #include <QList>
 namespace Ms {
@@ -99,6 +101,7 @@ Instrument::Instrument()
       _maxPitchP   = 127;
       _useDrumset  = false;
       _drumset     = 0;
+      _singleNoteDynamics = true;
       }
 
 Instrument::Instrument(const Instrument& i)
@@ -119,6 +122,7 @@ Instrument::Instrument(const Instrument& i)
       _stringData   = i._stringData;
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
+      _singleNoteDynamics = i._singleNoteDynamics;
       for (Channel* c : i._channel)
             _channel.append(new Channel(*c));
       _clefType     = i._clefType;
@@ -146,6 +150,7 @@ void Instrument::operator=(const Instrument& i)
       _stringData   = i._stringData;
       _midiActions  = i._midiActions;
       _articulation = i._articulation;
+      _singleNoteDynamics = i._singleNoteDynamics;
       for (Channel* c : i._channel)
             _channel.append(new Channel(*c));
       _clefType     = i._clefType;
@@ -252,11 +257,14 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
                   }
             }
 
+      if (_singleNoteDynamics != getSingleNoteDynamicsFromTemplate())
+            xml.tag("singleNoteDynamics", _singleNoteDynamics);
+
       if (!(_stringData == StringData()))
             _stringData.write(xml);
-      foreach(const NamedEventList& a, _midiActions)
+      for (const NamedEventList& a : _midiActions)
             a.write(xml, "MidiAction");
-      foreach(const MidiArticulation& a, _articulation)
+      for (const MidiArticulation& a : _articulation)
             a.write(xml);
       for (const Channel* a : _channel)
             a->write(xml, part);
@@ -270,16 +278,25 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
 void Instrument::read(XmlReader& e, Part* part)
       {
       bool customDrumset = false;
+      bool readSingleNoteDynamics = false;
 
       _channel.clear();       // remove default channel
       while (e.readNextStartElement()) {
-            if (!readProperties(e, part, &customDrumset))
+            const QStringRef& tag(e.name());
+            if (tag == "singleNoteDynamics") {
+                  _singleNoteDynamics = e.readBool();
+                  readSingleNoteDynamics = true;
+                  }
+            else if (!readProperties(e, part, &customDrumset))
                   e.unknown();
             }
+
+      if (!readSingleNoteDynamics)
+            setSingleNoteDynamicsFromTemplate();
+
       if (_useDrumset) {
             if (_channel[0]->bank() == 0 && _channel[0]->synti().toLower() != "zerberus")
                   _channel[0]->setBank(128);
-            _channel[0]->updateInitList();
             }
       }
 
@@ -415,7 +432,7 @@ const char *Channel::DEFAULT_NAME = "normal";
 Channel::Channel()
       {
       for(int i = 0; i < int(A::INIT_COUNT); ++i)
-            init.push_back(MidiCoreEvent());
+            _init.push_back(MidiCoreEvent());
       _synti    = "Fluid";     // default synthesizer
       _channel  = -1;
       _program  = -1;
@@ -434,6 +451,19 @@ Channel::Channel()
       }
 
 //---------------------------------------------------------
+//   initList
+//---------------------------------------------------------
+
+std::vector<MidiCoreEvent>& Channel::initList() const
+      {
+      if (_mustUpdateInit) {
+            updateInitList();
+            _mustUpdateInit = false;
+            }
+      return _init;
+      }
+
+//---------------------------------------------------------
 //   setVolume
 //---------------------------------------------------------
 
@@ -443,6 +473,7 @@ void Channel::setVolume(char value)
             _volume = value;
             firePropertyChanged(Prop::VOLUME);
             }
+      _mustUpdateInit = true;
       }
 
 //---------------------------------------------------------
@@ -455,6 +486,7 @@ void Channel::setPan(char value)
             _pan = value;
             firePropertyChanged(Prop::PAN);
             }
+      _mustUpdateInit = true;
       }
 
 //---------------------------------------------------------
@@ -467,6 +499,7 @@ void Channel::setChorus(char value)
             _chorus = value;
             firePropertyChanged(Prop::CHORUS);
             }
+      _mustUpdateInit = true;
       }
 
 //---------------------------------------------------------
@@ -479,6 +512,7 @@ void Channel::setReverb(char value)
             _reverb = value;
             firePropertyChanged(Prop::REVERB);
             }
+      _mustUpdateInit = true;
       }
 
 //---------------------------------------------------------
@@ -539,6 +573,7 @@ void Channel::setProgram(int value)
             _program = value;
             firePropertyChanged(Prop::PROGRAM);
             }
+      _mustUpdateInit = true;
       }
 
 //---------------------------------------------------------
@@ -551,6 +586,7 @@ void Channel::setBank(int value)
             _bank = value;
             firePropertyChanged(Prop::BANK);
             }
+      _mustUpdateInit = true;
       }
 
 //---------------------------------------------------------
@@ -616,8 +652,7 @@ void Channel::write(XmlWriter& xml, const Part* part) const
       if (_color != DEFAULT_COLOR)
             xml.tag("color", _color);
 
-      updateInitList();
-      foreach(const MidiCoreEvent& e, init) {
+      for (const MidiCoreEvent& e : initList()) {
             if (e.type() == ME_INVALID)
                   continue;
             if (e.type() == ME_CONTROLLER) {
@@ -644,6 +679,11 @@ void Channel::write(XmlWriter& xml, const Part* part) const
             xml.tag("mute", _mute);
       if (_solo)
             xml.tag("solo", _solo);
+
+      // This way we know not to change channel to expr automatically
+      if (_userBankController)
+            xml.tag("userSelectedBank", _userBankController);
+
       if (part && part->masterScore()->exportMidiMapping() && part->score() == part->masterScore()) {
             xml.tag("midiPort",    part->masterScore()->midiMapping(_channel)->port());
             xml.tag("midiChannel", part->masterScore()->midiMapping(_channel)->channel());
@@ -707,7 +747,7 @@ void Channel::read(XmlReader& e, Part* part)
                               ev.setChannel(0);
                               ev.setDataA(ctrl);
                               ev.setDataB(value);
-                              init.push_back(ev);
+                              _init.push_back(ev);
                               }
                               break;
                         }
@@ -733,6 +773,8 @@ void Channel::read(XmlReader& e, Part* part)
                   _mute = e.readInt();
             else if (tag == "solo")
                   _solo = e.readInt();
+            else if (tag == "userSelectedBank")
+                  _userBankController = e.readBool();
             else if (tag == "midiPort") {
                   midiPort = e.readInt();
                   }
@@ -744,10 +786,73 @@ void Channel::read(XmlReader& e, Part* part)
             }
       if (128 == _bank && "zerberus" == _synti.toLower())
             _bank = 0;
-      updateInitList();
+
+      _mustUpdateInit = true;
 
       if ((midiPort != -1 || midiChannel != -1) && part && part->score()->isMaster())
             part->masterScore()->addMidiMapping(this, part, midiPort, midiChannel);
+      }
+
+//---------------------------------------------------------
+//   switchExpressive
+//    Switches channel from non-expressive to expressive patch or vice versa
+//    This works only with MuseScore General soundfont
+//---------------------------------------------------------
+
+void Channel::switchExpressive(MasterSynthesizer* m, bool expressive, bool force /* = false */)
+      {
+      if ((_userBankController && !force) || !m)
+            return;
+
+      // Work out where the new expressive patch will be
+      // All expressive instruments are +1 bank higher than the
+      // normal counterparts, except on bank 0, where they are placed on bank 17
+      // and on bank 8, which uses bank 18 instead.
+      int searchBankNum;
+      int newBankNum;
+      if (expressive) {
+            int relativeBank = bank() % 129;
+            if (relativeBank == 0)
+                  newBankNum = 17;
+            else if (relativeBank == 8)
+                  newBankNum = 18;
+            else
+                  newBankNum = relativeBank + 1;
+            }
+      else {
+            int relativeBank = bank() % 129;
+            if (relativeBank == 17)
+                  newBankNum = 0;
+            else if (relativeBank == 18)
+                  newBankNum = 8;
+            else
+                  newBankNum = relativeBank - 1;
+            }
+
+      // Floor bank num to multiple of 129 and add new num to get bank num of new patch
+      searchBankNum = (bank() / 129) * 129 + newBankNum;
+
+      const auto& pl = m->getPatchInfo();
+      QString containString;
+      if (expressive)
+            containString = QString("Expr.");
+      else {
+            for (const MidiPatch* p : pl) {
+                  if (p->bank == bank() && p->prog == program() && p->synti == synti()) {
+                        containString = QString(p->name).replace("Expr.", "").trimmed();
+                        break;
+                        }
+                  }
+            }
+
+      for (const MidiPatch* p : pl) {
+            if (p->synti == "Fluid") {
+                  if (searchBankNum == p->bank && program() == p->prog && p->name.contains(containString)) {
+                        setBank(p->bank);
+                        return;
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -761,26 +866,26 @@ void Channel::updateInitList() const
             e.setType(ME_CONTROLLER);
             e.setDataA(CTRL_PROGRAM);
             e.setDataB(_program);
-            init[int(A::PROGRAM)] = e;
+            _init[int(A::PROGRAM)] = e;
             }
 
       e.setData(ME_CONTROLLER, CTRL_HBANK, (_bank >> 7) & 0x7f);
-      init[int(A::HBANK)] = e;
+      _init[int(A::HBANK)] = e;
 
       e.setData(ME_CONTROLLER, CTRL_LBANK, _bank & 0x7f);
-      init[int(A::LBANK)] = e;
+      _init[int(A::LBANK)] = e;
 
       e.setData(ME_CONTROLLER, CTRL_VOLUME, volume());
-      init[int(A::VOLUME)] = e;
+      _init[int(A::VOLUME)] = e;
 
       e.setData(ME_CONTROLLER, CTRL_PANPOT, pan());
-      init[int(A::PAN)] = e;
+      _init[int(A::PAN)] = e;
 
       e.setData(ME_CONTROLLER, CTRL_CHORUS_SEND, chorus());
-      init[int(A::CHORUS)] = e;
+      _init[int(A::CHORUS)] = e;
 
       e.setData(ME_CONTROLLER, CTRL_REVERB_SEND, reverb());
-      init[int(A::REVERB)] = e;
+      _init[int(A::REVERB)] = e;
 
       }
 
@@ -1024,6 +1129,22 @@ void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const QString
             }
       }
 
+
+//---------------------------------------------------------
+//   updateGateTime
+//---------------------------------------------------------
+
+void Instrument::switchExpressive(MasterSynthesizer* m, bool expressive, bool force /* = false */)
+      {
+      // Only switch to expressive where necessary
+      if (!m || (expressive && !singleNoteDynamics()))
+            return;
+
+      for (Channel* c : channel()) {
+            c->switchExpressive(m, expressive, force);
+            }
+      }
+
 //---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
@@ -1062,8 +1183,8 @@ bool Instrument::operator==(const Instrument& i) const
          &&  i._transpose.diatonic == _transpose.diatonic
          &&  i._transpose.chromatic == _transpose.chromatic
          &&  i._trackName == _trackName
-         &&  *i.stringData() == *stringData();
-         ;
+         &&  *i.stringData() == *stringData()
+         &&  i._singleNoteDynamics == _singleNoteDynamics;
       }
 
 //---------------------------------------------------------
@@ -1331,6 +1452,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       for (const Channel& c : t->channel)
             instr._channel.append(new Channel(c));
       instr.setStringData(t->stringData);
+      instr.setSingleNoteDynamics(t->singleNoteDynamics);
       return instr;
       }
 
@@ -1351,6 +1473,28 @@ const Channel* Instrument::playbackChannel(int idx, const MasterScore* score) co
 Channel* Instrument::playbackChannel(int idx, MasterScore* score)
       {
       return score->playbackChannel(channel(idx));
+      }
+
+//---------------------------------------------------------
+//   getSingleNoteDynamicsFromTemplate
+//---------------------------------------------------------
+
+bool Instrument::getSingleNoteDynamicsFromTemplate() const
+      {
+      QString templateName = trackName().toLower().replace(" ", "-").replace("♭", "b");
+      InstrumentTemplate* tp = searchTemplate(templateName);
+      if (tp)
+            return tp->singleNoteDynamics;
+      return true;
+      }
+
+//---------------------------------------------------------
+//   setSingleNoteDynamicsFromTemplate
+//---------------------------------------------------------
+
+void Instrument::setSingleNoteDynamicsFromTemplate()
+      {
+      setSingleNoteDynamics(getSingleNoteDynamicsFromTemplate());
       }
 
 //---------------------------------------------------------

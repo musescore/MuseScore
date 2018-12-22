@@ -971,7 +971,7 @@ void Seq::initInstruments(bool realTime)
 
       for (const MidiMapping& mm : cs->midiMapping()) {
             const Channel* channel = mm.articulation();
-            for (const MidiCoreEvent& e : channel->init) {
+            for (const MidiCoreEvent& e : channel->initList()) {
                   if (e.type() == ME_INVALID)
                         continue;
                   NPlayEvent event(e.type(), channel->channel(), e.dataA(), e.dataB());
@@ -1012,7 +1012,7 @@ void Seq::collectEvents()
       mutex.lock();
       events.clear();
 
-      cs->renderMidi(&events);
+      cs->renderMidi(&events, mscore->synthesizerState());
       endUTick = 0;
 
       if (!events.empty()) {

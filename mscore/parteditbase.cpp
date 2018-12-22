@@ -204,7 +204,6 @@ void PartEdit::patchChanged(int n, bool syncControls)
             score->setLayoutAll();
             score->endCmd();
             }
-      channel->updateInitList();
       sync(syncControls);
       }
 
@@ -217,7 +216,6 @@ void PartEdit::volChanged(double val, bool syncControls)
       int iv = lrint(val);
       seq->setController(channel->channel(), CTRL_VOLUME, iv);
       channel->setVolume(iv);
-      channel->updateInitList();
       sync(syncControls);
       }
 
@@ -230,7 +228,6 @@ void PartEdit::panChanged(double val, bool syncControls)
       int iv = lrint(val);
       seq->setController(channel->channel(), CTRL_PANPOT, iv);
       channel->setPan(iv);
-      channel->updateInitList();
       sync(syncControls);
       }
 
@@ -243,7 +240,6 @@ void PartEdit::reverbChanged(double val, bool syncControls)
       int iv = lrint(val);
       seq->setController(channel->channel(), CTRL_REVERB_SEND, iv);
       channel->setReverb(iv);
-      channel->updateInitList();
       sync(syncControls);
       }
 
@@ -256,7 +252,6 @@ void PartEdit::chorusChanged(double val, bool syncControls)
       int iv = lrint(val);
       seq->setController(channel->channel(), CTRL_CHORUS_SEND, iv);
       channel->setChorus(iv);
-      channel->updateInitList();
       sync(syncControls);
       }
 
@@ -525,7 +520,6 @@ void PartEdit::midiChannelChanged(int)
                   break;
                   }
             }
-      channel->updateInitList();
       if (needSync) {
             const int port = newChannel / 16;
             const int channelNo = newChannel % 16;
@@ -539,7 +533,7 @@ void PartEdit::midiChannelChanged(int)
             }
       else {
             // Initializing an instrument with new channel
-            foreach(const MidiCoreEvent& e, channel->init) {
+            foreach(const MidiCoreEvent& e, channel->initList()) {
                   if (e.type() == ME_INVALID)
                         continue;
                   NPlayEvent event(e.type(), channel->channel(), e.dataA(), e.dataB());

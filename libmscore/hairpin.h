@@ -32,6 +32,14 @@ enum class HairpinType : signed char {
       DECRESC_LINE
       };
 
+enum class VeloChangeMethod : signed char {
+      NORMAL,
+      EXPONENTIAL,
+      EASE_IN,
+      EASE_OUT,
+      EASE_IN_OUT       // and shake it all about
+      };
+
 //---------------------------------------------------------
 //   @@ HairpinSegment
 //---------------------------------------------------------
@@ -77,11 +85,18 @@ class Hairpin final : public TextLineBase {
       int _veloChange;
       bool  _hairpinCircledTip;
       Dynamic::Range _dynRange;
+      bool _singleNoteDynamics;
+      VeloChangeMethod _veloChangeMethod;
 
       Spatium _hairpinHeight;
       Spatium _hairpinContHeight;
 
       virtual Sid getPropertyStyle(Pid) const override;
+
+      struct VeloMethodItem {
+            VeloChangeMethod method;
+            const char* name;
+            };
 
    public:
       Hairpin(Score* s);
@@ -110,6 +125,17 @@ class Hairpin final : public TextLineBase {
       Spatium hairpinContHeight() const         { return _hairpinContHeight; }
       void setHairpinContHeight(Spatium val)    { _hairpinContHeight = val; }
 
+      bool singleNoteDynamics() const           { return _singleNoteDynamics; }
+      void setSingleNoteDynamics(bool val)      { _singleNoteDynamics = val; }
+
+      VeloChangeMethod veloChangeMethod() const { return _veloChangeMethod; }
+      void setVeloChangeMethod(VeloChangeMethod val)  { _veloChangeMethod = val; }
+      static QString veloChangeMethodToName(VeloChangeMethod method);
+      static VeloChangeMethod nameToVeloChangeMethod(QString name);
+
+      bool isCrescendo() const   { return _hairpinType == HairpinType::CRESC_HAIRPIN || _hairpinType == HairpinType::CRESC_LINE; }
+      bool isDecrescendo() const { return _hairpinType == HairpinType::DECRESC_HAIRPIN || _hairpinType == HairpinType::DECRESC_LINE; }
+
       virtual void write(XmlWriter&) const override;
       virtual void read(XmlReader&) override;
 
@@ -119,6 +145,8 @@ class Hairpin final : public TextLineBase {
 
       virtual QString accessibleInfo() const override;
       bool isLineType() const  { return _hairpinType == HairpinType::CRESC_LINE || _hairpinType == HairpinType::DECRESC_LINE; }
+
+      static const std::vector<VeloMethodItem> veloChangeMethodTable;
       };
 
 }     // namespace Ms

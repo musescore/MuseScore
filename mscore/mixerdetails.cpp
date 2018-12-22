@@ -486,10 +486,10 @@ void MixerDetails::patchChanged(int n)
       if (score) {
             score->startCmd();
             score->undo(new ChangePatch(score, channel, p));
+            score->undo(new SetUserBankController(channel, true));
             score->setLayoutAll();
             score->endCmd();
             }
-      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -531,7 +531,6 @@ void MixerDetails::drumkitToggled(bool val)
             score->setLayoutAll();
             score->endCmd();
             }
-      channel->updateInitList();
       }
 
 //---------------------------------------------------------
@@ -554,7 +553,6 @@ void MixerDetails::midiChannelChanged(int)
       MidiMapping* midiMap = _mti->midiMap();
       part->masterScore()->updateMidiMapping(midiMap->articulation(), part, p, c);
 
-//      channel->updateInitList();
       part->score()->setInstrumentsChanged(true);
       part->score()->setLayoutAll();
       seq->initInstruments();

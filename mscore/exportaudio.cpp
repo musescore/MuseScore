@@ -53,7 +53,7 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
     }
 
     EventMap events;
-    score->renderMidi(&events);
+    score->renderMidi(&events, synthesizerState());
     if(events.size() == 0)
           return false;
 
@@ -92,13 +92,12 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
           //
           // init instruments
           //
-          foreach(Part* part, score->parts()) {
+          for (Part* part : score->parts()) {
                 const InstrumentList* il = part->instruments();
-                for(auto i = il->begin(); i!= il->end(); i++) {
+                for (auto i = il->begin(); i!= il->end(); i++) {
                       for (const Channel* instrChan : i->second->channel()) {
                             const Channel* a = score->masterScore()->playbackChannel(instrChan);
-                            a->updateInitList();
-                            for (MidiCoreEvent e : a->init) {
+                            for (MidiCoreEvent e : a->initList()) {
                                   if (e.type() == ME_INVALID)
                                         continue;
                                   e.setChannel(a->channel());
@@ -269,7 +268,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             }
 
       EventMap events;
-      score->renderMidi(&events);
+      score->renderMidi(&events, synthesizerState());
       if(events.size() == 0)
             return false;
 

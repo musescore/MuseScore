@@ -584,6 +584,7 @@ MasterScore* MuseScore::getNewFile()
             }
       score->setCreated(true);
       score->fileInfo()->setFile(createDefaultName());
+      score->updateExpressive(synti);
 
       if (!score->style().chordList()->loaded()) {
             if (score->styleB(Sid::chordsXmlFile))
@@ -2027,13 +2028,13 @@ bool MuseScore::saveAs(Score* cs_, bool saveCopy, const QString& path, const QSt
 bool MuseScore::saveMidi(Score* score, const QString& name)
       {
       ExportMidi em(score);
-      return em.write(name, preferences.getBool(PREF_IO_MIDI_EXPANDREPEATS), preferences.getBool(PREF_IO_MIDI_EXPORTRPNS));
+      return em.write(name, preferences.getBool(PREF_IO_MIDI_EXPANDREPEATS), preferences.getBool(PREF_IO_MIDI_EXPORTRPNS), synthesizerState());
       }
 
 bool MuseScore::saveMidi(Score* score, QIODevice* device)
       {
       ExportMidi em(score);
-      return em.write(device, preferences.getBool(PREF_IO_MIDI_EXPANDREPEATS), preferences.getBool(PREF_IO_MIDI_EXPORTRPNS));
+      return em.write(device, preferences.getBool(PREF_IO_MIDI_EXPANDREPEATS), preferences.getBool(PREF_IO_MIDI_EXPORTRPNS), synthesizerState());
       }
 
 //---------------------------------------------------------
@@ -2332,6 +2333,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             s->setLayoutAll();
             }
       score->updateChannel();
+      score->updateExpressive(synti);
       score->setSaved(false);
       score->update();
 

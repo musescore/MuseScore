@@ -32,9 +32,16 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
 
       h.hairpinType->clear();
       h.hairpinType->addItem(tr("Crescendo Hairpin"),   int(HairpinType::CRESC_HAIRPIN));
-      h.hairpinType->addItem(tr("Decrescendo Hairpin"), int(HairpinType::DECRESC_HAIRPIN) );
+      h.hairpinType->addItem(tr("Decrescendo Hairpin"), int(HairpinType::DECRESC_HAIRPIN));
       h.hairpinType->addItem(tr("Crescendo Line"),      int(HairpinType::CRESC_LINE));
       h.hairpinType->addItem(tr("Decrescendo Line"),    int(HairpinType::DECRESC_LINE));
+
+      h.veloChangeMethod->clear();
+      h.veloChangeMethod->addItem(tr("Default (linear)"),   int(VeloChangeMethod::NORMAL));
+      h.veloChangeMethod->addItem(tr("Ease-in and out"),    int(VeloChangeMethod::EASE_IN_OUT));
+      h.veloChangeMethod->addItem(tr("Ease-in"),            int(VeloChangeMethod::EASE_IN));
+      h.veloChangeMethod->addItem(tr("Ease-out"),           int(VeloChangeMethod::EASE_OUT));
+      h.veloChangeMethod->addItem(tr("Exponential"),        int(VeloChangeMethod::EXPONENTIAL));
 
       const std::vector<InspectorItem> il = {
             { Pid::HAIRPIN_CIRCLEDTIP,   0, h.hairpinCircledTip,   h.resetHairpinCircledTip },
@@ -44,6 +51,8 @@ InspectorHairpin::InspectorHairpin(QWidget* parent)
             { Pid::VELO_CHANGE,          0, h.veloChange,          h.resetVeloChange        },
             { Pid::HAIRPIN_HEIGHT,       0, h.hairpinHeight,       h.resetHairpinHeight     },
             { Pid::HAIRPIN_CONT_HEIGHT,  0, h.hairpinContHeight,   h.resetHairpinContHeight },
+            { Pid::SINGLE_NOTE_DYNAMICS, 0, h.singleNoteDynamics,  h.resetSingleNoteDynamics},
+            { Pid::VELO_CHANGE_METHOD,   0, h.veloChangeMethod,    h.resetVeloChangeMethod  },
             };
       const std::vector<InspectorPanel> ppList = {
             { h.title, h.panel }

@@ -37,6 +37,9 @@ class MasterSynthesizer : public QObject {
       float _boost            { 10.0  };     // +20dB
       double _masterTuning    { 440.0 };
 
+      int _dynamicsMethod     { 1 };      // Default dynamics method
+      int _ccToUse            { 1 };      // CC2
+
    public:
       static const int MAX_BUFFERSIZE = 8192;
       static const int MAX_EFFECTS = 2;
@@ -103,6 +106,11 @@ class MasterSynthesizer : public QObject {
       float gain() const     { return _gain; }
       float boost() const    { return _boost; }
       void setBoost(float v) { _boost = v; }
+
+      int dynamicsMethod() const          { return _dynamicsMethod; }
+      void setDynamicsMethod(int val)     { _dynamicsMethod = val; }
+      int ccToUseIndex() const            { return _ccToUse; }    // NOTE: this doesn't return a CC number, but returns an index instead
+      void setCcToUseIndex(int val)       { _ccToUse = val; }
 
       bool storeState();
       };

@@ -189,6 +189,8 @@ void EditStaff::updateInstrument()
       maxPitchA->setText(midiCodeToStr(_maxPitchA));
       minPitchP->setText(midiCodeToStr(_minPitchP));
       maxPitchP->setText(midiCodeToStr(_maxPitchP));
+      singleNoteDynamics->setChecked(instrument.singleNoteDynamics());
+      instrument.switchExpressive(synti, instrument.singleNoteDynamics());
 
       // only show string data controls if instrument has strings
       int numStr = instrument.stringData() ? instrument.stringData()->strings() : 0;
@@ -333,6 +335,8 @@ void EditStaff::apply()
 
       instrument.setShortName(sn);
       instrument.setLongName(ln);
+
+      instrument.setSingleNoteDynamics(singleNoteDynamics->isChecked());
 
       bool inv       = invisible->isChecked();
       ClefTypeList clefType = orgStaff->defaultClefType();

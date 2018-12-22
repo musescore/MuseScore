@@ -64,6 +64,8 @@ class SynthesizerState : public std::list<SynthesizerGroup> {
       void read(XmlReader&);
       SynthesizerGroup group(const QString& name) const;
       bool isDefaultSynthSoundfont();
+      int ccToUse() const;
+      int method() const;
       };
 
 //---------------------------------------------------------
@@ -76,7 +78,9 @@ static SynthesizerState defaultState = {
       { "master", {
             { 0, "Zita1" },
             { 2, "0.1"   },
-            { 3, "440"   }
+            { 3, "440"   },
+            { 4, "1"     },
+            { 5, "1"     }
             },
             },
       { "Fluid", {

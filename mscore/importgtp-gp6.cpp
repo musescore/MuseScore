@@ -541,6 +541,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                                     StringData* stringData = new StringData(frets, strings, &tuning[0]);
                                     Instrument* instr      = part->instrument();
                                     instr->setStringData(*stringData);
+                                    instr->setSingleNoteDynamics(false);
                                     hasTuning = true;
                                     createTuningString(strings, &tuning[0]);
                                     }
