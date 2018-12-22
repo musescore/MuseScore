@@ -1999,6 +1999,18 @@ bool Score::processMidiInput()
                         ev.chord = false;
                   else
                         ev.chord = true;
+
+                  Element* cr = _is.lastSegment()->element(_is.track());
+                  if (cr->isChord()) {
+                        Note* n = toChord(cr)->findNote(ev.pitch);
+                        if (n) {
+                              deleteItem(n->tieBack());
+                              deleteItem(n);
+                              }
+                        if (qApp->keyboardModifiers() & Qt::ShiftModifier)
+                              ev.chord = true;
+                        }
+
                   // TODO: add shadow note instead of real note in realtime modes
                   // (note becomes real when realtime-advance triggered).
                   addMidiPitch(ev.pitch, ev.chord);
