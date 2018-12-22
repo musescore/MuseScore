@@ -433,9 +433,10 @@ void TourHandler::displayTour(Tour* tour)
             mbox->setWindowTitle(tr("Tour"));
             QPushButton* backButton = nullptr;
             QPushButton* nextButton = nullptr;
+            QPushButton* closeButton = nullptr;
 
             //QMessageBox doesn't support next/back semantic for various OS styles. QWizard does.
-            mbox->addButton(tr("Close"), QMessageBox::RejectRole);
+            closeButton = mbox->addButton(tr("Close"), QMessageBox::RejectRole);
             if (i != 0)
                   backButton = mbox->addButton(tr("Back"), QMessageBox::NoRole); //Explicit text is bad since it varies depending on the OS. MacOS uses "Go back"
             if (i != tourMessages.size() - 1)
@@ -448,6 +449,7 @@ void TourHandler::displayTour(Tour* tour)
                   mbox->setDefaultButton(nextButton);
             else
                   mbox->setDefaultButton(backButton);
+            mbox->setEscapeButton(closeButton);
 
             // Add text (translation?)
             mbox->setText(tourMessages[i].message);

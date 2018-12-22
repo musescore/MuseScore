@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="inspector-tour">
+  <Event objectName="inspector">MouseButtonRelease</Event>
+  <Event objectName="inspector">FocusIn</Event>
+  <Event objectName="InspectorBase">MouseButtonRelease</Event>
+  <Event objectName="InspectorBase">FocusIn</Event>
+  <Message>
+    <Text>Welcome to the Inspector, where you can change individual properties for selected elements.
+    Click "Next" to learn more.</Text>
+    <Widget>inspector</Widget>
+    </Message>
+  <Message>
+    <Text>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
+    The set of properties available will differ according to the type of selected elements or elements.</Text>
+    <Widget>inspector</Widget>
+    </Message>
+  <Message>
+    <Text>If you have selected elements of different types, only a few settings common to all elements will be available.
+    You can click the "Notes" and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</Text>
+    <Widget>InspectorElement</Widget>
+    <Widget>InspectorGroupElement</Widget>
+    <Widget>notes</Widget>
+    <Widget>graceNotes</Widget>
+    <Widget>rests</Widget>
+    </Message>
+  <Message>
+    <Text>If you have modified a value, you can click the "Reset" button to reset it to the default.
+    If the value is controlled by a style setting, you can click the "Set as style" button to set the current value as the new default for the style.
+    You can also set style defaults using Format / Style.</Text>
+    <Widget>offsetLabel</Widget>
+    <Widget>offset</Widget>
+    <Widget>resetOffset</Widget>
+    </Message>
+  </Tour>
