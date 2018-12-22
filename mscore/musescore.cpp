@@ -4252,7 +4252,7 @@ void MuseScore::readSettings()
       int w = 1024;
       int h = 768;
       QScreen* screen      = QGuiApplication::primaryScreen();
-      const QSize screenSize = screen->availableVirtualSize();
+      const QSize screenSize = screen->availableSize();
       if (screenSize.width() - margin > w)
             w = screenSize.width() - margin;
       else
