@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>TourXML</name>
     <message>
@@ -47,35 +45,6 @@
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</translation>
-    </message>
-    <message>
-        <source>To enable note input mode, click the &apos;Note input&apos; icon or press the shortcut &apos;N&apos;.</source>
-        <comment>note-input</comment>
-        <translation type="vanished">To enable note input mode, click the &apos;Note input&apos; icon or press the shortcut &apos;N&apos;.</translation>
-    </message>
-    <message>
-        <source>To enter a rest of the selected duration, press the shortcut &apos;0&apos;, or select this icon then click on the staff.</source>
-        <comment>note-input</comment>
-        <translation type="vanished">To enter a rest of the selected duration, press the shortcut &apos;0&apos;, or select this icon then click on the staff.</translation>
-    </message>
-    <message>
-        <source>To extend a note by adding a tied note, select the duration to extend by, then press &apos;+&apos;&apos; or click this button.</source>
-        <comment>note-input</comment>
-        <translation type="vanished">To extend a note by adding a tied note, select the duration to extend by, then press &apos;+&apos;&apos; or click this button.</translation>
-    </message>
-    <message>
-        <source>Welcome to note input, where you will enter notes and rests into your score.
-    Click &apos;Next&apos; to learn more.</source>
-        <comment>note-input</comment>
-        <translation type="vanished">Welcome to note input, where you will enter notes and rests into your score.
-    Click &apos;Next&apos; to learn more.</translation>
-    </message>
-    <message>
-        <source>Select a duration by clicking one of these icons or pressing the shortcuts &apos;1&apos; - &apos;9&apos;.
-    To include an augmentation dot, click the appropriate icon or press the shortcut &apos;.&apos;.</source>
-        <comment>note-input</comment>
-        <translation type="vanished">Select a duration by clicking one of these icons or pressing the shortcuts &apos;1&apos; - &apos;9&apos;.
-    To include an augmentation dot, click the appropriate icon or press the shortcut &apos;.&apos;.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
@@ -135,17 +104,6 @@
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</translation>
     </message>
     <message>
-        <source>That&apos;s the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &apos;Continue showing tours&apos; before closing this window.
-    You can also enable/disable tours in Help / Tours.</source>
-        <comment>welcome</comment>
-        <translation type="vanished">That&apos;s the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &apos;Continue showing tours&apos; before closing this window.
-    You can also enable/disable tours in Help / Tours.</translation>
-    </message>
-    <message>
         <source>There are different workspaces available with different sets of palettes.
     The &quot;Advanced&quot; workspace contains more items than the &quot;Basic&quot; workspace.</source>
         <comment>show-palette</comment>
@@ -169,13 +127,6 @@
     To toggle this setting again, press the shortcut &quot;M&quot;.</translation>
     </message>
     <message>
-        <source>Welcome to the Timeline, where you can view a reduction of the score for easier navigation.
-    Click &apos;Next&apos; to learn more.</source>
-        <comment>timeline-tour</comment>
-        <translation type="vanished">Welcome to the Timeline, where you can view a reduction of the score for easier navigation.
-    Click &apos;Next&apos; to learn more.</translation>
-    </message>
-    <message>
         <source>Each box represents a measure of a specific instrument.
     If it is highlighted, then there are notes in that measure.
     The timeline also shows rehearsal marks, changes of tempo, key, or time signature, and other points of interest.
@@ -192,42 +143,48 @@
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Welcome to note input, where you will enter notes and rests into your score.
+    Click &quot;Next&quot; to learn more.</translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
+    To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</translation>
     </message>
     <message>
-        <source>That&apos;s the end of this tour!
+        <source>That's the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable tours in Help / Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation>That&apos;s the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable tours in Help / Tours.</translation>
     </message>
     <message>
         <source>Welcome to the Timeline, where you can view a reduction of the score for easier navigation.
     Click &quot;Next&quot; to learn more.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation>Welcome to the Timeline, where you can view a reduction of the score for easier navigation.
+    Click &quot;Next&quot; to learn more.</translation>
     </message>
 </context>
 </TS>

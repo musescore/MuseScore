@@ -978,7 +978,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="437"/>
         <source>Baritone Horn (Treble Clef)</source>
-        <translation>Cor baryton (clé de Sol)</translation>
+        <translation>Cor baryton (clef de sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="438"/>
@@ -1224,7 +1224,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="565"/>
         <source>Trombone (Treble Clef)</source>
-        <translation>Trombone (clé de Sol)</translation>
+        <translation>Trombone (clef de sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="566"/>
@@ -1265,7 +1265,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="582"/>
         <source>Euphonium (Treble Clef)</source>
-        <translation>Euphonium (clé de Sol)</translation>
+        <translation>Euphonium (clef de sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="583"/>
@@ -1286,7 +1286,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="591"/>
         <source>E♭ Tuba (Treble Clef)</source>
-        <translation>Tuba en Mi♭ (clé de Sol)</translation>
+        <translation>Tuba en Mi♭ (clef de sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="592"/>
@@ -1302,7 +1302,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="598"/>
         <source>B♭ Tuba (Treble Clef)</source>
-        <translation>Tuba en Si♭ (clé de Sol)</translation>
+        <translation>Tuba en Si♭ (clef de sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="599"/>
@@ -2280,7 +2280,7 @@
         <location filename="../instruments/instrumentsxml.h" line="84"/>
         <source>B♭ S. Oc.</source>
         <comment>B♭ Soprano Ocarina</comment>
-        <translation>Oc. S. Si♭</translation>
+        <translation>Oc. S Si♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="86"/>
@@ -2805,7 +2805,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="255"/>
         <source>B♭ Bass Clarinet (Bass Clef)</source>
-        <translation>Clarinette Basse en Si♭ (Clef de Fa)</translation>
+        <translation>Clarinette Basse en Si♭ (clef de fa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="256"/>
@@ -2827,7 +2827,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="259"/>
         <source>A Bass Clarinet (Bass Clef)</source>
-        <translation>Clarinette Basse en La (Clef de Fa)</translation>
+        <translation>Clarinette Basse en La (clef de fa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="260"/>
@@ -3562,7 +3562,7 @@
         <location filename="../instruments/instrumentsxml.h" line="512"/>
         <source>S. Bu.</source>
         <comment>Soprano Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>Cl. S.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="514"/>
@@ -3610,13 +3610,13 @@
         <location filename="../instruments/instrumentsxml.h" line="528"/>
         <source>Cb. Bu.</source>
         <comment>Contrabass Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>Cl. Cb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="530"/>
         <source>Mello.</source>
         <comment>Mellophone</comment>
-        <translation type="unfinished"/>
+        <translation>Mello.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="532"/>
@@ -3821,7 +3821,7 @@
         <location filename="../instruments/instrumentsxml.h" line="604"/>
         <source>SCb. Tb.</source>
         <comment>Sub-Contrabass Tuba</comment>
-        <translation type="unfinished"/>
+        <translation>Tu. SCb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="606"/>
@@ -4693,27 +4693,27 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="868"/>
         <source>Soprano (C Clef)</source>
-        <translation>Soprano (Clef d&apos;ut)</translation>
+        <translation>Soprano (clef d&apos;ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="871"/>
         <source>Mezzo-soprano (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Mezzo-soprano (clef d&apos;ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="874"/>
         <source>Alto (C Clef)</source>
-        <translation>Alto (Clef d&apos;ut)</translation>
+        <translation>Alto (clef d&apos;ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="877"/>
         <source>Tenor (C Clef)</source>
-        <translation>Tenor (Clef d&apos;ut)</translation>
+        <translation>Tenor (clef d&apos;ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="880"/>
         <source>Baritone (C Clef)</source>
-        <translation>Baryton (Clef d&apos;ut)</translation>
+        <translation>Baryton (clef d&apos;ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="882"/>
@@ -5876,7 +5876,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1028"/>
         <source>Cb. Bal.</source>
         <comment>Contrabass Balalaika</comment>
-        <translation type="unfinished"/>
+        <translation>Bal. Cb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1031"/>
@@ -5919,7 +5919,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1044"/>
         <source>Guitar (Treble Clef)</source>
-        <translation>Guitare (clef de Sol)</translation>
+        <translation>Guitare (clef de sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1046"/>
