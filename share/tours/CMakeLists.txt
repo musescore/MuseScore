@@ -18,9 +18,13 @@
 #=============================================================================
 
 install(FILES
+      autoplace.tour
+      inspector.tour
       mmrest.tour
+      navigate.tour
       noteinput.tour
       palette.tour
+      select.tour
       timeline.tour
       welcome.tour
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}tours

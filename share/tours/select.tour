@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="select-tour">
+  <Shortcut>select-all</Shortcut>
+  <Shortcut>select-section</Shortcut>
+  <Shortcut>toggle-selection-window</Shortcut>
+  <Message>
+    <Text>MuseScore supports different types of selections: single, list, and range.
+    Click "Next" to learn more.</Text>
+    </Message>
+  <Message>
+    <Text>To make a single selection, click the element you want to select.
+    It becomes highlighted to indicate that it is selected.
+    You can use the left and right cursor keys to move the selection through the notes and rests of your score.
+    Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
+    and also move up and down from staff to staff.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>A list selection is a combination of single selections.
+    Press Ctrl (macOS: Cmd) while clicking to add or remove elements to the list selection.
+    You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
+    and then choosing one of the "Select" options from the resulting popup menu.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>A range selection includes everything from one point in time to another across one or more staves.
+    It is indicated by a blue rectangle encompassing the entire range.
+    To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
+    You can also extend range selections by holding the Shift key while moving the cursor.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>Another way to make selections is to hold Shift while dragging.
+    If your selection includes notes, it will automatically be made as a range selection;
+    otherwise it will be made as a list selection.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</Text>
+    <Widget>SelectionWindow</Widget>
+    </Message>
+  </Tour>

@@ -25,6 +25,7 @@
 #include "fontStyleSelect.h"
 #include "scoreview.h"
 #include "resetButton.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -35,9 +36,10 @@ namespace Ms {
 InspectorBase::InspectorBase(QWidget* parent)
    : QWidget(parent)
       {
-      setObjectName("inspector");
+      setObjectName("InspectorBase");
       setAccessibleName(tr("Inspector"));
       inspector = static_cast<Inspector*>(parent);
+      setParent(parent);
       _layout    = new QVBoxLayout(this);
       _layout->setSpacing(0);
       _layout->setContentsMargins(0, 10, 0, 0);
@@ -386,6 +388,11 @@ void InspectorBase::valueChanged(int idx, bool reset)
       QVariant val2 = getValue(ii);                   // get new value from UI
       Element* iElement = inspector->element();
       Score* score  = iElement->score();
+
+      if (ii.t == Pid::AUTOPLACE)
+            TourHandler::startTour("autoplace-tour");
+      else
+            TourHandler::startTour("inspector-tour");
 
       score->startCmd();
       for (Element* e : *inspector->el()) {
