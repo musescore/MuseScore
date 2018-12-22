@@ -154,7 +154,8 @@ void TourHandler::loadTour(XmlReader& tourXml)
                   while (tourXml.readNextStartElement()) {
                         if (tourXml.name() == "Text") {
                               QTextDocument doc;
-                              doc.setHtml(tourXml.readXml());
+                              QString ttext = qApp->translate("TourXML", tourXml.readXml().toUtf8().data());
+                              doc.setHtml(ttext);
                               text = doc.toPlainText().replace("\\n", "\n");
                               }
                         else if (tourXml.name() == "Widget")

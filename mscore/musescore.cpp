@@ -3134,6 +3134,7 @@ void setMscoreLocale(QString _localeName)
       // try to replicate QTranslator.load algorithm in our particular case
       loadTranslation("mscore", _localeName);
       loadTranslation("instruments", _localeName);
+      loadTranslation("tours", _localeName);
 
       QString resourceDir;
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
