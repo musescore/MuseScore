@@ -3049,7 +3049,7 @@ void Score::cmdPitchUpOctave()
       {
       Element* el = selection().element();
       if (el && (el->isArticulation() || el->isTextBase()))
-            el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()));
+            el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, -MScore::nudgeStep10 * el->spatium()), PropertyFlags::UNSTYLED);
       else
             upDown(true, UpDownMode::OCTAVE);
       }
@@ -3062,7 +3062,7 @@ void Score::cmdPitchDownOctave()
       {
       Element* el = selection().element();
       if (el && (el->isArticulation() || el->isTextBase()))
-            el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()));
+            el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, MScore::nudgeStep10 * el->spatium()), PropertyFlags::UNSTYLED);
       else
             upDown(false, UpDownMode::OCTAVE);
       }
