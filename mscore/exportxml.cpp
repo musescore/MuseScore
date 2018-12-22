@@ -1240,8 +1240,8 @@ void ExportMusicXml::credits(XmlWriter& xml)
       const double h  = getTenthsFromInches(_score->styleD(Sid::pageHeight));
       const double w  = getTenthsFromInches(_score->styleD(Sid::pageWidth));
       const double lm = getTenthsFromInches(_score->styleD(Sid::pageOddLeftMargin));
-      const double rm = getTenthsFromInches(_score->styleD(Sid::pagePrintableWidth) - _score->styleD(Sid::pageOddLeftMargin));
-      //const double tm = getTenthsFromInches(pf->oddTopMargin());
+      const double rm = getTenthsFromInches(_score->styleD(Sid::pageEvenLeftMargin));
+      //const double tm = getTenthsFromInches(_score->styleD(Sid::pageOddTopMargin));
       const double bm = getTenthsFromInches(_score->styleD(Sid::pageOddBottomMargin));
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
