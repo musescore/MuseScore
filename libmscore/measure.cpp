@@ -3419,8 +3419,6 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             }
       else {
             BarLineType t = BarLineType::NORMAL;
-            if (nm)
-                  t = BarLineType::END;
             if (!seg)
                   seg = getSegmentR(SegmentType::EndBarLine, ticks());
             else {
@@ -3429,6 +3427,8 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   if (bl)
                         t = bl->barLineType();
                   }
+            if (!nm)
+                  t = BarLineType::END;
             seg->setEnabled(true);
             //
             //  Set flag "hasCourtesyKeySig" if this measure needs a courtesy key sig.
