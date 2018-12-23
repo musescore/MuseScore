@@ -279,7 +279,7 @@ set(ASSETS_ARCHIVE_NAME "${MUSESCORE_NAME}-assets-${MUSESCORE_VERSION_FULL}.zip"
 # on whether the branches have the same value for ${ASSETS_ARCHIVE_NAME}.
 if (DOWNLOAD_ASSETS)
   # Download assets instead of building from source
-  set(ASSETS_REMOTE "https://transfer.sh/DCGBu/${ASSETS_ARCHIVE_NAME}") # TODO: fetch from MuseScore server
+  set(ASSETS_REMOTE "https://transfer.sh/QCx9R/${ASSETS_ARCHIVE_NAME}") # TODO: fetch from MuseScore server
   set(ASSETS_LOCAL "${ASSETS_BINARY_DIR}/${ASSETS_ARCHIVE_NAME}")
   set(ASSETS_PREVIOUS "${ASSETS_BINARY_DIR}/last_extracted") # file contains name of the last archive extracted
   set(EXTRACT_ASSETS TRUE) # whether to extract the archive

@@ -13,11 +13,6 @@ platform/app-icons/musescore-icon-round_96x96.png
 platform/app-icons/musescore-icon-round_128x128.png
 platform/app-icons/musescore-icon-round_256x256.png
 platform/app-icons/musescore-icon-round_512x512.png
-platform/app-icons/musescore-icon-round_16x16@2x.png
-platform/app-icons/musescore-icon-round_32x32@2x.png
-platform/app-icons/musescore-icon-round_128x128@2x.png
-platform/app-icons/musescore-icon-round_256x256@2x.png
-platform/app-icons/musescore-icon-round_512x512@2x.png
 platform/app-icons/musescore-icon-square.svg
 platform/app-icons/musescore-icon-square.ico
 platform/app-icons/musescore-icon-square.icns
@@ -31,11 +26,6 @@ platform/app-icons/musescore-icon-square_96x96.png
 platform/app-icons/musescore-icon-square_128x128.png
 platform/app-icons/musescore-icon-square_256x256.png
 platform/app-icons/musescore-icon-square_512x512.png
-platform/app-icons/musescore-icon-square_16x16@2x.png
-platform/app-icons/musescore-icon-square_32x32@2x.png
-platform/app-icons/musescore-icon-square_128x128@2x.png
-platform/app-icons/musescore-icon-square_256x256@2x.png
-platform/app-icons/musescore-icon-square_512x512@2x.png
 platform/file-icons/mscx.svg
 platform/file-icons/mscx.ico
 platform/file-icons/mscx.icns

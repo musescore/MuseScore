@@ -45,7 +45,10 @@ artifacts -v || curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/m
 sudo add-apt-repository -y ppa:inkscape.dev/stable
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - # node.js
 sudo apt-get install -y inkscape nodejs
-sudo npm install -g svgo
+sudo npm install -g svgo eclint google-font-installer
+for font in Raleway Roboto; do
+  sudo gfi install "${font}" # can't install more than one at a time
+done
 
 export DISPLAY=:99.0
 sh -e /etc/init.d/xvfb start # fake display for GUI programs (inkscape)

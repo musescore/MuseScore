@@ -3,6 +3,8 @@
 set -e # exit on error
 set -x # echo commands
 
+# DEPENDENCIES
+
 # upgrade older packages already installed on Travis CI
 HOMEBREW_UPGRADES=(
   # cmake # can't upgrade without updating homebrew itself
@@ -20,7 +22,9 @@ HOMEBREW_CASKS=(
   inkscape
   )
 
+# Node.js
 NPM_PACKAGES=(
+  eclint
   google-font-installer
   svgo
   )
@@ -43,29 +47,55 @@ for font in "${GOOGLE_FONTS[@]}"; do
   gfi install "${font}" # can't install more than one at a time
 done
 
-# get number of CPUs so we can launch this many parallel build jobs
-CPUS="$( getconf _NPROCESSORS_ONLN 2>/dev/null \
-      || getconf NPROCESSORS_ONLN 2>/dev/null \
-      || echo 1 )"
+# TEST - code sanity check
+if ! (cd assets && eclint check); then
+  echo "$0: Code doesn't match formatting rules in 'assets/.editorconfig'."
+  exit 1
+fi
 
+# CONFIGURE
 # We only want to build the assets, but we still have to configure MuseScore
 # so that we get access to the variables set in MuseScore's CMakeLists.txt.
+
 mkdir build.assets
 cd build.assets
 cmake .. -DDOWNLOAD_ASSETS=FALSE -DONLY_BUILD_ASSETS=TRUE
-make -j ${CPUS} assets_archive # make is faster than Xcode for custom commands
+
+# BUILD
+
+cpus="$(getconf _NPROCESSORS_ONLN)" # get number of logical CPU cores
+make -j ${cpus} assets_archive # make is faster than Xcode for assets
 
 cd assets # because we configured MuseScore, not just the assets
 
-# basic CI test:
-if ! git diff --no-index ../../assets/assets-manifest.txt assets-manifest.txt; then
-  echo "Assets build: Generated manifest doesn't match the repository version."
+assets_archive="$(ls MuseScore-assets-*.zip)"
+
+if [[ ! -f "${assets_archive}" ]]; then
+  echo "$0: Assets archive not found where it was supposed to be." >&2
+  pwd # where are we?
+  find . # what's here?
+  exit 1
 fi
 
-assets_archive="$(ls MuseScore-assets-*.zip)"
-if [[ ! -f "${assets_archive}" ]]; then
-  echo "Assets archive not found where it was supposed to be."
-  pwd
-  find .
-  exit 1
+# UPLOAD
+
+if [[ "${UPLOAD_ASSETS}" ]]; then
+  if [[ "${TRAVIS_REPO_SLUG}" == "musescore/MuseScore" ]] && [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
+    # Upload assets to MuseScore server so everyone can download them
+    (
+      # enter subshell to set shell options locally
+      set +x # protect secrets inside subshell
+      echo "TODO: write command to upload ${assets_archive} to MuseScore server"
+      exit 1 # remove when implemented
+    )
+  else
+    # Upload assets to transfer.sh so developers can download and test them
+    url="$(curl --upload-file "${assets_archive}" "https://transfer.sh/${file}")"
+    if [[ "${url}" ]]; then
+      echo "Assets uploaded to: ${url}"
+    else
+      echo "Assets upload failed!"
+      exit 1
+    fi
+  fi
 fi

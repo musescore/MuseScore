@@ -1,7 +1,7 @@
 ![MuseScore Logo](resources/mscore.svg)
 
-MuseScore's Assets
-==================
+MuseScore Assets
+================
 
 This is where all assets are stored as SVG (Scalable Vector Graphics) files.
 These source files are processed by various command line tools, including
@@ -65,24 +65,24 @@ Why compile assets? Why not just commit PNG & ICO files into the repository?
 ### Directories
 [Directories]: #directories
 
-- __[Resources]:__ Textures and basic shapes that are used in other assets
-- __[Brand]:__ Logos
-- __[Platform]:__ Application and document icons used by the operating system
-- __[Splash]:__ Splash screen images displayed during MuseScore's startup
-- *Glyphs:* in-app icons for MuseScore's buttons and menus are not currently
-  part of the assets build. They are in [../mscore/data/icons][Glyphs].
+- __[resources]:__ Textures and basic shapes that are used in other assets
+- __[brand]:__ Logos
+- __[platform]:__ Application and document icons used by the operating system
+- __[splash]:__ Splash screen images displayed during MuseScore's startup
+- *glyphs:* in-app icons for MuseScore's buttons and menus are not currently
+  part of the assets build (they are in [../mscore/data/icons][glyphs]).
 
-[Resources]: resources "Textures and basic shapes used in other assets"
-[Brand]: brand "Logos"
-[Platform]: platform "App and document icons used by the operating system"
-[Splash]: splash "Splash screen images displayed during MuseScore's startup"
-[Glyphs]: ../mscore/data/icons "Icons for MuseScore's buttons and menus"
+[resources]: resources "Textures and basic shapes used in other assets"
+[brand]: brand "Logos"
+[platform]: platform "App and document icons used by the operating system"
+[splash]: splash "Splash screen images displayed during MuseScore's startup"
+[glyphs]: ../mscore/data/icons "Icons for MuseScore's buttons and menus"
 
-The [Platform] directory produces assets that must integrate into the user's
+The [platform] directory produces assets that must integrate into the user's
 desktop environment (file manager and system menu). This means there are extra
-requirements for those files, as explained in the [Platform README].
+requirements for those files, as explained in the [platform README].
 
-[Platform README]: platform/README.md
+[platform README]: platform/README.md
 
 ## Building the assets
 [Building the assets]: #building-the-assets
@@ -111,13 +111,18 @@ developers have to install on their machines.
 
 If you want to build the assets simply set MuseScore's `DOWNLOAD_ASSETS` build
 option to `OFF` and then run the build again. The build will probably fail now
-due to missing programs or fonts, so see the [Dependencies section] to get it
+due to missing programs or fonts, so see the [Dependencies] section to get it
 working again.
 
-When building with MuseScore the assets are built inside the assets sub-folder
-of MuseScore's build directory (i.e. `build.debug/assets`).
+MuseScore has another build option `ONLY_BUILD_ASSETS` that you can enable if
+you want MuseScore's build to finish as soon as the assets have finished
+building (i.e. you are not interested in compiling MuseScore itself). This is
+useful when working on the assets, but you should always run a complete build
+of MuseScore before contributing any changes to the assets, as some changes
+will require MuseScore's own build process to be updated.
 
-[Dependencies section]: #dependencies
+When building with MuseScore the assets are built inside the assets sub-folder
+of MuseScore's build directory (i.e. `build.debug/assets` or similar).
 
 ### Building Alone
 [Building Alone]: #building-alone
@@ -158,9 +163,9 @@ cmake --build .  # this is the `build` step (notice the single dot/period)
 These commands are __likely to fail__ at the `configure` step, but don't worry
 as we will try to get it working in the next couple of sections.
 
-__Tip:__ Recent versions of CMake have a `-j` option to specify the number of
-parallel build jobs to run. The more jobs you run the faster the build, up to
-a point, but if you run too many the build will go more slowly and your
+__Tip:__ CMake version 3.12 and later have a `-j` option to specify the number
+of parallel build jobs to run. The more jobs you run the faster the build, up
+to a point, but if you run too many the build will go more slowly and your
 computer may hang (become unresponsive) until the build is complete. The
 optimum number of build jobs is usually the same as the number of physical CPU
 cores in your machine, or twice that number if your CPU has hyper-threading:
@@ -216,9 +221,17 @@ command line. You do this by defining (with `-D`) the CMake variable
 cmake "-GMinGW" "-DCMAKE_MAKE_PROGRAM=mingw32-make.exe" ..
 ```
 
-The `build` step is always the same regardless of which generator you use,
-though CMake will call a different build tool behind the scenes. (You could
-even call the native build tool yourself if you know what you are doing.)
+Once the configuration is done you need to run the native build tool on the
+build script that CMake generated for it. Each build tool has a different name
+and takes different options. Fortunately CMake knows how to call the one it
+just generated for and it provides a `--build` option to us as a convenience:
+
+```bash
+cmake --build .  # `build` step with any native build tool
+```
+
+CMake's job was done during the `configure` step, so this command doesn't do
+anything except call the native build tool.
 
 ##### Dependencies
 [Dependencies]: #dependencies
@@ -302,9 +315,8 @@ MuseScore's build shouldn't modify the asset files in any way, except to:
   distribution.
 - Embed them in an installation package or binary executable.
 
-All other modifications, such as format conversions, should be done as part of
-the assets build.
-
+All other modifications, including conversion to other image formats, should
+be done as part of the assets build.
 
 [MuseScore's CMakeLists.txt] defines a variable called `ASSETS_BINARY_DIR`,
 which points to where the asset files are built or downloaded. Simply look for

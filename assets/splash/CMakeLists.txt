@@ -15,14 +15,20 @@ function(splash # create splash screen image from a source SVG
 endfunction(splash)
 
 # splash screen for stable releases
-splash(splash-stable.svg.xml.in "STABLE" "../platform/app-icons/musescore-icon-round.svg")
+set(DEPENDENCIES
+  "../resources/splash-background.jpg"
+  "../platform/app-icons/musescore-icon-round.svg"
+  )
+splash(splash-stable.svg.xml.in "STABLE" ${DEPENDENCIES})
 
 # splash screen for unstable builds
+list(APPEND DEPENDENCIES "../resources/cymbals.svg")
 foreach(BUILD "NIGHTLY" "DEVELOPMENT")
-  splash(splash-unstable.svg.xml.in "${BUILD}" "../platform/app-icons/musescore-icon-round.svg")
+  splash(splash-unstable.svg.xml.in "${BUILD}" ${DEPENDENCIES})
 endforeach(BUILD)
 
 add_custom_target("assets_splash" DEPENDS ${GENERATED_FILES})
+add_dependencies("assets_splash" "assets_resources")
 add_dependencies("assets_splash" "assets_platform_appicons")
 add_dependencies("assets" "assets_splash")
 add_to_manifest(${GENERATED_FILES})

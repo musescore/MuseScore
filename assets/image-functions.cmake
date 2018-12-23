@@ -2,11 +2,11 @@ required_program(INKSCAPE "SVG vector graphics editing program - https://inkscap
 required_program(XMLLINT "Tool for parsing XML files - http://xmlsoft.org/xmllint.html" "xmllint")
 
 if(OPTIMIZE_SVGS)
-  required_program(SVGO "Tool for optimizing SVG vector graphics files" "svgo")
+  required_program(SVGO "Tool for optimizing SVG vector graphics files - https://github.com/svg/svgo" "svgo")
 endif(OPTIMIZE_SVGS)
 
 if(OPTIMIZE_PNGS)
-  required_program(PNGCRUSH "Tool for optimizing PNG image files losslessly" "pngcrush")
+  required_program(PNGCRUSH "Tool for optimizing PNG image files losslessly - https://pmt.sourceforge.io/pngcrush/" "pngcrush")
 endif(OPTIMIZE_PNGS)
 
 # Need a function to convert relative paths to absolute paths:
@@ -66,20 +66,6 @@ function(standalone_svg # resolve and embed an SVG's external dependencies
     VERBATIM
     )
 endfunction(standalone_svg)
-
-function(vectorize_svg # convert text to paths to remove font dependencies
-  SVG_FILE_IN # path to the input SVG
-  SVG_FILE_OUT # path where the output SVG will be written
-  )
-  absolute_path(SVG_FILE_IN_ABS "${SVG_FILE_IN}") # needed for DEPENDS
-  absolute_path(SVG_FILE_OUT_ABS "${SVG_FILE_OUT}") # needed for Inkscape on macOS
-  add_custom_command(
-    OUTPUT "${SVG_FILE_OUT}" # relative path required
-    DEPENDS "${SVG_FILE_IN_ABS}" # absolute path required
-    COMMAND "${INKSCAPE}" -z "${SVG_FILE_IN_ABS}" --export-text-to-path --vacuum-defs --export-plain-svg "${SVG_FILE_OUT_ABS}"
-    VERBATIM
-    )
-endfunction(vectorize_svg)
 
 function(optimize_svg # reduce size of an SVG without changing its appearance
   SVG_FILE_IN # path to the input SVG

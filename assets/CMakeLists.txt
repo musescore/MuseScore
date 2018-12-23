@@ -16,23 +16,23 @@ endif(WIN32)
 # building the assets alone. If MuseScore requires different settings then
 # these should be made in MuseScore's top-level CMakeLists.txt. Options with
 # the same name in MuseScore's CMakeLists.txt will override the ones here.
+option(TESTS "Run code validation and other checks during the build process" ON)
 option(STRICT_FONTS "Fail build if required fonts are not installed (disable to allow build to proceed using a fallback font)" ON)
 option(STRICT_VARIABLES "Fail build if required variables are not defined (disable to allow build to proceed using default values)" ON)
-option(BUILD_WINDOWS_ICONS "Build ICO icons for Windows and associated PNG sizes." ON)
-option(BUILD_MACOS_ICONS "Build ICNS icons for macOS and associated PNG sizes." ON)
-option(BUILD_FREEDESKTOP_ICONS "Build PNG icons at sizes commonly used on Linux and other systems that obey the FreeDesktop.org standards." ON)
-option(OPTIMIZE_SVGS "Optimize SVG file size using SVGO." ON)
-option(OPTIMIZE_PNGS "Optimize PNG file size using PNGCRUSH." ON)
-option(OPTIMIZE_PNGS_BRUTE "Try all PNG compression methods to ensure smallest possible size (takes time)." OFF)
+option(BUILD_WINDOWS_ICONS "Build ICO icon files for Windows" ON)
+option(BUILD_MACOS_ICONS "Build ICNS icon files for macOS" ON)
+option(BUILD_FREEDESKTOP_ICONS "Build PNG icons for Linux and other systems that follow the FreeDesktop.org specifications" ON)
+option(OPTIMIZE_SVGS "Optimize SVG file size using SVGO" ON)
+option(OPTIMIZE_PNGS "Optimize PNG file size using PNGCRUSH" ON)
+option(OPTIMIZE_PNGS_BRUTE "Try all PNG compression methods to ensure smallest possible size (takes time)" OFF)
 
-# Load CMake code stored in other files - modular programming (sort of)
+# Load CMake functions defined in other files - modular programming (sort of)
 include("basic-functions.cmake")
 include("image-functions.cmake")
 if(STRICT_FONTS)
   include("font-dependencies.cmake")
 else(STRICT_FONTS)
   message(STATUS "Not checking system fonts (STRICT_FONTS is OFF)")
-  message(WARNING "Text in assets will look wrong if required fonts are not installed.")
 endif(STRICT_FONTS)
 
 # Some assets depend on variables defined in MuseScore's CMakeLists.txt
@@ -63,9 +63,10 @@ function(add_to_manifest # add assets to the manifest file
   endforeach(FILE)
 endfunction(add_to_manifest)
 
-add_custom_target("assets" ALL) # main target to build all assets
+add_subdirectory(resources) # resources first (everything depends on them)
 
-add_subdirectory(resources)
+add_custom_target("assets" ALL) # main target to build all other assets
+
 add_subdirectory(brand)
 add_subdirectory(platform)
 add_subdirectory(splash)
@@ -86,3 +87,31 @@ add_custom_command(
   COMMAND "${CMAKE_COMMAND}" -E tar "cfv" "${ASSETS_ARCHIVE_NAME}" --format=zip ${ASSET_FILES}
   VERBATIM
   )
+
+if(TESTS)
+  # POST CONFIGURE CHECKS - these are run by CMake just before it exits.
+  # NOTE: CMake only runs on the first build or when the CMake or configured
+  # files change. All other files must be checked at build time.
+  required_program(GIT "Distributed VCS - https://git-scm.com/" "git")
+  execute_process(
+    COMMAND "${GIT}" diff --color --no-index "${PROJECT_SOURCE_DIR}/${ASSETS_MANIFEST}" "${ASSETS_MANIFEST}"
+    WORKING_DIRECTORY "${PROJECT_BINARY_DIR}"
+    RESULT_VARIABLE RET_VAL
+    )
+  if(RET_VAL STREQUAL "1") # compare strings as RET_VAL not always a number
+    message(FATAL_ERROR "Generated manifest doesn't match the repository version.")
+  elseif(NOT RET_VAL STREQUAL "0")
+    message(FATAL_ERROR "Diff command exited with '${RET_VAL}' indicating an error occured.")
+  endif(RET_VAL STREQUAL "1")
+
+  # PRE BUILD CHECKS - Run by the native build tool as soon as it starts.
+  # NOTE: The build tool runs on every build, so these checks do too.
+  required_program(ECLINT "Tool for checking code formatting and indentation - https://github.com/jedmao/eclint" "eclint")
+  add_custom_target("assets_sanitycheck" ALL
+    COMMAND "${ECLINT}" check # ignores all files in .gitignore
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+    VERBATIM USES_TERMINAL
+    )
+  # now ensure check runs before everything else
+  add_dependencies("assets_resources" "assets_sanitycheck")
+endif(TESTS)
