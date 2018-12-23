@@ -3419,9 +3419,8 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             }
       else {
             BarLineType t = BarLineType::NORMAL;
-            if (nm) {
+            if (nm)
                   t = BarLineType::END;
-                  }
             if (!seg)
                   seg = getSegmentR(SegmentType::EndBarLine, ticks());
             else {
