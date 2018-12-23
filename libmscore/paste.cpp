@@ -177,7 +177,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
-                              if (tuplet->rfrac() + tuplet->duration() > measure->len()) {
+                              tuplet->setTuplet(oldTuplet);
+                              if (tuplet->rfrac() + tuplet->actualFraction() > measure->len()) {
                                     delete tuplet;
                                     if (oldTuplet && oldTuplet->elements().empty())
                                           delete oldTuplet;
