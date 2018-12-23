@@ -303,7 +303,7 @@ class ExportMusicXml {
                            TrillHash& trillStart, TrillHash& trillStop);
       void wavyLineStartStop(Chord* chord, Notations& notations, Ornaments& ornaments,
                              TrillHash& trillStart, TrillHash& trillStop);
-      void print(Measure* m, int idx, int staffCount, int staves);
+      void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart);
       void findAndExportClef(Measure* m, const int staves, const int strack, const int etrack);
       void writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset);
 
@@ -4599,7 +4599,7 @@ static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrum
  anyway and is thus useless.
  */
 
-void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
+void ExportMusicXml::print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart)
       {
       int currentSystem = NoSystem;
       Measure* previousMeasure = 0;
@@ -4676,7 +4676,7 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
                   const System* system = mmR1->system();
 
                   // Put the system print suggestions only for the first part in a score...
-                  if (idx == 0) {
+                  if (partNr == 0) {
 
                         // Find the right margin of the system.
                         double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
@@ -4707,11 +4707,15 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
                         }
 
                   // Staff layout elements.
-                  for (int staffIdx = (staffCount == 0) ? 1 : 0; staffIdx < staves; staffIdx++) {
+                  for (int staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
+
+                        // calculate distance between this and previous staff using the bounding boxes
+                        const auto staffNr = firstStaffOfPart + staffIdx;
+                        const auto prevBbox = system->staff(staffNr - 1)->bbox();
+                        const auto staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
+
                         _xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
-                        const double staffDist = 0.0;
-//TODO-ws                              getTenthsFromDots(system->staff(staffCount + staffIdx - 1)->distanceDown());
-                        _xml.tag("staff-distance", QString("%1").arg(QString::number(staffDist,'f',2)));
+                        _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist),'f',2)));
                         _xml.etag();
                         }
 
