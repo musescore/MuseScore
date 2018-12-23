@@ -230,7 +230,7 @@ bool TextBase::edit(EditData& ed)
 
                   case Qt::Key_Delete:
                         if (!deleteSelectedText(ed))
-                              score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+                              score()->undo(new RemoveText(_cursor, _cursor->currentVariableLengthUnicodeCharacter()), &ed);
                         return true;
 
                   case Qt::Key_Backspace:
@@ -240,7 +240,7 @@ bool TextBase::edit(EditData& ed)
                               else {
                                     if (!_cursor->movePosition(QTextCursor::Left))
                                           return false;
-                                    score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+                                    score()->undo(new RemoveText(_cursor, _cursor->currentVariableLengthUnicodeCharacter()), &ed);
                                     }
                               }
                         return true;
@@ -410,6 +410,7 @@ void ChangeText::insertText(EditData* ed)
 
 //---------------------------------------------------------
 //  ChangeText::removeText
+//   note: operate on granularity of complete Unicode Characters, not 16-bit QChars
 //---------------------------------------------------------
 
 void ChangeText::removeText(EditData* ed)
@@ -418,8 +419,12 @@ void ChangeText::removeText(EditData* ed)
       TextBlock& l  = c.curLine();
       int column    = c.column();
 
-      for (int n = 0; n < s.size(); ++n)
-            l.remove(column);
+      for (int nQChars = 0; nQChars < s.size(); ) {
+            // remove one complete Unicode Character (could either be one QChar or two QChars) at column each iteration:
+            // nQChars will be increased by 1 when removing a Unicode Character from the Basic Multilingual Plane
+            // nQChars will be increased by 2 when removing a Unicode Character from a Supplemental Plane
+            nQChars += l.remove(column).size();
+            }
       c.text()->triggerLayout();
       if (ed)
             *c.text()->cursor(*ed) = tc;
@@ -547,11 +552,11 @@ void TextBase::paste(EditData& ed)
                         else {
                               deleteSelectedText(ed);
                               if (c.isHighSurrogate()) {
-                                    QChar highSurrogate = c;
                                     Q_ASSERT(i + 1 < txt.length());
                                     i++;
                                     QChar lowSurrogate = txt[i];
-                                    insertText(ed, QString(QChar::surrogateToUcs4(highSurrogate, lowSurrogate)));
+                                    QString surrogatePair = QString(c).append(lowSurrogate);
+                                    insertText(ed, surrogatePair);
                                     }
                               else {
                                     insertText(ed, QString(QChar(c.unicode())));
@@ -732,7 +737,7 @@ bool TextBase::deleteSelectedText(EditData& ed)
                   // move cursor left:
                   if (!_cursor->movePosition(QTextCursor::Left))
                         break;
-                  score()->undo(new RemoveText(_cursor, QString(_cursor->currentCharacter())), &ed);
+                  score()->undo(new RemoveText(_cursor, _cursor->currentVariableLengthUnicodeCharacter()), &ed);
                   }
             }
       return true;

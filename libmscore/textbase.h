@@ -126,7 +126,8 @@ class TextCursor {
       bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int count = 1);
       void moveCursorToEnd()   { movePosition(QTextCursor::End);   }
       void moveCursorToStart() { movePosition(QTextCursor::Start); }
-      QChar currentCharacter() const;
+      QString currentVariableLengthUnicodeCharacter() const;
+      QChar currentQChar() const;
       bool set(const QPointF& p, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
       QString selectedText() const;
       void updateCursorFormat();

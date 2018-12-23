@@ -86,13 +86,28 @@ int TextCursor::columns() const
       }
 
 //---------------------------------------------------------
-//   currentCharacter
+//   currentVariableLengthUnicodeCharacter
+//    returns a QString of the unicode character at current position if there is a character there
+//      - this string is a single 16-bit QChar if the unicode character is in the Basic Multilingual Plane
+//      - this string is two 16-bit QChars representing a surrogate pair if the unicode is in a Supplementary Plane
+//    returns an empty QString if there is no text at current cursor
 //---------------------------------------------------------
 
-QChar TextCursor::currentCharacter() const
+QString TextCursor::currentVariableLengthUnicodeCharacter() const
       {
       const TextBlock& t = _text->_layout[row()];
-      QString s = t.text(column(), 1);
+      return t.text(column(), 1);
+      }
+
+//---------------------------------------------------------
+//   currentQChar
+//    returns the 16-bit QChar at current cursor if there is a character there
+//    returns a null QChar if there is no text at current cursor
+//---------------------------------------------------------
+
+QChar TextCursor::currentQChar() const
+      {
+      QString s = currentVariableLengthUnicodeCharacter();
       if (s.isEmpty())
             return QChar();
       return s[0];
@@ -295,11 +310,11 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                   case QTextCursor::WordLeft:
                         if (_column > 0) {
                               --_column;
-                              while (_column > 0 && currentCharacter().isSpace())
+                              while (_column > 0 && currentQChar().isSpace())
                                     --_column;
-                              while (_column > 0 && !currentCharacter().isSpace())
+                              while (_column > 0 && !currentQChar().isSpace())
                                     --_column;
-                              if (currentCharacter().isSpace())
+                              if (currentQChar().isSpace())
                                     ++_column;
                               }
                         break;
@@ -308,9 +323,9 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                         int cols =  columns();
                         if (_column < cols) {
                               ++_column;
-                              while (_column < cols && !currentCharacter().isSpace())
+                              while (_column < cols && !currentQChar().isSpace())
                                     ++_column;
-                              while (_column < cols && currentCharacter().isSpace())
+                              while (_column < cols && currentQChar().isSpace())
                                     ++_column;
                               }
                         }
@@ -815,6 +830,12 @@ QList<TextFragment>::iterator TextBlock::fragment(int column, int* rcol, int* ri
 
 //---------------------------------------------------------
 //   remove
+//    removes the Unicode character at column
+//    note: operates on granularity of entire Unicode characters, not single 16-bit QChars
+//    - returns a QString representing the variable-length Unicode character at that column, which will be either
+//      - a single 16-bit QChar if the Unicode belonged to the Basic Multilingual Plane
+//      - two 16-bit QChars if the Unicode belonged to a Supplemental Plane
+//      - an empty string if no text was present to remove at that column
 //---------------------------------------------------------
 
 QString TextBlock::remove(int column)
@@ -827,6 +848,7 @@ QString TextBlock::remove(int column)
             for (const QChar& c : i->text) {
                   if (col == column) {
                         if (c.isSurrogate()) {
+                              // remove both QChars of a surrogate pair together
                               s = i->text.mid(idx, 2);
                               i->text.remove(idx, 2);
                               }
