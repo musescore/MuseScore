@@ -1364,7 +1364,8 @@ MuseScore::MuseScore()
 #ifdef OMR
       a = getAction("omr");
       a->setCheckable(true);
-      menuView->addAction(a);
+      if (enableExperimental)
+            menuView->addAction(a);
 #endif
       playId = getAction("toggle-playpanel");
       playId->setCheckable(true);
@@ -5829,7 +5830,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       else if (cmd == "inspector")
             showInspector(a->isChecked());
 #ifdef OMR
-      else if (cmd == "omr")
+      else if (cmd == "omr" && enableExperimental)
             showOmrPanel(a->isChecked());
 #endif
       else if (cmd == "toggle-playpanel")
