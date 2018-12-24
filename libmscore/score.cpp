@@ -718,6 +718,7 @@ void Score::setShowInvisible(bool v)
       {
       _showInvisible = v;
       setUpdateAll();
+      update();
       }
 
 //---------------------------------------------------------
