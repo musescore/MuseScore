@@ -827,7 +827,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
 #endif
       el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
 
-      el->setTrack(track);
+      el->setTrack(el->isTempoText() ? 0 : track);    // TempoText must be in track 0
       Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
       s->add(el);
       }
