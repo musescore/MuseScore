@@ -1865,6 +1865,7 @@ void Segment::createShape(int staffIdx)
                   s.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos()));
 #endif
                   }
+            s.addHorizontalSpacing(Shape::SPACING_GENERAL, 0, 0);
             return;
             }
 #if 0
