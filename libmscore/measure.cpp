@@ -4000,13 +4000,14 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
                   for (Segment* ps = s; ps != fs;) {
                         qreal ww;
                         ps = ps->prevEnabled();
+
+                        if (ps->isChordRestType())
+                              ++n;
+                        ww = ps->minHorizontalCollidingDistance(ns) - (s->x() - ps->x());
+
                         if (ps == fs)
-                              ww = ns->minLeft(ls) - s->x();
-                        else {
-                              if (ps->isChordRestType())
-                                    ++n;
-                              ww = ps->minHorizontalCollidingDistance(ns) - (s->x() - ps->x());
-                              }
+                              ww = std::max(ww, ns->minLeft(ls) - s->x());
+
                         if (ww > w) {
                               // overlap !
                               // distribute extra space between segments ps - ss;
