@@ -104,7 +104,7 @@ endif (NOT APPLE AND NOT MINGW AND NOT MSVC)
 option(AEOLUS        "Enable pipe organ synthesizer"      OFF)
 option(ZERBERUS      "Enable experimental SFZ sampler"    ON)
 option(OSC           "Enable OSC remote control protocol" ON)
-option(OMR           "Enable PDF import"  ON)                 # OMR - optical music recognition
+option(OMR           "Enable PDF import"  OFF)                 # OMR - optical music recognition
 # For installation see: http://ubuntuforums.org/showthread.php?t=1647350
 option(OCR           "Enable OCR, requires OMR" OFF)           # Requires tesseract 3.0, needs work on mac/win
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts" ON)         # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
