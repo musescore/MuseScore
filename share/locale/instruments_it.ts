@@ -2280,7 +2280,7 @@
         <location filename="../instruments/instrumentsxml.h" line="84"/>
         <source>B♭ S. Oc.</source>
         <comment>B♭ Soprano Ocarina</comment>
-        <translation>Ocr. s. Si♭</translation>
+        <translation>Ocr. S. Si♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="86"/>
@@ -2304,7 +2304,7 @@
         <location filename="../instruments/instrumentsxml.h" line="92"/>
         <source>B♭ A. Oc.</source>
         <comment>B♭ Alto Ocarina</comment>
-        <translation>Ocr. a. Si♭</translation>
+        <translation>Ocr. C. in Si♭ </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="94"/>

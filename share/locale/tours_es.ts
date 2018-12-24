@@ -1,59 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="es">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
 <context>
     <name>TourXML</name>
     <message>
         <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Para añadir una nota a un acorde, pulse Mayús mientras escribe la letra que  la identifica, o haga clic sobre el pentagrama.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Para crear un tresillo u otro grupo irregular, seleccione la duración que representa la longitud total del grupo irregular y después pulse Ctrl+número, o utilice Añadir / Grupos irregulares.</translation>
     </message>
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation>¡Bienvenido/a a MuseScore! Este breve recorrido le guiará a través de la interfaz de usuario de MuseScore.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation>La barra de herramientas de Controles de Reproducción le permiten ejecutar o pausar la partitura y controlar varios aspectos de la reproducción.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation>La barra de herramientas de entrada de notas le permite introducir notas y silencios en la partitura.</translation>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation>Las paletas le permiten añadir casi todos los demás elementos de notación a la partitura.</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"></translation>
+        <translation>Cada paleta contiene elementos que se pueden añadir a la partitura.</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenido/a a las paletas, donde podrá añadir varios elementos a la partitura. Pulse &quot;Siguiente&quot; para saber más.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Para introducir una nota de la duración elegida, escriba la letra que identifica a la nota o haga clic sobre el pentagrama.
+Pulse Ctrl+arriba o abajo (macOS: Cmd+arriba o abajo) para cambiar la octava.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Para añadir una alteración a  una nota, pulse la tecla Arriba o Abajo para elevar o bajar la altura o pulse sobre uno de estos iconos.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -61,186 +60,201 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Para introducir notas con distintos ritmos en el mismo compás, utilice múltiples voces.
+Cada pentagrama puede tener hasta cuatro voces.
+La voz predeterminada es la número 1, y se debería utilizar en primer lugar para cada uno de los pentagramas.
+Para escribir notas en una voz distinta, puse sobre uno de estos íconos.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation>Esta es la vista de partitura, en la que puede ver y editar la partitura.
+Utilice la rueda del ratón o panel táctil para desplazar la partitura verticalmente (con Mayús. para desplazarla horizontalmente).
+Si tiene abiertas varias partituras, puede alternar entre ellas usando las pestañas de la parte superior de la vista de partitura.</translation>
     </message>
     <message>
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation>Estas son las barras de herramientas.
+Las tres principales son Operaciones sobre archivos, Controles de reproducción y Entrada de notas.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
     You can also save to your musescore.com account if you go to File / Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation>La barra de herramientas de operaciones sobre archivos le permite crear, guardar, abrir o imprimir archivos y deshacer o rehacer cambios.
+También puede guardar dentro de su cuenta de musescore.com si va a Archivo / guardar en línea.
+ Los controles de la derecha en esta barra de herramientas controlan la presentación de la partitura.</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation>El menú principal contiene casi todos los demás comandos.
+Además, muchos comandos están accesibles por medio de combinaciones de teclas o pulsando con el botón derecho (macOS: Ctrl+clic) dentro de la vista de partitura.</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
     The &quot;Advanced&quot; workspace contains more items than the &quot;Basic&quot; workspace.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"></translation>
+        <translation>Están disponibles distintos espacios de trabajo con diferentes conjuntos de paletas.
+El espacio de trabajo &quot;Avanzado&quot; contiene más elementos que el &quot;Básico&quot;.</translation>
     </message>
     <message>
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"></translation>
+        <translation>Para añadir un elemento de una paleta a la partitura, en primer lugar seleccione un elemento o rango de la partitura, después haga doble clic sobre el elemento de la paleta para añadirlo a los elementos seleccionados.
+También puede arrastrar un elemento desde la paleta y soltarlo sobre un elemento específico de la partitura.</translation>
     </message>
     <message>
         <source>You have toggled multimeasure rests in this score.
     This combines multiple measures of rests into a single multimeasure rest.
     To toggle this setting again, press the shortcut &quot;M&quot;.</source>
         <comment>mmrest</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ha activado el uso de silencios multicompás en esta partitura.
+Esto combina varios compases de silencio en un solo silencio multicompás.
+Para desactivarlo, pulse la tecla &quot;M&quot;.</translation>
     </message>
     <message>
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenido/a al modo de entrada de notas, donde puede insertar notas y silencios en la partitura.
+Pulse &quot;Siguiente&quot; para saber más.</translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Para activar el modo de entrada de notas, pulse sobre el icono &quot;Entrada de notas&quot; o pulse la tecla &quot;N&quot;.</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Seleccione una duración pulsando sobre uno de estos iconos o pulsando las teclas &quot;1&quot; a &quot;9&quot;.
+    Para añadir un puntillo, pulse sobre el icono correspondiente o sobre la tecla &quot;.&quot;.</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Para introducir un silencio de la duración seleccionada, pulse la tecla &quot;0&quot; o seleccione este icono y después pulse sobre el pentagrama.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"></translation>
+        <translation>Para extender una nota añadiendo otra nota unida mediante una ligadura de prolongación, seleccione la duración en que desea extenderla, y después pulse sobre la tecla &quot;+&quot; o sobre este botón.</translation>
     </message>
     <message>
         <source>MuseScore provides many ways to navigate through your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding Shift while dragging.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Welcome to the Inspector, where you can change individual properties for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
     The set of properties available will differ according to the type of selected elements or elements.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>If you have selected elements of different types, only a few settings common to all elements will be available.
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
     You can also set style defaults using Format / Style.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>That&apos;s the end of this tour!
+        <source>That's the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help / Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
     You can also manually adjust the position of autoplaced elements, or disable autoplace for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Autoplace positions most elements according to standard music engraving practice,
     such as by moving tempo markings above other text or by shortening hairpins to avoid dynamics.
     In many cases, this means that no further adjustments will be required at all.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>If necessary, you can fine-tune the position of elements by dragging, by using the cursor keys while in Edit mode (double-click),
     or by using the &quot;Offset&quot; fields in the Inspector.
     This allows you to make adjustments while leaving autoplace enabled to continue avoiding collisions.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>For larger adjustments, it may be more convenient to disable autoplace for selected elements using the Inspector.
     This will remove them from collision detection and allow you to place them more freely.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
     Click &quot;Next&quot; to learn more.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
     You can click anywhere to jump to the corresponding location in your score.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>The section below contains a row for each instrument.
@@ -248,13 +262,13 @@
     If the box is highlighted, then there are notes in that measure.
     Boxes with a thin blue outline represent measures that are currently in view.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>MuseScore supports different types of selections: single, list, and range.
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.
@@ -263,7 +277,7 @@
     Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -271,7 +285,7 @@
     You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -279,19 +293,19 @@
     To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
     You can also extend range selections by holding the Shift key while moving the cursor.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Another way to make selections is to hold Shift while dragging.
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

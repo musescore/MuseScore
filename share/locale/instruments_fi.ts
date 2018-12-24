@@ -4698,7 +4698,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="871"/>
         <source>Mezzo-soprano (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Mezzosopraano (C-avain)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="874"/>
