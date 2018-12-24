@@ -1118,6 +1118,11 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
 
 #define beamModeMid(a) (a == Beam::Mode::MID || a == Beam::Mode::BEGIN32 || a == Beam::Mode::BEGIN64)
 
+bool beamNoContinue(Beam::Mode mode)
+      {
+      return mode == Beam::Mode::END || mode == Beam::Mode::NONE || mode == Beam::Mode::INVALID;
+      }
+
 //---------------------------------------------------------
 //   beamGraceNotes
 //---------------------------------------------------------
@@ -2184,6 +2189,7 @@ void Score::createBeams(Measure* measure)
                   continue;
 
             ChordRest* a1    = 0;      // start of (potential) beam
+            bool firstCR     = true;
             Beam* beam       = 0;      // current beam
             Beam::Mode bm    = Beam::Mode::AUTO;
             ChordRest* prev  = 0;
@@ -2218,6 +2224,21 @@ void Score::createBeams(Measure* measure)
                   ChordRest* cr = segment->cr(track);
                   if (cr == 0)
                         continue;
+
+                  if (firstCR) {
+                        firstCR = false;
+                        // Handle cross-measure beams
+                        Beam::Mode mode = cr->beamMode();
+                        if (mode == Beam::Mode::MID || mode == Beam::Mode::END) {
+                              ChordRest* prevCR = findCR(measure->tick() - 1, track);
+                              const Measure* pm = prevCR->measure();
+                              if (prevCR && !beamNoContinue(prevCR->beamMode())
+                                 && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()) {
+                                    beam = prevCR->beam();
+                                    a1 = beam ? beam->elements().front() : prevCR;
+                                    }
+                              }
+                        }
 #if 0
                   for (Lyrics* l : cr->lyrics()) {
                         if (l)
@@ -2225,6 +2246,7 @@ void Score::createBeams(Measure* measure)
                         }
 #endif
                   // handle grace notes and cross-measure beaming
+                  // (tied chords?)
                   if (cr->isChord()) {
                         Chord* chord = toChord(cr);
                         beamGraceNotes(chord, false); // grace before
@@ -2270,12 +2292,15 @@ void Score::createBeams(Measure* measure)
                         bm = Beam::Mode::NONE;
 
                   if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
+                        bool removeBeam = true;
                         if (beam) {
                               beam->layout1();
+                              removeBeam = (beam->elements().size() <= 1);
                               beam = 0;
                               }
                         if (a1) {
-                              a1->removeDeleteBeam(false);
+                              if (removeBeam)
+                                    a1->removeDeleteBeam(false);
                               a1 = 0;
                               }
                         cr->removeDeleteBeam(false);
@@ -2331,6 +2356,69 @@ void Score::createBeams(Measure* measure)
                   beam->layout1();
             else if (a1)
                   a1->removeDeleteBeam(false);
+            }
+      }
+
+//---------------------------------------------------------
+//   breakCrossMeasureBeams
+//---------------------------------------------------------
+
+static void breakCrossMeasureBeams(Measure* measure)
+      {
+      MeasureBase* mbNext = measure->next();
+      if (!mbNext || !mbNext->isMeasure())
+            return;
+
+      Measure* next = toMeasure(mbNext);
+      Score* score = measure->score();
+      const int ntracks = score->ntracks();
+      Segment* fstSeg = next->first(SegmentType::ChordRest);
+
+      for (int track = 0; track < ntracks; ++track) {
+            Staff* stf = score->staff(track2staff(track));
+
+            // don’t compute beams for invisible staffs and tablature without stems
+            if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->slashStyle()))
+                  continue;
+
+            Element* e = fstSeg->element(track);
+            if (!e || !e->isChordRest())
+                  continue;
+
+            ChordRest* cr = toChordRest(e);
+            Beam* beam = cr->beam();
+            if (!beam || beam->elements().front()->measure() == next) // no beam or not cross-measure beam
+                  continue;
+
+            std::vector<ChordRest*> mElements;
+            std::vector<ChordRest*> nextElements;
+
+            for (ChordRest* beamCR : beam->elements()) {
+                  if (beamCR->measure() == measure)
+                        mElements.push_back(beamCR);
+                  else
+                        nextElements.push_back(beamCR);
+                  }
+
+            if (mElements.size() == 1)
+                  mElements[0]->removeDeleteBeam(false);
+
+            Beam* newBeam = nullptr;
+            if (nextElements.size() > 1) {
+                  newBeam = new Beam(score);
+                  newBeam->setGenerated(true);
+                  newBeam->setTrack(track);
+                  }
+
+            const bool nextBeamed = bool(newBeam);
+            for (ChordRest* nextCR : nextElements) {
+                  nextCR->removeDeleteBeam(nextBeamed);
+                  if (newBeam)
+                        newBeam->add(nextCR);
+                  }
+
+            if (newBeam)
+                  newBeam->layout1();
             }
       }
 
@@ -3241,6 +3329,7 @@ System* Score::collectSystem(LayoutContext& lc)
       //
       // prevMeasure is the last measure in the system
       if (lc.prevMeasure && lc.prevMeasure->isMeasure()) {
+            breakCrossMeasureBeams(toMeasure(lc.prevMeasure));
             qreal w = toMeasure(lc.prevMeasure)->createEndBarLines(true);
             minWidth += w;
             }
