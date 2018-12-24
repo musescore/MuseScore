@@ -267,7 +267,7 @@ protected:
 #define SVG_X        " x="
 #define SVG_Y        " y="
 
-#define SVG_POINTS   " points=\""
+#define SVG_D_M      " d=\"M"
 #define SVG_D        " d=\""
 #define SVG_MOVE     'M'
 #define SVG_LINE     'L'
@@ -285,7 +285,6 @@ protected:
 
 #define SVG_IMAGE       "<image"
 #define SVG_PATH        "<path"
-#define SVG_POLYLINE    "<polyline"
 
 #define SVG_PRESERVE_ASPECT " preserveAspectRatio=\""
 
@@ -1220,8 +1219,8 @@ void SvgPaintEngine::drawPolygon(const QPointF *points, int pointCount,
         path.lineTo(points[i]);
 
     if (mode == PolylineMode) {
-        stream() << SVG_POLYLINE << stateString
-                 << SVG_POINTS;
+        stream() << SVG_PATH << stateString
+                 << SVG_D_M;
         for (int i = 0; i < pointCount; ++i) {
             const QPointF &pt = points[i];
             stream() << pt.x() + _dx << SVG_COMMA << pt.y() + _dy;
