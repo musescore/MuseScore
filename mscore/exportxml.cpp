@@ -659,8 +659,8 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, XmlWriter& xm
       QString tagName = "slur";
       tagName += slurTieLineStyle(s); // define line type
       tagName += color2xml(s);
-      tagName += QString(" type=\"start\"%1")
-            .arg(s->slurDirection() == Direction::UP ? " placement=\"above\"" : "");
+      tagName += QString(" type=\"start\" placement=\"%1\"")
+            .arg(s->up() ? "above" : "below");
       tagName += addPositioningAttributes(s, true);
 
       if (i >= 0) {
