@@ -76,8 +76,8 @@ include (CreatePrecompiledHeader)
 set(CMAKE_AUTOMOC     TRUE)
 set(MSCORE_UNSTABLE   FALSE)          # Mark as unstable
 #set(MSCORE_RELEASE_CHANNEL "devel")
-set(MSCORE_RELEASE_CHANNEL "testing")
-#set(MSCORE_RELEASE_CHANNEL "stable")
+#set(MSCORE_RELEASE_CHANNEL "testing")
+set(MSCORE_RELEASE_CHANNEL "stable")
 set(USE_SSE           TRUE)
 set(SCRIPT_INTERFACE  TRUE)
 
