@@ -5709,11 +5709,11 @@
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
-                  <Drum pitch="81">
+                  <Drum pitch="82">
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Open Triangle</name>
+                        <name>Shaker</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -5722,6 +5722,27 @@
                         <program value="0"/>
                   </Channel>
                   <genre>world</genre>
+            </Instrument>
+            <Instrument id="shaker">
+                  <longName>Shaker</longName>
+                  <shortName>Sh.</shortName>
+                  <description>Shaker</description>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <Drum pitch="82">
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Shaker</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                  </Drum>
+                  <Channel>
+                        <controller ctrl="0" value="1"/>
+                        <program value="0"/>
+                  </Channel>
             </Instrument>
             <Instrument id="metal-castanets">
                   <longName>Metal Castanets</longName>
@@ -6683,7 +6704,7 @@
                         <head>diamond</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Triangle</name>
+                        <name>Open Triangle</name>
                         <stem>1</stem>
                         <shortcut>D</shortcut>
                   </Drum>
