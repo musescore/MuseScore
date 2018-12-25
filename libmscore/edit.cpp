@@ -3026,7 +3026,15 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                                     }
 
                               if (cr->isFullMeasureRest()) {
-                                    cr->setDuration(cr->duration() - f);
+                                    if (cr->rtick() >= tick) {
+                                          // Move full-measure rest from the deleted area
+                                          undoRemoveElement(cr);
+                                          ChordRest* newCR = toChordRest(cr->clone());
+                                          newCR->setDuration(cr->duration() - f);
+                                          undoAddCR(newCR, m, etick);
+                                          }
+                                    else
+                                          cr->undoChangeProperty(Pid::DURATION, cr->duration() - f);
                                     }
                               // inside deleted area
                               else if (s->rtick() >= tick && cetick <= etick) {
