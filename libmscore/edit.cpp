@@ -4776,12 +4776,7 @@ void Score::undoInsertTime(int tick, int len)
                   }
             }
 
-      for (auto i = _unmanagedSpanner.begin(); i != _unmanagedSpanner.end();) {
-            auto ni = i;
-            ++ni;
-            (*i)->undoInsertTimeUnmanaged(tick, len); // may remove spanner from list
-            i = ni;
-            }
+      undo(new InsertTimeUnmanagedSpanner(this, tick, len));
       }
 
 //---------------------------------------------------------
