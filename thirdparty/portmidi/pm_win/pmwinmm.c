@@ -11,6 +11,11 @@
     #define _WIN32_WINNT 0x0500
 #endif
 
+// Undefine UNICODE to get the char-based library functions
+#ifdef UNICODE
+#undef UNICODE
+#endif
+
 #include "windows.h"
 #include "mmsystem.h"
 #include "portmidi.h"
