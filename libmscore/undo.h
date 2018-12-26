@@ -1133,6 +1133,23 @@ class InsertTime : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   InsertTimeUnmanagedSpanner
+//---------------------------------------------------------
+
+class InsertTimeUnmanagedSpanner : public UndoCommand {
+      Score* score;
+      int tick;
+      int len;
+
+      void flip(EditData*) override;
+
+   public:
+      InsertTimeUnmanagedSpanner(Score* s, int _tick, int _len)
+         : score(s), tick(_tick), len(_len) {}
+      UNDO_NAME("InsertTimeUnmanagedSpanner")
+      };
+
+//---------------------------------------------------------
 //   ChangeNoteEvent
 //---------------------------------------------------------
 

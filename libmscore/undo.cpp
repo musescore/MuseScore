@@ -2200,6 +2200,20 @@ void InsertTime::undo(EditData*)
       }
 
 //---------------------------------------------------------
+//   InsertTimeUnmanagedSpanner::flip
+//---------------------------------------------------------
+
+void InsertTimeUnmanagedSpanner::flip(EditData*)
+      {
+      for (Score* s : score->scoreList()) {
+            const auto unmanagedSpanners(s->unmanagedSpanners());
+            for (Spanner* sp : unmanagedSpanners)
+                  sp->insertTimeUnmanaged(tick, len);
+            }
+      len = -len;
+      }
+
+//---------------------------------------------------------
 //   ChangeNoteEvent::flip
 //---------------------------------------------------------
 
