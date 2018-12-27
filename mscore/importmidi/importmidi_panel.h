@@ -28,6 +28,8 @@ class ImportMidiPanel : public QWidget
 
       static bool isMidiFile(const QString &fileName);
 
+      void instrumentTemplatesChanged();
+
    signals:
       void closeClicked();
 
@@ -51,6 +53,9 @@ class ImportMidiPanel : public QWidget
       void restoreTableViewState();
       void resetTableViewState();
       void fillCharsetList();
+
+      void doCancelChanges();
+      static bool fileDataAvailable(const QString& midiFile);
 
       Ui::ImportMidiPanel *_ui;
       QTimer *_updateUiTimer;

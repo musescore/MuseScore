@@ -350,12 +350,15 @@ std::vector<const InstrumentTemplate *> findSuitableInstruments(const MTrack &tr
       return templates;
       }
 
-void findInstrumentsForAllTracks(const QList<MTrack> &tracks)
+void findInstrumentsForAllTracks(const QList<MTrack> &tracks, bool forceReload)
       {
       auto& opers = midiImportOperations;
       auto &instrListOption = opers.data()->trackOpers.msInstrList;
 
-      if (opers.data()->processingsOfOpenedFile == 0) {
+      if (forceReload)
+            instrListOption.clear();
+
+      if (opers.data()->processingsOfOpenedFile == 0 || forceReload) {
                         // create instrument list on MIDI file opening
             for (const auto &track: tracks) {
                   instrListOption.setValue(track.indexOfOperation,
@@ -365,6 +368,17 @@ void findInstrumentsForAllTracks(const QList<MTrack> &tracks)
                         opers.data()->trackOpers.msInstrIndex.setDefaultValue(defaultInstrIndex);
                         }
                   }
+            }
+      }
+
+void instrumentTemplatesChanged()
+      {
+      QStringList files(midiImportOperations.allMidiFiles());
+      for (const QString& file : files) {
+            MidiOperations::CurrentMidiFileSetter s(midiImportOperations, file);
+            MidiOperations::FileData* data = midiImportOperations.data();
+            if (data)
+                  findInstrumentsForAllTracks(data->tracks, /* forceReload */ true);
             }
       }
 
