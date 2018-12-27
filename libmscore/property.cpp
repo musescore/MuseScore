@@ -181,7 +181,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::TIMESIG_TYPE,            "timesig_type",            true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "subtype")          },
       { Pid::SPANNER_TICK,            "spanner_tick",            true,  "tick",                  P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "tick")             },
       { Pid::SPANNER_TICKS,           "spanner_ticks",           true,  "ticks",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "ticks")            },
-      { Pid::SPANNER_TRACK2,          "spanner_track2",          true,  "track2",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "track2")           },
+      { Pid::SPANNER_TRACK2,          "spanner_track2",          false,  "track2",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "track2")           },
       { Pid::OFFSET2,                 "user_off2",               false, "userOff2",              P_TYPE::POINT_SP,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "offset2")         },
       { Pid::BREAK_MMR,               "break_mmr",               false, "breakMultiMeasureRest", P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "breaking multimeasure rest")},
       { Pid::REPEAT_COUNT,            "repeat_count",            true,  "endRepeat",             P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "end repeat")       },
