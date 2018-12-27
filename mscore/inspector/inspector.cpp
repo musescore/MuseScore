@@ -333,7 +333,7 @@ void Inspector::update(Score* s)
                               ie = new InspectorBracket(this);
                               break;
                         case ElementType::INSTRUMENT_NAME:
-                              ie = new InspectorIname(this);
+                              //ie = new InspectorIname(this);
                               break;
                         case ElementType::FINGERING:
                               ie = new InspectorFingering(this);
