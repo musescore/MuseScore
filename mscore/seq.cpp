@@ -985,14 +985,14 @@ void Seq::initInstruments(bool realTime)
                   if (realTime) {
                         putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 0));
                         putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 0));
-                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HDATA,12));
+                        putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HDATA, PITCH_BEND_SENSITIVITY));
                         putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 127));
                         putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 127));
                         }
                   else {
                         sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 0));
                         sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 0));
-                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HDATA,12));
+                        sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HDATA, PITCH_BEND_SENSITIVITY));
                         sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 127));
                         sendEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 127));
                         }
