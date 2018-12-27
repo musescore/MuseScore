@@ -3928,10 +3928,9 @@ void Score::undoAddElement(Element* element)
       Staff* ostaff = element->staff();
       int strack = -1;
       if (ostaff) {
-            if (ostaff->score()->excerpt() && strack > -1)
+            strack = ostaff->idx() * VOICES + element->track() % VOICES;
+            if (ostaff->score()->excerpt() && !ostaff->score()->excerpt()->tracks().isEmpty() && strack > -1)
                   strack = ostaff->score()->excerpt()->tracks().key(strack, -1);
-            else
-                  strack = ostaff->idx() * VOICES + element->track() % VOICES;
             }
 
       ElementType et = element->type();
