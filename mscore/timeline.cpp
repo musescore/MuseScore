@@ -1181,7 +1181,7 @@ void Timeline::key_meta(Segment* seg, int* stagger, int pos)
       QString tooltip;
       if (new_key == Key::INVALID) {
             key_text = "X";
-            tooltip = keyNames[15];
+            tooltip = qApp->translate("MuseScore", keyNames[15]);
             }
       else if (new_key == Key::NUM_OF) {
             key_text = "?";
@@ -1189,15 +1189,15 @@ void Timeline::key_meta(Segment* seg, int* stagger, int pos)
             }
       else if (int(new_key) == 0) {
             key_text = "\u266E";
-            tooltip = keyNames[14];
+            tooltip = qApp->translate("MuseScore", keyNames[14]);
             }
       else if (int(new_key) < 0) {
             key_text = QString::number(abs(int(new_key))) + "\u266D";
-            tooltip = keyNames[(7 + int(new_key)) * 2 + 1];
+            tooltip = qApp->translate("MuseScore", keyNames[(7 + int(new_key)) * 2 + 1]);
             }
       else {
             key_text = QString::number(abs(int(new_key))) + "\u266F";
-            tooltip = keyNames[(int(new_key) - 1) * 2];
+            tooltip = qApp->translate("MuseScore", keyNames[(int(new_key) - 1) * 2]);
             }
 
       int x = pos + (*stagger) * spacing;
