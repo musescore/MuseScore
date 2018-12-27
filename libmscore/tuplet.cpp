@@ -932,6 +932,8 @@ void Tuplet::dump() const
 
 void Tuplet::setTrack(int val)
       {
+      if (tuplet())
+            tuplet()->setTrack(val);
       if (_number)
             _number->setTrack(val);
       Element::setTrack(val);
