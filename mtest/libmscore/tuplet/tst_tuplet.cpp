@@ -12,6 +12,7 @@
 
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
+#include "libmscore/staff.h"
 #include "libmscore/score.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/chord.h"
@@ -41,6 +42,7 @@ class TestTuplet : public QObject, public MTest
       void split2() { split("split2.mscx",   "split2-ref.mscx");  }
       void split3() { split("split3.mscx",   "split3-ref.mscx");  }
       void split4() { split("split4.mscx",   "split4-ref.mscx");  }
+      void addStaff();
       };
 
 //---------------------------------------------------------
@@ -148,6 +150,31 @@ void TestTuplet::split(const char* p1, const char* p2)
       delete score;
       }
 
+//---------------------------------------------------------
+//   addStaff
+//    Checks that after adding a staff the resulting
+//    score is equal to the reference score
+//---------------------------------------------------------
+
+void TestTuplet::addStaff()
+      {
+      MasterScore* score = readScore(DIR + "nestedTuplets_addStaff.mscx");
+      QVERIFY(score);
+
+      // add a staff to the existing staff
+      // (copied and adapted from void MuseScore::editInstrList() in mscore/instrdialog.cpp)
+      Staff* oldStaff   = score->staff(0);
+      Staff* newStaff   = new Staff(score);
+      newStaff->setPart(oldStaff->part());
+      newStaff->initFromStaffType(oldStaff->staffType(0));
+      newStaff->setDefaultClefType(ClefTypeList(ClefType::F));
+      KeySigEvent ke = oldStaff->keySigEvent(0);
+      newStaff->setKey(0, ke);
+      score->undoInsertStaff(newStaff, 0, true);
+
+      QVERIFY(saveCompareScore(score, "nestedTuplets_addStaff.mscx", DIR + "nestedTuplets_addStaff-ref.mscx"));
+      delete score;
+      }
 
 QTEST_MAIN(TestTuplet)
 #include "tst_tuplet.moc"
