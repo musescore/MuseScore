@@ -166,13 +166,22 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
             int ticks = spanner()->endElement()->tick() - element->tick();
             spanner()->undoChangeProperty(Pid::SPANNER_TICK, element->tick());
             spanner()->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
-            spanner()->undoChangeProperty(Pid::TRACK, element->track());
+            int diff = element->track() - spanner()->track();
+            for (auto e : spanner()->linkList()) {
+                  Spanner* s = toSpanner(e);
+                  s->undoChangeProperty(Pid::TRACK, s->track() + diff);
+                  }
+
             if (score()->spannerMap().removeSpanner(spanner()))
                   score()->addSpanner(spanner());
             }
       else {
             spanner()->undoChangeProperty(Pid::SPANNER_TICKS,  element->tick() - spanner()->startElement()->tick());
-            spanner()->undoChangeProperty(Pid::SPANNER_TRACK2, element->track());
+            int diff = element->track() - spanner()->track();
+            for (auto e : spanner()->linkList()) {
+                  Spanner* s = toSpanner(e);
+                  s->undoChangeProperty(Pid::SPANNER_TRACK2, s->track() + diff);
+                  }
             }
       const size_t segments  = spanner()->spannerSegments().size();
       ups(ed.curGrip).off = QPointF();
