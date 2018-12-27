@@ -406,7 +406,7 @@ Element* UndoMacro::selectedElement(const Selection& sel)
       if (sel.isSingle()) {
             Element* e = sel.element();
             Q_ASSERT(e); // otherwise it shouldn't be "single" selection
-            if (e->isNote() || e->isChordRest())
+            if (e->isNote() || e->isChordRest() || e->isTextBase())
                   return e;
             }
       return nullptr;
