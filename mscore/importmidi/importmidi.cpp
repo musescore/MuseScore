@@ -1071,7 +1071,7 @@ ReducedFraction findLastChordTick(const std::multimap<int, MTrack> &tracks)
       return lastTick;
       }
 
-void convertMidi(Score *score, const MidiFile *mf)
+QList<MTrack> convertMidi(Score *score, const MidiFile *mf)
       {
       auto *sigmap = score->sigmap();
 
@@ -1161,6 +1161,8 @@ void convertMidi(Score *score, const MidiFile *mf)
       MidiLyrics::setLyricsToScore(trackList);
       MidiTempo::setTempo(tracks, score);
       MidiChordName::setChordNames(trackList);
+
+      return trackList;
       }
 
 void loadMidiData(MidiFile &mf)
@@ -1211,7 +1213,7 @@ Score::FileError importMidi(MasterScore *score, const QString &name)
             opers.setMidiFileData(name, mf);
             }
 
-      convertMidi(score, opers.midiFile(name));
+      opers.data()->tracks = convertMidi(score, opers.midiFile(name));
       ++opers.data()->processingsOfOpenedFile;
 
       return Score::FileError::FILE_NO_ERROR;

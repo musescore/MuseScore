@@ -215,9 +215,12 @@ void ImportMidiPanel::applyMidiImport()
 
 void ImportMidiPanel::cancelChanges()
       {
-      if (!canTryCancelChanges())
-            return;
+      if (canTryCancelChanges())
+            doCancelChanges();
+      }
 
+void ImportMidiPanel::doCancelChanges()
+      {
       auto &opers = midiImportOperations;
       MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
 
@@ -234,6 +237,12 @@ void ImportMidiPanel::cancelChanges()
                   // tracks view has multiple headers (need for frozen rows/columns)
                   // so to set all headers special methods there have been implemented
       _ui->tracksView->setHHeaderResizeMode(QHeaderView::ResizeToContents);
+      }
+
+void ImportMidiPanel::instrumentTemplatesChanged()
+      {
+      if (fileDataAvailable(_midiFile))
+            doCancelChanges();
       }
 
 bool ImportMidiPanel::canImportMidi() const
@@ -256,6 +265,13 @@ bool ImportMidiPanel::canTryCancelChanges() const
 
       const QByteArray vData = _ui->tracksView->verticalHeader()->saveState();
       return opers.data()->VHeaderData != vData;
+      }
+
+bool ImportMidiPanel::fileDataAvailable(const QString& midiFile)
+      {
+      auto &opers = midiImportOperations;
+      MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, midiFile);
+      return bool(opers.data());
       }
 
 bool ImportMidiPanel::canMoveTrackUp(int visualIndex) const
