@@ -3639,6 +3639,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
       //-------------------------------------------------------------
 
       spanner.clear();
+      std::vector<Spanner*> hairpins;
       std::vector<Spanner*> ottavas;
       std::vector<Spanner*> pedal;
       std::vector<Spanner*> voltas;
@@ -3652,10 +3653,13 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         pedal.push_back(sp);
                   else if (sp->isVolta())
                         voltas.push_back(sp);
+                  else if (sp->isHairpin())
+                        hairpins.push_back(sp);
                   else if (!sp->isSlur() && !sp->isVolta())    // slurs are already
                         spanner.push_back(sp);
                   }
             }
+      processLines(system, hairpins, false);
       processLines(system, spanner, false);
 
       //-------------------------------------------------------------
