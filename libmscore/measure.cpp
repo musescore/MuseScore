@@ -3961,11 +3961,15 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
 
       if (isMMRest()) {
             // Reset MM rest to initial size and position
-            Rest* mmRest = toRest(findChordRest(tick(), 0));
-            if (mmRest) {
-                  mmRest->rxpos() = 0;
-                  mmRest->layoutMMRest(score()->styleP(Sid::minMMRestWidth) * mag());
-                  mmRest->segment()->createShapes();
+            Segment* seg = findSegmentR(SegmentType::ChordRest, 0);
+            const int nstaves = score()->nstaves();
+            for (int st = 0; st < nstaves; ++st) {
+                  Rest* mmRest = toRest(seg->element(staff2track(st)));
+                  if (mmRest) {
+                        mmRest->rxpos() = 0;
+                        mmRest->layoutMMRest(score()->styleP(Sid::minMMRestWidth) * mag());
+                        mmRest->segment()->createShapes();
+                        }
                   }
             }
 
