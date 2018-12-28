@@ -2005,9 +2005,15 @@ bool Score::processMidiInput()
                         Note* n = toChord(cr)->findNote(ev.pitch);
                         if (n) {
                               deleteItem(n->tieBack());
-                              deleteItem(n);
+
+                              // to prevent two notes of same pitch in same chord, remove the existing one
+                              if (qApp->keyboardModifiers() & Qt::ShiftModifier)
+                                    deleteItem(n);
                               }
-                        if (qApp->keyboardModifiers() & Qt::ShiftModifier)
+
+                        // check if there are any remaining notes
+                        cr = _is.lastSegment()->element(_is.track());
+                        if (cr && cr->isChord() && (qApp->keyboardModifiers() & Qt::ShiftModifier))
                               ev.chord = true;
                         }
 
