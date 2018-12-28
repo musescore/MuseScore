@@ -163,7 +163,7 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                 playTime = endTime;
                 if (updateProgress) {
                     // normalize to [0, 1] range
-                    if (!updateProgress((pass * et + playTime) / passes / et)) {
+                    if (!updateProgress(float(pass * et + playTime) / passes / et)) {
                         cancelled = true;
                         break;
                     }
