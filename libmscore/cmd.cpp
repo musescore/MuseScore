@@ -2001,7 +2001,7 @@ bool Score::processMidiInput()
                         ev.chord = true;
 
                   Element* cr = _is.lastSegment()->element(_is.track());
-                  if (cr->isChord()) {
+                  if (cr && cr->isChord()) {
                         Note* n = toChord(cr)->findNote(ev.pitch);
                         if (n) {
                               deleteItem(n->tieBack());
