@@ -58,7 +58,7 @@
              <widget class="QSlider" name="reverbSlider">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>75</width>
                 <height>0</height>
                </size>
               </property>
@@ -83,7 +83,7 @@
              <widget class="QSlider" name="chorusSlider">
               <property name="minimumSize">
                <size>
-                <width>200</width>
+                <width>75</width>
                 <height>0</height>
                </size>
               </property>
@@ -106,8 +106,8 @@
             </item>
             <item row="0" column="0" colspan="3">
              <layout class="QGridLayout" name="gridLayout_3">
-              <item row="0" column="2">
-               <spacer name="horizontalSpacer">
+              <item row="0" column="5">
+               <spacer name="horizontalSpacer_2">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -118,13 +118,6 @@
                  </size>
                 </property>
                </spacer>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="labelPort">
-                <property name="text">
-                 <string>Port:</string>
-                </property>
-               </widget>
               </item>
               <item row="0" column="1">
                <widget class="QSpinBox" name="portSpinBox">
@@ -159,8 +152,15 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="5">
-               <spacer name="horizontalSpacer_2">
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelPort">
+                <property name="text">
+                 <string>Port:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <spacer name="horizontalSpacer">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -285,95 +285,6 @@
        <property name="spacing">
         <number>11</number>
        </property>
-       <item row="6" column="1">
-        <widget class="QSlider" name="panSlider">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Pan</string>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>127</number>
-         </property>
-         <property name="pageStep">
-          <number>16</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="tickPosition">
-          <enum>QSlider::TicksBelow</enum>
-         </property>
-         <property name="tickInterval">
-          <number>16</number>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="labelPan">
-         <property name="text">
-          <string>Pan:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" rowspan="2">
-        <widget class="QLabel" name="labelPatch">
-         <property name="text">
-          <string>Patch:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" rowspan="2" colspan="2">
-        <widget class="QComboBox" name="patchCombo">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Patch voice</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="channelLabel">
-         <property name="toolTip">
-          <string>Channel name</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QCheckBox" name="drumkitCheck">
-         <property name="text">
-          <string>Drumset</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="labelChannel">
-         <property name="text">
-          <string>Channel:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelName">
-         <property name="text">
-          <string>Name:</string>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="2" rowspan="2">
         <widget class="QDoubleSpinBox" name="volumeSpinBox">
          <property name="toolTip">
@@ -387,16 +298,40 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="Awl::ColorLabel" name="trackColorLabel" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
+       <item row="4" column="0" rowspan="2">
+        <widget class="QLabel" name="labelVolume">
+         <property name="text">
+          <string>Volume:</string>
          </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QDoubleSpinBox" name="panSpinBox">
          <property name="toolTip">
-          <string>Track color</string>
+          <string>Pan</string>
+         </property>
+         <property name="decimals">
+          <number>0</number>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>127.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelChannel">
+         <property name="text">
+          <string>Channel:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" rowspan="2">
+        <widget class="QLabel" name="labelPatch">
+         <property name="text">
+          <string>Patch:</string>
          </property>
         </widget>
        </item>
@@ -404,7 +339,7 @@
         <widget class="QSlider" name="volumeSlider">
          <property name="minimumSize">
           <size>
-           <width>200</width>
+           <width>75</width>
            <height>0</height>
           </size>
          </property>
@@ -434,51 +369,149 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
-        <widget class="QDoubleSpinBox" name="panSpinBox">
-         <property name="toolTip">
-          <string>Pan</string>
-         </property>
-         <property name="decimals">
-          <number>0</number>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>127.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
+       <item row="0" column="1" colspan="2">
         <widget class="QLineEdit" name="partNameLineEdit">
          <property name="toolTip">
           <string>Part name</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0" rowspan="2">
-        <widget class="QLabel" name="labelVolume">
+       <item row="1" column="1" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="channelLabel">
+           <property name="toolTip">
+            <string>Channel name</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="drumkitCheck">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::RightToLeft</enum>
+           </property>
+           <property name="text">
+            <string>Drumset</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelName">
          <property name="text">
-          <string>Volume:</string>
+          <string>Name:</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="6" column="0">
+        <widget class="QLabel" name="labelPan">
+         <property name="text">
+          <string>Pan:</string>
          </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QSlider" name="panSlider">
+         <property name="minimumSize">
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>75</width>
+           <height>0</height>
           </size>
          </property>
-        </spacer>
+         <property name="toolTip">
+          <string>Pan</string>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>127</number>
+         </property>
+         <property name="pageStep">
+          <number>16</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="tickPosition">
+          <enum>QSlider::TicksBelow</enum>
+         </property>
+         <property name="tickInterval">
+          <number>16</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" rowspan="2" colspan="2">
+        <widget class="QComboBox" name="patchCombo">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Patch voice</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="3">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="labelColor">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Track color:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="Awl::ColorLabel" name="trackColorLabel">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Track color</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
@@ -489,7 +522,7 @@
  <customwidgets>
   <customwidget>
    <class>Awl::ColorLabel</class>
-   <extends>QWidget</extends>
+   <extends>QFrame</extends>
    <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>
