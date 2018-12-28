@@ -3748,7 +3748,6 @@ void ScoreView::cmdAddText(Tid tid)
             changeState(ViewState::NORMAL);
 
       TextBase* s = 0;
-      TextBase* es = 0;
       _score->startCmd();
       switch (tid) {
             case Tid::TITLE:
@@ -3765,6 +3764,7 @@ void ScoreView::cmdAddText(Tid tid)
                   s = new Text(_score, tid);
                   s->setParent(measure);
                   adjustCanvasPosition(measure, false);
+                  _score->undoAddElement(s);
                   }
                   break;
 
@@ -3774,8 +3774,7 @@ void ScoreView::cmdAddText(Tid tid)
                   if (!cr)
                         break;
                   s = new RehearsalMark(_score);
-                  s->setTrack(0);
-                  s->setParent(cr->segment());
+                  cr->undoAddAnnotation(s);
                   }
                   break;
             case Tid::STAFF:
@@ -3784,20 +3783,7 @@ void ScoreView::cmdAddText(Tid tid)
                   if (!cr)
                         break;
                   s = new StaffText(_score, Tid::STAFF);
-                  Segment* parent = 0;
-                  if (cr->segment()->measure()->isMMRest()) {     // mm hack
-                        Measure* m = cr->segment()->measure()->mmRestFirst();
-                        parent = m->findSegmentR(SegmentType::ChordRest, 0);
-                        es = new StaffText(_score, Tid::STAFF);
-                        es->setTrack(cr->track());
-                        es->setParent(cr->segment());
-                        _score->addElement(es);
-                        s->linkTo(es);
-                        }
-                  else
-                        parent = cr->segment();
-                  s->setTrack(cr->track());
-                  s->setParent(parent);
+                  cr->undoAddAnnotation(s);
                   }
                   break;
             case Tid::SYSTEM:
@@ -3806,8 +3792,7 @@ void ScoreView::cmdAddText(Tid tid)
                   if (!cr)
                         break;
                   s = new SystemText(_score, Tid::SYSTEM);
-                  s->setTrack(0);
-                  s->setParent(cr->segment());
+                  cr->undoAddAnnotation(s);
                   }
                   break;
             case Tid::EXPRESSION:
@@ -3816,9 +3801,8 @@ void ScoreView::cmdAddText(Tid tid)
                   if (!cr)
                         break;
                   s = new StaffText(_score, Tid::EXPRESSION);
-                  s->setTrack(cr->track());
                   s->setPlacement(Placement::BELOW);
-                  s->setParent(cr->segment());
+                  cr->undoAddAnnotation(s);
                   }
                   break;
             case Tid::INSTRUMENT_CHANGE:
@@ -3827,8 +3811,7 @@ void ScoreView::cmdAddText(Tid tid)
                   if (!cr)
                         break;
                   s = new InstrumentChange(_score);
-                  s->setTrack(cr->track());
-                  s->setParent(cr->segment());
+                  cr->undoAddAnnotation(s);
                   }
                   break;
             case Tid::FINGERING:
@@ -3843,6 +3826,7 @@ void ScoreView::cmdAddText(Tid tid)
                   s = new Fingering(_score);
                   s->setTrack(e->track());
                   s->setParent(e);
+                  _score->undoAddElement(s);
                   }
                   break;
             default:
@@ -3850,10 +3834,20 @@ void ScoreView::cmdAddText(Tid tid)
             }
 
       if (s) {
-            _score->undoAddElement(s);
             _score->select(s, SelectType::SINGLE, 0);
             _score->endCmd();
-            startEditMode(es ? es : s);
+            Measure* m = s->findMeasure();
+            if (m && m->hasMMRest() && s->links()) {
+                  Measure* mmRest = m->mmRest();
+                  for (ScoreElement* se : *s->links()) {
+                        TextBase* s1 = toTextBase(se);
+                        if (s != s1 && s1->findMeasure() == mmRest) {
+                              s = s1;
+                              break;
+                              }
+                        }
+                  }
+            startEditMode(s);
             }
       else
             _score->endCmd();

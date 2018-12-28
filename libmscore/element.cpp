@@ -1257,10 +1257,10 @@ bool Element::isPrintable() const
 //   findMeasure
 //---------------------------------------------------------
 
-Element* Element::findMeasure()
+Measure* Element::findMeasure()
       {
       if (isMeasure())
-            return this;
+            return toMeasure(this);
       else if (_parent)
             return _parent->findMeasure();
       else
@@ -1271,7 +1271,7 @@ Element* Element::findMeasure()
 //   findMeasure
 //---------------------------------------------------------
 
-const Element* Element::findMeasure() const
+const Measure* Element::findMeasure() const
       {
       Element* e = const_cast<Element*>(this);
       return e->findMeasure();
