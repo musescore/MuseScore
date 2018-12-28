@@ -181,6 +181,8 @@ class ChordRest : public DurationElement {
       virtual void removeMarkings(bool keepTremolo = false);
 
       bool isBefore(ChordRest*);
+
+      void undoAddAnnotation(Element*);
       };
 
 
