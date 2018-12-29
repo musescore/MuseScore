@@ -46,7 +46,7 @@ private:
       int _dots = 0;
       Fraction _dura;
       TDuration _normalType;
-      Fraction _timeMod { 0, 0 };                     // invalid (will handle "present but incorrect" as "not present")
+      Fraction _timeMod { 1, 1 };                     // default to no time modification
       MxmlLogger* _logger;                            ///< Error logger
       };
 

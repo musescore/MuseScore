@@ -133,7 +133,7 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
                   // Detect this by comparing the actual duration with the expected duration
                   // based on note type. If actual is 2/3 of expected, the rest is part
                   // of a tuplet.
-                  if (rest && !_timeMod.isValid()) {
+                  if (rest) {
                         if (2 * calcDura.ticks() == 3 * _dura.ticks()) {
                               _timeMod = Fraction(2, 3);
                               errorStr += " -> assuming triplet";
