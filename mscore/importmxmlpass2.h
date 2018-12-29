@@ -35,16 +35,20 @@ namespace Ms {
 //   support enums / structs / classes
 //---------------------------------------------------------
 
-typedef QList<Chord*> GraceChordList;
-typedef QVector<FiguredBass*> FiguredBassList;
+using GraceChordList = QList<Chord*>;
+using FiguredBassList = QVector<FiguredBass*>;
+//      typedef QList<Chord*> GraceChordList;
+//      typedef QVector<FiguredBass*> FiguredBassList;
+using Tuplets = std::map<QString, Tuplet*>;
 
 //---------------------------------------------------------
 //   MxmlStartStop
 //---------------------------------------------------------
-
+/*
 enum class MxmlStartStop : char {
       START, STOP, NONE
       };
+ */
 
 //---------------------------------------------------------
 //   MusicXmlTupletDesc
@@ -239,8 +243,8 @@ private:
       void divisions();
       void transpose(const QString& partId);
       Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,
-                 Fraction& dura, QString& currentVoice, GraceChordList& gcl, int& gac,
-                 Beam*& beam, FiguredBassList& fbl, int& alt);
+                 Fraction& missingPrev, Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac,
+                 Beam*& beam, FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
       void notePrintSpacingNo(Fraction& dura);
       FiguredBassItem* figure(const int idx, const bool paren);
       FiguredBass* figuredBass();
@@ -277,8 +281,6 @@ private:
       // or use score->sigmap() ?
       Fraction _timeSigDura;
 
-      QVector<Tuplet*> _tuplets;          ///< Current tuplet for each track in the current part
-      QVector<bool> _tuplImpls;           ///< Current tuplet implicit flag for each track in the current part
       SlurStack _slurs { {} };
       TrillStack _trills { {} };          ///< Current trills
       BracketsStack _brackets { {} };
