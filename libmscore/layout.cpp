@@ -3530,20 +3530,35 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show())
                         continue;
                   ChordRest* cr = toChordRest(e);
+
+                  // layout beam
                   if (isTopBeam(cr)) {
                         cr->beam()->layout();
                         cr->beam()->addSkyline(system->staff(cr->beam()->staffIdx())->skyline());
+                        }
 
-                       // layout fingering a second time (first layout called in note->layout2())
-                       // to finally place fingerings above or below a beam
-
-                        if (e->isChord()) {
-                              Chord* c = toChord(e);
-                              for (Note* note : c->notes()) {
-                                    for (Element* el : note->el()) {
-                                          if (el->isFingering())
-                                                el->layout();
+                  // layout fingerings placed above/below chord
+                  if (e->isChord()) {
+                        std::list<Fingering*> fingerings;
+                        Chord* c = toChord(e);
+                        for (Note* note : c->notes()) {
+                              for (Element* el : note->el()) {
+                                    if (el->isFingering()) {
+                                          Fingering* f = toFingering(el);
+                                          if (f->layoutType() == ElementType::CHORD) {
+                                                if (f->placeAbove())
+                                                      fingerings.push_back(f);
+                                                else
+                                                      fingerings.push_front(f);
+                                                }
                                           }
+                                    }
+                              }
+                        for (Fingering* f : fingerings) {
+                              f->layout();
+                              if (f->autoplace() && f->visible()) {
+                                    QRectF r = f->bbox().translated(f->pos() + f->note()->pos() + c->pos() + s->pos() + s->measure()->pos());
+                                    system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r);
                                     }
                               }
                         }
@@ -3570,7 +3585,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   while (de->tuplet() && de->tuplet()->elements().front() == de) {
                         Tuplet* t = de->tuplet();
                         t->layout();
-                        system->staff(t->staffIdx())->skyline().add(t->shape().translated(t->pos() + t->measure()->pos()));
+                        if (t->autoplace() && t->visible())
+                              system->staff(t->staffIdx())->skyline().add(t->shape().translated(t->pos() + t->measure()->pos()));
                         de = t;
                         }
                   }
