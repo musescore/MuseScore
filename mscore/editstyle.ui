@@ -167,7 +167,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Articulations</string>
+        <string>Articulations, Ornaments</string>
        </property>
       </item>
       <item>
@@ -8050,48 +8050,21 @@
           <layout class="QVBoxLayout" name="verticalLayout_9">
            <item>
             <layout class="QGridLayout" name="gridLayout_4">
+             <item row="1" column="3">
+              <spacer name="horizontalSpacer_31">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
              <item row="0" column="1">
               <widget class="QDoubleSpinBox" name="propertyDistanceHead">
-               <property name="suffix">
-                <string comment="space unit">sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_41">
-               <property name="text">
-                <string>Articulation distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>propertyDistance</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QDoubleSpinBox" name="propertyDistanceStem">
-               <property name="suffix">
-                <string comment="space unit">sp</string>
-               </property>
-               <property name="singleStep">
-                <double>0.100000000000000</double>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_35">
-               <property name="text">
-                <string>Notehead distance:</string>
-               </property>
-               <property name="buddy">
-                <cstring>propertyDistanceHead</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QDoubleSpinBox" name="propertyDistance">
                <property name="suffix">
                 <string comment="space unit">sp</string>
                </property>
@@ -8136,18 +8109,89 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_35">
+               <property name="text">
+                <string>Notehead distance:</string>
+               </property>
+               <property name="buddy">
+                <cstring>propertyDistanceHead</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="propertyDistance">
+               <property name="suffix">
+                <string comment="space unit">sp</string>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_41">
+               <property name="text">
+                <string>Articulation distance:</string>
+               </property>
+               <property name="buddy">
+                <cstring>propertyDistance</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="propertyDistanceStem">
+               <property name="suffix">
+                <string comment="space unit">sp</string>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QToolButton" name="resetPropertyDistanceHead">
+               <property name="accessibleName">
+                <string>Reset 'Notehead distance' value</string>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="2">
-              <spacer name="horizontalSpacer_31">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+              <widget class="QToolButton" name="resetPropertyDistanceStem">
+               <property name="accessibleName">
+                <string>Reset 'Stem distance' value</string>
                </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                </property>
-              </spacer>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QToolButton" name="resetPropertyDistance">
+               <property name="accessibleName">
+                <string>Reset 'Articulation distance' value</string>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QToolButton" name="resetArticulationMag">
+               <property name="accessibleName">
+                <string>Reset 'Articulation size' value</string>
+               </property>
+               <property name="icon">
+                <iconset resource="musescore.qrc">
+                 <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
