@@ -2608,6 +2608,8 @@ void Score::cmdImplode()
       Segment* endSegment = selection().endSegment();
       Measure* startMeasure = startSegment->measure();
       Measure* endMeasure = endSegment ? endSegment->measure() : lastMeasure();
+      int startTick       = startSegment->tick();
+      int endTick         = endSegment ? endSegment->tick() : lastMeasure()->endTick();
 
       // if single staff selected, combine voices
       // otherwise combine staves
@@ -2678,17 +2680,14 @@ void Score::cmdImplode()
                               }
                         }
                   }
+            // delete orphaned spanners (TODO: figure out solution to reconnect orphaned spanners to their cloned notes)
+            checkSpanner(startTick, endTick);
             }
       else {
             int tracks[VOICES];
             for (int i = 0; i < VOICES; i++)
                   tracks[i] = -1;
             int full = 0;
-            int lTick;
-            if (endSegment)
-                  lTick = endSegment->tick();
-            else
-                  lTick = lastMeasure()->endTick();
 
             // identify tracks to combine, storing the source track numbers in tracks[]
             // first four non-empty tracks to win
@@ -2705,7 +2704,7 @@ void Score::cmdImplode()
             for (int i = dstTrack; i < dstTrack + VOICES; i++) {
                   int strack = tracks[i % VOICES];
                   if (strack != -1 && strack != i) {
-                        undo( new CloneVoice(startSegment, lTick, startSegment, strack, i, i, false));
+                        undo( new CloneVoice(startSegment, endTick, startSegment, strack, i, i, false));
                         }
                   }
             }
