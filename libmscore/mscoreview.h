@@ -66,6 +66,7 @@ class MuseScoreView {
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
       virtual void setDropTarget(const Element*) {}
 
+      virtual void textTab(bool /*back*/) {}
       virtual void lyricsTab(bool /*back*/, bool /*end*/, bool /*moveOnly*/) {}
       virtual void lyricsReturn() {}
       virtual void lyricsEndEdit() {}

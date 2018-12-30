@@ -186,6 +186,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       virtual void lyricsUpDown(bool up, bool end) override;
       virtual void lyricsMinus() override;
       virtual void lyricsUnderscore() override;
+      virtual void textTab(bool back = false) override;
       void harmonyEndEdit();
       void harmonyTab(bool back);
       void harmonyBeatsTab(bool noterest, bool back);
