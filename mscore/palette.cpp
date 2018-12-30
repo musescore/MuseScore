@@ -709,6 +709,7 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
                   viewer->moveCursor();
             }
       viewer->setDropTarget(0);
+      score->update();
 //      mscore->endCmd();
       }
 
