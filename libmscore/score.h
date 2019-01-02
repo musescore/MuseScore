@@ -458,6 +458,7 @@ class Score : public QObject, public ScoreElement {
 
       qreal _noteHeadWidth { 0.0 };       // cached value
       QString accInfo;                    ///< information used by the screen-reader
+      IconType _graceInputState;
 
       //------------------
 
@@ -1188,6 +1189,13 @@ class Score : public QObject, public ScoreElement {
       void createBeams(Measure*);
 
       constexpr static double defaultTempo()  { return _defaultTempo; }
+
+      IconType getGraceInputState() {return _graceInputState;}
+      void setGraceInputState(IconType type) {_graceInputState = type;}
+      NoteType iconTypeToNoteType(IconType);
+      int iconTypeToLen(IconType iType);
+      TDuration iconTypeToDuration(IconType iType);
+      SymId iconTypeToSymId(IconType iType);
 
       friend class ChangeSynthesizerState;
       friend class Chord;

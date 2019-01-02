@@ -340,6 +340,15 @@ void Score::putNote(const Position& p, bool replace)
       ChordRest* cr = _is.cr();
       bool addToChord = false;
 
+      if(_graceInputState != IconType::NONE && selection().elements().count() == 1){
+            if (cr && cr->isChord()) {
+                        if(selection().element()->type() == ElementType::NOTE){
+                        setGraceNote(toChord(cr), nval.pitch, iconTypeToNoteType(_graceInputState), iconTypeToLen(_graceInputState));
+                        score()->addRefresh(cr->canvasBoundingRect());
+                        }
+                  }
+            return;
+            }
       if (cr) {
             // retrieve total duration of current chord
             TDuration d = cr->durationType();

@@ -547,7 +547,17 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
       chord->setMag(ch->staff()->mag(chord->tick()) * styleD(Sid::graceNoteMag));
 
       undoAddElement(chord);
-      select(note, SelectType::SINGLE, 0);
+
+      if(qApp->keyboardModifiers().testFlag(Qt::ShiftModifier)){
+            Chord* cg = ch->graceNotes().first();
+            if (viewer.count()) {
+                  if (cg->isGraceAfter())
+                        score()->viewer[0]->cmdAddSlur(ch, cg);
+                  else
+                        score()->viewer[0]->cmdAddSlur(cg, ch);
+                        }
+            }
+
       return note;
       }
 

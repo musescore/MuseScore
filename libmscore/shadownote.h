@@ -33,7 +33,7 @@ class ShadowNote final : public Element {
       TDuration _duration;
       int _voice;
       bool _rest;
-
+      bool _isGrace;
    public:
       ShadowNote(Score*);
       virtual ShadowNote* clone() const  { return new ShadowNote(*this); }
@@ -44,6 +44,7 @@ class ShadowNote final : public Element {
       virtual void draw(QPainter*) const;
 
       void setState(SymId noteSymbol, int voice, TDuration duration, bool rest = false);
+      void setGrace(bool grace);
 
       SymId getNoteFlag() const;
       bool computeUp() const;
