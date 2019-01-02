@@ -391,7 +391,7 @@ QString Dynamic::accessibleInfo() const
             s = plainText().simplified();
             if (s.length() > 20) {
                   s.truncate(20);
-                  s += "...";
+                  s += "…";
                   }
             }
       else {

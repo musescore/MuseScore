@@ -80,7 +80,7 @@ void MuseScore::showWorkspaceMenu()
             }
 
       menuWorkspaces->addSeparator();
-      QAction* a = new QAction(tr("New..."), this);
+      QAction* a = new QAction(tr("New…"), this);
       connect(a, SIGNAL(triggered()), SLOT(createNewWorkspace()));
       menuWorkspaces->addAction(a);
 

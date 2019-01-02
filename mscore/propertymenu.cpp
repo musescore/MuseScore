@@ -111,8 +111,8 @@ void ScoreView::genPropertyMenuText(Element* e, QMenu* popup)
                   }
             popup->addMenu(menuLayer);
             }
-//      popup->addAction(tr("Text Style..."))->setData("text-style");
-//      popup->addAction(tr("Text Properties..."))->setData("text-props");
+//      popup->addAction(tr("Text Style…"))->setData("text-style");
+//      popup->addAction(tr("Text Properties…"))->setData("text-props");
       }
 
 //---------------------------------------------------------
@@ -125,7 +125,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
       else if (e->isArticulation()) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Articulation Properties..."))->setData("a-props");
+            popup->addAction(tr("Articulation Properties…"))->setData("a-props");
             }
       else if (e->isBeam())
             popup->addAction(getAction("flip"));
@@ -135,11 +135,11 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             popup->addAction(getAction("flip"));
       else if (e->isBend()) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Bend Properties..."))->setData("b-props");
+            popup->addAction(tr("Bend Properties…"))->setData("b-props");
             }
       else if (e->isTremoloBar()) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Tremolo Bar Properties..."))->setData("tr-props");
+            popup->addAction(tr("Tremolo Bar Properties…"))->setData("tr-props");
             }
       else if (e->isHBox()) {
             QMenu* textMenu = popup->addMenu(tr("Add"));
@@ -178,7 +178,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   }
             if (!ts->generated()) {
                   popup->addSeparator();
-                  popup->addAction(tr("Time Signature Properties..."))->setData("ts-props");
+                  popup->addAction(tr("Time Signature Properties…"))->setData("ts-props");
                   }
             }
       else if (e->isClef()) {
@@ -194,11 +194,11 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             }
       else if (e->isStaffText()) {
             genPropertyMenuText(e, popup);
-            popup->addAction(tr("Staff Text Properties..."))->setData("st-props");
+            popup->addAction(tr("Staff Text Properties…"))->setData("st-props");
             }
       else if (e->isSystemText()) {
             genPropertyMenuText(e, popup);
-            popup->addAction(tr("System Text Properties..."))->setData("st-props");
+            popup->addAction(tr("System Text Properties…"))->setData("st-props");
             }
       else if (e->isText()
                || e->isSystemText()
@@ -224,7 +224,7 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
                   }
             }
       else if (e->isStaffState() && toStaffState(e)->staffStateType() == StaffStateType::INSTRUMENT) {
-            popup->addAction(tr("Change Instrument Properties..."))->setData("ss-props");
+            popup->addAction(tr("Change Instrument Properties…"))->setData("ss-props");
             }
       else if (e->isSlurSegment()) {
             genPropertyMenu1(e, popup);
@@ -233,13 +233,13 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             QAction* b = popup->actions()[0];
             QAction* a = popup->insertSeparator(b);
             a->setText(tr("Staff"));
-            a = new QAction(tr("Staff/Part Properties..."), 0);
+            a = new QAction(tr("Staff/Part Properties…"), 0);
             a->setData("staff-props");
             popup->insertAction(b, a);
 
             a = popup->insertSeparator(b);
             a->setText(tr("Measure"));
-            a = new QAction(tr("Measure Properties..."), 0);
+            a = new QAction(tr("Measure Properties…"), 0);
             a->setData("measure-props");
             // disable property changes for multi measure rests
             a->setEnabled(!static_cast<Rest*>(e)->segment()->measure()->isMMRest());
@@ -251,13 +251,13 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             QAction* b = popup->actions()[0];
             QAction* a = popup->insertSeparator(b);
             a->setText(tr("Staff"));
-            a = new QAction(tr("Staff/Part Properties..."), 0);
+            a = new QAction(tr("Staff/Part Properties…"), 0);
             a->setData("staff-props");
             popup->insertAction(b, a);
 
             a = popup->insertSeparator(b);
             a->setText(tr("Measure"));
-            a = new QAction(tr("Measure Properties..."), 0);
+            a = new QAction(tr("Measure Properties…"), 0);
             a->setData("measure-props");
             // disable property changes for multi measure rests
             a->setEnabled(!static_cast<Note*>(e)->chord()->segment()->measure()->isMMRest());
@@ -267,20 +267,20 @@ void ScoreView::createElementPropertyMenu(Element* e, QMenu* popup)
             genPropertyMenu1(e, popup);
             popup->addSeparator();
 
-            popup->addAction(tr("Style..."))->setData("style");
+            popup->addAction(tr("Style…"))->setData("style");
             if (enableExperimental)
-                  popup->addAction(tr("Chord Articulation..."))->setData("articulation");
+                  popup->addAction(tr("Chord Articulation…"))->setData("articulation");
             }
       else if (e->isLayoutBreak() && toLayoutBreak(e)->layoutBreakType() == LayoutBreak::Type::SECTION)
-            popup->addAction(tr("Section Break Properties..."))->setData("break-props");
+            popup->addAction(tr("Section Break Properties…"))->setData("break-props");
       else if (e->isInstrumentChange()) {
             genPropertyMenu1(e, popup);
-            popup->addAction(tr("Change Instrument..."))->setData("ch-instr");
+            popup->addAction(tr("Change Instrument…"))->setData("ch-instr");
             }
 //      else if (e->isFretDiagram())
-//            popup->addAction(tr("Fretboard Diagram Properties..."))->setData("fret-props");
+//            popup->addAction(tr("Fretboard Diagram Properties…"))->setData("fret-props");
       else if (e->isInstrumentName())
-            popup->addAction(tr("Staff/Part Properties..."))->setData("staff-props");
+            popup->addAction(tr("Staff/Part Properties…"))->setData("staff-props");
       else
             genPropertyMenu1(e, popup);
       }

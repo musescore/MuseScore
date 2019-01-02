@@ -292,7 +292,7 @@ static void qmlMsgHandler(QtMsgType type, const QMessageLogContext &, const QStr
 void PluginCreator::runClicked()
       {
       log->clear();
-      msg(tr("Running...\n"));
+      msg(tr("Running…\n"));
       QQmlEngine* qml = Ms::MScore::qml();
       connect(qml, SIGNAL(warnings(const QList<QQmlError>&)),
          SLOT(qmlWarnings(const QList<QQmlError>&)));

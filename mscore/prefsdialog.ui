@@ -3971,7 +3971,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             <string>Loads a Shortcut List</string>
            </property>
            <property name="text">
-            <string>Load</string>
+            <string>Load…</string>
            </property>
           </widget>
          </item>
@@ -3991,7 +3991,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             <string>Opens a dialog for defining a new shortcut for the selected action</string>
            </property>
            <property name="text">
-            <string>Define...</string>
+            <string>Define…</string>
            </property>
           </widget>
          </item>
