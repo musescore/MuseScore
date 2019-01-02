@@ -26,6 +26,7 @@
 #include "enableplayforwidget.h"
 #include "mixertrackgroup.h"
 #include <QWidget>
+#include <QDockWidget>
 #include <QScrollArea>
 #include <QList>
 
@@ -58,7 +59,7 @@ char userRangeToReverb(double v);
 //   Mixer
 //---------------------------------------------------------
 
-class Mixer : public QWidget, public Ui::Mixer, public MixerTrackGroup
+class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
       {
       Q_OBJECT
 
