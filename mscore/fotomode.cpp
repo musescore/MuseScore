@@ -327,7 +327,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       popup->addAction(a);
 
       popup->addSeparator();
-      a = popup->addAction(tr("Resolution (%1 DPI)...").arg(preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION)));
+      a = popup->addAction(tr("Resolution (%1 DPI)…").arg(preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION)));
       a->setData("set-res");
       QAction* bgAction = popup->addAction(tr("Transparent background"));
       bgAction->setCheckable(true);
@@ -343,7 +343,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             a->setData(resizeEntry[i].label);
             popup->addAction(a);
             }
-      QMenu* setSize = new QMenu(tr("Set Standard Size..."));
+      QMenu* setSize = new QMenu(tr("Set Standard Size…"));
       for (int i = 0; i < 4; ++i) {
             a = new QAction(qApp->translate("fotomode", setSizeEntry[i].text), this);
             a->setData(setSizeEntry[i].label);
@@ -352,10 +352,10 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       popup->addMenu(setSize);
 
       popup->addSeparator();
-      a = new QAction(tr("Save As (Print Mode)..."), this);
+      a = new QAction(tr("Save As (Print Mode)…"), this);
       a->setData("print");
       popup->addAction(a);
-      a = new QAction(tr("Save As (Screenshot Mode)..."), this);
+      a = new QAction(tr("Save As (Screenshot Mode)…"), this);
       a->setData("screenshot");
       popup->addAction(a);
 

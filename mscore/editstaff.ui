@@ -135,7 +135,7 @@
         <item row="5" column="2">
          <widget class="QPushButton" name="changeStaffType">
           <property name="text">
-           <string>Advanced Style Properties...</string>
+           <string>Advanced Style Properties…</string>
           </property>
          </widget>
         </item>
@@ -344,7 +344,7 @@
           <item>
            <widget class="QPushButton" name="changeInstrument">
             <property name="text">
-             <string>Change Instrument...</string>
+             <string>Change Instrument…</string>
             </property>
            </widget>
           </item>
@@ -803,7 +803,7 @@
          <item>
           <widget class="QPushButton" name="editStringData">
            <property name="text">
-            <string>Edit String Data...</string>
+            <string>Edit String Data…</string>
            </property>
           </widget>
          </item>

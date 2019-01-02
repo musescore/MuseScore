@@ -294,7 +294,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       progress.setWindowModality(Qt::ApplicationModal);
       //progress.setCancelButton(0);
       progress.setCancelButtonText(tr("Cancel"));
-      progress.setLabelText(tr("Exporting..."));
+      progress.setLabelText(tr("Exporting…"));
       if (!MScore::noGui) {
           // callback function that will update the progress bar
           // it will return false and thus cancel the export if the user

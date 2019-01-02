@@ -318,7 +318,7 @@ QList<std::string> makeLyricsListForUI()
                   else
                         lyricText += text;
                   if (lyricText.size() >= symbolLimit - 1) {
-                        lyricText += "...";
+                        lyricText += "…";
                         break;
                         }
                   }

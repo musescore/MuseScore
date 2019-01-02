@@ -299,7 +299,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       selMenu->addAction(getAction("select-similar"));
       selMenu->addAction(getAction("select-similar-staff"));
       selMenu->addAction(getAction("select-similar-range"));
-      a = selMenu->addAction(tr("More..."));
+      a = selMenu->addAction(tr("More…"));
       a->setData("select-dialog");
 
       popup->addSeparator();
@@ -380,16 +380,16 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
 
       QAction* a = popup->addSeparator();
       a->setText(tr("Staff"));
-      a = popup->addAction(tr("Edit Drumset..."));
+      a = popup->addAction(tr("Edit Drumset…"));
       a->setData("edit-drumset");
       a->setEnabled(staff->part()->instrument()->drumset() != 0);
 
-      a = popup->addAction(tr("Piano Roll Editor..."));
+      a = popup->addAction(tr("Piano Roll Editor…"));
       a->setData("pianoroll");
 
-      a = popup->addAction(tr("Staff/Part Properties..."));
+      a = popup->addAction(tr("Staff/Part Properties…"));
       a->setData("staff-properties");
-      a = popup->addAction(tr("Split Staff..."));
+      a = popup->addAction(tr("Split Staff…"));
       a->setData("staff-split");
 
       a = popup->addSeparator();
@@ -412,7 +412,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       
       popup->addSeparator();
 
-      a = popup->addAction(tr("Measure Properties..."));
+      a = popup->addAction(tr("Measure Properties…"));
       a->setData("props");
       a->setEnabled(!obj->isMMRest());
       popup->addSeparator();

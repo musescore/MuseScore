@@ -237,7 +237,7 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             if (!_moreElements)
                   return;
             QMenu menu;
-            QAction* moreAction = menu.addAction(tr("More Elements..."));
+            QAction* moreAction = menu.addAction(tr("More Elements…"));
             moreAction->setEnabled(_moreElements);
             QAction* action = menu.exec(mapToGlobal(event->pos()));
             if (action == moreAction)
@@ -247,10 +247,10 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
 
       QMenu menu;
       QAction* deleteCellAction   = menu.addAction(tr("Delete"));
-      QAction* contextAction = menu.addAction(tr("Properties..."));
+      QAction* contextAction = menu.addAction(tr("Properties…"));
       deleteCellAction->setEnabled(!_readOnly);
       contextAction->setEnabled(!_readOnly);
-      QAction* moreAction    = menu.addAction(tr("More Elements..."));
+      QAction* moreAction    = menu.addAction(tr("More Elements…"));
       moreAction->setEnabled(_moreElements);
 
       if (filterActive || (cellAt(i) && cellAt(i)->readOnly))
