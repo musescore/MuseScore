@@ -71,6 +71,7 @@ enum class Sid {
 
       lyricsOddFontFace,
       lyricsOddFontSize,
+      lyricsOddFontSpatiumDependent,
       lyricsOddFontStyle,
       lyricsOddAlign,
       lyricsOddFrameType,
@@ -82,6 +83,7 @@ enum class Sid {
 
       lyricsEvenFontFace,
       lyricsEvenFontSize,
+      lyricsEvenFontSpatiumDependent,
       lyricsEvenFontStyle,
       lyricsEvenAlign,
       lyricsEvenFrameType,
@@ -184,6 +186,7 @@ enum class Sid {
       hairpinLineWidth,
       hairpinFontFace,
       hairpinFontSize,
+      hairpinFontSpatiumDependent,
       hairpinFontStyle,
       hairpinTextAlign,
       hairpinFrameType,
@@ -209,6 +212,7 @@ enum class Sid {
       pedalHookHeight,
       pedalFontFace,
       pedalFontSize,
+      pedalFontSpatiumDependent,
       pedalFontStyle,
       pedalTextAlign,
       pedalFrameType,
@@ -239,6 +243,7 @@ enum class Sid {
 
       chordSymbolAFontFace,
       chordSymbolAFontSize,
+      chordSymbolAFontSpatiumDependent,
       chordSymbolAFontStyle,
       chordSymbolAAlign,
       chordSymbolAFrameType,
@@ -250,6 +255,7 @@ enum class Sid {
 
       chordSymbolBFontFace,
       chordSymbolBFontSize,
+      chordSymbolBFontSpatiumDependent,
       chordSymbolBFontStyle,
       chordSymbolBAlign,
       chordSymbolBFrameType,
@@ -358,6 +364,7 @@ enum class Sid {
       voltaLineStyle,
       voltaFontFace,
       voltaFontSize,
+      voltaFontSpatiumDependent,
       voltaFontStyle,
       voltaAlign,
       voltaOffset,
@@ -398,6 +405,7 @@ enum class Sid {
       ottavaNumbersOnly,
       ottavaFontFace,
       ottavaFontSize,
+      ottavaFontSpatiumDependent,
       ottavaFontStyle,
       ottavaTextAlign,
       ottavaFrameType,
@@ -434,6 +442,7 @@ enum class Sid {
       tupletBracketType,
       tupletFontFace,
       tupletFontSize,
+      tupletFontSpatiumDependent,
       tupletFontStyle,
       tupletAlign,
       tupletBracketHookHeight,
@@ -550,6 +559,7 @@ enum class Sid {
 
       fingeringFontFace,
       fingeringFontSize,
+      fingeringFontSpatiumDependent,
       fingeringFontStyle,
       fingeringAlign,
       fingeringFrameType,
@@ -562,6 +572,7 @@ enum class Sid {
 
       lhGuitarFingeringFontFace,
       lhGuitarFingeringFontSize,
+      lhGuitarFingeringFontSpatiumDependent,
       lhGuitarFingeringFontStyle,
       lhGuitarFingeringAlign,
       lhGuitarFingeringFrameType,
@@ -574,6 +585,7 @@ enum class Sid {
 
       rhGuitarFingeringFontFace,
       rhGuitarFingeringFontSize,
+      rhGuitarFingeringFontSpatiumDependent,
       rhGuitarFingeringFontStyle,
       rhGuitarFingeringAlign,
       rhGuitarFingeringFrameType,
@@ -586,6 +598,7 @@ enum class Sid {
 
       stringNumberFontFace,
       stringNumberFontSize,
+      stringNumberFontSpatiumDependent,
       stringNumberFontStyle,
       stringNumberAlign,
       stringNumberFrameType,
@@ -598,6 +611,7 @@ enum class Sid {
 
       longInstrumentFontFace,
       longInstrumentFontSize,
+      longInstrumentFontSpatiumDependent,
       longInstrumentFontStyle,
       longInstrumentAlign,
       longInstrumentOffset,
@@ -610,6 +624,7 @@ enum class Sid {
 
       shortInstrumentFontFace,
       shortInstrumentFontSize,
+      shortInstrumentFontSpatiumDependent,
       shortInstrumentFontStyle,
       shortInstrumentAlign,
       shortInstrumentOffset,
@@ -622,6 +637,7 @@ enum class Sid {
 
       partInstrumentFontFace,
       partInstrumentFontSize,
+      partInstrumentFontSpatiumDependent,
       partInstrumentFontStyle,
       partInstrumentAlign,
       partInstrumentOffset,
@@ -634,6 +650,7 @@ enum class Sid {
 
       dynamicsFontFace,
       dynamicsFontSize,
+      dynamicsFontSpatiumDependent,
       dynamicsFontStyle,
       dynamicsAlign,
       dynamicsFrameType,
@@ -645,6 +662,7 @@ enum class Sid {
 
       expressionFontFace,
       expressionFontSize,
+      expressionFontSpatiumDependent,
       expressionFontStyle,
       expressionAlign,
       expressionPlacement,
@@ -658,6 +676,7 @@ enum class Sid {
 
       tempoFontFace,
       tempoFontSize,
+      tempoFontSpatiumDependent,
       tempoFontStyle,
       tempoAlign,
       tempoSystemFlag,
@@ -674,6 +693,7 @@ enum class Sid {
 
       metronomeFontFace,
       metronomeFontSize,
+      metronomeFontSpatiumDependent,
       metronomeFontStyle,
       metronomePlacement,
       metronomeAlign,
@@ -687,6 +707,7 @@ enum class Sid {
 
       measureNumberFontFace,
       measureNumberFontSize,
+      measureNumberFontSpatiumDependent,
       measureNumberFontStyle,
       measureNumberOffset,
       measureNumberOffsetType,
@@ -700,6 +721,7 @@ enum class Sid {
 
       translatorFontFace,
       translatorFontSize,
+      translatorFontSpatiumDependent,
       translatorFontStyle,
       translatorAlign,
       translatorOffset,
@@ -712,6 +734,7 @@ enum class Sid {
 
       systemTextFontFace,
       systemTextFontSize,
+      systemTextFontSpatiumDependent,
       systemTextFontStyle,
       systemTextAlign,
       systemTextOffsetType,
@@ -728,6 +751,7 @@ enum class Sid {
 
       staffTextFontFace,
       staffTextFontSize,
+      staffTextFontSpatiumDependent,
       staffTextFontStyle,
       staffTextAlign,
       staffTextOffsetType,
@@ -744,6 +768,7 @@ enum class Sid {
 
       rehearsalMarkFontFace,
       rehearsalMarkFontSize,
+      rehearsalMarkFontSpatiumDependent,
       rehearsalMarkFontStyle,
       rehearsalMarkAlign,
       rehearsalMarkFrameType,
@@ -759,6 +784,7 @@ enum class Sid {
 
       repeatLeftFontFace,
       repeatLeftFontSize,
+      repeatLeftFontSpatiumDependent,
       repeatLeftFontStyle,
       repeatLeftAlign,
       repeatLeftPlacement,
@@ -771,6 +797,7 @@ enum class Sid {
 
       repeatRightFontFace,
       repeatRightFontSize,
+      repeatRightFontSpatiumDependent,
       repeatRightFontStyle,
       repeatRightAlign,
       repeatRightPlacement,
@@ -783,6 +810,7 @@ enum class Sid {
 
       frameFontFace,
       frameFontSize,
+      frameFontSpatiumDependent,
       frameFontStyle,
       frameAlign,
       frameOffset,
@@ -795,11 +823,13 @@ enum class Sid {
 
       textLineFontFace,
       textLineFontSize,
+      textLineFontSpatiumDependent,
       textLineFontStyle,
       textLineTextAlign,
 
       glissandoFontFace,
       glissandoFontSize,
+      glissandoFontSpatiumDependent,
       glissandoFontStyle,
       glissandoAlign,
       glissandoOffset,
@@ -814,6 +844,7 @@ enum class Sid {
 
       bendFontFace,
       bendFontSize,
+      bendFontSpatiumDependent,
       bendFontStyle,
       bendAlign,
       bendOffset,
@@ -828,6 +859,7 @@ enum class Sid {
 
       headerFontFace,
       headerFontSize,
+      headerFontSpatiumDependent,
       headerFontStyle,
       headerAlign,
       headerOffset,
@@ -840,6 +872,7 @@ enum class Sid {
 
       footerFontFace,
       footerFontSize,
+      footerFontSpatiumDependent,
       footerFontStyle,
       footerAlign,
       footerOffset,
@@ -852,6 +885,7 @@ enum class Sid {
 
       instrumentChangeFontFace,
       instrumentChangeFontSize,
+      instrumentChangeFontSpatiumDependent,
       instrumentChangeFontStyle,
       instrumentChangeAlign,
       instrumentChangeOffset,
@@ -868,11 +902,13 @@ enum class Sid {
 
       figuredBassFontFace,
       figuredBassFontSize,
+      figuredBassFontSpatiumDependent,
       figuredBassFontStyle,
 
       user1Name,
       user1FontFace,
       user1FontSize,
+      user1FontSpatiumDependent,
       user1FontStyle,
       user1Align,
       user1Offset,
@@ -887,6 +923,7 @@ enum class Sid {
       user2Name,
       user2FontFace,
       user2FontSize,
+      user2FontSpatiumDependent,
       user2FontStyle,
       user2Align,
       user2Offset,
@@ -901,6 +938,7 @@ enum class Sid {
       user3Name,
       user3FontFace,
       user3FontSize,
+      user3FontSpatiumDependent,
       user3FontStyle,
       user3Align,
       user3Offset,
@@ -915,6 +953,7 @@ enum class Sid {
       user4Name,
       user4FontFace,
       user4FontSize,
+      user4FontSpatiumDependent,
       user4FontStyle,
       user4Align,
       user4Offset,
@@ -929,6 +968,7 @@ enum class Sid {
       user5Name,
       user5FontFace,
       user5FontSize,
+      user5FontSpatiumDependent,
       user5FontStyle,
       user5Align,
       user5Offset,
@@ -943,6 +983,7 @@ enum class Sid {
       user6Name,
       user6FontFace,
       user6FontSize,
+      user6FontSpatiumDependent,
       user6FontStyle,
       user6Align,
       user6Offset,
@@ -956,6 +997,7 @@ enum class Sid {
 
       letRingFontFace,
       letRingFontSize,
+      letRingFontSpatiumDependent,
       letRingFontStyle,
       letRingTextAlign,
       letRingHookHeight,
@@ -975,6 +1017,7 @@ enum class Sid {
 
       palmMuteFontFace,
       palmMuteFontSize,
+      palmMuteFontSpatiumDependent,
       palmMuteFontStyle,
       palmMuteTextAlign,
       palmMuteHookHeight,
