@@ -416,7 +416,7 @@ void readTextStyle206(MStyle* style, XmlReader& e)
       {
       QString family = "FreeSerif";
       double size = 10;
-      bool sizeIsSpatiumDependent = true;
+      bool sizeIsSpatiumDependent = false;
       FontStyle fontStyle = FontStyle::Normal;
       Align align = Align::LEFT;
       QPointF offset;
