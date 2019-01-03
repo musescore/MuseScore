@@ -209,11 +209,13 @@ UndoStack::~UndoStack()
 
 void UndoStack::beginMacro(Score* score)
       {
+      mutexPushPop.lock();
       if (curCmd) {
             qWarning("already active");
             return;
             }
       curCmd = new UndoMacro(score);
+      mutexPushPop.unlock();
       }
 
 //---------------------------------------------------------
@@ -222,6 +224,7 @@ void UndoStack::beginMacro(Score* score)
 
 void UndoStack::push(UndoCommand* cmd, EditData* ed)
       {
+      mutexPushPop.lock();
       if (!curCmd) {
             // this can happen for layout() outside of a command (load)
             if (!ScoreLoad::loading())
@@ -229,6 +232,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 
             cmd->redo(ed);
             delete cmd;
+            mutexPushPop.unlock();
             return;
             }
 #ifndef QT_NO_DEBUG
@@ -242,6 +246,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 #endif
       curCmd->appendChild(cmd);
       cmd->redo(ed);
+      mutexPushPop.unlock();
       }
 
 //---------------------------------------------------------
@@ -250,12 +255,15 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 
 void UndoStack::push1(UndoCommand* cmd)
       {
+      mutexPushPop.lock();
       if (!curCmd) {
             if (!ScoreLoad::loading())
                   qWarning("no active command, UndoStack %p", this);
+            mutexPushPop.unlock();
             return;
             }
       curCmd->appendChild(cmd);
+      mutexPushPop.unlock();
       }
 
 //---------------------------------------------------------
@@ -264,6 +272,7 @@ void UndoStack::push1(UndoCommand* cmd)
 
 void UndoStack::remove(int idx)
       {
+      mutexPushPop.lock();
       Q_ASSERT(idx <= curIdx);
       Q_ASSERT(curIdx >= 0);
       // remove redo stack
@@ -281,6 +290,7 @@ void UndoStack::remove(int idx)
             delete cmd;
             }
       curIdx = idx;
+      mutexPushPop.unlock();
       }
 
 //---------------------------------------------------------
@@ -289,13 +299,16 @@ void UndoStack::remove(int idx)
 
 void UndoStack::pop()
       {
+      mutexPushPop.lock();
       if (!curCmd) {
             if (!ScoreLoad::loading())
                   qWarning("no active command");
+            mutexPushPop.unlock();
             return;
             }
       UndoCommand* cmd = curCmd->removeChild();
       cmd->undo(0);
+      mutexPushPop.unlock();
       }
 
 //---------------------------------------------------------
@@ -318,6 +331,7 @@ void UndoStack::rollback()
 
 void UndoStack::endMacro(bool rollback)
       {
+      mutexPushPop.lock();
       if (curCmd == 0) {
             qWarning("not active");
             return;
@@ -337,6 +351,7 @@ void UndoStack::endMacro(bool rollback)
             ++curIdx;
             }
       curCmd = 0;
+      mutexPushPop.unlock();
       }
 
 //---------------------------------------------------------
@@ -345,6 +360,7 @@ void UndoStack::endMacro(bool rollback)
 
 void UndoStack::reopen()
       {
+      mutexPushPop.lock();
       qDebug("curIdx %d size %d", curIdx, list.size());
       Q_ASSERT(curCmd == 0);
       Q_ASSERT(curIdx > 0);
@@ -354,6 +370,7 @@ void UndoStack::reopen()
       for (auto i : curCmd->commands()) {
             qDebug("   <%s>", i->name());
             }
+      mutexPushPop.unlock();
       }
 
 //---------------------------------------------------------
@@ -371,19 +388,24 @@ void UndoStack::setClean()
 
 void UndoStack::undo(EditData* ed)
       {
+      mutexPushPop.lock();
       qCDebug(undoRedo) << "===";
       // Are we currently editing text?
       if (ed && ed->element && ed->element->isTextBase()) {
             TextEditData* ted = static_cast<TextEditData*>(ed->getData(ed->element));
-            if (ted && ted->startUndoIdx == curIdx)
+            if (ted && ted->startUndoIdx == curIdx) {
                   // No edits to undo, so do nothing
+                  mutexPushPop.unlock();
                   return;
+                  }
             }
       if (curIdx) {
             --curIdx;
             Q_ASSERT(curIdx >= 0);
             list[curIdx]->undo(ed);
             }
+
+      mutexPushPop.unlock();
       }
 
 //---------------------------------------------------------
@@ -392,9 +414,11 @@ void UndoStack::undo(EditData* ed)
 
 void UndoStack::redo(EditData* ed)
       {
+      mutexPushPop.lock();
       qCDebug(undoRedo) << "===";
       if (canRedo())
             list[curIdx++]->redo(ed);
+      mutexPushPop.unlock();
       }
 
 //---------------------------------------------------------

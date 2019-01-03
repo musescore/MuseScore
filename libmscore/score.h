@@ -388,6 +388,7 @@ class Score : public QObject, public ScoreElement {
 
    private:
       static std::set<Score*> validScores;
+      static Score* scoreOfUpdate; // set by Score::update() and needed in doConcurrentLayoutAndUpdate to know which score called update when CmdState is only doing updateRange
       int _linkId { 0 };
       MasterScore* _masterScore { 0 };
       QList<MuseScoreView*> viewer;
@@ -526,6 +527,8 @@ class Score : public QObject, public ScoreElement {
       void renderSpanners(EventMap* events);
       void renderMetronome(EventMap* events, Measure* m, int tickOffset);
       void updateVelo();
+
+      void doConcurrentLayoutAndUpdate();
 
    protected:
       int _fileDivision; ///< division of current loading *.msc file
@@ -997,7 +1000,7 @@ class Score : public QObject, public ScoreElement {
       void removeAudio();
 
       void doLayout();
-      void doLayoutRange(int, int);
+      void doLayoutRange(int stick, int etick);
       void layoutLinear(bool layoutAll, LayoutContext& lc);
 
       void layoutSystemsUndoRedo();

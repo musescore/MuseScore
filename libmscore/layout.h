@@ -13,6 +13,8 @@
 #ifndef __LAYOUT_H__
 #define __LAYOUT_H__
 
+Q_DECLARE_LOGGING_CATEGORY(layout)
+
 namespace Ms {
 
 class Segment;

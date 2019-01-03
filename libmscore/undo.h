@@ -18,6 +18,7 @@
  Definition of undo-releated classes and structs.
 */
 
+#include "all.h"
 #include "spatium.h"
 #include "mscore.h"
 #include "sig.h"
@@ -146,6 +147,7 @@ class UndoStack {
       int nextState;
       int cleanState;
       int curIdx;
+      QMutex mutexPushPop;
 
    public:
       UndoStack();

@@ -205,40 +205,67 @@ void CmdState::dump()
 #endif
 
 //---------------------------------------------------------
+//   doConcurrentLayoutAndUpdate
+//    layout & update for a single score
+//    must be thread-safe such that doesn't modify memory outside of this score so can run concurrently
+//---------------------------------------------------------
+Score* Score::scoreOfUpdate = 0;
+
+void Score::doConcurrentLayoutAndUpdate()
+      {
+      CmdState& cs = _masterScore->cmdState();
+
+      if (cs.layoutRange())
+            doLayoutRange(cs.startTick(), cs.endTick());
+
+      if (cs.updateAll()) {
+            for (MuseScoreView* v : viewer)
+                  v->updateAll();
+            }
+      else if (cs.updateRange() && this == Score::scoreOfUpdate) {
+            // updateRange updates only current score
+            qreal d = spatium() * .5;
+            _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
+            for (MuseScoreView* v : viewer)
+                  v->dataChanged(_updateState.refresh);
+            _updateState.refresh = QRectF();
+            }
+      }
+
+//---------------------------------------------------------
 //   update
 //    layout & update
 //---------------------------------------------------------
 
 void Score::update()
       {
+#ifndef NDEBUG
+      QElapsedTimer updateTimer;
+      updateTimer.start();
+#endif
+
+      Score::scoreOfUpdate = this;
+
+      // first determine if need to update all MasterScores due to one MasterScore needing to do a layout
       bool updateAll = false;
       for (MasterScore* ms : *movements()) {
-            CmdState& cs = ms->cmdState();
             ms->deletePostponed();
-            if (cs.layoutRange()) {
-                  for (Score* s : ms->scoreList())
-                        s->doLayoutRange(cs.startTick(), cs.endTick());
+            if (ms->cmdState().layoutRange()) {
                   updateAll = true;
                   }
             }
+      if (updateAll) {
+            for (MasterScore* ms : *movements())
+                  ms->cmdState().setUpdateMode(UpdateMode::UpdateAll);
+            }
 
+      // for each MasterScore, layout & update all scores in its scoreList concurrently
       for (MasterScore* ms : *movements()) {
             CmdState& cs = ms->cmdState();
-            if (updateAll || cs.updateAll()) {
-                  for (Score* s : scoreList()) {
-                        for (MuseScoreView* v : s->viewer) {
-                              v->updateAll();
-                              }
-                        }
-                  }
-            else if (cs.updateRange()) {
-                  // updateRange updates only current score
-                  qreal d = spatium() * .5;
-                  _updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-                  for (MuseScoreView* v : viewer)
-                        v->dataChanged(_updateState.refresh);
-                  _updateState.refresh = QRectF();
-                  }
+            QList<Score*> scores = ms->scoreList();
+
+            QtConcurrent::blockingMap(scores, [](Score* s){ s->doConcurrentLayoutAndUpdate(); } );
+
             const InputState& is = inputState();
             if (is.noteEntryMode() && is.segment()) {
                   setPlayPos(is.segment()->tick());
@@ -251,6 +278,10 @@ void Score::update()
             }
       if (_selection.isRange())
             _selection.updateSelectedElements();
+
+#ifndef NDEBUG
+      //qDebug() << "update took " << updateTimer.elapsed() << "ms.";
+#endif
       }
 
 //---------------------------------------------------------

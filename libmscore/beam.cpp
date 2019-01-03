@@ -1056,11 +1056,13 @@ static void initBeamMetrics()
 
 static Bm beamMetric1(bool up, char l1, char l2)
       {
-      static int initialized = false;
-      if (!initialized) {
+      static bool initialized = false;
+      static QMutex mutexInitBeamMetrics;
+      if (mutexInitBeamMetrics.tryLock()) {
             initBeamMetrics();
             initialized = true;
             }
+      while (!initialized); // spin in rare case that another thread is in initBeamMetrics() while another thread calls beamMetric1
       return bMetrics[Bm::key(up, l1, l2)];
       }
 

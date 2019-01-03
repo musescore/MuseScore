@@ -204,6 +204,7 @@
 
 #include <QJsonDocument>
 
+#include <QMutex>
 
 // change Q_ASSERT to NOP if not debugging
 
