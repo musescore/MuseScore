@@ -69,6 +69,7 @@ enum class ViewState {
       DRAG_EDIT,
       LASSO,
       NOTE_ENTRY,
+      GRACE_NOTE_ENTRY,
       PLAY,
       ENTRY_PLAY,
 
@@ -240,6 +241,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void startNoteEntry();
       virtual void startNoteEntryMode() override;
+      void graceNoteEntry(IconType graceNoteType);
       void endNoteEntry();
 
       void endLasso();

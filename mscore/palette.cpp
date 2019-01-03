@@ -348,6 +348,15 @@ void Palette::mousePressEvent(QMouseEvent* ev)
 */
       if (dragIdx == -1)
             return;
+      if (_name == "Grace Notes" && qApp->keyboardModifiers().testFlag(Qt::ControlModifier)) {
+            // Want one single note to start grace notes input
+            const Selection sel = mscore->currentScoreView()->score()->selection();
+            if (sel.isNone() || ! sel.isSingle() || ! sel.elements().first()->isNote())
+                  return;
+            mscore->currentScoreView()->score()->setGraceInputState(static_cast<Icon*>(cells[dragIdx]->element)->iconType());
+            mscore->currentScoreView()->changeState(ViewState::NOTE_ENTRY);
+            return;
+            }
       if (_selectable) {
             if (dragIdx != selectedIdx) {
                   update(idxRect(dragIdx) | idxRect(selectedIdx));

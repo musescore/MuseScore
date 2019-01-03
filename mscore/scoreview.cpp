@@ -11,7 +11,6 @@
 //=============================================================================
 
 #include "scoreview.h"
-
 #include "breaksdialog.h"
 #include "continuouspanel.h"
 #include "drumroll.h"
@@ -863,6 +862,9 @@ void ScoreView::setShadowNote(const QPointF& p)
 
       SymId symNotehead;
       TDuration d(is.duration());
+           IconType ic = _score->getGraceInputState();
+           if (ic != IconType::NONE)
+                 d = _score->iconTypeToDuration(ic);
 
       if (is.rest()) {
             int yo;
@@ -876,6 +878,12 @@ void ScoreView::setShadowNote(const QPointF& p)
                   symNotehead = instr->drumset()->noteHeads(is.drumNote(), noteHead);
             else
                   symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
+            if (ic == IconType::NONE)
+                  symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
+            else {
+                  symNotehead = Note::noteHead(0, noteheadGroup, NoteHead::Type::HEAD_QUARTER);
+                  shadowNote->setGrace(true);
+                  }
 
             shadowNote->setState(symNotehead, voice, d);
             }
@@ -1081,6 +1089,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   case ViewState::DRAG_OBJECT:
                   case ViewState::LASSO:
                   case ViewState::NOTE_ENTRY:
+                  case ViewState::GRACE_NOTE_ENTRY:
                   case ViewState::PLAY:
                   case ViewState::ENTRY_PLAY:
                         break;
@@ -2482,12 +2491,23 @@ void ScoreView::startNoteEntry()
       }
 
 //---------------------------------------------------------
+//   graceNoteEntry
+//---------------------------------------------------------
+void ScoreView::graceNoteEntry(IconType graceNoteType)
+      {
+      score()->setGraceInputState(graceNoteType);
+      if (!score()->inputState().noteEntryMode())
+            cmd(getAction("note-input"));
+      }
+
+//---------------------------------------------------------
 //   endNoteEntry
 //---------------------------------------------------------
 
 void ScoreView::endNoteEntry()
       {
       InputState& is = _score->inputState();
+      score()->setGraceInputState(IconType::NONE);
       is.setNoteEntryMode(false);
       if (is.slur()) {
             const std::vector<SpannerSegment*>& el = is.slur()->spannerSegments();
@@ -3199,6 +3219,8 @@ void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2)
             slur->setTrack2(cr1->track());
       slur->setStartElement(cr1);
       slur->setEndElement(cr2);
+      if(cr1->isGrace() || cr2->isGrace())
+            slur->setSlurDirection(Direction::DOWN);
 
       cr1->score()->undoAddElement(slur);
       SlurSegment* ss = new SlurSegment(cr1->score());
@@ -4436,6 +4458,7 @@ bool ScoreView::fotoMode() const
             case ViewState::DRAG_EDIT:
             case ViewState::LASSO:
             case ViewState::NOTE_ENTRY:
+            case ViewState::GRACE_NOTE_ENTRY:
             case ViewState::PLAY:
             case ViewState::ENTRY_PLAY:
                   break;
