@@ -2412,6 +2412,8 @@ QVariant Beam::propertyDefault(Pid id) const
 
 void Beam::addSkyline(Skyline& sk)
       {
+      if (beamSegments.empty())
+            return;
       qreal lw2 = score()->styleP(Sid::beamWidth) * .5 * mag();
       const QLineF* bs = beamSegments.front();
       double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
