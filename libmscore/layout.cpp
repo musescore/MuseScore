@@ -3591,9 +3591,9 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             Slur* slur = toSlur(s);
             ChordRest* scr = s->startCR();
             ChordRest* ecr = s->endCR();
-            if (scr->isChord())
+            if (scr && scr->isChord())
                   toChord(scr)->layoutArticulations3(slur);
-            if (ecr->isChord())
+            if (ecr && ecr->isChord())
                   toChord(ecr)->layoutArticulations3(slur);
             }
 
