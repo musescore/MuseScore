@@ -1589,6 +1589,7 @@ void Score::deleteItem(Element* el)
                                     if (toRest(del)->isGap())
                                           undoRemoveElement(del);
                                     }
+                              checkSpanner(m->tick(), m->endTick());
                               }
                         else {
                               // check if the other rest could be combined
