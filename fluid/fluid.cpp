@@ -571,6 +571,8 @@ void Fluid::updatePatchList()
       qDeleteAll(patches);
       patches.clear();
 
+      QMap<int, QList<MidiPatch*>> patchNums;
+
       int bankOffset = 0;
       for (SFont* sf : sfonts) {
             sf->setBankOffset(bankOffset);
@@ -584,10 +586,17 @@ void Fluid::updatePatchList()
                   patch->bank = p->get_banknum() + bankOffset;
                   patch->prog = p->get_num();
                   patch->name = p->get_name();
-                  patches.append(patch);
+                  patchNums[patch->prog].append(patch);
                   }
             bankOffset += (banks + 1);
             }
+
+      // Order by patch number first instead of by bank first
+      for (QList<MidiPatch*> num : patchNums) {
+            for (MidiPatch* p : num)
+                  patches.append(p);
+            }
+
       /* try to set the correct presets */
       int n = channel.size();
       for (int i = 0; i < n; i++)
