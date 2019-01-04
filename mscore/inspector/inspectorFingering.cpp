@@ -33,11 +33,31 @@ InspectorFingering::InspectorFingering(QWidget* parent)
             { f.title, f.panel }
             };
 
-      f.style->clear();
-      for (auto ss : { Tid::FINGERING, Tid::LH_GUITAR_FINGERING, Tid::RH_GUITAR_FINGERING, Tid::STRING_NUMBER } )
-            f.style->addItem(textStyleUserName(ss), int(ss));
+      populateStyle(f.style);
 
       mapSignals(iiList, ppList);
+      }
+
+//---------------------------------------------------------
+//   allowedTextStyles
+//---------------------------------------------------------
+
+const std::vector<Tid>& InspectorFingering::allowedTextStyles()
+      {
+      static const std::vector<Tid> _fingeringTextStyles = {
+            Tid::FINGERING,
+            Tid::LH_GUITAR_FINGERING,
+            Tid::RH_GUITAR_FINGERING,
+            Tid::STRING_NUMBER,
+            Tid::USER1,
+            Tid::USER2,
+            Tid::USER3,
+            Tid::USER4,
+            Tid::USER5,
+            Tid::USER6
+            };
+
+      return _fingeringTextStyles;
       }
 }
 
