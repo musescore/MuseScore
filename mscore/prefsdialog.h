@@ -80,6 +80,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void filterShortcutsTextChanged(const QString &);
       void filterAdvancedPreferences(const QString&);
       void resetAdvancedPreferenceToDefault();
+      void restartAudioEngine();
 
       void changeSoundfontPaths();
       void updateTranslationClicked();

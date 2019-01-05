@@ -72,6 +72,9 @@ Portaudio::Portaudio(Seq* s)
 Portaudio::~Portaudio()
       {
       if (initialized) {
+            if (midiDriver)
+                  delete midiDriver;
+
             PaError err = Pa_CloseStream(stream);
             if (err != paNoError)
                   qDebug("Portaudio close stream failed: %s", Pa_GetErrorText(err));

@@ -206,6 +206,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(jackDriver, SIGNAL(toggled(bool)), SLOT(exclusiveAudioDriver(bool)));
       connect(useJackAudio, SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
       connect(useJackMidi,  SIGNAL(toggled(bool)), SLOT(nonExclusiveJackDriver(bool)));
+      connect(rescanDrivers, SIGNAL(clicked()), this, SLOT(restartAudioEngine()));
       updateRemote();
 
       advancedWidget = new PreferencesListWidget();
@@ -995,8 +996,6 @@ void PreferenceDialog::apply()
          || (preferences.getInt(PREF_IO_ALSA_FRAGMENTS) != alsaFragments->value())
 #endif
             ) {
-            if (seq)
-                  seq->exit();
 
             preferences.setPreference(PREF_IO_ALSA_USEALSAAUDIO, alsaDriver->isChecked());
             preferences.setPreference(PREF_IO_PORTAUDIO_USEPORTAUDIO, portaudioDriver->isChecked());
@@ -1005,19 +1004,8 @@ void PreferenceDialog::apply()
             preferences.setPreference(PREF_IO_ALSA_SAMPLERATE, alsaSampleRate->currentData().toInt());
             preferences.setPreference(PREF_IO_ALSA_PERIODSIZE, alsaPeriodSize->currentData().toInt());
             preferences.setPreference(PREF_IO_ALSA_FRAGMENTS, alsaFragments->value());
-            if (seq) {
-                  Driver* driver = driverFactory(seq, "");
-                  if (driver) {
-                        // Updating synthesizer's sample rate
-                        if (seq->synti()) {
-                              seq->synti()->setSampleRate(driver->sampleRate());
-                              seq->synti()->init();
-                              }
-                        seq->setDriver(driver);
-                        }
-                  if (!seq->init())
-                        qDebug("sequencer init failed");
-                  }
+
+            restartAudioEngine();
             }
 
 #ifdef USE_PORTAUDIO
@@ -1377,6 +1365,7 @@ void PreferenceDialog::defineShortcutClicked()
       shortcutsChanged = true;
       }
 
+
 //---------------------------------------------------------
 //   printShortcutsClicked
 //---------------------------------------------------------
@@ -1448,6 +1437,15 @@ void PreferenceDialog::printShortcutsClicked()
       p.end();
 #endif
 }
+
+//---------------------------------------------------------
+//   rebuildAudioDrivers
+//---------------------------------------------------------
+
+void PreferenceDialog::restartAudioEngine()
+      {
+      mscore->restartAudioEngine();
+      }
 
 
 } // namespace Ms
