@@ -87,12 +87,14 @@ void HairpinSegment::layout()
       {
       const qreal _spatium = spatium();
       const int _trck = track();
+      Dynamic* sd = nullptr;
+      Dynamic* ed = nullptr;
+      qreal dymax = 0.0;
       if (autoplace() && !score()->isPalette()) {
             // Try to fit between adjacent dynamics
             const System* sys = system();
             if (isSingleType() || isBeginType()) {
                   Segment* start = hairpin()->startSegment();
-                  Dynamic* sd = nullptr;
                   if (start && start->system() == sys)
                         sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
                   if (sd && sd->visible() && sd->autoplace()) {
@@ -101,11 +103,12 @@ void HairpinSegment::layout()
                         const qreal dist    = sdRight - pos().x() + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
                         rxpos()  += dist;
                         rxpos2() -= dist;
+                        // prepare to align vertically
+                        dymax = sd->pos().y();
                         }
                   }
             if (isSingleType() || isEndType()) {
                   Segment* end = hairpin()->endSegment();
-                  Dynamic* ed = nullptr;
                   if (end && end->tick() < sys->endTick()) {
                         // checking ticks rather than systems since latter
                         // systems may be unknown at layout stage.
@@ -117,6 +120,11 @@ void HairpinSegment::layout()
                         const qreal dist    = edLeft - pos2().x() - pos().x() - score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
                         if (dist < 0.0 || dist >= 3.0 * spatium())
                               rxpos2() += dist;
+                        // prepare to align vertically
+                        if (hairpin()->placeBelow())
+                              dymax = qMax(dymax, ed->pos().y());
+                        else
+                              dymax = qMin(dymax, ed->pos().y());
                         }
                   }
             }
@@ -231,20 +239,63 @@ void HairpinSegment::layout()
       if (autoplace()) {
             qreal minDistance = spatium() * .7;
             qreal ymax = pos().y();
+            qreal d;
+            qreal ddiff = spatium() * 0.5;
 
             SkylineLine sl(!hairpin()->placeAbove());
             sl.add(shape().translated(pos()));
             if (hairpin()->placeAbove()) {
-                  qreal d  = system()->topDistance(staffIdx(), sl);
+                  d  = system()->topDistance(staffIdx(), sl);
                   if (d > -minDistance)
                         ymax -= d + minDistance;
+                  // align hairpin with dynamics
+                  ymax = qMin(ymax, dymax - ddiff);
                   }
             else {
-                  qreal d  = system()->bottomDistance(staffIdx(), sl);
+                  d  = system()->bottomDistance(staffIdx(), sl);
                   if (d > -minDistance)
                         ymax += d + minDistance;
+                  // align hairpin with dynamics
+                  if (!hairpin()->diagonal())
+                        ymax = qMax(ymax, dymax - ddiff);
                   }
             rypos() += ymax - pos().y();
+
+            if (hairpin()->visible() && !hairpin()->diagonal()) {
+                  // align dynamics with hairpin
+                  if (sd && sd->autoplace() && sd->placement() == hairpin()->placement()) {
+                        qreal ny = y() + ddiff - sd->offset().y();
+                        if (sd->placeAbove())
+                              ny = qMin(ny, sd->ipos().y());
+                        else
+                              ny = qMax(ny, sd->ipos().y());
+                        if (sd->ipos().y() != ny) {
+                              sd->rypos() = ny;
+                              Segment* s = sd->segment();
+                              Measure* m = s->measure();
+                              QRectF r = sd->bbox().translated(sd->pos());
+                              s->staffShape(sd->staffIdx()).add(r);
+                              r = sd->bbox().translated(sd->pos() + s->pos() + m->pos());
+                              m->system()->staff(sd->staffIdx())->skyline().add(r);
+                              }
+                        }
+                  if (ed && ed->autoplace() && visible() && ed->placement() == hairpin()->placement()) {
+                        qreal ny = y() + ddiff - ed->offset().y();
+                        if (ed->placeAbove())
+                              ny = qMin(ny, ed->ipos().y());
+                        else
+                              ny = qMax(ny, ed->ipos().y());
+                        if (ed->ipos().y() != ny) {
+                              ed->rypos() = ny;
+                              Segment* s = ed->segment();
+                              Measure* m = s->measure();
+                              QRectF r = ed->bbox().translated(ed->pos());
+                              s->staffShape(ed->staffIdx()).add(r);
+                              r = ed->bbox().translated(ed->pos() + s->pos() + m->pos());
+                              m->system()->staff(ed->staffIdx())->skyline().add(r);
+                              }
+                        }
+                  }
             }
       }
 
