@@ -30,7 +30,8 @@ ExpandableBlank {
                 { text: "Chromatic", value: Glissando.STYLE_CHROMATIC },
                 { text: "White keys", value: Glissando.STYLE_WHITE_KEYS },
                 { text: "Black keys", value: Glissando.STYLE_BLACK_KEYS },
-                { text: "Diatonic", value: Glissando.STYLE_DIATONIC }
+                { text: "Diatonic", value: Glissando.STYLE_DIATONIC },
+                { text: "Portamento", value: Glissando.STYLE_PORTAENTO }
             ]
 
             currentIndex: root.model && !root.model.styleType.isUndefined ? indexOfValue(root.model.styleType.value) : -1
