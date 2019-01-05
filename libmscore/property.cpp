@@ -459,6 +459,8 @@ QVariant propertyFromString(Pid id, QString value)
                         return QVariant(int(GlissandoStyle::BLACK_KEYS));
                   else if ( value == "diatonic")
                         return QVariant(int(GlissandoStyle::DIATONIC));
+                  else if ( value == "portamento") 
+                        return QVariant(int(GlissandoStyle::PORTAMENTO));
                   else // e.g., normally "Chromatic"
                         return QVariant(int(GlissandoStyle::CHROMATIC));
                   }
@@ -758,6 +760,8 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
                               return "whitekeys";
                         case GlissandoStyle::DIATONIC:
                               return "diatonic";
+                        case GlissandoStyle::PORTAMENTO:
+                              return "portamento";
                         case GlissandoStyle::CHROMATIC:
                               return "Chromatic";
                         }

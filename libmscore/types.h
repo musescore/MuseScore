@@ -370,7 +370,7 @@ enum class GlissandoType {
 
 enum class GlissandoStyle {
       ///.\{
-      CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC
+      CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC, PORTAMENTO
       ///\}
       };
 

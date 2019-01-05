@@ -52,6 +52,8 @@ namespace FluidS {
 /* min vol envelope release (to stop clicks) in SoundFont timecents */
 #define FLUID_MIN_VOLENVRELEASE -7200.0f /* ~16ms */
 
+/* buffer size*/
+#define FILTER_TRANSITION_SAMPLES 64
 
 //---------------------------------------------------------
 //   triangle - calc value of triangle function for lfos
@@ -77,6 +79,14 @@ int samplesToNextTurningPoint(int dur, int pos) {
       return ((dur/2)-(pos%(dur/2))) % (dur/2);
       }
 
+//---------------------------------------------------------
+//   channelPortamentoTime
+//   Grabs the Portamento time CC from the midi instructions
+//---------------------------------------------------------
+
+float samplesToNextTurningPoint(Channel* c) {
+      return ((c)->cc[PORTAMENTO_TIME_MSB] * 128 + (c)->cc[PORTAMENTO_TIME_LSB]);
+      }
 
 //---------------------------------------------------------
 //   Voice
@@ -175,6 +185,10 @@ void Voice::init(Sample* _sample, Channel* _channel, int _key, int _vel,
       /* Clear sample history in filter */
       hist1 = 0;
       hist2 = 0;
+
+      /* portamento */
+      pitchinc = 0;
+      pitchoffset = 0;
 
       /* Set all the generators to their default value, according to SF
        * 2.01 section 8.1.3 (page 48). The value of NRPN messages are
@@ -498,19 +512,32 @@ bool Voice::generateDataForDSPChain(unsigned framesBufCount)
             }
             
             fluid_check_fpe ("voice_write amplitude calculation");
-            
+
             /* Calculate the number of samples, that the DSP loop advances
              * through the original waveform with each step in the output
              * buffer. It is the ratio between the frequencies of original
              * waveform and output waveform.*/
             
             {
-                  float cent = pitch + modlfo_val * modlfo_to_pitch
+                  float cent = pitch + pitchoffset + modlfo_val * modlfo_to_pitch
                   + viblfo_val * viblfo_to_pitch
                   + modenv_val * modenv_to_pitch;
                   phase_incr = _fluid->ct2hz_real(cent) / root_pitch_hz;
             }
-            
+
+            if (pitchoffset < 0.0f) {
+                  float diff = pitchinc * framesBufCount;
+                  pitchoffset -= diff;
+                  if ( pitchoffset > 0.0f)
+                        pitchoffset = 0.0f;
+                  }
+            else if (pitchoffset > 0.0f) {
+                  float diff = pitchinc * framesBufCount;
+                  pitchoffset -= diff;
+                  if (pitchoffset < 0.0f)
+                        pitchoffset = 0.0f;
+                  }
+
             /* if phase_incr is not advancing, set it to the minimum fraction value (prevent stuckage) */
             if (phase_incr == 0)
                   phase_incr = 1;
@@ -599,9 +626,6 @@ bool Voice::generateDataForDSPChain(unsigned framesBufCount)
                          * the filter is still too 'grainy', then increase this number
                          * at will.
                          */
-                        
-#define FILTER_TRANSITION_SAMPLES 64     // (FLUID_BUFSIZE)
-                        
                         a1_incr = (a1_temp - a1) / FILTER_TRANSITION_SAMPLES;
                         a2_incr = (a2_temp - a2) / FILTER_TRANSITION_SAMPLES;
                         b02_incr = (b02_temp - b02) / FILTER_TRANSITION_SAMPLES;
@@ -811,6 +835,15 @@ void Voice::voice_start()
       /* Calculate the voice parameter(s) dependent on each generator. */
       for (int i = 0; list_of_generators_to_initialize[i] != -1; i++)
             update_param(list_of_generators_to_initialize[i]);
+
+      /* fromkey note comes from "GetFromKeyPortamentoLegato()" detector.
+        When fromkey is set to ValidNote , portamento is started */
+      /* Return fromkey portamento */
+      int fromkey = channel->getFromKeyPortamento();
+      if (fromkey != Channel::INVALID_NOTE) {
+            /* Send portamento parameters to the voice dsp */
+            updatePortamento(fromkey, key);
+            }
 
       /* Make an estimate on how loud this voice can get at any time (attenuation). */
       min_attenuation_cB = get_lower_boundary_for_attenuation();
@@ -1933,5 +1966,30 @@ void Voice::effects(int startBufIdx, int count, float* out, float* reverb, float
                   }
             }
       }
-}
 
+      /** legato update functions --------------------------------------------------*/
+      /* Updates voice portamento parameters
+       *
+       * @fromkey the beginning pitch of portamento.
+       * @tokey the ending pitch of portamento.
+       *
+       * The function calculates pitch offset and increment, then these parameters
+       * are send to the dsp.
+      */
+void Voice::updatePortamento(int fromkey, int tokey) {
+      /* calculates pitch offset */
+      float PitchBeg = gen[GEN_SCALETUNE].val
+            * (fromkey - root_pitch / 100.0f) + root_pitch;
+      float PitchEnd = gen[GEN_SCALETUNE].val
+            * (tokey - root_pitch / 100.0f) + root_pitch;
+      float pitchoffset = PitchBeg - PitchEnd;
+      setPortamento(samplesToNextTurningPoint(channel), pitchoffset);
+      }
+
+void Voice::setPortamento(unsigned int countinc, float pitchoffset) {
+      if (countinc) {
+            this->pitchoffset += pitchoffset;
+            this->pitchinc = pitchoffset/(_fluid->sampleRate()*(0.001f*countinc));//countinc;
+            }
+      }
+}

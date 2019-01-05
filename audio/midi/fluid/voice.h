@@ -139,6 +139,10 @@ public:
 	int loopstart;
 	int loopend;
 
+      /* Stuff needed for portamento calculations */
+      float pitchoffset;        /* the portamento range in midicents */
+      float pitchinc;           /* the portamento increment in midicents */
+
 	/* vol env */
 	fluid_env_data_t volenv_data[FLUID_VOICE_ENVLAST];
 	unsigned int volenv_count;
@@ -268,6 +272,10 @@ public:
       int dsp_float_interpolate_linear(unsigned);
       int dsp_float_interpolate_4th_order(unsigned);
       int dsp_float_interpolate_7th_order(unsigned);
+
+      void updatePortamento(int fromKey, int toKey);
+      float fluid_voice_calculate_pitch(int key);
+      void setPortamento(unsigned int countinc, float pitchoffset);
       };
 }
 
