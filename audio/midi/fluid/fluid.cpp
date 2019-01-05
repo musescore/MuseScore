@@ -39,6 +39,11 @@ namespace FluidS {
 
 bool Fluid::initialized = false;
 
+/* better than a macro to determine inappropriate values for notes*/
+bool validNote(const int input) {
+      return (input < 255 && input > -1);
+      }
+
 /* default modulators
  * SF2.01 page 52 ff:
  *
@@ -97,6 +102,9 @@ void Fluid::init(float sampleRate)
       for (int i = 0; i < 128; ++i)
             _tuning[i] = i * 100.0;
       _masterTuning = 440.0;
+
+      fromkey_portamento = Channel::INVALID_NOTE;
+      lastNote = Channel::INVALID_NOTE;
 
       for (int i = 0; i < 512; i++)
             freeVoices.append(new Voice(this));
@@ -315,6 +323,37 @@ void Fluid::pitch_wheel_sens(int chan, int val)
       {
       /* set the pitch-bend value in the channel */
       channel[chan]->pitchWheelSens(val);
+      }
+
+/*
+ * setFromKeyPortamento
+ * requires an input for a default value, usually the TPC
+ */
+void Fluid::setFromKeyPortamento(int chan, int defaultValue) {
+      int ptc = get_cc(chan, PORTAMENTO_CTRL);
+      if (validNote(ptc)) {
+            resetPortamento(chan);
+            fromkey_portamento = ptc; 
+            /*
+            // Assumedly this fixed some sort of bug in FluidSynth2
+            if (!validNote(defaultValue))
+                  defaultValue = ptc;*/
+            }
+      else {
+
+            /* determines and returns fromkey portamento */
+            fromkey_portamento = Channel::INVALID_NOTE;
+
+            if (portamentoTime(chan)) {
+                  /* Portamento when Portamento pedal is On */
+                  /* 'fromkey portamento'is determined from the portamento mode
+                   and the most recent note played (prev_note)*/
+                  if (validNote(defaultValue)) 
+                        fromkey_portamento = ptc;
+                  else 
+                        fromkey_portamento = lastNote;
+                  }
+            }
       }
 
 /*

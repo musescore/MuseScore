@@ -199,6 +199,9 @@ bool Preset::noteon(Fluid* synth, unsigned id, int chan, int key, int vel, doubl
                   Instrument* inst = preset_zone->get_inst();
                   Zone* global_inst_zone = inst->get_global_zone();
 
+                  /* set portamento attributes*/
+                  synth->setFromKeyPortamento(chan, key);
+
                   /* run thru all the zones of this instrument */
                   for(Zone* inst_zone : inst->get_zone()) {
                         /* make sure this instrument zone has a valid sample */
@@ -342,15 +345,15 @@ bool Preset::noteon(Fluid* synth, unsigned id, int chan, int key, int vel, doubl
                                     mod = mod_list[i];
                                     if ((mod != 0) && (mod->amount != 0)) { /* disabled modulators can be skipped. */
                                           /* Preset modulators -add- to existing instrument /
-	                                     * default modulators.  SF2.01 page 70 first bullet on
-	                                     * page */
+                                           * default modulators.  SF2.01 page 70 first bullet on
+                                           * page */
                                           voice->add_mod(mod, FLUID_VOICE_ADD);
                                           }
                                     }
 
 	                        /* add the synthesis process to the synthesis loop. */
 	                        synth->start_voice(voice);
-
+                              synth->setLastNote(key);
                               /* Store the ID of the first voice that was created by this noteon event.
                                * Exclusive class may only terminate older voices.
                                * That avoids killing voices, which have just been created.
