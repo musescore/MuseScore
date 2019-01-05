@@ -397,7 +397,7 @@ void populateGenreCombo(QComboBox* combo)
       combo->addItem(qApp->translate("InstrumentsDialog", "All instruments"), "all");
       int i = 1;
       int defaultIndex = 0;
-      foreach (InstrumentGenre *ig, instrumentGenres) {
+      for (InstrumentGenre *ig : instrumentGenres) {
             combo->addItem(ig->name, ig->id);
             if (ig->id == "common")
                   defaultIndex = i;
@@ -414,7 +414,7 @@ void populateInstrumentList(QTreeWidget* instrumentList)
       {
       instrumentList->clear();
       // TODO: memory leak?
-      foreach(InstrumentGroup* g, instrumentGroups) {
+      for (InstrumentGroup* g : instrumentGroups) {
             InstrumentTemplateListItem* group = new InstrumentTemplateListItem(g->name, instrumentList);
             group->setFlags(Qt::ItemIsEnabled);
             for (InstrumentTemplate* t : g->instrumentTemplates) {
@@ -456,7 +456,7 @@ void InstrumentsWidget::genPartList(Score* cs)
       {
       partiturList->clear();
 
-      foreach (Part* p, cs->parts()) {
+      for (Part* p : cs->parts()) {
             PartListItem* pli = new PartListItem(p, partiturList);
             pli->setVisible(p->show());
             for (Staff* s : *p->staves()) {
@@ -562,7 +562,7 @@ void InstrumentsWidget::on_instrumentList_itemDoubleClicked(QTreeWidgetItem*, in
 
 void InstrumentsWidget::on_addButton_clicked()
       {
-      foreach(QTreeWidgetItem* i, instrumentList->selectedItems()) {
+      for (QTreeWidgetItem* i : instrumentList->selectedItems()) {
             InstrumentTemplateListItem* item = static_cast<InstrumentTemplateListItem*>(i);
             const InstrumentTemplate* it     = item->instrumentTemplate();
             if (it == 0)
@@ -909,6 +909,11 @@ void InstrumentsWidget::on_search_textChanged(const QString &searchPhrase)
 
 void InstrumentsWidget::on_instrumentGenreFilter_currentIndexChanged(int index)
       {
+      QSettings settings;
+      settings.beginGroup("selectInstrument");  // hard coded, since this is also used in instrwidget
+      settings.setValue("selectedGenre", instrumentGenreFilter->currentText());
+      settings.endGroup();
+
       QString id = instrumentGenreFilter->itemData(index).toString();
       // Redisplay tree, only showing items from the selected genre
       filterInstrumentsByGenre(instrumentList, id);
@@ -1033,6 +1038,7 @@ void InstrumentsWidget::createInstruments(Score* cs)
 
 void InstrumentsWidget::init()
       {
+      qDebug("=== INIT ===");
       partiturList->clear();
       instrumentList->clearSelection();
       addButton->setEnabled(false);
@@ -1041,6 +1047,16 @@ void InstrumentsWidget::init()
       downButton->setEnabled(false);
       linkedButton->setEnabled(false);
       belowButton->setEnabled(false);
+
+      // get last saved, user-selected instrument genre and set filter to it
+      QSettings settings;
+      settings.beginGroup("selectedInstrument");
+      if ( ! settings.value("selectedGenre").isNull() ){
+            QString selectedGenre = settings.value("selectedGenre").value<QString>();
+            instrumentGenreFilter->setCurrentText(selectedGenre);
+            }
+      settings.endGroup();
+
       emit completeChanged(false);
       }
 

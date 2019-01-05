@@ -43,6 +43,17 @@ SelectInstrument::SelectInstrument(const Instrument* instrument, QWidget* parent
       buildTemplateList();
       buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
       connect(instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
+
+      qDebug("INIT SELECTINSTRUMENT");
+      // get last saved, user-selected instrument genre and set filter to it
+      QSettings settings;
+      settings.beginGroup("selectInstrument");
+      if (!settings.value("selectedGenre").isNull() ){
+            QString selectedGenre = settings.value("selectedGenre").value<QString>();
+            instrumentGenreFilter->setCurrentText(selectedGenre);
+            }
+      settings.endGroup();
+
       MuseScore::restoreGeometry(this);
       }
 
@@ -125,7 +136,13 @@ void SelectInstrument::on_search_textChanged(const QString &searchPhrase)
 
 void SelectInstrument::on_instrumentGenreFilter_currentIndexChanged(int index)
       {
+      QSettings settings;
+      settings.beginGroup("selectInstrument");  // hard coded, since this is also used in instrwidget
+      settings.setValue("selectedGenre", instrumentGenreFilter->currentText());
+      settings.endGroup();
+
       QString id = instrumentGenreFilter->itemData(index).toString();
+
       // Redisplay tree, only showing items from the selected genre
       filterInstrumentsByGenre(instrumentList, id);
       }
@@ -170,6 +187,4 @@ void SelectInstrument::hideEvent(QHideEvent* event)
       MuseScore::saveGeometry(this);
       QWidget::hideEvent(event);
       }
-
 }
-
