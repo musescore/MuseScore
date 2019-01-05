@@ -197,6 +197,12 @@ int Channel::getCC(int num)
       return ((num >= 0) && (num < 128))? cc[num] : 0;
       }
 
+int Channel::getFromKeyPortamento() {
+      if (synth)
+            return synth->getFromKeyPortamento();
+      return -1;
+      }
+
 //---------------------------------------------------------
 //   pitchBend
 //---------------------------------------------------------

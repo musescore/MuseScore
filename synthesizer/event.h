@@ -24,6 +24,11 @@ class Score;
 
 enum class BeatType : char;
 
+// 4 is the default for the majority of synthesisers, aka VSTis
+const int PITCH_BEND_SENSITIVITY = 4;
+
+const int MIDI_ON_SIGNAL = 127;
+
 //---------------------------------------------------------
 //   Event types
 //---------------------------------------------------------
@@ -103,10 +108,11 @@ enum {
       CTRL_MODULATION         = 0x01,
       CTRL_BREATH             = 0x02,
       CTRL_FOOT               = 0x04,
-      CTRL_PORTAMENTO_TIME    = 0x05,
+      CTRL_PORTAMENTO_TIME_MSB= 0x05,
       CTRL_VOLUME             = 0x07,
       CTRL_PANPOT             = 0x0a,
       CTRL_EXPRESSION         = 0x0b,
+      CTRL_PORTAMENTO_TIME_LSB= 0x25,
       CTRL_SUSTAIN            = 0x40,
       CTRL_PORTAMENTO         = 0x41,
       CTRL_SOSTENUTO          = 0x42,
@@ -242,6 +248,7 @@ class NPlayEvent : public PlayEvent {
       const Harmony* _harmony{nullptr};
       int _origin = -1;
       int _discard = 0;
+      bool _portamento = false;
 
    public:
       NPlayEvent() : PlayEvent() {}
@@ -260,6 +267,12 @@ class NPlayEvent : public PlayEvent {
       void setDiscard(int d) { _discard = d; }
       int discard() const { return _discard; }
       bool isMuted() const;
+      void setPortamento(bool p) { _portamento = p; }
+      bool portamento() const { 
+            return (_portamento == true || 
+                  (this->type() == ME_CONTROLLER && 
+                  (this->controller() == CTRL_PORTAMENTO || this->controller() == CTRL_PORTAMENTO_CONTROL || 
+                        this->controller() == CTRL_PORTAMENTO_TIME_MSB ||  this->controller() == CTRL_PORTAMENTO_TIME_LSB))); }
       };
 
 //---------------------------------------------------------

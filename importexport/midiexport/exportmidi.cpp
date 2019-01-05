@@ -336,18 +336,27 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                                     // ignore noteoff but restrike noteon
                                     continue;
 
+                              if (!exportRPNs && event.type() == ME_CONTROLLER && event.portamento())
+                                    // ignore portamento control events if exportRPN isn't switched on
+                                    continue;
+
                               char eventPort    = cs->masterScore()->midiPort(event.channel());
                               char eventChannel = cs->masterScore()->midiChannel(event.channel());
                               if (port != eventPort || channel != eventChannel)
                                     continue;
 
                               if (event.type() == ME_NOTEON) {
-                                    track.insert(pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
-                                                                     event.pitch(), event.velo()));
+                                    // use the note values instead of the event values if portamento is suppressed
+                                    if (!exportRPNs && event.portamento()) 
+                                          track.insert(pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
+                                                event.note()->pitch(), event.velo()));
+                                    else  
+                                          track.insert(pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
+                                                event.pitch(), event.velo()));
                                     }
                               else if (event.type() == ME_CONTROLLER) {
                                     track.insert(pauseMap.addPauseTicks(i->first), MidiEvent(ME_CONTROLLER, channel,
-                                                                     event.controller(), event.value()));
+                                          event.controller(), event.value()));
                                     }
                               else if(event.type() == ME_PITCHBEND) {
                                     track.insert(pauseMap.addPauseTicks(i->first), MidiEvent(ME_PITCHBEND, channel,

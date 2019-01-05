@@ -176,7 +176,6 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
       const char* name = propertyName(id);
       if (name == 0)
             return;
-
       const QString writableVal(propertyToString(id, data, /* mscx */ true));
       if (writableVal.isEmpty())
             tag(name, data);
