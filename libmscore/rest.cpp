@@ -148,6 +148,10 @@ void Rest::setOffset(const QPointF& o)
 
 QRectF Rest::drag(EditData& ed)
       {
+      // don't allow drag for Measure Rests, because they can't be easily laid out in correct position while dragging
+      if (measure() && durationType().type() == TDuration::DurationType::V_MEASURE)
+            return QRectF();
+
       QPointF s(ed.delta);
       QRectF r(abbox());
 
