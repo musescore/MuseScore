@@ -57,6 +57,15 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   init
+//---------------------------------------------------------
+
+void InstrumentsDialog::init()
+      {
+      instrumentsWidget->init();
+      }
+
+//---------------------------------------------------------
 //   accept
 //---------------------------------------------------------
 
@@ -203,6 +212,7 @@ void MuseScore::editInstrList()
             instrList->done(0);
             return;
             }
+      instrList->init();
       MasterScore* masterScore = cs->masterScore();
       instrList->genPartList(masterScore);
       masterScore->startCmd();
