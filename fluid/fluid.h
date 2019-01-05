@@ -222,6 +222,8 @@ class Channel {
       Preset* _preset;
 
    public:
+      enum { INVALID_NOTE = -1};
+
       int channum;
       short key_pressure;
       short channel_pressure;
@@ -283,6 +285,7 @@ class Channel {
       int getNum() const                  { return channum;    }
       void setInterpMethod(int m)         { interp_method = m; }
       int getInterpMethod() const         { return interp_method; }
+      int getFromKeyPortamento();
       };
 
 // subsystems:
@@ -316,6 +319,9 @@ class Fluid : public Synthesizer {
 
       //the variable is used to stop loading samples from the sf files
       bool _globalTerminate = false;
+
+      int fromkey_portamento = Channel::INVALID_NOTE;
+      int lastNote = Channel::INVALID_NOTE;
 
    protected:
       int _state;                         // the synthesizer state
@@ -368,6 +374,10 @@ class Fluid : public Synthesizer {
       void update_presets();
 
       int get_cc(int chan, int num) const { return channel[chan]->cc[num]; }
+      void resetPortamento(int chan) const { channel[chan]->cc[PORTAMENTO_CTRL] = Channel::INVALID_NOTE; }
+      int portamentoTime(int chan) const {
+            return get_cc(chan, PORTAMENTO_TIME_MSB) * 128 + get_cc(chan, PORTAMENTO_TIME_LSB);
+      }
 
       void system_reset();
       void program_change(int chan, int prognum);
@@ -418,6 +428,9 @@ class Fluid : public Synthesizer {
 
       bool globalTerminate() { return _globalTerminate; }
       void setGlobalTerminate(bool terminate = true) { _globalTerminate = terminate; }
+      int getFromKeyPortamento() { return fromkey_portamento; }
+      void setFromKeyPortamento(int chan, int defaultValue);
+      void setLastNote(int last_note) { this->lastNote = last_note; }
 
       friend class Voice;
       friend class Preset;

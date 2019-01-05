@@ -28,12 +28,15 @@ class SynthesizerGui;
 
 class Synthesizer {
       bool _active;
+      int bufferSize;
 
    protected:
       float _sampleRate;
       SynthesizerGui* _gui;
 
    public:
+      int getBufferSize() { return bufferSize;}
+      void setBufferSize(int value) { bufferSize = value; }
       Synthesizer() : _active(false) { _gui = 0; }
       virtual ~Synthesizer() {}
       virtual void init(float sr)    { _sampleRate = sr; }

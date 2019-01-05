@@ -189,17 +189,21 @@ void Channel::setcc(int num, int value)
 //   getCC
 //---------------------------------------------------------
 
-int Channel::getCC(int num)
-      {
+int Channel::getCC(int num) {
       return ((num >= 0) && (num < 128))? cc[num] : 0;
+      }
+
+int Channel::getFromKeyPortamento() {
+      if (synth)
+            return synth->getFromKeyPortamento();
+      return -1;
       }
 
 //---------------------------------------------------------
 //   pitchBend
 //---------------------------------------------------------
 
-void Channel::pitchBend(int val)
-      {
+void Channel::pitchBend(int val) {
       pitch_bend = val;
       synth->modulate_voices(channum, false, FLUID_MOD_PITCHWHEEL);
       }

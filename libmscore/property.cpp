@@ -429,6 +429,8 @@ QVariant propertyFromString(Pid id, QString value)
                         return QVariant(int(GlissandoStyle::BLACK_KEYS));
                   else if ( value == "diatonic")
                         return QVariant(int(GlissandoStyle::DIATONIC));
+                  else if ( value == "continuous") 
+                        return QVariant(int(GlissandoStyle::CONTINUOUS));
                   else // e.g., normally "Chromatic"
                         return QVariant(int(GlissandoStyle::CHROMATIC));
                   }

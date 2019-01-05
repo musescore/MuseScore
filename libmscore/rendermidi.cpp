@@ -217,9 +217,19 @@ void MasterScore::updateChannel()
       }
 
 //---------------------------------------------------------
+//   Converts midi time (noteoff - noteon) to milliseconds
+//---------------------------------------------------------
+int toMilliseconds(float tempo, float midiTime) {
+      float ticksPerSecond = (float)MScore::division * tempo;
+      int time = (int)((midiTime / ticksPerSecond) * 1000.0f);
+      if (time > 0x7fff) //maximum possible value
+            time = 0x7fff;
+      return time;
+}
+
+//---------------------------------------------------------
 //   playNote
 //---------------------------------------------------------
-
 static void playNote(EventMap* events, const Note* note, int channel, int pitch,
    int velo, int onTime, int offTime, int staffIdx)
       {
@@ -232,6 +242,35 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
       ev.setNote(note);
       if (offTime < onTime)
             offTime = onTime;
+      // adds portamento for continuous glissando
+      for (Spanner* spanner : note->spannerFor()) {
+            if (spanner->type() == ElementType::GLISSANDO) {
+                  Glissando *glissando = toGlissando(spanner);
+                  GlissandoStyle glissandoStyle = glissando->glissandoStyle();
+                  if (glissandoStyle == GlissandoStyle::CONTINUOUS) {
+                        //Changes the notes pitch to the next note's pitch, note-on is the eventual pitch
+                        Note* nextNote = toNote(spanner->endElement());
+                        ev.setPitch(nextNote->pitch());
+
+                        int time = toMilliseconds(note->score()->tempo(note->tick()), offTime - onTime);
+                        int lsb = (time & 0x00FF);
+                        time = (time >> 8);
+                        int msb = (time & 0x00FF);
+
+                        //All portamento related events
+                        NPlayEvent portamentoOn(ME_CONTROLLER, channel, CTRL_PORTAMENTO_CONTROL, pitch);
+                        NPlayEvent portamentoTimeMSB(ME_CONTROLLER, channel, CTRL_PORTAMENTO_TIME_MSB, msb);
+                        NPlayEvent portamentoTimeLSB(ME_CONTROLLER, channel, CTRL_PORTAMENTO_TIME_LSB, lsb);
+                        //Do not set events before 0
+                        if (onTime == 0)
+                              onTime++;
+                        events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoOn));
+                        events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoTimeMSB));
+                        events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoTimeLSB));
+                  }
+            }
+      }
+
       events->insert(std::pair<int, NPlayEvent>(onTime, ev));
       ev.setVelo(0);
       events->insert(std::pair<int, NPlayEvent>(offTime, ev));
@@ -2012,6 +2051,9 @@ void renderGlissando(NoteEventList* events, Note *notestart)
                   Glissando *glissando = toGlissando(spanner);
                   GlissandoStyle glissandoStyle = glissando->glissandoStyle();
                   Element* ee = spanner->endElement();
+                  // handle this elsewhere in a different way
+                  if (glissandoStyle == GlissandoStyle::CONTINUOUS)
+                        continue;
                   // only consider glissando connected to NOTE.
                   if (glissando->playGlissando() && ElementType::NOTE == ee->type()) {
                         vector<int> body;
