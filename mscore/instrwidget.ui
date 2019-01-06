@@ -44,7 +44,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QTreeWidget" name="instrumentList">
+        <widget class="Ms::FilterableTreeWidget" name="instrumentList">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -83,7 +83,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="instrumentSearch">
+        <widget class="Ms::SearchBox" name="instrumentSearch">
          <property name="focusPolicy">
           <enum>Qt::StrongFocus</enum>
          </property>
@@ -348,6 +348,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::FilterableTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>widgets/filterabletreeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Ms::SearchBox</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/searchbox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>instrumentGenreFilter</tabstop>
   <tabstop>instrumentList</tabstop>

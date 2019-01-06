@@ -1,4 +1,5 @@
 set(WIDGETS_SOURCE_FILES
+    filterableview.cpp
     filterabletreeview.cpp
     searchbox.cpp
     )

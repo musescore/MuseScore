@@ -31,6 +31,7 @@ class FilterableView
       virtual void toInitialState() = 0;
       virtual void toInitialState(const QModelIndex& node) = 0;
       virtual bool filter(const QString& searchString) = 0;
+      virtual bool matches(const QModelIndex& node, const QString& searchString);
       };
 
 }
