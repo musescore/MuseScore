@@ -29,6 +29,7 @@ class InspectorFingering : public InspectorTextBase {
 
    public:
       InspectorFingering(QWidget* parent);
+      virtual const std::vector<Tid>& allowedTextStyles() override;
       };
 
 
