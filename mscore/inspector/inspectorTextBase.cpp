@@ -95,6 +95,15 @@ void InspectorTextBase::setElement()
       }
 
 //---------------------------------------------------------
+//   allowedTextStyles
+//---------------------------------------------------------
+
+const std::vector<Tid>& InspectorTextBase::allowedTextStyles()
+      {
+      return primaryTextStyles();
+      }
+
+//---------------------------------------------------------
 //   populateStyle
 //---------------------------------------------------------
 
@@ -106,7 +115,7 @@ void InspectorTextBase::populateStyle(QComboBox* style)
             style->blockSignals(true);
             int idx = style->currentIndex();
             style->clear();
-            for (auto ss : primaryTextStyles())
+            for (auto ss : allowedTextStyles())
                   style->addItem(score->getTextStyleUserName(ss), int(ss));
             style->setCurrentIndex(idx);
             style->blockSignals(false);
