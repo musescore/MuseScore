@@ -135,9 +135,8 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
       void on_downButton_clicked();
       StaffListItem* on_addStaffButton_clicked();
       void on_addLinkedStaffButton_clicked();
-      void expandOrCollapse(const QModelIndex &);
 
-      void on_instrumentSearch_textChanged(const QString &searchPhrase);
+      void on_instrumentSearch_textChanged(const QString &);
 
       void on_instrumentGenreFilter_currentIndexChanged(int);
       void filterInstrumentsByGenre(QTreeWidget *, QString);
