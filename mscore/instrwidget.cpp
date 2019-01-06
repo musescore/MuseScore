@@ -418,8 +418,8 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
       removeButton->setEnabled(false);
       upButton->setEnabled(false);
       downButton->setEnabled(false);
-      belowButton->setEnabled(false);
-      linkedButton->setEnabled(false);
+      addStaffButton->setEnabled(false);
+      addLinkedStaffButton->setEnabled(false);
 
       connect(instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
       }
@@ -467,7 +467,7 @@ void populateInstrumentList(QTreeWidget* instrumentList)
 void InstrumentsWidget::buildTemplateList()
       {
       // clear search if instrument list is updated
-      search->clear();
+      instrumentSearch->clear();
 
       populateInstrumentList(instrumentList);
       populateGenreCombo(instrumentGenreFilter);
@@ -545,8 +545,8 @@ void InstrumentsWidget::on_partiturList_itemSelectionChanged()
             removeButton->setEnabled(false);
             upButton->setEnabled(false);
             downButton->setEnabled(false);
-            linkedButton->setEnabled(false);
-            belowButton->setEnabled(false);
+            addLinkedStaffButton->setEnabled(false);
+            addStaffButton->setEnabled(false);
             return;
             }
       QTreeWidgetItem* item = wi.front();
@@ -579,8 +579,8 @@ void InstrumentsWidget::on_partiturList_itemSelectionChanged()
       removeButton->setEnabled(flag && !onlyOne);
       upButton->setEnabled(flag && !onlyOne && !first);
       downButton->setEnabled(flag && !onlyOne && !last);
-      linkedButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
-      belowButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
+      addLinkedStaffButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
+      addStaffButton->setEnabled(item && item->type() == STAFF_LIST_ITEM);
       }
 
 //---------------------------------------------------------
@@ -876,11 +876,10 @@ void InstrumentsWidget::on_downButton_clicked()
       }
 
 //---------------------------------------------------------
-//   on_belowButton_clicked
-//    (actually "Add Staff" button)
+//   on_addStaffButton_clicked
 //---------------------------------------------------------
 
-StaffListItem* InstrumentsWidget::on_belowButton_clicked()
+StaffListItem* InstrumentsWidget::on_addStaffButton_clicked()
       {
       QList<QTreeWidgetItem*> wi = partiturList->selectedItems();
       if (wi.isEmpty())
@@ -917,21 +916,21 @@ StaffListItem* InstrumentsWidget::on_belowButton_clicked()
       }
 
 //---------------------------------------------------------
-//   on_linkedButton_clicked
+//   on_addLinkedStaffButton_clicked
 //---------------------------------------------------------
 
-void InstrumentsWidget::on_linkedButton_clicked()
+void InstrumentsWidget::on_addLinkedStaffButton_clicked()
       {
-      StaffListItem* nsli = on_belowButton_clicked();
+      StaffListItem* nsli = on_addStaffButton_clicked();
       if (nsli)
             nsli->setLinked(true);
       }
 
 //---------------------------------------------------------
-//   on_search_textChanged
+//   on_instrumentSearch_textChanged
 //---------------------------------------------------------
 
-void InstrumentsWidget::on_search_textChanged(const QString &searchPhrase)
+void InstrumentsWidget::on_instrumentSearch_textChanged(const QString &searchPhrase)
       {
       instrumentGenreFilter->blockSignals(true);
       instrumentGenreFilter->setCurrentIndex(0);
@@ -1076,8 +1075,8 @@ void InstrumentsWidget::init()
       removeButton->setEnabled(false);
       upButton->setEnabled(false);
       downButton->setEnabled(false);
-      linkedButton->setEnabled(false);
-      belowButton->setEnabled(false);
+      addLinkedStaffButton->setEnabled(false);
+      addStaffButton->setEnabled(false);
       emit completeChanged(false);
       }
 
