@@ -71,15 +71,15 @@ char userRangeToReverb(double v) { return (char)qBound(0, (int)(v / 100.0 * 128.
 //---------------------------------------------------------
 
 Mixer::Mixer(QWidget* parent)
-   : QWidget(parent, Qt::Dialog),
+    : QDockWidget("Mixer", parent),
       showDetails(true),
       trackHolder(nullptr)
       {
       setupUi(this);
 
-      setObjectName("Mixer");
       setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
       trackAreaLayout = new QHBoxLayout;
       trackAreaLayout->setMargin(0);
