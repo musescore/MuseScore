@@ -35,7 +35,7 @@ class Score;
 class Palette;
 class StaffListItem;
 class InstrumentsWidget;
-class ScoreBrowser;
+class TemplateBrowser;
 
 //---------------------------------------------------------
 //   TimesigWizard
@@ -135,7 +135,7 @@ class NewWizardTimesigPage : public QWizardPage {
 class NewWizardTemplatePage : public QWizardPage {
       Q_OBJECT
 
-      ScoreBrowser* templateFileBrowser;
+      TemplateBrowser* templateFileBrowser;
       QString path;
 
    private slots:
