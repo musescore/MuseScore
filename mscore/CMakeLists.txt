@@ -17,6 +17,22 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+function(prepend_to_list_items # prepend a string to each item in list
+  LIST_INV # input list variable
+  STRING # the string to prepend to each list item
+  LIST_OUTV # input list variable
+  )
+  set(LIST_IN "${${LIST_INV}}")
+  set(LIST_OUT "") # empty list
+  foreach(ITEM IN LISTS LIST_IN)
+    list(APPEND LIST_OUT "${STRING}${ITEM}")
+  endforeach(ITEM)
+  set("${LIST_OUTV}" "${LIST_OUT}" PARENT_SCOPE)
+endfunction(prepend_to_list_items)
+
+add_subdirectory(widgets)
+prepend_to_list_items(WIDGETS_SOURCE_FILES "widgets/" WIDGETS_SOURCE_FILES)
+
 # This is not needed for MSVC compilation
 if (NOT MSVC)
    include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
@@ -51,7 +67,7 @@ QT5_WRAP_UI (ui_headers
       editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
-      startcenter.ui scorePreview.ui scoreBrowser.ui
+      startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
       logindialog.ui uploadscoredialog.ui breaksdialog.ui
       toolbarEditor.ui workspacedialog.ui
 
@@ -301,7 +317,7 @@ add_executable ( ${ExecutableName}
       sectionbreakprop.h selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
-      textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
+      templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
       toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h tremolobarprop.h
       tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
 
@@ -425,7 +441,7 @@ add_executable ( ${ExecutableName}
       scorecmp/scorecmp.cpp scorecmp/scorediffmodel.cpp scorecmp/scorelistmodel.cpp
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
-      startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp
+      startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp templateBrowser.cpp
       logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp searchComboBox.cpp
       help.cpp help.h
       toolbarEditor.cpp toolbarEditor.h
@@ -436,6 +452,7 @@ add_executable ( ${ExecutableName}
       tourhandler.cpp
       script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
 
+      ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}
       ${OMR_FILES}
       ${AUDIO}

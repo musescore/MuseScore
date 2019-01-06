@@ -23,7 +23,7 @@
 #include "preferences.h"
 #include "palette.h"
 #include "instrdialog.h"
-#include "scoreBrowser.h"
+#include "templateBrowser.h"
 #include "extension.h"
 
 #include "libmscore/instrtemplate.h"
@@ -274,31 +274,15 @@ NewWizardTemplatePage::NewWizardTemplatePage(QWidget* parent)
       setAccessibleName(title());
       setAccessibleDescription(subTitle());
 
-      templateFileBrowser = new ScoreBrowser;
+      templateFileBrowser = new TemplateBrowser(this);
       templateFileBrowser->setStripNumbers(true);
-      buildTemplatesList();
-      // templateFileBrowser->setShowCustomCategory(true);
-      // templateFileBrowser->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 
       QVBoxLayout* layout = new QVBoxLayout;
-      QHBoxLayout* searchLayout = new QHBoxLayout;
-      QLineEdit* searchBox = new QLineEdit;
-      searchBox->setPlaceholderText(tr("Search"));
-      searchBox->setAccessibleName(tr("Template search"));
-      searchBox->setAccessibleDescription(tr("Filter template scores by name or category"));
-      searchBox->setClearButtonEnabled(true);
-      searchBox->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-      searchLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
-      searchLayout->addWidget(searchBox);
-
-      layout->addLayout(searchLayout);
       layout->addWidget(templateFileBrowser);
       setLayout(layout);
 
       connect(templateFileBrowser, SIGNAL(scoreSelected(const QString&)), SLOT(templateChanged(const QString&)));
-      connect(searchBox, &QLineEdit::textChanged, [this] (const QString& searchString) {
-            this->templateFileBrowser->filter(searchString);
-            });
+      buildTemplatesList();
       }
 
 //---------------------------------------------------------
@@ -307,8 +291,7 @@ NewWizardTemplatePage::NewWizardTemplatePage(QWidget* parent)
 
 void NewWizardTemplatePage::initializePage()
       {
-      templateFileBrowser->show();
-      path.clear();
+
       }
 
 //---------------------------------------------------------
