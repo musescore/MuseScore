@@ -2000,14 +2000,10 @@ bool Score::processMidiInput()
                   else
                         ev.chord = true;
 
-                  Element* cr = _is.lastSegment()->element(_is.track());
-                  if (cr && cr->isChord()) {
-                        Note* n = toChord(cr)->findNote(ev.pitch);
-                        if (n) {
-                              deleteItem(n->tieBack());
-                              deleteItem(n);
-                              }
-                        if (qApp->keyboardModifiers() & Qt::ShiftModifier)
+                  // holding shift while inputting midi will add the new pitch to the prior existing chord
+                  if (qApp->keyboardModifiers() & Qt::ShiftModifier) {
+                        Element* cr = _is.lastSegment()->element(_is.track());
+                        if (cr && cr->isChord())
                               ev.chord = true;
                         }
 
