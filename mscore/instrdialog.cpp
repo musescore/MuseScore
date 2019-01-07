@@ -317,7 +317,6 @@ void MuseScore::editInstrList()
                   for (int cidx = 0; pli->child(cidx); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(pli->child(cidx));
                         if (sli->op() == ListItemOp::I_DELETE) {
-                              masterScore->systems().clear();
                               Staff* staff = sli->staff();
                               int sidx = staff->idx();
                               masterScore->cmdRemoveStaff(sidx);

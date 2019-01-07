@@ -216,7 +216,7 @@ class Spanner : public Element {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       bool removeSpannerBack();
       virtual void removeUnmanaged();
-      virtual void undoInsertTimeUnmanaged(int tick, int len);
+      virtual void insertTimeUnmanaged(int tick, int len);
 
       QVariant getProperty(Pid propertyId) const;
       bool setProperty(Pid propertyId, const QVariant& v);

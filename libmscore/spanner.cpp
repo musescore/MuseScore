@@ -363,10 +363,10 @@ void Spanner::removeUnmanaged()
       }
 
 //---------------------------------------------------------
-//   undoInserTimeUnmanaged
+//   insertTimeUnmanaged
 //---------------------------------------------------------
 
-void Spanner::undoInsertTimeUnmanaged(int fromTick, int len)
+void Spanner::insertTimeUnmanaged(int fromTick, int len)
       {
       int   newTick1    = tick();
       int   newTick2    = tick2();
