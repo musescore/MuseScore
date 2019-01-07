@@ -767,6 +767,11 @@ void Palette::mouseDoubleClickEvent(QMouseEvent* ev)
             return;
       if (score->selection().isNone())
             return;
+      
+      // exit edit mode, to allow for palette element to be applied properly
+      ScoreView* viewer = mscore->currentScoreView();
+      if (viewer && viewer->editMode() && !(viewer->mscoreState() & STATE_ALLTEXTUAL_EDIT))
+            viewer->changeState(ViewState::NORMAL);
 
       applyPaletteElement(cellAt(i), ev->modifiers());
       }
