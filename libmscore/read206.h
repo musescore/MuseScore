@@ -65,7 +65,7 @@ class PageFormat {
       qreal oddRightMargin() const        { return _size.width() - _printableWidth - _oddLeftMargin;  }
       };
 
-extern Element* readArticulation(ChordRest*, XmlReader&);
+extern Element* readArticulation(Score*, XmlReader&);
 extern void readAccidental206(Accidental*, XmlReader&);
 extern void setPageFormat(MStyle*, const PageFormat&);
 extern void initPageFormat(MStyle*, PageFormat*);

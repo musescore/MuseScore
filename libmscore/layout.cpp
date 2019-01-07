@@ -3484,9 +3484,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             Measure* m = toMeasure(mb);
             m->layoutMeasureNumber();
             for (Segment* s = m->first(); s; s = s->next()) {
-                  if (!s->isChordRestType())
-                        continue;
-                  sl.push_back(s);
+                  if (s->isChordRestType() || !s->annotations().empty())
+                        sl.push_back(s);
                   }
             }
 
