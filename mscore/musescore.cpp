@@ -57,6 +57,7 @@
 #include "navigator.h"
 #include "timeline.h"
 #include "importmidi/importmidi_panel.h"
+#include "importmidi/importmidi_instrument.h"
 #include "importmidi/importmidi_operations.h"
 #include "scorecmp/scorecmp.h"
 #include "script/recorderwidget.h"
@@ -2307,6 +2308,10 @@ void MuseScore::reloadInstrumentTemplates()
             for (auto instFile : instFiles)
                   loadInstrumentTemplates(instFile.absoluteFilePath());
             }
+
+      MidiInstr::instrumentTemplatesChanged();
+      if (importmidiPanel)
+            importmidiPanel->instrumentTemplatesChanged();
       }
 
 //---------------------------------------------------------
