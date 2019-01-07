@@ -4085,8 +4085,10 @@ void Score::doLayoutRange(int stick, int etick)
 
       if (cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO)
             updateVelo();
+#if 0 // TODO: needed? It was introduced in ab9774ec4098512068b8ef708167d9aa6e702c50
       if (cmdState().layoutFlags & LayoutFlag::PLAY_EVENTS)
             createPlayEvents();
+#endif
 
       //---------------------------------------------------
       //    initialize layout context lc
