@@ -2089,7 +2089,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         startingBeam->add(chord); // also calls chord->setBeam(startingBeam)
                         startingBeam = nullptr;
                         }
-                  if (tuplet)
+                  if (tuplet && !chord->isGrace())
                         chord->readAddTuplet(tuplet);
                   segment = getSegment(SegmentType::ChordRest, e.tick());
                   if (chord->noteType() != NoteType::NORMAL)
