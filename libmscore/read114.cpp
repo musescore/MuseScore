@@ -1054,7 +1054,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e)
                   chord->add(note);
                   }
             else if (tag == "Attribute" || tag == "Articulation") {
-                  Element* el = readArticulation(chord, e);
+                  Element* el = readArticulation(chord->score(), e);
                   if (el->isFermata()) {
                         if (!chord->segment())
                               chord->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
@@ -1087,7 +1087,7 @@ static void readRest(Measure* m, Rest* rest, XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Attribute" || tag == "Articulation") {
-                  Element* el = readArticulation(rest, e);
+                  Element* el = readArticulation(rest->score(), e);
                   if (el->isFermata()) {
                         if (!rest->segment())
                               rest->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));

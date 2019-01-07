@@ -29,6 +29,7 @@
 #include "drumset.h"
 #include "duration.h"
 #include "dynamic.h"
+#include "fermata.h"
 #include "fret.h"
 #include "glissando.h"
 #include "hairpin.h"
@@ -2037,6 +2038,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
       QList<Chord*> graceNotes;
       Beam* startingBeam = nullptr;
       Tuplet* tuplet = nullptr;
+      Fermata* fermata = nullptr;
 
       Staff* staff = score()->staff(staffIdx);
       Fraction timeStretch(staff->timeStretch(tick()));
@@ -2082,6 +2084,10 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         segment->add(barLine);
                         barLine->layout();
                         }
+                  if (fermata) {
+                        segment->add(fermata);
+                        fermata = nullptr;
+                        }
                   }
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score());
@@ -2107,6 +2113,10 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         int crticks = chord->actualTicks();
                         e.incTick(crticks);
                         }
+                  if (fermata) {
+                        segment->add(fermata);
+                        fermata = nullptr;
+                        }
                   }
             else if (tag == "Rest") {
                   Rest* rest = new Rest(score());
@@ -2122,6 +2132,10 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         rest->readAddTuplet(tuplet);
                   segment = getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(rest);
+                  if (fermata) {
+                        segment->add(fermata);
+                        fermata = nullptr;
+                        }
 
                   if (!rest->duration().isValid())     // hack
                         rest->setDuration(timesig()/timeStretch);
@@ -2258,17 +2272,20 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                || tag == "InstrumentChange"
                || tag == "StaffState"
                || tag == "FiguredBass"
-               || tag == "Fermata"
                ) {
                   Element* el = Element::name2Element(tag, score());
                   // hack - needed because tick tags are unreliable in 1.3 scores
                   // for symbols attached to anything but a measure
                   el->setTrack(e.track());
-                  if (el->isFermata())
-                        el->setPlacement(el->track() & 1 ? Placement::BELOW : Placement::ABOVE);
                   el->read(e);
                   segment = getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
+                  }
+            else if (tag == "Fermata") {
+                  fermata = new Fermata(score());
+                  fermata->setTrack(e.track());
+                  fermata->setPlacement(fermata->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+                  fermata->read(e);
                   }
             else if (tag == "Image") {
                   if (MScore::noImages)
@@ -2344,6 +2361,11 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         tuplet->tuplet()->remove(tuplet);
                   delete tuplet;
                   }
+            }
+      if (fermata) {
+            segment = getSegment(SegmentType::EndBarLine, e.tick());
+            segment->add(fermata);
+            fermata = nullptr;
             }
       }
 
