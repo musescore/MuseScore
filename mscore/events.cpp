@@ -17,6 +17,7 @@
 #include "texttools.h"
 #include "fotomode.h"
 #include "tourhandler.h"
+#include "scoreaccessibility.h"
 #include "libmscore/score.h"
 #include "libmscore/keysig.h"
 #include "libmscore/segment.h"
@@ -255,6 +256,7 @@ void ScoreView::mouseReleaseEvent(QMouseEvent*)
                         _score->deselectAll();
                         _score->update();
                         mscore->updateInspector();
+                        ScoreAccessibility::instance()->updateAccessibilityInfo();
                         }
             case ViewState::EDIT:
             case ViewState::NOTE_ENTRY:

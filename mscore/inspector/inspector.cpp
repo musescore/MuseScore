@@ -170,20 +170,19 @@ void Inspector::update(Score* s)
             return;
       _score = s;
       bool sameTypes = true;
-      if (!el())
-            return;
-
-      for (Element* ee : *el()) {
-            if (((element()->type() != ee->type()) && // different and
-                (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
-                (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
-                (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
-                (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
-                (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
-                (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
-                  {
-                  sameTypes = false;
-                  break;
+      if (el()) {
+            for (Element* ee : *el()) {
+                  if (((element()->type() != ee->type()) && // different and
+                      (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
+                      (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
+                      (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
+                      (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
+                      (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
+                      (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
+                        {
+                        sameTypes = false;
+                        break;
+                        }
                   }
             }
       if (oe != element() || oSameTypes != sameTypes) {
