@@ -495,7 +495,8 @@ void MuseScore::editInstrList()
       if (masterScore->measures()->size() == 0)
             masterScore->insertMeasure(ElementType::MEASURE, 0, false);
 
-      for (Excerpt* excerpt : masterScore->excerpts()) {
+      const QList<Excerpt*> excerpts(masterScore->excerpts()); // excerpts list may change in the loop below
+      for (Excerpt* excerpt : excerpts) {
             QList<Staff*> sl       = excerpt->partScore()->staves();
             QMultiMap<int, int> tr = excerpt->tracks();
             if (sl.size() == 0)
