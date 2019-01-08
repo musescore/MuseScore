@@ -1278,6 +1278,7 @@ Palette* MuseScore::newTextPalette()
       st = new StaffText(gscore, Tid::EXPRESSION);
       st->setXmlText(tr("Expression"));
       st->setPlacement(Placement::BELOW);
+      st->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
       sp->append(st, tr("Expression text"));
 
       InstrumentChange* is = new InstrumentChange(gscore);
