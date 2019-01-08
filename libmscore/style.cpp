@@ -404,11 +404,11 @@ static const StyleType styleTypes[] {
       { Sid::ottava22MBPlacement,     "ottava22MBPlacement",     int(Placement::BELOW)  },
 
       { Sid::ottava8VAText,           "ottava8VAText",           QString("<sym>ottavaAlta</sym>") },
-      { Sid::ottava8VBText,           "ottava8VBText",           QString("<sym>ottavaBassaBa</sym>") },
+      { Sid::ottava8VBText,           "ottava8VBText",           QString("<sym>ottavaBassaVb</sym>") },
       { Sid::ottava15MAText,          "ottava15MAText",          QString("<sym>quindicesimaAlta</sym>") },
-      { Sid::ottava15MBText,          "ottava15MBText",          QString("<sym>quindicesimaBassa</sym>") },
+      { Sid::ottava15MBText,          "ottava15MBText",          QString("<sym>quindicesimaBassaMb</sym>") },
       { Sid::ottava22MAText,          "ottava22MAText",          QString("<sym>ventiduesimaAlta</sym>") },
-      { Sid::ottava22MBText,          "ottava22MBText",          QString("<sym>ventiduesimaBassa</sym>") },
+      { Sid::ottava22MBText,          "ottava22MBText",          QString("<sym>ventiduesimaBassaMb</sym>") },
 
       { Sid::ottava8VAnoText,         "ottava8VAnoText",         QString("<sym>ottava</sym>") },
       { Sid::ottava8VBnoText,         "ottava8VBnoText",         QString("<sym>ottava</sym>") },
