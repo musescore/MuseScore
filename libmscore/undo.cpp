@@ -1585,7 +1585,7 @@ std::vector<Clef*> InsertRemoveMeasures::getCourtesyClefs(Measure* m)
             if (clefSeg) {
                   for (int st = 0; st < score->nstaves(); ++st) {
                         Element* clef = clefSeg->element(staff2track(st));
-                        if (clef->isClef())
+                        if (clef && clef->isClef())
                               startClefs.push_back(toClef(clef));
                         }
                   }
