@@ -133,11 +133,10 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
       void on_removeButton_clicked();
       void on_upButton_clicked();
       void on_downButton_clicked();
-      StaffListItem* on_belowButton_clicked();
-      void on_linkedButton_clicked();
-      void expandOrCollapse(const QModelIndex &);
+      StaffListItem* on_addStaffButton_clicked();
+      void on_addLinkedStaffButton_clicked();
 
-      void on_search_textChanged(const QString &searchPhrase);
+      void on_instrumentSearch_textChanged(const QString &);
 
       void on_instrumentGenreFilter_currentIndexChanged(int);
       void filterInstrumentsByGenre(QTreeWidget *, QString);

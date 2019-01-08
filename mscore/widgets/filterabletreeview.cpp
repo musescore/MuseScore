@@ -21,8 +21,10 @@ template <typename T>
 FilterableTreeViewTemplate<T>::FilterableTreeViewTemplate(QWidget* parent)
    : T(parent)
       {
-      FilterableTreeViewTemplate<T>::connect(this, &FilterableTreeViewTemplate<T>::clicked, this, &FilterableTreeViewTemplate<T>::toggleExpanded); // expand categories on click
-      FilterableTreeViewTemplate<T>::connect(this, &FilterableTreeViewTemplate<T>::activated, this, &FilterableTreeViewTemplate<T>::toggleExpanded); // expand categories on Enter
+      // expand branches when clicked unless the branch is selectable, in which case it will just be selected as usual
+      FilterableTreeViewTemplate<T>::connect(this, &FilterableTreeViewTemplate<T>::clicked, this, &FilterableTreeViewTemplate<T>::toggleExpandedForUnselectable);
+      // expand current branch when activated (usally when Enter key is pressed)
+      FilterableTreeViewTemplate<T>::connect(this, &FilterableTreeViewTemplate<T>::activated, this, &FilterableTreeViewTemplate<T>::toggleExpanded);
       }
 
 // to avoid linker errors, we must explicity instantiate constructors for the types we need
@@ -38,7 +40,8 @@ void FilterableTreeViewTemplate<T>::keyPressEvent(QKeyEvent* event)
       {
       switch(event->key()) {
             case Qt::Key_Space:
-                  toggleExpanded(FilterableTreeViewTemplate<T>::currentIndex()); // expand categories on Space
+                  // expand current branch when spacebar is pressed
+                  toggleExpanded(FilterableTreeViewTemplate<T>::currentIndex());
                   break;
             default:
                   T::keyPressEvent(event);
@@ -47,13 +50,25 @@ void FilterableTreeViewTemplate<T>::keyPressEvent(QKeyEvent* event)
 
 //---------------------------------------------------------
 //   toggleExpanded
-//    Expand or collapse a category in the tree view
+// Expand or collapse a branch in the tree view.
 //---------------------------------------------------------
 
 template <typename T>
 void FilterableTreeViewTemplate<T>::toggleExpanded(const QModelIndex& node)
       {
       FilterableTreeViewTemplate<T>::setExpanded(node, !FilterableTreeViewTemplate<T>::isExpanded(node));
+      }
+
+//---------------------------------------------------------
+//   toggleExpandedForUnselectable
+// Expand or collapse a branch only if it cannot be selected.
+//---------------------------------------------------------
+
+template <typename T>
+void FilterableTreeViewTemplate<T>::toggleExpandedForUnselectable(const QModelIndex& node)
+      {
+      if (!(node.flags() & Qt::ItemIsSelectable))
+            toggleExpanded(node);
       }
 
 //---------------------------------------------------------
@@ -154,7 +169,7 @@ void FilterableTreeViewTemplate<T>::selectPrevious()
 
 //---------------------------------------------------------
 //   toInitialState
-//    Make all items visible but collapse all categories
+//    Make all items visible but collapse all branches
 //---------------------------------------------------------
 
 template <typename T>
@@ -170,7 +185,7 @@ void FilterableTreeViewTemplate<T>::toInitialState(const QModelIndex& node)
 
 //---------------------------------------------------------
 //   filter
-// Show leaves and branches that match a search string and hide the rest.
+// Show leaves and branches that match a search string. Hide the rest.
 //---------------------------------------------------------
 
 template <typename T>
@@ -189,7 +204,7 @@ bool FilterableTreeViewTemplate<T>::filter(const QString& searchString, const QM
       QAbstractItemModel* mod = FilterableTreeViewTemplate<T>::model();
       for (int row = 0; row < mod->rowCount(node); row++) {
             const QModelIndex child = mod->index(row, 0, node);
-            bool match = child.data().toString().contains(searchString, Qt::CaseInsensitive);
+            bool match = matches(child, searchString);
             if (match)
                   recurse(lambdaShowNode, child); // branch matches so show all decendants
             else
@@ -205,9 +220,9 @@ bool FilterableTreeViewTemplate<T>::filter(const QString& searchString, const QM
 //---------------------------------------------------------
 //   recurseUnder
 // Apply a callable (e.g. a function or lambda) to all decendants of a node,
-// but not the node itself (use `CategoryTree<T>::recurse` to include the
-// original node). If the callable returns true for any decendant then
-// recursing stops immediately and that decendant's index is returned.
+// but not the node itself (use `recurse` to include the original node). If
+// the callable returns true for any decendant then recursing stops
+// immediately and that decendant's index is returned.
 //
 // If you want to do something to all decendents simply provide a callable
 // expression that always returns false.
