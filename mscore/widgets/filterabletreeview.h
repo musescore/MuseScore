@@ -30,6 +30,7 @@ class FilterableTreeViewTemplate : public T, public FilterableView
 
    private:
       void toggleExpanded(const QModelIndex& node);
+      void toggleExpandedForUnselectable(const QModelIndex& node);
       template <typename F> inline QModelIndex recurse(const F& func, const bool backwards = false) {
             return recurseUnder(func, FilterableTreeViewTemplate<T>::rootIndex(), backwards);
             }

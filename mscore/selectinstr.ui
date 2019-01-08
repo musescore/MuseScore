@@ -42,7 +42,13 @@
     <widget class="QComboBox" name="instrumentGenreFilter"/>
    </item>
    <item>
-    <widget class="QTreeWidget" name="instrumentList">
+    <widget class="Ms::FilterableTreeWidget" name="instrumentList">
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="uniformRowHeights">
+      <bool>true</bool>
+     </property>
      <property name="expandsOnDoubleClick">
       <bool>false</bool>
      </property>
@@ -57,18 +63,14 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLineEdit" name="search">
-       <property name="placeholderText">
-        <string>Search</string>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="Ms::SearchBox" name="instrumentSearch">
+     <property name="placeholderText">
+      <string>Search</string>
+     </property>
+     <property name="clearButtonEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -82,11 +84,23 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::FilterableTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>widgets/filterabletreeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Ms::SearchBox</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/searchbox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>currentInstrument</tabstop>
   <tabstop>instrumentGenreFilter</tabstop>
   <tabstop>instrumentList</tabstop>
-  <tabstop>search</tabstop>
+  <tabstop>instrumentSearch</tabstop>
  </tabstops>
  <resources/>
  <connections>
