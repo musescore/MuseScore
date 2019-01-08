@@ -33,6 +33,7 @@
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
 #include "newwizard.h"
+#include "timeline.h"
 
 namespace Ms {
 
@@ -242,7 +243,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       ScoreTab* tab1;
       ScoreTab* tab2;
       NScrollArea* _navigator;
-      TDockWidget* _timeline;
+      Timeline* _timeline;
       ImportMidiPanel* importmidiPanel     { 0 };
       QFrame* importmidiShowPanel;
       QSplitter* mainWindow;
@@ -742,8 +743,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       Q_INVOKABLE QString getLocaleISOCode() const;
       Navigator* navigator() const;
       NScrollArea* navigatorScrollArea() const { return _navigator; }
-      Timeline* timeline() const;
-      TDockWidget* timelineScrollArea() const { return _timeline; }
+      Timeline* timeline() const { return _timeline; }
       QWidget*   searchDialog() const;
       SelectionWindow* getSelectionWindow() const { return selectionWindow; }
       void updateLayer();

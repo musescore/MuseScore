@@ -4164,6 +4164,8 @@ void ScoreView::layoutChanged()
       {
       if (mscore->navigator())
             mscore->navigator()->layoutChanged();
+      if (mscore->timeline())
+            mscore->timeline()->updateTimeline();
       _curLoopIn->move(_score->pos(POS::LEFT));
       Measure* lm = _score->lastMeasure();
       if (lm && _score->pos(POS::RIGHT) > lm->endTick())

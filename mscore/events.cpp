@@ -17,6 +17,7 @@
 #include "texttools.h"
 #include "fotomode.h"
 #include "tourhandler.h"
+#include "timeline.h"
 #include "libmscore/score.h"
 #include "libmscore/keysig.h"
 #include "libmscore/segment.h"
@@ -254,6 +255,8 @@ void ScoreView::mouseReleaseEvent(QMouseEvent*)
                   if (editData.startMove == editData.pos && clickOffElement) {
                         _score->deselectAll();
                         _score->update();
+                        if (mscore->timeline())
+                              mscore->timeline()->updateSelection();
                         mscore->updateInspector();
                         }
             case ViewState::EDIT:
