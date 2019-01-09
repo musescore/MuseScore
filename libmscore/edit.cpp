@@ -1440,11 +1440,19 @@ void Score::cmdFlip()
                || e->isFermata()
                || e->isLyrics()
                || e->isTrillSegment()) {
+                  e->undoChangeProperty(Pid::AUTOPLACE, true);
                   // getProperty() delegates call from spannerSegment to Spanner:
                   Placement p = Placement(e->getProperty(Pid::PLACEMENT).toInt());
                   p = (p == Placement::ABOVE) ? Placement::BELOW : Placement::ABOVE;
-                  e->undoChangeProperty(Pid::AUTOPLACE, true);
-                  e->undoChangeProperty(Pid::PLACEMENT, int(p), PropertyFlags::UNSTYLED);
+                  // TODO: undoChangeProperty() should probably do this directly
+                  // see https://musescore.org/en/node/281432
+                  Element* ee = e->propertyDelegate(Pid::PLACEMENT);
+                  if (!ee)
+                        ee = e;
+                  PropertyFlags pf = ee->propertyFlags(Pid::PLACEMENT);
+                  if (pf == PropertyFlags::STYLED)
+                        pf = PropertyFlags::UNSTYLED;
+                  ee->undoChangeProperty(Pid::PLACEMENT, int(p), pf);
                   }
             }
       }

@@ -343,6 +343,7 @@ void Trill::write(XmlWriter& xml) const
       xml.tag("subtype", trillTypeName());
       writeProperty(xml, Pid::PLAY);
       writeProperty(xml, Pid::ORNAMENT_STYLE);
+      writeProperty(xml, Pid::PLACEMENT);
       SLine::writeProperties(xml);
       if (_accidental)
             _accidental->write(xml);

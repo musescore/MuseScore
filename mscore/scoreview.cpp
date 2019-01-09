@@ -3802,6 +3802,7 @@ void ScoreView::cmdAddText(Tid tid)
                         break;
                   s = new StaffText(_score, Tid::EXPRESSION);
                   s->setPlacement(Placement::BELOW);
+                  s->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
                   cr->undoAddAnnotation(s);
                   }
                   break;
