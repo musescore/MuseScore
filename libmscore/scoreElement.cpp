@@ -288,6 +288,8 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v)
 
 void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
       {
+      if ((getProperty(id) == v) && (propertyFlags(id) == ps))
+            return;
       bool doUpdateInspector = false;
       if (id == Pid::PLACEMENT || id == Pid::HAIRPIN_TYPE) {
             // first set property, then set offset for above/below if styled
