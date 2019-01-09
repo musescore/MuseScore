@@ -2930,10 +2930,6 @@ QVariant Measure::getProperty(Pid propertyId) const
                   return repeatCount();
             case Pid::USER_STRETCH:
                   return userStretch();
-            case Pid::NO_OFFSET:
-                  return noOffset();
-            case Pid::IRREGULAR:
-                  return irregular();
             default:
                   return MeasureBase::getProperty(propertyId);
             }
@@ -2963,12 +2959,6 @@ bool Measure::setProperty(Pid propertyId, const QVariant& value)
                   break;
             case Pid::USER_STRETCH:
                   setUserStretch(value.toDouble());
-                  break;
-            case Pid::NO_OFFSET:
-                  setNoOffset(value.toInt());
-                  break;
-            case Pid::IRREGULAR:
-                  setIrregular(value.toBool());
                   break;
             default:
                   return MeasureBase::setProperty(propertyId, value);
