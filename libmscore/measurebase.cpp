@@ -332,6 +332,10 @@ QVariant MeasureBase::getProperty(Pid id) const
                   return repeatStart();
             case Pid::REPEAT_JUMP:
                   return repeatJump();
+            case Pid::NO_OFFSET:
+                  return noOffset();
+            case Pid::IRREGULAR:
+                  return irregular();
             default:
                   return Element::getProperty(id);
             }
@@ -352,6 +356,12 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
                   break;
             case Pid::REPEAT_JUMP:
                   setRepeatJump(value.toBool());
+                  break;
+            case Pid::NO_OFFSET:
+                  setNoOffset(value.toInt());
+                  break;
+            case Pid::IRREGULAR:
+                  setIrregular(value.toBool());
                   break;
             default:
                   if (!Element::setProperty(id, value))
