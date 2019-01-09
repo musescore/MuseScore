@@ -101,8 +101,8 @@
           <Spanner type="Pedal">
             <Pedal>
               <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
-              <lineWidth>0.006</lineWidth>
               <endHookHeight>-1.5</endHookHeight>
+              <lineWidth>0.006</lineWidth>
               </Pedal>
             <next>
               <location>
