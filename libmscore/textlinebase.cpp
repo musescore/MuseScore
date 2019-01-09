@@ -444,7 +444,7 @@ void TextLineBase::writeProperties(XmlWriter& xml) const
 bool TextLineBase::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
-      for (Pid i :pids) {
+      for (Pid i : pids) {
             if (readProperty(tag, e, i)) {
                   setPropertyFlags(i, PropertyFlags::UNSTYLED);
                   return true;

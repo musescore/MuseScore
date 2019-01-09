@@ -283,7 +283,7 @@ struct StyleVal2 {
       { Sid::staffTextAlign,              QVariant::fromValue(Align::LEFT | Align::TOP) },      // different from 3.x
 //      { Sid::staffTextOffsetType,         int(OffsetType::SPATIUM)   },
 //      { Sid::staffTextPlacement,          int(Placement::ABOVE) },
-//      { Sid::staffTextPosAbove,           QPointF(.0, -2.0) },
+      { Sid::staffTextPosAbove,           QPointF(.0, -4.0) },
 //      { Sid::staffTextMinDistance,        Spatium(0.5)  },
 //      { Sid::staffTextFrameType,          int(FrameType::NO_FRAME) },
 //      { Sid::staffTextFramePadding,       0.2 },
@@ -1199,6 +1199,100 @@ static void readNote(Note* note, XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   adjustPlacement
+//---------------------------------------------------------
+
+static void adjustPlacement(Element* e)
+      {
+      if (!e || !e->staff())
+            return;
+
+      // element to use to determine placement
+      // for spanners, choose first segment
+      Element* ee;
+      Spanner* spanner;
+      if (e->isSpanner()) {
+            spanner = toSpanner(e);
+            if (spanner->spannerSegments().empty())
+                  return;
+            ee = spanner->spannerSegments().front();
+            if (!ee)
+                  return;
+            }
+      else {
+            spanner = nullptr;
+            ee = e;
+            }
+
+      // determine placement based on offset
+      // anything below staff will be set to below
+      qreal staffHeight = e->staff()->height();
+      qreal threshold = staffHeight;
+      qreal offsetAdjust = 0.0;
+      Placement defaultPlacement = Placement(e->propertyDefault(Pid::PLACEMENT).toInt());
+      Placement newPlacement;
+      // most offsets will be recorded as relative to top staff line
+      // exceptions are styled offsets on elements with default placement below
+      qreal normalize;
+      if (defaultPlacement == Placement::BELOW && ee->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED)
+            normalize = staffHeight;
+      else
+            normalize = 0.0;
+      qreal ypos = ee->offset().y() + normalize;
+      if (ypos >= threshold) {
+            newPlacement = Placement::BELOW;
+            offsetAdjust -= staffHeight;
+            }
+      else {
+            newPlacement = Placement::ABOVE;
+            }
+
+      // set placement
+      e->setProperty(Pid::PLACEMENT, int(newPlacement));
+      if (newPlacement != defaultPlacement)
+            e->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+
+      // adjust offset
+      if (spanner) {
+            // adjust segments individually
+            for (auto a : spanner->spannerSegments()) {
+                  // spanner segments share the placement setting of the spanner
+                  // just adjust offset
+                  if (defaultPlacement == Placement::BELOW && a->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED)
+                        normalize = staffHeight;
+                  else
+                        normalize = 0.0;
+                  qreal ypos = a->offset().y() + normalize;
+                  a->ryoffset() += normalize + offsetAdjust;
+
+                  // if any segments are offset to opposite side of staff from placement,
+                  // or if they are within staff,
+                  // disable autoplace
+                  bool disableAutoplace;
+                  if (ypos + a->height() <= 0.0)
+                        disableAutoplace = (newPlacement == Placement::BELOW);
+                  else if (ypos > staffHeight)
+                        disableAutoplace = (newPlacement == Placement::ABOVE);
+                  else
+                        disableAutoplace = true;
+                  if (disableAutoplace)
+                        a->setAutoplace(false);
+                  // needed for https://musescore.org/en/node/281312
+                  // ideally we would rebase and calculate new offset
+                  // but this may not be possible
+                  // since original offset is relative to system
+                  a->rxoffset() = 0;
+                  }
+            }
+      else {
+            e->ryoffset() += normalize + offsetAdjust;
+            // if within staff, disable autoplace
+            if (ypos + e->height() > 0.0 && ypos <= staffHeight)
+                  e->setAutoplace(false);
+            }
+      }
+
+//---------------------------------------------------------
 //   readNoteProperties206
 //---------------------------------------------------------
 
@@ -1383,9 +1477,7 @@ bool readNoteProperties206(Note* note, XmlReader& e)
                   note->addSpannerFor(sp);
                   sp->setParent(note);
                   }
-            for (auto a : sp->spannerSegments()) {
-                  a->setProperty(Pid::PLACEMENT, a->offset().y() > 0.0 ? int(Placement::BELOW) : int(Placement::ABOVE));
-                  }
+            adjustPlacement(sp);
             }
       else if (tag == "offset")
             note->Element::readProperties(e);
@@ -1507,15 +1599,7 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
             t->readProperty(e, Pid::OFFSET);
             if ((char(t->align()) & char(Align::VMASK)) == char(Align::TOP))
                   t->ryoffset() += .5 * t->score()->spatium();     // HACK: bbox is different in 2.x
-            if (t->staff()) {
-                  qreal staffHeight = t->staff()->height();
-                  if (t->offset().y() >= staffHeight) {
-                        t->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                        t->ryoffset() -= staffHeight;
-                        }
-                  else
-                        t->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-                  }
+            adjustPlacement(t);
             }
       else if (!t->readProperties(e))
             return false;
@@ -2228,15 +2312,7 @@ static void readVolta206(XmlReader& e, Volta* volta)
             else if (!readTextLineProperties(e, volta))
                   e.unknown();
             }
-      for (auto a : volta->spannerSegments()) {
-            qreal belowThreshold = a->spatium() * 4.0;
-            if (a->offset().y() >= belowThreshold) {
-                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                  a->ryoffset() -= a->spatium() * 4.0;
-                  }
-            else
-                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-            }
+      adjustPlacement(volta);
       }
 
 //---------------------------------------------------------
@@ -2249,15 +2325,7 @@ static void readPedal(XmlReader& e, Pedal* pedal)
             if (!readTextLineProperties(e, pedal))
                   e.unknown();
             }
-      for (auto a : pedal->spannerSegments()) {
-            qreal belowThreshold = a->spatium() * 4.0;
-            if (a->offset().y() >= belowThreshold) {
-                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                  a->ryoffset() -= a->spatium() * 4.0;
-                  }
-            else
-                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-            }
+      adjustPlacement(pedal);
       }
 
 //---------------------------------------------------------
@@ -2292,15 +2360,7 @@ static void readOttava(XmlReader& e, Ottava* ottava)
             else if (!readTextLineProperties(e, ottava))
                   e.unknown();
             }
-      for (auto a : ottava->spannerSegments()) {
-            qreal belowThreshold = a->spatium() * 4.0;
-            if (a->offset().y() >= belowThreshold) {
-                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                  a->ryoffset() -= a->spatium() * 4.0;
-                  }
-            else
-                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-            }
+      adjustPlacement(ottava);
       }
 
 //---------------------------------------------------------
@@ -2348,16 +2408,7 @@ void readHairpin206(XmlReader& e, Hairpin* h)
             h->setContinueText("");
             h->setEndText("");
             }
-      for (auto a : h->spannerSegments()) {
-            qreal belowThreshold = a->spatium() * 4.0;
-            if (a->offset().y() >= belowThreshold) {
-                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                  a->ryoffset() -= a->spatium() * 4.0;
-                  }
-            else
-                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-            a->rxoffset() = 0;
-            }
+      adjustPlacement(h);
       }
 
 //---------------------------------------------------------
@@ -2376,13 +2427,14 @@ void readTrill206(XmlReader& e, Trill* t)
                   _accidental->setParent(t);
                   t->setAccidental(_accidental);
                   }
-            else if ( tag == "ornamentStyle")
+            else if (tag == "ornamentStyle")
                   t->readProperty(e, Pid::ORNAMENT_STYLE);
-            else if ( tag == "play")
+            else if (tag == "play")
                   t->setPlayArticulation(e.readBool());
             else if (!t->SLine::readProperties(e))
                   e.unknown();
             }
+      adjustPlacement(t);
       }
 
 //---------------------------------------------------------
@@ -2395,15 +2447,7 @@ void readTextLine206(XmlReader& e, TextLineBase* tlb)
             if (!readTextLineProperties(e, tlb))
                   e.unknown();
             }
-      for (auto a : tlb->spannerSegments()) {
-            qreal belowThreshold = a->spatium() * 4.0;
-            if (a->offset().y() >= belowThreshold) {
-                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                  a->ryoffset() -= a->spatium() * 4.0;
-                  }
-            else
-                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-            }
+      adjustPlacement(tlb);
       }
 
 //---------------------------------------------------------
@@ -3034,6 +3078,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               }
                         }
                   else {
+#if 0
+                        // This code was added at commit ed5b615
+                        // but it seems to no longer be appropriate.
+                        // autoplace is usually true,
+                        // exception is text within staff,
+                        // and in this case offset is already correct without further adjustment.
                         if (!t->autoplace()) {
                               // adjust position
                               qreal userY = t->offset().y() / t->spatium();
@@ -3042,6 +3092,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               t->setAlign(Align::LEFT | Align::TOP);
                               t->ryoffset() = yo;
                               }
+#endif
                         segment = m->getSegment(SegmentType::ChordRest, e.tick());
                         segment->add(t);
                         }
@@ -3098,16 +3149,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   // for symbols attached to anything but a measure
                   el->setTrack(e.track());
                   el->read(e);
-                  if (el->staff() && (el->isHarmony() || el->isFretDiagram() || el->isInstrumentChange())) {
-                        qreal staffHeight = el->staff()->height();
-                        if (el->offset().y() >= staffHeight) {
-                              el->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                              el->ryoffset() -= staffHeight;
-                              }
-                        else
-                              el->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-                        }
-
+                  if (el->staff() && (el->isHarmony() || el->isFretDiagram() || el->isInstrumentChange()))
+                        adjustPlacement(el);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }

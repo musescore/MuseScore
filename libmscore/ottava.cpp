@@ -257,6 +257,7 @@ void Ottava::write(XmlWriter& xml) const
             return;
       xml.stag(this);
       xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
+      writeProperty(xml, Pid::PLACEMENT);
 //      for (const StyledProperty& spp : *styledProperties())
 //            writeProperty(xml, spp.pid);
       TextLineBase::writeProperties(xml);
@@ -401,6 +402,8 @@ QVariant Ottava::propertyDefault(Pid pid) const
                   return Spatium(.0);
             case Pid::END_TEXT:
                   return QString("");
+            case Pid::PLACEMENT:
+                  return styleValue(Pid::PLACEMENT, getPropertyStyle(Pid::PLACEMENT));
 
             default:
                   return TextLineBase::propertyDefault(pid);
