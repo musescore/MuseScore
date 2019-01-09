@@ -122,8 +122,6 @@ void Pedal::write(XmlWriter& xml) const
          Pid::END_HOOK_TYPE,
          Pid::BEGIN_TEXT,
          Pid::END_TEXT,
-         Pid::LINE_WIDTH,
-         Pid::LINE_STYLE,
          Pid::LINE_VISIBLE,
          Pid::BEGIN_HOOK_TYPE
          }) {
@@ -132,7 +130,7 @@ void Pedal::write(XmlWriter& xml) const
       for (const StyledProperty& spp : *styledProperties())
             writeProperty(xml, spp.pid);
 
-      Element::writeProperties(xml);
+      SLine::writeProperties(xml);
       xml.etag();
       }
 
