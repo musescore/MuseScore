@@ -3040,7 +3040,7 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                                           undoRemoveElement(cr);
                                           ChordRest* newCR = toChordRest(cr->clone());
                                           newCR->setDuration(cr->duration() - f);
-                                          undoAddCR(newCR, m, etick);
+                                          undoAddCR(newCR, m, m->tick() + etick);
                                           }
                                     else
                                           cr->undoChangeProperty(Pid::DURATION, cr->duration() - f);
