@@ -41,6 +41,7 @@ class SegmentList {
 
       Segment* first() const               { return _first;       }
       Segment* first(SegmentType) const;
+      Segment* first(ElementFlag) const;
 
       Segment* last() const                { return _last;        }
       Segment* firstCRSegment() const;
