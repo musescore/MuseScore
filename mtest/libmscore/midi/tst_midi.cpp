@@ -43,6 +43,7 @@ class TestMidi : public QObject, public MTest
       {
       Q_OBJECT
       void midiExportTestRef(const QString& file);
+      void testMidiExport(MasterScore* score, const QString& writeFile, const QString& refFile);
 
    private slots:
       void initTestCase();
@@ -67,6 +68,7 @@ class TestMidi : public QObject, public MTest
           midiExportTestRef("testVoltaDynamic"); // test changing Dynamic in prima and seconda volta 
           midiExportTestRef("testVoltaStaffText"); // test changing StaffText in prima and seconda volta 
           }
+      void midiTimeStretchFermata();
       };
 
 //---------------------------------------------------------
@@ -365,6 +367,31 @@ void TestMidi::midi03()
       }
 
 //---------------------------------------------------------
+//   midiTimeStretchFermata
+//---------------------------------------------------------
+
+void TestMidi::midiTimeStretchFermata()
+      {
+      const QString file("testTimeStretchFermata");
+      QString readFile(DIR   + file + ".mscx");
+      QString writeFile(file + "-test-%1.mid");
+      QString reference(DIR + file + "-ref.mid");
+
+      MasterScore* score = readScore(readFile);
+      testMidiExport(score, writeFile.arg(1), reference);
+
+      const Fraction frac1 = 2 * Fraction(4, 4) + Fraction(2, 4); // 3rd measure, 3rd beat
+      score->doLayoutRange(frac1.ticks(), frac1.ticks());
+      testMidiExport(score, writeFile.arg(2), reference);
+
+      const Fraction frac2 = 6 * Fraction(4, 4); // 7th measure
+      score->doLayoutRange(frac2.ticks(), frac2.ticks());
+      testMidiExport(score, writeFile.arg(3), reference);
+
+      delete score;
+      }
+
+//---------------------------------------------------------
 //   events
 //---------------------------------------------------------
 
@@ -404,6 +431,19 @@ void TestMidi::events()
       QVERIFY(score);
       QVERIFY(compareFiles(writeFile, reference));
      // QVERIFY(saveCompareScore(score, writeFile, reference));
+
+      delete score;
+      }
+
+//---------------------------------------------------------
+//   testMidiExport
+//---------------------------------------------------------
+
+void TestMidi::testMidiExport(MasterScore* score, const QString& writeFile, const QString& refFile)
+      {
+      Q_ASSERT(writeFile.endsWith(".mid") && refFile.endsWith(".mid"));
+      QVERIFY(saveMidi(score, writeFile));
+      QVERIFY(compareFiles(writeFile, refFile));
       }
 
 //---------------------------------------------------------
@@ -418,8 +458,7 @@ void TestMidi::midiExportTestRef(const QString& file)
       QVERIFY(score);
       score->doLayout();
       score->rebuildMidiMapping();
-      QVERIFY(saveMidi(score, QString(file) + ".mid"));
-      QVERIFY(compareFiles(QString(file) + ".mid", DIR + QString(file) + "-ref.mid"));
+      testMidiExport(score, QString(file) + ".mid", DIR + QString(file) + "-ref.mid");
       delete score;
       }
 
