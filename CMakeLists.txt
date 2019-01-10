@@ -224,7 +224,7 @@ else (APPLE)
       endif(BUILD_64 STREQUAL "ON")
    # Set compiler options for VS2017 toolchain.
    # Note: /D_CRT_SECURE_NO WARNINGS disables warnings when using "non-secure" library functions like sscanf...
-      set(CMAKE_CXX_FLAGS                "/MP /DWIN32 /D_WINDOWS /GR /EHsc /D_UNICODE /DUNICODE /D_CRT_SECURE_NO_WARNINGS /execution-charset:utf-8")
+      set(CMAKE_CXX_FLAGS                "/MP /DWIN32 /D_WINDOWS /GR /EHsc /D_UNICODE /DUNICODE /D_CRT_SECURE_NO_WARNINGS /execution-charset:utf-8 /source-charset:utf-8")
       if (USE_SSE)
          # If USE_SSE is set, enable use of SSE instructions to compiler.
          set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /arch:SSE")
