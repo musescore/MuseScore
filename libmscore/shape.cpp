@@ -26,6 +26,8 @@ void Shape::addHorizontalSpacing(HorizontalSpacingType type, qreal leftEdge, qre
       {
       constexpr qreal eps = 100 * std::numeric_limits<qreal>::epsilon();
       const qreal y = eps * int(type);
+      if (leftEdge == rightEdge) // HACK zero-width shapes collide with everything currently.
+            rightEdge += eps;
       add(QRectF(leftEdge, y, rightEdge - leftEdge, 0));
       }
 

@@ -3955,7 +3955,7 @@ static void dumpMeasure(Measure* m)
 
 void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
       {
-      Segment* fs = s;
+      Segment* fs = firstEnabled();
       bool first  = system()->firstMeasure() == this;
       const Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
 
@@ -3996,10 +3996,17 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
                   // look back for collisions with previous segments
                   // this is time consuming (ca. +5%) and probably requires more optimization
 
+                  if (s == fs) // don't let the second segment cross measure start (not covered by the loop below)
+                        w = std::max(w, ns->minLeft(ls) - s->x());
+
                   int n = 1;
                   for (Segment* ps = s; ps != fs;) {
                         qreal ww;
                         ps = ps->prevEnabled();
+
+                        Q_ASSERT(ps); // ps should never be nullptr but better be safe.
+                        if (!ps)
+                              break;
 
                         if (ps->isChordRestType())
                               ++n;

@@ -1866,6 +1866,7 @@ void Segment::createShape(int staffIdx)
 #endif
                   }
             s.addHorizontalSpacing(Shape::SPACING_GENERAL, 0, 0);
+            s.addHorizontalSpacing(Shape::SPACING_LYRICS, 0, 0);
             return;
             }
 #if 0
