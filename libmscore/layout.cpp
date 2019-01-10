@@ -2657,6 +2657,11 @@ void Score::getNextMeasure(LayoutContext& lc)
             }
 
       measure->computeTicks();
+
+      // Reset tempo to set correct time stretch for fermata.
+      if (isMaster())
+            resetTempoRange(measure->tick(), measure->endTick());
+
       for (Segment& segment : measure->segments()) {
             if (segment.isBreathType()) {
                   qreal length = 0.0;
@@ -2709,7 +2714,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                         if (e->isFermata())
                               stretch = qMax(stretch, toFermata(e)->timeStretch());
                         else if (e->isTempoText()) {
-                              if (score()->isMaster()) {
+                              if (isMaster()) {
                                     TempoText* tt = toTempoText(e);
                                     setTempo(tt->segment(), tt->tempo());
                                     }
@@ -4186,11 +4191,6 @@ void Score::doLayoutRange(int stick, int etick)
             }
 
       lc.prevMeasure = 0;
-
-      // we need to reset tempo because fermata is setted
-      //inside getNextMeasure and it lead to twice timeStretch
-      if (isMaster())
-            resetTempoRange(stick, etick);
 
       getNextMeasure(lc);
       lc.curSystem = collectSystem(lc);
