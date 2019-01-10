@@ -2113,7 +2113,7 @@ QString TextBase::accessibleInfo() const
       QString s = plainText().simplified();
       if (s.length() > 20) {
             s.truncate(20);
-            s += "...";
+            s += "…";
             }
       return  QString("%1: %2").arg(rez).arg(s);
       }

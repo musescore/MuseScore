@@ -63,14 +63,14 @@
          <item>
           <widget class="QPushButton" name="newString">
            <property name="text">
-            <string>New String...</string>
+            <string>New String…</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="editString">
            <property name="text">
-            <string>Edit String...</string>
+            <string>Edit String…</string>
            </property>
           </widget>
          </item>

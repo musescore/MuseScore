@@ -68,7 +68,7 @@
        <item>
         <widget class="QPushButton" name="openScore">
          <property name="text">
-          <string>Open a score...</string>
+          <string>Open a score…</string>
          </property>
         </widget>
        </item>
@@ -106,8 +106,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -432,7 +432,7 @@ void LoginManager::uploadMedia()
             QNetworkRequest request;
             request.setUrl(QUrl(_mediaUrl));
             _progressDialog->reset();
-            _progressDialog->setLabelText(tr("Uploading..."));
+            _progressDialog->setLabelText(tr("Uploading…"));
             _progressDialog->setCancelButtonText(tr("Cancel"));
             _progressDialog->show();
             _uploadTryCount++;

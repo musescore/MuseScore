@@ -478,7 +478,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             + QString("</i></td></tr></table><p>")
             + tr("Available metadata tags and their current values")
             + QString("<br />")
-            + tr("(in File > Score Properties...):")
+            + tr("(in File > Score Properties…):")
             + QString("</p><table>");
       // show all tags for current score/part, see also Score::init()
       if (!cs->isMaster()) {

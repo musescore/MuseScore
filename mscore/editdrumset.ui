@@ -116,14 +116,14 @@
        <item>
         <widget class="QPushButton" name="loadButton">
          <property name="text">
-          <string>Load...</string>
+          <string>Load…</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="saveButton">
          <property name="text">
-          <string>Save As...</string>
+          <string>Save As…</string>
          </property>
         </widget>
        </item>
