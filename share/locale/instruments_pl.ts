@@ -2304,7 +2304,7 @@
         <location filename="../instruments/instrumentsxml.h" line="92"/>
         <source>B♭ A. Oc.</source>
         <comment>B♭ Alto Ocarina</comment>
-        <translation>Oc. c-a. in B♭</translation>
+        <translation>Oc. c-a. in B♭­</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="94"/>

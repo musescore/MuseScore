@@ -305,7 +305,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
         <source>Baritone Oboe</source>
-        <translation>Baritone Oboe</translation>
+        <translation>Bass Oboe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="147"/>
@@ -2466,7 +2466,7 @@
         <location filename="../instruments/instrumentsxml.h" line="146"/>
         <source>Bar. Ob.</source>
         <comment>Baritone Oboe</comment>
-        <translation>Bar. Ob.</translation>
+        <translation>B. Ob.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="148"/>
