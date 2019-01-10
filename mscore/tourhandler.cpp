@@ -154,7 +154,8 @@ void TourHandler::loadTour(XmlReader& tourXml)
                   while (tourXml.readNextStartElement()) {
                         if (tourXml.name() == "Text") {
                               QTextDocument doc;
-                              QString ttext = qApp->translate("TourXML", tourXml.readXml().toUtf8().data());
+                              QString rawText = tourXml.readElementText();
+                              QString ttext = qApp->translate("TourXML", rawText.toUtf8().constData());
                               doc.setHtml(ttext);
                               text = doc.toPlainText().replace("\\n", "\n");
                               }
