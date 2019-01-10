@@ -179,7 +179,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
         <source>B♭ Alto Ocarina</source>
-        <translation>B altinė okarina</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>

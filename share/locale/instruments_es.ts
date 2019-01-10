@@ -179,7 +179,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
         <source>B♭ Alto Ocarina</source>
-        <translation>Ocarina contralto en Si♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
@@ -305,7 +305,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
         <source>Baritone Oboe</source>
-        <translation>Oboe barítono</translation>
+        <translation>Oboe bajo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="147"/>
@@ -1803,7 +1803,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="839"/>
         <source>Stamp</source>
-        <translation>Sello</translation>
+        <translation>Patada</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="819"/>
@@ -2280,7 +2280,7 @@
         <location filename="../instruments/instrumentsxml.h" line="84"/>
         <source>B♭ S. Oc.</source>
         <comment>B♭ Soprano Ocarina</comment>
-        <translation>Oc. sop. Si♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="86"/>
@@ -2304,7 +2304,7 @@
         <location filename="../instruments/instrumentsxml.h" line="92"/>
         <source>B♭ A. Oc.</source>
         <comment>B♭ Alto Ocarina</comment>
-        <translation>Oc. Ctrl. Si♭</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="94"/>
@@ -2466,7 +2466,7 @@
         <location filename="../instruments/instrumentsxml.h" line="146"/>
         <source>Bar. Ob.</source>
         <comment>Baritone Oboe</comment>
-        <translation>Ob. bar.</translation>
+        <translation>Ob. bj.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="148"/>
@@ -4601,7 +4601,7 @@
         <location filename="../instruments/instrumentsxml.h" line="840"/>
         <source>Sta.</source>
         <comment>Stamp</comment>
-        <translation>Sell.</translation>
+        <translation>Pat.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="843"/>
@@ -4693,27 +4693,27 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="868"/>
         <source>Soprano (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Soprano (Clave de Do)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="871"/>
         <source>Mezzo-soprano (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Mezzo-soprano (Clave de Do)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="874"/>
         <source>Alto (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Contralto (Clave de Do)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="877"/>
         <source>Tenor (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Tenor (Clave de Do)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="880"/>
         <source>Baritone (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Baritono (Clave de Do)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="882"/>

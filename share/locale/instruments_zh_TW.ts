@@ -2280,7 +2280,7 @@
         <location filename="../instruments/instrumentsxml.h" line="84"/>
         <source>B♭ S. Oc.</source>
         <comment>B♭ Soprano Ocarina</comment>
-        <translation>B♭ S. Oc.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="86"/>
@@ -2304,7 +2304,7 @@
         <location filename="../instruments/instrumentsxml.h" line="92"/>
         <source>B♭ A. Oc.</source>
         <comment>B♭ Alto Ocarina</comment>
-        <translation>B♭ A. Oc.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="94"/>
@@ -5606,7 +5606,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1180"/>
         <source>Strings - Bowed</source>
-        <translation type="unfinished"/>
+        <translation>弓弦樂器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1182"/>
@@ -5806,7 +5806,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1000"/>
         <source>Strings - Plucked</source>
-        <translation type="unfinished"/>
+        <translation>撥弦樂器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1002"/>

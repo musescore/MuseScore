@@ -179,7 +179,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
         <source>B♭ Alto Ocarina</source>
-        <translation>Ocarina Alto en Si♭</translation>
+        <translation>Si♭ Ocarina Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
@@ -2495,7 +2495,7 @@
         <location filename="../instruments/instrumentsxml.h" line="154"/>
         <source>Hph.-cl.</source>
         <comment>Heckelphone-clarinet</comment>
-        <translation type="unfinished"/>
+        <translation>Hph.-cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="156"/>
@@ -4693,27 +4693,27 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="868"/>
         <source>Soprano (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Soprano (Clave de dó)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="871"/>
         <source>Mezzo-soprano (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Mezzo-soprano (clave de dó)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="874"/>
         <source>Alto (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Alto (clave de dó)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="877"/>
         <source>Tenor (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Tenor (clave de dó)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="880"/>
         <source>Baritone (C Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Baritono (clave de dó)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="882"/>

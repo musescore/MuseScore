@@ -139,42 +139,42 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Okarina</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="77"/>
         <source>G Soprano Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Sopran Okarina u G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="79"/>
         <source>F Soprano Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Sopran Okarina u F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="81"/>
         <source>C Soprano Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Sopran Okarina u C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="83"/>
         <source>B♭ Soprano Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Sopran Okarina u Bb</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="85"/>
         <source>G Alto Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Alt Okarina u G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="87"/>
         <source>F Alto Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Alt Okarina u F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="89"/>
         <source>C Alto Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Alt Okarina u C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
@@ -184,73 +184,73 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
         <source>C Bass Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Bas Okarina u C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="95"/>
         <source>Pan Flute</source>
-        <translation type="unfinished"/>
+        <translation>Panova Frula</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="97"/>
         <location filename="../instruments/instrumentsxml.h" line="105"/>
         <source>Quena</source>
-        <translation type="unfinished"/>
+        <translation>Kvina</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="99"/>
         <source>C Quena</source>
-        <translation type="unfinished"/>
+        <translation>Kvina u C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="101"/>
         <source>G Quena</source>
-        <translation type="unfinished"/>
+        <translation>Kvina u G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="103"/>
         <source>F Quena</source>
-        <translation type="unfinished"/>
+        <translation>Kvina u F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="107"/>
         <source>Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Blok flauta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="109"/>
         <source>Garklein Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Sopran blok flauta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="111"/>
         <source>Sopranino Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Sopranino blok flauta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="113"/>
         <source>Soprano Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Sopran blok flauta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="115"/>
         <source>Alto Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Alt blok flauta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="117"/>
         <source>Tenor Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Tenor blok flauta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="119"/>
         <source>Bass Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Bas blok flauta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="123"/>
         <source>Contrabass Recorder</source>
-        <translation type="unfinished"/>
+        <translation>Kontra bas blok flauta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="121"/>
@@ -280,27 +280,27 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="135"/>
         <source>Oboe</source>
-        <translation type="unfinished"/>
+        <translation>Oboa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="137"/>
         <source>Baroque Oboe</source>
-        <translation type="unfinished"/>
+        <translation>Barokna oboa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="139"/>
         <source>Oboe d&apos;amore</source>
-        <translation type="unfinished"/>
+        <translation>Oboa d&apos;amore</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="141"/>
         <source>Oboe da caccia</source>
-        <translation type="unfinished"/>
+        <translation>Lovačka oboa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="143"/>
         <source>English Horn</source>
-        <translation type="unfinished"/>
+        <translation>Engleski rog</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
