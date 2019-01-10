@@ -10131,7 +10131,7 @@
                 <item>
                  <widget class="QRadioButton" name="useStandardNoteNames">
                   <property name="toolTip">
-                   <string notr="true">A, B♭, B, C, C♯, ...</string>
+                   <string notr="true">A, B♭, B, C, C♯, …</string>
                   </property>
                   <property name="text">
                    <string>Standard</string>
@@ -10141,7 +10141,7 @@
                 <item>
                  <widget class="QRadioButton" name="useGermanNoteNames">
                   <property name="toolTip">
-                   <string notr="true">A, B♭, H, C, C♯, ...</string>
+                   <string notr="true">A, B♭, H, C, C♯, …</string>
                   </property>
                   <property name="text">
                    <string>German</string>
@@ -10151,7 +10151,7 @@
                 <item>
                  <widget class="QRadioButton" name="useFullGermanNoteNames">
                   <property name="toolTip">
-                   <string notr="true">A, B, H, C, Cis</string>
+                   <string notr="true">A, B, H, C, Cis, …</string>
                   </property>
                   <property name="text">
                    <string>Full German</string>
@@ -10161,7 +10161,7 @@
                 <item>
                  <widget class="QRadioButton" name="useSolfeggioNoteNames">
                   <property name="toolTip">
-                   <string notr="true">Do, Do♯, Re♭, Re, ...</string>
+                   <string notr="true">Do, Do♯, Re♭, Re, …</string>
                   </property>
                   <property name="text">
                    <string>Solfeggio</string>
@@ -10171,7 +10171,7 @@
                 <item>
                  <widget class="QRadioButton" name="useFrenchNoteNames">
                   <property name="toolTip">
-                   <string notr="true">Do, Do♯, Ré♭, Ré, ...</string>
+                   <string notr="true">Do, Do♯, Ré♭, Ré, …</string>
                   </property>
                   <property name="text">
                    <string>French</string>
