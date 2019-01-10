@@ -3315,11 +3315,12 @@ void Score::resetTempo()
 
 void Score::resetTempoRange(int tick1, int tick2)
       {
+      const bool zeroInRange = (tick1 <= 0 && tick2 > 0);
       tempomap()->clearRange(tick1, tick2);
-      if (tempomap()->empty())
+      if (zeroInRange)
             tempomap()->setTempo(0, _defaultTempo);
       sigmap()->clearRange(tick1, tick2);
-      if (sigmap()->empty()) {
+      if (zeroInRange) {
             Measure* m = firstMeasure();
             if (m)
                   sigmap()->add(0, SigEvent(m->len(),  m->timesig(), 0));
