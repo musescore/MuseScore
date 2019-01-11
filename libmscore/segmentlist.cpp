@@ -210,5 +210,17 @@ Segment* SegmentList::first(SegmentType types) const
       return 0;
       }
 
+//---------------------------------------------------------
+//   first
+//---------------------------------------------------------
+
+Segment* SegmentList::first(ElementFlag flags) const
+      {
+      for (Segment* s = _first; s; s = s->next()) {
+            if (s->flag(flags))
+                  return s;
+            }
+      return nullptr;
+      }
 }
 
