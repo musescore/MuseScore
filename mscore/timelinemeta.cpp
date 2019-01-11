@@ -13,6 +13,12 @@
 
 namespace Ms {
 
+TimelineMetaLabel::TimelineMetaLabel(TimelineMetaLabels *view, int nMeta, int height)
+      : TimelineLabel(view, nMeta, height)
+      {
+
+      }
+
 //---------------------------------------------------------
 //   TimelineMetaRowsValue
 //---------------------------------------------------------
@@ -158,6 +164,58 @@ bool TimelineMetaRowsValue::contains(Element *element)
             }
 
       return false;
+      }
+
+TimelineMetaLabels::TimelineMetaLabels(TimelineMeta* parent)
+      : QGraphicsView(parent)
+      {
+      setScene(new QGraphicsScene);
+      scene()->setBackgroundBrush(Qt::lightGray);
+      setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
+      connect(parent, SIGNAL(splitterMoved(int, int)), this, SLOT(updateLabelWidths(int)));
+
+      qDebug() << parent->sizes();
+
+      setSceneRect(-1, -1, parent->sizes()[0], parent->getParent()->cellHeight() * parent->nVisibleMetaRows());
+      }
+
+TimelineMeta* TimelineMetaLabels::getParent()
+      {
+      return static_cast<TimelineMeta*>(parent());
+      }
+
+void TimelineMetaLabels::updateLabelWidths(int newWidth)
+      {
+      for (TimelineMetaLabel* label : _labels)
+            label->updateWidth(newWidth);
+
+      // -1 makes sure the rect border is within view, -2 makes sure the scene rect is always smaller than the view rect
+      setSceneRect(-1, -1, newWidth - 2, getParent()->getParent()->cellHeight() * _labels.length() + 1);
+      }
+
+void TimelineMetaLabels::updateLabels()
+      {
+      _labels.clear();
+      scene()->clear();
+
+      if (!score())
+            return;
+
+      int nMeta = 0;
+      for (Meta meta : getParent()->metas()) {
+            TimelineMetaLabel* metaLabel = new TimelineMetaLabel(this, nMeta, getParent()->getParent()->cellHeight());
+            _labels.append(metaLabel);
+            scene()->addItem(metaLabel);
+            nMeta++;
+            }
+      // Add measure label here
+
+      updateLabelWidths(getParent()->sizes()[0]);
+      }
+
+Score* TimelineMetaLabels::score()
+      {
+      return getParent()->score();
       }
 
 //---------------------------------------------------------
@@ -613,6 +671,9 @@ TimelineMetaRowsValue* TimelineMetaRows::getTopItem(QList<QGraphicsItem*> items)
 
 void TimelineMetaRows::mousePressEvent(QMouseEvent* event)
       {
+      if (!score())
+            return;
+
       QList<QGraphicsItem*> items = scene()->items(mapToScene(event->pos()));
       if (items.isEmpty()) {
             score()->deselectAll();
@@ -760,14 +821,13 @@ TimelineMeta::TimelineMeta(Timeline* parent)
       _metas.append(Meta(tr("Barline"), int(MetaRow::BARLINE)));
       _metas.append(Meta(tr("Jumps and Markers"), int(MetaRow::JUMPS_AND_MARKERS)));
 
-      QGraphicsView* labels = new QGraphicsView(this);
-      labels->setScene(new QGraphicsScene);
-      labels->scene()->setBackgroundBrush(Qt::lightGray);
-      labels->setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
-      addWidget(labels);
+      addWidget(new TimelineMetaLabels(this));
+      addWidget(new TimelineMetaRows(this));
 
-      TimelineMetaRows* rows = new TimelineMetaRows(this);
-      addWidget(rows);
+//      QList<int> sizes;
+//      //TODO: Replace 70 with hard coded value
+//      sizes << 70 << 10000;
+//      setSizes(sizes);
       }
 
 //---------------------------------------------------------
@@ -776,6 +836,7 @@ TimelineMeta::TimelineMeta(Timeline* parent)
 
 void TimelineMeta::updateMeta()
       {
+      labelView()->updateLabels();
       rowsView()->updateRows();
       }
 

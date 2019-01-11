@@ -2,12 +2,24 @@
 #define TIMELINEMETA_H
 
 #include "timeline.h"
+#include "timelinelabel.h"
 
 namespace Ms {
 
 class Timeline;
+//class TimelineLabel;
 class TimelineMeta;
 class TimelineMetaRows;
+class TimelineMetaLabels;
+
+class TimelineMetaLabel : public TimelineLabel
+      {
+
+      TimelineMetaLabels* _parent;
+
+   public:
+      TimelineMetaLabel(TimelineMetaLabels* view, int nMeta, int height);
+      };
 
 //---------------------------------------------------------
 //   Meta
@@ -50,6 +62,22 @@ class TimelineMetaRowsValue : public QGraphicsItemGroup
       bool selected() { return _selected; }
 
       bool contains(Element* element);
+      };
+
+class TimelineMetaLabels : public QGraphicsView
+      {
+      Q_OBJECT
+
+      QList<TimelineMetaLabel*> _labels;
+
+   public slots:
+      void updateLabelWidths(int newWidth);
+
+   public:
+      TimelineMetaLabels(TimelineMeta* parent);
+      TimelineMeta* getParent();
+      void updateLabels();
+      Score* score();
       };
 
 //---------------------------------------------------------
@@ -132,12 +160,13 @@ class TimelineMeta : public QSplitter
       Score* score();
       ScoreView* scoreView();
 
-      QGraphicsView* labelView() { return (QGraphicsView*) widget(0); }
+      TimelineMetaLabels* labelView() { return (TimelineMetaLabels*) widget(0); }
       TimelineMetaRows* rowsView() { return (TimelineMetaRows*) widget(1); }
 
       QList<int> getCorrectMetaRows();
       int nVisibleMetaRows();
       bool collapsed() { return _collapsed; }
+      QList<Meta> metas() { return _metas; }
 
       enum class MetaRow {
             TEMPO,

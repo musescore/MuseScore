@@ -317,8 +317,7 @@ add_executable ( ${ExecutableName}
       sectionbreakprop.h selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
-      templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
-      templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timelinemeta.h timelinedata.h timesigproperties.h
+      templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timelinelabel.h timelinemeta.h timelinedata.h timesigproperties.h
       toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h tremolobarprop.h
       tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
 
@@ -332,7 +331,7 @@ add_executable ( ${ExecutableName}
       instrdialog.cpp instrwidget.cpp
       debugger/debugger.cpp menus.cpp
       musescore.cpp navigator.cpp pagesettings.cpp palette.cpp
-      timeline.cpp timelinemeta.cpp timelinedata.cpp
+      timeline.cpp timelinelabel.cpp timelinemeta.cpp timelinedata.cpp
       mixer.cpp mixertrackchannel.cpp mixertrackitem.cpp mixertrackpart.cpp mixerdetails.cpp
       parteditbase.cpp playpanel.cpp selectionwindow.cpp
       preferences.cpp measureproperties.cpp
