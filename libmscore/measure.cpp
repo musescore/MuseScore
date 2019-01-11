@@ -1558,6 +1558,8 @@ Element* Measure::drop(EditData& data)
                         if (cbl)
                               cbl->drop(data);
                         }
+                  else if (bl->barLineType() == BarLineType::START_REPEAT)
+                        undoChangeProperty(Pid::REPEAT_START, true);
                   else {
                         // drop to first end barline
                         seg = findSegmentR(SegmentType::EndBarLine, ticks());
