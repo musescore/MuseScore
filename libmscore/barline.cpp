@@ -36,6 +36,19 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType)
       {
       Measure* m = bl->measure();
 
+      if (barType == BarLineType::START_REPEAT) {
+            m->undoChangeProperty(Pid::REPEAT_END, false);
+            m = m->nextMeasure();
+            if (!m)
+                  return;
+            }
+      else if (bl->barLineType() == BarLineType::START_REPEAT) {
+            m->undoChangeProperty(Pid::REPEAT_START, false);
+            m = m->prevMeasure();
+            if (!m)
+                  return;
+            }
+
       switch (barType) {
             case BarLineType::END:
             case BarLineType::NORMAL:
@@ -77,8 +90,6 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType)
                                     }
                               }
                         }
-                  else if (segmentType == SegmentType::StartRepeatBarLine)
-                        m->undoChangeProperty(Pid::REPEAT_START, false);
                   }
                   break;
             case BarLineType::START_REPEAT:
