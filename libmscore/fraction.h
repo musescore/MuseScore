@@ -81,8 +81,6 @@ class Fraction {
 inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
 inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
 
-#ifdef SCRIPT_INTERFACE
-
 //---------------------------------------------------------
 //   FractionWrapper
 //---------------------------------------------------------
@@ -109,16 +107,10 @@ class FractionWrapper : public QObject {
       int ticks() const       { return f.ticks(); }
       };
 
-
-#endif // SCRIPT_INTERFACE
-
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Fraction);
 
-#ifdef SCRIPT_INTERFACE
 Q_DECLARE_METATYPE(Ms::FractionWrapper);
-#endif
 
 #endif
-
