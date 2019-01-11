@@ -49,7 +49,7 @@ include_directories(
       )
 
 if (SCRIPT_INTERFACE)
-      set (SCRIPT_FILES mscorePlugins pluginCreator.cpp qmledit.cpp pluginManager.cpp)
+      set (SCRIPT_FILES mscorePlugins pluginCreator.cpp pluginCreator.h pluginManager.cpp pluginManager.h qmledit.cpp qmledit.h)
       set (SCRIPT_UI   pluginCreator.ui pluginManager.ui)
 endif (SCRIPT_INTERFACE)
 
@@ -310,8 +310,7 @@ add_executable ( ${ExecutableName}
       omrpanel.h ove.h pa.h pagesettings.h palette.h palettebox.h paletteBoxButton.h partedit.h parteditbase.h
       pathlistdialog.h piano.h pianolevels.h pianolevelschooser.h  pianolevelsfilter.h
       pianokeyboard.h pianoroll.h pianoruler.h pianotools.h pianoview.h
-      playpanel.h pluginCreator.h
-      pluginManager.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h qmledit.h
+      playpanel.h pm.h preferences.h preferenceslistwidget.h prefsdialog.h
       qmlplugin.h recordbutton.h resourceManager.h revision.h ruler.h scoreaccessibility.h
       scoreBrowser.h scoreInfo.h scorePreview.h scoretab.h scoreview.h searchComboBox.h
       sectionbreakprop.h selectdialog.h selectionwindow.h selectnotedialog.h selinstrument.h

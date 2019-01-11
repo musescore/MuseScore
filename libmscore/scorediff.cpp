@@ -1216,7 +1216,7 @@ static QString addLinePrefix(const QString& str, const QString& prefix)
             lines.pop_back();
       QStringList processedLines;
       for (QStringRef& line : lines)
-            processedLines.push_back(prefix + line);
+            processedLines.push_back(QString(prefix).append(line));
       return processedLines.join('\n');
       }
 
