@@ -172,14 +172,14 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
 
       QString strType;
       switch (type) {
-            case 0:  strType = "Debug"; break;
-            case 1:  strType = "Warning"; break;
-            case 2:  strType = "Critical"; break;
-            case 3:  strType = "Fatal"; break;
-            default: strType = "Unknown"; break;
+            case 0:  strType = tr("Debug"); break;
+            case 1:  strType = tr("Warning"); break;
+            case 2:  strType = tr("Critical"); break;
+            case 3:  strType = tr("Fatal"); break;
+            default: strType = tr("Unknown"); break;
             }
 
-      QString errorStr = QString("%1 error: line %2 column %3 %4")
+      QString errorStr = QString(tr("%1 error: line %2 column %3 %4"))
             .arg(strType)
             .arg(sourceLocation.line())
             .arg(sourceLocation.column())

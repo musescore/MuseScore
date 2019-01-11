@@ -34,7 +34,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Vertical  grid:</string>
+             <string>Vertical grid:</string>
             </property>
            </widget>
           </item>
