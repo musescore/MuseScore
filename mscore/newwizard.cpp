@@ -346,6 +346,7 @@ void NewWizardTemplatePage::fileAccepted(const QString& s)
 
 void NewWizardTemplatePage::templateChanged(const QString& s)
       {
+      setFinalPage(QFileInfo(s).completeBaseName() != "00-Blank");
       path = s;
       emit completeChanged();
       }
