@@ -78,7 +78,7 @@
     <Widget>tie</Widget>
     </Message>
   <Message>
-    <Text>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</Text>
+    <Text>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add > Tuplets.</Text>
     <Widget>menu-add</Widget>
     <Widget>menu-tuplet</Widget>
     </Message>

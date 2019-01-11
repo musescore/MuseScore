@@ -109,32 +109,32 @@
         </property>
         <item>
          <property name="text">
-          <string>8va</string>
+          <string>8va alta</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>8vb</string>
+          <string>8va bassa</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>15ma</string>
+          <string>15ma alta</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>15mb</string>
+          <string>15ma bbassa</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>22ma</string>
+          <string>22ma alta</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>22mb</string>
+          <string>22ma bassa</string>
          </property>
         </item>
        </widget>
@@ -167,10 +167,10 @@
        </widget>
       </item>
       <item row="1" column="3">
-       <widget class="Ms::ResetButton" name="resetPlacement"/>
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true"/>
       </item>
       <item row="2" column="3">
-       <widget class="Ms::ResetButton" name="resetNumbersOnly"/>
+       <widget class="Ms::ResetButton" name="resetNumbersOnly" native="true"/>
       </item>
      </layout>
     </widget>
@@ -191,8 +191,6 @@
   <tabstop>placement</tabstop>
   <tabstop>numbersOnly</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

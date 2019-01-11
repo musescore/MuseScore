@@ -246,7 +246,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
       switch (n) {
             case -2:
                   if (explicitAccidental) {
-                        acc = QObject::tr("double flat");
+                        acc = QObject::tr("double ♭");
                         }
                   else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
                         switch (tpc) {
@@ -261,7 +261,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
                   break;
             case -1:
                   if (explicitAccidental)
-                        acc = QObject::tr("flat");
+                        acc = QObject::tr("♭");
                   else if (noteSpelling == NoteSpellingType::GERMAN_PURE)
                         acc = (tpc == TPC_A_B || tpc == TPC_E_B) ? "s" : "es";
                   else
@@ -270,13 +270,13 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
             case  0: acc = ""; break;
             case  1:
                   if (explicitAccidental)
-                        acc = QObject::tr("sharp");
+                        acc = QObject::tr("♯");
                   else
                         acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "is" : "#";
                   break;
             case  2:
                   if (explicitAccidental)
-                        acc = QObject::tr("double sharp");
+                        acc = QObject::tr("double ♯");
                   else
                         acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "isis" : "##";
                   break;
