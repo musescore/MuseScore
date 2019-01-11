@@ -2320,11 +2320,12 @@ void MuseScore::reloadInstrumentTemplates()
 
 void MuseScore::askResetOldScorePositions(Score* score)
       {
-      if (score->mscVersion() < 300 && score->mscVersion() > 114) {
+      if (score->mscVersion() < 300) {
             QMessageBox msgBox;
-            QString question = tr("Reset all elements positions?");
+            QString question = tr("Reset the positions of all elements?");
             msgBox.setWindowTitle(question);
-            msgBox.setText(tr("This score was created in older versions of MuseScore. For a better experience of using MuseScore 3.0 it is recommended to reset elements positions to their default values.") + "\n\n" + question);
+            msgBox.setText(tr("To best take advantage of automatic placement in MuseScore 3 when importing '%1' from MuseScore %2, it is recommended to reset the positions of all elements.")
+                           .arg(score->masterScore()->fileInfo()->completeBaseName(), score->mscoreVersion()) + "\n\n" + question);
             msgBox.setIcon(QMessageBox::Question);
             msgBox.setStandardButtons(
                QMessageBox::Yes | QMessageBox::No

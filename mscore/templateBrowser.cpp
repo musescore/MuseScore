@@ -117,7 +117,7 @@ TemplateItem* TemplateBrowser::genTemplateItem(QTreeWidgetItem* p, const QFileIn
             item->setText(0, tr("Choose Instruments"));
             }
       else if (fi.completeBaseName() == "Create_New_Score") {
-            item->setText(0, tr("Create New Score..."));
+            item->setText(0, tr("Create New Score…"));
             }
       else {
             QString s(si.completeBaseName());

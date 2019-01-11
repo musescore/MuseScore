@@ -233,7 +233,7 @@ void ExtensionsUpdateChecker::check()
                   if (compareVersion(installedVersion, version)) {
                         QMessageBox msgBox;
                         msgBox.setWindowTitle(tr("Extension Updates Available"));
-                        msgBox.setText(tr("One or more installed extensions have updates available in Help / Resource Manager…"));
+                        msgBox.setText(tr("One or more installed extensions have updates available in Help > Resource Manager…"));
                         msgBox.setTextFormat(Qt::RichText);
                         msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
                         msgBox.setDefaultButton(QMessageBox::Ok);
