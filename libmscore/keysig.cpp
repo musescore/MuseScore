@@ -28,7 +28,7 @@ const char* keyNames[] = {
       QT_TRANSLATE_NOOP("MuseScore", "C♭ major, A♭ minor"),
       QT_TRANSLATE_NOOP("MuseScore", "D major, B minor"),
       QT_TRANSLATE_NOOP("MuseScore", "G♭ major, E♭ minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "A major, F# minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "A major, F♯ minor"),
       QT_TRANSLATE_NOOP("MuseScore", "D♭ major, B♭ minor"),
       QT_TRANSLATE_NOOP("MuseScore", "E major, C♯ minor"),
       QT_TRANSLATE_NOOP("MuseScore", "A♭ major, F minor"),

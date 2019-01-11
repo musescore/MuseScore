@@ -1045,39 +1045,39 @@ Palette* MuseScore::newLinesPalette()
       ottava->setOttavaType(OttavaType::OTTAVA_8VA);
       ottava->setLen(w);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8va"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8va alta"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_8VB);
       ottava->setLen(w);
       ottava->setPlacement(Placement::BELOW);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8vb"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8va bassa"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_15MA);
       ottava->setLen(w);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15ma"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15ma alta"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_15MB);
       ottava->setLen(w);
       ottava->setPlacement(Placement::BELOW);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15mb"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15ma bassa"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_22MA);
       ottava->setLen(w);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22ma"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22ma alta"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_22MB);
       ottava->setLen(w);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22mb"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22ma bassa"));
 
       Pedal* pedal;
       pedal = new Pedal(gscore);

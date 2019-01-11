@@ -478,7 +478,7 @@ void PartEdit::midiChannelChanged(int)
                   msgBox.setIcon(QMessageBox::Warning);
                   QString text = QString(tr("There is already an instrument '%1' with MIDI port = %2 and channel = %3.")).arg(pe->partName->text(), QString::number(pe->portSpinBox->value()), QString::number(pe->channelSpinBox->value()));
                   msgBox.setText(text);
-                  msgBox.setInformativeText(tr("Do you want to synchronize current instrument with an existing one?"));
+                  msgBox.setInformativeText(tr("Do you want to synchronize the current instrument with an existing one?"));
                   msgBox.setDetailedText(detailedText);
                   msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
                   QPushButton *assignFreeChannel = msgBox.addButton(tr("Assign next free MIDI channel"), QMessageBox::HelpRole);

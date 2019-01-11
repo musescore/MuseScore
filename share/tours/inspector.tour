@@ -26,7 +26,7 @@
   <Message>
     <Text>If you have modified a value, you can click the "Reset" button to reset it to the default.
     If the value is controlled by a style setting, you can click the "Set as style" button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</Text>
+    You can also set style defaults using Format > Style.</Text>
     <Widget>offsetLabel</Widget>
     <Widget>offset</Widget>
     <Widget>resetOffset</Widget>

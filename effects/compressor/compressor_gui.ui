@@ -400,7 +400,7 @@
       <string>RMS</string>
      </property>
      <property name="whatsThis">
-      <string>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.</string>
+      <string>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and peak is better for heavier, fast compression and percussion.</string>
      </property>
      <property name="value" stdset="0">
       <double>0.000000000000000</double>

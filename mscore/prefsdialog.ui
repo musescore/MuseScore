@@ -3190,7 +3190,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           <item row="0" column="0">
            <widget class="QPushButton" name="rescanDrivers">
             <property name="text">
-             <string>Restart Audio &amp;&amp; MIDI Devices</string>
+             <string>Restart Audio and MIDI Devices</string>
             </property>
            </widget>
           </item>
@@ -3208,56 +3208,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
            </spacer>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="restartWarning">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="palette">
-          <palette>
-           <active>
-            <colorrole role="WindowText">
-             <brush brushstyle="SolidPattern">
-              <color alpha="255">
-               <red>255</red>
-               <green>1</green>
-               <blue>39</blue>
-              </color>
-             </brush>
-            </colorrole>
-           </active>
-           <inactive>
-            <colorrole role="WindowText">
-             <brush brushstyle="SolidPattern">
-              <color alpha="255">
-               <red>255</red>
-               <green>1</green>
-               <blue>39</blue>
-              </color>
-             </brush>
-            </colorrole>
-           </inactive>
-           <disabled>
-            <colorrole role="WindowText">
-             <brush brushstyle="SolidPattern">
-              <color alpha="255">
-               <red>119</red>
-               <green>119</green>
-               <blue>121</blue>
-              </color>
-             </brush>
-            </colorrole>
-           </disabled>
-          </palette>
-         </property>
-         <property name="text">
-          <string>Attention: Any changes on this page require a restart of MuseScore.  Precise MIDI output timing is only possible via JACK.</string>
-         </property>
         </widget>
        </item>
        <item>
