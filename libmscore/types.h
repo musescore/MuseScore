@@ -13,8 +13,12 @@
 #ifndef __TYPES_H__
 #define __TYPES_H__
 
+#include "config.h"
+
 namespace Ms {
+#ifdef SCRIPT_INTERFACE
 Q_NAMESPACE
+#endif
 
 //-------------------------------------------------------------------
 //    The value of this enum determines the "stacking order"
@@ -225,9 +229,10 @@ constexpr bool operator& (FontStyle a1, FontStyle a2) {
 enum class TupletNumberType  : char { SHOW_NUMBER, SHOW_RELATION, NO_TEXT         };
 enum class TupletBracketType : char { AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET };
 
-
+#ifdef SCRIPT_INTERFACE
 Q_ENUM_NS(ElementType)
 Q_ENUM_NS(Direction)
+#endif
 
 //hack: to force the build system to run moc on this file
 class Mops : public QObject {
@@ -243,5 +248,6 @@ extern void fillComboBoxDirection(QComboBox*);
 
 Q_DECLARE_METATYPE(Ms::Align)
 
+Q_DECLARE_METATYPE(Ms::Direction);
 
 #endif

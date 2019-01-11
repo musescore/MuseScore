@@ -62,8 +62,13 @@ if (MSVC)
    set (MINGW false)
 endif (MSVC)
 
+set(SCRIPT_INTERFACE  TRUE)
 #  Look for Qt5
+if (SCRIPT_INTERFACE)
 SET(QT_MIN_VERSION    "5.8.0")
+else (SCRIPT_INTERFACE)
+SET(QT_MIN_VERSION    "5.7.0")
+endif (SCRIPT_INTERFACE)
 # Include modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build" ${CMAKE_MODULE_PATH})
 include (FindQt5)
@@ -81,7 +86,6 @@ set(MSCORE_RELEASE_CHANNEL "devel")
 #set(MSCORE_RELEASE_CHANNEL "testing")
 #set(MSCORE_RELEASE_CHANNEL "stable")
 set(USE_SSE           TRUE)
-set(SCRIPT_INTERFACE  TRUE)
 
 # Disable components not supported on Windows
 if (MSVC OR MINGW)
