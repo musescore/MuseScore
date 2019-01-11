@@ -3114,13 +3114,13 @@ QString Chord::accessibleExtraInfo() const
 Shape Chord::shape() const
       {
       Shape shape;
-      if (_hook)
+      if (_hook && _hook->autoplace() && _hook->visible())
             shape.add(_hook->shape().translated(_hook->pos()));
-      if (_stem)
+      if (_stem && _stem->autoplace() && _stem->visible())
             shape.add(_stem->shape().translated(_stem->pos()));
-      if (_stemSlash)
+      if (_stemSlash && _stemSlash->autoplace() && _stemSlash->visible())
             shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
-      if (_arpeggio)
+      if (_arpeggio && _arpeggio->autoplace() && _arpeggio->visible())
             shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
 //      if (_tremolo)
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
