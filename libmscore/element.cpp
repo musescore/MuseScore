@@ -1958,6 +1958,11 @@ bool Element::edit(EditData& ed)
 void Element::startEditDrag(EditData& ed)
       {
       ElementEditData* eed = ed.getData(this);
+      if (!eed) {
+            eed = new ElementEditData();
+            eed->e = this;
+            ed.addData(eed);
+            }
       eed->pushProperty(Pid::OFFSET);
       }
 
