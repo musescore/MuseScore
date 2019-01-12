@@ -2,12 +2,39 @@
 #define TIMELINEDATA_H
 
 #include "timeline.h"
+#include "timelinelabel.h"
 
 namespace Ms {
 
 class Timeline;
 class TimelineData;
+class TimelineDataLabels;
 class TimelineDataGrid;
+
+class TimelineDataLabel : public TimelineLabel
+      {
+
+      TimelineDataLabels* _parent;
+
+   public:
+      TimelineDataLabel(TimelineDataLabels* view, QString text, int nMeta);
+      };
+
+class TimelineDataLabels : public QGraphicsView
+      {
+      Q_OBJECT
+
+      QList<TimelineDataLabel*> _labels;
+
+   public slots:
+      void updateLabelWidths(int newWidth);
+
+   public:
+      TimelineDataLabels(TimelineData* parent);
+      TimelineData* getParent();
+      void updateLabels();
+      Score* score();
+      };
 
 //---------------------------------------------------------
 //   TimelineDataCell
@@ -109,7 +136,9 @@ class TimelineData : public QSplitter
    public:
       TimelineData(Timeline* parent);
 
-      void updateData() { gridView()->updateGrid(); }
+      void updateData() { gridView()->updateGrid();
+                          labelView()->updateLabels(); }
+      TimelineDataLabels* labelView() { return static_cast<TimelineDataLabels*>(widget(0)); }
       TimelineDataGrid* gridView() { return static_cast<TimelineDataGrid*>(widget(1)); }
 
       Score* score();

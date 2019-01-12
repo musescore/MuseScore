@@ -3,8 +3,69 @@
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 #include "libmscore/system.h"
+#include "libmscore/part.h"
 
 namespace Ms {
+
+TimelineDataLabel::TimelineDataLabel(TimelineDataLabels *view, QString text, int nMeta)
+      : TimelineLabel(view, text, view->getParent()->getParent()->getFont(), nMeta, view->getParent()->getParent()->cellHeight())
+      {
+
+      }
+
+void TimelineDataLabels::updateLabelWidths(int newWidth)
+      {
+      for (TimelineDataLabel* label : _labels)
+            label->updateWidth(newWidth);
+
+      // -1 makes sure the rect border is within view
+      // -2 makes sure the sDcene rect is always smaller than the view rect, thus no scrollbar is displayed
+      setSceneRect(-1, -1, newWidth - 2, getParent()->getParent()->cellHeight() * _labels.length());
+      }
+
+TimelineDataLabels::TimelineDataLabels(TimelineData *parent)
+      : QGraphicsView(parent)
+      {
+      setScene(new QGraphicsScene);
+      scene()->setBackgroundBrush(Qt::lightGray);
+      setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
+      setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+      connect(parent, SIGNAL(splitterMoved(int, int)), this, SLOT(updateLabelWidths(int)));
+      }
+
+TimelineData* TimelineDataLabels::getParent()
+      {
+      return static_cast<TimelineData*>(parent());
+      }
+
+void TimelineDataLabels::updateLabels()
+      {
+      _labels.clear();
+      scene()->clear();
+
+      if (!score())
+            return;
+
+      QList<Part*> parts = score()->parts();
+
+      int nMeta = 0;
+      for (Part* part : parts) {
+            for (Staff* staff : *(part->staves())) {
+                  TimelineDataLabel* instrumentLabel = new TimelineDataLabel(this, staff->partName(), nMeta);
+                  _labels.append(instrumentLabel);
+                  scene()->addItem(instrumentLabel);
+                  nMeta++;
+                  }
+            }
+
+      updateLabelWidths(getParent()->sizes()[0]);
+      }
+
+Score* TimelineDataLabels::score()
+      {
+      return getParent()->score();
+      }
 
 //---------------------------------------------------------
 //   TimelineDataCell
@@ -583,14 +644,8 @@ void TimelineDataGrid::selectLassoItems(QList<QGraphicsItem*> items) {
 TimelineData::TimelineData(Timeline* parent)
    : QSplitter(parent)
       {
-      QGraphicsView* labels = new QGraphicsView(this);
-      labels->setScene(new QGraphicsScene);
-      labels->scene()->setBackgroundBrush(Qt::lightGray);
-      labels->setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
-      addWidget(labels);
-
-      TimelineDataGrid* grid = new TimelineDataGrid(this);
-      addWidget(grid);
+      addWidget(new TimelineDataLabels(this));
+      addWidget(new TimelineDataGrid(this));
       }
 
 //---------------------------------------------------------
@@ -601,6 +656,7 @@ void TimelineData::metaSplitterMoved()
       {
       QSplitter* metaSplitter = getParent()->metaWidget();
       setSizes(metaSplitter->sizes());
+      labelView()->updateLabelWidths(metaSplitter->sizes()[0]);
       }
 
 //---------------------------------------------------------

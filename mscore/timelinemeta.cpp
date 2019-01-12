@@ -172,7 +172,7 @@ TimelineMetaLabels::TimelineMetaLabels(TimelineMeta* parent)
       setScene(new QGraphicsScene);
       scene()->setBackgroundBrush(Qt::lightGray);
       setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
-      setSceneRect(-1, -1, parent->sizes()[0], parent->cellHeight() * parent->nVisibleMetaRows());
+      setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
       connect(parent, SIGNAL(splitterMoved(int, int)), this, SLOT(updateLabelWidths(int)));
       }
