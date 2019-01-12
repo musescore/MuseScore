@@ -18,7 +18,7 @@ class TimelineMetaLabel : public TimelineLabel
       TimelineMetaLabels* _parent;
 
    public:
-      TimelineMetaLabel(TimelineMetaLabels* view, int nMeta, int height);
+      TimelineMetaLabel(TimelineMetaLabels* view, QString text, int nMeta);
       };
 
 //---------------------------------------------------------
@@ -159,6 +159,8 @@ class TimelineMeta : public QSplitter
       Timeline* getParent();
       Score* score();
       ScoreView* scoreView();
+      int cellHeight();
+      int cellWidth();
 
       TimelineMetaLabels* labelView() { return (TimelineMetaLabels*) widget(0); }
       TimelineMetaRows* rowsView() { return (TimelineMetaRows*) widget(1); }

@@ -5,12 +5,14 @@ class TimelineLabel : public QGraphicsItemGroup {
 
       QGraphicsView* _view;
       QGraphicsRectItem* _box;
-//      QGraphicsTextItem* _text;
+      QGraphicsTextItem* _textItem;
       int _rowNumber;
+      QString _text;
 
 public:
-      TimelineLabel(QGraphicsView* view, int rowNumber, int height);
+      TimelineLabel(QGraphicsView* view, QString text, QFont font, int rowNumber, int height);
       void updateWidth(int newWidth);
+      void centerTextVertically();
       };
 
 #endif // TIMELINELABEL_H

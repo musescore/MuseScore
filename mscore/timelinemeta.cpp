@@ -13,8 +13,8 @@
 
 namespace Ms {
 
-TimelineMetaLabel::TimelineMetaLabel(TimelineMetaLabels *view, int nMeta, int height)
-      : TimelineLabel(view, nMeta, height)
+TimelineMetaLabel::TimelineMetaLabel(TimelineMetaLabels *view, QString text, int nMeta)
+      : TimelineLabel(view, text, view->getParent()->getParent()->getFont(), nMeta, view->getParent()->cellHeight())
       {
 
       }
@@ -172,11 +172,9 @@ TimelineMetaLabels::TimelineMetaLabels(TimelineMeta* parent)
       setScene(new QGraphicsScene);
       scene()->setBackgroundBrush(Qt::lightGray);
       setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
+      setSceneRect(-1, -1, parent->sizes()[0], parent->cellHeight() * parent->nVisibleMetaRows());
+
       connect(parent, SIGNAL(splitterMoved(int, int)), this, SLOT(updateLabelWidths(int)));
-
-      qDebug() << parent->sizes();
-
-      setSceneRect(-1, -1, parent->sizes()[0], parent->getParent()->cellHeight() * parent->nVisibleMetaRows());
       }
 
 TimelineMeta* TimelineMetaLabels::getParent()
@@ -189,8 +187,9 @@ void TimelineMetaLabels::updateLabelWidths(int newWidth)
       for (TimelineMetaLabel* label : _labels)
             label->updateWidth(newWidth);
 
-      // -1 makes sure the rect border is within view, -2 makes sure the scene rect is always smaller than the view rect
-      setSceneRect(-1, -1, newWidth - 2, getParent()->getParent()->cellHeight() * _labels.length() + 1);
+      // -1 makes sure the rect border is within view
+      // -2 makes sure the sDcene rect is always smaller than the view rect, thus no scrollbar is displayed
+      setSceneRect(-1, -1, newWidth - 2, getParent()->cellHeight() * _labels.length() + 1);
       }
 
 void TimelineMetaLabels::updateLabels()
@@ -203,12 +202,17 @@ void TimelineMetaLabels::updateLabels()
 
       int nMeta = 0;
       for (Meta meta : getParent()->metas()) {
-            TimelineMetaLabel* metaLabel = new TimelineMetaLabel(this, nMeta, getParent()->getParent()->cellHeight());
-            _labels.append(metaLabel);
-            scene()->addItem(metaLabel);
-            nMeta++;
+            if (meta.visible) {
+                  TimelineMetaLabel* metaLabel = new TimelineMetaLabel(this, meta.metaName, nMeta);
+                  _labels.append(metaLabel);
+                  scene()->addItem(metaLabel);
+                  nMeta++;
+                  }
             }
       // Add measure label here
+      TimelineMetaLabel* measureLabel = new TimelineMetaLabel(this, tr("Measure"), nMeta);
+      _labels.append(measureLabel);
+      scene()->addItem(measureLabel);
 
       updateLabelWidths(getParent()->sizes()[0]);
       }
@@ -749,7 +753,7 @@ void TimelineMetaRows::resetOldHover()
 
 int TimelineMetaRows::cellWidth()
       {
-      return getParent()->getParent()->cellWidth();
+      return getParent()->cellWidth();
       }
 
 //---------------------------------------------------------
@@ -758,7 +762,7 @@ int TimelineMetaRows::cellWidth()
 
 int TimelineMetaRows::cellHeight()
       {
-      return getParent()->getParent()->cellHeight();
+      return getParent()->cellHeight();
       }
 
 //---------------------------------------------------------
@@ -848,6 +852,7 @@ void TimelineMeta::dataSplitterMoved()
       {
       QSplitter* dataSplitter = getParent()->dataWidget();
       setSizes(dataSplitter->sizes());
+      labelView()->updateLabels();
       }
 
 //---------------------------------------------------------
@@ -875,6 +880,16 @@ Score* TimelineMeta::score()
 ScoreView* TimelineMeta::scoreView()
       {
       return getParent()->scoreView();
+      }
+
+int TimelineMeta::cellHeight()
+      {
+      return getParent()->cellHeight();
+      }
+
+int TimelineMeta::cellWidth()
+      {
+      return getParent()->cellWidth();
       }
 
 //---------------------------------------------------------
