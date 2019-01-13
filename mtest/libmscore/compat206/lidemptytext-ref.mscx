@@ -182,7 +182,7 @@
     <Staff id="1">
       <VBox>
         <height>8</height>
-        <bottomGap>6</bottomGap>
+        <bottomGap>13</bottomGap>
         </VBox>
       <Measure>
         <stretch>0.9</stretch>
@@ -352,7 +352,7 @@
       <Staff id="1">
         <VBox>
           <height>8</height>
-          <bottomGap>6</bottomGap>
+          <bottomGap>13</bottomGap>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Bass</text>

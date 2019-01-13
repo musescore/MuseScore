@@ -3302,6 +3302,8 @@ static void readBox(Box* b, XmlReader& e)
       b->setRightMargin(0.0);
       b->setTopMargin(0.0);
       b->setBottomMargin(0.0);
+      b->setTopGap(0.0);
+      b->setBottomGap(0.0);
 
       b->setBoxHeight(Spatium(0));     // override default set in constructor
       b->setBoxWidth(Spatium(0));
@@ -3361,12 +3363,20 @@ static void readStaffContent(Score* score, XmlReader& e)
       int staff = e.intAttribute("id", 1) - 1;
       e.initTick(0);
       e.setTrack(staff * VOICES);
+      Box* lastReadBox = nullptr;
+      bool readMeasureLast = false;
 
       if (staff == 0) {
             while (e.readNextStartElement()) {
                   const QStringRef& tag(e.name());
 
                   if (tag == "Measure") {
+                        if (lastReadBox) {
+                              lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).toReal());
+                              lastReadBox = nullptr;
+                              }
+                        readMeasureLast = true;
+
                         Measure* measure = 0;
                         measure = new Measure(score);
                         measure->setTick(e.tick());
@@ -3401,6 +3411,10 @@ static void readStaffContent(Score* score, XmlReader& e)
                         readBox(b, e);
                         b->setTick(e.tick());
                         score->measures()->add(b);
+                        lastReadBox = b;
+                        if (readMeasureLast)
+                              b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).toReal());
+                        readMeasureLast = false;
                         }
                   else if (tag == "tick")
                         e.initTick(score->fileDivision(e.readInt()));
