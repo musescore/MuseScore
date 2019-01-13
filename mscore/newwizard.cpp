@@ -282,6 +282,7 @@ NewWizardTemplatePage::NewWizardTemplatePage(QWidget* parent)
       setLayout(layout);
 
       connect(templateFileBrowser, SIGNAL(scoreSelected(const QString&)), SLOT(templateChanged(const QString&)));
+      connect(templateFileBrowser, SIGNAL(scoreActivated(const QString&)), SLOT(fileAccepted(const QString&)));
       buildTemplatesList();
       }
 

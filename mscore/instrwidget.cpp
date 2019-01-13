@@ -544,7 +544,7 @@ void InstrumentsWidget::on_partiturList_itemSelectionChanged()
 //   on_instrumentList
 //---------------------------------------------------------
 
-void InstrumentsWidget::on_instrumentList_itemDoubleClicked(QTreeWidgetItem* item, int)
+void InstrumentsWidget::on_instrumentList_itemActivated(QTreeWidgetItem* item, int)
       {
       if (item->flags() & Qt::ItemIsSelectable)
             on_addButton_clicked();

@@ -74,6 +74,7 @@ TemplateBrowser::TemplateBrowser(QWidget* parent)
       else
             preview->setVisible(false);
       connect(templateTree, &QTreeWidget::itemSelectionChanged, this, &TemplateBrowser::scoreClicked);
+      connect(templateTree, &QTreeWidget::itemActivated, this, &TemplateBrowser::handleItemActivated);
       templateSearch->setFilterableView(templateTree);
       }
 
@@ -212,4 +213,13 @@ void TemplateBrowser::scoreClicked()
       emit scoreSelected(""); // no score selected
       }
 
+//---------------------------------------------------------
+//   handleItemActivated
+//---------------------------------------------------------
+
+void TemplateBrowser::handleItemActivated(QTreeWidgetItem* item)
+      {
+      if (item->flags() & Qt::ItemIsSelectable)
+            emit scoreActivated(static_cast<TemplateItem*>(item)->info().filePath());
+      }
 }
