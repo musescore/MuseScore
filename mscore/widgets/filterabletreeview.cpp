@@ -23,7 +23,7 @@ FilterableTreeViewTemplate<T>::FilterableTreeViewTemplate(QWidget* parent)
       {
       // expand branches when clicked unless the branch is selectable, in which case it will just be selected as usual
       FilterableTreeViewTemplate<T>::connect(this, &FilterableTreeViewTemplate<T>::clicked, this, &FilterableTreeViewTemplate<T>::toggleExpandedForUnselectable);
-      // expand current branch when activated (usally when Enter key is pressed)
+      // expand current branch when activated (usually when double-clicked, or when selected and Enter key is pressed)
       FilterableTreeViewTemplate<T>::connect(this, &FilterableTreeViewTemplate<T>::activated, this, &FilterableTreeViewTemplate<T>::toggleExpanded);
       }
 
