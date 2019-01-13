@@ -16,6 +16,8 @@
 #include "ui_templateBrowser.h"
 #include "scoreInfo.h"
 
+class QTreeWidgetItem;
+
 namespace Ms {
 
 class TemplateItem;
@@ -37,10 +39,12 @@ class TemplateBrowser : public QWidget, public Ui::TemplateBrowser
 
    private slots:
       void scoreClicked();
+      void handleItemActivated(QTreeWidgetItem* item);
 
    signals:
       void leave();
       void scoreSelected(QString);
+      void scoreActivated(QString path);
 
    public:
       TemplateBrowser(QWidget* parent = 0);
