@@ -2821,6 +2821,8 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
                                     nt->clear();
                                     nt->setTrack(track);
                                     nt->setScore(sc);
+                                    nt->setParent(m);
+                                    nt->setTick(m->tick() + ot->rtick());
                                     tupletMap.add(ot, nt);
                                     }
                               ncr->setTuplet(nt);
