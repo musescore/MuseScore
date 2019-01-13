@@ -84,29 +84,31 @@ TemplateBrowser::TemplateBrowser(QWidget* parent)
 TemplateItem* TemplateBrowser::genTemplateItem(QTreeWidgetItem* p, const QFileInfo& fi)
       {
       ScoreInfo si(fi);
-      QPixmap pm(QSize(181,256));
+      QPixmap pm;
       if (!QPixmapCache::find(fi.filePath(), &pm)) {
-            //load and scale pixmap
-            QPixmap pixmap = mscore->extractThumbnail(fi.filePath());
-            if (pixmap.isNull())
-                  pixmap = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
-            // draw pixmap and add border
-            pm.fill(Qt::transparent);
-            QPainter painter( &pm );
-            painter.setRenderHint(QPainter::Antialiasing);
-            painter.setRenderHint(QPainter::TextAntialiasing);
-            painter.drawPixmap(0, 0, pixmap);
-            painter.setPen(QPen(QColor(0, 0, 0, 128), 1));
-            painter.setBrush(Qt::white);
             if (fi.completeBaseName() == "00-Blank" || fi.completeBaseName() == "Create_New_Score") {
-                  qreal round = 8.0 * qApp->devicePixelRatio();
-                  painter.drawRoundedRect(QRectF(0, 0, pm.width() - 1 , pm.height() - 1), round, round);
+                  // draw a custom thumbnail for these special templates
+                  const QSize thumbnailSize = QSize(181,256); // A4 aspect ratio
+                  const qreal pixelRatio = qApp->devicePixelRatio();
+                  pm = QPixmap(thumbnailSize * pixelRatio);
+                  pm.setDevicePixelRatio(pixelRatio);
+                  pm.fill(Qt::transparent); // transparent at corners
+                  QPainter painter(&pm);
+                  painter.setRenderHint(QPainter::Antialiasing);
+                  painter.setPen(QPen(QColor(0, 0, 0, 128), 1));
+                  painter.setBrush(Qt::white);
+                  const qreal cornerRadius = 12.0;
+                  painter.drawRoundedRect(QRect(QPoint(0, 0), thumbnailSize), cornerRadius, cornerRadius);
+                  painter.end();
                   }
-            else
-                  painter.drawRect(0, 0, pm.width()  - 1, pm.height()  - 1);
-            if (fi.completeBaseName() != "00-Blank")
-                  painter.drawPixmap(1, 1, pixmap);
-            painter.end();
+            else {
+                  // load or generate an actual thumbnail for the score
+                  pm = mscore->extractThumbnail(fi.filePath());
+                  if (pm.isNull()) {
+                        // couldn't load/generate thumbnail so display generic icon
+                        pm = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
+                        }
+                  }
             QPixmapCache::insert(fi.filePath(), pm);
             }
 
