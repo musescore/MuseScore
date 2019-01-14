@@ -675,6 +675,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       {
       deselectAll();
 
+      if (fm->isMMRest())
+            fm = fm->mmRestFirst();
+
       Fraction ns  = ts->sig();
       int tick     = fm->tick();
       TimeSig* lts = staff(staffIdx)->timeSig(tick);
@@ -714,9 +717,10 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             // so its ok to just update the time signatures
             //
             TimeSig* nts = staff(staffIdx)->nextTimeSig(tick+1);
-            Measure* lm  = nts ? nts->segment()->measure() : 0;
+            const int lmTick = nts ? nts->segment()->tick() : -1;
             for (Score* score : scoreList()) {
                   Measure* mf = score->tick2measure(tick);
+                  Measure* lm = (lmTick != -1) ? score->tick2measure(lmTick) : nullptr;
                   for (Measure* m = mf; m != lm; m = m->nextMeasure()) {
                         bool changeActual = m->len() == m->timesig();
                         m->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
@@ -778,6 +782,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                         }
                   }
             // add the time signatures
+            std::map<int, TimeSig*> masterTimeSigs;
             for (Score* score : scoreList()) {
                   Measure* nfm = score->tick2measure(tick);
                   seg   = nfm->undoGetSegment(SegmentType::TimeSig, nfm->tick());
@@ -806,6 +811,12 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               nsig->setTrack(si * VOICES);
                               nsig->setParent(seg);
                               undoAddElement(nsig);
+                              if (score->excerpt()) {
+                                    const int masterTrack = score->excerpt()->tracks().key(nsig->track());
+                                    TimeSig* masterTimeSig = masterTimeSigs[masterTrack];
+                                    if (masterTimeSig)
+                                          undo(new Link(masterTimeSig, nsig));
+                                    }
                               }
                         else {
                               nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
@@ -821,6 +832,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                               nsig->setSelected(false);
                               nsig->setDropTarget(0);       // DEBUG
                               }
+
+                        if (score->isMaster())
+                              masterTimeSigs[nsig->track()] = nsig;
                         }
                   }
             }
