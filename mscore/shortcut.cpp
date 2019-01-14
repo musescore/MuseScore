@@ -65,7 +65,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Save Online…"),
          QT_TRANSLATE_NOOP("action","File > Save online"),
          QT_TRANSLATE_NOOP("action","Save score on MuseScore.com"),
-         Icons::fileSaveAs_ICON,
+         Icons::fileSaveOnline_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_SCORE
          },
