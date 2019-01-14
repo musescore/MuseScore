@@ -1,8 +1,8 @@
 import QtQuick 2.1
-import MuseScore 3.0
+import MuseScore 1.0
 
 MuseScore {
-      version:  "3.0"
+      version:  "2.1"
       description: "Create random score."
       menuPath: "Plugins.random"
       requiresScore: false

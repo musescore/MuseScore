@@ -15,10 +15,10 @@
 //=============================================================================
 
 import QtQuick 2.0
-import MuseScore 3.0
+import MuseScore 1.0
 
 MuseScore {
-   version: "3.0"
+   version: "2.0"
    description: qsTr("This plugin names notes as per your language setting")
    menuPath: "Plugins.Notes." + qsTr("Note Names") // this does not work, why?
 
@@ -124,7 +124,7 @@ MuseScore {
       var endTick;
       var fullScore = false;
       cursor.rewind(1);
-      if (!cursor.segment()) { // no selection
+      if (!cursor.segment) { // no selection
          fullScore = true;
          startStaff = 0; // start with 1st staff
          endStaff  = curScore.nstaves - 1; // and end with last
@@ -153,11 +153,11 @@ MuseScore {
             if (fullScore)  // no selection
                cursor.rewind(0); // beginning of score
 
-            while (cursor.segment() && (fullScore || cursor.tick < endTick)) {
-               if (cursor.element() && cursor.element().type === Ms.CHORD) {
-                  var text = newElement(Ms.STAFF_TEXT);
+            while (cursor.segment && (fullScore || cursor.tick < endTick)) {
+               if (cursor.element && cursor.element.type === Element.CHORD) {
+                  var text = newElement(Element.STAFF_TEXT);
 
-                  var graceChords = cursor.element().graceNotes;
+                  var graceChords = cursor.element.graceNotes;
                   for (var i = 0; i < graceChords.length; i++) {
                      // iterate through all grace chords
                      var graceNotes = graceChords[i].notes;
@@ -174,10 +174,10 @@ MuseScore {
 
                      cursor.add(text);
                      // new text for next element
-                     text  = newElement(Ms.STAFF_TEXT);
+                     text  = newElement(Element.STAFF_TEXT);
                   }
 
-                  var notes = cursor.element().notes;
+                  var notes = cursor.element.notes;
                   nameChord(notes, text);
 
                   switch (voice) {

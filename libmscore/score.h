@@ -322,10 +322,10 @@ class Movements : public std::vector<MasterScore*> {
 
 //---------------------------------------------------------------------------------------
 //   @@ Score
-////   @P composer        string            composer of the score (read only)
+//   @P composer        string            composer of the score (read only)
 //   @P duration        int               duration of score in seconds (read only)
-////   @P excerpts        array[Excerpt]    the list of the excerpts (linked parts)
-////   @P firstMeasure    Measure           the first measure of the score (read only)
+//   @P excerpts        array[Excerpt]    the list of the excerpts (linked parts)
+//   @P firstMeasure    Measure           the first measure of the score (read only)
 //   @P firstMeasureMM  Measure           the first multi-measure rest measure of the score (read only)
 //   @P harmonyCount    int               number of harmony items (read only)
 //   @P hasHarmonies    bool              score has chord symbols (read only)
@@ -335,14 +335,13 @@ class Movements : public std::vector<MasterScore*> {
 //   @P lastMeasureMM   Measure           the last multi-measure rest measure of the score (read only)
 //   @P lastSegment     Segment           the last score segment (read-only)
 //   @P lyricCount      int               number of lyric items (read only)
-////   @P name            string            name of the score
+//   @P name            string            name of the score
 //   @P nmeasures       int               number of measures (read only)
 //   @P npages          int               number of pages (read only)
 //   @P nstaves         int               number of staves (read only)
 //   @P ntracks         int               number of tracks (staves * 4) (read only)
-////   @P parts           array[Part]       the list of parts (read only)
-//   @P mscoreVersion   QString           MuseScore version the score was last saved with (read only)
-//   @P mscoreRevision  QString           MuseScore revision the score was last saved with (read only)
+// not to be documented?
+//   @P parts           array[Part]       the list of parts (read only)
 //
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
