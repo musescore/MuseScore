@@ -34,7 +34,7 @@ MuseScore {
                 var e = cursor.element();
                 if (e) {
 	              console.log("type: " + e.name + " (" + e.type + ") at  tick: " + e.tick + " color " + e.get("color"));
-                    if (e.type === Ms.REST) {
+                    if (e.type == Ms.REST) {
                         var d = e.get("duration");
                         console.log("   duration " + d.numerator + "/" + d.denominator);
                         }

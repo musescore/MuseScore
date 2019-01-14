@@ -1,10 +1,10 @@
 import QtQuick 2.0
-import MuseScore 3.0
+import MuseScore 1.0
 
 
 MuseScore {
     menuPath:   "Plugins.panel"
-    version:  "3.0"
+    version:  "2.0"
     description: "This demo plugin creates a GUI panel."
     requiresScore: false
 
