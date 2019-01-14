@@ -68,8 +68,8 @@ Kept as an example of how to integrate with a complex synthesizer.
     * **thirdparty/rtf2html**
     Used for capella import
 
-    * **thirdparty/diff**
-    Not used currently. [Diff, Match and Patch Library](https://code.google.com/p/google-diff-match-patch/)
+    * **thirdparty/dtl**
+    Used for the score comparison tool. [Diff Template Library](https://github.com/cubicdaiya/dtl)
 
     * **thirdparty/ofqf**
     OSC server interface. Based on [OSC for Qt4](http://www.arnoldarts.de/projects/ofqf/)
