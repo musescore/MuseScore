@@ -234,6 +234,7 @@ const std::list<const char*> MuseScore::_allFileOperationEntries {
             "file-new",
             "file-open",
             "file-save",
+            "file-save-online",
             "print",
             "undo",
             "redo"

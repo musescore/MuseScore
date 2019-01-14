@@ -77,6 +77,7 @@
         <file>data/icons/document-print.svg</file>
         <file>data/icons/document-save.svg</file>
         <file>data/icons/document-save-as.svg</file>
+        <file>data/icons/document-save-online.svg</file>
         <file>data/icons/edit-copy.svg</file>
         <file>data/icons/edit-cut.svg</file>
         <file>data/icons/edit-paste.svg</file>
