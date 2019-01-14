@@ -449,6 +449,7 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
             Note* note = new Note(this);
             Chord* chord = on->chord();
             note->setParent(chord);
+            note->setTrack(chord->track());
             int valTmp = val < 0 ? val+1 : val-1;
 
             int npitch;
