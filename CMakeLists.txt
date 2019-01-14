@@ -20,7 +20,7 @@
 project(mscore)
 
 # Minimum tested, report if it works with older
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.3.0)
 
 set (CI $ENV{CI})
 if (CI)

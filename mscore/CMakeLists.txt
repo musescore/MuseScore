@@ -487,6 +487,8 @@ target_link_libraries(mscore
       kqoauth
       )
 
+add_dependencies(mscore workspaces)
+
 if (USE_SYSTEM_FREETYPE)
       target_link_libraries(mscore ${FREETYPE_LIBRARIES})
 endif (USE_SYSTEM_FREETYPE)
