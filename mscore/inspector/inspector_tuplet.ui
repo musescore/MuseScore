@@ -299,7 +299,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Line width:</string>
+         <string>Line thickness:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -312,7 +312,7 @@
       <item row="3" column="1">
        <widget class="QDoubleSpinBox" name="lineWidth">
         <property name="accessibleName">
-         <string>Line width</string>
+         <string>Line thickness</string>
         </property>
         <property name="suffix">
          <string>sp</string>
