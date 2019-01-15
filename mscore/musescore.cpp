@@ -78,8 +78,8 @@
 #endif
 #include "shortcut.h"
 #ifdef SCRIPT_INTERFACE
-#include "pluginCreator.h"
-#include "pluginManager.h"
+#include "plugin/pluginCreator.h"
+#include "plugin/pluginManager.h"
 #endif
 #include "helpBrowser.h"
 #include "drumtools.h"
@@ -110,7 +110,7 @@
 #include "synthesizer/synthesizergui.h"
 #include "synthesizer/msynthesizer.h"
 #include "fluid/fluid.h"
-#include "qmlplugin.h"
+#include "plugin/qmlplugin.h"
 #include "accessibletoolbutton.h"
 #include "toolbuttonmenu.h"
 #include "searchComboBox.h"
