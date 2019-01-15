@@ -7,11 +7,6 @@
         <translation>Hou de shift toets ingedrukt om een noot aan een akkoord toe te voegen terwijl u de letter van de noot in toets of op de notenbalk klikt.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
-        <comment>note-input</comment>
-        <translation>Om een triool of ander antimetrisch figuur te maken selecteert u de duur die overeenkomt met de totale lengte van het figuur en drukt u Ctrl+getal of gebruik Voeg toe / Antimetrische figuren.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Welkom bij MuseScore! Deze korte rondleiding laat u mee de MuseScore gebruikersinterface zien.</translation>
@@ -81,15 +76,6 @@
         <comment>welcome</comment>
         <translation>Dit zijn de werkbalken.
  De drie hoofd werkbalken zijn: bestandsbewerkingen, afspeelknoppen en noteninvoer.</translation>
-    </message>
-    <message>
-        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
-    The controls at the right of this toolbar control the display of your score.</source>
-        <comment>welcome</comment>
-        <translation>Met de bestandsbewerkingen werkbalk kunt u bestanden maken/opslaan/openen/afdrukken en wijzigingen ongedaan maken/opnieuw uitvoeren.
- U kunt ook opslaan in uw musescore.com gebruikersaccount door gebruik te maken van: Bestand / Sla online op.
- De instellingen rechts van deze werkbalk bepalen de weergave van de partituur.</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
@@ -207,29 +193,9 @@
  U kunt de &quot;Noten&quot; en andere knoppen onderaan het instellingenoverzicht kiezen om de selectie te beperken tot de elementen van het gekozen type.</translation>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</source>
-        <comment>inspector-tour</comment>
-        <translation>Indien u een waarde heeft aangepast dan kunt u de &quot;Herstel&quot; knop gebruiken om de waarde terug te zetten naar de standaard waarde.
- Indien de waarde beïnvloed wordt door een stijl instelling dan kunt u klikken op de &quot;Stel in als stijl&quot; knop om de huidige waarde in te stellen als de nieuwe standaard voor de stijl.
- U kunt de standaard waarden voor de stijl ook instellen middels Opmaak / Stijl.</translation>
-    </message>
-    <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
         <translation>Het instellingenoverzicht stelt u in staat de verschillende eigenschappen van de elementen in uw partituur aan te passen.</translation>
-    </message>
-    <message>
-        <source>That's the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</source>
-        <comment>welcome</comment>
-        <translation>Dit is het einde van deze rondleiding!
- Tijdens het gebruik van MuseScore zullen er meer rondleidingen verschijnen om de functionaliteit verder uit te leggen.
- Om deze uit te schakelen, de-selecteert u &quot;Doorgaan met rondleiding laten zien&quot; voordat u dit venster sluit.
- U kunt de rondleiding ook aan-/uitzetten en herstellen in Help / Rondleidingen.</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -341,6 +307,40 @@ zoals het verplaatsen van tempo aanduidingen boven andere tekst of het inkorten 
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Als laatste is er het selectiefilter (te vinden in het Weergave menu) waarmee u elementen van een bepaald type kunt uitsluiten van een bereik selectie.</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style.</source>
+        <comment>inspector-tour</comment>
+        <translation>Indien u een waarde heeft aangepast dan kunt u de &quot;Herstel&quot; knop gebruiken om de waarde terug te zetten naar de standaard waarde.
+ Indien de waarde beïnvloed wordt door een stijl instelling dan kunt u klikken op de &quot;Stel in als stijl&quot; knop om de huidige waarde in te stellen als de nieuwe standaard voor de stijl.
+ U kunt de standaard waarden voor de stijl ook instellen middels Opmaak / Stijl.</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation>Om een triool of ander antimetrisch figuur te maken selecteert u de duur die overeenkomt met de totale lengte van het figuur en drukt u Ctrl+getal of gebruik Voeg toe / Antimetrische figuren. </translation>
+    </message>
+    <message>
+        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File &gt; Save Online.
+    The controls at the right of this toolbar control the display of your score.</source>
+        <comment>welcome</comment>
+        <translation>Met de bestandsbewerkingen werkbalk kunt u bestanden maken/opslaan/openen/afdrukken en wijzigingen ongedaan maken/opnieuw uitvoeren.
+ U kunt ook opslaan in uw musescore.com gebruikersaccount door gebruik te maken van: Bestand / Sla online op.
+ De instellingen rechts van deze werkbalk bepalen de weergave van de partituur. </translation>
+    </message>
+    <message>
+        <source>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable and reset tours in Help &gt; Tours.</source>
+        <comment>welcome</comment>
+        <translation>Dit is het einde van deze rondleiding!
+ Tijdens het gebruik van MuseScore zullen er meer rondleidingen verschijnen om de functionaliteit verder uit te leggen.
+ Om deze uit te schakelen, de-selecteert u &quot;Doorgaan met rondleiding laten zien&quot; voordat u dit venster sluit.
+ U kunt de rondleiding ook aan-/uitzetten en herstellen in Help / Rondleidingen. </translation>
     </message>
 </context>
 </TS>

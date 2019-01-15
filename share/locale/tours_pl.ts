@@ -7,11 +7,6 @@
         <translation>Aby dodać nutę do akordu, podczas wprowadzania jej nazwy klawiszem litery, wciśnij klawisz Shift lub kliknij na pięciolinię.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
-        <comment>note-input</comment>
-        <translation>Aby utworzyć triolę lub inną grupę niemiarową, wybierz jej długość, a następnie wciśnij Ctrl+numer lub użyj: Dodaj &gt; Grupy niemiarowe.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Witaj w MuseScorze! Te krótkie wskazówki pomogą Ci poznać interfejs programu.</translation>
@@ -80,15 +75,6 @@
         <comment>welcome</comment>
         <translation>To są paski narzędziowe.
     Trzy główne to: Operacje na plikach, Kontrola odtwarzania i Wprowadzanie nut.</translation>
-    </message>
-    <message>
-        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
-    The controls at the right of this toolbar control the display of your score.</source>
-        <comment>welcome</comment>
-        <translation>Pasek narzędziowy &quot;Operacje na plikach&quot; umożliwia tworzenie/zapisywanie/otwieranie/drukowanie plików oraz cofanie/ponawianie zmian.
-    Możesz również zapisywać na swoim koncie na musescore.com, jeśli przejdziesz do: Plik &gt; Zapisz online.
-    Przyciski po prawej stronie tego paska narzędziowego kontrolują wyświetlanie Twojej partytury.</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
@@ -205,29 +191,9 @@
     Możesz kliknąć przycisk &quot;Nuty&quot; lub inne przyciski u dołu Kontrolera obiektów, aby ograniczyć zaznaczenie tylko do elementów określonego typu.</translation>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</source>
-        <comment>inspector-tour</comment>
-        <translation>Jeśli zmieniłeś/aś wartość, możesz kliknąć przycisk &quot;Resetuj&quot;, aby przywrócić wartość domyślną.
-    Jeśli wartość jest kontrolowana przez ustawienie stylu, możesz kliknąć przycisk &quot;Ustaw jako styl&quot;, aby ustawić bieżącą wartość jako nową domyślną dla stylu.
-    Możesz również ustawić domyślne ustawienia stylu za pomocą: Format &gt; Style.</translation>
-    </message>
-    <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
         <translation>&quot;Kontroler obiektów&quot; umożliwia kontrolowanie szczegółów elementów partytury oraz innych obiektów w Twojej partyturze.</translation>
-    </message>
-    <message>
-        <source>That's the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</source>
-        <comment>welcome</comment>
-        <translation>To już koniec wskazówek!
-    Podczas pracy z MuseScore&apos;em pojawi się ich więcej, aby wyjaśnić funkcje programu.
-    Aby je wyłączyć, odznacz opcję &quot;Kontynuuj pokazywanie wskazówek&quot; przed zamknięciem tego okna.
-    Możesz również włączyć/wyłączyć i zresetować wskazówki w: Pomoc &gt; Wskazówki.</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -338,6 +304,40 @@
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Na koniec &quot;Filtr zaznaczenia&quot; (znajdziesz go w menu Widok) - pozwala wykluczyć elementy danego typu z zakresu zaznaczenia.</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style.</source>
+        <comment>inspector-tour</comment>
+        <translation>Jeśli zmieniłeś/aś wartość, możesz kliknąć przycisk &quot;Resetuj&quot;, aby przywrócić wartość domyślną.
+    Jeśli wartość jest kontrolowana przez ustawienie stylu, możesz kliknąć przycisk &quot;Ustaw jako styl&quot;, aby ustawić bieżącą wartość jako nową domyślną dla stylu.
+    Możesz również ustawić domyślne ustawienia stylu za pomocą: Format &gt; Style.</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation>Aby utworzyć triolę lub inną grupę niemiarową, wybierz jej długość, a następnie wciśnij Ctrl+numer lub użyj: Dodaj &gt; Grupy niemiarowe.</translation>
+    </message>
+    <message>
+        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File &gt; Save Online.
+    The controls at the right of this toolbar control the display of your score.</source>
+        <comment>welcome</comment>
+        <translation>Pasek narzędziowy &quot;Operacje na plikach&quot; umożliwia tworzenie/zapisywanie/otwieranie/drukowanie plików oraz cofanie/ponawianie zmian.
+    Możesz również zapisywać na swoim koncie na musescore.com, jeśli przejdziesz do: Plik &gt; Zapisz online.
+    Przyciski po prawej stronie tego paska narzędziowego kontrolują wyświetlanie Twojej partytury.</translation>
+    </message>
+    <message>
+        <source>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable and reset tours in Help &gt; Tours.</source>
+        <comment>welcome</comment>
+        <translation>To już koniec wskazówek!
+    Podczas pracy z MuseScore&apos;em pojawi się ich więcej, aby wyjaśnić funkcje programu.
+    Aby je wyłączyć, odznacz opcję &quot;Kontynuuj pokazywanie wskazówek&quot; przed zamknięciem tego okna.
+    Możesz również włączyć/wyłączyć i zresetować wskazówki w: Pomoc &gt; Wskazówki.</translation>
     </message>
 </context>
 </TS>

@@ -7,11 +7,6 @@
         <translation>Akorde bati nota bat gehitzeko, mantendu Maius sakatuta haren laster-tekla (sistema anglosaxoiko izena) sakatu bitartean, ala pentagrama sakatu.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
-        <comment>note-input</comment>
-        <translation>Hirukotxo bat edo beste N-kotxo bat sortzeko, N-kotxo osoaren luzera osoa adierazten duen iraupena hautatu eta gero Ktrl+zenbakia sakatu, edo Gehitu / N-kotxoak erabili.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Ongi etorri MuseScore-ra! Ibilaldi labur honek MuseScore-ko erabiltzaile interfazean zehar gidatuko zaitu.</translation>
@@ -80,15 +75,6 @@ Hainbat partitura irekita badituzu, partitura ikuspegiko goialdeko kutxatilak er
         <comment>welcome</comment>
         <translation>Hauek tresna-barrak dira.
 Hiru nagusiak &apos;Fitxategi-eragiketak&apos;, &apos;Erreprodukzio-kontrolak&apos; eta &apos;Nota sarrera&apos; dira.</translation>
-    </message>
-    <message>
-        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
-    The controls at the right of this toolbar control the display of your score.</source>
-        <comment>welcome</comment>
-        <translation>Fitxategi-eragiketak tresna-barrak fitxategiak sortu/gorde/ireki/inprimatzeko eta aldaketak desegiteko/berregiteko balio du.
-Zure musescore.com kontura ere gorde dezakezu Fitxategia / Sarean gorde-ra joz gero.
-Tresna-barra honen eskuinaldeko kontrolek zure partituraren ikuspegia kontrolatzen dute.</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
@@ -205,29 +191,9 @@ Ezaugarri-talde erabilgarriak hautatutako elementuaren edo elementuen motaren ar
 Ikuskariaren azpialdean dauden &apos;Notak&apos; eta beste botoiak saka ditzakezu hautapena zehaztutako motako elementuetara soilik mugatzeko.</translation>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</source>
-        <comment>inspector-tour</comment>
-        <translation>Balio bat aldatu baduzu, &apos;Berrezarri&apos; botoia saka dezakezu lehenetsira berrezartzeko.
-Balioa estilo ezarpen batek kontrolatzen badu, &apos;Estilo bezala ezarri&apos; botoia sakatuz uneko balioa estiloaren lehenetsi bezala ezar dezakezu.
-Estiloaren balio lehenetsiak Formatua / Estiloa erabiliz ere ezar ditzakezu.</translation>
-    </message>
-    <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
         <translation>Ikuskatzailearen bidez zure partituraren elementuen ezaugarriak kontrola ditzakezu.</translation>
-    </message>
-    <message>
-        <source>That's the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</source>
-        <comment>welcome</comment>
-        <translation>Ibilaldi honen amaiera heldu zara!
-MuseScore erabiltzen duzun heinean, ibilaldi gehiago agertuko dira, funtzionaltasunak azaltzen jarraitzeko.
-Horiek desktibatzeko, &quot;Ibilaldiak erakusten jarraitu&quot; aukeratik hautapena kendu leiho hau itxi aurretik.
-Ibilaldiak Laguntza / Ibilaldiak-en ere ezar/ken ditzakezu.</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -341,6 +307,33 @@ Hautapenak notak baditu, automatikoki hein hautapena egingo da; bestela, zerrend
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Azkenik, hautapen iragazkiaren bidez (&apos;Ikusi&apos; menuan dagoena) mota zehatz bateko elementuak hein hautapen batetik kanpo utz ditzakezu.</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style.</source>
+        <comment>inspector-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File &gt; Save Online.
+    The controls at the right of this toolbar control the display of your score.</source>
+        <comment>welcome</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable and reset tours in Help &gt; Tours.</source>
+        <comment>welcome</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
