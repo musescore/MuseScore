@@ -7,11 +7,6 @@
         <translation>Para engadir unha nota a un acorde, prema Maiúsculas mentres escribe o nome da letra, ou prema na partitura.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
-        <comment>note-input</comment>
-        <translation>Para crear un tresillo ou outra quiáltera, seleccione a duración que represente a duración total da quiáltera e prema Ctrl+número ou empregue Engadir / Quiálteras.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Benvido a MuseScore! Esta breve viaxe guiarate a través da interface de usuario de MuseScore </translation>
@@ -83,15 +78,6 @@
     As tres principais son Operacións de ficheiro, Controles de reprodución e Introdución de notas.</translation>
     </message>
     <message>
-        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
-    The controls at the right of this toolbar control the display of your score.</source>
-        <comment>welcome</comment>
-        <translation>A barra de ferramentas Operacións de ficheiro permite crear/gardar/abrir/imprimir ficheiros e desfacer/refacer cambios.
-    Tamén é posíbel gardar na conta de musescore.com desde Ficheiro / Gardar na rede.
-    Os controles da dereita desta barra de ferramentas controlan como se presenta a partitura.</translation>
-    </message>
-    <message>
         <source>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
         <comment>welcome</comment>
@@ -109,7 +95,8 @@
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>Para engadir un elemento da paleta á partitura seleccione primeiro un elemento ou intervalo da partitura e faga duplo clic no elemento da paleta para engadilo aos elementos seleccionados.
+    Tamén pode arrastrar un elemento dunha paleta e soltalo sobre un elemento determinado da partitura.</translation>
     </message>
     <message>
         <source>You have toggled multimeasure rests in this score.
@@ -122,23 +109,25 @@
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Benvida á introdución de notas, onde pode introducir notas e silencios na partitura.
+    Prema «Seguinte» para saber máis.</translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Para activar o modo de introdución de notas prema na icona «Introdución de notas» ou prema no atallo «N».</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Seleccione unha duración premendo nunha destas iconas ou premendo nos atallos «1» - «9».
+    Para incluír un puntillo prema na icona correspondente e prema no atallo «.».</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Para introducir un silencio da duración seleccionada, prema no atallo «0» ou seleccione esta icona e prema na partitura.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
@@ -149,20 +138,24 @@
         <source>MuseScore provides many ways to navigate through your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>O MuseScore fornece modos distintos de navegación pola partitura.
+    Prema «Seguinte» para saber máis.</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>A maneira máis rápida de se desprazar para riba e para abaixo pola partitura é usando a roda do rato ou o xesto equivalente das superficies táctiles (por exemplo, deslizar con dous dedos).
+    Para se desprazar na horizontal, prema Maiús ao tempo que move a roda do rato ou usa o xesto.</translation>
     </message>
     <message>
         <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>As teclas de navegación do teclado como RePáx, AvPáx, Inicio e Fin funcionan como nos demais aplicativos
+    para se mover entre páxinas
+    Os teclados que carecen destas teclas fornecen con frecuencia equivalentes, como Fn+Arriba/Abaixo/Esquerda/Dereita.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -194,22 +187,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</source>
-        <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
-        <comment>welcome</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>That's the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</source>
         <comment>welcome</comment>
         <translation type="unfinished"/>
     </message>
@@ -301,6 +279,33 @@
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style.</source>
+        <comment>inspector-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File &gt; Save Online.
+    The controls at the right of this toolbar control the display of your score.</source>
+        <comment>welcome</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable and reset tours in Help &gt; Tours.</source>
+        <comment>welcome</comment>
         <translation type="unfinished"/>
     </message>
 </context>

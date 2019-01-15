@@ -7,11 +7,6 @@
         <translation>音符を入力したあと、さらに音を追加するには、Shiftキーを押しながらキーボードで追加する音を入力するか、譜表に直接クリックしてください。</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
-        <comment>note-input</comment>
-        <translation>3連符やその他の連符を作成するには、作りたい連符の長さを選択したあとに、Ctrlキー＋作りたい連符の数を入力します。この操作はメニューの &quot;追加(A)&quot; → &quot;連符(U)&quot; からでもできます。</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>MuseScoreへようこそ！
@@ -81,16 +76,6 @@
         <comment>welcome</comment>
         <translation>これらはツールバーです。
 基本は3種類。これによってファイル操作、再生、音符入力などができます。</translation>
-    </message>
-    <message>
-        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
-    The controls at the right of this toolbar control the display of your score.</source>
-        <comment>welcome</comment>
-        <translation>ファイル操作ツールバーは、/ 作成 / 開く / 保存 / 印刷 / 元に戻す / やり直し / を行います。
-musescore.com のアカウントを持っている場合、 &quot; ファイル(F) &quot; → &quot; オンライン上にアップロード &quot; からオンライン上に保存することもできます。
-このツールバーの右隣にあるプルダウンメニューは、スコアの拡大率や表示方法を操作することができます。
-</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
@@ -209,29 +194,9 @@ musescore.com のアカウントを持っている場合、 &quot; ファイル(
  インスペクタの下部にある &quot; 音符 &quot; やその他のボタンをクリックして、選択範囲を指定した種類の要素だけにできます。</translation>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</source>
-        <comment>inspector-tour</comment>
-        <translation>値を変更した場合は、&quot; リセット &quot; ボタンをクリックして値をデフォルトにリセットできます。
- 値がスタイル設定によって制御されている場合は、&quot; スタイルとして設定 &quot; ボタンをクリックして現在の値をスタイルの新しい既定値として設定できます。
- &quot; フォーマット &quot; → &quot; スタイル &quot; を使ってスタイルの既定値を設定することもできます。</translation>
-    </message>
-    <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
         <translation>インスペクタを使用すると、スコア内の要素のさまざまなプロパティを編集できます。</translation>
-    </message>
-    <message>
-        <source>That's the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</source>
-        <comment>welcome</comment>
-        <translation>以上でツアーを終わります。
-MuseScoreで初めて機能を使う際、さらに機能を説明するためのツアーが表示されます。
-これらを無効にするには、このウィンドウを閉じる前に「今後もツアーを表示する」の選択を解除してください。
- &quot; ヘルプ &quot;→ &quot; ツアー &quot; でツアーを有効/無効にしたりリセットしたりすることもできます。</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -347,6 +312,33 @@ Ctrlキー（macOS：Cmd）を押しながら、未選択部分をクリック�
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>最後に、選択フィルタ（&quot; 表示 &quot;メニューにある）を使用すると、範囲選択から特定の種類の要素を除外できます。</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style.</source>
+        <comment>inspector-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File &gt; Save Online.
+    The controls at the right of this toolbar control the display of your score.</source>
+        <comment>welcome</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable and reset tours in Help &gt; Tours.</source>
+        <comment>welcome</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

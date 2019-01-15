@@ -7,11 +7,6 @@
         <translation>要往和弦中添加音符，按住Shift并键入音名，或者在谱表中单击。</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
-        <comment>note-input</comment>
-        <translation>要创建一个三连音或者其他连音，请选取一段长度来作为连音的总时值，然后按下Ctrl+数字 (Mac: Command+数字)。也可使用顶部菜单栏里的添加-连音符。</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>欢迎使用MuseScore！这个简洁的教程会带你导览MuseScore的用户界面。</translation>
@@ -81,15 +76,6 @@
         <comment>welcome</comment>
         <translation>工具栏这些是工具栏。
         其中最主要的三个是：文件操作栏、播放控制栏以及音符输入栏。</translation>
-    </message>
-    <message>
-        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
-    The controls at the right of this toolbar control the display of your score.</source>
-        <comment>welcome</comment>
-        <translation>文件操作栏使您可以 新建/保存/打开/打印文件 以及 撤销/恢复更改。
-        您亦可前往顶部菜单栏的“文件-保存至在线空间”来将乐谱保存至您的musescore.com账户。
-    这栏的右侧是可控制您的乐谱的显示方式。</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
@@ -207,29 +193,9 @@
         您可点击查看器下部的“音符”或其他按钮来筛选特定类型的元素。</translation>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</source>
-        <comment>inspector-tour</comment>
-        <translation>如果您修改了一个值，您可以单击“重置”按钮来恢复默认值。
-        若这个值是由样式文件控制的，您可点击“设为样式”按钮来将当前值设定为样式文件的新的默认值。
-        您亦可通过顶部菜单栏的“格式-样式…”将所有的样式恢复系统默认样式。</translation>
-    </message>
-    <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
         <translation>通过查看器来调整您乐谱中各种元素的不同属性  </translation>
-    </message>
-    <message>
-        <source>That's the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</source>
-        <comment>welcome</comment>
-        <translation>教程导览结束了！
-    当您使用MuseScore时，更多的教程导览会弹出来详解更深入的功能。
-    不想再看导览了吗？请在关闭本窗口前取消选中“继续显示导览”。
-    您还可以在顶部菜单栏的“帮助-教程导览”中再次启用/关闭导览的显示。</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -343,6 +309,40 @@
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>最后，滤选器（可以在顶部菜单栏的“视图”中找到）让您可以通过给定的类型排除选区中的元素。</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style.</source>
+        <comment>inspector-tour</comment>
+        <translation>如果您一修改过一个值，您可以单击“重置”按钮来恢复默认值。
+        若这个值是由样式文件控制的，您可点击“设为样式”按钮来将当前值设定为样式文件的新的默认值。
+        您亦可通过顶部菜单栏的“格式 &gt; 样式”将所有的样式恢复系统默认样式。</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation>要创建一个三连音或者其他连音，请选取一段长度来作为连音的总时值，然后按下Ctrl+数字（Mac: Command+数字）。也可使用顶部菜单栏里的添加 &gt; 连音符。</translation>
+    </message>
+    <message>
+        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File &gt; Save Online.
+    The controls at the right of this toolbar control the display of your score.</source>
+        <comment>welcome</comment>
+        <translation>文件操作栏使您可以新建、保存、打开/打印文件以及撤销、恢复更改。
+        您亦可前往顶部菜单栏的“文件 &gt; 保存至在线空间”来将乐谱保存至您的musescore.com账户。
+        这栏的右侧是可控制您的乐谱的显示方式。</translation>
+    </message>
+    <message>
+        <source>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable and reset tours in Help &gt; Tours.</source>
+        <comment>welcome</comment>
+        <translation>教程导览结束了！
+    当您使用MuseScore时，更多的教程导览会弹出来详解更深入的功能。
+    不想再看导览了吗？请在关闭本窗口前取消选中“继续显示导览”。
+    您还可以在顶部菜单栏的“帮助 &gt; 教程导览”中再次启用/关闭导览的显示。</translation>
     </message>
 </context>
 </TS>

@@ -7,11 +7,6 @@
         <translation>Lisääksesi nuotin sointuun, paina vaihtonäppäintä samalla, kun kirjoitat nuotin kirjaimen, tai klikkaa viivastoon.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
-        <comment>note-input</comment>
-        <translation>Luodaksesi triolin tai muun poikkeusjaon, valitse kesto, joka vastaa poikkeusjaon kokonaiskestoa, sen jälkeen paina Ctrl+numero tai käytä Luo / Tupletit.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Tervetuloa MuseScoreen! Tämä lyhyt esittelykierros opastaa sinua MuseScoren käyttöliittymän läpi.</translation>
@@ -81,15 +76,6 @@
         <comment>welcome</comment>
         <translation>Nämä ovat työkalupalkkeja.
  Kolme tärkeintä on Tiedostotoiminnot, Toistosäätimet ja Nuotinsyöttö.</translation>
-    </message>
-    <message>
-        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
-    The controls at the right of this toolbar control the display of your score.</source>
-        <comment>welcome</comment>
-        <translation>Tiedostotoimintojen työkalupalkki sallii sinun luoda/tallentaa/avata/tulostaa tiedostoja ja kumota/tehdä uudelleen muutoksia.
-    Voit myös tallentaa musescore.com-tiliisi, jos menet kohteeseen Tiedosto / Tallenna verkkoon.
-    Tämän työkalupalkin oikeanpuoleiset säätimet säätävät partituurisi näkymää.</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
@@ -205,29 +191,9 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</source>
-        <comment>inspector-tour</comment>
-        <translation>Jos olet muokannut arvoa, voit klikata &quot;Palauta&quot;-painiketta palauttaaksesi sen oletukseen.
-    Jos arvo on tyyliasetuksen hallitsema, voit klikata &quot;Aseta tyyliksi&quot;-painiketta asettaaksesi nykyisen arvon uudeksi oletustyyliksi.
-    Voit myös asettaa tyylin oletuksesi menemällä kohteeseen Muotoilu / Tyyli.</translation>
-    </message>
-    <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
         <translation>Tarkastaja sallii sinun säädellä eri elementtien ominaisuuksia partituurissasi.</translation>
-    </message>
-    <message>
-        <source>That's the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</source>
-        <comment>welcome</comment>
-        <translation>Tähän loppui tämänkertainen esittely!
-    Kun käytät MuseScorea, muita esittelykierroksia putkahtaa esiin selittämään toiminnallisuutta.
-    Poistaaksesi nämä käytöstä, poista valinta kohdasta &quot;Jatka esittelykierrosten näyttämistä&quot; ennen kuin suljet tämän ikkunan.
-    Voit myös ottaa/poistaa käytöstä ja palauttaa esittelykierrokset kohdasta Ohje / Esittelykierrokset.</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -325,6 +291,33 @@
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>Lopuksi, Valintasuodin (Näytä-valikossa) sallii sinun erottaa tietyntyyppiset elementit valinta-alueesta.</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style.</source>
+        <comment>inspector-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File &gt; Save Online.
+    The controls at the right of this toolbar control the display of your score.</source>
+        <comment>welcome</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable and reset tours in Help &gt; Tours.</source>
+        <comment>welcome</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

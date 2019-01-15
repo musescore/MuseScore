@@ -7,11 +7,6 @@
         <translation>Om &apos;n noot by &apos;n akkoord te voeg, druk Shift terwyl jy die letternaam tik, of klik op die notebalk.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
-        <comment>note-input</comment>
-        <translation>Om &apos;n triool of ander onreëlmatige nootgroep te skep, selekteer die duur wat die totale lengte van die onreëlmatige nootgroep bevat, druk dan Ctrl+getal of gebruik Voeg By / Onreëlmatige nootgroepe.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Welkom by MuseScore! Hierdie kort toer sal jou deur die MuseScore-gebruikerskoppelvlak begelei.</translation>
@@ -19,7 +14,7 @@
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation>Die Terugspeel-kontroles-nutsbalk laat jou toe om jou partituur te speel/pouseer en verskeie aspekte van terugspeel te beheer.</translation>
+        <translation>Die Terugspeelkontroles-nutsbalk laat jou toe om jou partituur te speel/pouseer en verskeie aspekte van terugspeel te beheer.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
@@ -29,7 +24,7 @@
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation>Die palette laat jou toe om meeste ander notasie-elemente tot jou partituur te voeg.</translation>
+        <translation>Die palette laat jou toe om meeste ander notasie-elemente by jou partituur te voeg.</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
@@ -39,14 +34,14 @@
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation>Welkom by die palette, waar jy verskeie elemente tot jou partituur gaan byvoeg. Klik &quot;Volgende&quot; om meer te leer.</translation>
+        <translation>Welkom by die palette, waar jy verskeie elemente by jou partituur gaan byvoeg. Klik &quot;Volgende&quot; om meer te leer.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
         <comment>note-input</comment>
-        <translation>Om &apos;n noot van die gekose duur in te voer, tik die letternaam of klik op die notebalk.
-    Drick Ctrl+op/af (macOS: Cmd+op/af) om &apos;n oktaaf te verander.</translation>
+        <translation>Om &apos;n noot van die gekose duur in te voer, tik sy letternaam of klik op die notebalk.
+    Druk Ctrl+op/af (macOS: Cmd+op/af) om &apos;n oktaaf te verander.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
@@ -61,9 +56,9 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation>Om note in te voer met verskillende ritmes in dieselfde maat, gebruik veelvuldige stemme.
-    Elke notebalk kan tot vier stemme hê.
-    Die verstek is stem 1, en dit moet eerste vir elke notebalk.
+        <translation>Om note met verskillende ritmes in dieselfde maat in te voer, gebruik veelvuldige stemme.
+    Elke notebalk kan tot en met vier stemme hê.
+    Die verstek is stem 1, en dit moet eerste vir elke notebalk gebruik word.
     Om note in &apos;n ander stem in te voer, klik op een van hierdie ikone.</translation>
     </message>
     <message>
@@ -80,16 +75,7 @@
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
         <translation>Hierdie is die nutsbalke.
-    Die belangrikste drie is Lêerbewerkings, Terugspeel-kontroles en Noottoevoer.</translation>
-    </message>
-    <message>
-        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
-    The controls at the right of this toolbar control the display of your score.</source>
-        <comment>welcome</comment>
-        <translation>Die Lêerbewerkings-nutsbalk laat jou toe om lêers te skep/open/stoor/druk en wysigings te ontdoen/herdoen.
-    Jy kan ook jou stoor na jou musescore.com-rekening as jy gaan na Lêer &gt; Stoor aanlyn.
-    Die kontroles aan die regterkant van hierdie nutsbalk beheer die vertoon van jou partituur.</translation>
+    Die belangrikste drie is Lêerbewerkings, Terugspeelkontroles en Noottoevoer.</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
@@ -171,7 +157,7 @@
         <comment>navigate-tour</comment>
         <translation>Die navigasietoetse op jou toetsbord, soos PgUp, PgDn, Home en End werk soos in ander toepassings
     om tussen bladsye te beweeg.
-    sleutelborde wat nie hierdie toetse het nie, verskaf dikwels ekwivalente soos Fn+Up/Down/Left/Right.</translation>
+    Toetsborde wat nie hierdie toetse het nie, verskaf dikwels ekwivalente soos Fn+Up/Down/Left/Right.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -183,7 +169,7 @@
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
-        <translation>Addisionele navigasie-nutsmiddels sluit in die tydslyn en navigeerder, beide te vinde in die Aansig-kieslys.</translation>
+        <translation>Addisionele navigasie-nutsmiddels sluit die tydlyn en navigeerder in, beide te vinde in die Aansig-kieslys.</translation>
     </message>
     <message>
         <source>Welcome to the Inspector, where you can change individual properties for selected elements.
@@ -196,7 +182,7 @@
         <source>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
     The set of properties available will differ according to the type of selected elements or elements.</source>
         <comment>inspector-tour</comment>
-        <translation>Begin deur een of meer elemente in jou partituur te selekteer, dan deur die merkblokkies, spinblokkies en ander kontroles te gebruik om waardes van die verskeie eienskappe verander.
+        <translation>Begin deur een of meer elemente in jou partituur te selekteer, dan die merkblokkies, rolblokkies, uitvoukieslyste en ander kontroles te gebruik om waardes van die verskeie eienskappe verander.
     Die stel van eienskappe beskikbaar sal verskil na aanleiding van die tipe van geselekteerde elemente of elemente self.</translation>
     </message>
     <message>
@@ -204,32 +190,12 @@
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
         <translation>As jy elemente van verskillende soorte geselekteer het, is slegs &apos;n paar instellings wat algemeen aan alle elemente is, beskikbaar.
-    Jy kan op die &quot;Notas&quot; en ander knoppies aan die onderkant van die inspekteur klik, om die seleksie te bepeperk tot slegs die elemente van die gespesifiseerde tipe.</translation>
-    </message>
-    <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</source>
-        <comment>inspector-tour</comment>
-        <translation>As jy &apos;n waarde gewysig het, kan jy op die &quot;Stel terug&quot;-knoppie klik om dit na die verstek terug te stel.
-    As die waarde beheer word deur &apos;n stylverstelling, kan jy die &quot;Stel as styl&quot;-knoppie druk om die huidige waarde as die nuwe verstek vir die styl te stel.
-    Jy kan ook styl-verstekwaardes via Formaat &gt; Styl...</translation>
+    Jy kan op die &quot;Note&quot; en ander knoppies aan die onderkant van die inspekteur klik om die seleksie te bepeperk tot slegs die elemente van die gespesifiseerde tipe.</translation>
     </message>
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
-        <translation>Die inspekteur laat jou toe om verskei eienskappe van die elemente in jou partituur te beheer.</translation>
-    </message>
-    <message>
-        <source>That's the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</source>
-        <comment>welcome</comment>
-        <translation>Dit is die einde van hierdie toer!
-    Soos wat jy MuseScore gebruik, sal meer toere opwip om funksionaliteit verder te verduidelik.
-    Om hulle te deaktiveer, haal die merkie langs &quot;Hou aan om toere te wys&quot; af voordat jy hierdie venster toemaak.
-    Jy kan ook toere aktiveer/deaktiveer en terugstel in Hulp &gt; Toere.</translation>
+        <translation>Die inspekteur laat jou toe om verskeie eienskappe van die elemente in jou partituur te beheer.</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -269,15 +235,15 @@
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
     Click &quot;Next&quot; to learn more.</source>
         <comment>timeline-tour</comment>
-        <translation>Welkom by die tydslyn, waar jy &apos;n hoëvlak aansig van die partituur kan sien vir makliker navigasie.
+        <translation>Welkom by die tydlyn, waar jy &apos;n hoëvlak-vereenvoudiging van die partituur kan sien vir makliker navigasie.
     Klik &quot;Volgende&quot; om meer te leer.</translation>
     </message>
     <message>
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
     You can click anywhere to jump to the corresponding location in your score.</source>
         <comment>timeline-tour</comment>
-        <translation>Die tydslyn wys oefenmerke, wysigings van tempo, sleutel en tydmaatteken, en ander punte van belang.
-    Jy kan enige plek klik om te spring na die ooreenstemmende ligging in jou partetuur.</translation>
+        <translation>Die tydlyn wys oefenmerke, veranderings van tempo, sleutel en tydmaatteken en ander punte van belang.
+    Jy kan enige plek klik om na die ooreenstemmende ligging in jou partituur te spring.</translation>
     </message>
     <message>
         <source>The section below contains a row for each instrument.
@@ -288,7 +254,7 @@
         <translation>Die afdeling daaronder bevat &apos;n ry vir elke instrument.
     Elke kassie in die ry stel &apos;n maat vir daardie instrument voor.
     As die kassie verlig is, is daar note in daardie maat.
-    Kassies met &apos;n dun blou lyn stel voor mate wat tans gewys word.</translation>
+    Kassies met &apos;n dun blou buitelyn stel voor mate wat tans gewys word.</translation>
     </message>
     <message>
         <source>MuseScore supports different types of selections: single, list, and range.
@@ -304,7 +270,7 @@
     Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
-        <translation>Om &apos;n enkele seleksie te maak, klik element wat jy wil kies.
+        <translation>Om &apos;n enkele seleksie te maak, klik element wat jy wil selekteer.
     Dit word verlig om aan te dui dat dit geselekteer is.
     Jy kan die linkspyl- en regspyl-toetse gebruik om die seleksie deur die note en rustekens van jou partituur te beweeg.
     Wenk: as jy die Alt-toets druk (Option op macOS), saam met die pyltoets, kan jy deur ander elemente beweeg,
@@ -318,8 +284,8 @@
         <comment>select-tour</comment>
         <translation>&apos;n Lysseleksie is &apos;n kombinasie van enkele seleksies.
     Druk Ctrl (macOS: Cmd) terwyl jy klik om elemente tot die lys seleksie by te voeg of te verwyder.
-    Jy kan ook vinning soortgelyke elemente selekteer deur een te regsklik (macOS: Ctrl+kliek) 
-    en dan een van die &quot;Selekteer&quot;-opsies van die opwip-keuselys te kies.</translation>
+    Jy kan ook vinning soortgelyke elemente selekteer deur een te regsklik (macOS: Ctrl+klik) 
+    en dan een van die &quot;Selekteer&quot;-opsies van die opwip-kieslys te kies.</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -327,7 +293,7 @@
     To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
     You can also extend range selections by holding the Shift key while moving the cursor.</source>
         <comment>select-tour</comment>
-        <translation>&apos;n Reeksseleksie sluit in als van een punt in tyd na &apos;n ander oor een of meer nootbalke.
+        <translation>&apos;n Reeksseleksie sluit alles van een punt in tyd na &apos;n ander oor een of meer nootbalke in.
     Dit word aangedui deur &apos;n blou reghoek wat die hele reeks omsluit.
     Om &apos;n reeksseleksie te doen, klik op die eerste noot, rusteken of maat wat jy wil selekteer, en Shift+klik die laaste een.
     Jy kan ook reeksseleksies uitbrei deur die Shift-toets in te hou terwyl jy die pyltoetse beweeg.</translation>
@@ -344,7 +310,41 @@
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation>Ten slotte, die seleksiefilter (wat in die Aansig-kieslys gevind word) laat jou toe om elemente van &apos;n gegewe tipe van &apos;n reeksseleksie , uit te sluit.</translation>
+        <translation>Ten slotte, die seleksiefilter (wat in die Aansig-kieslys gevind word) laat jou toe om elemente van &apos;n gegewe tipe uit &apos;n reeksseleksie uit te sluit.</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style.</source>
+        <comment>inspector-tour</comment>
+        <translation>As jy &apos;n waarde gewysig het, kan jy op die &quot;Stel terug&quot;-knoppie klik om dit na die verstek terug te stel.
+    As die waarde beheer word deur &apos;n stylverstelling, kan jy die &quot;Stel as styl&quot;-knoppie druk om die huidige waarde as die nuwe verstek vir die styl te stel.
+    Jy kan ook styl-verstekwaardes via Formaat &gt; Styl….</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation>Om &apos;n triool of ander onreëlmatige nootgroep te skep, selekteer die duur wat die totale lengte van die onreëlmatige nootgroep bevat, druk dan Ctrl+getal of gebruik Voeg by &gt; Onreëlmatige nootgroepe.</translation>
+    </message>
+    <message>
+        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File &gt; Save Online.
+    The controls at the right of this toolbar control the display of your score.</source>
+        <comment>welcome</comment>
+        <translation>Die Lêerbewerkings-nutsbalk laat jou toe om lêers te skep/open/stoor/druk en wysigings te ontdoen/herdoen.
+    Jy kan ook jou stoor na jou musescore.com-rekening as jy gaan na Lêer &gt; Stoor aanlyn.
+    Die kontroles aan die regterkant van hierdie nutsbalk beheer die vertoon van jou partituur.</translation>
+    </message>
+    <message>
+        <source>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable and reset tours in Help &gt; Tours.</source>
+        <comment>welcome</comment>
+        <translation>Dit is die einde van hierdie toer!
+    Soos wat jy MuseScore gebruik, sal meer toere opwip om funksionaliteit verder te verduidelik.
+    Om hulle te deaktiveer, haal die merkie langs &quot;Hou aan om toere te wys&quot; af voordat jy hierdie venster toemaak.
+    Jy kan ook toere aktiveer/deaktiveer en terugstel in Hulp &gt; Toere.</translation>
     </message>
 </context>
 </TS>

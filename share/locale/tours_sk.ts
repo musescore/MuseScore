@@ -7,11 +7,6 @@
         <translation>Ak chcete pridať notu k akordu, stlačte Shift spolu s jeho abecedným menom alebo kliknite na notovú osnovu.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
-        <comment>note-input</comment>
-        <translation>Ak chcete vytvoriť triolu alebo inú rytmickú skupinu nôt, zvoľte si trvanie, ktoré je celou dĺžkou skupiny, potom stlačte Ctrl+číslo alebo použite Pridať / Rytmické skupiny nôt,</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation type="unfinished"/>
@@ -71,13 +66,6 @@
     <message>
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
-        <comment>welcome</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
-    The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
         <translation type="unfinished"/>
     </message>
@@ -182,22 +170,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</source>
-        <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
-        <comment>welcome</comment>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>That's the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</source>
         <comment>welcome</comment>
         <translation type="unfinished"/>
     </message>
@@ -289,6 +262,33 @@
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style.</source>
+        <comment>inspector-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File &gt; Save Online.
+    The controls at the right of this toolbar control the display of your score.</source>
+        <comment>welcome</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable and reset tours in Help &gt; Tours.</source>
+        <comment>welcome</comment>
         <translation type="unfinished"/>
     </message>
 </context>
