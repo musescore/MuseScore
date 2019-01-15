@@ -435,6 +435,8 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                         else {
                               editData.element->mousePress(editData);
                               score()->update();
+                              if (editData.element->isTextBase() && mscore->textTools())
+                                    mscore->textTools()->updateTools(editData);
                               }
                         }
                   }
