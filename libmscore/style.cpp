@@ -2276,7 +2276,8 @@ void MStyle::load(XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "TextStyle")
-                  readTextStyle206(this, e);        // obsolete
+                  //readTextStyle206(this, e);        // obsolete
+                  e.readElementText();
             else if (tag == "ottavaHook") {           // obsolete, for 3.0dev bw. compatibility, should be removed in final release
                   qreal y = qAbs(e.readDouble());
                   set(Sid::ottavaHookAbove, y);
