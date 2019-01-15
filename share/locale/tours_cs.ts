@@ -7,11 +7,6 @@
         <translation>Pro přidání noty do akordu stiskněte klávesu Shift současně s názvem noty nebo klepněte do notové osnovy.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add / Tuplets.</source>
-        <comment>note-input</comment>
-        <translation>Pro vytvoření trioly nebo jiné nepravidelné rytmické skupiny vyberte délku noty představující celkovou délku nepravidelné rytmické skupiny, a poté stiskněte Ctrl+číslo nebo použijte Přidat → Nepravidelná rytmická skupina.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Vítejte v MuseScore! Tato krátká prohlídka vám představí uživatelské rozhraní MuseScore.</translation>
@@ -81,15 +76,6 @@
         <comment>welcome</comment>
         <translation>Toto jsou panely.
     Nejdůležitější tři jsou: Práce se soubory, Přehrávání a Vkládání not.</translation>
-    </message>
-    <message>
-        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
-    The controls at the right of this toolbar control the display of your score.</source>
-        <comment>welcome</comment>
-        <translation>Panel Práce se soubory vám umožní vytvořit/uložit/otevřít/vytisknout soubory nebo vrátit zpět / znovu použít změny v notovém zápisu.
-    Notové zápisy můžete ukládat také na svém musescore.com účtu prostřednictvím příkazu Soubor → Uložit na internet.
-    Ovládací prvek na pravé straně panelu umožňuje změnu velikosti zobrazení vašeho notového zápisu. </translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
@@ -207,29 +193,9 @@
     Můžete klepnout na Noty a na jiná tlačítka ve správci dole k omezení výběru jen na prvky určitého typu.</translation>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format / Style.</source>
-        <comment>inspector-tour</comment>
-        <translation>Pokud jste změnil hodnotu, můžete klepnout na tlačítko Obnovit výchozí nastavení, pro její vrácení do výchozího stavu.
-    Pokud hodnotu řídí nastavení stylu, můžete klepnout na tlačítko Nastavit jako styl pro nastavení nynější hodnoty jako nové výchozí pro styl.
-    Výchozí hodnotu stylu také můžete nastavit pomocí Formát → Styl.</translation>
-    </message>
-    <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
         <translation>Správce umožňuje ovládání různých vlastností prvků notového zápisu.</translation>
-    </message>
-    <message>
-        <source>That's the end of this tour!
-    As you use MuseScore, more tours will pop up to further explain functionality.
-    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</source>
-        <comment>welcome</comment>
-        <translation>Toto je konec této prohlídky!
-    Při používání MuseScore se vynoří více funkce programu blíže vysvětlujících prohlídek.
-    Pro jejich vypnutí zrušte před zavřením tohoto okna výběr pro Pokračovat v zobrazování prohlídek.
-    Prohlídky také můžete povolit/zakázat a vrátit zpět v Nápověda → Prohlídky.</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -344,6 +310,33 @@
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
         <translation>A konečně filtr výběru (v nabídce Pohled) umožňuje vyloučení prvků daného typu z rozsahu výběru.</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style.</source>
+        <comment>inspector-tour</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File &gt; Save Online.
+    The controls at the right of this toolbar control the display of your score.</source>
+        <comment>welcome</comment>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
+    You can also enable/disable and reset tours in Help &gt; Tours.</source>
+        <comment>welcome</comment>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
