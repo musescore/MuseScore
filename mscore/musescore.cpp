@@ -3031,7 +3031,7 @@ static bool experimentalMediaScore(const QString& inFilePath)
       mxmlDevice.open(QIODevice::ReadWrite);
       //QString fileName5 = QString("D:\\123\\score.pdf");
       res &= saveMxl(score, &mxmlDevice);
-      file.write("\"midi\": \"");
+      file.write("\"mxml\": \"");
       file.write(mxmlData.toBase64());
       file.write("\",\n");
       }
