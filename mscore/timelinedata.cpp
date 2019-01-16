@@ -322,8 +322,10 @@ void TimelineDataGrid::updateSelection()
       if (!score())
             return;
 
-      if (_selectionPathItem)
+      if (_selectionPathItem) {
             _oldSelectionPath = _selectionPathItem->path();
+            scene()->removeItem(_selectionPathItem);
+            }
       else
             _oldSelectionPath = QPainterPath();
 
@@ -339,8 +341,8 @@ void TimelineDataGrid::updateSelection()
 
       selectionPathItem->setBrush(Qt::NoBrush);
       selectionPathItem->setZValue(ZValues::SELECTION);
-      scene()->removeItem(_selectionPathItem);
       scene()->addItem(selectionPathItem);
+
       _selectionPathItem = selectionPathItem;
 
       keepSelectionChangeInView();
