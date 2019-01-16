@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+Q_DECLARE_LOGGING_CATEGORY(portAudio)
+
 namespace Ms {
 
 class Synth;

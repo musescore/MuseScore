@@ -29,6 +29,8 @@
   #include <portmidi.h>
 #endif
 
+Q_DECLARE_LOGGING_CATEGORY(portMidi)
+
 namespace Ms {
 
 class Seq;

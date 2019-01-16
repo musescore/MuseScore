@@ -208,8 +208,10 @@ QStringList PortMidiDriver::deviceInList() const
       int interf = Pm_CountDevices();
       for (PmDeviceID id = 0; id < interf; id++) {
             const PmDeviceInfo* info = Pm_GetDeviceInfo((PmDeviceID)id);
-            if(info->input)
-                il.append(QString(info->interf) + "," + QString(info->name));
+            if(info->input) {
+                  qCDebug(portMidi) << "appending " << QByteArray(info->name).toHex();
+                  il.append(QString(info->interf) + "," + QString(info->name));
+                  }
             }
       return il;
       }
@@ -224,8 +226,10 @@ QStringList PortMidiDriver::deviceOutList() const
       int interf = Pm_CountDevices();
       for (PmDeviceID id = 0; id < interf; id++) {
             const PmDeviceInfo* info = Pm_GetDeviceInfo((PmDeviceID)id);
-            if(info->output)
-                ol.append(QString(info->interf) + "," + QString(info->name));
+            if(info->output) {
+                  qCDebug(portMidi) << "appending " << QByteArray(info->name).toHex();
+                  ol.append(QString(info->interf) + "," + QString(info->name));
+                  }
             }
       return ol;
       }

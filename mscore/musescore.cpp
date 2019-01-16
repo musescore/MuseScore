@@ -144,8 +144,12 @@ extern Ms::Synthesizer* createZerberus();
 
 #ifdef QT_NO_DEBUG
       Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
+      Q_LOGGING_CATEGORY(portAudio, "portAudio", QtCriticalMsg)
+      Q_LOGGING_CATEGORY(portMidi, "portMidi", QtCriticalMsg)
 #else
       Q_LOGGING_CATEGORY(undoRedo, "undoRedo", QtCriticalMsg)
+      Q_LOGGING_CATEGORY(portAudio, "portAudio", QtCriticalMsg)
+      Q_LOGGING_CATEGORY(portMidi, "portMidi", QtCriticalMsg)
 //      Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
 #endif
 
