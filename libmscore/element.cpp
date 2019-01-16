@@ -174,6 +174,7 @@ Element::Element(const Element& e)
       _offset     = e._offset;
       _track      = e._track;
       _flags      = e._flags;
+      setFlag(ElementFlag::SELECTED, false);
       _tag        = e._tag;
       _z          = e._z;
       _color      = e._color;
