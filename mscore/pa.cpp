@@ -168,7 +168,7 @@ QStringList Portaudio::apiList() const
       for (PaHostApiIndex i = 0; i < apis; ++i) {
             const PaHostApiInfo* info = Pa_GetHostApiInfo(i);
             if (info)
-                  al.append(QString::fromLocal8Bit(info->name));
+                  al.append(QString(info->name));
             }
       return al;
       }
@@ -186,7 +186,7 @@ QStringList Portaudio::deviceList(int apiIdx)
                   PaDeviceIndex idx = Pa_HostApiDeviceIndexToDeviceIndex(apiIdx, i);
                   const PaDeviceInfo* di = Pa_GetDeviceInfo(idx);
                   if (di)
-                        dl.append(QString::fromLocal8Bit(di->name));
+                        dl.append(QString(di->name));
                   }
             }
       return dl;
@@ -220,7 +220,7 @@ bool Portaudio::start(bool)
 //---------------------------------------------------------
 
 bool Portaudio::stop()
-      {
+      {fromLocal8Bit
       PaError err = Pa_StopStream(stream);      // sometimes the program hangs here on exit
       if (err != paNoError) {
             qDebug("Portaudio: stop failed: %s", Pa_GetErrorText(err));
