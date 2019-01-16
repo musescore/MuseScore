@@ -7,11 +7,19 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   TimelineDataLabel
+//---------------------------------------------------------
+
 TimelineDataLabel::TimelineDataLabel(TimelineDataLabels *view, QString text, int nMeta)
       : TimelineLabel(view, text, view->getParent()->getParent()->getFont(), nMeta, view->getParent()->getParent()->cellHeight())
       {
 
       }
+
+//---------------------------------------------------------
+//   updateLabelWidths
+//---------------------------------------------------------
 
 void TimelineDataLabels::updateLabelWidths(int newWidth)
       {
@@ -22,6 +30,10 @@ void TimelineDataLabels::updateLabelWidths(int newWidth)
       // -2 makes sure the sDcene rect is always smaller than the view rect, thus no scrollbar is displayed
       setSceneRect(-1, -1, newWidth - 2, getParent()->getParent()->cellHeight() * _labels.length());
       }
+
+//---------------------------------------------------------
+//   TimelineDataLabels
+//---------------------------------------------------------
 
 TimelineDataLabels::TimelineDataLabels(TimelineData *parent)
       : QGraphicsView(parent)
@@ -34,10 +46,18 @@ TimelineDataLabels::TimelineDataLabels(TimelineData *parent)
       connect(parent, SIGNAL(splitterMoved(int, int)), this, SLOT(updateLabelWidths(int)));
       }
 
+//---------------------------------------------------------
+//   getParent
+//---------------------------------------------------------
+
 TimelineData* TimelineDataLabels::getParent()
       {
       return static_cast<TimelineData*>(parent());
       }
+
+//---------------------------------------------------------
+//   updateLabels
+//---------------------------------------------------------
 
 void TimelineDataLabels::updateLabels()
       {
@@ -61,6 +81,10 @@ void TimelineDataLabels::updateLabels()
 
       updateLabelWidths(getParent()->sizes()[0]);
       }
+
+//---------------------------------------------------------
+//   score
+//---------------------------------------------------------
 
 Score* TimelineDataLabels::score()
       {
@@ -214,13 +238,15 @@ QList<TimelineDataGridCell*> TimelineDataGrid::getVisibleCells()
 
       QSet<QPair<Measure*, int>> visibleMeasures; // QPair<measure, staffIdx> used for _grid lookup
 
+      Score* localScore = score();
+
       // Fill visibleMeasures
-      Measure* currMeasure = score()->firstMeasure();
+      Measure* currMeasure = localScore->firstMeasure();
       for (; currMeasure; currMeasure = currMeasure->nextMeasure()) {
 
-            if (currMeasure->mmRest() &&score()->styleB(Sid::createMultiMeasureRests)) {
-                  for (int staffIdx = 0; staffIdx < score()->nstaves(); staffIdx++) {
-                        QRectF bounds = staffMeasureBounds(currMeasure->mmRest(), staffIdx);
+            if (currMeasure->mmRest() && localScore->styleB(Sid::createMultiMeasureRests)) {
+                  for (int staffIdx = 0; staffIdx < localScore->nstaves(); staffIdx++) {
+                        QRectF bounds = staffMeasureBounds(currMeasure->mmRest(), staffIdx, localScore);
                         if (!canvas.intersects(bounds))
                               continue;
 
@@ -236,8 +262,8 @@ QList<TimelineDataGridCell*> TimelineDataGrid::getVisibleCells()
                         break;
                   }
             else {
-                  for (int staffIdx = 0; staffIdx < score()->nstaves(); staffIdx++) {
-                        QRectF bounds = staffMeasureBounds(currMeasure, staffIdx);
+                  for (int staffIdx = 0; staffIdx < localScore->nstaves(); staffIdx++) {
+                        QRectF bounds = staffMeasureBounds(currMeasure, staffIdx, localScore);
 
                         if (canvas.intersects(bounds)) {
                               QPair<Measure*, int> visibleMeasure(currMeasure, staffIdx);
@@ -270,9 +296,9 @@ QRectF TimelineDataGrid::gridBounds() {
 //   or if the staff doesn't show
 //---------------------------------------------------------
 
-QRectF TimelineDataGrid::staffMeasureBounds(Measure* measure, int staffIdx) {
+QRectF TimelineDataGrid::staffMeasureBounds(Measure* measure, int staffIdx, Score* localScore) {
       System* system = measure->system();
-      if (!system || !score()->staff(staffIdx)->show())
+      if (!system || !localScore->staff(staffIdx)->show())
             return QRectF();
 
       QRectF staffRect = QRectF(system->canvasBoundingRect().left(),
@@ -281,7 +307,7 @@ QRectF TimelineDataGrid::staffMeasureBounds(Measure* measure, int staffIdx) {
                                 system->staff(staffIdx)->bbox().height());
 
       // Staves with one line return bbox height of 0. Set to 1 for intersection
-      if (score()->staff(staffIdx)->lines(measure->tick()) < 2)
+      if (localScore->staff(staffIdx)->lines(measure->tick()) < 2)
             staffRect.setHeight(1);
 
       return measure->canvasBoundingRect().intersected(staffRect);
@@ -434,6 +460,10 @@ void TimelineDataGrid::updateGrid()
       updateView();
       updateSelection();
       }
+
+//---------------------------------------------------------
+//   redrawGrid
+//---------------------------------------------------------
 
 void TimelineDataGrid::redrawGrid()
       {

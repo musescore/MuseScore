@@ -11,14 +11,21 @@ class TimelineData;
 class TimelineDataLabels;
 class TimelineDataGrid;
 
+//---------------------------------------------------------
+//   TimelineDataLabel
+//---------------------------------------------------------
+
 class TimelineDataLabel : public TimelineLabel
       {
-
       TimelineDataLabels* _parent;
 
    public:
       TimelineDataLabel(TimelineDataLabels* view, QString text, int nMeta);
       };
+
+//---------------------------------------------------------
+//   TimelineDataLabels
+//---------------------------------------------------------
 
 class TimelineDataLabels : public QGraphicsView
       {
@@ -88,7 +95,7 @@ class TimelineDataGrid : public QGraphicsView
       void populateGrid();
       QList<TimelineDataGridCell*> getVisibleCells();
 
-      QRectF staffMeasureBounds(Measure* measure, int staffIdx);
+      QRectF staffMeasureBounds(Measure* measure, int staffIdx, Score* localScore);
 
       void keepSelectionChangeInView();
       QList<TimelineDataGridCell*> getSelectedCells();

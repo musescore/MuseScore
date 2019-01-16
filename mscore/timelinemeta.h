@@ -7,18 +7,40 @@
 namespace Ms {
 
 class Timeline;
-//class TimelineLabel;
 class TimelineMeta;
 class TimelineMetaRows;
 class TimelineMetaLabels;
 
+//---------------------------------------------------------
+//   TimelineMetaLabel
+//---------------------------------------------------------
+
 class TimelineMetaLabel : public TimelineLabel
       {
-
       TimelineMetaLabels* _parent;
 
    public:
       TimelineMetaLabel(TimelineMetaLabels* view, QString text, int nMeta, QFont font);
+      };
+
+//---------------------------------------------------------
+//   TimelineMetaLabels
+//---------------------------------------------------------
+
+class TimelineMetaLabels : public QGraphicsView
+      {
+      Q_OBJECT
+
+      QList<TimelineMetaLabel*> _labels;
+
+   public slots:
+      void updateLabelWidths(int newWidth);
+
+   public:
+      TimelineMetaLabels(TimelineMeta* parent);
+      TimelineMeta* getParent();
+      void updateLabels();
+      Score* score();
       };
 
 //---------------------------------------------------------
@@ -70,22 +92,6 @@ class TimelineMetaRowsValue : public QGraphicsItemGroup
       bool contains(Element* element);
 
       void redraw(int newWidth);
-      };
-
-class TimelineMetaLabels : public QGraphicsView
-      {
-      Q_OBJECT
-
-      QList<TimelineMetaLabel*> _labels;
-
-   public slots:
-      void updateLabelWidths(int newWidth);
-
-   public:
-      TimelineMetaLabels(TimelineMeta* parent);
-      TimelineMeta* getParent();
-      void updateLabels();
-      Score* score();
       };
 
 //---------------------------------------------------------
