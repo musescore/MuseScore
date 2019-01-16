@@ -50,7 +50,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::VISIBLE,                 "visible",                 false, "visible",               P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "visible")          },
       { Pid::Z,                       "z",                       false, "z",                     P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "z")                },
       { Pid::SMALL,                   "small",                   false, "small",                 P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "small")            },
-      { Pid::SHOW_COURTESY,           "show_courtesy",           false, "showCourtesy",          P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "show courtesy")    },
+      { Pid::SHOW_COURTESY,           "show_courtesy",           false, "showCourtesySig",       P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "show courtesy")    },
       { Pid::LINE_TYPE,               "line_type",               false, "lineType",              P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "line type")        },
       { Pid::PITCH,                   "pitch",                   true,  "pitch",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "pitch")            },
 
