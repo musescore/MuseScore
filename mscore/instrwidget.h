@@ -31,6 +31,7 @@ class InstrumentGenre;
 
 enum class ListItemOp : char { KEEP, I_DELETE, ADD, UPDATE };
 enum { PART_LIST_ITEM = QTreeWidgetItem::UserType, STAFF_LIST_ITEM };
+enum class PartiturSelectionType : char { PARENTS_SELECTED, CHILDREN_SELECTED, NONE_SELECTED };
 
 //---------------------------------------------------------
 //   PartListItem
@@ -126,7 +127,9 @@ class InstrumentTemplateListItem : public QTreeWidgetItem {
 
 class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
       Q_OBJECT
-
+      PartiturSelectionType _partiturSelectionType;
+      QList<QTreeWidgetItem*> _partiturSelectedItems;
+      
    private slots:
       void on_instrumentList_itemSelectionChanged();
       void on_instrumentList_itemActivated(QTreeWidgetItem* item, int);
@@ -142,6 +145,9 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
 
       void on_instrumentGenreFilter_currentIndexChanged(int);
       void filterInstrumentsByGenre(QTreeWidget *, QString);
+      
+      void sanitizePartiturListSelection();
+      void movePartiturListItems(bool moveUp);
 
    public slots:
       void buildTemplateList();
