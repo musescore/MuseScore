@@ -196,7 +196,9 @@ void Timeline::wheelEvent(QWheelEvent* event)
                   changeWidth(-1);
 
             // TODO: Create a "redraw" function that updates the view without rescanning the score
-            updateTimeline();
+//            updateTimeline();
+            metaWidget()->rowsView()->redrawRows();
+            dataWidget()->gridView()->redrawGrid();
 
             // Attempt to keep mouse in original spot
             dataWidget()->gridView()->adjustScrollBar(originalScrollBarValue, globalCursorPos, originalGridWidth);

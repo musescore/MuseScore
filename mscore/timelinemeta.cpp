@@ -13,8 +13,8 @@
 
 namespace Ms {
 
-TimelineMetaLabel::TimelineMetaLabel(TimelineMetaLabels *view, QString text, int nMeta)
-      : TimelineLabel(view, text, view->getParent()->getParent()->getFont(), nMeta, view->getParent()->cellHeight())
+TimelineMetaLabel::TimelineMetaLabel(TimelineMetaLabels *view, QString text, int nMeta, QFont font)
+      : TimelineLabel(view, text, font, nMeta, view->getParent()->cellHeight())
       {
 
       }
@@ -23,17 +23,17 @@ TimelineMetaLabel::TimelineMetaLabel(TimelineMetaLabels *view, QString text, int
 //   TimelineMetaRowsValue
 //---------------------------------------------------------
 
-TimelineMetaRowsValue::TimelineMetaRowsValue(TimelineMetaRows* parent, Element* element, QString text, int x, int y)
-      : _parent(parent), _item(element)
+TimelineMetaRowsValue::TimelineMetaRowsValue(TimelineMetaRows* parent, Element* element, QString text, int column, int stagger, int y, QFont font)
+      : _parent(parent), _item(element), _column(column), _stagger(stagger)
       {
       const int margin = 4;
-      QGraphicsRectItem* rectItem = new QGraphicsRectItem(x, y, getTextWidth(text) + margin, _parent->cellHeight());
-      addToGroup(rectItem);
+      _rectItem = new QGraphicsRectItem(column * _parent->cellWidth() + stagger, y, getTextWidth(text, font) + margin, _parent->cellHeight());
+      addToGroup(_rectItem);
 
-      QGraphicsTextItem* textItem = new QGraphicsTextItem(text, this);
-      textItem->setFont(_parent->getParent()->getParent()->getFont());
-      positionText(rectItem, textItem);
-      addToGroup(textItem);
+      _textItem = new QGraphicsTextItem(text, this);
+      _textItem->setFont(font);
+      positionText();
+      addToGroup(_textItem);
 
       resetBrush();
       }
@@ -42,22 +42,21 @@ TimelineMetaRowsValue::TimelineMetaRowsValue(TimelineMetaRows* parent, Element* 
 //   positionText
 //---------------------------------------------------------
 
-void TimelineMetaRowsValue::positionText(QGraphicsRectItem* rectItem, QGraphicsTextItem* textItem)
+void TimelineMetaRowsValue::positionText()
       {
-      QPointF targetCenter = rectItem->boundingRect().center();
-      QPointF offset = targetCenter - textItem->boundingRect().center();
-      textItem->setPos(textItem->boundingRect().translated(offset).topLeft());
+      QPointF targetCenter = _rectItem->boundingRect().center();
+      QPointF offset = targetCenter - _textItem->boundingRect().center();
+      _textItem->setPos(_textItem->boundingRect().translated(offset).topLeft());
       }
 
 //---------------------------------------------------------
 //   getTextWidth
 //---------------------------------------------------------
 
-qreal TimelineMetaRowsValue::getTextWidth(QString text)
+qreal TimelineMetaRowsValue::getTextWidth(QString text, QFont font)
       {
       // TODO: Elide text if it extends past grid width
-      QFont applicationFont = _parent->getParent()->getParent()->getFont();
-      QSizeF textSize = QFontMetricsF(applicationFont).size(Qt::TextSingleLine, text);
+      QSizeF textSize = QFontMetricsF(font).size(Qt::TextSingleLine, text);
       return textSize.width();
       }
 
@@ -72,21 +71,6 @@ void TimelineMetaRowsValue::setZ(int z)
       }
 
 //---------------------------------------------------------
-//   getRect
-//---------------------------------------------------------
-
-QGraphicsRectItem* TimelineMetaRowsValue::getRect()
-      {
-      QList<QGraphicsItem*> items = childItems();
-      for (QGraphicsItem* item : items) {
-            QGraphicsRectItem* rect = qgraphicsitem_cast<QGraphicsRectItem*>(item);
-            if (rect)
-                  return rect;
-            }
-      return nullptr;
-      }
-
-//---------------------------------------------------------
 //   resetBrush
 //---------------------------------------------------------
 
@@ -95,7 +79,7 @@ void TimelineMetaRowsValue::resetBrush()
       if (_selected)
             selectBrush();
       else
-            getRect()->setBrush(QBrush(Qt::darkGray));
+            _rectItem->setBrush(QBrush(Qt::darkGray));
       }
 
 //---------------------------------------------------------
@@ -130,7 +114,7 @@ void TimelineMetaRowsValue::selectValue()
 void TimelineMetaRowsValue::selectBrush()
       {
       _selected = true;
-      getRect()->setBrush(QBrush(Qt::blue));
+      _rectItem->setBrush(QBrush(Qt::blue));
       }
 
 //---------------------------------------------------------
@@ -140,7 +124,7 @@ void TimelineMetaRowsValue::selectBrush()
 void TimelineMetaRowsValue::hoverBrush()
       {
       if (!_selected)
-            getRect()->setBrush(QBrush(Qt::red));
+            _rectItem->setBrush(QBrush(Qt::red));
       }
 
 //---------------------------------------------------------
@@ -164,6 +148,20 @@ bool TimelineMetaRowsValue::contains(Element *element)
             }
 
       return false;
+      }
+
+void TimelineMetaRowsValue::redraw(int newWidth)
+      {
+      QRectF oldRect = _rectItem->rect();
+      QPointF textPos = _textItem->pos();
+      QPointF textOffsetFromRect = oldRect.topLeft() - textPos;
+      QRectF newRect = oldRect;
+
+      newRect.setX(_column * newWidth + _stagger);
+      newRect.setWidth(oldRect.width()); // setX changes width
+      textPos = newRect.topLeft() + textOffsetFromRect;
+      _rectItem->setRect(newRect);
+      _textItem->setPos(textPos);
       }
 
 TimelineMetaLabels::TimelineMetaLabels(TimelineMeta* parent)
@@ -200,17 +198,19 @@ void TimelineMetaLabels::updateLabels()
       if (!score())
             return;
 
+      QFont font = getParent()->getParent()->getFont();
+
       int nMeta = 0;
       for (Meta meta : getParent()->metas()) {
             if (meta.visible) {
-                  TimelineMetaLabel* metaLabel = new TimelineMetaLabel(this, meta.metaName, nMeta);
+                  TimelineMetaLabel* metaLabel = new TimelineMetaLabel(this, meta.metaName, nMeta, font);
                   _labels.append(metaLabel);
                   scene()->addItem(metaLabel);
                   nMeta++;
                   }
             }
       // Add measure label here
-      TimelineMetaLabel* measureLabel = new TimelineMetaLabel(this, tr("Measure"), nMeta);
+      TimelineMetaLabel* measureLabel = new TimelineMetaLabel(this, tr("Measure"), nMeta, font);
       _labels.append(measureLabel);
       scene()->addItem(measureLabel);
 
@@ -254,6 +254,18 @@ void TimelineMetaRows::updateRows()
       updateMetas();
       }
 
+void TimelineMetaRows::redrawRows()
+      {
+      for (QGraphicsItem* item : _redrawList)
+            scene()->removeItem(item);
+
+      drawRows();
+      int newWidth = cellWidth();
+      for (TimelineMetaRowsValue* value : _metaList)
+            value->redraw(newWidth);
+
+      }
+
 //---------------------------------------------------------
 //   updateSelection
 //---------------------------------------------------------
@@ -264,12 +276,10 @@ void TimelineMetaRows::updateSelection()
       QList<TimelineMetaRowsValue*> values = getSelectedValues();
 
       for (TimelineMetaRowsValue* value : _metaList) {
-            if (values.contains(value)) {
+            if (values.contains(value))
                   value->selectBrush();
-                  }
-            else {
+            else
                   value->deselect();
-                  }
             }
       }
 
@@ -305,24 +315,34 @@ void TimelineMetaRows::drawRows()
       if (!score())
             return;
 
+      _currentFont = getParent()->getParent()->getFont();
+      _redrawList.clear();
+
       int gridWidth = cellWidth() * score()->nmeasures();
       int nRows = getParent()->nVisibleMetaRows() + 1; // One row for measures
+      int localCellHeight = cellHeight();
 
       for (int row = 0; row < nRows; row++) {
-            QGraphicsRectItem* rect = new QGraphicsRectItem(0, cellHeight() * row, gridWidth, cellHeight());
+            QGraphicsRectItem* rect = new QGraphicsRectItem(0, localCellHeight * row, gridWidth, localCellHeight);
             scene()->addItem(rect);
+            _redrawList.append(rect);
             }
 
-      drawMeasureNumbers((nRows - 1) * cellHeight());
+      drawMeasureNumbers((nRows - 1) * localCellHeight);
 
       // Use 1 to make sure rect borders are in the sceneRect
-      setSceneRect(-1, -1, gridWidth + 1, cellHeight() * nRows + 1);
+      setSceneRect(-1, -1, gridWidth + 1, localCellHeight * nRows + 1);
       }
+
+//---------------------------------------------------------
+//   updateMetas
+//---------------------------------------------------------
 
 void TimelineMetaRows::updateMetas()
       {
       _metaList.clear();
-      if (!score())
+      Score* localScore = score();
+      if (!localScore)
             return;
 
       QList<int> correctRowIndexes = getParent()->getCorrectMetaRows(); // Lookup using TimelineMeta::MetaRow
@@ -331,7 +351,7 @@ void TimelineMetaRows::updateMetas()
       int keySigRowIndex = correctRowIndexes[int(TimelineMeta::MetaRow::KEY_SIGNATURE)];
       if (keySigRowIndex != -1) {
             bool foundStartingKeySig = false;
-            for (Segment* segment = score()->firstMeasure()->first(); segment->tick() <= 0; segment = segment->next()) {
+            for (Segment* segment = localScore->firstMeasure()->first(); segment->tick() <= 0; segment = segment->next()) {
                   if (segment->isKeySigType()) {
                         foundStartingKeySig = true;
                         break;
@@ -342,38 +362,37 @@ void TimelineMetaRows::updateMetas()
             }
 
       int cellNumber = 0;
-      for (Measure* measure = score()->firstMeasure(); measure; measure = measure->nextMeasure()) {
-            int x = cellNumber * cellWidth();
+      for (Measure* measure = localScore->firstMeasure(); measure; measure = measure->nextMeasure()) {
             int rowIndex;
 
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                   rowIndex = correctRowIndexes[int(TimelineMeta::MetaRow::TEMPO)];
-                  std::vector<Element*> tempoAnnotations = segment->findAnnotations(ElementType::TEMPO_TEXT, 0, score()->nstaves() * VOICES);
+                  std::vector<Element*> tempoAnnotations = segment->findAnnotations(ElementType::TEMPO_TEXT, 0, localScore->nstaves() * VOICES);
                   if (rowIndex != -1 && !tempoAnnotations.empty())
-                        drawTempoMeta(tempoAnnotations, x, rowIndex);
+                        drawTempoMeta(tempoAnnotations, cellNumber, rowIndex);
 
                   rowIndex = correctRowIndexes[int(TimelineMeta::MetaRow::TIME_SIGNATURE)];
                   if (rowIndex != -1 && segment->isTimeSigType())
-                        drawTimeSigMeta(segment, x, rowIndex);
+                        drawTimeSigMeta(segment, cellNumber, rowIndex);
 
                   rowIndex = correctRowIndexes[int(TimelineMeta::MetaRow::REHEARSAL_MARK)];
-                  std::vector<Element*> rehearsalAnnotations = segment->findAnnotations(ElementType::REHEARSAL_MARK, 0, score()->nstaves() * VOICES);
+                  std::vector<Element*> rehearsalAnnotations = segment->findAnnotations(ElementType::REHEARSAL_MARK, 0, localScore->nstaves() * VOICES);
                   if (rowIndex != -1 && !rehearsalAnnotations.empty())
-                        drawRehersalMarkMeta(rehearsalAnnotations, x, rowIndex);
+                        drawRehersalMarkMeta(rehearsalAnnotations, cellNumber, rowIndex);
 
                   rowIndex = correctRowIndexes[int(TimelineMeta::MetaRow::KEY_SIGNATURE)];
                   if (rowIndex != -1 && segment->isKeySigType())
-                        drawKeySigMeta(segment, x, rowIndex);
+                        drawKeySigMeta(segment, cellNumber, rowIndex);
 
                   rowIndex = correctRowIndexes[int(TimelineMeta::MetaRow::BARLINE)];
                   if (rowIndex != -1 && (segment->isBarLine() || segment->isStartRepeatBarLineType() ||
                                          segment->isBeginBarLineType() || segment->isEndBarLineType()))
-                        drawBarlineMeta(segment, x, rowIndex);
+                        drawBarlineMeta(segment, cellNumber, rowIndex);
                   }
 
             rowIndex = correctRowIndexes[int(TimelineMeta::MetaRow::JUMPS_AND_MARKERS)];
             if (rowIndex != -1)
-                  drawJumpMarkersMeta(measure->el(), x, rowIndex);
+                  drawJumpMarkersMeta(measure->el(), cellNumber, rowIndex);
             cellNumber++;
             resetStagger();
             }
@@ -386,7 +405,7 @@ void TimelineMetaRows::updateMetas()
 void TimelineMetaRows::drawMetaValue(Element* element, QString text, int x, int row)
       {
       QString cleanText = text.replace("\n", "");
-      TimelineMetaRowsValue* value = new TimelineMetaRowsValue(this, element, cleanText, x + getStagger(row), row * cellHeight());
+      TimelineMetaRowsValue* value = new TimelineMetaRowsValue(this, element, cleanText, x, getStagger(row), row * cellHeight(), _currentFont);
       int newZ = getNewZValue();
       value->setZ(newZ);
 
@@ -602,12 +621,13 @@ void TimelineMetaRows::drawMeasureNumbers(int y)
       int cellNumber = 0;
 
       int gridWidth = cellWidth() * score()->nmeasures();
+      QFont font = getParent()->getParent()->getFont();
 
       for (Measure* measure = score()->firstMeasure(); measure; measure = measure->nextMeasure()) {
             if (measureCounter < 0) {
                   QString measureNumber = (measure->isIrregular())? "( )" : QString::number(measure->no() + 1);
                   QGraphicsTextItem* measureNumberItem = new QGraphicsTextItem(measureNumber);
-                  measureNumberItem->setFont(getParent()->getParent()->getFont());
+                  measureNumberItem->setFont(font);
 
                   // TODO: Keep first measure number within grid at all times
                   qreal x = cellNumber * cellWidth();
@@ -623,6 +643,8 @@ void TimelineMetaRows::drawMeasureNumbers(int y)
                         scene()->addItem(measureNumberItem);
 
                   measureCounter += increment;
+
+                  _redrawList.append(measureNumberItem);
                   }
             measureCounter--;
             cellNumber++;

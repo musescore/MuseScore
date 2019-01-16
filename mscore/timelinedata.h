@@ -106,6 +106,7 @@ class TimelineDataGrid : public QGraphicsView
 
       void updateSelection();
       void updateGrid();
+      void redrawGrid();
 
       int scrollBarValue() { return horizontalScrollBar()->value(); }
       void setScrollBarValue(int v) { horizontalScrollBar()->setValue(v); }

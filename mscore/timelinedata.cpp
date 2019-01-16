@@ -126,6 +126,7 @@ TimelineDataGrid::TimelineDataGrid(TimelineData *parent)
 TimelineDataGridCell* TimelineDataGrid::getCell(int row, int column)
       {
       int gridIdx = column * _nStaves + row;
+//      qDebug() << gridIdx;
       if (_grid.length() >= gridIdx + 1)
             return _grid[gridIdx];
       else
@@ -433,6 +434,33 @@ void TimelineDataGrid::updateGrid()
       updateView();
       updateSelection();
       }
+
+void TimelineDataGrid::redrawGrid()
+      {
+      int nMeasures = score()->nmeasures();
+      int newX = 0;
+      int gridIdx = 0;
+      int newWidth = cellWidth();
+
+      for (int row = 0; row < nMeasures; row++) {
+            for (int column = 0; column < _nStaves; column++) {
+                  TimelineDataGridCell* cell = _grid[gridIdx];
+
+                  QRectF newRect = cell->rect();
+                  newRect.setX(newX);
+                  newRect.setWidth(newWidth);
+                  cell->setRect(newRect);
+
+                  gridIdx++;
+                  }
+            newX += newWidth;
+            }
+
+      updateView();
+      updateSelection();
+      setSceneRect(-1, -1, newWidth * nMeasures + 1, cellHeight() * _nStaves + 1);
+      }
+
 
 //---------------------------------------------------------
 //   adjustScrollBar

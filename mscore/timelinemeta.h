@@ -18,7 +18,7 @@ class TimelineMetaLabel : public TimelineLabel
       TimelineMetaLabels* _parent;
 
    public:
-      TimelineMetaLabel(TimelineMetaLabels* view, QString text, int nMeta);
+      TimelineMetaLabel(TimelineMetaLabels* view, QString text, int nMeta, QFont font);
       };
 
 //---------------------------------------------------------
@@ -43,12 +43,18 @@ class TimelineMetaRowsValue : public QGraphicsItemGroup
       bool _selected = false;
       Element* _item;
 
-      void positionText(QGraphicsRectItem* rectItem, QGraphicsTextItem* textItem);
-      qreal getTextWidth(QString text);
-      QGraphicsRectItem* getRect();
+      QGraphicsRectItem* _rectItem = nullptr;
+      QGraphicsTextItem* _textItem = nullptr;
+
+      // Used for redraw
+      int _column;
+      int _stagger;
+
+      void positionText();
+      qreal getTextWidth(QString text, QFont font);
 
    public:
-      TimelineMetaRowsValue(TimelineMetaRows* parent, Element* element, QString text, int x, int y);
+      TimelineMetaRowsValue(TimelineMetaRows* parent, Element* element, QString text, int x, int stagger, int y, QFont font);
       void setZ(int z);
       void resetZ() { setZValue(_originalZValue); }
       int getZ() { return _originalZValue; }
@@ -62,6 +68,8 @@ class TimelineMetaRowsValue : public QGraphicsItemGroup
       bool selected() { return _selected; }
 
       bool contains(Element* element);
+
+      void redraw(int newWidth);
       };
 
 class TimelineMetaLabels : public QGraphicsView
@@ -93,6 +101,9 @@ class TimelineMetaRows : public QGraphicsView
       const int _staggerDistance = 5;
 
       TimelineMetaRowsValue* _oldHoverValue = nullptr;
+      QFont _currentFont;
+
+      QList<QGraphicsItem*> _redrawList;
 
       QList<TimelineMetaRowsValue*> _metaList;
       QList<TimelineMetaRowsValue*> getSelectedValues();
@@ -124,6 +135,7 @@ class TimelineMetaRows : public QGraphicsView
       TimelineMetaRows(TimelineMeta* parent);
       void updateRows();
       void updateSelection();
+      void redrawRows();
 
       int cellWidth();
       int cellHeight();
