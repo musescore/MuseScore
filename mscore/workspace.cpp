@@ -122,7 +122,7 @@ void MuseScore::deleteWorkspace()
             return;
 
       QMessageBox::StandardButton reply;
-      reply = QMessageBox::question(0,
+      reply = QMessageBox::question(nullptr,
                  QWidget::tr("Are you sure?"),
                  QWidget::tr("Do you really want to delete the '%1' workspace?").arg(workspace->name()),
                  QMessageBox::Yes | QMessageBox::No,
@@ -227,7 +227,7 @@ static void writeFailed(const QString& _path)
 //---------------------------------------------------------
 
 Workspace::Workspace()
-   : QObject(0)
+   : QObject(nullptr)
       {
       _dirty = false;
       _readOnly = false;
@@ -1116,7 +1116,7 @@ QAction* Workspace::findActionFromString(QString string)
             if (pair.second == string)
                   return pair.first;
             }
-      return 0;
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -1129,7 +1129,7 @@ QString Workspace::findStringFromAction(QAction* action)
             if (pair.first == action)
                   return pair.second;
             }
-      return 0;
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -1154,7 +1154,7 @@ QMenu* Workspace::findMenuFromString(QString string)
             if (pair.second == string)
                   return pair.first;
             }
-      return 0;
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -1167,7 +1167,7 @@ QString Workspace::findStringFromMenu(QMenu* menu)
             if (pair.first == menu)
                   return pair.second;
             }
-      return 0;
+      return nullptr;
       }
 
 //---------------------------------------------------------
