@@ -652,29 +652,40 @@ void TimelineMetaRows::drawMeasureNumbers(int y)
 
       int gridWidth = cellWidth() * score()->nmeasures();
       QFont font = getParent()->getParent()->getFont();
+      qreal oldRightSide = -1;
+      const qreal spacer = 1;
 
       for (Measure* measure = score()->firstMeasure(); measure; measure = measure->nextMeasure()) {
             if (measureCounter < 0) {
                   QString measureNumber = (measure->isIrregular())? "( )" : QString::number(measure->no() + 1);
                   QGraphicsTextItem* measureNumberItem = new QGraphicsTextItem(measureNumber);
                   measureNumberItem->setFont(font);
+                  QSizeF textSize = QFontMetricsF(measureNumberItem->font()).size(Qt::TextSingleLine, measureNumber);
 
-                  // TODO: Keep first measure number within grid at all times
                   qreal x = cellNumber * cellWidth();
                   QPointF targetCenter = QPointF(x + cellWidth() / 2.0, y + cellHeight() / 2.0);
                   QPointF offset = targetCenter - measureNumberItem->boundingRect().center();
-                  measureNumberItem->setPos(measureNumberItem->boundingRect().translated(offset).topLeft());
+                  QRectF newRect = measureNumberItem->boundingRect().translated(offset);
 
-                  // Don't display if extends past grid length
-                  QSizeF textSize = QFontMetricsF(measureNumberItem->font()).size(Qt::TextSingleLine, measureNumber);
-                  qreal rightSideOfText = measureNumberItem->boundingRect().center().x() + textSize.width() / 2.0;
-                  rightSideOfText += measureNumberItem->pos().x();
-                  if (rightSideOfText <= gridWidth)
+                  // Fallen off the left side, shift right to fit
+                  qreal itemCenterX = newRect.center().x();
+                  qreal textRadius = textSize.width() / 2.0;
+                  qreal leftSide = itemCenterX - textRadius - spacer;
+                  qreal rightSide = itemCenterX + textRadius + spacer;
+                  if (leftSide < 0) {
+                        newRect.setX(newRect.x() - leftSide);
+                        leftSide = 0;
+                        rightSide = textSize.width() + spacer;
+                        }
+                  measureNumberItem->setPos(newRect.topLeft());
+
+                  if (oldRightSide <= leftSide && rightSide <= gridWidth) {
                         scene()->addItem(measureNumberItem);
+                        oldRightSide = rightSide;
+                        _redrawList.append(measureNumberItem);
+                        }
 
                   measureCounter += increment;
-
-                  _redrawList.append(measureNumberItem);
                   }
             measureCounter--;
             cellNumber++;
