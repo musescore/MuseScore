@@ -50,16 +50,18 @@ class TimelineDataLabels : public QGraphicsView
 class TimelineDataGridCell : public QGraphicsRectItem
       {
       Measure* _measure;
+      int _measureIdx; // For lasso selection, ignores measure properties
       int _staffIdx;
 
       bool isFilled() { return !_measure->isMeasureRest(_staffIdx) ||
                                 _measure->isRepeatMeasure(_measure->score()->staff(_staffIdx)); }
    public:
-      TimelineDataGridCell(Measure* measure, int staffIdx);
+      TimelineDataGridCell(Measure* measure, int staffIdx, int measureIdx);
       QPair<Measure*, int> infoPair();
 
       Measure* getMeasureToSelect();
       Measure* measure() { return _measure; }
+      int measureIdx() { return _measureIdx; }
       int staffIdx() { return _staffIdx; }
 };
 

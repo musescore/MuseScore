@@ -95,10 +95,9 @@ Score* TimelineDataLabels::score()
 //   TimelineDataCell
 //---------------------------------------------------------
 
-TimelineDataGridCell::TimelineDataGridCell(Measure* measure, int staffIdx)
-{
-      _measure = measure;
-      _staffIdx = staffIdx;
+TimelineDataGridCell::TimelineDataGridCell(Measure* measure, int staffIdx, int measureIdx)
+      : _measure(measure), _staffIdx(staffIdx), _measureIdx(measureIdx)
+      {
       setPen(QPen(QColor(Qt::black)));
 
       if (isFilled())
@@ -178,7 +177,7 @@ void TimelineDataGrid::populateGrid()
       int measureIdx = 0;
       for (Measure* measure = score()->firstMeasure(); measure; measure = measure->nextMeasure()) {
             for (int staffIdx = 0; staffIdx < _nStaves; staffIdx++) {
-                  TimelineDataGridCell* newCell = new TimelineDataGridCell(measure, staffIdx);
+                  TimelineDataGridCell* newCell = new TimelineDataGridCell(measure, staffIdx, measureIdx);
                   newCell->setRect(cellWidth() * measureIdx, cellHeight() * staffIdx, cellWidth(), cellHeight());
                   newCell->setZValue(ZValues::CELL);
 
@@ -694,7 +693,8 @@ void TimelineDataGrid::setMouseCursor(QMouseEvent* event)
 //   Locate top left and bottom right cells. Perform a range seletion.
 //---------------------------------------------------------
 
-void TimelineDataGrid::selectLassoItems(QList<QGraphicsItem*> items) {
+void TimelineDataGrid::selectLassoItems(QList<QGraphicsItem*> items)
+      {
       if (items.isEmpty())
             return;
 
@@ -707,15 +707,13 @@ void TimelineDataGrid::selectLassoItems(QList<QGraphicsItem*> items) {
             if (!currCell)
                   continue;
 
-            // TODO: Remove measure number dependency
-            // Rather find the top left and bottom right using geometry.
             if (!topLeft ||
-                (currCell->measure()->no() <= topLeft->measure()->no() &&
+                (currCell->measureIdx() <= topLeft->measureIdx() &&
                  currCell->staffIdx() <= topLeft->staffIdx()))
                   topLeft = currCell;
 
             if (!bottomRight ||
-                (currCell->measure()->no() >= bottomRight->measure()->no() &&
+                (currCell->measureIdx() >= bottomRight->measureIdx() &&
                  currCell->staffIdx() >= bottomRight->staffIdx()))
                   bottomRight = currCell;
             }
