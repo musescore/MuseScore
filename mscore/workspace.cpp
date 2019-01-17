@@ -59,7 +59,7 @@ void MuseScore::undoWorkspace()
 
 void MuseScore::showWorkspaceMenu()
       {
-      if (workspaces == 0) {
+      if (workspaces == nullptr) {
             workspaces = new QActionGroup(this);
             workspaces->setExclusive(true);
             connect(workspaces, SIGNAL(triggered(QAction*)), SLOT(changeWorkspace(QAction*)));
@@ -111,7 +111,7 @@ void MuseScore::deleteWorkspace()
       QAction* a = workspaces->checkedAction();
       if (!a)
             return;
-      Workspace* workspace = 0;
+      Workspace* workspace = nullptr;
       for (Workspace* p : Workspace::workspaces()) {
             if (p->name() == a->text()) {
                   workspace = p;
@@ -208,7 +208,7 @@ void Workspace::initWorkspace()
                   }
             }
       Q_ASSERT(!Workspace::workspaces().empty());
-      if (currentWorkspace == 0)
+      if (currentWorkspace == nullptr)
             currentWorkspace = Workspace::workspaces().at(0);
       }
 
@@ -976,7 +976,7 @@ QList<Workspace*>& Workspace::workspaces()
                   QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
 
                   foreach (const QString& entry, pl) {
-                        Workspace* p = 0;
+                        Workspace* p = nullptr;
                         QFileInfo fi(s + "/" + entry);
                         QString name(fi.completeBaseName());
                         for (Workspace* w : _workspaces) {
