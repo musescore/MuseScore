@@ -141,6 +141,11 @@ TimelineDataGrid::TimelineDataGrid(TimelineData *parent)
       setScene(new QGraphicsScene);
       scene()->setBackgroundBrush(Qt::lightGray);
       setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
+
+      setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+      setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+      setMouseTracking(true);
       }
 
 //---------------------------------------------------------
@@ -401,7 +406,7 @@ QList<TimelineDataGridCell*> TimelineDataGrid::getSelectedCells()
 
             Measure* containingMeasure = score()->tick2measure(element->tick());
             int staffIdx = element->staffIdx();
-            if (!element->staff()->show())
+            if (!element->staff() || !element->staff()->show())
                   continue;
 
             // If has a mmrest, find the count and add each measure to it
@@ -570,6 +575,9 @@ void TimelineDataGrid::mousePressEvent(QMouseEvent* event)
             if (!cell || cell->zValue() != TimelineDataGrid::CELL)
                   return; // Clicks outside edge of selection path, ignore
 
+            if (!cell->measure()->system()->staff(cell->staffIdx())->show())
+                  return; // Ignore clicks on non-visible cells
+
             Measure* measureToSelect = cell->getMeasureToSelect();
 
             // TODO: Decide behavior when clicking hidden instruments
@@ -600,8 +608,10 @@ void TimelineDataGrid::mousePressEvent(QMouseEvent* event)
 
 void TimelineDataGrid::mouseMoveEvent(QMouseEvent* event)
       {
-      if (event->buttons() != Qt::LeftButton)
+      if (event->buttons() != Qt::LeftButton) {
+            setMouseCursor(event);
             return;
+            }
 
       QPointF newMousePos = mapToScene(event->pos());
       QPointF offset = _oldMousePos - newMousePos;
@@ -609,9 +619,10 @@ void TimelineDataGrid::mouseMoveEvent(QMouseEvent* event)
       if (_lassoSelection) {
             QRectF adjustedLasso = QRectF(_oldMousePos, newMousePos);
             _lassoSelection->setRect(adjustedLasso.normalized());
+            setMouseCursor(event);
             }
       else if (event->modifiers() == Qt::ShiftModifier && !_draggingGrid) {
-
+            setMouseCursor(event);
             if (offset.manhattanLength() <= 4)
                   return; // Allows for some wiggle room to mimic scoreview
 
@@ -640,7 +651,7 @@ void TimelineDataGrid::mouseMoveEvent(QMouseEvent* event)
 //   mouseReleaseEvent
 //---------------------------------------------------------
 
-void TimelineDataGrid::mouseReleaseEvent(QMouseEvent*)
+void TimelineDataGrid::mouseReleaseEvent(QMouseEvent* event)
       {
       if (_lassoSelection) {
             QRect lassoRect = _lassoSelection->rect().toRect();
@@ -651,10 +662,31 @@ void TimelineDataGrid::mouseReleaseEvent(QMouseEvent*)
 
             mscore->endCmd();
             }
-      else if (_draggingGrid) {
+
+      _draggingGrid = false;
+      setMouseCursor(event);
+      }
+
+//---------------------------------------------------------
+//   setMouseCursor
+//---------------------------------------------------------
+
+void TimelineDataGrid::setMouseCursor(QMouseEvent* event)
+      {
+      QList<QGraphicsItem*> itemsList = items(event->pos());
+      if (itemsList.isEmpty())
+            return;
+
+      TimelineDataGridCell* cell = static_cast<TimelineDataGridCell*>(itemsList.last());
+      if (!cell || cell->zValue() != TimelineDataGrid::CELL) {
             this->setCursor(Qt::ArrowCursor);
-            _draggingGrid = false;
+            return; // Clicks outside edge of selection path, ignore
             }
+
+      if (!cell->measure()->system()->staff(cell->staffIdx())->show())
+            this->setCursor(Qt::ForbiddenCursor);
+      else
+            this->setCursor(Qt::ArrowCursor);
       }
 
 //---------------------------------------------------------
@@ -706,6 +738,13 @@ TimelineData::TimelineData(Timeline* parent)
       {
       addWidget(new TimelineDataLabels(this));
       addWidget(new TimelineDataGrid(this));
+
+      setCollapsible(1, false);
+
+      connect(labelView()->verticalScrollBar(), SIGNAL(valueChanged(int)),
+              gridView()->verticalScrollBar(), SLOT(setValue(int)));
+      connect(gridView()->verticalScrollBar(), SIGNAL(valueChanged(int)),
+              labelView()->verticalScrollBar(), SLOT(setValue(int)));
       }
 
 //---------------------------------------------------------

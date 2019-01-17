@@ -262,8 +262,7 @@ TimelineMetaRows::TimelineMetaRows(TimelineMeta *parent)
       setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
 
       setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-      // What to do with vertical? If data is visible, turn it on?
-      // Do we need scroll bars? (Yes)
+      setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
       for (int i = 0; i < getParent()->getCorrectMetaRows().length(); i++)
             _staggerArray << 0;
@@ -890,6 +889,13 @@ TimelineMeta::TimelineMeta(Timeline* parent)
 
       addWidget(new TimelineMetaLabels(this));
       addWidget(new TimelineMetaRows(this));
+
+      setCollapsible(1, false);
+
+      connect(labelView()->verticalScrollBar(), SIGNAL(valueChanged(int)),
+              rowsView()->verticalScrollBar(), SLOT(setValue(int)));
+      connect(rowsView()->verticalScrollBar(), SIGNAL(valueChanged(int)),
+              labelView()->verticalScrollBar(), SLOT(setValue(int)));
       }
 
 //---------------------------------------------------------

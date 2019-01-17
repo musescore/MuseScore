@@ -101,6 +101,7 @@ class TimelineDataGrid : public QGraphicsView
       QList<TimelineDataGridCell*> getSelectedCells();
       QPainterPath createCellPath(QList<TimelineDataGridCell*> selectedCells);
 
+      void setMouseCursor(QMouseEvent* event);
       void selectLassoItems(QList<QGraphicsItem*> items);
 
    public slots:
@@ -127,7 +128,7 @@ class TimelineDataGrid : public QGraphicsView
 
       virtual void mousePressEvent(QMouseEvent* event);
       virtual void mouseMoveEvent(QMouseEvent* event);
-      virtual void mouseReleaseEvent(QMouseEvent*);
+      virtual void mouseReleaseEvent(QMouseEvent* event);
       };
 
 //---------------------------------------------------------

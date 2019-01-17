@@ -66,6 +66,8 @@ void Timeline::configureMetaAndDataWidgets()
       _topBottom->addWidget(meta);
       _topBottom->addWidget(data);
 
+      _topBottom->setCollapsible(1, false);
+
       connect(metaWidget(), SIGNAL(splitterMoved(int, int)), dataWidget(), SLOT(metaSplitterMoved()));
       connect(dataWidget(), SIGNAL(splitterMoved(int, int)), metaWidget(), SLOT(dataSplitterMoved()));
 
