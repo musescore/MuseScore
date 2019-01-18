@@ -1857,6 +1857,8 @@ void Score::cmdResetBeamMode()
                         }
                   }
             }
+      if (noSelection)
+            deselectAll();
       }
 
 //---------------------------------------------------------
@@ -1874,7 +1876,8 @@ void Score::cmdResetStyle()
 
 void Score::cmdResetNoteAndRestGroupings()
       {
-      if (selection().isNone())
+      bool noSelection = selection().isNone();
+      if (noSelection)
             cmdSelectAll();
       else if (!selection().isRange()) {
             qDebug("no system or staff selected");
@@ -1897,6 +1900,8 @@ void Score::cmdResetNoteAndRestGroupings()
                   }
             }
       endCmd();
+      if (noSelection)
+            deselectAll();
       }
 
 //---------------------------------------------------------
