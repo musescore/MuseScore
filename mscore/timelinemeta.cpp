@@ -737,17 +737,15 @@ TimelineMetaRowsValue* TimelineMetaRows::getTopItem(QList<QGraphicsItem*> items)
 
 void TimelineMetaRows::mousePressEvent(QMouseEvent* event)
       {
+      _oldMousePos = mapToScene(event->pos());
       if (!score())
             return;
 
       QList<QGraphicsItem*> items = scene()->items(mapToScene(event->pos()));
-      if (items.isEmpty()) {
-            score()->deselectAll();
-            mscore->endCmd();
-            return;
+      if (!items.isEmpty()) {
+            TimelineMetaRowsValue* top = getTopItem(items);
+            selectValue(top);
             }
-      TimelineMetaRowsValue* top = getTopItem(items);
-      selectValue(top);
       }
 
 //---------------------------------------------------------
@@ -756,13 +754,41 @@ void TimelineMetaRows::mousePressEvent(QMouseEvent* event)
 
 void TimelineMetaRows::mouseMoveEvent(QMouseEvent* event)
       {
-      QList<QGraphicsItem*> items = scene()->items(mapToScene(event->pos()));
-      if (items.isEmpty()) {
-            resetOldHover();
+      if (event->buttons() != Qt::LeftButton) {
+            QList<QGraphicsItem*> items = scene()->items(mapToScene(event->pos()));
+            if (items.isEmpty()) {
+                  resetOldHover();
+                  return;
+                  }
+            TimelineMetaRowsValue* top = getTopItem(items);
+            bringToFront(top);
             return;
             }
-      TimelineMetaRowsValue* top = getTopItem(items);
-      bringToFront(top);
+
+      _draggingRows = true;
+      QPointF newMousePos = mapToScene(event->pos());
+      QPointF offset = _oldMousePos - newMousePos;
+
+      this->setCursor(Qt::SizeAllCursor);
+      horizontalScrollBar()->setValue(horizontalScrollBar()->value() + offset.x());
+      verticalScrollBar()->setValue(verticalScrollBar()->value() + offset.y());
+      }
+
+//---------------------------------------------------------
+//   mouseReleaseEvent
+//---------------------------------------------------------
+
+void TimelineMetaRows::mouseReleaseEvent(QMouseEvent* event)
+      {
+      if (!_draggingRows) {
+            QList<QGraphicsItem*> items = scene()->items(mapToScene(event->pos()));
+            if (items.length() <= 1) { // Either off or on a row
+                  score()->deselectAll();
+                  mscore->endCmd();
+                  }
+            }
+      _draggingRows = false;
+      this->setCursor(Qt::ArrowCursor);
       }
 
 //---------------------------------------------------------

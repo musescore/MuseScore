@@ -106,6 +106,9 @@ class TimelineMetaRows : public QGraphicsView
       QList<int> _staggerArray;
       const int _staggerDistance = 5;
 
+      QPointF _oldMousePos;
+      bool _draggingRows;
+
       TimelineMetaRowsValue* _oldHoverValue = nullptr;
       QFont _currentFont;
 
@@ -154,6 +157,7 @@ class TimelineMetaRows : public QGraphicsView
 
       virtual void mousePressEvent(QMouseEvent* event);
       virtual void mouseMoveEvent(QMouseEvent* event);
+      virtual void mouseReleaseEvent(QMouseEvent* event);
       };
 
 //---------------------------------------------------------

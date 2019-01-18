@@ -565,11 +565,7 @@ void TimelineDataGrid::mousePressEvent(QMouseEvent* event)
 
       QList<QGraphicsItem*> itemsList = items(event->pos());
 
-      if (itemsList.isEmpty()) {
-            score()->deselectAll();
-            updateSelection();
-            }
-      else {
+      if (!itemsList.isEmpty()) {
             TimelineDataGridCell* cell = static_cast<TimelineDataGridCell*>(itemsList.last());
             if (!cell || cell->zValue() != TimelineDataGrid::CELL)
                   return; // Clicks outside edge of selection path, ignore
@@ -661,6 +657,13 @@ void TimelineDataGrid::mouseReleaseEvent(QMouseEvent* event)
 
             mscore->endCmd();
             }
+      else if (!_draggingGrid) {
+            QList<QGraphicsItem*> itemsList = items(event->pos());
+            if (itemsList.isEmpty()) {
+                  score()->deselectAll();
+                  updateSelection();
+                  }
+            }
 
       _draggingGrid = false;
       setMouseCursor(event);
@@ -673,8 +676,10 @@ void TimelineDataGrid::mouseReleaseEvent(QMouseEvent* event)
 void TimelineDataGrid::setMouseCursor(QMouseEvent* event)
       {
       QList<QGraphicsItem*> itemsList = items(event->pos());
-      if (itemsList.isEmpty())
+      if (itemsList.isEmpty()) {
+            this->setCursor(Qt::ArrowCursor);
             return;
+            }
 
       TimelineDataGridCell* cell = static_cast<TimelineDataGridCell*>(itemsList.last());
       if (!cell || cell->zValue() != TimelineDataGrid::CELL) {
