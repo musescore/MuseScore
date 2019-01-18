@@ -105,6 +105,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)},
             {PREF_EXPORT_MUSICXML_EXPORTBREAKS,                    new EnumPreference(QVariant::fromValue(MusicxmlExportBreaks::ALL), false)},
             {PREF_EXPORT_MUSICXML_EXPORTLAYOUT,                    new BoolPreference(true, false)},
+            {PREF_EXPORT_MUSICXML_OUTDATED,                        new BoolPreference(false)},
             {PREF_EXPORT_PDF_DPI,                                  new IntPreference(300, false)},
             {PREF_EXPORT_PNG_RESOLUTION,                           new DoublePreference(DPI, false)},
             {PREF_EXPORT_PNG_USETRANSPARENCY,                      new BoolPreference(true, false)},
