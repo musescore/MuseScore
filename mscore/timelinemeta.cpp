@@ -361,6 +361,9 @@ void TimelineMetaRows::drawRows()
 
       // Use 1 to make sure rect borders are in the sceneRect
       setSceneRect(-1, -1, gridWidth + 1, localCellHeight * nRows + 1);
+
+      QSplitter* timelineSplitter = static_cast<QSplitter*>(getParent()->parent());
+      getParent()->setMaximumHeight(localCellHeight * nRows + timelineSplitter->handleWidth() + 1);
       }
 
 //---------------------------------------------------------
