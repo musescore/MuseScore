@@ -2478,8 +2478,10 @@ static void connectTremolo(Measure* m)
 
                         for (Segment* ls = s->next(st); ls; ls = ls->next(st)) {
                               if (Element* element = ls->element(i)) {
-                                    if (!element->isChord())
+                                    if (!element->isChord()) {
                                           qDebug("cannot connect tremolo");
+                                          continue;
+                                          }
                                     Chord* nc = toChord(element);
                                     tremolo->setChords(c, nc);
                                     nc->setTremolo(tremolo);
