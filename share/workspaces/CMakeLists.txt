@@ -17,29 +17,33 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-function (build_workspace WS_NAME _TARGET)
-      set(_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${WS_NAME}.workspace")
-      set(_FILES workspace.xml META-INF/container.xml)
-      add_custom_command(OUTPUT ${_OUTPUT}
-            COMMAND ${CMAKE_COMMAND} -E tar cf "${_OUTPUT}" --format=zip -- ${_FILES}
-            DEPENDS
-            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${WS_NAME}"
-            COMMENT "Building ${WS_NAME}.workspace"
-            )
-      set("${_TARGET}" "${_OUTPUT}" PARENT_SCOPE)
+function(build_workspace # compress a workspace XML file at build time
+  WS_NAME # name of the workspace directory to be zipped
+  )
+  fn__copy_during_build(
+    "${CMAKE_CURRENT_SOURCE_DIR}/${WS_NAME}.xml"
+    "${WS_NAME}/${WS_NAME}.xml"
+    )
+  fn__build_container(
+    "${WS_NAME}.workspace"
+    "${WS_NAME}"
+    "${WS_NAME}.xml"
+    )
+  list(APPEND GENERATED_WORKSPACES "${WS_NAME}.workspace")
+  set(GENERATED_WORKSPACES "${GENERATED_WORKSPACES}" PARENT_SCOPE)
 endfunction(build_workspace)
 
-build_workspace(Basic BASIC_TARGET)
-build_workspace(Advanced ADVANCED_TARGET)
+set(GENERATED_WORKSPACES "") # create empty list
 
-add_custom_target(workspaces DEPENDS
-      "${BASIC_TARGET}"
-      "${ADVANCED_TARGET}"
-      )
+build_workspace(Basic)
+build_workspace(Advanced)
 
-install(FILES
-      "${BASIC_TARGET}"
-      "${ADVANCED_TARGET}"
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}workspaces
-      PERMISSIONS OWNER_READ GROUP_READ WORLD_READ
-      )
+# custom commands do not run unless something depends on their output
+add_custom_target(workspaces DEPENDS ${GENERATED_WORKSPACES})
+
+foreach(FILE IN LISTS GENERATED_WORKSPACES)
+  install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/${FILE}"
+    DESTINATION "${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}workspaces"
+    )
+endforeach(FILE)
