@@ -771,16 +771,16 @@ Palette* MuseScore::newBracketsPalette()
       sp->setDrawGrid(true);
 
       for (auto t : std::array<std::pair<BracketType,const char*>, 4> {
-         {{ BracketType::NORMAL, "Bracket" },
-         { BracketType::BRACE,  "Brace"   },
-         { BracketType::SQUARE, "Square"  },
-         { BracketType::LINE,   "Line"    }}
+         {{ BracketType::NORMAL, QT_TRANSLATE_NOOP("Palette", "Bracket") },
+          { BracketType::BRACE,  QT_TRANSLATE_NOOP("Palette", "Brace")   },
+          { BracketType::SQUARE, QT_TRANSLATE_NOOP("Palette", "Square")  },
+          { BracketType::LINE,   QT_TRANSLATE_NOOP("Palette", "Line")    }}
          } ) {
             Bracket* b1      = new Bracket(gscore);
             BracketItem* bi1 = new BracketItem(gscore);
             bi1->setBracketType(t.first);
             b1->setBracketItem(bi1);
-            sp->append(b1, tr(t.second));      // Brace, Square, Line
+            sp->append(b1, qApp->translate("Palette", t.second));      // Bracket, Brace, Square, Line
             }
       return sp;
       }
