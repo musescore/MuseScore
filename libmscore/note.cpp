@@ -1142,7 +1142,7 @@ void Note::draw(QPainter* painter) const
                         }
                   }
             QFont f(tab->fretFont());
-            f.setPointSizeF(f.pointSizeF() * spatium() * MScore::pixelRatio / SPATIUM20);
+            f.setPointSizeF(f.pointSizeF() * magS() * MScore::pixelRatio);
             painter->setFont(f);
             painter->setPen(c);
             painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), _fretString);
