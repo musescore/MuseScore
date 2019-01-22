@@ -904,8 +904,20 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
             int track = chord->track();
             while (seg2 && !seg2->element(track))
                   seg2 = seg2->next(st);
-            Chord* c2 = seg2 ? toChord(seg2->element(track)) : 0;
-            if (c2 && c2->type() == ElementType::CHORD) {
+
+            if (!seg2)
+                  return;
+
+            Element* s2El = seg2->element(track);
+            if (s2El) {
+                  if (!s2El->isChord())
+                        return;
+                  }
+            else
+                  return;
+
+            Chord* c2 = toChord(s2El);
+            if (c2->type() == ElementType::CHORD) {
                   int notes2 = int(c2->notes().size());
                   int tnotes = qMax(notes, notes2);
                   int tticks = chord->actualTicks() * 2; // use twice the size
