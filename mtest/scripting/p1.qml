@@ -13,17 +13,17 @@ MuseScore {
             cursor.filter   = -1;
             cursor.rewind(0);
 
-            while (cursor.segment()) {
-                  var e = cursor.element();
+            while (cursor.segment) {
+                  var e = cursor.element;
                   if (e) {
                         log2("found:", e.name + " (" + e.type + ") at " + e.tick);
-                        if (e.type == Ms.CHORD) {
-                            log2("  durationType:",  e.durationType);
-                            log2("  beamMode:",      e.get("beam_mode"));
-                            log2("  small:",         e.get("small"));
-                            log2("  stemDirection:", e.get("stem_direction"));
+                        if (e.type == Element.CHORD) {
+//                             log2("  durationType:",  e.durationType); // TODO: some wrapper/string conversion?
+                            log2("  beamMode:",      e.beamMode);
+                            log2("  small:",         e.small);
+                            log2("  stemDirection:", e.stemDirection);
 
-                            log2("  duration:", e.duration);
+                            log2("  duration:", e.duration.str);
 //                            log2("    numerator:",   e.duration.numerator);
 //                            log2("    denominator:", e.duration.denominator);
 //                            log2("    ticks:",       e.duration.ticks);
@@ -64,7 +64,7 @@ MuseScore {
 //                                      }
 //                                }
                             }
-                        if (e.type == Ms.REST) {
+                        if (e.type == Element.REST) {
 //                            logn("  duration:");
 //                            log2("    numerator:",   e.duration.numerator);
 //                            log2("    denominator:", e.duration.denominator);

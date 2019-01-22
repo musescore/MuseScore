@@ -15,7 +15,9 @@
 #include "elements.h"
 #include "fraction.h"
 #include "score.h"
+#ifndef TESTROOT
 #include "shortcut.h"
+#endif
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
 #include "libmscore/plugins.h" // TODO: remove
@@ -150,14 +152,22 @@ Score* PluginAPI::newScore(const QString& name, const QString& part, int measure
 //---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
-
 void PluginAPI::cmd(const QString& s)
       {
+#ifdef TESTROOT
+      // TODO: testing this function requires including
+      // shortcuts system to mtest testutils library
+      // as well as some way to execute these commands
+      // without MuseScore instance.
+      Q_UNUSED(s);
+      qFatal("PluginAPI::cmd is not testable currently");
+#else
       Shortcut* sc = Shortcut::getShortcut(qPrintable(s));
       if (sc)
             msc()->cmd(sc->action());
       else
             qDebug("PluginAPI:cmd: not found <%s>", qPrintable(s));
+#endif
       }
 
 //---------------------------------------------------------
