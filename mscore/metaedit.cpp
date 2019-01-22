@@ -75,21 +75,7 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
                   tag->setFocusPolicy(Qt::NoFocus);
                   tag->setReadOnly(true);
                   tag->setToolTip(tr("This is a system tag. It's name can't be modified."));
-
-                  if      (s ==  "platform")       tag->setText(tr("Platform"));
-                  else if (s ==  "movementNumber") tag->setText(tr("Movement number"));
-                  else if (s ==  "movementTitle")  tag->setText(tr("Movement title"));
-                  else if (s ==  "workNumber")     tag->setText(tr("Work number"));
-                  else if (s ==  "workTitle")      tag->setText(tr("Work title"));
-                  else if (s ==  "arranger")       tag->setText(tr("Arranger"));
-                  else if (s ==  "composer")       tag->setText(tr("Composer"));
-                  else if (s ==  "lyricist")       tag->setText(tr("Lyricist"));
-                  else if (s ==  "poet")           tag->setText(tr("Poet"));
-                  else if (s ==  "translator")     tag->setText(tr("Translator"));
-                  else if (s ==  "source")         tag->setText(tr("Source"));
-                  else if (s ==  "copyright")      tag->setText(tr("Copyright"));
-                  else if (s ==  "creationDate")   tag->setText(tr("Creation date"));
-                  else                             tag->setText(s); // For all other cases.
+                  tag->setText(s);
 
                   QLineEdit *value = new QLineEdit(i.value());
                   connect(value, SIGNAL(textChanged(const QString&)), SLOT(setDirty()));
@@ -102,7 +88,7 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
                   // for now the connections aren't even made for deleteButton.
                   // If in the future the system tags can be removed,
                   // simply uncomment the following lines. It should do the job.
-                  // Enable it, though.
+                  // Enable deleteButton, though.
                   deleteButton->setEnabled(false);
 //                  connect(deleteButton, SIGNAL(clicked()), SLOT(setDirty()));
 //                  connect(deleteButton, SIGNAL(clicked()), tag,          SLOT(deleteLater()));
@@ -155,18 +141,6 @@ bool MetaEditDialog::isSystemTag(QString tag) const {
               || tag ==  "translator" || tag ==  "source"         || tag ==  "copyright"
               || tag ==  "creationDate");
       }
-
-////---------------------------------------------------------
-////   isSystemTag
-////---------------------------------------------------------
-
-//bool MetaEditDialog::isTransformedSystemTag(QString tag) const {
-//      return (tag ==  tr("Platform")       || tag ==  tr("Movement number") || tag ==  tr("Movement title")
-//              || tag ==  tr("Work number") || tag ==  tr("Work title")      || tag ==  tr("Arranger")
-//              || tag ==  tr("Composer")    || tag ==  tr("Lyricist")        || tag ==  tr("Poet")
-//              || tag ==  tr("Translator")  || tag ==  tr("Source")          || tag ==  tr("Copyright")
-//              || tag ==  tr("Creation date"));
-//      }
 
 //---------------------------------------------------------
 //   newClicked
@@ -265,19 +239,6 @@ bool MetaEditDialog::save()
                               tag->setFocus();
                               return false;
                               }
-                        if      (tagText ==  tr("Platform"))        tagText = "platform";
-                        else if (tagText ==  tr("Movement number")) tagText = "movementNumber";
-                        else if (tagText ==  tr("Movement title"))  tagText = "movementTitle";
-                        else if (tagText ==  tr("Work number"))     tagText = "workNumber";
-                        else if (tagText ==  tr("Work title"))      tagText = "workTitle";
-                        else if (tagText ==  tr("Arranger"))        tagText = "arranger";
-                        else if (tagText ==  tr("Composer"))        tagText = "composer";
-                        else if (tagText ==  tr("Lyricist"))        tagText = "lyricist";
-                        else if (tagText ==  tr("Poet"))            tagText = "poet";
-                        else if (tagText ==  tr("Translator"))      tagText = "translator";
-                        else if (tagText ==  tr("Source"))          tagText = "source";
-                        else if (tagText ==  tr("Copyright"))       tagText = "copyright";
-                        else if (tagText ==  tr("Creation date"))   tagText = "creationDate";
 
                         if (map.contains(tagText)) {
                               QMessageBox::warning(this, tr("MuseScore"),
