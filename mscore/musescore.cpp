@@ -2886,6 +2886,57 @@ static bool experimentalPartsMedia(const QString& inFilePath)
       delete score;
       return true;
       }
+     
+class CustomJsonWriter
+      {
+      public:
+            CustomJsonWriter(const QString& filePath)
+            {
+            jsonFormatFile.setFileName(filePath);
+            jsonFormatFile.open(QIODevice::WriteOnly);
+            jsonFormatFile.write("{\n");
+            }
+      
+            ~CustomJsonWriter()
+            {
+            jsonFormatFile.write("\n}\n");
+            jsonFormatFile.close();
+            }
+      
+            void addKey(const char* arrayName)
+            {
+            jsonFormatFile.write("\"");
+            jsonFormatFile.write(arrayName);
+            jsonFormatFile.write("\": ");
+            }
+      
+            void addValue(const QByteArray& data, bool lastJsonElement = false, bool isJson = false)
+            {
+            if (!isJson)
+                  jsonFormatFile.write("\"");
+            jsonFormatFile.write(data);
+            if (!isJson)
+                  jsonFormatFile.write("\"");
+            if (!lastJsonElement)
+                  jsonFormatFile.write(",\n");
+            }
+      
+            void openArray()
+            {
+            jsonFormatFile.write(" [");
+            }
+      
+            void closeArray(bool lastJsonElement = false)
+            {
+            jsonFormatFile.write("]");
+            if (!lastJsonElement)
+                  jsonFormatFile.write(",");
+            jsonFormatFile.write("\n");
+            }
+      
+      private:
+            QFile jsonFormatFile;
+      };
       
 static bool exportScoreMp3AsJSON(const QString& inFilePath)
       {
@@ -2893,23 +2944,15 @@ static bool exportScoreMp3AsJSON(const QString& inFilePath)
       if (!score)
             return false;
       
-      QJsonObject jsonForMedia;
       //export score audio
+      CustomJsonWriter jsonWriter("/tmp/test.json");
+      jsonWriter.addKey("mp3");
       QByteArray mp3Data;
       QBuffer mp3Device(&mp3Data);
       mp3Device.open(QIODevice::ReadWrite);
       bool dummy = false;
       bool res = mscore->saveMp3(score, &mp3Device, dummy);
-      jsonForMedia["mp3"] = QString::fromLatin1(mp3Data.toBase64());
-      
-      QJsonDocument jsonDoc(jsonForMedia);
-      const QString& jsonPath{"/dev/stdout"};
-      QFile file(jsonPath);
-      res &= file.open(QIODevice::WriteOnly);
-      if (res) {
-            file.write(jsonDoc.toJson(QJsonDocument::Compact));
-            file.close();
-            }
+      jsonWriter.addValue(mp3Data.toBase64(), true);
       
       delete score;
       return res;
@@ -2936,46 +2979,36 @@ static bool experimentalMediaScore(const QString& inFilePath)
       score->switchToPageMode();
 
       //manually build the json structure, because QJsonObject cannot be bigger than 128Mb
-      const QString& jsonPath{"/dev/stdout"}; //{"D:\\123\\score.json"};
-      QFile file(jsonPath);
-      file.open(QIODevice::WriteOnly);
-      file.write("{\n");
-      bool res = true;
+      const QString jsonPath{"/dev/stdout"}; //{"D:\\123\\score.json"};
+      CustomJsonWriter jsonWriter(jsonPath);
 
-      {
+      bool res = true;
       //export score pngs and svgs
-      QJsonArray pngsJsonArray;
-      QJsonArray svgsJsonArray;
-      file.write("\"pngs\": [");
+      jsonWriter.addKey("pngs");
+      jsonWriter.openArray();
       for (int i = 0; i < score->pages().size(); ++i) {
             QByteArray pngData;
             QBuffer pngDevice(&pngData);
             pngDevice.open(QIODevice::ReadWrite);
             //QString fileName2 = QString("D:\\123") + QString(i) + ".png";
             res &= mscore->savePng(score, &pngDevice, i);
-            file.write("\"");
-            file.write(pngData.toBase64());
-            file.write("\"");
-            if (i != score->pages().size() - 1)
-                  file.write(", ");
+            bool lastArrayValue = ((score->pages().size() - 1) == i);
+            jsonWriter.addValue(pngData.toBase64(), lastArrayValue);
             }
-      file.write("],\n");
+      jsonWriter.closeArray();
       
-      file.write("\"svgs\": [");
+      jsonWriter.addKey("svgs");
+      jsonWriter.openArray();
       for (int i = 0; i < score->pages().size(); ++i) {
             QByteArray svgData;
             QBuffer svgDevice(&svgData);
             svgDevice.open(QIODevice::ReadWrite);
             //QString fileName2 = QString("D:\\123") + QString(i) + ".svg";
             res &= mscore->saveSvg(score, &svgDevice, i);
-            file.write("\"");
-            file.write(svgData.toBase64());
-            file.write("\"");
-            if (i != score->pages().size() - 1)
-                  file.write(", ");
+            bool lastArrayValue = ((score->pages().size() - 1) == i);
+            jsonWriter.addValue(svgData.toBase64(), lastArrayValue);
             }
-            file.write("],\n");
-      }
+      jsonWriter.closeArray();
       
       {
       //export score .spos
@@ -2984,9 +3017,8 @@ static bool experimentalMediaScore(const QString& inFilePath)
       partPosDevice.open(QIODevice::ReadWrite);
       //QString fileName3 = QString("D:\\123\\sposfile.spos");
       savePositions(score, &partPosDevice, true);
-      file.write("\"sposXML\": \"");
-      file.write(partDataPos.toBase64());
-      file.write("\",\n");
+      jsonWriter.addKey("sposXML");
+      jsonWriter.addValue(partDataPos.toBase64());
       partPosDevice.close();
       partDataPos.clear();
       
@@ -2994,9 +3026,8 @@ static bool experimentalMediaScore(const QString& inFilePath)
       partPosDevice.open(QIODevice::ReadWrite);
       //QString fileName4 = QString("D:\\123\\mposfile.mpos");
       savePositions(score, &partPosDevice, false);
-      file.write("\"mposXML\": \"");
-      file.write(partDataPos.toBase64());
-      file.write("\",\n");
+      jsonWriter.addKey("mposXML");
+      jsonWriter.addValue(partDataPos.toBase64());
       }
       
       {
@@ -3007,9 +3038,8 @@ static bool experimentalMediaScore(const QString& inFilePath)
       QPdfWriter writer(&pdfDevice);
       //QString fileName5 = QString("D:\\123\\score.pdf");
       res &= mscore->savePdf(score, writer);
-      file.write("\"pdf\": \"");
-      file.write(pdfData.toBase64());
-      file.write("\",\n");
+      jsonWriter.addKey("pdf");
+      jsonWriter.addValue(pdfData.toBase64());
       }
       
       {
@@ -3019,9 +3049,8 @@ static bool experimentalMediaScore(const QString& inFilePath)
       midiDevice.open(QIODevice::ReadWrite);
       //QString fileName5 = QString("D:\\123\\score.pdf");
       res &= mscore->saveMidi(score, &midiDevice);
-      file.write("\"midi\": \"");
-      file.write(midiData.toBase64());
-      file.write("\",\n");
+      jsonWriter.addKey("midi");
+      jsonWriter.addValue(midiData.toBase64());
       }
       
       {
@@ -3031,20 +3060,14 @@ static bool experimentalMediaScore(const QString& inFilePath)
       mxmlDevice.open(QIODevice::ReadWrite);
       //QString fileName5 = QString("D:\\123\\score.pdf");
       res &= saveMxl(score, &mxmlDevice);
-      file.write("\"mxml\": \"");
-      file.write(mxmlData.toBase64());
-      file.write("\",\n");
+      jsonWriter.addKey("mxml");
+      jsonWriter.addValue(mxmlData.toBase64());
       }
       
       //export metadata
       QJsonDocument doc(mscore->saveMetadataJSON(score));
-      file.write("\"metadata\": ");
-      file.write(doc.toJson(QJsonDocument::Compact));
-      file.write("\n");
-      file.write("}");
-
-      file.close();
-
+      jsonWriter.addKey("metadata");
+      jsonWriter.addValue(doc.toJson(QJsonDocument::Compact), true, true);
       delete score;
       return true;
       }
