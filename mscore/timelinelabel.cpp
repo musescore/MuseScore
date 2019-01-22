@@ -26,3 +26,8 @@ void TimelineLabel::centerTextVertically()
       QPointF offset = targetCenter - currentCenter;
       _textItem->setPos(0, _textItem->boundingRect().translated(offset).y());
       }
+
+int TimelineLabel::getTextWidth()
+      {
+      return _textItem->boundingRect().width();
+      }

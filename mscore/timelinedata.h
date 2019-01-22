@@ -32,6 +32,7 @@ class TimelineDataLabels : public QGraphicsView
       Q_OBJECT
 
       QList<TimelineDataLabel*> _labels;
+      int _maxTextWidth = 0;
 
    public slots:
       void updateLabelWidths(int newWidth);
@@ -41,6 +42,7 @@ class TimelineDataLabels : public QGraphicsView
       TimelineData* getParent();
       void updateLabels();
       Score* score();
+      int maximumTextWidth() { return _maxTextWidth; }
       };
 
 //---------------------------------------------------------

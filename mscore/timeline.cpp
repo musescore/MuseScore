@@ -98,6 +98,11 @@ void Timeline::updateTimeline()
       _cellHeight = determineHeight();
       metaWidget()->updateMeta();
       dataWidget()->updateData();
+
+      int maxLabelWidth = qMax(metaWidget()->labelView()->maximumTextWidth(),
+                               dataWidget()->labelView()->maximumTextWidth());
+      metaWidget()->labelView()->setMaximumWidth(maxLabelWidth);
+      dataWidget()->labelView()->setMaximumWidth(maxLabelWidth);
       }
 
 //---------------------------------------------------------

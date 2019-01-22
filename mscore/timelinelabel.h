@@ -13,6 +13,7 @@ public:
       TimelineLabel(QGraphicsView* view, QString text, QFont font, int rowNumber, int height);
       void updateWidth(int newWidth);
       void centerTextVertically();
+      int getTextWidth();
       };
 
 #endif // TIMELINELABEL_H

@@ -68,11 +68,13 @@ void TimelineDataLabels::updateLabels()
             return;
 
       QList<Part*> parts = score()->parts();
+      _maxTextWidth = 0;
 
       int nMeta = 0;
       for (Part* part : parts) {
             for (Staff* staff : *(part->staves())) {
                   TimelineDataLabel* instrumentLabel = new TimelineDataLabel(this, staff->partName(), nMeta);
+                  _maxTextWidth = qMax(_maxTextWidth, instrumentLabel->getTextWidth());
                   _labels.append(instrumentLabel);
                   scene()->addItem(instrumentLabel);
                   nMeta++;

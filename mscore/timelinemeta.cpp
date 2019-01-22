@@ -74,17 +74,19 @@ void TimelineMetaLabels::updateLabels()
             return;
 
       QFont font = getParent()->getParent()->getFont();
+      _maxTextWidth = 0;
 
       int nMeta = 0;
       for (Meta meta : getParent()->metas()) {
             if (meta.visible) {
                   TimelineMetaLabel* metaLabel = new TimelineMetaLabel(this, meta.metaName, nMeta, font);
+                  _maxTextWidth = qMax(_maxTextWidth, metaLabel->getTextWidth());
                   _labels.append(metaLabel);
                   scene()->addItem(metaLabel);
                   nMeta++;
                   }
             }
-      // Add measure label here
+
       TimelineMetaLabel* measureLabel = new TimelineMetaLabel(this, tr("Measure"), nMeta, font);
       _labels.append(measureLabel);
       scene()->addItem(measureLabel);
