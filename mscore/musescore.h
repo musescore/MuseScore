@@ -552,7 +552,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       virtual QMenu* createPopupMenu() override;
       
-      QJsonValue exportPdfAsJSON(Score*);
+      QByteArray exportPdfAsJSON(Score*);
 
    public slots:
       virtual void cmd(QAction* a);
