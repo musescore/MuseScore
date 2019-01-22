@@ -1,8 +1,8 @@
 import QtQuick 2.0
-import MuseScore 1.0
+import MuseScore 3.0
 
 MuseScore {
-      version:  "2.0"
+      version:  "3.0"
       description: "This demo plugin creates a new score."
       menuPath: "Plugins.createscore"
       requiresScore: false
@@ -15,13 +15,15 @@ MuseScore {
 
             score.addText("title", "==Test-Score==");
             score.addText("subtitle", "subtitle");
+            score.addText("composer", "Composer");
+            score.addText("lyricist", "Lyricist");
 
             var cursor = score.newCursor();
             cursor.track = 0;
 
             cursor.rewind(0);
             var ts = newElement(Element.TIMESIG);
-            ts.setSig(numerator, denominator);
+            ts.timesig = fraction(numerator, denominator);
             cursor.add(ts);
 
             cursor.rewind(0);
