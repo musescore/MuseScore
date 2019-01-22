@@ -32,7 +32,6 @@
 #include "libmscore/segment.h"
 #include "libmscore/rest.h"
 #include "libmscore/stafftext.h"
-#include "libmscore/cursor.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
 #include "libmscore/staff.h"

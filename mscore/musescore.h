@@ -92,6 +92,7 @@ class MasterPalette;
 class PluginCreator;
 #ifdef SCRIPT_INTERFACE
 class PluginManager;
+class QmlPluginEngine;
 #endif
 class MasterSynthesizer;
 class SynthesizerState;
@@ -287,6 +288,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PluginCreator* _pluginCreator        { 0 };
 #ifdef SCRIPT_INTERFACE
       PluginManager* pluginManager         { 0 };
+      QmlPluginEngine* _qmlEngine          { 0 };
 #endif
       SelectionWindow* selectionWindow     { 0 };
 
@@ -635,6 +637,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PianoTools* pianoTools() const              { return _pianoTools; }
 #ifdef SCRIPT_INTERFACE
       PluginManager* getPluginManager() const     { return pluginManager; }
+      QmlPluginEngine* getPluginEngine();
 #endif
       void writeSessionFile(bool);
       bool restoreSession(bool);

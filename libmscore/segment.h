@@ -149,7 +149,7 @@ class Segment final : public Element {
 
       // a variant of the above function, specifically designed to be called from QML
       //@ returns the element at track 'track' (null if none)
-      Q_INVOKABLE Ms::Element* elementAt(int track) const;
+      Ms::Element* elementAt(int track) const;
 
       const std::vector<Element*>& elist() const { return _elist; }
       std::vector<Element*>& elist()             { return _elist; }

@@ -38,7 +38,6 @@ class BSymbol;
 class Chord;
 class ChordRest;
 class Clef;
-class Cursor;
 class Dynamic;
 class ElementList;
 class EventMap;
@@ -348,25 +347,6 @@ class Movements : public std::vector<MasterScore*> {
 
 class Score : public QObject, public ScoreElement {
       Q_OBJECT
-      Q_PROPERTY(int                            duration          READ duration)
-//      Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
-//      Q_PROPERTY(Ms::Measure*                   firstMeasure      READ firstMeasure)
-      Q_PROPERTY(Ms::Measure*                   firstMeasureMM    READ firstMeasureMM)
-      Q_PROPERTY(int                            harmonyCount      READ harmonyCount)
-      Q_PROPERTY(bool                           hasHarmonies      READ hasHarmonies)
-      Q_PROPERTY(bool                           hasLyrics         READ hasLyrics)
-      Q_PROPERTY(int                            keysig            READ keysig)
-      Q_PROPERTY(Ms::Measure*                   lastMeasure       READ lastMeasure)
-      Q_PROPERTY(Ms::Measure*                   lastMeasureMM     READ lastMeasureMM)
-      Q_PROPERTY(Ms::Segment*                   lastSegment       READ lastSegment)
-      Q_PROPERTY(int                            lyricCount        READ lyricCount)
-      Q_PROPERTY(int                            nmeasures         READ nmeasures)
-      Q_PROPERTY(int                            npages            READ npages)
-      Q_PROPERTY(int                            nstaves           READ nstaves)
-      Q_PROPERTY(int                            ntracks           READ ntracks)
-//      Q_PROPERTY(QQmlListProperty<Ms::Part>     parts             READ qmlParts)
-      Q_PROPERTY(QString                        mscoreVersion     READ mscoreVersion)
-      Q_PROPERTY(QString                        mscoreRevision    READ mscoreRevision)
 
    public:
       enum class FileError : char {
@@ -936,8 +916,7 @@ class Score : public QObject, public ScoreElement {
       virtual inline RepeatList* repeatList() const;
       qreal utick2utime(int tick) const;
       int utime2utick(qreal utime) const;
-      //@ ??
-      Q_INVOKABLE void updateRepeatList(bool expandRepeats);
+      void updateRepeatList(bool expandRepeats);
 
       void nextInputPos(ChordRest* cr, bool);
       void cmdMirrorNoteHead();
@@ -958,7 +937,7 @@ class Score : public QObject, public ScoreElement {
       MeasureBase* first() const;
       MeasureBase* firstMM() const;
       MeasureBase* last()  const;
-      Q_INVOKABLE Ms::Measure* firstMeasure() const;
+      Ms::Measure* firstMeasure() const;
       Ms::Measure* firstMeasureMM() const;
       Ms::Measure* lastMeasure() const;
       Ms::Measure* lastMeasureMM() const;
@@ -1022,9 +1001,9 @@ class Score : public QObject, public ScoreElement {
       void setMetaTags(const QMap<QString,QString>& t) { _metaTags = t; }
 
       //@ returns as a string the metatag named 'tag'
-      Q_INVOKABLE QString metaTag(const QString& tag) const;
+      QString metaTag(const QString& tag) const;
       //@ sets the metatag named 'tag' to 'val'
-      Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val);
+      void setMetaTag(const QString& tag, const QString& val);
 
       void cmdSplitMeasure(ChordRest*);
       void splitMeasure(Segment*);
@@ -1076,15 +1055,10 @@ class Score : public QObject, public ScoreElement {
       QList<Score*> scoreList();
       bool switchLayer(const QString& s);
       //@ appends to the score a named part as last part
-      Q_INVOKABLE void appendPart(const QString&);
+      void appendPart(const QString&);
       //@ appends to the score a number of measures
-      Q_INVOKABLE void appendMeasures(int);
-#ifdef SCRIPT_INTERFACE
-      //@ ??
-      Q_INVOKABLE void addText(const QString&, const QString&);
-      //@ creates and returns a cursor to be used to navigate the score
-      Q_INVOKABLE Ms::Cursor* newCursor();
-#endif
+      void appendMeasures(int);
+
       const std::multimap<int, Spanner*>& spanner() const { return _spanner.map(); }
       SpannerMap& spannerMap() { return _spanner; }
       bool isSpannerStartEnd(int tick, int track) const;
@@ -1123,12 +1097,12 @@ class Score : public QObject, public ScoreElement {
       Element* firstElement();
       Element* lastElement();
 
-      int nmeasures();
+      int nmeasures() const;
       bool hasLyrics();
       bool hasHarmonies();
       int  lyricCount();
       int  harmonyCount();
-      Q_INVOKABLE QString extractLyrics();
+      QString extractLyrics();
       int keysig();
       int duration();
 
@@ -1191,6 +1165,15 @@ class Score : public QObject, public ScoreElement {
       friend class ChangeSynthesizerState;
       friend class Chord;
       };
+
+static inline Score* toScore(ScoreElement* e) {
+      Q_ASSERT(!e || e->isScore());
+      return static_cast<Score*>(e);
+      }
+static inline const Score* toScore(const ScoreElement* e) {
+      Q_ASSERT(!e || e->isScore());
+      return static_cast<const Score*>(e);
+      }
 
 //---------------------------------------------------------
 //   MasterScore
