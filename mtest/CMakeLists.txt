@@ -92,6 +92,14 @@ set (SOURCE_LIB
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlfonthandler.cpp
       ${PROJECT_SOURCE_DIR}/mscore/musicxmlsupport.cpp
       ${PROJECT_SOURCE_DIR}/mscore/plugin/qmlplugin.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/plugin/qmlpluginengine.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/enums.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/qmlpluginapi.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/cursor.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/fraction.h
+      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/scoreelement.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/elements.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/score.cpp
       ${PROJECT_SOURCE_DIR}/mscore/preferences.cpp
       ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
       ${PROJECT_SOURCE_DIR}/mscore/stringutils.cpp

@@ -27,6 +27,7 @@ class FractionWrapper : public QObject {
       Q_PROPERTY(int numerator READ numerator)
       Q_PROPERTY(int denominator READ denominator)
       Q_PROPERTY(int ticks READ ticks)
+      Q_PROPERTY(QString str READ toString)
 
       Ms::Fraction f;
 
@@ -41,6 +42,7 @@ class FractionWrapper : public QObject {
       int numerator() const   { return f.numerator(); }
       int denominator() const { return f.denominator(); }
       int ticks() const       { return f.ticks(); }
+      QString toString() const { return f.toString(); }
       };
 
 //---------------------------------------------------------
