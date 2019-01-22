@@ -7511,7 +7511,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       }
       score->switchToPageMode();
 
-      jsonForPdfs["scoreBin"] = mscore->exportPdfAsJSON(score);
+      jsonForPdfs["scoreBin"] = QString::fromLatin1(mscore->exportPdfAsJSON(score));
 
       //save extended score+parts and separate parts pdfs
       //if no parts, generate parts from existing instruments
@@ -7535,7 +7535,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
             scores.append(e->partScore());
             QJsonValue partNameVal(e->title());
             partsNamesArray.append(partNameVal);
-            QJsonValue partVal(exportPdfAsJSON(e->partScore()));
+            QJsonValue partVal(QString::fromLatin1(exportPdfAsJSON(e->partScore())));
             partsArray.append(partVal);
       }
       jsonForPdfs["parts"] = partsNamesArray;
