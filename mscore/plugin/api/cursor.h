@@ -16,7 +16,6 @@
 namespace Ms {
 
 class Element;
-class ScoreElement;
 class Score;
 class Chord;
 class Rest;
@@ -29,29 +28,12 @@ class Measure;
 
 enum class SegmentType;
 
-//---------------------------------------------------------
-//   ElementW
-//    Element wrapper
-//---------------------------------------------------------
+namespace PluginAPI {
 
-class ElementW : public QObject {
-      Q_OBJECT
-      Q_PROPERTY(int       type READ type)
-      Q_PROPERTY(QString   name READ name)
-      Q_PROPERTY(int       tick READ tick)
-
-      ScoreElement* e;
-
-   public slots:
-
-   public:
-      ElementW(ScoreElement* _e) : QObject() { e = _e; }
-      ElementW() {}
-      QString name() const;
-      int type() const;
-      int tick() const;
-      Q_INVOKABLE QVariant get(const QString& s) const;
-      };
+class Element;
+class Measure;
+class Segment;
+class Score;
 
 //---------------------------------------------------------
 //   @@ Cursor
@@ -59,7 +41,7 @@ class ElementW : public QObject {
 //   @P staffIdx  int           current staff (track / 4)
 //   @P voice     int           current voice (track % 4)
 //   @P filter    enum          segment type filter
-//   @P element   Ms::ElementW*  current element at track, read only
+//   @P element   Ms::Element*  current element at track, read only
 //   @P segment   Ms::Segment*  current segment, read only
 //   @P measure   Ms::Measure*  current measure, read only
 //   @P tick      int           midi tick position, read only
@@ -82,24 +64,38 @@ class Cursor : public QObject {
       Q_PROPERTY(qreal tempo      READ tempo)
 
       Q_PROPERTY(int keySignature READ qmlKeySignature)
-      Q_PROPERTY(Ms::Score* score READ score    WRITE setScore)
+      Q_PROPERTY(Ms::PluginAPI::Score* score READ score    WRITE setScore)
 
-      Score* _score;
-      int _track;
-      bool _expandRepeats;
+      Q_PROPERTY(Ms::PluginAPI::Element* element READ element)
+      Q_PROPERTY(Ms::PluginAPI::Segment*  segment READ segment)
+      Q_PROPERTY(Ms::PluginAPI::Measure*  measure READ measure)
+
+   public:
+      enum RewindMode {
+            SCORE_START = 0,
+            SELECTION_START = 1,
+            SELECTION_END = 2
+            };
+      Q_ENUM(RewindMode)
+
+   private:
+      Ms::Score* _score = nullptr;
+      int _track = 0;
+//       bool _expandRepeats; // used?
 
       //state
-      Segment* _segment;
+      Ms::Segment* _segment = nullptr;
       SegmentType _filter;
 
       // utility methods
       void nextInTrack();
+      void setScore(Ms::Score* s);
 
    public:
-      Cursor(Score* c = 0);
-      Cursor(Score*, bool);
+      Cursor(Ms::Score* s = nullptr);
+//       Cursor(Score*, bool); // not implemented? what is bool?
 
-      Score* score() const          { return _score;    }
+      Score* score() const;
       void setScore(Score* s);
 
       int track() const             { return _track;    }
@@ -114,9 +110,9 @@ class Cursor : public QObject {
       int filter() const            { return int(_filter); }
       void setFilter(int f)         { _filter = SegmentType(f); }
 
-      Q_INVOKABLE Ms::ElementW* element() const;
-      Q_INVOKABLE Ms::ElementW* segment() const;
-      Q_INVOKABLE Ms::ElementW* measure() const;
+      Element* element() const;
+      Segment* segment() const;
+      Measure* measure() const;
 
       int tick();
       double time();
@@ -125,14 +121,14 @@ class Cursor : public QObject {
       int qmlKeySignature();
 
       //@ rewind cursor
-      //@   type=0      rewind to start of score
-      //@   type=1      rewind to start of selection
-      //@   type=2      rewind to end of selection
-      Q_INVOKABLE void rewind(int type);
+      //@   mode=SCORE_START      rewind to start of score
+      //@   mode=SELECTION_START  rewind to start of selection
+      //@   mode=SELECTION_END    rewind to end of selection
+      Q_INVOKABLE void rewind(RewindMode mode);
 
       Q_INVOKABLE bool next();
       Q_INVOKABLE bool nextMeasure();
-      Q_INVOKABLE void add(Ms::Element*);
+      Q_INVOKABLE void add(Ms::PluginAPI::Element*);
 
       Q_INVOKABLE void addNote(int pitch);
 
@@ -143,6 +139,7 @@ class Cursor : public QObject {
       Q_INVOKABLE void setDuration(int z, int n);
       };
 
+}     // namespace PluginAPI
 }     // namespace Ms
 #endif
 

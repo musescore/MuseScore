@@ -33,7 +33,6 @@
 #include "libmscore/rest.h"
 #include "libmscore/stafftext.h"
 // #include "plugins.h"
-#include "libmscore/cursor.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
@@ -49,6 +48,7 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/layoutbreak.h"
 #include "qmlplugin.h"
+#include "qmlpluginengine.h"
 #include "pluginManager.h"
 
 namespace Ms {
@@ -84,7 +84,7 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
             qDebug("Register Plugin <%s>", qPrintable(_pluginPath));
       f.close();
       QObject* obj = 0;
-      QQmlComponent component(Ms::MScore::qml(), QUrl::fromLocalFile(_pluginPath));
+      QQmlComponent component(getPluginEngine(), QUrl::fromLocalFile(_pluginPath));
       obj = component.create();
       if (obj == 0) {
             qDebug("creating component <%s> failed", qPrintable(_pluginPath));
@@ -402,7 +402,7 @@ void MuseScore::pluginTriggered(int idx)
       {
       QString pp = plugins[idx];
 
-      QQmlEngine* engine = Ms::MScore::qml();
+      QQmlEngine* engine = getPluginEngine();
 
       QQmlComponent component(engine);
       component.loadUrl(QUrl::fromLocalFile(pp));
@@ -473,7 +473,7 @@ void collectPluginMetaInformation(PluginDescription* d)
       {
       qDebug("Collect meta for <%s>", qPrintable(d->path));
 
-      QQmlComponent component(Ms::MScore::qml(), QUrl::fromLocalFile(d->path));
+      QQmlComponent component(mscore->getPluginEngine(), QUrl::fromLocalFile(d->path));
       QObject* obj = component.create();
       if (obj == 0) {
             qDebug("creating component <%s> failed", qPrintable(d->path));

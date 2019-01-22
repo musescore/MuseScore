@@ -15,8 +15,9 @@
 
 #include "config.h"
 
-#ifdef SCRIPT_INTERFACE
 #include "libmscore/mscore.h"
+#include "libmscore/musescoreCore.h"
+#include "libmscore/utils.h"
 
 namespace Ms {
 
@@ -24,12 +25,6 @@ class MsProcess;
 class Score;
 class Element;
 class MScore;
-class MuseScoreCore;
-
-extern int version();
-extern int majorVersion();
-extern int minorVersion();
-extern int updateVersion();
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -53,40 +48,21 @@ extern int updateVersion();
 
 class QmlPlugin : public QQuickItem {
       Q_OBJECT
-      Q_PROPERTY(QString menuPath        READ menuPath WRITE setMenuPath)
-      Q_PROPERTY(QString filePath        READ filePath)
-      Q_PROPERTY(QString version         READ version WRITE setVersion)
-      Q_PROPERTY(QString description     READ description WRITE setDescription)
-      Q_PROPERTY(QString pluginType      READ pluginType WRITE setPluginType)
 
-      Q_PROPERTY(QString dockArea        READ dockArea WRITE setDockArea)
-      Q_PROPERTY(bool requiresScore      READ requiresScore WRITE setRequiresScore)
-      Q_PROPERTY(int division            READ division)
-      Q_PROPERTY(int mscoreVersion       READ mscoreVersion)
-      Q_PROPERTY(int mscoreMajorVersion  READ mscoreMajorVersion)
-      Q_PROPERTY(int mscoreMinorVersion  READ mscoreMinorVersion)
-      Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion)
-      Q_PROPERTY(qreal mscoreDPI         READ mscoreDPI)
-      Q_PROPERTY(Ms::Score* curScore     READ curScore)
-//TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
-
-      MuseScoreCore* msc;
       QString _menuPath;
       QString _pluginType;
       QString _dockArea;
-      bool    _requiresScore;
+      bool    _requiresScore = true;
       QString _version;
       QString _description;
-      QFile logFile;
 
    protected:
       QString _filePath;            // the path of the source file, without file name
-   signals:
-      void run();
+      MuseScoreCore* msc()             { return MuseScoreCore::mscoreCore; }
+      const MuseScoreCore* msc() const { return MuseScoreCore::mscoreCore; }
 
    public:
       QmlPlugin(QQuickItem* parent = 0);
-      ~QmlPlugin();
 
       void setMenuPath(const QString& s)   { _menuPath = s;    }
       QString menuPath() const             { return _menuPath; }
@@ -101,9 +77,10 @@ class QmlPlugin : public QQuickItem {
       QString pluginType() const           { return _pluginType; }
       void setDockArea(const QString& s)   { _dockArea = s;    }
       QString dockArea() const             { return _dockArea; }
-      void runPlugin()                     { emit run();       }
       void setRequiresScore(bool b)        { _requiresScore = b;    }
       bool requiresScore() const           { return _requiresScore; }
+
+      virtual void runPlugin() = 0;
 
       int division() const                { return MScore::division; }
       int mscoreVersion() const           { return Ms::version();      }
@@ -111,26 +88,8 @@ class QmlPlugin : public QQuickItem {
       int mscoreMinorVersion() const      { return minorVersion();  }
       int mscoreUpdateVersion() const     { return updateVersion(); }
       qreal mscoreDPI() const             { return DPI;     }
-
-      Score* curScore() const;
-      QQmlListProperty<Score> scores();
-
-      Q_INVOKABLE Ms::Score* newScore(const QString& name, const QString& part, int measures);
-      Q_INVOKABLE Ms::Element* newElement(int);
-      Q_INVOKABLE void cmd(const QString&);
-      Q_INVOKABLE Ms::MsProcess* newQProcess();
-      Q_INVOKABLE bool writeScore(Ms::Score*, const QString& name, const QString& ext);
-      Q_INVOKABLE Ms::Score* readScore(const QString& name, bool noninteractive = false);
-      Q_INVOKABLE void closeScore(Ms::Score*);
-
-      Q_INVOKABLE void log(const QString&);
-      Q_INVOKABLE void logn(const QString&);
-      Q_INVOKABLE void log2(const QString&, const QString&);
-      Q_INVOKABLE void openLog(const QString&);
-      Q_INVOKABLE void closeLog();
       };
 
 
 } // namespace Ms
-#endif
 #endif

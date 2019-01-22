@@ -50,9 +50,16 @@ include_directories(
 
 if (SCRIPT_INTERFACE)
       set (SCRIPT_FILES
-            plugin/pluginCreator.h plugin/pluginManager.h plugin/qmledit.h plugin/qmlplugin.h
+            plugin/pluginCreator.h plugin/pluginManager.h plugin/qmledit.h
+            plugin/qmlplugin.h plugin/qmlpluginengine.h
+            plugin/api/qmlpluginapi.h plugin/api/cursor.h plugin/api/scoreelement.h plugin/api/elements.h
+            plugin/api/score.h
+            plugin/api/fraction.h
 
-            plugin/mscorePlugins.cpp plugin/pluginCreator.cpp plugin/pluginManager.cpp plugin/qmledit.cpp plugin/qmlplugin.cpp
+            plugin/mscorePlugins.cpp plugin/pluginCreator.cpp plugin/pluginManager.cpp plugin/qmledit.cpp
+            plugin/qmlplugin.cpp plugin/qmlpluginengine.cpp
+            plugin/api/qmlpluginapi.cpp plugin/api/cursor.cpp plugin/api/scoreelement.cpp plugin/api/elements.cpp
+            plugin/api/score.cpp
             )
 
       set (SCRIPT_UI

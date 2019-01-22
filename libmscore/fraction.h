@@ -81,36 +81,8 @@ class Fraction {
 inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
 inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
 
-//---------------------------------------------------------
-//   FractionWrapper
-//---------------------------------------------------------
-
-class FractionWrapper : public QObject {
-      Q_OBJECT
-      Q_PROPERTY(int numerator READ numerator)
-      Q_PROPERTY(int denominator READ denominator)
-      Q_PROPERTY(int ticks READ ticks)
-
-      Fraction f;
-
-   public slots:
-      void setFraction(Fraction _f) { f = _f; }
-
-   public:
-      FractionWrapper(const FractionWrapper& w) : QObject() { f = w.f; }
-      FractionWrapper() {}
-      FractionWrapper(const Fraction& _f) : f(_f) {}
-
-      Fraction fraction() const { return f; }
-      int numerator() const   { return f.numerator(); }
-      int denominator() const { return f.denominator(); }
-      int ticks() const       { return f.ticks(); }
-      };
-
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Fraction);
-
-Q_DECLARE_METATYPE(Ms::FractionWrapper);
 
 #endif
