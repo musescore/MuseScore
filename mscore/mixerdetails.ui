@@ -39,7 +39,7 @@
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="toolTip">
-          <string>MIDI Out controllers</string>
+          <string>MIDI OUT controllers</string>
          </property>
          <property name="title">
           <string>MIDI</string>

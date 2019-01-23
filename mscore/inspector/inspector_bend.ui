@@ -183,7 +183,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Line width:</string>
+         <string>Line thickness:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -196,7 +196,7 @@
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="lineWidth">
         <property name="accessibleName">
-         <string>Line width</string>
+         <string>Line thickness</string>
         </property>
         <property name="suffix">
          <string>sp</string>
@@ -219,7 +219,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="Ms::FontStyleSelect" name="fontStyle">
+         <widget class="Ms::FontStyleSelect" name="fontStyle" native="true">
           <property name="minimumSize">
            <size>
             <width>10</width>
@@ -231,19 +231,19 @@
        </layout>
       </item>
       <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetLineWidth"/>
+       <widget class="Ms::ResetButton" name="resetLineWidth" native="true"/>
       </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetFontFace"/>
+       <widget class="Ms::ResetButton" name="resetFontFace" native="true"/>
       </item>
       <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetFontSize"/>
+       <widget class="Ms::ResetButton" name="resetFontSize" native="true"/>
       </item>
       <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetFontStyle"/>
+       <widget class="Ms::ResetButton" name="resetFontStyle" native="true"/>
       </item>
       <item row="4" column="2">
-       <widget class="Ms::ResetButton" name="resetPlayBend"/>
+       <widget class="Ms::ResetButton" name="resetPlayBend" native="true"/>
       </item>
      </layout>
     </widget>
@@ -261,6 +261,7 @@
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
    <header>inspector/resetButton.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -271,8 +272,6 @@
   <tabstop>playBend</tabstop>
   <tabstop>properties</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

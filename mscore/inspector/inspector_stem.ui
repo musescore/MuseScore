@@ -79,7 +79,7 @@
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="lineWidth">
         <property name="accessibleName">
-         <string>Line width</string>
+         <string>Line thickness</string>
         </property>
         <property name="suffix">
          <string>sp</string>
@@ -92,7 +92,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Line width:</string>
+         <string>Line thickness:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -132,10 +132,10 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetLineWidth"/>
+       <widget class="Ms::ResetButton" name="resetLineWidth" native="true"/>
       </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetUserLength"/>
+       <widget class="Ms::ResetButton" name="resetUserLength" native="true"/>
       </item>
      </layout>
     </widget>
@@ -150,8 +150,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
