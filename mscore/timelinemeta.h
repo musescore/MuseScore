@@ -2,10 +2,11 @@
 #define TIMELINEMETA_H
 
 #include "timeline.h"
-#include "timelinelabel.h"
+#include "timelineabstract.h"
 
 namespace Ms {
 
+class TimelineComponent;
 class Timeline;
 class TimelineMeta;
 class TimelineMetaRows;
@@ -27,7 +28,7 @@ class TimelineMetaLabel : public TimelineLabel
 //   TimelineMetaLabels
 //---------------------------------------------------------
 
-class TimelineMetaLabels : public QGraphicsView
+class TimelineMetaLabels : public QGraphicsView, public TimelineComponent
       {
       Q_OBJECT
 
@@ -41,7 +42,6 @@ class TimelineMetaLabels : public QGraphicsView
       TimelineMetaLabels(TimelineMeta* parent);
       TimelineMeta* getParent();
       void updateLabels();
-      Score* score();
       int maximumTextWidth() { return _maxTextWidth; }
       };
 
@@ -100,7 +100,7 @@ class TimelineMetaRowsValue : public QGraphicsItemGroup
 //   TimelineMetaRows
 //---------------------------------------------------------
 
-class TimelineMetaRows : public QGraphicsView
+class TimelineMetaRows : public QGraphicsView, public TimelineComponent
       {
       Q_OBJECT
 
@@ -148,14 +148,7 @@ class TimelineMetaRows : public QGraphicsView
       void updateSelection();
       void redrawRows();
 
-      int cellWidth();
-      int cellHeight();
-      int minCellWidth();
-      int maxCellWidth();
-
       TimelineMeta* getParent();
-      Score* score();
-      ScoreView* scoreView();
 
       virtual void mousePressEvent(QMouseEvent* event);
       virtual void mouseMoveEvent(QMouseEvent* event);
@@ -166,12 +159,15 @@ class TimelineMetaRows : public QGraphicsView
 //   TimelineMeta
 //---------------------------------------------------------
 
-class TimelineMeta : public QSplitter
+class TimelineMeta : public QSplitter, public TimelineComponent
       {
       Q_OBJECT
 
       QList<Meta> _metas;
       bool _collapsed = false;
+
+      void updateScore();
+      void updateScoreView();
 
    public slots:
       void dataSplitterMoved();
@@ -181,10 +177,6 @@ class TimelineMeta : public QSplitter
       void updateMeta();
 
       Timeline* getParent();
-      Score* score();
-      ScoreView* scoreView();
-      int cellHeight();
-      int cellWidth();
 
       TimelineMetaLabels* labelView() { return (TimelineMetaLabels*) widget(0); }
       TimelineMetaRows* rowsView() { return (TimelineMetaRows*) widget(1); }

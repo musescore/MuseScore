@@ -45,9 +45,6 @@ void MuseScore::showTimeline(bool visible)
 Timeline::Timeline(QWidget* parent)
   : QDockWidget(parent)
       {
-      _score = nullptr;
-      _scoreView = nullptr;
-
       configureMetaAndDataWidgets();
 
       setWindowTitle(tr("Timeline"));
@@ -95,7 +92,7 @@ void Timeline::updateSliders()
 
 void Timeline::updateTimeline()
       {
-      _cellHeight = determineHeight();
+      setCellHeight(determineHeight());
       metaWidget()->updateMeta();
       dataWidget()->updateData();
 
@@ -116,24 +113,12 @@ void Timeline::updateSelection()
       }
 
 //---------------------------------------------------------
-//   setScore
+//   updateScoreView
 //---------------------------------------------------------
 
-void Timeline::setScore(Score* score)
+void Timeline::updateScoreView()
       {
-      _score = score;
-      updateTimeline();
-      }
-
-//---------------------------------------------------------
-//   setScoreView
-//---------------------------------------------------------
-
-void Timeline::setScoreView(ScoreView* scoreView)
-      {
-      _scoreView = scoreView;
-      connect(_scoreView, SIGNAL(viewRectChanged()), dataWidget()->gridView(), SLOT(updateView()));
-      dataWidget()->gridView()->updateView();
+      connect(scoreView(), SIGNAL(viewRectChanged()), dataWidget()->gridView(), SLOT(updateView()));
       }
 
 //---------------------------------------------------------
@@ -162,27 +147,16 @@ int Timeline::determineHeight()
       }
 
 //---------------------------------------------------------
-//   getFont
-//---------------------------------------------------------
-
-QFont Timeline::getFont()
-      {
-      QString fontFamily = preferences.getString(PREF_UI_THEME_FONTFAMILY);
-      int fontSize = preferences.getInt(PREF_UI_THEME_FONTSIZE);
-      return QFont(fontFamily, fontSize);
-      }
-
-//---------------------------------------------------------
 //   changeWidth
 //---------------------------------------------------------
 
 void Timeline::changeWidth(int newWidth)
       {
-      _cellWidth += newWidth;
-      if (_cellWidth < _minCellWidth)
-            _cellWidth = _minCellWidth;
-      if (_cellWidth > _maxCellWidth)
-            _cellWidth = _maxCellWidth;
+      setCellWidth(cellWidth() + newWidth);
+      if (cellWidth() < minCellWidth())
+            setCellWidth(minCellWidth());
+      if (cellWidth() > maxCellWidth())
+            setCellWidth(maxCellWidth());
       }
 
 //---------------------------------------------------------

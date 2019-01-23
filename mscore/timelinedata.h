@@ -2,7 +2,7 @@
 #define TIMELINEDATA_H
 
 #include "timeline.h"
-#include "timelinelabel.h"
+#include "timelineabstract.h"
 
 namespace Ms {
 
@@ -27,7 +27,7 @@ class TimelineDataLabel : public TimelineLabel
 //   TimelineDataLabels
 //---------------------------------------------------------
 
-class TimelineDataLabels : public QGraphicsView
+class TimelineDataLabels : public QGraphicsView, public TimelineComponent
       {
       Q_OBJECT
 
@@ -41,7 +41,6 @@ class TimelineDataLabels : public QGraphicsView
       TimelineDataLabels(TimelineData* parent);
       TimelineData* getParent();
       void updateLabels();
-      Score* score();
       int maximumTextWidth() { return _maxTextWidth; }
       };
 
@@ -71,7 +70,7 @@ class TimelineDataGridCell : public QGraphicsRectItem
 //   TimelineDataGrid
 //---------------------------------------------------------
 
-class TimelineDataGrid : public QGraphicsView
+class TimelineDataGrid : public QGraphicsView, public TimelineComponent
       {
       Q_OBJECT
 
@@ -124,12 +123,6 @@ class TimelineDataGrid : public QGraphicsView
       void setScrollBarValue(int v) { horizontalScrollBar()->setValue(v); }
       void adjustScrollBar(int originalScrollValue, QPoint globalCursorPos, int originalGridWidth);
 
-      TimelineData* getParent() { return qobject_cast<TimelineData*>(parent()); }
-      Score* score();
-      ScoreView* scoreView();
-      int cellWidth();
-      int cellHeight();
-
       virtual void mousePressEvent(QMouseEvent* event);
       virtual void mouseMoveEvent(QMouseEvent* event);
       virtual void mouseReleaseEvent(QMouseEvent* event);
@@ -139,7 +132,7 @@ class TimelineDataGrid : public QGraphicsView
 //   TimelineData
 //---------------------------------------------------------
 
-class TimelineData : public QSplitter
+class TimelineData : public QSplitter, public TimelineComponent
       {
       Q_OBJECT
 
@@ -153,9 +146,6 @@ class TimelineData : public QSplitter
                           labelView()->updateLabels(); }
       TimelineDataLabels* labelView() { return static_cast<TimelineDataLabels*>(widget(0)); }
       TimelineDataGrid* gridView() { return static_cast<TimelineDataGrid*>(widget(1)); }
-
-      Score* score();
-      ScoreView* scoreView();
 
       Timeline* getParent();
       };

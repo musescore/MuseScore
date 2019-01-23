@@ -18,7 +18,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 TimelineMetaLabel::TimelineMetaLabel(TimelineMetaLabels *view, QString text, int nMeta, QFont font)
-      : TimelineLabel(view, text, font, nMeta, view->getParent()->cellHeight())
+      : TimelineLabel(view, text, font, nMeta, view->cellHeight())
       {
 
       }
@@ -54,11 +54,11 @@ TimelineMeta* TimelineMetaLabels::getParent()
 void TimelineMetaLabels::updateLabelWidths(int newWidth)
       {
       for (TimelineMetaLabel* label : _labels)
-            label->updateWidth(newWidth);
+            label->updateWidth(newWidth, getParent()->handleWidth());
 
       // -1 makes sure the rect border is within view
       // -2 makes sure the sDcene rect is always smaller than the view rect, thus no scrollbar is displayed
-      setSceneRect(-1, -1, newWidth - 2, getParent()->cellHeight() * _labels.length() + 1);
+      setSceneRect(-1, -1, newWidth - 2, cellHeight() * _labels.length() + 1);
       }
 
 //---------------------------------------------------------
@@ -73,7 +73,7 @@ void TimelineMetaLabels::updateLabels()
       if (!score())
             return;
 
-      QFont font = getParent()->getParent()->getFont();
+      QFont font = getFont();
       _maxTextWidth = 0;
 
       int nMeta = 0;
@@ -92,15 +92,6 @@ void TimelineMetaLabels::updateLabels()
       scene()->addItem(measureLabel);
 
       updateLabelWidths(getParent()->sizes()[0]);
-      }
-
-//---------------------------------------------------------
-//   score
-//---------------------------------------------------------
-
-Score* TimelineMetaLabels::score()
-      {
-      return getParent()->score();
       }
 
 //---------------------------------------------------------
@@ -346,7 +337,7 @@ void TimelineMetaRows::drawRows()
       if (!score())
             return;
 
-      _currentFont = getParent()->getParent()->getFont();
+      _currentFont = getFont();
       _redrawList.clear();
 
       int gridWidth = cellWidth() * score()->nmeasures();
@@ -655,7 +646,7 @@ void TimelineMetaRows::drawMeasureNumbers(int y)
       int cellNumber = 0;
 
       int gridWidth = cellWidth() * score()->nmeasures();
-      QFont font = getParent()->getParent()->getFont();
+      QFont font = getFont();
       qreal oldRightSide = -1;
       const qreal spacer = 1;
 
@@ -841,66 +832,12 @@ void TimelineMetaRows::resetOldHover()
       }
 
 //---------------------------------------------------------
-//   cellWidth
-//---------------------------------------------------------
-
-int TimelineMetaRows::cellWidth()
-      {
-      return getParent()->cellWidth();
-      }
-
-//---------------------------------------------------------
-//   cellHeight
-//---------------------------------------------------------
-
-int TimelineMetaRows::cellHeight()
-      {
-      return getParent()->cellHeight();
-      }
-
-//---------------------------------------------------------
-//   minCellWidth
-//---------------------------------------------------------
-
-int TimelineMetaRows::minCellWidth()
-      {
-      return getParent()->getParent()->minCellWidth();
-      }
-
-//---------------------------------------------------------
-//   maxCellWidth
-//---------------------------------------------------------
-
-int TimelineMetaRows::maxCellWidth()
-      {
-      return getParent()->getParent()->maxCellWidth();
-      }
-
-//---------------------------------------------------------
 //   getParent
 //---------------------------------------------------------
 
 TimelineMeta* TimelineMetaRows::getParent()
       {
       return static_cast<TimelineMeta*>(parent());
-      }
-
-//---------------------------------------------------------
-//   score
-//---------------------------------------------------------
-
-Score* TimelineMetaRows::score()
-      {
-      return getParent()->score();
-      }
-
-//---------------------------------------------------------
-//   scoreView
-//---------------------------------------------------------
-
-ScoreView* TimelineMetaRows::scoreView()
-      {
-      return getParent()->scoreView();
       }
 
 //---------------------------------------------------------
@@ -940,6 +877,26 @@ void TimelineMeta::updateMeta()
       }
 
 //---------------------------------------------------------
+//   updateScore
+//---------------------------------------------------------
+
+void TimelineMeta::updateScore()
+      {
+      labelView()->setScore(score());
+      rowsView()->setScore(score());
+      }
+
+//---------------------------------------------------------
+//   updateScoreView
+//---------------------------------------------------------
+
+void TimelineMeta::updateScoreView()
+      {
+      labelView()->setScoreView(scoreView());
+      rowsView()->setScoreView(scoreView());
+      }
+
+//---------------------------------------------------------
 //   dataSplitterMoved
 //---------------------------------------------------------
 
@@ -957,42 +914,6 @@ void TimelineMeta::dataSplitterMoved()
 Timeline* TimelineMeta::getParent()
       {
       return static_cast<Timeline*>(parent()->parent());
-      }
-
-//---------------------------------------------------------
-//   score
-//---------------------------------------------------------
-
-Score* TimelineMeta::score()
-      {
-      return getParent()->score();
-      }
-
-//---------------------------------------------------------
-//   scoreView
-//---------------------------------------------------------
-
-ScoreView* TimelineMeta::scoreView()
-      {
-      return getParent()->scoreView();
-      }
-
-//---------------------------------------------------------
-//   cellHeight
-//---------------------------------------------------------
-
-int TimelineMeta::cellHeight()
-      {
-      return getParent()->cellHeight();
-      }
-
-//---------------------------------------------------------
-//   cellWidth
-//---------------------------------------------------------
-
-int TimelineMeta::cellWidth()
-      {
-      return getParent()->cellWidth();
       }
 
 //---------------------------------------------------------

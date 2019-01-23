@@ -12,7 +12,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 TimelineDataLabel::TimelineDataLabel(TimelineDataLabels *view, QString text, int nMeta)
-      : TimelineLabel(view, text, view->getParent()->getParent()->getFont(), nMeta, view->getParent()->getParent()->cellHeight())
+      : TimelineLabel(view, text, view->getFont(), nMeta, view->cellHeight())
       {
 
       }
@@ -24,11 +24,11 @@ TimelineDataLabel::TimelineDataLabel(TimelineDataLabels *view, QString text, int
 void TimelineDataLabels::updateLabelWidths(int newWidth)
       {
       for (TimelineDataLabel* label : _labels)
-            label->updateWidth(newWidth);
+            label->updateWidth(newWidth, getParent()->handleWidth());
 
       // -1 makes sure the rect border is within view
       // -2 makes sure the sDcene rect is always smaller than the view rect, thus no scrollbar is displayed
-      setSceneRect(-1, -1, newWidth - 2, getParent()->getParent()->cellHeight() * _labels.length());
+      setSceneRect(-1, -1, newWidth - 2, cellHeight() * _labels.length());
       }
 
 //---------------------------------------------------------
@@ -85,20 +85,11 @@ void TimelineDataLabels::updateLabels()
       }
 
 //---------------------------------------------------------
-//   score
-//---------------------------------------------------------
-
-Score* TimelineDataLabels::score()
-      {
-      return getParent()->score();
-      }
-
-//---------------------------------------------------------
 //   TimelineDataCell
 //---------------------------------------------------------
 
 TimelineDataGridCell::TimelineDataGridCell(Measure* measure, int staffIdx, int measureIdx)
-      : _measure(measure), _staffIdx(staffIdx), _measureIdx(measureIdx)
+      : _measure(measure), _measureIdx(measureIdx),  _staffIdx(staffIdx)
       {
       setPen(QPen(QColor(Qt::black)));
 
@@ -520,42 +511,6 @@ void TimelineDataGrid::adjustScrollBar(int originalScrollValue, QPoint globalCur
       }
 
 //---------------------------------------------------------
-//   score
-//---------------------------------------------------------
-
-Score* TimelineDataGrid::score()
-      {
-      return getParent()->score();
-      }
-
-//---------------------------------------------------------
-//   scoreView
-//---------------------------------------------------------
-
-ScoreView* TimelineDataGrid::scoreView()
-      {
-      return getParent()->scoreView();
-      }
-
-//---------------------------------------------------------
-//   cellWidth
-//---------------------------------------------------------
-
-int TimelineDataGrid::cellWidth()
-      {
-      return getParent()->getParent()->cellWidth();
-      }
-
-//---------------------------------------------------------
-//   cellHeight
-//---------------------------------------------------------
-
-int TimelineDataGrid::cellHeight()
-      {
-      return getParent()->getParent()->cellHeight();
-      }
-
-//---------------------------------------------------------
 //   mousePressEvent
 //---------------------------------------------------------
 
@@ -761,24 +716,6 @@ void TimelineData::metaSplitterMoved()
       QSplitter* metaSplitter = getParent()->metaWidget();
       setSizes(metaSplitter->sizes());
       labelView()->updateLabelWidths(metaSplitter->sizes()[0]);
-      }
-
-//---------------------------------------------------------
-//   score
-//---------------------------------------------------------
-
-Score* TimelineData::score()
-      {
-      return getParent()->score();
-      }
-
-//---------------------------------------------------------
-//   scoreView
-//---------------------------------------------------------
-
-ScoreView* TimelineData::scoreView()
-      {
-      return getParent()->scoreView();
       }
 
 //---------------------------------------------------------
