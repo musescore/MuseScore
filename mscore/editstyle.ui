@@ -5070,7 +5070,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_57">
              <property name="text">
-              <string>Beam distance (in beam thickness units):</string>
+              <string>Beam distance (relative to beam thickness):</string>
              </property>
             </widget>
            </item>
