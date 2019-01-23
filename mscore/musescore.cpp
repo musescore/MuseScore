@@ -4488,13 +4488,18 @@ AboutBoxDialog::AboutBoxDialog()
       revisionLabel->setText(tr("Revision: %1").arg(revision));
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-      copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>")
-                              .arg(tr("Visit %1www.musescore.org%2 for new versions and more information.\n").arg("<a href=\"http://www.musescore.org/\">")
-                                   .arg("</a>").replace("\n", "<br/>") +
-                                   tr("Support MuseScore with your %3donation%4.\n\n").arg("<a href=\"http://www.musescore.org/donate\">")
-                                   .arg("</a>").replace("\n", "<br/>") +
-                                   tr("Copyright &copy; 1999-2019 Werner Schweer and Others.\n").replace("\n", "<br/>") +
-                                   tr("Published under the GNU General Public License.").replace("\n", "<br/>")));
+      QString visitAndDonateString;
+#if !defined(FOR_WINSTORE)
+      visitAndDonateString = tr("Visit %1www.musescore.org%2 for new versions and more information.\nSupport MuseScore with your %3donation%4.")
+                                     .arg("<a href=\"https://www.musescore.org/\">")
+                                     .arg("</a>")
+                                     .arg("<a href=\"https://www.musescore.org/donate\">")
+                                     .arg("</a>");
+      visitAndDonateString += "\n\n";
+#endif
+      QString finalString = visitAndDonateString + tr("Copyright &copy; 1999-2019 Werner Schweer and Others.\nPublished under the GNU General Public License.");
+      finalString.replace("\n", "<br/>");
+      copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>").arg(finalString));
       connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
       }
 
