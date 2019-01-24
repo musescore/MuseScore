@@ -407,7 +407,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       menuAdd->addAction(getAction("insert-vbox"));
       menuAdd->addAction(getAction("insert-textframe"));
 
-      a = popup->addAction(tr("Delete Selected Measures"));
+      a = popup->addAction(tr("Remove Selected Measures"));
       a->setData("delete-selected-measures");
       
       popup->addSeparator();
