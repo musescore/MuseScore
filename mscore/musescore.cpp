@@ -4073,7 +4073,7 @@ void MuseScore::changeState(ScoreState val)
                         val = STATE_NOTE_ENTRY_METHOD_REALTIME_MANUAL;
                         }
                   else if (getAction("note-input-timewise")->isChecked()) {
-                        showModeText(tr("Timewise input mode"));
+                        showModeText(tr("Insert mode"));
                         cs->setNoteEntryMethod(NoteEntryMethod::TIMEWISE);
                         val = STATE_NOTE_ENTRY_METHOD_TIMEWISE;
                         }
