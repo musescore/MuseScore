@@ -14,6 +14,7 @@
 #define __STYLE_H__
 
 #include "chordlist.h"
+#include "types.h"
 
 namespace Ms {
 
@@ -1040,63 +1041,6 @@ enum class Sid {
       fermataMinDistance,
 
       STYLES
-      };
-
-//-------------------------------------------------------------------
-//   Tid
-//    Enumerate the list of built-in text substyles
-//    must be in sync with textStyles array
-//-------------------------------------------------------------------
-
-enum class Tid {
-      DEFAULT,
-      TITLE,
-      SUBTITLE,
-      COMPOSER,
-      POET,
-      LYRICS_ODD,
-      LYRICS_EVEN,
-      FINGERING,
-      LH_GUITAR_FINGERING,
-      RH_GUITAR_FINGERING,
-      STRING_NUMBER,
-      INSTRUMENT_LONG,
-      INSTRUMENT_SHORT,
-      INSTRUMENT_EXCERPT,
-      DYNAMICS,
-      EXPRESSION,
-      TEMPO,
-      METRONOME,
-      MEASURE_NUMBER,
-      TRANSLATOR,
-      TUPLET,
-      SYSTEM,
-      STAFF,
-      HARMONY_A,
-      HARMONY_B,
-      REHEARSAL_MARK,
-      REPEAT_LEFT,       // align to start of measure
-      REPEAT_RIGHT,      // align to end of measure
-      FRAME,
-      TEXTLINE,
-      GLISSANDO,
-      OTTAVA,
-      VOLTA,
-      PEDAL,
-      LET_RING,
-      PALM_MUTE,
-      HAIRPIN,
-      BEND,
-      HEADER,
-      FOOTER,
-      INSTRUMENT_CHANGE,
-      USER1,
-      USER2,
-      USER3,
-      USER4,
-      USER5,
-      USER6,
-      TEXT_STYLES
       };
 
 //---------------------------------------------------------

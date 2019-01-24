@@ -304,6 +304,7 @@ class MPaintDevice : public QPaintDevice {
 //---------------------------------------------------------
 
 class MScore {
+      Q_GADGET
       static MStyle _baseStyle;          // buildin initial style
       static MStyle _defaultStyle;       // buildin modified by preferences
       static MStyle* _defaultStyleForParts;
@@ -317,6 +318,8 @@ class MScore {
    public:
       enum class DirectionH : char { AUTO, LEFT, RIGHT };
       enum class OrnamentStyle : char { DEFAULT, BAROQUE};
+      Q_ENUM(DirectionH)
+      Q_ENUM(OrnamentStyle)
 
       static MsError _error;
       static std::vector<MScoreError> errorList;
@@ -423,11 +426,6 @@ inline static int limit(int val, int min, int max)
       }
 }     // namespace Ms
 
-// Q_DECLARE_METATYPE(Ms::Direction);
-// Q_DECLARE_METATYPE(Ms::MSQE_Direction::E);
-// Q_DECLARE_METATYPE(Ms::Direction::E);
-
-Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
 Q_DECLARE_METATYPE(Ms::BarLineType);
 
 #endif
