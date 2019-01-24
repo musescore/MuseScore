@@ -15,7 +15,8 @@
 
 #include "config.h"
 
-#include "plugin/qmlplugin.h"
+#include "../qmlplugin.h"
+#include "enums.h"
 #include "libmscore/mscore.h"
 #include "libmscore/utils.h"
 
@@ -70,6 +71,41 @@ class PluginAPI : public Ms::QmlPlugin {
       Q_PROPERTY(Ms::PluginAPI::Score* curScore     READ curScore)
 //TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
 
+      Enum* elementTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Element MEMBER elementTypeEnum)
+      Enum* accidentalTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Accidental MEMBER accidentalTypeEnum)
+      Enum* beamModeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Beam MEMBER beamModeEnum)
+      Enum* placementEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Placement MEMBER placementEnum) // was Element.ABOVE and Element.BELOW in 2.X
+      Enum* glissandoTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Glissando MEMBER glissandoTypeEnum) // was probably absent in 2.X
+      Enum* layoutBreakTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* LayoutBreak MEMBER layoutBreakTypeEnum)
+      Enum* lyricsSyllabicEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Lyrics MEMBER lyricsSyllabicEnum)
+      Enum* directionEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Direction MEMBER directionEnum) // was in MScore class in 2.X
+      Enum* directionHEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* DirectionH MEMBER directionHEnum) // was in MScore class in 2.X
+      Enum* ornamentStyleEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* OrnamentStyle MEMBER ornamentStyleEnum) // was in MScore class in 2.X
+      Enum* glissandoStyleEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* GlissandoStyle MEMBER glissandoStyleEnum) // was in MScore class in 2.X
+      Enum* tidEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Tid MEMBER tidEnum) // was TextStyleType in 2.X
+      Enum* noteHeadTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* NoteHeadType MEMBER noteHeadTypeEnum) // was in NoteHead class in 2.X
+      Enum* noteHeadGroupEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* NoteHeadGroup MEMBER noteHeadGroupEnum) // was in NoteHead class in 2.X
+      Enum* noteValueTypeEnum; // or velo type?
+      Q_PROPERTY(Ms::PluginAPI::Enum* NoteValueType MEMBER noteValueTypeEnum) // was in Note class in 2.X
+      Enum* segmentTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Segment MEMBER segmentTypeEnum);
+      Enum* spannerAnchorEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Spanner MEMBER spannerAnchorEnum); // probably unavailable in 2.X
+
       QFile logFile;
 
    signals:
@@ -86,8 +122,7 @@ class PluginAPI : public Ms::QmlPlugin {
       QQmlListProperty<Score> scores();
 
       Q_INVOKABLE Ms::PluginAPI::Score* newScore(const QString& name, const QString& part, int measures);
-//       Q_INVOKABLE Ms::PluginAPI::Element* newElement(int);
-      Q_INVOKABLE Ms::PluginAPI::Element* newElement(const QString& name);
+      Q_INVOKABLE Ms::PluginAPI::Element* newElement(int);
       Q_INVOKABLE void cmd(const QString&);
       Q_INVOKABLE Ms::MsProcess* newQProcess();
       Q_INVOKABLE bool writeScore(Ms::PluginAPI::Score*, const QString& name, const QString& ext);

@@ -33,6 +33,23 @@ PluginAPI::PluginAPI(QQuickItem* parent)
    : Ms::QmlPlugin(parent)
       {
       setRequiresScore(true);              // by default plugins require a score to work
+      // Expose enumerations to QML
+      elementTypeEnum = wrapEnum<Ms::ElementType>(this);
+      accidentalTypeEnum = wrapEnum<Ms::AccidentalType>(this);
+      beamModeEnum = wrapEnum<Ms::Beam::Mode>(this);
+      glissandoTypeEnum = wrapEnum<Ms::GlissandoType>(this);
+      layoutBreakTypeEnum = wrapEnum<Ms::LayoutBreak::Type>(this);
+      lyricsSyllabicEnum = wrapEnum<Ms::Lyrics::Syllabic>(this);
+      directionEnum = wrapEnum<Ms::Direction>(this);
+      directionHEnum = wrapEnum<Ms::MScore::DirectionH>(this);
+      ornamentStyleEnum = wrapEnum<Ms::MScore::OrnamentStyle>(this);
+      glissandoStyleEnum = wrapEnum<Ms::GlissandoStyle>(this);
+      tidEnum = wrapEnum<Ms::Tid>(this); // TODO: check that it is exposed
+      noteHeadTypeEnum = wrapEnum<Ms::NoteHead::Type>(this);
+      noteHeadGroupEnum = wrapEnum<Ms::NoteHead::Group>(this);
+      noteValueTypeEnum = wrapEnum<Ms::Note::ValueType>(this);
+      segmentTypeEnum = wrapEnum<Ms::SegmentType>(this);
+      spannerAnchorEnum = wrapEnum<Ms::Spanner::Anchor>(this);
       }
 
 //---------------------------------------------------------
@@ -95,12 +112,16 @@ void PluginAPI::closeScore(Ms::PluginAPI::Score* score)
 //   newElement
 //---------------------------------------------------------
 
-Element* PluginAPI::newElement(const QString& name)
+Element* PluginAPI::newElement(int elementType)
       {
       Ms::Score* score = msc()->currentScore();
       if (!score)
             return nullptr;
-      const ElementType type = Ms::ScoreElement::name2type(name);
+      if (elementType <= int(ElementType::INVALID) || elementType >= int(ElementType::MAXTYPE)) {
+            qWarning("PluginAPI::newElement: Wrong type ID: %d", elementType);
+            return nullptr;
+            }
+      const ElementType type = ElementType(elementType);
       Ms::Element* e = Ms::Element::create(type, score);
       return wrap(e, Ownership::PLUGIN);
       }
@@ -235,14 +256,14 @@ void PluginAPI::registerQmlTypes()
 //             qmlRegisterType<MScore>     ("MuseScore", 3, 0, "MScore");
 //TODO-ws            qmlRegisterType<MsScoreView>("MuseScore", 3, 0, "ScoreView");
 
-      qmlRegisterType<Cursor>     ("MuseScore", 3, 0, "Cursor");
-      qmlRegisterType<ScoreElement>("MuseScore", 3, 0, "ScoreElement");
-      qmlRegisterType<Score>      ("MuseScore", 3, 0, "Score");
-      qmlRegisterType<Element>   ("MuseScore", 3, 0, "Element");
-      qmlRegisterType<Chord>      ("MuseScore", 3, 0, "Chord");
-      qmlRegisterType<Note>       ("MuseScore", 3, 0, "Note");
-      qmlRegisterType<Segment>    ("MuseScore", 3, 0, "Segment");
-      qmlRegisterType<Measure>    ("MuseScore", 3, 0, "Measure");
+      qmlRegisterType<Cursor>("MuseScore", 3, 0, "Cursor");
+      qmlRegisterType<ScoreElement>();
+      qmlRegisterType<Score>();
+      qmlRegisterType<Element>();
+      qmlRegisterType<Chord>();
+      qmlRegisterType<Note>();
+      qmlRegisterType<Segment>();
+      qmlRegisterType<Measure>();
 #if 0
       qmlRegisterType<NoteHead>   ("MuseScore", 1, 0, "NoteHead");
       qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
@@ -278,7 +299,7 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<SlurTie>();
       qmlRegisterType<Spanner>();
 #endif
-      qmlRegisterType<FractionWrapper>   ("MuseScore", 3, 0, "Fraction");
+      qmlRegisterType<FractionWrapper>();
       qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
       qmlTypesRegistered = true;
