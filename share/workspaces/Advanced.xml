@@ -4096,6 +4096,9 @@
       <action>print</action>
       <action>undo</action>
       <action>redo</action>
+      <action></action>
+      <action>mag</action>
+      <action>view-box</action>
       </Toolbar>
     <Toolbar name="playbackControl">
       <action>midi-on</action>

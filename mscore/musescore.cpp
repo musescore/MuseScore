@@ -237,7 +237,10 @@ const std::list<const char*> MuseScore::_allFileOperationEntries {
             "file-save-online",
             "print",
             "undo",
-            "redo"
+            "redo",
+            "",
+            "mag",
+            "view-box"
             };
 
 const std::list<const char*> MuseScore::_allPlaybackControlEntries {
@@ -896,46 +899,40 @@ void MuseScore::populateFileOperations()
       {
       fileTools->clear();
 
-      if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
-            for (auto s : _fileOperationEntries) {
-                  if (!*s)
-                        fileTools->addSeparator();
-                  else
-                        fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(s)));
-                  }
-            }
-      else {
+      if (qApp->layoutDirection() == Qt::LayoutDirection::RightToLeft)
             _fileOperationEntries.reverse();
-            for (auto s : _fileOperationEntries) {
-                  if (!*s)
-                        fileTools->addSeparator();
-                  else
-                        fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(s)));
-                  }
-            _fileOperationEntries.reverse();
-            }
 
-      // Currently not customizable in ToolbarEditor
-      fileTools->addSeparator();
-      mag = new MagBox;
-      connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
-      fileTools->addWidget(mag);
-
-      viewModeCombo = new QComboBox(this);
+      for (auto s : _fileOperationEntries) {
+            if (!*s)
+                  fileTools->addSeparator();
+            else if (s == QString("view-box")) {
+                  viewModeCombo = new QComboBox(this);
 #if defined(Q_OS_MAC)
-      viewModeCombo->setFocusPolicy(Qt::StrongFocus);
+                  viewModeCombo->setFocusPolicy(Qt::StrongFocus);
 #else
-      viewModeCombo->setFocusPolicy(Qt::TabFocus);
+                  viewModeCombo->setFocusPolicy(Qt::TabFocus);
 #endif
-      viewModeCombo->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
+                  viewModeCombo->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
 
-      viewModeCombo->setAccessibleName(tr("View Mode"));
-      viewModeCombo->addItem(tr("Page View"), int(LayoutMode::PAGE));
-      viewModeCombo->addItem(tr("Continuous View"), int(LayoutMode::LINE));
-      viewModeCombo->addItem(tr("Single Page"), int(LayoutMode::SYSTEM));
+                  viewModeCombo->setAccessibleName(tr("View Mode"));
+                  viewModeCombo->addItem(tr("Page View"), int(LayoutMode::PAGE));
+                  viewModeCombo->addItem(tr("Continuous View"), int(LayoutMode::LINE));
+                  viewModeCombo->addItem(tr("Single Page"), int(LayoutMode::SYSTEM));
 
-      connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
-      fileTools->addWidget(viewModeCombo);
+                  connect(viewModeCombo, SIGNAL(activated(int)), SLOT(switchLayoutMode(int)));
+                  fileTools->addWidget(viewModeCombo);
+                  }
+            else if (s == QString("mag")) {
+                  mag = new MagBox;
+                  connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
+                  fileTools->addWidget(mag);
+                  }
+            else
+                  fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(s)));
+            }
+
+      if (qApp->layoutDirection() == Qt::LayoutDirection::RightToLeft)
+            _fileOperationEntries.reverse();
       }
 
 //---------------------------------------------------------

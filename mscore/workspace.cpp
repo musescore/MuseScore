@@ -170,7 +170,8 @@ void MuseScore::changeWorkspace(QAction* a)
 
 void MuseScore::changeWorkspace(Workspace* p, bool first)
       {
-      Workspace::currentWorkspace->save();
+      if (!first)
+            Workspace::currentWorkspace->save();
       p->read();
       Workspace::currentWorkspace = p;
       if (!first) {
