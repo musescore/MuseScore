@@ -10653,14 +10653,14 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="0" colspan="2">
+           <item row="3" column="0" colspan="2">
             <widget class="QCheckBox" name="textStyleSpatiumDependent">
              <property name="text">
               <string>Size changes with staff space setting</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="5" column="1">
             <widget class="Ms::AlignSelect" name="textStyleAlign" native="true"/>
            </item>
            <item row="2" column="1">
@@ -10720,7 +10720,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="2">
+           <item row="5" column="2">
             <widget class="QToolButton" name="resetTextStyleAlign">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -10754,14 +10754,14 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item row="5" column="0">
             <widget class="QLabel" name="label_210">
              <property name="text">
               <string>Align:</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label_209">
              <property name="text">
               <string>Font style:</string>
@@ -10785,14 +10785,45 @@
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
+           <item row="6" column="0">
+            <widget class="QLabel" name="textStyleColorLabel">
+             <property name="text">
+              <string>Color:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="Awl::ColorLabel" name="textStyleColor">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="resetTextStyleColor">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Color' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
             <widget class="QLabel" name="label_186">
              <property name="text">
               <string>Offset:</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="2">
+           <item row="7" column="2">
             <widget class="QToolButton" name="resetTextStyleOffset">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -10809,7 +10840,7 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="2">
+           <item row="3" column="2">
             <widget class="QToolButton" name="resetTextStyleSpatiumDependent">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -10826,7 +10857,7 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
+           <item row="4" column="2">
             <widget class="QToolButton" name="resetTextStyleFontStyle">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -10843,13 +10874,13 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="4" column="1">
             <widget class="Ms::FontStyleSelect" name="textStyleFontStyle" native="true"/>
            </item>
-           <item row="5" column="1">
+           <item row="7" column="1">
             <widget class="Ms::OffsetSelect" name="textStyleOffset" native="true"/>
            </item>
-           <item row="8" column="1">
+           <item row="10" column="1">
             <spacer name="verticalSpacer_32">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -10862,7 +10893,7 @@
              </property>
             </spacer>
            </item>
-           <item row="7" column="0" colspan="3">
+           <item row="9" column="0" colspan="3">
             <widget class="QGroupBox" name="groupBox_40">
              <property name="title">
               <string/>
