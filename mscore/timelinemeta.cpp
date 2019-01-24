@@ -342,21 +342,20 @@ void TimelineMetaRows::drawRows()
 
       int gridWidth = cellWidth() * score()->nmeasures();
       int nRows = getParent()->nVisibleMetaRows() + 1; // One row for measures
-      int localCellHeight = cellHeight();
 
       for (int row = 0; row < nRows; row++) {
-            QGraphicsRectItem* rect = new QGraphicsRectItem(0, localCellHeight * row, gridWidth, localCellHeight);
+            QGraphicsRectItem* rect = new QGraphicsRectItem(0, cellHeight() * row, gridWidth, cellHeight());
             scene()->addItem(rect);
             _redrawList.append(rect);
             }
 
-      drawMeasureNumbers((nRows - 1) * localCellHeight);
+      drawMeasureNumbers((nRows - 1) * cellHeight());
 
       // Use 1 to make sure rect borders are in the sceneRect
-      setSceneRect(-1, -1, gridWidth + 1, localCellHeight * nRows + 1);
+      setSceneRect(-1, -1, gridWidth + 1, cellHeight() * nRows + 1);
 
       QSplitter* timelineSplitter = static_cast<QSplitter*>(getParent()->parent());
-      getParent()->setMaximumHeight(localCellHeight * nRows + timelineSplitter->handleWidth() + 1);
+      getParent()->setMaximumHeight(cellHeight() * nRows + timelineSplitter->handleWidth() + 1);
       }
 
 //---------------------------------------------------------
@@ -366,8 +365,7 @@ void TimelineMetaRows::drawRows()
 void TimelineMetaRows::updateMetas()
       {
       _metaList.clear();
-      Score* localScore = score();
-      if (!localScore)
+      if (!score())
             return;
 
       QList<int> correctRowIndexes = getParent()->getCorrectMetaRows(); // Lookup using TimelineMeta::MetaRow
@@ -376,7 +374,7 @@ void TimelineMetaRows::updateMetas()
       int keySigRowIndex = correctRowIndexes[int(TimelineMeta::MetaRow::KEY_SIGNATURE)];
       if (keySigRowIndex != -1) {
             bool foundStartingKeySig = false;
-            for (Segment* segment = localScore->firstMeasure()->first(); segment->tick() <= 0; segment = segment->next()) {
+            for (Segment* segment = score()->firstMeasure()->first(); segment->tick() <= 0; segment = segment->next()) {
                   if (segment->isKeySigType()) {
                         foundStartingKeySig = true;
                         break;
@@ -387,12 +385,12 @@ void TimelineMetaRows::updateMetas()
             }
 
       int cellNumber = 0;
-      for (Measure* measure = localScore->firstMeasure(); measure; measure = measure->nextMeasure()) {
+      for (Measure* measure = score()->firstMeasure(); measure; measure = measure->nextMeasure()) {
             int rowIndex;
 
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                   rowIndex = correctRowIndexes[int(TimelineMeta::MetaRow::TEMPO)];
-                  std::vector<Element*> tempoAnnotations = segment->findAnnotations(ElementType::TEMPO_TEXT, 0, localScore->nstaves() * VOICES);
+                  std::vector<Element*> tempoAnnotations = segment->findAnnotations(ElementType::TEMPO_TEXT, 0, score()->nstaves() * VOICES);
                   if (rowIndex != -1 && !tempoAnnotations.empty())
                         drawTempoMeta(tempoAnnotations, cellNumber, rowIndex);
 
@@ -401,7 +399,7 @@ void TimelineMetaRows::updateMetas()
                         drawTimeSigMeta(segment, cellNumber, rowIndex);
 
                   rowIndex = correctRowIndexes[int(TimelineMeta::MetaRow::REHEARSAL_MARK)];
-                  std::vector<Element*> rehearsalAnnotations = segment->findAnnotations(ElementType::REHEARSAL_MARK, 0, localScore->nstaves() * VOICES);
+                  std::vector<Element*> rehearsalAnnotations = segment->findAnnotations(ElementType::REHEARSAL_MARK, 0, score()->nstaves() * VOICES);
                   if (rowIndex != -1 && !rehearsalAnnotations.empty())
                         drawRehersalMarkMeta(rehearsalAnnotations, cellNumber, rowIndex);
 
@@ -427,12 +425,13 @@ void TimelineMetaRows::updateMetas()
 //   drawMetaValue
 //---------------------------------------------------------
 
-void TimelineMetaRows::drawMetaValue(Element* element, QString text, int x, int row)
+void TimelineMetaRows::drawMetaValue(Element* element, QString text, int x, int row, QString toolTip)
       {
       QString cleanText = text.replace("\n", "");
       TimelineMetaRowsValue* value = new TimelineMetaRowsValue(this, element, cleanText, x, getStagger(row), row * cellHeight(), _currentFont);
       int newZ = getNewZValue();
       value->setZ(newZ);
+      value->setToolTip(toolTip);
 
       scene()->addItem(value);
       _metaList.append(value);
@@ -470,7 +469,7 @@ void TimelineMetaRows::drawTempoMeta(std::vector<Element*> elist, int x, int row
       {
       for (Element* element : elist) {
             TempoText* text = toTempoText(element);
-            drawMetaValue(element, text->plainText(), x, row);
+            drawMetaValue(element, text->plainText(), x, row, text->plainText());
             }
       }
 
@@ -495,7 +494,7 @@ void TimelineMetaRows::drawTimeSigMeta(Segment* segment, int x, int row)
       QString text = QString::number(timeSigToMatch->numerator()) +
                      QString("/") +
                      QString::number(timeSigToMatch->denominator());
-      drawMetaValue(segment, text, x, row);
+      drawMetaValue(segment, text, x, row, text);
       }
 
 //---------------------------------------------------------
@@ -506,7 +505,7 @@ void TimelineMetaRows::drawRehersalMarkMeta(std::vector<Element*> elist, int x, 
       {
       for (Element* element : elist) {
             RehearsalMark* text = toRehearsalMark(element);
-            drawMetaValue(element, text->plainText(), x, row);
+            drawMetaValue(element, text->plainText(), x, row, text->plainText());
             }
       }
 
@@ -517,7 +516,7 @@ void TimelineMetaRows::drawRehersalMarkMeta(std::vector<Element*> elist, int x, 
 void TimelineMetaRows::drawKeySigMeta(Segment* segment, int x, int row)
       {
       if (!segment) {
-            drawMetaValue(segment, getKeyText(Key::C), x, row);
+            drawMetaValue(segment, getKeyText(Key::C, new QString()), x, row, keyNames[14]);
             return;
             }
 
@@ -559,26 +558,37 @@ void TimelineMetaRows::drawKeySigMeta(Segment* segment, int x, int row)
                   }
             }
 
-      QString keyText = getKeyText(mostFrequentKey);
-      drawMetaValue(segment, keyText, x, row);
+      QString tooltip = "";
+      QString keyText = getKeyText(mostFrequentKey, &tooltip);
+      drawMetaValue(segment, keyText, x, row, tooltip);
       }
 
 //---------------------------------------------------------
 //   getKeyText
 //---------------------------------------------------------
 
-QString TimelineMetaRows::getKeyText(Key key)
+QString TimelineMetaRows::getKeyText(Key key, QString* tooltip)
       {
-      if (key == Key::INVALID)
+      if (key == Key::INVALID) {
+            *tooltip = keyNames[15];
             return "X";
-      else if (key == Key::NUM_OF)
+            }
+      else if (key == Key::NUM_OF) {
+            *tooltip = tr("Custom Key Signature");
             return "?";
-      else if (int(key) == 0)
+            }
+      else if (int(key) == 0) {
+            *tooltip = keyNames[14];
             return "♮";
-      else if (int(key) < 0)
+            }
+      else if (int(key) < 0) {
+            *tooltip = keyNames[(7 + int(key)) * 2 + 1];
             return QString::number(-int(key)) + "♭";
-      else
+            }
+      else {
+            *tooltip = keyNames[(int(key) - 1) * 2];
             return QString::number(int(key)) + "♯";
+            }
       }
 
 //---------------------------------------------------------
@@ -591,24 +601,29 @@ void TimelineMetaRows::drawBarlineMeta(Segment* segment, int x, int row)
       if (barline) {
 
             QString text = "";
+            QString tooltip = "";
             switch (barline->barLineType()) {
                   case BarLineType::DOUBLE:
                         text = "𝄁";
+                        tooltip = tr("Double Barline");
                         break;
                   case BarLineType::END:
                         text = "𝄂";
+                        tooltip = tr("End Barline");
                         break;
                   case BarLineType::END_REPEAT:
                         text = "𝄇";
+                        tooltip = tr("End Repeat");
                         break;
                   case BarLineType::START_REPEAT:
                         text = "𝄆";
+                        tooltip = tr("Start Repeat");
                         break;
                   default:
                         return;
                   }
 
-            drawMetaValue(segment, text, x, row);
+            drawMetaValue(segment, text, x, row, tooltip);
             }
       }
 
@@ -625,12 +640,12 @@ void TimelineMetaRows::drawJumpMarkersMeta(std::vector<Element*> elist, int x, i
             else if (element->isJump()) {
                   Jump* jump = toJump(element);
                   text = jump->plainText();
-                  drawMetaValue(element, text, x, row);
+                  drawMetaValue(element, text, x, row, text);
                   }
             else if (element->isMarker()) {
                   Marker* marker = toMarker(element);
                   text = marker->plainText();
-                  drawMetaValue(element, text, x, row);
+                  drawMetaValue(element, text, x, row, text);
                   }
             }
       }

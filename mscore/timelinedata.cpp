@@ -161,23 +161,34 @@ TimelineDataGridCell* TimelineDataGrid::getCell(int row, int column)
 void TimelineDataGrid::populateGrid()
       {
       _grid.clear();
-      Score* localScore = score();
 
-      if (localScore == nullptr)
+      if (score() == nullptr)
             return;
 
-      _nStaves = localScore->nstaves();
+      QChar initialMeasureLetter = tr("Measure")[0];
+      QList<QString> partNames;
+      for (Part* part : score()->parts()) {
+            for (Staff* staff : *(part->staves()))
+                  partNames.append(staff->partName());
+            }
+
+      _nStaves = score()->nstaves();
       int measureIdx = 0;
       for (Measure* measure = score()->firstMeasure(); measure; measure = measure->nextMeasure()) {
+
+            QString measureNumber = (measure->irregular())? "( )" : QString::number(measure->no() + 1);
+
             for (int staffIdx = 0; staffIdx < _nStaves; staffIdx++) {
                   TimelineDataGridCell* newCell = new TimelineDataGridCell(measure, staffIdx, measureIdx);
                   newCell->setRect(cellWidth() * measureIdx, cellHeight() * staffIdx, cellWidth(), cellHeight());
                   newCell->setZValue(ZValues::CELL);
+                  newCell->setToolTip(initialMeasureLetter + QString(" ") + measureNumber + QString(", ") + partNames[staffIdx]);
 
                   _grid.append(newCell);
 
                   scene()->addItem(newCell);
                   }
+
             measureIdx++;
             }
 
@@ -235,15 +246,13 @@ QList<TimelineDataGridCell*> TimelineDataGrid::getVisibleCells()
 
       QSet<QPair<Measure*, int>> visibleMeasures; // QPair<measure, staffIdx> used for _grid lookup
 
-      Score* localScore = score();
-
       // Fill visibleMeasures
-      Measure* currMeasure = localScore->firstMeasure();
+      Measure* currMeasure = score()->firstMeasure();
       for (; currMeasure; currMeasure = currMeasure->nextMeasure()) {
 
-            if (currMeasure->mmRest() && localScore->styleB(Sid::createMultiMeasureRests)) {
-                  for (int staffIdx = 0; staffIdx < localScore->nstaves(); staffIdx++) {
-                        QRectF bounds = staffMeasureBounds(currMeasure->mmRest(), staffIdx, localScore);
+            if (currMeasure->mmRest() && score()->styleB(Sid::createMultiMeasureRests)) {
+                  for (int staffIdx = 0; staffIdx < score()->nstaves(); staffIdx++) {
+                        QRectF bounds = staffMeasureBounds(currMeasure->mmRest(), staffIdx);
                         if (!canvas.intersects(bounds))
                               continue;
 
@@ -259,8 +268,8 @@ QList<TimelineDataGridCell*> TimelineDataGrid::getVisibleCells()
                         break;
                   }
             else {
-                  for (int staffIdx = 0; staffIdx < localScore->nstaves(); staffIdx++) {
-                        QRectF bounds = staffMeasureBounds(currMeasure, staffIdx, localScore);
+                  for (int staffIdx = 0; staffIdx < score()->nstaves(); staffIdx++) {
+                        QRectF bounds = staffMeasureBounds(currMeasure, staffIdx);
 
                         if (canvas.intersects(bounds)) {
                               QPair<Measure*, int> visibleMeasure(currMeasure, staffIdx);
@@ -293,9 +302,9 @@ QRectF TimelineDataGrid::gridBounds() {
 //   or if the staff doesn't show
 //---------------------------------------------------------
 
-QRectF TimelineDataGrid::staffMeasureBounds(Measure* measure, int staffIdx, Score* localScore) {
+QRectF TimelineDataGrid::staffMeasureBounds(Measure* measure, int staffIdx) {
       System* system = measure->system();
-      if (!system || !localScore->staff(staffIdx)->show())
+      if (!system || !score()->staff(staffIdx)->show())
             return QRectF();
 
       QRectF staffRect = QRectF(system->canvasBoundingRect().left(),
@@ -304,7 +313,7 @@ QRectF TimelineDataGrid::staffMeasureBounds(Measure* measure, int staffIdx, Scor
                                 system->staff(staffIdx)->bbox().height());
 
       // Staves with one line return bbox height of 0. Set to 1 for intersection
-      if (localScore->staff(staffIdx)->lines(measure->tick()) < 2)
+      if (score()->staff(staffIdx)->lines(measure->tick()) < 2)
             staffRect.setHeight(1);
 
       return measure->canvasBoundingRect().intersected(staffRect);

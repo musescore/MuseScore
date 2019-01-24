@@ -98,7 +98,7 @@ class TimelineDataGrid : public QGraphicsView, public TimelineComponent
       void populateGrid();
       QList<TimelineDataGridCell*> getVisibleCells();
 
-      QRectF staffMeasureBounds(Measure* measure, int staffIdx, Score* localScore);
+      QRectF staffMeasureBounds(Measure* measure, int staffIdx);
 
       void keepSelectionChangeInView();
       QList<TimelineDataGridCell*> getSelectedCells();

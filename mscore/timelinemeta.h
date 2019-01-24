@@ -124,7 +124,7 @@ class TimelineMetaRows : public QGraphicsView, public TimelineComponent
       int getMeasureIncrement();
       void updateMetas();
 
-      void drawMetaValue(Element* element, QString text, int x, int row);
+      void drawMetaValue(Element* element, QString text, int x, int row, QString toolTip);
       int getNewZValue() { return _globalZValue++; }
       int getStagger(int x);
       void resetStagger();
@@ -133,7 +133,7 @@ class TimelineMetaRows : public QGraphicsView, public TimelineComponent
       void drawTimeSigMeta(Segment* segment, int x, int row);
       void drawRehersalMarkMeta(std::vector<Element*> elist, int x, int row);
       void drawKeySigMeta(Segment* segment, int x, int row);
-      QString getKeyText(Key key);
+      QString getKeyText(Key key, QString* tooltip);
       void drawBarlineMeta(Segment* segment, int x, int row);
       void drawJumpMarkersMeta(std::vector<Element*> elist, int x, int row);
 
