@@ -157,8 +157,6 @@ void Cursor::add(Element* wrapped)
       if (!_segment || !s)
             return;
 
-      if (s->isStaffText())
-            qDebug() << toStaffText(s)->plainText();
       wrapped->setOwnership(Ownership::SCORE);
       s->setTrack(_track);
       s->setParent(_segment);
