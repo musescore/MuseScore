@@ -6883,6 +6883,9 @@ int main(int argc, char* av[])
 #endif
 
       QApplication::setDesktopSettingsAware(true);
+#ifdef Q_OS_LINUX
+      QGuiApplication::setDesktopFileName("mscore");
+#endif
       QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
       QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #if defined(QT_DEBUG) && defined(Q_OS_WIN)
