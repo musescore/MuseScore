@@ -166,20 +166,39 @@ void MixerDetails::updateFromTrack()
       drumkitCheck->setChecked(drum);
       drumkitCheck->blockSignals(false);
 
-
       //Populate patch combo
       patchCombo->blockSignals(true);
       patchCombo->clear();
       const auto& pl = synti->getPatchInfo();
       int patchIndex = 0;
 
-      for (const MidiPatch* p : pl) {
-            if (p->drum == drum || p->synti != "Fluid") {
-                  patchCombo->addItem(p->name, QVariant::fromValue<void*>((void*)p));
-                  if (p->synti == chan->synti() &&
-                      p->bank == chan->bank() &&
-                      p->prog == chan->program())
-                        patchIndex = patchCombo->count() - 1;
+      // Order by program number instead of bank, so similar instruments
+      // appear next to each other, but ordered primarily by soundfont
+      std::map<int, std::map<int, std::vector<const MidiPatch*>>> orderedPl;
+
+      for (const MidiPatch* p : pl)
+            orderedPl[p->sfid][p->prog].push_back(p);
+
+      std::vector<QString> usedNames;
+      for (auto const& sf : orderedPl) {
+            for (auto const& pn : sf.second) {
+                  for (const MidiPatch* p : pn.second) {
+                        if (p->drum == drum || p->synti != "Fluid") {
+                              QString pName = p->name;
+                              if (std::find(usedNames.begin(), usedNames.end(), p->name) != usedNames.end()) {
+                                    QString addNum = QString(" (%1)").arg(p->sfid);
+                                    pName.append(addNum);
+                                    }
+                              else
+                                    usedNames.push_back(p->name);
+
+                              patchCombo->addItem(pName, QVariant::fromValue<void*>((void*)p));
+                              if (p->synti == chan->synti() &&
+                                  p->bank == chan->bank() &&
+                                  p->prog == chan->program())
+                                    patchIndex = patchCombo->count() - 1;
+                              }
+                        }
                   }
             }
       patchCombo->setCurrentIndex(patchIndex);
