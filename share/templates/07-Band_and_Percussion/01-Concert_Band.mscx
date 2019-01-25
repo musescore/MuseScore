@@ -936,7 +936,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="56"/>
           <synti>Fluid</synti>
           </Channel>
@@ -993,7 +993,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="56"/>
           <synti>Fluid</synti>
           </Channel>
@@ -1050,7 +1050,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="56"/>
           <synti>Fluid</synti>
           </Channel>
@@ -1485,7 +1485,7 @@ B. Tbn.</shortName>
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="arco">
           <program value="43"/>
           <synti>Fluid</synti>
           </Channel>

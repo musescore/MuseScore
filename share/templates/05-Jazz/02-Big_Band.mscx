@@ -1035,7 +1035,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="pizzicato">
           <program value="32"/>
           <synti>Fluid</synti>
           <midiPort>1</midiPort>
