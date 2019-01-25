@@ -421,16 +421,24 @@ const char* Articulation::symId2ArticulationName(SymId symId)
 
             case SymId::articStaccatoAbove:
             case SymId::articStaccatoBelow:
+                  return "staccato";
+                  
             case SymId::articAccentStaccatoAbove:
             case SymId::articAccentStaccatoBelow:
+                  return "sforzatoStaccato";
+                  
             case SymId::articMarcatoStaccatoAbove:
             case SymId::articMarcatoStaccatoBelow:
-                  return "staccato";
+                  return "marcatoStaccato";
 
             case SymId::articTenutoStaccatoAbove:
             case SymId::articTenutoStaccatoBelow:
                   return "portato";
 
+            case SymId::articMarcatoTenutoAbove:
+            case SymId::articMarcatoTenutoBelow:
+                  return "marcatoTenuto";
+                  
             case SymId::articTenutoAbove:
             case SymId::articTenutoBelow:
                   return "tenuto";
