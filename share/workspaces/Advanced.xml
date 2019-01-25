@@ -775,21 +775,25 @@
         <Cell name="Curved caesura">
           <Breath>
             <symbol>caesuraCurved</symbol>
+            <pause>2</pause>
             </Breath>
           </Cell>
         <Cell name="Caesura">
           <Breath>
             <symbol>caesura</symbol>
+            <pause>2</pause>
             </Breath>
           </Cell>
         <Cell name="Short caesura">
           <Breath>
             <symbol>caesuraShort</symbol>
+            <pause>2</pause>
             </Breath>
           </Cell>
         <Cell name="Thick caesura">
           <Breath>
             <symbol>caesuraThick</symbol>
+            <pause>2</pause>
             </Breath>
           </Cell>
         </Palette>
@@ -1525,7 +1529,6 @@
           <StaffText>
             <channelSwitch voice="0" name="pizzicato"/>
             <track>0</track>
-            <style>Expression</style>
             <text>pizz.</text>
             </StaffText>
           </Cell>
@@ -1533,7 +1536,6 @@
           <StaffText>
             <channelSwitch voice="0" name="arco"/>
             <track>0</track>
-            <style>Expression</style>
             <text>arco</text>
             </StaffText>
           </Cell>
@@ -1549,7 +1551,6 @@
           <StaffText>
             <channelSwitch voice="0" name="mute"/>
             <track>0</track>
-            <style>Expression</style>
             <text>mute</text>
             </StaffText>
           </Cell>
@@ -1557,7 +1558,6 @@
           <StaffText>
             <channelSwitch voice="0" name="open"/>
             <track>0</track>
-            <style>Expression</style>
             <text>open</text>
             </StaffText>
           </Cell>
