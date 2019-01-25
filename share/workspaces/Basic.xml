@@ -541,7 +541,6 @@
           <StaffText>
             <channelSwitch voice="0" name="pizzicato"/>
             <track>0</track>
-            <style>Expression</style>
             <text>pizz.</text>
             </StaffText>
           </Cell>
@@ -549,7 +548,6 @@
           <StaffText>
             <channelSwitch voice="0" name="arco"/>
             <track>0</track>
-            <style>Expression</style>
             <text>arco</text>
             </StaffText>
           </Cell>
@@ -557,7 +555,6 @@
           <StaffText>
             <channelSwitch voice="0" name="mute"/>
             <track>0</track>
-            <style>Expression</style>
             <text>mute</text>
             </StaffText>
           </Cell>
@@ -565,7 +562,6 @@
           <StaffText>
             <channelSwitch voice="0" name="open"/>
             <track>0</track>
-            <style>Expression</style>
             <text>open</text>
             </StaffText>
           </Cell>

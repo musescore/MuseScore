@@ -25,10 +25,10 @@ const std::vector<BreathType> Breath::breathList {
       { SymId::breathMarkTick,       false, 0.0 },
       { SymId::breathMarkSalzedo,    false, 0.0 },
       { SymId::breathMarkUpbow,      false, 0.0 },
-      { SymId::caesuraCurved,        true,  0.0 },
-      { SymId::caesura,              true,  0.0 },
-      { SymId::caesuraShort,         true,  0.0 },
-      { SymId::caesuraThick,         true,  0.0 },
+      { SymId::caesuraCurved,        true,  2.0 },
+      { SymId::caesura,              true,  2.0 },
+      { SymId::caesuraShort,         true,  2.0 },
+      { SymId::caesuraThick,         true,  2.0 },
       };
 
 //---------------------------------------------------------

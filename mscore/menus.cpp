@@ -1302,14 +1302,14 @@ Palette* MuseScore::newTextPalette(bool defaultPalette)
       sp->append(stxt, tr("System text"));
 
       if (!defaultPalette) {
-            StaffText* pz = new StaffText(gscore, Tid::EXPRESSION);
+            StaffText* pz = new StaffText(gscore);
             pz->setXmlText(tr("pizz."));
             pz->setChannelName(0, "pizzicato");
             sp->append(pz, tr("pizz."));
 
-            StaffText* ar = new StaffText(gscore, Tid::EXPRESSION);
+            StaffText* ar = new StaffText(gscore);
             ar->setXmlText(tr("arco"));
-            ar->setChannelName(0, "arco"); // needs updated instruments.xml to work with strings too, not just acoustic bass
+            ar->setChannelName(0, "arco");
             sp->append(ar, tr("arco"));
 
             StaffText* tm = new StaffText(gscore, Tid::EXPRESSION);
@@ -1317,12 +1317,12 @@ Palette* MuseScore::newTextPalette(bool defaultPalette)
             tm->setChannelName(0, "tremolo");
             sp->append(tm, tr("tremolo"));
 
-            StaffText* mu = new StaffText(gscore, Tid::EXPRESSION);
+            StaffText* mu = new StaffText(gscore);
             mu->setXmlText(tr("mute"));
             mu->setChannelName(0, "mute");
             sp->append(mu, tr("mute"));
 
-            StaffText* no = new StaffText(gscore, Tid::EXPRESSION);
+            StaffText* no = new StaffText(gscore);
             no->setXmlText(tr("open"));
             no->setChannelName(0, "open");
             sp->append(no, tr("open"));
