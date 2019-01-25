@@ -129,11 +129,12 @@ class SpannerSegment : public Element {
 //----------------------------------------------------------------------------------
 
 class Spanner : public Element {
-
+      Q_GADGET
    public:
       enum class Anchor {
             SEGMENT, MEASURE, CHORD, NOTE
             };
+      Q_ENUM(Anchor)
    private:
 
       Element* _startElement { 0  };
@@ -260,8 +261,4 @@ class Spanner : public Element {
       };
 
 }     // namespace Ms
-
-// Q_DECLARE_METATYPE(Ms::Spanner::Anchor);
-
 #endif
-

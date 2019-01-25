@@ -49,7 +49,7 @@ add_library (
 
       types.h accidental.h ambitus.h arpeggio.h articulation.h audio.h bagpembell.h barline.h beam.h bend.h
       box.h bracket.h bracketItem.h breath.h bsp.h bsymbol.h chord.h chordline.h chordlist.h chordrest.h clef.h
-      cleflist.h connector.h cursor.h drumset.h dsp.h duration.h durationtype.h dynamic.h element.h
+      cleflist.h connector.h drumset.h dsp.h duration.h durationtype.h dynamic.h element.h
       elementmap.h excerpt.h fermata.h fifo.h figuredbass.h fingering.h fraction.h fret.h glissando.h groups.h hairpin.h
       harmony.h hook.h icon.h image.h imageStore.h iname.h input.h instrchange.h instrtemplate.h instrument.h interval.h
       jump.h key.h keylist.h keysig.h lasso.h layout.h layoutbreak.h ledgerline.h letring.h line.h location.h
@@ -89,7 +89,7 @@ add_library (
       figuredbass.cpp rehearsalmark.cpp transpose.cpp
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
       audio.cpp splitMeasure.cpp joinMeasure.cpp
-      cursor.cpp paste.cpp
+      paste.cpp
       bsymbol.cpp marker.cpp jump.cpp stemslash.cpp ledgerline.cpp
       synthesizerstate.cpp mcursor.cpp groups.cpp mscoreview.cpp
       noteline.cpp spannermap.cpp

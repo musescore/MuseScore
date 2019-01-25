@@ -90,7 +90,10 @@ class TDockWidget;
 class Sym;
 class MasterPalette;
 class PluginCreator;
+#ifdef SCRIPT_INTERFACE
 class PluginManager;
+class QmlPluginEngine;
+#endif
 class MasterSynthesizer;
 class SynthesizerState;
 class Driver;
@@ -283,7 +286,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       InsertMeasuresDialog* insertMeasuresDialog { 0 };
       MasterPalette* masterPalette         { 0 };
       PluginCreator* _pluginCreator        { 0 };
+#ifdef SCRIPT_INTERFACE
       PluginManager* pluginManager         { 0 };
+      QmlPluginEngine* _qmlEngine          { 0 };
+#endif
       SelectionWindow* selectionWindow     { 0 };
 
       QMenu* menuFile;
@@ -629,7 +635,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PianorollEditor* getPianorollEditor() const { return pianorollEditor; }
       DrumrollEditor* getDrumrollEditor() const   { return drumrollEditor; }
       PianoTools* pianoTools() const              { return _pianoTools; }
+#ifdef SCRIPT_INTERFACE
       PluginManager* getPluginManager() const     { return pluginManager; }
+      QmlPluginEngine* getPluginEngine();
+#endif
       void writeSessionFile(bool);
       bool restoreSession(bool);
       bool splitScreen() const { return _splitScreen; }

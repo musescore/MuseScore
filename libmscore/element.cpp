@@ -1060,6 +1060,8 @@ void collectElements(void* data, Element* e)
 QVariant Element::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::TICK:
+                  return tick();
             case Pid::TRACK:
                   return track();
             case Pid::VOICE:
@@ -1135,8 +1137,7 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
                   setSizeIsSpatiumDependent(v.toBool());
                   break;
             default:
-//                  qFatal("<%s> unknown <%s>(%d), data <%s>", name(), propertyQmlName(propertyId), int(propertyId), qPrintable(v.toString()));
-                  qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyQmlName(propertyId), int(propertyId), qPrintable(v.toString()));
+                  qDebug("%s unknown <%s>(%d), data <%s>", name(), propertyName(propertyId), int(propertyId), qPrintable(v.toString()));
                   return false;
             }
       triggerLayout();

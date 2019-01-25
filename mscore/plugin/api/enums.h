@@ -1,12 +1,8 @@
 //=============================================================================
 //  MuseScore
-//  Linux Music Score Editor
+//  Music Composition & Notation
 //
-//  Color notehead plugin
-//  Noteheads are colored according to pitch. User can change to color by
-//  modifying the colors array. First element is C, second C# etc...
-//
-//  Copyright (C)2012 Werner Schweer and others
+//  Copyright (C) 2019 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -21,26 +17,27 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-import QtQuick 2.0
-import MuseScore 3.0
+#ifndef __PLUGIN_API_ENUMS_H__
+#define __PLUGIN_API_ENUMS_H__
 
-MuseScore {
-      menuPath: "Plugins.run"
-      version:  "2.0"
-      description: "This demo plugin runs an external command. Probably this will only work on Linux."
-      requiresScore: false
+#include <QQmlPropertyMap>
 
-      QProcess {
-        id: proc
-        }
+namespace Ms {
+namespace PluginAPI {
 
-      onRun: {
-            console.log("run ls");
-            proc.start("/bin/ls");
-            var val = proc.waitForFinished(30000);
-            if (val)
-                  console.log(proc.readAllStandardOutput());
-            Qt.quit()
-            }
+class Enum : public QQmlPropertyMap {
+      Q_OBJECT
+
+   public:
+      Enum(const QMetaEnum& _enum, QObject* parent = nullptr);
+      };
+
+template <class T>
+Enum* wrapEnum(QObject* parent = nullptr)
+      {
+      return new Enum(QMetaEnum::fromType<T>(), parent);
       }
 
+} // namespace PluginAPI
+} // namespace Ms
+#endif

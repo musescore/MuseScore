@@ -634,7 +634,7 @@ inline int Note::concertPitchIdx() const
 
 void Note::setPitch(int val)
       {
-      Q_ASSERT(val >= 0 && val <= 127);
+      Q_ASSERT(pitchIsValid(val));
       if (_pitch != val) {
             _pitch = val;
             score()->setPlaylistDirty();
@@ -648,15 +648,6 @@ void Note::setPitch(int pitch, int tpc1, int tpc2)
       _tpc[0] = tpc1;
       _tpc[1] = tpc2;
       setPitch(pitch);
-      }
-
-//---------------------------------------------------------
-//   undoSetPitch
-//---------------------------------------------------------
-
-void Note::undoSetPitch(int p)
-      {
-      undoChangeProperty(Pid::PITCH, p);
       }
 
 //---------------------------------------------------------
@@ -2695,120 +2686,12 @@ QString Note::propertyUserValue(Pid pid) const
       }
 
 //---------------------------------------------------------
-//   undoSetFret
-//---------------------------------------------------------
-
-void Note::undoSetFret(int val)
-      {
-      undoChangeProperty(Pid::FRET, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetString
-//---------------------------------------------------------
-
-void Note::undoSetString(int val)
-      {
-      undoChangeProperty(Pid::STRING, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetGhost
-//---------------------------------------------------------
-
-void Note::undoSetGhost(bool val)
-      {
-      undoChangeProperty(Pid::GHOST, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetSmall
-//---------------------------------------------------------
-
-void Note::undoSetSmall(bool val)
-      {
-      undoChangeProperty(Pid::SMALL, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetPlay
-//---------------------------------------------------------
-
-void Note::undoSetPlay(bool val)
-      {
-      undoChangeProperty(Pid::PLAY, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetTuning
-//---------------------------------------------------------
-
-void Note::undoSetTuning(qreal val)
-      {
-      undoChangeProperty(Pid::TUNING, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetVeloType
-//---------------------------------------------------------
-
-void Note::undoSetVeloType(ValueType val)
-      {
-      undoChangeProperty(Pid::VELO_TYPE, int(val));
-      }
-
-//---------------------------------------------------------
-//   undoSetVeloOffset
-//---------------------------------------------------------
-
-void Note::undoSetVeloOffset(int val)
-      {
-      undoChangeProperty(Pid::VELO_OFFSET, val);
-      }
-
-//---------------------------------------------------------
-//   undoSetUserMirror
-//---------------------------------------------------------
-
-void Note::undoSetUserMirror(MScore::DirectionH val)
-      {
-      undoChangeProperty(Pid::MIRROR_HEAD, int(val));
-      }
-
-//---------------------------------------------------------
-//   undoSetUserDotPosition
-//---------------------------------------------------------
-
-void Note::undoSetUserDotPosition(Direction val)
-      {
-      undoChangeProperty(Pid::DOT_POSITION, QVariant::fromValue<Direction>(val));
-      }
-
-//---------------------------------------------------------
-//   undoSetHeadGroup
-//---------------------------------------------------------
-
-void Note::undoSetHeadGroup(NoteHead::Group val)
-      {
-      undoChangeProperty(Pid::HEAD_GROUP, int(val));
-      }
-
-//---------------------------------------------------------
 //   setHeadType
 //---------------------------------------------------------
 
 void Note::setHeadType(NoteHead::Type t)
       {
       _headType = t;
-      }
-
-//---------------------------------------------------------
-//   undoSetHeadType
-//---------------------------------------------------------
-
-void Note::undoSetHeadType(NoteHead::Type val)
-      {
-      undoChangeProperty(Pid::HEAD_TYPE, int(val));
       }
 
 //---------------------------------------------------------

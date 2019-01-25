@@ -124,7 +124,7 @@ MuseScore {
       var endTick;
       var fullScore = false;
       cursor.rewind(1);
-      if (!cursor.segment()) { // no selection
+      if (!cursor.segment) { // no selection
          fullScore = true;
          startStaff = 0; // start with 1st staff
          endStaff  = curScore.nstaves - 1; // and end with last
@@ -153,41 +153,41 @@ MuseScore {
             if (fullScore)  // no selection
                cursor.rewind(0); // beginning of score
 
-            while (cursor.segment() && (fullScore || cursor.tick < endTick)) {
-               if (cursor.element() && cursor.element().type === Ms.CHORD) {
-                  var text = newElement(Ms.STAFF_TEXT);
+            while (cursor.segment && (fullScore || cursor.tick < endTick)) {
+               if (cursor.element && cursor.element.type === Element.CHORD) {
+                  var text = newElement(Element.STAFF_TEXT);
 
-                  var graceChords = cursor.element().graceNotes;
+                  var graceChords = cursor.element.graceNotes;
                   for (var i = 0; i < graceChords.length; i++) {
                      // iterate through all grace chords
                      var graceNotes = graceChords[i].notes;
                      nameChord(graceNotes, text);
                      // there seems to be no way of knowing the exact horizontal pos.
                      // of a grace note, so we have to guess:
-                     text.pos.x = -2.5 * (graceChords.length - i);
+                     text.offsetX = -2.5 * (graceChords.length - i);
                      switch (voice) {
-                        case 0: text.pos.y =  1; break;
-                        case 1: text.pos.y = 10; break;
-                        case 2: text.pos.y = -1; break;
-                        case 3: text.pos.y = 12; break;
+                        case 0: text.offsetY =  1; break;
+                        case 1: text.offsetY = 10; break;
+                        case 2: text.offsetY = -1; break;
+                        case 3: text.offsetY = 12; break;
                      }
 
                      cursor.add(text);
                      // new text for next element
-                     text  = newElement(Ms.STAFF_TEXT);
+                     text = newElement("StaffText");
                   }
 
-                  var notes = cursor.element().notes;
+                  var notes = cursor.element.notes;
                   nameChord(notes, text);
 
                   switch (voice) {
-                     case 0: text.pos.y =  1; break;
-                     case 1: text.pos.y = 10; break;
-                     case 2: text.pos.y = -1; break;
-                     case 3: text.pos.y = 12; break;
+                     case 0: text.offsetY =  1; break;
+                     case 1: text.offsetY = 10; break;
+                     case 2: text.offsetY = -1; break;
+                     case 3: text.offsetY = 12; break;
                   }
                   if ((voice == 0) && (notes[0].pitch > 83))
-                     text.pos.x = 1;
+                     text.offsetX = 1;
                   cursor.add(text);
                } // end if CHORD
                cursor.next();

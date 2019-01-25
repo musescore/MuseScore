@@ -17,6 +17,9 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
+#ifndef MUSESCORE_CONFIG_H
+#define MUSESCORE_CONFIG_H
+
 #cmakedefine USE_ALSA
 #cmakedefine USE_JACK
 #cmakedefine USE_PORTAUDIO
@@ -58,3 +61,4 @@
 // does not work on windows/mac:
 //#define USE_GLYPHS  true
 
+#endif /* MUSESCORE_CONFIG_H */

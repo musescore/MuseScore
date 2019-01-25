@@ -10,26 +10,27 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __QMLPLUGIN_H__
-#define __QMLPLUGIN_H__
+#ifndef __QMLPLUGINAPI_H__
+#define __QMLPLUGINAPI_H__
 
 #include "config.h"
 
-#ifdef SCRIPT_INTERFACE
+#include "../qmlplugin.h"
+#include "enums.h"
 #include "libmscore/mscore.h"
+#include "libmscore/utils.h"
 
 namespace Ms {
 
 class MsProcess;
-class Score;
 class Element;
 class MScore;
-class MuseScoreCore;
 
-extern int version();
-extern int majorVersion();
-extern int minorVersion();
-extern int updateVersion();
+namespace PluginAPI {
+
+class Element;
+class FractionWrapper;
+class Score;
 
 //---------------------------------------------------------
 //   QmlPlugin
@@ -47,11 +48,11 @@ extern int updateVersion();
 //   @P mscoreMinorVersion   int               2nd part of the MuseScore version (read only)
 //   @P mscoreUpdateVersion  int               3rd part of the MuseScore version (read only)
 //   @P mscoreDPI            qreal             (read only)
-//   @P curScore             Ms::Score*        current score, if any (read only)
+//   @P curScore             Ms::PluginAPI::Score*        current score, if any (read only)
 //   @P scores               array[Ms::Score]  all currently open scores (read only)
 //---------------------------------------------------------
 
-class QmlPlugin : public QQuickItem {
+class PluginAPI : public Ms::QmlPlugin {
       Q_OBJECT
       Q_PROPERTY(QString menuPath        READ menuPath WRITE setMenuPath)
       Q_PROPERTY(QString filePath        READ filePath)
@@ -67,70 +68,77 @@ class QmlPlugin : public QQuickItem {
       Q_PROPERTY(int mscoreMinorVersion  READ mscoreMinorVersion)
       Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion)
       Q_PROPERTY(qreal mscoreDPI         READ mscoreDPI)
-      Q_PROPERTY(Ms::Score* curScore     READ curScore)
+      Q_PROPERTY(Ms::PluginAPI::Score* curScore     READ curScore)
 //TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
 
-      MuseScoreCore* msc;
-      QString _menuPath;
-      QString _pluginType;
-      QString _dockArea;
-      bool    _requiresScore;
-      QString _version;
-      QString _description;
+      Enum* elementTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Element MEMBER elementTypeEnum)
+      Enum* accidentalTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Accidental MEMBER accidentalTypeEnum)
+      Enum* beamModeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Beam MEMBER beamModeEnum)
+      Enum* placementEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Placement MEMBER placementEnum) // was Element.ABOVE and Element.BELOW in 2.X
+      Enum* glissandoTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Glissando MEMBER glissandoTypeEnum) // was probably absent in 2.X
+      Enum* layoutBreakTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* LayoutBreak MEMBER layoutBreakTypeEnum)
+      Enum* lyricsSyllabicEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Lyrics MEMBER lyricsSyllabicEnum)
+      Enum* directionEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Direction MEMBER directionEnum) // was in MScore class in 2.X
+      Enum* directionHEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* DirectionH MEMBER directionHEnum) // was in MScore class in 2.X
+      Enum* ornamentStyleEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* OrnamentStyle MEMBER ornamentStyleEnum) // was in MScore class in 2.X
+      Enum* glissandoStyleEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* GlissandoStyle MEMBER glissandoStyleEnum) // was in MScore class in 2.X
+      Enum* tidEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Tid MEMBER tidEnum) // was TextStyleType in 2.X
+      Enum* noteHeadTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* NoteHeadType MEMBER noteHeadTypeEnum) // was in NoteHead class in 2.X
+      Enum* noteHeadGroupEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* NoteHeadGroup MEMBER noteHeadGroupEnum) // was in NoteHead class in 2.X
+      Enum* noteValueTypeEnum; // or velo type?
+      Q_PROPERTY(Ms::PluginAPI::Enum* NoteValueType MEMBER noteValueTypeEnum) // was in Note class in 2.X
+      Enum* segmentTypeEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Segment MEMBER segmentTypeEnum);
+      Enum* spannerAnchorEnum;
+      Q_PROPERTY(Ms::PluginAPI::Enum* Spanner MEMBER spannerAnchorEnum); // probably unavailable in 2.X
+
       QFile logFile;
 
-   protected:
-      QString _filePath;            // the path of the source file, without file name
    signals:
       void run();
 
    public:
-      QmlPlugin(QQuickItem* parent = 0);
-      ~QmlPlugin();
+      PluginAPI(QQuickItem* parent = 0);
 
-      void setMenuPath(const QString& s)   { _menuPath = s;    }
-      QString menuPath() const             { return _menuPath; }
-      void setVersion(const QString& s)    { _version = s; }
-      QString version() const              { return _version; }
-      void setDescription(const QString& s) { _description = s; }
-      QString description() const          { return _description; }
-      void setFilePath(const QString s)   { _filePath = s;        }
-      QString filePath() const            { return _filePath;     }
+      static void registerQmlTypes();
 
-      void setPluginType(const QString& s) { _pluginType = s;    }
-      QString pluginType() const           { return _pluginType; }
-      void setDockArea(const QString& s)   { _dockArea = s;    }
-      QString dockArea() const             { return _dockArea; }
-      void runPlugin()                     { emit run();       }
-      void setRequiresScore(bool b)        { _requiresScore = b;    }
-      bool requiresScore() const           { return _requiresScore; }
-
-      int division() const                { return MScore::division; }
-      int mscoreVersion() const           { return Ms::version();      }
-      int mscoreMajorVersion() const      { return majorVersion();  }
-      int mscoreMinorVersion() const      { return minorVersion();  }
-      int mscoreUpdateVersion() const     { return updateVersion(); }
-      qreal mscoreDPI() const             { return DPI;     }
+      void runPlugin() override            { emit run();       }
 
       Score* curScore() const;
       QQmlListProperty<Score> scores();
 
-      Q_INVOKABLE Ms::Score* newScore(const QString& name, const QString& part, int measures);
-      Q_INVOKABLE Ms::Element* newElement(int);
+      Q_INVOKABLE Ms::PluginAPI::Score* newScore(const QString& name, const QString& part, int measures);
+      Q_INVOKABLE Ms::PluginAPI::Element* newElement(int);
       Q_INVOKABLE void cmd(const QString&);
       Q_INVOKABLE Ms::MsProcess* newQProcess();
-      Q_INVOKABLE bool writeScore(Ms::Score*, const QString& name, const QString& ext);
-      Q_INVOKABLE Ms::Score* readScore(const QString& name, bool noninteractive = false);
-      Q_INVOKABLE void closeScore(Ms::Score*);
+      Q_INVOKABLE bool writeScore(Ms::PluginAPI::Score*, const QString& name, const QString& ext);
+      Q_INVOKABLE Ms::PluginAPI::Score* readScore(const QString& name, bool noninteractive = false);
+      Q_INVOKABLE void closeScore(Ms::PluginAPI::Score*);
 
       Q_INVOKABLE void log(const QString&);
       Q_INVOKABLE void logn(const QString&);
       Q_INVOKABLE void log2(const QString&, const QString&);
       Q_INVOKABLE void openLog(const QString&);
       Q_INVOKABLE void closeLog();
+
+      //@ creates a new fraction with the given numerator and denominator
+      Q_INVOKABLE Ms::PluginAPI::FractionWrapper* fraction(int numerator, int denominator) const;
       };
 
-
+} // namespace PluginAPI
 } // namespace Ms
-#endif
 #endif

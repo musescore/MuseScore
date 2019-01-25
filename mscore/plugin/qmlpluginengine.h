@@ -1,8 +1,8 @@
 //=============================================================================
-//  MusE
-//  Linux Music Editor
+//  MuseScore
+//  Music Composition & Notation
 //
-//  Copyright (C) 2002-2010 by Werner Schweer and others
+//  Copyright (C) 2019 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -17,36 +17,21 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MUSESCORE_CONFIG_H
-#define MUSESCORE_CONFIG_H
+#ifndef __QMLPLUGINENGINE_H__
+#define __QMLPLUGINENGINE_H__
 
-#define USE_ALSA
-#define USE_JACK
-/* #undef USE_PORTAUDIO */
-/* #undef USE_PORTMIDI */
+namespace Ms {
 
-#define MSCORE_UNSTABLE
+class QmlPlugin;
 
-#define HAS_MIDI
-#define STATIC_SCRIPT_BINDINGS
-#define BUILD_SCRIPTGEN
-#define HAS_AUDIOFILE
-/* #undef USE_SSE */
+//---------------------------------------------------------
+//   QmlPluginEngine
+//---------------------------------------------------------
 
-#define INSTALL_NAME      "mscore-2.0/"
-#define INSTPREFIX        "/usr/local"
-#define VERSION           "2.0.0"
+class QmlPluginEngine : public QQmlEngine {
+   public:
+      QmlPluginEngine(QObject* parent = nullptr);
+      };
 
-#define AEOLUS
-/* #undef OMR */
-/* #undef OCR */
-#define OSC
-/* #undef OPENGL */
-#define SOUNDFONT3
-
-/* #undef Q_OS_UIKIT */
-
-#define USE_BSP         true
-#define SCRIPT_INTERFACE true
-
-#endif /* MUSESCORE_CONFIG_H */
+} // namespace Ms
+#endif

@@ -405,7 +405,7 @@ int main(int argc, char* argv[])
       srcPath = argv[1];
       dstPath = argv[2];
       QStringList files;
-      files << "mscore/qmlplugin.h";
+      files << "mscore/plugin/qmlplugin.h";
       files << "mscore/svggenerator.h";
 
       QDir libdir(srcPath + "/libmscore");

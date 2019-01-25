@@ -78,8 +78,9 @@
 #endif
 #include "shortcut.h"
 #ifdef SCRIPT_INTERFACE
-#include "pluginCreator.h"
-#include "pluginManager.h"
+#include "plugin/pluginCreator.h"
+#include "plugin/pluginManager.h"
+#include "plugin/qmlpluginengine.h"
 #endif
 #include "helpBrowser.h"
 #include "drumtools.h"
@@ -110,7 +111,7 @@
 #include "synthesizer/synthesizergui.h"
 #include "synthesizer/msynthesizer.h"
 #include "fluid/fluid.h"
-#include "qmlplugin.h"
+#include "plugin/qmlplugin.h"
 #include "accessibletoolbutton.h"
 #include "toolbuttonmenu.h"
 #include "searchComboBox.h"
@@ -7221,10 +7222,6 @@ int main(int argc, char* av[])
             }
 #endif
 
-#ifdef SCRIPT_INTERFACE
-      if (-1 == qmlRegisterType<QmlPlugin>  ("MuseScore", 3, 0, "MuseScore"))
-            qDebug("qmlRegisterType failed: MuseScore");
-#endif
       if (MScore::debugMode) {
             qDebug("DPI %f", DPI);
 
@@ -7428,8 +7425,10 @@ int main(int argc, char* av[])
             }
 
       errorMessage = new QErrorMessage(mscore);
+#ifdef SCRIPT_INTERFACE
       mscore->getPluginManager()->readPluginList();
       mscore->loadPlugins();
+#endif
       mscore->writeSessionFile(false);
 
 #ifdef Q_OS_MAC
@@ -7567,4 +7566,15 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
 
       delete score;
       return res;
+      }
+
+//---------------------------------------------------------
+//   getQmlEngine
+//---------------------------------------------------------
+
+QmlPluginEngine* MuseScore::getPluginEngine()
+      {
+      if (!_qmlEngine)
+            _qmlEngine = new QmlPluginEngine(this);
+      return _qmlEngine;
       }

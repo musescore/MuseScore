@@ -35,11 +35,11 @@ class DurationElement : public Element {
       Fraction _duration;
       Tuplet* _tuplet;
 
-#ifdef SCRIPT_INTERFACE
-      void setDurationW(FractionWrapper* f)  { _duration = f->fraction(); }
-      FractionWrapper* durationW() const     { return new FractionWrapper(_duration); }
-      FractionWrapper* globalDurW() const    { return new FractionWrapper(globalDuration()); }
-#endif
+// #ifdef SCRIPT_INTERFACE
+//       void setDurationW(FractionWrapper* f)  { _duration = f->fraction(); }
+//       FractionWrapper* durationW() const     { return new FractionWrapper(_duration); }
+//       FractionWrapper* globalDurW() const    { return new FractionWrapper(globalDuration()); }
+// #endif
 
    public:
       DurationElement(Score* = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);

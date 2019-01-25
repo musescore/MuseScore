@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "pluginManager.h"
+#include "qmlpluginengine.h"
 #include "shortcutcapturedialog.h"
 #include "musescore.h"
 #include "libmscore/xml.h"
@@ -186,7 +187,7 @@ void PluginManager::updatePluginList(bool forceRefresh)
       pluginPathList.append(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
       if (forceRefresh) {
             _pluginList.clear();
-            QQmlEngine* engine=Ms::MScore::qml();
+            QmlPluginEngine* engine = mscore->getPluginEngine();
             engine->clearComponentCache(); //TODO: Check this doesn't have unwanted side effects.
             }
 

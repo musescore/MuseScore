@@ -192,7 +192,7 @@
   <customwidget>
    <class>Ms::QmlEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>qmledit.h</header>
+   <header>plugin/qmledit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
