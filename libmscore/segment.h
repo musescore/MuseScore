@@ -25,40 +25,6 @@ class ChordRest;
 class Spanner;
 class System;
 
-//-------------------------------------------------------------------
-//   SegmentType
-//
-//    Type values determine the order of segments for a given tick
-//-------------------------------------------------------------------
-
-enum class SegmentType {
-      Invalid            = 0x0,
-      BeginBarLine       = 0x1,
-      HeaderClef         = 0x2,
-      KeySig             = 0x4,
-      Ambitus            = 0x8,
-      TimeSig            = 0x10,
-      Clef               = 0x20,
-      StartRepeatBarLine = 0x40,
-      BarLine            = 0x80,
-      Breath             = 0x100,
-      //--
-      ChordRest          = 0x200,
-      //--
-      EndBarLine         = 0x400,
-      KeySigAnnounce     = 0x800,
-      TimeSigAnnounce    = 0x1000,
-      All                = -1,
-      BarLineType        = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine
-      };
-
-constexpr SegmentType operator| (const SegmentType t1, const SegmentType t2) {
-      return static_cast<SegmentType>(static_cast<int>(t1) | static_cast<int>(t2));
-      }
-constexpr bool operator& (const SegmentType t1, const SegmentType t2) {
-      return static_cast<int>(t1) & static_cast<int>(t2);
-      }
-
 //------------------------------------------------------------------------
 //   @@ Segment
 //    A segment holds all vertical aligned staff elements.
@@ -149,7 +115,7 @@ class Segment final : public Element {
 
       // a variant of the above function, specifically designed to be called from QML
       //@ returns the element at track 'track' (null if none)
-      Q_INVOKABLE Ms::Element* elementAt(int track) const;
+      Ms::Element* elementAt(int track) const;
 
       const std::vector<Element*>& elist() const { return _elist; }
       std::vector<Element*>& elist()             { return _elist; }

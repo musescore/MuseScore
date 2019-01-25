@@ -280,15 +280,5 @@ QVariant LayoutBreak::propertyDefault(Pid id) const
                   return Element::propertyDefault(id);
             }
       }
-
-//---------------------------------------------------------
-//   undoLayoutBreakType
-//---------------------------------------------------------
-
-void LayoutBreak::undoSetLayoutBreakType(Type t)
-      {
-      undoChangeProperty(Pid::LAYOUT_BREAK, int(t));
-      }
-
 }
 

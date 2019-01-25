@@ -192,6 +192,7 @@ class ScoreElement {
       virtual ElementType type() const = 0;
 
       static ElementType name2type(const QStringRef&, bool silent = false);
+      static ElementType name2type(const QString& s) { return name2type(QStringRef(&s)); }
       static const char* name(ElementType);
 
       virtual QVariant getProperty(Pid) const = 0;
@@ -584,7 +585,6 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(Page)
       CONVERT(SystemText)
       CONVERT(BracketItem)
-      CONVERT(Score)
       CONVERT(Staff)
       CONVERT(Part)
       CONVERT(BagpipeEmbellishment)

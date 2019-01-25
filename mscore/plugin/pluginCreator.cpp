@@ -12,6 +12,7 @@
 
 
 #include "pluginCreator.h"
+#include "qmlpluginengine.h"
 #include "musescore.h"
 #include "qmlplugin.h"
 #include "icons.h"
@@ -293,7 +294,7 @@ void PluginCreator::runClicked()
       {
       log->clear();
       msg(tr("Running…\n"));
-      QQmlEngine* qml = Ms::MScore::qml();
+      QmlPluginEngine* qml = mscore->getPluginEngine();
       connect(qml, SIGNAL(warnings(const QList<QQmlError>&)),
          SLOT(qmlWarnings(const QList<QQmlError>&)));
 

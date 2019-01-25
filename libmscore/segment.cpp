@@ -1035,12 +1035,6 @@ void Segment::clearAnnotations()
 Ms::Element* Segment::elementAt(int track) const
       {
       Element* e = track < int(_elist.size()) ? _elist[track] : 0;
-
-#ifdef SCRIPT_INTERFACE
-// if called from QML/JS, tell QML engine not to garbage collect this object
-//      if (e)
-//            QQmlEngine::setObjectOwnership(e, QQmlEngine::CppOwnership);
-#endif
       return e;
       }
 

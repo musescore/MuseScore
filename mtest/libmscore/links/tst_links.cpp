@@ -50,6 +50,23 @@ void TestLinks::initTestCase()
       }
 
 //---------------------------------------------------------
+//   addTitleText
+//---------------------------------------------------------
+
+static void addTitleText(Score* score, const QString& title)
+      {
+      MeasureBase* measure = score->first();
+      if (!measure->isVBox()) {
+            score->insertMeasure(ElementType::VBOX, measure);
+            measure = score->first();
+            }
+
+      Text* text = new Text(score, Tid::TITLE);
+      text->setPlainText(title);
+      measure->add(text);
+      }
+
+//---------------------------------------------------------
 //   test3LinkedSameScore
 ///  Create an empty 1 staff score
 ///  Add 2 linked staff
@@ -172,7 +189,7 @@ void TestLinks::test3LinkedParts_99796()
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
       MasterScore* score = c.score();
-      score->addText("title", "Title");
+      addTitleText(score, "Title");
       score->doLayout();
       // delete chord
       Measure* m = score->firstMeasure();
@@ -253,7 +270,7 @@ void TestLinks::test4LinkedParts_94911()
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
       MasterScore* score = c.score();
-      score->addText("title", "Title");
+      addTitleText(score, "Title");
       score->doLayout();
       // delete chord
       Measure* m = score->firstMeasure();
@@ -375,7 +392,7 @@ void TestLinks::test5LinkedParts_94911()
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
       MasterScore* score = c.score();
-      score->addText("title", "Title");
+      addTitleText(score, "Title");
       score->doLayout();
       // delete chord
       Measure* m = score->firstMeasure();

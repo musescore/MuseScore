@@ -10,6 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "cursor.h"
+#include "elements.h"
+#include "score.h"
 #include "libmscore/score.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
@@ -22,55 +25,40 @@
 #include "libmscore/system.h"
 #include "libmscore/segment.h"
 #include "libmscore/timesig.h"
-#include "cursor.h"
 
 namespace Ms {
-
-//---------------------------------------------------------
-//   ElementW
-//---------------------------------------------------------
-
-QString ElementW::name() const
-      {
-      return QString(e->name());
-      }
-
-int ElementW::type() const
-      {
-      return int(e->type());
-      }
-
-int ElementW::tick() const
-      {
-      return ((Element*)e)->tick();
-      }
-
-QVariant ElementW::get(const QString& s) const
-      {
-      QVariant val;
-      if (e) {
-            Pid pid = propertyIdQml(s);
-            val = e->getProperty(pid);
-            if (propertyType(pid) == P_TYPE::FRACTION) {
-                  Fraction f(val.value<Fraction>());
-                  FractionWrapper*  fw = new FractionWrapper(f);
-                  return QVariant::fromValue(fw);
-                  }
-            }
-      return val;
-      }
+namespace PluginAPI {
 
 //---------------------------------------------------------
 //   Cursor
 //---------------------------------------------------------
 
-Cursor::Cursor(Score* s)
-   : QObject(0)
+Cursor::Cursor(Ms::Score* s)
+   : QObject(0), _filter(Ms::SegmentType::ChordRest)
       {
-      _track   = 0;
-      _segment = 0;
-      _filter  = SegmentType::ChordRest;
       setScore(s);
+      }
+
+//---------------------------------------------------------
+//   score
+//---------------------------------------------------------
+
+Score* Cursor::score() const
+      {
+      return wrap<Score>(_score, Ownership::SCORE);
+      }
+
+//---------------------------------------------------------
+//   setScore
+//---------------------------------------------------------
+
+void Cursor::setScore(Ms::Score* s)
+      {
+      _score = s;
+      if (_score) {
+            _score->inputState().setTrack(_track);
+            _score->inputState().setSegment(_segment);
+            }
       }
 
 //---------------------------------------------------------
@@ -79,25 +67,21 @@ Cursor::Cursor(Score* s)
 
 void Cursor::setScore(Score* s)
       {
-      _score = s;
-      if (score()) {
-            score()->inputState().setTrack(_track);
-            score()->inputState().setSegment(_segment);
-            }
+      setScore(s ? s->score() : nullptr);
       }
 
 //---------------------------------------------------------
 //   rewind
 //---------------------------------------------------------
 
-void Cursor::rewind(int type)
+void Cursor::rewind(RewindMode mode)
       {
       //
       // rewind to start of score
       //
-      if (type == 0) {
-            _segment = 0;
-            Measure* m = score()->firstMeasure();
+      if (mode == SCORE_START) {
+            _segment = nullptr;
+            Ms::Measure* m = _score->firstMeasure();
             if (m) {
                   _segment = m->first(_filter);
                   nextInTrack();
@@ -106,20 +90,24 @@ void Cursor::rewind(int type)
       //
       // rewind to start of selection
       //
-      else if (type == 1) {
-            _segment  = score()->selection().startSegment();
-            _track    = score()->selection().staffStart() * VOICES;
+      else if (mode == SELECTION_START) {
+            if (!_score->selection().isRange())
+                  return;
+            _segment  = _score->selection().startSegment();
+            _track    = _score->selection().staffStart() * VOICES;
             nextInTrack();
             }
       //
       // rewind to end of selection
       //
-      else if (type == 2) {
-            _segment  = score()->selection().endSegment();
-            _track    = (score()->selection().staffEnd() * VOICES) - 1;  // be sure _track exists
+      else if (mode == SELECTION_END) {
+            if (!_score->selection().isRange())
+                  return;
+            _segment  = _score->selection().endSegment();
+            _track    = (_score->selection().staffEnd() * VOICES) - 1;  // be sure _track exists
             }
-      score()->inputState().setTrack(_track);
-      score()->inputState().setSegment(_segment);
+      _score->inputState().setTrack(_track);
+      _score->inputState().setSegment(_segment);
       }
 
 //---------------------------------------------------------
@@ -134,8 +122,8 @@ bool Cursor::next()
             return false;
       _segment = _segment->next1(_filter);
       nextInTrack();
-      score()->inputState().setTrack(_track);
-      score()->inputState().setSegment(_segment);
+      _score->inputState().setTrack(_track);
+      _score->inputState().setSegment(_segment);
       return _segment != 0;
       }
 
@@ -149,7 +137,7 @@ bool Cursor::nextMeasure()
       {
       if (_segment == 0)
             return false;
-      Measure* m = _segment->measure()->nextMeasure();
+      Ms::Measure* m = _segment->measure()->nextMeasure();
       if (m == 0) {
             _segment = 0;
             return false;
@@ -163,38 +151,42 @@ bool Cursor::nextMeasure()
 //   add
 //---------------------------------------------------------
 
-void Cursor::add(Element* s)
+void Cursor::add(Element* wrapped)
       {
-      if (!_segment)
+      Ms::Element* s = wrapped->element();
+      if (!_segment || !s)
             return;
 
+      if (s->isStaffText())
+            qDebug() << toStaffText(s)->plainText();
+      wrapped->setOwnership(Ownership::SCORE);
       s->setTrack(_track);
       s->setParent(_segment);
 
       if (s->isChordRest())
             s->score()->undoAddCR(toChordRest(s), _segment->measure(), _segment->tick());
       else if (s->type() == ElementType::KEYSIG) {
-            Segment* ns = _segment->measure()->undoGetSegment(SegmentType::KeySig, _segment->tick());
+            Ms::Segment* ns = _segment->measure()->undoGetSegment(SegmentType::KeySig, _segment->tick());
             s->setParent(ns);
-            score()->undoAddElement(s);
+            _score->undoAddElement(s);
             }
       else if (s->type() == ElementType::TIMESIG) {
-            Measure* m = _segment->measure();
+            Ms::Measure* m = _segment->measure();
             int tick = m->tick();
-            score()->cmdAddTimeSig(m, _track, toTimeSig(s), false);
-            m = score()->tick2measure(tick);
+            _score->cmdAddTimeSig(m, _track, toTimeSig(s), false);
+            m = _score->tick2measure(tick);
             _segment = m->first(_filter);
             nextInTrack();
             }
       else if (s->type() == ElementType::LAYOUT_BREAK) {
-            Measure* m = _segment->measure();
+            Ms::Measure* m = _segment->measure();
             s->setParent(m);
-            score()->undoAddElement(s);
+            _score->undoAddElement(s);
             }
       else {
-            score()->undoAddElement(s);
+            _score->undoAddElement(s);
             }
-      score()->setLayoutAll();
+      _score->setLayoutAll();
       }
 
 //---------------------------------------------------------
@@ -203,8 +195,14 @@ void Cursor::add(Element* s)
 
 void Cursor::addNote(int pitch)
       {
+      if (!pitchIsValid(pitch)) {
+            qWarning("Cursor::addNote: invalid pitch: %d", pitch);
+            return;
+            }
+      if (!_score->inputState().duration().isValid())
+            setDuration(1, 4);
       NoteVal nval(pitch);
-      score()->addPitch(nval, false);
+      _score->addPitch(nval, false);
       }
 
 //---------------------------------------------------------
@@ -216,7 +214,7 @@ void Cursor::setDuration(int z, int n)
       TDuration d(Fraction(z, n));
       if (!d.isValid())
             d = TDuration(TDuration::DurationType::V_QUARTER);
-      score()->inputState().setDuration(d);
+      _score->inputState().setDuration(d);
       }
 
 //---------------------------------------------------------
@@ -234,7 +232,7 @@ int Cursor::tick()
 
 double Cursor::time()
       {
-      return score()->utick2utime(tick()) * 1000;
+      return _score->utick2utime(tick()) * 1000;
       }
 
 //---------------------------------------------------------
@@ -243,34 +241,37 @@ double Cursor::time()
 
 qreal Cursor::tempo()
       {
-      return score()->tempo(tick());
+      return _score->tempo(tick());
       }
 
 //---------------------------------------------------------
 //   segment
 //---------------------------------------------------------
 
-ElementW* Cursor::segment() const
+Segment* Cursor::segment() const
       {
-      return _segment ? new ElementW(_segment) : 0;
+      return _segment ? wrap<Segment>(_segment, Ownership::SCORE) : nullptr;
       }
 
 //---------------------------------------------------------
 //   element
 //---------------------------------------------------------
 
-ElementW* Cursor::element() const
+Element* Cursor::element() const
       {
-      return _segment && _segment->element(_track) ? new ElementW(_segment->element(_track)) : 0;
+      Ms::Element* e = _segment && _segment->element(_track) ? _segment->element(_track) : nullptr;
+      if (!e)
+            return nullptr;
+      return wrap(e, Ownership::SCORE);
       }
 
 //---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
 
-ElementW* Cursor::measure() const
+Measure* Cursor::measure() const
       {
-      return _segment ? new ElementW(_segment->measure()) : 0;
+      return _segment ? wrap<Measure>(_segment->measure(), Ownership::SCORE) : nullptr;
       }
 
 //---------------------------------------------------------
@@ -280,12 +281,12 @@ ElementW* Cursor::measure() const
 void Cursor::setTrack(int v)
       {
       _track = v;
-      int tracks = score()->nstaves() * VOICES;
+      int tracks = _score->nstaves() * VOICES;
       if (_track < 0)
             _track = 0;
       else if (_track >= tracks)
             _track = tracks - 1;
-      score()->inputState().setTrack(_track);
+      _score->inputState().setTrack(_track);
       }
 
 //---------------------------------------------------------
@@ -295,12 +296,12 @@ void Cursor::setTrack(int v)
 void Cursor::setStaffIdx(int v)
       {
       _track = v * VOICES + _track % VOICES;
-      int tracks = score()->nstaves() * VOICES;
+      int tracks = _score->nstaves() * VOICES;
       if (_track < 0)
             _track = 0;
       else if (_track >= tracks)
             _track = tracks - 1;
-      score()->inputState().setTrack(_track);
+      _score->inputState().setTrack(_track);
       }
 
 //---------------------------------------------------------
@@ -310,12 +311,12 @@ void Cursor::setStaffIdx(int v)
 void Cursor::setVoice(int v)
       {
       _track = (_track / VOICES) * VOICES + v;
-      int tracks = score()->nstaves() * VOICES;
+      int tracks = _score->nstaves() * VOICES;
       if (_track < 0)
             _track = 0;
       else if (_track >= tracks)
             _track = tracks - 1;
-      score()->inputState().setTrack(_track);
+      _score->inputState().setTrack(_track);
       }
 
 //---------------------------------------------------------
@@ -355,8 +356,8 @@ void Cursor::nextInTrack()
 
 int Cursor::qmlKeySignature()
       {
-      Staff *staff = score()->staves()[staffIdx()];
+      Staff *staff = _score->staves()[staffIdx()];
       return (int) staff->key(tick());
       }
 }
-
+}

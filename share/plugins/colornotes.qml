@@ -46,7 +46,7 @@ MuseScore {
             var endStaff;
             var endTick;
             var fullScore = false;
-            if (!cursor.segment()) { // no selection
+            if (!cursor.segment) { // no selection
                   fullScore = true;
                   startStaff = 0; // start with 1st staff
                   endStaff = curScore.nstaves - 1; // and end with last
@@ -74,16 +74,16 @@ MuseScore {
                         if (fullScore)
                               cursor.rewind(0) // if no selection, beginning of score
 
-                        while (cursor.segment() && (fullScore || cursor.tick < endTick)) {
-                              if (cursor.element() && cursor.element().type === Ms.CHORD) {
-                                    var graceChords = cursor.element().graceNotes;
+                        while (cursor.segment && (fullScore || cursor.tick < endTick)) {
+                              if (cursor.element && cursor.element.type === Element.CHORD) {
+                                    var graceChords = cursor.element.graceNotes;
                                     for (var i = 0; i < graceChords.length; i++) {
                                           // iterate through all grace chords
                                           var graceNotes = graceChords[i].notes;
                                           for (var j = 0; j < graceNotes.length; j++)
                                                 func(graceNotes[j]);
                                     }
-                                    var notes = cursor.element().notes;
+                                    var notes = cursor.element.notes;
                                     for (var k = 0; k < notes.length; k++) {
                                           var note = notes[k];
                                           func(note);
@@ -96,24 +96,24 @@ MuseScore {
       }
 
       function colorNote(note) {
-            if (note.get("color") === black)
-                  note.set("color", colors[note.pitch % 12]);
+            if (note.color == black)
+                  note.color = colors[note.pitch % 12];
             else
-                  note.set("color", black);
+                  note.color = black;
 
             if (note.accidental) {
-                  //if (note.accidental.get("color") === black)
-                       //note.accidental.set("color", colors[note.pitch % 12]);
-                  //else
-                        note.accidental.set("color", black);
+                  if (note.accidental.color == black)
+                        note.accidental.color = colors[note.pitch % 12];
+                  else
+                        note.accidental.color = black;
                   }
 
             for (var i = 0; i < note.dots.length; i++) {
                   if (note.dots[i]) {
-                        //if (note.dots[i].get("color") === black)
-                              //note.dots[i].set("color", colors[note.pitch % 12]);
-                        //else
-                              note.dots[i].set("color", black);
+                        if (note.dots[i].color == black)
+                              note.dots[i].color = colors[note.pitch % 12];
+                        else
+                              note.dots[i].color = black;
                         }
                   }
          }
