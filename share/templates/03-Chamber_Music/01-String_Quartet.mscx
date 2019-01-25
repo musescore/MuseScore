@@ -79,7 +79,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="arco">
           <program value="40"/>
           <synti>Fluid</synti>
           </Channel>
@@ -144,7 +144,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="arco">
           <program value="40"/>
           <synti>Fluid</synti>
           </Channel>
@@ -211,7 +211,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="arco">
           <program value="41"/>
           <synti>Fluid</synti>
           </Channel>
@@ -277,7 +277,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="arco">
           <program value="42"/>
           <synti>Fluid</synti>
           </Channel>
