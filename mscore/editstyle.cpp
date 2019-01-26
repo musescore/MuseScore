@@ -674,6 +674,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
          [=](){ textStyleValueChanged(Pid::FRAME_BG_COLOR, textStyleFrameBackground->color()); }
          );
 
+      resetTextStyleColor->setIcon(*icons[int(Icons::reset_ICON)]);
+      connect(resetTextStyleColor, &QToolButton::clicked, [=](){ resetTextStyle(Pid::COLOR); });
+      connect(textStyleColor, &Awl::ColorLabel::colorChanged,
+         [=](){ textStyleValueChanged(Pid::COLOR, textStyleColor->color()); }
+         );
+
       connect(textStyles, SIGNAL(currentRowChanged(int)), SLOT(textStyleChanged(int)));
       textStyles->setCurrentRow(0);
       MuseScore::restoreGeometry(this);
@@ -1353,6 +1359,10 @@ void EditStyle::textStyleChanged(int row)
                         resetTextStyleFrameBackground->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
                         break;
 
+                  case Pid::COLOR:
+                        textStyleColor->setColor(cs->styleV(a.sid).value<QColor>());
+                        resetTextStyleColor->setEnabled(cs->styleV(a.sid) != MScore::defaultStyle().value(a.sid));
+                        break;
 
                   default:
                         break;
