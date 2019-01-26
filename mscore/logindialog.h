@@ -14,9 +14,10 @@
 #define __LOGINDIALOG_H__
 
 #include "ui_logindialog.h"
-#include "loginmanager.h"
 
 namespace Ms {
+
+class LoginManager;
 
 //---------------------------------------------------------
 //   LoginDialog

@@ -1,4 +1,3 @@
-
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -12,51 +11,126 @@
 //=============================================================================
 
 #include "loginmanager.h"
+#include "loginmanager_p.h"
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "preferences.h"
 #include "kQOAuth/kqoauthrequest.h"
 #include "kQOAuth/kqoauthrequest_xauth.h"
 
+#include <QWebEngineCookieStore>
+
 namespace Ms {
 
 extern QString dataPath;
 
-static const char* MUSESCORE_HOST = "api.musescore.com";
+ApiInfo* ApiInfo::_instance = nullptr;
+const QUrl ApiInfo::loginUrl(ApiInfo::loginPage);
+const QUrl ApiInfo::loginSuccessUrl(ApiInfo::loginSuccessPage);
+
+//---------------------------------------------------------
+//   ApiInfo:apiInfoLocation
+//---------------------------------------------------------
+
+QString ApiInfo::apiInfoLocation()
+      {
+      return dataPath + "/api.dat";
+      }
+
+//---------------------------------------------------------
+//   ApiInfo:genClientId
+//---------------------------------------------------------
+
+QByteArray ApiInfo::genClientId()
+      {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+      QByteArray qtGeneratedId(QSysInfo::machineUniqueId());
+      if (!qtGeneratedId.isEmpty())
+            return qtGeneratedId;
+#endif
+      long long randId = qrand();
+      constexpr size_t randBytes = sizeof(decltype(qrand()));
+      qDebug() << "randBytes =" << randBytes << "sizeof(randId)" << sizeof(randId);
+      for (size_t bytes = randBytes; bytes < sizeof(randId); bytes += randBytes) {
+            randId <<= 8 * randBytes;
+            randId += qrand();
+            }
+      qDebug() << randId << QString::number(randId, 2) << QString::number(randId, 16);
+
+      return QString::number(randId, 16).toLatin1();
+      }
+
+//---------------------------------------------------------
+//   ApiInfo:createInstance
+//---------------------------------------------------------
+
+void ApiInfo::createInstance()
+      {
+      if (_instance)
+            return;
+
+      QFile f(apiInfoLocation());
+      QByteArray clientId;
+      if (f.open(QIODevice::ReadOnly)) {
+            const QByteArray saveData = f.readAll();
+            const QJsonDocument d(QJsonDocument::fromBinaryData(saveData));
+            QJsonObject saveObject = d.object();
+            clientId = saveObject["clientId"].toString().toLatin1();
+            f.close();
+            }
+      else {
+            clientId = genClientId();
+            // Save the generated ID
+            if (f.open(QIODevice::WriteOnly)) {
+                  QJsonObject saveObject;
+                  saveObject["clientId"] = QString(clientId);
+                  QJsonDocument saveDoc(saveObject);
+                  f.write(saveDoc.toBinaryData());
+                  f.close();
+                  }
+            }
+
+      QByteArray apiKey("0b19809bab331d70fb9983a0b9866290");
+      _instance = new ApiInfo(clientId, apiKey);
+      }
+
+//---------------------------------------------------------
+//   ApiInfo::getOsInfo
+//---------------------------------------------------------
+
+QString ApiInfo::getOsInfo()
+      {
+      QStringList info;
+      info  << QSysInfo::kernelType() << QSysInfo::kernelVersion()
+            << QSysInfo::productType() << QSysInfo::productVersion()
+            << QSysInfo::currentCpuArchitecture();
+      return info.join(' ');
+      }
+
+//---------------------------------------------------------
+//   ApiInfo
+//---------------------------------------------------------
+
+ApiInfo::ApiInfo(const QByteArray _clientId, const QByteArray _apiKey)
+   : clientId(_clientId),
+   apiKey(_apiKey),
+   userAgent(QString(userAgentTemplate).arg(VERSION).arg(BUILD_NUMBER).arg(getOsInfo()).toLatin1())
+      {
+      if (MScore::debugMode) {
+            qWarning("clientId: %s", clientId.constData());
+            qWarning("apiKey: %s", apiKey.constData());
+            qWarning("userAgent: %s", userAgent.constData());
+            }
+      }
 
 //---------------------------------------------------------
 //   LoginManager
 //---------------------------------------------------------
 
 LoginManager::LoginManager(QAction* uploadAudioMenuAction, QObject* parent)
- : QObject(parent),
+ : QObject(parent), _networkManager(new QNetworkAccessManager(this)),
    _uploadAudioMenuAction(uploadAudioMenuAction)
       {
-      _oauthManager = new KQOAuthManager(this);
-      connect(_oauthManager, SIGNAL(accessTokenReceived(QString, QString)),
-            this, SLOT(onAccessTokenReceived(QString, QString)));
-      connect(_oauthManager, SIGNAL(authorizedRequestDone()),
-            this, SLOT(onAuthorizedRequestDone()));
-      QByteArray ba;
-      ba.resize(32);
-      ba[0] = 0x68; ba[1] = 0x74; ba[2] = 0x55; ba[3] = 0x38;
-      ba[4] = 0x48; ba[5] = 0x45; ba[6] = 0x4c; ba[7] = 0x45;
-      ba[8] = 0x4d; ba[9] = 0x47; ba[10] = 0x43; ba[11] = 0x55;
-      ba[12] = 0x6e; ba[13] = 0x6f; ba[14] = 0x53; ba[15] = 0x54;
-      ba[16] = 0x38; ba[17] = 0x67; ba[18] = 0x6b; ba[19] = 0x78;
-      ba[20] = 0x34; ba[21] = 0x77; ba[22] = 0x33; ba[23] = 0x69;
-      ba[24] = 0x52; ba[25] = 0x63; ba[26] = 0x64; ba[27] = 0x6e;
-      ba[28] = 0x41; ba[29] = 0x6a; ba[30] = 0x37; ba[31] = 0x51;
-      _consumerKey = QString(ba);
-      ba[0] = 0x52; ba[1] = 0x50; ba[2] = 0x75; ba[3] = 0x32;
-      ba[4] = 0x79; ba[5] = 0x52; ba[6] = 0x69; ba[7] = 0x52;
-      ba[8] = 0x6f; ba[9] = 0x58; ba[10] = 0x53; ba[11] = 0x41;
-      ba[12] = 0x48; ba[13] = 0x6d; ba[14] = 0x4a; ba[15] = 0x6f;
-      ba[16] = 0x6b; ba[17] = 0x61; ba[18] = 0x62; ba[19] = 0x59;
-      ba[20] = 0x35; ba[21] = 0x37; ba[22] = 0x59; ba[23] = 0x74;
-      ba[24] = 0x66; ba[25] = 0x51; ba[26] = 0x5a; ba[27] = 0x36;
-      ba[28] = 0x77; ba[29] = 0x35; ba[30] = 0x69; ba[31] = 0x77;
-      _consumerSecret  = QString(ba);
       load();
       _progressDialog = new QProgressDialog(mscore);
       _progressDialog->setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));
@@ -70,14 +144,14 @@ LoginManager::LoginManager(QAction* uploadAudioMenuAction, QObject* parent)
 
 bool LoginManager::save()
       {
-      if (_accessToken.isEmpty() || _accessTokenSecret.isEmpty())
+      if (_accessToken.isEmpty() || _refreshToken.isEmpty())
             return true;
       QFile saveFile(dataPath + "/cred.dat");
       if (!saveFile.open(QIODevice::WriteOnly))
             return false;
       QJsonObject saveObject;
       saveObject["accessToken"] = _accessToken;
-      saveObject["accessTokenSecret"] = _accessTokenSecret;
+      saveObject["refreshToken"] = _refreshToken;
       QJsonDocument saveDoc(saveObject);
       saveFile.write(saveDoc.toBinaryData());
       saveFile.close();
@@ -97,15 +171,65 @@ bool LoginManager::load()
       QJsonDocument loadDoc(QJsonDocument::fromBinaryData(saveData));
       QJsonObject saveObject = loadDoc.object();
       _accessToken = saveObject["accessToken"].toString();
-      _accessTokenSecret = saveObject["accessTokenSecret"].toString();
+      _refreshToken = saveObject["refreshToken"].toString();
       loadFile.close();
       return true;
       }
 
 //---------------------------------------------------------
-//   onAuthorizedRequestDone
+//   onReplyFinished
 //---------------------------------------------------------
 
+void LoginManager::onReplyFinished(QNetworkReply* reply, RequestType requestType)
+      {
+      if (!reply)
+            return;
+
+      const int code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+      QByteArray ba(reply->readAll());
+      QJsonObject obj;
+      if (!ba.isEmpty()) {
+            QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
+            if (jsonResponse.isObject())
+                  obj = jsonResponse.object();
+            }
+
+      switch (requestType) {
+            case RequestType::LOGIN:
+                  onLoginReply(reply, code, obj);
+                  break;
+            case RequestType::GET_USER_INFO:
+                  onGetUserReply(reply, code, obj);
+                  break;
+            case RequestType::GET_SCORE_INFO:
+                  onGetScoreInfoReply(reply, code, obj);
+                  break;
+            case RequestType::UPLOAD_SCORE:
+                  onUploadReply(reply, code, obj);
+                  break;
+            case RequestType::GET_MEDIA_URL:
+                  onGetMediaUrlReply(reply, code, obj);
+                  break;
+            }
+
+      reply->deleteLater();
+      }
+
+//---------------------------------------------------------
+//   getErrorString
+//---------------------------------------------------------
+
+QString LoginManager::getErrorString(QNetworkReply* reply, const QJsonObject& obj)
+      {
+      const QString err = reply ? reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString() : tr("Error");
+      const QString msg = obj["message"].toString();
+      return QString("%1 (%2)").arg(err).arg(msg);
+      }
+
+//---------------------------------------------------------
+//   onAuthorizedRequestDone
+//---------------------------------------------------------
+#if 0
 void LoginManager::onAuthorizedRequestDone()
       {
       if (_oauthManager->lastError() == KQOAuthManager::NetworkError)
@@ -122,6 +246,7 @@ void LoginManager::onAuthorizedRequestDone()
       //      mscore->showLoginDialog();
       //      }
       }
+#endif
 
 /*------- TRY LOGIN ROUTINES ----------------------------*/
 /*  Try to get user information, if error,               */
@@ -161,9 +286,46 @@ void LoginManager::onTryLoginError(const QString& error)
       disconnect(this, SIGNAL(getUserError(QString)), this, SLOT(onTryLoginError(QString)));
       connect(this, SIGNAL(loginSuccess()), this, SLOT(tryLogin()));
       logout();
-      mscore->showLoginDialog();
+      loginInteractive();
+//       mscore->showLoginDialog(); // TODO: switch depending on USE_WEBENGINE
       }
 /*------- END - TRY LOGIN ROUTINES ----------------------------*/
+
+//---------------------------------------------------------
+//   loginInteractive
+//---------------------------------------------------------
+
+void LoginManager::loginInteractive()
+      {
+      QWebEngineView* webView = new QWebEngineView;
+      webView->setWindowModality(Qt::ApplicationModal);
+      webView->setAttribute(Qt::WA_DeleteOnClose);
+
+      QWebEnginePage* page = webView->page();
+      QWebEngineProfile* profile = page->profile();
+      // TODO: logout in editor does not log out in web view
+      profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
+      profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));
+
+      connect(page, &QWebEnginePage::loadFinished, this, [this, page, webView](bool ok) {
+            if (!ok)
+                  return;
+            constexpr QUrl::FormattingOptions cmpOpt = QUrl::RemoveQuery | QUrl::RemoveFragment | QUrl::StripTrailingSlash;
+            if (!page->url().matches(ApiInfo::loginSuccessUrl, cmpOpt))
+                  return;
+
+            page->runJavaScript("JSON.stringify(muGetAuthInfo())", [this, page, webView](const QVariant& v) {
+                  onLoginReply(nullptr, HTTP_OK, QJsonDocument::fromJson(v.toString().toUtf8()).object());
+                  // We have retrieved an access token, do not remain logged
+                  // in with web view profile.
+                  page->profile()->cookieStore()->deleteAllCookies();
+                  webView->close();
+                  });
+            });
+
+      webView->load(ApiInfo::loginUrl);
+      webView->show();
+      }
 
 //---------------------------------------------------------
 //   login
@@ -171,24 +333,43 @@ void LoginManager::onTryLoginError(const QString& error)
 
 void LoginManager::login(QString login, QString password)
       {
-      if(login == "" || password == "")
+      if(login.isEmpty() || password.isEmpty())
            return;
 
-      connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
-                this, SLOT(onAccessTokenRequestReady(QByteArray)), Qt::UniqueConnection);
+      ApiRequest r = ApiRequestBuilder()
+         .setPath("/auth/login")
+         .addPostParameter("field", login)
+         .addPostParameter("password", password)
+         .build();
 
-      KQOAuthRequest_XAuth *oauthRequest = new KQOAuthRequest_XAuth(this);
-      oauthRequest->initRequest(KQOAuthRequest::AccessToken, QUrl(QString("https://%1/oauth/access_token").arg(MUSESCORE_HOST)));
-      oauthRequest->setConsumerKey(_consumerKey);
-      oauthRequest->setConsumerSecretKey(_consumerSecret);
-      oauthRequest->setXAuthLogin(login, password);
-      _oauthManager->executeRequest(oauthRequest);
+      QNetworkReply* reply = _networkManager->put(r.request, r.data);
+      connect(reply, &QNetworkReply::finished, this, [this, reply] {
+            onReplyFinished(reply, RequestType::LOGIN);
+            });
      }
+
+//---------------------------------------------------------
+//   onLoginSuccessReply
+//---------------------------------------------------------
+
+void LoginManager::onLoginReply(QNetworkReply* reply, int code, const QJsonObject& obj)
+      {
+      if (code == HTTP_OK) {
+            _accessToken = obj["token"].toString();
+            _refreshToken = obj["refresh_token"].toString();
+            if (!_accessToken.isEmpty())
+                  emit loginSuccess();
+            else
+                  emit loginError(tr("Wrong response from the server"));
+            }
+      else
+            emit loginError(getErrorString(reply, obj));
+      }
 
 //---------------------------------------------------------
 //   onAccessTokenReceived
 //---------------------------------------------------------
-
+#if 0
 void LoginManager::onAccessTokenReceived(QString token, QString tokenSecret)
       {
       //qDebug() << "Access token received: " << token << tokenSecret;
@@ -197,11 +378,12 @@ void LoginManager::onAccessTokenReceived(QString token, QString tokenSecret)
       disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)), this, SLOT(onAccessTokenRequestReady(QByteArray)));
       emit loginSuccess();
       }
+#endif
 
 //---------------------------------------------------------
 //   onAccessTokenRequestReady
 //---------------------------------------------------------
-
+#if 0
 void LoginManager::onAccessTokenRequestReady(QByteArray ba)
       {
       //qDebug() << "onAccessTokenRequestReady" << ba;
@@ -247,6 +429,7 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
                                   .replace("\n", "<br/>"));
             }
       }
+#endif
 
 //---------------------------------------------------------
 //   getUser
@@ -254,102 +437,167 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
 
 void LoginManager::getUser()
       {
-      //qDebug() << "getUser";
-      if (_accessToken.isEmpty() || _accessTokenSecret.isEmpty()) {
+      if (_accessToken.isEmpty() || _refreshToken.isEmpty()) {
             emit getUserError("getUser - No token");
             return;
             }
-      KQOAuthRequest * oauthRequest = new KQOAuthRequest();
-      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, QUrl(QString("https://%1/services/rest/me.json").arg(MUSESCORE_HOST)));
-      oauthRequest->setHttpMethod(KQOAuthRequest::GET);
-      oauthRequest->setConsumerKey(_consumerKey);
-      oauthRequest->setConsumerSecretKey(_consumerSecret);
-      oauthRequest->setToken(_accessToken);
-      oauthRequest->setTokenSecret(_accessTokenSecret);
 
-      connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
-            this, SLOT(onGetUserRequestReady(QByteArray)));
+      ApiRequest r = ApiRequestBuilder()
+         .setPath("/user/me")
+         .setToken(_accessToken)
+         .build();
 
-      _oauthManager->executeRequest(oauthRequest);
+      QNetworkReply* reply = _networkManager->get(r.request);
+      connect(reply, &QNetworkReply::finished, this, [this, reply] {
+            onReplyFinished(reply, RequestType::GET_USER_INFO);
+            });
       }
 
 //---------------------------------------------------------
-//   onGetUserRequestReady
+//   onGetUserReply
 //---------------------------------------------------------
 
-void LoginManager::onGetUserRequestReady(QByteArray ba)
+void LoginManager::onGetUserReply(QNetworkReply* reply, int code, const QJsonObject& user)
       {
-      //qDebug() << "onGetUserRequestReady" << ba;
-      disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
-            this, SLOT(onGetUserRequestReady(QByteArray)));
-      if (_oauthManager->lastError() == KQOAuthManager::NoError) {
-            QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
-            QJsonObject user = jsonResponse.object();
+//       qDebug() << "onGetUserReply" << code << reply->errorString();
+      if (code == HTTP_OK) {
             if (user.value("name") != QJsonValue::Undefined) {
-            	_userName = user.value("name").toString();
+                  _userName = user.value("name").toString();
                   _uid = user.value("id").toString().toInt();
                   emit getUserSuccess();
                   }
-            else {
-                  emit getUserError(tr("Error while getting user info. Please try again"));
-                  }
+            else
+                  emit getUserError(tr("Wrong response from the server"));
             }
-      else if (_oauthManager->lastError() != KQOAuthManager::NetworkError) {
-            emit getUserError(tr("Error while getting user info: %1").arg(_oauthManager->lastError()));
-            }
-
+      else
+            emit getUserError(tr("Error while getting user info: %1").arg(getErrorString(reply, user)));
       }
 
 //---------------------------------------------------------
 //   getScore
 //---------------------------------------------------------
 
-void LoginManager::getScore(int nid)
+void LoginManager::getScoreInfo(int nid)
       {
-      //qDebug() << "getScore";
-      if (_accessToken.isEmpty() || _accessTokenSecret.isEmpty()) {
+      if (_accessToken.isEmpty() && _refreshToken.isEmpty()) {
             emit getScoreError("getScore - No token");
             return;
             }
-      KQOAuthRequest * oauthRequest = new KQOAuthRequest();
-      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, QUrl(QString("https://%1/services/rest/score/%2.json").arg(MUSESCORE_HOST).arg(nid)));
-      oauthRequest->setHttpMethod(KQOAuthRequest::GET);
-      oauthRequest->setConsumerKey(_consumerKey);
-      oauthRequest->setConsumerSecretKey(_consumerSecret);
-      oauthRequest->setToken(_accessToken);
-      oauthRequest->setTokenSecret(_accessTokenSecret);
 
-      connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
-            this, SLOT(onGetScoreRequestReady(QByteArray)));
+      ApiRequest r = ApiRequestBuilder()
+         .setPath("/score/full-info")
+         .setToken(_accessToken)
+         .addGetParameter("score_id", QString::number(nid))
+         .build();
 
-      _oauthManager->executeRequest(oauthRequest);
+      QNetworkReply* reply = _networkManager->get(r.request);
+      connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+            onReplyFinished(reply, RequestType::GET_SCORE_INFO);
+            });
       }
 
 //---------------------------------------------------------
-//   getScore
+//   onGetScoreInfoReply
+//---------------------------------------------------------
+
+void LoginManager::onGetScoreInfoReply(QNetworkReply* reply, int code, const QJsonObject& score)
+      {
+      if (code == HTTP_OK) {
+            if (score.value("user") != QJsonValue::Undefined) {
+                  QJsonObject user = score.value("user").toObject();
+                  QString title = score.value("title").toString();
+                  QString description = score.value("description").toString();
+                  QString sharing = score.value("sharing").toString();
+                  QString license = score.value("license").toString();
+                  QString tags = score.value("tags").toString();
+                  QString url = score.value("custom_url").toString();
+                  if (user.value("uid") != QJsonValue::Undefined) {
+                        int uid = user.value("uid").toString().toInt();
+                        if (uid == _uid)
+                              emit getScoreSuccess(title, description, (sharing == "private"), license, tags, url);
+                        else
+                              emit getScoreError("");
+                        }
+                  else {
+                       emit getScoreError("");
+                       }
+                  }
+            else {
+                  emit getScoreError("");
+                  }
+            }
+      else
+            emit getScoreError(getErrorString(reply, score));
+      }
+
+//---------------------------------------------------------
+//   getMediaUrl
 //---------------------------------------------------------
 
 void LoginManager::getMediaUrl(const QString& nid, const QString& vid, const QString& encoding)
       {
-      KQOAuthRequest * oauthRequest = new KQOAuthRequest();
-      QString url = QString("https://%1/services/rest/signedurl/%2/%3/%4.json").arg(MUSESCORE_HOST).arg(nid).arg(vid).arg(encoding);
-      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, QUrl(url));
-      oauthRequest->setHttpMethod(KQOAuthRequest::GET);
-      oauthRequest->setConsumerKey(_consumerKey);
-      oauthRequest->setConsumerSecretKey(_consumerSecret);
-      oauthRequest->setToken(_accessToken);
-      oauthRequest->setTokenSecret(_accessTokenSecret);
+      ApiRequest r = ApiRequestBuilder()
+         .setPath("/score/audio")
+         .setToken(_accessToken)
+         .addGetParameter("score_id", nid)
+         .addGetParameter("revision_id", vid)
+         .build();
 
-      connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
+      QNetworkReply* reply = _networkManager->get(r.request);
+      connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+            onReplyFinished(reply, RequestType::GET_MEDIA_URL);
+            });
+      }
+
+//---------------------------------------------------------
+//   onGetMediaUrlReply
+//---------------------------------------------------------
+void LoginManager::onGetMediaUrlReply(QNetworkReply* reply, int code, const QJsonObject& response)
+      {
+      if (code == HTTP_OK) {
+            QJsonValue urlValue = response.value("url");
+            if (urlValue.isString()) {
+                  _mediaUrl = urlValue.toString();
+                  QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
+                  _mp3File = new QFile(mp3Path);
+                  Score* score = mscore->currentScore()->masterScore();
+                  int br = preferences.getInt(PREF_EXPORT_MP3_BITRATE);
+                  preferences.setPreference(PREF_EXPORT_MP3_BITRATE, 128);
+                  if (mscore->saveMp3(score, mp3Path)) { // no else, error handling is done in saveMp3
+                        _uploadTryCount = 0;
+                        uploadMedia();
+                        }
+                  preferences.setPreference(PREF_EXPORT_MP3_BITRATE, br);
+                  }
+            }
+      else // TODO: handle request error properly
+            qWarning(getErrorString(reply, response).toUtf8().constData());
+#if 0
+      disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
             this, SLOT(onGetMediaUrlRequestReady(QByteArray)));
-
-      _oauthManager->executeRequest(oauthRequest);
+      QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
+      QJsonObject response = jsonResponse.object();
+      QJsonValue urlValue = response.value("url");
+      if (urlValue.isString()) {
+            _mediaUrl = response.value("url").toString();
+            QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
+            _mp3File = new QFile(mp3Path);
+            Score* score = mscore->currentScore()->masterScore();
+            int br = preferences.getInt(PREF_EXPORT_MP3_BITRATE);
+            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, 128);
+            if (mscore->saveMp3(score, mp3Path)) { // no else, error handling is done in saveMp3
+                  _uploadTryCount = 0;
+                  uploadMedia();
+                  }
+            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, br);
+            }
+#endif
       }
 
 //---------------------------------------------------------
 //   onGetUserRequestReady
 //---------------------------------------------------------
-
+#if 0
 void LoginManager::onGetScoreRequestReady(QByteArray ba)
       {
       //qDebug() << "onGetScoreRequestReady" << ba;
@@ -386,32 +634,7 @@ void LoginManager::onGetScoreRequestReady(QByteArray ba)
             emit getScoreError("");
             }
       }
-
-//---------------------------------------------------------
-//   onGetMediaUrlRequestReady
-//---------------------------------------------------------
-
-void LoginManager::onGetMediaUrlRequestReady(QByteArray ba)
-      {
-      disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
-            this, SLOT(onGetMediaUrlRequestReady(QByteArray)));
-      QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
-      QJsonObject response = jsonResponse.object();
-      QJsonValue urlValue = response.value("url");
-      if (urlValue.isString()) {
-            _mediaUrl = response.value("url").toString();
-            QString mp3Path = QDir::tempPath() + QString("/temp_%1.mp3").arg(qrand() % 100000);
-            _mp3File = new QFile(mp3Path);
-            Score* score = mscore->currentScore()->masterScore();
-            int br = preferences.getInt(PREF_EXPORT_MP3_BITRATE);
-            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, 128);
-            if (mscore->saveMp3(score, mp3Path)) { // no else, error handling is done in saveMp3
-                  _uploadTryCount = 0;
-                  uploadMedia();
-                  }
-            preferences.setPreference(PREF_EXPORT_MP3_BITRATE, br);
-            }
-      }
+#endif
 
 //---------------------------------------------------------
 //   uploadMedia
@@ -494,18 +717,16 @@ void LoginManager::mediaUploadProgress(qint64 progress, qint64 total)
 
 void LoginManager::upload(const QString &path, int nid, const QString &title, const QString &description, const QString& priv, const QString& license, const QString& tags, const QString& changes)
       {
-      //qDebug() << "file upload";
-      KQOAuthRequest *oauthRequest = new KQOAuthRequest(this);
-      QUrl url(QString("https://%1/services/rest/score.json").arg(MUSESCORE_HOST));
-      if (nid > 0)
-            url = QUrl(QString("https://%1/services/rest/score/%2/update.json").arg(MUSESCORE_HOST).arg(nid));
-      oauthRequest->initRequest(KQOAuthRequest::AuthorizedRequest, url);
-      oauthRequest->setConsumerKey(_consumerKey);
-      oauthRequest->setConsumerSecretKey(_consumerSecret);
-      oauthRequest->setToken(_accessToken);
-      oauthRequest->setTokenSecret(_accessTokenSecret);
+      qDebug() << "file upload" << nid;
+//       KQOAuthRequest *oauthRequest = new KQOAuthRequest(this);
+//       QUrl url(QString("https://%1/services/rest/score.json").arg(MUSESCORE_HOST));
+//       if (nid > 0)
+//             url = QUrl(QString("https://%1/services/rest/score/%2/update.json").arg(MUSESCORE_HOST).arg(nid));
 
-      oauthRequest->setContentType("multipart/form-data");
+      ApiRequest r = ApiRequestBuilder()
+         .setPath("/score/upload")
+         .setToken(_accessToken)
+         .build();
 
       QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
@@ -518,6 +739,14 @@ void LoginManager::upload(const QString &path, int nid, const QString &title, co
       filePart.setBodyDevice(file);
       file->setParent(multiPart); // we cannot delete the file now, so delete it with the multiPart
       multiPart->append(filePart);
+
+      if (nid > 0) {
+            QHttpPart idPart;
+            qDebug() << "added idPart";
+            idPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
+            idPart.setBody(QString::number(nid).toLatin1()); // TODO: check
+            multiPart->append(idPart);
+            }
 
       QHttpPart titlePart;
       titlePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"title\""));
@@ -544,41 +773,44 @@ void LoginManager::upload(const QString &path, int nid, const QString &title, co
       tagsPart.setBody(tags.toUtf8());
       multiPart->append(tagsPart);
 
+#if 0 // TODO: what is this and is this now supported?
       if (nid > 0) {
             QHttpPart changesPart;
             changesPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"revision_log\""));
             changesPart.setBody(changes.toUtf8());
             multiPart->append(changesPart);
       }
+#endif
 
-      connect(_oauthManager, SIGNAL(requestReady(QByteArray)),
-            this, SLOT(onUploadRequestReady(QByteArray)));
-      oauthRequest->setHttpMultiPart(multiPart);
-      _oauthManager->executeRequest(oauthRequest);
+      // TODO: "uri" parameter?
+      QNetworkReply* reply;
+      if (nid > 0) // score exists, update
+            reply = _networkManager->put(r.request, multiPart);
+      else // score doesn't exist, post a new score
+            reply = _networkManager->post(r.request, multiPart);
+
+      connect(reply, &QNetworkReply::finished, this, [this, reply] {
+            onReplyFinished(reply, RequestType::UPLOAD_SCORE);
+            });
      }
 
 //---------------------------------------------------------
-//   onUploadRequestReady
+//   onUploadReply
 //---------------------------------------------------------
 
-void LoginManager::onUploadRequestReady(QByteArray ba)
+void LoginManager::onUploadReply(QNetworkReply* reply, int code, const QJsonObject& obj)
       {
-      disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
-            this, SLOT(onUploadRequestReady(QByteArray)));
-      //qDebug() << "onUploadRequestReady" << ba;
-      if (_oauthManager->lastError() == KQOAuthManager::NoError) {
-            QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
-            QJsonObject score = jsonResponse.object();
-            if (score.value("permalink") != QJsonValue::Undefined) {
-                  emit uploadSuccess(score.value("permalink").toString(), score.value("id").toString(), score.value("vid").toString());
+      qDebug() << "onUploadReply" << code << reply->errorString();
+      if (code == HTTP_OK) {
+            if (obj.value("permalink") != QJsonValue::Undefined) {
+                  emit uploadSuccess(obj.value("permalink").toString(), obj.value("id").toString(), obj.value("vid").toString());
                   }
             else {
                   emit uploadError(tr("An error occurred during the file transfer. Please try again"));
                   }
             }
-      else {
-            emit uploadError(tr("Cannot upload: %1").arg(_oauthManager->lastError()));
-            }
+      else
+            emit uploadError(tr("Cannot upload: %1").arg(getErrorString(reply, obj)));
       }
 
 //---------------------------------------------------------
@@ -587,7 +819,7 @@ void LoginManager::onUploadRequestReady(QByteArray ba)
 
 bool LoginManager::hasAccessToken()
       {
-      return !_accessTokenSecret.isEmpty() && !_accessToken.isEmpty();
+      return !_accessToken.isEmpty();
       }
 
 //---------------------------------------------------------
@@ -596,13 +828,57 @@ bool LoginManager::hasAccessToken()
 
 bool LoginManager::logout()
       {
-      _accessToken = "";
-      _accessTokenSecret = "";
+      if (!_accessToken.isEmpty()) {
+            ApiRequest r = ApiRequestBuilder()
+               .setPath("/auth/login")
+               .setToken(_accessToken)
+               .build();
+
+            QNetworkReply* reply = _networkManager->deleteResource(r.request);
+            connect(reply, &QNetworkReply::finished, reply, &QNetworkReply::deleteLater); // we don't need the reply info here
+            }
+
+      _accessToken.clear();
+      _refreshToken.clear();
       QFile loadFile(dataPath + "/cred.dat");
       if (!loadFile.exists())
-      	return true;
+            return true;
       return loadFile.remove();
       }
 
-}
+//---------------------------------------------------------
+//   ApiRequestBuilder::build
+//---------------------------------------------------------
 
+ApiRequest ApiRequestBuilder::build() const
+      {
+      ApiRequest r;
+
+      QUrl url(_url);
+      url.setQuery(_urlQuery);
+      r.request.setUrl(url);
+      r.request.setRawHeader("Accept", "application/json");
+      const ApiInfo& apiInfo = ApiInfo::instance();
+      r.request.setHeader(QNetworkRequest::UserAgentHeader, apiInfo.userAgent);
+      r.request.setRawHeader(apiInfo.clientIdHeader, apiInfo.clientId);
+      r.request.setRawHeader(apiInfo.apiKeyHeader, apiInfo.apiKey);
+
+      r.data = _bodyQuery.toString().toLatin1();
+
+      return r;
+      }
+
+//---------------------------------------------------------
+//   ApiWebEngineRequestInterceptor::interceptRequest
+//    Sets the appropriate API headers for requests to
+//    musescore.com
+//---------------------------------------------------------
+
+void ApiWebEngineRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo& request)
+      {
+      const ApiInfo& apiInfo = ApiInfo::instance();
+      request.setHttpHeader("User-Agent", apiInfo.userAgent);
+      request.setHttpHeader(apiInfo.clientIdHeader, apiInfo.clientId);
+      request.setHttpHeader(apiInfo.apiKeyHeader, apiInfo.apiKey);
+      }
+}

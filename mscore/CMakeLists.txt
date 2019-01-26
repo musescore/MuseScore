@@ -318,7 +318,9 @@ add_executable ( ${ExecutableName}
       harmonycanvas.h harmonyedit.h help.h helpBrowser.h icons.h importgtp.h importmxml.h
       importmxmllogger.h importmxmlnoteduration.h importmxmlnotepitch.h importmxmlpass1.h
       importmxmlpass2.h importptb.h importxmlfirstpass.h instrdialog.h instrwidget.h jackaudio.h
-      keycanvas.h keyedit.h layer.h licence.h logindialog.h loginmanager.h magbox.h masterpalette.h
+      keycanvas.h keyedit.h layer.h licence.h
+      logindialog.h network/loginmanager.h network/loginmanager_p.h
+      magbox.h masterpalette.h
       measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h
       mixer.h mixertrack.h mixertrackchannel.h mixertrackgroup.h mixertrackitem.h mixertrackpart.h mixerdetails.h musedata.h
       musescore.h musicxml.h musicxmlfonthandler.h musicxmlsupport.h navigator.h newwizard.h noteGroups.h
@@ -455,7 +457,8 @@ add_executable ( ${ExecutableName}
       resourceManager.cpp downloadUtils.cpp
       textcursor.cpp continuouspanel.cpp accessibletoolbutton.cpp scoreaccessibility.cpp
       startcenter.cpp scoreBrowser.cpp scorePreview.cpp scoreInfo.cpp templateBrowser.cpp
-      logindialog.cpp loginmanager.cpp uploadscoredialog.cpp breaksdialog.cpp searchComboBox.cpp
+      logindialog.cpp network/loginmanager.cpp uploadscoredialog.cpp
+      breaksdialog.cpp searchComboBox.cpp
       help.cpp help.h
       toolbarEditor.cpp toolbarEditor.h
       abstractdialog.cpp abstractdialog.h

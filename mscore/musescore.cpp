@@ -11,7 +11,7 @@
 //=============================================================================
 
 #include <fenv.h>
-#include "loginmanager.h"
+#include "network/loginmanager.h"
 #include "uploadscoredialog.h"
 #include <QStyleFactory>
 #include "palettebox.h"
