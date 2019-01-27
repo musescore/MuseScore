@@ -3231,6 +3231,11 @@ static void loadScores(const QStringList& argv)
                         case SessionStart::SCORE:
                               {
                               QString startScore = preferences.getString(PREF_APP_STARTUP_STARTSCORE);
+                              if (startScore == ":/data/My_First_Score.mscz") {
+                                    startScore = ":/data/My_First_Score.mscx";
+                                    preferences.setPreference(PREF_APP_STARTUP_STARTSCORE, startScore);
+                                    }
+
                               MasterScore* score = mscore->readScore(startScore);
                               if (startScore.startsWith(":/") && score) {
                                     score->setName(mscore->createDefaultName());
@@ -3239,7 +3244,7 @@ static void loadScores(const QStringList& argv)
                                     score->setCreated(true);
                                     }
                               if (score == 0) {
-                                    score = mscore->readScore(":/data/My_First_Score.mscz");
+                                    score = mscore->readScore(":/data/My_First_Score.mscx");
                                     if (score) {
                                           score->setName(mscore->createDefaultName());
                                           // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
