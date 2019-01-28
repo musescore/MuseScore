@@ -3435,6 +3435,15 @@ void Score::undoChangeStyleVal(Sid idx, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   undoChangePageNumberOffset
+//---------------------------------------------------------
+
+void Score::undoChangePageNumberOffset(int po)
+      {
+      undo(new ChangePageNumberOffset(this, po));
+      }
+
+//---------------------------------------------------------
 //   undoChangeElement
 //---------------------------------------------------------
 
