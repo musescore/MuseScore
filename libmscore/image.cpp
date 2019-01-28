@@ -366,7 +366,7 @@ class ImageEditData : public ElementEditData {
 //   startDrag
 //---------------------------------------------------------
 
-void Image::startDrag(EditData& data)
+void Image::startEditDrag(EditData& data)
       {
       ImageEditData* ed = new ImageEditData();
       ed->e    = this;
