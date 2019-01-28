@@ -357,6 +357,15 @@ struct StyleVal2 {
       };
 
 //---------------------------------------------------------
+//   excessTextStyles206
+//    The first map has the name of the style as the string
+//    The second map has the mapping of each Sid that the style identifies
+//    to the default value for that sid.
+//---------------------------------------------------------
+
+static std::map<QString, std::map<Sid, QVariant>> excessTextStyles206;
+
+//---------------------------------------------------------
 //   setPageFormat
 //    set Style from PageFormat
 //---------------------------------------------------------
@@ -412,7 +421,7 @@ void readPageFormat(MStyle* style, XmlReader& e)
 //   readTextStyle206
 //---------------------------------------------------------
 
-void readTextStyle206(MStyle* style, XmlReader& e)
+void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid, QVariant>>& excessStyles)
       {
       QString family = "FreeSerif";
       double size = 10;
@@ -609,22 +618,32 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   break;
                   }
             }
+
+      bool isExcessStyle = false;
       if (ss == Tid::TEXT_STYLES) {
             ss = e.addUserTextStyle(name);
             if (ss == Tid::TEXT_STYLES) {
                   qDebug("unhandled substyle <%s>", qPrintable(name));
-                  return;
+                  isExcessStyle = true;
                   }
-            int idx = int(ss) - int(Tid::USER1);
-            if ((idx < 0) || (idx > 5)) {
-                  qDebug("User style index %d outside of range [0,5].", idx);
-                  return;
+            else {
+                  int idx = int(ss) - int(Tid::USER1);
+                  if ((idx < 0) || (idx > 5)) {
+                        qDebug("User style index %d outside of range [0,5].", idx);
+                        return;
+                        }
+                  Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name };
+                  style->set(sid[idx], name);
                   }
-            Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name };
-            style->set(sid[idx], name);
             }
 
-      for (const auto& i : *textStyle(ss)) {
+      std::map<Sid, QVariant> excessPairs;
+      const TextStyle* ts;
+      if (isExcessStyle)
+            ts = textStyle("User-1");
+      else
+            ts = textStyle(ss);
+      for (const auto& i : *ts) {
             QVariant value;
             if (i.sid == Sid::NOSTYLE)
                   break;
@@ -715,11 +734,18 @@ void readTextStyle206(MStyle* style, XmlReader& e)
 //                        qDebug("unhandled property <%s>%d", propertyName(i.pid), int (i.pid));
                         break;
                   }
-            if (value.isValid())
-                  style->set(i.sid, value);
+            if (value.isValid()) {
+                  if (isExcessStyle)
+                        excessPairs[i.sid] = value;
+                  else
+                        style->set(i.sid, value);
+                  }
 //            else
 //                  qDebug("invalid style value <%s> pid<%s>", MStyle::valueName(i.sid), propertyName(i.pid));
             }
+
+      if (isExcessStyle && excessPairs.size() > 0)
+            excessStyles[name] = excessPairs;
       }
 
 //---------------------------------------------------------
@@ -1524,12 +1550,25 @@ static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be, QSt
             return true;
 
       if (!be->isTuplet()) {      // Hack
-            Tid ss;
-            ss = e.lookupUserTextStyle(s);
-            if (ss == Tid::TEXT_STYLES)
-                  ss = textStyleFromName(s);
-            if (ss != Tid::TEXT_STYLES)
-                  t->initTid(ss);
+            if (excessTextStyles206.find(s) != excessTextStyles206.end()) {
+                  // Init the text with a style that can't be stored as a user style
+                  // due to the limit on the number of user styles possible.
+                  // Use User-1, since it has all the possible user style pids
+                  t->initTid(Tid::DEFAULT);
+                  std::map<Sid, QVariant> styleVals = excessTextStyles206[s];
+                  for (const StyledProperty& p : *textStyle("User-1")) {
+                        if (t->getProperty(p.pid) == t->propertyDefault(p.pid) && styleVals.find(p.sid) != styleVals.end())
+                              t->setProperty(p.pid, styleVals[p.sid]);
+                        }
+                  }
+            else {
+                  Tid ss;
+                  ss = e.lookupUserTextStyle(s);
+                  if (ss == Tid::TEXT_STYLES)
+                        ss = textStyleFromName(s);
+                  if (ss != Tid::TEXT_STYLES)
+                        t->initTid(ss);
+                  }
             }
 
       return true;
@@ -3463,11 +3502,11 @@ static void readStyle(MStyle* style, XmlReader& e)
       {
       QString oldChordDescriptionFile = style->value(Sid::chordDescriptionFile).toString();
       bool chordListTag = false;
+      excessTextStyles206.clear();
       while (e.readNextStartElement()) {
             QString tag = e.name().toString();
-
             if (tag == "TextStyle")
-                  readTextStyle206(style, e);
+                  readTextStyle206(style, e, excessTextStyles206);
             else if (tag == "Spatium")
                   style->set(Sid::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout")
