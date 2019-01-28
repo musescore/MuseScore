@@ -1,20 +1,32 @@
 #!/usr/bin/env python
 
 import xml.etree.ElementTree as ET
+import os
 
-
-
-
-def addMessage(f, text, comment=''):
+def addMessage(f, text, comment='', category='InstrumentsXML'):
     if (comment):
-        f.write('QT_TRANSLATE_NOOP3("InstrumentsXML", "' + text.encode('utf8') + '", "' + comment.encode('utf8') + '"),\n')
+        f.write('QT_TRANSLATE_NOOP3("'+category+'", "' + text.encode('utf8') + '", "' + comment.encode('utf8') + '"),\n')
     else:
-        f.write('QT_TRANSLATE_NOOP("InstrumentsXML", "' + text.encode('utf8') + '"),\n')
+        f.write('QT_TRANSLATE_NOOP("'+category+'", "' + text.encode('utf8') + '"),\n')
 
 
+f = open('instrumentsxml.h', 'w')
 
-f = open('instrumentsxml.h','w')
+#include template names and template categories
+d = "../templates"
+for o in os.listdir(d):
+    ofullPath = os.path.join(d, o)
+    if os.path.isdir(ofullPath):
+        templateCategory = o.split("-")[1].replace("_", " ")
+        addMessage(f, templateCategory, '', 'Templates')
+        print templateCategory
+        for t in os.listdir(ofullPath):
+            if (os.path.isfile(os.path.join(ofullPath, t))):
+                templateName = os.path.splitext(t)[0].split("-")[1].replace("_", " ")
+                addMessage(f, templateName, '', 'Templates')
+                print "    " + templateName
 
+#instruments.xml
 tree = ET.parse('instruments.xml')
 root = tree.getroot()
 
@@ -26,25 +38,25 @@ for child in root:
         addMessage(f, genre.text)
     elif child.tag == "InstrumentGroup":
         instrGroup = child.find("name")
-        print "Instr Group " + instrGroup.text
+        print "Instr Group : " + instrGroup.text
         addMessage(f, instrGroup.text)
         instruments = child.findall("Instrument")
         for instrument in instruments:
             longName = instrument.find("longName")
             if longName is not None:
-                print "longName " + longName.text.encode('utf8')
+                print "  longName : " + longName.text.encode('utf8')
                 addMessage(f, longName.text)
                 previousLongName = longName.text
 
             shortName = instrument.find("shortName")
             if shortName is not None:
-                print "shortName " + shortName.text.encode('utf8')
+                print "  shortName : " + shortName.text.encode('utf8')
                 addMessage(f, shortName.text, previousLongName)
                 previousLongName = ""
 
             trackName = instrument.find("trackName")
             if trackName is not None:
-                print "trackName " + trackName.text.encode('utf8')
+                print "  trackName " + trackName.text.encode('utf8')
                 addMessage(f, trackName.text)
                 previousLongName = ""
 
@@ -52,20 +64,20 @@ for child in root:
             for channel in channels:
                 channelName = channel.get("name")
                 if channelName is not None:
-                    print "Channel name :" + channelName
+                    print "  Channel name : " + channelName
                     addMessage(f, channelName)
                 cMidiActions = channel.findall("MidiAction")
                 for cma in cMidiActions:
                     cmaName = cma.get("name")
                     if cmaName is not None:
-                        print "Channel, MidiAction name :" + cmaName
+                        print "    Channel, MidiAction name :" + cmaName
                         addMessage(f, cma)
 
             iMidiActions = instrument.findall("MidiAction")
             for ima in iMidiActions:
                 imaName = ima.get("name")
                 if imaName is not None:
-                    print "Instrument, MidiAction name :" + imaName
+                    print "  Instrument, MidiAction name :" + imaName
                     addMessage(f, ima)
 
 f.close()

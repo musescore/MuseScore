@@ -127,7 +127,7 @@ TemplateItem* TemplateBrowser::genTemplateItem(QTreeWidgetItem* p, const QFileIn
             if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
                   s = s.mid(3);
             s = s.replace('_', ' ');
-            item->setText(0, s);
+            item->setText(0, qApp->translate("Templates", s.toUtf8().constData()));
             }
       return item;
       }
@@ -153,7 +153,7 @@ void TemplateBrowser::setScores(QFileInfoList& s)
                   if (!st.isEmpty() && st[0].isNumber() && _stripNumbers)
                         st = st.mid(3);
                   st = st.replace('_', ' ');
-                  TemplateCategory* category = new TemplateCategory(st, templateTree);
+                  TemplateCategory* category = new TemplateCategory(qApp->translate("Templates", st.toUtf8().data()), templateTree);
                   QDir dir(fil.filePath());
                   unsigned childCount = 0; //nbr of entries added
                   for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name)) {
