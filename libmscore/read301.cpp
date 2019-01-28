@@ -79,6 +79,8 @@ bool Score::read(XmlReader& e)
                   _currentLayer = e.readInt();
             else if (tag == "Synthesizer")
                   _synthesizerState.read(e);
+            else if (tag == "page-offset")
+                  _pageNumberOffset = e.readInt();
             else if (tag == "Division")
                   _fileDivision = e.readInt();
             else if (tag == "showInvisible")
