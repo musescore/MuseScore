@@ -4179,6 +4179,8 @@ static bool elementLower(const Element* e1, const Element* e2)
       {
       if (!e1->selectable())
             return false;
+      if (!e2->selectable())
+            return true;
       if (e1->z() == e2->z()) {
             if (e1->type() == e2->type()) {
                   if (e1->type() == ElementType::NOTEDOT) {
