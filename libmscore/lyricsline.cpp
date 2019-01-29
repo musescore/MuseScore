@@ -358,7 +358,7 @@ void LyricsLineSegment::layout()
             endOfSystem = (sys != system());
             // if next lyrics is on a different system, this line segment is at the end of its system:
             // do not adjust for next lyrics position
-            if (!endOfSystem) {
+            if (sys && !endOfSystem) {
                   qreal lyrX        = lyr->bbox().x();
                   qreal lyrXp       = lyr->pagePos().x();
                   qreal sysXp       = sys->pagePos().x();
