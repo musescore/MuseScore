@@ -22,9 +22,9 @@ CD C:\MuseScore
 for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set NIGHTLY_BUILD=%%i
 
 :: add stable keys for musescore.com
-IF "%NIGHTLY_BUILD%" == "" (
-python build/add-mc-keys.py %MC_CONSUMER_KEY% %MC_CONSUMER_SECRET%
-)
+::IF "%NIGHTLY_BUILD%" == "" (
+::python build/add-mc-keys.py %MC_CONSUMER_KEY% %MC_CONSUMER_SECRET%
+::)
 
 :: get revision number
 SET PATH=C:\Qt\5.9\msvc2017_64\bin;%PATH%
