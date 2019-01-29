@@ -301,10 +301,17 @@ bool TextBase::edit(EditData& ed)
                         break;
 
                   case Qt::Key_Space:
-                        if (ed.modifiers & CONTROL_MODIFIER)
+                        if (ed.modifiers & CONTROL_MODIFIER) {
                               s = QString(QChar(0xa0)); // non-breaking space
-                        else
+                              }
+                        else {
+                              if (isFingering() && ed.view) {
+                                    score()->endCmd();
+                                    ed.view->textTab(ed.modifiers & Qt::ShiftModifier);
+                                    return true;
+                                    }
                               s = " ";
+                              }
                         ed.modifiers = 0;
                         break;
 

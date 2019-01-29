@@ -867,7 +867,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
-         STATE_NORMAL,
+         STATE_NORMAL | STATE_TEXT_EDIT | STATE_HARMONY_FIGBASS_EDIT,
          "next-element",
          QT_TRANSLATE_NOOP("action","Next Element"),
          QT_TRANSLATE_NOOP("action","Accessibility: Next element"),
@@ -878,7 +878,7 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
-         STATE_NORMAL,
+         STATE_NORMAL | STATE_TEXT_EDIT | STATE_HARMONY_FIGBASS_EDIT,
          "prev-element",
          QT_TRANSLATE_NOOP("action","Previous Element"),
          QT_TRANSLATE_NOOP("action","Accessibility: Previous element"),
