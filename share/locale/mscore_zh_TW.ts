@@ -426,10 +426,6 @@
         <translation>這是「方均根」及「峰值」音波包絡從動件之間的平衡。「方均根」普遍在使用較柔和壓縮的音樂上較佳，而「峰值」就使用在一些有較重和快速壓縮的音樂和敲擊樂。</translation>
     </message>
     <message>
-        <source>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.</source>
-        <translation type="vanished">這是「方均根」及「峰值」音波包絡從動件之間的平衡。「方均根」普遍在使用較柔和壓縮的音樂上較佳，而「峰值」就使用在一些有較重和快速壓縮的音樂和敲擊樂。</translation>
-    </message>
-    <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="432"/>
         <source>Makeup gain (dB)</source>
         <translation>補償增益（分貝）</translation>
@@ -468,17 +464,17 @@
 <context>
     <name>Direction</name>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="207"/>
+        <location filename="../../libmscore/mscore.cpp" line="202"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="208"/>
+        <location filename="../../libmscore/mscore.cpp" line="203"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="209"/>
+        <location filename="../../libmscore/mscore.cpp" line="204"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
@@ -1462,10 +1458,6 @@
         <translation>垂直網格：</translation>
     </message>
     <message>
-        <source>Vertical  grid:</source>
-        <translation type="vanished">垂直網格：</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editraster.ui" line="44"/>
         <location filename="../../mscore/editraster.ui" line="67"/>
         <source>1 / </source>
@@ -1475,7 +1467,7 @@
         <location filename="../../mscore/editraster.ui" line="54"/>
         <location filename="../../mscore/editraster.ui" line="77"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
 </context>
 <context>
@@ -1783,7 +1775,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="153"/>
         <source>Lines:</source>
-        <translation>譜線：</translation>
+        <translation>線條：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="179"/>
@@ -1794,7 +1786,7 @@
         <location filename="../../mscore/editstaff.ui" line="195"/>
         <location filename="../../mscore/editstaff.ui" line="215"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="205"/>
@@ -1832,7 +1824,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="105"/>
         <source>Lines:</source>
-        <translation>譜線：</translation>
+        <translation>線條：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="140"/>
@@ -1844,7 +1836,7 @@
         <location filename="../../mscore/editstafftype.ui" line="499"/>
         <location filename="../../mscore/editstafftype.ui" line="786"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="186"/>
@@ -1905,7 +1897,7 @@
         <location filename="../../mscore/editstafftype.ui" line="469"/>
         <location filename="../../mscore/editstafftype.ui" line="754"/>
         <source>pt</source>
-        <translation>點</translation>
+        <translation> 點</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="489"/>
@@ -1921,7 +1913,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="543"/>
         <source>On lines</source>
-        <translation>在譜線上</translation>
+        <translation>在線條上</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="565"/>
@@ -1931,7 +1923,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="587"/>
         <source>Lines are:</source>
-        <translation>譜線是：</translation>
+        <translation>線條是：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="603"/>
@@ -2189,107 +2181,107 @@
         <location filename="../../mscore/editstyle.ui" line="958"/>
         <location filename="../../mscore/editstyle.ui" line="1094"/>
         <location filename="../../mscore/editstyle.ui" line="1116"/>
-        <location filename="../../mscore/editstyle.ui" line="1160"/>
-        <location filename="../../mscore/editstyle.ui" line="1202"/>
-        <location filename="../../mscore/editstyle.ui" line="1243"/>
-        <location filename="../../mscore/editstyle.ui" line="2561"/>
-        <location filename="../../mscore/editstyle.ui" line="2596"/>
-        <location filename="../../mscore/editstyle.ui" line="2651"/>
-        <location filename="../../mscore/editstyle.ui" line="2677"/>
-        <location filename="../../mscore/editstyle.ui" line="2752"/>
-        <location filename="../../mscore/editstyle.ui" line="2778"/>
-        <location filename="../../mscore/editstyle.ui" line="2845"/>
-        <location filename="../../mscore/editstyle.ui" line="2871"/>
-        <location filename="../../mscore/editstyle.ui" line="3370"/>
-        <location filename="../../mscore/editstyle.ui" line="3380"/>
-        <location filename="../../mscore/editstyle.ui" line="3390"/>
-        <location filename="../../mscore/editstyle.ui" line="3573"/>
-        <location filename="../../mscore/editstyle.ui" line="3654"/>
-        <location filename="../../mscore/editstyle.ui" line="3699"/>
-        <location filename="../../mscore/editstyle.ui" line="3832"/>
-        <location filename="../../mscore/editstyle.ui" line="3848"/>
-        <location filename="../../mscore/editstyle.ui" line="3891"/>
-        <location filename="../../mscore/editstyle.ui" line="3901"/>
-        <location filename="../../mscore/editstyle.ui" line="3946"/>
-        <location filename="../../mscore/editstyle.ui" line="3997"/>
-        <location filename="../../mscore/editstyle.ui" line="4013"/>
-        <location filename="../../mscore/editstyle.ui" line="4029"/>
-        <location filename="../../mscore/editstyle.ui" line="4109"/>
-        <location filename="../../mscore/editstyle.ui" line="4125"/>
-        <location filename="../../mscore/editstyle.ui" line="4141"/>
-        <location filename="../../mscore/editstyle.ui" line="4167"/>
-        <location filename="../../mscore/editstyle.ui" line="4285"/>
-        <location filename="../../mscore/editstyle.ui" line="4318"/>
-        <location filename="../../mscore/editstyle.ui" line="4411"/>
-        <location filename="../../mscore/editstyle.ui" line="4421"/>
-        <location filename="../../mscore/editstyle.ui" line="4601"/>
-        <location filename="../../mscore/editstyle.ui" line="4618"/>
-        <location filename="../../mscore/editstyle.ui" line="4686"/>
-        <location filename="../../mscore/editstyle.ui" line="4713"/>
-        <location filename="../../mscore/editstyle.ui" line="4748"/>
-        <location filename="../../mscore/editstyle.ui" line="4767"/>
-        <location filename="../../mscore/editstyle.ui" line="4790"/>
-        <location filename="../../mscore/editstyle.ui" line="4829"/>
-        <location filename="../../mscore/editstyle.ui" line="4907"/>
-        <location filename="../../mscore/editstyle.ui" line="4923"/>
-        <location filename="../../mscore/editstyle.ui" line="4939"/>
-        <location filename="../../mscore/editstyle.ui" line="5008"/>
-        <location filename="../../mscore/editstyle.ui" line="5024"/>
-        <location filename="../../mscore/editstyle.ui" line="5063"/>
-        <location filename="../../mscore/editstyle.ui" line="5080"/>
-        <location filename="../../mscore/editstyle.ui" line="5178"/>
-        <location filename="../../mscore/editstyle.ui" line="5197"/>
-        <location filename="../../mscore/editstyle.ui" line="5233"/>
-        <location filename="../../mscore/editstyle.ui" line="5363"/>
-        <location filename="../../mscore/editstyle.ui" line="5392"/>
-        <location filename="../../mscore/editstyle.ui" line="5418"/>
-        <location filename="../../mscore/editstyle.ui" line="5447"/>
-        <location filename="../../mscore/editstyle.ui" line="5630"/>
-        <location filename="../../mscore/editstyle.ui" line="5649"/>
-        <location filename="../../mscore/editstyle.ui" line="5919"/>
-        <location filename="../../mscore/editstyle.ui" line="5942"/>
-        <location filename="../../mscore/editstyle.ui" line="5965"/>
-        <location filename="../../mscore/editstyle.ui" line="6025"/>
-        <location filename="../../mscore/editstyle.ui" line="6051"/>
-        <location filename="../../mscore/editstyle.ui" line="6078"/>
-        <location filename="../../mscore/editstyle.ui" line="6107"/>
-        <location filename="../../mscore/editstyle.ui" line="6143"/>
-        <location filename="../../mscore/editstyle.ui" line="6286"/>
-        <location filename="../../mscore/editstyle.ui" line="6405"/>
-        <location filename="../../mscore/editstyle.ui" line="6415"/>
-        <location filename="../../mscore/editstyle.ui" line="6561"/>
-        <location filename="../../mscore/editstyle.ui" line="6675"/>
-        <location filename="../../mscore/editstyle.ui" line="6695"/>
-        <location filename="../../mscore/editstyle.ui" line="6873"/>
-        <location filename="../../mscore/editstyle.ui" line="6995"/>
-        <location filename="../../mscore/editstyle.ui" line="7114"/>
-        <location filename="../../mscore/editstyle.ui" line="7361"/>
-        <location filename="../../mscore/editstyle.ui" line="7689"/>
-        <location filename="../../mscore/editstyle.ui" line="7735"/>
-        <location filename="../../mscore/editstyle.ui" line="8306"/>
-        <location filename="../../mscore/editstyle.ui" line="8516"/>
-        <location filename="../../mscore/editstyle.ui" line="8708"/>
-        <location filename="../../mscore/editstyle.ui" line="8780"/>
-        <location filename="../../mscore/editstyle.ui" line="8806"/>
-        <location filename="../../mscore/editstyle.ui" line="8835"/>
-        <location filename="../../mscore/editstyle.ui" line="8946"/>
-        <location filename="../../mscore/editstyle.ui" line="8969"/>
-        <location filename="../../mscore/editstyle.ui" line="9089"/>
-        <location filename="../../mscore/editstyle.ui" line="9122"/>
-        <location filename="../../mscore/editstyle.ui" line="9264"/>
-        <location filename="../../mscore/editstyle.ui" line="9357"/>
-        <location filename="../../mscore/editstyle.ui" line="9472"/>
-        <location filename="../../mscore/editstyle.ui" line="9785"/>
-        <location filename="../../mscore/editstyle.ui" line="9873"/>
-        <location filename="../../mscore/editstyle.ui" line="10301"/>
-        <location filename="../../mscore/editstyle.ui" line="10333"/>
-        <location filename="../../mscore/editstyle.ui" line="10385"/>
-        <location filename="../../mscore/editstyle.ui" line="10485"/>
+        <location filename="../../mscore/editstyle.ui" line="1157"/>
+        <location filename="../../mscore/editstyle.ui" line="1199"/>
+        <location filename="../../mscore/editstyle.ui" line="1237"/>
+        <location filename="../../mscore/editstyle.ui" line="2555"/>
+        <location filename="../../mscore/editstyle.ui" line="2590"/>
+        <location filename="../../mscore/editstyle.ui" line="2645"/>
+        <location filename="../../mscore/editstyle.ui" line="2671"/>
+        <location filename="../../mscore/editstyle.ui" line="2746"/>
+        <location filename="../../mscore/editstyle.ui" line="2772"/>
+        <location filename="../../mscore/editstyle.ui" line="2839"/>
+        <location filename="../../mscore/editstyle.ui" line="2865"/>
+        <location filename="../../mscore/editstyle.ui" line="3364"/>
+        <location filename="../../mscore/editstyle.ui" line="3374"/>
+        <location filename="../../mscore/editstyle.ui" line="3384"/>
+        <location filename="../../mscore/editstyle.ui" line="3567"/>
+        <location filename="../../mscore/editstyle.ui" line="3648"/>
+        <location filename="../../mscore/editstyle.ui" line="3693"/>
+        <location filename="../../mscore/editstyle.ui" line="3826"/>
+        <location filename="../../mscore/editstyle.ui" line="3842"/>
+        <location filename="../../mscore/editstyle.ui" line="3885"/>
+        <location filename="../../mscore/editstyle.ui" line="3895"/>
+        <location filename="../../mscore/editstyle.ui" line="3940"/>
+        <location filename="../../mscore/editstyle.ui" line="3991"/>
+        <location filename="../../mscore/editstyle.ui" line="4007"/>
+        <location filename="../../mscore/editstyle.ui" line="4023"/>
+        <location filename="../../mscore/editstyle.ui" line="4103"/>
+        <location filename="../../mscore/editstyle.ui" line="4119"/>
+        <location filename="../../mscore/editstyle.ui" line="4135"/>
+        <location filename="../../mscore/editstyle.ui" line="4161"/>
+        <location filename="../../mscore/editstyle.ui" line="4279"/>
+        <location filename="../../mscore/editstyle.ui" line="4312"/>
+        <location filename="../../mscore/editstyle.ui" line="4405"/>
+        <location filename="../../mscore/editstyle.ui" line="4415"/>
+        <location filename="../../mscore/editstyle.ui" line="4595"/>
+        <location filename="../../mscore/editstyle.ui" line="4612"/>
+        <location filename="../../mscore/editstyle.ui" line="4680"/>
+        <location filename="../../mscore/editstyle.ui" line="4707"/>
+        <location filename="../../mscore/editstyle.ui" line="4742"/>
+        <location filename="../../mscore/editstyle.ui" line="4761"/>
+        <location filename="../../mscore/editstyle.ui" line="4784"/>
+        <location filename="../../mscore/editstyle.ui" line="4823"/>
+        <location filename="../../mscore/editstyle.ui" line="4901"/>
+        <location filename="../../mscore/editstyle.ui" line="4917"/>
+        <location filename="../../mscore/editstyle.ui" line="4933"/>
+        <location filename="../../mscore/editstyle.ui" line="5002"/>
+        <location filename="../../mscore/editstyle.ui" line="5018"/>
+        <location filename="../../mscore/editstyle.ui" line="5057"/>
+        <location filename="../../mscore/editstyle.ui" line="5074"/>
+        <location filename="../../mscore/editstyle.ui" line="5172"/>
+        <location filename="../../mscore/editstyle.ui" line="5191"/>
+        <location filename="../../mscore/editstyle.ui" line="5227"/>
+        <location filename="../../mscore/editstyle.ui" line="5357"/>
+        <location filename="../../mscore/editstyle.ui" line="5386"/>
+        <location filename="../../mscore/editstyle.ui" line="5412"/>
+        <location filename="../../mscore/editstyle.ui" line="5441"/>
+        <location filename="../../mscore/editstyle.ui" line="5624"/>
+        <location filename="../../mscore/editstyle.ui" line="5643"/>
+        <location filename="../../mscore/editstyle.ui" line="5913"/>
+        <location filename="../../mscore/editstyle.ui" line="5936"/>
+        <location filename="../../mscore/editstyle.ui" line="5959"/>
+        <location filename="../../mscore/editstyle.ui" line="6019"/>
+        <location filename="../../mscore/editstyle.ui" line="6045"/>
+        <location filename="../../mscore/editstyle.ui" line="6072"/>
+        <location filename="../../mscore/editstyle.ui" line="6101"/>
+        <location filename="../../mscore/editstyle.ui" line="6137"/>
+        <location filename="../../mscore/editstyle.ui" line="6280"/>
+        <location filename="../../mscore/editstyle.ui" line="6399"/>
+        <location filename="../../mscore/editstyle.ui" line="6409"/>
+        <location filename="../../mscore/editstyle.ui" line="6555"/>
+        <location filename="../../mscore/editstyle.ui" line="6669"/>
+        <location filename="../../mscore/editstyle.ui" line="6689"/>
+        <location filename="../../mscore/editstyle.ui" line="6867"/>
+        <location filename="../../mscore/editstyle.ui" line="6989"/>
+        <location filename="../../mscore/editstyle.ui" line="7108"/>
+        <location filename="../../mscore/editstyle.ui" line="7355"/>
+        <location filename="../../mscore/editstyle.ui" line="7683"/>
+        <location filename="../../mscore/editstyle.ui" line="7729"/>
+        <location filename="../../mscore/editstyle.ui" line="8300"/>
+        <location filename="../../mscore/editstyle.ui" line="8510"/>
+        <location filename="../../mscore/editstyle.ui" line="8702"/>
+        <location filename="../../mscore/editstyle.ui" line="8774"/>
+        <location filename="../../mscore/editstyle.ui" line="8800"/>
+        <location filename="../../mscore/editstyle.ui" line="8829"/>
+        <location filename="../../mscore/editstyle.ui" line="8940"/>
+        <location filename="../../mscore/editstyle.ui" line="8963"/>
+        <location filename="../../mscore/editstyle.ui" line="9083"/>
+        <location filename="../../mscore/editstyle.ui" line="9116"/>
+        <location filename="../../mscore/editstyle.ui" line="9258"/>
+        <location filename="../../mscore/editstyle.ui" line="9351"/>
+        <location filename="../../mscore/editstyle.ui" line="9466"/>
+        <location filename="../../mscore/editstyle.ui" line="9779"/>
+        <location filename="../../mscore/editstyle.ui" line="9867"/>
+        <location filename="../../mscore/editstyle.ui" line="10295"/>
+        <location filename="../../mscore/editstyle.ui" line="10327"/>
+        <location filename="../../mscore/editstyle.ui" line="10379"/>
+        <location filename="../../mscore/editstyle.ui" line="10479"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
 space unit</extracomment>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="487"/>
@@ -2299,7 +2291,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="501"/>
         <source>Hide instrument name if there is only 1 instrument</source>
-        <translation>如果只有一種樂器，隱藏樂器名稱</translation>
+        <translation>如果只有一種樂器則隱藏樂器名稱</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="524"/>
@@ -2333,18 +2325,18 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="596"/>
-        <location filename="../../mscore/editstyle.ui" line="5133"/>
-        <location filename="../../mscore/editstyle.ui" line="9191"/>
+        <location filename="../../mscore/editstyle.ui" line="5127"/>
+        <location filename="../../mscore/editstyle.ui" line="9185"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="60"/>
         <location filename="../../mscore/editstyle.ui" line="702"/>
-        <location filename="../../mscore/editstyle.ui" line="1782"/>
-        <location filename="../../mscore/editstyle.ui" line="2135"/>
+        <location filename="../../mscore/editstyle.ui" line="1776"/>
+        <location filename="../../mscore/editstyle.ui" line="2129"/>
         <source>Page</source>
-        <translation>頁</translation>
+        <translation>頁面</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="983"/>
@@ -2367,7 +2359,7 @@ space unit</extracomment>
         <translation>譜表間距：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1302"/>
+        <location filename="../../mscore/editstyle.ui" line="1296"/>
         <source>Grand staff distance:</source>
         <translation>總譜距離：</translation>
     </message>
@@ -2378,21 +2370,11 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1141"/>
-        <source>Vertical frame upper margin</source>
-        <translation>垂直框架距離上方邊界：</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1144"/>
         <source>Vertical frame top margin:</source>
         <translation>垂直框架距離上方邊界：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1224"/>
-        <source>Vertical frame lower margin</source>
-        <translation>垂直框架距離下方邊界：</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1227"/>
+        <location filename="../../mscore/editstyle.ui" line="1221"/>
         <source>Vertical frame bottom margin:</source>
         <translation>垂直框架距離下方邊界：</translation>
     </message>
@@ -2402,7 +2384,7 @@ space unit</extracomment>
         <translation>最大組合譜表之間的距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1325"/>
+        <location filename="../../mscore/editstyle.ui" line="1319"/>
         <source>Last system fill threshold:</source>
         <translation>最後一個組合譜表內填滿的門檻：</translation>
     </message>
@@ -2422,209 +2404,209 @@ space unit</extracomment>
         <translation>建立提示性的拍號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1312"/>
+        <location filename="../../mscore/editstyle.ui" line="1306"/>
         <source>Create courtesy key signatures</source>
         <translation>建立提示性的調號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1923"/>
+        <location filename="../../mscore/editstyle.ui" line="1917"/>
         <source>Header Text</source>
         <translation>頁首文字</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1937"/>
+        <location filename="../../mscore/editstyle.ui" line="1931"/>
         <source>Show header also on first page</source>
         <translation>於第一頁顯示頁首文字</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1645"/>
-        <location filename="../../mscore/editstyle.ui" line="1940"/>
-        <location filename="../../mscore/editstyle.ui" line="2363"/>
+        <location filename="../../mscore/editstyle.ui" line="1639"/>
+        <location filename="../../mscore/editstyle.ui" line="1934"/>
+        <location filename="../../mscore/editstyle.ui" line="2357"/>
         <source>Show first</source>
         <translation>顯示第一個</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1947"/>
+        <location filename="../../mscore/editstyle.ui" line="1941"/>
         <source>Use odd/even page header</source>
         <translation>使用單／雙頁頁首文字</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1655"/>
-        <location filename="../../mscore/editstyle.ui" line="1950"/>
+        <location filename="../../mscore/editstyle.ui" line="1649"/>
+        <location filename="../../mscore/editstyle.ui" line="1944"/>
         <source>Odd/Even</source>
         <translation>奇數／偶數</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1742"/>
-        <location filename="../../mscore/editstyle.ui" line="1977"/>
-        <location filename="../../mscore/editstyle.ui" line="2708"/>
-        <location filename="../../mscore/editstyle.ui" line="10534"/>
+        <location filename="../../mscore/editstyle.ui" line="1736"/>
+        <location filename="../../mscore/editstyle.ui" line="1971"/>
+        <location filename="../../mscore/editstyle.ui" line="2702"/>
+        <location filename="../../mscore/editstyle.ui" line="10528"/>
         <source>Left</source>
         <translation>左</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1699"/>
-        <location filename="../../mscore/editstyle.ui" line="1987"/>
+        <location filename="../../mscore/editstyle.ui" line="1693"/>
+        <location filename="../../mscore/editstyle.ui" line="1981"/>
         <source>Middle</source>
         <translation>中點</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1789"/>
-        <location filename="../../mscore/editstyle.ui" line="1997"/>
-        <location filename="../../mscore/editstyle.ui" line="2804"/>
-        <location filename="../../mscore/editstyle.ui" line="10520"/>
+        <location filename="../../mscore/editstyle.ui" line="1783"/>
+        <location filename="../../mscore/editstyle.ui" line="1991"/>
+        <location filename="../../mscore/editstyle.ui" line="2798"/>
+        <location filename="../../mscore/editstyle.ui" line="10514"/>
         <source>Right</source>
         <translation>右</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1682"/>
-        <location filename="../../mscore/editstyle.ui" line="2007"/>
+        <location filename="../../mscore/editstyle.ui" line="1676"/>
+        <location filename="../../mscore/editstyle.ui" line="2001"/>
         <source>Odd</source>
         <translation>奇數</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1729"/>
-        <location filename="../../mscore/editstyle.ui" line="2096"/>
+        <location filename="../../mscore/editstyle.ui" line="1723"/>
+        <location filename="../../mscore/editstyle.ui" line="2090"/>
         <source>Even</source>
         <translation>偶數</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1628"/>
+        <location filename="../../mscore/editstyle.ui" line="1622"/>
         <source>Footer Text</source>
         <translation>頁尾文字</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1642"/>
+        <location filename="../../mscore/editstyle.ui" line="1636"/>
         <source>Show footer also on first page</source>
         <translation>於第一頁顯示頁尾文字</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1652"/>
+        <location filename="../../mscore/editstyle.ui" line="1646"/>
         <source>Use odd/even page footer</source>
         <translation>使用單／雙頁頁尾文字</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="75"/>
-        <location filename="../../mscore/editstyle.ui" line="2264"/>
+        <location filename="../../mscore/editstyle.ui" line="2258"/>
         <source>Measure Numbers</source>
         <translation>小節號碼</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2326"/>
+        <location filename="../../mscore/editstyle.ui" line="2320"/>
         <source>All staves</source>
         <translation>所有譜表</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2295"/>
+        <location filename="../../mscore/editstyle.ui" line="2289"/>
         <source>Every system</source>
         <translation>每個組合譜表</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2304"/>
+        <location filename="../../mscore/editstyle.ui" line="2298"/>
         <source>Interval:</source>
         <translation>間隔：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="80"/>
-        <location filename="../../mscore/editstyle.ui" line="2531"/>
+        <location filename="../../mscore/editstyle.ui" line="2525"/>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
         <translation>組合譜表</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2551"/>
+        <location filename="../../mscore/editstyle.ui" line="2545"/>
         <source>System bracket thickness:</source>
         <translation>組合譜表的括線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2580"/>
+        <location filename="../../mscore/editstyle.ui" line="2574"/>
         <source>System bracket distance:</source>
         <translation>組合譜表的括線距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2632"/>
+        <location filename="../../mscore/editstyle.ui" line="2626"/>
         <source>Brace thickness:</source>
         <translation>花括線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2658"/>
+        <location filename="../../mscore/editstyle.ui" line="2652"/>
         <source>Brace distance:</source>
         <translation>花括線距離：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="95"/>
-        <location filename="../../mscore/editstyle.ui" line="3362"/>
+        <location filename="../../mscore/editstyle.ui" line="3356"/>
         <source>Measure</source>
         <translation>小節</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4199"/>
+        <location filename="../../mscore/editstyle.ui" line="4193"/>
         <source>Spacing (1=tight):</source>
         <translation>間隔（1 = 最密集 ）：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3715"/>
+        <location filename="../../mscore/editstyle.ui" line="3709"/>
         <source>Minimum measure width:</source>
         <translation>最小小節寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4093"/>
+        <location filename="../../mscore/editstyle.ui" line="4087"/>
         <source>Note to barline distance:</source>
         <translation>音符至小節線的距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4183"/>
+        <location filename="../../mscore/editstyle.ui" line="4177"/>
         <source>Clef left margin:</source>
         <translation>譜號距離小節左方邊界：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4157"/>
+        <location filename="../../mscore/editstyle.ui" line="4151"/>
         <source>Minimum note distance:</source>
         <translation>最小音符間距：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4061"/>
+        <location filename="../../mscore/editstyle.ui" line="4055"/>
         <source>Key signature left margin:</source>
         <translation>調號距離小節左方邊界：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4045"/>
+        <location filename="../../mscore/editstyle.ui" line="4039"/>
         <source>Time signature left margin:</source>
         <translation>拍號距離小節左方邊界：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3978"/>
+        <location filename="../../mscore/editstyle.ui" line="3972"/>
         <source>Clef/Key right margin:</source>
         <translation>譜號／調號距離小節右方邊界：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3962"/>
+        <location filename="../../mscore/editstyle.ui" line="3956"/>
         <source>Clef to barline distance:</source>
         <translation>譜號至小節線的距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3933"/>
+        <location filename="../../mscore/editstyle.ui" line="3927"/>
         <source>Staff line thickness:</source>
         <translation>譜表線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3917"/>
+        <location filename="../../mscore/editstyle.ui" line="3911"/>
         <source>Barline to accidental distance:</source>
         <translation>小節線距離臨時記號：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3858"/>
+        <location filename="../../mscore/editstyle.ui" line="3852"/>
         <source>Multimeasure rest margin:</source>
         <translation>多小節休止符左右各方距離小節邊界：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3782"/>
+        <location filename="../../mscore/editstyle.ui" line="3776"/>
         <source>Barline to grace note distance:</source>
         <translation>小節線至裝飾音符的距離：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="100"/>
-        <location filename="../../mscore/editstyle.ui" line="4369"/>
+        <location filename="../../mscore/editstyle.ui" line="4363"/>
         <source>Barlines</source>
         <translation>小節線</translation>
     </message>
@@ -2634,517 +2616,512 @@ space unit</extracomment>
         <translation>顯示橫跨小節線的音符時值（【試驗中】只限早期音樂！）</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4587"/>
+        <location filename="../../mscore/editstyle.ui" line="4581"/>
         <source>Show repeat barline tips (&quot;winged&quot; repeats)</source>
-        <translation>顯示反複小節的提示（「winged」反複）</translation>
+        <translation>顯示反複小節線的尾勾（「winged」反複）</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4496"/>
+        <location filename="../../mscore/editstyle.ui" line="4490"/>
         <source>Barline at start of single staff</source>
         <translation>單行譜開始的小節線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4577"/>
+        <location filename="../../mscore/editstyle.ui" line="4571"/>
         <source>Barline at start of multiple staves</source>
         <translation>多行譜開始的小節線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4570"/>
+        <location filename="../../mscore/editstyle.ui" line="4564"/>
         <source>Scale barlines to staff size</source>
         <translation>縮放小節線至譜表大小</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4489"/>
+        <location filename="../../mscore/editstyle.ui" line="4483"/>
         <source>Double barline thickness:</source>
         <translation>雙小節線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4611"/>
+        <location filename="../../mscore/editstyle.ui" line="4605"/>
         <source>Double barline distance:</source>
         <translation>雙小節線距離：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="105"/>
-        <location filename="../../mscore/editstyle.ui" line="4733"/>
+        <location filename="../../mscore/editstyle.ui" line="4727"/>
         <source>Notes</source>
         <translation>音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4758"/>
+        <location filename="../../mscore/editstyle.ui" line="4752"/>
         <source>Shorten stems</source>
         <translation>縮短符桿</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4780"/>
+        <location filename="../../mscore/editstyle.ui" line="4774"/>
         <source>Progression:</source>
         <translation>進行</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4800"/>
+        <location filename="../../mscore/editstyle.ui" line="4794"/>
         <source>Shortest stem:</source>
         <translation>最短符幹：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4839"/>
+        <location filename="../../mscore/editstyle.ui" line="4833"/>
         <source>Accidental distance:</source>
         <translation>臨時記號間距：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4813"/>
+        <location filename="../../mscore/editstyle.ui" line="4807"/>
         <source>Ledger line thickness:</source>
         <translation>上下加線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4972"/>
+        <location filename="../../mscore/editstyle.ui" line="4966"/>
         <source>Ledger line length:</source>
         <translation>上下加線長度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4962"/>
+        <location filename="../../mscore/editstyle.ui" line="4956"/>
         <source>Stem thickness:</source>
         <translation>符桿寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4872"/>
+        <location filename="../../mscore/editstyle.ui" line="4866"/>
         <source>Dot size:</source>
-        <translation>點的大小：</translation>
+        <translation>附點大小：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="85"/>
-        <location filename="../../mscore/editstyle.ui" line="3229"/>
+        <location filename="../../mscore/editstyle.ui" line="3223"/>
         <source>Clefs</source>
         <translation>譜號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3235"/>
+        <location filename="../../mscore/editstyle.ui" line="3229"/>
         <source>Default TAB Clef</source>
         <translation>預設 TAB 譜號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3241"/>
+        <location filename="../../mscore/editstyle.ui" line="3235"/>
         <source>Standard TAB clef</source>
         <translation>標準 TAB 譜號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3248"/>
+        <location filename="../../mscore/editstyle.ui" line="3242"/>
         <source>Serif TAB clef</source>
         <translation>襯邊 TAB 譜號</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="120"/>
-        <location filename="../../mscore/editstyle.ui" line="5895"/>
+        <location filename="../../mscore/editstyle.ui" line="5889"/>
         <source>Arpeggios</source>
         <translation>琶音</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5909"/>
+        <location filename="../../mscore/editstyle.ui" line="5903"/>
         <source>Distance to note:</source>
         <translation>與音符的距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5932"/>
-        <location filename="../../mscore/editstyle.ui" line="6571"/>
-        <location filename="../../mscore/editstyle.ui" line="6702"/>
-        <location filename="../../mscore/editstyle.ui" line="6978"/>
-        <location filename="../../mscore/editstyle.ui" line="7230"/>
-        <location filename="../../mscore/editstyle.ui" line="7754"/>
+        <location filename="../../mscore/editstyle.ui" line="5926"/>
+        <location filename="../../mscore/editstyle.ui" line="6565"/>
+        <location filename="../../mscore/editstyle.ui" line="6696"/>
+        <location filename="../../mscore/editstyle.ui" line="6972"/>
+        <location filename="../../mscore/editstyle.ui" line="7224"/>
+        <location filename="../../mscore/editstyle.ui" line="7748"/>
         <source>Line thickness:</source>
         <translation>線條寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5955"/>
+        <location filename="../../mscore/editstyle.ui" line="5949"/>
         <source>Hook length:</source>
         <translation>勾線長度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="110"/>
-        <location filename="../../mscore/editstyle.ui" line="5044"/>
+        <location filename="../../mscore/editstyle.ui" line="5038"/>
         <source>Beams</source>
         <translation>符槓</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5053"/>
+        <location filename="../../mscore/editstyle.ui" line="5047"/>
         <source>Beam thickness:</source>
         <translation>符槓寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5073"/>
-        <source>Beam distance (in beam thickness units):</source>
-        <translation>符槓距離（以符槓寬度為單位）：</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="5090"/>
+        <location filename="../../mscore/editstyle.ui" line="5084"/>
         <source>Broken beam minimum length:</source>
         <translation>斷續符槓最小長度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5126"/>
+        <location filename="../../mscore/editstyle.ui" line="5120"/>
         <source>Flatten all beams</source>
         <translation>壓扁所有符槓</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="125"/>
-        <location filename="../../mscore/editstyle.ui" line="6010"/>
+        <location filename="../../mscore/editstyle.ui" line="6004"/>
         <source>Slurs/Ties</source>
         <translation>圓滑線／連接線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6068"/>
+        <location filename="../../mscore/editstyle.ui" line="6062"/>
         <source>Line thickness at end:</source>
         <translation>線條尾端寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6117"/>
+        <location filename="../../mscore/editstyle.ui" line="6111"/>
         <source>Line thickness middle:</source>
         <translation>線條中端寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6035"/>
+        <location filename="../../mscore/editstyle.ui" line="6029"/>
         <source>Dotted line thickness:</source>
         <translation>點線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6127"/>
+        <location filename="../../mscore/editstyle.ui" line="6121"/>
         <source>Minimum tie length:</source>
         <translation>連接線最小長度：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="65"/>
-        <location filename="../../mscore/editstyle.ui" line="1345"/>
+        <location filename="../../mscore/editstyle.ui" line="1339"/>
         <source>Sizes</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1360"/>
+        <location filename="../../mscore/editstyle.ui" line="1354"/>
         <source>Small staff size:</source>
         <translation>小型化譜表大小：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1428"/>
+        <location filename="../../mscore/editstyle.ui" line="1422"/>
         <source>Small note size:</source>
         <translation>縮小音符大小：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1466"/>
+        <location filename="../../mscore/editstyle.ui" line="1460"/>
         <source>Grace note size:</source>
         <translation>裝飾音符大小：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1504"/>
+        <location filename="../../mscore/editstyle.ui" line="1498"/>
         <source>Small clef size:</source>
         <translation>縮小譜號大小：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="130"/>
-        <location filename="../../mscore/editstyle.ui" line="6267"/>
+        <location filename="../../mscore/editstyle.ui" line="6261"/>
         <source>Hairpins</source>
         <translation>音量變化記號線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6276"/>
+        <location filename="../../mscore/editstyle.ui" line="6270"/>
         <source>Height:</source>
         <translation>高度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6296"/>
+        <location filename="../../mscore/editstyle.ui" line="6290"/>
         <source>Continue height:</source>
         <translation>延續高度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10541"/>
+        <location filename="../../mscore/editstyle.ui" line="10535"/>
         <source>Default vertical position:</source>
         <translation>預設垂直位置：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="135"/>
-        <location filename="../../mscore/editstyle.ui" line="6601"/>
+        <location filename="../../mscore/editstyle.ui" line="6595"/>
         <source>Volta</source>
         <translation>反複</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6636"/>
+        <location filename="../../mscore/editstyle.ui" line="6630"/>
         <source>Hook height:</source>
         <translation>勾線高度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6647"/>
-        <location filename="../../mscore/editstyle.ui" line="7003"/>
-        <location filename="../../mscore/editstyle.ui" line="7172"/>
+        <location filename="../../mscore/editstyle.ui" line="6641"/>
+        <location filename="../../mscore/editstyle.ui" line="6997"/>
+        <location filename="../../mscore/editstyle.ui" line="7166"/>
         <location filename="../../mscore/editstyle.cpp" line="79"/>
         <source>Continuous</source>
         <translation>繼續／連續</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6652"/>
-        <location filename="../../mscore/editstyle.ui" line="7008"/>
-        <location filename="../../mscore/editstyle.ui" line="7177"/>
+        <location filename="../../mscore/editstyle.ui" line="6646"/>
+        <location filename="../../mscore/editstyle.ui" line="7002"/>
+        <location filename="../../mscore/editstyle.ui" line="7171"/>
         <location filename="../../mscore/editstyle.cpp" line="80"/>
         <source>Dashed</source>
         <translation>斷線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6657"/>
-        <location filename="../../mscore/editstyle.ui" line="7013"/>
-        <location filename="../../mscore/editstyle.ui" line="7182"/>
+        <location filename="../../mscore/editstyle.ui" line="6651"/>
+        <location filename="../../mscore/editstyle.ui" line="7007"/>
+        <location filename="../../mscore/editstyle.ui" line="7176"/>
         <location filename="../../mscore/editstyle.cpp" line="81"/>
         <source>Dotted</source>
         <translation>點線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6662"/>
-        <location filename="../../mscore/editstyle.ui" line="7018"/>
-        <location filename="../../mscore/editstyle.ui" line="7187"/>
+        <location filename="../../mscore/editstyle.ui" line="6656"/>
+        <location filename="../../mscore/editstyle.ui" line="7012"/>
+        <location filename="../../mscore/editstyle.ui" line="7181"/>
         <location filename="../../mscore/editstyle.cpp" line="82"/>
         <source>Dash-dotted</source>
         <translation>虛點線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6667"/>
-        <location filename="../../mscore/editstyle.ui" line="7023"/>
-        <location filename="../../mscore/editstyle.ui" line="7192"/>
+        <location filename="../../mscore/editstyle.ui" line="6661"/>
+        <location filename="../../mscore/editstyle.ui" line="7017"/>
+        <location filename="../../mscore/editstyle.ui" line="7186"/>
         <location filename="../../mscore/editstyle.cpp" line="83"/>
         <source>Dash-dot-dotted</source>
         <translation>雙點虛線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6801"/>
-        <location filename="../../mscore/editstyle.ui" line="6968"/>
-        <location filename="../../mscore/editstyle.ui" line="7220"/>
+        <location filename="../../mscore/editstyle.ui" line="6795"/>
+        <location filename="../../mscore/editstyle.ui" line="6962"/>
+        <location filename="../../mscore/editstyle.ui" line="7214"/>
         <source>Line style:</source>
         <translation>線條樣式：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="140"/>
-        <location filename="../../mscore/editstyle.ui" line="6831"/>
+        <location filename="../../mscore/editstyle.ui" line="6825"/>
         <source>Ottava</source>
         <translation>八度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7084"/>
+        <location filename="../../mscore/editstyle.ui" line="7078"/>
         <source>Numbers only</source>
         <translation>只有數字</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7165"/>
+        <location filename="../../mscore/editstyle.ui" line="7159"/>
         <source>Pedal Line</source>
         <translation>腳踏線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7402"/>
+        <location filename="../../mscore/editstyle.ui" line="7396"/>
         <source>Trill Line</source>
         <translation>顫音線</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="210"/>
-        <location filename="../../mscore/editstyle.ui" line="10054"/>
+        <location filename="../../mscore/editstyle.ui" line="10048"/>
         <source>Chord Symbols</source>
         <translation>和弦符號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5165"/>
+        <location filename="../../mscore/editstyle.ui" line="5159"/>
         <source>Vertical Distance from Notes</source>
-        <translation type="unfinished"/>
+        <translation>與音符的垂直距離</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5171"/>
+        <location filename="../../mscore/editstyle.ui" line="5165"/>
         <source>Avoid staves</source>
         <translation>避開譜表</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5347"/>
+        <location filename="../../mscore/editstyle.ui" line="5341"/>
         <source>Horizontal Distance from Notes</source>
-        <translation type="unfinished"/>
+        <translation>與音符的橫向距離</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5353"/>
+        <location filename="../../mscore/editstyle.ui" line="5347"/>
         <source>Distance before stem of first note:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5382"/>
+        <location filename="../../mscore/editstyle.ui" line="5376"/>
         <source>Distance before head of first note:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5408"/>
+        <location filename="../../mscore/editstyle.ui" line="5402"/>
         <source>Distance after stem of last note:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5437"/>
+        <location filename="../../mscore/editstyle.ui" line="5431"/>
         <source>Distance after head of last note:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5485"/>
+        <location filename="../../mscore/editstyle.ui" line="5479"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5508"/>
+        <location filename="../../mscore/editstyle.ui" line="5502"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5531"/>
+        <location filename="../../mscore/editstyle.ui" line="5525"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5554"/>
+        <location filename="../../mscore/editstyle.ui" line="5548"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5763"/>
-        <location filename="../../mscore/editstyle.ui" line="5815"/>
+        <location filename="../../mscore/editstyle.ui" line="5757"/>
+        <location filename="../../mscore/editstyle.ui" line="5809"/>
         <source>None</source>
         <translation>無</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10060"/>
+        <location filename="../../mscore/editstyle.ui" line="10054"/>
         <source>Appearance</source>
         <translation>顯示</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10069"/>
-        <location filename="../../mscore/editstyle.ui" line="10181"/>
+        <location filename="../../mscore/editstyle.ui" line="10063"/>
+        <location filename="../../mscore/editstyle.ui" line="10175"/>
         <source>Standard</source>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10076"/>
+        <location filename="../../mscore/editstyle.ui" line="10070"/>
         <source>Jazz</source>
         <translation>爵士</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10083"/>
+        <location filename="../../mscore/editstyle.ui" line="10077"/>
         <source>Custom</source>
         <translation>自訂</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10150"/>
+        <location filename="../../mscore/editstyle.ui" line="10144"/>
         <source>Chord symbols style file:</source>
         <translation>和弦符號樣式檔案：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10160"/>
+        <location filename="../../mscore/editstyle.ui" line="10154"/>
         <source>Load chords.xml</source>
         <translation>載入 chords.xml</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10170"/>
+        <location filename="../../mscore/editstyle.ui" line="10164"/>
         <source>Note Spelling</source>
         <translation>音符拼字</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10191"/>
+        <location filename="../../mscore/editstyle.ui" line="10185"/>
         <source>German</source>
         <translation>德語</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10201"/>
+        <location filename="../../mscore/editstyle.ui" line="10195"/>
         <source>Full German</source>
         <translation>全德語</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10211"/>
+        <location filename="../../mscore/editstyle.ui" line="10205"/>
         <source>Solfeggio</source>
         <translation>階名</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10221"/>
+        <location filename="../../mscore/editstyle.ui" line="10215"/>
         <source>French</source>
         <translation>法語</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10243"/>
+        <location filename="../../mscore/editstyle.ui" line="10237"/>
         <source>Automatic Capitalization</source>
         <translation>自動大寫字母</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10252"/>
+        <location filename="../../mscore/editstyle.ui" line="10246"/>
         <source>Lower case minor chords</source>
         <translation>小楷小調和弦</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10259"/>
+        <location filename="../../mscore/editstyle.ui" line="10253"/>
         <source>Lower case bass notes</source>
         <translation>小楷低音音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10266"/>
+        <location filename="../../mscore/editstyle.ui" line="10260"/>
         <source>All caps note names</source>
         <translation>全大楷音符名</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10292"/>
+        <location filename="../../mscore/editstyle.ui" line="10286"/>
         <source>Positioning</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10320"/>
+        <location filename="../../mscore/editstyle.ui" line="10314"/>
         <source>Distance to fretboard diagram:</source>
         <translation>指板圖距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10352"/>
+        <location filename="../../mscore/editstyle.ui" line="10346"/>
         <source>Minimum chord spacing:</source>
         <translation>最少和弦分隔距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10375"/>
+        <location filename="../../mscore/editstyle.ui" line="10369"/>
         <source>Maximum barline distance:</source>
         <translation>最大小節線距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10407"/>
+        <location filename="../../mscore/editstyle.ui" line="10401"/>
         <source>Capo</source>
         <extracomment>Capodastro</extracomment>
         <translation>移調夾</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10433"/>
+        <location filename="../../mscore/editstyle.ui" line="10427"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
         <translation>移調夾在指板上的位置：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="215"/>
-        <location filename="../../mscore/editstyle.ui" line="10466"/>
+        <location filename="../../mscore/editstyle.ui" line="10460"/>
         <source>Fretboard Diagrams</source>
         <translation>指板圖</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10527"/>
+        <location filename="../../mscore/editstyle.ui" line="10521"/>
         <source>Position:</source>
         <translation>位置：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10551"/>
+        <location filename="../../mscore/editstyle.ui" line="10545"/>
         <source>Barré line thickness:</source>
         <translation>小節線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10593"/>
+        <location filename="../../mscore/editstyle.ui" line="10587"/>
         <source>Scale:</source>
         <translation>大小比率：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="205"/>
-        <location filename="../../mscore/editstyle.ui" line="9831"/>
+        <location filename="../../mscore/editstyle.ui" line="9825"/>
         <source>Figured Bass</source>
         <translation>數字低音</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9860"/>
+        <location filename="../../mscore/editstyle.ui" line="9854"/>
         <source>Font:</source>
         <translation>字型：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1824"/>
-        <location filename="../../mscore/editstyle.ui" line="2150"/>
-        <location filename="../../mscore/editstyle.ui" line="9892"/>
+        <location filename="../../mscore/editstyle.ui" line="1818"/>
+        <location filename="../../mscore/editstyle.ui" line="2144"/>
+        <location filename="../../mscore/editstyle.ui" line="9886"/>
         <source>Size:</source>
         <translation>字體大小：</translation>
     </message>
@@ -3170,43 +3147,43 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="195"/>
-        <location filename="../../mscore/editstyle.ui" line="9456"/>
+        <location filename="../../mscore/editstyle.ui" line="9450"/>
         <source>Dynamics</source>
         <translation>強弱記號</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="175"/>
-        <location filename="../../mscore/editstyle.ui" line="8227"/>
+        <location filename="../../mscore/editstyle.ui" line="8221"/>
         <source>Fermatas</source>
         <translation>延長記號</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="165"/>
-        <location filename="../../mscore/editstyle.ui" line="7899"/>
+        <location filename="../../mscore/editstyle.ui" line="7893"/>
         <source>Text Line</source>
         <translation>文字線</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="180"/>
-        <location filename="../../mscore/editstyle.ui" line="8370"/>
+        <location filename="../../mscore/editstyle.ui" line="8364"/>
         <source>Staff Text</source>
         <translation>譜表文字</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="185"/>
-        <location filename="../../mscore/editstyle.ui" line="8562"/>
+        <location filename="../../mscore/editstyle.ui" line="8556"/>
         <source>Tempo Text</source>
         <translation>速度文字</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="200"/>
-        <location filename="../../mscore/editstyle.ui" line="9639"/>
+        <location filename="../../mscore/editstyle.ui" line="9633"/>
         <source>Rehearsal Marks</source>
         <translation>排練記號</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="160"/>
-        <location filename="../../mscore/editstyle.ui" line="7670"/>
+        <location filename="../../mscore/editstyle.ui" line="7664"/>
         <source>Bend</source>
         <translation>推弦</translation>
     </message>
@@ -3239,166 +3216,167 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="886"/>
         <location filename="../../mscore/editstyle.ui" line="903"/>
         <location filename="../../mscore/editstyle.ui" line="1032"/>
-        <location filename="../../mscore/editstyle.ui" line="1179"/>
-        <location filename="../../mscore/editstyle.ui" line="1262"/>
-        <location filename="../../mscore/editstyle.ui" line="1279"/>
-        <location filename="../../mscore/editstyle.ui" line="1392"/>
-        <location filename="../../mscore/editstyle.ui" line="1536"/>
-        <location filename="../../mscore/editstyle.ui" line="1553"/>
-        <location filename="../../mscore/editstyle.ui" line="1570"/>
-        <location filename="../../mscore/editstyle.ui" line="1847"/>
-        <location filename="../../mscore/editstyle.ui" line="1874"/>
-        <location filename="../../mscore/editstyle.ui" line="1894"/>
-        <location filename="../../mscore/editstyle.ui" line="2180"/>
-        <location filename="../../mscore/editstyle.ui" line="2197"/>
-        <location filename="../../mscore/editstyle.ui" line="2237"/>
-        <location filename="../../mscore/editstyle.ui" line="2333"/>
-        <location filename="../../mscore/editstyle.ui" line="2370"/>
-        <location filename="../../mscore/editstyle.ui" line="2394"/>
-        <location filename="../../mscore/editstyle.ui" line="2455"/>
-        <location filename="../../mscore/editstyle.ui" line="2482"/>
-        <location filename="../../mscore/editstyle.ui" line="2912"/>
-        <location filename="../../mscore/editstyle.ui" line="2952"/>
-        <location filename="../../mscore/editstyle.ui" line="3003"/>
-        <location filename="../../mscore/editstyle.ui" line="3020"/>
-        <location filename="../../mscore/editstyle.ui" line="3071"/>
-        <location filename="../../mscore/editstyle.ui" line="3129"/>
-        <location filename="../../mscore/editstyle.ui" line="3146"/>
-        <location filename="../../mscore/editstyle.ui" line="3163"/>
-        <location filename="../../mscore/editstyle.ui" line="3410"/>
-        <location filename="../../mscore/editstyle.ui" line="3427"/>
-        <location filename="../../mscore/editstyle.ui" line="3444"/>
-        <location filename="../../mscore/editstyle.ui" line="3471"/>
-        <location filename="../../mscore/editstyle.ui" line="3488"/>
-        <location filename="../../mscore/editstyle.ui" line="3505"/>
-        <location filename="../../mscore/editstyle.ui" line="3522"/>
-        <location filename="../../mscore/editstyle.ui" line="3539"/>
-        <location filename="../../mscore/editstyle.ui" line="3556"/>
-        <location filename="../../mscore/editstyle.ui" line="3583"/>
-        <location filename="../../mscore/editstyle.ui" line="3600"/>
-        <location filename="../../mscore/editstyle.ui" line="3637"/>
-        <location filename="../../mscore/editstyle.ui" line="3725"/>
-        <location filename="../../mscore/editstyle.ui" line="3742"/>
-        <location filename="../../mscore/editstyle.ui" line="3759"/>
-        <location filename="../../mscore/editstyle.ui" line="3792"/>
-        <location filename="../../mscore/editstyle.ui" line="3809"/>
-        <location filename="../../mscore/editstyle.ui" line="3868"/>
-        <location filename="../../mscore/editstyle.ui" line="4209"/>
-        <location filename="../../mscore/editstyle.ui" line="4252"/>
-        <location filename="../../mscore/editstyle.ui" line="4295"/>
-        <location filename="../../mscore/editstyle.ui" line="4375"/>
-        <location filename="../../mscore/editstyle.ui" line="4438"/>
-        <location filename="../../mscore/editstyle.ui" line="4455"/>
-        <location filename="../../mscore/editstyle.ui" line="4472"/>
-        <location filename="../../mscore/editstyle.ui" line="4503"/>
-        <location filename="../../mscore/editstyle.ui" line="4546"/>
-        <location filename="../../mscore/editstyle.ui" line="4628"/>
-        <location filename="../../mscore/editstyle.ui" line="4645"/>
-        <location filename="../../mscore/editstyle.ui" line="4669"/>
-        <location filename="../../mscore/editstyle.ui" line="4696"/>
-        <location filename="../../mscore/editstyle.ui" line="5281"/>
-        <location filename="../../mscore/editstyle.ui" line="5304"/>
-        <location filename="../../mscore/editstyle.ui" line="5327"/>
-        <location filename="../../mscore/editstyle.ui" line="5482"/>
-        <location filename="../../mscore/editstyle.ui" line="5505"/>
-        <location filename="../../mscore/editstyle.ui" line="5528"/>
-        <location filename="../../mscore/editstyle.ui" line="5551"/>
-        <location filename="../../mscore/editstyle.ui" line="5606"/>
-        <location filename="../../mscore/editstyle.ui" line="5674"/>
-        <location filename="../../mscore/editstyle.ui" line="5735"/>
-        <location filename="../../mscore/editstyle.ui" line="5787"/>
-        <location filename="../../mscore/editstyle.ui" line="5839"/>
-        <location filename="../../mscore/editstyle.ui" line="6159"/>
-        <location filename="../../mscore/editstyle.ui" line="6189"/>
-        <location filename="../../mscore/editstyle.ui" line="6206"/>
-        <location filename="../../mscore/editstyle.ui" line="6223"/>
-        <location filename="../../mscore/editstyle.ui" line="6240"/>
-        <location filename="../../mscore/editstyle.ui" line="6332"/>
-        <location filename="../../mscore/editstyle.ui" line="6355"/>
-        <location filename="../../mscore/editstyle.ui" line="6378"/>
-        <location filename="../../mscore/editstyle.ui" line="6431"/>
-        <location filename="../../mscore/editstyle.ui" line="6478"/>
-        <location filename="../../mscore/editstyle.ui" line="6508"/>
-        <location filename="../../mscore/editstyle.ui" line="6544"/>
-        <location filename="../../mscore/editstyle.ui" line="6616"/>
-        <location filename="../../mscore/editstyle.ui" line="6731"/>
-        <location filename="../../mscore/editstyle.ui" line="6761"/>
-        <location filename="../../mscore/editstyle.ui" line="6784"/>
-        <location filename="../../mscore/editstyle.ui" line="6846"/>
-        <location filename="../../mscore/editstyle.ui" line="6928"/>
-        <location filename="../../mscore/editstyle.ui" line="6951"/>
-        <location filename="../../mscore/editstyle.ui" line="7037"/>
-        <location filename="../../mscore/editstyle.ui" line="7060"/>
-        <location filename="../../mscore/editstyle.ui" line="7097"/>
-        <location filename="../../mscore/editstyle.ui" line="7127"/>
-        <location filename="../../mscore/editstyle.ui" line="7253"/>
-        <location filename="../../mscore/editstyle.ui" line="7270"/>
-        <location filename="../../mscore/editstyle.ui" line="7287"/>
-        <location filename="../../mscore/editstyle.ui" line="7314"/>
-        <location filename="../../mscore/editstyle.ui" line="7331"/>
-        <location filename="../../mscore/editstyle.ui" line="7441"/>
-        <location filename="../../mscore/editstyle.ui" line="7482"/>
-        <location filename="../../mscore/editstyle.ui" line="7506"/>
-        <location filename="../../mscore/editstyle.ui" line="7575"/>
-        <location filename="../../mscore/editstyle.ui" line="7616"/>
-        <location filename="../../mscore/editstyle.ui" line="7640"/>
-        <location filename="../../mscore/editstyle.ui" line="7708"/>
-        <location filename="../../mscore/editstyle.ui" line="7784"/>
-        <location filename="../../mscore/editstyle.ui" line="7801"/>
-        <location filename="../../mscore/editstyle.ui" line="7848"/>
-        <location filename="../../mscore/editstyle.ui" line="7875"/>
-        <location filename="../../mscore/editstyle.ui" line="7945"/>
-        <location filename="../../mscore/editstyle.ui" line="7962"/>
-        <location filename="../../mscore/editstyle.ui" line="7992"/>
-        <location filename="../../mscore/editstyle.ui" line="8255"/>
-        <location filename="../../mscore/editstyle.ui" line="8279"/>
-        <location filename="../../mscore/editstyle.ui" line="8325"/>
-        <location filename="../../mscore/editstyle.ui" line="8416"/>
-        <location filename="../../mscore/editstyle.ui" line="8433"/>
-        <location filename="../../mscore/editstyle.ui" line="8486"/>
-        <location filename="../../mscore/editstyle.ui" line="8532"/>
-        <location filename="../../mscore/editstyle.ui" line="8615"/>
-        <location filename="../../mscore/editstyle.ui" line="8632"/>
-        <location filename="../../mscore/editstyle.ui" line="8662"/>
-        <location filename="../../mscore/editstyle.ui" line="8724"/>
-        <location filename="../../mscore/editstyle.ui" line="8861"/>
-        <location filename="../../mscore/editstyle.ui" line="8878"/>
-        <location filename="../../mscore/editstyle.ui" line="8895"/>
-        <location filename="../../mscore/editstyle.ui" line="8912"/>
-        <location filename="../../mscore/editstyle.ui" line="8929"/>
-        <location filename="../../mscore/editstyle.ui" line="8985"/>
-        <location filename="../../mscore/editstyle.ui" line="9012"/>
-        <location filename="../../mscore/editstyle.ui" line="9041"/>
-        <location filename="../../mscore/editstyle.ui" line="9072"/>
-        <location filename="../../mscore/editstyle.ui" line="9105"/>
-        <location filename="../../mscore/editstyle.ui" line="9167"/>
-        <location filename="../../mscore/editstyle.ui" line="9204"/>
-        <location filename="../../mscore/editstyle.ui" line="9237"/>
-        <location filename="../../mscore/editstyle.ui" line="9280"/>
-        <location filename="../../mscore/editstyle.ui" line="9304"/>
-        <location filename="../../mscore/editstyle.ui" line="9321"/>
-        <location filename="../../mscore/editstyle.ui" line="9387"/>
-        <location filename="../../mscore/editstyle.ui" line="9520"/>
-        <location filename="../../mscore/editstyle.ui" line="9537"/>
-        <location filename="../../mscore/editstyle.ui" line="9578"/>
-        <location filename="../../mscore/editstyle.ui" line="9609"/>
-        <location filename="../../mscore/editstyle.ui" line="9692"/>
-        <location filename="../../mscore/editstyle.ui" line="9709"/>
-        <location filename="../../mscore/editstyle.ui" line="9739"/>
-        <location filename="../../mscore/editstyle.ui" line="9801"/>
-        <location filename="../../mscore/editstyle.ui" line="10698"/>
-        <location filename="../../mscore/editstyle.ui" line="10732"/>
-        <location filename="../../mscore/editstyle.ui" line="10749"/>
-        <location filename="../../mscore/editstyle.ui" line="10780"/>
-        <location filename="../../mscore/editstyle.ui" line="10804"/>
-        <location filename="../../mscore/editstyle.ui" line="10821"/>
-        <location filename="../../mscore/editstyle.ui" line="10838"/>
-        <location filename="../../mscore/editstyle.ui" line="10880"/>
-        <location filename="../../mscore/editstyle.ui" line="10935"/>
-        <location filename="../../mscore/editstyle.ui" line="10952"/>
-        <location filename="../../mscore/editstyle.ui" line="10969"/>
-        <location filename="../../mscore/editstyle.ui" line="10986"/>
-        <location filename="../../mscore/editstyle.ui" line="11033"/>
+        <location filename="../../mscore/editstyle.ui" line="1176"/>
+        <location filename="../../mscore/editstyle.ui" line="1256"/>
+        <location filename="../../mscore/editstyle.ui" line="1273"/>
+        <location filename="../../mscore/editstyle.ui" line="1386"/>
+        <location filename="../../mscore/editstyle.ui" line="1530"/>
+        <location filename="../../mscore/editstyle.ui" line="1547"/>
+        <location filename="../../mscore/editstyle.ui" line="1564"/>
+        <location filename="../../mscore/editstyle.ui" line="1841"/>
+        <location filename="../../mscore/editstyle.ui" line="1868"/>
+        <location filename="../../mscore/editstyle.ui" line="1888"/>
+        <location filename="../../mscore/editstyle.ui" line="2174"/>
+        <location filename="../../mscore/editstyle.ui" line="2191"/>
+        <location filename="../../mscore/editstyle.ui" line="2231"/>
+        <location filename="../../mscore/editstyle.ui" line="2327"/>
+        <location filename="../../mscore/editstyle.ui" line="2364"/>
+        <location filename="../../mscore/editstyle.ui" line="2388"/>
+        <location filename="../../mscore/editstyle.ui" line="2449"/>
+        <location filename="../../mscore/editstyle.ui" line="2476"/>
+        <location filename="../../mscore/editstyle.ui" line="2906"/>
+        <location filename="../../mscore/editstyle.ui" line="2946"/>
+        <location filename="../../mscore/editstyle.ui" line="2997"/>
+        <location filename="../../mscore/editstyle.ui" line="3014"/>
+        <location filename="../../mscore/editstyle.ui" line="3065"/>
+        <location filename="../../mscore/editstyle.ui" line="3123"/>
+        <location filename="../../mscore/editstyle.ui" line="3140"/>
+        <location filename="../../mscore/editstyle.ui" line="3157"/>
+        <location filename="../../mscore/editstyle.ui" line="3404"/>
+        <location filename="../../mscore/editstyle.ui" line="3421"/>
+        <location filename="../../mscore/editstyle.ui" line="3438"/>
+        <location filename="../../mscore/editstyle.ui" line="3465"/>
+        <location filename="../../mscore/editstyle.ui" line="3482"/>
+        <location filename="../../mscore/editstyle.ui" line="3499"/>
+        <location filename="../../mscore/editstyle.ui" line="3516"/>
+        <location filename="../../mscore/editstyle.ui" line="3533"/>
+        <location filename="../../mscore/editstyle.ui" line="3550"/>
+        <location filename="../../mscore/editstyle.ui" line="3577"/>
+        <location filename="../../mscore/editstyle.ui" line="3594"/>
+        <location filename="../../mscore/editstyle.ui" line="3631"/>
+        <location filename="../../mscore/editstyle.ui" line="3719"/>
+        <location filename="../../mscore/editstyle.ui" line="3736"/>
+        <location filename="../../mscore/editstyle.ui" line="3753"/>
+        <location filename="../../mscore/editstyle.ui" line="3786"/>
+        <location filename="../../mscore/editstyle.ui" line="3803"/>
+        <location filename="../../mscore/editstyle.ui" line="3862"/>
+        <location filename="../../mscore/editstyle.ui" line="4203"/>
+        <location filename="../../mscore/editstyle.ui" line="4246"/>
+        <location filename="../../mscore/editstyle.ui" line="4289"/>
+        <location filename="../../mscore/editstyle.ui" line="4369"/>
+        <location filename="../../mscore/editstyle.ui" line="4432"/>
+        <location filename="../../mscore/editstyle.ui" line="4449"/>
+        <location filename="../../mscore/editstyle.ui" line="4466"/>
+        <location filename="../../mscore/editstyle.ui" line="4497"/>
+        <location filename="../../mscore/editstyle.ui" line="4540"/>
+        <location filename="../../mscore/editstyle.ui" line="4622"/>
+        <location filename="../../mscore/editstyle.ui" line="4639"/>
+        <location filename="../../mscore/editstyle.ui" line="4663"/>
+        <location filename="../../mscore/editstyle.ui" line="4690"/>
+        <location filename="../../mscore/editstyle.ui" line="5275"/>
+        <location filename="../../mscore/editstyle.ui" line="5298"/>
+        <location filename="../../mscore/editstyle.ui" line="5321"/>
+        <location filename="../../mscore/editstyle.ui" line="5476"/>
+        <location filename="../../mscore/editstyle.ui" line="5499"/>
+        <location filename="../../mscore/editstyle.ui" line="5522"/>
+        <location filename="../../mscore/editstyle.ui" line="5545"/>
+        <location filename="../../mscore/editstyle.ui" line="5600"/>
+        <location filename="../../mscore/editstyle.ui" line="5668"/>
+        <location filename="../../mscore/editstyle.ui" line="5729"/>
+        <location filename="../../mscore/editstyle.ui" line="5781"/>
+        <location filename="../../mscore/editstyle.ui" line="5833"/>
+        <location filename="../../mscore/editstyle.ui" line="6153"/>
+        <location filename="../../mscore/editstyle.ui" line="6183"/>
+        <location filename="../../mscore/editstyle.ui" line="6200"/>
+        <location filename="../../mscore/editstyle.ui" line="6217"/>
+        <location filename="../../mscore/editstyle.ui" line="6234"/>
+        <location filename="../../mscore/editstyle.ui" line="6326"/>
+        <location filename="../../mscore/editstyle.ui" line="6349"/>
+        <location filename="../../mscore/editstyle.ui" line="6372"/>
+        <location filename="../../mscore/editstyle.ui" line="6425"/>
+        <location filename="../../mscore/editstyle.ui" line="6472"/>
+        <location filename="../../mscore/editstyle.ui" line="6502"/>
+        <location filename="../../mscore/editstyle.ui" line="6538"/>
+        <location filename="../../mscore/editstyle.ui" line="6610"/>
+        <location filename="../../mscore/editstyle.ui" line="6725"/>
+        <location filename="../../mscore/editstyle.ui" line="6755"/>
+        <location filename="../../mscore/editstyle.ui" line="6778"/>
+        <location filename="../../mscore/editstyle.ui" line="6840"/>
+        <location filename="../../mscore/editstyle.ui" line="6922"/>
+        <location filename="../../mscore/editstyle.ui" line="6945"/>
+        <location filename="../../mscore/editstyle.ui" line="7031"/>
+        <location filename="../../mscore/editstyle.ui" line="7054"/>
+        <location filename="../../mscore/editstyle.ui" line="7091"/>
+        <location filename="../../mscore/editstyle.ui" line="7121"/>
+        <location filename="../../mscore/editstyle.ui" line="7247"/>
+        <location filename="../../mscore/editstyle.ui" line="7264"/>
+        <location filename="../../mscore/editstyle.ui" line="7281"/>
+        <location filename="../../mscore/editstyle.ui" line="7308"/>
+        <location filename="../../mscore/editstyle.ui" line="7325"/>
+        <location filename="../../mscore/editstyle.ui" line="7435"/>
+        <location filename="../../mscore/editstyle.ui" line="7476"/>
+        <location filename="../../mscore/editstyle.ui" line="7500"/>
+        <location filename="../../mscore/editstyle.ui" line="7569"/>
+        <location filename="../../mscore/editstyle.ui" line="7610"/>
+        <location filename="../../mscore/editstyle.ui" line="7634"/>
+        <location filename="../../mscore/editstyle.ui" line="7702"/>
+        <location filename="../../mscore/editstyle.ui" line="7778"/>
+        <location filename="../../mscore/editstyle.ui" line="7795"/>
+        <location filename="../../mscore/editstyle.ui" line="7842"/>
+        <location filename="../../mscore/editstyle.ui" line="7869"/>
+        <location filename="../../mscore/editstyle.ui" line="7939"/>
+        <location filename="../../mscore/editstyle.ui" line="7956"/>
+        <location filename="../../mscore/editstyle.ui" line="7986"/>
+        <location filename="../../mscore/editstyle.ui" line="8249"/>
+        <location filename="../../mscore/editstyle.ui" line="8273"/>
+        <location filename="../../mscore/editstyle.ui" line="8319"/>
+        <location filename="../../mscore/editstyle.ui" line="8410"/>
+        <location filename="../../mscore/editstyle.ui" line="8427"/>
+        <location filename="../../mscore/editstyle.ui" line="8480"/>
+        <location filename="../../mscore/editstyle.ui" line="8526"/>
+        <location filename="../../mscore/editstyle.ui" line="8609"/>
+        <location filename="../../mscore/editstyle.ui" line="8626"/>
+        <location filename="../../mscore/editstyle.ui" line="8656"/>
+        <location filename="../../mscore/editstyle.ui" line="8718"/>
+        <location filename="../../mscore/editstyle.ui" line="8855"/>
+        <location filename="../../mscore/editstyle.ui" line="8872"/>
+        <location filename="../../mscore/editstyle.ui" line="8889"/>
+        <location filename="../../mscore/editstyle.ui" line="8906"/>
+        <location filename="../../mscore/editstyle.ui" line="8923"/>
+        <location filename="../../mscore/editstyle.ui" line="8979"/>
+        <location filename="../../mscore/editstyle.ui" line="9006"/>
+        <location filename="../../mscore/editstyle.ui" line="9035"/>
+        <location filename="../../mscore/editstyle.ui" line="9066"/>
+        <location filename="../../mscore/editstyle.ui" line="9099"/>
+        <location filename="../../mscore/editstyle.ui" line="9161"/>
+        <location filename="../../mscore/editstyle.ui" line="9198"/>
+        <location filename="../../mscore/editstyle.ui" line="9231"/>
+        <location filename="../../mscore/editstyle.ui" line="9274"/>
+        <location filename="../../mscore/editstyle.ui" line="9298"/>
+        <location filename="../../mscore/editstyle.ui" line="9315"/>
+        <location filename="../../mscore/editstyle.ui" line="9381"/>
+        <location filename="../../mscore/editstyle.ui" line="9514"/>
+        <location filename="../../mscore/editstyle.ui" line="9531"/>
+        <location filename="../../mscore/editstyle.ui" line="9572"/>
+        <location filename="../../mscore/editstyle.ui" line="9603"/>
+        <location filename="../../mscore/editstyle.ui" line="9686"/>
+        <location filename="../../mscore/editstyle.ui" line="9703"/>
+        <location filename="../../mscore/editstyle.ui" line="9733"/>
+        <location filename="../../mscore/editstyle.ui" line="9795"/>
+        <location filename="../../mscore/editstyle.ui" line="10692"/>
+        <location filename="../../mscore/editstyle.ui" line="10726"/>
+        <location filename="../../mscore/editstyle.ui" line="10743"/>
+        <location filename="../../mscore/editstyle.ui" line="10774"/>
+        <location filename="../../mscore/editstyle.ui" line="10805"/>
+        <location filename="../../mscore/editstyle.ui" line="10829"/>
+        <location filename="../../mscore/editstyle.ui" line="10846"/>
+        <location filename="../../mscore/editstyle.ui" line="10863"/>
+        <location filename="../../mscore/editstyle.ui" line="10905"/>
+        <location filename="../../mscore/editstyle.ui" line="10960"/>
+        <location filename="../../mscore/editstyle.ui" line="10977"/>
+        <location filename="../../mscore/editstyle.ui" line="10994"/>
+        <location filename="../../mscore/editstyle.ui" line="11011"/>
+        <location filename="../../mscore/editstyle.ui" line="11058"/>
         <source>Reset to default</source>
         <translation>重設為預設值</translation>
     </message>
@@ -3428,7 +3406,7 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1182"/>
+        <location filename="../../mscore/editstyle.ui" line="1179"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
         <translation>重設「最大組合譜表之間的距離」設定值</translation>
     </message>
@@ -3448,12 +3426,12 @@ space unit</extracomment>
         <translation>重設「垂直框架距離下方邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1265"/>
+        <location filename="../../mscore/editstyle.ui" line="1259"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
         <translation>重設「總譜間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1282"/>
+        <location filename="../../mscore/editstyle.ui" line="1276"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
         <translation>重設「音樂距離下方邊界」設定值</translation>
     </message>
@@ -3473,1127 +3451,1142 @@ space unit</extracomment>
         <translation>重設「垂直框架距離上方邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1807"/>
-        <location filename="../../mscore/editstyle.ui" line="2214"/>
-        <location filename="../../mscore/editstyle.ui" line="2438"/>
-        <location filename="../../mscore/editstyle.ui" line="2929"/>
-        <location filename="../../mscore/editstyle.ui" line="3180"/>
-        <location filename="../../mscore/editstyle.ui" line="7725"/>
-        <location filename="../../mscore/editstyle.ui" line="9905"/>
-        <location filename="../../mscore/editstyle.ui" line="10675"/>
+        <location filename="../../mscore/editstyle.ui" line="1801"/>
+        <location filename="../../mscore/editstyle.ui" line="2208"/>
+        <location filename="../../mscore/editstyle.ui" line="2432"/>
+        <location filename="../../mscore/editstyle.ui" line="2923"/>
+        <location filename="../../mscore/editstyle.ui" line="3174"/>
+        <location filename="../../mscore/editstyle.ui" line="7719"/>
+        <location filename="../../mscore/editstyle.ui" line="9899"/>
+        <location filename="../../mscore/editstyle.ui" line="10669"/>
         <source>pt</source>
-        <translation>點</translation>
+        <translation> 點</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1817"/>
-        <location filename="../../mscore/editstyle.ui" line="2173"/>
-        <location filename="../../mscore/editstyle.ui" line="2285"/>
-        <location filename="../../mscore/editstyle.ui" line="2996"/>
-        <location filename="../../mscore/editstyle.ui" line="3122"/>
-        <location filename="../../mscore/editstyle.ui" line="7764"/>
-        <location filename="../../mscore/editstyle.ui" line="10715"/>
+        <location filename="../../mscore/editstyle.ui" line="1811"/>
+        <location filename="../../mscore/editstyle.ui" line="2167"/>
+        <location filename="../../mscore/editstyle.ui" line="2279"/>
+        <location filename="../../mscore/editstyle.ui" line="2990"/>
+        <location filename="../../mscore/editstyle.ui" line="3116"/>
+        <location filename="../../mscore/editstyle.ui" line="7758"/>
+        <location filename="../../mscore/editstyle.ui" line="10709"/>
         <source>Font face:</source>
         <translation>字體:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1850"/>
-        <location filename="../../mscore/editstyle.ui" line="2183"/>
-        <location filename="../../mscore/editstyle.ui" line="2397"/>
-        <location filename="../../mscore/editstyle.ui" line="2915"/>
-        <location filename="../../mscore/editstyle.ui" line="3149"/>
-        <location filename="../../mscore/editstyle.ui" line="7851"/>
-        <location filename="../../mscore/editstyle.ui" line="10752"/>
+        <location filename="../../mscore/editstyle.ui" line="1844"/>
+        <location filename="../../mscore/editstyle.ui" line="2177"/>
+        <location filename="../../mscore/editstyle.ui" line="2391"/>
+        <location filename="../../mscore/editstyle.ui" line="2909"/>
+        <location filename="../../mscore/editstyle.ui" line="3143"/>
+        <location filename="../../mscore/editstyle.ui" line="7845"/>
+        <location filename="../../mscore/editstyle.ui" line="10746"/>
         <source>Reset &apos;Font face&apos; value</source>
         <translation>重設「字型」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1864"/>
-        <location filename="../../mscore/editstyle.ui" line="2224"/>
+        <location filename="../../mscore/editstyle.ui" line="1858"/>
+        <location filename="../../mscore/editstyle.ui" line="2218"/>
         <source>Style:</source>
         <translation>樣式：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1877"/>
-        <location filename="../../mscore/editstyle.ui" line="1897"/>
-        <location filename="../../mscore/editstyle.ui" line="2200"/>
-        <location filename="../../mscore/editstyle.ui" line="2240"/>
-        <location filename="../../mscore/editstyle.ui" line="2458"/>
-        <location filename="../../mscore/editstyle.ui" line="3023"/>
-        <location filename="../../mscore/editstyle.ui" line="3132"/>
-        <location filename="../../mscore/editstyle.ui" line="7711"/>
-        <location filename="../../mscore/editstyle.ui" line="10783"/>
+        <location filename="../../mscore/editstyle.ui" line="1871"/>
+        <location filename="../../mscore/editstyle.ui" line="1891"/>
+        <location filename="../../mscore/editstyle.ui" line="2194"/>
+        <location filename="../../mscore/editstyle.ui" line="2234"/>
+        <location filename="../../mscore/editstyle.ui" line="2452"/>
+        <location filename="../../mscore/editstyle.ui" line="3017"/>
+        <location filename="../../mscore/editstyle.ui" line="3126"/>
+        <location filename="../../mscore/editstyle.ui" line="7705"/>
+        <location filename="../../mscore/editstyle.ui" line="10777"/>
         <source>Reset &apos;Font size&apos; value</source>
         <translation>重設「字型大小」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2540"/>
-        <location filename="../../mscore/editstyle.ui" line="5571"/>
+        <location filename="../../mscore/editstyle.ui" line="2534"/>
+        <location filename="../../mscore/editstyle.ui" line="5565"/>
         <source>Brackets</source>
         <translation>括線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2702"/>
+        <location filename="../../mscore/editstyle.ui" line="2696"/>
         <source>Dividers</source>
         <translation>分隔符號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2723"/>
-        <location filename="../../mscore/editstyle.ui" line="2816"/>
+        <location filename="../../mscore/editstyle.ui" line="2717"/>
+        <location filename="../../mscore/editstyle.ui" line="2810"/>
         <source>Symbol:</source>
         <translation>符號：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2736"/>
-        <location filename="../../mscore/editstyle.ui" line="2829"/>
+        <location filename="../../mscore/editstyle.ui" line="2730"/>
+        <location filename="../../mscore/editstyle.ui" line="2823"/>
         <source>Horizontal offset:</source>
         <translation>橫向偏移：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2762"/>
-        <location filename="../../mscore/editstyle.ui" line="2855"/>
+        <location filename="../../mscore/editstyle.ui" line="2756"/>
+        <location filename="../../mscore/editstyle.ui" line="2849"/>
         <source>Vertical offset:</source>
         <translation>垂直偏移：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2900"/>
+        <location filename="../../mscore/editstyle.ui" line="2894"/>
         <source>Long Instrument Names</source>
         <translation>樂器全名：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2448"/>
-        <location filename="../../mscore/editstyle.ui" line="2939"/>
-        <location filename="../../mscore/editstyle.ui" line="3115"/>
-        <location filename="../../mscore/editstyle.ui" line="7818"/>
-        <location filename="../../mscore/editstyle.ui" line="10725"/>
+        <location filename="../../mscore/editstyle.ui" line="2442"/>
+        <location filename="../../mscore/editstyle.ui" line="2933"/>
+        <location filename="../../mscore/editstyle.ui" line="3109"/>
+        <location filename="../../mscore/editstyle.ui" line="7812"/>
+        <location filename="../../mscore/editstyle.ui" line="10719"/>
         <source>Font size:</source>
         <translation>字型大小：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2424"/>
-        <location filename="../../mscore/editstyle.ui" line="2982"/>
-        <location filename="../../mscore/editstyle.ui" line="3108"/>
-        <location filename="../../mscore/editstyle.ui" line="7865"/>
-        <location filename="../../mscore/editstyle.ui" line="10773"/>
+        <location filename="../../mscore/editstyle.ui" line="2418"/>
+        <location filename="../../mscore/editstyle.ui" line="2976"/>
+        <location filename="../../mscore/editstyle.ui" line="3102"/>
+        <location filename="../../mscore/editstyle.ui" line="7859"/>
+        <location filename="../../mscore/editstyle.ui" line="10767"/>
         <source>Font style:</source>
         <translation>字型樣式：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2485"/>
-        <location filename="../../mscore/editstyle.ui" line="2955"/>
-        <location filename="../../mscore/editstyle.ui" line="3166"/>
-        <location filename="../../mscore/editstyle.ui" line="10735"/>
+        <location filename="../../mscore/editstyle.ui" line="2479"/>
+        <location filename="../../mscore/editstyle.ui" line="2949"/>
+        <location filename="../../mscore/editstyle.ui" line="3160"/>
+        <location filename="../../mscore/editstyle.ui" line="10729"/>
         <source>Reset &apos;Align&apos; values</source>
         <translation>重設「對齊」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2472"/>
-        <location filename="../../mscore/editstyle.ui" line="2989"/>
-        <location filename="../../mscore/editstyle.ui" line="3088"/>
-        <location filename="../../mscore/editstyle.ui" line="9138"/>
-        <location filename="../../mscore/editstyle.ui" line="10766"/>
+        <location filename="../../mscore/editstyle.ui" line="2466"/>
+        <location filename="../../mscore/editstyle.ui" line="2983"/>
+        <location filename="../../mscore/editstyle.ui" line="3082"/>
+        <location filename="../../mscore/editstyle.ui" line="9132"/>
+        <location filename="../../mscore/editstyle.ui" line="10760"/>
         <source>Align:</source>
         <translation>對齊：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2336"/>
-        <location filename="../../mscore/editstyle.ui" line="3006"/>
-        <location filename="../../mscore/editstyle.ui" line="3074"/>
-        <location filename="../../mscore/editstyle.ui" line="7878"/>
-        <location filename="../../mscore/editstyle.ui" line="10841"/>
+        <location filename="../../mscore/editstyle.ui" line="2330"/>
+        <location filename="../../mscore/editstyle.ui" line="3000"/>
+        <location filename="../../mscore/editstyle.ui" line="3068"/>
+        <location filename="../../mscore/editstyle.ui" line="7872"/>
+        <location filename="../../mscore/editstyle.ui" line="10866"/>
         <source>Reset &apos;Font style&apos; values</source>
         <translation>重設「字型樣式」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3053"/>
+        <location filename="../../mscore/editstyle.ui" line="3047"/>
         <source>Short Instrument Names</source>
         <translation>樂器簡稱：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3400"/>
+        <location filename="../../mscore/editstyle.ui" line="3394"/>
         <source>Clef to key distance:</source>
         <translation>譜號距離調號：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3413"/>
+        <location filename="../../mscore/editstyle.ui" line="3407"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
         <translation>重設「譜表線寬度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3430"/>
+        <location filename="../../mscore/editstyle.ui" line="3424"/>
         <source>Reset &apos;Multimeasure rest margin&apos; value</source>
         <translation>重設「多小節休止符左右各方距離小節邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3447"/>
+        <location filename="../../mscore/editstyle.ui" line="3441"/>
         <source>Reset &apos;Clef/Key right margin&apos; valua</source>
         <translation>重設「譜號／調號距離小節右方邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3461"/>
+        <location filename="../../mscore/editstyle.ui" line="3455"/>
         <source>Key to time signature distance:</source>
         <translation>調號距離拍號：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3474"/>
+        <location filename="../../mscore/editstyle.ui" line="3468"/>
         <source>Reset &apos;Time signature left margin&apos; value</source>
         <translation>重設「拍號距離小節左方邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3491"/>
+        <location filename="../../mscore/editstyle.ui" line="3485"/>
         <source>Reset &apos;Clef left margin&apos; value</source>
         <translation>重設「譜號距離小節左方邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3508"/>
+        <location filename="../../mscore/editstyle.ui" line="3502"/>
         <source>Reset &apos;Minimum note distance&apos; value</source>
         <translation>重設「最小音符間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3525"/>
+        <location filename="../../mscore/editstyle.ui" line="3519"/>
         <source>Reset &apos;Note to barline distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「音符距離小節線」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3542"/>
+        <location filename="../../mscore/editstyle.ui" line="3536"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「調號距離小節線」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3559"/>
+        <location filename="../../mscore/editstyle.ui" line="3553"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
         <translation>重設「譜號距離拍號」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3586"/>
+        <location filename="../../mscore/editstyle.ui" line="3580"/>
         <source>Reset &apos;Clef to key distance&apos; value</source>
         <translation>重設「譜號距離調號」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3603"/>
+        <location filename="../../mscore/editstyle.ui" line="3597"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
         <translation>重設「調號距離拍號」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3617"/>
+        <location filename="../../mscore/editstyle.ui" line="3611"/>
         <source>System header distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3627"/>
+        <location filename="../../mscore/editstyle.ui" line="3621"/>
         <source>Key to barline distance:</source>
         <translation>調號至小節線的距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3640"/>
+        <location filename="../../mscore/editstyle.ui" line="3634"/>
         <source>Reset &apos;System header distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3683"/>
+        <location filename="../../mscore/editstyle.ui" line="3677"/>
         <source>Clef to time signature distance:</source>
         <translation>譜號距離拍號：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3728"/>
+        <location filename="../../mscore/editstyle.ui" line="3722"/>
         <source>Reset &apos;Barline to accidental distance&apos; value</source>
         <translation>重設「小節線距離臨時記號」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3745"/>
+        <location filename="../../mscore/editstyle.ui" line="3739"/>
         <source>Reset &apos;Clef to barline distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「譜號距離小節線」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3762"/>
+        <location filename="../../mscore/editstyle.ui" line="3756"/>
         <source>Reset &apos;Key signature left margin&apos; value</source>
         <translation>重設「調號距離小節左方邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3795"/>
+        <location filename="../../mscore/editstyle.ui" line="3789"/>
         <source>Reset &apos;Minimum measure width&apos; value</source>
         <translation>重設「最小小節寬度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3812"/>
+        <location filename="../../mscore/editstyle.ui" line="3806"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「小節線距離裝飾音符」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3871"/>
+        <location filename="../../mscore/editstyle.ui" line="3865"/>
         <source>Reset &apos;Note left margin&apos; value</source>
         <translation>重設「音符距離小節左方邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4077"/>
+        <location filename="../../mscore/editstyle.ui" line="4071"/>
         <source>Note left margin:</source>
         <translation>音符距離小節左方邊界：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4212"/>
+        <location filename="../../mscore/editstyle.ui" line="4206"/>
         <source>Reset &apos;Spacing&apos; value</source>
         <translation>重設「間隔」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4226"/>
+        <location filename="../../mscore/editstyle.ui" line="4220"/>
         <source>System header with time signature distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4255"/>
+        <location filename="../../mscore/editstyle.ui" line="4249"/>
         <source>Reset &apos;System header to time signature distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4275"/>
+        <location filename="../../mscore/editstyle.ui" line="4269"/>
         <source>Time signature to barline distance:</source>
         <translation>拍號距離小節線：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4298"/>
+        <location filename="../../mscore/editstyle.ui" line="4292"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
         <translation>重設「拍號距離小節線」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2373"/>
-        <location filename="../../mscore/editstyle.ui" line="10807"/>
+        <location filename="../../mscore/editstyle.ui" line="2367"/>
+        <location filename="../../mscore/editstyle.ui" line="10832"/>
         <source>Reset &apos;Offset&apos; values</source>
         <translation>重設「偏移」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2387"/>
-        <location filename="../../mscore/editstyle.ui" line="10797"/>
+        <location filename="../../mscore/editstyle.ui" line="2381"/>
+        <location filename="../../mscore/editstyle.ui" line="10822"/>
         <source>Offset:</source>
         <translation>偏移：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4458"/>
+        <location filename="../../mscore/editstyle.ui" line="4452"/>
         <source>Reset &apos;Repeat barline to dots distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4378"/>
+        <location filename="../../mscore/editstyle.ui" line="4372"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4441"/>
+        <location filename="../../mscore/editstyle.ui" line="4435"/>
         <source>Reset &apos;Double barline thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4475"/>
+        <location filename="../../mscore/editstyle.ui" line="4469"/>
         <source>Reset &apos;Thick barline distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4662"/>
+        <location filename="../../mscore/editstyle.ui" line="4656"/>
         <source>Thick barline distance:</source>
         <translation>粗小節線間距：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4431"/>
+        <location filename="../../mscore/editstyle.ui" line="4425"/>
         <source>Thick barline thickness:</source>
         <translation>粗小節線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4594"/>
+        <location filename="../../mscore/editstyle.ui" line="4588"/>
         <source>Thin barline thickness:</source>
         <translation>幼小節線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4631"/>
+        <location filename="../../mscore/editstyle.ui" line="4625"/>
         <source>Reset &apos;Thick barline thickness&apos; value</source>
         <translation>重設「粗小節線寬度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4563"/>
+        <location filename="../../mscore/editstyle.ui" line="4557"/>
         <source>Repeat barline to dots distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4549"/>
+        <location filename="../../mscore/editstyle.ui" line="4543"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
         <translation>重設「幼小節線寬度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4506"/>
+        <location filename="../../mscore/editstyle.ui" line="4500"/>
         <source>Reset &apos;Scale barlines to staff size&apos; value</source>
         <translation>重設「縮放小節線至譜表大小」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4648"/>
+        <location filename="../../mscore/editstyle.ui" line="4642"/>
         <source>Reset &apos;Barline at start of multiple staves&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4672"/>
+        <location filename="../../mscore/editstyle.ui" line="4666"/>
         <source>Reset &apos;Barline at start of single staff&apos; value</source>
         <translation>重設「單行譜開始的小節線」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4699"/>
+        <location filename="../../mscore/editstyle.ui" line="4693"/>
         <source>Reset &apos;Show repeat barline tips (&quot;winged&quot; repeats)&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「顯示反複小節線的尾勾（「winged」反複）」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4982"/>
+        <location filename="../../mscore/editstyle.ui" line="4976"/>
         <source>Accidental to note distance:</source>
         <translation>臨時記號距離音符：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4849"/>
+        <location filename="../../mscore/editstyle.ui" line="4843"/>
         <source>Note to dot distance:</source>
         <translation>音符與附點的間距：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4992"/>
+        <location filename="../../mscore/editstyle.ui" line="4986"/>
         <source>Dot to dot distance:</source>
         <translation>符點與符點的間距：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5978"/>
+        <location filename="../../mscore/editstyle.ui" line="5972"/>
         <source>Do not show arpeggio in standard notation when displayed in tablature</source>
         <translation>當以指法譜顯示時不要顯示標準記譜的琶音符號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6061"/>
-        <location filename="../../mscore/editstyle.ui" line="8296"/>
-        <location filename="../../mscore/editstyle.ui" line="8503"/>
-        <location filename="../../mscore/editstyle.ui" line="8568"/>
-        <location filename="../../mscore/editstyle.ui" line="9462"/>
-        <location filename="../../mscore/editstyle.ui" line="9645"/>
+        <location filename="../../mscore/editstyle.ui" line="6055"/>
+        <location filename="../../mscore/editstyle.ui" line="8290"/>
+        <location filename="../../mscore/editstyle.ui" line="8497"/>
+        <location filename="../../mscore/editstyle.ui" line="8562"/>
+        <location filename="../../mscore/editstyle.ui" line="9456"/>
+        <location filename="../../mscore/editstyle.ui" line="9639"/>
         <source>Autoplace min. distance:</source>
         <translation>自動擺放時至少距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6162"/>
-        <location filename="../../mscore/editstyle.ui" line="8328"/>
-        <location filename="../../mscore/editstyle.ui" line="9523"/>
-        <location filename="../../mscore/editstyle.ui" line="9804"/>
+        <location filename="../../mscore/editstyle.ui" line="6156"/>
+        <location filename="../../mscore/editstyle.ui" line="8322"/>
+        <location filename="../../mscore/editstyle.ui" line="9517"/>
+        <location filename="../../mscore/editstyle.ui" line="9798"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
         <translation>重設「自動擺放時至少距離」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6192"/>
+        <location filename="../../mscore/editstyle.ui" line="6186"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
         <translation>重設「線條尾段寬度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6209"/>
+        <location filename="../../mscore/editstyle.ui" line="6203"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
         <translation>重設「線條中段寬度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6226"/>
+        <location filename="../../mscore/editstyle.ui" line="6220"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6243"/>
+        <location filename="../../mscore/editstyle.ui" line="6237"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
         <translation>重設「連接線最小長度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1395"/>
+        <location filename="../../mscore/editstyle.ui" line="1389"/>
         <source>Reset &apos;Small staff size&apos; value</source>
         <translation>重設「小型化譜表」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1539"/>
+        <location filename="../../mscore/editstyle.ui" line="1533"/>
         <source>Reset &apos;Small note size&apos; value</source>
         <translation>重設「縮小音符大小」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1556"/>
+        <location filename="../../mscore/editstyle.ui" line="1550"/>
         <source>Reset &apos;Grace note size&apos; value</source>
         <translation>重設「裝飾音符大小」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1573"/>
+        <location filename="../../mscore/editstyle.ui" line="1567"/>
         <source>Reset &apos;Small clef size&apos; value</source>
         <translation>重設「小型化譜號大小」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6319"/>
-        <location filename="../../mscore/editstyle.ui" line="6988"/>
-        <location filename="../../mscore/editstyle.ui" line="7200"/>
-        <location filename="../../mscore/editstyle.ui" line="7421"/>
-        <location filename="../../mscore/editstyle.ui" line="7555"/>
-        <location filename="../../mscore/editstyle.ui" line="7985"/>
-        <location filename="../../mscore/editstyle.ui" line="8248"/>
-        <location filename="../../mscore/editstyle.ui" line="8479"/>
-        <location filename="../../mscore/editstyle.ui" line="8655"/>
-        <location filename="../../mscore/editstyle.ui" line="9410"/>
-        <location filename="../../mscore/editstyle.ui" line="9595"/>
-        <location filename="../../mscore/editstyle.ui" line="9732"/>
+        <location filename="../../mscore/editstyle.ui" line="6313"/>
+        <location filename="../../mscore/editstyle.ui" line="6982"/>
+        <location filename="../../mscore/editstyle.ui" line="7194"/>
+        <location filename="../../mscore/editstyle.ui" line="7415"/>
+        <location filename="../../mscore/editstyle.ui" line="7549"/>
+        <location filename="../../mscore/editstyle.ui" line="7979"/>
+        <location filename="../../mscore/editstyle.ui" line="8242"/>
+        <location filename="../../mscore/editstyle.ui" line="8473"/>
+        <location filename="../../mscore/editstyle.ui" line="8649"/>
+        <location filename="../../mscore/editstyle.ui" line="9404"/>
+        <location filename="../../mscore/editstyle.ui" line="9589"/>
+        <location filename="../../mscore/editstyle.ui" line="9726"/>
         <source>Position above:</source>
-        <translation type="unfinished"/>
+        <translation>置於上方的位置：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6335"/>
-        <location filename="../../mscore/editstyle.ui" line="7273"/>
-        <location filename="../../mscore/editstyle.ui" line="7444"/>
-        <location filename="../../mscore/editstyle.ui" line="7578"/>
-        <location filename="../../mscore/editstyle.ui" line="7995"/>
-        <location filename="../../mscore/editstyle.ui" line="8258"/>
-        <location filename="../../mscore/editstyle.ui" line="8436"/>
-        <location filename="../../mscore/editstyle.ui" line="8665"/>
-        <location filename="../../mscore/editstyle.ui" line="9324"/>
-        <location filename="../../mscore/editstyle.ui" line="9540"/>
+        <location filename="../../mscore/editstyle.ui" line="6329"/>
+        <location filename="../../mscore/editstyle.ui" line="7267"/>
+        <location filename="../../mscore/editstyle.ui" line="7438"/>
+        <location filename="../../mscore/editstyle.ui" line="7572"/>
+        <location filename="../../mscore/editstyle.ui" line="7989"/>
+        <location filename="../../mscore/editstyle.ui" line="8252"/>
+        <location filename="../../mscore/editstyle.ui" line="8430"/>
+        <location filename="../../mscore/editstyle.ui" line="8659"/>
+        <location filename="../../mscore/editstyle.ui" line="9318"/>
+        <location filename="../../mscore/editstyle.ui" line="9534"/>
         <source>Reset &apos;Position above&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「置於上方的位置」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6547"/>
-        <location filename="../../mscore/editstyle.ui" line="6619"/>
-        <location filename="../../mscore/editstyle.ui" line="7063"/>
-        <location filename="../../mscore/editstyle.ui" line="7290"/>
-        <location filename="../../mscore/editstyle.ui" line="7804"/>
+        <location filename="../../mscore/editstyle.ui" line="6541"/>
+        <location filename="../../mscore/editstyle.ui" line="6613"/>
+        <location filename="../../mscore/editstyle.ui" line="7057"/>
+        <location filename="../../mscore/editstyle.ui" line="7284"/>
+        <location filename="../../mscore/editstyle.ui" line="7798"/>
         <source>Reset &apos;Line thickness&apos; value</source>
         <translation>重設「線條寬度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6358"/>
+        <location filename="../../mscore/editstyle.ui" line="6352"/>
         <source>Reset &apos;Height&apos; value</source>
         <translation>重設「高度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6381"/>
+        <location filename="../../mscore/editstyle.ui" line="6375"/>
         <source>Reset &apos;Continue height&apos; value</source>
         <translation>重設「延續高度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6395"/>
+        <location filename="../../mscore/editstyle.ui" line="6389"/>
         <source>Autoplace, distance to dynamics:</source>
         <translation>自動擺放一一距離強弱記號：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6434"/>
+        <location filename="../../mscore/editstyle.ui" line="6428"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
         <translation>重設「自動擺放一一距離強弱記號」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6448"/>
-        <location filename="../../mscore/editstyle.ui" line="7304"/>
-        <location filename="../../mscore/editstyle.ui" line="7472"/>
-        <location filename="../../mscore/editstyle.ui" line="7606"/>
-        <location filename="../../mscore/editstyle.ui" line="8009"/>
-        <location filename="../../mscore/editstyle.ui" line="8450"/>
-        <location filename="../../mscore/editstyle.ui" line="8679"/>
-        <location filename="../../mscore/editstyle.ui" line="9157"/>
-        <location filename="../../mscore/editstyle.ui" line="9568"/>
-        <location filename="../../mscore/editstyle.ui" line="9756"/>
+        <location filename="../../mscore/editstyle.ui" line="6442"/>
+        <location filename="../../mscore/editstyle.ui" line="7298"/>
+        <location filename="../../mscore/editstyle.ui" line="7466"/>
+        <location filename="../../mscore/editstyle.ui" line="7600"/>
+        <location filename="../../mscore/editstyle.ui" line="8003"/>
+        <location filename="../../mscore/editstyle.ui" line="8444"/>
+        <location filename="../../mscore/editstyle.ui" line="8673"/>
+        <location filename="../../mscore/editstyle.ui" line="9151"/>
+        <location filename="../../mscore/editstyle.ui" line="9562"/>
+        <location filename="../../mscore/editstyle.ui" line="9750"/>
         <source>Placement:</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6481"/>
-        <location filename="../../mscore/editstyle.ui" line="7317"/>
-        <location filename="../../mscore/editstyle.ui" line="7485"/>
-        <location filename="../../mscore/editstyle.ui" line="7619"/>
-        <location filename="../../mscore/editstyle.ui" line="7948"/>
-        <location filename="../../mscore/editstyle.ui" line="8419"/>
-        <location filename="../../mscore/editstyle.ui" line="8618"/>
-        <location filename="../../mscore/editstyle.ui" line="9390"/>
-        <location filename="../../mscore/editstyle.ui" line="9581"/>
-        <location filename="../../mscore/editstyle.ui" line="9695"/>
+        <location filename="../../mscore/editstyle.ui" line="6475"/>
+        <location filename="../../mscore/editstyle.ui" line="7311"/>
+        <location filename="../../mscore/editstyle.ui" line="7479"/>
+        <location filename="../../mscore/editstyle.ui" line="7613"/>
+        <location filename="../../mscore/editstyle.ui" line="7942"/>
+        <location filename="../../mscore/editstyle.ui" line="8413"/>
+        <location filename="../../mscore/editstyle.ui" line="8612"/>
+        <location filename="../../mscore/editstyle.ui" line="9384"/>
+        <location filename="../../mscore/editstyle.ui" line="9575"/>
+        <location filename="../../mscore/editstyle.ui" line="9689"/>
         <source>Reset &apos;Placement&apos; value</source>
         <translation>重設「位置」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6495"/>
-        <location filename="../../mscore/editstyle.ui" line="7077"/>
-        <location filename="../../mscore/editstyle.ui" line="7348"/>
-        <location filename="../../mscore/editstyle.ui" line="7499"/>
-        <location filename="../../mscore/editstyle.ui" line="7633"/>
-        <location filename="../../mscore/editstyle.ui" line="7911"/>
-        <location filename="../../mscore/editstyle.ui" line="8272"/>
-        <location filename="../../mscore/editstyle.ui" line="8409"/>
-        <location filename="../../mscore/editstyle.ui" line="8581"/>
-        <location filename="../../mscore/editstyle.ui" line="9344"/>
-        <location filename="../../mscore/editstyle.ui" line="9602"/>
-        <location filename="../../mscore/editstyle.ui" line="9658"/>
+        <location filename="../../mscore/editstyle.ui" line="6489"/>
+        <location filename="../../mscore/editstyle.ui" line="7071"/>
+        <location filename="../../mscore/editstyle.ui" line="7342"/>
+        <location filename="../../mscore/editstyle.ui" line="7493"/>
+        <location filename="../../mscore/editstyle.ui" line="7627"/>
+        <location filename="../../mscore/editstyle.ui" line="7905"/>
+        <location filename="../../mscore/editstyle.ui" line="8266"/>
+        <location filename="../../mscore/editstyle.ui" line="8403"/>
+        <location filename="../../mscore/editstyle.ui" line="8575"/>
+        <location filename="../../mscore/editstyle.ui" line="9338"/>
+        <location filename="../../mscore/editstyle.ui" line="9596"/>
+        <location filename="../../mscore/editstyle.ui" line="9652"/>
         <source>Position below:</source>
-        <translation type="unfinished"/>
+        <translation>置於下方的位置：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6511"/>
-        <location filename="../../mscore/editstyle.ui" line="7334"/>
-        <location filename="../../mscore/editstyle.ui" line="7509"/>
-        <location filename="../../mscore/editstyle.ui" line="7643"/>
-        <location filename="../../mscore/editstyle.ui" line="7965"/>
-        <location filename="../../mscore/editstyle.ui" line="8282"/>
-        <location filename="../../mscore/editstyle.ui" line="8489"/>
-        <location filename="../../mscore/editstyle.ui" line="8535"/>
-        <location filename="../../mscore/editstyle.ui" line="8635"/>
-        <location filename="../../mscore/editstyle.ui" line="9170"/>
-        <location filename="../../mscore/editstyle.ui" line="9612"/>
+        <location filename="../../mscore/editstyle.ui" line="6505"/>
+        <location filename="../../mscore/editstyle.ui" line="7328"/>
+        <location filename="../../mscore/editstyle.ui" line="7503"/>
+        <location filename="../../mscore/editstyle.ui" line="7637"/>
+        <location filename="../../mscore/editstyle.ui" line="7959"/>
+        <location filename="../../mscore/editstyle.ui" line="8276"/>
+        <location filename="../../mscore/editstyle.ui" line="8483"/>
+        <location filename="../../mscore/editstyle.ui" line="8529"/>
+        <location filename="../../mscore/editstyle.ui" line="8629"/>
+        <location filename="../../mscore/editstyle.ui" line="9164"/>
+        <location filename="../../mscore/editstyle.ui" line="9606"/>
         <source>Reset &apos;Position below&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「置於下方的位置」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6748"/>
+        <location filename="../../mscore/editstyle.ui" line="6742"/>
         <source>Default position:</source>
         <translation>預設位置：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6787"/>
+        <location filename="../../mscore/editstyle.ui" line="6781"/>
         <source>Reset &apos;Default position&apos; value</source>
         <translation>重設「預設位置」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6764"/>
-        <location filename="../../mscore/editstyle.ui" line="7100"/>
-        <location filename="../../mscore/editstyle.ui" line="7130"/>
+        <location filename="../../mscore/editstyle.ui" line="6758"/>
+        <location filename="../../mscore/editstyle.ui" line="7094"/>
+        <location filename="../../mscore/editstyle.ui" line="7124"/>
         <source>Reset &apos;Hook height&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6734"/>
-        <location filename="../../mscore/editstyle.ui" line="7040"/>
-        <location filename="../../mscore/editstyle.ui" line="7256"/>
+        <location filename="../../mscore/editstyle.ui" line="6728"/>
+        <location filename="../../mscore/editstyle.ui" line="7034"/>
+        <location filename="../../mscore/editstyle.ui" line="7250"/>
         <source>Reset &apos;Line style&apos; value</source>
         <translation>重設「線條樣式」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6931"/>
-        <location filename="../../mscore/editstyle.ui" line="9742"/>
+        <location filename="../../mscore/editstyle.ui" line="6925"/>
+        <location filename="../../mscore/editstyle.ui" line="9736"/>
         <source>Reset &apos;Position Above&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「置於上方的位置」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6863"/>
+        <location filename="../../mscore/editstyle.ui" line="6857"/>
         <source>Hook height above:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6954"/>
+        <location filename="../../mscore/editstyle.ui" line="6948"/>
         <source>Reset &apos;Numbers only&apos; value</source>
         <translation>重設「只限數字」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6849"/>
-        <location filename="../../mscore/editstyle.ui" line="8727"/>
-        <location filename="../../mscore/editstyle.ui" line="9712"/>
+        <location filename="../../mscore/editstyle.ui" line="6843"/>
+        <location filename="../../mscore/editstyle.ui" line="8721"/>
+        <location filename="../../mscore/editstyle.ui" line="9706"/>
         <source>Reset &apos;Position Below&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重設「置於下方的位置」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6880"/>
+        <location filename="../../mscore/editstyle.ui" line="6874"/>
         <source>Hook height below:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7536"/>
+        <location filename="../../mscore/editstyle.ui" line="7530"/>
         <source>Vibrato Line</source>
         <translation>抖音線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10475"/>
+        <location filename="../../mscore/editstyle.ui" line="10469"/>
         <source>Fret number font size:</source>
         <translation>琴格數字字型大小：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7787"/>
+        <location filename="../../mscore/editstyle.ui" line="7781"/>
         <source>Reset &apos;Arrow width&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7825"/>
+        <location filename="../../mscore/editstyle.ui" line="7819"/>
         <source>Arrow width:</source>
         <translation>箭頭寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9184"/>
-        <location filename="../../mscore/editstyle.ui" line="9921"/>
+        <location filename="../../mscore/editstyle.ui" line="9178"/>
+        <location filename="../../mscore/editstyle.ui" line="9915"/>
         <source>Line height:</source>
         <translation>線條高度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9934"/>
+        <location filename="../../mscore/editstyle.ui" line="9928"/>
         <source>Vertical position:</source>
         <translation>垂直位置：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9954"/>
+        <location filename="../../mscore/editstyle.ui" line="9948"/>
         <source>from top of staff</source>
         <translation>從譜表上方</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9961"/>
+        <location filename="../../mscore/editstyle.ui" line="9955"/>
         <source>of font height</source>
         <translation>字體高度</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9985"/>
+        <location filename="../../mscore/editstyle.ui" line="9979"/>
         <source>Alignment</source>
         <translation>對齊</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9991"/>
+        <location filename="../../mscore/editstyle.ui" line="9985"/>
         <source>Top</source>
         <translation>頂部</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9998"/>
+        <location filename="../../mscore/editstyle.ui" line="9992"/>
         <source>Bottom</source>
         <translation>底部</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="32"/>
-        <location filename="../../mscore/editstyle.ui" line="10008"/>
+        <location filename="../../mscore/editstyle.ui" line="10002"/>
         <source>Style</source>
         <translation>樣式</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10014"/>
+        <location filename="../../mscore/editstyle.ui" line="10008"/>
         <source>Modern</source>
         <translation>現代</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10021"/>
+        <location filename="../../mscore/editstyle.ui" line="10015"/>
         <source>Historic</source>
         <translation>古代</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="170"/>
-        <location filename="../../mscore/editstyle.ui" line="8048"/>
+        <location filename="../../mscore/editstyle.ui" line="8042"/>
         <source>Articulations, Ornaments</source>
         <translation>演奏法記號、裝飾記號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8079"/>
+        <location filename="../../mscore/editstyle.ui" line="8073"/>
         <source>Stem distance:</source>
         <translation>符桿距離</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8069"/>
-        <location filename="../../mscore/editstyle.ui" line="8125"/>
-        <location filename="../../mscore/editstyle.ui" line="8145"/>
+        <location filename="../../mscore/editstyle.ui" line="8063"/>
+        <location filename="../../mscore/editstyle.ui" line="8119"/>
+        <location filename="../../mscore/editstyle.ui" line="8139"/>
         <source>sp</source>
         <comment>space unit</comment>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8135"/>
+        <location filename="../../mscore/editstyle.ui" line="8129"/>
         <source>Articulation distance:</source>
         <translation>與演奏法記號的距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8115"/>
+        <location filename="../../mscore/editstyle.ui" line="8109"/>
         <source>Notehead distance:</source>
         <translation>符頭距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3312"/>
+        <location filename="../../mscore/editstyle.ui" line="3306"/>
         <source>♮ in Key Signatures</source>
         <translation>調號中的♮</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3325"/>
+        <location filename="../../mscore/editstyle.ui" line="3319"/>
         <source>Before key signature if changing to fewer ♯ or ♭</source>
-        <translation>置於調號前如轉調為較少的♯或♭</translation>
+        <translation>如轉調至較少的 ♯ 或 ♭ 則置於調號之前</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3332"/>
+        <location filename="../../mscore/editstyle.ui" line="3326"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
-        <translation>置於調號後如轉調為較少的♯或♭，置於調號前如在♯與♭間轉調</translation>
+        <translation>如轉調至較少的 ♯ 或 ♭ 則置於調號之後，如在 ♯ 與 ♭ 之間轉調則置於調號之前</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5223"/>
+        <location filename="../../mscore/editstyle.ui" line="5067"/>
+        <source>Beam distance (relative to beam thickness):</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="5217"/>
         <source>Vertical distance from notehead:</source>
         <translation>與符頭的垂直距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5577"/>
+        <location filename="../../mscore/editstyle.ui" line="5571"/>
         <source>Bracket thickness:</source>
         <translation>括線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5609"/>
+        <location filename="../../mscore/editstyle.ui" line="5603"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5623"/>
+        <location filename="../../mscore/editstyle.ui" line="5617"/>
         <source>Bracket hook height:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5677"/>
+        <location filename="../../mscore/editstyle.ui" line="5671"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5694"/>
+        <location filename="../../mscore/editstyle.ui" line="5688"/>
         <source>Properties</source>
         <translation>屬性</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5700"/>
+        <location filename="../../mscore/editstyle.ui" line="5694"/>
         <source>Direction:</source>
         <translation>方向：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5711"/>
-        <location filename="../../mscore/editstyle.ui" line="5805"/>
+        <location filename="../../mscore/editstyle.ui" line="5705"/>
+        <location filename="../../mscore/editstyle.ui" line="5799"/>
         <source>Auto</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5716"/>
+        <location filename="../../mscore/editstyle.ui" line="5710"/>
         <source>Up</source>
         <translation>上</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5721"/>
+        <location filename="../../mscore/editstyle.ui" line="5715"/>
         <source>Down</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5738"/>
+        <location filename="../../mscore/editstyle.ui" line="5732"/>
         <source>Reset &apos;Direction&apos; value</source>
         <translation>重設「方向」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5753"/>
+        <location filename="../../mscore/editstyle.ui" line="5747"/>
         <source>Number</source>
         <translation>號碼</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5758"/>
+        <location filename="../../mscore/editstyle.ui" line="5752"/>
         <source>Ratio</source>
         <translation>比例</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5771"/>
+        <location filename="../../mscore/editstyle.ui" line="5765"/>
         <source>Number type:</source>
         <translation>數字類型：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5790"/>
+        <location filename="../../mscore/editstyle.ui" line="5784"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <translation>重設「括弧類型」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5810"/>
+        <location filename="../../mscore/editstyle.ui" line="5804"/>
         <source>Bracket</source>
         <translation>括線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5823"/>
+        <location filename="../../mscore/editstyle.ui" line="5817"/>
         <source>Bracket type:</source>
         <translation>括弧類型：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5842"/>
+        <location filename="../../mscore/editstyle.ui" line="5836"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>重設「數字類型」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8155"/>
+        <location filename="../../mscore/editstyle.ui" line="8149"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8166"/>
+        <location filename="../../mscore/editstyle.ui" line="8160"/>
         <source>Reset &apos;Stem distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8177"/>
+        <location filename="../../mscore/editstyle.ui" line="8171"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8188"/>
+        <location filename="../../mscore/editstyle.ui" line="8182"/>
         <source>Reset &apos;Articulation size&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8754"/>
+        <location filename="../../mscore/editstyle.ui" line="8748"/>
         <source>Lyrics Dash</source>
         <translation>歌詞虛線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8763"/>
+        <location filename="../../mscore/editstyle.ui" line="8757"/>
         <source>Dash thickness:</source>
         <translation>虛線寬度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8770"/>
+        <location filename="../../mscore/editstyle.ui" line="8764"/>
         <source>Min. dash length:</source>
         <translation>最小虛線長度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8796"/>
+        <location filename="../../mscore/editstyle.ui" line="8790"/>
         <source>Max. dash length:</source>
         <translation>最大虛線長度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8825"/>
+        <location filename="../../mscore/editstyle.ui" line="8819"/>
         <source>Max. dash distance:</source>
         <translation>最大虛線間距：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8854"/>
+        <location filename="../../mscore/editstyle.ui" line="8848"/>
         <source>Always force dash</source>
         <translation>總是強制使用虛線</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8864"/>
+        <location filename="../../mscore/editstyle.ui" line="8858"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
         <translation>重設「最小虛線長度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8881"/>
+        <location filename="../../mscore/editstyle.ui" line="8875"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
         <translation>重設「最大虛線長度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8898"/>
+        <location filename="../../mscore/editstyle.ui" line="8892"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
         <translation>重設「最大虛線間距」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8915"/>
+        <location filename="../../mscore/editstyle.ui" line="8909"/>
         <source>Reset &apos;Always force dash&apos; value</source>
         <translation>重設「總是強制使用虛線」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8932"/>
+        <location filename="../../mscore/editstyle.ui" line="8926"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
         <translation>重設「虛線寬度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8962"/>
+        <location filename="../../mscore/editstyle.ui" line="8956"/>
         <source>Dash pad:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8988"/>
+        <location filename="../../mscore/editstyle.ui" line="8982"/>
         <source>Reset &apos;Dash pad&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9002"/>
+        <location filename="../../mscore/editstyle.ui" line="8996"/>
         <source>Dash Y position ratio:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9015"/>
+        <location filename="../../mscore/editstyle.ui" line="9009"/>
         <source>Reset &apos;Dash Y position ratio&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9032"/>
+        <location filename="../../mscore/editstyle.ui" line="9026"/>
         <source>Lyrics Melisma</source>
         <translation>歌詞花音</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9044"/>
+        <location filename="../../mscore/editstyle.ui" line="9038"/>
         <source>Reset &apos;Melisma pad&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9058"/>
+        <location filename="../../mscore/editstyle.ui" line="9052"/>
         <source>Melisma pad:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9065"/>
+        <location filename="../../mscore/editstyle.ui" line="9059"/>
         <source>Melisma thickness:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9075"/>
+        <location filename="../../mscore/editstyle.ui" line="9069"/>
         <source>Reset &apos;Melisma thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9108"/>
+        <location filename="../../mscore/editstyle.ui" line="9102"/>
         <source>Reset &apos;Align&apos; value</source>
         <translation>重設「對齊」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10658"/>
+        <location filename="../../mscore/editstyle.ui" line="10652"/>
         <source>Name:</source>
         <translation>名稱：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10665"/>
+        <location filename="../../mscore/editstyle.ui" line="10659"/>
         <source>Size changes with staff space setting</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9148"/>
+        <location filename="../../mscore/editstyle.ui" line="9142"/>
         <source>Lyrics Text</source>
         <translation>歌詞文字</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9207"/>
+        <location filename="../../mscore/editstyle.ui" line="9201"/>
         <source>Reset &apos;Line height&apos; value</source>
         <translation>重設「線條高度」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9227"/>
+        <location filename="../../mscore/editstyle.ui" line="9221"/>
         <source>Min. top margin:</source>
         <translation>最小距離上方邊界：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9240"/>
+        <location filename="../../mscore/editstyle.ui" line="9234"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
         <translation>重設「最小距離上方邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9254"/>
+        <location filename="../../mscore/editstyle.ui" line="9248"/>
         <source>Min. bottom margin:</source>
         <translation>最小距離下方邊界：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9283"/>
+        <location filename="../../mscore/editstyle.ui" line="9277"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
         <translation>重設「最小距離下方邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9297"/>
+        <location filename="../../mscore/editstyle.ui" line="9291"/>
         <source>Align verse number</source>
         <translation>對齊獨唱部編號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9307"/>
+        <location filename="../../mscore/editstyle.ui" line="9301"/>
         <source>Reset &apos;Align verse number&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10701"/>
+        <location filename="../../mscore/editstyle.ui" line="10695"/>
         <source>Reset &apos;Name&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10897"/>
+        <location filename="../../mscore/editstyle.ui" line="10791"/>
+        <source>Color:</source>
+        <translation>顏色：</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="10808"/>
+        <source>Reset &apos;Color&apos; value</source>
+        <translation>重設「顏色」設定值</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="10922"/>
         <source>Background:</source>
         <translation>背景</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="11003"/>
+        <location filename="../../mscore/editstyle.ui" line="11028"/>
         <source>Frame:</source>
         <translation>邊框：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10914"/>
+        <location filename="../../mscore/editstyle.ui" line="10939"/>
         <source>Text margin:</source>
         <translation>文字邊界：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10907"/>
+        <location filename="../../mscore/editstyle.ui" line="10932"/>
         <source>Border:</source>
         <translation>框線：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="11023"/>
+        <location filename="../../mscore/editstyle.ui" line="11048"/>
         <source>Border radius:</source>
         <translation>框線半徑：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10928"/>
+        <location filename="../../mscore/editstyle.ui" line="10953"/>
         <source>Foreground:</source>
         <translation>前景</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10989"/>
+        <location filename="../../mscore/editstyle.ui" line="11014"/>
         <source>Reset &apos;Foreground&apos; value</source>
         <translation>重設「前景」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10972"/>
+        <location filename="../../mscore/editstyle.ui" line="10997"/>
         <source>Reset &apos;Background&apos; value</source>
         <translation>重設「背景」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10955"/>
+        <location filename="../../mscore/editstyle.ui" line="10980"/>
         <source>Reset &apos;Border&apos; value</source>
         <translation>重設「框線」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10883"/>
+        <location filename="../../mscore/editstyle.ui" line="10908"/>
         <source>Reset &apos;Text margin&apos; value</source>
         <translation>重設「文字邊界」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="11036"/>
+        <location filename="../../mscore/editstyle.ui" line="11061"/>
         <source>Reset &apos;Border radius&apos; value</source>
         <translation>重設「框線半徑」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10938"/>
+        <location filename="../../mscore/editstyle.ui" line="10963"/>
         <source>Reset &apos;Frame&apos; value</source>
         <translation>重設「邊框」設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10824"/>
+        <location filename="../../mscore/editstyle.ui" line="10849"/>
         <source>Reset &apos;Size changes with staff space setting&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8089"/>
+        <location filename="../../mscore/editstyle.ui" line="8083"/>
         <source>Articulation size:</source>
         <translation>演奏法記號大小：</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="90"/>
-        <location filename="../../mscore/editstyle.ui" line="3281"/>
+        <location filename="../../mscore/editstyle.ui" line="3275"/>
         <source>Accidentals</source>
         <translation>臨時記號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3291"/>
+        <location filename="../../mscore/editstyle.ui" line="3285"/>
         <source>Accidental</source>
         <translation>臨時記號</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3296"/>
+        <location filename="../../mscore/editstyle.ui" line="3290"/>
         <source>Semitones offset</source>
         <translation>半音階偏移</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3301"/>
+        <location filename="../../mscore/editstyle.ui" line="3295"/>
         <source>Cents offset</source>
         <translation>音分誤差</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3318"/>
+        <location filename="../../mscore/editstyle.ui" line="3312"/>
         <source>Only for a change to C Maj / A min</source>
         <translation>只限轉調至 C 大調或 A 小調時</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="115"/>
-        <location filename="../../mscore/editstyle.ui" line="5159"/>
+        <location filename="../../mscore/editstyle.ui" line="5153"/>
         <source>Tuplets</source>
         <translation>連音符</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5213"/>
+        <location filename="../../mscore/editstyle.ui" line="5207"/>
         <source>Maximum slope:</source>
         <translation>最大斜度：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5252"/>
+        <location filename="../../mscore/editstyle.ui" line="5246"/>
         <source>Vertical distance from stem:</source>
         <translation>與符桿的垂直距離：</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5284"/>
+        <location filename="../../mscore/editstyle.ui" line="5278"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5307"/>
+        <location filename="../../mscore/editstyle.ui" line="5301"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5330"/>
+        <location filename="../../mscore/editstyle.ui" line="5324"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
         <translation type="unfinished"/>
     </message>
@@ -4796,7 +4789,7 @@ space unit</extracomment>
 <context>
     <name>GreendotButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5446"/>
+        <location filename="../../mscore/musescore.cpp" line="5448"/>
         <source>Record</source>
         <translation>錄音</translation>
     </message>
@@ -5000,7 +4993,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="178"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="191"/>
@@ -5662,7 +5655,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="166"/>
         <source>pt</source>
-        <translation>點</translation>
+        <translation> 點</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="176"/>
@@ -5671,18 +5664,18 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="186"/>
-        <source>Line width:</source>
-        <translation>線寬：</translation>
+        <source>Line thickness:</source>
+        <translation>線條寬度：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="199"/>
-        <source>Line width</source>
-        <translation>線條寬度</translation>
+        <source>Line thickness</source>
+        <translation>線條寬度：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="202"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="111"/>
@@ -5985,12 +5978,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="99"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="104"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="112"/>
@@ -6192,7 +6185,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="224"/>
         <source>pt</source>
-        <translation>點</translation>
+        <translation> 點</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="244"/>
@@ -6312,7 +6305,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="133"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="101"/>
@@ -6406,7 +6399,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="176"/>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="202"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="186"/>
@@ -6451,12 +6444,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="251"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="256"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="267"/>
@@ -6710,12 +6703,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="99"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="104"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
 </context>
 <context>
@@ -6779,7 +6772,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_line.ui" line="235"/>
         <source>sp</source>
         <extracomment>Staff space unit</extracomment>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="245"/>
@@ -7214,12 +7207,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="149"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="154"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="165"/>
@@ -7252,12 +7245,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_palmmute.ui" line="99"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_palmmute.ui" line="104"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
 </context>
 <context>
@@ -7285,12 +7278,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="99"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="104"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
 </context>
 <context>
@@ -7332,7 +7325,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="85"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="101"/>
@@ -7434,7 +7427,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_spacer.ui" line="90"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
 </context>
 <context>
@@ -7485,12 +7478,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="84"/>
         <source>Lines:</source>
-        <translation>譜線：</translation>
+        <translation>線條：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="97"/>
         <source>Lines</source>
-        <translation>譜線：</translation>
+        <translation>線條：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="110"/>
@@ -7516,7 +7509,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="152"/>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="294"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="171"/>
@@ -7598,19 +7591,19 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="82"/>
-        <source>Line width</source>
-        <translation>線條寬度</translation>
+        <source>Line thickness</source>
+        <translation>線條寬度：</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_stem.ui" line="95"/>
+        <source>Line thickness:</source>
+        <translation>線條寬度：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="85"/>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="124"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_stem.ui" line="95"/>
-        <source>Line width:</source>
-        <translation>線寬：</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="108"/>
@@ -7688,7 +7681,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="227"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="211"/>
@@ -7795,7 +7788,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="139"/>
         <source>pt</source>
-        <translation>點</translation>
+        <translation> 點</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="161"/>
@@ -7852,7 +7845,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_text.ui" line="308"/>
         <location filename="../../mscore/inspector/inspector_text.ui" line="372"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="318"/>
@@ -7910,12 +7903,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="86"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="91"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="99"/>
@@ -7944,7 +7937,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="91"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="175"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="101"/>
@@ -8017,7 +8010,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="511"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="784"/>
         <source>pt</source>
-        <translation>點</translation>
+        <translation> 點</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="272"/>
@@ -8059,14 +8052,14 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="561"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="723"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="333"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="566"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="728"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="341"/>
@@ -8167,18 +8160,18 @@ space unit</extracomment>
         <translation>顫音區段</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="85"/>
-        <source>Line width</source>
-        <translation>線條寬度</translation>
-    </message>
-    <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="88"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="85"/>
+        <source>Line thickness</source>
+        <translation>線條寬度：</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="107"/>
-        <source>Line Width:</source>
+        <source>Line thickness:</source>
         <translation>線條寬度：</translation>
     </message>
     <message>
@@ -8262,12 +8255,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="164"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="169"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="183"/>
@@ -8348,6 +8341,16 @@ space unit</extracomment>
         <translation>方向</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="302"/>
+        <source>Line thickness:</source>
+        <translation>線條寬度：</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="315"/>
+        <source>Line thickness</source>
+        <translation>線條寬度：</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="243"/>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="284"/>
         <source>Auto</source>
@@ -8367,7 +8370,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="109"/>
         <source>pt</source>
-        <translation>點</translation>
+        <translation> 點</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="119"/>
@@ -8392,19 +8395,9 @@ space unit</extracomment>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="302"/>
-        <source>Line width:</source>
-        <translation>線寬：</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="315"/>
-        <source>Line width</source>
-        <translation>線條寬度</translation>
-    </message>
-    <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="318"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
 </context>
 <context>
@@ -8453,7 +8446,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="191"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="146"/>
@@ -8532,12 +8525,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="99"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="104"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="112"/>
@@ -9188,16 +9181,6 @@ Would you like to locate %2 now?</source>
 
 請問您需要指出 %2 路徑嗎？</translation>
     </message>
-    <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
-You only need to do this once.
-
-Would you like to locate %2 now?</source>
-        <translation type="vanished">MuseScore 不會直接匯出 MP3 檔案，但會使用免費提供的 LAME 資料庫。您需要另外獲取 %1（詳情請參閱用戶手冊），然後為 MuseScore 至出其檔案的位置。
-您只需要進行此操作一次。
-
-請問您需要指出 %2 路徑嗎？</translation>
-    </message>
 </context>
 <context>
     <name>MasterPalette</name>
@@ -9209,7 +9192,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="195"/>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
-        <location filename="../../mscore/musescore.cpp" line="5821"/>
+        <location filename="../../mscore/musescore.cpp" line="5823"/>
         <source>Symbols</source>
         <translation>符號</translation>
     </message>
@@ -9513,11 +9496,6 @@ tuplet would cross measure</source>
 <context>
     <name>MixerDetails</name>
     <message>
-        <location filename="../../mscore/mixerdetails.ui" line="42"/>
-        <source>MIDI Out controllers</source>
-        <translation>MIDI 輸出控制器</translation>
-    </message>
-    <message>
         <location filename="../../mscore/mixerdetails.ui" line="45"/>
         <source>MIDI</source>
         <translation>MIDI</translation>
@@ -9550,6 +9528,11 @@ tuplet would cross measure</source>
         <translation>MIDI 連接埠號碼</translation>
     </message>
     <message>
+        <location filename="../../mscore/mixerdetails.ui" line="42"/>
+        <source>MIDI OUT controllers</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/mixerdetails.ui" line="138"/>
         <location filename="../../mscore/mixerdetails.ui" line="327"/>
         <source>Channel:</source>
@@ -9564,10 +9547,6 @@ tuplet would cross measure</source>
         <location filename="../../mscore/mixerdetails.ui" line="180"/>
         <source>Reverb:</source>
         <translation>迴響效果：</translation>
-    </message>
-    <message>
-        <source>Mute Per Voice</source>
-        <translation type="vanished">將聲部靜音</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="311"/>
@@ -9729,19 +9708,24 @@ tuplet would cross measure</source>
         <translation>修訂：%1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4493"/>
+        <location filename="../../mscore/musescore.cpp" line="4494"/>
         <source>Visit %1www.musescore.org%2 for new versions and more information.
-Support MuseScore with your %3donation%4.
-
-Copyright &amp;copy; 1999-2019 Werner Schweer and Others.
+Support MuseScore with your %3donation%4.</source>
+        <translation>請瀏覽 %1www.musescore.org%2 以獲取新版本和更多資訊。
+請%3贊助%4以支持 MuseScore。</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="4501"/>
+        <source>Copyright &amp;copy; 1999-2019 Werner Schweer and Others.
 Published under the GNU General Public License.</source>
-        <translation type="unfinished"/>
+        <translation>版權所有 &amp;copy; 1999 至 2009 年 Werner Schweer 和其他參與者。
+根據 GNU 通用公共授權條款出版。</translation>
     </message>
 </context>
 <context>
     <name>Ms::AboutMusicXMLBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4535"/>
+        <location filename="../../mscore/musescore.cpp" line="4537"/>
         <source>MusicXML is an open file format for exchanging digital sheet music,
 supported by many applications.
 Copyright © 2004-2018 the Contributors to the MusicXML
@@ -9940,12 +9924,12 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="392"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="393"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="397"/>
@@ -10110,10 +10094,6 @@ failed: %1</source>
         <location filename="../../mscore/updatechecker.cpp" line="236"/>
         <source>One or more installed extensions have updates available in Help &gt; Resource Manager…</source>
         <translation>一個或多個擴充套件於「說明＞資源管理員…」有更新</translation>
-    </message>
-    <message>
-        <source>One or more installed extensions have updates available in Help / Resource Manager…</source>
-        <translation type="vanished">一個或多個擴充套件於「說明＞資源管理員…」有更新</translation>
     </message>
 </context>
 <context>
@@ -10581,7 +10561,7 @@ failed: %2</source>
 <context>
     <name>Ms::MixerDetails</name>
     <message>
-        <location filename="../../mscore/mixerdetails.cpp" line="252"/>
+        <location filename="../../mscore/mixerdetails.cpp" line="271"/>
         <source>Staff #%1</source>
         <translation>譜表 #%1</translation>
     </message>
@@ -10658,36 +10638,36 @@ Patch: %5</source>
     <name>Ms::MuseScore</name>
     <message>
         <location filename="../../mscore/exportaudio.cpp" line="296"/>
-        <location filename="../../mscore/musescore.cpp" line="6638"/>
+        <location filename="../../mscore/musescore.cpp" line="6640"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <location filename="../../mscore/exportaudio.cpp" line="297"/>
-        <location filename="../../mscore/musescore.cpp" line="6639"/>
+        <location filename="../../mscore/musescore.cpp" line="6641"/>
         <source>Exporting…</source>
         <translation>匯出中…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6570"/>
-        <location filename="../../mscore/musescore.cpp" line="6582"/>
+        <location filename="../../mscore/musescore.cpp" line="6572"/>
+        <location filename="../../mscore/musescore.cpp" line="6584"/>
         <source>Error Opening LAME library</source>
         <translation>開啟 LAME 資料庫時出現問題。</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6571"/>
+        <location filename="../../mscore/musescore.cpp" line="6573"/>
         <source>Could not open MP3 encoding library!</source>
         <translation>未能開啟 MP3 編碼資料庫！</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6583"/>
+        <location filename="../../mscore/musescore.cpp" line="6585"/>
         <source>Not a valid or supported MP3 encoding library!</source>
         <translation>此並非有效或已支援的 MP3 編碼資料庫！</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6538"/>
-        <location filename="../../mscore/musescore.cpp" line="6607"/>
-        <location filename="../../mscore/musescore.cpp" line="6764"/>
+        <location filename="../../mscore/musescore.cpp" line="6540"/>
+        <location filename="../../mscore/musescore.cpp" line="6609"/>
+        <location filename="../../mscore/musescore.cpp" line="6766"/>
         <source>Encoding Error</source>
         <translation>編碼錯誤</translation>
     </message>
@@ -10707,33 +10687,33 @@ Patch: %5</source>
         <translation>鼓組輸入模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5550"/>
+        <location filename="../../mscore/musescore.cpp" line="5552"/>
         <source>Invalid Command</source>
         <translation>無效的指令</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5551"/>
+        <location filename="../../mscore/musescore.cpp" line="5553"/>
         <source>Command %1 not valid in current state</source>
         <translation>指令 %1 在當前狀態無效</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6608"/>
+        <location filename="../../mscore/musescore.cpp" line="6610"/>
         <source>Unable to initialize MP3 stream</source>
         <translation>無法初始化 MP3 串流</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6539"/>
+        <location filename="../../mscore/musescore.cpp" line="6541"/>
         <source>Unable to open target file for writing</source>
         <translation>無法開啟目標檔案作寫入用途</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6765"/>
+        <location filename="../../mscore/musescore.cpp" line="6767"/>
         <source>Error %1 returned from MP3 encoder</source>
         <translation>從 MP3 編碼器回報錯誤 %1 </translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="243"/>
-        <location filename="../../mscore/musescore.cpp" line="4931"/>
+        <location filename="../../mscore/musescore.cpp" line="4933"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
@@ -10784,12 +10764,12 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="290"/>
         <source>PDF Files (experimental OMR)</source>
-        <translation>PDF 檔案（光學標示讀取（OMR）試驗中）</translation>
+        <translation>PDF 檔案（光學標示讀取 OMR 試驗中）</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="292"/>
         <source>Overture / Score Writer Files (experimental)</source>
-        <translation>Overture／樂譜編寫檔案（試驗中）</translation>
+        <translation>Overture ／樂譜編寫檔案（試驗中）</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="293"/>
@@ -10841,7 +10821,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1009"/>
         <location filename="../../mscore/file.cpp" line="1036"/>
-        <location filename="../../mscore/musescore.cpp" line="5968"/>
+        <location filename="../../mscore/musescore.cpp" line="5970"/>
         <source>Load Style</source>
         <translation>載入型態</translation>
     </message>
@@ -10854,7 +10834,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1016"/>
         <location filename="../../mscore/file.cpp" line="1053"/>
         <location filename="../../mscore/file.cpp" line="1136"/>
-        <location filename="../../mscore/musescore.cpp" line="5958"/>
+        <location filename="../../mscore/musescore.cpp" line="5960"/>
         <source>Save Style</source>
         <translation>儲存型態</translation>
     </message>
@@ -11357,30 +11337,30 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/musescore.cpp" line="1938"/>
         <source>&amp;Add</source>
-        <translation>新增(&amp;A)</translation>
+        <translation>新增 (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1939"/>
         <source>&amp;Measures</source>
-        <translation>小節(&amp;M)</translation>
+        <translation>小節 (&amp;M)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1940"/>
         <source>&amp;Frames</source>
-        <translation>框架(&amp;F)</translation>
+        <translation>框架 (&amp;F)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1941"/>
         <source>&amp;Text</source>
-        <translation>文字(&amp;T)</translation>
+        <translation>文字 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1942"/>
         <source>&amp;Lines</source>
-        <translation>線條(&amp;L)</translation>
+        <translation>線條 (&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="274"/>
+        <location filename="../../mscore/musescore.cpp" line="275"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>未選取小節：
@@ -11392,12 +11372,12 @@ Please select a measure and try again</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1045"/>
+        <location filename="../../mscore/musescore.cpp" line="1046"/>
         <source>Switch layer</source>
         <translation>轉換圖層</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1050"/>
+        <location filename="../../mscore/musescore.cpp" line="1051"/>
         <source>Switch play mode</source>
         <translation>轉圜播放模式</translation>
     </message>
@@ -11412,19 +11392,19 @@ Please select a measure and try again</source>
         <translation>檔案操作工具列</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="932"/>
+        <location filename="../../mscore/musescore.cpp" line="933"/>
         <location filename="../../mscore/musescore.cpp" line="1972"/>
         <source>View Mode</source>
         <translation>檢視模式</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="933"/>
+        <location filename="../../mscore/musescore.cpp" line="934"/>
         <location filename="../../mscore/musescore.cpp" line="1973"/>
         <source>Page View</source>
         <translation>整頁檢視</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="934"/>
+        <location filename="../../mscore/musescore.cpp" line="935"/>
         <location filename="../../mscore/musescore.cpp" line="1974"/>
         <source>Continuous View</source>
         <translation>連續檢視</translation>
@@ -11450,14 +11430,14 @@ Please select a measure and try again</source>
         <translation>音符輸入</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="566"/>
+        <location filename="../../mscore/musescore.cpp" line="567"/>
         <source>Note Entry Methods</source>
         <translation>音符輸入方法</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1931"/>
         <source>&amp;File</source>
-        <translation>檔案(&amp;F)</translation>
+        <translation>檔案 (&amp;F)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1932"/>
@@ -11467,57 +11447,57 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1933"/>
         <source>&amp;Edit</source>
-        <translation>編輯(&amp;E)</translation>
+        <translation>編輯 (&amp;E)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1949"/>
         <source>&amp;Measure</source>
-        <translation>小節(&amp;M)</translation>
+        <translation>小節 (&amp;M)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1947"/>
         <source>&amp;Tools</source>
-        <translation>工具(&amp;T)</translation>
+        <translation>工具 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1948"/>
         <source>&amp;Voices</source>
-        <translation>聲部(&amp;V)</translation>
+        <translation>聲部 (&amp;V)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1936"/>
         <source>W&amp;orkspaces</source>
-        <translation>工作區(O)</translation>
+        <translation>工作區 (&amp;O)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1937"/>
         <source>&amp;Preferences…</source>
-        <translation>偏好設定(&amp;P)…</translation>
+        <translation>偏好設定… (&amp;P)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1934"/>
         <source>&amp;View</source>
-        <translation>檢視(&amp;V)</translation>
+        <translation>檢視 (&amp;V)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1935"/>
         <source>&amp;Toolbars</source>
-        <translation>&amp;工具列</translation>
+        <translation>工具列 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1945"/>
         <source>T&amp;uplets</source>
-        <translation>連音符(&amp;u)</translation>
+        <translation>連音符 (&amp;U)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1950"/>
         <source>&amp;Plugins</source>
-        <translation>外掛模組(&amp;P)</translation>
+        <translation>外掛模組 (&amp;P)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1951"/>
         <source>&amp;Help</source>
-        <translation>說明（&amp;H）</translation>
+        <translation>說明 (&amp;H)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1957"/>
@@ -11527,63 +11507,63 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1954"/>
         <source>&amp;About…</source>
-        <translation>關於…&amp;A</translation>
+        <translation>關於… (&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="725"/>
+        <location filename="../../mscore/musescore.cpp" line="726"/>
         <source>Please wait, unpacking extension…</source>
         <translation>請稍候，擴充套件打開中…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="799"/>
+        <location filename="../../mscore/musescore.cpp" line="800"/>
         <source>Please wait, loading soundfonts…</source>
         <translation>請稍候，音色庫加載中…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="935"/>
+        <location filename="../../mscore/musescore.cpp" line="936"/>
         <location filename="../../mscore/musescore.cpp" line="1975"/>
         <source>Single Page</source>
         <translation>單頁檢視</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1048"/>
+        <location filename="../../mscore/musescore.cpp" line="1049"/>
         <source>Synthesizer</source>
         <translation>合成器</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1049"/>
+        <location filename="../../mscore/musescore.cpp" line="1050"/>
         <source>Audio track</source>
         <translation>音軌</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1602"/>
         <source>&amp;Stretch</source>
-        <translation>伸展（&amp;S）</translation>
+        <translation>伸展 (&amp;S)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1943"/>
         <source>N&amp;otes</source>
-        <translation>音符（&amp;O）</translation>
+        <translation>音符 (&amp;O)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1944"/>
         <source>&amp;Intervals</source>
-        <translation>音程（&amp;I）</translation>
+        <translation>音程 (&amp;I)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1946"/>
         <source>F&amp;ormat</source>
-        <translation>格式（&amp;F）</translation>
+        <translation>格式 (&amp;F)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1952"/>
         <source>&amp;Tours</source>
-        <translation>教學導覽（&amp;T）</translation>
+        <translation>教學導覽 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1955"/>
         <source>About &amp;Qt…</source>
-        <translation>關於&amp;Qt</translation>
+        <translation>關於 &amp;Qt</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1956"/>
@@ -11593,7 +11573,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1959"/>
         <source>Check for &amp;Update</source>
-        <translation>檢查更新(&amp;U)</translation>
+        <translation>檢查更新 (&amp;U)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1960"/>
@@ -11640,14 +11620,6 @@ Are you sure you want to proceed?</source>
         <location filename="../../mscore/musescore.cpp" line="2285"/>
         <source>Clear Recent Files</source>
         <translation>清除最近的檔案</translation>
-    </message>
-    <message>
-        <source>Reset all elements positions?</source>
-        <translation type="vanished">是否重設所有元件的位置？</translation>
-    </message>
-    <message>
-        <source>This score was created in older versions of MuseScore. For a better experience of using MuseScore 3.0 it is recommended to reset elements positions to their default values.</source>
-        <translation type="vanished">本譜表是使用較舊的 MuseScore 版本建立的。為了提供 MuseScore 3.0 版本中更好的使用體驗，MuseScore 建議您把所有的元件回復至預設值。</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="3792"/>
@@ -11738,7 +11710,7 @@ Are you sure you want to proceed?</source>
         <translation>樂譜被封鎖</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4932"/>
+        <location filename="../../mscore/musescore.cpp" line="4934"/>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
@@ -11746,17 +11718,17 @@ Restore session?</source>
 要回復嗎？</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6224"/>
+        <location filename="../../mscore/musescore.cpp" line="6226"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6225"/>
+        <location filename="../../mscore/musescore.cpp" line="6227"/>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>無法建立連音：音符時值太短</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6383"/>
+        <location filename="../../mscore/musescore.cpp" line="6385"/>
         <source>Go To: </source>
         <translation>跳到： </translation>
     </message>
@@ -12117,10 +12089,6 @@ connection enabled</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Do you want to synchronize current instrument with an existing one?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/parteditbase.cpp" line="484"/>
         <source>Assign next free MIDI channel</source>
         <translation>分配下一個未使用的 MIDI 頻道</translation>
@@ -12233,86 +12201,86 @@ connection enabled</source>
 <context>
     <name>Ms::PluginCreator</name>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="50"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="51"/>
         <source>File Operations</source>
         <translation>檔案操作工具列</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="75"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="76"/>
         <source>Edit Operations</source>
         <translation>編輯操作工具列</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="199"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="200"/>
         <source>Plugin Creator</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="245"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="323"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="416"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="502"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="246"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="324"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="417"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="503"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="246"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="417"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="503"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="247"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="418"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="504"/>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
         <translation>外掛模組 &quot;%1&quot; 已變更。
 關閉前是否儲存?</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="295"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="296"/>
         <source>Running…
 </source>
         <translation>執行中…
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="305"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="306"/>
         <source>Creating component failed
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="307"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="308"/>
         <source>line %1: %2
 </source>
         <translation>第 %1 行：%2
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="316"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="317"/>
         <source>Plugin Details:</source>
         <translation>外掛模組的詳細資料：</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="317"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="318"/>
         <source>Menu Path:</source>
         <translation>菜單路徑：</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="318"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="319"/>
         <source>Version:</source>
         <translation>版本： </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="319"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="320"/>
         <source>Description:</source>
         <translation>描述：</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="320"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="321"/>
         <source>Requires Score
 </source>
         <translation>需要樂譜
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="324"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="325"/>
         <source>No score open.
 This plugin requires an open score to run.
 </source>
@@ -12321,27 +12289,27 @@ This plugin requires an open score to run.
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="464"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="465"/>
         <source>Saving to:</source>
         <translation>儲存至：</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="466"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="467"/>
         <source>Save Plugin</source>
         <translation>儲存外掛模組</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="466"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="467"/>
         <source>Cannot determine file type</source>
         <translation>無法判斷檔案類型</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="512"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="513"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="572"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="573"/>
         <source>Manual</source>
         <translation>手動／用戶手冊</translation>
     </message>
@@ -12349,12 +12317,12 @@ This plugin requires an open score to run.
 <context>
     <name>Ms::PluginManager</name>
     <message>
-        <location filename="../../mscore/pluginManager.cpp" line="356"/>
+        <location filename="../../mscore/plugin/pluginManager.cpp" line="357"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.cpp" line="357"/>
+        <location filename="../../mscore/plugin/pluginManager.cpp" line="358"/>
         <source>Plugins reloaded.</source>
         <translation>外掛模組已經重新載入。</translation>
     </message>
@@ -12491,10 +12459,6 @@ This plugin requires an open score to run.
         <location filename="../../mscore/prefsdialog.cpp" line="120"/>
         <source>320</source>
         <translation>320</translation>
-    </message>
-    <message>
-        <source>Warning: You used the same CoreMIDI IAC bus for input and output.  This will cause problematic loopback, whereby MuseScore&apos;s output MIDI messages will be sent back to MuseScore as input, causing confusion.  To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output.  Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
-        <translation type="vanished">警告：您在輸入口和輸出口使用了同一條 CoreMIDI IAC 總線。這會對信號回送產生問題，因為這樣 MuseScore 所輸出的信息會被傳送回 MuseScore 的輸入口，從而產生混淆。為了避免這個問題，請通過 Spotlight 存取 Audio MIDI Setup 以創造一個 MuseScore MIDI 輸出專用的虛擬接口，然後重新啟動 MuseScore，並返回偏好設定，最後選取您新的虛擬接口。這樣其他的應用程式就可以使用這個專用接口獲取 MuseScore MIDI 的輸出。 </translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="610"/>
@@ -12634,22 +12598,22 @@ This plugin requires an open score to run.
 <context>
     <name>Ms::PreferencesListWidget</name>
     <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="29"/>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="30"/>
         <source>Preference</source>
         <translation>偏好設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="29"/>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="30"/>
         <source>Value</source>
         <translation>設定值</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="32"/>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="33"/>
         <source>Advanced preferences</source>
         <translation>進階偏好設定</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="33"/>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="34"/>
         <source>Access to more advanced preferences</source>
         <translation>存取至更多進階偏好設定</translation>
     </message>
@@ -13141,14 +13105,14 @@ failed: %2</source>
         <translation>請選取整個連音或顫音，然後重試。</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2216"/>
+        <location filename="../../mscore/scoreview.cpp" line="2224"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>未選取任何小節：
 請選取一定範圍的小節，然後再試一次。</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3894"/>
+        <location filename="../../mscore/scoreview.cpp" line="4007"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -13157,7 +13121,7 @@ first create some staves</source>
 以建立一些譜表。</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3976"/>
+        <location filename="../../mscore/scoreview.cpp" line="4089"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>未選取任何小節：
@@ -14028,7 +13992,7 @@ please choose a different name:</source>
         <location filename="../../mscore/inspector/offset_select.ui" line="47"/>
         <location filename="../../mscore/inspector/offset_select.ui" line="97"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/offset_select.ui" line="60"/>
@@ -14246,7 +14210,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="144"/>
         <source>Frames &amp;&amp; Measures</source>
-        <translation>框架 &amp;&amp; 小節</translation>
+        <translation>框架與小節</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="180"/>
@@ -14256,7 +14220,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="226"/>
         <location filename="../../mscore/menus.cpp" line="224"/>
-        <location filename="../../mscore/musescore.cpp" line="5817"/>
+        <location filename="../../mscore/musescore.cpp" line="5819"/>
         <source>Key Signatures</source>
         <translation>調號</translation>
     </message>
@@ -14293,7 +14257,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="354"/>
         <source>Repeats &amp;&amp; Jumps</source>
-        <translation>反覆記號 &amp;&amp; 跳越播放記號</translation>
+        <translation>反覆記號與跳越播放記號</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="406"/>
@@ -14336,6 +14300,21 @@ please choose a different name:</source>
         <translation>括線</translation>
     </message>
     <message>
+        <location filename="../../mscore/menus.cpp" line="774"/>
+        <source>Bracket</source>
+        <translation>括線</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/menus.cpp" line="775"/>
+        <source>Brace</source>
+        <translation>花括號</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/menus.cpp" line="776"/>
+        <source>Square</source>
+        <translation>方括號</translation>
+    </message>
+    <message>
         <location filename="../../mscore/menus.cpp" line="795"/>
         <source>Breaths &amp;&amp; Pauses</source>
         <translation>呼吸與停頓</translation>
@@ -14343,7 +14322,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="816"/>
         <source>Arpeggios &amp;&amp; Glissandos</source>
-        <translation>琶音 &amp;&amp; 滑奏</translation>
+        <translation>琶音與滑奏</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="879"/>
@@ -14441,6 +14420,7 @@ please choose a different name:</source>
         <translation>文字線</translation>
     </message>
     <message>
+        <location filename="../../mscore/menus.cpp" line="777"/>
         <location filename="../../mscore/menus.cpp" line="1138"/>
         <source>Line</source>
         <translation>線</translation>
@@ -14473,7 +14453,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
         <location filename="../../mscore/menus.cpp" line="1363"/>
-        <location filename="../../mscore/musescore.cpp" line="5819"/>
+        <location filename="../../mscore/musescore.cpp" line="5821"/>
         <source>Time Signatures</source>
         <translation>拍號</translation>
     </message>
@@ -14538,7 +14518,7 @@ failed: </source>
         <location filename="../../mscore/cellproperties.ui" line="80"/>
         <location filename="../../mscore/cellproperties.ui" line="90"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="100"/>
@@ -14581,7 +14561,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/palette.ui" line="97"/>
         <source>sp</source>
-        <translation>個譜線間隔</translation>
+        <translation> 個譜線間隔</translation>
     </message>
     <message>
         <location filename="../../mscore/palette.ui" line="107"/>
@@ -14873,78 +14853,78 @@ failed: </source>
 <context>
     <name>PluginCreatorBase</name>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="49"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="49"/>
         <source>Run</source>
         <translation>執行</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="62"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="62"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="91"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="91"/>
         <source>File</source>
         <translation>檔案</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="102"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="102"/>
         <source>Help</source>
         <translation>說明</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="108"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="108"/>
         <source>Edit</source>
         <translation>編輯</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="120"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="120"/>
         <source>New</source>
         <translation>新增</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="128"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="128"/>
         <source>Open…</source>
         <translation>開啟…</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="136"/>
-        <location filename="../../mscore/pluginCreator.ui" line="139"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="136"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="139"/>
         <source>Save</source>
         <translation>儲存</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="179"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="179"/>
         <source>Reload</source>
         <translation>重新載入</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="187"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="187"/>
         <source>Save As…</source>
         <translation>儲存為…</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="147"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="147"/>
         <source>Manual</source>
         <translation>手動／用戶手冊</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="155"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="155"/>
         <source>Undo</source>
         <translation>復原</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="163"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="163"/>
         <source>Redo</source>
         <translation>重做</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="171"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="171"/>
         <source>Close Plugin Creator</source>
         <translation>關閉外掛模組編輯器</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="182"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
         <translation>重新載入當前外掛模組</translation>
     </message>
@@ -14952,49 +14932,49 @@ failed: </source>
 <context>
     <name>PluginManager</name>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="17"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="17"/>
         <source>Plugin Manager</source>
         <translation>外掛模組管理員</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="44"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="44"/>
         <source>Name:</source>
         <translation>名稱：</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="88"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="88"/>
         <source>Version:</source>
         <translation>版本： </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="81"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="81"/>
         <source>Path:</source>
         <translation>路徑：</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="102"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="102"/>
         <source>Shortcut:</source>
         <translation>快捷鍵：</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="114"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="114"/>
         <source>Define Shortcut</source>
         <translation>自訂義快捷鍵</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="121"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="121"/>
         <source>Clear Shortcut</source>
         <translation>清除快捷鍵</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="128"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="128"/>
         <source>Reload all plugins.
 This will re-evaluate all plugins, picking up any changes that may have occurred.</source>
         <translation>重新載入所有外掛模組。
 這會重新檢查所有外掛模組，以發現任何已經發生的改變。</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="132"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="132"/>
         <source>Reload Plugins</source>
         <translation>重新載入外掛模組</translation>
     </message>
@@ -16151,10 +16131,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>使用 JACK MIDI</translation>
     </message>
     <message>
-        <source>Attention: Any changes on this page require a restart of MuseScore.  Precise MIDI output timing is only possible via JACK.</source>
-        <translation type="vanished">注意：任何在此頁所做的變更都需要重新啟動 MuseScore。 精確的 MIDI 輸出計時只能透過 JACK。</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="3233"/>
         <source>Import</source>
         <translation>匯入</translation>
@@ -16671,12 +16647,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../mscore/mscorePlugins.cpp" line="419"/>
+        <location filename="../../mscore/plugin/mscorePlugins.cpp" line="419"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/mscorePlugins.cpp" line="420"/>
+        <location filename="../../mscore/plugin/mscorePlugins.cpp" line="420"/>
         <source>No score open.
 This plugin requires an open score to run.
 </source>
@@ -16701,12 +16677,14 @@ This plugin requires an open score to run.
         <source>Open chord description
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>開啟和弦敘述
+%1
+失敗：%2</translation>
     </message>
     <message>
         <location filename="../../libmscore/chordlist.cpp" line="1768"/>
         <source>Write chord description failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>和弦敘述寫入失敗： %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/durationtype.cpp" line="785"/>
@@ -16794,24 +16772,6 @@ failed: %2</source>
         <location filename="../../libmscore/durationtype.cpp" line="802"/>
         <source>Invalid</source>
         <translation>無效</translation>
-    </message>
-    <message>
-        <source>double flat</source>
-        <translation type="vanished">重降記號</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/harmony.cpp" line="1571"/>
-        <source>flat</source>
-        <translation>降記號</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/harmony.cpp" line="1566"/>
-        <source>sharp</source>
-        <translation>升記號</translation>
-    </message>
-    <message>
-        <source>double sharp</source>
-        <translation type="vanished">重升記號</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1203"/>
@@ -17039,8 +16999,8 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../libmscore/barline.cpp" line="1324"/>
         <location filename="../../libmscore/chordrest.cpp" line="1151"/>
         <location filename="../../libmscore/chordrest.cpp" line="1157"/>
-        <location filename="../../libmscore/note.cpp" line="2904"/>
-        <location filename="../../libmscore/note.cpp" line="2913"/>
+        <location filename="../../libmscore/note.cpp" line="2796"/>
+        <location filename="../../libmscore/note.cpp" line="2805"/>
         <source>%1 Start of %2</source>
         <translation type="unfinished"/>
     </message>
@@ -17048,8 +17008,8 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../libmscore/barline.cpp" line="1326"/>
         <location filename="../../libmscore/chordrest.cpp" line="1153"/>
         <location filename="../../libmscore/chordrest.cpp" line="1162"/>
-        <location filename="../../libmscore/note.cpp" line="2907"/>
-        <location filename="../../libmscore/note.cpp" line="2920"/>
+        <location filename="../../libmscore/note.cpp" line="2799"/>
+        <location filename="../../libmscore/note.cpp" line="2812"/>
         <source>%1 End of %2</source>
         <translation type="unfinished"/>
     </message>
@@ -17142,7 +17102,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fingering.cpp" line="137"/>
+        <location filename="../../libmscore/fingering.cpp" line="213"/>
         <source>String number</source>
         <translation>弦線號碼</translation>
     </message>
@@ -17162,7 +17122,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>%1：自訂</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="496"/>
+        <location filename="../../mscore/plugin/api/qmlpluginapi.cpp" line="305"/>
         <source>You can&apos;t create an enum</source>
         <translation>您無法建立列舉</translation>
     </message>
@@ -17192,41 +17152,41 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2856"/>
-        <location filename="../../libmscore/note.cpp" line="2875"/>
+        <location filename="../../libmscore/note.cpp" line="2748"/>
+        <location filename="../../libmscore/note.cpp" line="2767"/>
         <location filename="../../libmscore/rest.cpp" line="790"/>
         <location filename="../../libmscore/rest.cpp" line="800"/>
         <source>Voice: %1</source>
         <translation>聲部：%1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2860"/>
+        <location filename="../../libmscore/note.cpp" line="2752"/>
         <source>Beat slash</source>
         <translation>基於節拍轉換成斜線形符頭</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2860"/>
+        <location filename="../../libmscore/note.cpp" line="2752"/>
         <source>Rhythm slash</source>
         <translation>基於節奏轉換成斜線形符頭</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2865"/>
+        <location filename="../../libmscore/note.cpp" line="2757"/>
         <source>%1; Pitch: %2; Duration: %3%4</source>
         <translation>%1；音高：%2；時值：%3%4</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2879"/>
+        <location filename="../../libmscore/note.cpp" line="2771"/>
         <source>Beat Slash</source>
         <translation>基於節拍轉換成斜線形符頭</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2879"/>
+        <location filename="../../libmscore/note.cpp" line="2771"/>
         <source>Rhythm Slash</source>
         <translation>基於節奏轉換成斜線形符頭</translation>
     </message>
     <message>
-        <location filename="../../libmscore/read206.cpp" line="3730"/>
-        <location filename="../../libmscore/read301.cpp" line="199"/>
+        <location filename="../../libmscore/read206.cpp" line="3772"/>
+        <location filename="../../libmscore/read301.cpp" line="201"/>
         <source>XML read error at line %1, column %2: %3</source>
         <translation>讀取 XML 檔案時於第 %1 行第 %2 欄時發生錯誤：%3</translation>
     </message>
@@ -17290,17 +17250,17 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>%1：標記變更：%2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1798"/>
+        <location filename="../../libmscore/segment.cpp" line="1792"/>
         <source>Annotations:</source>
         <translation>註解：</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1820"/>
+        <location filename="../../libmscore/segment.cpp" line="1814"/>
         <source>Start of </source>
         <translation>的開始</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1834"/>
+        <location filename="../../libmscore/segment.cpp" line="1828"/>
         <source>End of </source>
         <translation>的完結</translation>
     </message>
@@ -17329,13 +17289,13 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../mscore/inspector/inspector.cpp" line="983"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="41"/>
         <source>Above</source>
-        <translation>高</translation>
+        <translation>上方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="984"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="42"/>
         <source>Below</source>
-        <translation>低</translation>
+        <translation>下方</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspectorTextBase.cpp" line="53"/>
@@ -17398,11 +17358,13 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>重降記號</translation>
     </message>
     <message>
+        <location filename="../../libmscore/harmony.cpp" line="1571"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
         <source>♭</source>
         <translation>降記號</translation>
     </message>
     <message>
+        <location filename="../../libmscore/harmony.cpp" line="1566"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="273"/>
         <source>♯</source>
         <translation>升記號</translation>
@@ -17483,60 +17445,60 @@ Do you want to overwrite it?</source>
         <translation>載入樣式失敗</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="621"/>
-        <location filename="../../mscore/musescore.cpp" line="626"/>
-        <location filename="../../mscore/musescore.cpp" line="656"/>
-        <location filename="../../mscore/musescore.cpp" line="661"/>
-        <location filename="../../mscore/musescore.cpp" line="666"/>
-        <location filename="../../mscore/musescore.cpp" line="681"/>
-        <location filename="../../mscore/musescore.cpp" line="700"/>
-        <location filename="../../mscore/musescore.cpp" line="711"/>
-        <location filename="../../mscore/musescore.cpp" line="744"/>
+        <location filename="../../mscore/musescore.cpp" line="622"/>
+        <location filename="../../mscore/musescore.cpp" line="627"/>
+        <location filename="../../mscore/musescore.cpp" line="657"/>
+        <location filename="../../mscore/musescore.cpp" line="662"/>
+        <location filename="../../mscore/musescore.cpp" line="667"/>
+        <location filename="../../mscore/musescore.cpp" line="682"/>
+        <location filename="../../mscore/musescore.cpp" line="701"/>
+        <location filename="../../mscore/musescore.cpp" line="712"/>
+        <location filename="../../mscore/musescore.cpp" line="745"/>
         <source>Import Extension File</source>
         <translation>匯入擴充套件檔案</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="621"/>
+        <location filename="../../mscore/musescore.cpp" line="622"/>
         <source>Cannot import extension on read-only storage: %1</source>
         <translation>無法於只讀儲存器匯入擴充套件：%1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="626"/>
+        <location filename="../../mscore/musescore.cpp" line="627"/>
         <source>Cannot import extension: storage %1 is full</source>
         <translation>無法匯入擴充套件：%1 已滿</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="656"/>
+        <location filename="../../mscore/musescore.cpp" line="657"/>
         <source>Corrupted extension: no metadata.json</source>
         <translation>擴充套件損毀：metadata.json 檔案不存在</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="661"/>
+        <location filename="../../mscore/musescore.cpp" line="662"/>
         <source>Corrupted extension: unsupported directories in root directory</source>
         <translation>擴充套件損毀：根目錄內有不支持的目錄</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="666"/>
+        <location filename="../../mscore/musescore.cpp" line="667"/>
         <source>Corrupted extension: unsupported files in root directory</source>
         <translation>擴充套件損毀：根目錄內有不支持的檔案</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="681"/>
+        <location filename="../../mscore/musescore.cpp" line="682"/>
         <source>Corrupted extension: corrupted metadata.json</source>
         <translation>擴充套件損毀：metadata.json 檔案損毀</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="700"/>
+        <location filename="../../mscore/musescore.cpp" line="701"/>
         <source>A newer version is already installed</source>
         <translation>較新版本已經安裝</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="711"/>
+        <location filename="../../mscore/musescore.cpp" line="712"/>
         <source>Error while deleting previous version of the extension: %1</source>
         <translation>刪除上一個版本的擴充套件時出現問題：%1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="744"/>
+        <location filename="../../mscore/musescore.cpp" line="745"/>
         <source>Unable to extract files from the extension</source>
         <translation>無法從擴充套件解壓縮檔案</translation>
     </message>
@@ -17614,7 +17576,7 @@ Do you want to overwrite it?</source>
 <context>
     <name>RecordButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5435"/>
+        <location filename="../../mscore/musescore.cpp" line="5437"/>
         <source>Record</source>
         <translation>录音</translation>
     </message>
@@ -18118,8 +18080,8 @@ Up to four combinations can be used: Ctrl+A then Ctrl+B then Ctrl+C then Ctrl+D 
 Note: this last shortcut would be noted &quot;Ctrl+A,Ctrl+B,Ctrl+C,Ctrl+D&quot;</source>
         <translation>輸入快捷鍵時，請選取一組按鍵順序，例如 Ctrl＋A，然後在鍵盤上按下。
 一組按鍵順序可以包含更多的按鍵順序組合：Ctrl＋B，然後 Ctrl＋C 是一組有效的按鍵順序。
-最多 4 個組合的按鍵順序可以使用：Ctrl＋A，然後 Ctrl＋B，再 Ctrl＋C，最後 Ctrl＋Ｄ 也是一組有效的按鍵順序。
-注意：以上最後一組的快捷鍵將會表示為「Ctrl＋A，Ctrl＋B，Ctrl＋C，Ctrl＋Ｄ」。</translation>
+最多 4 個組合的按鍵順序可以使用：Ctrl＋A，然後 Ctrl＋B，再 Ctrl＋C，最後 Ctrl＋D 也是一組有效的按鍵順序。
+注意：以上最後一組的快捷鍵將會表示為「Ctrl＋A，Ctrl＋B，Ctrl＋C，Ctrl＋D」。</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="44"/>
@@ -18672,237 +18634,237 @@ Note: Ctrl+Shift+1 is one key combination</source>
 <context>
     <name>TextStyle</name>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1792"/>
+        <location filename="../../libmscore/style.cpp" line="1887"/>
         <source>Title</source>
         <translation>標題</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1793"/>
+        <location filename="../../libmscore/style.cpp" line="1888"/>
         <source>Subtitle</source>
         <translation>副標題</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1794"/>
+        <location filename="../../libmscore/style.cpp" line="1889"/>
         <source>Composer</source>
         <translation>作曲家</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1795"/>
+        <location filename="../../libmscore/style.cpp" line="1890"/>
         <source>Lyricist</source>
         <translation>填詞人</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1797"/>
+        <location filename="../../libmscore/style.cpp" line="1892"/>
         <source>Lyrics Odd Lines</source>
         <translation>單行歌詞</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1798"/>
+        <location filename="../../libmscore/style.cpp" line="1893"/>
         <source>Lyrics Even Lines</source>
         <translation>雙行歌詞</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1799"/>
+        <location filename="../../libmscore/style.cpp" line="1894"/>
         <source>Fingering</source>
         <translation>指法記號</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1800"/>
+        <location filename="../../libmscore/style.cpp" line="1895"/>
         <source>LH Guitar Fingering</source>
         <translation>左手吉他指法</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1801"/>
+        <location filename="../../libmscore/style.cpp" line="1896"/>
         <source>RH Guitar Fingering</source>
         <translation>右手吉他指法</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1802"/>
+        <location filename="../../libmscore/style.cpp" line="1897"/>
         <source>String Number</source>
         <translation>弦線號碼</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1804"/>
+        <location filename="../../libmscore/style.cpp" line="1899"/>
         <source>Instrument Name (Long)</source>
         <translation>樂器名稱（全名）</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1805"/>
+        <location filename="../../libmscore/style.cpp" line="1900"/>
         <source>Instrument Name (Short)</source>
         <translation>樂器名稱（簡寫）</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1806"/>
+        <location filename="../../libmscore/style.cpp" line="1901"/>
         <source>Instrument Name (Part)</source>
         <translation>樂器名稱（分譜）</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1807"/>
+        <location filename="../../libmscore/style.cpp" line="1902"/>
         <source>Dynamics</source>
         <translation>強弱記號</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1810"/>
+        <location filename="../../libmscore/style.cpp" line="1905"/>
         <source>Tempo</source>
         <translation>速度</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1811"/>
+        <location filename="../../libmscore/style.cpp" line="1906"/>
         <source>Metronome</source>
         <translation>節拍器</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1812"/>
+        <location filename="../../libmscore/style.cpp" line="1907"/>
         <source>Measure Number</source>
         <translation>小節號碼</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1813"/>
+        <location filename="../../libmscore/style.cpp" line="1908"/>
         <source>Translator</source>
         <translation>翻譯者</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1814"/>
+        <location filename="../../libmscore/style.cpp" line="1909"/>
         <source>Tuplet</source>
         <translation>連音符</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1816"/>
+        <location filename="../../libmscore/style.cpp" line="1911"/>
         <source>System</source>
         <translation>組合譜表</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1817"/>
+        <location filename="../../libmscore/style.cpp" line="1912"/>
         <source>Staff</source>
         <translation>譜表</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1818"/>
+        <location filename="../../libmscore/style.cpp" line="1913"/>
         <source>Chord Symbol</source>
         <translation>和弦符號</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1820"/>
+        <location filename="../../libmscore/style.cpp" line="1915"/>
         <source>Rehearsal Mark</source>
         <translation>排練記號</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1822"/>
+        <location filename="../../libmscore/style.cpp" line="1917"/>
         <source>Repeat Text Left</source>
         <translation>反復記號文字左方</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1823"/>
+        <location filename="../../libmscore/style.cpp" line="1918"/>
         <source>Repeat Text Right</source>
         <translation>反復記號文字右方</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1829"/>
+        <location filename="../../libmscore/style.cpp" line="1924"/>
         <source>Volta</source>
         <translation>反複</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1824"/>
+        <location filename="../../libmscore/style.cpp" line="1919"/>
         <source>Frame</source>
         <translation>框架</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1791"/>
+        <location filename="../../libmscore/style.cpp" line="1886"/>
         <source>Default</source>
         <translation>預設</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1808"/>
+        <location filename="../../libmscore/style.cpp" line="1903"/>
         <source>Expression</source>
         <translation>音樂情感詞語</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1819"/>
+        <location filename="../../libmscore/style.cpp" line="1914"/>
         <source>Chord Symbol (Alternate)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1825"/>
+        <location filename="../../libmscore/style.cpp" line="1920"/>
         <source>Text Line</source>
         <translation>文字線</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1826"/>
+        <location filename="../../libmscore/style.cpp" line="1921"/>
         <source>Glissando</source>
         <translation>滑奏</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1828"/>
+        <location filename="../../libmscore/style.cpp" line="1923"/>
         <source>Ottava</source>
         <translation>八度</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1830"/>
+        <location filename="../../libmscore/style.cpp" line="1925"/>
         <source>Pedal</source>
         <translation>腳踏板</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1831"/>
+        <location filename="../../libmscore/style.cpp" line="1926"/>
         <source>Let Ring</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1832"/>
+        <location filename="../../libmscore/style.cpp" line="1927"/>
         <source>Palm Mute</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1834"/>
+        <location filename="../../libmscore/style.cpp" line="1929"/>
         <source>Hairpin</source>
         <translation>音量變化記號</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1835"/>
+        <location filename="../../libmscore/style.cpp" line="1930"/>
         <source>Bend</source>
         <translation>推弦</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1836"/>
+        <location filename="../../libmscore/style.cpp" line="1931"/>
         <source>Header</source>
         <translation>頁首</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1837"/>
+        <location filename="../../libmscore/style.cpp" line="1932"/>
         <source>Footer</source>
         <translation>頁尾</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1838"/>
+        <location filename="../../libmscore/style.cpp" line="1933"/>
         <source>Instrument Change</source>
         <translation>更改樂器</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1840"/>
+        <location filename="../../libmscore/style.cpp" line="1935"/>
         <source>User-1</source>
         <translation>使用者－1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1841"/>
+        <location filename="../../libmscore/style.cpp" line="1936"/>
         <source>User-2</source>
         <translation>使用者－2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1842"/>
+        <location filename="../../libmscore/style.cpp" line="1937"/>
         <source>User-3</source>
         <translation>使用者－3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1843"/>
+        <location filename="../../libmscore/style.cpp" line="1938"/>
         <source>User-4</source>
         <translation>使用者－4</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1844"/>
+        <location filename="../../libmscore/style.cpp" line="1939"/>
         <source>User-5</source>
         <translation>使用者－5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1846"/>
+        <location filename="../../libmscore/style.cpp" line="1941"/>
         <source>User-6</source>
         <translation>使用者－6</translation>
     </message>
@@ -19061,7 +19023,6 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/timesigwizard.ui" line="49"/>
         <source>Enter a numerical time signature such as four-four or six-eight</source>
         <translation type="unfinished"/>
     </message>
@@ -19074,7 +19035,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="68"/>
         <source>The numerator, or upper number, in the time signature</source>
-        <translation type="unfinished"/>
+        <translation>拍號中的分子／上面的數字</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="90"/>
@@ -19137,6 +19098,10 @@ Note: Ctrl+Shift+1 is one key combination</source>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="172"/>
+        <source>Use the common time symbol, the letter C, and a 4/4 meter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Use the common time symbol, the letter C, and a four-four meter</source>
         <translation type="unfinished"/>
     </message>
@@ -19151,6 +19116,11 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <translation>2 分之 2 拍</translation>
     </message>
     <message>
+        <location filename="../../mscore/timesigwizard.ui" line="192"/>
+        <source>Use the cut time symbol, the letter C with a vertical line through it, and a 2/2 meter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/timesigwizard.ui" line="373"/>
         <source>The number of measures initially present in the score</source>
         <translation type="unfinished"/>
@@ -19161,12 +19131,16 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <translation>4 分之 4 拍</translation>
     </message>
     <message>
+        <location filename="../../mscore/timesigwizard.ui" line="49"/>
+        <source>Enter a numerical time signature such as 4/4 or 6/8</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/timesigwizard.ui" line="169"/>
         <source>Common Time</source>
         <translation>4 分之 4 拍</translation>
     </message>
     <message>
-        <location filename="../../mscore/timesigwizard.ui" line="192"/>
         <source>Use the cut time symbol, the letter C with a vertical line through it, and a two-two meter</source>
         <translation type="unfinished"/>
     </message>
@@ -19190,23 +19164,23 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <location filename="../../mscore/timesigwizard.ui" line="234"/>
         <location filename="../../mscore/timesigwizard.ui" line="240"/>
         <source>Number of beats in the pickup measure</source>
-        <translation type="unfinished"/>
+        <translation>弱拍小節的拍數</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="237"/>
         <source>Pickup beats</source>
-        <translation type="unfinished"/>
+        <translation>弱拍</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="272"/>
         <location filename="../../mscore/timesigwizard.ui" line="278"/>
         <source>Beat unit for the pickup measure</source>
-        <translation type="unfinished"/>
+        <translation>弱拍小節的拍數單位</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="275"/>
         <source>Pickup beat unit</source>
-        <translation type="unfinished"/>
+        <translation>弱拍單位</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="339"/>
@@ -19922,10 +19896,6 @@ failed: </source>
         <translation>開啟…</translation>
     </message>
     <message>
-        <source>File: Open</source>
-        <translation type="vanished">檔案：開啟</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="48"/>
         <source>Load score from file</source>
         <translation>從檔案裡開啟樂譜</translation>
@@ -19934,10 +19904,6 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="56"/>
         <source>Save</source>
         <translation>儲存</translation>
-    </message>
-    <message>
-        <source>File: Save</source>
-        <translation type="vanished">檔案：儲存</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="58"/>
@@ -19950,10 +19916,6 @@ failed: </source>
         <translation>儲存至線上…</translation>
     </message>
     <message>
-        <source>File: Save online</source>
-        <translation type="vanished">檔案：儲存至線上</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="67"/>
         <source>Save score on MuseScore.com</source>
         <translation>儲存樂譜於 MuseScore.com 網站上</translation>
@@ -19962,10 +19924,6 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="77"/>
         <source>Save As…</source>
         <translation>儲存為…</translation>
-    </message>
-    <message>
-        <source>File: Save as</source>
-        <translation type="vanished">檔案：儲存為</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="79"/>
@@ -19991,10 +19949,6 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="99"/>
         <source>Save a Copy…</source>
         <translation>另存新檔…</translation>
-    </message>
-    <message>
-        <source>File: Save a copy</source>
-        <translation type="vanished">檔案：儲存副本</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="101"/>
@@ -20052,10 +20006,6 @@ failed: </source>
         <translation>關閉</translation>
     </message>
     <message>
-        <source>File: Close</source>
-        <translation type="vanished">檔案：關閉</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="142"/>
         <source>Close current score</source>
         <translation>關閉當前樂譜</translation>
@@ -20064,10 +20014,6 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="148"/>
         <source>New…</source>
         <translation>開新檔案…</translation>
-    </message>
-    <message>
-        <source>File: New</source>
-        <translation type="vanished">檔案：新增檔案</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="150"/>
@@ -21604,54 +21550,6 @@ failed: </source>
         <translation>音符輸入：休止符</translation>
     </message>
     <message>
-        <source>Double Sharp</source>
-        <translation type="vanished">重升記號</translation>
-    </message>
-    <message>
-        <source>Note input: Double sharp</source>
-        <translation type="vanished">音符輸入：重升記號</translation>
-    </message>
-    <message>
-        <source>Double sharp</source>
-        <translation type="vanished">重升記號</translation>
-    </message>
-    <message>
-        <source>Sharp</source>
-        <translation type="vanished">升記號</translation>
-    </message>
-    <message>
-        <source>Note input: Sharp</source>
-        <translation type="vanished">音符輸入：升記號</translation>
-    </message>
-    <message>
-        <source>Natural</source>
-        <translation type="vanished">還原記號</translation>
-    </message>
-    <message>
-        <source>Note input: Natural</source>
-        <translation type="vanished">音符輸入：還原記號</translation>
-    </message>
-    <message>
-        <source>Flat</source>
-        <translation type="vanished">降記號</translation>
-    </message>
-    <message>
-        <source>Note input: Flat</source>
-        <translation type="vanished">音符輸入：降記號</translation>
-    </message>
-    <message>
-        <source>Double Flat</source>
-        <translation type="vanished">重降記號</translation>
-    </message>
-    <message>
-        <source>Note input: Double flat</source>
-        <translation type="vanished">音符輸入：重降記號</translation>
-    </message>
-    <message>
-        <source>Double flat</source>
-        <translation type="vanished">重降記號</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="1583"/>
         <location filename="../../mscore/shortcut.cpp" line="1585"/>
         <source>Acciaccatura</source>
@@ -22060,7 +21958,7 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="3414"/>
         <location filename="../../mscore/shortcut.cpp" line="3415"/>
         <source>Toggle &apos;Hide Empty Staves&apos;</source>
-        <translation>切換至「隱藏空白譜表 」</translation>
+        <translation>切換至「隱藏空白譜表」</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3496"/>
@@ -22762,7 +22660,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2192"/>
         <source>&amp;Transpose…</source>
-        <translation>移調(&amp;T)</translation>
+        <translation>移調 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2193"/>
@@ -26945,7 +26843,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="40"/>
         <source>Articulations &amp; Ornaments</source>
-        <translation>演奏標示 及 裝飾音</translation>
+        <translation>演奏標示及裝飾音</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="41"/>
@@ -26970,7 +26868,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="45"/>
         <source>Other Lines</source>
-        <translation>其他譜線</translation>
+        <translation>其他線條</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="46"/>
@@ -28760,7 +28658,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="454"/>
         <source>Coptic Epact Numbers</source>
-        <translation type="unfinished"/>
+        <translation>科普特閏餘數字</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="455"/>
@@ -29005,7 +28903,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="503"/>
         <source>Bamum Supplement</source>
-        <translation type="unfinished"/>
+        <translation>巴姆穆文字擴充</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="504"/>
@@ -29035,7 +28933,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="509"/>
         <source>Duployan</source>
-        <translation type="unfinished"/>
+        <translation>杜普雷嚴速記文字</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="510"/>

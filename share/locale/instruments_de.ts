@@ -5074,7 +5074,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1003"/>
         <source>bowed</source>
-        <translation>Bogen</translation>
+        <translation>gestrichen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1004"/>
@@ -6105,12 +6105,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1134"/>
         <source>distorted</source>
-        <translation>verzerrt</translation>
+        <translation>Verzerrung</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1135"/>
         <source>overdrive</source>
-        <translation>übersteuert</translation>
+        <translation>Übersteuerung</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1138"/>

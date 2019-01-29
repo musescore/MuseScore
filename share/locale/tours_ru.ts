@@ -4,22 +4,22 @@
     <message>
         <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Чтобы добавить ноты в аккорд, держите нажатой Shift, пока вводите буквенные имена нот, или кликайте по нотному стану.</translation>
     </message>
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Добро пожаловать в MuseScore! Этот короткий тур познакомит Вас с пользовательским интерфейсом MuseScore.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Панель управления воспроизведением позволяет Вам проигрывать и останавливать музыку вашей партитуры, а также управлять различными настройками воспроизведения.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Панель управления &quot;Ввод нот&quot; позволяет Вам вводить ноты и паузы в вашу партитуру.</translation>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
@@ -267,7 +267,7 @@
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation type="unfinished"/>
     </message>

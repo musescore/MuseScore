@@ -3335,7 +3335,7 @@
         <location filename="../instruments/instrumentsxml.h" line="560"/>
         <location filename="../instruments/instrumentsxml.h" line="564"/>
         <source>open</source>
-        <translation type="unfinished"/>
+        <translation>abrir</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="418"/>
@@ -5232,7 +5232,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1178"/>
         <source>Mandolin (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Mandolina (tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1180"/>
@@ -5273,7 +5273,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1195"/>
         <source>Ukulele (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Ukelele (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1196"/>
@@ -5333,7 +5333,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1206"/>
         <source>Bass Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra baixo (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1217"/>
@@ -5344,7 +5344,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1220"/>
         <source>Electric Bass (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Baixo eléctrico (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1222"/>
@@ -5362,7 +5362,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1229"/>
         <source>5-str. Electric Bass (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Baixo eléctrico de 5 cordas (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1232"/>
@@ -5372,7 +5372,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1235"/>
         <source>5-str. Electric Bass (High C/Tenor) (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Baixo eléctrico de 5 cordas (dó alto/Tenor) (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1236"/>
@@ -5388,7 +5388,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1240"/>
         <source>6-str. Electric Bass (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Baixo eléctrico de 6 cordas (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1243"/>
@@ -5880,7 +5880,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1052"/>
         <source>Banjo (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Banjo (tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1054"/>
@@ -5902,7 +5902,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1057"/>
         <source>Irish Tenor Banjo (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Banjo irlandés tenor (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1059"/>
@@ -5992,7 +5992,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1098"/>
         <source>Classical Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra clásica (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1099"/>
@@ -6008,7 +6008,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1101"/>
         <source>7-string Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra de 7 cordas (Tablatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1102"/>
@@ -6024,7 +6024,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1104"/>
         <source>Cavaquinho (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Cavaquinho (Tablatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1105"/>
@@ -6070,7 +6070,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1117"/>
         <source>Acoustic Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra acústica (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1119"/>
@@ -6120,7 +6120,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1139"/>
         <source>Electric Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra eléctrica (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1141"/>
@@ -6171,7 +6171,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1150"/>
         <source>Lute (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Laúde (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1173"/>

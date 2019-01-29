@@ -311,11 +311,11 @@ zoals het verplaatsen van tempo aanduidingen boven andere tekst of het inkorten 
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation>Indien u een waarde heeft aangepast dan kunt u de &quot;Herstel&quot; knop gebruiken om de waarde terug te zetten naar de standaard waarde.
  Indien de waarde beïnvloed wordt door een stijl instelling dan kunt u klikken op de &quot;Stel in als stijl&quot; knop om de huidige waarde in te stellen als de nieuwe standaard voor de stijl.
- U kunt de standaard waarden voor de stijl ook instellen middels Opmaak / Stijl.</translation>
+ U kunt de standaard waarden voor de stijl ook instellen middels Opmaak -&gt; Stijl....</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>

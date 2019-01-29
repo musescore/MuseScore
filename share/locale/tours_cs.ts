@@ -314,21 +314,25 @@
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Pokud jste změnil hodnotu, můžete klepnout na tlačítko Obnovit výchozí nastavení, pro její vrácení do výchozího stavu.
+    Pokud hodnotu řídí nastavení stylu, můžete klepnout na tlačítko Nastavit jako styl pro nastavení nynější hodnoty jako nové výchozí pro styl.
+    Výchozí hodnotu stylu také můžete nastavit pomocí Formát → Styl...</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Pro vytvoření trioly nebo jiné nepravidelné rytmické skupiny vyberte délku noty představující celkovou délku nepravidelné rytmické skupiny, a poté stiskněte Ctrl+číslo nebo použijte Přidat → Nepravidelná rytmická skupina.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Panel Práce se soubory vám umožní vytvořit/uložit/otevřít/vytisknout soubory nebo vrátit zpět / znovu použít změny v notovém zápisu.
+    Notové zápisy můžete ukládat také na svém musescore.com účtu prostřednictvím příkazu Soubor → Uložit na internet.
+    Ovládací prvek na pravé straně panelu umožňuje změnu velikosti zobrazení vašeho notového zápisu. </translation>
     </message>
     <message>
         <source>That's the end of this tour!
@@ -336,7 +340,10 @@
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Toto je konec této prohlídky!
+    Při používání MuseScore se vynoří více funkce programu blíže vysvětlujících prohlídek.
+    Pro jejich vypnutí zrušte před zavřením tohoto okna výběr pro Pokračovat v zobrazování prohlídek.
+    Prohlídky také můžete povolit/zakázat a vrátit zpět v Nápověda → Prohlídky.</translation>
     </message>
 </context>
 </TS>

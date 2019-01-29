@@ -69,27 +69,27 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="45"/>
         <source>C Dizi</source>
-        <translation>C-dizi</translation>
+        <translation>Dizi i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="47"/>
         <source>A Dizi</source>
-        <translation>A-dizi</translation>
+        <translation>Dizi i A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="49"/>
         <source>G Dizi</source>
-        <translation>G-dizi</translation>
+        <translation>Dizi i G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="51"/>
         <source>F Dizi</source>
-        <translation>F-dizi</translation>
+        <translation>Dizi i F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="53"/>
         <source>E Dizi</source>
-        <translation>E-dizi</translation>
+        <translation>Dizi i E</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="57"/>
@@ -159,7 +159,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="83"/>
         <source>B♭ Soprano Ocarina</source>
-        <translation>Sopranokarina i B</translation>
+        <translation>Sopranokarina i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="85"/>
@@ -179,12 +179,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
         <source>B♭ Alto Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Altokarina i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
         <source>C Bass Ocarina</source>
-        <translation>C Bas-ocarina</translation>
+        <translation>Basokarina i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="95"/>
@@ -200,17 +200,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="99"/>
         <source>C Quena</source>
-        <translation>C-quena</translation>
+        <translation>Quena i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="101"/>
         <source>G Quena</source>
-        <translation>G-quena</translation>
+        <translation>Quena i G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="103"/>
         <source>F Quena</source>
-        <translation>F-quena</translation>
+        <translation>Quena i F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="107"/>
@@ -255,7 +255,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="121"/>
         <source>Greatbass Recorder</source>
-        <translation>Stor basblockflöjt</translation>
+        <translation>Subkontrabasblockflöjt</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="125"/>
@@ -270,7 +270,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="129"/>
         <source>B♭ Tin Whistle</source>
-        <translation>B-bleckflöjt</translation>
+        <translation>Bleckflöjt i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="133"/>
@@ -385,7 +385,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="179"/>
         <source>Greatbass Crumhorn</source>
-        <translation>Stort baskrumhom</translation>
+        <translation>Kontrabaskrumhom</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="181"/>
@@ -395,22 +395,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="183"/>
         <source>Soprano Cornamuse</source>
-        <translation>Sopran-cornamuse</translation>
+        <translation>Soprancornamuse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="185"/>
         <source>Alto Cornamuse</source>
-        <translation>Alt-cornamuse</translation>
+        <translation>Altcornamuse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>
         <source>Tenor Cornamuse</source>
-        <translation>Tenor-cornamuse</translation>
+        <translation>Tenorcornamuse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="189"/>
         <source>Bass Cornamuse</source>
-        <translation>Bas-cornamuse</translation>
+        <translation>Bascornamuse</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="191"/>
@@ -421,37 +421,37 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="193"/>
         <source>F Duduk</source>
-        <translation>F-duduk</translation>
+        <translation>Duduk i F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="195"/>
         <source>E Duduk</source>
-        <translation>E-duduk</translation>
+        <translation>Duduk i E</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="199"/>
         <source>C Duduk</source>
-        <translation>C-duduk</translation>
+        <translation>Duduk i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="201"/>
         <source>B Duduk</source>
-        <translation>H-duduk</translation>
+        <translation>Duduk i B</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="203"/>
         <source>B♭ Duduk</source>
-        <translation>B-duduk</translation>
+        <translation>Duduk i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="205"/>
         <source>A Duduk</source>
-        <translation>A-duduk</translation>
+        <translation>Duduk i A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="207"/>
         <source>G Duduk</source>
-        <translation>G-duduk</translation>
+        <translation>Duduk i G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="209"/>
@@ -521,22 +521,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="237"/>
         <source>D Clarinet</source>
-        <translation>D-klarinett</translation>
+        <translation>Klarinett i D</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="239"/>
         <source>E♭ Clarinet</source>
-        <translation>E♭-klarinett</translation>
+        <translation>Klarinett i E♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="243"/>
         <source>B♭ Clarinet</source>
-        <translation>B-klarinett</translation>
+        <translation>Klarinett i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="245"/>
         <source>A Clarinet</source>
-        <translation>A-klarinett</translation>
+        <translation>Klarinett i A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="247"/>
@@ -576,27 +576,27 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="267"/>
         <source>Sopranino Chalumeau</source>
-        <translation>Sopranino-chalumeau</translation>
+        <translation>Sopraninochalumeau</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="269"/>
         <source>Soprano Chalumeau</source>
-        <translation>Sopran-chalumeau</translation>
+        <translation>Sopranchalumeau</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="271"/>
         <source>Alto Chalumeau</source>
-        <translation>Alt-chalumeau</translation>
+        <translation>Altchalumeau</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="273"/>
         <source>Tenor Chalumeau</source>
-        <translation>Tenor-chalumeau</translation>
+        <translation>Tenorchalumeau</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="275"/>
         <source>Bass Chalumeau</source>
-        <translation>Bas-chalumeau</translation>
+        <translation>Baschalumeau</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="277"/>
@@ -756,67 +756,67 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="338"/>
         <source>12 Hole C Chromatic Harmonica</source>
-        <translation>12-håls C kromatiskt munspel</translation>
+        <translation>12-håls kromatiskt munspel i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="340"/>
         <source>14 Hole C Chromatic Harmonica</source>
-        <translation>14-håls C kromatiskt munspel</translation>
+        <translation>14-håls kromatiskt munspel i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="342"/>
         <source>12 Hole G Chromatic Harmonica</source>
-        <translation>12-håls G kromatiskt munspel</translation>
+        <translation>12-håls kromatiskt munspel i G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="344"/>
         <source>16 Hole C Chromatic Harmonica</source>
-        <translation>16-håls C kromatiskt munspel</translation>
+        <translation>16-håls kromatiskt munspel i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="346"/>
         <source>12 Hole Tenor C Chromatic Harmonica</source>
-        <translation>12-håls tenor C kromatiskt munspel</translation>
+        <translation>12-håls kromatiskt tenormunspel i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="348"/>
         <source>10 Hole High G Diatonic Harmonica</source>
-        <translation>10-håls höga-G diatoniskt munspel</translation>
+        <translation>10-håls diatoniskt diskantmunspel i G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="350"/>
         <source>10 Hole F Diatonic Harmonica</source>
-        <translation>10-håls F diatoniskt munspel</translation>
+        <translation>10-håls diatoniskt munspel i F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="352"/>
         <source>10 Hole D Diatonic Harmonica</source>
-        <translation>10-håls D diatoniskt munspel</translation>
+        <translation>10-håls diatoniskt munspel i D</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="354"/>
         <source>10 Hole C Diatonic Harmonica</source>
-        <translation>10-håls C diatoniskt munspel</translation>
+        <translation>10-håls diatoniskt munspel i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="356"/>
         <source>10 Hole A Diatonic Harmonica</source>
-        <translation>10-håls A diatoniskt munspel</translation>
+        <translation>10-håls diatoniskt munspel i A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="358"/>
         <source>10 Hole G Diatonic Harmonica</source>
-        <translation>10-håls G diatoniskt munspel</translation>
+        <translation>10-håls diatoniskt munspel i G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="360"/>
         <source>10 Hole Low D Diatonic Harmonica</source>
-        <translation>10-håls låga-D diatoniskt munspel</translation>
+        <translation>10-håls diatoniskt basmunspel i D</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="362"/>
         <source>20 Hole Chordet Harmonica</source>
-        <translation>20-håls chordet-munspel</translation>
+        <translation>20-håls chordetmunspel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="364"/>
@@ -861,22 +861,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="380"/>
         <source>Soprano Sheng</source>
-        <translation>Sopran-sheng</translation>
+        <translation>Sopransheng</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="382"/>
         <source>Alto Sheng</source>
-        <translation>Alt-Sheng</translation>
+        <translation>Altsheng</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="384"/>
         <source>Tenor Sheng</source>
-        <translation>Tenor-Sheng</translation>
+        <translation>Tenorsheng</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="386"/>
         <source>Bass Sheng</source>
-        <translation>Bas-Sheng</translation>
+        <translation>Bassheng</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="388"/>
@@ -887,12 +887,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="391"/>
         <source>Horn in F</source>
-        <translation>F-horn</translation>
+        <translation>Horn i F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="393"/>
         <source>High C Horn</source>
-        <translation>Höga C-horn</translation>
+        <translation>Diskanthorn i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="395"/>
@@ -902,37 +902,37 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="397"/>
         <source>Horn in A</source>
-        <translation>A-horn</translation>
+        <translation>Horn i A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="399"/>
         <source>Horn in A♭</source>
-        <translation>A♭-horn</translation>
+        <translation>Horn i A♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="401"/>
         <source>Horn in G</source>
-        <translation>G-horn</translation>
+        <translation>Horn i G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="403"/>
         <source>E Horn</source>
-        <translation>E-horn</translation>
+        <translation>Horn i E</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="405"/>
         <source>Horn in E♭</source>
-        <translation>E♭-horn</translation>
+        <translation>Horn i E♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="407"/>
         <source>Horn in D</source>
-        <translation>D-horn</translation>
+        <translation>Horn i D</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="409"/>
         <source>Horn in C</source>
-        <translation>C-horn</translation>
+        <translation>Horn i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="411"/>
@@ -942,17 +942,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="413"/>
         <source>Horn in B♭ basso</source>
-        <translation>B-horn basso</translation>
+        <translation>Bassohorn i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="415"/>
         <source>E♭ Cornet</source>
-        <translation>E♭-kornett</translation>
+        <translation>Kornett i E♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="423"/>
         <source>B♭ Cornet</source>
-        <translation>B-kornett</translation>
+        <translation>Kornett i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="431"/>
@@ -962,12 +962,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="433"/>
         <source>F Alto Horn</source>
-        <translation>F-althorn</translation>
+        <translation>Althorn i F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="435"/>
         <source>E♭ Alto Horn</source>
-        <translation>E♭-althorn</translation>
+        <translation>Althorn i E♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="437"/>
@@ -1013,22 +1013,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="470"/>
         <source>E♭ Trumpet</source>
-        <translation>E♭-trumpet</translation>
+        <translation>Trumpet i E♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="474"/>
         <source>D Trumpet</source>
-        <translation>D-trumpet</translation>
+        <translation>Trumpet i D</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="478"/>
         <source>C Trumpet</source>
-        <translation>C-trumpet</translation>
+        <translation>Trumpet i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="482"/>
         <source>B♭ Trumpet</source>
-        <translation>B-trumpet</translation>
+        <translation>Trumpet i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="490"/>
@@ -1053,17 +1053,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="506"/>
         <source>E♭ Bass Trumpet</source>
-        <translation>E♭-bastrumpet</translation>
+        <translation>Bastrumpet i E♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="510"/>
         <source>Bass Trumpet in C</source>
-        <translation>C-bastrumpet</translation>
+        <translation>Bastrumpet i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="514"/>
         <source>B♭ Bass Trumpet</source>
-        <translation>B-bastrumpet</translation>
+        <translation>Bastrumpet i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="518"/>
@@ -1178,7 +1178,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="582"/>
         <source>B♭ Bass Ophicleide</source>
-        <translation>Basofikleid i B</translation>
+        <translation>Basofikleid i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="584"/>
@@ -1188,7 +1188,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="586"/>
         <source>Cornettino</source>
-        <translation>Cornettino</translation>
+        <translation>Kornettino</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="588"/>
@@ -1275,44 +1275,44 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="628"/>
         <source>F Tuba</source>
-        <translation>F-tuba</translation>
+        <translation>Tuba i F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="630"/>
         <location filename="../instruments/instrumentsxml.h" line="632"/>
         <source>E♭ Tuba</source>
-        <translation>E♭-tuba</translation>
+        <translation>Tuba i E♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="634"/>
         <source>E♭ Tuba (Treble Clef)</source>
-        <translation>E♭-tuba (diskantklav)</translation>
+        <translation>Tuba i E♭ (diskantklav)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="635"/>
         <source>C Tuba</source>
-        <translation>C-tuba</translation>
+        <translation>Tuba i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="637"/>
         <location filename="../instruments/instrumentsxml.h" line="639"/>
         <source>B♭ Tuba</source>
-        <translation>B-tuba</translation>
+        <translation>Tuba i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="641"/>
         <source>B♭ Tuba (Treble Clef)</source>
-        <translation>B-tuba (diskantklav)</translation>
+        <translation>Tuba i B♭ (diskantklav)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="642"/>
         <source>Bass Tuba in F</source>
-        <translation>F-bastuba</translation>
+        <translation>Bastuba i F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="644"/>
         <source>Bass Tuba in E♭</source>
-        <translation>E♭-bastuba</translation>
+        <translation>Bastuba i E♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="646"/>
@@ -1337,12 +1337,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="656"/>
         <source>B♭ Wagner Tuba</source>
-        <translation>B-Wagnertuba</translation>
+        <translation>Wagnertuba i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="658"/>
         <source>F Wagner Tuba</source>
-        <translation>F-Wagnertuba</translation>
+        <translation>Wagnertuba i F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="660"/>
@@ -1377,17 +1377,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="675"/>
         <source>Glockenspiel</source>
-        <translation>Glockenspiel</translation>
+        <translation>Klockspel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="677"/>
         <source>Orff Soprano Glockenspiel</source>
-        <translation>Orff Sopran-glockenspiel</translation>
+        <translation>Sopran-Orffklockspel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="679"/>
         <source>Orff Alto Glockenspiel</source>
-        <translation>Orff Alt-glockenspiel</translation>
+        <translation>Alt-Orffklockspel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="681"/>
@@ -1402,7 +1402,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="685"/>
         <source>Almglocken</source>
-        <translation>Almglocken</translation>
+        <translation>Alpklockor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="687"/>
@@ -1417,52 +1417,52 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="691"/>
         <source>Orff Soprano Metallophone</source>
-        <translation>Orff Sopran-glockenspiel</translation>
+        <translation>Sopran-Orffmetallofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="693"/>
         <source>Orff Alto Metallophone</source>
-        <translation>Orff Altmetallofon</translation>
+        <translation>Alt-Orffmetallofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="695"/>
         <source>Orff Bass Metallophone</source>
-        <translation>Orff Basmetallofon</translation>
+        <translation>Bas-Orffmetallofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="699"/>
         <source>Steel Drums</source>
-        <translation>Ståltrummor</translation>
+        <translation>Oljefat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="701"/>
         <source>Soprano Steel Drums</source>
-        <translation>Sopranståltrummor</translation>
+        <translation>Sopranoljefat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="703"/>
         <source>Alto Steel Drums</source>
-        <translation>Altståltrummor</translation>
+        <translation>Altoljefat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="705"/>
         <source>Guitar Steel Drums</source>
-        <translation>Gitarrståltrummor</translation>
+        <translation>Gitarroljefat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="707"/>
         <source>Tenor Steel Drums</source>
-        <translation>Tenorståltrummor</translation>
+        <translation>Tenoroljefat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="709"/>
         <source>Cello Steel Drums</source>
-        <translation>Celloståltrummor</translation>
+        <translation>Cellooljefat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="711"/>
         <source>Bass Steel Drums</source>
-        <translation>Basståltrummor</translation>
+        <translation>Basoljefat</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="713"/>
@@ -1472,7 +1472,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="715"/>
         <source>Tuned Gongs</source>
-        <translation type="unfinished"/>
+        <translation>Stämd gong</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="717"/>
@@ -1482,7 +1482,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="719"/>
         <source>Musical Saw</source>
-        <translation>Musikalisk Såg</translation>
+        <translation>Musikalisk såg</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="721"/>
@@ -1502,17 +1502,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="727"/>
         <source>Orff Soprano Xylophone</source>
-        <translation>Orff Sopranxylofon</translation>
+        <translation>Sopran-Orffxylofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="729"/>
         <source>Orff Alto Xylophone</source>
-        <translation>Orff Altxylofon</translation>
+        <translation>Alt-Orffxylofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="731"/>
         <source>Orff Bass Xylophone</source>
-        <translation>Orff Basxylofon</translation>
+        <translation>Bas-Orffxylofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="733"/>
@@ -1538,7 +1538,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="747"/>
         <source>Tuned Klaxon Horns</source>
-        <translation type="unfinished"/>
+        <translation>Stämd biltuta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="749"/>
@@ -1548,12 +1548,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="751"/>
         <source>Treble Kalimba</source>
-        <translation>Diskant-kalimba</translation>
+        <translation>Diskantkalimba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="753"/>
         <source>Alto Kalimba</source>
-        <translation>Alt-kalimba</translation>
+        <translation>Altkalimba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="756"/>
@@ -1618,12 +1618,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="792"/>
         <source>Bell Plate</source>
-        <translation type="unfinished"/>
+        <translation>Plattklocka</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="794"/>
         <source>Bowl Gongs</source>
-        <translation type="unfinished"/>
+        <translation>Sångskålar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="796"/>
@@ -1678,7 +1678,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="818"/>
         <source>Ride Cymbal</source>
-        <translation>Ride Cymbal</translation>
+        <translation>Ride-cymbal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="820"/>
@@ -1688,7 +1688,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="822"/>
         <source>Crash Cymbal</source>
-        <translation>Crash Cymbal</translation>
+        <translation>Crash-cymbal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="824"/>
@@ -2003,7 +2003,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2"/>
         <source>Pop/Rock</source>
-        <translation>Pop/Rock</translation>
+        <translation>Pop / rock</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3"/>
@@ -2013,7 +2013,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4"/>
         <source>Choral</source>
-        <translation type="unfinished"/>
+        <translation>Kör</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
@@ -2064,7 +2064,7 @@
         <location filename="../instruments/instrumentsxml.h" line="14"/>
         <source>Wi.</source>
         <comment>Winds</comment>
-        <translation type="unfinished"/>
+        <translation>Bl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="16"/>
@@ -2075,7 +2075,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="17"/>
         <source>D♭ Piccolo</source>
-        <translation>D♭ Piccolo</translation>
+        <translation>Piccolo i D♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="18"/>
@@ -2093,13 +2093,13 @@
         <location filename="../instruments/instrumentsxml.h" line="22"/>
         <source>Tr. Fl.</source>
         <comment>Treble Flute</comment>
-        <translation>Diskant flöjt</translation>
+        <translation>Diskantflöjt</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="24"/>
         <source>Sop. Fl.</source>
         <comment>Soprano Flute</comment>
-        <translation>Sopran flöjt</translation>
+        <translation>Sopranflöjt</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="26"/>
@@ -2200,7 +2200,7 @@
         <location filename="../instruments/instrumentsxml.h" line="56"/>
         <source>B♭ Fife</source>
         <comment>B♭ Fife</comment>
-        <translation>B-fältpipa</translation>
+        <translation>Fältpipa i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="58"/>
@@ -2284,7 +2284,7 @@
         <location filename="../instruments/instrumentsxml.h" line="84"/>
         <source>B♭ S. Oc.</source>
         <comment>B♭ Soprano Ocarina</comment>
-        <translation type="unfinished"/>
+        <translation>B♭-Soc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="86"/>
@@ -2308,7 +2308,7 @@
         <location filename="../instruments/instrumentsxml.h" line="92"/>
         <source>B♭ A. Oc.</source>
         <comment>B♭ Alto Ocarina</comment>
-        <translation type="unfinished"/>
+        <translation>B♭-Aoc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="94"/>
@@ -2393,7 +2393,7 @@
         <location filename="../instruments/instrumentsxml.h" line="122"/>
         <source>Gb. Rec.</source>
         <comment>Greatbass Recorder</comment>
-        <translation>Gess-blöckflöjt</translation>
+        <translation>Kb. blf.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="124"/>
@@ -2417,18 +2417,18 @@
         <location filename="../instruments/instrumentsxml.h" line="130"/>
         <source>B♭ Tin Wh.</source>
         <comment>B♭ Tin Whistle</comment>
-        <translation>B-bleckpipa</translation>
+        <translation>B♭-bl.pipa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="131"/>
         <source>D Tin Whistle</source>
-        <translation>D Tin Whistle</translation>
+        <translation>Bleckpipa i D</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="132"/>
         <source>D Tin Wh.</source>
         <comment>D Tin Whistle</comment>
-        <translation>D Tin Wh.</translation>
+        <translation>D-bl.pipa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="134"/>
@@ -2499,7 +2499,7 @@
         <location filename="../instruments/instrumentsxml.h" line="154"/>
         <source>Hph.-cl.</source>
         <comment>Heckelphone-clarinet</comment>
-        <translation type="unfinished"/>
+        <translation>Hph.-kl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="156"/>
@@ -2644,7 +2644,7 @@
         <location filename="../instruments/instrumentsxml.h" line="204"/>
         <source>B♭ Du.</source>
         <comment>B♭ Duduk</comment>
-        <translation>B Du.</translation>
+        <translation>B♭ Du.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="206"/>
@@ -2762,7 +2762,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="241"/>
         <source>G Clarinet</source>
-        <translation>G Klarinett</translation>
+        <translation>Klarinett i G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="242"/>
@@ -2774,7 +2774,7 @@
         <location filename="../instruments/instrumentsxml.h" line="244"/>
         <source>B♭ Cl.</source>
         <comment>B♭ Clarinet</comment>
-        <translation>B kl.</translation>
+        <translation>B♭ kl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="246"/>
@@ -2809,7 +2809,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="255"/>
         <source>B♭ Bass Clarinet (Bass Clef)</source>
-        <translation>B♭ Basklarinett (basklav)</translation>
+        <translation>Basklarinett i B♭ (basklav)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="256"/>
@@ -2820,7 +2820,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="257"/>
         <source>A Bass Clarinet</source>
-        <translation>A Basklarinett</translation>
+        <translation>Basklarinett i A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="258"/>
@@ -3239,7 +3239,7 @@
         <location filename="../instruments/instrumentsxml.h" line="396"/>
         <source>B♭ Hn.</source>
         <comment>Horn in B♭</comment>
-        <translation>B hn.</translation>
+        <translation>B♭ hn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="398"/>
@@ -3293,7 +3293,7 @@
         <location filename="../instruments/instrumentsxml.h" line="414"/>
         <source>B♭ ba Hn.</source>
         <comment>Horn in B♭ basso</comment>
-        <translation>B hn. ba</translation>
+        <translation>B♭ hn. ba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="416"/>
@@ -3335,7 +3335,7 @@
         <location filename="../instruments/instrumentsxml.h" line="560"/>
         <location filename="../instruments/instrumentsxml.h" line="564"/>
         <source>open</source>
-        <translation type="unfinished"/>
+        <translation>öppen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="418"/>
@@ -3386,7 +3386,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="419"/>
         <source>C Cornet</source>
-        <translation>C-kornett</translation>
+        <translation>Kornett i C</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="420"/>
@@ -3398,12 +3398,12 @@
         <location filename="../instruments/instrumentsxml.h" line="424"/>
         <source>B♭ Cnt.</source>
         <comment>B♭ Cornet</comment>
-        <translation>B knt.</translation>
+        <translation>B♭ knt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="427"/>
         <source>A Cornet</source>
-        <translation>A-kornett</translation>
+        <translation>Kornett i A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="428"/>
@@ -3464,7 +3464,7 @@
         <location filename="../instruments/instrumentsxml.h" line="455"/>
         <source>P. Tpt. B♭</source>
         <comment>Piccolo Trumpet in B♭</comment>
-        <translation>P. Tpt. B</translation>
+        <translation>P. Tpt. B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="459"/>
@@ -3475,7 +3475,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="462"/>
         <source>F Trumpet</source>
-        <translation>F Trumpet</translation>
+        <translation>Trumpet i F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="463"/>
@@ -3486,7 +3486,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="466"/>
         <source>E Trumpet</source>
-        <translation>E-trumpet</translation>
+        <translation>Trumpet i E</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="467"/>
@@ -3516,12 +3516,12 @@
         <location filename="../instruments/instrumentsxml.h" line="483"/>
         <source>B♭ Tpt.</source>
         <comment>B♭ Trumpet</comment>
-        <translation>B Tpt.</translation>
+        <translation>B♭ Tpt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="486"/>
         <source>A Trumpet</source>
-        <translation>A-trumpet</translation>
+        <translation>Trumpet i A</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="487"/>
@@ -3569,7 +3569,7 @@
         <location filename="../instruments/instrumentsxml.h" line="515"/>
         <source>B♭ B. Tpt.</source>
         <comment>B♭ Bass Trumpet</comment>
-        <translation>B btpt.</translation>
+        <translation>B♭ btpt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="519"/>
@@ -3605,7 +3605,7 @@
         <location filename="../instruments/instrumentsxml.h" line="539"/>
         <source>Bq. Tpt. B♭</source>
         <comment>Baroque Trumpet in B♭</comment>
-        <translation>Bar.tpt. B</translation>
+        <translation>Bar.tpt. B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="543"/>
@@ -3623,13 +3623,13 @@
         <location filename="../instruments/instrumentsxml.h" line="549"/>
         <source>S. Bu.</source>
         <comment>Soprano Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>S. Bhn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="551"/>
         <source>A. Bu.</source>
         <comment>Alto Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>A. Bhn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="553"/>
@@ -3659,25 +3659,25 @@
         <location filename="../instruments/instrumentsxml.h" line="567"/>
         <source>Euph. Bu.</source>
         <comment>Euphonium Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>Euph. bhn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="569"/>
         <source>Mello. Bu.</source>
         <comment>Mellophone Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>Mello. bhn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="571"/>
         <source>Cb. Bu.</source>
         <comment>Contrabass Bugle</comment>
-        <translation type="unfinished"/>
+        <translation>Kb. bhn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="573"/>
         <source>Mello.</source>
         <comment>Mellophone</comment>
-        <translation type="unfinished"/>
+        <translation>Mello.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="575"/>
@@ -3754,7 +3754,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="598"/>
         <source>Alto Sackbut</source>
-        <translation>Alt-sackbut</translation>
+        <translation>Altsackbut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="599"/>
@@ -3765,7 +3765,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="600"/>
         <source>Tenor Sackbut</source>
-        <translation>Tenor-sackbut</translation>
+        <translation>Tenorsackbut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="601"/>
@@ -3776,7 +3776,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="602"/>
         <source>Bass Sackbut</source>
-        <translation>Bas-sackbut</translation>
+        <translation>Bassackbut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="603"/>
@@ -3844,45 +3844,45 @@
         <location filename="../instruments/instrumentsxml.h" line="629"/>
         <source>F Tb.</source>
         <comment>F Tuba</comment>
-        <translation type="unfinished"/>
+        <translation>F Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="631"/>
         <location filename="../instruments/instrumentsxml.h" line="633"/>
         <source>E♭ Tb.</source>
         <comment>E♭ Tuba</comment>
-        <translation type="unfinished"/>
+        <translation>E♭ Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="636"/>
         <source>C Tb.</source>
         <comment>C Tuba</comment>
-        <translation type="unfinished"/>
+        <translation>C Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="638"/>
         <location filename="../instruments/instrumentsxml.h" line="640"/>
         <source>B♭ Tb.</source>
         <comment>B♭ Tuba</comment>
-        <translation type="unfinished"/>
+        <translation>B♭ Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="643"/>
         <source>Ba. Tb. F</source>
         <comment>Bass Tuba in F</comment>
-        <translation type="unfinished"/>
+        <translation>Ba. Tb. F</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="645"/>
         <source>Ba. Tb. E♭</source>
         <comment>Bass Tuba in E♭</comment>
-        <translation type="unfinished"/>
+        <translation>Ba. Tb. E♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="647"/>
         <source>SCb. Tb.</source>
         <comment>Sub-Contrabass Tuba</comment>
-        <translation type="unfinished"/>
+        <translation>Skb. Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="649"/>
@@ -3911,19 +3911,19 @@
         <location filename="../instruments/instrumentsxml.h" line="655"/>
         <source>Wag. Tb.</source>
         <comment>Wagner Tuba</comment>
-        <translation type="unfinished"/>
+        <translation>Wag. Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="657"/>
         <source>B♭ Wag. Tb.</source>
         <comment>B♭ Wagner Tuba</comment>
-        <translation type="unfinished"/>
+        <translation>B♭ Wag. Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="659"/>
         <source>F Wag. Tb.</source>
         <comment>F Wagner Tuba</comment>
-        <translation type="unfinished"/>
+        <translation>F Wag. Tb.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="661"/>
@@ -3958,7 +3958,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="670"/>
         <source>Percussion - Pitched</source>
-        <translation type="unfinished"/>
+        <translation>Slagverk – stämt</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="672"/>
@@ -4229,7 +4229,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="755"/>
         <source>Percussion - Unpitched</source>
-        <translation type="unfinished"/>
+        <translation>Slagverk – ostämt</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="757"/>
@@ -4246,7 +4246,7 @@
         <location filename="../instruments/instrumentsxml.h" line="759"/>
         <source>Con. Sn.</source>
         <comment>Concert Snare Drum</comment>
-        <translation type="unfinished"/>
+        <translation>Kon.-virv.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="760"/>
@@ -4268,7 +4268,7 @@
         <location filename="../instruments/instrumentsxml.h" line="763"/>
         <source>Picc. Sn.</source>
         <comment>Piccolo Snare</comment>
-        <translation type="unfinished"/>
+        <translation>Picc.-virv.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="764"/>
@@ -4354,7 +4354,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="786"/>
         <source>Tam-Tam</source>
-        <translation>Tam-Tam</translation>
+        <translation>Tam-tam</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="787"/>
@@ -4620,7 +4620,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="868"/>
         <source>Percussion - Marching</source>
-        <translation>Slagverk - Marsch</translation>
+        <translation>Slagverk – marsch</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="870"/>
@@ -4649,7 +4649,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="877"/>
         <source>Percussion - Body</source>
-        <translation type="unfinished"/>
+        <translation>Slagverk – kropp</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="879"/>
@@ -5232,7 +5232,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1178"/>
         <source>Mandolin (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Mandolin (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1180"/>
@@ -5273,7 +5273,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1195"/>
         <source>Ukulele (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Ukulele (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1196"/>
@@ -5333,7 +5333,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1206"/>
         <source>Bass Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Basgitarr (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1217"/>
@@ -5344,7 +5344,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1220"/>
         <source>Electric Bass (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Elbas (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1222"/>
@@ -5362,7 +5362,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1229"/>
         <source>5-str. Electric Bass (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Femsträngad elbas (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1232"/>
@@ -5372,7 +5372,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1235"/>
         <source>5-str. Electric Bass (High C/Tenor) (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Femsträngad elbas (högt C) (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1236"/>
@@ -5388,7 +5388,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1240"/>
         <source>6-str. Electric Bass (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Sexsträngad elbas (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1243"/>
@@ -5448,7 +5448,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1253"/>
         <source>Strings - Bowed</source>
-        <translation>Stråkinstrument - Stråkar</translation>
+        <translation>Stråkinstrument – med stråkar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1260"/>
@@ -5825,7 +5825,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1225"/>
         <location filename="../instruments/instrumentsxml.h" line="1230"/>
         <source>5-str. Electric Bass</source>
-        <translation>Elbas 5-strängad</translation>
+        <translation>Femsträngad elbas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1338"/>
@@ -5840,7 +5840,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="55"/>
         <source>B♭ Fife</source>
-        <translation>B-fältpipa</translation>
+        <translation>Fältpipa i B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1030"/>
@@ -5864,12 +5864,12 @@
         <location filename="../instruments/instrumentsxml.h" line="1048"/>
         <source>Perc. Syn.</source>
         <comment>Percussion Synthesizer</comment>
-        <translation type="unfinished"/>
+        <translation>Perc. Syn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1049"/>
         <source>Strings - Plucked</source>
-        <translation type="unfinished"/>
+        <translation>Stränginstrument – knäppta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1051"/>
@@ -5880,7 +5880,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1052"/>
         <source>Banjo (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Banjo (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1054"/>
@@ -5902,7 +5902,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1057"/>
         <source>Irish Tenor Banjo (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Irländsk tenorbanjo (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1059"/>
@@ -5992,7 +5992,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1098"/>
         <source>Classical Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Klassisk gitarr (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1099"/>
@@ -6008,7 +6008,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1101"/>
         <source>7-string Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Sjusträngad gitarr (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1102"/>
@@ -6060,7 +6060,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1128"/>
         <location filename="../instruments/instrumentsxml.h" line="1137"/>
         <source>jazz</source>
-        <translation type="unfinished"/>
+        <translation>jazz</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1116"/>
@@ -6070,7 +6070,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1117"/>
         <source>Acoustic Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Akustisk gitarr (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1119"/>
@@ -6100,17 +6100,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1133"/>
         <source>harmonics</source>
-        <translation type="unfinished"/>
+        <translation>övertoner</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1134"/>
         <source>distorted</source>
-        <translation type="unfinished"/>
+        <translation>distad</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1135"/>
         <source>overdrive</source>
-        <translation type="unfinished"/>
+        <translation>överstyrning</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1138"/>
@@ -6120,7 +6120,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1139"/>
         <source>Electric Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Elgitarr (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1141"/>
@@ -6171,7 +6171,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1150"/>
         <source>Lute (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Luta (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1173"/>

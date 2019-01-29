@@ -211,9 +211,9 @@
     such as by moving tempo markings above other text or by shortening hairpins to avoid dynamics.
     In many cases, this means that no further adjustments will be required at all.</source>
         <comment>autoplace-tour</comment>
-        <translation>Outoplasing posisiesioneer meeste elemente volgends standaard praktyke van musiekgravering,
-    soos deur bewegende tempoaanduiding bo ander teks te plaas of deur crescendo/diminuendo-tekens te verkort deur dinamiektekens te vermy.
-    In vele gevalle beteken dit dat daar nie verder verstellings vereis sal word nie.</translation>
+        <translation>Outoplasing posisiesioneer meeste elemente volgends standaard musiekgraveringspraktyk,
+    soos deur tempoaanduidings bo ander teks te skuif of deur crescendo/diminuendo-tekens te verkort om dinamiektekens te vermy.
+    In vele gevalle beteken dit dat daar geen verdere verstellings nodig sal wees nie.</translation>
     </message>
     <message>
         <source>If necessary, you can fine-tune the position of elements by dragging, by using the cursor keys while in Edit mode (double-click),
@@ -221,15 +221,15 @@
     This allows you to make adjustments while leaving autoplace enabled to continue avoiding collisions.</source>
         <comment>autoplace-tour</comment>
         <translation>Indien nodig, kan jy die posisie van elemente verfyn deur te sleep, deur die pyltoetse te gebruik terwyl jy in redigeer-modus is (dubbelklik),
-    of deur die &quot;Verplasing&quot;-velde in dien inspekteur te gebruik.
+    of deur die &quot;Verplasing&quot;-velde in die inspekteur te gebruik.
     Dit laat jou toe om verstellings te maak terwyl outoplasing geaktiveer bly om aan te hou om botsings te vermy.</translation>
     </message>
     <message>
         <source>For larger adjustments, it may be more convenient to disable autoplace for selected elements using the Inspector.
     This will remove them from collision detection and allow you to place them more freely.</source>
         <comment>autoplace-tour</comment>
-        <translation>Vir groter verstellings, mag dit meer gerieflik wees om outoplasing vir gekose elemente deur middel van die inspekteur te deaktiveer.
-    Dit sal hulle verwyder van botsing-opsporing en jou toelaat om hulle meer vrylik te plaas.</translation>
+        <translation>Vir groter verstellings mag dit meer gerieflik wees om outoplasing vir gekose elemente met die inspekteur te af te skakel.
+    Dit sal hulle verwyder van botsing-opsporing en jou meer vryheid met hul plasing toelaat.</translation>
     </message>
     <message>
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
@@ -254,7 +254,7 @@
         <translation>Die afdeling daaronder bevat &apos;n ry vir elke instrument.
     Elke kassie in die ry stel &apos;n maat vir daardie instrument voor.
     As die kassie verlig is, is daar note in daardie maat.
-    Kassies met &apos;n dun blou buitelyn stel voor mate wat tans gewys word.</translation>
+    Kassies met &apos;n dun blou buitelyn stel mate wat tans gewys word voor.</translation>
     </message>
     <message>
         <source>MuseScore supports different types of selections: single, list, and range.
@@ -270,11 +270,11 @@
     Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
-        <translation>Om &apos;n enkele seleksie te maak, klik element wat jy wil selekteer.
+        <translation>Om &apos;n enkelseleksie te maak, klik element wat jy wil selekteer.
     Dit word verlig om aan te dui dat dit geselekteer is.
-    Jy kan die linkspyl- en regspyl-toetse gebruik om die seleksie deur die note en rustekens van jou partituur te beweeg.
-    Wenk: as jy die Alt-toets druk (Option op macOS), saam met die pyltoets, kan jy deur ander elemente beweeg,
-    en ook op en af tussen notebalke beweeg.</translation>
+    Jy kan die links- en regspyltoetse gebruik om die seleksie deur die note en rustekens van jou partituur te beweeg.
+    Wenk: as jy die Alt-toets druk (Option op macOS), saam met die pyltoets, kan jy deur ander elemente,
+    en ook op en af tussen notebalke, beweeg.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -283,9 +283,9 @@
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
         <translation>&apos;n Lysseleksie is &apos;n kombinasie van enkele seleksies.
-    Druk Ctrl (macOS: Cmd) terwyl jy klik om elemente tot die lys seleksie by te voeg of te verwyder.
+    Druk Ctrl (macOS: Cmd) terwyl jy klik om elemente tot die lysseleksie by te voeg of te verwyder.
     Jy kan ook vinning soortgelyke elemente selekteer deur een te regsklik (macOS: Ctrl+klik) 
-    en dan een van die &quot;Selekteer&quot;-opsies van die opwip-kieslys te kies.</translation>
+    en dan een van die &quot;Selekteer&quot;-opsies van die opwipkieslys te kies.</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -303,22 +303,22 @@
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation>&apos;n Ander manier om seleksies te maak is om Shift in te hou terwyl jy sleep.
+        <translation>Om Shift in te hou terwyl jy sleep, is &apos;n ander manier om seleksies te maak.
     As jou seleksie note insluit, sal dit outomaties &apos;n reeksseleksie gemaak word;
     andersins sal dit &apos;n lysseleksie gemaak word.</translation>
     </message>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation>Ten slotte, die seleksiefilter (wat in die Aansig-kieslys gevind word) laat jou toe om elemente van &apos;n gegewe tipe uit &apos;n reeksseleksie uit te sluit.</translation>
+        <translation>Ten slotte laat die seleksiefilter (wat in die Aansig-kieslys gevind word) jou toe om elemente van &apos;n gegewe tipe uit &apos;n reeksseleksie uit te sluit.</translation>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation>As jy &apos;n waarde gewysig het, kan jy op die &quot;Stel terug&quot;-knoppie klik om dit na die verstek terug te stel.
-    As die waarde beheer word deur &apos;n stylverstelling, kan jy die &quot;Stel as styl&quot;-knoppie druk om die huidige waarde as die nuwe verstek vir die styl te stel.
+    As die waarde beheer word deur &apos;n stylinstelling, kan jy die &quot;Stel as styl&quot;-knoppie druk om die huidige waarde as die nuwe verstek vir die styl te stel.
     Jy kan ook styl-verstekwaardes via Formaat &gt; Styl….</translation>
     </message>
     <message>
@@ -332,7 +332,7 @@
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
         <translation>Die Lêerbewerkings-nutsbalk laat jou toe om lêers te skep/open/stoor/druk en wysigings te ontdoen/herdoen.
-    Jy kan ook jou stoor na jou musescore.com-rekening as jy gaan na Lêer &gt; Stoor aanlyn.
+    Jy kan ook stoor na jou musescore.com-rekening as jy gaan na Lêer &gt; Stoor aanlyn.
     Die kontroles aan die regterkant van hierdie nutsbalk beheer die vertoon van jou partituur.</translation>
     </message>
     <message>

@@ -3335,7 +3335,7 @@
         <location filename="../instruments/instrumentsxml.h" line="560"/>
         <location filename="../instruments/instrumentsxml.h" line="564"/>
         <source>open</source>
-        <translation type="unfinished"/>
+        <translation>オープン</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="418"/>
@@ -5274,7 +5274,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1195"/>
         <source>Ukulele (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>ウクレレ[TAB譜]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1196"/>
@@ -5881,7 +5881,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1052"/>
         <source>Banjo (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>バンジョー[TAB譜]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1054"/>
@@ -5993,7 +5993,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1098"/>
         <source>Classical Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>クラシックギター[TAB譜]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1099"/>
@@ -6061,7 +6061,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1128"/>
         <location filename="../instruments/instrumentsxml.h" line="1137"/>
         <source>jazz</source>
-        <translation type="unfinished"/>
+        <translation>ジャズ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1116"/>
@@ -6111,7 +6111,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1135"/>
         <source>overdrive</source>
-        <translation type="unfinished"/>
+        <translation>オバードライブ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1138"/>

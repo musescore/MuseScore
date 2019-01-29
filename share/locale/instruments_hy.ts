@@ -49,7 +49,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="35"/>
         <source>Double Contrabass Flute</source>
-        <translation>Կրկնակի կոնտրաբասային ֆլեյտա</translation>
+        <translation>Կրկնակի Կոնտրաբասային ֆլեյտա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="37"/>
@@ -114,27 +114,27 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="65"/>
         <source>Gemshorn</source>
-        <translation>Գեմսհորն</translation>
+        <translation>Գեմսհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="67"/>
         <source>Soprano Gemshorn</source>
-        <translation>Սոպրանոյի գեմսհորն</translation>
+        <translation>Սոպրանոյի Գեմսհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="69"/>
         <source>Alto Gemshorn</source>
-        <translation>Ալտային գեմսհորն</translation>
+        <translation>Ալտային գեմսհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="71"/>
         <source>Tenor Gemshorn</source>
-        <translation>Տենորային գեմսհորն</translation>
+        <translation>Տենորային գեմսհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="73"/>
         <source>Bass Gemshorn</source>
-        <translation>Բասային գեմսհորն</translation>
+        <translation>Բասային գեմսհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
@@ -144,47 +144,47 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="77"/>
         <source>G Soprano Ocarina</source>
-        <translation>Սոլ սոպրանո օկարինա</translation>
+        <translation>Սոլ Սոպրանոյի Օկարինա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="79"/>
         <source>F Soprano Ocarina</source>
-        <translation>Ֆա սոպրանո օկարինա</translation>
+        <translation>Ֆա Սոպրանոյի Օկարինա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="81"/>
         <source>C Soprano Ocarina</source>
-        <translation>Դո սոպրանո օկարինա</translation>
+        <translation>Դո Սոպրանոյի Օկարինա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="83"/>
         <source>B♭ Soprano Ocarina</source>
-        <translation>Սի բեմոլ սոպրանո օկարինա</translation>
+        <translation>Սի♭ Սոպրանոյի Օկարինա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="85"/>
         <source>G Alto Ocarina</source>
-        <translation>Սոլ ալտային օկարինա</translation>
+        <translation>Սոլ Ալտային Օկարինա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="87"/>
         <source>F Alto Ocarina</source>
-        <translation>Ֆա ալտային օկարինա</translation>
+        <translation>Ֆա Ալտային Օկարինա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="89"/>
         <source>C Alto Ocarina</source>
-        <translation>Դո ալտային օկարինա</translation>
+        <translation>Դո Ալտային Օկարինա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
         <source>B♭ Alto Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Ալտային Օկարինա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
         <source>C Bass Ocarina</source>
-        <translation>Դո բասային օկարինա</translation>
+        <translation>Դո Բասային Օկարինա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="95"/>
@@ -200,17 +200,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="99"/>
         <source>C Quena</source>
-        <translation>Դո կենա</translation>
+        <translation>Դո Կենա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="101"/>
         <source>G Quena</source>
-        <translation>Սոլ կենա</translation>
+        <translation>Սոլ Կենա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="103"/>
         <source>F Quena</source>
-        <translation>Ֆա կենա</translation>
+        <translation>Ֆա Կենա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="107"/>
@@ -220,82 +220,82 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="109"/>
         <source>Garklein Recorder</source>
-        <translation>Գառկլյայն բլոկֆլեյտա</translation>
+        <translation>Գառկլյայն Բլոկֆլեյտա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="111"/>
         <source>Sopranino Recorder</source>
-        <translation>Սոպրանինո բլոկֆլեյտա</translation>
+        <translation>Սոպրանինո Բլոկֆլեյտա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="113"/>
         <source>Soprano Recorder</source>
-        <translation>Սոպրանո բլոկֆլեյտա</translation>
+        <translation>Սոպրանոյի Բլոկֆլեյտա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="115"/>
         <source>Alto Recorder</source>
-        <translation>Ալտային բլոկֆլեյտա</translation>
+        <translation>Ալտային Բլոկֆլեյտա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="117"/>
         <source>Tenor Recorder</source>
-        <translation>Տենորային բլոկֆլեյտա</translation>
+        <translation>Տենորային Բլոկֆլեյտա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="119"/>
         <source>Bass Recorder</source>
-        <translation>Բասային բլոկֆլեյտա</translation>
+        <translation>Բասային Բլոկֆլեյտա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="123"/>
         <source>Contrabass Recorder</source>
-        <translation>Կոնտրաբասային բլոկֆլեյտա</translation>
+        <translation>Կոնտրաբասային Բլոկֆլեյտա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="121"/>
         <source>Greatbass Recorder</source>
-        <translation>Գրոսբասային բլոկֆլեյտա</translation>
+        <translation>Գրոսբասային Բլոկֆլեյտա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="125"/>
         <source>Slide Whistle</source>
-        <translation>Սլայդ վիսլ</translation>
+        <translation>Սլայդ Ուիսլ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="127"/>
         <source>Tin Whistle</source>
-        <translation>Թին վիսլ</translation>
+        <translation>Թին Ուիսլ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="129"/>
         <source>B♭ Tin Whistle</source>
-        <translation>Սի բեմոլ վիսլ</translation>
+        <translation>Սի♭Թին Ուիսլ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="133"/>
         <source>Piccolo Oboe</source>
-        <translation>Գոբոյ-պիկոլո</translation>
+        <translation>Հոբոյ Պիկոլո</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="135"/>
         <source>Oboe</source>
-        <translation>Գոբոյ</translation>
+        <translation>Հոբոյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="137"/>
         <source>Baroque Oboe</source>
-        <translation>Բարոկկո Գոբոյ</translation>
+        <translation>Բարոկկո Հոբոյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="139"/>
         <source>Oboe d&apos;amore</source>
-        <translation>Գոբոյ դ՚ամուր</translation>
+        <translation>Հոբոյ դ՚ամուր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="141"/>
         <source>Oboe da caccia</source>
-        <translation>Գոբոյ դա կաչչա</translation>
+        <translation>Հոբոյ դա կաչչա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="143"/>
@@ -305,12 +305,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
         <source>Baritone Oboe</source>
-        <translation>Բարիտոն հոբոյ</translation>
+        <translation>Բարիտոնային Հոբոյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="147"/>
         <source>Piccolo Heckelphone</source>
-        <translation>Հեկելֆոն պիկոլո</translation>
+        <translation>Հեկելֆոն Պիկոլո</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="149"/>
@@ -320,37 +320,37 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="153"/>
         <source>Heckelphone-clarinet</source>
-        <translation>Հեկելֆոն կլառնետ</translation>
+        <translation>Հեկելֆոն-կլառնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="155"/>
         <source>Sopranino Shawm</source>
-        <translation>Սոպրանինո շալմեյ</translation>
+        <translation>Սոպրանինո Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="157"/>
         <source>Soprano Shawm</source>
-        <translation>Սոպրանո շալմեյ</translation>
+        <translation>Սոպրանոյի Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="159"/>
         <source>Alto Shawm</source>
-        <translation>Ալտային շալմեյ</translation>
+        <translation>Ալտային Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="161"/>
         <source>Tenor Shawm</source>
-        <translation>Տենորային շալմեյ</translation>
+        <translation>Տենորային Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="163"/>
         <source>Bass Shawm</source>
-        <translation>Բասային շալմեյ</translation>
+        <translation>Բասային Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="165"/>
         <source>Great Bass Shawm</source>
-        <translation>Մեծ բասային շալմեյ</translation>
+        <translation>Մեծ Բասային Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="167"/>
@@ -360,680 +360,680 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="169"/>
         <source>Crumhorn</source>
-        <translation>Կրումհորն</translation>
+        <translation>Կրամհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="171"/>
         <source>Soprano Crumhorn</source>
-        <translation>Սոպրանո կրումհորն</translation>
+        <translation>Սոպրանոյի Կրամհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="173"/>
         <source>Alto Crumhorn</source>
-        <translation>Ալտային կրումհորն</translation>
+        <translation>Ալտային Կրամհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="175"/>
         <source>Tenor Crumhorn</source>
-        <translation>Տենորային կրումհորն</translation>
+        <translation>Տենորային Կրամհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="177"/>
         <source>Bass Crumhorn</source>
-        <translation>Բասային կրումհորն</translation>
+        <translation>Բասային Կրամհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="179"/>
         <source>Greatbass Crumhorn</source>
-        <translation>Մեծ բասային կրումհորն</translation>
+        <translation>Մեծ Բասային Կրամհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="181"/>
         <source>Cornamuse</source>
-        <translation type="unfinished"/>
+        <translation>Պարկապզուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="183"/>
         <source>Soprano Cornamuse</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Պարկապզուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="185"/>
         <source>Alto Cornamuse</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Պարկապզուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>
         <source>Tenor Cornamuse</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Պարկապզուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="189"/>
         <source>Bass Cornamuse</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Պարկապզուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="191"/>
         <location filename="../instruments/instrumentsxml.h" line="197"/>
         <source>Duduk</source>
-        <translation type="unfinished"/>
+        <translation>Դուդուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="193"/>
         <source>F Duduk</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա Դուդուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="195"/>
         <source>E Duduk</source>
-        <translation type="unfinished"/>
+        <translation>Մի Դուդուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="199"/>
         <source>C Duduk</source>
-        <translation type="unfinished"/>
+        <translation>Դո Դուդուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="201"/>
         <source>B Duduk</source>
-        <translation type="unfinished"/>
+        <translation>Սի Դուդուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="203"/>
         <source>B♭ Duduk</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Դուդուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="205"/>
         <source>A Duduk</source>
-        <translation type="unfinished"/>
+        <translation>Լա Դուդուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="207"/>
         <source>G Duduk</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ Դուդուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="209"/>
         <source>A Bass Duduk</source>
-        <translation type="unfinished"/>
+        <translation>Լա Բասային Դուդուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="211"/>
         <source>Soprano Kelhorn</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Կելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="213"/>
         <source>Alto Kelhorn</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Կելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="215"/>
         <source>Tenor Kelhorn</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Կելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="217"/>
         <source>Bass Kelhorn</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Կելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="219"/>
         <source>Greatbass Kelhorn</source>
-        <translation type="unfinished"/>
+        <translation>Մեծ Բասային Կելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="221"/>
         <source>Rauschpfeife</source>
-        <translation type="unfinished"/>
+        <translation>Րաուշֆայֆե</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="223"/>
         <source>Sopranino Rauschpfeife</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանինո Րաուշֆայֆե</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="225"/>
         <source>Soprano Rauschpfeife</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Րաուշֆայֆե</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="227"/>
         <source>Shenai</source>
-        <translation type="unfinished"/>
+        <translation>Շահնաի</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="229"/>
         <source>Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="231"/>
         <source>Piccolo Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Կլարնետ Պիկոլո</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="233"/>
         <source>Soprano Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="237"/>
         <source>D Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Ռե Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="239"/>
         <source>E♭ Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="243"/>
         <source>B♭ Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="245"/>
         <source>A Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Լա Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="247"/>
         <source>Alto Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="249"/>
         <source>Basset Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Բասետ Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="251"/>
         <source>Basset Horn</source>
-        <translation type="unfinished"/>
+        <translation>Բասետհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="253"/>
         <source>Bass Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="261"/>
         <source>Contra-alto Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Կոնտրալտային Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="263"/>
         <source>Contrabass Clarinet</source>
-        <translation type="unfinished"/>
+        <translation>Կոնտրաբասային Կլարնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="265"/>
         <source>Chalumeau</source>
-        <translation type="unfinished"/>
+        <translation>Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="267"/>
         <source>Sopranino Chalumeau</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանինո Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="269"/>
         <source>Soprano Chalumeau</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="271"/>
         <source>Alto Chalumeau</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="273"/>
         <source>Tenor Chalumeau</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="275"/>
         <source>Bass Chalumeau</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Շալմեյ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="277"/>
         <source>Tarogato</source>
-        <translation type="unfinished"/>
+        <translation>Տարոգատո</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="279"/>
         <source>Octavin</source>
-        <translation type="unfinished"/>
+        <translation>Փոքր Ֆլեյտա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="281"/>
         <source>Bassoon</source>
-        <translation type="unfinished"/>
+        <translation>Ֆագոտ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="283"/>
         <source>Contrabassoon</source>
-        <translation type="unfinished"/>
+        <translation>Կոնտրաֆագոտ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="285"/>
         <source>Reed Contrabass</source>
-        <translation type="unfinished"/>
+        <translation>Լեզվակային Կոնտրաբաս</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="287"/>
         <source>Dulcian</source>
-        <translation type="unfinished"/>
+        <translation>Դուլցիան</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="289"/>
         <source>Rackett</source>
-        <translation type="unfinished"/>
+        <translation>Ռակետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="291"/>
         <source>Sarrusophone</source>
-        <translation type="unfinished"/>
+        <translation>Սարյուսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="293"/>
         <source>Sopranino Sarrusophone</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանինո Սարյուսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="295"/>
         <source>Soprano Sarrusophone</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Սարյուսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="297"/>
         <source>Alto Sarrusophone</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Սարյուսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="299"/>
         <source>Tenor Sarrusophone</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Սարյուսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="301"/>
         <source>Baritone Sarrusophone</source>
-        <translation type="unfinished"/>
+        <translation>Բարիտոնային Սարյուսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="303"/>
         <source>Bass Sarrusophone</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Սարյուսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="305"/>
         <source>Contrabass Sarrusophone</source>
-        <translation type="unfinished"/>
+        <translation>Կոնտրաբասային Սարյուսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="307"/>
         <source>Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="309"/>
         <source>Sopranissimo Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանիսիմո Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="311"/>
         <source>Sopranino Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանինո Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="313"/>
         <source>Soprano Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="315"/>
         <source>Aulochrome</source>
-        <translation type="unfinished"/>
+        <translation>Աուլոքրոմ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="317"/>
         <source>Mezzo-Soprano Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Մեցցո-սոպրանոյի Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="319"/>
         <source>Alto Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="321"/>
         <source>Melody Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Մելոդիկ Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="323"/>
         <source>Tenor Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="325"/>
         <source>Baritone Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Բարիտոնային Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="327"/>
         <source>Bass Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="329"/>
         <source>Contrabass Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Կոնտրաբասային Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="331"/>
         <source>Subcontrabass Saxophone</source>
-        <translation type="unfinished"/>
+        <translation>Սուբկոնտրաբասային Սաքսոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="333"/>
         <source>Bagpipe</source>
-        <translation type="unfinished"/>
+        <translation>Պարկապզուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="335"/>
         <source>Free Reed</source>
-        <translation type="unfinished"/>
+        <translation>Լեզվակային նվագարաններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="336"/>
         <source>Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="338"/>
         <source>12 Hole C Chromatic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>12-անցքանի Դո Խրոմատիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="340"/>
         <source>14 Hole C Chromatic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>14-անցքանի Դո Խրոմատիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="342"/>
         <source>12 Hole G Chromatic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>12-անցքանի Սոլ Խրոմատիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="344"/>
         <source>16 Hole C Chromatic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>16-անցքանի Դո Խրոմատիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="346"/>
         <source>12 Hole Tenor C Chromatic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>12-անցքանի Տենորային Դո Խրոմատիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="348"/>
         <source>10 Hole High G Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>10-անցքանի Դիատոնիկ Բարձր Սոլ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="350"/>
         <source>10 Hole F Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>10-անցքանի Ֆա Դիատոնիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="352"/>
         <source>10 Hole D Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>10-անցքանի Ռե Դիատոնիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="354"/>
         <source>10 Hole C Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>10-անցքանի Դո Դիատոնիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="356"/>
         <source>10 Hole A Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>10-անցքանի Լա Դիատոնիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="358"/>
         <source>10 Hole G Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>10-անցքանի Սոլ Դիատոնիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="360"/>
         <source>10 Hole Low D Diatonic Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>10-անցքանի ցածր Ռե Դիատոնիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="362"/>
         <source>20 Hole Chordet Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>20-անցքանի Ակորդային Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="364"/>
         <source>Bass Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="366"/>
         <source>Bass Hohner Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Հարմոնիկա Հոներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="368"/>
         <source>Bass Huang Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Հարմոնիկա Հուան</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="370"/>
         <source>Accordion</source>
-        <translation type="unfinished"/>
+        <translation>Ակորդեոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="372"/>
         <source>Bandoneon</source>
-        <translation type="unfinished"/>
+        <translation>Բանդանեոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="374"/>
         <source>Concertina</source>
-        <translation type="unfinished"/>
+        <translation>Կոնցերտինա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="376"/>
         <source>Melodica</source>
-        <translation type="unfinished"/>
+        <translation>Մելոդիկ Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="378"/>
         <source>Sheng</source>
-        <translation type="unfinished"/>
+        <translation>Շեն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="380"/>
         <source>Soprano Sheng</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Շեն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="382"/>
         <source>Alto Sheng</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Շեն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="384"/>
         <source>Tenor Sheng</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Շեն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="386"/>
         <source>Bass Sheng</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Շեն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="388"/>
         <location filename="../instruments/instrumentsxml.h" line="389"/>
         <source>Brass</source>
-        <translation type="unfinished"/>
+        <translation>Պղնձյա փողային նվագարններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="391"/>
         <source>Horn in F</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="393"/>
         <source>High C Horn</source>
-        <translation type="unfinished"/>
+        <translation>Բարձր Դո Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="395"/>
         <source>Horn in B♭</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="397"/>
         <source>Horn in A</source>
-        <translation type="unfinished"/>
+        <translation>Լա Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="399"/>
         <source>Horn in A♭</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="401"/>
         <source>Horn in G</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="403"/>
         <source>E Horn</source>
-        <translation type="unfinished"/>
+        <translation>Մի Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="405"/>
         <source>Horn in E♭</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="407"/>
         <source>Horn in D</source>
-        <translation type="unfinished"/>
+        <translation>Ռե Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="409"/>
         <source>Horn in C</source>
-        <translation type="unfinished"/>
+        <translation>Դո Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="411"/>
         <source>Vienna Horn</source>
-        <translation type="unfinished"/>
+        <translation>Վիենյան Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="413"/>
         <source>Horn in B♭ basso</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Բասային Գալարափող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="415"/>
         <source>E♭ Cornet</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Կորնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="423"/>
         <source>B♭ Cornet</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Կորնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="431"/>
         <source>Saxhorn</source>
-        <translation type="unfinished"/>
+        <translation>Սաքսհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="433"/>
         <source>F Alto Horn</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա Ալտային Փող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="435"/>
         <source>E♭ Alto Horn</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Ալտային Փող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="437"/>
         <location filename="../instruments/instrumentsxml.h" line="439"/>
         <source>Baritone Horn</source>
-        <translation type="unfinished"/>
+        <translation>Բարիտոնային Փող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="441"/>
         <source>Baritone Horn (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Բարիտոնային Փող (Ջութակի բանալի)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="442"/>
         <source>Posthorn</source>
-        <translation type="unfinished"/>
+        <translation>Փոստային Փող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="444"/>
         <source>Alphorn</source>
-        <translation type="unfinished"/>
+        <translation>Ալպիական Փող</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="446"/>
         <source>Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="450"/>
         <source>Piccolo Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Շեփոր Պիկոլո</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="454"/>
         <source>Piccolo Trumpet in B♭</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Շեփոր Պիկոլո</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="458"/>
         <source>Piccolo Trumpet in A</source>
-        <translation type="unfinished"/>
+        <translation>Լա Շեփոր Պիկոլո</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="470"/>
         <source>E♭ Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="474"/>
         <source>D Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Ռե Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="478"/>
         <source>C Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Դո Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="482"/>
         <source>B♭ Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="490"/>
         <source>Pocket Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Գրպանի Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="494"/>
@@ -1043,517 +1043,517 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="498"/>
         <source>Tenor Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="502"/>
         <source>Bass Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="506"/>
         <source>E♭ Bass Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Բասային Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="510"/>
         <source>Bass Trumpet in C</source>
-        <translation type="unfinished"/>
+        <translation>Դո Բասային Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="514"/>
         <source>B♭ Bass Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Բասային Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="518"/>
         <source>Baroque Trumpet</source>
-        <translation type="unfinished"/>
+        <translation>Բարոկկո Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="522"/>
         <source>Baroque Trumpet in F</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա Բարոկկո շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="526"/>
         <source>Baroque Trumpet in E♭</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Բարոկկո Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="530"/>
         <source>Baroque Trumpet in D</source>
-        <translation type="unfinished"/>
+        <translation>Ռե Բարոկկո Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="534"/>
         <source>Baroque Trumpet in C</source>
-        <translation type="unfinished"/>
+        <translation>Դո Բարոկկո Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="538"/>
         <source>Baroque Trumpet in B♭</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Բարոկկո Շեփոր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="542"/>
         <source>Rag Dung</source>
-        <translation type="unfinished"/>
+        <translation>Ռագ Դանգ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="546"/>
         <source>Bugle</source>
-        <translation type="unfinished"/>
+        <translation>Բյուգելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="548"/>
         <source>Soprano Bugle</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Բյուգելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="550"/>
         <source>Alto Bugle</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Բյուգելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="552"/>
         <source>Baritone Bugle</source>
-        <translation type="unfinished"/>
+        <translation>Բարիտոնային Բյուգելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="554"/>
         <source>Flugelhorn</source>
-        <translation type="unfinished"/>
+        <translation>Ֆլյուգելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="558"/>
         <source>Fiscorn</source>
-        <translation type="unfinished"/>
+        <translation>Ֆիսկոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="562"/>
         <source>Kuhlohorn</source>
-        <translation type="unfinished"/>
+        <translation>Կուհլոհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="566"/>
         <source>Euphonium Bugle</source>
-        <translation type="unfinished"/>
+        <translation>Բարիտոնային Բյուգելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="568"/>
         <source>Mellophone Bugle</source>
-        <translation type="unfinished"/>
+        <translation>Մելոֆոնային Բյուգելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="570"/>
         <source>Contrabass Bugle</source>
-        <translation type="unfinished"/>
+        <translation>Կոնտրաբասային Բյուգելհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="572"/>
         <source>Mellophone</source>
-        <translation type="unfinished"/>
+        <translation>Մելոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="574"/>
         <source>Ophicleide</source>
-        <translation type="unfinished"/>
+        <translation>Օֆիկլեիդ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="576"/>
         <source>F Alto Ophicleide</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա Ալտային Օֆիկլեիդ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="578"/>
         <source>E♭ Alto Ophicleide</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Ալտային Օֆիկլեիդ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="580"/>
         <source>C Bass Ophicleide</source>
-        <translation type="unfinished"/>
+        <translation>Դո Բասային Օֆիկլեիդ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="582"/>
         <source>B♭ Bass Ophicleide</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Բասային Օֆիկլեիդ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="584"/>
         <source>E♭ Contrabass Ophicleide</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Կոնտրաբասային Օֆիկլեիդ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="586"/>
         <source>Cornettino</source>
-        <translation type="unfinished"/>
+        <translation>Կորնետինո</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="588"/>
         <source>Cornett</source>
-        <translation type="unfinished"/>
+        <translation>Կորնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="590"/>
         <source>Soprano Cornett</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Կորնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="592"/>
         <source>Alto Cornett</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Կորնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="594"/>
         <source>Tenor Cornett</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Կորնետ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="596"/>
         <source>Serpent</source>
-        <translation type="unfinished"/>
+        <translation>Սերպենտ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="604"/>
         <location filename="../instruments/instrumentsxml.h" line="606"/>
         <source>Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Տրոմբոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="608"/>
         <source>Trombone (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Տրոմբոն (Ջութակի բանալի)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="609"/>
         <source>Soprano Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Տրոմբոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="611"/>
         <source>Alto Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Տրոմբոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="613"/>
         <source>Tenor Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Տրոմբոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="615"/>
         <source>Bass Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Տրամբոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="617"/>
         <source>Contrabass Trombone</source>
-        <translation type="unfinished"/>
+        <translation>Կոնտրաբասային Տրոմբոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="619"/>
         <source>Cimbasso</source>
-        <translation type="unfinished"/>
+        <translation>Չիմբասո</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="621"/>
         <location filename="../instruments/instrumentsxml.h" line="623"/>
         <source>Euphonium</source>
-        <translation type="unfinished"/>
+        <translation>Էուֆոնիում</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="625"/>
         <source>Euphonium (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Էուֆոնիում (Ջութակի բանալի)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="626"/>
         <source>Tuba</source>
-        <translation type="unfinished"/>
+        <translation>Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="628"/>
         <source>F Tuba</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="630"/>
         <location filename="../instruments/instrumentsxml.h" line="632"/>
         <source>E♭ Tuba</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="634"/>
         <source>E♭ Tuba (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Տուբա (Ջութակի բանալի)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="635"/>
         <source>C Tuba</source>
-        <translation type="unfinished"/>
+        <translation>Դո Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="637"/>
         <location filename="../instruments/instrumentsxml.h" line="639"/>
         <source>B♭ Tuba</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="641"/>
         <source>B♭ Tuba (Treble Clef)</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Տուբա (Ջութակի բանալի)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="642"/>
         <source>Bass Tuba in F</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա Բասային Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="644"/>
         <source>Bass Tuba in E♭</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ Բասային Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="646"/>
         <source>Sub-Contrabass Tuba</source>
-        <translation type="unfinished"/>
+        <translation>Սուբկոնտրաբասային Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="648"/>
         <source>Helicon</source>
-        <translation type="unfinished"/>
+        <translation>Հելիկոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="650"/>
         <source>Sousaphone</source>
-        <translation type="unfinished"/>
+        <translation>Սուզաֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="654"/>
         <source>Wagner Tuba</source>
-        <translation type="unfinished"/>
+        <translation>Վագներ Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="656"/>
         <source>B♭ Wagner Tuba</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ Վագներ Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="658"/>
         <source>F Wagner Tuba</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա Վագներ Տուբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="660"/>
         <source>Conch</source>
-        <translation type="unfinished"/>
+        <translation>Կոնխ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="662"/>
         <source>Didgeridoo</source>
-        <translation type="unfinished"/>
+        <translation>Դիջերիդու</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="664"/>
         <source>Horagai</source>
-        <translation type="unfinished"/>
+        <translation>Հորագաի</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="666"/>
         <source>Shofar</source>
-        <translation type="unfinished"/>
+        <translation>Շոյֆեր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="668"/>
         <source>Vuvuzela</source>
-        <translation type="unfinished"/>
+        <translation>Վուվուզելա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="671"/>
         <source>Timpani</source>
-        <translation type="unfinished"/>
+        <translation>Լիտավրներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="675"/>
         <source>Glockenspiel</source>
-        <translation type="unfinished"/>
+        <translation>Գլոկենշպիլ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="677"/>
         <source>Orff Soprano Glockenspiel</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Գլոկենշպիլ Օրֆ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="679"/>
         <source>Orff Alto Glockenspiel</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Գլոկենշպիլ Օրֆ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="681"/>
         <source>Crotales</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրիկ ծնծղաներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="683"/>
         <source>Tubaphone</source>
-        <translation type="unfinished"/>
+        <translation>Տուբաֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="685"/>
         <source>Almglocken</source>
-        <translation type="unfinished"/>
+        <translation>Ալմգլոկեն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="687"/>
         <source>Vibraphone</source>
-        <translation type="unfinished"/>
+        <translation>Վիբրաֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="689"/>
         <source>Metallophone</source>
-        <translation type="unfinished"/>
+        <translation>Մետաղաֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="691"/>
         <source>Orff Soprano Metallophone</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Մետաղաֆոն Օրֆ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="693"/>
         <source>Orff Alto Metallophone</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Մետաղաֆոն Օրֆ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="695"/>
         <source>Orff Bass Metallophone</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Մետաղաֆոն Օրֆ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="699"/>
         <source>Steel Drums</source>
-        <translation type="unfinished"/>
+        <translation>Պողպատե Հարվածային նվագարաններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="701"/>
         <source>Soprano Steel Drums</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Պողպատե Հարվածային նվագարաններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="703"/>
         <source>Alto Steel Drums</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Պողպատե Հարվածային նվագարաններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="705"/>
         <source>Guitar Steel Drums</source>
-        <translation type="unfinished"/>
+        <translation>Կիթառային Պողպատե Հարվածային նվագարաններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="707"/>
         <source>Tenor Steel Drums</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Պողպատե Հարվածային նվագարաններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="709"/>
         <source>Cello Steel Drums</source>
-        <translation type="unfinished"/>
+        <translation>Թավջութակային Պողպատե Հարվածային նվագարաններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="711"/>
         <source>Bass Steel Drums</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Պողպատե Հարվածային նվագարաններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="713"/>
         <source>Hand Bells</source>
-        <translation type="unfinished"/>
+        <translation>Զանգակներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="715"/>
         <source>Tuned Gongs</source>
-        <translation type="unfinished"/>
+        <translation>Լարած Գոնգեր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="717"/>
         <source>Flexatone</source>
-        <translation type="unfinished"/>
+        <translation>Ֆլեքսատոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="719"/>
         <source>Musical Saw</source>
-        <translation type="unfinished"/>
+        <translation>Երաժշտական Սղոց</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="721"/>
         <source>Musical Glasses</source>
-        <translation type="unfinished"/>
+        <translation>Երաժշտական Բաժակներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="723"/>
         <source>Glass Harmonica</source>
-        <translation type="unfinished"/>
+        <translation>Ապակյա Հարմոնիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="725"/>
         <source>Xylophone</source>
-        <translation type="unfinished"/>
+        <translation>Քսիլոֆոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="727"/>
         <source>Orff Soprano Xylophone</source>
-        <translation type="unfinished"/>
+        <translation>Սոպրանոյի Քսիլոֆոն Օրֆ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="729"/>
         <source>Orff Alto Xylophone</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Քսիլոֆոն Օրֆ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="731"/>
         <source>Orff Bass Xylophone</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Քսիլոֆոն Օրֆ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="733"/>
         <source>Xylomarimba</source>
-        <translation type="unfinished"/>
+        <translation>Քսիլոմարիմբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="735"/>
         <location filename="../instruments/instrumentsxml.h" line="738"/>
         <source>Marimba</source>
-        <translation type="unfinished"/>
+        <translation>Մարիմբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="741"/>
         <source>Bass Marimba</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Մարիմբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="745"/>
         <source>Dulcimer</source>
-        <translation type="unfinished"/>
+        <translation>Դուլսիմեր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="747"/>
         <source>Tuned Klaxon Horns</source>
-        <translation type="unfinished"/>
+        <translation>Լարած Կլակսոնային Փողեր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="749"/>
         <source>Kalimba</source>
-        <translation type="unfinished"/>
+        <translation>Կալիմբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="751"/>
         <source>Treble Kalimba</source>
-        <translation type="unfinished"/>
+        <translation>Դիսկանտային Կալիմբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="753"/>
         <source>Alto Kalimba</source>
-        <translation type="unfinished"/>
+        <translation>Ալտային Կալիմբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="756"/>
@@ -1563,107 +1563,107 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="869"/>
         <source>Snare Drum</source>
-        <translation type="unfinished"/>
+        <translation>Փոքր Թմբուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="770"/>
         <source>Bongos</source>
-        <translation type="unfinished"/>
+        <translation>Բոնգեր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="772"/>
         <source>Congas</source>
-        <translation type="unfinished"/>
+        <translation>Կոնգեր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="774"/>
         <source>Timbales</source>
-        <translation type="unfinished"/>
+        <translation>Լիտավրներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="776"/>
         <source>Frame Drum</source>
-        <translation type="unfinished"/>
+        <translation>Շրջանակավոր Թմբուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="778"/>
         <source>Tablas</source>
-        <translation type="unfinished"/>
+        <translation>Տաբլա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="780"/>
         <source>Cuica</source>
-        <translation type="unfinished"/>
+        <translation>Կուիկա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="782"/>
         <source>Finger Cymbals</source>
-        <translation type="unfinished"/>
+        <translation>Կաստանյետներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="784"/>
         <source>Hi-hat</source>
-        <translation type="unfinished"/>
+        <translation>Հայ-հեթ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="788"/>
         <source>Bells</source>
-        <translation type="unfinished"/>
+        <translation>Զանգեր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="790"/>
         <source>Sleigh Bells</source>
-        <translation type="unfinished"/>
+        <translation>Բուբեններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="792"/>
         <source>Bell Plate</source>
-        <translation type="unfinished"/>
+        <translation>Ծնծղա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="794"/>
         <source>Bowl Gongs</source>
-        <translation type="unfinished"/>
+        <translation>Գավաթանման Գոնգեր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="796"/>
         <source>Tubo</source>
-        <translation type="unfinished"/>
+        <translation>Տուբո</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="800"/>
         <source>Metal Castanets</source>
-        <translation type="unfinished"/>
+        <translation>Մետաղական Կաստանյետներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="802"/>
         <source>Automobile Brake Drums</source>
-        <translation type="unfinished"/>
+        <translation>Ավտոմեքենայի Արգելակային Թմբուկներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="804"/>
         <source>Iron Pipes</source>
-        <translation type="unfinished"/>
+        <translation>Երկաթե Փողայիններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="806"/>
         <source>Chains</source>
-        <translation type="unfinished"/>
+        <translation>Շղթաներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="808"/>
         <source>Anvil</source>
-        <translation type="unfinished"/>
+        <translation>Զնդան</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="810"/>
         <source>Wood Blocks</source>
-        <translation type="unfinished"/>
+        <translation>Փայտե տուփեր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="812"/>
         <source>Temple Blocks</source>
-        <translation type="unfinished"/>
+        <translation>Թեմփլբլոկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="814"/>
@@ -1673,82 +1673,82 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="816"/>
         <source>Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Ծնծղա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="818"/>
         <source>Ride Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Միջին Ծնծղա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="820"/>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Չինական Ծնծղա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="822"/>
         <source>Crash Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Ակցենտային Ծնծղա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="824"/>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Սպլեշ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="826"/>
         <source>Cowbell</source>
-        <translation type="unfinished"/>
+        <translation>Կաուբել</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="828"/>
         <source>Claves</source>
-        <translation type="unfinished"/>
+        <translation>Կլավեսներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="830"/>
         <source>Castanets</source>
-        <translation type="unfinished"/>
+        <translation>Կաստանյետներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="834"/>
         <source>Maracas</source>
-        <translation type="unfinished"/>
+        <translation>Մառակաս</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="836"/>
         <source>Cabasa</source>
-        <translation type="unfinished"/>
+        <translation>Կաբացա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="838"/>
         <source>Quijada</source>
-        <translation type="unfinished"/>
+        <translation>Ծնոտ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="840"/>
         <source>Vibraslap</source>
-        <translation type="unfinished"/>
+        <translation>Վիբրասլեպ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="842"/>
         <source>Slit Drum</source>
-        <translation type="unfinished"/>
+        <translation>Ճեղքավոր Թմբուկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="844"/>
         <source>Whip</source>
-        <translation type="unfinished"/>
+        <translation>Շրխկան</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="846"/>
         <source>Ratchet</source>
-        <translation type="unfinished"/>
+        <translation>Չխկչխկան</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="848"/>
         <source>Thundersheet</source>
-        <translation type="unfinished"/>
+        <translation>Որոտաթիթեղ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="850"/>
@@ -1783,57 +1783,57 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="862"/>
         <source>Stones</source>
-        <translation type="unfinished"/>
+        <translation>Քարեր</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="878"/>
         <source>Finger Snap</source>
-        <translation type="unfinished"/>
+        <translation>Մատնազարկ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="880"/>
         <source>Hand Clap</source>
-        <translation type="unfinished"/>
+        <translation>Ծափ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="882"/>
         <source>Slap</source>
-        <translation type="unfinished"/>
+        <translation>Ապտակ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="884"/>
         <source>Stamp</source>
-        <translation type="unfinished"/>
+        <translation>Դոփում</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="864"/>
         <source>Tambourine</source>
-        <translation type="unfinished"/>
+        <translation>Դափ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="871"/>
         <source>Tenor Drums</source>
-        <translation type="unfinished"/>
+        <translation>Տենորային Հարվածային նվագարաններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="873"/>
         <source>Bass Drums</source>
-        <translation type="unfinished"/>
+        <translation>Բասային Հարվածային նվագարաններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="875"/>
         <source>Cymbals</source>
-        <translation type="unfinished"/>
+        <translation>Ծնծղաներ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="886"/>
         <source>Vocals</source>
-        <translation type="unfinished"/>
+        <translation>Երգչայիններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="887"/>
         <source>Voice</source>
-        <translation type="unfinished"/>
+        <translation>Ձայն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="889"/>
@@ -3415,7 +3415,7 @@
         <location filename="../instruments/instrumentsxml.h" line="432"/>
         <source>Saxhorn</source>
         <comment>Saxhorn</comment>
-        <translation type="unfinished"/>
+        <translation>Սաքսհոռն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="434"/>
@@ -3888,7 +3888,7 @@
         <location filename="../instruments/instrumentsxml.h" line="649"/>
         <source>Helicon</source>
         <comment>Helicon</comment>
-        <translation type="unfinished"/>
+        <translation>Հելիկոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="651"/>
@@ -4349,7 +4349,7 @@
         <location filename="../instruments/instrumentsxml.h" line="785"/>
         <source>Hi-hat</source>
         <comment>Hi-hat</comment>
-        <translation type="unfinished"/>
+        <translation>Հայ-հեթ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="786"/>
@@ -5563,7 +5563,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1332"/>
         <source>Vla. d. g.</source>
         <comment>Viola da gamba</comment>
-        <translation type="unfinished"/>
+        <translation>Վիոլա դ. գ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1345"/>
@@ -6352,7 +6352,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1254"/>
         <source>Strings</source>
-        <translation type="unfinished"/>
+        <translation>Լարայիններ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1255"/>
@@ -6419,39 +6419,39 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1331"/>
         <source>Viola da gamba</source>
-        <translation type="unfinished"/>
+        <translation>Վիոլա դա գամբա</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1336"/>
         <source>Viola da gamba (Tab)</source>
-        <translation type="unfinished"/>
+        <translation>Վիոլա դա գամբա (Tab)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1337"/>
         <source>Vla. d. g.</source>
         <comment>Viola da gamba (Tab)</comment>
-        <translation type="unfinished"/>
+        <translation>Վիոլա դ. գ.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1339"/>
         <source>Baryton</source>
-        <translation type="unfinished"/>
+        <translation>Բարիտոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1340"/>
         <source>Bary.</source>
         <comment>Baryton</comment>
-        <translation type="unfinished"/>
+        <translation>Բարիտոն</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1344"/>
         <source>Violone</source>
-        <translation type="unfinished"/>
+        <translation>Վիոլոնե</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1349"/>
         <source>D Violone</source>
-        <translation type="unfinished"/>
+        <translation>Ռե Վիոլոնե</translation>
     </message>
 </context>
 </TS>

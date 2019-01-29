@@ -313,11 +313,11 @@
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation>如果您一修改过一个值，您可以单击“重置”按钮来恢复默认值。
+        <translation>如果您已修改过一个值，您可以单击“重置”按钮来将其恢复默认。
         若这个值是由样式文件控制的，您可点击“设为样式”按钮来将当前值设定为样式文件的新的默认值。
-        您亦可通过顶部菜单栏的“格式 &gt; 样式”将所有的样式恢复系统默认样式。</translation>
+        您亦可通过顶部菜单栏的“格式 &gt; 样式”将所有的样式恢复为默认。</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>

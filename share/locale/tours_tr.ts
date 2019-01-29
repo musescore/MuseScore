@@ -4,17 +4,17 @@
     <message>
         <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Bir nota veya akor eklemek için Shift tuşuna basarken harf olarak ismini yazınız, veya porte üzerine tıklayınız.</translation>
     </message>
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>MuseScore&apos;a hoşgeldiniz. Bu kısa tur size MuseScore kullanıcı arayüzünü tanıtacak.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Playback araç çubuğu partisyonunuzu başlatmanıza/duraklatmanıza ve başka özellikleri kontrol etmenize olanak sağlar.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
@@ -267,7 +267,7 @@
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation type="unfinished"/>
     </message>

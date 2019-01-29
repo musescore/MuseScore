@@ -4743,7 +4743,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="907"/>
         <source>Women</source>
-        <translation type="unfinished"/>
+        <translation>Женщина</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="908"/>
@@ -4754,7 +4754,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="911"/>
         <source>Men</source>
-        <translation type="unfinished"/>
+        <translation>Мужчина</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="912"/>

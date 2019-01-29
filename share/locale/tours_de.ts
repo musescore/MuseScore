@@ -249,9 +249,9 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
     If the box is highlighted, then there are notes in that measure.
     Boxes with a thin blue outline represent measures that are currently in view.</source>
         <comment>timeline-tour</comment>
-        <translation>Der Bereich unten enthält eine Zeile für jedes Instrument.
-    Jeder Kasten in der Zeile entspricht einem Takt für dieses Instrument.
-    Wen der Kasten hervorgehoben ist, enthält der Takt Noten.
+        <translation>Der Bereich unten enthält eine Zeile pro Instrument.
+    Jeder Kasten in der Zeile entspricht je einem Takt für dieses Instrument.
+    Wenn der Kasten hervorgehoben ist, enthält der Takt Noten.
     Kästen mit einer dünnen blauen Umrandung repräsentieren Takte, die zur Zeit sichtbar sind.</translation>
     </message>
     <message>
@@ -272,7 +272,7 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
     Es wird hervorgehoben, um anzuzeigen, dass es aus ausgewählt ist.
     Sie können die &quot;Links&quot; und &quot;Rechts&quot; Pfeiltasten verwenden, um eine andere Note oder Pause Ihrer Partitur auszuwählen.
     Tipp: Wenn Sie die &quot;Alt&quot; Taste (&quot;Option&quot; bei macOS) zusammen mit den Pfeiltasten drücken können Sie ebenfalls andere Elemente auswählen,
-    und auch auf und ab von Notenzeile zu Notenzeile gehen.</translation>
+    und dabei auch auf und ab von Notenzeile zu Notenzeile gehen.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -281,7 +281,7 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
         <translation>Eine Listenauswahl ist eine Kombination einzelner Auswahlen.
-    Drücken Sie &quot;Strg&quot; (macOS: &quot;Cmd&quot;) während des klickens, um Elemente zur Liste hinzuzufügen oder zu entfernen.
+    Drücken Sie &quot;Strg&quot; (macOS: &quot;Cmd&quot;) während des Klickens, um Elemente zur Liste hinzuzufügen oder zu entfernen.
     Sie können auch schell gleichartige Elemente auswählen, durch per rechstklick (macOS: Strg+klick) auf eines
     und dann auf eine der &quot;Auswahl&quot; Optionen des Kontextmenüs.</translation>
     </message>
@@ -301,19 +301,19 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation>Eine andere Art der Auswahl ist es bei gedrückter &quot;Umschalt&quot; Taste die Maus zu ziehen.
-    Wenn diese Aushalt Noten enthält, wird es eine Bereichsauswahl,
+        <translation>Eine andere Art der Auswahl ist es bei gedrückter &quot;Umschalt&quot; Taste zu ziehen.
+    Wenn diese Auswahl Noten enthält, wird es eine Bereichsauswahl,
     sonst eine Listenauswahl.</translation>
     </message>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation>Schließlich erlaubt der Auswahlfilter (zu finden im &quot;Ansicht&quot; Menü) es, bestimmte Elemente von der Bereichsauswahl auszuschießen.</translation>
+        <translation>Schließlich erlaubt der Auswahlfilter (zu finden im Menü &quot;Ansicht&quot;) es, bestimmte Elemente von der Bereichsauswahl auszuschießen.</translation>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation>Wenn Sie einen Wert verändert haben, können Sie ihn durch klick auf den &quot;Zurücksetzen&quot; Knopf auf seine Voreinstellung zurücksetzen.
     Wenn dieser Wert mit einen Stil verknüpft ist, können Sie ihn durch klick auf den &quot;Als Stil verwenden&quot; Knopf als neue Voreinstellung dieses Stils setzen.
@@ -329,9 +329,9 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation>Mit der Werkzeugleiste &quot;Dateibefehle&quot; kann man Partituren erstellen, speichern, öffnen und ausdrucken sowie Änderungen an der Partitur vornehmen oder diese rückgängig machen.
+        <translation>Mittels der Werkzeugleiste &quot;Dateibefehle&quot; kann man Partituren erstellen, speichern, öffnen und ausdrucken, sowie Änderungen an der Partitur vornehmen oder diese rückgängig machen.
     Man kann Partituren auch in seinem &quot;musescore.com&quot;-Konto speichern, gehen Sie dafür auf &quot;Datei &gt; Online Speichern&quot;.
-    Die Werkzeuge rechts in dieser Leiste regeln die Anzeige der Noten.</translation>
+    Die Bedienelemente rechts in dieser Leiste steuern die Anzeige der Noten.</translation>
     </message>
     <message>
         <source>That's the end of this tour!

@@ -1768,7 +1768,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="856"/>
         <source>Metal Wind Chimes</source>
-        <translation>Metalen wiind klokkenspel</translation>
+        <translation>Metalen wind klokkenspel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="858"/>

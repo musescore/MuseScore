@@ -3215,7 +3215,7 @@
         <location filename="../instruments/instrumentsxml.h" line="387"/>
         <source>B She.</source>
         <comment>Bass Sheng</comment>
-        <translation>Bshe.</translation>
+        <translation>B.she.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="390"/>

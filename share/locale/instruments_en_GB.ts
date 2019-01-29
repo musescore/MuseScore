@@ -2369,13 +2369,13 @@
         <location filename="../instruments/instrumentsxml.h" line="114"/>
         <source>S. Rec.</source>
         <comment>Soprano Recorder</comment>
-        <translation>S. Rec.</translation>
+        <translation>D. Rec.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="116"/>
         <source>A. Rec.</source>
         <comment>Alto Recorder</comment>
-        <translation>A. Rec.</translation>
+        <translation>T. Rec.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="118"/>
@@ -6105,12 +6105,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1134"/>
         <source>distorted</source>
-        <translation>distorted</translation>
+        <translation>distortion</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1135"/>
         <source>overdrive</source>
-        <translation>overdrive</translation>
+        <translation>overdriven</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1138"/>

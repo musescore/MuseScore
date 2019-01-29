@@ -179,7 +179,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
         <source>B♭ Alto Ocarina</source>
-        <translation type="unfinished"/>
+        <translation>B♭ Alt Okariina</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
@@ -265,12 +265,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="127"/>
         <source>Tin Whistle</source>
-        <translation type="unfinished"/>
+        <translation>Metall vilepill</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="129"/>
         <source>B♭ Tin Whistle</source>
-        <translation type="unfinished"/>
+        <translation>B♭ Metall vilepill</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="133"/>
