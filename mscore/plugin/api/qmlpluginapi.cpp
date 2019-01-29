@@ -27,6 +27,24 @@
 namespace Ms {
 namespace PluginAPI {
 
+Enum* const PluginAPI::elementTypeEnum = wrapEnum<Ms::ElementType>();
+Enum* const PluginAPI::accidentalTypeEnum = wrapEnum<Ms::AccidentalType>();
+Enum* const PluginAPI::beamModeEnum = wrapEnum<Ms::Beam::Mode>();
+Enum* const PluginAPI::placementEnum = wrapEnum<Ms::Placement>();
+Enum* const PluginAPI::glissandoTypeEnum = wrapEnum<Ms::GlissandoType>();
+Enum* const PluginAPI::layoutBreakTypeEnum = wrapEnum<Ms::LayoutBreak::Type>();
+Enum* const PluginAPI::lyricsSyllabicEnum = wrapEnum<Ms::Lyrics::Syllabic>();
+Enum* const PluginAPI::directionEnum = wrapEnum<Ms::Direction>();
+Enum* const PluginAPI::directionHEnum = wrapEnum<Ms::MScore::DirectionH>();
+Enum* const PluginAPI::ornamentStyleEnum = wrapEnum<Ms::MScore::OrnamentStyle>();
+Enum* const PluginAPI::glissandoStyleEnum = wrapEnum<Ms::GlissandoStyle>();
+Enum* const PluginAPI::tidEnum = wrapEnum<Ms::Tid>();
+Enum* const PluginAPI::noteHeadTypeEnum = wrapEnum<Ms::NoteHead::Type>();
+Enum* const PluginAPI::noteHeadGroupEnum = wrapEnum<Ms::NoteHead::Group>();
+Enum* const PluginAPI::noteValueTypeEnum = wrapEnum<Ms::Note::ValueType>();
+Enum* const PluginAPI::segmentTypeEnum = wrapEnum<Ms::SegmentType>();
+Enum* const PluginAPI::spannerAnchorEnum = wrapEnum<Ms::Spanner::Anchor>();
+
 //---------------------------------------------------------
 //   PluginAPI
 //---------------------------------------------------------
@@ -35,23 +53,6 @@ PluginAPI::PluginAPI(QQuickItem* parent)
    : Ms::QmlPlugin(parent)
       {
       setRequiresScore(true);              // by default plugins require a score to work
-      // Expose enumerations to QML
-      elementTypeEnum = wrapEnum<Ms::ElementType>(this);
-      accidentalTypeEnum = wrapEnum<Ms::AccidentalType>(this);
-      beamModeEnum = wrapEnum<Ms::Beam::Mode>(this);
-      glissandoTypeEnum = wrapEnum<Ms::GlissandoType>(this);
-      layoutBreakTypeEnum = wrapEnum<Ms::LayoutBreak::Type>(this);
-      lyricsSyllabicEnum = wrapEnum<Ms::Lyrics::Syllabic>(this);
-      directionEnum = wrapEnum<Ms::Direction>(this);
-      directionHEnum = wrapEnum<Ms::MScore::DirectionH>(this);
-      ornamentStyleEnum = wrapEnum<Ms::MScore::OrnamentStyle>(this);
-      glissandoStyleEnum = wrapEnum<Ms::GlissandoStyle>(this);
-      tidEnum = wrapEnum<Ms::Tid>(this); // TODO: check that it is exposed
-      noteHeadTypeEnum = wrapEnum<Ms::NoteHead::Type>(this);
-      noteHeadGroupEnum = wrapEnum<Ms::NoteHead::Group>(this);
-      noteValueTypeEnum = wrapEnum<Ms::Note::ValueType>(this);
-      segmentTypeEnum = wrapEnum<Ms::SegmentType>(this);
-      spannerAnchorEnum = wrapEnum<Ms::Spanner::Anchor>(this);
       }
 
 //---------------------------------------------------------
