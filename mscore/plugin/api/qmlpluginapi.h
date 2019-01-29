@@ -32,6 +32,11 @@ class Element;
 class FractionWrapper;
 class Score;
 
+#define DECLARE_API_ENUM(qmlName, cppName) \
+      static Enum* const cppName; \
+      static Enum* get_##cppName() { return cppName; } \
+      Q_PROPERTY(Ms::PluginAPI::Enum* qmlName READ get_##cppName CONSTANT)
+
 //---------------------------------------------------------
 //   QmlPlugin
 //   @@ MuseScore
@@ -63,48 +68,32 @@ class PluginAPI : public Ms::QmlPlugin {
       Q_PROPERTY(QString dockArea        READ dockArea WRITE setDockArea)
       Q_PROPERTY(bool requiresScore      READ requiresScore WRITE setRequiresScore)
       Q_PROPERTY(int division            READ division)
-      Q_PROPERTY(int mscoreVersion       READ mscoreVersion)
-      Q_PROPERTY(int mscoreMajorVersion  READ mscoreMajorVersion)
-      Q_PROPERTY(int mscoreMinorVersion  READ mscoreMinorVersion)
-      Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion)
+      Q_PROPERTY(int mscoreVersion       READ mscoreVersion       CONSTANT)
+      Q_PROPERTY(int mscoreMajorVersion  READ mscoreMajorVersion  CONSTANT)
+      Q_PROPERTY(int mscoreMinorVersion  READ mscoreMinorVersion  CONSTANT)
+      Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion CONSTANT)
       Q_PROPERTY(qreal mscoreDPI         READ mscoreDPI)
       Q_PROPERTY(Ms::PluginAPI::Score* curScore     READ curScore)
 //TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
 
-      Enum* elementTypeEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* Element MEMBER elementTypeEnum)
-      Enum* accidentalTypeEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* Accidental MEMBER accidentalTypeEnum)
-      Enum* beamModeEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* Beam MEMBER beamModeEnum)
-      Enum* placementEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* Placement MEMBER placementEnum) // was Element.ABOVE and Element.BELOW in 2.X
-      Enum* glissandoTypeEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* Glissando MEMBER glissandoTypeEnum) // was probably absent in 2.X
-      Enum* layoutBreakTypeEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* LayoutBreak MEMBER layoutBreakTypeEnum)
-      Enum* lyricsSyllabicEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* Lyrics MEMBER lyricsSyllabicEnum)
-      Enum* directionEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* Direction MEMBER directionEnum) // was in MScore class in 2.X
-      Enum* directionHEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* DirectionH MEMBER directionHEnum) // was in MScore class in 2.X
-      Enum* ornamentStyleEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* OrnamentStyle MEMBER ornamentStyleEnum) // was in MScore class in 2.X
-      Enum* glissandoStyleEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* GlissandoStyle MEMBER glissandoStyleEnum) // was in MScore class in 2.X
-      Enum* tidEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* Tid MEMBER tidEnum) // was TextStyleType in 2.X
-      Enum* noteHeadTypeEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* NoteHeadType MEMBER noteHeadTypeEnum) // was in NoteHead class in 2.X
-      Enum* noteHeadGroupEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* NoteHeadGroup MEMBER noteHeadGroupEnum) // was in NoteHead class in 2.X
-      Enum* noteValueTypeEnum; // or velo type?
-      Q_PROPERTY(Ms::PluginAPI::Enum* NoteValueType MEMBER noteValueTypeEnum) // was in Note class in 2.X
-      Enum* segmentTypeEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* Segment MEMBER segmentTypeEnum);
-      Enum* spannerAnchorEnum;
-      Q_PROPERTY(Ms::PluginAPI::Enum* Spanner MEMBER spannerAnchorEnum); // probably unavailable in 2.X
+      // Should be initialized in qmlpluginapi.cpp
+      DECLARE_API_ENUM( Element,          elementTypeEnum         )
+      DECLARE_API_ENUM( Accidental,       accidentalTypeEnum      )
+      DECLARE_API_ENUM( Beam,             beamModeEnum            )
+      DECLARE_API_ENUM( Placement,        placementEnum           ) // was Element.ABOVE and Element.BELOW in 2.X
+      DECLARE_API_ENUM( Glissando,        glissandoTypeEnum       ) // was probably absent in 2.X
+      DECLARE_API_ENUM( LayoutBreak,      layoutBreakTypeEnum     )
+      DECLARE_API_ENUM( Lyrics,           lyricsSyllabicEnum      )
+      DECLARE_API_ENUM( Direction,        directionEnum           ) // was in MScore class in 2.X
+      DECLARE_API_ENUM( DirectionH,       directionHEnum          ) // was in MScore class in 2.X
+      DECLARE_API_ENUM( OrnamentStyle,    ornamentStyleEnum       ) // was in MScore class in 2.X
+      DECLARE_API_ENUM( GlissandoStyle,   glissandoStyleEnum      ) // was in MScore class in 2.X
+      DECLARE_API_ENUM( Tid,              tidEnum                 ) // was TextStyleType in 2.X
+      DECLARE_API_ENUM( NoteHeadType,     noteHeadTypeEnum        ) // was in NoteHead class in 2.X
+      DECLARE_API_ENUM( NoteHeadGroup,    noteHeadGroupEnum       ) // was in NoteHead class in 2.X
+      DECLARE_API_ENUM( NoteValueType,    noteValueTypeEnum       ) // was in Note class in 2.X
+      DECLARE_API_ENUM( Segment,          segmentTypeEnum         )
+      DECLARE_API_ENUM( Spanner,          spannerAnchorEnum       ) // probably unavailable in 2.X
 
       QFile logFile;
 
@@ -139,6 +128,7 @@ class PluginAPI : public Ms::QmlPlugin {
       Q_INVOKABLE Ms::PluginAPI::FractionWrapper* fraction(int numerator, int denominator) const;
       };
 
+#undef DECLARE_API_ENUM
 } // namespace PluginAPI
 } // namespace Ms
 #endif
