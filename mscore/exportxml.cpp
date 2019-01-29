@@ -303,7 +303,7 @@ class ExportMusicXml {
                            TrillHash& trillStart, TrillHash& trillStop);
       void wavyLineStartStop(Chord* chord, Notations& notations, Ornaments& ornaments,
                              TrillHash& trillStart, TrillHash& trillStop);
-      void print(Measure* m, int idx, int staffCount, int staves);
+      void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart);
       void findAndExportClef(Measure* m, const int staves, const int strack, const int etrack);
       void writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset);
 
@@ -1124,38 +1124,37 @@ void ExportMusicXml::calcDivisions()
 #endif
       }
 
-#if 0
 //---------------------------------------------------------
 //   writePageFormat
 //---------------------------------------------------------
 
-static void writePageFormat(const PageFormat* pf, XmlWriter& xml, double conversion)
+static void writePageFormat(const Score* const s, XmlWriter& xml, double conversion)
       {
       xml.stag("page-layout");
 
-      xml.tag("page-height", pf->size().height() * conversion);
-      xml.tag("page-width", pf->size().width() * conversion);
+      xml.tag("page-height", s->styleD(Sid::pageHeight) * conversion);
+      xml.tag("page-width", s->styleD(Sid::pageWidth) * conversion);
+
       QString type("both");
-      if (pf->twosided()) {
+      if (s->styleB(Sid::pageTwosided)) {
             type = "even";
             xml.stag(QString("page-margins type=\"%1\"").arg(type));
-            xml.tag("left-margin",   pf->evenLeftMargin() * conversion);
-            xml.tag("right-margin",  pf->evenRightMargin() * conversion);
-            xml.tag("top-margin",    pf->evenTopMargin() * conversion);
-            xml.tag("bottom-margin", pf->evenBottomMargin() * conversion);
+            xml.tag("left-margin",   s->styleD(Sid::pageEvenLeftMargin) * conversion);
+            xml.tag("right-margin",  s->styleD(Sid::pageOddLeftMargin) * conversion);
+            xml.tag("top-margin",    s->styleD(Sid::pageEvenTopMargin)  * conversion);
+            xml.tag("bottom-margin", s->styleD(Sid::pageEvenBottomMargin) * conversion);
             xml.etag();
             type = "odd";
             }
       xml.stag(QString("page-margins type=\"%1\"").arg(type));
-      xml.tag("left-margin",   pf->oddLeftMargin() * conversion);
-      xml.tag("right-margin",  pf->oddRightMargin() * conversion);
-      xml.tag("top-margin",    pf->oddTopMargin() * conversion);
-      xml.tag("bottom-margin", pf->oddBottomMargin() * conversion);
+      xml.tag("left-margin",   s->styleD(Sid::pageOddLeftMargin) * conversion);
+      xml.tag("right-margin",  s->styleD(Sid::pageEvenLeftMargin) * conversion);
+      xml.tag("top-margin",    s->styleD(Sid::pageOddTopMargin) * conversion);
+      xml.tag("bottom-margin", s->styleD(Sid::pageOddBottomMargin) * conversion);
       xml.etag();
 
       xml.etag();
       }
-#endif
 
 //---------------------------------------------------------
 //   defaults
@@ -1163,16 +1162,15 @@ static void writePageFormat(const PageFormat* pf, XmlWriter& xml, double convers
 
 // _spatium = DPMM * (millimeter * 10.0 / tenths);
 
-static void defaults(XmlWriter& xml, Score* s, double& millimeters, const int& tenths)
+static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, const int& tenths)
       {
       xml.stag("defaults");
       xml.stag("scaling");
       xml.tag("millimeters", millimeters);
       xml.tag("tenths", tenths);
       xml.etag();
-//TODO:ws      const PageFormat* pf = s->pageFormat();
-//      if (pf)
-//            writePageFormat(pf, xml, INCH / millimeters * tenths);
+
+      writePageFormat(s, xml, INCH / millimeters * tenths);
 
       // TODO: also write default system layout here
       // when exporting only manual or no breaks, system-distance is not written at all
@@ -1242,8 +1240,8 @@ void ExportMusicXml::credits(XmlWriter& xml)
       const double h  = getTenthsFromInches(_score->styleD(Sid::pageHeight));
       const double w  = getTenthsFromInches(_score->styleD(Sid::pageWidth));
       const double lm = getTenthsFromInches(_score->styleD(Sid::pageOddLeftMargin));
-      const double rm = getTenthsFromInches(_score->styleD(Sid::pagePrintableWidth) - _score->styleD(Sid::pageOddLeftMargin));
-      //const double tm = getTenthsFromInches(pf->oddTopMargin());
+      const double rm = getTenthsFromInches(_score->styleD(Sid::pageEvenLeftMargin));
+      //const double tm = getTenthsFromInches(_score->styleD(Sid::pageOddTopMargin));
       const double bm = getTenthsFromInches(_score->styleD(Sid::pageOddBottomMargin));
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
@@ -4601,7 +4599,7 @@ static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrum
  anyway and is thus useless.
  */
 
-void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
+void ExportMusicXml::print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart)
       {
       int currentSystem = NoSystem;
       Measure* previousMeasure = 0;
@@ -4678,7 +4676,7 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
                   const System* system = mmR1->system();
 
                   // Put the system print suggestions only for the first part in a score...
-                  if (idx == 0) {
+                  if (partNr == 0) {
 
                         // Find the right margin of the system.
                         double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
@@ -4709,11 +4707,15 @@ void ExportMusicXml::print(Measure* m, int idx, int staffCount, int staves)
                         }
 
                   // Staff layout elements.
-                  for (int staffIdx = (staffCount == 0) ? 1 : 0; staffIdx < staves; staffIdx++) {
+                  for (int staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
+
+                        // calculate distance between this and previous staff using the bounding boxes
+                        const auto staffNr = firstStaffOfPart + staffIdx;
+                        const auto prevBbox = system->staff(staffNr - 1)->bbox();
+                        const auto staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
+
                         _xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
-                        const double staffDist = 0.0;
-//TODO-ws                              getTenthsFromDots(system->staff(staffCount + staffIdx - 1)->distanceDown());
-                        _xml.tag("staff-distance", QString("%1").arg(QString::number(staffDist,'f',2)));
+                        _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist),'f',2)));
                         _xml.etag();
                         }
 
