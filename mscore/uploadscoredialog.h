@@ -14,9 +14,10 @@
 #define __UPLOADSCOREDIALOG_H__
 
 #include "ui_uploadscoredialog.h"
-#include "loginmanager.h"
 
 namespace Ms {
+
+class LoginManager;
 
 //---------------------------------------------------------
 //   LoginDialog

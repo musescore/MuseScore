@@ -13,6 +13,7 @@
 #include "musescore.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
+#include "network/loginmanager.h"
 #include "uploadscoredialog.h"
 
 namespace Ms {
@@ -216,7 +217,7 @@ void UploadScoreDialog::display()
                   int nid = nidString.toInt(&ok);
                   if (ok) {
                         _nid = nid;
-                        _loginManager->getScore(nid);
+                        _loginManager->getScoreInfo(nid);
                         return;
                         }
                   }
