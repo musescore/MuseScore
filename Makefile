@@ -22,7 +22,7 @@ CPUS      := $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSOR
 
 PREFIX    = "/usr/local"
 VERSION   = "3.0b-${REVISION}"
-#VERSION = 3.0.2
+#VERSION = 3.0.3
 BUILD_NUMBER=""
 
 # Override SUFFIX and LABEL when multiple versions are installed to avoid conflicts.
