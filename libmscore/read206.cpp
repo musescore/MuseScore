@@ -3638,6 +3638,8 @@ static bool readScore(Score* score, XmlReader& e)
                   score->setCurrentLayer(e.readInt());
             else if (tag == "Synthesizer")
                   score->synthesizerState().read(e);
+            else if (tag == "page-offset")
+                  score->setPageNumberOffset(e.readInt());
             else if (tag == "Division")
                   score->setFileDivision(e.readInt());
             else if (tag == "showInvisible")
