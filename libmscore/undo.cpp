@@ -1509,6 +1509,20 @@ void ChangeStyleVal::flip(EditData*)
       }
 
 //---------------------------------------------------------
+//   ChangePageNumberOffset::flip
+//---------------------------------------------------------
+
+void ChangePageNumberOffset::flip(EditData*)
+      {
+      int po = score->pageNumberOffset();
+
+      score->setPageNumberOffset(pageOffset);
+      score->setLayoutAll();
+
+      pageOffset = po;
+      }
+
+//---------------------------------------------------------
 //   ChangeChordStaffMove
 //---------------------------------------------------------
 

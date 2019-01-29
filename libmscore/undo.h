@@ -653,6 +653,21 @@ class ChangeStyleVal : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   ChangePageNumberOffset
+//---------------------------------------------------------
+
+class ChangePageNumberOffset : public UndoCommand {
+      Score* score;
+      int pageOffset;
+
+      void flip(EditData*) override;
+
+   public:
+      ChangePageNumberOffset(Score* s, int po) : score(s), pageOffset(po) {}
+      UNDO_NAME("ChangePageNumberOffset")
+      };
+
+//---------------------------------------------------------
 //   ChangeChordStaffMove
 //---------------------------------------------------------
 
