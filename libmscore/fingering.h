@@ -31,6 +31,8 @@ class Fingering final : public TextBase {
       virtual ElementType type() const override { return ElementType::FINGERING; }
 
       Note* note() const { return toNote(parent()); }
+      ElementType layoutType();
+      void calculatePlacement();
 
       virtual void draw(QPainter*) const override;
       virtual void layout() override;

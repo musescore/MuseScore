@@ -1007,9 +1007,9 @@ void Note::add(Element* e)
             case ElementType::NOTEDOT:
                   _dots.append(toNoteDot(e));
                   break;
+            case ElementType::FINGERING:
             case ElementType::SYMBOL:
             case ElementType::IMAGE:
-            case ElementType::FINGERING:
             case ElementType::TEXT:
             case ElementType::BEND:
                   _el.push_back(e);
@@ -2077,8 +2077,17 @@ void Note::layout2()
                         e->rxpos() -= symWidth(SymId::noteheadParenthesisLeft);
                         }
                   }
-            else
+            else if (e->isFingering()) {
+                  Fingering* f = toFingering(e);
+                  f->calculatePlacement();
+                  // layout fingerings that are placed relative to notehead
+                  // fingerings placed relative to chord will be laid out later
+                  if (f->layoutType() == ElementType::NOTE)
+                        f->layout();
+                  }
+            else {
                   e->layout();
+                  }
             }
       }
 
@@ -3166,8 +3175,10 @@ Shape Note::shape() const
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
       if (_accidental)
             shape.add(_accidental->bbox().translated(_accidental->pos()));
-      for (auto e : _el)
-            shape.add(e->bbox().translated(e->pos()));
+      for (auto e : _el) {
+            if (e->autoplace() && e->visible())
+                  shape.add(e->bbox().translated(e->pos()));
+            }
 #endif
       return shape;
       }
