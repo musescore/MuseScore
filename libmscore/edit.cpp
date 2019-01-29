@@ -1698,7 +1698,7 @@ void Score::deleteItem(Element* el)
                   BarLine* bl = toBarLine(el);
                   Segment* s = bl->segment();
                   Measure* m = s->measure();
-                  if (s->isBeginBarLineType()) {
+                  if (s->isBeginBarLineType() || s->isBarLineType()) {
                         undoRemoveElement(el);
                         }
                   else {
