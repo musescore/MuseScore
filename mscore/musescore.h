@@ -28,8 +28,6 @@
 #include "ui_aboutmusicxmlbox.h"
 #include "singleapp/src/QtSingleApplication"
 #include "updatechecker.h"
-// #include "loginmanager.h"
-// #include "uploadscoredialog.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
 #include "newwizard.h"

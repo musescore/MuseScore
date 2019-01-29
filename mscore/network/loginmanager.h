@@ -13,27 +13,33 @@
 #ifndef __LOGINMANAGER_H__
 #define __LOGINMANAGER_H__
 
-#include "thirdparty/kQOAuth/kqoauthmanager.h"
-
 namespace Ms {
 
 //---------------------------------------------------------
-//   LoginDialog
+//   LoginManager
 //---------------------------------------------------------
 
 class LoginManager : public QObject
       {
       Q_OBJECT
 
-      static const int MAX_UPLOAD_TRY_COUNT = 5;
+      enum class RequestType
+            {
+            LOGIN,
+            GET_USER_INFO,
+            GET_SCORE_INFO,
+            UPLOAD_SCORE,
+            GET_MEDIA_URL,
+            };
 
-      KQOAuthManager* _oauthManager = nullptr;
+      static constexpr int MAX_UPLOAD_TRY_COUNT = 5;
+
+      QNetworkAccessManager* _networkManager;
+
       QAction* _uploadAudioMenuAction = nullptr;
-      QString _consumerKey = 0;
-      QString _consumerSecret = 0;
-      QString _accessToken = 0;
-      QString _accessTokenSecret = 0;
-      QString _userName = 0;
+      QString _accessToken;
+      QString _refreshToken;
+      QString _userName;
       int _uid = -1;
 
       QString _mediaUrl;
@@ -41,6 +47,15 @@ class LoginManager : public QObject
       int _uploadTryCount = 0;
 
       QProgressDialog* _progressDialog;
+
+      void onReplyFinished(QNetworkReply*, RequestType);
+      static QString getErrorString(QNetworkReply*, const QJsonObject&);
+
+      void onGetUserReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
+      void onLoginReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
+      void onUploadReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
+      void onGetScoreInfoReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
+      void onGetMediaUrlReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
 
    signals:
       void loginError(const QString& error);
@@ -55,14 +70,6 @@ class LoginManager : public QObject
       void displaySuccess();
 
    private slots:
-      void onAccessTokenRequestReady(QByteArray ba);
-      void onAccessTokenReceived(QString token, QString tokenSecret);
-      void onGetUserRequestReady(QByteArray ba);
-      void onGetScoreRequestReady(QByteArray ba);
-      void onAuthorizedRequestDone();
-      void onUploadRequestReady(QByteArray ba);
-      void onGetMediaUrlRequestReady(QByteArray ba);
-
       void uploadMedia();
       void mediaUploadFinished();
       void mediaUploadProgress(qint64, qint64);
@@ -76,10 +83,11 @@ class LoginManager : public QObject
    public:
       LoginManager(QAction* uploadAudioMenuAction, QObject* parent = 0);
       void login(QString login, QString password);
+      void loginInteractive();
       void upload(const QString& path, int nid, const QString& title, const QString& description, const QString& priv, const QString& license, const QString& tags, const QString& changes);
       bool hasAccessToken();
       void getUser();
-      void getScore(int nid);
+      void getScoreInfo(int nid);
       void getMediaUrl(const QString& nid, const QString& vid, const QString& format);
 
       bool save();
