@@ -159,6 +159,7 @@ private slots:
       void tempo1() { mxmlIoTest("testTempo1"); }
       void tempo2() { mxmlIoTestRef("testTempo2"); }
       void tempo3() { mxmlIoTestRef("testTempo3"); }
+      void tempo4() { mxmlIoTestRef("testTempo4"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
       void tremolo() { mxmlIoTest("testTremolo"); }

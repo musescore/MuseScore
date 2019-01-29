@@ -3,7 +3,7 @@
 <score-partwise version="3.1">
   <work>
     <work-number>MuseScore testfile</work-number>
-    <work-title>Multiple notations</work-title>
+    <work-title>Tempo 4</work-title>
     </work>
   <identification>
     <creator type="composer">Leon Vinken</creator>
@@ -19,14 +19,29 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name></part-name>
+      <part-name>Oboe</part-name>
+      <part-abbreviation>Ob.</part-abbreviation>
       <score-instrument id="P1-I1">
-        <instrument-name></instrument-name>
+        <instrument-name>Oboe</instrument-name>
         </score-instrument>
       <midi-device id="P1-I1" port="1"></midi-device>
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
-        <midi-program>74</midi-program>
+        <midi-program>69</midi-program>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      </score-part>
+    <score-part id="P2">
+      <part-name>Harmonica</part-name>
+      <part-abbreviation>Harm.</part-abbreviation>
+      <score-instrument id="P2-I1">
+        <instrument-name>Harmonica</instrument-name>
+        </score-instrument>
+      <midi-device id="P2-I1" port="1"></midi-device>
+      <midi-instrument id="P2-I1">
+        <midi-channel>2</midi-channel>
+        <midi-program>23</midi-program>
         <volume>78.7402</volume>
         <pan>0</pan>
         </midi-instrument>
@@ -48,60 +63,53 @@
           <line>2</line>
           </clef>
         </attributes>
+      <direction placement="above">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>80</per-minute>
+            </metronome>
+          </direction-type>
+        <sound tempo="80"/>
+        </direction>
       <note>
         <pitch>
-          <step>F</step>
+          <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        <notations>
-          <slur type="start" placement="below" number="1"/>
-          </notations>
+        <type>whole</type>
         </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+    </part>
+  <part id="P2">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+          </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+          </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
+        </attributes>
       <note>
         <pitch>
-          <step>A</step>
+          <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>1</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        <notations>
-          <slur type="stop" number="1"/>
-          <articulations>
-            <staccato/>
-            </articulations>
-          </notations>
-        </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        <notations>
-          <slur type="start" placement="below" number="1"/>
-          </notations>
-        </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        <notations>
-          <slur type="stop" number="1"/>
-          </notations>
+        <type>whole</type>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
