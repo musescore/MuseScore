@@ -257,7 +257,7 @@ void Zerberus::updatePatchList()
       patches.clear();
       int idx = 0;
       for (ZInstrument* i : instruments) {
-            Ms::MidiPatch* p = new Ms::MidiPatch { false, name(), 0, idx, i->name() };
+            Ms::MidiPatch* p = new Ms::MidiPatch { false, name(), 0, idx, 0, i->name() };
             patches.append(p);
             ++idx;
             }
