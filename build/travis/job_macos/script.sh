@@ -19,8 +19,8 @@ if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
 then
 cp -f build/travis/resources/splash-nightly.png  mscore/data/splash.png
 cp -f build/travis/resources/mscore-nightly.icns mscore/data/mscore.icns
-else
-python build/add-mc-keys.py $MC_CONSUMER_KEY $MC_CONSUMER_SECRET
+#else
+#python build/add-mc-keys.py $MC_CONSUMER_KEY $MC_CONSUMER_SECRET
 fi
 
 make -f Makefile.osx ci BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
