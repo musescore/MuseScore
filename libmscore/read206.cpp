@@ -2819,6 +2819,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         st = SegmentType::EndBarLine;
                   segment = m->getSegment(st, e.tick());
                   segment->add(bl);
+                  bl->layout();
                   }
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score);
