@@ -40,12 +40,9 @@ class Spanner;
 enum class SegmentType;
 
 //-------------------------------------------------------------------
-//   @@ ChordRest
-///    Virtual base class. Chords and rests can be part of a beam
+//   ChordRest
+//    Virtual base class. Chords and rests can be part of a beam
 //
-//   @P beamMode      enum (Beam.AUTO, .BEGIN, .MID, .END, .NONE, .BEGIN32, .BEGIN64, .INVALID)
-//   @P durationType  int
-//   @P small         bool           small chord/rest
 //-------------------------------------------------------------------
 
 class ChordRest : public DurationElement {
@@ -123,14 +120,13 @@ class ChordRest : public DurationElement {
       const TDuration actualDurationType() const   { return _durationType; }
       void setDurationType(TDuration::DurationType t);
       void setDurationType(const QString& s);
-      void setDurationType(int ticks);
+      void setDurationType(const Fraction& ticks);
       void setDurationType(TDuration v);
       void setDots(int n)                       { _durationType.setDots(n); }
       int dots() const        { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.dots()
                                     : (_crossMeasure == CrossMeasure::SECOND ? 0 : _durationType.dots()); }
       int actualDots() const  { return _durationType.dots(); }
-      int durationTypeTicks() { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks()
-                                    : _durationType.ticks(); }
+      Fraction durationTypeTicks() { return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks() : _durationType.ticks(); }
       QString durationUserName() const;
 
       virtual void setTrack(int val) override;
@@ -149,7 +145,7 @@ class ChordRest : public DurationElement {
 
       CrossMeasure crossMeasure() const            { return _crossMeasure; }
       void setCrossMeasure(CrossMeasure val)       { _crossMeasure = val;  }
-      virtual void crossMeasureSetup(bool /*on*/)   { }
+      virtual void crossMeasureSetup(bool /*on*/)     { }
       // the following two functions should not be used, unless absolutely necessary;
       // the cross-measure duration is best managed through setDuration() and crossMeasureSetup()
       TDuration crossMeasureDurationType() const      { return _crossMeasureTDur;   }

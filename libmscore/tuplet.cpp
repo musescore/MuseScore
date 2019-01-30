@@ -48,7 +48,6 @@ static const ElementStyle tupletStyle {
 Tuplet::Tuplet(Score* s)
   : DurationElement(s)
       {
-      _tick         = 0;
       _ratio        = Fraction(1, 1);
       _number       = 0;
       _hasBracket   = false;
@@ -108,6 +107,35 @@ void Tuplet::setVisible(bool f)
       Element::setVisible(f);
       if (_number)
             _number->setVisible(f);
+      }
+
+#if 0
+//---------------------------------------------------------
+//   tick
+//---------------------------------------------------------
+
+Fraction Tuplet::tick() const
+      {
+      std::vector<DurationElement*> _elements;
+
+      const DurationElement* de = this;
+      while (de->isTuplet()) {
+            const Tuplet* t = toTuplet(de);
+            if (t->_elements.empty())
+                  return Fraction(0, 1);
+            de = t->_elements.front();
+            }
+      return toChordRest(de)->tick();
+      }
+#endif
+
+//---------------------------------------------------------
+//   rtick
+//---------------------------------------------------------
+
+Fraction Tuplet::rtick() const
+      {
+      return tick() - measure()->tick();
       }
 
 //---------------------------------------------------------
@@ -743,7 +771,7 @@ void Tuplet::read(XmlReader& e)
                   e.unknown();
             }
       Fraction f = _baseLen.fraction() * _ratio.denominator();
-      setDuration(f.reduced());
+      setTicks(f.reduced());
       }
 
 //---------------------------------------------------------
@@ -801,18 +829,15 @@ void Tuplet::add(Element* e)
 #endif
 
       switch (e->type()) {
-//            case ElementType::TEXT:
-//                  _number = toText(e);
-//                  break;
             case ElementType::CHORD:
             case ElementType::REST:
             case ElementType::TUPLET: {
                   bool found = false;
                   DurationElement* de = toDurationElement(e);
-                  int tick = de->tick();
-                  if (tick != -1) {
+                  Fraction tick = de->rtick();
+                  if (tick != Fraction(-1,1)) {
                         for (unsigned int i = 0; i < _elements.size(); ++i) {
-                              if (_elements[i]->tick() > tick) {
+                              if (_elements[i]->rtick() > tick) {
                                     _elements.insert(_elements.begin() + i, de);
                                     found = true;
                                     break;
@@ -967,7 +992,7 @@ Fraction Tuplet::elementsDuration()
       {
       Fraction f;
       for (DurationElement* el : _elements)
-            f += el->duration();
+            f += el->ticks();
       return f;
       }
 
@@ -1103,12 +1128,14 @@ void Tuplet::sanitizeTuplet()
       if (ratio().numerator() == ratio().reduced().numerator()) // return if the ratio is an irreducible fraction
             return;
       Fraction baseLenDuration = (Fraction(ratio().denominator(),1) * baseLen().fraction()).reduced();
+
       // Due to a bug present in 2.1 (and before), a tuplet with non-reduced ratio could be
       // in a corrupted state (mismatch between duration and base length).
       // A tentative will now be made to retrieve the correct duration by summing up all the
       // durations of the elements constituting the tuplet. This does not work for
       // not-completely filled tuplets, such as tuplets in voices > 0 with
       // gaps (for example, a tuplet in second voice with a deleted chordrest element)
+
       Fraction testDuration(0,1);
       for (DurationElement* de : elements()) {
             if (de == 0)
@@ -1117,23 +1144,23 @@ void Tuplet::sanitizeTuplet()
             if (de->isTuplet()){
                   Tuplet* t = toTuplet(de);
                   t->sanitizeTuplet();
-                  elementDuration = t->duration();
+                  elementDuration = t->ticks();
                   }
             else {
-                  elementDuration = de->duration();
+                  elementDuration = de->ticks();
                   }
             testDuration += elementDuration;
             }
       testDuration = testDuration / ratio();
       testDuration.reduce();
-      if (elements().back()->tick() + elements().back()->actualTicks() - elements().front()->tick() > testDuration.ticks())
+      if (elements().back()->tick() + elements().back()->actualTicks() - elements().front()->tick() > testDuration)
             return;     // this tuplet has missing elements; do not sanitize
-      if (!(testDuration == baseLenDuration && baseLenDuration == duration())) {
+      if (!(testDuration == baseLenDuration && baseLenDuration == ticks())) {
             Fraction f = testDuration * Fraction(1, ratio().denominator());
             f.reduce();
             Fraction fbl(1, f.denominator());
             if (TDuration::isValid(fbl)) {
-                  setDuration(testDuration);
+                  setTicks(testDuration);
                   setBaseLen(fbl);
                   qDebug("Tuplet %p sanitized duration %d/%d   baseLen %d/%d",this,
                         testDuration.numerator(), testDuration.denominator(),
@@ -1152,9 +1179,9 @@ void Tuplet::sanitizeTuplet()
 //     Needed for importing files that saved incomplete tuplets.
 //---------------------------------------------------------
 
-Fraction Tuplet::addMissingElement(int startTick, int endTick)
+Fraction Tuplet::addMissingElement(const Fraction& startTick, const Fraction& endTick)
       {
-      Fraction f = Fraction::fromTicks(endTick - startTick) * ratio();
+      Fraction f = (endTick - startTick) * ratio();
       TDuration d = TDuration(f, true);
       if (!d.isValid()) {
             qDebug("Tuplet::addMissingElement(): invalid duration: %d/%d", f.numerator(), f.denominator());
@@ -1163,7 +1190,7 @@ Fraction Tuplet::addMissingElement(int startTick, int endTick)
       f = d.fraction();
       Rest* rest = new Rest(score());
       rest->setDurationType(d);
-      rest->setDuration(f);
+      rest->setTicks(f);
       rest->setTrack(track());
       rest->setVisible(false);
       Segment* segment = measure()->getSegment(SegmentType::ChordRest, startTick);
@@ -1185,11 +1212,11 @@ void Tuplet::addMissingElements()
             return;     // do not correct nested tuplets
       if (voice() == 0)
             return;     // nothing to do for tuplets in voice 1
-      Fraction missingElementsDuration = duration() * ratio() - elementsDuration();
+      Fraction missingElementsDuration = ticks() * ratio() - elementsDuration();
       if (missingElementsDuration.isZero())
             return;
       // first, fill in any holes in the middle of the tuplet
-      int expectedTick = elements().front()->tick();
+      Fraction expectedTick = elements().front()->tick();
       for (DurationElement* de : elements()) {
             if (de->tick() != expectedTick) {
                   missingElementsDuration -= addMissingElement(expectedTick, de->tick());
@@ -1199,19 +1226,20 @@ void Tuplet::addMissingElements()
             expectedTick += de->actualTicks();
             }
       // calculate the tick where we would expect a tuplet of this duration to start
-      expectedTick = elements().front()->tick() - elements().front()->tick() % duration().ticks();
+      // TODO: check:
+      expectedTick = elements().front()->tick() - Fraction::fromTicks(elements().front()->tick().ticks() % ticks().ticks());
       if (expectedTick != elements().front()->tick()) {
             // try to fill a hole at the beginning of the tuplet
-            int firstAvailableTick = measure()->tick();
+            Fraction firstAvailableTick = measure()->tick();
             Segment* segment = measure()->findSegment(SegmentType::ChordRest, elements().front()->tick());
             ChordRest* prevChordRest = segment && segment->prev() ? segment->prev()->nextChordRest(track(), true) : nullptr;
             if (prevChordRest && prevChordRest->measure() == measure())
                   firstAvailableTick = prevChordRest->tick() + prevChordRest->actualTicks();
             if (firstAvailableTick != elements().front()->tick()) {
                   Fraction f = missingElementsDuration / ratio();
-                  int ticksRequired = f.ticks();
-                  int endTick = elements().front()->tick();
-                  int startTick = max(firstAvailableTick, endTick - ticksRequired);
+                  Fraction ticksRequired = f;
+                  Fraction endTick = elements().front()->tick();
+                  Fraction startTick = max(firstAvailableTick, endTick - ticksRequired);
                   if (expectedTick > startTick)
                         startTick = expectedTick;
                   missingElementsDuration -= addMissingElement(startTick, endTick);
@@ -1220,8 +1248,8 @@ void Tuplet::addMissingElements()
                   }
             }
       // now fill a hole at the end of the tuplet
-      int startTick = elements().back()->tick() + elements().back()->actualTicks();
-      int endTick = elements().front()->tick() + duration().ticks();
+      Fraction startTick = elements().back()->tick() + elements().back()->actualTicks();
+      Fraction endTick = elements().front()->tick() + ticks();
       // just to be safe, find the next ChordRest in the track, and adjust endTick if necessary
       Segment* segment = measure()->findSegment(SegmentType::ChordRest, elements().back()->tick());
       ChordRest* nextChordRest = segment && segment->next() ? segment->next()->nextChordRest(track(), false) : nullptr;

@@ -34,10 +34,10 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       ScoreRange range;
       range.read(m1->first(), m2->last());
 
-      int tick1 = m1->tick();
-      int tick2 = m2->endTick();
+      Fraction tick1 = m1->tick();
+      Fraction tick2 = m2->endTick();
 
-      auto spanners = _spanner.findContained(tick1, tick2);
+      auto spanners = _spanner.findContained(tick1.ticks(), tick2.ticks());
       for (auto i : spanners)
             undo(new RemoveElement(i.value));
 
@@ -55,7 +55,7 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       const Fraction newTimesig = m1->timesig();
       Fraction newLen;
       for (Measure* mm = m1; mm; mm = mm->nextMeasure())  {
-            newLen += mm->len();
+            newLen += mm->ticks();
             if (mm == m2)
                   break;
             }

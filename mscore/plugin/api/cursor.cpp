@@ -170,7 +170,7 @@ void Cursor::add(Element* wrapped)
             }
       else if (s->type() == ElementType::TIMESIG) {
             Ms::Measure* m = _segment->measure();
-            int tick = m->tick();
+            Fraction tick = m->tick();
             _score->cmdAddTimeSig(m, _track, toTimeSig(s), false);
             m = _score->tick2measure(tick);
             _segment = m->first(_filter);
@@ -221,7 +221,7 @@ void Cursor::setDuration(int z, int n)
 
 int Cursor::tick()
       {
-      return (_segment) ? _segment->tick() : 0;
+      return (_segment) ? _segment->tick().ticks() : 0;
       }
 
 //---------------------------------------------------------
@@ -239,7 +239,7 @@ double Cursor::time()
 
 qreal Cursor::tempo()
       {
-      return _score->tempo(tick());
+      return _score->tempo(Fraction::fromTicks(tick()));
       }
 
 //---------------------------------------------------------
@@ -354,8 +354,8 @@ void Cursor::nextInTrack()
 
 int Cursor::qmlKeySignature()
       {
-      Staff *staff = _score->staves()[staffIdx()];
-      return (int) staff->key(tick());
+      Staff* staff = _score->staves()[staffIdx()];
+      return (int) staff->key(Fraction::fromTicks(tick()));
       }
 }
 }

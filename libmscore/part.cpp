@@ -109,7 +109,7 @@ bool Part::readProperties(XmlReader& e)
       else if (tag == "Instrument") {
             Instrument* instr = new Instrument;
             instr->read(e, this);
-            setInstrument(instr, -1);
+            setInstrument(instr, Fraction(-1,1));
             }
       else if (tag == "name")
             instrument()->setLongName(e.readElementText());
@@ -162,12 +162,12 @@ void Part::write(XmlWriter& xml) const
 //   setLongNames
 //---------------------------------------------------------
 
-void Part::setLongNames(QList<StaffName>& name, int tick)
+void Part::setLongNames(QList<StaffName>& name, const Fraction& tick)
       {
       instrument(tick)->longNames() = name;
       }
 
-void Part::setShortNames(QList<StaffName>& name, int tick)
+void Part::setShortNames(QList<StaffName>& name, const Fraction& tick)
       {
       instrument(tick)->shortNames() = name;
       }
@@ -273,7 +273,7 @@ int Part::midiPort() const
 //   setMidiChannel(channel, port) to set both
 //---------------------------------------------------------
 
-void Part::setMidiChannel(int ch, int port, int tick)
+void Part::setMidiChannel(int ch, int port, const Fraction& tick)
       {
       Channel* channel = instrument(tick)->channel(0);
       if (channel->channel() == -1)
@@ -286,29 +286,30 @@ void Part::setMidiChannel(int ch, int port, int tick)
 //   setInstrument
 //---------------------------------------------------------
 
-void Part::setInstrument(Instrument* i, int tick)
+void Part::setInstrument(Instrument* i, Fraction tick)
       {
-      _instruments.setInstrument(i, tick);
+      _instruments.setInstrument(i, tick.ticks());
       }
 
-void Part::setInstrument(const Instrument&& i, int tick)
+void Part::setInstrument(const Instrument&& i, Fraction tick)
       {
-      _instruments.setInstrument(new Instrument(i), tick);
+      _instruments.setInstrument(new Instrument(i), tick.ticks());
       }
-void Part::setInstrument(const Instrument& i, int tick)
+
+void Part::setInstrument(const Instrument& i, Fraction tick)
       {
-      _instruments.setInstrument(new Instrument(i), tick);
+      _instruments.setInstrument(new Instrument(i), tick.ticks());
       }
 
 //---------------------------------------------------------
 //   removeInstrument
 //---------------------------------------------------------
 
-void Part::removeInstrument(int tick)
+void Part::removeInstrument(const Fraction& tick)
       {
-      auto i = _instruments.find(tick);
+      auto i = _instruments.find(tick.ticks());
       if (i == _instruments.end()) {
-            qDebug("Part::removeInstrument: not found at tick %d", tick);
+            qDebug("Part::removeInstrument: not found at tick %d", tick.ticks());
             return;
             }
       _instruments.erase(i);
@@ -318,18 +319,18 @@ void Part::removeInstrument(int tick)
 //   instrument
 //---------------------------------------------------------
 
-Instrument* Part::instrument(int tick)
+Instrument* Part::instrument(Fraction tick)
       {
-      return _instruments.instrument(tick);
+      return _instruments.instrument(tick.ticks());
       }
 
 //---------------------------------------------------------
 //   instrument
 //---------------------------------------------------------
 
-const Instrument* Part::instrument(int tick) const
+const Instrument* Part::instrument(Fraction tick) const
       {
-      return _instruments.instrument(tick);
+      return _instruments.instrument(tick.ticks());
       }
 
 //---------------------------------------------------------
@@ -345,7 +346,7 @@ const InstrumentList* Part::instruments() const
 //   instrumentId
 //---------------------------------------------------------
 
-QString Part::instrumentId(int tick) const
+QString Part::instrumentId(const Fraction& tick) const
       {
       return instrument(tick)->instrumentId();
       }
@@ -354,7 +355,7 @@ QString Part::instrumentId(int tick) const
 //   longName
 //---------------------------------------------------------
 
-QString Part::longName(int tick) const
+QString Part::longName(const Fraction& tick) const
       {
       const QList<StaffName>& nl = longNames(tick);
       return nl.empty() ? "" : nl[0].name();
@@ -364,7 +365,7 @@ QString Part::longName(int tick) const
 //   instrumentName
 //---------------------------------------------------------
 
-QString Part::instrumentName(int tick) const
+QString Part::instrumentName(const Fraction& tick) const
       {
       return instrument(tick)->trackName();
       }
@@ -373,7 +374,7 @@ QString Part::instrumentName(int tick) const
 //   shortName
 //---------------------------------------------------------
 
-QString Part::shortName(int tick) const
+QString Part::shortName(const Fraction& tick) const
       {
       const QList<StaffName>& nl = shortNames(tick);
       return nl.empty() ? "" : nl[0].name();
@@ -474,28 +475,28 @@ int Part::endTrack() const
 //   insertTime
 //---------------------------------------------------------
 
-void Part::insertTime(int tick, int len)
+void Part::insertTime(const Fraction& tick, const Fraction& len)
       {
-      if (len == 0)
+      if (len.isZero())
             return;
 
       // move all instruments
 
-      if (len < 0) {
+      if (len < Fraction(0,1)) {
             // remove instruments between tickpos >= tick and tickpos < (tick+len)
             // ownership goes back to class InstrumentChange()
 
-            auto si = _instruments.lower_bound(tick);
-            auto ei = _instruments.lower_bound(tick-len);
+            auto si = _instruments.lower_bound(tick.ticks());
+            auto ei = _instruments.lower_bound((tick-len).ticks());
             _instruments.erase(si, ei);
             }
 
       InstrumentList il;
-      for (auto i = _instruments.lower_bound(tick); i != _instruments.end();) {
+      for (auto i = _instruments.lower_bound(tick.ticks()); i != _instruments.end();) {
             Instrument* instrument = i->second;
             int t = i->first;
             _instruments.erase(i++);
-            _instruments[t + len] = instrument;
+            _instruments[t + len.ticks()] = instrument;
             }
       _instruments.insert(il.begin(), il.end());
       }
@@ -548,7 +549,7 @@ bool Part::hasPitchedStaff()
       if (!staves())
             return false;
       for (Staff* s : *staves()) {
-            if (s && s->isPitchedStaff(0))
+            if (s && s->isPitchedStaff(Fraction(0,1)))
                   return true;
             }
       return false;
@@ -563,7 +564,7 @@ bool Part::hasTabStaff()
       if (!staves())
             return false;
       for (Staff* s : *staves()) {
-            if (s && s->isTabStaff(0))
+            if (s && s->isTabStaff(Fraction(0,1)))
                   return true;
             }
       return false;
@@ -578,7 +579,7 @@ bool Part::hasDrumStaff()
       if (!staves())
             return false;
       for (Staff* s : *staves()) {
-            if (s && s->isDrumStaff(0))
+            if (s && s->isDrumStaff(Fraction(0,1)))
                   return true;
             }
       return false;

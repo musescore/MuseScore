@@ -30,7 +30,7 @@ class TieSegment final : public SlurTieSegment {
       QPointF getAutoAdjust() const             { return autoAdjustOffset; }
 
    protected:
-      virtual void changeAnchor(EditData&, Element*);
+      virtual void changeAnchor(EditData&, Element*) override;
 
    public:
       TieSegment(Score* s) : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }

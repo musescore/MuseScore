@@ -323,11 +323,11 @@ void Seq::start()
                         setLoopSelection();
                   }
             if (!preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) || (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && state == Transport::STOP))
-                  seek(cs->repeatList()->tick2utick(cs->loopInTick()));
+                  seek(cs->repeatList()->tick2utick(cs->loopInTick().ticks()));
             }
       else {
             if (!preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) || (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && state == Transport::STOP))
-                  seek(cs->repeatList()->tick2utick(cs->playPos()));
+                  seek(cs->repeatList()->tick2utick(cs->playPos().ticks()));
             }
       if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT) && mscore->countIn() && state == Transport::STOP) {
             // Ready to start playing count in, switching to fake transport
@@ -435,7 +435,8 @@ void Seq::guiStop()
       if (!cs)
             return;
 
-      cs->setPlayPos(cs->repeatList()->utick2tick(cs->utime2utick(qreal(playFrame) / qreal(MScore::sampleRate))));
+      int tick = cs->repeatList()->utick2tick(cs->utime2utick(qreal(playFrame) / qreal(MScore::sampleRate)));
+      cs->setPlayPos(Fraction::fromTicks(tick));
       cs->update();
       emit stopped();
       }
@@ -451,10 +452,10 @@ void Seq::seqMessage(int msg, int arg)
       switch(msg) {
             case '5': {
                   // Update the screen after seeking from the realtime thread
-                  Segment* seg = cs->tick2segment(arg);
+                  Segment* seg = cs->tick2segment(Fraction::fromTicks(arg));
                   if (seg)
                         mscore->currentScoreView()->moveCursor(seg->tick());
-                  cs->setPlayPos(arg);
+                  cs->setPlayPos(Fraction::fromTicks(arg));
                   cs->update();
                   break;
                   }
@@ -462,7 +463,7 @@ void Seq::seqMessage(int msg, int arg)
                   loopStart();
                   break;
             case '3':   // Loop restart while playing
-                  seek(cs->repeatList()->tick2utick(cs->loopInTick()));
+                  seek(cs->repeatList()->tick2utick(cs->loopInTick().ticks()));
                   break;
             case '2':
                   guiStop();
@@ -637,24 +638,24 @@ void Seq::metronome(unsigned n, float* p, bool force)
 
 void Seq::addCountInClicks()
       {
-      const int   plPos       = cs->playPos();
-      Measure*    m           = cs->tick2measure(plPos);
-      const int   msrTick     = m->tick();
-      const qreal tempo       = cs->tempomap()->tempo(msrTick);
-      TimeSigFrac timeSig     = cs->sigmap()->timesig(msrTick).nominal();
+      const Fraction plPos = cs->playPos();
+      Measure*    m        = cs->tick2measure(plPos);
+      Fraction   msrTick   = m->tick();
+      qreal tempo          = cs->tempomap()->tempo(msrTick.ticks());
+      TimeSigFrac timeSig  = cs->sigmap()->timesig(m->tick()).nominal();
 
       const int clickTicks = timeSig.isBeatedCompound(tempo) ? timeSig.beatTicks() : timeSig.dUnitTicks();
 
       // add at least one full measure of just clicks.
-      int endTick = timeSig.ticksPerMeasure();
+      Fraction endTick = Fraction::fromTicks(timeSig.ticksPerMeasure());
 
       // add extra clicks if...
       endTick += plPos - msrTick;   // ...not starting playback at beginning of measure
 
       if (m->isAnacrusis())         // ...measure is incomplete (anacrusis)
-            endTick += timeSig.ticksPerMeasure() - m->ticks();
+            endTick += Fraction::fromTicks(timeSig.ticksPerMeasure()) - m->ticks();
 
-      for (int t = 0; t < endTick; t += clickTicks) {
+      for (int t = 0; t < endTick.ticks(); t += clickTicks) {
             const int rtick = t % timeSig.ticksPerMeasure();
             countInEvents.insert(std::pair<int,NPlayEvent>(t, NPlayEvent(timeSig.rtick2beatType(rtick))));
             }
@@ -662,7 +663,7 @@ void Seq::addCountInClicks()
       NPlayEvent event;
       event.setType(ME_INVALID);
       event.setPitch(0);
-      countInEvents.insert( std::pair<int,NPlayEvent>(endTick, event));
+      countInEvents.insert( std::pair<int,NPlayEvent>(endTick.ticks(), event));
       // initialize play parameters to count-in events
       countInPlayPos  = countInEvents.cbegin();
       countInPlayFrame = 0;
@@ -729,7 +730,7 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                   initInstruments(true);
                   if (playPos == events.cend()) {
                         if (mscore->loop()) {
-                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d, cs->pos() = %d", playPos->first, cs->pos());
+                              qDebug("Seq.cpp - Process - Loop whole score. playPos = %d, cs->pos() = %d", playPos->first, cs->pos().ticks());
                               emit toGui('4');
                               return;
                               }
@@ -772,7 +773,7 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
             //
             unsigned framePos = 0; // frame currently being processed relative to the first frame of this call to Seq::process
             int periodEndFrame = *pPlayFrame + framesPerPeriod; // the ending frame (relative to start of playback) of the period being processed by this call to Seq::process
-            int scoreEndUTick = cs->repeatList()->tick2utick(cs->lastMeasure()->endTick());
+            int scoreEndUTick = cs->repeatList()->tick2utick(cs->lastMeasure()->endTick().ticks());
             while (*pPlayPos != pEvents->cend()) {
                   int playPosUTick = (*pPlayPos)->first;
                   int n; // current frame (relative to start of playback) that is being synthesized
@@ -801,14 +802,14 @@ void Seq::process(unsigned framesPerPeriod, float* buffer)
                               n = 0;
                               }
                         if (mscore->loop()) {
-                              int loopOutUTick = cs->repeatList()->tick2utick(cs->loopOutTick());
+                              int loopOutUTick = cs->repeatList()->tick2utick(cs->loopOutTick().ticks());
                               if (loopOutUTick < scoreEndUTick) {
                                     // Also make sure we are not "before" the loop
-                                    if (playPosUTick >= loopOutUTick || cs->repeatList()->utick2tick(playPosUTick) < cs->loopInTick()) {
-                                          qDebug ("Process: playPosUTick = %d, cs->loopInTick() = %d, cs->loopOutTick() = %d, getCurTick() = %d, loopOutUTick = %d, playFrame = %d",
-                                                            playPosUTick,      cs->loopInTick(),      cs->loopOutTick(),      getCurTick(),      loopOutUTick,    *pPlayFrame);
+                                    if (playPosUTick >= loopOutUTick || cs->repeatList()->utick2tick(playPosUTick) < cs->loopInTick().ticks()) {
+                                          qDebug ("Process: playPosUTick = %d, cs->loopInTick().ticks() = %d, cs->loopOutTick().ticks() = %d, getCurTick() = %d, loopOutUTick = %d, playFrame = %d",
+                                                            playPosUTick,      cs->loopInTick().ticks(),      cs->loopOutTick().ticks(),      getCurTick(),      loopOutUTick,    *pPlayFrame);
                                           if (preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT)) {
-                                                int loopInUTick = cs->repeatList()->tick2utick(cs->loopInTick());
+                                                int loopInUTick = cs->repeatList()->tick2utick(cs->loopInTick().ticks());
                                                 _driver->seekTransport(loopInUTick);
                                                 if (loopInUTick != 0) {
                                                       int seekto = loopInUTick - 2 * cs->utime2utick((qreal)_driver->bufferSize() / MScore::sampleRate);
@@ -1091,7 +1092,7 @@ void Seq::seekCommon(int utick)
             }
 
       guiPos = events.lower_bound(utick);
-      mscore->setPos(cs->repeatList()->utick2tick(utick));
+      mscore->setPos(Fraction::fromTicks(cs->repeatList()->utick2tick(utick)));
       unmarkNotes();
       }
 
@@ -1113,10 +1114,10 @@ void Seq::seek(int utick)
       seekCommon(utick);
 
       int t = cs->repeatList()->utick2tick(utick);
-      Segment* seg = cs->tick2segment(t);
+      Segment* seg = cs->tick2segment(Fraction::fromTicks(t));
       if (seg)
             mscore->currentScoreView()->moveCursor(seg->tick());
-      cs->setPlayPos(t);
+      cs->setPlayPos(Fraction::fromTicks(t));
       cs->update();
       guiToSeq(SeqMsg(SeqMsgId::SEEK, utick));
       }
@@ -1248,11 +1249,11 @@ void Seq::sendEvent(const NPlayEvent& ev)
 
 void Seq::nextMeasure()
       {
-      Measure* m = cs->tick2measure(guiPos->first);
+      Measure* m = cs->tick2measure(Fraction::fromTicks(guiPos->first));
       if (m) {
             if (m->nextMeasure())
                   m = m->nextMeasure();
-            seek(m->tick());
+            seek(m->tick().ticks());
             }
       }
 
@@ -1281,11 +1282,11 @@ void Seq::prevMeasure()
       if (i == events.begin())
             return;
       --i;
-      Measure* m = cs->tick2measure(i->first);
+      Measure* m = cs->tick2measure(Fraction::fromTicks(i->first));
       if (m) {
-            if ((i->first == m->tick()) && m->prevMeasure())
+            if ((i->first == m->tick().ticks()) && m->prevMeasure())
                   m = m->prevMeasure();
-            seek(m->tick());
+            seek(m->tick().ticks());
             }
       }
 
@@ -1491,7 +1492,7 @@ void Seq::heartBeatTimeout()
             if (guiPos->first > ppos->first)
                   break;
             if (mscore->loop())
-                  if (guiPos->first >= cs->repeatList()->tick2utick(cs->loopOutTick()))
+                  if (guiPos->first >= cs->repeatList()->tick2utick(cs->loopOutTick().ticks()))
                         break;
             const NPlayEvent& n = guiPos->second;
             if (n.type() == ME_NOTEON) {
@@ -1526,8 +1527,8 @@ void Seq::heartBeatTimeout()
             }
       int utick = ppos->first;
       int t = cs->repeatList()->utick2tick(utick);
-      mscore->currentScoreView()->moveCursor(t);
-      mscore->setPos(t);
+      mscore->currentScoreView()->moveCursor(Fraction::fromTicks(t));
+      mscore->setPos(Fraction::fromTicks(t));
 
       emit(heartBeat(t, utick, endFrame));
 
@@ -1583,16 +1584,16 @@ double Seq::curTempo() const
 
 void Seq::setLoopIn()
       {
-      int t;
-      if (state == Transport::PLAY) {      // If in playback mode, set the In position where note is being played
+      Fraction t;
+      if (state == Transport::PLAY) {     // If in playback mode, set the In position where note is being played
             auto ppos = playPos;
             if (ppos != events.cbegin())
                   --ppos;                 // We have to go back one pos to get the correct note that has just been played
-            t = cs->repeatList()->utick2tick(ppos->first);
+            t = Fraction::fromTicks(cs->repeatList()->utick2tick(ppos->first));
             }
       else
-            t = cs->pos();             // Otherwise, use the selected note.
-      if (t >= cs->loopOutTick())   // If In pos >= Out pos, reset Out pos to end of score
+            t = cs->pos();        // Otherwise, use the selected note.
+      if (t >= cs->loopOutTick())         // If In pos >= Out pos, reset Out pos to end of score
             cs->setPos(POS::RIGHT, cs->lastMeasure()->endTick());
       cs->setPos(POS::LEFT, t);
       }
@@ -1603,20 +1604,20 @@ void Seq::setLoopIn()
 
 void Seq::setLoopOut()
       {
-      int t;
+      Fraction t;
       if (state == Transport::PLAY) {    // If in playback mode, set the Out position where note is being played
-            t = cs->repeatList()->utick2tick(playPos->first);
+            t = Fraction::fromTicks(cs->repeatList()->utick2tick(playPos->first));
             }
       else
             t = cs->pos() + cs->inputState().ticks();   // Otherwise, use the selected note.
-      if (t <= cs->loopInTick())   // If Out pos <= In pos, reset In pos to beginning of score
-            cs->setPos(POS::LEFT, 0);
+      if (t <= cs->loopInTick())                        // If Out pos <= In pos, reset In pos to beginning of score
+            cs->setPos(POS::LEFT, Fraction(0,1));
       else
           if (t > cs->lastMeasure()->endTick())
               t = cs->lastMeasure()->endTick();
       cs->setPos(POS::RIGHT, t);
       if (state == Transport::PLAY)
-            guiToSeq(SeqMsg(SeqMsgId::SEEK, t));
+            guiToSeq(SeqMsg(SeqMsgId::SEEK, t.ticks()));
       }
 
 void Seq::setPos(POS, unsigned t)

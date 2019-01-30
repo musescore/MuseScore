@@ -491,7 +491,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             if (si.exec()) {
                   const InstrumentTemplate* it = si.instrTemplate();
                   if (it) {
-                        int tickStart = ic->segment()->tick();
+                        Fraction tickStart = ic->segment()->tick();
                         Part* part = ic->staff()->part();
                         Interval oldV = part->instrument(tickStart)->transpose();
                         //Instrument* oi = ic->instrument();  //part->instrument(tickStart);
@@ -505,12 +505,12 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         // transpose for current score only
                         // this automatically propagates to linked scores
                         if (part->instrument(tickStart)->transpose() != oldV) {
-                              auto i = part->instruments()->upper_bound(tickStart);    // find(), ++i
-                              int tickEnd;
+                              auto i = part->instruments()->upper_bound(tickStart.ticks());    // find(), ++i
+                              Fraction tickEnd;
                               if (i == part->instruments()->end())
-                                    tickEnd = -1;
+                                    tickEnd = Fraction(-1,0);
                               else
-                                    tickEnd = i->first;
+                                    tickEnd = Fraction::fromTicks(i->first);
                               ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
                               }
                         }
@@ -521,7 +521,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
 //      else if (cmd == "fret-props")
 //            editFretDiagram(static_cast<FretDiagram*>(e));
       else if (cmd == "staff-props") {
-            int tick = -1;
+            Fraction tick = {-1,1};
             if (e->isChordRest())
                   tick = static_cast<ChordRest*>(e)->tick();
             else if (e->type() == ElementType::NOTE)

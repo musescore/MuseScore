@@ -44,7 +44,6 @@ class DurationElement : public Element {
    public:
       DurationElement(Score* = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
       DurationElement(const DurationElement& e);
-      ~DurationElement();
 
       virtual Measure* measure() const    { return (Measure*)(parent()); }
 
@@ -56,14 +55,12 @@ class DurationElement : public Element {
       Tuplet* tuplet() const              { return _tuplet;   }
       Tuplet* topTuplet() const;
       virtual Beam* beam() const          { return 0;         }
-      int actualTicks() const;
-      Fraction actualFraction() const;
-      Fraction afrac() const override;
-      Fraction rfrac() const override;
 
-      virtual Fraction duration() const   { return _duration; }
-      Fraction globalDuration() const;
-      void setDuration(const Fraction& f) { _duration = f;    }
+      Fraction actualTicks() const;
+
+      virtual Fraction ticks() const { return _duration; }
+      Fraction globalTicks() const;
+      void setTicks(const Fraction& f) { _duration = f;    }
 
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;

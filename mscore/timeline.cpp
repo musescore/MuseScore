@@ -956,7 +956,7 @@ void Timeline::drawGrid(int global_rows, int global_cols)
             for (Segment* curr_seg = cm->first(); curr_seg; curr_seg = curr_seg->next()) {
                   //Toggle no_key if initial key signature is found
                   if (curr_seg->isKeySigType() && cm == _score->firstMeasure()) {
-                        if (no_key && curr_seg->tick() == 0)
+                        if (no_key && curr_seg->tick().isZero())
                               no_key = false;
                         }
 
@@ -1127,7 +1127,7 @@ void Timeline::key_meta(Segment* seg, int* stagger, int pos)
                   }
 
             //Ignore unpitched staves
-            if ((seg && !stave->isPitchedStaff(seg->tick())) || (!seg && !stave->isPitchedStaff(0))) {
+            if ((seg && !stave->isPitchedStaff(seg->tick())) || (!seg && !stave->isPitchedStaff(Fraction(0,1)))) {
                   track += VOICES;
                   continue;
                   }
@@ -1143,7 +1143,7 @@ void Timeline::key_meta(Segment* seg, int* stagger, int pos)
             if (seg)
                   global_key = stave->key(seg->tick());
             else
-                  global_key = stave->key(0);
+                  global_key = stave->key(Fraction(0,1));
             if (curr_key_sig) {
                   if (curr_key_sig->generated())
                         return;
@@ -1729,7 +1729,7 @@ void Timeline::drawSelection()
       const Selection& selection = _score->selection();
       const QList<Element*>& el = selection.elements();
       for (Element* element : el) {
-            if (element->tick() == -1)
+            if (element->tick() == Fraction(-1,1))
                   continue;
             else {
                   switch (element->type()) {
@@ -1748,7 +1748,7 @@ void Timeline::drawSelection()
                   }
 
             int staffIdx;
-            int tick = element->tick();
+            Fraction tick = element->tick();
             Measure* measure = _score->tick2measure(tick);
             staffIdx = element->staffIdx();
             if (numToStaff(staffIdx) && !numToStaff(staffIdx)->show())
@@ -2491,7 +2491,7 @@ std::vector<std::pair<QString, bool>> Timeline::getLabels()
             part_name = doc.toPlainText();
             if (part_name.isEmpty())
                   part_name = part_list.at(stave)->instrumentName();
-            
+
             std::pair<QString, bool> instrument_label(part_name, part_list.at(stave)->show());
             row_labels.push_back(instrument_label);
             }

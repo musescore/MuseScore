@@ -141,8 +141,8 @@ class Spanner : public Element {
       Element* _endElement   { 0  };
 
       Anchor _anchor         { Anchor::SEGMENT };
-      int _tick              { -1 };
-      int _ticks             {  0 };
+      Fraction _tick         { Fraction(-1, 1) };
+      Fraction _ticks        { Fraction(0, 1) };
       int _track2            { -1 };
       bool _broken           { false };
 
@@ -170,26 +170,21 @@ class Spanner : public Element {
       virtual ElementType type() const = 0;
       virtual void setScore(Score* s) override;
 
-      void writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac = -1) const;
-      void writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction frac = -1) const;
-      void writeSpannerStart(XmlWriter& xml, const Element* current, int track, int tick) const;
-      void writeSpannerEnd(XmlWriter& xml, const Element* current, int track, int tick) const;
+      void writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac = { -1, 1 }) const;
+      void writeSpannerEnd(XmlWriter& xml,   const Element* current, int track, Fraction frac = { -1, 1 }) const;
       static void readSpanner(XmlReader& e, Element* current, int track);
       static void readSpanner(XmlReader& e, Score* current, int track);
 
-      virtual int tick() const override { return _tick;          }
-      int tick2() const                 { return _tick + _ticks; }
-      int ticks() const                 { return _ticks;         }
+      virtual Fraction tick() const override { return _tick;          }
+      Fraction tick2() const                 { return _tick + _ticks; }
+      Fraction ticks() const                 { return _ticks;         }
 
-      void setTick(int v);
-      void setTick2(int v);
-      void setTicks(int v);
+      void setTick(const Fraction&);
+      void setTick2(const Fraction&);
+      void setTicks(const Fraction&);
 
       int track2() const       { return _track2;   }
       void setTrack2(int v)    { _track2 = v;      }
-
-      Fraction rfrac() const override;
-      Fraction afrac() const override;
 
       bool broken() const      { return _broken;   }
       void setBroken(bool v)   { _broken = v;      }
@@ -217,7 +212,7 @@ class Spanner : public Element {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
       bool removeSpannerBack();
       virtual void removeUnmanaged();
-      virtual void insertTimeUnmanaged(int tick, int len);
+      virtual void insertTimeUnmanaged(const Fraction& tick, const Fraction& len);
 
       QVariant getProperty(Pid propertyId) const;
       bool setProperty(Pid propertyId, const QVariant& v);

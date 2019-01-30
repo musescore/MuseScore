@@ -33,7 +33,7 @@ static QHash<void*, int> segs;
 static void saveMeasureEvents(XmlWriter& xml, Measure* m, int offset)
       {
       for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-            int tick = s->tick() + offset;
+            int tick = s->tick().ticks() + offset;
             int id = segs[(void*)s];
             int time = lrint(m->score()->repeatList()->utick2utime(tick) * 1000);
             xml.tagE(QString("event elid=\"%1\" position=\"%2\"")
@@ -120,11 +120,11 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments)
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
-            for (Measure* m = score->tick2measureMM(startTick); m; m = m->nextMeasureMM()) {
+            for (Measure* m = score->tick2measureMM(Fraction::fromTicks(startTick)); m; m = m->nextMeasureMM()) {
                         if (segments)
                               saveMeasureEvents(xml, m, tickOffset);
                         else {
-                              int tick = m->tick() + tickOffset;
+                              int tick = m->tick().ticks() + tickOffset;
                               int i = segs[(void*)m];
                               int time = lrint(m->score()->repeatList()->utick2utime(tick) * 1000);
                               xml.tagE(QString("event elid=\"%1\" position=\"%2\"")
@@ -132,7 +132,7 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments)
                                  .arg(time)
                                  );
                               }
-                  if (m->tick() + m->ticks() >= endTick)
+                  if (m->endTick().ticks() >= endTick)
                         break;
                   }
             }

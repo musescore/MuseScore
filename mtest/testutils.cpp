@@ -76,7 +76,6 @@ Element* MTest::writeReadElement(Element* element)
       //
       // write element
       //
-      qDebug("writeReadElement %s", element->name());
       QBuffer buffer;
       buffer.open(QIODevice::WriteOnly);
       XmlWriter xml(element->score(), &buffer);
@@ -87,13 +86,10 @@ Element* MTest::writeReadElement(Element* element)
       //
       // read element
       //
-// printf("===read <%s>===\n", element->name());
-// printf("%s\n", buffer.buffer().data());
 
       XmlReader e(buffer.buffer());
       e.readNextStartElement();
       QString tag(e.name().toString());
-// printf("read tag %s\n", qPrintable(tag));
       element = Element::name2Element(e.name(), score);
       element->read(e);
       return element;

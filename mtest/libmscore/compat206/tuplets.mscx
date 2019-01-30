@@ -409,7 +409,6 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <tick>6188</tick>
         <Chord>
           <Tuplet>5</Tuplet>
           <durationType>16th</durationType>
@@ -450,7 +449,6 @@
             <tpc>18</tpc>
             </Note>
           </Chord>
-        <tick>6720</tick>
         <Rest>
           <durationType>half</durationType>
           </Rest>
@@ -607,7 +605,6 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <tick>8466</tick>
         <Chord>
           <Tuplet>7</Tuplet>
           <durationType>eighth</durationType>
@@ -648,7 +645,6 @@
             <tpc>17</tpc>
             </Note>
           </Chord>
-        <tick>9120</tick>
         <Rest>
           <durationType>quarter</durationType>
           </Rest>

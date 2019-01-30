@@ -120,8 +120,8 @@ void MeasureProperties::setMeasure(Measure* _m)
       m->score()->deselectAll();
       m->score()->select(m, SelectType::ADD, 0);
 
-      actualZ->setValue(m->len().numerator());
-      int index = actualN->findText(QString::number(m->len().denominator()));
+      actualZ->setValue(m->ticks().numerator());
+      int index = actualN->findText(QString::number(m->ticks().denominator()));
       if (index == -1)
             index = 2;
       actualN->setCurrentIndex(index);
@@ -258,7 +258,7 @@ void MeasureProperties::apply()
       m->undoChangeProperty(Pid::NO_OFFSET, measureNumberOffset->value());
       m->undoChangeProperty(Pid::IRREGULAR, isIrregular());
 
-      if (m->len() != len()) {
+      if (m->ticks() != len()) {
             ScoreRange range;
             range.read(m->first(), m->last());
             m->adjustToLen(len());

@@ -273,7 +273,8 @@ QVariant Volta::propertyDefault(Pid propertyId) const
 //   layoutSystem
 //---------------------------------------------------------
 
-SpannerSegment * Volta::layoutSystem(System * system) {
+SpannerSegment * Volta::layoutSystem(System * system)
+      {
       SpannerSegment* voltaSegment= SLine::layoutSystem(system);
 
       // we need set tempo in layout because all tempos of score is set in layout
@@ -287,19 +288,20 @@ SpannerSegment * Volta::layoutSystem(System * system) {
 //   setVelocity
 //---------------------------------------------------------
 
-void Volta::setVelocity() const {
+void Volta::setVelocity() const
+      {
       Measure* startMeasure = Spanner::startMeasure();
       Measure* endMeasure = Spanner::endMeasure();
 
       if (startMeasure && endMeasure) {
             if (!endMeasure->repeatEnd())
-            return;
+                  return;
 
-            auto startTick = startMeasure->tick() - 1;
-            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
-            Staff* st = staff();
+            int startTick  = startMeasure->tick().ticks() - 1;
+            int endTick    = (endMeasure->tick() + endMeasure->ticks()).ticks() - 1;
+            Staff* st      = staff();
             VeloList& velo = st->velocities();
-            auto prevVelo = velo.velo(startTick);
+            auto prevVelo  = velo.velo(startTick);
             velo.setVelo(endTick, prevVelo);
             }
       }
@@ -308,16 +310,17 @@ void Volta::setVelocity() const {
 //   setChannel
 //---------------------------------------------------------
 
-void Volta::setChannel() const {
+void Volta::setChannel() const
+      {
       Measure* startMeasure = Spanner::startMeasure();
       Measure* endMeasure = Spanner::endMeasure();
 
       if (startMeasure && endMeasure) {
             if (!endMeasure->repeatEnd())
-            return;
+                  return;
 
-            auto startTick = startMeasure->tick() - 1;
-            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
+            Fraction startTick = startMeasure->tick() - Fraction::fromTicks(1);
+            Fraction endTick  = endMeasure->endTick() - Fraction::fromTicks(1);
             Staff* st = staff();
             for (int voice = 0; voice < VOICES; ++voice) {
                   int channel = st->channel(startTick, voice);
@@ -330,17 +333,17 @@ void Volta::setChannel() const {
 //   setTempo
 //---------------------------------------------------------
 
-void Volta::setTempo() const {
+void Volta::setTempo() const
+      {
       Measure* startMeasure = Spanner::startMeasure();
       Measure* endMeasure = Spanner::endMeasure();
 
       if (startMeasure && endMeasure) {
             if (!endMeasure->repeatEnd())
-            return;
-
-            auto startTick = startMeasure->tick() - 1;
-            auto endTick = endMeasure->tick() + endMeasure->ticks() - 1;
-            qreal tempoBeforeVolta = score()->tempomap()->tempo(startTick);
+                  return;
+            Fraction startTick = startMeasure->tick() - Fraction::fromTicks(1);
+            Fraction endTick  = endMeasure->endTick() - Fraction::fromTicks(1);
+            qreal tempoBeforeVolta = score()->tempomap()->tempo(startTick.ticks());
             score()->setTempo(endTick, tempoBeforeVolta);
             }
       }

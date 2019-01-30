@@ -41,7 +41,7 @@
 
 namespace Ms {
 
-extern void layoutTies(Chord* ch, System* system, int stick);
+extern void layoutTies(Chord* ch, System* system, const Fraction& stick);
 extern void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, qreal spatium);
 
 //---------------------------------------------------------
@@ -152,7 +152,7 @@ void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
                   if (firstMeasure) {
                         system->layoutSystem(0.0);
                         if (m->repeatStart()) {
-                              Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, 0);
+                              Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
                               if (!s->enabled())
                                     s->setEnabled(true);
                               }
@@ -538,7 +538,7 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
                         KeySig* ks = toKeySig(segment.element(staffIdx * VOICES));
                         if (!ks)
                               continue;
-                        int t = segment.tick();
+                        Fraction t = segment.tick();
                         as.init(staff->keySigEvent(t), staff->clef(t));
                         ks->layout();
                         }
@@ -617,7 +617,7 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
       for (Segment& segment : measure->segments()) {
             if (segment.isBreathType()) {
                   qreal length = 0.0;
-                  int t = segment.tick();
+                  Fraction t = segment.tick();
                   // find longest pause
                   for (int i = 0, n = score->ntracks(); i < n; ++i) {
                         Element* e = segment.element(i);
@@ -659,11 +659,11 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
                               stretch = qMax(stretch, toFermata(e)->timeStretch());
                         }
                   if (stretch != 0.0 && stretch != 1.0) {
-                        qreal otempo = score->tempomap()->tempo(segment.tick());
+                        qreal otempo = score->tempomap()->tempo(segment.tick().ticks());
                         qreal ntempo = otempo / stretch;
                         score->setTempo(segment.tick(), ntempo);
-                        int etick = segment.tick() + segment.ticks() - 1;
-                        auto e = score->tempomap()->find(etick);
+                        Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480*4);
+                        auto e = score->tempomap()->find(etick.ticks());
                         if (e == score->tempomap()->end())
                               score->setTempo(etick, otempo);
                         }
@@ -682,21 +682,21 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
       // even if they are equivalent 4/4 vs 2/2
       // also check if nominal time signature has changed
 
-      if (score->isMaster() && ((!measure->len().identical(sig) && measure->len() != sig * measure->mmRestCount())
+      if (score->isMaster() && ((!measure->ticks().identical(sig) && measure->ticks() != sig * measure->mmRestCount())
          || (prevMeasure && prevMeasure->isMeasure()
          && !measure->timesig().identical(toMeasure(prevMeasure)->timesig()))))
             {
             if (measure->isMMRest())
-                  sig = measure->mmRestFirst()->len();
+                  sig = measure->mmRestFirst()->ticks();
             else
-                  sig = measure->len();
-            score->sigmap()->add(tick, SigEvent(sig, measure->timesig(), measure->no()));
+                  sig = measure->ticks();
+            score->sigmap()->add(tick.ticks(), SigEvent(sig, measure->timesig(), measure->no()));
             }
 
-      Segment* seg = measure->findSegmentR(SegmentType::StartRepeatBarLine, 0);
+      Segment* seg = measure->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
       if (measure->repeatStart()) {
             if (!seg)
-                  seg = measure->getSegmentR(SegmentType::StartRepeatBarLine, 0);
+                  seg = measure->getSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
             measure->barLinesSetSpan(seg);      // this also creates necessary barlines
             for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                   BarLine* b = toBarLine(seg->element(staffIdx * VOICES));

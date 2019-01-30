@@ -79,7 +79,7 @@ void TestLinks::test3LinkedSameScore_99796()
       c.setTimeSig(Fraction(4,4));
       c.createScore("test");
       c.addPart("voice");
-      c.move(0, 0);     // move to track 0 tick 0
+      c.move(0, Fraction(0,1));     // move to track 0 tick 0
 
       c.addKeySig(Key(1));
       c.addTimeSig(Fraction(4,4));
@@ -182,7 +182,7 @@ void TestLinks::test3LinkedParts_99796()
       c.setTimeSig(Fraction(4,4));
       c.createScore("test");
       c.addPart("voice");
-      c.move(0, 0);     // move to track 0 tick 0
+      c.move(0, Fraction(0,1));     // move to track 0 tick 0
 
       c.addKeySig(Key(1));
       c.addTimeSig(Fraction(4,4));
@@ -263,7 +263,7 @@ void TestLinks::test4LinkedParts_94911()
       c.setTimeSig(Fraction(4,4));
       c.createScore("test");
       c.addPart("electric-guitar");
-      c.move(0, 0);     // move to track 0 tick 0
+      c.move(0, Fraction(0,1));     // move to track 0 tick 0
 
 //      c.addKeySig(Key(1));
 //      c.addTimeSig(Fraction(4,4));
@@ -385,7 +385,7 @@ void TestLinks::test5LinkedParts_94911()
       c.setTimeSig(Fraction(4,4));
       c.createScore("test");
       c.addPart("electric-guitar");
-      c.move(0, 0);     // move to track 0 tick 0
+      c.move(0, Fraction(0,1));     // move to track 0 tick 0
 
 //      c.addKeySig(Key(1));
 //      c.addTimeSig(Fraction(4,4));

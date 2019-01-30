@@ -128,7 +128,7 @@
               </Note>
             </Chord>
           <location>
-            <fractions>3/320</fractions>
+            <fractions>1/108</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -138,7 +138,7 @@
               </Note>
             </Chord>
           <location>
-            <fractions>3/320</fractions>
+            <fractions>1/108</fractions>
             </location>
           <Chord>
             <durationType>eighth</durationType>
@@ -149,12 +149,13 @@
             </Chord>
           <endTuplet/>
           <location>
-            <fractions>-19/960</fractions>
+            <fractions>-43/2160</fractions>
             </location>
           <Rest>
             <dots>1</dots>
             <durationType>eighth</durationType>
             </Rest>
+          <endTuplet/>
           <location>
             <fractions>-1/960</fractions>
             </location>
@@ -168,6 +169,10 @@
               <text>6:4</text>
               </Number>
             </Tuplet>
+          <Beam>
+            <l1>15</l1>
+            <l2>15</l2>
+            </Beam>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -175,9 +180,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/480</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -185,9 +187,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/480</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -195,9 +194,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/480</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -205,9 +201,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/480</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -215,9 +208,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>1/480</fractions>
-            </location>
           <Chord>
             <durationType>32nd</durationType>
             <Note>
@@ -226,9 +216,8 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <endTuplet/>
           <location>
-            <fractions>-3/320</fractions>
+            <fractions>-11/960</fractions>
             </location>
           <Rest>
             <durationType>half</durationType>

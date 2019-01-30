@@ -557,13 +557,13 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void onLongOperationFinished();
 
       virtual QMenu* createPopupMenu() override;
-      
+
       QByteArray exportPdfAsJSON(Score*);
 
    public slots:
       virtual void cmd(QAction* a);
       void dirtyChanged(Score*);
-      void setPos(int tick);
+      void setPos(const Fraction& tick);
       void pluginTriggered(int);
       void handleMessage(const QString& message);
       void setCurrentScoreView(ScoreView*);
@@ -740,7 +740,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool exportMp3AsJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       bool exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       /////////////////////////////////////////////////
-      
+
       virtual void closeScore(Score* score);
 
       void addTempo();

@@ -140,6 +140,7 @@ class TimeSigMap : public std::map<int, SigEvent > {
       void dump() const;
 
       const SigEvent& timesig(int tick) const;
+      const SigEvent& timesig(const Fraction& f) const { return timesig(f.ticks()); }
 
       void tickValues(int t, int* bar, int* beat, int* tick) const;
       int bar2tick(int bar, int beat) const;

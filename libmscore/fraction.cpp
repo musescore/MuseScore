@@ -159,11 +159,13 @@ Fraction& Fraction::operator/=(const Fraction& val)
       return *this;
       }
 
+#if 0
 Fraction& Fraction::operator/=(int val)
       {
       _denominator *= val;
       return *this;
       }
+#endif
 
 //---------------------------------------------------------
 //   fromTicks
@@ -171,6 +173,8 @@ Fraction& Fraction::operator/=(int val)
 
 Fraction Fraction::fromTicks(int ticks)
       {
+      if (ticks == -1)
+            return Fraction(-1,1);  // HACK
       return Fraction(ticks, MScore::division * 4).reduced();
       }
 
@@ -180,7 +184,10 @@ Fraction Fraction::fromTicks(int ticks)
 
 int Fraction::ticks() const
       {
-      // MScore::division - ticks per quarter note
+      if (_numerator == -1 && _denominator == 1)        // HACK
+            return -1;
+
+      // MScore::division     - ticks per quarter note
       // MScore::division * 4 - ticks per whole note
       // result: rounded (MScore::division * 4 * _numerator * 1.0 / _denominator) value
       const auto result = (static_cast<int_least64_t>(_numerator) * MScore::division * 4 + (_denominator/2)) / _denominator;

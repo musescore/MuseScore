@@ -62,12 +62,12 @@ class InputState {
 
       ChordRest* cr() const;
 
-      int tick() const;
+      Fraction tick() const;
 
       void setDuration(const TDuration& d) { _duration = d;          }
       TDuration duration() const           { return _duration;       }
       void setDots(int n)                  { _duration.setDots(n);   }
-      int ticks() const                    { return _duration.ticks(); }
+      Fraction ticks() const               { return _duration.ticks(); }
 
       Segment* segment() const            { return _segment;        }
       void setSegment(Segment* s);

@@ -355,11 +355,11 @@ Fraction MxmlSupport::calculateFraction(QString type, int dots, int normalNotes,
             // dot(s)
             Fraction f_no_dots = f;
             for (int i = 0; i < dots; ++i)
-                  f += (f_no_dots / (2 << i));
+                  f += (f_no_dots / Fraction(2 << i, 1));
             // tuplet
             if (actualNotes > 0 && normalNotes > 0) {
                   f *= normalNotes;
-                  f /= actualNotes;
+                  f /= Fraction(actualNotes,1);
                   }
             // clean up (just in case)
             f.reduce();

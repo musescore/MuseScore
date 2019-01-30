@@ -100,7 +100,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
 
       bool bNew;
       // add a (new) FB element, using chord duration as default duration
-      FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, 0, &bNew);
+      FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, Fraction(0,1), &bNew);
       if (bNew) {
             _score->startCmd();
             _score->undoAddElement(fbNew);
@@ -120,7 +120,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
 //    manages [Ctrl] [1]-[9], extending current FB of the given number of ticks
 //---------------------------------------------------------
 
-void ScoreView::figuredBassTicksTab(int ticks)
+void ScoreView::figuredBassTicksTab(const Fraction& ticks)
       {
       FiguredBass* fb   = toFiguredBass(editData.element);
       int track         = fb->track();
@@ -131,7 +131,7 @@ void ScoreView::figuredBassTicksTab(int ticks)
             }
       Measure* measure = segm->measure();
 
-      int nextSegTick   = segm->tick() + ticks;
+      Fraction nextSegTick   = segm->tick() + ticks;
 
       // find the measure containing the target tick
       while (nextSegTick >= measure->tick() + measure->ticks()) {

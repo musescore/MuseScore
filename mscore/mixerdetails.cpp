@@ -509,7 +509,7 @@ void MixerDetails::drumkitToggled(bool val)
       if (_mti->trackType() == MixerTrackItem::TrackType::CHANNEL)
             instr = _mti->instrument();
       else
-            instr = part->instrument(0);
+            instr = part->instrument(Fraction(0,1));
 
       if (instr->useDrumset() == val)
             return;

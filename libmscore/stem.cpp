@@ -88,8 +88,8 @@ void Stem::layout()
       const Staff* stf = staff();
       if (chord()) {
             setMag(chord()->mag());
-            int tick = chord()->tick();
-            const StaffType* st = stf ? stf->staffType(tick) : nullptr;
+            Fraction tick = chord()->tick();
+            const StaffType* st = stf ? stf->staffType(tick) : 0;
             if (st && st->isTabStaff() ) {            // TAB staves
                   if (st->stemThrough()) {
                         // if stems through staves, gets Y pos. of stem-side note relative to chord other side

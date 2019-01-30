@@ -130,16 +130,16 @@ class System final : public Element {
       void removeStaff(int);
 
       int y2staff(qreal y) const;
-      void setInstrumentNames(bool longName, int tick = 0);
-      int snap(int tick, const QPointF p) const;
-      int snapNote(int tick, const QPointF p, int staff) const;
+      void setInstrumentNames(bool longName, Fraction tick = {0,1});
+      Fraction snap(const Fraction& tick, const QPointF p) const;
+      Fraction snapNote(const Fraction& tick, const QPointF p, int staff) const;
 
       const std::vector<MeasureBase*>& measures() const { return ml; }
 
       MeasureBase* measure(int idx)          { return ml[idx]; }
       Measure* firstMeasure() const;
       Measure* lastMeasure() const;
-      int endTick() const;
+      Fraction endTick() const;
 
       MeasureBase* prevMeasure(const MeasureBase*) const;
       MeasureBase* nextMeasure(const MeasureBase*) const;

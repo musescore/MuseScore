@@ -270,7 +270,7 @@ class ExportMusicXml {
       XmlWriter _xml;
       SlurHandler sh;
       GlissandoHandler gh;
-      int _tick;
+      Fraction _tick;
       Attributes _attr;
       TextLine const* brackets[MAX_NUMBER_LEVEL];
       Hairpin const* hairpins[MAX_NUMBER_LEVEL];
@@ -296,7 +296,7 @@ class ExportMusicXml {
       void barlineRight(Measure* m);
       void lyrics(const std::vector<Lyrics*>* ll, const int trk);
       void work(const MeasureBase* measure);
-      void calcDivMoveToTick(int t);
+      void calcDivMoveToTick(const Fraction& t);
       void calcDivisions();
       void keysigTimesig(const Measure* m, const Part* p);
       void chordAttributes(Chord* chord, Notations& notations, Technical& technical,
@@ -312,18 +312,18 @@ public:
       ExportMusicXml(Score* s)
             : _xml(s)
             {
-            _score = s; _tick = 0; div = 1; tenths = 40;
+            _score = s; _tick = {0,1}; div = 1; tenths = 40;
             millimeters = _score->spatium() * tenths / (10 * DPMM);
             }
       void write(QIODevice* dev);
       void credits(XmlWriter& xml);
-      void moveToTick(int t);
+      void moveToTick(const Fraction& t);
       void words(Text const* const text, int staff);
       void rehearsal(RehearsalMark const* const rmk, int staff);
-      void hairpin(Hairpin const* const hp, int staff, int tick);
-      void ottava(Ottava const* const ot, int staff, int tick);
-      void pedal(Pedal const* const pd, int staff, int tick);
-      void textLine(TextLine const* const tl, int staff, int tick);
+      void hairpin(Hairpin const* const hp, int staff, const Fraction& tick);
+      void ottava(Ottava const* const ot, int staff, const Fraction& tick);
+      void pedal(Pedal const* const pd, int staff, const Fraction& tick);
+      void textLine(TextLine const* const tl, int staff, const Fraction& tick);
       void dynamic(Dynamic const* const dyn, int staff);
       void symbol(Symbol const* const sym, int staff);
       void tempoText(TempoText const* const text, int staff);
@@ -592,7 +592,7 @@ static const Chord* findFirstChord(const Slur* s)
             if (!c1->isGrace() && !c2->isGrace()) {
                   // slur between two regular notes at the same tick
                   // probably shouldn't happen but handle just in case
-                  qDebug("invalid slur between chords %p and %p at tick %d", c1, c2, c1->tick());
+                  qDebug("invalid slur between chords %p and %p at tick %d", c1, c2, c1->tick().ticks());
                   return 0;
                   }
             else if (c1->isGraceBefore() && !c2->isGraceBefore())
@@ -860,15 +860,15 @@ class DirectionsAnchor {
       Element* direct;        // the element containing the direction
       Element* anchor;        // the element it is attached to
       bool start;             // whether it is attached to start or end
-      int tick;               // the timestamp
+      Fraction tick;          // the timestamp
 
 public:
-      DirectionsAnchor(Element* a, bool s, int t) { direct = 0; anchor = a; start = s; tick = t; }
-      DirectionsAnchor(int t) { direct = 0; anchor = 0; start = true; tick = t; }
+      DirectionsAnchor(Element* a, bool s, const Fraction& t) { direct = 0; anchor = a; start = s; tick = t; }
+      DirectionsAnchor(const Fraction& t) { direct = 0; anchor = 0; start = true; tick = t; }
       Element* getDirect() { return direct; }
       Element* getAnchor() { return anchor; }
       bool getStart() { return start; }
-      int getTick() { return tick; }
+      Fraction getTick() { return tick; }
       void setDirect(Element* d) { direct = d; }
       };
 
@@ -884,9 +884,9 @@ public:
 
 static void findTrillAnchors(const Trill* trill, Chord*& startChord, Chord*& stopChord)
       {
-      const Segment* seg = trill->startSegment();
-      const int endTick  = trill->tick2();
-      const int strack   = trill->track();
+      const Segment* seg     = trill->startSegment();
+      const Fraction endTick = trill->tick2();
+      const int strack       = trill->track();
       // try to find chords in the same track:
       // find a track with suitable chords both for start and stop
       for (int i = 0; i < VOICES; ++i) {
@@ -936,9 +936,9 @@ static void findTrillAnchors(const Trill* trill, Chord*& startChord, Chord*& sto
 static void findTrills(Measure* measure, int strack, int etrack, TrillHash& trillStart, TrillHash& trillStop)
       {
       // loop over all spanners in this measure
-      int stick = measure->tick();
-      int etick = measure->tick() + measure->ticks();
-      for (auto it = measure->score()->spanner().lower_bound(stick); it != measure->score()->spanner().upper_bound(etick); ++it) {
+      Fraction stick = measure->tick();
+      Fraction etick = measure->tick() + measure->ticks();
+      for (auto it = measure->score()->spanner().lower_bound(stick.ticks()); it != measure->score()->spanner().upper_bound(etick.ticks()); ++it) {
             Spanner* e = it->second;
             //qDebug("findTrills 1 trill %p type %d track %d tick %d", e, e->type(), e->track(), e->tick());
             if (e->type() == ElementType::TRILL && strack <= e->track() && e->track() < etrack
@@ -1003,19 +1003,19 @@ static void addInteger(int len)
 //   calcDivMoveToTick
 //---------------------------------------------------------
 
-void ExportMusicXml::calcDivMoveToTick(int t)
+void ExportMusicXml::calcDivMoveToTick(const Fraction& t)
       {
       if (t < _tick) {
 #ifdef DEBUG_TICK
-            qDebug("backup %d", tick - t);
+            qDebug("backup %d", (tick - t).ticks());
 #endif
-            addInteger(_tick - t);
+            addInteger((_tick - t).ticks());
             }
       else if (t > _tick) {
 #ifdef DEBUG_TICK
-            qDebug("forward %d", t - tick);
+            qDebug("forward %d", (t - tick).ticks());;
 #endif
-            addInteger(t - _tick);
+            addInteger((t - _tick).ticks());
             }
       _tick = t;
       }
@@ -1061,7 +1061,7 @@ void ExportMusicXml::calcDivisions()
       for (int idx = 0; idx < il.size(); ++idx) {
 
             Part* part = il.at(idx);
-            _tick = 0;
+            _tick = {0,1};
 
             int staves = part->nstaves();
             int strack = _score->staffIdx(part) * VOICES;
@@ -1096,21 +1096,21 @@ void ExportMusicXml::calcDivisions()
                                     calcDivMoveToTick(seg->tick());
 
                               if (el->isChordRest()) {
-                                    int l = static_cast<ChordRest*>(el)->actualTicks();
-                                    if (el->type() == ElementType::CHORD) {
-                                          if (isTwoNoteTremolo(static_cast<Chord*>(el)))
-                                                l /= 2;
+                                    Fraction l = toChordRest(el)->actualTicks();
+                                    if (el->isChord()) {
+                                          if (isTwoNoteTremolo(toChord(el)))
+                                                l = l * Fraction(1,2);
                                           }
 #ifdef DEBUG_TICK
                                     qDebug("chordrest %d", l);
 #endif
-                                    addInteger(l);
+                                    addInteger(l.ticks());
                                     _tick += l;
                                     }
                               }
                         }
                   // move to end of measure (in case of incomplete last voice)
-                  calcDivMoveToTick(m->tick() + m->ticks());
+                  calcDivMoveToTick(m->endTick());
                   }
             }
 
@@ -1368,7 +1368,7 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       // note->pitch() and note->line()
       // note->line() is determined by drumMap
       //
-      int tick        = note->chord()->tick();
+      Fraction tick        = note->chord()->tick();
       ClefType ct     = st->clef(tick);
       if (ct == ClefType::PERC || ct == ClefType::PERC2) {
             alter = 0;
@@ -1384,7 +1384,7 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
             case -12: ottava = -1; break;
             case -24: ottava = -2; break;
             default:  qDebug("pitch2xml() tick=%d pitch()=%d ppitch()=%d",
-                             tick, note->pitch(), note->ppitch());
+                             tick.ticks(), note->pitch(), note->ppitch());
             }
       octave += ottava;
 
@@ -1402,7 +1402,7 @@ static void unpitch2xml(const Note* note, QString& s, int& octave)
       {
       static char table1[]  = "FEDCBAG";
 
-      int tick        = note->chord()->tick();
+      Fraction tick        = note->chord()->tick();
       Staff* st       = note->staff();
       ClefType ct     = st->clef(tick);
       // offset in lines between staff with current clef and with G clef
@@ -1418,8 +1418,8 @@ static void unpitch2xml(const Note* note, QString& s, int& octave)
       // 3 line staff: 2, 4, 6       -> correction 2
       // 5 line staff: 0, 2, 4, 6, 8 -> correction 0
       // TODO handle other # staff lines ?
-      if (st->lines(0) == 1) line5g += 8;
-      if (st->lines(0) == 3) line5g += 2;
+      if (st->lines(Fraction(0,1)) == 1) line5g += 8;
+      if (st->lines(Fraction(0,1)) == 3) line5g += 2;
       // index in table1 to get step
       int stepIdx     = (line5g + 700) % 7;
       // get step
@@ -1436,10 +1436,10 @@ static void unpitch2xml(const Note* note, QString& s, int& octave)
 //    set type + dots depending on tick len
 //---------------------------------------------------------
 
-static QString tick2xml(const int ticks, int* dots)
+static QString tick2xml(const Fraction& ticks, int* dots)
       {
       TDuration t;
-      t.setVal(ticks);
+      t.setVal(ticks.ticks());
       *dots = t.dots();
       return t.name();
       }
@@ -1450,9 +1450,9 @@ static QString tick2xml(const int ticks, int* dots)
 
 static Volta* findVolta(Measure* m, bool left)
       {
-      int stick = m->tick();
-      int etick = m->tick() + m->ticks();
-      auto spanners = m->score()->spannerMap().findOverlapping(stick, etick);
+      Fraction stick = m->tick();
+      Fraction etick = m->tick() + m->ticks();
+      auto spanners = m->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
       for (auto i : spanners) {
             Spanner* el = i.value;
             if (el->type() != ElementType::VOLTA)
@@ -1602,7 +1602,7 @@ void ExportMusicXml::barlineRight(Measure* m)
 //   moveToTick
 //---------------------------------------------------------
 
-void ExportMusicXml::moveToTick(int t)
+void ExportMusicXml::moveToTick(const Fraction& t)
       {
       // qDebug("ExportMusicXml::moveToTick(t=%d) tick=%d", t, tick);
       if (t < _tick) {
@@ -1611,7 +1611,7 @@ void ExportMusicXml::moveToTick(int t)
 #endif
             _attr.doAttr(_xml, false);
             _xml.stag("backup");
-            _xml.tag("duration", (_tick - t) / div);
+            _xml.tag("duration", (_tick - t).ticks() / div);
             _xml.etag();
             }
       else if (t > _tick) {
@@ -1620,7 +1620,7 @@ void ExportMusicXml::moveToTick(int t)
 #endif
             _attr.doAttr(_xml, false);
             _xml.stag("forward");
-            _xml.tag("duration", (t - _tick) / div);
+            _xml.tag("duration", (t - _tick).ticks() / div);
             _xml.etag();
             }
       _tick = t;
@@ -1828,7 +1828,7 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
                         trills[n] = tr;
                   else
                         qDebug("too many overlapping trills (chord %p staff %d tick %d)",
-                               chord, chord->staffIdx(), chord->tick());
+                               chord, chord->staffIdx(), chord->tick().ticks());
                   }
             if (n >= 0) {
                   notations.tag(_xml);
@@ -1860,7 +1860,7 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
                         }
                   else
                         qDebug("too many overlapping trills (chord %p staff %d tick %d)",
-                               chord, chord->staffIdx(), chord->tick());
+                               chord, chord->staffIdx(), chord->tick().ticks());
                   trillStart.remove(chord);
                   }
             }
@@ -1872,9 +1872,9 @@ void ExportMusicXml::wavyLineStartStop(Chord* chord, Notations& notations, Ornam
 
 static Breath* hasBreathMark(Chord* ch)
       {
-      int tick = ch->tick() + ch->actualTicks();
+      Fraction tick = ch->tick() + ch->actualTicks();
       Segment* s = ch->measure()->findSegment(SegmentType::Breath, tick);
-      return s ? static_cast<Breath*>(s->element(ch->track())) : 0;
+      return s ? toBreath(s->element(ch->track())) : 0;
       }
 
 //---------------------------------------------------------
@@ -2320,10 +2320,10 @@ static int determineTupletNormalTicks(ChordRest const* const chord)
             qDebug("determineTupletNormalTicks t %p i %d ticks %d", t, i, t->elements().at(i)->duration().ticks());
             */
       for (unsigned int i = 1; i < t->elements().size(); ++i)
-            if (t->elements().at(0)->duration().ticks() != t->elements().at(i)->duration().ticks())
-                  return t->baseLen().ticks();
+            if (t->elements().at(0)->ticks() != t->elements().at(i)->ticks())
+                  return t->baseLen().ticks().ticks();
       if (t->elements().size() != (unsigned)(t->ratio().numerator()))
-            return t->baseLen().ticks();
+            return t->baseLen().ticks().ticks();
       return 0;
       }
 
@@ -2510,7 +2510,7 @@ static int stretchCorrActTicks(const Note* const note)
       // time signature stretch factor
       const Fraction str = note->chord()->staff()->timeStretch(note->chord()->tick());
       // chord's actual ticks corrected for stretch
-      return note->chord()->actualTicks() * str.numerator() / str.denominator();
+      return (note->chord()->actualTicks() * str).ticks();
       }
 
 //---------------------------------------------------------
@@ -2542,7 +2542,8 @@ static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
             }
 
       const auto strActTicks = stretchCorrActTicks(note);
-      QString s = tick2xml(strActTicks * actNotes * tremoloCorrection(note) / nrmNotes, &dots);
+      Fraction tt = Fraction::fromTicks(strActTicks * actNotes * tremoloCorrection(note) / nrmNotes);
+      QString s = tick2xml(tt, &dots);
       if (s.isEmpty())
             qDebug("no note type found for ticks %d", strActTicks);
 
@@ -2582,7 +2583,7 @@ static void writeTimeModification(XmlWriter& xml, const Note* const note)
             //qDebug("nrmTicks %d", nrmTicks);
             if (nrmTicks > 0) {
                   int nrmDots = 0;
-                  QString nrmType = tick2xml(nrmTicks, &nrmDots);
+                  QString nrmType = tick2xml(Fraction::fromTicks(nrmTicks), &nrmDots);
                   if (nrmType.isEmpty())
                         qDebug("no note type found for ticks %d", nrmTicks);
                   else {
@@ -2606,7 +2607,7 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
       int alter = 0;
       int octave = 0;
       const auto chord = note->chord();
-      if (chord->staff() && chord->staff()->isTabStaff(0)) {
+      if (chord->staff() && chord->staff()->isTabStaff(Fraction(0,1))) {
             tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
             }
       else {
@@ -2820,7 +2821,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
             writeFingering(_xml, notations, technical, note);
 
             // write tablature string / fret
-            if (chord->staff() && chord->staff()->isTabStaff(0))
+            if (chord->staff() && chord->staff()->isTabStaff(Fraction(0,1)))
                   if (note->fret() >= 0 && note->string() >= 0) {
                         notations.tag(_xml);
                         technical.tag(_xml);
@@ -2915,7 +2916,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
             }
 
       TDuration d = rest->durationType();
-      int tickLen = rest->actualTicks();
+      Fraction tickLen = rest->actualTicks();
       if (d.type() == TDuration::DurationType::V_MEASURE) {
             // to avoid forward since rest->ticklen=0 in this case.
             tickLen = rest->measure()->ticks();
@@ -2925,7 +2926,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
       qDebug(" tickLen=%d newtick=%d", tickLen, tick);
 #endif
 
-      _xml.tag("duration", tickLen / div);
+      _xml.tag("duration", tickLen.ticks() / div);
 
       // for a single-staff part, staff is 0, which needs to be corrected
       // to calculate the correct voice number
@@ -2954,7 +2955,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
             int nrmTicks = determineTupletNormalTicks(rest);
             if (nrmTicks > 0) {
                   int nrmDots = 0;
-                  QString nrmType = tick2xml(nrmTicks, &nrmDots);
+                  QString nrmType = tick2xml(Fraction::fromTicks(nrmTicks), &nrmDots);
                   if (nrmType.isEmpty())
                         qDebug("no note type found for ticks %d", nrmTicks);
                   else {
@@ -3438,7 +3439,7 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
 //   hairpin
 //---------------------------------------------------------
 
-void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
+void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction& tick)
       {
       int n = findHairpin(hp);
       if (n >= 0)
@@ -3448,7 +3449,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, int tick)
             if (n >= 0)
                   hairpins[n] = hp;
             else {
-                  qDebug("too many overlapping hairpins (hp %p staff %d tick %d)", hp, staff, tick);
+                  qDebug("too many overlapping hairpins (hp %p staff %d tick %d)", hp, staff, tick.ticks());
                   return;
                   }
             }
@@ -3498,7 +3499,7 @@ int ExportMusicXml::findOttava(const Ottava* ot) const
 // <octave-shift type="stop" size="8"/>
 //---------------------------------------------------------
 
-void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
+void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& tick)
       {
       int n = findOttava(ot);
       if (n >= 0)
@@ -3508,7 +3509,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
             if (n >= 0)
                   ottavas[n] = ot;
             else {
-                  qDebug("too many overlapping ottavas (ot %p staff %d tick %d)", ot, staff, tick);
+                  qDebug("too many overlapping ottavas (ot %p staff %d tick %d)", ot, staff, tick.ticks());
                   return;
                   }
             }
@@ -3562,7 +3563,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, int tick)
 //   pedal
 //---------------------------------------------------------
 
-void ExportMusicXml::pedal(Pedal const* const pd, int staff, int tick)
+void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tick)
       {
       directionTag(_xml, _attr, pd);
       _xml.stag("direction-type");
@@ -3593,7 +3594,7 @@ int ExportMusicXml::findBracket(const TextLine* tl) const
 //   textLine
 //---------------------------------------------------------
 
-void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
+void ExportMusicXml::textLine(TextLine const* const tl, int staff, const Fraction& tick)
       {
       int n = findBracket(tl);
       if (n >= 0)
@@ -3603,7 +3604,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, int tick)
             if (n >= 0)
                   brackets[n] = tl;
             else {
-                  qDebug("too many overlapping textlines (tl %p staff %d tick %d)", tl, staff, tick);
+                  qDebug("too many overlapping textlines (tl %p staff %d tick %d)", tl, staff, tick.ticks());
                   return;
                   }
             }
@@ -3804,7 +3805,7 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
                               xml.tagE("extend");
                         */
 #else
-                        if (l->ticks())
+                        if (l->ticks().isNotZero())
                               _xml.tagE("extend");
 #endif
                         _xml.etag();
@@ -4007,7 +4008,7 @@ static void repeatAtMeasureStart(XmlWriter& xml, Attributes& attr, Measure* m, i
                         break;
                   default:
                         qDebug("repeatAtMeasureStart: direction type %s at tick %d not implemented",
-                               Element::name(e->type()), m->tick());
+                               Element::name(e->type()), m->tick().ticks());
                         break;
                   }
             }
@@ -4047,7 +4048,7 @@ static void repeatAtMeasureStop(XmlWriter& xml, Measure* m, int strack, int etra
                         break;
                   default:
                         qDebug("repeatAtMeasureStop: direction type %s at tick %d not implemented",
-                               Element::name(e->type()), m->tick());
+                               Element::name(e->type()), m->tick().ticks());
                         break;
                   }
             }
@@ -4181,7 +4182,7 @@ static void annotations(ExportMusicXml* exp, XmlWriter&, int strack, int etrack,
                                     break;
                               default:
                                     qDebug("annotations: direction type %s at tick %d not implemented",
-                                           Element::name(e->type()), seg->tick());
+                                           Element::name(e->type()), seg->tick().ticks());
                                     break;
                               }
                         }
@@ -4221,10 +4222,11 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
                                     }
                               else
                                     fbMap.remove(strack);
-                              const int crEndTick = cr->tick() + cr->actualTicks();
-                              const int fbEndTick = fb->segment()->tick() + fb->ticks();
+                              const Fraction crEndTick = cr->tick() + cr->actualTicks();
+                              const Fraction fbEndTick = fb->segment()->tick() + fb->ticks();
                               const bool writeDuration = fb->ticks() < cr->actualTicks();
-                              fb->writeMusicXML(xml, true, crEndTick, fbEndTick, writeDuration, divisions);
+                              fb->writeMusicXML(xml, true, crEndTick.ticks(), fbEndTick.ticks(),
+                                writeDuration, divisions);
 
                               // Check for changing figures under a single note (each figure stored in a separate segment)
                               for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
@@ -4243,12 +4245,12 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
             // check for extend pending
             if (fbMap.contains(strack)) {
                   const FiguredBass* fb = fbMap.value(strack);
-                  int crEndTick = cr->tick() + cr->actualTicks();
-                  int fbEndTick = fb->segment()->tick() + fb->ticks();
+                  Fraction crEndTick = cr->tick() + cr->actualTicks();
+                  Fraction fbEndTick = fb->segment()->tick() + fb->ticks();
                   bool writeDuration = fb->ticks() < cr->actualTicks();
                   if (cr->tick() < fbEndTick) {
                         //qDebug("figuredbass() at tick %d extend only", cr->tick());
-                        fb->writeMusicXML(xml, false, crEndTick, fbEndTick, writeDuration, divisions);
+                        fb->writeMusicXML(xml, false, crEndTick.ticks(), fbEndTick.ticks(), writeDuration, divisions);
                         }
                   if (fbEndTick <= crEndTick) {
                         //qDebug("figuredbass() at tick %d extend done", cr->tick() + cr->actualTicks());
@@ -4274,8 +4276,8 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
 static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
       {
       if (seg->segmentType() == SegmentType::ChordRest) {
-            int stick = seg->tick();
-            for (auto it = exp->score()->spanner().lower_bound(stick); it != exp->score()->spanner().upper_bound(stick); ++it) {
+            Fraction stick = seg->tick();
+            for (auto it = exp->score()->spanner().lower_bound(stick.ticks()); it != exp->score()->spanner().upper_bound(stick.ticks()); ++it) {
                   Spanner* e = it->second;
 
                   int wtrack = -1; // track to write spanner
@@ -4304,7 +4306,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                                     break;
                               default:
                                     qDebug("spannerStart: direction type %s at tick %d not implemented",
-                                           Element::name(e->type()), seg->tick());
+                                           Element::name(e->type()), seg->tick().ticks());
                                     break;
                               }
                         }
@@ -4321,7 +4323,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
 // note that more than one voice may contains notes ending at tick2,
 // remember which spanners have already been stopped (the "stopped" set)
 
-static void spannerStop(ExportMusicXml* exp, int strack, int tick2, int sstaff, QSet<const Spanner*>& stopped)
+static void spannerStop(ExportMusicXml* exp, int strack, const Fraction& tick2, int sstaff, QSet<const Spanner*>& stopped)
       {
       for (auto it : exp->score()->spanner()) {
             Spanner* e = it.second;
@@ -4333,16 +4335,16 @@ static void spannerStop(ExportMusicXml* exp, int strack, int tick2, int sstaff, 
                   stopped.insert(e);
                   switch (e->type()) {
                         case ElementType::HAIRPIN:
-                              exp->hairpin(static_cast<const Hairpin*>(e), sstaff, -1);
+                              exp->hairpin(static_cast<const Hairpin*>(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::OTTAVA:
-                              exp->ottava(static_cast<const Ottava*>(e), sstaff, -1);
+                              exp->ottava(static_cast<const Ottava*>(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::PEDAL:
-                              exp->pedal(static_cast<const Pedal*>(e), sstaff, -1);
+                              exp->pedal(static_cast<const Pedal*>(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::TEXTLINE:
-                              exp->textLine(static_cast<const TextLine*>(e), sstaff, -1);
+                              exp->textLine(static_cast<const TextLine*>(e), sstaff, Fraction(-1,1));
                               break;
                         case ElementType::TRILL:
                               // ignore (written as <note><notations><ornaments><wavy-line>
@@ -4352,7 +4354,7 @@ static void spannerStop(ExportMusicXml* exp, int strack, int tick2, int sstaff, 
                               break;
                         default:
                               qDebug("spannerStop: direction type %s at tick2 %d not implemented",
-                                     Element::name(e->type()), tick2);
+                                     Element::name(e->type()), tick2.ticks());
                               break;
                         }
                   }
@@ -4423,7 +4425,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
             }
       else {
             // always write a keysig at tick = 0
-            if (m->tick() == 0) {
+            if (m->tick().isZero()) {
                   //KeySigEvent kse;
                   //kse.setKey(Key::C);
                   KeySig* ks = new KeySig(_score);
@@ -4744,8 +4746,8 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
       {
       const auto staves = part->nstaves();
 
-      if (m->tick() == 0) {
-            const auto clefSeg = m->findSegment(SegmentType::HeaderClef, 0);
+      if (m->tick() == Fraction(0,1)) {
+            const auto clefSeg = m->findSegment(SegmentType::HeaderClef, Fraction(0,1));
 
             if (clefSeg) {
                   for (int i = 0; i < staves; ++i) {
@@ -4761,7 +4763,7 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
                         if (clefSeg->element(track) == nullptr) {
                               ClefType ct { ClefType::G };
                               QString stafftype;
-                              switch (part->staff(i)->staffType(0)->group()) {
+                              switch (part->staff(i)->staffType(Fraction(0,1))->group()) {
                                     case StaffGroup::TAB:
                                           ct = ClefType::TAB;
                                           stafftype = "tab";
@@ -4795,7 +4797,7 @@ void ExportMusicXml::findAndExportClef(Measure* m, const int staves, const int s
       {
       Measure* prevMeasure = m->prevMeasure();
       Measure* mmR         = m->mmRest();       // the replacing measure in a multi-measure rest
-      int tick             = m->tick();
+      Fraction tick        = m->tick();
       Segment* cs1;
       Segment* cs2         = m->findSegment(SegmentType::Clef, tick);
       Segment* cs3;
@@ -4846,7 +4848,7 @@ void ExportMusicXml::findAndExportClef(Measure* m, const int staves, const int s
                         clefDebug("exportxml: clef at start measure ti=%d ct=%d gen=%d", tick, int(cle->clefType()), cle->generated());
                         // output only clef changes, not generated clefs at line beginning
                         // exception: at tick=0, export clef anyway
-                        if (tick == 0 || !cle->generated()) {
+                        if (tick.isZero() || !cle->generated()) {
                               clefDebug("exportxml: clef exported");
                               clef(sstaff, cle->clefType(), color2xml(cle));
                               }
@@ -5060,7 +5062,7 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
                   // also ignore clefs at the end of a measure
                   // these will be output at the start of the next measure
                   const Clef* cle = static_cast<const Clef*>(el);
-                  int ti = cle->segment()->tick();
+                  Fraction ti = cle->segment()->tick();
                   clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
                   if (el->generated()) {
                         clefDebug("exportxml: generated clef not exported");
@@ -5141,13 +5143,13 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
       //       currently exported as a two staff part ...
       for (int i = 0; i < staves; i++) {
             Staff* st = part->staff(i);
-            if (st->lines(0) != 5 || st->isTabStaff(0)) {
+            if (st->lines(Fraction(0,1)) != 5 || st->isTabStaff(Fraction(0,1))) {
                   if (staves > 1)
                         xml.stag(QString("staff-details number=\"%1\"").arg(i+1));
                   else
                         xml.stag("staff-details");
-                  xml.tag("staff-lines", st->lines(0));
-                  if (st->isTabStaff(0) && instrument->stringData()) {
+                  xml.tag("staff-lines", st->lines(Fraction(0,1)));
+                  if (st->isTabStaff(Fraction(0,1)) && instrument->stringData()) {
                         QList<instrString> l = instrument->stringData()->stringList();
                         for (int ii = 0; ii < l.size(); ii++) {
                               char step  = ' ';
@@ -5244,7 +5246,7 @@ void ExportMusicXml::write(QIODevice* dev)
 
       for (int idx = 0; idx < il.size(); ++idx) {
             Part* part = il.at(idx);
-            _tick = 0;
+            _tick = {0,1};
             _xml.stag(QString("part id=\"P%1\"").arg(idx+1));
 
             int staves = part->nstaves();
@@ -5369,7 +5371,7 @@ void ExportMusicXml::write(QIODevice* dev)
                                                       break;
                                                 for (Element* annot : seg1->annotations()) {
                                                       if (annot->type() == ElementType::HARMONY && annot->track() == st)
-                                                            harmony(static_cast<Harmony*>(annot), 0, (seg1->tick() - seg->tick()) / div);
+                                                            harmony(toHarmony(annot), 0, (seg1->tick() - seg->tick()).ticks() / div);
                                                       }
                                                 }
                                           }
@@ -5393,7 +5395,7 @@ void ExportMusicXml::write(QIODevice* dev)
 #ifdef DEBUG_TICK
                   qDebug("end of measure");
 #endif
-                  moveToTick(m->tick() + m->ticks());
+                  moveToTick(m->endTick());
                   if (idx == 0)
                         repeatAtMeasureStop(_xml, m, strack, etrack, strack);
                   // note: don't use "m->repeatFlags() & Repeat::END" here, because more

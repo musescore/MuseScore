@@ -42,7 +42,7 @@ class Lyrics final : public TextBase {
       // static constexpr qreal  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
 
    private:
-      int _ticks;             ///< if > 0 then draw an underline to tick() + _ticks
+      Fraction _ticks;        ///< if > 0 then draw an underline to tick() + _ticks
                               ///< (melisma)
       Syllabic _syllabic;
       LyricsLine* _separator;
@@ -85,9 +85,9 @@ class Lyrics final : public TextBase {
       virtual void remove(Element*) override;
       virtual void endEdit(EditData&) override;
 
-      int ticks() const                               { return _ticks;    }
-      void setTicks(int tick)                         { _ticks = tick;    }
-      int endTick() const;
+      Fraction ticks() const                          { return _ticks;    }
+      void setTicks(const Fraction& tick)             { _ticks = tick;    }
+      Fraction endTick() const;
       void removeFromScore();
 
       using ScoreElement::undoChangeProperty;

@@ -4376,8 +4376,8 @@ void MuseScore::play(Element* e) const
             seq->stopNotes();
             Chord* c   = toChord(e);
             Part* part = c->staff()->part();
-            int tick   = c->segment() ? c->segment()->tick() : 0;
-            seq->seek(tick);
+            Fraction tick   = c->segment() ? c->segment()->tick() : Fraction(0,1);
+            seq->seek(tick.ticks());
             Instrument* instr = part->instrument(tick);
             for (Note* n : c->notes()) {
                   const int channel = instr->channel(n->subchannel())->channel();
@@ -4404,9 +4404,9 @@ void MuseScore::play(Element* e, int pitch) const
                         }
                   }
 
-            int tick = masterNote->chord()->tick();
-            if (tick < 0)
-                  tick = 0;
+            Fraction tick = masterNote->chord()->tick();
+            if (tick < Fraction(0,1))
+                  tick = Fraction(0,1);
             Instrument* instr = masterNote->part()->instrument(tick);
             const int channel = instr->channel(masterNote->subchannel())->channel();
             seq->startNote(channel, pitch, 80, MScore::defaultPlayDuration, masterNote->tuning());
@@ -4637,14 +4637,14 @@ void MuseScore::setMag(double d)
 //    set position label
 //---------------------------------------------------------
 
-void MuseScore::setPos(int t)
+void MuseScore::setPos(const Fraction& t)
       {
-      if (cs == 0 || t < 0)
+      if (cs == 0 || t < Fraction(0,1))
             return;
 
       TimeSigMap* s = cs->sigmap();
       int bar, beat, tick;
-      s->tickValues(t, &bar, &beat, &tick);
+      s->tickValues(t.ticks(), &bar, &beat, &tick);
       _positionLabel->setText(QString("%1:%2:%3")
          .arg(bar + 1,  3, 10, QLatin1Char(' '))
          .arg(beat + 1, 2, 10, QLatin1Char('0'))
@@ -5495,7 +5495,7 @@ void MuseScore::transpose()
 
       int startStaffIdx = 0;
       int endStaffIdx   = 0;
-      int startTick     = 0;
+      Fraction startTick = Fraction(0,1);
       if (rangeSelection) {
             startStaffIdx = cs->selection().staffStart();
             endStaffIdx   = cs->selection().staffEnd();
@@ -5778,8 +5778,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             }
       else if (cmd == "rewind") {
             if (cs) {
-                  int tick = loop() ? cs->loopInTick() : 0;
-                  seq->seek(tick);
+                  Fraction tick = loop() ? cs->loopInTick() : Fraction(0,1);
+                  seq->seek(tick.ticks());
                   if (cv) {
                         Measure* m = cs->tick2measureMM(tick);
                         if (m)

@@ -46,7 +46,7 @@
       <VBox>
         <height>14</height>
         </VBox>
-      <Measure len="1/2">
+      <Measure len="2/4">
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>

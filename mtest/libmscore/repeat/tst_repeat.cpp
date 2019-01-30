@@ -124,9 +124,9 @@ void TestRepeat::repeat(const char* f1, const QString & ref)
       for (const RepeatSegment* rs : *score->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
-            for (Measure* m = score->tick2measure(startTick); m; m = m->nextMeasure()) {
+            for (Measure* m = score->tick2measure(Fraction::fromTicks(startTick)); m; m = m->nextMeasure()) {
                   sl.append(QString::number(m->no()+1));
-                  if (m->tick() + m->ticks() >= endTick)
+                  if (m->endTick().ticks() >= endTick)
                         break;
                   }
             }

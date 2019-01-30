@@ -73,16 +73,16 @@ class Part final : public ScoreElement {
       int startTrack() const;
       int endTrack() const;
 
-      QString longName(int tick = -1) const;
-      QString shortName(int tick = -1) const;
-      QString instrumentName(int tick = -1) const;
-      QString instrumentId(int tick = -1) const;
+      QString longName(const Fraction& tick = { -1, 1 } ) const;
+      QString shortName(const Fraction& tick = { -1, 1 } ) const;
+      QString instrumentName(const Fraction& tick = { -1, 1 } ) const;
+      QString instrumentId(const Fraction& tick = { -1, 1 } ) const;
 
-      const QList<StaffName>& longNames(int tick = -1) const  { return instrument(tick)->longNames();  }
-      const QList<StaffName>& shortNames(int tick = -1) const { return instrument(tick)->shortNames(); }
+      const QList<StaffName>& longNames(const  Fraction& tick = { -1, 1 } ) const { return instrument(tick)->longNames();  }
+      const QList<StaffName>& shortNames(const Fraction& tick = { -1, 1 } ) const { return instrument(tick)->shortNames(); }
 
-      void setLongNames(QList<StaffName>& s, int tick = -1);
-      void setShortNames(QList<StaffName>& s, int tick = -1);
+      void setLongNames(QList<StaffName>& s,  const Fraction& tick = { -1, 1 } );
+      void setShortNames(QList<StaffName>& s, const Fraction& tick = { -1, 1 } );
 
       void setLongName(const QString& s);
       void setShortName(const QString& s);
@@ -97,22 +97,22 @@ class Part final : public ScoreElement {
 
       int midiChannel() const;
       int midiPort() const;
-      void setMidiChannel(int ch, int port = -1, int tick = -1);  // tick != -1 for InstrumentChange
+      void setMidiChannel(int ch, int port = -1, const Fraction& tick = {-1,1});  // tick != -1 for InstrumentChange
 
       void insertStaff(Staff*, int idx);
       void removeStaff(Staff*);
       bool show() const                        { return _show;  }
       void setShow(bool val)                   { _show = val;   }
 
-      Instrument* instrument(int tick = -1);
-      const Instrument* instrument(int tick = -1) const;
-      void setInstrument(Instrument*, int tick = -1);       // transfer ownership
-      void setInstrument(const Instrument&&, int tick = -1);
-      void setInstrument(const Instrument&, int tick = -1);
-      void removeInstrument(int tick);
+      Instrument* instrument(Fraction = { -1, 1 } );
+      const Instrument* instrument(Fraction = { -1, 1 }) const;
+      void setInstrument(Instrument*, Fraction = { -1, 1} );       // transfer ownership
+      void setInstrument(const Instrument&&, Fraction = { -1, 1 });
+      void setInstrument(const Instrument&, Fraction = { -1, 1 });
+      void removeInstrument(const Fraction&);
       const InstrumentList* instruments() const;
 
-      void insertTime(int tick, int len);
+      void insertTime(const Fraction& tick, const Fraction& len);
 
       QString partName() const                 { return _partName; }
       void setPartName(const QString& s)       { _partName = s; }

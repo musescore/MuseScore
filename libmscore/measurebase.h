@@ -64,11 +64,12 @@ class MeasureBase : public Element {
 
       ElementList _el;                    ///< Measure(/tick) relative -elements: with defined start time
                                           ///< but outside the staff
-      int _tick              { 0 };
+      Fraction _tick         { Fraction(0, 1) };
       int _no                { 0 };       ///< Measure number, counting from zero
       int _noOffset          { 0 };       ///< Offset to measure number
 
    protected:
+      Fraction _len  { Fraction(0, 1) };  ///< actual length of measure
       void cleanupLayoutBreaks(bool undo);
 
    public:
@@ -111,20 +112,20 @@ class MeasureBase : public Element {
       void undoSetSectionBreak(bool v)       {  undoSetBreak(v, LayoutBreak::SECTION);}
       void undoSetNoBreak(bool v)            {  undoSetBreak(v, LayoutBreak::NOBREAK);}
 
-      virtual void moveTicks(int diff)       { setTick(tick() + diff); }
+      virtual void moveTicks(const Fraction& diff)       { setTick(tick() + diff); }
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void writeProperties(XmlWriter&) const override;
       virtual bool readProperties(XmlReader&) override;
 
-      virtual int tick() const override      { return _tick;  }
-      virtual int ticks() const              { return 0;      }
-      int endTick() const                    { return tick() + ticks();  }
-      void setTick(int t)                    { _tick = t;     }
+      Fraction tick() const                { return _tick; }
+      void setTick(const Fraction& f)      { _tick = f;    }
 
-      Fraction rfrac() const override        { return 0;      }
-      Fraction afrac() const override;
+      Fraction ticks() const               { return _len;         }
+      void setTicks(const Fraction& f)     { _len = f;            }
+
+      Fraction endTick() const             { return _tick + _len; }
 
       qreal pause() const;
 

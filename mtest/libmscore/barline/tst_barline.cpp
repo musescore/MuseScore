@@ -389,7 +389,7 @@ void TestBarline::barline179726()
 
       // drop NORMAL onto initial START_REPEAT barline will remove that START_REPEAT
       dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
-      QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, 0) == NULL);
+      QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, Fraction(0,1)) == NULL);
 
       // drop NORMAL onto END_START_REPEAT will turn into NORMAL
       dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));

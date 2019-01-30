@@ -44,10 +44,10 @@ void setTempoToScore(Score *score, int tick, double beatsPerSecond)
       if (score->tempomap()->find(tick) != score->tempomap()->end())
             return;
                   // don't repeat tempo, always set only tempo for tick 0
-      if (tick > 0 && score->tempo(tick) == beatsPerSecond)
+      if (tick > 0 && score->tempo(Fraction::fromTicks(tick)) == beatsPerSecond)
             return;
 
-      score->setTempo(tick, beatsPerSecond);
+      score->setTempo(Fraction::fromTicks(tick), beatsPerSecond);
 
       auto *data = midiImportOperations.data();
       if (data->trackOpers.showTempoText.value()) {
@@ -58,12 +58,12 @@ void setTempoToScore(Score *score, int tick, double beatsPerSecond)
             tempoText->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempoInBpm));
             tempoText->setTrack(0);
 
-            Measure *measure = score->tick2measure(tick);
+            Measure *measure = score->tick2measure(Fraction::fromTicks(tick));
             if (!measure) {
                   qDebug("MidiTempo::setTempoToScore: no measure for tick %d", tick);
                   return;
                   }
-            Segment *segment = measure->getSegment(SegmentType::ChordRest, tick);
+            Segment *segment = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(tick));
             if (!segment) {
                   qDebug("MidiTempo::setTempoToScore: no chord/rest segment for tempo at %d", tick);
                   return;
