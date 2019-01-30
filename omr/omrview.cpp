@@ -70,7 +70,7 @@ void OmrView::setOmr(Omr* s)
       const QImage& i      = page->image();
       Score* score         = _scoreView->score();
       double mag           = _omr->spatium() / score->spatium();
-      pageWidth            = lrint(score->styleD(Sid::pageWidth) * mag * DPI);
+      pageWidth            = lrint(score->style().pageOdd()->width() * mag);
 
       int htiles = ((pageWidth + TILE_W - 1) / TILE_W);
       pageWidth  = htiles * TILE_W;
@@ -154,7 +154,7 @@ void OmrView::paintEvent(QPaintEvent* event)
       double mag      = spatium / sSpatium;
 
       int w = pageWidth;
-      int h = lrint(score->styleD(Sid::pageHeight) * mag * DPI);
+      int h = lrint(score->style().pageOdd()->height() * mag);
       int n = _omr->numPages();
 
       int nx = (w * n) / TILE_W;

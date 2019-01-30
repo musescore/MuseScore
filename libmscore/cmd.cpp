@@ -1884,15 +1884,6 @@ void Score::cmdResetBeamMode()
       }
 
 //---------------------------------------------------------
-//   cmdResetStyle
-//---------------------------------------------------------
-
-void Score::cmdResetStyle()
-      {
-      style().reset(this);
-      }
-
-//---------------------------------------------------------
 //   cmdResetNoteAndRestGroupings
 //---------------------------------------------------------
 
@@ -3621,7 +3612,6 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "pad-note-64-TAB",            [this]{ padToggle(Pad::NOTE64);                                     }},
             { "pad-note-128",               [this]{ padToggle(Pad::NOTE128);                                    }},
             { "pad-note-128-TAB",           [this]{ padToggle(Pad::NOTE128);                                    }},
-            { "reset-style",                [this]{ cmdResetStyle();                                            }},
             { "reset-beammode",             [this]{ cmdResetBeamMode();                                         }},
             { "reset-groupings",            [this]{ cmdResetNoteAndRestGroupings();                             }},
             { "clef-violin",                [this]{ cmdInsertClef(ClefType::G);                                 }},

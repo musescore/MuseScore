@@ -372,7 +372,7 @@ static std::map<QString, std::map<Sid, QVariant>> excessTextStyles206;
 //---------------------------------------------------------
 
 void setPageFormat(MStyle* style, const PageFormat& pf)
-      {
+      { // 3.01 styles
       style->set(Sid::pageWidth,            pf.size().width());
       style->set(Sid::pageHeight,           pf.size().height());
       style->set(Sid::pagePrintableWidth,   pf.printableWidth());
@@ -383,6 +383,51 @@ void setPageFormat(MStyle* style, const PageFormat& pf)
       style->set(Sid::pageOddTopMargin,     pf.oddTopMargin());
       style->set(Sid::pageOddBottomMargin,  pf.oddBottomMargin());
       style->set(Sid::pageTwosided,         pf.twosided());
+
+      // 3.01+ styles
+      double factor = PPI * MSCX_F;
+      double width  = factor * pf.size().width();
+      double height = factor * pf.size().height();
+      double left   = factor * pf.oddLeftMargin();
+      double ppw    = factor * pf.printableWidth();
+      style->set(Sid::marginOddLeft,    left);
+      style->set(Sid::marginOddRight,   width - ppw - left);
+      style->set(Sid::marginOddTop,     factor * pf.oddTopMargin());
+      style->set(Sid::marginOddBottom,  factor * pf.oddBottomMargin());
+      style->set(Sid::marginEvenTop,    factor * pf.evenTopMargin());
+      style->set(Sid::marginEvenBottom, factor * pf.evenBottomMargin());
+      style->set(Sid::pageTwosided,     pf.twosided());
+      style->set(Sid::pageUnits,        MScore::unitsValue());
+
+      QPageSize::PageSizeId psid = QPageSize::id(pf.size(),
+                                                 QPageSize::Inch,
+                                                 QPageSize::FuzzyOrientationMatch);
+      int id = int(psid);
+      // MuseScore uses a subset of QPageSize::PageSizeId, not the full enum
+      if (psid != QPageSize::Custom &&
+          MScore::sizesMetric.find(id)   == MScore::sizesMetric.end() &&
+          MScore::sizesImperial.find(id) == MScore::sizesImperial.end() &&
+          MScore::sizesOther.find(id)    == MScore::sizesOther.end())
+            {
+            psid = QPageSize::Custom;
+            id   = int(psid);
+            }
+
+      style->set(Sid::pageSize, id);
+      if (psid == QPageSize::Custom) {
+            style->set(Sid::pageFullWidth,  width);
+            style->set(Sid::pageFullHeight, height);
+            }
+      else {
+            QSizeF size = QPageSize::definitionSize(psid);
+            factor = pageUnits[int(QPageSize::definitionUnits(psid))].factor();
+            if ((width > height) != (size.width() > size.height())) 
+                  size.transpose(); // landscape orientation
+            style->set(Sid::pageFullWidth,  factor * size.width());
+            style->set(Sid::pageFullHeight, factor * size.height());
+            }
+
+      style->toPageLayout();
       }
 
 //---------------------------------------------------------
@@ -393,17 +438,24 @@ void setPageFormat(MStyle* style, const PageFormat& pf)
 void initPageFormat(MStyle* style, PageFormat* pf)
       {
       QSizeF sz;
-      sz.setWidth(style->value(Sid::pageWidth).toReal());
-      sz.setHeight(style->value(Sid::pageHeight).toReal());
+      sz.setWidth (style->value(Sid::pageFullWidth).toReal()  / PPI);
+      sz.setHeight(style->value(Sid::pageFullHeight).toReal() / PPI);
       pf->setSize(sz);
-      pf->setPrintableWidth(style->value(Sid::pagePrintableWidth).toReal());
-      pf->setEvenLeftMargin(style->value(Sid::pageEvenLeftMargin).toReal());
-      pf->setOddLeftMargin(style->value(Sid::pageOddLeftMargin).toReal());
-      pf->setEvenTopMargin(style->value(Sid::pageEvenTopMargin).toReal());
-      pf->setEvenBottomMargin(style->value(Sid::pageEvenBottomMargin).toReal());
-      pf->setOddTopMargin(style->value(Sid::pageOddTopMargin).toReal());
-      pf->setOddBottomMargin(style->value(Sid::pageOddBottomMargin).toReal());
-      pf->setTwosided(style->value(Sid::pageTwosided).toBool());
+      
+      double w = style->value(Sid::pageFullWidth).toReal()  / PPI;
+      double l = style->value(Sid::marginOddLeft ).toReal() / PPI;
+      double r = style->value(Sid::marginOddRight).toReal() / PPI;
+      pf->setPrintableWidth(w - l - r);
+      pf->setOddLeftMargin(l);
+      if (style->value(Sid::pageTwosided).toBool())
+            l = r;
+      pf->setEvenLeftMargin(l);
+
+      pf->setOddTopMargin    (style->value(Sid::marginOddTop).toReal()     / PPI);
+      pf->setOddBottomMargin (style->value(Sid::marginOddBottom).toReal()  / PPI);
+      pf->setEvenTopMargin   (style->value(Sid::marginEvenTop).toReal()    / PPI);
+      pf->setEvenBottomMargin(style->value(Sid::marginEvenBottom).toReal() / PPI);
+      pf->setTwosided        (style->value(Sid::pageTwosided).toBool());
       }
 
 //---------------------------------------------------------
@@ -3540,7 +3592,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             if (tag == "TextStyle")
                   readTextStyle206(style, e, excessTextStyles206);
             else if (tag == "Spatium")
-                  style->set(Sid::spatium, e.readDouble() * DPMM);
+                  style->spatium301(e);
             else if (tag == "page-layout")
                   readPageFormat(style, e);
             else if (tag == "displayInConcertPitch")

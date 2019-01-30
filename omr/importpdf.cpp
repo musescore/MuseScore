@@ -250,12 +250,11 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
       score->style().set(Sid::staffLowerBorder,     0.0);
       score->style().set(Sid::measureSpacing,       1.0);
       score->style().set(Sid::frameSystemDistance,  0);
-      score->style().set(Sid::pageEvenLeftMargin,   5.0 * DPMM / DPI);
-      score->style().set(Sid::pageEvenTopMargin,    0);
-      score->style().set(Sid::pageEvenBottomMargin, 0);
-      score->style().set(Sid::pageOddLeftMargin,    5.0 * DPMM / DPI);
-      score->style().set(Sid::pageOddTopMargin,     0);
-      score->style().set(Sid::pageOddBottomMargin,  0);
+      QMarginsF marg = QMarginsF(5, 0, 5, 0);
+      score->style().pageOdd() ->setUnits(QPageLayout::Millimeter);
+      score->style().pageEven()->setUnits(QPageLayout::Millimeter);
+      score->style().pageOdd() ->setMargins(marg);
+      score->style().pageEven()->setMargins(marg);
       score->style().set(Sid::minSystemDistance,    Spatium(omr->systemDistance()));
       score->style().set(Sid::maxSystemDistance,    Spatium(omr->systemDistance()));
       score->style().set(Sid::akkoladeDistance,     Spatium(omr->staffDistance()));

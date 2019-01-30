@@ -1,0 +1,4 @@
+#!/bin/bash
+cp ../../../build.debug/mtest/libmscore/barline/barlinedelete.mscx barlinedelete-ref.mscx
+
+

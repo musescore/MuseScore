@@ -414,6 +414,15 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
             }
       language->blockSignals(false);
 
+      for (int i = 0; i <= QPageSize::Cicero; ++i)
+            unitsList->addItem(QString("%1 (%2)").arg(Ms::pageUnits[i].name())
+                                                 .arg(Ms::pageUnits[i].suffix()));
+      unitsList->setCurrentIndex(preferences.getInt(PREF_APP_PAGE_UNITS_VALUE));
+      if (preferences.getBool(PREF_APP_PAGE_UNITS_GLOBAL))
+            unitsGlobal->setChecked(true);
+      else
+            unitsByScore->setChecked(true);
+
       //
       // initialize local shortcut table
       //    we need a deep copy to be able to rewind all
@@ -909,6 +918,10 @@ void PreferenceDialog::apply()
       else if (emptySession->isChecked())
             preferences.setCustomPreference<SessionStart>(PREF_APP_STARTUP_SESSIONSTART, SessionStart::EMPTY);
 
+      preferences.setPreference(PREF_APP_PAGE_UNITS_VALUE, unitsList->currentIndex());
+      MScore::defaultStyle().set(Sid::pageUnits, unitsList->currentIndex()); // must update default style too
+
+      preferences.setPreference(PREF_APP_PAGE_UNITS_GLOBAL,     unitsGlobal->isChecked());
       preferences.setPreference(PREF_APP_AUTOSAVE_AUTOSAVETIME, autoSaveTime->value());
       preferences.setPreference(PREF_APP_AUTOSAVE_USEAUTOSAVE, autoSave->isChecked());
       preferences.setPreference(PREF_APP_PATHS_INSTRUMENTLIST1, instrumentList1->text());
@@ -1100,14 +1113,26 @@ void PreferenceDialog::apply()
             mscore->update();
             }
 
+      QString partText = partStyle->text();
+      QString partPref = preferences.getString(PREF_SCORE_STYLE_PARTSTYLEFILE);
       if (defaultStyle->text() != preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE)) {
-            preferences.setPreference(PREF_SCORE_STYLE_DEFAULTSTYLEFILE, defaultStyle->text());
-            MScore::readDefaultStyle(preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE));
+            QString qs = defaultStyle->text();
+            preferences.setPreference(PREF_SCORE_STYLE_DEFAULTSTYLEFILE, qs);
+            if (qs.isEmpty()) {
+                  MScore::setDefaultStyle(MScore::baseStyle());
+                  if (partText.isEmpty() && partPref.isEmpty())
+                        MScore::setDefaultStyleForParts(new MStyle(MScore::defaultStyle()));
+                  }
+            else 
+                  MScore::readDefaultStyle(qs);
             }
 
-      if (partStyle->text() != preferences.getString(PREF_SCORE_STYLE_PARTSTYLEFILE)) {
-            preferences.setPreference(PREF_SCORE_STYLE_PARTSTYLEFILE, partStyle->text());
-            MScore::defaultStyleForPartsHasChanged();
+      if (partText != partPref) {
+            preferences.setPreference(PREF_SCORE_STYLE_PARTSTYLEFILE, partText);
+            if (partText.isEmpty())
+                  MScore::setDefaultStyleForParts(new MStyle(MScore::defaultStyle()));
+            else
+                  MScore::readDefaultStyle(partText);
             }
       
       Workspace::retranslate();
@@ -1374,10 +1399,7 @@ void PreferenceDialog::printShortcutsClicked()
       {
 #ifndef QT_NO_PRINTER
       QPrinter printer(QPrinter::HighResolution);
-      const MStyle& s = MScore::defaultStyle();
-      qreal pageW = s.value(Sid::pageWidth).toReal();
-      qreal pageH = s.value(Sid::pageHeight).toReal();
-      printer.setPaperSize(QSizeF(pageW, pageH), QPrinter::Inch);
+      printer.setPageLayout(MScore::defaultStyle().pageOdd());
 
       printer.setCreator("MuseScore Version: " VERSION);
       printer.setFullPage(true);

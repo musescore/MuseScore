@@ -61,6 +61,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void applyToAllParts();
       const StyleWidget& styleWidget(Sid) const;
 
+      void saveAs(bool isParts);
+
    private slots:
       void selectChordDescriptionFile();
       void setChordStyle(bool);
@@ -77,6 +79,10 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void valueChanged(int);
       void textStyleChanged(int);
       void resetTextStyle(Pid);
+      void resetToBaseStyle();
+      void resetToDefaultStyle();
+      void saveAsDefaultStyle();
+      void saveAsPartsStyle();
       void textStyleValueChanged(Pid, QVariant);
       void on_comboFBFont_currentIndexChanged(int index);
       void on_buttonTogglePagelist_clicked();

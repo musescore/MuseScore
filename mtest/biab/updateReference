@@ -1,0 +1,4 @@
+#!/bin/bash
+cp ../../build.debug/mtest/biab/chords-test.mscx chords-ref.mscx
+
+

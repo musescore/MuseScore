@@ -22,38 +22,58 @@ class MasterScore;
 class Score;
 class Navigator;
 
+enum class PaperType { // 4 paper size types for the typesList combo box
+      NOTYPE = -1,
+      Common,
+      Metric,
+      Imperial,
+      Other
+      };
+
 //---------------------------------------------------------
 //   PageSettings
 //---------------------------------------------------------
+struct PageUnit; // instead of #include "libmscore/style.h"
 
 class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
       Q_OBJECT
 
-      Navigator* preview;
-      bool mmUnit;
       Score* cs;
       Score* clonedScore;
+      Navigator* preview;
+      double sp20_mm;
+      double sp20_in;
+      double sp20_p;
+      double sp20_dd;
+      double sp20_c;
 
 //      std::unique_ptr<Score> clonedScoreForNavigator;
 
       virtual void hideEvent(QHideEvent*);
-      void updateValues();
-      void updatePreview(int);
+      void updateWidgets(bool onlyUnits = false);
+      void updateDecimals(Score *score, PageUnit *unit, int decimals);
+      void updateMaximum(double max);
+      void updateWidthHeight(const QRectF & rect);
+      void updatePreview();
       void blockSignals(bool);
-      void applyToScore(Score*);
-      void setMarginsMax(double);
+      void applyToScore(Score* s, bool runCmd = true);
+      void lrMargins(double val, bool isLeft, bool isOdd, QDoubleSpinBox* spinOne);
+      void widthHeightChanged(double w, double h, bool byType);
+      double marginMinMax(double val, double max, QDoubleSpinBox* spinner);
+      PaperType getPaperType(int id);
 
    private slots:
-      void mmClicked();
-      void inchClicked();
-      void pageFormatSelected(int);
+      void typeChanged(int idx);
+      void sizeChanged();
+      void unitsChanged();
 
-      void apply();
+      void setToDefault();
       void applyToAllParts();
-      void ok();
+      void okCancel(QAbstractButton*);
       void done(int val);
 
-      void twosidedToggled(bool);
+      void twosidedToggled(bool b);
+      void orientationToggled(bool);
       void otmChanged(double val);
       void obmChanged(double val);
       void olmChanged(double val);
@@ -63,10 +83,9 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
       void elmChanged(double val);
       void ermChanged(double val);
       void spatiumChanged(double val);
-      void pageHeightChanged(double);
-      void pageWidthChanged(double);
+      void widthChanged(double val);
+      void heightChanged(double val);
       void pageOffsetChanged(int val);
-      void orientationClicked();
 
    protected:
       virtual void retranslate() { retranslateUi(this); }
@@ -76,8 +95,6 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
       ~PageSettings();
       void setScore(Score*);
       };
-
-
 } // namespace Ms
 #endif
 

@@ -53,8 +53,9 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
             chord->setStemDirection(Direction::UP);
             chords->push_back(chord);
             }
-      c.score()->style().set(Sid::pageOddTopMargin, 16.0/INCH);
-      c.score()->style().set(Sid::pageOddLeftMargin, 0.0);
+      c.score()->style().pageOdd().setUnits(QPageLayout::Millimeter);
+      c.score()->style().pageOdd().setTopMargin(16);
+      c.score()->style().pageOdd().setLeftMargin(0);
 
       c.score()->parts().front()->setLongName("");
       c.score()->style().set(Sid::linearStretch, 1.3);

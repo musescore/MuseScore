@@ -1,0 +1,3 @@
+#!/bin/bash
+cp ../../../build.debug/mtest/libmscore/readwriteundoreset/barlines-undoreset-test.mscx barlines.mscx
+cp ../../../build.debug/mtest/libmscore/readwriteundoreset/slurs-undoreset-test.mscx    slurs.mscx

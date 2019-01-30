@@ -1612,7 +1612,6 @@ MuseScore::MuseScore()
       menuFormat->addMenu(menuStretch);
       menuFormat->addSeparator();
 
-      menuFormat->addAction(getAction("reset-style"));
       menuFormat->addAction(getAction("reset-beammode"));
       menuFormat->addAction(getAction("reset"));
       menuFormat->addSeparator();
@@ -3319,7 +3318,6 @@ static void loadScores(const QStringList& argv)
                               if (startScore.startsWith(":/") && score) {
                                     score->setStyle(MScore::defaultStyle());
                                     score->setName(mscore->createDefaultName());
-                                    // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                                     score->doLayout();
                                     score->setCreated(true);
                                     }
@@ -3328,7 +3326,6 @@ static void loadScores(const QStringList& argv)
                                     if (score) {
                                           score->setStyle(MScore::defaultStyle());
                                           score->setName(mscore->createDefaultName());
-                                          // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                                           score->doLayout();
                                           score->setCreated(true);
                                           }
@@ -7375,10 +7372,14 @@ int main(int argc, char* av[])
             QPrinter p;
             if (p.isValid()) {
 //                  qDebug("set paper size from default printer");
-                  QRectF psf = p.paperRect(QPrinter::Inch);
-                  MScore::defaultStyle().set(Sid::pageWidth,  psf.width());
-                  MScore::defaultStyle().set(Sid::pageHeight, psf.height());
-                  MScore::defaultStyle().set(Sid::pagePrintableWidth, psf.width()-20.0/INCH);
+                  MStyle& def = MScore::defaultStyle();
+                  QPageSize ps = p.pageLayout().pageSize();
+                  MPageLayout& odd  = def.pageOdd();
+                  MPageLayout& even = def.pageEven();
+
+                  def.setPageSize(ps);
+                  odd.setPageSize(ps);
+                  even.setPageSize(ps);
                   }
             }
 #endif

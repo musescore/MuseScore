@@ -459,7 +459,6 @@ class Score : public QObject, public ScoreElement {
       ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
       ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
       void cmdSetBeamMode(Beam::Mode);
-      void cmdResetStyle();
       void cmdFlip();
       Note* getSelectedNote();
       ChordRest* upStaff(ChordRest* cr);
@@ -652,6 +651,7 @@ class Score : public QObject, public ScoreElement {
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(const Fraction& tick, const Fraction& len);
       void undoChangeStyleVal(Sid idx, const QVariant& v);
+      void undoChangeStylePtrs(QPageSize& ps, MPageLayout& odd, MPageLayout& even);
       void undoChangePageNumberOffset(int po);
 
       Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);

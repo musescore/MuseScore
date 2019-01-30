@@ -44,6 +44,18 @@ enum class Sid {
       pageOddBottomMargin,
       pageTwosided,
 
+      pageSize,
+      pageUnits,
+      pageOrientation,
+      pageFullWidth,
+      pageFullHeight,
+      marginOddLeft,
+      marginOddRight,
+      marginOddTop,
+      marginOddBottom,
+      marginEvenTop,
+      marginEvenBottom,
+
       staffUpperBorder,
       staffLowerBorder,
       staffDistance,
@@ -1094,6 +1106,82 @@ enum class Sid {
       STYLES
       };
 
+static constexpr qreal INCH      = 25.4;                // millimeters per inch
+static constexpr qreal PPI       = 72.0;                // PostScript points per inch
+static constexpr qreal DPI_F     = 5;                   // internal resolution factor
+static constexpr qreal DPI       = DPI_F * PPI;
+static constexpr qreal SPATIUM20 = DPI_F * (DPI / PPI); // == DPI_F * DPI_F
+static constexpr qreal DPMM      = DPI / INCH;
+static constexpr qreal DIDOT     = 1.06574601373228;    // didot per point
+static constexpr qreal CICERO    = 12.0;                // didot per cicero and points per pica
+static constexpr qreal MSCX_F    = 10000;               // page settings stored in points * MSCX_F
+
+//---------------------------------------------------------
+//   PageUnit
+//    Units require a custom structure for text suffixes and
+//    widget steps because Qt does not provide them.
+//---------------------------------------------------------
+struct PageUnit {
+      const char* _key;   // never translated
+      const char* _name;
+      const char* _suffix;
+      int _decimals;      // number of decimal places for QDoubleSpinBox
+      qreal _step;        // for spin widgets in specific units
+      qreal _stepSpatium; // ditto
+      qreal _max;         // max width and height value
+      qreal _factor;      // conversion-to-points factor
+
+public:
+      const char* key()    const { return _key;             }
+      const char* name()   const { return _name;            }
+      const char* suffix() const { return _suffix;          }
+      int decimals()       const { return _decimals;        }
+      qreal step()         const { return _step;            }
+      qreal stepSpatium()  const { return _stepSpatium;     }
+      qreal max()          const { return _max;             }
+      qreal factor()       const { return _factor * MSCX_F; }
+      qreal paintFactor()  const { return _factor * DPI_F;  }
+      };
+
+//---------------------------------------------------------
+//   pageUnits - an array of PageUnit instances
+//---------------------------------------------------------
+const PageUnit pageUnits[] = { 
+      { "Millimeters",  QT_TRANSLATE_NOOP("unitName", "Millimeters"),  QT_TRANSLATE_NOOP("unitSuffix", "mm"), 2, 1.0,  0.2,    9999.99, PPI / INCH     },
+      { "Points",       QT_TRANSLATE_NOOP("unitName", "Points"),       QT_TRANSLATE_NOOP("unitSuffix", "pt"), 0, 1.0,  0.2,   99999.99, 1.0            },
+      { "Inches",       QT_TRANSLATE_NOOP("unitName", "Inches"),       QT_TRANSLATE_NOOP("unitSuffix", "in"), 2, 0.05, 0.005,  2000.99, PPI            },
+      { "Picas",        QT_TRANSLATE_NOOP("unitName", "Picas"),        QT_TRANSLATE_NOOP("unitSuffix", "p" ), 2, 1.0,  0.1,    9999.99, CICERO         },
+      { "Didot",        QT_TRANSLATE_NOOP("unitName", "Didot"),        QT_TRANSLATE_NOOP("unitSuffix", "dd"), 0, 1.0,  0.005, 99999.99, DIDOT          },
+      { "Cicero",       QT_TRANSLATE_NOOP("unitName", "Cicero"),       QT_TRANSLATE_NOOP("unitSuffix", "c" ), 2, 1.0,  0.1,    9999.99, DIDOT * CICERO },
+      { "Staff Spaces", QT_TRANSLATE_NOOP("unitName", "Staff Spaces"), QT_TRANSLATE_NOOP("unitSuffix", "sp"), 2, 0.1,  0.01,   9999.99, 0              }, // factor must be set, somehow, if ever used
+      { "Pixels",       QT_TRANSLATE_NOOP("unitName", "Pixels"),       QT_TRANSLATE_NOOP("unitSuffix", "px"), 2, 1.0,  1.0,   99999.99, 1.0 / DPI_F    }  // if ever used...
+      };
+
+// For human readable .mscx files
+const QString pageOrient[] = { QString("Portrait"), QString("Landscape") };
+
+class MPageLayout : public QPageLayout {
+   private:
+      double factor()      const{ return pageUnits[int(units())].factor();      }
+      double paintFactor() const{ return pageUnits[int(units())].paintFactor(); }
+   public:
+      double width()        const { return fullRect().width()  * paintFactor(); }
+      double height()       const { return fullRect().height() * paintFactor(); }
+      double paintWidth()   const { return paintRect().width() * paintFactor(); }
+      double leftMargin()   const { return margins().left()    * paintFactor(); }
+      double rightMargin()  const { return margins().right()   * paintFactor(); }
+      double topMargin()    const { return margins().top()     * paintFactor(); }
+      double bottomMargin() const { return margins().bottom()  * paintFactor(); }
+
+      // "Points" is really QPageSize::Point / MSCX_F == 0.0001pt
+      int widthPoints()        const { return lrint(fullRect().width()  * factor()); }
+      int heightPoints()       const { return lrint(fullRect().height() * factor()); }
+      int leftMarginPoints()   const { return lrint(margins().left()    * factor()); }
+      int rightMarginPoints()  const { return lrint(margins().right()   * factor()); }
+      int topMarginPoints()    const { return lrint(margins().top()     * factor()); }
+      int bottomMarginPoints() const { return lrint(margins().bottom()  * factor()); }
+      };
+
 //---------------------------------------------------------
 //   MStyle
 //    the name "Style" gives problems with some microsoft
@@ -1104,6 +1192,11 @@ class MStyle {
       std::array<QVariant, int(Sid::STYLES)> _values;
       std::array<qreal, int(Sid::STYLES)> _precomputedValues;
 
+      QPageSize _pageSize;
+      MPageLayout _pageOdd;
+      MPageLayout _pageEven;
+      bool _isMMInch;       // for 3.01 to 3.01+ conversion
+
       ChordList _chordList;
       bool _customChordList;        // if true, chordlist will be saved as part of score
 
@@ -1111,10 +1204,20 @@ class MStyle {
       MStyle();
 
       void precomputeValues();
+      void initPageLayout();
       QVariant value(Sid idx) const;
       qreal pvalue(Sid idx) const    { return _precomputedValues[int(idx)]; }
       void set(Sid idx, const QVariant& v);
 
+      QPageSize& pageSize()   { return _pageSize; }
+      MPageLayout& pageOdd()  { return _pageOdd;  }
+      MPageLayout& pageEven() { return _pageEven; }
+      const QPageSize& pageSize() const   { return _pageSize; }
+      const MPageLayout& pageOdd() const  { return _pageOdd;  }
+      const MPageLayout& pageEven() const { return _pageEven; }
+      void setPageSize(QPageSize& val)    { _pageSize = val; }
+      void setPageOdd(MPageLayout& val)   { _pageOdd  = val; }
+      void setPageEven(MPageLayout& val)  { _pageEven = val; }
       bool isDefault(Sid idx) const;
 
       const ChordDescription* chordDescription(int id) const;
@@ -1129,8 +1232,13 @@ class MStyle {
       bool readStyleValCompat(XmlReader&);
       bool readTextStyleValCompat(XmlReader&);
 
-      void reset(Score*);
+      void fromPageLayout();
+      void toPageLayout();
+      void spatium301(XmlReader& e);
 
+      bool fuzzyCompare(Sid sid, double pageValue, double epsilon = 0.01);
+
+      static bool isMetric(QPageLayout::Unit unit);
       static const char* valueType(const Sid);
       static const char* valueName(const Sid);
       static Sid styleIdx(const QString& name);

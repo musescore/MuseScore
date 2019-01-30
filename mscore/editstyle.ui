@@ -32,6 +32,55 @@
    <string>Style</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_39">
+   <item row="2" column="0">
+    <widget class="QFrame" name="frame_2">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_9">
+      <property name="leftMargin">
+       <number>19</number>
+      </property>
+      <property name="topMargin">
+       <number>1</number>
+      </property>
+      <property name="bottomMargin">
+       <number>1</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="resetLabel_2">
+        <property name="text">
+         <string>Reset to:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="resetToBase">
+        <property name="text">
+         <string>MuseScore Default</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="resetToDefault">
+        <property name="text">
+         <string>User Default</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDialogButtonBox" name="buttonBox">
+        <property name="standardButtons">
+         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -712,7 +761,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_8">
            <property name="verticalSpacing">
-            <number>-1</number>
+            <number>6</number>
            </property>
            <item row="7" column="0" colspan="2">
             <widget class="QCheckBox" name="genClef">
@@ -1346,7 +1395,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_27">
            <property name="horizontalSpacing">
-            <number>-1</number>
+            <number>6</number>
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="label_38">
@@ -2271,7 +2320,7 @@
           </property>
           <layout class="QGridLayout" name="_2">
            <property name="spacing">
-            <number>-1</number>
+            <number>6</number>
            </property>
            <item row="8" column="1">
             <widget class="Ms::OffsetSelect" name="measureNumberOffset" native="true"/>
@@ -2715,7 +2764,7 @@
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_13">
                  <property name="spacing">
-                  <number>-1</number>
+                  <number>6</number>
                  </property>
                  <item>
                   <widget class="QLabel" name="label_7">
@@ -2901,7 +2950,7 @@
              </property>
              <layout class="QGridLayout" name="_3">
               <property name="horizontalSpacing">
-               <number>-1</number>
+               <number>6</number>
               </property>
               <property name="verticalSpacing">
                <number>0</number>
@@ -3054,7 +3103,7 @@
              </property>
              <layout class="QGridLayout" name="_4">
               <property name="horizontalSpacing">
-               <number>-1</number>
+               <number>6</number>
               </property>
               <property name="verticalSpacing">
                <number>0</number>
@@ -6268,7 +6317,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_7">
            <property name="verticalSpacing">
-            <number>-1</number>
+            <number>6</number>
            </property>
            <item row="5" column="0">
             <widget class="QLabel" name="label_9">
@@ -6602,7 +6651,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout0">
            <property name="verticalSpacing">
-            <number>-1</number>
+            <number>6</number>
            </property>
            <item row="3" column="2">
             <widget class="QToolButton" name="resetVoltaLineWidth">
@@ -6832,7 +6881,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_12">
            <property name="verticalSpacing">
-            <number>-1</number>
+            <number>6</number>
            </property>
            <item row="3" column="2">
             <widget class="QToolButton" name="resetOttavaPosBelow">
@@ -8755,7 +8804,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_24">
            <property name="spacing">
-            <number>-1</number>
+            <number>6</number>
            </property>
            <item row="3" column="0">
             <widget class="QLabel" name="label_189">
@@ -9149,7 +9198,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_23">
            <property name="spacing">
-            <number>-1</number>
+            <number>6</number>
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="label_71">
@@ -10510,7 +10559,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_131">
            <property name="verticalSpacing">
-            <number>-1</number>
+            <number>6</number>
            </property>
            <item row="2" column="0">
             <widget class="QLabel" name="label_601">
@@ -10673,16 +10722,6 @@
       </widget>
       <widget class="QWidget" name="PageTextStyles">
        <layout class="QGridLayout" name="gridLayout_41">
-        <item row="0" column="0">
-         <widget class="QListWidget" name="textStyles">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
          <widget class="QWidget" name="showMeasureNumber_8" native="true">
           <property name="sizePolicy">
@@ -10693,7 +10732,7 @@
           </property>
           <layout class="QGridLayout" name="_12">
            <property name="spacing">
-            <number>-1</number>
+            <number>6</number>
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="labelStyleName">
@@ -11124,52 +11163,98 @@
           </layout>
          </widget>
         </item>
+        <item row="0" column="0">
+         <widget class="QListWidget" name="textStyles">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
     </widget>
    </item>
    <item row="1" column="0">
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="buttonTogglePagelist">
-       <property name="maximumSize">
-        <size>
-         <width>20</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QFrame" name="saveAsFrame">
+     <layout class="QHBoxLayout" name="buttons">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="topMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>1</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="buttonTogglePagelist">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="saveAsLabel">
+        <property name="text">
+         <string>Save as:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveAsDefault">
+        <property name="text">
+         <string>Default Style</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveAsDefParts">
+        <property name="text">
+         <string>Default for Parts</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_18">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="applyToParts">
+        <property name="text">
+         <string>Apply to All Parts</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

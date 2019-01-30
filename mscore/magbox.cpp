@@ -140,8 +140,8 @@ double MagBox::getMag(ScoreView* canvas) const
       qreal pmag           = mscore->physicalDotsPerInch() / DPI;
       double cw            = canvas->width();
       double ch            = canvas->height();
-      qreal pw             = score->styleD(Sid::pageWidth);
-      qreal ph             = score->styleD(Sid::pageHeight);
+      qreal pw             = score->style().pageOdd().width();
+      qreal ph             = score->style().pageOdd().height();
       double nmag;
 
       switch (idx) {
@@ -156,13 +156,13 @@ double MagBox::getMag(ScoreView* canvas) const
             case MagIdx::MAG_1600:    nmag = 16.0 * pmag; break;
 
             case MagIdx::MAG_PAGE_WIDTH:      // page width
-                  nmag = cw / (pw * DPI);
+                  nmag = cw / pw;
                   break;
 
             case MagIdx::MAG_PAGE:     // page
                   {
-                  double mag1 = cw / (pw *  DPI);
-                  double mag2 = ch / (ph * DPI);
+                  double mag1 = cw / pw;
+                  double mag2 = ch / ph;
                   nmag  = (mag1 > mag2) ? mag2 : mag1;
                   }
                   break;
@@ -172,12 +172,12 @@ double MagBox::getMag(ScoreView* canvas) const
                   double mag1 = 0;
                   double mag2 = 0;
                   if (MScore::verticalOrientation()) {
-                        mag1 = ch / (ph * 2 * DPI +  MScore::verticalPageGap);
-                        mag2 = cw / (pw * DPI);
+                        mag1 = ch / (ph * 2 +  MScore::verticalPageGap);
+                        mag2 = cw / pw;
                         }
                   else {
-                        mag1 = cw / (pw * 2 * DPI + 50);
-                        mag2 = ch / (ph * DPI);
+                        mag1 = cw / (pw * 2 + 50);
+                        mag2 = ch / ph;
                         }
                   nmag  = (mag1 > mag2) ? mag2 : mag1;
                   }

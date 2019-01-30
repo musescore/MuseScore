@@ -669,6 +669,24 @@ class ChangeStyleVal : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   ChangeStylePtr
+//---------------------------------------------------------
+
+class ChangeStylePtrs : public UndoCommand {
+      Score* score;
+      QPageSize ps;
+      MPageLayout odd;
+      MPageLayout even;
+
+      void flip(EditData*) override;
+
+   public:
+      ChangeStylePtrs(Score* s, QPageSize& ps, MPageLayout& odd, MPageLayout& even)
+                     : score(s), ps(ps), odd(odd), even(even) {}
+      UNDO_NAME("ChangeStylePtrs")
+      };
+
+//---------------------------------------------------------
 //   ChangePageNumberOffset
 //---------------------------------------------------------
 

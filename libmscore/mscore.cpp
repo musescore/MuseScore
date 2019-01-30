@@ -79,6 +79,7 @@ bool  MScore::saveTemplateMode = false;
 bool  MScore::noGui = false;
 
 MStyle* MScore::_defaultStyleForParts;
+int     MScore::_unitsValue;
 
 QString MScore::_globalShare;
 int     MScore::_vRaster;
@@ -116,6 +117,11 @@ bool    MScore::svgPrinting = false;
 double  MScore::pixelRatio  = 0.8;        // DPI / logicalDPI
 
 MPaintDevice* MScore::_paintDevice;
+
+std::vector<int> MScore::sizesCommon;
+std::set<int> MScore::sizesMetric;
+std::set<int> MScore::sizesImperial;
+std::set<int> MScore::sizesOther;
 
 Sequencer* MScore::seq = 0;
 MuseScoreCore* MuseScoreCore::mscoreCore;
@@ -315,7 +321,9 @@ void MScore::init()
       //
       //  initialize styles
       //
+      _baseStyle.initPageLayout();
       _baseStyle.precomputeValues();
+      _defaultStyle.initPageLayout();
       QSettings s;
       QString defStyle = s.value("score/style/defaultStyleFile").toString();
       if (!(MScore::testMode || defStyle.isEmpty())) {
@@ -337,6 +345,41 @@ void MScore::init()
                   _defaultStyleForParts->precomputeValues();
                   }
             }
+
+      // 4 types of paper sizes: Common, Metric, Imperial, Other
+      // Common overlaps with Metric/Imperial/Other and is sorted manually here
+      // Envelope sizes excluded
+      unsigned i;
+      sizesCommon.push_back(QPageSize::A3);
+      sizesCommon.push_back(QPageSize::A4);
+      sizesCommon.push_back(QPageSize::A5);
+      sizesCommon.push_back(QPageSize::B5);
+      sizesCommon.push_back(QPageSize::JisB4);
+      sizesCommon.push_back(QPageSize::Letter);
+      sizesCommon.push_back(QPageSize::Legal);
+      sizesCommon.push_back(QPageSize::Ledger);
+      sizesCommon.push_back(QPageSize::Tabloid);
+      sizesCommon.push_back(QPageSize::Imperial9x12);
+      sizesCommon.push_back(QPageSize::Imperial10x13);
+
+      sizesMetric.insert(QPageSize::A4);
+      sizesMetric.insert(QPageSize::B5);
+      for (i = QPageSize::A0; i <= QPageSize::B9; ++i)
+            sizesMetric.insert(i);
+      for (i = QPageSize::A10; i <= QPageSize::B5Extra; ++i)
+            sizesMetric.insert(i);
+
+      for (i = QPageSize::Letter; i <= QPageSize::Executive; ++i)
+            sizesImperial.insert(i);
+      for (i = QPageSize::Folio; i <= QPageSize::Tabloid; ++i)
+            sizesImperial.insert(i);
+      for (i = QPageSize::AnsiC; i <= QPageSize::Imperial15x11; ++i)
+            sizesImperial.insert(i);
+
+      for (i = QPageSize::JisB0; i <= QPageSize::JisB10; ++i)
+            sizesOther.insert(i);
+      for (i = QPageSize::ExecutiveStandard; i <= QPageSize::FanFoldGermanLegal; ++i)
+            sizesOther.insert(i);
 
       //
       //  load internal fonts
@@ -360,7 +403,7 @@ void MScore::init()
             ":/fonts/mscore/MScoreText.ttf",
             };
 
-      for (unsigned i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {
+      for (i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {
             QString str(fonts[i]);
             if (-1 == QFontDatabase::addApplicationFont(str)) {
                   if (!MScore::testMode)

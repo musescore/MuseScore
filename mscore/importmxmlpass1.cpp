@@ -542,7 +542,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
              pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), DPMM, DPI);
       */
       // page width, height and odd top margin in tenths
-      const double ph  = score->styleD(Sid::pageHeight) * 10 * DPI / score->spatium();
+      const double ph = score->styleI(Sid::pageFullHeight) * 10 / MSCX_F / score->spatium();
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
