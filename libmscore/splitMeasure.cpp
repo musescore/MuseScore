@@ -39,7 +39,7 @@ void Score::cmdSplitMeasure(ChordRest* cr)
 
 void Score::splitMeasure(Segment* segment)
       {
-      if (segment->rtick() == 0) {
+      if (segment->rtick().isZero()) {
             MScore::setError(CANNOT_SPLIT_MEASURE_FIRST_BEAT);
             return;
             }
@@ -52,10 +52,10 @@ void Score::splitMeasure(Segment* segment)
       ScoreRange range;
       range.read(measure->first(), measure->last());
 
-      int stick = measure->tick();
-      int etick = measure->endTick();
+      Fraction stick = measure->tick();
+      Fraction etick = measure->endTick();
 
-      std::list<std::tuple<Spanner*, int, int>> sl;
+      std::list<std::tuple<Spanner*, Fraction, Fraction>> sl;
       for (auto i : spanner()) {
             Spanner* s = i.second;
             Element* start = s->startElement();
@@ -80,21 +80,21 @@ void Score::splitMeasure(Segment* segment)
       insertMeasure(ElementType::MEASURE, m2, true);
       Measure* m1 = toMeasure(m2->prev());
 
-      int tick = segment->tick();
+      Fraction tick = segment->tick();
       m1->setTick(measure->tick());
       m2->setTick(tick);
-      int ticks1 = segment->tick() - measure->tick();
-      int ticks2 = measure->ticks() - ticks1;
+      Fraction ticks1 = segment->tick() - measure->tick();
+      Fraction ticks2 = measure->ticks() - ticks1;
       m1->setTimesig(measure->timesig());
       m2->setTimesig(measure->timesig());
-      m1->adjustToLen(Fraction::fromTicks(ticks1), false);
-      m2->adjustToLen(Fraction::fromTicks(ticks2), false);
+      m1->adjustToLen(ticks1.reduced(), false);
+      m2->adjustToLen(ticks2.reduced(), false);
       range.write(this, m1->tick());
 
       for (auto i : sl) {
-            Spanner* s = std::get<0>(i);
-            int t      = std::get<1>(i);
-            int ticks  = std::get<2>(i);
+            Spanner* s      = std::get<0>(i);
+            Fraction t      = std::get<1>(i);
+            Fraction ticks  = std::get<2>(i);
             if (s->tick() != t)
                   s->undoChangeProperty(Pid::SPANNER_TICK, t);
             if (s->ticks() != ticks)

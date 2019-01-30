@@ -47,7 +47,7 @@ void RehearsalMark::layout()
 
       Segment* s = segment();
       if (s) {
-            if (!s->rtick()) {
+            if (s->rtick().isZero()) {
                   // first CR of measure, decide whether to align to barline
                   if (!s->prev() && align() & Align::CENTER) {
                         // measure with no clef / keysig / timesig

@@ -590,34 +590,34 @@ MasterScore* MuseScore::getNewFile()
 
       score->sigmap()->add(0, timesig);
 
-      int firstMeasureTicks = pickupMeasure ? Fraction(pickupTimesigZ, pickupTimesigN).ticks() : timesig.ticks();
+      Fraction firstMeasureTicks = pickupMeasure ? Fraction(pickupTimesigZ, pickupTimesigN) : timesig;
 
       for (int i = 0; i < measures; ++i) {
-            int tick = firstMeasureTicks + timesig.ticks() * (i - 1);
+            Fraction tick = firstMeasureTicks + timesig * (i - 1);
             if (i == 0)
-                  tick = 0;
+                  tick = Fraction(0,1);
             QList<Rest*> puRests;
             for (Score* _score : score->scoreList()) {
                   Rest* rest = 0;
                   Measure* measure = new Measure(_score);
                   measure->setTimesig(timesig);
-                  measure->setLen(timesig);
+                  measure->setTicks(timesig);
                   measure->setTick(tick);
 
-                  if (pickupMeasure && tick == 0) {
+                  if (pickupMeasure && tick.isZero()) {
                         measure->setIrregular(true);        // don’t count pickup measure
-                        measure->setLen(Fraction(pickupTimesigZ, pickupTimesigN));
+                        measure->setTicks(Fraction(pickupTimesigZ, pickupTimesigN));
                         }
                   _score->measures()->add(measure);
 
                   for (Staff* staff : _score->staves()) {
                         int staffIdx = staff->idx();
-                        if (tick == 0) {
+                        if (tick.isZero()) {
                               TimeSig* ts = new TimeSig(_score);
                               ts->setTrack(staffIdx * VOICES);
                               ts->setSig(timesig, timesigType);
                               Measure* m = _score->firstMeasure();
-                              Segment* s = m->getSegment(SegmentType::TimeSig, 0);
+                              Segment* s = m->getSegment(SegmentType::TimeSig, Fraction(0,1));
                               s->add(ts);
                               Part* part = staff->part();
                               if (!part->instrument()->useDrumset()) {
@@ -631,11 +631,11 @@ MasterScore* MuseScore::getNewFile()
                                           }
                                     // do not create empty keysig unless custom or atonal
                                     if (nKey.custom() || nKey.isAtonal() || nKey.key() != Key::C) {
-                                          staff->setKey(0, nKey);
+                                          staff->setKey(Fraction(0,1), nKey);
                                           KeySig* keysig = new KeySig(score);
                                           keysig->setTrack(staffIdx * VOICES);
                                           keysig->setKeySigEvent(nKey);
-                                          Segment* ss = measure->getSegment(SegmentType::KeySig, 0);
+                                          Segment* ss = measure->getSegment(SegmentType::KeySig, Fraction(0,1));
                                           ss->add(keysig);
                                           }
                                     }
@@ -643,12 +643,12 @@ MasterScore* MuseScore::getNewFile()
 
                         // determined if this staff is linked to previous so we can reuse rests
                         bool linkedToPrevious = staffIdx && staff->isLinked(_score->staff(staffIdx - 1));
-                        if (measure->timesig() != measure->len()) {
+                        if (measure->timesig() != measure->ticks()) {
                               if (!linkedToPrevious)
                                     puRests.clear();
-                              std::vector<TDuration> dList = toDurationList(measure->len(), false);
+                              std::vector<TDuration> dList = toDurationList(measure->ticks(), false);
                               if (!dList.empty()) {
-                                    int ltick = tick;
+                                    Fraction ltick = tick;
                                     int k = 0;
                                     foreach (TDuration d, dList) {
                                           if (k < puRests.count())
@@ -658,7 +658,7 @@ MasterScore* MuseScore::getNewFile()
                                                 puRests.append(rest);
                                                 }
                                           rest->setScore(_score);
-                                          rest->setDuration(d.fraction());
+                                          rest->setTicks(d.fraction());
                                           rest->setTrack(staffIdx * VOICES);
                                           Segment* seg = measure->getSegment(SegmentType::ChordRest, ltick);
                                           seg->add(rest);
@@ -673,7 +673,7 @@ MasterScore* MuseScore::getNewFile()
                               else
                                     rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                               rest->setScore(_score);
-                              rest->setDuration(measure->len());
+                              rest->setTicks(measure->ticks());
                               rest->setTrack(staffIdx * VOICES);
                               Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
                               seg->add(rest);
@@ -706,7 +706,7 @@ MasterScore* MuseScore::getNewFile()
             MeasureBase* measure = score->measures()->first();
             if (measure->type() != ElementType::VBOX) {
                   MeasureBase* nm = nvb ? nvb : new VBox(score);
-                  nm->setTick(0);
+                  nm->setTick(Fraction(0,1));
                   nm->setNext(measure);
                   score->measures()->add(nm);
                   measure = nm;

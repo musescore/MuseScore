@@ -284,12 +284,12 @@ void PianoLevels::paintEvent(QPaintEvent* e)
 //   noteStartTick
 //---------------------------------------------------------
 
-int PianoLevels::noteStartTick(Note* note, NoteEvent* evt) {
+int PianoLevels::noteStartTick(Note* note, NoteEvent* evt)
+      {
       Chord* chord = note->chord();
-      int ticks = chord->duration().ticks();
+      int ticks = chord->ticks().ticks();
 
-      return note->chord()->tick()
-            + (evt ? evt->ontime() * ticks / 1000 : 0);
+      return note->chord()->tick().ticks() + (evt ? evt->ontime() * ticks / 1000 : 0);
       }
 
 

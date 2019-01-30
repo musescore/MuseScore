@@ -70,7 +70,6 @@ class Measure final : public MeasureBase {
       qreal _userStretch;
 
       Fraction _timesig;
-      Fraction _len;          ///< actual length of measure
 
       int _mmRestCount;       // > 0 if this is a multi measure rest
                               // 0 if this is the start of a mm rest (_mmRest != 0)
@@ -137,47 +136,45 @@ class Measure final : public MeasureBase {
 
       Fraction timesig() const             { return _timesig;     }
       void setTimesig(const Fraction& f)   { _timesig = f;        }
-      Fraction len() const                 { return _len;         }
+
       Fraction stretchedLen(Staff*) const;
-      void setLen(const Fraction& f)       { _len = f;            }
-      virtual int ticks() const override;             // actual length of measure in ticks
       bool isIrregular() const             { return _timesig != _len; }
 
-      int size() const                          { return _segments.size();        }
-      Ms::Segment* first() const                { return _segments.first();       }
-      Segment* first(SegmentType t) const     { return _segments.first(t);      }
-      Segment* firstEnabled() const             { return _segments.first(ElementFlag::ENABLED); }
+      int size() const                     { return _segments.size();        }
+      Ms::Segment* first() const           { return _segments.first();       }
+      Segment* first(SegmentType t) const  { return _segments.first(t);      }
+      Segment* firstEnabled() const        { return _segments.first(ElementFlag::ENABLED); }
 
-      Ms::Segment* last() const                 { return _segments.last(); }
-      SegmentList& segments()                   { return _segments; }
-      const SegmentList& segments() const       { return _segments; }
+      Ms::Segment* last() const            { return _segments.last(); }
+      SegmentList& segments()              { return _segments; }
+      const SegmentList& segments() const  { return _segments; }
 
       qreal userStretch() const;
-      void setUserStretch(qreal v)              { _userStretch = v; }
+      void setUserStretch(qreal v)         { _userStretch = v; }
 
       void stretchMeasure(qreal stretch);
-      int computeTicks();
+      Fraction computeTicks();
       void layout2();
       void layoutMeasureNumber();
 
-      Chord* findChord(int tick, int track);
-      ChordRest* findChordRest(int tick, int track);
-      int snap(int tick, const QPointF p) const;
-      int snapNote(int tick, const QPointF p, int staff) const;
+      Chord* findChord(Fraction tick, int track);
+      ChordRest* findChordRest(Fraction tick, int track);
+      Fraction snap(const Fraction& tick, const QPointF p) const;
+      Fraction snapNote(const Fraction& tick, const QPointF p, int staff) const;
 
       void insertStaff(Staff*, int staff);
       void insertMStaff(MStaff* staff, int idx);
       void removeMStaff(MStaff* staff, int idx);
 
-      virtual void moveTicks(int diff);
+      virtual void moveTicks(const Fraction& diff) override;
 
       void cmdRemoveStaves(int s, int e);
       void cmdAddStaves(int s, int e, bool createRest);
       void removeStaves(int s, int e);
       void insertStaves(int s, int e);
 
-      qreal tick2pos(int) const;
-      Segment* tick2segment(int tick, SegmentType st = SegmentType::ChordRest);
+      qreal tick2pos(Fraction) const;
+      Segment* tick2segment(const Fraction& tick, SegmentType st = SegmentType::ChordRest);
 
       void sortStaves(QList<int>& dst);
 
@@ -187,19 +184,16 @@ class Measure final : public MeasureBase {
       int repeatCount() const         { return _repeatCount; }
       void setRepeatCount(int val)    { _repeatCount = val; }
 
-      Segment* undoGetSegment(SegmentType st, int tick);  // deprecated
-      Segment* getSegment(SegmentType st, int tick);      // deprecated
-      Segment* findSegment(SegmentType st, int tick) const;     // deprecated
+      Segment* findSegmentR(SegmentType st,    const Fraction&) const;
+      Segment* undoGetSegmentR(SegmentType st, const Fraction& f);
+      Segment* getSegmentR(SegmentType st,     const Fraction& f);
+      Segment* findFirstR(SegmentType st, const Fraction& rtick) const;
 
-      Segment* undoGetSegmentR(SegmentType st, int rtick);
-      Segment* getSegmentR(SegmentType st, int rtick);
-      Segment* findSegmentR(SegmentType st, int rtick) const;
+      // segment routines with absolute tick values
+      Segment* findSegment(SegmentType st,    const Fraction& f) const { return findSegmentR(st, f - tick()); }
+      Segment* undoGetSegment(SegmentType st, const Fraction& f)       { return undoGetSegmentR(st, f - tick()); }
+      Segment* getSegment(SegmentType st,     const Fraction& f)       { return getSegmentR(st, f - tick()); }
 
-      // preferred:
-      Segment* undoGetSegment(SegmentType st, const Fraction& f) { return undoGetSegmentR(st, f.ticks()); }
-      Segment* getSegment(SegmentType st, const Fraction& f)     { return getSegmentR(st, f.ticks()); }
-
-      Segment* findFirst(SegmentType st, int rtick) const;
 
       qreal createEndBarLines(bool);
       void barLinesSetSpan(Segment*);

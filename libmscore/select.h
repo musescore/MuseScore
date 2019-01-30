@@ -42,7 +42,7 @@ struct ElementPattern {
       int voice;
       const System* system;
       bool subtypeValid;
-      int durationTicks;
+      Fraction durationTicks;
       };
 
 //---------------------------------------------------------
@@ -74,6 +74,10 @@ enum class SelState : char {
                   // is selected
       };
 
+//---------------------------------------------------------
+//   SelectionFilterType
+//---------------------------------------------------------
+
 enum class SelectionFilterType {
       NONE                    = 0,
       FIRST_VOICE             = 1 << 0,
@@ -99,6 +103,11 @@ enum class SelectionFilterType {
       GRACE_NOTE              = 1 << 20,
       ALL                     = -1
       };
+
+
+//---------------------------------------------------------
+//   SelectionFilter
+//---------------------------------------------------------
 
 class SelectionFilter {
       Score* _score;
@@ -130,8 +139,8 @@ class Selection {
       Segment* _startSegment;
       Segment* _endSegment;         // next segment after selection
 
-      int _plannedTick1 = -1; // Will be actually selected on updateSelectedElements() call.
-      int _plannedTick2 = -1; // Used by setRangeTicks() to restore proper selection after
+      Fraction _plannedTick1 { -1, 1 }; // Will be actually selected on updateSelectedElements() call.
+      Fraction _plannedTick2 { -1, 1 }; // Used by setRangeTicks() to restore proper selection after
                               // command end in case some changes are expected to segments'
                               // structure (e.g. MMRests reconstruction).
 
@@ -185,14 +194,14 @@ class Selection {
       void setStartSegment(Segment* s)  { _startSegment = s; }
       void setEndSegment(Segment* s)    { _endSegment = s; }
       void setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd);
-      void setRangeTicks(int tick1, int tick2, int staffStart, int staffEnd);
+      void setRangeTicks(const Fraction& tick1, const Fraction& tick2, int staffStart, int staffEnd);
       Segment* activeSegment() const    { return _activeSegment; }
       void setActiveSegment(Segment* s) { _activeSegment = s; }
       ChordRest* activeCR() const;
       bool isStartActive() const;
       bool isEndActive() const;
-      int tickStart() const;
-      int tickEnd() const;
+      Fraction tickStart() const;
+      Fraction tickEnd() const;
       int staffStart() const            { return _staffStart;  }
       int staffEnd() const              { return _staffEnd;    }
       int activeTrack() const           { return _activeTrack; }
@@ -203,7 +212,7 @@ class Selection {
       void updateSelectedElements();
       bool measureRange(Measure** m1, Measure** m2) const;
       void extendRangeSelection(ChordRest* cr);
-      void extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, int tick, int etick);
+      void extendRangeSelection(Segment* seg, Segment* segAfter, int staffIdx, const Fraction& tick, const Fraction& etick);
       };
 
 

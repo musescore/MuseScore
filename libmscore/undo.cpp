@@ -454,7 +454,7 @@ void UndoMacro::redo(EditData* ed)
 //   CloneVoice
 //---------------------------------------------------------
 
-CloneVoice::CloneVoice(Segment* _sf, int _lTick, Segment* _d, int _strack, int _dtrack, int _otrack, bool _linked)
+CloneVoice::CloneVoice(Segment* _sf, const Fraction& _lTick, Segment* _d, int _strack, int _dtrack, int _otrack, bool _linked)
       {
       sf      = _sf;          // first source segment
       lTick   = _lTick;       // last tick to clone
@@ -469,7 +469,7 @@ CloneVoice::CloneVoice(Segment* _sf, int _lTick, Segment* _d, int _strack, int _
 void CloneVoice::undo(EditData*)
       {
       Score* s = d->score();
-      int ticks = d->tick() + lTick - sf->tick();
+      Fraction ticks = d->tick() + lTick - sf->tick();
       int sTrack = otrack == -1 ? dtrack : otrack; // use the correct source / destination if deleting the source
       int dTrack = otrack == -1 ? strack : dtrack;
 
@@ -487,7 +487,7 @@ void CloneVoice::undo(EditData*)
             // On the first run get going the undo redo action for adding/deleting elements and slurs
             if (first) {
                   s->cloneVoice(sTrack, dTrack, sf, ticks, linked);
-                  auto spanners = s->spannerMap().findOverlapping(sf->tick(), lTick);
+                  auto spanners = s->spannerMap().findOverlapping(sf->tick().ticks(), lTick.ticks());
                   for (auto i = spanners.begin(); i < spanners.end(); i++) {
                         Spanner* sp = i->value;
                         if (sp->isSlur() && (sp->track() == sTrack || sp->track2() == sTrack))
@@ -502,12 +502,12 @@ void CloneVoice::undo(EditData*)
                   }
             // Set rests if first voice in a staff
             if (!(sTrack % VOICES))
-                  s->setRest(d->tick(), sTrack, Fraction::fromTicks(ticks), false, 0);
+                  s->setRest(d->tick(), sTrack, ticks, false, 0);
             }
       else {
             s->cloneVoice(sTrack, dTrack, sf, ticks, linked);
             if (!linked && !(dTrack % VOICES))
-                  s->setRest(d->tick(), dTrack, Fraction::fromTicks(ticks), false, 0);
+                  s->setRest(d->tick(), dTrack, ticks, false, 0);
             }
 
       first = false;
@@ -516,7 +516,7 @@ void CloneVoice::undo(EditData*)
 void CloneVoice::redo(EditData*)
       {
       Score* s = d->score();
-      int ticks = d->tick() + lTick - sf->tick();
+      Fraction ticks = d->tick() + lTick - sf->tick();
 
       // Clear destination voice (in case of not linked and otrack = -1 we would delete our source
       if (otrack != -1 && linked)
@@ -532,7 +532,7 @@ void CloneVoice::redo(EditData*)
             // On the first run get going the undo redo action for adding/deleting elements and slurs
             if (first) {
                   s->cloneVoice(strack, dtrack, sf, ticks, linked);
-                  auto spanners = s->spannerMap().findOverlapping(sf->tick(), lTick);
+                  auto spanners = s->spannerMap().findOverlapping(sf->tick().ticks(), lTick.ticks());
                   for (auto i = spanners.begin(); i < spanners.end(); i++) {
                         Spanner* sp = i->value;
                         if (sp->isSlur() && (sp->track() == strack || sp->track2() == strack))
@@ -547,7 +547,7 @@ void CloneVoice::redo(EditData*)
                   }
             // Set rests if first voice in a staff
             if (!(strack % VOICES))
-                  s->setRest(d->tick(), strack, Fraction::fromTicks(ticks), false, 0);
+                  s->setRest(d->tick(), strack, ticks, false, 0);
             }
       else
             s->cloneVoice(strack, dtrack, sf, ticks, linked, first);
@@ -1118,7 +1118,7 @@ ChangeKeySig::ChangeKeySig(KeySig* k, KeySigEvent newKeySig, bool sc, bool addEv
 void ChangeKeySig::flip(EditData*)
       {
       Segment* segment = keysig->segment();
-      const int tick = segment->tick();
+      Fraction tick = segment->tick();
       Staff* staff = keysig->staff();
 
       const bool curEvtInStaff = (staff->currentKeyTick(tick) == tick);
@@ -1138,7 +1138,7 @@ void ChangeKeySig::flip(EditData*)
       // is probably generated. Otherwise it is probably added manually.
       // Set segment flags according to this, layout will change it if needed.
       segment->setEnabled(evtInStaff);
-      segment->setHeader(!evtInStaff && segment->rtick() == 0);
+      segment->setHeader(!evtInStaff && segment->rtick() == Fraction(0,1));
 
       showCourtesy = curShowCourtesy;
       ks           = curKey;
@@ -1159,7 +1159,7 @@ ChangeMeasureLen::ChangeMeasureLen(Measure* m, Fraction l)
 
 void ChangeMeasureLen::flip(EditData*)
       {
-      Fraction oLen = measure->len();
+      Fraction oLen = measure->ticks();
 
       //
       // move EndBarLine and TimeSigAnnounce
@@ -1170,11 +1170,11 @@ void ChangeMeasureLen::flip(EditData*)
       for (Segment* s = measure->first(); s; s = s->next()) {
             if (!s->isEndBarLineType() && !s->isTimeSigAnnounceType())
                   continue;
-            s->setRtick(len.ticks());
+            s->setRtick(len);
             sl.push_back(s);
             measure->remove(s);
             }
-      measure->setLen(len);
+      measure->setTicks(len);
       measure->score()->fixTicks();
       len = oLen;
       }
@@ -1229,7 +1229,7 @@ void ExchangeVoice::redo(EditData*)
 //   ChangeInstrumentShort
 //---------------------------------------------------------
 
-ChangeInstrumentShort::ChangeInstrumentShort(int _tick, Part* p, QList<StaffName> t)
+ChangeInstrumentShort::ChangeInstrumentShort(const Fraction&_tick, Part* p, QList<StaffName> t)
       {
       tick = _tick;
       part = p;
@@ -1248,7 +1248,7 @@ void ChangeInstrumentShort::flip(EditData*)
 //   ChangeInstrumentLong
 //---------------------------------------------------------
 
-ChangeInstrumentLong::ChangeInstrumentLong(int _tick, Part* p, QList<StaffName> t)
+ChangeInstrumentLong::ChangeInstrumentLong(const Fraction& _tick, Part* p, QList<StaffName> t)
       {
       tick = _tick;
       part = p;
@@ -1415,9 +1415,9 @@ void ChangeStaff::flip(EditData*)
 
 void ChangeStaffType::flip(EditData*)
       {
-      StaffType st = *staff->staffType(0);      // TODO
+      StaffType st = *staff->staffType(Fraction(0,1));      // TODO
 
-      staff->setStaffType(0, staffType);
+      staff->setStaffType(Fraction(0,1), staffType);
 
       staffType = st;
 
@@ -1699,8 +1699,8 @@ void InsertRemoveMeasures::removeMeasures()
       {
       Score* score = fm->score();
 
-      int tick1 = fm->tick();
-      int tick2 = lm->endTick();
+      Fraction tick1 = fm->tick();
+      Fraction tick2 = lm->endTick();
 
       QList<System*> systemList;
       for (MeasureBase* mb = lm;; mb = mb->prev()) {
@@ -1896,7 +1896,7 @@ void ChangeNoteEvents::flip(EditData*)
 void ChangeInstrument::flip(EditData*)
       {
       Part* part = is->staff()->part();
-      int tickStart = is->segment()->tick();
+      Fraction tickStart = is->segment()->tick();
       Instrument* oi = is->instrument();  //new Instrument(*is->instrument());
 
       // set instrument in both part and instrument change element

@@ -19,7 +19,6 @@ namespace Ms {
 
 class MidiNote;
 class Note;
-class Event;
 enum class Key;
 
 const int   INVALID_PITCH      = -1;

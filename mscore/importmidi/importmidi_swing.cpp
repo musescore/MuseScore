@@ -46,14 +46,14 @@ SwingDetector::SwingDetector(MidiOperations::Swing st)
 void SwingDetector::add(ChordRest *cr)
       {
       if (elements.empty()) {
-            if (ReducedFraction(cr->globalDuration()) >= FULL_LEN)
+            if (ReducedFraction(cr->globalTicks()) >= FULL_LEN)
                   return;
-            const int tickInBar = cr->tick() - cr->measure()->tick();
+            const int tickInBar = (cr->tick() - cr->measure()->tick()).ticks();
             if (tickInBar % MScore::division == 0)
                   append(cr);
             }
       else {
-            if (sumLen + ReducedFraction(cr->globalDuration()) > FULL_LEN) {
+            if (sumLen + ReducedFraction(cr->globalTicks()) > FULL_LEN) {
                   reset();
                   return;
                   }
@@ -78,14 +78,14 @@ void SwingDetector::add(ChordRest *cr)
 void SwingDetector::reset()
       {
       elements.clear();
-      sumLen = ReducedFraction(0);
+      sumLen = ReducedFraction(Fraction(0,1));
       }
 
 void SwingDetector::append(ChordRest *cr)
       {
       if (cr->isChord() || cr->isRest()) {
             elements.push_back(cr);
-            sumLen += ReducedFraction(cr->globalDuration());
+            sumLen += ReducedFraction(cr->globalTicks());
             }
       }
 
@@ -94,8 +94,8 @@ void SwingDetector::checkNormalSwing()
       if (elements.size() == 2
                   && areAllTuplets()
                   && (elements[0]->isChord() || elements[1]->type() == ElementType::CHORD)
-                  && elements[0]->duration().reduced() == Fraction(1, 4)
-                  && elements[1]->duration().reduced() == Fraction(1, 8))
+                  && elements[0]->ticks().reduced() == Fraction(1, 4)
+                  && elements[1]->ticks().reduced() == Fraction(1, 8))
             {
                         // swing with two 8th notes
                         // or 8th note + 8th rest
@@ -106,9 +106,9 @@ void SwingDetector::checkNormalSwing()
                && elements[0]->isChord()
                && elements[1]->isRest()
                && elements[2]->isChord()
-               && elements[0]->duration().reduced() == Fraction(1, 8)
-               && elements[1]->duration().reduced() == Fraction(1, 8)
-               && elements[2]->duration().reduced() == Fraction(1, 8))
+               && elements[0]->ticks().reduced() == Fraction(1, 8)
+               && elements[1]->ticks().reduced() == Fraction(1, 8)
+               && elements[2]->ticks().reduced() == Fraction(1, 8))
             {
                         // swing with two 8th notes
             applySwing();
@@ -122,8 +122,8 @@ void SwingDetector::checkShuffle()
                   && elements[0]->isChord()
                   && (elements[1]->isChord()
                       || elements[1]->isRest())
-                  && elements[0]->duration().reduced() == Fraction(3, 16)  // dotted 8th
-                  && elements[1]->duration().reduced() == Fraction(1, 16))
+                  && elements[0]->ticks().reduced() == Fraction(3, 16)  // dotted 8th
+                  && elements[1]->ticks().reduced() == Fraction(1, 16))
             {
                         // swing with two 8th notes
                         // or 8th note + 8th rest
@@ -139,7 +139,7 @@ void SwingDetector::applySwing()
       Tuplet *tuplet = nullptr;
       for (ChordRest *el: elements) {
             el->setDurationType(TDuration::DurationType::V_EIGHTH);
-            el->setDuration(Fraction(1, 8));
+            el->setTicks(Fraction(1, 8));
             el->setDots(0);
             if (el->tuplet()) {
                   if (!tuplet)
@@ -149,10 +149,10 @@ void SwingDetector::applySwing()
             }
 
       const ChordRest *first = elements.front();
-      const int startTick = first->segment()->tick();
+      const int startTick = first->segment()->tick().ticks();
       ChordRest *last = elements.back();
       last->segment()->remove(last);
-      Segment *s = last->measure()->getSegment(SegmentType::ChordRest, startTick + MScore::division / 2);
+      Segment *s = last->measure()->getSegment(SegmentType::ChordRest, Fraction::fromTicks(startTick + MScore::division / 2));
       s->add(last);
 
       if (elements.size() == 3) {

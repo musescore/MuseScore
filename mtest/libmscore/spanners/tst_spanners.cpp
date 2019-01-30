@@ -80,7 +80,7 @@ void TestSpanners::spanners01()
       // go to top note of first chord
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -195,7 +195,7 @@ void TestSpanners::spanners03()
       // go to top note of first chord
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -266,12 +266,12 @@ void TestSpanners::spanners04()
       Staff* oldStaff   = score->staff(0);
       Staff* newStaff   = new Staff(score);
       newStaff->setPart(oldStaff->part());
-      newStaff->initFromStaffType(oldStaff->staffType(0));
+      newStaff->initFromStaffType(oldStaff->staffType(Fraction(0,1)));
       newStaff->setDefaultClefType(ClefTypeList(ClefType::G));
 
       KeySigEvent ke;
       ke.setKey(Key::C);
-      newStaff->setKey(0, ke);
+      newStaff->setKey(Fraction(0,1), ke);
 
       score->undoInsertStaff(newStaff, 1, false);
       Excerpt::cloneStaff(oldStaff, newStaff);
@@ -328,7 +328,7 @@ void TestSpanners::spanners06()
       // DROP A GLISSANDO ON FIRST NOTE
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);
@@ -360,7 +360,7 @@ void TestSpanners::spanners07()
       // DROP A GLISSANDO ON FIRST NOTE
       Measure*    msr   = score->firstMeasure();
       QVERIFY(msr);
-      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, 0);
+      Segment*    seg   = msr->findSegment(SegmentType::ChordRest, Fraction(0,1));
       QVERIFY(seg);
       Ms::Chord*      chord = static_cast<Ms::Chord*>(seg->element(0));
       QVERIFY(chord && chord->type() == ElementType::CHORD);

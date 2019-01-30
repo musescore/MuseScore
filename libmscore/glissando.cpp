@@ -274,7 +274,7 @@ void Glissando::layout()
 
       // FINAL SYSTEM-INITIAL NOTE
       // if the last gliss. segment attaches to a system-initial note, some extra width has to be added
-      if (cr2->segment()->measure() == cr2->segment()->system()->firstMeasure() && cr2->rtick() == 0
+      if (cr2->segment()->measure() == cr2->segment()->system()->firstMeasure() && cr2->rtick().isZero()
          // but ignore graces after, as they are not the first note of the system,
          // even if their segment is the first segment of the system
          && !(cr2->noteType() == NoteType::GRACE8_AFTER

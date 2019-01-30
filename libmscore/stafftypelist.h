@@ -29,9 +29,9 @@ class StaffTypeList : public std::map<int, StaffType> {
 
    public:
       StaffTypeList() {}
-      StaffType& staffType(int tick);
-      const StaffType& staffType(int tick) const;
-      StaffType* setStaffType(int tick, const StaffType&);
+      StaffType& staffType(const Fraction&);
+      const StaffType& staffType(const Fraction&) const;
+      StaffType* setStaffType(const Fraction&, const StaffType&);
       void read(XmlReader&, Score*);
       };
 

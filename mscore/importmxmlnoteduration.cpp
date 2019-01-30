@@ -73,9 +73,11 @@ static Fraction calculateFraction(const QString& type, const int dots, const Fra
       Fraction f = noteTypeToFraction(type);
       if (f.isValid()) {
             // dot(s)
-            Fraction f_no_dots = f;
-            for (int i = 0; i < dots; ++i)
-                  f += (f_no_dots / (2 << i));
+            Fraction ff = f;
+            for (int i = 0; i < dots; ++i) {
+                  ff = ff * Fraction(1,2);
+                  f += ff;
+                  }
             // tuplet
             if (timeMod.isValid())
                   f *= timeMod;

@@ -222,9 +222,9 @@ void Fermata::layout()
       Element* e = s->element(track());
       if (e) {
             if (e->isChord())
-                  rxpos() += score()->noteHeadWidth() * staff()->mag(0) * .5;
+                  rxpos() += score()->noteHeadWidth() * staff()->mag(Fraction(0, 1)) * .5;
             else
-                  rxpos() += e->x() + e->width() * staff()->mag(0) * .5;
+                  rxpos() += e->x() + e->width() * staff()->mag(Fraction(0, 1)) * .5;
             }
 
       QString name = Sym::id2name(_symId);

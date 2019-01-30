@@ -1085,7 +1085,7 @@ void readPart206(Part* part, XmlReader& e)
                   readInstrument(i, part, e);
                   Drumset* ds = i->drumset();
                   Staff*   s = part->staff(0);
-                  int lld = s ? qRound(s->lineDistance(0)) : 1;
+                  int lld = s ? qRound(s->lineDistance(Fraction(0,1))) : 1;
                   if (ds && s && lld > 1) {
                         for (int j = 0; j < DRUM_INSTRUMENTS; ++j)
                               ds->drum(j).line /= lld;
@@ -1168,7 +1168,7 @@ static void readNote(Note* note, XmlReader& e)
                   note->setTpc2(tpc);
             }
       if (!(tpcIsValid(note->tpc1()) && tpcIsValid(note->tpc2()))) {
-            int tick = note->chord() ? note->chord()->tick() : -1;
+            Fraction tick = note->chord() ? note->chord()->tick() : Fraction(-1,1);
             Interval v = note->staff() ? note->part()->instrument(tick)->transpose() : Interval();
             if (tpcIsValid(note->tpc1())) {
                   v.flip();
@@ -1460,7 +1460,7 @@ bool readNoteProperties206(Note* note, XmlReader& e)
                         placeholder->setAnchor(Spanner::Anchor::NOTE);
                         placeholder->setEndElement(note);
                         placeholder->setTrack2(note->track());
-                        placeholder->setTick(0);
+                        placeholder->setTick(Fraction(0,1));
                         placeholder->setTick2(e.tick());
                         e.addSpanner(id1, placeholder);
                         }
@@ -1751,9 +1751,9 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             else if (!readTupletProperties206(e, tuplet))
                   e.unknown();
             }
-      Fraction r = (tuplet->ratio() == 1) ? tuplet->ratio() : tuplet->ratio().reduced();
+      Fraction r = (tuplet->ratio() == Fraction(1,1)) ? tuplet->ratio() : tuplet->ratio().reduced();
       Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
-      tuplet->setDuration(f.reduced());
+      tuplet->setTicks(f.reduced());
       }
 
 //---------------------------------------------------------
@@ -1785,7 +1785,7 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e)
 
       // if any endTick, make it relative to current tick
       if (iEndTick)
-            lyrics->setTicks(iEndTick - e.tick());
+            lyrics->setTicks(Fraction::fromTicks(iEndTick) - e.tick());
       if (_verseNumber) {
             // TODO: add text to main text
             delete _verseNumber;
@@ -1882,21 +1882,21 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                               // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
                               // (see Fraction() constructor in fraction.h; this happens for instance
                               // when pasting selection from clipboard): they should not be converted
-                              ch->duration().numerator() != 0 &&
+                              ch->ticks().numerator() != 0 &&
                               // rest durations are initialized to full measure duration when
                               // created upon reading the <Rest> tag (see Measure::read() )
                               // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                              (ch->actualDurationType()==TDuration::DurationType::V_WHOLE && ch->duration() <= Fraction(4, 4)) ) {
+                              (ch->actualDurationType()==TDuration::DurationType::V_WHOLE && ch->ticks() <= Fraction(4, 4)) ) {
                         // old pre 2.0 scores: convert
                         ch->setDurationType(TDuration::DurationType::V_MEASURE);
                         }
                   else  // not from old score: set duration fraction from duration type
-                        ch->setDuration(ch->actualDurationType().fraction());
+                        ch->setTicks(ch->actualDurationType().fraction());
                   }
             else {
                   if (ch->score()->mscVersion() <= 114) {
                         SigEvent event = ch->score()->sigmap()->timesig(e.tick());
-                        ch->setDuration(event.timesig());
+                        ch->setTicks(event.timesig());
                         }
                   }
             }
@@ -1943,7 +1943,7 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
       else if (tag == "small")
             ch->setSmall(e.readInt());
       else if (tag == "duration")
-            ch->setDuration(e.readFraction());
+            ch->setTicks(e.readFraction());
       else if (tag == "ticklen") {      // obsolete (version < 1.12)
             int mticks = ch->score()->sigmap()->timesig(e.tick()).timesig().ticks();
             int i = e.readInt();
@@ -1951,11 +1951,11 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                   i = mticks;
             if ((ch->type() == ElementType::REST) && (mticks == i)) {
                   ch->setDurationType(TDuration::DurationType::V_MEASURE);
-                  ch->setDuration(Fraction::fromTicks(i));
+                  ch->setTicks(Fraction::fromTicks(i));
                   }
             else {
                   Fraction f = Fraction::fromTicks(i);
-                  ch->setDuration(f);
+                  ch->setTicks(f);
                   ch->setDurationType(TDuration(f));
                   }
             }
@@ -1983,8 +1983,8 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                   }
             else {
                   if (atype == "start") {
-                        if (spanner->ticks() > 0 && spanner->tick() == -1) // stop has been read first
-                              spanner->setTicks(spanner->ticks() - e.tick() - 1);
+                        if (spanner->ticks() > Fraction(0,1) && spanner->tick() == Fraction(-1,1)) // stop has been read first
+                              spanner->setTicks(spanner->ticks() - e.tick() - Fraction::fromTicks(1));
                         spanner->setTick(e.tick());
                         spanner->setTrack(ch->track());
                         if (spanner->type() == ElementType::SLUR)
@@ -2742,18 +2742,18 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
 
       // tick is obsolete
       if (e.hasAttribute("tick"))
-            e.initTick(score->fileDivision(e.intAttribute("tick")));
+            e.setTick(Fraction::fromTicks(score->fileDivision(e.intAttribute("tick"))));
 
       bool irregular;
       if (e.hasAttribute("len")) {
             QStringList sl = e.attribute("len").split('/');
             if (sl.size() == 2)
-                  m->setLen(Fraction(sl[0].toInt(), sl[1].toInt()));
+                  m->setTicks(Fraction(sl[0].toInt(), sl[1].toInt()));
             else
                   qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
             irregular = true;
-            score->sigmap()->add(m->tick(), SigEvent(m->len(), m->timesig()));
-            score->sigmap()->add(m->endTick(), SigEvent(m->timesig()));
+            score->sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
+            score->sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
             }
       else
             irregular = false;
@@ -2764,15 +2764,15 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
       // keep track of tick of previous element
       // this allows markings that need to apply to previous element to do so
       // even though we may have already advanced to next tick position
-      int lastTick = e.tick();
+      Fraction lastTick = e.tick();
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
             if (tag == "move")
-                  e.initTick(e.readFraction().ticks() + m->tick());
+                  e.setTick(e.readFraction() + m->tick());
             else if (tag == "tick") {
-                  e.initTick(score->fileDivision(e.readInt()));
+                  e.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
                   lastTick = e.tick();
                   }
             else if (tag == "BarLine") {
@@ -2853,23 +2853,23 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               chord->add(gc);
                               }
                         graceNotes.clear();
-                        int crticks = chord->actualTicks();
-                        lastTick    = e.tick();
+                        Fraction crticks = chord->actualTicks();
+                        lastTick         = e.tick();
                         e.incTick(crticks);
                         }
                   }
             else if (tag == "Rest") {
                   Rest* rest = new Rest(score);
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
-                  rest->setDuration(m->timesig()/timeStretch);
+                  rest->setTicks(m->timesig()/timeStretch);
                   rest->setTrack(e.track());
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   rest->setParent(segment);
                   readRest(rest, e);
                   segment->add(rest);
 
-                  if (!rest->duration().isValid())     // hack
-                        rest->setDuration(m->timesig()/timeStretch);
+                  if (!rest->ticks().isValid())     // hack
+                        rest->setTicks(m->timesig()/timeStretch);
 
                   lastTick = e.tick();
                   e.incTick(rest->actualTicks());
@@ -2877,13 +2877,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Breath") {
                   Breath* breath = new Breath(score);
                   breath->setTrack(e.track());
-                  int tick = e.tick();
+                  Fraction tick = e.tick();
                   breath->read(e);
                   // older scores placed the breath segment right after the chord to which it applies
                   // rather than before the next chordrest segment with an element for the staff
                   // result would be layout too far left if there are other segments due to notes in other staves
                   // we need to find tick of chord to which this applies, and add its duration
-                  int prevTick;
+                  Fraction prevTick;
                   if (e.tick() < tick)
                         prevTick = e.tick();    // use our own tick if we explicitly reset to earlier position
                   else
@@ -2984,8 +2984,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
-                  if (e.tick() == 0) {
-                        if (score->staff(staffIdx)->clef(0) != clef->clefType())
+                  if (e.tick().isZero()) {
+                        if (score->staff(staffIdx)->clef(Fraction(0,1)) != clef->clefType())
                               score->staff(staffIdx)->setDefaultClefType(clef->clefType());
                         if (clef->links() && clef->links()->size() == 1) {
                               e.linkIds().remove(clef->links()->lid());
@@ -3045,7 +3045,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   ts->setTrack(e.track());
                   ts->read(e);
                   // if time sig not at beginning of measure => courtesy time sig
-                  int currTick = e.tick();
+                  Fraction currTick = e.tick();
                   bool courtesySig = (currTick > m->tick());
                   if (courtesySig) {
                         // if courtesy sig., just add it without map processing
@@ -3061,12 +3061,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         m->setTimesig(ts->sig() / timeStretch);
 
                         if (irregular) {
-                              score->sigmap()->add(m->tick(), SigEvent(m->len(), m->timesig()));
-                              score->sigmap()->add(m->endTick(), SigEvent(m->timesig()));
+                              score->sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
+                              score->sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
                               }
                         else {
-                              m->setLen(m->timesig());
-                              score->sigmap()->add(m->tick(), SigEvent(m->timesig()));
+                              m->setTicks(m->timesig());
+                              score->sigmap()->add(m->tick().ticks(), SigEvent(m->timesig()));
                               }
                         }
                   }
@@ -3074,8 +3074,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   KeySig* ks = new KeySig(score);
                   ks->setTrack(e.track());
                   ks->read(e);
-                  int curTick = e.tick();
-                  if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick == 0) {
+                  Fraction curTick = e.tick();
+                  if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick.isZero()) {
                         // ignore empty key signature
                         qDebug("remove keysig c at tick 0");
                         if (ks->links()) {
@@ -3338,7 +3338,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   m->setMMRestCount(e.readInt());
                   // set tick to previous measure
                   m->setTick(e.lastMeasure()->tick());
-                  e.initTick(e.lastMeasure()->tick());
+                  e.setTick(e.lastMeasure()->tick());
                   }
             else if (m->MeasureBase::readProperties(e))
                   ;
@@ -3417,7 +3417,7 @@ static void readBox(Box* b, XmlReader& e)
 static void readStaffContent(Score* score, XmlReader& e)
       {
       int staff = e.intAttribute("id", 1) - 1;
-      e.initTick(0);
+      e.setTick(Fraction(0,1));
       e.setTrack(staff * VOICES);
       Box* lastReadBox = nullptr;
       bool readMeasureLast = false;
@@ -3441,7 +3441,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                         //
                         Measure* m = e.lastMeasure(); // measure->prevMeasure();
                         Fraction f(m ? m->timesig() : Fraction(4,4));
-                        measure->setLen(f);
+                        measure->setTicks(f);
                         measure->setTimesig(f);
 
                         readMeasure(measure, staff, e);
@@ -3449,7 +3449,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                         if (!measure->isMMRest()) {
                               score->measures()->add(measure);
                               e.setLastMeasure(measure);
-                              e.initTick(measure->tick() + measure->ticks());
+                              e.setTick(measure->endTick());
                               }
                         else {
                               // this is a multi measure rest
@@ -3473,7 +3473,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                         readMeasureLast = false;
                         }
                   else if (tag == "tick")
-                        e.initTick(score->fileDivision(e.readInt()));
+                        e.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
                   else
                         e.unknown();
                   }
@@ -3490,7 +3490,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                               measure->setTick(e.tick());
                               score->measures()->add(measure);
                               }
-                        e.initTick(measure->tick());
+                        e.setTick(measure->tick());
                         readMeasure(measure, staff, e);
                         measure->checkMeasure(staff);
                         if (measure->isMMRest())
@@ -3504,7 +3504,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                               }
                         }
                   else if (tag == "tick")
-                        e.initTick(score->fileDivision(e.readInt()));
+                        e.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
                   else
                         e.unknown();
                   }

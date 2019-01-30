@@ -35,7 +35,7 @@ class SpannerWriter : public ConnectorInfoWriter {
    public:
       SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction frac, bool start);
 
-      static void fillSpannerPosition(Location& l, const MeasureBase* endpoint, int tick, bool clipboardmode);
+      static void fillSpannerPosition(Location& l, const MeasureBase* endpoint, const Fraction& tick, bool clipboardmode);
       };
 
 //---------------------------------------------------------
@@ -366,20 +366,20 @@ void Spanner::removeUnmanaged()
 //   insertTimeUnmanaged
 //---------------------------------------------------------
 
-void Spanner::insertTimeUnmanaged(int fromTick, int len)
+void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
       {
-      int   newTick1    = tick();
-      int   newTick2    = tick2();
+      Fraction newTick1 = tick();
+      Fraction newTick2 = tick2();
 
       // check spanner start and end point
-      if (len > 0) {                // adding time
+      if (len > Fraction(0,1)) {          // adding time
             if (tick() > fromTick)        // start after insertion point: shift start to right
                   newTick1 += len;
             if (tick2() > fromTick)       // end after insertion point: shift end to right
                   newTick2 += len;
             }
-      if (len < 0) {                // removing time
-            int toTick = fromTick - len;
+      if (len < Fraction(0,1)) {          // removing time
+            Fraction toTick = fromTick - len;
             if (tick() > fromTick) {      // start after beginning of removed time
                   if (tick() < toTick) {  // start within removed time: bring start at removing point
                         if (parent()) {
@@ -444,9 +444,9 @@ QVariant Spanner::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::SPANNER_TICK:
-                  return tick();
+                  return _tick;
             case Pid::SPANNER_TICKS:
-                  return ticks();
+                  return _ticks;
             case Pid::SPANNER_TRACK2:
                   return track2();
             case Pid::ANCHOR:
@@ -456,7 +456,7 @@ QVariant Spanner::getProperty(Pid propertyId) const
             case Pid::LOCATION_VOICES:
                   return (track2() % VOICES) - (track() / VOICES);
             case Pid::LOCATION_FRACTIONS:
-                  return Fraction::fromTicks(_ticks);
+                  return _ticks;
             case Pid::LOCATION_MEASURES:
             case Pid::LOCATION_GRACE:
             case Pid::LOCATION_NOTE:
@@ -475,14 +475,14 @@ bool Spanner::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case Pid::SPANNER_TICK:
-                  setTick(v.toInt());
+                  setTick(v.value<Fraction>());
                   setStartElement(0);     // invalidate
                   setEndElement(0);       //
                   if (score() && score()->spannerMap().removeSpanner(this))
                         score()->addSpanner(this);
                   break;
             case Pid::SPANNER_TICKS:
-                  setTicks(v.toInt());
+                  setTicks(v.value<Fraction>());
                   setEndElement(0);       // invalidate
                   break;
             case Pid::TRACK:
@@ -561,25 +561,22 @@ void Spanner::computeEndElement()
             case Anchor::SEGMENT: {
                   if (track2() == -1)
                         setTrack2(track());
-                  if (ticks() == 0 && isTextLine() && parent())   // special case palette
+                  if (ticks().isZero() && isTextLine() && parent())   // special case palette
                         setTicks(score()->lastSegment()->tick() - _tick);
                   // find last cr on this staff that ends before tick2
 
                   _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
                   if (!_endElement) {
-                        qDebug("%s no end element for tick %d", name(), tick2());
+                        qDebug("%s no end element for tick %d", name(), tick2().ticks());
                         return;
                         }
                   if (!endCR()->measure()->isMMRest()) {
                         ChordRest* cr = endCR();
-                        int nticks = cr->tick() + cr->actualTicks() - _tick;
-                        // allow fudge factor for tuplets
-                        // TODO: replace with fraction-based calculation
-                        int fudge = cr->tuplet() ? 5 : 0;
-                        if (qAbs(_ticks - nticks) > fudge) {
-                              qDebug("%s ticks changed, %d -> %d", name(), _ticks, nticks);
+                        Fraction nticks = cr->tick() + cr->actualTicks() - _tick;
+                        if ((_ticks - nticks).isNotZero()) {
+                              qDebug("%s ticks changed, %d -> %d", name(), _ticks.ticks(), nticks.ticks());
                               setTicks(nticks);
-                              if (type() == ElementType::OTTAVA)
+                              if (isOttava())
                                     staff()->updateOttava();
                               }
                         }
@@ -587,9 +584,9 @@ void Spanner::computeEndElement()
                   break;
 
             case Anchor::MEASURE:
-                  _endElement = score()->tick2measure(tick2() - 1);
+                  _endElement = score()->tick2measure(tick2() - Fraction(1, 1920));
                   if (!_endElement) {
-                        qDebug("Spanner::computeEndElement(), measure not found for tick %d\n", tick2()-1);
+                        qDebug("Spanner::computeEndElement(), measure not found for tick %d\n", tick2().ticks()-1);
                         _endElement = score()->lastMeasure();
                         }
                   break;
@@ -738,7 +735,7 @@ ChordRest* Spanner::endCR()
       {
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
       if ((!_endElement || _endElement->score() != score())) {
-            Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
+            Segment* s  = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
             _endElement = s ? toChordRest(s->element(track2())) : 0;
             }
       return toChordRest(_endElement);
@@ -847,7 +844,7 @@ void Spanner::setEndElement(Element* e)
 Spanner* Spanner::nextSpanner(Element* e, int activeStaff)
       {
     std::multimap<int, Spanner*> mmap = score()->spanner();
-          auto range = mmap.equal_range(tick());
+          auto range = mmap.equal_range(tick().ticks());
           if (range.first != range.second) { // range not empty
                 for (auto i = range.first; i != range.second; ++i) {
                       if (i->second == e) {
@@ -882,7 +879,7 @@ Spanner* Spanner::nextSpanner(Element* e, int activeStaff)
 Spanner* Spanner::prevSpanner(Element* e, int activeStaff)
       {
       std::multimap<int, Spanner*> mmap = score()->spanner();
-      auto range = mmap.equal_range(tick());
+      auto range = mmap.equal_range(tick().ticks());
       if (range.first != range.second) { // range not empty
             for (auto i = range.first; i != range.second; ++i) {
                   if (i->second == e) {
@@ -930,7 +927,7 @@ Element* Spanner::prevSegmentElement()
 //   setTick
 //---------------------------------------------------------
 
-void Spanner::setTick(int v)
+void Spanner::setTick(const Fraction& v)
       {
       _tick = v;
       if (score())
@@ -941,41 +938,20 @@ void Spanner::setTick(int v)
 //   setTick2
 //---------------------------------------------------------
 
-void Spanner::setTick2(int v)
+void Spanner::setTick2(const Fraction& f)
       {
-      setTicks(v - _tick);
+      setTicks(f - _tick);
       }
 
 //---------------------------------------------------------
 //   setTicks
 //---------------------------------------------------------
 
-void Spanner::setTicks(int v)
+void Spanner::setTicks(const Fraction& f)
       {
-      _ticks = v;
+      _ticks = f;
       if (score())
             score()->spannerMap().setDirty();
-      }
-
-//---------------------------------------------------------
-//   afrac
-//---------------------------------------------------------
-
-Fraction Spanner::afrac() const
-      {
-      return Fraction::fromTicks(_tick);
-      }
-
-//---------------------------------------------------------
-//   rfrac
-//---------------------------------------------------------
-
-Fraction Spanner::rfrac() const
-      {
-      const Measure* m = toMeasure(findMeasure());
-      if (m)
-            return Fraction::fromTicks(_tick - m->tick());
-      return afrac();
       }
 
 //---------------------------------------------------------
@@ -1147,6 +1123,23 @@ void Spanner::layoutSystemsDone()
       }
 
 //--------------------------------------------------
+//   fraction
+//---------------------------------------------------------
+
+#if 0
+static Fraction fraction(const XmlWriter& xml, const Element* current, const Fraction& t)
+      {
+      Fraction tick(t);
+      if (!xml.clipboardmode()) {
+            const Measure* m = toMeasure(current->findMeasure());
+            if (m)
+                  tick -= m->tick();
+            }
+      return tick;
+      }
+#endif
+
+//--------------------------------------------------
 //   Spanner::writeSpannerStart
 //---------------------------------------------------------
 
@@ -1164,37 +1157,6 @@ void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track,
       {
       SpannerWriter w(xml, current, this, track, frac, false);
       w.write();
-      }
-
-//--------------------------------------------------
-//   fraction
-//---------------------------------------------------------
-
-static Fraction fraction(const XmlWriter& xml, const Element* current, int tick) {
-      if (!xml.clipboardmode()) {
-            const Measure* m = toMeasure(current->findMeasure());
-            if (m)
-                  tick -= m->tick();
-            }
-      return Fraction::fromTicks(tick);
-      }
-
-//--------------------------------------------------
-//   Spanner::writeSpannerStart
-//---------------------------------------------------------
-
-void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, int tick) const
-      {
-      writeSpannerStart(xml, current, track, fraction(xml, current, tick));
-      }
-
-//--------------------------------------------------
-//   Spanner::writeSpannerEnd
-//---------------------------------------------------------
-
-void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, int tick) const
-      {
-      writeSpannerEnd(xml, current, track, fraction(xml, current, tick));
       }
 
 //--------------------------------------------------
@@ -1221,21 +1183,21 @@ void Spanner::readSpanner(XmlReader& e, Score* current, int track)
 //   SpannerWriter::fillSpannerPosition
 //---------------------------------------------------------
 
-void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, int tick, bool clipboardmode)
+void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const Fraction& tick, bool clipboardmode)
       {
       if (clipboardmode) {
             l.setMeasure(0);
-            l.setFrac(Fraction::fromTicks(tick));
+            l.setFrac(tick);
             }
       else {
             if (!m) {
                   qWarning("fillSpannerPosition: couldn't find spanner's endpoint's measure");
                   l.setMeasure(0);
-                  l.setFrac(Fraction::fromTicks(tick));
+                  l.setFrac(tick);
                   return;
                   }
             l.setMeasure(m->measureIndex());
-            l.setFrac(Fraction::fromTicks(tick - m->tick()));
+            l.setFrac(tick - m->tick());
             }
       }
 
@@ -1258,12 +1220,14 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
             // elements and will try to obtain this info from the spanner itself.
             if (!start) {
                   _prevLoc.setTrack(sp->track());
-                  fillSpannerPosition(_prevLoc, sp->score()->tick2measure(sp->tick()), sp->tick(), clipboardmode);
+                  Measure* m = sp->score()->tick2measure(sp->tick());
+                  fillSpannerPosition(_prevLoc, m, sp->tick(), clipboardmode);
                   }
             else {
                   const int track2 = (sp->track2() != -1) ? sp->track2() : sp->track();
                   _nextLoc.setTrack(track2);
-                  fillSpannerPosition(_nextLoc, sp->score()->tick2measure(sp->tick2()), sp->tick2(), clipboardmode);
+                  Measure* m = sp->score()->tick2measure(sp->tick2());
+                  fillSpannerPosition(_nextLoc, m, sp->tick2(), clipboardmode);
                   }
             }
       else {

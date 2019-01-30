@@ -189,8 +189,10 @@ Fraction XmlReader::readFraction()
       const QString& s(readElementText());
       if (!s.isEmpty()) {
             int i = s.indexOf('/');
-            if (i == -1)
-                  qFatal("illegal fraction <%s>", qPrintable(s));
+            if (i == -1) {
+                  qDebug("reading ticks <%s>", qPrintable(s));
+                  return Fraction::fromTicks(s.toInt());
+                  }
             else {
                   z = s.left(i).toInt();
                   n = s.mid(i+1).toInt();
@@ -214,28 +216,6 @@ void XmlReader::unknown()
       else
             qDebug("line %lld col %lld: %s", lineNumber(), columnNumber(), name().toUtf8().data());
       skipCurrentElement();
-      }
-
-//---------------------------------------------------------
-//   rfrac
-//    return relative position in measure
-//---------------------------------------------------------
-
-Fraction XmlReader::rfrac() const
-      {
-      if (_currMeasure)
-            return Fraction::fromTicks(tick() - _currMeasure->tick());
-      return afrac();
-      }
-
-//---------------------------------------------------------
-//   afrac
-//    return absolute position
-//---------------------------------------------------------
-
-Fraction XmlReader::afrac() const
-      {
-      return Fraction::fromTicks(tick());
       }
 
 //---------------------------------------------------------
@@ -265,7 +245,7 @@ void XmlReader::fillLocation(Location& l, bool forceAbsFrac) const
       if (l.track() == defaults.track())
             l.setTrack(track());
       if (l.frac() == defaults.frac())
-            l.setFrac(absFrac ? afrac() : rfrac());
+            l.setFrac(absFrac ? tick() : rtick());
       if (l.measure() == defaults.measure())
             l.setMeasure(absFrac ? 0 : currentMeasureIndex());
       }
@@ -285,12 +265,11 @@ void XmlReader::setLocation(const Location& l)
             return;
             }
       setTrack(l.track() - _trackOffset);
-      int tick = l.frac().ticks() - _tickOffset;
+      setTick(l.frac() - _tickOffset);
       if (!pasteMode()) {
             Q_ASSERT(l.measure() == currentMeasureIndex());
-            tick += currentMeasure()->tick();
+            incTick(currentMeasure()->tick());
             }
-      initTick(tick);
       }
 
 //---------------------------------------------------------
@@ -740,6 +719,35 @@ int LinksIndexer::assignLocalIndex(const Location& mainElementLocation)
       _lastLocalIndex = 0;
       _lastLinkedElementLoc = mainElementLocation;
       return 0;
+      }
+
+//---------------------------------------------------------
+//   rtick
+//    return relative position in measure
+//---------------------------------------------------------
+
+Fraction XmlReader::rtick() const
+      {
+      return _curMeasure ? _tick - _curMeasure->tick() : _tick;
+      }
+
+//---------------------------------------------------------
+//   setTick
+//---------------------------------------------------------
+
+void XmlReader::setTick(const Fraction& f)
+      {
+      _tick = f.reduced();
+      }
+
+//---------------------------------------------------------
+//   incTick
+//---------------------------------------------------------
+
+void XmlReader::incTick(const Fraction& f)
+      {
+      _tick += f;
+      _tick.reduce();
       }
 }
 

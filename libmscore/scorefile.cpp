@@ -279,7 +279,7 @@ void Score::readStaff(XmlReader& e)
       int staff = e.intAttribute("id", 1) - 1;
       int measureIdx = 0;
       e.setCurrentMeasureIndex(0);
-      e.initTick(0);
+      e.setTick(Fraction(0,1));
       e.setTrack(staff * VOICES);
 
       if (staff == 0) {
@@ -296,7 +296,7 @@ void Score::readStaff(XmlReader& e)
                         //
                         Measure* m = e.lastMeasure(); // measure->prevMeasure();
                         Fraction f(m ? m->timesig() : Fraction(4,4));
-                        measure->setLen(f);
+                        measure->setTicks(f);
                         measure->setTimesig(f);
 
                         measure->read(e, staff);
@@ -304,7 +304,7 @@ void Score::readStaff(XmlReader& e)
                         if (!measure->isMMRest()) {
                               measures()->add(measure);
                               e.setLastMeasure(measure);
-                              e.initTick(measure->tick() + measure->ticks());
+                              e.setTick(measure->tick() + measure->ticks());
                               }
                         else {
                               // this is a multi measure rest
@@ -324,7 +324,7 @@ void Score::readStaff(XmlReader& e)
                         measures()->add(mb);
                         }
                   else if (tag == "tick")
-                        e.initTick(fileDivision(e.readInt()));
+                        e.setTick(Fraction::fromTicks(fileDivision(e.readInt())));
                   else
                         e.unknown();
                   }
@@ -341,7 +341,7 @@ void Score::readStaff(XmlReader& e)
                               measure->setTick(e.tick());
                               measures()->add(measure);
                               }
-                        e.initTick(measure->tick());
+                        e.setTick(measure->tick());
                         e.setCurrentMeasureIndex(measureIdx++);
                         measure->read(e, staff);
                         measure->checkMeasure(staff);
@@ -356,7 +356,7 @@ void Score::readStaff(XmlReader& e)
                               }
                         }
                   else if (tag == "tick")
-                        e.initTick(fileDivision(e.readInt()));
+                        e.setTick(Fraction::fromTicks(fileDivision(e.readInt())));
                   else
                         e.unknown();
                   }
@@ -1082,7 +1082,7 @@ qDebug("createRevision");
 //    Returns true if <voice> tag was written.
 //---------------------------------------------------------
 
-static bool writeVoiceMove(XmlWriter& xml, Segment* seg, int startTick, int track, int* lastTrackWrittenPtr)
+static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTick, int track, int* lastTrackWrittenPtr)
       {
       bool voiceTagWritten = false;
       int& lastTrackWritten = *lastTrackWrittenPtr;
@@ -1098,11 +1098,11 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, int startTick, int trac
             voiceTagWritten = true;
             }
 
-      if ((xml.afrac() != seg->afrac()) || (track != xml.curTrack())) {
+      if ((xml.curTick() != seg->tick()) || (track != xml.curTrack())) {
             Location curr = Location::absolute();
             Location dest = Location::absolute();
-            curr.setFrac(xml.afrac());
-            dest.setFrac(seg->afrac());
+            curr.setFrac(xml.curTick());
+            dest.setFrac(seg->tick());
             curr.setTrack(xml.curTrack());
             dest.setTrack(track);
 
@@ -1125,9 +1125,10 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, int startTick, int trac
 void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
    Segment* fs, Segment* ls, bool writeSystemElements, bool forceTimeSig)
       {
-      const int startTick = xml.curTick();
-      const int endTick = ls ? ls->tick() : lastMeasure()->endTick();
-      const bool clip = xml.clipboardmode();
+      Fraction startTick = xml.curTick();
+      Fraction endTick   = ls ? ls->tick() : lastMeasure()->endTick();
+      bool clip          = xml.clipboardmode();
+
       // in clipboard mode, ls might be in an mmrest
       // since we are traversing regular measures,
       // force them out of mmRest
@@ -1154,7 +1155,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
       for (auto i = spanner().begin(); i != endIt; ++i) {
             Spanner* s = i->second;
 #else
-      auto sl = spannerMap().findOverlapping(fs->tick(), endTick);
+      auto sl = spannerMap().findOverlapping(fs->tick().ticks(), endTick.ticks());
       for (auto i : sl) {
             Spanner* s = i.value;
 #endif
@@ -1324,54 +1325,6 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
 
 Tuplet* Score::searchTuplet(XmlReader& /*e*/, int /*id*/)
       {
-#if 0 // TODOx
-      QDomElement e = de;
-      QDomDocument doc = e.ownerDocument();
-
-      QString tag;
-      for (e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            tag = e.tagName();
-            if (tag == "museScore")
-                  break;
-            }
-      if (tag != "museScore") {
-            qDebug("Score::searchTuplet():  no museScore found");
-            return 0;
-            }
-
-      for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
-            tag = e.tagName();
-            if (tag == "Score" || tag == "Part")
-                  break;
-            }
-      if (tag != "Score" && tag != "Part") {
-            qDebug("Score::searchTuplet():  no Score/Part found");
-            return 0;
-            }
-      if (tag == "Score")
-            e = e.firstChildElement();
-      else
-            e = e.nextSiblingElement();
-      for (; !e.isNull(); e = e.nextSiblingElement()) {
-            if (e.tagName() == "Staff") {
-                  for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                        if (ee.tagName() == "Measure") {
-                              for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                                    if (eee.tagName() == "Tuplet") {
-                                          Tuplet* tuplet = new Tuplet(this);
-                                          QList<Spanner*> spannerList;
-                                          QList<Tuplet*> tuplets;
-                                          tuplet->read(eee);
-                                          if (tuplet->id() == id)
-                                                return tuplet;
-                                          delete tuplet;
-                                          }
-                                    }
-                              }
-                        }
-                  }
-            }
-#endif
       return 0;
       }
 

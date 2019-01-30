@@ -75,21 +75,21 @@ Beam::Mode Groups::endBeam(ChordRest* cr, ChordRest* prev)
       TDuration d      = cr->durationType();
       const Groups& g  = cr->staff()->group(cr->tick());
       Fraction stretch = cr->staff()->timeStretch(cr->tick());
-      int tick         = (cr->rtick() * stretch.numerator()) / stretch.denominator();
+      Fraction tick    = cr->rtick() * stretch;
 
-      Beam::Mode val = g.beamMode(tick, d.type());
+      Beam::Mode val = g.beamMode(tick.ticks(), d.type());
 
       // context-dependent checks
-      if (val == Beam::Mode::AUTO && tick) {
+      if (val == Beam::Mode::AUTO && tick.isNotZero()) {
             // if current or previous cr is in tuplet (but not both in same tuplet):
             // consider it as if this were next shorter duration
             if (prev && (cr->tuplet() != prev->tuplet()) && (d == prev->durationType())) {
                   if (d >= TDuration::DurationType::V_EIGHTH)
-                        val = g.beamMode(tick, TDuration::DurationType::V_16TH);
+                        val = g.beamMode(tick.ticks(), TDuration::DurationType::V_16TH);
                   else if (d == TDuration::DurationType::V_16TH)
-                        val = g.beamMode(tick, TDuration::DurationType::V_32ND);
+                        val = g.beamMode(tick.ticks(), TDuration::DurationType::V_32ND);
                   else
-                        val = g.beamMode(tick, TDuration::DurationType::V_64TH);
+                        val = g.beamMode(tick.ticks(), TDuration::DurationType::V_64TH);
                   }
             // if there is a hole between previous and current cr, break beam
             // exclude tuplets from this check; tick calculations can be unreliable

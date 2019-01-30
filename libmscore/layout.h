@@ -29,7 +29,7 @@ struct LayoutContext {
       bool firstSystem         { true };
       Page* page               { 0 };
       int curPage              { 0 };      // index in Score->page()s
-      int tick                 { 0 };
+      Fraction tick            { 0, 1 };
       Fraction sig;
 
       QList<System*> systemList;          // reusable systems
@@ -45,7 +45,7 @@ struct LayoutContext {
       MeasureBase* curMeasure  { 0 };
       MeasureBase* nextMeasure { 0 };
       int measureNo            { 0 };
-      int endTick;
+      Fraction endTick;
 
       LayoutContext() = default;
       LayoutContext(const LayoutContext&) = delete;

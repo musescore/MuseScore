@@ -43,7 +43,7 @@ namespace Ms {
 //   EditStaff
 //---------------------------------------------------------
 
-EditStaff::EditStaff(Staff* s, int /*tick*/, QWidget* parent)
+EditStaff::EditStaff(Staff* s, const Fraction& /*tick*/, QWidget* parent)
    : QDialog(parent)
       {
       setObjectName("EditStaff");
@@ -90,8 +90,8 @@ void EditStaff::setStaff(Staff* s)
       instrument        = *part->instrument(/*tick*/);
       Score* score      = part->score();
       staff             = new Staff(score);
-      staff->setStaffType(0, *orgStaff->staffType(0));
-      staff->setSmall(0, orgStaff->small(0));
+      staff->setStaffType(Fraction(0,1), *orgStaff->staffType(Fraction(0,1)));
+      staff->setSmall(Fraction(0,1), orgStaff->small(Fraction(0,1)));
       staff->setInvisible(orgStaff->invisible());
       staff->setUserDist(orgStaff->userDist());
       staff->setColor(orgStaff->color());
@@ -99,17 +99,17 @@ void EditStaff::setStaff(Staff* s)
       staff->setCutaway(orgStaff->cutaway());
       staff->setHideWhenEmpty(orgStaff->hideWhenEmpty());
       staff->setShowIfEmpty(orgStaff->showIfEmpty());
-      staff->setUserMag(0, orgStaff->userMag(0));
+      staff->setUserMag(Fraction(0,1), orgStaff->userMag(Fraction(0,1)));
       staff->setHideSystemBarLine(orgStaff->hideSystemBarLine());
 
       // get tick range for instrument
       auto i = part->instruments()->upper_bound(0);   // tick
       if (i == part->instruments()->end())
-            _tickEnd = -1;
+            _tickEnd = Fraction(-1,1);
       else
-            _tickEnd = i->first;
+            _tickEnd = Fraction::fromTicks(i->first);
 #if 1
-      _tickStart = -1;
+      _tickStart = Fraction(-1,1);
 #else
       --i;
       if (i == part->instruments()->begin())
@@ -121,14 +121,14 @@ void EditStaff::setStaff(Staff* s)
       // set dlg controls
       spinExtraDistance->setValue(s->userDist() / score->spatium());
       invisible->setChecked(staff->invisible());
-      small->setChecked(staff->small(0));
+      small->setChecked(staff->small(Fraction(0,1)));
       color->setColor(s->color());
       partName->setText(part->partName());
       cutaway->setChecked(staff->cutaway());
       hideMode->setCurrentIndex(int(staff->hideWhenEmpty()));
       showIfEmpty->setChecked(staff->showIfEmpty());
       hideSystemBarLine->setChecked(staff->hideSystemBarLine());
-      mag->setValue(staff->userMag(0) * 100.0);
+      mag->setValue(staff->userMag(Fraction(0,1)) * 100.0);
       updateStaffType();
       updateInstrument();
       updateNextPreviousButtons();
@@ -150,7 +150,7 @@ void EditStaff::hideEvent(QHideEvent* ev)
 
 void EditStaff::updateStaffType()
       {
-      const StaffType* staffType = staff->staffType(0);
+      const StaffType* staffType = staff->staffType(Fraction(0,1));
       lines->setValue(staffType->lines());
       lineDistance->setValue(staffType->lineDistance().val());
       showClef->setChecked(staffType->genClef());
@@ -374,9 +374,9 @@ void EditStaff::apply()
             score->undo(new ChangeStaff(orgStaff, inv, clefType, userDist * score->spatium(), hideEmpty, ifEmpty, cutAway, hideSystemBL));
             }
 
-      if ( !(*orgStaff->staffType(0) == *staff->staffType(0)) ) {
+      if ( !(*orgStaff->staffType(Fraction(0,1)) == *staff->staffType(Fraction(0,1))) ) {
             // updateNeeded |= (orgStaff->staffGroup() == StaffGroup::TAB || staff->staffGroup() == StaffGroup::TAB);
-            score->undo(new ChangeStaffType(orgStaff, *staff->staffType(0)));
+            score->undo(new ChangeStaffType(orgStaff, *staff->staffType(Fraction(0,1))));
             }
 
       score->update();
@@ -437,27 +437,31 @@ void EditStaff::maxPitchPClicked()
 
 void EditStaff::lineDistanceChanged()
       {
-      staff->staffType(0)->setLineDistance(Spatium(lineDistance->value()));
+      staff->staffType(Fraction(0,1))->setLineDistance(Spatium(lineDistance->value()));
       }
+
+//---------------------------------------------------------
+//   numOfLinesChanged
+//---------------------------------------------------------
 
 void EditStaff::numOfLinesChanged()
       {
-      staff->staffType(0)->setLines(lines->value());
+      staff->staffType(Fraction(0,1))->setLines(lines->value());
       }
 
 void EditStaff::showClefChanged()
       {
-      staff->staffType(0)->setGenClef(showClef->checkState() == Qt::Checked);
+      staff->staffType(Fraction(0,1))->setGenClef(showClef->checkState() == Qt::Checked);
       }
 
 void EditStaff::showTimeSigChanged()
       {
-      staff->staffType(0)->setGenTimesig(showTimesig->checkState() == Qt::Checked);
+      staff->staffType(Fraction(0,1))->setGenTimesig(showTimesig->checkState() == Qt::Checked);
       }
 
 void EditStaff::showBarlinesChanged()
       {
-      staff->staffType(0)->setShowBarlines(showBarlines->checkState() == Qt::Checked);
+      staff->staffType(Fraction(0,1))->setShowBarlines(showBarlines->checkState() == Qt::Checked);
       }
 
 //---------------------------------------------------------
@@ -560,7 +564,7 @@ void EditStaff::showStaffTypeDialog()
       EditStaffType editor(this, staff);
       editor.setWindowModality(Qt::WindowModal);
       if (editor.exec()) {
-            staff->setStaffType(0, *editor.getStaffType());
+            staff->setStaffType(Fraction(0,1), *editor.getStaffType());
             updateStaffType();
             }
       }

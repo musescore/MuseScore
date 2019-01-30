@@ -321,7 +321,7 @@ void PianorollEditor::focusOnPosition(Position* p)
             return;
 
       //Move view so that view is centered on this element
-      pianoView->ensureVisible(p->segment->tick());
+      pianoView->ensureVisible(p->segment->tick().ticks());
       }
 
 //---------------------------------------------------------
@@ -345,9 +345,9 @@ void PianorollEditor::setStaff(Staff* st)
             _score = st ? st->score() : nullptr;
             if (_score) {
                   _score->addViewer(this);
-                  setLocator(POS::CURRENT, _score->pos(POS::CURRENT));
-                  setLocator(POS::LEFT,    _score->pos(POS::LEFT));
-                  setLocator(POS::RIGHT,   _score->pos(POS::RIGHT));
+                  setLocator(POS::CURRENT, _score->pos(POS::CURRENT).ticks());
+                  setLocator(POS::LEFT,    _score->pos(POS::LEFT).ticks());
+                  setLocator(POS::RIGHT,   _score->pos(POS::RIGHT).ticks());
                   connect(_score, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
                   connect(_score, SIGNAL(playlistChanged()), SLOT(playlistChanged()));
                   }
@@ -501,7 +501,7 @@ void PianorollEditor::veloTypeChanged(int val)
             return;
 
       int newVelocity = note->veloOffset();
-      int dynamicsVel = staff->velocities().velo(note->tick());
+      int dynamicsVel = staff->velocities().velo(note->tick().ticks());
 
       //Change velocity to equivilent in new metric
       switch (Note::ValueType(val)) {
@@ -614,7 +614,7 @@ void PianorollEditor::heartBeat(Seq* s)
 void PianorollEditor::moveLocator(int i, const Pos& p)
       {
       if (locator[i].valid())
-            score()->setPos(POS(i), p.tick());
+            score()->setPos(POS(i), Fraction::fromTicks(p.tick()));
       }
 
 //---------------------------------------------------------

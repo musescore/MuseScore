@@ -35,7 +35,7 @@ class LinkedElements;
 
 struct SpannerValues {
       int spannerId;
-      int tick2;
+      Fraction tick2;
       int track2;
       };
 
@@ -72,14 +72,14 @@ class XmlReader : public QXmlStreamReader {
       QIODevice* _readAheadDevice = nullptr;
 
       // Score read context (for read optimizations):
-      int _tick             { 0       };
-      int _tickOffset       { 0       };
+      Fraction _tick             { Fraction(0, 1) };
+      Fraction _tickOffset       { Fraction(0, 1) };
       int _track            { 0       };
       int _trackOffset      { 0       };
       bool _pasteMode       { false   };        // modifies read behaviour on paste operation
       Measure* _lastMeasure { 0       };
-      Measure* _currMeasure { 0       };
-      int _currMeasureIdx   { 0       };
+      Measure* _curMeasure  { 0       };
+      int _curMeasureIdx    { 0       };
       QHash<int, Beam*>    _beams;
       QHash<int, Tuplet*>  _tuplets;
 
@@ -143,12 +143,12 @@ class XmlReader : public QXmlStreamReader {
       void setDocName(const QString& s) { docName = s; }
       QString getDocName() const        { return docName; }
 
-      int tick()  const            { return _tick + _tickOffset;  }
-      void initTick(int val)       { _tick = val;       }
-      void incTick(int val)        { _tick += val;      }
-      void setTickOffset(int val)  { _tickOffset = val; }
-      Fraction rfrac() const;
-      Fraction afrac() const;
+      Fraction tick()  const            { return _tick + _tickOffset; }
+      Fraction rtick()  const ;
+      void setTick(const Fraction& f);
+      void incTick(const Fraction& f);
+      void setTickOffset(const Fraction& val) { _tickOffset = val; }
+
       int track() const            { return _track + _trackOffset;     }
       void setTrackOffset(int val) { _trackOffset = val;   }
       int trackOffset() const      { return _trackOffset;   }
@@ -162,18 +162,18 @@ class XmlReader : public QXmlStreamReader {
                                          // account its type (absolute or relative).
 
       void addBeam(Beam* s);
-      Beam* findBeam(int id) const { return _beams.value(id);   }
+      Beam* findBeam(int id) const          { return _beams.value(id);   }
 
       void addTuplet(Tuplet* s);
-      Tuplet* findTuplet(int id) const { return _tuplets.value(id); }
-      QHash<int, Tuplet*>& tuplets()   { return _tuplets; }
+      Tuplet* findTuplet(int id) const      { return _tuplets.value(id); }
+      QHash<int, Tuplet*>& tuplets()        { return _tuplets; }
 
-      void setLastMeasure(Measure* m) { _lastMeasure = m;    }
-      Measure* lastMeasure() const    { return _lastMeasure; }
-      void setCurrentMeasure(Measure* m) { _currMeasure = m; }
-      Measure* currentMeasure() const { return _currMeasure; }
-      void setCurrentMeasureIndex(int idx)  { _currMeasureIdx = idx;  }
-      int currentMeasureIndex() const       { return _currMeasureIdx; }
+      void setLastMeasure(Measure* m)       { _lastMeasure = m;    }
+      Measure* lastMeasure() const          { return _lastMeasure; }
+      void setCurrentMeasure(Measure* m)    { _curMeasure = m; }
+      Measure* currentMeasure() const       { return _curMeasure; }
+      void setCurrentMeasureIndex(int idx)  { _curMeasureIdx = idx;  }
+      int currentMeasureIndex() const       { return _curMeasureIdx; }
 
       void removeSpanner(const Spanner*);
       void addSpanner(int id, Spanner*);
@@ -221,16 +221,16 @@ class XmlWriter : public QTextStream {
       QList<QString> stack;
       SelectionFilter _filter;
 
-      int _curTick        = { 0 };       // used to optimize output
-      int _curTrack       = { -1 };
-      int _tickDiff       = { 0 };
-      int _trackDiff      = { 0 };       // saved track is curTrack-trackDiff
+      Fraction _curTick    { 0, 1 };     // used to optimize output
+      Fraction _tickDiff   { 0, 1 };
+      int _curTrack        { -1 };
+      int _trackDiff       { 0 };       // saved track is curTrack-trackDiff
 
-      bool _clipboardmode = { false };   // used to modify write() behaviour
-      bool _excerptmode   = { false };   // true when writing a part
-      bool _writeOmr      = { true };    // false if writing into *.msc file
-      bool _writeTrack    = { false };
-      bool _writePosition = { false };
+      bool _clipboardmode  { false };   // used to modify write() behaviour
+      bool _excerptmode    { false };   // true when writing a part
+      bool _writeOmr       { true };    // false if writing into *.msc file
+      bool _writeTrack     { false };
+      bool _writePosition  { false };
 
       LinksIndexer _linksIndexer;
       QMap<int, int> _lidLocalIndices;
@@ -244,29 +244,30 @@ class XmlWriter : public QTextStream {
       XmlWriter(Score*);
       XmlWriter(Score* s, QIODevice* dev);
 
-      int curTick() const           { return _curTick; }
-      Fraction afrac() const        { return Fraction::fromTicks(_curTick); }
-      int curTrack() const          { return _curTrack; }
-      int tickDiff() const          { return _tickDiff; }
-      int trackDiff() const         { return _trackDiff; }
+      Fraction curTick() const            { return _curTick; }
+      void setCurTick(const Fraction& v)  { _curTick   = v; }
+      void incCurTick(const Fraction& v)  { _curTick += v; }
 
-      bool clipboardmode() const    { return _clipboardmode; }
-      bool excerptmode() const      { return _excerptmode;   }
-      bool writeOmr() const         { return _writeOmr;   }
-      bool writeTrack() const       { return _writeTrack;    }
-      bool writePosition() const    { return _writePosition; }
+      int curTrack() const                { return _curTrack; }
+      void setCurTrack(int v)             { _curTrack  = v; }
 
-      void setClipboardmode(bool v) { _clipboardmode = v; }
-      void setExcerptmode(bool v)   { _excerptmode = v;   }
-      void setWriteOmr(bool v)      { _writeOmr = v;      }
-      void setWriteTrack(bool v)    { _writeTrack= v;     }
-      void setWritePosition(bool v) { _writePosition = v; }
-      void setCurTick(int v)        { _curTick   = v; }
-      void setCurTrack(int v)       { _curTrack  = v; }
-      void setTickDiff(int v)       { _tickDiff  = v; }
-      void setTrackDiff(int v)      { _trackDiff = v; }
+      Fraction tickDiff() const           { return _tickDiff; }
+      void setTickDiff(const Fraction& v) { _tickDiff  = v; }
 
-      void incCurTick(int v)        { _curTick += v; }
+      int trackDiff() const               { return _trackDiff; }
+      void setTrackDiff(int v)            { _trackDiff = v; }
+
+      bool clipboardmode() const          { return _clipboardmode; }
+      bool excerptmode() const            { return _excerptmode;   }
+      bool writeOmr() const               { return _writeOmr;   }
+      bool writeTrack() const             { return _writeTrack;    }
+      bool writePosition() const          { return _writePosition; }
+
+      void setClipboardmode(bool v)       { _clipboardmode = v; }
+      void setExcerptmode(bool v)         { _excerptmode = v;   }
+      void setWriteOmr(bool v)            { _writeOmr = v;      }
+      void setWriteTrack(bool v)          { _writeTrack= v;     }
+      void setWritePosition(bool v)       { _writePosition = v; }
 
       int assignLocalIndex(const Location& mainElementLocation);
       void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }

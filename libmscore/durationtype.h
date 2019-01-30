@@ -53,7 +53,7 @@ class TDuration {
       void setType(DurationType t);
       void setType(const QString&);
 
-      int ticks() const;
+      Fraction ticks() const;
       bool operator==(const TDuration& t) const    { return t._val == _val && t._dots == _dots; }
       bool operator==(const DurationType& t) const { return t == _val; }
       bool operator!=(const TDuration& t) const    { return t._val != _val || t._dots != _dots; }
@@ -71,7 +71,12 @@ class TDuration {
       int hooks() const;
       bool hasStem() const;
       TDuration shift(int nSteps) const                              { TDuration d(type()); d.shiftType(nSteps); return d; } // dots are not retained
-      TDuration shiftRetainDots(int nSteps, bool stepDotted = false) { TDuration d(type()); d.setDots(_dots); d.shiftType(nSteps, stepDotted); return d; }
+      TDuration shiftRetainDots(int nSteps, bool stepDotted = false) {
+            TDuration d(type());
+            d.setDots(_dots);
+            d.shiftType(nSteps, stepDotted);
+            return d;
+            }
       int dots() const    { return _dots; }
       void setDots(int v);
       Fraction fraction() const;
@@ -80,14 +85,14 @@ class TDuration {
       };
 
 std::vector<TDuration> toDurationList(Fraction l, bool useDots, int maxDots = 4, bool printRestRemains = true);
-std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, Measure* msr, int maxDots);
+std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, Fraction rtickStart, const TimeSigFrac& nominal, Measure* msr, int maxDots);
 
 bool forceRhythmicSplit(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed, BeatType strongestBeatCrossed, const TimeSigFrac& nominal);
 bool forceRhythmicSplitSimple(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed, BeatType strongestBeatCrossed);
 bool forceRhythmicSplitCompound(bool isRest, BeatType startBeat, BeatType endBeat, int beatsCrossed, BeatType strongestBeatCrossed);
 
-void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots);
-void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, int rtickStart, const TimeSigFrac& nominal, int maxDots);
+void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, const Fraction& rtickStart, const TimeSigFrac& nominal, int maxDots);
+void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l, bool isRest, const Fraction& rtickStart, const TimeSigFrac& nominal, int maxDots);
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::TDuration);

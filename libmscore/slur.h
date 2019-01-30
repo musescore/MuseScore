@@ -25,7 +25,7 @@ namespace Ms {
 class SlurSegment final : public SlurTieSegment {
 
    protected:
-      virtual void changeAnchor(EditData&, Element*);
+      virtual void changeAnchor(EditData&, Element*) override;
 
    public:
       SlurSegment(Score* s) : SlurTieSegment(s) {}
@@ -43,7 +43,7 @@ class SlurSegment final : public SlurTieSegment {
       virtual bool edit(EditData&) override;
       virtual void updateGrips(EditData&) const override;
 
-      Slur* slur() const { return (Slur*)spanner(); }
+      Slur* slur() const { return toSlur(spanner()); }
 
       virtual void computeBezier(QPointF so = QPointF());
       };

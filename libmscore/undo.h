@@ -428,7 +428,7 @@ class ExchangeVoice : public UndoCommand {
 
 class CloneVoice : public UndoCommand {
       Segment* sf;
-      int lTick;
+      Fraction lTick;
       Segment* d;             //Destination
       int strack, dtrack;
       int otrack;
@@ -436,7 +436,7 @@ class CloneVoice : public UndoCommand {
       bool first = true;      //first redo
 
    public:
-      CloneVoice(Segment* sf, int lTick, Segment* d, int strack, int dtrack, int otrack, bool linked = true);
+      CloneVoice(Segment* sf, const Fraction& lTick, Segment* d, int strack, int dtrack, int otrack, bool linked = true);
       virtual void undo(EditData*) override;
       virtual void redo(EditData*) override;
       UNDO_NAME("CloneVoice")
@@ -448,12 +448,12 @@ class CloneVoice : public UndoCommand {
 
 class ChangeInstrumentShort : public UndoCommand {
       Part* part;
-      int tick;
+      Fraction tick;
       QList<StaffName> text;
       void flip(EditData*) override;
 
    public:
-      ChangeInstrumentShort(int, Part*, QList<StaffName>);
+      ChangeInstrumentShort(const Fraction&, Part*, QList<StaffName>);
       UNDO_NAME("ChangeInstrumentShort")
       };
 
@@ -463,13 +463,13 @@ class ChangeInstrumentShort : public UndoCommand {
 
 class ChangeInstrumentLong : public UndoCommand {
       Part* part;
-      int tick;
+      Fraction tick;
       QList<StaffName> text;
       void flip(EditData*) override;
 
    public:
       const QList<StaffName>& longNames() const;
-      ChangeInstrumentLong(int, Part*, QList<StaffName>);
+      ChangeInstrumentLong(const Fraction&, Part*, QList<StaffName>);
       UNDO_NAME("ChangeInstrumentLong")
       };
 
@@ -1135,14 +1135,14 @@ class ChangeMMRest : public UndoCommand {
 
 class InsertTime : public UndoCommand {
       Score* score;
-      int tick;
-      int len;
+      Fraction tick;
+      Fraction len;
 
       void redo(EditData*) override;
       void undo(EditData*) override;
 
    public:
-      InsertTime(Score* _score, int _tick, int _len)
+      InsertTime(Score* _score, const Fraction& _tick, const Fraction& _len)
          : score(_score), tick(_tick), len(_len) {}
       UNDO_NAME("InsertTime")
       };
@@ -1153,13 +1153,13 @@ class InsertTime : public UndoCommand {
 
 class InsertTimeUnmanagedSpanner : public UndoCommand {
       Score* score;
-      int tick;
-      int len;
+      Fraction tick;
+      Fraction len;
 
       void flip(EditData*) override;
 
    public:
-      InsertTimeUnmanagedSpanner(Score* s, int _tick, int _len)
+      InsertTimeUnmanagedSpanner(Score* s, const Fraction& _tick, const Fraction& _len)
          : score(s), tick(_tick), len(_len) {}
       UNDO_NAME("InsertTimeUnmanagedSpanner")
       };

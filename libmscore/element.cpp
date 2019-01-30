@@ -246,6 +246,16 @@ Staff* Element::staff() const
       }
 
 //---------------------------------------------------------
+//   staffType
+//---------------------------------------------------------
+
+StaffType* Element::staffType() const
+      {
+      Staff* s = staff();
+      return s ? s->staffType(tick()) : 0;
+      }
+
+//---------------------------------------------------------
 //   z
 //---------------------------------------------------------
 
@@ -254,6 +264,36 @@ int Element::z() const
       if (_z == -1)
             _z = int(type()) * 100;
       return _z;
+      }
+
+//---------------------------------------------------------
+//   tick
+//---------------------------------------------------------
+
+Fraction Element::tick() const
+      {
+      const Element* e = this;
+      while (e->parent()) {
+            if (e->parent()->isSegment())
+                  return toSegment(e->parent())->tick();
+            e = e->parent();
+            }
+      return Fraction(0, 1);
+      }
+
+//---------------------------------------------------------
+//   rtick
+//---------------------------------------------------------
+
+Fraction Element::rtick() const
+      {
+      const Element* e = this;
+      while (e->parent()) {
+            if (e->parent()->isSegment())
+                  return toSegment(e->parent())->rtick();
+            e = e->parent();
+            }
+      return Fraction(0, 1);
       }
 
 //---------------------------------------------------------
@@ -510,7 +550,7 @@ void Element::writeProperties(XmlWriter& xml) const
             xml.tag("track", t);
             }
       if (xml.writePosition())
-            xml.tag(Pid::POSITION, rfrac());
+            xml.tag(Pid::POSITION, rtick());
       if (_tag != 0x1) {
             for (int i = 1; i < MAX_TAGS; i++) {
                   if (_tag == ((unsigned)1 << i)) {
@@ -634,7 +674,7 @@ bool Element::readProperties(XmlReader& e)
       else if (tag == "tick") {
             int val = e.readInt();
             if (val >= 0)
-                  e.initTick(score()->fileDivision(val));
+                  e.setTick(Fraction::fromTicks(score()->fileDivision(val)));       // obsolete
             }
       else if (tag == "pos")             // obsolete
             readProperty(e, Pid::OFFSET);
@@ -843,7 +883,7 @@ QByteArray Element::mimeData(const QPointF& dragOffset) const
       xml.setClipboardmode(true);
       xml.stag("Element");
       if (isNote())
-            xml.tag("duration", toNote(this)->chord()->duration());
+            xml.tag("duration", toNote(this)->chord()->ticks());
       if (!dragOffset.isNull())
             xml.tag("dragOffset", dragOffset);
       write(xml);
@@ -1067,7 +1107,7 @@ QVariant Element::getProperty(Pid propertyId) const
             case Pid::VOICE:
                   return voice();
             case Pid::POSITION:
-                  return rfrac();
+                  return rtick();
             case Pid::GENERATED:
                   return generated();
             case Pid::COLOR:
@@ -1668,67 +1708,6 @@ bool Element::isUserModified() const
                   }
             }
       return !visible() || !offset().isNull() || (color() != MScore::defaultColor);
-      }
-
-//---------------------------------------------------------
-//   tick
-//    utility, searches for segment / segment parent
-//---------------------------------------------------------
-
-int Element::tick() const
-      {
-      const Element* e = this;
-      while (e) {
-            if (e->isSegment())
-                  return toSegment(e)->tick();
-            else if (e->isMeasureBase())
-                  return toMeasureBase(e)->tick();
-            e = e->parent();
-            }
-      return -1;
-      }
-
-//---------------------------------------------------------
-//   rtick
-//    utility, searches for segment / segment parent
-//---------------------------------------------------------
-
-int Element::rtick() const
-      {
-      const Element* e = this;
-      while (e) {
-            if (e->isSegment())
-                  return toSegment(e)->rtick();
-            e = e->parent();
-            }
-      return -1;
-      }
-
-//---------------------------------------------------------
-//   rfrac
-//    Position of element in fractions relative to a
-//    measure start.
-//---------------------------------------------------------
-
-Fraction Element::rfrac() const
-      {
-      if (parent())
-            return parent()->rfrac();
-      else
-            return -1;
-      }
-
-//---------------------------------------------------------
-//   afrac
-//    Absolute position of element in fractions.
-//---------------------------------------------------------
-
-Fraction Element::afrac() const
-      {
-      if (parent())
-            return parent()->afrac();
-      else
-            return -1;
       }
 
 //---------------------------------------------------------

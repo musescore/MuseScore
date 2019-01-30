@@ -375,7 +375,7 @@ void TestMeasure::gap()
       //Select and delete third quarter rest in first Measure (voice 2)
       score->startCmd();
       Measure* m  = score->firstMeasure();
-      Segment* s  = m->undoGetSegment(SegmentType::ChordRest, 960);
+      Segment* s  = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(960));
       Element* el = s->element(1);
       score->select(el);
       score->cmdDeleteSelection();
@@ -389,7 +389,7 @@ void TestMeasure::gap()
       //Select and delete second quarter rest in third Measure (voice 4)
       score->startCmd();
       m  = m->nextMeasure()->nextMeasure();
-      s  = m->undoGetSegment(SegmentType::ChordRest, 4320);
+      s  = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(4320));
       el = s->element(3);
       score->select(el);
       score->cmdDeleteSelection();
@@ -402,7 +402,7 @@ void TestMeasure::gap()
 
       //Select and delete first quarter rest in third Measure (voice 4)
       score->startCmd();
-      s  = m->undoGetSegment(SegmentType::ChordRest, 3840);
+      s  = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(3840));
       el = s->element(3);
       score->select(el);
       score->cmdDeleteSelection();
@@ -411,7 +411,10 @@ void TestMeasure::gap()
       tst = s->element(3);
       Q_ASSERT(tst);
 
-      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 960/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
+      QVERIFY(tst->isRest() && toRest(tst)->isGap()
+         && toRest(tst)->actualTicks() == Fraction::fromTicks(960)
+         /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
+         );
 
 
       delete score;
@@ -430,31 +433,37 @@ void TestMeasure::checkMeasure()
       Element* tst       = 0;
       Measure* m         = score->firstMeasure()->nextMeasure();
 
-      Segment* s = m->undoGetSegment(SegmentType::ChordRest, 2880);
+      Segment* s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(2880));
       tst = s->element(1);
       Q_ASSERT(tst);
 
-      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 480/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
+      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == Fraction::fromTicks(480)
+         /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
+         );
 
       m = m->nextMeasure();
-//      s = m->undoGetSegment(SegmentType::ChordRest, 3840);
+//      s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(3840));
 //      tst = s->element(2);
 //      Q_ASSERT(tst);
 
 //      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 480/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
 
       m = m->nextMeasure();
-      s = m->undoGetSegment(SegmentType::ChordRest, 6240);
+      s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(6240));
       tst = s->element(1);
       Q_ASSERT(tst);
 
-      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 120/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
+      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == Fraction::fromTicks(120)
+         /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
+         );
 
-      s = m->undoGetSegment(SegmentType::ChordRest, 6480);
+      s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(6480));
       tst = s->element(1);
       Q_ASSERT(tst);
 
-      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 120/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
+      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == Fraction::fromTicks(120)
+         /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
+         );
 
       delete score;
       }
@@ -481,7 +490,7 @@ void TestMeasure::undoDelInitialVBox_269919()
       // 2. change duration of first chordrest
       score->startCmd();
       Measure* m = score->firstMeasure();
-      ChordRest* cr = m->findChordRest(0, 0);
+      ChordRest* cr = m->findChordRest(Fraction(0,1), 0);
       Fraction quarter(4, 1);
       score->changeCRlen(cr, quarter);
       score->endCmd();

@@ -222,7 +222,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                                                 Breath* b = new Breath(score);
                                                 b->setTrack(track);
                                                 b->setSymId(SymId::caesura);
-                                                Segment* seg = s->measure()->getSegment(SegmentType::Breath, s->tick() + (cr ? cr->actualTicks() : 0));
+                                                Segment* seg = s->measure()->getSegment(SegmentType::Breath, s->tick() + (cr ? cr->actualTicks() : Fraction(0,1)));
                                                 seg->add(b);
                                                 }
                                                 break;
@@ -376,11 +376,12 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
 
 Fraction TupletFractionCap(int tupletCount, bool tuplettrp, bool tupletprol)
       {
-      int dd = 0;
-      int nn = 0;
+      int dd         = 0;
+      int nn         = 0;
       qreal exponent = 0;
-      qreal count = tupletCount;
+      qreal count    = tupletCount;
       Fraction f(3,2);
+
       if ((count > 0) && (count <= 15)) {
             if (tuplettrp)
                   exponent = qFloor(qLn(count/3.0)/qLn(2.0));
@@ -396,13 +397,11 @@ Fraction TupletFractionCap(int tupletCount, bool tuplettrp, bool tupletprol)
       if (exponent < 0.0)
             exponent = 0.0;
       nn = tupletCount;
-      dd =  static_cast<int>(qPow(2.0, exponent));
+      dd = static_cast<int>(qPow(2.0, exponent));
       if (tuplettrp)
             dd = dd * 3;
-      qDebug("Tuplet Fraction: %d / %d",nn,dd);
-      f.setNumerator(nn);
-      f.setDenominator(dd);
-      return f;
+      qDebug("Tuplet Fraction: %d / %d", nn, dd);
+      return Fraction(nn, dd);
       }
 
 //---------------------------------------------------------
@@ -410,7 +409,7 @@ Fraction TupletFractionCap(int tupletCount, bool tuplettrp, bool tupletprol)
 //   return true on success (both begin and end found)
 //---------------------------------------------------------
 
-static bool findChordRests(BasicDrawObj const* const o, Score* score, const int track, const int tick,
+static bool findChordRests(BasicDrawObj const* const o, Score* score, const int track, const Fraction& tick,
                            ChordRest*& cr1, ChordRest*& cr2, NoteObj* no, QList<NoteObj*> objects)
       {
       cr1 = 0;                         // ChordRest where BasicDrawObj o begins
@@ -421,7 +420,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
       int graceNumber = 0;
       int graceNumber1 = 0;
       bool foundcr1 = false;
-      int tick2 = tick;
+      Fraction tick2 = tick;
       foreach(NoteObj* nobj, objects) {
             BasicDurationalObj* d = 0;
             if (nobj->type() == CapellaNoteObjectType::REST) {
@@ -431,7 +430,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
             else if (nobj->type() == CapellaNoteObjectType::CHORD) {
                   ChordObj* cho = static_cast<ChordObj*>(nobj);
                   d = static_cast<BasicDurationalObj*>(cho);
-                  if (!(cho->invisible) && (cho->ticks() == 0)) // grace note
+                  if (!(cho->invisible) && (cho->ticks().isZero())) // grace note
                         ++graceNumber;
                   else
                         graceNumber = 0;
@@ -442,20 +441,20 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
                   foundcr1 = true;
                   graceNumber1 = graceNumber;
                   }
-            int ticks = 0;
+            Fraction ticks = Fraction(0,1);
             if (foundcr1) {
                   --n;   // found the object corresponding to cr1, count down to find the second one
                   ticks = d->ticks();
                   if (d->count) {
                         Fraction f = TupletFractionCap(d->count, d->tripartite, d->isProlonging);
-                        ticks = ticks*f.denominator()/f.numerator();
+                        ticks = ticks / f;
                         }
                   if (nobj->type() == CapellaNoteObjectType::REST) {
                         RestObj* ro = static_cast<RestObj*>(nobj);
                         if (ro->fullMeasures) {
-                              Measure* m = score->getCreateMeasure(tick2);
-                              int ft     = m->ticks();
-                              ticks = ft * ro->fullMeasures;
+                              Measure* m  = score->getCreateMeasure(tick2);
+                              Fraction ft = m->ticks();
+                              ticks       = ft * ro->fullMeasures;
                               }
                         }
                   if (n == 0)
@@ -499,11 +498,12 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
                   break;
                   }
             }
-      qDebug("findChordRests o %p nNotes %d score %p track %d tick %d cr1 %p cr2 %p", o, o->nNotes, score, track, tick, cr1, cr2);
+      qDebug("findChordRests o %p nNotes %d score %p track %d tick %d cr1 %p cr2 %p",
+         o, o->nNotes, score, track, tick.ticks(), cr1, cr2);
 
       if (!(cr1 && cr2)) {
             qDebug("first or second anchor for BasicDrawObj not found (tick %d type %d track %d first %p second %p)",
-                   tick, int(o->type), track, cr1, cr2);
+                   tick.ticks(), int(o->type), track, cr1, cr2);
             return false;
             }
       return true;
@@ -513,25 +513,24 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
 //   readCapVoice
 //---------------------------------------------------------
 
-static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, bool capxMode)
+static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const Fraction& t, bool capxMode)
       {
+      Fraction tick(t);
       int voice = cvoice->voiceNo;
       int track = staffIdx * VOICES + voice;
 
-      qDebug("readCapVoice 1");
       //
       // pass I
       //
-      int startTick = tick;
+      Fraction startTick = tick;
 
-      Tuplet* tuplet = 0;
+      Tuplet* tuplet  = 0;
       int tupletCount = 0;
-      bool tuplettrp = false;
+      bool tuplettrp  = false;
       bool tupletprol = false;
-      int nTuplet = 0;
-      int tupletTick = 0;
+      int nTuplet     = 0;
+      Fraction tupletTick = Fraction(0,1);
 
-      qDebug("    read voice: tick %d track: %d)", tick, track);
       QList<Chord*> graceNotes;
       foreach(NoteObj* no, cvoice->objects) {
             switch (no->type()) {
@@ -540,12 +539,11 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         qDebug("     <Rest>");
                         Measure* m = score->getCreateMeasure(tick);
                         RestObj* o = static_cast<RestObj*>(no);
-                        int ticks  = o->ticks();
-                        if (o->invisible && ticks == 0) {  // get rid of placeholders
+                        Fraction ticks  = o->ticks();
+                        if (o->invisible && ticks.isZero())   // get rid of placeholders
                               break;
-                              }
                         TDuration d;
-                        d.setVal(ticks);
+                        d.setVal(ticks.ticks());
                         if (o->count) {
                               if (tuplet == 0) {
                                     tupletCount = o->count;
@@ -560,21 +558,21 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     tuplet->setTrack(track);
                                     tuplet->setTick(tick);
                                     tuplet->setParent(m);
-                                    int nn = ((tupletCount * ticks) * f.denominator()) / f.numerator();
-                                    tuplet->setDuration(Fraction::fromTicks(nn));
+                                    Fraction nn = (ticks * tupletCount) / f;
+                                    tuplet->setTicks(nn);
                                     }
                               }
 
-                        int ft     = m->ticks();
+                        Fraction ft = m->ticks();
                         if (o->fullMeasures) {
                               ticks = ft * o->fullMeasures;
                               if (!o->invisible) {
                                     for (unsigned i = 0; i < o->fullMeasures; ++i) {
-                                          Measure* m1 = score->getCreateMeasure(tick + i * ft);
-                                          Segment* s = m1->getSegment(SegmentType::ChordRest, tick + i * ft);
+                                          Measure* m1 = score->getCreateMeasure(tick + (ft * i));
+                                          Segment* s = m1->getSegment(SegmentType::ChordRest, tick + (ft * i));
                                           Rest* rest = new Rest(score);
                                           rest->setDurationType(TDuration(TDuration::DurationType::V_MEASURE));
-                                          rest->setDuration(m1->len());
+                                          rest->setTicks(m1->ticks());
                                           rest->setTrack(staffIdx * VOICES + voice);
                                           s->add(rest);
                                           }
@@ -583,23 +581,21 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         if (!o->invisible || voice == 0) {
                               Segment* s = m->getSegment(SegmentType::ChordRest, tick);
                               Rest* rest = new Rest(score);
-                              if (tuplet) {
-                                    rest->setTuplet(tuplet);
-                                    tuplet->add(rest);
-                                    }
                               TDuration d1;
                               if (o->fullMeasures) {
                                     d1.setType(TDuration::DurationType::V_MEASURE);
-                                    rest->setDuration(m->len());
+                                    rest->setTicks(m->ticks());
                                     }
                               else {
-                                    d1.setVal(ticks);
-                                    rest->setDuration(d1.fraction());
+                                    d1.setVal(ticks.ticks());
+                                    rest->setTicks(d1.fraction());
                                     }
                               rest->setDurationType(d1);
                               rest->setTrack(track);
                               rest->setVisible(!o->invisible);
                               s->add(rest);
+                              if (tuplet)
+                                    tuplet->add(rest);
                               processBasicDrawObj(o->objects, s, track, rest);
                               }
 
@@ -609,7 +605,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     tuplet = 0;
                                     }
                               else {
-                                    tick += (ticks * tuplet->ratio().denominator()) / tuplet->ratio().numerator();
+                                    tick += ticks / tuplet->ratio();
                                     }
                               }
                         else
@@ -620,15 +616,15 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         {
                         qDebug("     <Chord>");
                         ChordObj* o = static_cast<ChordObj*>(no);
-                        int ticks = o->ticks();
-                        if (o->invisible && ticks == 0) {  // get rid of placeholders
+                        Fraction ticks = o->ticks();
+                        if (o->invisible && ticks.isZero()) {  // get rid of placeholders
                               break;
                               }
                         TDuration d;
-                        d.setVal(ticks);
+                        d.setVal(ticks.ticks());
                         Measure* m = score->getCreateMeasure(tick);
 
-                        bool isgracenote = (!(o->invisible) && (ticks==0));
+                        bool isgracenote = (!(o->invisible) && (ticks.isZero()));
                         if (o->count) {
                               if (tuplet == 0) {
                                     tupletCount = o->count;
@@ -643,26 +639,22 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     tuplet->setTrack(track);
                                     tuplet->setTick(tick);
                                     tuplet->setParent(m);
-                                    int nn = ((tupletCount * ticks) * f.denominator()) / f.numerator();
-                                    tuplet->setDuration(Fraction::fromTicks(nn));
+                                    Fraction nn = (ticks * tupletCount) / f;
+                                    tuplet->setTicks(nn);
                                     }
                               qDebug("Tuplet at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %d",
-                                     tick, o->count, o->tripartite, o->isProlonging, ticks,
+                                     tick.ticks(), o->count, o->tripartite, o->isProlonging, ticks.ticks(),
                                      o->objects.size());
                               }
 
                         Chord* chord = new Chord(score);
-                        if (tuplet) {
-                              chord->setTuplet(tuplet);
-                              tuplet->add(chord);
-                              }
                         if (isgracenote) { // grace notes
                               SetCapGraceDuration(chord,o);
-                              chord->setDuration(chord->durationType().fraction());
+                              chord->setTicks(chord->durationType().fraction());
                               }
                         else { // normal notes
                               chord->setDurationType(d);
-                              chord->setDuration(d.fraction());
+                              chord->setTicks(d.fraction());
                               }
                         chord->setTrack(track);
                         switch (o->stemDir) {
@@ -694,6 +686,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     }
                               graceNotes.clear();
                               }
+                        if (tuplet)
+                              tuplet->add(chord);
                         ClefType clef = score->staff(staffIdx)->clef(tick);
                         Key key  = score->staff(staffIdx)->key(tick);
                         int off;
@@ -791,7 +785,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     tuplet = 0;
                                     }
                               else {
-                                    tick += (ticks * tuplet->ratio().denominator()) / tuplet->ratio().numerator();
+                                    tick += ticks / tuplet->ratio();
                                     }
                               }
                         else
@@ -803,7 +797,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         qDebug("     <Clef>");
                         CapClef* o = static_cast<CapClef*>(no);
                         ClefType nclef = o->clef();
-                        qDebug("%d:%d <Clef> %s line %d oct %d clef %d", tick, staffIdx, o->name(), int(o->line), int(o->oct), int(o->clef()));
+                        qDebug("%d:%d <Clef> %s line %d oct %d clef %d",
+                           tick.ticks(), staffIdx, o->name(), int(o->line), int(o->oct), int(o->clef()));
                         if (nclef == ClefType::INVALID)
                               break;
                         // staff(staffIdx)->setClef(tick, nclef);
@@ -840,14 +835,14 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                   case CapellaNoteObjectType::METER:
                         {
                         CapMeter* o = static_cast<CapMeter*>(no);
-                        qDebug("     <Meter> tick %d %d/%d", tick, o->numerator, 1 << o->log2Denom);
+                        qDebug("     <Meter> tick %d %d/%d", tick.ticks(), o->numerator, 1 << o->log2Denom);
                         if (o->log2Denom > 7 || o->log2Denom < 0)
                               qFatal("illegal fraction");
                         SigEvent se = score->sigmap()->timesig(tick);
                         Fraction f(o->numerator, 1 << o->log2Denom);
                         SigEvent ne(f);
                         if (!(se == ne))
-                              score->sigmap()->add(tick, ne);
+                              score->sigmap()->add(tick.ticks(), ne);
 
                         // do not add timesig again
                         Measure* m = score->getCreateMeasure(tick);
@@ -863,7 +858,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         ts->setTrack(track);
                         s = m->getSegment(SegmentType::TimeSig, tick);
                         s->add(ts);
-                        m->setLen(f);
+                        m->setTicks(f);
                         }
                         break;
                   case CapellaNoteObjectType::EXPL_BARLINE:
@@ -872,14 +867,14 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         CapExplicitBarline* o = static_cast<CapExplicitBarline*>(no);
                         qDebug("     <Barline>");
                         Measure* pm = 0; // the previous measure (the one terminated by this barline)
-                        if (tick > 0)
-                              pm = score->getCreateMeasure(tick-1);
+                        if (tick > Fraction(0,1))
+                              pm = score->getCreateMeasure(tick - Fraction::fromTicks(1));
                         if (pm) {
-                              int ticks = tick - pm->tick();
-                              if (ticks > 0 && ticks != pm->ticks()) {
+                              Fraction ticks = tick - pm->tick();
+                              if ((ticks > Fraction(0,1)) && ticks != pm->ticks()) {
                                     // this is a measure with different actual duration
-                                    Fraction f = Fraction::fromTicks(ticks);
-                                    pm->setLen(f);
+                                    Fraction f = ticks;
+                                    pm->setTicks(f);
 #if 0
                                     AL::SigEvent ne(f);
                                     ne.setNominal(m->timesig());
@@ -919,9 +914,8 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         break;
                   }
             }
-      int endTick = tick;
+      Fraction endTick = tick;
 
-      qDebug("readCapVoice 2");
       //
       // pass II
       //
@@ -953,10 +947,11 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               if (res) {
                                     if (cr1 == cr2)
                                           qDebug("first and second anchor for slur identical (tick %d track %d first %p second %p)",
-                                                 tick, track, cr1, cr2);
+                                             tick.ticks(), track, cr1, cr2);
                                     else {
                                           Slur* slur = new Slur(score);
-                                          qDebug("tick %d track %d cr1 %p cr2 %p -> slur %p", tick, track, cr1, cr2, slur);
+                                          qDebug("tick %d track %d cr1 %p cr2 %p -> slur %p",
+                                             tick.ticks(), track, cr1, cr2, slur);
                                           slur->setTick(cr1->tick());
                                           slur->setTick2(cr2->tick());
                                           slur->setStartElement(cr1);
@@ -980,7 +975,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               MeasureBase* measure = score->measures()->first();
                               if (measure->type() != ElementType::VBOX) {
                                     MeasureBase* mb = new VBox(score);
-                                    mb->setTick(0);
+                                    mb->setTick(Fraction(0, 1));
                                     score->addMeasure(mb, measure);
                                     measure = mb;
                                     }
@@ -1021,7 +1016,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               if (res) {
                                     if (cr1 == cr2)
                                           qDebug("first and second anchor for trill line identical (tick %d track %d first %p second %p)",
-                                                 tick, track, cr1, cr2);
+                                                 tick.ticks(), track, cr1, cr2);
                                     else {
                                           Trill* trill = new Trill(score);
                                           trill->setTrack(track);
@@ -1044,7 +1039,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               if (res) {
                                     if (cr1 == cr2)
                                           qDebug("first and second anchor for hairpin identical (tick %d track %d first %p second %p)",
-                                                 tick, track, cr1, cr2);
+                                                 tick.ticks(), track, cr1, cr2);
                                     else {
                                           Hairpin* hp = new Hairpin(score);
                                           if (wdgo->decresc)
@@ -1066,22 +1061,21 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               break;
                         }
                   }
-            int ticks = d->ticks();
+            Fraction ticks = d->ticks();
             if (d->count) {
                   Fraction f = TupletFractionCap(d->count, d->tripartite, d->isProlonging);
-                  ticks = ticks*f.denominator()/f.numerator();
+                  ticks = ticks / f;
                   }
             if (no->type() == CapellaNoteObjectType::REST) {
                   RestObj* o = static_cast<RestObj*>(no);
                   if (o->fullMeasures) {
-                        Measure* m = score->getCreateMeasure(tick);
-                        int ft     = m->ticks();
-                        ticks = ft * o->fullMeasures;
+                        Measure* m  = score->getCreateMeasure(tick);
+                        Fraction ft = m->ticks();
+                        ticks       = ft * o->fullMeasures;
                         }
                   }
             tick += ticks;
             }
-      qDebug("   readCapVoice");
       return endTick;
       }
 
@@ -1105,13 +1099,9 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
 
 static bool needPart(const int prevInst, const int currInst, const int staffIdx, QList<CapBracket> const& bracketList)
       {
-      // qDebug("needPart(prevInst %d, currInst %d, staffIdx %d)", prevInst, currInst, staffIdx);
       foreach(CapBracket cb, bracketList) {
-            // qDebug("needPart bracket %d-%d curly %d", cb.from, cb.to, cb.curly);
-            if (prevInst == currInst && cb.from < staffIdx && staffIdx <= cb.to && cb.curly) {
-                  // qDebug("needPart found brace, continue part");
+            if (prevInst == currInst && cb.from < staffIdx && staffIdx <= cb.to && cb.curly)
                   return false;
-                  }
             }
       return true;
       }
@@ -1208,7 +1198,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   bstaff = 0;
                   }
 
-            s->setSmall(0, cl->bSmall);
+            s->setSmall(Fraction(0,1), cl->bSmall);
             part->insertStaff(s, -1);
             Interval interval;
             // guess diatonic transposition from chromatic transposition for the instrument
@@ -1255,7 +1245,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         s->setPlainText(ss);
                         if (!measure) {
                               measure = new VBox(score);
-                              measure->setTick(0);
+                              measure->setTick(Fraction(0,1));
                               score->addMeasure(measure, score->measures()->first());
                               }
                         measure->add(s);
@@ -1275,14 +1265,14 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   mb = static_cast<VBox*>(mbl->first());
             else {
                   VBox* vb = new VBox(score);
-                  vb->setTick(0);
+                  vb->setTick(Fraction(0,1));
                   score->addMeasure(vb, mb);
                   mb = vb;
                   }
             mb->setBoxHeight(Spatium(cap->topDist));
             }
 
-      int systemTick = 0;
+      Fraction systemTick = Fraction(0,1);
       foreach(CapSystem* csys, cap->systems) {
             qDebug("readCapSystem");
             /*
@@ -1293,7 +1283,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   score->addMeasure(mb);
                   }
             */
-            int mtick = 0;
+            Fraction mtick = Fraction(0,1);
             for (CapStaff* cstaff : csys->staves) {
                   //
                   // assumption: layout index is mscore staffIdx
@@ -1304,13 +1294,13 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   int staffIdx = cstaff->iLayout;
                   int voice = 0;
                   for (CapVoice* cvoice : cstaff->voices) {
-                        int tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
+                        Fraction tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
                         ++voice;
                         if (tick > mtick)
                               mtick = tick;
                         }
                   }
-            Measure* m = score->tick2measure(mtick-1);
+            Measure* m = score->tick2measure(mtick - Fraction::fromTicks(1));
             if (m && !m->lineBreak()) {
                   LayoutBreak* lb = new LayoutBreak(score);
                   lb->setLayoutBreakType(LayoutBreak::Type::LINE);
@@ -1335,24 +1325,24 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                         }
                   if (empty) {
 
-                        if ((m->len() == m->timesig())) {
+                        if ((m->ticks() == m->timesig())) {
                               Segment* s = m->getSegment(SegmentType::ChordRest, m->tick());
                               Rest* rest = new Rest(score);
                               rest->setDurationType(TDuration::DurationType::V_MEASURE);
-                              rest->setDuration(m->len());
+                              rest->setTicks(m->ticks());
                               rest->setTrack(staffIdx * VOICES);
                               s->add(rest);
                               }
                         else {
-                              auto durList = toDurationList(m->len(), true);
+                              auto durList = toDurationList(m->ticks(), true);
                               int tickOffset = 0;
                               for (auto d : durList) {
-                                    Segment* s = m->getSegment(SegmentType::ChordRest, m->tick() + tickOffset);
+                                    Segment* s = m->getSegment(SegmentType::ChordRest, m->tick() + Fraction::fromTicks(tickOffset));
                                     Rest* rest = new Rest(score);
                                     rest->setDurationType(d);
                                     rest->setTrack(staffIdx * VOICES);
                                     s->add(rest);
-                                    tickOffset += d.ticks();
+                                    tickOffset += d.ticks().ticks();
                                     }
                               }
                         }
@@ -2581,30 +2571,30 @@ void Capella::readSystem()
 //   toTicks
 //---------------------------------------------------------
 
-int BasicDurationalObj::ticks() const
+Fraction BasicDurationalObj::ticks() const
       {
       if (noDuration)
-            return 0;
-      int len = 0;
+            return Fraction(0,1);
+      Fraction len = {0,1};
       switch (t) {
-            case TIMESTEP::D1:          len = 4 * MScore::division; break;
-            case TIMESTEP::D2:          len = 2 * MScore::division; break;
-            case TIMESTEP::D4:          len = MScore::division; break;
-            case TIMESTEP::D8:          len = MScore::division >> 1; break;
-            case TIMESTEP::D16:         len = MScore::division >> 2; break;
-            case TIMESTEP::D32:         len = MScore::division >> 3; break;
-            case TIMESTEP::D64:         len = MScore::division >> 4; break;
-            case TIMESTEP::D128:        len = MScore::division >> 5; break;
-            case TIMESTEP::D256:        len = MScore::division >> 6; break;
-            case TIMESTEP::D_BREVE:     len = MScore::division * 8; break;
+            case TIMESTEP::D1:          len = Fraction(1,1);   break;
+            case TIMESTEP::D2:          len = Fraction(1,2);   break;
+            case TIMESTEP::D4:          len = Fraction(1,4);   break;
+            case TIMESTEP::D8:          len = Fraction(1,8);   break;
+            case TIMESTEP::D16:         len = Fraction(1,16);  break;
+            case TIMESTEP::D32:         len = Fraction(1,32);  break;
+            case TIMESTEP::D64:         len = Fraction(1,64);  break;
+            case TIMESTEP::D128:        len = Fraction(1,128); break;
+            case TIMESTEP::D256:        len = Fraction(1,256); break;
+            case TIMESTEP::D_BREVE:     len = Fraction(2,2);   break;
             default:
                   qDebug("BasicDurationalObj::ticks: illegal duration value %d", int(t));
                   break;
             }
-      int slen = len;
+      Fraction slen = len;
       int dots = nDots;
       while (dots--) {
-            slen >>= 1;
+            slen /= Fraction(2,1);
             len += slen;
             }
       return len;
