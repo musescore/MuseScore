@@ -88,8 +88,8 @@ class Fraction {
       operator QVariant() const { return QVariant::fromValue(*this); }
       };
 
-inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
-inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
+ inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
+ inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
 
 }     // namespace Ms
 
