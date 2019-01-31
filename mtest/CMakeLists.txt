@@ -231,7 +231,7 @@ subdirs (
         biab
         musicxml
         guitarpro
-#        scripting            # fraction integration
+#        scripting            # ws:disabled during fraction integration
         stringutils
 #        testoves
         zerberus/comments
@@ -241,7 +241,7 @@ subdirs (
         zerberus/opcodeparse
         zerberus/inputControls
         zerberus/loop
-        testscript
+#        testscript           ws:disabled during fraction migration
         )
 
 
