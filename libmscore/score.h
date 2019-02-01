@@ -532,7 +532,7 @@ class Score : public QObject, public ScoreElement {
 
    public:
       Score();
-      Score(MasterScore*);
+      Score(MasterScore*, bool forcePartStyle = true);
       Score(MasterScore*, const MStyle&);
       virtual ~Score();
       Score* clone();
