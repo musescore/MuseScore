@@ -33,7 +33,7 @@ class FractionWrapper;
 class Score;
 
 #define DECLARE_API_ENUM(qmlName, cppName) \
-      static Enum* const cppName; \
+      static Enum* cppName; \
       static Enum* get_##cppName() { return cppName; } \
       Q_PROPERTY(Ms::PluginAPI::Enum* qmlName READ get_##cppName CONSTANT)
 
@@ -96,6 +96,8 @@ class PluginAPI : public Ms::QmlPlugin {
       DECLARE_API_ENUM( Spanner,          spannerAnchorEnum       ) // probably unavailable in 2.X
 
       QFile logFile;
+
+      static void initEnums();
 
    signals:
       void run();
