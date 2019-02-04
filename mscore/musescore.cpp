@@ -7572,12 +7572,14 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       }
 
 //---------------------------------------------------------
-//   getQmlEngine
+//   getPluginEngine
 //---------------------------------------------------------
 
+#ifdef SCRIPT_INTERFACE
 QmlPluginEngine* MuseScore::getPluginEngine()
       {
       if (!_qmlEngine)
             _qmlEngine = new QmlPluginEngine(this);
       return _qmlEngine;
       }
+#endif
