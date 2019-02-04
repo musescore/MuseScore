@@ -1105,13 +1105,16 @@
           <Pedal id="18">
             <endHookType>1</endHookType>
             <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+            <continueText>(&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;)</continueText>
             <track>0</track>
             </Pedal>
           </Cell>
         <Cell name="Pedal">
           <Pedal id="19">
             <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+            <continueText>(&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;)</continueText>
             <endText>&lt;sym&gt;keyboardPedalUp&lt;/sym&gt;</endText>
+            <lineVisible>0</lineVisible>
             <track>0</track>
             </Pedal>
           </Cell>
