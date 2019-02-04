@@ -2366,9 +2366,7 @@ void ScoreView::textTab(bool back)
       while (el) {
             if (el->isNote()) {
                   Note* n = toNote(el);
-                  if (op->isNote() && n != op)
-                        break;
-                  else if (op->isSegment() && n->chord()->segment() != op)
+                  if (op->isNote() || op->isSegment())
                         break;
                   }
             // get prev/next note
