@@ -1460,6 +1460,12 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                                     toChord(parent())->setEndsGlissando(true);
                               addSpannerBack(sp);
                               }
+
+                        // As spanners get added after being fully read, they
+                        // do not get cloned with the note when pasting to
+                        // linked staves. So add this spanner explicilty.
+                        if (pasteMode)
+                              score()->undoAddElement(sp);
                         }
                   }
             default:
