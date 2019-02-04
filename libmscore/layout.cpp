@@ -2662,9 +2662,24 @@ void Score::getNextMeasure(LayoutContext& lc)
 
       measure->computeTicks();
 
-      // Reset tempo to set correct time stretch for fermata.
-      if (isMaster())
-            resetTempoRange(measure->tick(), measure->endTick());
+      if (isMaster()) {
+            // Reset tempo to set correct time stretch for fermata.
+            const int startTick = measure->tick();
+            resetTempoRange(startTick, measure->endTick());
+
+            // Add pauses from the end of the previous measure (at measure->tick()):
+            for (Segment* s = measure->first()->prev1(); s && s->tick() == startTick; s = s->prev1()) {
+                  if (!s->isBreathType())
+                        continue;
+                  qreal length = 0.0;
+                  for (Element* e : s->elist()) {
+                        if (e && e->isBreath())
+                              length = qMax(length, toBreath(e)->pause());
+                        }
+                  if (length != 0.0)
+                        setPause(startTick, length);
+                  }
+            }
 
       for (Segment& segment : measure->segments()) {
             if (segment.isBreathType()) {
