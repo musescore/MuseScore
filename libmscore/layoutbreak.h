@@ -27,6 +27,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 class LayoutBreak final : public Element {
+      Q_GADGET
    public:
       enum Type {
             PAGE, LINE, SECTION, NOBREAK
