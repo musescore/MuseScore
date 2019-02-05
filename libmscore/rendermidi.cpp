@@ -747,6 +747,16 @@ void Score::renderSpanners(EventMap* events)
                               }
                         }
                   else if (s->isVibrato()) {
+                        int stick = s->tick();
+                        int etick = s->tick2();
+                        if (stick >= tick2 || etick < tick1)
+                              continue;
+
+                        if (stick < tick1)
+                              stick = tick1;
+                        if (etick > tick2)
+                              etick = tick2;
+
                         // from start to end of trill, send bend events at regular interval
                         Vibrato* t = toVibrato(s);
                         // guitar vibrato, up only
@@ -768,8 +778,8 @@ void Score::renderSpanners(EventMap* events)
 
                         int j = 0;
                         int delta = MScore::division / 8; // 1/8 note
-                        int lastPointTick = s->tick();
-                        while (lastPointTick < s->tick2()) {
+                        int lastPointTick = stick;
+                        while (lastPointTick < etick) {
                               int pitch = (j % 4 < 2) ? spitch : epitch;
                               int nextPitch = ((j+1) % 4 < 2) ? spitch : epitch;
                               int nextPointTick = lastPointTick + delta;
@@ -781,14 +791,14 @@ void Score::renderSpanners(EventMap* events)
                                     int lsb = midiPitch % 128;
                                     NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
                                     ev.setOriginatingStaff(staff);
-                                    events->insert(std::pair<int, NPlayEvent>(i, ev));
+                                    events->insert(std::pair<int, NPlayEvent>(i + tickOffset, ev));
                                     }
                               lastPointTick = nextPointTick;
                               j++;
                               }
                         NPlayEvent ev(ME_PITCHBEND, channel, 0, 64); // no pitch bend
                         ev.setOriginatingStaff(staff);
-                        events->insert(std::pair<int, NPlayEvent>(s->tick2(), ev));
+                        events->insert(std::pair<int, NPlayEvent>(etick + tickOffset, ev));
                         }
                   else
                         continue;
