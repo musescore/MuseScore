@@ -18,7 +18,9 @@
 #include "kQOAuth/kqoauthrequest.h"
 #include "kQOAuth/kqoauthrequest_xauth.h"
 
+#ifdef USE_WEBENGINE
 #include <QWebEngineCookieStore>
+#endif
 
 namespace Ms {
 
@@ -286,8 +288,11 @@ void LoginManager::onTryLoginError(const QString& error)
       disconnect(this, SIGNAL(getUserError(QString)), this, SLOT(onTryLoginError(QString)));
       connect(this, SIGNAL(loginSuccess()), this, SLOT(tryLogin()));
       logout();
+#ifdef USE_WEBENGINE
       loginInteractive();
-//       mscore->showLoginDialog(); // TODO: switch depending on USE_WEBENGINE
+#else
+      mscore->showLoginDialog();
+#endif
       }
 /*------- END - TRY LOGIN ROUTINES ----------------------------*/
 
@@ -295,6 +300,7 @@ void LoginManager::onTryLoginError(const QString& error)
 //   loginInteractive
 //---------------------------------------------------------
 
+#ifdef USE_WEBENGINE
 void LoginManager::loginInteractive()
       {
       QWebEngineView* webView = new QWebEngineView;
@@ -326,6 +332,7 @@ void LoginManager::loginInteractive()
       webView->load(ApiInfo::loginUrl);
       webView->show();
       }
+#endif
 
 //---------------------------------------------------------
 //   login
@@ -346,7 +353,7 @@ void LoginManager::login(QString login, QString password)
       connect(reply, &QNetworkReply::finished, this, [this, reply] {
             onReplyFinished(reply, RequestType::LOGIN);
             });
-     }
+      }
 
 //---------------------------------------------------------
 //   onLoginSuccessReply
@@ -874,6 +881,7 @@ ApiRequest ApiRequestBuilder::build() const
 //    musescore.com
 //---------------------------------------------------------
 
+#ifdef USE_WEBENGINE
 void ApiWebEngineRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo& request)
       {
       const ApiInfo& apiInfo = ApiInfo::instance();
@@ -881,4 +889,5 @@ void ApiWebEngineRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo& 
       request.setHttpHeader(apiInfo.clientIdHeader, apiInfo.clientId);
       request.setHttpHeader(apiInfo.apiKeyHeader, apiInfo.apiKey);
       }
+#endif
 }
