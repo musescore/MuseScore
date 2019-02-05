@@ -2652,8 +2652,10 @@ void Score::getNextMeasure(LayoutContext& lc)
                                           if (l)
                                                 l->layout();
                                           }
-                                    if (cr->isChord())
-                                          toChord(cr)->layoutArticulations();
+                                    if (cr->isChord()) {
+                                          Chord* c = toChord(cr);
+                                          c->layoutArticulations();
+                                          }
                                     }
                               }
                         }
@@ -3502,7 +3504,32 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                               int strack = staffIdx * VOICES;
                               int etrack = strack + VOICES;
                               for (Element* e : s.elist()) {
-                                    if (!e || !e->visible())
+                                    if (!e)
+                                          continue;
+                                    // clear layout for chord-based fingerings
+                                    if (e->isChord()) {
+                                          Chord* c = toChord(e);
+                                          std::list<Note*> notes;
+                                          for (auto gc : c->graceNotes()) {
+                                                for (auto n : gc->notes())
+                                                      notes.push_back(n);
+                                                }
+                                          for (auto n : c->notes())
+                                                notes.push_back(n);
+                                          std::list<Fingering*> fingerings;
+                                          for (Note* note : notes) {
+                                                for (Element* e : note->el()) {
+                                                      if (e->isFingering()) {
+                                                            Fingering* f = toFingering(e);
+                                                            if (f->layoutType() == ElementType::CHORD) {
+                                                                  f->setPos(QPointF());
+                                                                  f->setbbox(QRectF());
+                                                                  }
+                                                            }
+                                                      }
+                                                }
+                                          }
+                                    if (!e->visible())
                                           continue;
                                     int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
                                     if (effectiveTrack >= strack && effectiveTrack < etrack)
@@ -3537,11 +3564,18 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         cr->beam()->addSkyline(system->staff(cr->beam()->staffIdx())->skyline());
                         }
 
-                  // layout fingerings placed above/below chord
+                  // layout chord-based fingerings
                   if (e->isChord()) {
-                        std::list<Fingering*> fingerings;
                         Chord* c = toChord(e);
-                        for (Note* note : c->notes()) {
+                        std::list<Note*> notes;
+                        for (auto gc : c->graceNotes()) {
+                              for (auto n : gc->notes())
+                                    notes.push_back(n);
+                              }
+                        for (auto n : c->notes())
+                              notes.push_back(n);
+                        std::list<Fingering*> fingerings;
+                        for (Note* note : notes) {
                               for (Element* el : note->el()) {
                                     if (el->isFingering()) {
                                           Fingering* f = toFingering(el);
@@ -3557,7 +3591,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         for (Fingering* f : fingerings) {
                               f->layout();
                               if (f->autoplace() && f->visible()) {
-                                    QRectF r = f->bbox().translated(f->pos() + f->note()->pos() + c->pos() + s->pos() + s->measure()->pos());
+                                    Note* n = f->note();
+                                    QRectF r = f->bbox().translated(f->pos() + n->pos() + n->chord()->pos() + s->pos() + s->measure()->pos());
                                     system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r);
                                     }
                               }

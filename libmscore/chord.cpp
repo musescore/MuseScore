@@ -1895,11 +1895,14 @@ void Chord::layoutPitched()
                         }
                   }
 
-            // clear fingering layout
+            // clear layout for note-based fingerings
             for (Element* e : note->el()) {
                   if (e->isFingering()) {
-                        e->setPos(QPointF());
-                        e->setbbox(QRectF());
+                        Fingering* f = toFingering(e);
+                        if (f->layoutType() == ElementType::NOTE) {
+                              f->setPos(QPointF());
+                              f->setbbox(QRectF());
+                              }
                         }
                   }
 
@@ -1996,7 +1999,7 @@ void Chord::layoutPitched()
       for (Note* note : _notes)
             note->layout2();
 
-      // align fingering
+      // align note-based fingerings
       std::vector<Fingering*> alignNote;
       qreal xNote = 10000.0;
       for (Note* note : _notes) {
