@@ -289,9 +289,9 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             emit displayMore(_name);
 
       bool sizeChanged = false;
-      for (int i = 0; i < cells.size(); ++i) {
-            if (!cellAt(i)) {
-                  cells.removeAt(i);
+      for (int j = 0; j < cells.size(); ++j) {
+            if (!cellAt(j)) {
+                  cells.removeAt(j);
                   sizeChanged = true;
                   }
             }
@@ -740,8 +740,8 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
                   // Set widget name to name of selected key signature. We could
                   // set the description, but some screen readers ignore it.
                   setAccessibleName(qApp->translate("Palette", p->cellAt(idx)->name.toUtf8()));
-                  QAccessibleEvent event(this, QAccessible::NameChanged);
-                  QAccessible::updateAccessibility(&event);
+                  QAccessibleEvent aev(this, QAccessible::NameChanged);
+                  QAccessible::updateAccessibility(&aev);
                   p->update();
                   break;
                   }
