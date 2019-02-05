@@ -289,7 +289,7 @@ class ExportMusicXml {
       int findTrill(const Trill* tl) const;
       void chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset);
       void rest(Rest* chord, int staff);
-      void clef(int staff, const Clef* clef);
+      void clef(int staff, const ClefType ct, const QString& extraAttributes = "");
       void timesig(TimeSig* tsig);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(Measure* m);
@@ -305,6 +305,7 @@ class ExportMusicXml {
                              TrillHash& trillStart, TrillHash& trillStop);
       void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart);
       void findAndExportClef(Measure* m, const int staves, const int strack, const int etrack);
+      void exportDefaultClef(const Part* const part, const Measure* const m);
       void writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset);
 
 public:
@@ -1745,15 +1746,14 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visib
 //   clef
 //---------------------------------------------------------
 
-void ExportMusicXml::clef(int staff, const Clef* clef)
+void ExportMusicXml::clef(int staff, const ClefType ct, const QString& extraAttributes)
       {
-      ClefType ct = clef->clefType();
       clefDebug("ExportMusicXml::clef(staff %d, clef %hhd)", staff, ct);
 
       QString tagName = "clef";
       if (staff)
             tagName += QString(" number=\"%1\"").arg(staff);
-      tagName += color2xml(clef);
+      tagName += extraAttributes;
       _attr.doAttr(_xml, true);
       _xml.stag(tagName);
 
@@ -4732,6 +4732,58 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
       }
 
 //---------------------------------------------------------
+//  exportDefaultClef
+//---------------------------------------------------------
+
+/**
+ In case no clef is found, export a default clef with type determined by staff type.
+ Note that a multi-measure rest starting in the first measure should be handled correctly.
+ */
+
+void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* const m)
+      {
+      const auto staves = part->nstaves();
+
+      if (m->tick() == 0) {
+            const auto clefSeg = m->findSegment(SegmentType::HeaderClef, 0);
+
+            if (clefSeg) {
+                  for (int i = 0; i < staves; ++i) {
+
+                        // sstaff - xml staff number, counting from 1 for this
+                        // instrument
+                        // special number 0 -> don’t show staff number in
+                        // xml output (because there is only one staff)
+
+                        auto sstaff = (staves > 1) ? i + 1 : 0;
+                        auto track = part->startTrack() + VOICES * i;
+
+                        if (clefSeg->element(track) == nullptr) {
+                              ClefType ct { ClefType::G };
+                              QString stafftype;
+                              switch (part->staff(i)->staffType(0)->group()) {
+                                    case StaffGroup::TAB:
+                                          ct = ClefType::TAB;
+                                          stafftype = "tab";
+                                          break;
+                                    case StaffGroup::STANDARD:
+                                          ct = ClefType::G;
+                                          stafftype = "std";
+                                          break;
+                                    case StaffGroup::PERCUSSION:
+                                          ct = ClefType::PERC;
+                                          stafftype = "perc";
+                                          break;
+                                    }
+                              qDebug("no clef found in first measure track %d (stafftype %s)", track, qPrintable(stafftype));
+                              clef(sstaff, ct, " print-object=\"no\"");
+                              }
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //  findAndExportClef
 //---------------------------------------------------------
 
@@ -4796,7 +4848,7 @@ void ExportMusicXml::findAndExportClef(Measure* m, const int staves, const int s
                         // exception: at tick=0, export clef anyway
                         if (tick == 0 || !cle->generated()) {
                               clefDebug("exportxml: clef exported");
-                              clef(sstaff, cle);
+                              clef(sstaff, cle->clefType(), color2xml(cle));
                               }
                         else {
                               clefDebug("exportxml: clef not exported");
@@ -5015,7 +5067,7 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
                         break;
                         }
                   if (!el->generated() && ti != m->tick() && ti != m->endTick())
-                        clef(sstaff, cle);
+                        clef(sstaff, cle->clefType(), color2xml(cle));
                   else {
                         clefDebug("exportxml: clef not exported");
                         }
@@ -5260,6 +5312,9 @@ void ExportMusicXml::write(QIODevice* dev)
 
                   // make sure clefs at end of measure get exported at start of next measure
                   findAndExportClef(m, staves, strack, etrack);
+
+                  // make sure a clef gets exported if none is found
+                  exportDefaultClef(part, m);
 
                   // output attributes with the first actual measure (pickup or regular) only
                   if (isFirstActualMeasure) {
