@@ -20,6 +20,8 @@
 #ifndef __LOGINMANAGER_P_H__
 #define __LOGINMANAGER_P_H__
 
+#include "config.h"
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -102,6 +104,7 @@ class ApiRequestBuilder
 //   ApiWebEngineRequestInterceptor
 //---------------------------------------------------------
 
+#ifdef USE_WEBENGINE
 class ApiWebEngineRequestInterceptor : public QWebEngineUrlRequestInterceptor
       {
       Q_OBJECT
@@ -109,6 +112,7 @@ class ApiWebEngineRequestInterceptor : public QWebEngineUrlRequestInterceptor
       ApiWebEngineRequestInterceptor(QObject* parent) : QWebEngineUrlRequestInterceptor(parent) {}
       void interceptRequest(QWebEngineUrlRequestInfo& info) override;
       };
+#endif
 
 //---------------------------------------------------------
 //   HttpStatus

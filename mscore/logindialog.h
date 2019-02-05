@@ -21,6 +21,8 @@ class LoginManager;
 
 //---------------------------------------------------------
 //   LoginDialog
+//    Old-style login dialog in case QtWebEngine is
+//    unavailable.
 //---------------------------------------------------------
 
 class LoginDialog : public QDialog, public Ui::LoginDialog
