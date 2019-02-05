@@ -49,7 +49,9 @@ void TestScripts::initTestCase()
 
 void TestScripts::runTestScripts()
       {
-      Q_ASSERT(QDir::setCurrent(scriptsPath));
+      // needed because all.h disables Q_ASSERT ifdef QT_NO_DEBUG
+      bool did_cwd = QDir::setCurrent(scriptsPath);
+      Q_ASSERT(did_cwd);
 
       QDir cwd = QDir::current();
       QStringList nameFilters({ "*.script" });
