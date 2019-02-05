@@ -26,7 +26,7 @@ if [ "${path}" == "" ] || [ ! -d "${path}" ]; then
   exit 1
 fi
 
-if [ "$(ls "build.debug/${path}/"*-test.*)" == "" ]; then
+if [ "$(ls "build.xcode/mtest/guitarpro/Debug/"*-test.*)" == "" ]; then
   echo "$0: No test files in 'build.debug/$path'. Have you run the tests?"
   exit 2
 fi
@@ -35,6 +35,6 @@ fi
 
 echo "Copy refs from 'build.debug/${path}' to '${path}'."
 
-for file in build.debug/"${path}"/*-test.*; do
+for file in build.xcode/mtest/guitarpro/*-test.*; do
   cp "$file" "${path}"/"$(basename "${file}" | sed "s|-test\.|-ref\.|")"
 done
