@@ -5986,16 +5986,26 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             setPlayRepeats(a->isChecked());
       else if (cmd == "pan")
             MScore::panPlayback = !MScore::panPlayback;
-      else if (cmd == "show-invisible")
+      else if (cmd == "show-invisible") {
             cs->setShowInvisible(a->isChecked());
-      else if (cmd == "show-unprintable")
+            cs->update();
+            }
+      else if (cmd == "show-unprintable") {
             cs->setShowUnprintable(a->isChecked());
-      else if (cmd == "show-frames")
+            cs->update();
+            }
+      else if (cmd == "show-frames") {
             cs->setShowFrames(a->isChecked());
-      else if (cmd == "show-pageborders")
+            cs->update();
+            }
+      else if (cmd == "show-pageborders") {
             cs->setShowPageborders(a->isChecked());
-      else if (cmd == "mark-irregular")
+            cs->update();
+            }
+      else if (cmd == "mark-irregular") {
             cs->setMarkIrregularMeasures(a->isChecked());
+            cs->update();
+            }
       else if (cmd == "tempo")
             addTempo();
       else if (cmd == "loop") {
