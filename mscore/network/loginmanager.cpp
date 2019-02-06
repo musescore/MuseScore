@@ -578,7 +578,7 @@ void LoginManager::onGetMediaUrlReply(QNetworkReply* reply, int code, const QJso
                   }
             }
       else // TODO: handle request error properly
-            qWarning(getErrorString(reply, response).toUtf8().constData());
+            qWarning("%s", getErrorString(reply, response).toUtf8().constData());
 #if 0
       disconnect(_oauthManager, SIGNAL(requestReady(QByteArray)),
             this, SLOT(onGetMediaUrlRequestReady(QByteArray)));
