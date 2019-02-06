@@ -21,6 +21,7 @@
 #include "libmscore/note.h"
 #include "libmscore/notedot.h"
 #include "libmscore/segment.h"
+#include "libmscore/accidental.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -306,8 +307,8 @@ class Element : public Ms::PluginAPI::ScoreElement {
 
 class Note : public Element {
       Q_OBJECT
-//       Q_PROPERTY(Ms::Accidental*                accidental        READ accidental)
-//       Q_PROPERTY(int                            accidentalType    READ qmlAccidentalType  WRITE qmlSetAccidentalType)
+      Q_PROPERTY(Ms::PluginAPI::Element*          accidental        READ accidental)
+      Q_PROPERTY(Ms::AccidentalType               accidentalType    READ accidentalType  WRITE setAccidentalType)
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  dots              READ dots)
 //       Q_PROPERTY(int                            dotsCount         READ qmlDotsCount)
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  elements          READ elements)
@@ -347,6 +348,11 @@ class Note : public Element {
 
       QQmlListProperty<Element> dots()     { return wrapContainerProperty<Element>(this, note()->dots()); }
       QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, note()->el());   }
+
+      Element* accidental() { return wrap<Element>(note()->accidental()); }
+
+      Ms::AccidentalType accidentalType() { return note()->accidentalType(); }
+      void setAccidentalType(Ms::AccidentalType t) { note()->setAccidentalType(t); }
       };
 
 //---------------------------------------------------------
@@ -380,7 +386,7 @@ class Chord : public Element {
 class Segment : public Element {
       Q_OBJECT
       // TODO
-//       Q_PROPERTY(QQmlListProperty<Ms::Element> annotations READ qmlAnnotations)
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> annotations READ annotations)
       Q_PROPERTY(Ms::PluginAPI::Segment*       next              READ nextInScore)
       Q_PROPERTY(Ms::PluginAPI::Segment*       nextInMeasure     READ nextInMeasure)
       Q_PROPERTY(Ms::PluginAPI::Segment*       prev              READ prevInScore)
@@ -406,6 +412,7 @@ class Segment : public Element {
       Segment* nextInMeasure() { return wrap<Segment>(segment()->next()); }
       Segment* prevInScore() { return wrap<Segment>(segment()->prev1()); }
       Segment* prevInMeasure() { return wrap<Segment>(segment()->prev()); }
+      QQmlListProperty<Element> annotations() { return wrapContainerProperty<Element>(this, segment()->annotations()); }
       };
 
 //---------------------------------------------------------
