@@ -148,7 +148,8 @@ QList<QString> JackAudio::inputPorts()
             if (!(flags & JackPortIsInput))
                   continue;
             char buffer[128];
-            strncpy(buffer, *p, 128);
+            strncpy(buffer, *p, sizeof(buffer) - 1);
+            buffer[sizeof(buffer) - 1] = 0;
             if (strncmp(buffer, "Mscore", 6) == 0)
                   continue;
             clientList.append(QString(buffer));
