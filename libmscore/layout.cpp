@@ -2561,12 +2561,6 @@ void Score::getNextMeasure(LayoutContext& lc)
       Measure* measure = toMeasure(lc.curMeasure);
       measure->moveTicks(lc.tick - measure->tick());
 
-      //
-      //  implement section break rest
-      //
-      if (measure->sectionBreak() && measure->pause() != 0.0)
-            setPause(measure->endTick(), measure->pause());
-
       connectTremolo(measure);
 
       //
@@ -2666,6 +2660,12 @@ void Score::getNextMeasure(LayoutContext& lc)
             // Reset tempo to set correct time stretch for fermata.
             const int startTick = measure->tick();
             resetTempoRange(startTick, measure->endTick());
+
+            // Implement section break rest
+            for (MeasureBase* mb = measure->prev(); mb && mb->endTick() == startTick; mb = mb->prev()) {
+                  if (mb->pause())
+                        setPause(startTick, mb->pause());
+                  }
 
             // Add pauses from the end of the previous measure (at measure->tick()):
             for (Segment* s = measure->first()->prev1(); s && s->tick() == startTick; s = s->prev1()) {
