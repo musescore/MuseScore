@@ -2399,6 +2399,7 @@ static void readOttava(XmlReader& e, Ottava* ottava)
             else if (!readTextLineProperties(e, ottava))
                   e.unknown();
             }
+      ottava->styleChanged();
       adjustPlacement(ottava);
       }
 
