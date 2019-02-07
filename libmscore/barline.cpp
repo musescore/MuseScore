@@ -25,6 +25,7 @@
 #include "stafflines.h"
 #include "spanner.h"
 #include "undo.h"
+#include "fermata.h"
 
 namespace Ms {
 
@@ -584,7 +585,7 @@ bool BarLine::acceptDrop(EditData& data) const
             return true;
             }
       else {
-            return (type == ElementType::ARTICULATION
+            return ((type == ElementType::ARTICULATION || type == ElementType::FERMATA)
                && segment()
                && segment()->isEndBarLineType());
             }
@@ -645,6 +646,27 @@ Element* BarLine::drop(EditData& data)
             atr->setTrack(track());
             score()->undoAddElement(atr);
             return atr;
+            }
+      else if (e->isFermata()) {
+            e->setPlacement(track() & 1 ? Placement::BELOW : Placement::ABOVE);
+            for (Element* el: segment()->annotations())
+                  if (el->isFermata() && (el->track() == track())) {
+                        if (el->subtype() == e->subtype()) {
+                              delete e;
+                              return el;
+                        }
+                        else {
+                              e->setPlacement(el->placement());
+                              e->setTrack(track());
+                              e->setParent(segment());
+                              score()->undoChangeElement(el, e);
+                              return e;
+                        }
+                  }
+            e->setTrack(track());
+            e->setParent(segment());
+            score()->undoAddElement(e);
+            return e;
             }
       return 0;
       }
