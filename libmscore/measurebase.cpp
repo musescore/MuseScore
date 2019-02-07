@@ -66,6 +66,10 @@ void MeasureBase::clearElements()
 ElementList MeasureBase::takeElements()
       {
       ElementList l = _el;
+      // if we are to empty the elementList, we need to make
+      // sure that the measure-flags are updated
+      setSectionBreak(false); // only SET if an LayoutBreak::SECTION element is present.
+
       _el.clear();
       return l;
       }
@@ -430,12 +434,18 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
 
 //---------------------------------------------------------
 //   cleanupLayoutBreaks
+// This function names hints of a possible KLUDGE somewhere else.
+// The score is obvious in an inconsistent state, and a
+// stop-gap-measure function like this is needed.
 //---------------------------------------------------------
 
 void MeasureBase::cleanupLayoutBreaks(bool undo)
       {
       // remove unneeded layout breaks
       std::vector<Element*> toDelete;
+      bool has_lb_section_elm = false;
+      // Remove layout-break-elements when no such ElementFlag
+      // is set on the measure.
       for (Element* e : el()) {
             if (e->isLayoutBreak()) {
                   switch (toLayoutBreak(e)->layoutBreakType()) {
@@ -448,6 +458,7 @@ void MeasureBase::cleanupLayoutBreaks(bool undo)
                                     toDelete.push_back(e);
                               break;
                         case LayoutBreak::SECTION:
+                              has_lb_section_elm = true;
                               if (!sectionBreak())
                                     toDelete.push_back(e);
                               break;
@@ -463,6 +474,16 @@ void MeasureBase::cleanupLayoutBreaks(bool undo)
                   score()->undoRemoveElement(e);
             else
                   _el.remove(e);
+            }
+
+      // Reset the ElementFlag::SECTION_BREAK when no
+      // associated layout-break elements are found.
+      if(sectionBreak() && (! has_lb_section_elm)){
+            // Emergency correct the measure flag, this is needed
+            // because alot of code relies on the fact that
+            // if sectionBreak() holds, then sectionBreakElement() must return an element.
+            setSectionBreak(false);
+            qWarning("measure %d has sectionBreak flag, but no element of type ElementType::LAYOUT_BREAK\n", no());
             }
       }
 
@@ -599,8 +620,13 @@ LayoutBreak* MeasureBase::sectionBreakElement() const
                   if (e->isLayoutBreak() && toLayoutBreak(e)->isSectionBreak())
                         return toLayoutBreak(e);
                   }
+            /* If we end up here, then we have a measure
+             * where the sectionBreak flag is set, but no
+             * section-break-element is found in the measure's
+             * element-list.
+             */
+            qWarning("Measure %d, without a section-break-element", no());
             }
-      return 0;
+      return nullptr;
       }
 }
-

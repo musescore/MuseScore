@@ -310,8 +310,9 @@ void Score::readStaff(XmlReader& e)
                               // this is a multi measure rest
                               // always preceded by the first measure it replaces
                               Measure* m1 = e.lastMeasure();
-
                               if (m1) {
+                                    // Ensure mmRest slot is not occupied, or else we would leak the measure
+                                    Q_ASSERT(! m1->mmRest());
                                     m1->setMMRest(measure);
                                     measure->setTick(m1->tick());
                                     }
@@ -1376,4 +1377,3 @@ Tuplet* Score::searchTuplet(XmlReader& /*e*/, int /*id*/)
       }
 
 }
-
