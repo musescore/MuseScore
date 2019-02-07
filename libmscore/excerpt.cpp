@@ -114,15 +114,6 @@ bool Excerpt::operator==(const Excerpt& e) const
       }
 
 //---------------------------------------------------------
-//   localSetScore
-//---------------------------------------------------------
-
-static void localSetScore(void* score, Element* element)
-      {
-      element->setScore((Score*)score);
-      }
-
-//---------------------------------------------------------
 //   createExcerpt
 //---------------------------------------------------------
 

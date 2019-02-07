@@ -1288,16 +1288,16 @@ static void adjustPlacement(Element* e)
                         normalize = staffHeight;
                   else
                         normalize = 0.0;
-                  qreal ypos = a->offset().y() + normalize;
+                  qreal yp = a->offset().y() + normalize;
                   a->ryoffset() += normalize + offsetAdjust;
 
                   // if any segments are offset to opposite side of staff from placement,
                   // or if they are within staff,
                   // disable autoplace
                   bool disableAutoplace;
-                  if (ypos + a->height() <= 0.0)
+                  if (yp + a->height() <= 0.0)
                         disableAutoplace = (newPlacement == Placement::BELOW);
-                  else if (ypos > staffHeight)
+                  else if (yp > staffHeight)
                         disableAutoplace = (newPlacement == Placement::ABOVE);
                   else
                         disableAutoplace = true;
@@ -1578,7 +1578,7 @@ static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be, QSt
 //   readTextProperties206
 //---------------------------------------------------------
 
-static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
+static bool readTextProperties206(XmlReader& e, TextBase* t)
       {
       const QStringRef& tag(e.name());
       if (tag == "style") {
@@ -1653,7 +1653,7 @@ static void readText206(XmlReader& e, TextBase* t, Element* be)
       {
       readTextPropertyStyle206(e, t, be, e.name());
       while (e.readNextStartElement()) {
-            if (!readTextProperties206(e, t, be))
+            if (!readTextProperties206(e, t))
                   e.unknown();
             }
       }
@@ -1671,7 +1671,7 @@ static void readTempoText(TempoText* t, XmlReader& e)
                   t->setTempo(e.readDouble());
             else if (tag == "followText")
                   t->setFollowText(e.readInt());
-            else if (!readTextProperties206(e, t, t))
+            else if (!readTextProperties206(e, t))
                   e.unknown();
             }
       // check sanity
@@ -1699,7 +1699,7 @@ static void readMarker(Marker* m, XmlReader& e)
                   m->setLabel(s);
                   mt = m->markerType(s);
                   }
-            else if (!readTextProperties206(e, m, m))
+            else if (!readTextProperties206(e, m))
                   e.unknown();
             }
       m->setMarkerType(mt);
@@ -1720,7 +1720,7 @@ static void readDynamic(Dynamic* d, XmlReader& e)
                   d->setVelocity(e.readInt());
             else if (tag == "dynType")
                   d->setDynRange(Dynamic::Range(e.readInt()));
-            else if (!readTextProperties206(e, d, d))
+            else if (!readTextProperties206(e, d))
                   e.unknown();
             }
       }

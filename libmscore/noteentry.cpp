@@ -602,14 +602,14 @@ void Score::localInsertChord(const Position& pos)
                         else if (cr->isChord()) {
                               Chord* chord = toChord(cr);
                               std::vector<TDuration> durations = toDurationList(chord->duration() + fraction, /* useDots */ true);
-                              Fraction pos = chord->afrac();
+                              Fraction p = chord->afrac();
                               ms->undoRemoveElement(chord);
                               Chord* prevChord = nullptr;
                               for (const TDuration& dur : durations) {
                                     Chord* prototype = prevChord ? prevChord : chord;
                                     const bool genTie = bool(prevChord);
-                                    prevChord = ms->addChord(pos.ticks(), dur, prototype, genTie, /* tuplet */ nullptr);
-                                    pos += dur.fraction();
+                                    prevChord = ms->addChord(p.ticks(), dur, prototype, genTie, /* tuplet */ nullptr);
+                                    p += dur.fraction();
                                     }
                               // TODO: reconnect ties if this chord was tied to other
                               }

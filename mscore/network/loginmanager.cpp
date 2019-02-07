@@ -543,6 +543,7 @@ void LoginManager::onGetScoreInfoReply(QNetworkReply* reply, int code, const QJs
 
 void LoginManager::getMediaUrl(const QString& nid, const QString& vid, const QString& encoding)
       {
+      Q_UNUSED(encoding);
       ApiRequest r = ApiRequestBuilder()
          .setPath("/score/audio")
          .setToken(_accessToken)
@@ -724,6 +725,9 @@ void LoginManager::mediaUploadProgress(qint64 progress, qint64 total)
 
 void LoginManager::upload(const QString &path, int nid, const QString &title, const QString &description, const QString& priv, const QString& license, const QString& tags, const QString& changes)
       {
+#if ! 0 // see further down
+      Q_UNUSED(changes);
+#endif
       qDebug() << "file upload" << nid;
 //       KQOAuthRequest *oauthRequest = new KQOAuthRequest(this);
 //       QUrl url(QString("https://%1/services/rest/score.json").arg(MUSESCORE_HOST));
