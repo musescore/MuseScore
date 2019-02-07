@@ -108,9 +108,9 @@ echo "Compare PNG files and references"
 for src in $SRC; do
       if test -f $src-1.png; then
             cp ../$src-ref.png .
-            compare $src-1.png $src-ref.png $src-diff.png
+            compare -verbose -metric AE $src-1.png $src-ref.png $src-diff.png
             fi
-      done
+      done 2>&1 | tee /dev/stderr | fgrep -e Image: -e all: >LOG-compare
 
 echo "Generate report"
 F=vtest.html
