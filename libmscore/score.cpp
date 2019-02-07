@@ -263,7 +263,7 @@ Score::Score()
       accInfo = "No selection";
       }
 
-Score::Score(MasterScore* parent)
+Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
    : Score{}
       {
       Score::validScores.insert(this);
@@ -291,10 +291,12 @@ Score::Score(MasterScore* parent)
             for (auto i : styles)
                   _style.set(i, MScore::defaultStyle().value(i));
             // and force some style settings that just make sense for parts
-            style().set(Sid::concertPitch, false);
-            style().set(Sid::createMultiMeasureRests, true);
-            style().set(Sid::dividerLeft, false);
-            style().set(Sid::dividerRight, false);
+            if (forcePartStyle) {
+                  style().set(Sid::concertPitch, false);
+                  style().set(Sid::createMultiMeasureRests, true);
+                  style().set(Sid::dividerLeft, false);
+                  style().set(Sid::dividerRight, false);
+                  }
             }
       _synthesizerState = parent->_synthesizerState;
       _mscVersion = parent->_mscVersion;
