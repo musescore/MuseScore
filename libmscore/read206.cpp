@@ -1922,7 +1922,7 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
             ch->setBeamMode(bm);
             }
       else if (tag == "Articulation") {
-            Element* el = readArticulation(ch, e);
+            Element* el = readArticulation(ch->score(), e);
             if (el->isFermata())
                   ch->segment()->add(el);
             else
@@ -2526,12 +2526,13 @@ static void setFermataPlacement(Element* el, ArticulationAnchor anchor, Directio
 //   readArticulation
 //---------------------------------------------------------
 
-Element* readArticulation(ChordRest* cr, XmlReader& e)
+Element* readArticulation(Score* score, XmlReader& e)
       {
       Element* el = 0;
       SymId sym = SymId::fermataAbove;          // default -- backward compatibility (no type = ufermata in 1.2)
       ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
       Direction direction = Direction::AUTO;
+      int track = e.track();
       double timeStretch = 0.0;
       bool useDefaultPlacement = true;
 
@@ -2583,7 +2584,7 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                                           sym       = al[i].id;
                                           bool up   = al[i].up;
                                           direction = up ? Direction::UP : Direction::DOWN;
-                                          if ((direction == Direction::DOWN) != (cr->track() & 1))
+                                          if ((direction == Direction::DOWN) != (track & 1))
                                                 useDefaultPlacement = false;
                                           break;
                                           }
@@ -2604,10 +2605,10 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                         case SymId::fermataLongBelow:
                         case SymId::fermataVeryLongAbove:
                         case SymId::fermataVeryLongBelow:
-                              el = new Fermata(sym, cr->score());
+                              el = new Fermata(sym, score);
                               break;
                         default:
-                              el = new Articulation(sym, cr->score());
+                              el = new Articulation(sym, score);
                               toArticulation(el)->setDirection(direction);
                               break;
                         };
@@ -2639,16 +2640,16 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
             }
       // Special case for "no type" = ufermata, with missing subtype tag
       if (!el)
-            el = new Fermata(sym, cr->score());
+            el = new Fermata(sym, score);
       if (el->isFermata()) {
             if (timeStretch != 0.0)
                   el->setProperty(Pid::TIME_STRETCH, timeStretch);
             if (useDefaultPlacement)
-                  el->setPlacement(cr->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+                  el->setPlacement(track & 1 ? Placement::BELOW : Placement::ABOVE);
             else
                   setFermataPlacement(el, anchor, direction);
             }
-      el->setTrack(cr->track());
+      el->setTrack(track);
       return el;
       }
 
@@ -2775,6 +2776,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   lastTick = e.tick();
                   }
             else if (tag == "BarLine") {
+                  Fermata* fermataAbove = nullptr;
+                  Fermata* fermataBelow = nullptr;
                   BarLine* bl = new BarLine(score);
                   bl->setTrack(e.track());
                   while (e.readNextStartElement()) {
@@ -2796,9 +2799,17 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         else if (t == "spanToOffset")
                               bl->setSpanTo(e.readInt());
                         else if (t == "Articulation") {
-                              Articulation* a = new Articulation(score);
-                              a->read(e);
-                              bl->add(a);
+                              Element* el = readArticulation(score, e);
+                              if (el->isFermata()) {
+                                    if (el->placement() == Placement::ABOVE)
+                                          fermataAbove = toFermata(el);
+                                    else {
+                                          fermataBelow = toFermata(el);
+                                          fermataBelow->setTrack((bl->staffIdx() + bl->spanStaff()) * VOICES);
+                                          }
+                                    }
+                              else
+                                    bl->add(el);
                               }
                         else if (!bl->Element::readProperties(e))
                               e.unknown();
@@ -2821,6 +2832,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   segment = m->getSegment(st, e.tick());
                   segment->add(bl);
                   bl->layout();
+                  if (fermataAbove)
+                        segment->add(fermataAbove);
+                  if (fermataBelow)
+                        segment->add(fermataBelow);
                   }
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score);
