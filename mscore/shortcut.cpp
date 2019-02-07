@@ -2689,7 +2689,7 @@ Shortcut Shortcut::_sc[] = {
 #endif
       {
          MsWidget::MAIN_WINDOW,
-         STATE_NORMAL & (~STATE_TEXT_EDIT),
+         ~STATE_TEXT_EDIT,
          "fullscreen",
          QT_TRANSLATE_NOOP("action","Full Screen"),
          QT_TRANSLATE_NOOP("action","Full screen")
