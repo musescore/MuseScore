@@ -2365,7 +2365,6 @@ void ScoreView::textTab(bool back)
       // find new note to add text to
       while (el) {
             if (el->isNote()) {
-                  Note* n = toNote(el);
                   if (op->isNote() || op->isSegment())
                         break;
                   }
