@@ -3344,6 +3344,8 @@ static void readBox(Box* b, XmlReader& e)
       b->setBottomMargin(0.0);
       b->setTopGap(0.0);
       b->setBottomGap(0.0);
+      b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
+      b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
 
       b->setBoxHeight(Spatium(0));     // override default set in constructor
       b->setBoxWidth(Spatium(0));
@@ -3451,9 +3453,17 @@ static void readStaffContent(Score* score, XmlReader& e)
                         readBox(b, e);
                         b->setTick(e.tick());
                         score->measures()->add(b);
-                        lastReadBox = b;
-                        if (readMeasureLast)
+
+                        // If it's the first box, and comes before any measures, reset to
+                        // 301 default.
+                        if (!readMeasureLast && !lastReadBox) {
+                              b->setTopGap(b->propertyDefault(Pid::TOP_GAP).toReal());
+                              b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::STYLED);
+                              }
+                        else if (readMeasureLast)
                               b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).toReal());
+
+                        lastReadBox = b;
                         readMeasureLast = false;
                         }
                   else if (tag == "tick")
