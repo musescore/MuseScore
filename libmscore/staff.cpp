@@ -31,6 +31,7 @@
 #include "ottava.h"
 #include "harmony.h"
 #include "bracketItem.h"
+#include "chord.h"
 
 // #define DEBUG_CLEFS
 
@@ -863,6 +864,44 @@ int Staff::capo(int tick) const
             return 0;
       --i;
       return i.value();
+      }
+
+//---------------------------------------------------------
+//   getNotes
+//---------------------------------------------------------
+
+QList<Note*> Staff::getNotes()
+      {
+      QList<Note*> list;
+
+      int staffIdx = idx();
+
+      SegmentType st = SegmentType::ChordRest;
+      for (Segment* s = score()->firstSegment(st); s; s = s->next1(st)) {
+            for (int voice = 0; voice < VOICES; ++voice) {
+                  int track = voice + staffIdx * VOICES;
+                  Element* e = s->element(track);
+                  if (e && e->isChord())
+                        addChord(list, toChord(e), voice);
+                  }
+            }
+
+      return list;
+      }
+
+//---------------------------------------------------------
+//   addChord
+//---------------------------------------------------------
+
+void Staff::addChord(QList<Note*>& list, Chord* chord, int voice)
+      {
+      for (Chord* c : chord->graceNotes())
+            addChord(list, c, voice);
+      for (Note* note : chord->notes()) {
+            if (note->tieBack())
+                  continue;
+            list.append(note);
+            }
       }
 
 //---------------------------------------------------------

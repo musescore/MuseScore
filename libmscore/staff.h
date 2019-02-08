@@ -59,6 +59,8 @@ struct SwingParameters {
 ///    Global staff data not directly related to drawing.
 //---------------------------------------------------------
 
+class Note;
+
 class Staff final : public ScoreElement {
    public:
       enum class HideMode { AUTO, ALWAYS, NEVER, INSTRUMENT };
@@ -181,6 +183,9 @@ class Staff final : public ScoreElement {
       void setBarLineFrom(int val)   { _barLineFrom = val;  }
       void setBarLineTo(int val)     { _barLineTo = val;    }
       qreal height() const;
+
+      QList<Note*> getNotes();
+      void addChord(QList<Note*>& list, Chord* chord, int voice);
 
       int channel(int tick, int voice) const;
       void clearChannelList(int voice)                               { _channelList[voice].clear(); }

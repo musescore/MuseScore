@@ -21,6 +21,7 @@
 #define __PIANOLEVELSFILTER_H__
 
 #include <QString>
+#include <QCoreApplication>
 
 namespace Ms {
 
@@ -55,8 +56,10 @@ public:
 
 class PianoLevelFilterOnTime : public PianoLevelsFilter
 {
+      Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterOnTime)
+
 public:
-      QString name() override { return "On Time"; }
+      QString name() override { return tr("On Time"); }
       int maxRange() override { return 1000; }
       int minRange() override { return -1000; }
       int divisionGap() override { return 250; }
@@ -73,11 +76,33 @@ public:
 
 class PianoLevelFilterLen : public PianoLevelsFilter
 {
+      Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterLen)
+
 public:
-      QString name() override { return "Length"; }
+      QString name() override { return tr("Length As Note Multiplier"); }
       int maxRange() override { return 1000; }
       int minRange() override { return 0; }
       int divisionGap() override { return 250; }
+      bool isPerEvent() override { return true; }
+      int value(Staff* staff, Note* note, NoteEvent* evt) override;
+      void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
+};
+
+
+//---------------------------------------------------------
+//   PianoLevelFilterLenOff
+//---------------------------------------------------------
+
+
+class PianoLevelFilterLenOfftime : public PianoLevelsFilter
+{
+      Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterLenOfftime)
+
+public:
+      QString name() override { return tr("Length As Note Offtime"); }
+      int maxRange() override;
+      int minRange() override { return 0; }
+      int divisionGap() override;
       bool isPerEvent() override { return true; }
       int value(Staff* staff, Note* note, NoteEvent* evt) override;
       void setValue(Staff* staff, Note* note, NoteEvent* evt, int value) override;
@@ -91,8 +116,10 @@ public:
 
 class PianoLevelFilterVeloOffset : public PianoLevelsFilter
 {
+      Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterVeloOffset)
+
 public:
-      QString name() override { return "Velocity Offset"; }
+      QString name() override { return tr("Velocity Relative to Dynamic"); }
       int maxRange() override { return 200; }
       int minRange() override { return -200; }
       int divisionGap() override { return 100; }
@@ -109,8 +136,10 @@ public:
 
 class PianoLevelFilterVeloUser : public PianoLevelsFilter
 {
+      Q_DECLARE_TR_FUNCTIONS(PianoLevelFilterVeloUser)
+
 public:
-      QString name() override { return "Velocity Absolute"; }
+      QString name() override { return tr("Velocity As MIDI Volume"); }
       int maxRange() override { return 128; }
       int minRange() override { return 0; }
       int divisionGap() override { return 32; }

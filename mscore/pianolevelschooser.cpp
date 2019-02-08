@@ -1,8 +1,9 @@
 #include "pianolevelschooser.h"
 #include "pianolevelsfilter.h"
 
-namespace Ms {
+#include "libmscore/score.h"
 
+namespace Ms {
 
 //---------------------------------------------------------
 //   PianoLevelsChooser
@@ -11,22 +12,27 @@ namespace Ms {
 PianoLevelsChooser::PianoLevelsChooser(QWidget *parent)
       : QWidget(parent)
 {
+      setupUi(this);
+
       _levelsIndex = 0;
 
-      QGridLayout* layout = new QGridLayout;
-
-      levelsCombo = new QComboBox;
       for (int i = 0; PianoLevelsFilter::FILTER_LIST[i]; ++i) {
             QString name = PianoLevelsFilter::FILTER_LIST[i]->name();
             levelsCombo->addItem(name, i);
             }
 
-      layout->addWidget(levelsCombo, 0, 0, 1, 1);
-
-      setLayout(layout);
-
       connect(levelsCombo, SIGNAL(activated(int)), SLOT(setLevelsIndex(int)));
+      connect(setEventsBn, SIGNAL(clicked(bool)), SLOT(setEventDataPressed()));
 }
+
+//---------------------------------------------------------
+//   setStaff
+//---------------------------------------------------------
+
+void PianoLevelsChooser::setStaff(Staff* staff)
+      {
+      _staff = staff;
+      }
 
 
 //---------------------------------------------------------
@@ -40,5 +46,55 @@ void PianoLevelsChooser::setLevelsIndex(int index)
             emit levelsIndexChanged(index);
             }
 }
+
+
+//---------------------------------------------------------
+//   PianoLevelsChooser
+//---------------------------------------------------------
+
+void PianoLevelsChooser::setEventDataPressed()
+      {
+      PianoLevelsFilter* filter = PianoLevelsFilter::FILTER_LIST[_levelsIndex];
+
+      int val = eventValSpinBox->value();
+      QList<Note*> noteList = _staff->getNotes();
+
+      Score* score = _staff->score();
+
+      score->startCmd();
+
+      for(Note* note: noteList) {
+            if (!note->selected())
+                  continue;
+
+            if (filter->isPerEvent()) {
+                  for (NoteEvent& e : note->playEvents()) {
+                        filter->setValue(_staff, note, &e, val);
+                        }
+                  }
+                  else
+                        filter->setValue(_staff, note, nullptr, val);
+
+            }
+
+      score->endCmd();
+
+      emit notesChanged();
+      }
+
+//---------------------------------------------------------
+//   addChord
+//---------------------------------------------------------
+
+//void PianoLevelsChooser::addChord(Chord* chord, int voice)
+//      {
+//      for (Chord* c : chord->graceNotes())
+//            addChord(c, voice);
+//      for (Note* note : chord->notes()) {
+//            if (note->tieBack())
+//                  continue;
+//            noteList.append(note);
+//            }
+//      }
 
 }

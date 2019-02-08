@@ -71,7 +71,7 @@ endif (SCRIPT_INTERFACE)
 QT5_WRAP_UI (ui_headers
       insertmeasuresdialog.ui editinstrument.ui editstyle.ui instrdialog.ui instrwidget.ui
       measuresdialog.ui pagesettings.ui mixer.ui mixertrackchannel.ui mixertrackpart.ui mixerdetails.ui parteditbase.ui
-      playpanel.ui prefsdialog.ui measureproperties.ui
+      playpanel.ui prefsdialog.ui measureproperties.ui pianolevelschooser.ui
       textpalette.ui  timedialog.ui symboldialog.ui  shortcutcapturedialog.ui  editdrumset.ui
       editstaff.ui timesigproperties.ui
       instrwizard.ui timesigwizard.ui newwizard.ui aboutbox.ui aboutmusicxmlbox.ui
@@ -84,7 +84,7 @@ QT5_WRAP_UI (ui_headers
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
       logindialog.ui uploadscoredialog.ui breaksdialog.ui
-      toolbarEditor.ui workspacedialog.ui
+      toolbarEditor.ui workspacedialog.ui notetweakerdialog.ui
 
       importmidi/importmidi_panel.ui
 
@@ -323,7 +323,7 @@ add_executable ( ${ExecutableName}
       magbox.h masterpalette.h
       measureproperties.h mediadialog.h metaedit.h miconengine.h mididriver.h
       mixer.h mixertrack.h mixertrackchannel.h mixertrackgroup.h mixertrackitem.h mixertrackpart.h mixerdetails.h musedata.h
-      musescore.h musicxml.h musicxmlfonthandler.h musicxmlsupport.h navigator.h newwizard.h noteGroups.h
+      musescore.h musicxml.h musicxmlfonthandler.h musicxmlsupport.h navigator.h newwizard.h noteGroups.h notetweakerdialog.h
       omrpanel.h ove.h pa.h pagesettings.h palette.h palettebox.h paletteBoxButton.h partedit.h parteditbase.h
       pathlistdialog.h piano.h pianolevels.h pianolevelschooser.h  pianolevelsfilter.h
       pianokeyboard.h pianoroll.h pianoruler.h pianotools.h pianoview.h
@@ -361,6 +361,7 @@ add_executable ( ${ExecutableName}
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianokeyboard.cpp pianolevels.cpp pianolevelschooser.cpp pianolevelsfilter.cpp
       pianoruler.cpp pianoview.cpp drumview.cpp scoretab.cpp keyedit.cpp harmonyedit.cpp
+      notetweakerdialog.cpp
       updatechecker.cpp
       importove.cpp
       ove.cpp

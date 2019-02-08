@@ -24,6 +24,7 @@ class ChordRest;
 class Note;
 class NoteEvent;
 class PianoView;
+class NoteTweakerDialog;
 
 enum class NoteSelectType {
       REPLACE = 0,
@@ -132,6 +133,7 @@ private:
       void pitchChanged(int);
       void trackingPosChanged(const Pos&);
       void selectionChanged();
+      void showNoteTweakerRequest();
 
    public slots:
       void moveLocator(int);
@@ -140,6 +142,7 @@ private:
       void setTuplet(int);
       void setSubdiv(int);
       void setBarPattern(int);
+      void showNoteTweaker();
 
    public:
       PianoView();

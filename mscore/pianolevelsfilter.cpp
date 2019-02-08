@@ -1,6 +1,7 @@
 #include "pianolevelsfilter.h"
 
 #include "libmscore/note.h"
+#include "libmscore/chord.h"
 #include "libmscore/staff.h"
 #include "libmscore/score.h"
 #include "libmscore/undo.h"
@@ -10,6 +11,7 @@ namespace Ms {
 
 PianoLevelsFilter* PianoLevelsFilter::FILTER_LIST[] = {
       new PianoLevelFilterLen,
+      new PianoLevelFilterLenOfftime,
       new PianoLevelFilterVeloOffset,
       new PianoLevelFilterVeloUser,
       new PianoLevelFilterOnTime,
@@ -60,6 +62,59 @@ void PianoLevelFilterLen::setValue(Staff* staff, Note* note, NoteEvent* evt, int
 
       NoteEvent ne = *evt;
       ne.setLen(value);
+
+      score->startCmd();
+      score->undo(new ChangeNoteEvent(note, evt, ne));
+      score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   maxRange
+//---------------------------------------------------------
+
+int PianoLevelFilterLenOfftime::maxRange()
+      {
+            return MScore::division;
+      }
+
+//---------------------------------------------------------
+//   divisionGap
+//---------------------------------------------------------
+
+int PianoLevelFilterLenOfftime::divisionGap()
+      {
+            return MScore::division / 4;
+      }
+
+//---------------------------------------------------------
+//   value
+//---------------------------------------------------------
+
+int PianoLevelFilterLenOfftime::value(Staff* /*staff*/, Note* note, NoteEvent* evt)
+      {
+      Chord* chord = note->chord();
+      int ticks = chord->duration().ticks();
+      int gate = evt->len();
+      int offTicks = ticks - (ticks * gate / 1000);
+
+      return offTicks;
+      }
+
+//---------------------------------------------------------
+//   setValue
+//---------------------------------------------------------
+
+void PianoLevelFilterLenOfftime::setValue(Staff* staff, Note* note, NoteEvent* evt, int value)
+      {
+      Chord* chord = note->chord();
+      int ticks = chord->duration().ticks();
+      int onTicks = qMax(ticks - value, 1);
+      int gate = 1000 * onTicks / ticks;
+
+      Score* score = staff->score();
+
+      NoteEvent ne = *evt;
+      ne.setLen(gate);
 
       score->startCmd();
       score->undo(new ChangeNoteEvent(note, evt, ne));

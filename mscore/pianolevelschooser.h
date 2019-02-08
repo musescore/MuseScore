@@ -20,8 +20,11 @@
 #ifndef __PIANOLEVELSCHOOSER_H__
 #define __PIANOLEVELSCHOOSER_H__
 
+#include "ui_pianolevelschooser.h"
+
 #include <QObject>
 #include <QWidget>
+#include "libmscore/staff.h"
 
 namespace Ms {
 
@@ -30,17 +33,24 @@ namespace Ms {
 //   PianoLevelsChooser
 //---------------------------------------------------------
 
-class PianoLevelsChooser : public QWidget
+class PianoLevelsChooser : public QWidget, public Ui::PianoLevelsChooser
 {
-    Q_OBJECT
+      Q_OBJECT
 
-      QComboBox* levelsCombo;
       int _levelsIndex;
+      Staff* _staff;
+
+public:
+      Staff* staff() { return _staff; }
+      void setStaff(Staff*);
+
 signals:
       void levelsIndexChanged(int);
+      void notesChanged();
 
 public slots:
       void setLevelsIndex(int index);
+      void setEventDataPressed();
 
 public:
     explicit PianoLevelsChooser(QWidget *parent = 0);

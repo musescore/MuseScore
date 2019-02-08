@@ -21,6 +21,7 @@
 #include "seq.h"
 #include "preferences.h"
 #include "waveview.h"
+#include "notetweakerdialog.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
@@ -48,6 +49,8 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       waveView = 0;
       _score   = 0;
       staff    = 0;
+
+      noteTweakerDlg = new NoteTweakerDialog(this);
 
       QWidget* mainWidget = new QWidget;
       QToolBar* tb = addToolBar("Toolbar 1");
@@ -262,16 +265,19 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(hsb,         SIGNAL(valueChanged(int)),                 SLOT(setXpos(int)));
       connect(pianoView->horizontalScrollBar(), SIGNAL(valueChanged(int)),   SLOT(setXpos(int)));
 
-      connect(ruler,       SIGNAL(locatorMoved(int, const Pos&)), SLOT(moveLocator(int, const Pos&)));
-      connect(pianoLevels, SIGNAL(locatorMoved(int, const Pos&)), SLOT(moveLocator(int, const Pos&)));
-      connect(veloType,    SIGNAL(activated(int)),                SLOT(veloTypeChanged(int)));
-      connect(velocity,    SIGNAL(valueChanged(int)),             SLOT(velocityChanged(int)));
-      connect(onTime,      SIGNAL(valueChanged(int)),             SLOT(onTimeChanged(int)));
-      connect(tickLen,     SIGNAL(valueChanged(int)),             SLOT(tickLenChanged(int)));
-      connect(pianoView,   SIGNAL(selectionChanged()),            SLOT(selectionChanged()));
-      connect(pianoKbd,    SIGNAL(keyPressed(int)),               SLOT(keyPressed(int)));
-      connect(pianoKbd,    SIGNAL(keyReleased(int)),              SLOT(keyReleased(int)));
-      connect(pianoLevels, SIGNAL(noteLevelsChanged()),           SLOT(selectionChanged()));
+      connect(ruler,              SIGNAL(locatorMoved(int, const Pos&)), SLOT(moveLocator(int, const Pos&)));
+      connect(pianoLevels,        SIGNAL(locatorMoved(int, const Pos&)), SLOT(moveLocator(int, const Pos&)));
+      connect(veloType,           SIGNAL(activated(int)),                SLOT(veloTypeChanged(int)));
+      connect(velocity,           SIGNAL(valueChanged(int)),             SLOT(velocityChanged(int)));
+      connect(onTime,             SIGNAL(valueChanged(int)),             SLOT(onTimeChanged(int)));
+      connect(tickLen,            SIGNAL(valueChanged(int)),             SLOT(tickLenChanged(int)));
+      connect(pianoView,          SIGNAL(selectionChanged()),            SLOT(selectionChanged()));
+      connect(pianoView,          SIGNAL(showNoteTweakerRequest()),      SLOT(showNoteTweaker()));
+      connect(pianoKbd,           SIGNAL(keyPressed(int)),               SLOT(keyPressed(int)));
+      connect(pianoKbd,           SIGNAL(keyReleased(int)),              SLOT(keyReleased(int)));
+      connect(pianoLevels,        SIGNAL(noteLevelsChanged()),           SLOT(selectionChanged()));
+      connect(noteTweakerDlg,     SIGNAL(notesChanged()),                SLOT(selectionChanged()));
+      connect(pianoLevelsChooser, SIGNAL(notesChanged()),                SLOT(selectionChanged()));
 
       readSettings();
 
@@ -311,8 +317,18 @@ PianorollEditor::~PianorollEditor()
             action->disconnect(this);
       }
 
+
 //---------------------------------------------------------
-//   focucOnElement
+//   showNoteTweaker
+//---------------------------------------------------------
+
+void PianorollEditor::showNoteTweaker()
+      {
+      noteTweakerDlg->show();
+      }
+
+//---------------------------------------------------------
+//   focusOnPosition
 //---------------------------------------------------------
 
 void PianorollEditor::focusOnPosition(Position* p)
@@ -368,7 +384,9 @@ void PianorollEditor::setStaff(Staff* st)
       pianoView->setStaff(staff, locator);
       pianoLevels->setScore(_score, locator);
       pianoLevels->setStaff(staff, locator);
+      pianoLevelsChooser->setStaff(staff);
       pianoKbd->setStaff(staff);
+      noteTweakerDlg->setStaff(staff);
 
       updateSelection();
       setEnabled(st != nullptr);
@@ -626,6 +644,7 @@ void PianorollEditor::cmd(QAction* /*a*/)
       //score()->startCmd();
       pianoView->setStaff(staff, locator);
       pianoLevels->setStaff(staff, locator);
+      pianoLevelsChooser->setStaff(staff);
       pianoKbd->setStaff(staff);
       //score()->endCmd();
       }
