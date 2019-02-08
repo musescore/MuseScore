@@ -20,6 +20,7 @@
 
 #include "config.h"
 #include "input.h"
+#include "instrument.h"
 #include "select.h"
 #include "synthesizerstate.h"
 #include "mscoreview.h"
@@ -534,6 +535,8 @@ class Score : public QObject, public ScoreElement {
       Score();
       Score(MasterScore*);
       Score(MasterScore*, const MStyle&);
+      Score(const Score&) = delete;
+      Score& operator=(const Score&) = delete;
       virtual ~Score();
       Score* clone();
 
@@ -1186,6 +1189,10 @@ class MasterScore : public Score {
       TempoMap* _tempomap;
       RepeatList* _repeatList;
       QList<Excerpt*> _excerpts;
+      std::vector<std::unique_ptr<Channel>> _playbackChannels;
+      std::vector<PartChannelSettingsLink> _playbackCommonSettingsLinks;
+      std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
+      Score* _playbackScore = nullptr;
       Revisions* _revisions;
       MasterScore* _next      { 0 };
       MasterScore* _prev      { 0 };
@@ -1209,6 +1216,8 @@ class MasterScore : public Score {
 
       void parseVersion(const QString&);
       void reorderMidiMapping();
+      void rebuildExcerptsMidiMapping();
+      void rebuildPlaybackChannels();
       void removeDeletedMidiMapping();
       int updateMidiMapping();
 
@@ -1296,6 +1305,12 @@ class MasterScore : public Score {
       void addExcerpt(Excerpt*);
       void removeExcerpt(Excerpt*);
       void deleteExcerpt(Excerpt*);
+
+      void setPlaybackScore(Score*);
+      Score* playbackScore() { return _playbackScore; }
+      const Score* playbackScore() const { return _playbackScore; }
+      Channel* playbackChannel(const Channel* c)             { return _midiMapping[c->channel()].articulation; }
+      const Channel* playbackChannel(const Channel* c) const { return _midiMapping[c->channel()].articulation; }
 
       QFileInfo* fileInfo()               { return &info; }
       const QFileInfo* fileInfo() const   { return &info; }

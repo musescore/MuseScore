@@ -25,6 +25,7 @@
 namespace Ms {
 
 class InstrumentTemplate;
+class MasterScore;
 class XmlWriter;
 class XmlReader;
 class Drumset;
@@ -141,7 +142,6 @@ public:
 
       mutable std::vector<MidiCoreEvent> init;
 
-
       QString name() const { return _name; }
       void setName(const QString& value);
       QString descr() const { return _descr; }
@@ -178,7 +178,7 @@ public:
       QList<MidiArticulation> articulation;
 
       Channel();
-      void write(XmlWriter&, Part *part) const;
+      void write(XmlWriter&, const Part* part) const;
       void read(XmlReader&, Part *part);
       void updateInitList() const;
       bool operator==(const Channel& c) { return (_name == c._name) && (_channel == c._channel); }
@@ -198,6 +198,38 @@ class ChannelListener : public Listener<Channel::Prop> {
 
    private:
       void receive(Channel::Prop prop) override { propertyChanged(prop); }
+      };
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink
+//---------------------------------------------------------
+
+class PartChannelSettingsLink final : private ChannelListener {
+      // A list of properties which may vary for different excerpts.
+      static constexpr std::initializer_list<Channel::Prop> excerptProperties {
+            Channel::Prop::SOLOMUTE,
+            Channel::Prop::SOLO,
+            Channel::Prop::MUTE,
+            };
+
+   private:
+      Channel* _main;
+      Channel* _bound;
+      bool _excerpt;
+
+      static bool isExcerptProperty(Channel::Prop p) { return std::find(excerptProperties.begin(), excerptProperties.end(), p) != excerptProperties.end(); }
+      static void applyProperty(Channel::Prop p, const Channel* from, Channel* to);
+      void propertyChanged(Channel::Prop p) override;
+
+   public:
+      PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt);
+      PartChannelSettingsLink(const PartChannelSettingsLink&) = delete;
+      PartChannelSettingsLink(PartChannelSettingsLink&&);
+      PartChannelSettingsLink& operator=(const PartChannelSettingsLink&) = delete;
+      PartChannelSettingsLink& operator=(PartChannelSettingsLink&&);
+      ~PartChannelSettingsLink();
+
+      friend void swap(PartChannelSettingsLink&, PartChannelSettingsLink&);
       };
 
 //---------------------------------------------------------
@@ -230,7 +262,7 @@ class Instrument {
 
       void read(XmlReader&, Part *part);
       bool readProperties(XmlReader&, Part* , bool* customDrumset);
-      void write(XmlWriter& xml, Part *part) const;
+      void write(XmlWriter& xml, const Part* part) const;
       NamedEventList* midiAction(const QString& s, int channel) const;
       int channelIdx(const QString& s) const;
       void updateVelocity(int* velocity, int channel, const QString& name);
@@ -256,6 +288,8 @@ class Instrument {
       void setProfessionalPitchRange(int a, int b)           { _minPitchP = a; _maxPitchP = b; }
       Channel* channel(int idx)                              { return _channel[idx];  }
       const Channel* channel(int idx) const                  { return _channel[idx];  }
+      Channel* playbackChannel(int idx, MasterScore*);
+      const Channel* playbackChannel(int idx, const MasterScore*) const;
       ClefTypeList clefType(int staffIdx) const;
       void setClefType(int staffIdx, const ClefTypeList& c);
 

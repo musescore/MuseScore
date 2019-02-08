@@ -516,7 +516,7 @@ void Seq::playEvent(const NPlayEvent& event, unsigned framePos)
             if (note) {
                   Staff* staff      = note->staff();
                   Instrument* instr = staff->part()->instrument(note->chord()->tick());
-                  const Channel* a = instr->channel(note->subchannel());
+                  const Channel* a = instr->playbackChannel(note->subchannel(), cs);
                   mute = a->mute() || a->soloMute() || !staff->playbackVoice(note->voice());
                   }
             if (!mute) {

@@ -2391,6 +2391,9 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       else
             cs = 0;
 
+      if (cs)
+            cs->masterScore()->setPlaybackScore(_playPartOnly ? cs : cs->masterScore());
+
                   // set midi import panel
       QString fileName = cs ? cs->importedFilePath() : "";
       midiPanelOnSwitchToFile(fileName);
@@ -2409,7 +2412,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       if (selectionWindow)
             selectionWindow->setScore(cs);
       if (mixer)
-            mixer->setScore(cs ? cs->masterScore() : nullptr);
+            mixer->setScore(cs);
 #ifdef OMR
       if (omrPanel) {
             if (cv && cv->omrView())
@@ -4377,8 +4380,8 @@ void MuseScore::play(Element* e) const
             seq->seek(tick);
             Instrument* instr = part->instrument(tick);
             for (Note* n : c->notes()) {
-                  const Channel* channel = instr->channel(n->subchannel());
-                  seq->startNote(channel->channel(), n->ppitch(), 80, n->tuning());
+                  const int channel = instr->channel(n->subchannel())->channel();
+                  seq->startNote(channel, n->ppitch(), 80, n->tuning());
                   }
             seq->startNoteTimer(MScore::defaultPlayDuration);
             }
@@ -4405,8 +4408,8 @@ void MuseScore::play(Element* e, int pitch) const
             if (tick < 0)
                   tick = 0;
             Instrument* instr = masterNote->part()->instrument(tick);
-            const Channel* channel = instr->channel(masterNote->subchannel());
-            seq->startNote(channel->channel(), pitch, 80, MScore::defaultPlayDuration, masterNote->tuning());
+            const int channel = instr->channel(masterNote->subchannel())->channel();
+            seq->startNote(channel, pitch, 80, MScore::defaultPlayDuration, masterNote->tuning());
             }
       }
 
@@ -5735,6 +5738,17 @@ void MuseScore::setPlayRepeats(bool repeat)
       }
 
 //---------------------------------------------------------
+//   setPlayPartOnly
+//---------------------------------------------------------
+
+void MuseScore::setPlayPartOnly(bool val)
+      {
+      _playPartOnly = val;
+      if (cs)
+            cs->masterScore()->setPlaybackScore(_playPartOnly ? cs : cs->masterScore());
+      }
+
+//---------------------------------------------------------
 //   createScoreTab
 //---------------------------------------------------------
 
@@ -5760,7 +5774,7 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
       if (cmd == "instruments") {
             editInstrList();
             if (mixer)
-                  mixer->setScore(cs->masterScore());
+                  mixer->setScore(cs);
             }
       else if (cmd == "rewind") {
             if (cs) {
@@ -6235,7 +6249,7 @@ void MuseScore::noteTooShortForTupletDialog()
 void MuseScore::instrumentChanged()
       {
       if (mixer)
-            mixer->setScore(cs->masterScore());
+            mixer->setScore(cs);
       }
 
 //---------------------------------------------------------
@@ -6662,10 +6676,11 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
             //
             // init instruments
             //
-            foreach(Part* part, score->parts()) {
+            for (Part* part : score->parts()) {
                   const InstrumentList* il = part->instruments();
                   for(auto i = il->begin(); i!= il->end(); i++) {
-                        for (const Channel* a : i->second->channel()) {
+                        for (const Channel* channel : i->second->channel()) {
+                              const Channel* a = score->masterScore()->playbackChannel(channel);
                               a->updateInitList();
                               for (MidiCoreEvent e : a->init) {
                                     if (e.type() == ME_INVALID)

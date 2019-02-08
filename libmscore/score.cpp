@@ -4444,6 +4444,37 @@ void MasterScore::setLayoutAll()
       }
 
 //---------------------------------------------------------
+//   setPlaybackScore
+//---------------------------------------------------------
+
+void MasterScore::setPlaybackScore(Score* score)
+      {
+      if (_playbackScore == score)
+            return;
+
+      _playbackScore = score;
+      _playbackSettingsLinks.clear();
+
+      if (!_playbackScore)
+            return;
+
+      for (auto& ch : _playbackChannels)
+            ch->setSoloMute(true);
+      for (Part* part : score->parts()) {
+            for (auto& i : *part->instruments()) {
+                  Instrument* instr = i.second;
+                  for (Channel* ch : instr->channel()) {
+                        Channel* pChannel = playbackChannel(ch);
+                        Q_ASSERT(pChannel);
+                        if (!pChannel)
+                              continue;
+                        _playbackSettingsLinks.emplace_back(pChannel, ch, /* excerpt */ true);
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   setLayout
 //---------------------------------------------------------
 
