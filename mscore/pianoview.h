@@ -103,6 +103,7 @@ private:
       bool inProgressUndoEvent;
       
       QList<PianoItem*> noteList;
+      char pitchHighlight[128];
 
       virtual void drawBackground(QPainter* painter, const QRectF& rect);
 
@@ -140,6 +141,7 @@ private:
       void setTuplet(int);
       void setSubdiv(int);
       void setBarPattern(int);
+      void togglePitchHighlight(int pitch);
 
    public:
       PianoView();

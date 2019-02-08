@@ -23,6 +23,8 @@
 #include "libmscore/part.h"
 #include "libmscore/drumset.h"
 
+#include <QGuiApplication>
+
 namespace Ms {
 
 const QColor colKeySelect = QColor(224, 170, 20);
@@ -250,11 +252,18 @@ void PianoKeyboard::mousePressEvent(QMouseEvent* event)
             ? event->pos().x()
             : 128 * noteHeight - (event->y() + _ypos);
 
-      curKeyPressed = offset / noteHeight;
-      if (curKeyPressed < 0 || curKeyPressed > 127)
-            curKeyPressed = -1;
+      int pitch = curKeyPressed = offset / noteHeight;
+      if (pitch < 0 || pitch > 127)
+            pitch = -1;
       
-      emit keyPressed(curKeyPressed);
+      uint modifiers = QGuiApplication::keyboardModifiers();
+      bool bnCtrl = modifiers & Qt::ControlModifier;
+      if (bnCtrl)
+            pitchHighlightToggled(curKeyPressed);
+      else {
+            curKeyPressed = pitch;
+            emit keyPressed(curKeyPressed);
+            }
       }
 
 //---------------------------------------------------------
@@ -263,8 +272,10 @@ void PianoKeyboard::mousePressEvent(QMouseEvent* event)
 
 void PianoKeyboard::mouseReleaseEvent(QMouseEvent*)
       {
-      emit keyReleased(curKeyPressed);
-      curKeyPressed = -1;
+      if (curKeyPressed != -1) {
+            emit keyReleased(curKeyPressed);
+            curKeyPressed = -1;
+            }
       }
 
 //---------------------------------------------------------
