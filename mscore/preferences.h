@@ -94,6 +94,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_APP_PLAYBACK_FOLLOWSONG                        "application/playback/followSong"
 #define PREF_APP_PLAYBACK_PANPLAYBACK                       "application/playback/panPlayback"
 #define PREF_APP_PLAYBACK_PLAYREPEATS                       "application/playback/playRepeats"
+#define PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY             "application/playback/setLoopToSelectionOnPlay"
 #define PREF_APP_USESINGLEPALETTE                           "application/useSinglePalette"
 #define PREF_APP_STARTUP_FIRSTSTART                         "application/startup/firstStart"
 #define PREF_APP_STARTUP_SESSIONSTART                       "application/startup/sessionStart"

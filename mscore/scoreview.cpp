@@ -3684,7 +3684,7 @@ void ScoreView::cmdTuplet(int n)
 
 void ScoreView::midiNoteReceived(int pitch, bool chord, int velocity)
       {
-      qDebug("midiNoteReceived %d chord %d", pitch, chord);
+      qDebug("midiNoteReceived: pitch %d, chord %d, velocity %d", pitch, chord, velocity);
 
       MidiInputEvent ev;
       ev.pitch = pitch;
