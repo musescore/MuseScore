@@ -12,6 +12,7 @@
 
 
 #include "score.h"
+#include "excerpt.h"
 #include "instrument.h"
 #include "part.h"
 
@@ -23,10 +24,16 @@ namespace Ms {
 
 void MasterScore::rebuildMidiMapping()
       {
+      Score* playbackScore = _playbackScore ? _playbackScore : this;
+      setPlaybackScore(nullptr);
+
       removeDeletedMidiMapping();
       int maxport = updateMidiMapping();
       reorderMidiMapping();
+      rebuildExcerptsMidiMapping();
       masterScore()->setMidiPortCount(maxport);
+
+      setPlaybackScore(playbackScore);
       }
 
 //---------------------------------------------------------
@@ -122,6 +129,57 @@ int MasterScore::getNextFreeDrumMidiMapping()
             if (!occupiedMidiChannels.contains(i*16+9)) {
                   occupiedMidiChannels.insert(i*16+9);
                   return i*16+9;
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   rebuildExcerptsMidiMapping
+//---------------------------------------------------------
+
+void MasterScore::rebuildExcerptsMidiMapping()
+      {
+      for (Excerpt* ex : excerpts()) {
+            for (Part* p : ex->partScore()->parts()) {
+                  const Part* masterPart = p->masterPart();
+                  if (!masterPart->score()->isMaster()) {
+                        qWarning("reorderMidiMapping: no part in master score is linked");
+                        continue;
+                        }
+                  Q_ASSERT(p->instruments()->size() == masterPart->instruments()->size());
+                  for (const auto& item : *masterPart->instruments()) {
+                        const Instrument* iMaster = item.second;
+                        const int tick = item.first;
+                        Instrument* iLocal = p->instrument(tick);
+                        Q_ASSERT(iLocal->channel().size() == iMaster->channel().size());
+                        const int nchannels = iLocal->channel().size();
+                        for (int c = 0; c < nchannels; ++c) {
+                              Channel* cLocal = iLocal->channel(c);
+                              const Channel* cMaster = iMaster->channel(c);
+                              cLocal->setChannel(cMaster->channel());
+                              }
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   rebuildPlaybackChannels
+//---------------------------------------------------------
+
+void MasterScore::rebuildPlaybackChannels()
+      {
+      _playbackCommonSettingsLinks.clear();
+      _playbackChannels.clear();
+      for (const Part* part : parts()) {
+            for (const auto& i : *part->instruments()) {
+                  const Instrument* instr = i.second;
+                  for (Channel* channel : instr->channel()) {
+                        Channel* playbackChannel = new Channel(*channel);
+                        _playbackChannels.emplace_back(playbackChannel);
+                        _playbackCommonSettingsLinks.emplace_back(playbackChannel, channel, /* excerpt */ false);
+                        _midiMapping[playbackChannel->channel()].articulation = playbackChannel;
+                        }
                   }
             }
       }
@@ -263,13 +321,14 @@ int MasterScore::updateMidiMapping()
                               maxport = mm.port;
 
                         mm.part         = part;
-                        mm.articulation = channel;
+//                         mm.articulation = channel; // now set in rebuildPlaybackChannels()
 
                         _midiMapping.append(mm);
                         channel->setChannel(_midiMapping.size() - 1);
                         }
                   }
             }
+      rebuildPlaybackChannels();
       return maxport;
       }
 

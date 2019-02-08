@@ -63,7 +63,8 @@ class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
       {
       Q_OBJECT
 
-      MasterScore* _score;
+      Score* _score = nullptr; // playback score
+      Score* _activeScore = nullptr; // may be a _score itself or its excerpt;
       QHBoxLayout* trackAreaLayout;
       EnablePlayForWidget* enablePlay;
 
@@ -84,6 +85,10 @@ class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
       virtual void keyPressEvent(QKeyEvent*) override;
       void readSettings();
       void keepScrollPosition();
+      void setPlaybackScore(Score*);
+
+   private slots:
+      void on_partOnlyCheckBox_toggled(bool checked);
 
    public slots:
       void updateTracks();
@@ -102,7 +107,7 @@ class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
 
    public:
       Mixer(QWidget* parent);
-      void setScore(MasterScore*);
+      void setScore(Score*);
       PartEdit* getPartAtIndex(int index);
       void writeSettings();
       void expandToggled(Part* part, bool expanded) override;

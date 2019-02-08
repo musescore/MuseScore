@@ -95,7 +95,8 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
           foreach(Part* part, score->parts()) {
                 const InstrumentList* il = part->instruments();
                 for(auto i = il->begin(); i!= il->end(); i++) {
-                      for (const Channel* a : i->second->channel()) {
+                      for (const Channel* instrChan : i->second->channel()) {
+                            const Channel* a = score->masterScore()->playbackChannel(instrChan);
                             a->updateInitList();
                             for (MidiCoreEvent e : a->init) {
                                   if (e.type() == ME_INVALID)

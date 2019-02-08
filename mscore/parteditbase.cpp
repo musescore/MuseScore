@@ -286,7 +286,8 @@ void PartEdit::soloToggled(bool val, bool syncControls)
                   const InstrumentList* il = p->instruments();
                   for (auto i = il->begin(); i != il->end(); ++i) {
                         const Instrument* instr = i->second;
-                        for (Channel* a : instr->channel()) {
+                        for (Channel* instrChan : instr->channel()) {
+                              Channel* a = part->masterScore()->playbackChannel(instrChan);
                               a->setSoloMute((channel != a && !a->solo()));
                               a->setSolo(channel == a || a->solo());
                               if (a->soloMute())
@@ -302,7 +303,8 @@ void PartEdit::soloToggled(bool val, bool syncControls)
                   const InstrumentList* il = p->instruments();
                   for (auto i = il->begin(); i != il->end(); ++i) {
                         const Instrument* instr = i->second;
-                        for (Channel* a : instr->channel()) {
+                        for (Channel* instrChan : instr->channel()) {
+                              Channel* a = part->masterScore()->playbackChannel(instrChan);
                               if (a->solo()){
                                     found = true;
                                     break;
@@ -315,7 +317,8 @@ void PartEdit::soloToggled(bool val, bool syncControls)
                         const InstrumentList* il = p->instruments();
                         for (auto i = il->begin(); i != il->end(); ++i) {
                               const Instrument* instr = i->second;
-                              for (Channel* a : instr->channel()) {
+                              for (Channel* instrChan : instr->channel()) {
+                                    Channel* a = part->masterScore()->playbackChannel(instrChan);
                                     a->setSoloMute(false);
                                     a->setSolo(false);
                                     }
