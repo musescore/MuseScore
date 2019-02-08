@@ -449,16 +449,6 @@ QVariant Part::getProperty(Pid id) const
                   return QVariant(_show);
             case Pid::USE_DRUMSET:
                   return instrument()->useDrumset();
-//             case Pid::PART_VOLUME:
-//                   return volume();
-//             case Pid::PART_MUTE:
-//                   return mute();
-//             case Pid::PART_PAN:
-//                   return pan();
-//             case Pid::PART_REVERB:
-//                   return reverb();
-//             case Pid::PART_CHORUS:
-//                   return chorus();
             default:
                   return QVariant();
             }
@@ -477,21 +467,6 @@ bool Part::setProperty(Pid id, const QVariant& property)
             case Pid::USE_DRUMSET:
                   instrument()->setUseDrumset(property.toBool());
                   break;
-//             case Pid::PART_VOLUME:
-//                   setVolume(property.toInt());
-//                   break;
-//             case Pid::PART_MUTE:
-//                   setMute(property.toBool());
-//                   break;
-//             case Pid::PART_PAN:
-//                   setPan(property.toInt());
-//                   break;
-//             case Pid::PART_REVERB:
-//                   setReverb(property.toInt());
-//                   break;
-//             case Pid::PART_CHORUS:
-//                   setChorus(property.toInt());
-//                   break;
             default:
                   qDebug("Part::setProperty: unknown id %d", int(id));
                   break;
