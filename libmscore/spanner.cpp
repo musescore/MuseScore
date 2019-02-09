@@ -1124,6 +1124,7 @@ SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::functio
       seg->setSystem(system);
       seg->setSpanner(this);
       seg->setTrack(track());
+      seg->setVisible(visible());
       return seg;
       }
 
