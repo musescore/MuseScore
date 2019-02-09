@@ -2047,6 +2047,8 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             w += score()->styleP(Sid::noteBarDistance);
       else if (st == SegmentType::BeginBarLine && (nst & (SegmentType::HeaderClef | SegmentType::Clef)))
             w += score()->styleP(Sid::clefLeftMargin);
+      else if (st == SegmentType::BeginBarLine && nst == SegmentType::KeySig)
+            w += score()->styleP(Sid::keysigLeftMargin);
       else if (st == SegmentType::EndBarLine) {
             if (nst == SegmentType::KeySigAnnounce)
                   w += score()->styleP(Sid::keysigLeftMargin);
