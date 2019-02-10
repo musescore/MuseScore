@@ -389,10 +389,9 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
                   drag->setMimeData(mimeData);
 
                   drag->setPixmap(pixmap(currentIdx));
-                  QRect r = idxRect(currentIdx);
 
-                  QPoint o(dragStartPosition - r.topLeft());
-                  drag->setHotSpot(o);
+                  QPoint hotsp(drag->pixmap().rect().bottomRight());
+                  drag->setHotSpot(hotsp);
 
                   Qt::DropActions da;
                   if (!(_readOnly || filterActive) && (ev->modifiers() & Qt::ShiftModifier)) {
