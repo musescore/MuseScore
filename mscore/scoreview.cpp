@@ -2357,23 +2357,43 @@ void ScoreView::textTab(bool back)
       Tid tid = ot->tid();
       ElementType type = ot->type();
 
-      // get prev/next element, as current element may be deleted if empty
+      // get prev/next element now, as current element may be deleted if empty
       Element* el = back ? score()->prevElement() : score()->nextElement();
       // end edit mode
       changeState(ViewState::NORMAL);
 
       // find new note to add text to
+      bool here = false;      // prevent infinite loop
       while (el) {
             if (el->isNote()) {
-                  if (op->isNote() || op->isSegment())
+                  Note* n = toNote(el);
+                  if (op->isNote() && n != op)
                         break;
+                  else if (op->isSegment() && n->chord()->segment() != op)
+                        break;
+                  else if (here)
+                        break;
+                  here = true;
+                  }
+            else if (el->isRest() && op->isSegment()) {
+                  // skip rests, but still check for infinite loop
+                  Rest* r = toRest(el);
+                  if (r->segment() != op)
+                        ;
+                  else if (here)
+                        break;
+                  here = true;
                   }
             // get prev/next note
             score()->select(el);
             el = back ? score()->prevElement() : score()->nextElement();
             }
-      if (!el || !el->isNote())
+      if (!el || !el->isNote()) {
+            // nothing found, re-select original element and give up
+            score()->select(oe);
+            changeState(ViewState::EDIT);
             return;
+            }
       Note* nn = toNote(el);
 
       // go to note
