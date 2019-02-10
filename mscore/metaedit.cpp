@@ -45,6 +45,7 @@ MetaEditDialog::MetaEditDialog(Score* s, QWidget* parent)
       else
             revision->setText(QString::number(rev, 10));
       filePath->setText(score->importedFilePath());
+      filePath->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
       int idx = 0;
       QMapIterator<QString, QString> i(s->metaTags());
