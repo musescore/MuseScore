@@ -3031,6 +3031,30 @@ bool MuseScore::saveMetadataJSON(Score* score, const QString& name)
       return true;
       }
 
+//---------------------------------------------------------
+//   findTextByType
+//    @data must contain std::pair<Tid, QStringList*>*
+//          Tid specifies text style
+//          QStringList* specifies the container to keep found text
+//
+//    For usage with Score::scanElements().
+//    Finds all text elements with specified style.
+//---------------------------------------------------------
+static void findTextByType(void* data, Element* element)
+      {
+      if (!element->isTextBase())
+            return;
+      TextBase* text = toTextBase(element);
+      auto* typeStringsData = static_cast<std::pair<Tid, QStringList*>*>(data);
+      if (text->tid() == typeStringsData->first) {
+            // or if score->getTextStyleUserName().contains("Title") ???
+            // That is bad since it may be localized
+            QStringList* titleStrings = typeStringsData->second;
+            Q_ASSERT(titleStrings);
+            titleStrings->append(text->plainText());
+            }
+      }
+      
 QJsonObject MuseScore::saveMetadataJSON(Score* score)
       {
       auto boolToString = [](bool b) { return b ? "true" : "false"; };
@@ -3121,7 +3145,26 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
       jsonPageformat.insert("width", round(score->pageFormat()->width() * INCH));
       jsonPageformat.insert("twosided", boolToString(score->pageFormat()->twosided()));
       json.insert("pageFormat", jsonPageformat);
-
+      
+      //text frames metadata
+      QJsonObject jsonTypeData;
+      static std::vector<std::pair<QString, Tid>> namesTypesList {
+            {"titles", Tid::TITLE},
+            {"subtitles", Tid::SUBTITLE},
+            {"composers", Tid::COMPOSER},
+            {"poets", Tid::POET}
+            };
+      for (auto nameType : namesTypesList) {
+            QJsonArray typeData;
+            QStringList typeTextStrings;
+            std::pair<Tid, QStringList*> extendedTitleData = std::make_pair(nameType.second, &typeTextStrings);
+            score->scanElements(&extendedTitleData, findTextByType);
+            for (auto typeStr : typeTextStrings)
+                  typeData.append(typeStr);
+            jsonTypeData.insert(nameType.first, typeData);
+            }
+      json.insert("textFramesData", jsonTypeData);
+      
       return json;
       }
 

@@ -2945,7 +2945,7 @@ static bool exportScoreMp3AsJSON(const QString& inFilePath)
             return false;
       
       //export score audio
-      CustomJsonWriter jsonWriter("/tmp/test.json");
+      CustomJsonWriter jsonWriter("/dev/stdout");
       jsonWriter.addKey("mp3");
       QByteArray mp3Data;
       QBuffer mp3Device(&mp3Data);
