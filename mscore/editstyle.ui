@@ -35,7 +35,7 @@
    <item row="1" column="0">
     <layout class="QHBoxLayout">
      <property name="spacing">
-      <number>6</number>
+      <number>-1</number>
      </property>
      <property name="leftMargin">
       <number>0</number>
@@ -1388,7 +1388,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_27">
            <property name="horizontalSpacing">
-            <number>6</number>
+            <number>-1</number>
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="label_38">
@@ -2329,7 +2329,7 @@
           </property>
           <layout class="QGridLayout" name="_2">
            <property name="spacing">
-            <number>6</number>
+            <number>-1</number>
            </property>
            <item row="8" column="1">
             <widget class="Ms::OffsetSelect" name="measureNumberOffset" native="true"/>
@@ -2773,7 +2773,7 @@
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_13">
                  <property name="spacing">
-                  <number>6</number>
+                  <number>-1</number>
                  </property>
                  <item>
                   <widget class="QLabel" name="label_7">
@@ -2959,7 +2959,7 @@
              </property>
              <layout class="QGridLayout" name="_3">
               <property name="horizontalSpacing">
-               <number>6</number>
+               <number>-1</number>
               </property>
               <property name="verticalSpacing">
                <number>0</number>
@@ -3112,7 +3112,7 @@
              </property>
              <layout class="QGridLayout" name="_4">
               <property name="horizontalSpacing">
-               <number>6</number>
+               <number>-1</number>
               </property>
               <property name="verticalSpacing">
                <number>0</number>
@@ -6332,7 +6332,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_7">
            <property name="verticalSpacing">
-            <number>6</number>
+            <number>-1</number>
            </property>
            <item row="5" column="0">
             <widget class="QLabel" name="label_9">
@@ -6666,7 +6666,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout0">
            <property name="verticalSpacing">
-            <number>6</number>
+            <number>-1</number>
            </property>
            <item row="3" column="2">
             <widget class="QToolButton" name="resetVoltaLineWidth">
@@ -6896,7 +6896,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_12">
            <property name="verticalSpacing">
-            <number>6</number>
+            <number>-1</number>
            </property>
            <item row="3" column="2">
             <widget class="QToolButton" name="resetOttavaPosBelow">
@@ -8819,7 +8819,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_24">
            <property name="spacing">
-            <number>6</number>
+            <number>-1</number>
            </property>
            <item row="3" column="0">
             <widget class="QLabel" name="label_189">
@@ -9213,7 +9213,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_23">
            <property name="spacing">
-            <number>6</number>
+            <number>-1</number>
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="label_71">
@@ -10531,7 +10531,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_131">
            <property name="verticalSpacing">
-            <number>6</number>
+            <number>-1</number>
            </property>
            <item row="2" column="0">
             <widget class="QLabel" name="label_601">
@@ -10714,7 +10714,7 @@
           </property>
           <layout class="QGridLayout" name="_12">
            <property name="spacing">
-            <number>6</number>
+            <number>-1</number>
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="labelStyleName">
