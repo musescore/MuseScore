@@ -966,8 +966,8 @@ void Seq::initInstruments(bool realTime)
                   _driver->updateOutPortCount(maxMidiOutPort + 1);
             }
 
-      foreach(const MidiMapping& mm, *cs->midiMapping()) {
-            Channel* channel = mm.articulation;
+      for (const MidiMapping& mm : cs->midiMapping()) {
+            const Channel* channel = mm.articulation();
             for (const MidiCoreEvent& e : channel->init) {
                   if (e.type() == ME_INVALID)
                         continue;
@@ -978,7 +978,7 @@ void Seq::initInstruments(bool realTime)
                         sendEvent(event);
                   }
             // Setting pitch bend sensitivity to 12 semitones for external synthesizers
-            if ((preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)) && mm.channel != 9) {
+            if ((preferences.getBool(PREF_IO_JACK_USEJACKMIDI) || preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO)) && mm.channel() != 9) {
                   if (realTime) {
                         putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_LRPN, 0));
                         putEvent(NPlayEvent(ME_CONTROLLER, channel->channel(), CTRL_HRPN, 0));
@@ -1202,7 +1202,7 @@ void Seq::stopNotes(int channel, bool realTime)
       };
       // Stop notes in all channels
       if (channel == -1) {
-            for(int ch = 0; ch < cs->midiMapping()->size(); ch++) {
+            for(int ch = 0; ch < int(cs->midiMapping().size()); ch++) {
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_SUSTAIN, 0));
                   send(NPlayEvent(ME_CONTROLLER, ch, CTRL_ALL_NOTES_OFF, 0));
                   if (cs->midiChannel(ch) != 9)
@@ -1421,13 +1421,13 @@ void Seq::putEvent(const NPlayEvent& event, unsigned framePos)
       if (!cs)
             return;
       int channel = event.channel();
-      if (channel >= cs->midiMapping()->size()) {
-            qDebug("bad channel value %d >= %d", channel, cs->midiMapping()->size());
+      if (channel >= int(cs->midiMapping().size())) {
+            qDebug("bad channel value %d >= %d", channel, int(cs->midiMapping().size()));
             return;
             }
 
       // audio
-      int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation->synti());
+      int syntiIdx= _synti->index(cs->midiMapping(channel)->articulation()->synti());
       _synti->play(event, syntiIdx);
 
       // midi

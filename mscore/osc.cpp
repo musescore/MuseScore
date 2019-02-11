@@ -290,10 +290,10 @@ void MuseScore::oscVolChannel(double val)
       PathObject* po = (PathObject*) sender();
 
       int i = po->path().mid(4).toInt() - 1;
-      QList<MidiMapping>* mms = cs->masterScore()->midiMapping();
-      if( i >= 0 && i < mms->size()) {
-            MidiMapping mm = mms->at(i);
-            Channel* channel = mm.articulation;
+      auto& mms = cs->masterScore()->midiMapping();
+      if( i >= 0 && i < int(mms.size())) {
+            MidiMapping& mm = mms[i];
+            Channel* channel = mm.articulation();
             int iv = lrint(val*127);
             seq->setController(channel->channel(), CTRL_VOLUME, iv);
             channel->setVolume(val * 100.0);
@@ -313,10 +313,10 @@ void MuseScore::oscPanChannel(double val)
       PathObject* po = (PathObject*) sender();
 
       int i = po->path().mid(4).toInt() - 1;
-      QList<MidiMapping>* mms = cs->masterScore()->midiMapping();
-      if (i >= 0 && i < mms->size()) {
-            MidiMapping mm = mms->at(i);
-            Channel* channel = mm.articulation;
+      auto& mms = cs->masterScore()->midiMapping();
+      if (i >= 0 && i < int(mms.size())) {
+            MidiMapping& mm = mms[i];
+            Channel* channel = mm.articulation();
             int iv = lrint((val + 1) * 64);
             seq->setController(channel->channel(), CTRL_PANPOT, iv);
             channel->setPan(val * 180.0);
@@ -336,10 +336,10 @@ void MuseScore::oscMuteChannel(double val)
       PathObject* po = (PathObject*) sender();
 
       int i = po->path().mid(5).toInt() - 1;
-      QList<MidiMapping>* mms = cs->masterScore()->midiMapping();
-      if (i >= 0 && i < mms->size()) {
-            MidiMapping mm = mms->at(i);
-            Channel* channel = mm.articulation;
+      auto& mms = cs->masterScore()->midiMapping();
+      if (i >= 0 && i < int(mms.size())) {
+            MidiMapping& mm = mms[i];
+            Channel* channel = mm.articulation();
             channel->setMute(val==0.0f ? false : true);
             if (mixer)
                   mixer->getPartAtIndex(i)->mute->setChecked(channel->mute());

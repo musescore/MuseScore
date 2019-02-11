@@ -160,11 +160,24 @@ class MeasureBaseList {
 //   MidiMapping
 //---------------------------------------------------------
 
-struct MidiMapping {
-      Part* part;
-      Channel* articulation;
-      signed char port;
-      signed char channel;
+class MidiMapping {
+      Part* _part;
+      std::unique_ptr<Channel> _articulation;
+      signed char _port;
+      signed char _channel;
+      Channel* masterChannel;
+      PartChannelSettingsLink link;
+
+      MidiMapping() = default; // should be created only within MasterScore
+      friend class MasterScore;
+
+   public:
+      Part* part() { return _part; }
+      const Part* part() const { return _part; }
+      Channel* articulation() { return _articulation.get(); }
+      const Channel* articulation() const { return _articulation.get(); }
+      signed char port() const { return _port; }
+      signed char channel() const { return _channel; }
       };
 
 //---------------------------------------------------------
@@ -1189,8 +1202,6 @@ class MasterScore : public Score {
       TempoMap* _tempomap;
       RepeatList* _repeatList;
       QList<Excerpt*> _excerpts;
-      std::vector<std::unique_ptr<Channel>> _playbackChannels;
-      std::vector<PartChannelSettingsLink> _playbackCommonSettingsLinks;
       std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
       Score* _playbackScore = nullptr;
       Revisions* _revisions;
@@ -1208,7 +1219,7 @@ class MasterScore : public Score {
       int _midiPortCount      { 0 };                  // A count of JACK/ALSA midi out ports
       QQueue<MidiInputEvent> _midiInputQueue;         // MIDI events that have yet to be processed
       std::list<MidiInputEvent> _activeMidiPitches;   // MIDI keys currently being held down
-      QList<MidiMapping> _midiMapping;
+      std::vector<MidiMapping> _midiMapping;
       bool isSimpleMidiMaping;                        // midi mapping is simple if all ports and channels
                                                       // don't decrease and don't have gaps
       QSet<int> occupiedMidiChannels;                 // each entry is port*16+channel, port range: 0-inf, channel: 0-15
@@ -1217,7 +1228,6 @@ class MasterScore : public Score {
       void parseVersion(const QString&);
       void reorderMidiMapping();
       void rebuildExcerptsMidiMapping();
-      void rebuildPlaybackChannels();
       void removeDeletedMidiMapping();
       int updateMidiMapping();
 
@@ -1289,10 +1299,12 @@ class MasterScore : public Score {
 
       int midiPortCount() const                { return _midiPortCount;            }
       void setMidiPortCount(int val)           { _midiPortCount = val;             }
-      QList<MidiMapping>* midiMapping()        { return &_midiMapping;             }
+      std::vector<MidiMapping>& midiMapping()  { return _midiMapping;         }
       MidiMapping* midiMapping(int channel)    { return &_midiMapping[channel];    }
-      int midiPort(int idx) const              { return _midiMapping[idx].port;    }
-      int midiChannel(int idx) const           { return _midiMapping[idx].channel; }
+      void addMidiMapping(Channel* channel, Part* part, int midiPort, int midiChannel);
+      void updateMidiMapping(Channel* channel, Part* part, int midiPort, int midiChannel);
+      int midiPort(int idx) const              { return _midiMapping[idx].port();    }
+      int midiChannel(int idx) const           { return _midiMapping[idx].channel(); }
       void rebuildMidiMapping();
       void checkMidiMapping();
       bool exportMidiMapping()                 { return !isSimpleMidiMaping; }
@@ -1309,8 +1321,8 @@ class MasterScore : public Score {
       void setPlaybackScore(Score*);
       Score* playbackScore() { return _playbackScore; }
       const Score* playbackScore() const { return _playbackScore; }
-      Channel* playbackChannel(const Channel* c)             { return _midiMapping[c->channel()].articulation; }
-      const Channel* playbackChannel(const Channel* c) const { return _midiMapping[c->channel()].articulation; }
+      Channel* playbackChannel(const Channel* c)             { return _midiMapping[c->channel()].articulation(); }
+      const Channel* playbackChannel(const Channel* c) const { return _midiMapping[c->channel()].articulation(); }
 
       QFileInfo* fileInfo()               { return &info; }
       const QFileInfo* fileInfo() const   { return &info; }
