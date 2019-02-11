@@ -748,7 +748,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_8">
            <property name="verticalSpacing">
-            <number>6</number>
+            <number>-1</number>
            </property>
            <item row="7" column="0" colspan="2">
             <widget class="QCheckBox" name="genClef">
