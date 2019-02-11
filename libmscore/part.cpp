@@ -276,33 +276,10 @@ int Part::midiPort() const
 void Part::setMidiChannel(int ch, int port, int tick)
       {
       Channel* channel = instrument(tick)->channel(0);
-      if (channel->channel() == -1) {
-            // Add new mapping
-            MidiMapping mm;
-            mm.part = this;
-            mm.articulation = channel;
-            mm.channel = -1;
-            mm.port = -1;
-            if (ch != -1)
-                  mm.channel = ch;
-            if (port != -1)
-                  mm.port = port;
-            channel->setChannel(masterScore()->midiMapping()->size());
-            masterScore()->midiMapping()->append(mm);
-            }
-      else {
-            // Update existing mapping
-            if (channel->channel() >= masterScore()->midiMapping()->size()) {
-                  qDebug()<<"Can't' set midi channel: midiMapping is empty!";
-                  return;
-                  }
-
-            if (ch != -1)
-                  masterScore()->midiMapping(channel->channel())->channel = ch;
-            if (port != -1)
-                  masterScore()->midiMapping(channel->channel())->port = port;
-            masterScore()->midiMapping(channel->channel())->part = this;
-            }
+      if (channel->channel() == -1)
+            masterScore()->addMidiMapping(channel, this, port, ch);
+      else
+            masterScore()->updateMidiMapping(channel, this, port, ch);
       }
 
 //---------------------------------------------------------

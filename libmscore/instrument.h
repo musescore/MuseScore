@@ -222,6 +222,7 @@ class PartChannelSettingsLink final : private ChannelListener {
       void propertyChanged(Channel::Prop p) override;
 
    public:
+      PartChannelSettingsLink() : _main(nullptr), _bound(nullptr), _excerpt(false) {}
       PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt);
       PartChannelSettingsLink(const PartChannelSettingsLink&) = delete;
       PartChannelSettingsLink(PartChannelSettingsLink&&);

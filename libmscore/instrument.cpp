@@ -641,8 +641,8 @@ void Channel::write(XmlWriter& xml, const Part* part) const
       if (_solo)
             xml.tag("solo", _solo);
       if (part && part->masterScore()->exportMidiMapping() && part->score() == part->masterScore()) {
-            xml.tag("midiPort",    part->masterScore()->midiMapping(_channel)->port);
-            xml.tag("midiChannel", part->masterScore()->midiMapping(_channel)->channel);
+            xml.tag("midiPort",    part->masterScore()->midiMapping(_channel)->port());
+            xml.tag("midiChannel", part->masterScore()->midiMapping(_channel)->channel());
             }
       for (const NamedEventList& a : midiActions)
             a.write(xml, "MidiAction");
@@ -728,20 +728,13 @@ void Channel::read(XmlReader& e, Part* part)
                   _solo = e.readInt();
             else if (tag == "midiPort") {
                   int midiPort = e.readInt();
-                  if (part) {
-                        MidiMapping mm;
-                        mm.port = midiPort;
-                        mm.channel = -1;
-                        mm.part = part;
-                        mm.articulation = this;
-                        part->masterScore()->midiMapping()->append(mm);
-                        _channel = part->masterScore()->midiMapping()->size() - 1;
-                        }
+                  if (part && part->score()->isMaster())
+                        part->masterScore()->addMidiMapping(this, part, midiPort, -1);
                   }
             else if (tag == "midiChannel") {
                   int midiChannel = e.readInt();
-                  if (part)
-                        part->masterScore()->midiMapping(_channel)->channel = midiChannel;
+                  if (part && part->score()->isMaster())
+                        part->masterScore()->updateMidiMapping(this, part, -1, midiChannel);
                   }
             else
                   e.unknown();
