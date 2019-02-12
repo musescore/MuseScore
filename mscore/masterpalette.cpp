@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: masterpalette.cpp
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -13,6 +12,7 @@
 
 #include "musescore.h"
 #include "masterpalette.h"
+#include "menus.h"
 #include "symboldialog.h"
 #include "palette.h"
 #include "keyedit.h"
@@ -40,13 +40,6 @@
 #include "timedialog.h"
 
 namespace Ms {
-
-extern void populateIconPalette(Palette* p, const IconAction* a);
-extern Palette* newKeySigPalette();
-extern Palette* newBarLinePalette(bool);
-extern Palette* newLinesPalette(bool);
-extern Palette* newAccidentalsPalette();
-extern QMap<QString, QStringList>* smuflRanges();
 
 //---------------------------------------------------------
 //   showMasterPalette
@@ -93,6 +86,19 @@ Palette* MasterPalette::createPalette(int w, int h, bool grid, double mag)
       sp->setReadOnly(true);
       stack->addWidget(psa);
       return sp;
+      }
+
+//---------------------------------------------------------
+//   keyPressEvent
+//---------------------------------------------------------
+
+void MasterPalette::keyPressEvent(QKeyEvent* ev) 
+      {
+      if (ev->key() == Qt::Key_Escape && ev->modifiers() == Qt::NoModifier) {
+            close();
+            return;
+            }
+      QWidget::keyPressEvent(ev);
       }
 
 //---------------------------------------------------------
@@ -147,7 +153,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
       treeWidget->clear();
 
-      addPalette(MuseScore::newClefsPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newClefsPalette());
       keyEditor = new KeyEditor;
 
       keyItem = new QTreeWidgetItem();
@@ -162,36 +168,45 @@ MasterPalette::MasterPalette(QWidget* parent)
       treeWidget->addTopLevelItem(timeItem);
 
       addPalette(MuseScore::newBracketsPalette());
-      addPalette(MuseScore::newAccidentalsPalette(PaletteType::MASTER));
-      addPalette(MuseScore::newArticulationsPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newAccidentalsPalette());
+      addPalette(MuseScore::newArticulationsPalette());
       addPalette(MuseScore::newOrnamentsPalette());
       addPalette(MuseScore::newBreathPalette());
-      addPalette(MuseScore::newGraceNotePalette(PaletteType::MASTER));
+      addPalette(MuseScore::newGraceNotePalette());
       addPalette(MuseScore::newNoteHeadsPalette());
-      addPalette(MuseScore::newLinesPalette(PaletteType::MASTER));
-      addPalette(MuseScore::newBarLinePalette(PaletteType::MASTER));
+      addPalette(MuseScore::newLinesPalette());
+      addPalette(MuseScore::newBarLinePalette());
       addPalette(MuseScore::newArpeggioPalette());
       addPalette(MuseScore::newTremoloPalette());
       addPalette(MuseScore::newTextPalette());
-      addPalette(MuseScore::newTempoPalette(PaletteType::MASTER));
-      addPalette(MuseScore::newDynamicsPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newTempoPalette());
+      addPalette(MuseScore::newDynamicsPalette());
       addPalette(MuseScore::newFingeringPalette());
       addPalette(MuseScore::newRepeatsPalette());
       addPalette(MuseScore::newFretboardDiagramPalette());
       addPalette(MuseScore::newBagpipeEmbellishmentPalette());
       addPalette(MuseScore::newBreaksPalette());
       addPalette(MuseScore::newFramePalette());
-      addPalette(MuseScore::newBeamPalette(PaletteType::MASTER));
+      addPalette(MuseScore::newBeamPalette());
 
       symbolItem = new QTreeWidgetItem();
-      symbolItem->setData(0, Qt::UserRole, -1);
+      idxAllSymbols = stack->count();
+      symbolItem->setData(0, Qt::UserRole, idxAllSymbols);
       symbolItem->setText(0, QT_TRANSLATE_NOOP("MasterPalette", "Symbols"));
       treeWidget->addTopLevelItem(symbolItem);
+      stack->addWidget(new SymbolDialog(SMUFL_ALL_SYMBOLS));
+
+      // Add "All symbols" entry to be first in the list of categories
+      QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(SMUFL_ALL_SYMBOLS));
+      child->setData(0, Qt::UserRole, idxAllSymbols);
+      symbolItem->addChild(child);
 
       for (const QString& s : smuflRanges()->keys()) {
-            QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(s));
-            child->setData(0, Qt::UserRole, stack->count());
-            symbolItem->addChild(child);
+            if (s == SMUFL_ALL_SYMBOLS)
+                  continue;
+            QTreeWidgetItem* chld = new QTreeWidgetItem(QStringList(s));
+            chld->setData(0, Qt::UserRole, stack->count());
+            symbolItem->addChild(chld);
             stack->addWidget(new SymbolDialog(s));
             }
 
@@ -233,8 +248,11 @@ void MasterPalette::currentChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
 void MasterPalette::clicked(QTreeWidgetItem* item, int)
       {
       int idx = item->data(0, Qt::UserRole).toInt();
-      if (idx == -1)
+      if (idx == idxAllSymbols) {
             item->setExpanded(!item->isExpanded());
+            if (idx != -1)
+                  stack->setCurrentIndex(idx);
+            }
       }
 
 //---------------------------------------------------------

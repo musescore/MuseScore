@@ -97,7 +97,7 @@ inline static AccidentalVal tpc2alter(int tpc) {
 
 extern QString tpc2stepName(int tpc);
 extern bool tpcIsValid(int val);
-
+inline bool pitchIsValid(int pitch) { return pitch >= 0 && pitch <= 127; }
 
 }     // namespace Ms
 #endif

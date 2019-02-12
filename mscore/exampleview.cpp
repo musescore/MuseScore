@@ -117,6 +117,8 @@ void ExampleView::setScore(Score* s)
       _score = s;
       _score->addViewer(this);
       _score->setLayoutMode(LayoutMode::LINE);
+
+      ScoreLoad sl;
       _score->doLayout();
       update();
       }
@@ -221,11 +223,11 @@ void ExampleView::paintEvent(QPaintEvent* ev)
 
 void ExampleView::dragEnterEvent(QDragEnterEvent* event)
       {
-      const QMimeData* data = event->mimeData();
-      if (data->hasFormat(mimeSymbolFormat)) {
+      const QMimeData* d = event->mimeData();
+      if (d->hasFormat(mimeSymbolFormat)) {
             event->acceptProposedAction();
 
-            QByteArray a = data->data(mimeSymbolFormat);
+            QByteArray a = d->data(mimeSymbolFormat);
 
 // qDebug("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
 

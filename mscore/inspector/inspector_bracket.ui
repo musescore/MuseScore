@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>115</width>
-    <height>69</height>
+    <width>142</width>
+    <height>80</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -77,7 +77,11 @@
        <number>0</number>
       </property>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="column"/>
+       <widget class="QSpinBox" name="column">
+        <property name="accessibleName">
+         <string>Column</string>
+        </property>
+       </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
@@ -90,27 +94,20 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QToolButton" name="resetColumn">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Column' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetColumn"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../musescore.qrc"/>
  </resources>

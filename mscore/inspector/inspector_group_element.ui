@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>InspectorGroupElement</class>
  <widget class="QWidget" name="InspectorGroupElement">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>159</width>
-    <height>93</height>
-   </rect>
-  </property>
   <property name="accessibleName">
    <string>Element Group Inspector</string>
   </property>
@@ -81,9 +73,6 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Set Color</string>
-        </property>
         <property name="text">
          <string>Set Color</string>
         </property>
@@ -104,9 +93,6 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Set Visible</string>
-        </property>
         <property name="text">
          <string>Set Visible</string>
         </property>
@@ -116,9 +102,6 @@
        <widget class="QPushButton" name="setInvisible">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Set Invisible</string>
         </property>
         <property name="text">
          <string>Set Invisible</string>

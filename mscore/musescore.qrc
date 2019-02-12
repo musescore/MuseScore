@@ -16,6 +16,7 @@
         <file alias="themes/palette_light_fusion.json">../share/themes/palette_light_fusion.json</file>
         <file alias="themes/palette_dark_fusion.json">../share/themes/palette_dark_fusion.json</file>
         <file>data/splash.png</file>
+        <file>data/splash@2x.png</file>
         <file alias="data/My_First_Score.mscz">../share/templates/My_First_Score.mscz</file>
         <file alias="data/Create_New_Score.mscz">../share/templates/Create_New_Score.mscz</file>
         <file alias="data/Empty_Score.mscx">../share/templates/01-General/00-Blank.mscx</file>
@@ -76,6 +77,7 @@
         <file>data/icons/document-print.svg</file>
         <file>data/icons/document-save.svg</file>
         <file>data/icons/document-save-as.svg</file>
+        <file>data/icons/document-save-online.svg</file>
         <file>data/icons/edit-copy.svg</file>
         <file>data/icons/edit-cut.svg</file>
         <file>data/icons/edit-paste.svg</file>
@@ -162,5 +164,17 @@
         <file>data/icons/clef-bass.svg</file>
         <file>data/solid_note_head.dat</file>
         <file>data/icons/edit-swap.svg</file>
+        <file>data/icons/mail.svg</file>
+        <file>data/icons/bug.svg</file>
+        <file>data/icons/note_timewise.svg</file>
+        <file>data/icons/mixer-slider-handle.svg</file>
+        <file>data/icons/mixer-mute-off.svg</file>
+        <file>data/icons/mixer-mute-on.svg</file>
+        <file>data/icons/mixer-solo-off.svg</file>
+        <file>data/icons/mixer-solo-on.svg</file>
+        <file>data/icons/mixer-dial.svg</file>
+        <file>data/icons/mixer-slider-handle-vertical.svg</file>
+        <file>data/icons/triangleDown.svg</file>
+        <file>data/icons/triangleUp.svg</file>
     </qresource>
 </RCC>

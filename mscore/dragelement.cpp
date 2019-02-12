@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer
 //
@@ -18,6 +17,7 @@
 #include "libmscore/utils.h"
 #include "libmscore/undo.h"
 #include "libmscore/part.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -29,7 +29,7 @@ void ScoreView::startDrag()
       {
       editData.grips = 0;
       editData.clearData();
-      editData.startMove  -= editData.element->userOff();
+      editData.startMove  -= editData.element->offset();
 
       _score->startCmd();
 
@@ -45,11 +45,13 @@ void ScoreView::doDragElement(QMouseEvent* ev)
       {
       QPointF delta = toLogical(ev->pos()) - editData.startMove;
 
+      TourHandler::startTour("autoplace-tour");
+
       QPointF pt(delta);
       if (qApp->keyboardModifiers() == Qt::ShiftModifier)
-            pt.setX(editData.element->userOff().x());
+            pt.setX(editData.element->offset().x());
       else if (qApp->keyboardModifiers() == Qt::ControlModifier)
-            pt.setY(editData.element->userOff().y());
+            pt.setY(editData.element->offset().y());
 
       editData.hRaster = mscore->hRaster();
       editData.vRaster = mscore->vRaster();

@@ -89,7 +89,7 @@ void TestSpanners::spanners01()
       // drop a glissando on note
       gliss             = new Glissando(score); // create a new element each time, as drop() will eventually delete it
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO FROM TOP STAFF TO BOTTOM STAFF
@@ -105,7 +105,7 @@ void TestSpanners::spanners01()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO FROM BOTTOM STAFF TO TOP STAFF
@@ -121,7 +121,7 @@ void TestSpanners::spanners01()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO OVER INTERVENING NOTES IN ANOTHER VOICE
@@ -137,7 +137,7 @@ void TestSpanners::spanners01()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO OVER INTERVENING NOTES IN ANOTHER STAFF
@@ -153,7 +153,7 @@ void TestSpanners::spanners01()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       QVERIFY(saveCompareScore(score, "glissando01.mscx", DIR + "glissando01-ref.mscx"));
@@ -204,7 +204,7 @@ void TestSpanners::spanners03()
       // drop a glissando on note
       gliss             = new Glissando(score); // create a new element each time, as drop() will eventually delete it
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO FROM AFTER-GRACE TO BEFORE-GRACE OF NEXT CHORD
@@ -215,7 +215,7 @@ void TestSpanners::spanners03()
       QVERIFY(note);
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO FROM MAIN NOTE TO BEFORE-GRACE OF NEXT CHORD
@@ -228,7 +228,7 @@ void TestSpanners::spanners03()
       QVERIFY(note);
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       // GLISSANDO FROM BEFORE-GRACE TO MAIN NOTE
@@ -244,7 +244,7 @@ void TestSpanners::spanners03()
       QVERIFY(note);
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       QVERIFY(saveCompareScore(score, "glissando-graces01.mscx", DIR + "glissando-graces01-ref.mscx"));
@@ -337,7 +337,7 @@ void TestSpanners::spanners06()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       QVERIFY(saveCompareScore(score, "glissando-cloning03.mscx", DIR + "glissando-cloning03-ref.mscx"));
@@ -369,7 +369,7 @@ void TestSpanners::spanners07()
       // drop a glissando on note
       gliss             = new Glissando(score);
       dropData.pos      = note->pagePos();
-      dropData.element  = gliss;
+      dropData.dropElement  = gliss;
       note->drop(dropData);
 
       QVERIFY(saveCompareScore(score, "glissando-cloning04.mscx", DIR + "glissando-cloning04-ref.mscx"));
@@ -572,7 +572,7 @@ void TestSpanners::spanners13()
       brk               = new LayoutBreak(score);
       brk->setLayoutBreakType(LayoutBreak::Type::LINE);
       dropData.pos      = msr->pagePos();
-      dropData.element  = brk;
+      dropData.dropElement  = brk;
       score->startCmd();
       msr->drop(dropData);
       score->endCmd();

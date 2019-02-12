@@ -856,7 +856,7 @@ void TestImportMidi::separateTupletVoices()
       std::vector<int> pitches = {74, 77};
       for (int i = 1; i != tripletNumber; ++i) {
             chords.insert({tripletNoteLen * i,
-                           chordFactory(tripletNoteLen * (i + 1), {pitches[i]})});
+                           chordFactory(tripletNoteLen * (i + 1), {pitches[i-1]})});
             }
                   // quintuplet
       const ReducedFraction quintupletLen = tupletLen;
@@ -865,7 +865,7 @@ void TestImportMidi::separateTupletVoices()
       pitches = {60, 62, 58, 60};
       for (int i = 1; i != quintupletNumber; ++i) {
             chords.insert({quintupletNoteLen * i,
-                           chordFactory(quintupletNoteLen * (i + 1), {pitches[i]})});
+                           chordFactory(quintupletNoteLen * (i + 1), {pitches[i-1]})});
             }
                   // septuplet
       const ReducedFraction septupletLen = tupletLen * 2;
@@ -874,7 +874,7 @@ void TestImportMidi::separateTupletVoices()
       pitches = {50, 52, 48, 51, 47, 47};
       for (int i = 1; i != septupletNumber; ++i) {
             chords.insert({septupletNoteLen * i,
-                           chordFactory(septupletNoteLen * (i + 1), {pitches[i]})});
+                           chordFactory(septupletNoteLen * (i + 1), {pitches[i-1]})});
             }
 
       MidiTuplet::TupletInfo tripletInfo;

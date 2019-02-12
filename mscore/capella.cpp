@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: capella.cpp 5637 2012-05-16 14:23:09Z wschweer $
 //
 //  Copyright (C) 2009-2013 Werner Schweer and others
 //
@@ -339,7 +338,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         p = p / 32.0 * score->spatium();
                         // text->setUserOff(st->pos());
                         text->setAutoplace(false);
-                        text->setUserOff(p);
+                        text->setOffset(p);
                         // qDebug("setText %s (%f %f)(%f %f) <%s>",
                         //            qPrintable(st->font().family()),
                         //            st->pos().x(), st->pos().y(), p.x(), p.y(), qPrintable(st->text()));
@@ -571,11 +570,11 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               ticks = ft * o->fullMeasures;
                               if (!o->invisible) {
                                     for (unsigned i = 0; i < o->fullMeasures; ++i) {
-                                          Measure* m = score->getCreateMeasure(tick + i * ft);
-                                          Segment* s = m->getSegment(SegmentType::ChordRest, tick + i * ft);
+                                          Measure* m1 = score->getCreateMeasure(tick + i * ft);
+                                          Segment* s = m1->getSegment(SegmentType::ChordRest, tick + i * ft);
                                           Rest* rest = new Rest(score);
                                           rest->setDurationType(TDuration(TDuration::DurationType::V_MEASURE));
-                                          rest->setDuration(m->len());
+                                          rest->setDuration(m1->len());
                                           rest->setTrack(staffIdx * VOICES + voice);
                                           s->add(rest);
                                           }
@@ -588,16 +587,16 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     rest->setTuplet(tuplet);
                                     tuplet->add(rest);
                                     }
-                              TDuration d;
+                              TDuration d1;
                               if (o->fullMeasures) {
-                                    d.setType(TDuration::DurationType::V_MEASURE);
+                                    d1.setType(TDuration::DurationType::V_MEASURE);
                                     rest->setDuration(m->len());
                                     }
                               else {
-                                    d.setVal(ticks);
-                                    rest->setDuration(d.fraction());
+                                    d1.setVal(ticks);
+                                    rest->setDuration(d1.fraction());
                                     }
-                              rest->setDurationType(d);
+                              rest->setDurationType(d1);
                               rest->setTrack(track);
                               rest->setVisible(!o->invisible);
                               s->add(rest);
@@ -726,7 +725,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                               };
                         off += keyOffsets[int(key) + 7];
 
-                        foreach(CNote n, o->notes) {
+                        for (CNote n : o->notes) {
                               Note* note = new Note(score);
                               int pitch = 0;
                               // .cap import: pitch contains the diatonic note number relative to clef and key
@@ -761,7 +760,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                                     note->setTieFor(tie);
                                     }
                               }
-                        foreach(Verse v, o->verse) {
+                        for (Verse v : o->verse) {
                               Lyrics* l = new Lyrics(score);
                               l->setTrack(track);
                               l->setPlainText(v.text);
@@ -935,7 +934,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                   d = static_cast<BasicDurationalObj*>(static_cast<ChordObj*>(no));
             if (!d)
                   continue;
-            foreach(BasicDrawObj* o, d->objects) {
+            for (BasicDrawObj* o : d->objects) {
                   switch (o->type) {
                         case CapellaType::SIMPLE_TEXT:
                               // qDebug("simple text at %d", tick);
@@ -972,7 +971,7 @@ static int readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, int tick, 
                         case CapellaType::TEXT: {
 
                               TextObj* to = static_cast<TextObj*>(o);
-                              Text* s = new Text(SubStyleId::TITLE, score);
+                              Text* s = new Text(score, Tid::TITLE);
                               QString ss = ::rtf2html(QString(to->text));
 
                               // qDebug("string %f:%f w %d ratio %d <%s>",
@@ -1136,7 +1135,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 #if 1
       foreach(CapSystem* csys, cap->systems) {
             qDebug("System:");
-            foreach(CapStaff* cstaff, csys->staves) {
+            for (CapStaff* cstaff : csys->staves) {
                   CapStaffLayout* cl = cap->staffLayout(cstaff->iLayout);
                   qDebug("  Staff layout <%s><%s><%s><%s><%s> %d  barline %d-%d mode %d",
                          qPrintable(cl->descr), qPrintable(cl->name), qPrintable(cl->abbrev),
@@ -1185,6 +1184,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             midiPatch = cl->sound;
 
             Staff* s = new Staff(score);
+            s->initFromStaffType(0);
+
             s->setPart(part);
             if (cl->bPercussion)
                   part->setMidiProgram(0, 128);
@@ -1203,10 +1204,10 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             ++span;
             if (cl->barlineMode == 1) {
-//                  bstaff->setBarLineSpan(span);
                   bstaff->setBarLineSpan(span != 0);
                   bstaff = 0;
                   }
+
             s->setSmall(0, cl->bSmall);
             part->insertStaff(s, -1);
             Interval interval;
@@ -1216,7 +1217,6 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             interval.chromatic = cl->transp;
             s->part()->instrument()->setTranspose(interval);
             score->staves().push_back(s);
-            // _parts.push_back(part);
             }
       if (bstaff)
             bstaff->setBarLineSpan(span != 0);
@@ -1237,14 +1237,14 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   case CapellaType::SIMPLE_TEXT:
                         {
                         SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
-                        SubStyleId ssid;
+                        Tid tid;
                         switch (to->textalign()) {
-                              case 0:   ssid = SubStyleId::POET;    break;
-                              case 1:   ssid = SubStyleId::TITLE;   break;
-                              case 2:   ssid = SubStyleId::COMPOSER; break;
-                              default:  ssid = SubStyleId::DEFAULT; break;
+                              case 0:   tid = Tid::POET;    break;
+                              case 1:   tid = Tid::TITLE;   break;
+                              case 2:   tid = Tid::COMPOSER; break;
+                              default:  tid = Tid::DEFAULT; break;
                               }
-                        Text* s = new Text(ssid, score);
+                        Text* s = new Text(score, tid);
                         QFont f(to->font());
                         s->setItalic(f.italic());
                         // s->setUnderline(f.underline());
@@ -1294,7 +1294,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   }
             */
             int mtick = 0;
-            foreach(CapStaff* cstaff, csys->staves) {
+            for (CapStaff* cstaff : csys->staves) {
                   //
                   // assumption: layout index is mscore staffIdx
                   //    which means that there is a 1:1 relation between layout/staff
@@ -1303,7 +1303,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                   qDebug("  ReadCapStaff %d/%d", cstaff->numerator, 1 << cstaff->log2Denom);
                   int staffIdx = cstaff->iLayout;
                   int voice = 0;
-                  foreach(CapVoice* cvoice, cstaff->voices) {
+                  for (CapVoice* cvoice : cstaff->voices) {
                         int tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
                         ++voice;
                         if (tick > mtick)
@@ -1412,7 +1412,14 @@ void TextObj::read()
       {
       BasicRectObj::read();
       unsigned size = cap->readUnsigned();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       char txt[size+1];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<char> vtxt(size+1);
+      char* txt = vtxt.data();
+#endif
       cap->read(txt, size);
       txt[size] = 0;
       text = QString(txt);
@@ -1496,7 +1503,14 @@ void MetafileObj::read()
       {
       BasicRectObj::read();
       unsigned size = cap->readUnsigned();
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       char enhMetaFileBits[size];
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<char> vEnhMetaFileBits(size);
+      char* enhMetaFileBits = vEnhMetaFileBits.data();
+#endif
       cap->read(enhMetaFileBits, size);
       // qDebug("MetaFileObj::read %d bytes", size);
       }
@@ -1581,11 +1595,11 @@ void VoltaObj::read()
       y  = cap->readInt();
       color = cap->readColor();
 
-      unsigned char flags = cap->readByte();
-      bLeft      = (flags & 1) != 0; // links abgeknickt
-      bRight     = (flags & 2) != 0; // rechts abgeknickt
-      bDotted    = (flags & 4) != 0;
-      allNumbers = (flags & 8) != 0;
+      unsigned char f = cap->readByte();
+      bLeft      = (f & 1) != 0; // links abgeknickt
+      bRight     = (f & 2) != 0; // rechts abgeknickt
+      bDotted    = (f & 4) != 0;
+      allNumbers = (f & 8) != 0;
 
       unsigned char numbers = cap->readByte();
       from = numbers & 0x0F;
@@ -2108,8 +2122,8 @@ QColor Capella::readColor()
             Q_ASSERT(b == 255);
             int r = readByte();
             int g = readByte();
-            int b = readByte();
-            c = QColor(r, g, b);
+            int bi = readByte();
+            c = QColor(r, g, bi);
             }
       else {
             c = QColor(colors[b]);
@@ -2210,7 +2224,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
             uchar iMin = readByte();
             Q_UNUSED(iMin);
             uchar n    = readByte();
-            Q_ASSERT (n > 0 and iMin + n <= 128);
+            Q_ASSERT (n > 0 && iMin + n <= 128);
             f->read(sl->soundMapIn, n);
             curPos += n;
             }
@@ -2218,7 +2232,7 @@ void Capella::readStaveLayout(CapStaffLayout* sl, int idx)
             unsigned char iMin = readByte();
             Q_UNUSED(iMin);
             unsigned char n    = readByte();
-            Q_ASSERT (n > 0 and iMin + n <= 128);
+            Q_ASSERT (n > 0 && iMin + n <= 128);
             f->read(sl->soundMapOut, n);
             curPos += n;
             }
@@ -2278,12 +2292,12 @@ void Capella::readLayout()
       // system brackets:
       unsigned n = readUnsigned();  // number of brackets
       for (unsigned int i = 0; i < n; i++) {
-            CapBracket b;
-            b.from   = readInt();
-            b.to     = readInt();
-            b.curly = readByte();
+            CapBracket cb;
+            cb.from   = readInt();
+            cb.to     = readInt();
+            cb.curly = readByte();
             // qDebug("Bracket%d %d-%d curly %d", i, b.from, b.to, b.curly);
-            brackets.append(b);
+            brackets.append(cb);
             }
       // qDebug("Capella::readLayout(): done");
       }

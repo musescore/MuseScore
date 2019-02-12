@@ -77,7 +77,16 @@ QPointF StaffLines::canvasPos() const
 
 void StaffLines::layout()
       {
-      Staff* s       = staff();
+      layoutForWidth(measure()->width());
+      }
+
+//---------------------------------------------------------
+//   layoutForWidth
+//---------------------------------------------------------
+
+void StaffLines::layoutForWidth(qreal w)
+      {
+      const Staff* s = staff();
       qreal _spatium = spatium();
       qreal dist     = _spatium;
       setPos(QPointF(0.0, 0.0));
@@ -85,23 +94,27 @@ void StaffLines::layout()
       if (s) {
             setMag(s->mag(measure()->tick()));
             setColor(s->color());
-            StaffType* st = s->staffType(measure()->tick());
+            const StaffType* st = s->staffType(measure()->tick());
             dist         *= st->lineDistance().val();
             _lines        = st->lines();
             rypos()       = st->yoffset().val() * _spatium;
-            if (_lines == 1)
-                  rypos() = 2 * _spatium;
+//            if (_lines == 1)
+//                  rypos() = 2 * _spatium;
             }
       else {
             _lines = 5;
             setColor(MScore::defaultColor);
             }
-      qreal w = measure()->width();
-      lw      = score()->styleS(Sid::staffLineWidth).val() * _spatium;
+      lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
       qreal x1 = pos().x();
       qreal x2 = x1 + w;
       qreal y  = pos().y();
       bbox().setRect(x1, -lw * .5 + y, w, (_lines-1) * dist + lw);
+
+      if (_lines == 1) {
+            qreal extraSize = _spatium;
+            bbox().adjust(0, -extraSize, 0, extraSize);
+      }
 
       lines.clear();
       for (int i = 0; i < _lines; ++i) {

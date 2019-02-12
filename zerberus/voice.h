@@ -15,6 +15,12 @@
 
 #include <cstdint>
 #include <math.h>
+#include "filter.h"
+
+// Disable warning C4201: nonstandard extension used: nameless struct/union in VS2017
+#if (defined (_MSCVER) || defined (_MSC_VER))
+      #pragma warning ( disable: 4201)
+#endif
 
 class Channel;
 struct Zone;
@@ -25,7 +31,6 @@ enum class LoopMode : char;
 enum class OffMode : char;
 enum class Trigger : char;
 
-static const int INTERP_MAX = 256;
 static const int EG_SIZE    = 256;
 
 //---------------------------------------------------------
@@ -121,12 +126,12 @@ class Voice {
       int audioChan;
 
       short* data;
-      int eidx;
+      long long eidx;
       LoopMode _loopMode;
       OffMode _offMode;
       int _offBy;
-      int _loopStart;
-      int _loopEnd;
+      long long _loopStart;
+      long long _loopEnd;
       bool _looping;
       int _samplesSinceStart;
 
@@ -134,41 +139,10 @@ class Voice {
 
       Phase phase, phaseIncr;
 
-      float fres;              // the resonance frequency, in cents (not absolute cents)
-      float last_fres;         // Current resonance frequency of the IIR filter
-
-      // Serves as a flag: A deviation between fres and last_fres
-      // indicates, that the filter has to be recalculated.
-      float q_lin;             // the q-factor on a linear scale
-      float filter_gain;       // Gain correction factor, depends on q
-
-      float hist1r, hist2r;    // Sample history for the IIR filter
-      float hist1l, hist2l;
-
-      bool filter_startup;     // Flag: If set, the filter will be set directly.
-                               // Else it changes smoothly.
-
-      // filter coefficients
-      // b0 and b2 are identical >= b02
-      float b02;             // b0 / a0
-      float b1;              // b1 / a0
-      float a1;              // a0 / a0
-      float a2;              // a1 / a0
-
-      float b02_incr;
-      float b1_incr;
-      float a1_incr;
-      float a2_incr;
-      int filter_coeff_incr_count;
-
-      float modenv_val;
-      float modlfo_val;
+      ZFilter filter;
 
       int currentEnvelope;
       Envelope envelopes[V1Envelopes::COUNT];
-      static float interpCoeff[INTERP_MAX][4];
-
-      void updateFilter(float fres);
 
       Trigger trigger;
 
@@ -183,7 +157,7 @@ class Voice {
       void updateEnvelopes();
       void process(int frames, float*);
       void updateLoop();
-      short getData(int pos);
+      short getData(long long pos);
 
       Channel* channel() const    { return _channel; }
       int key() const             { return _key;     }

@@ -245,7 +245,7 @@
               </sizepolicy>
              </property>
              <property name="accessibleName">
-              <string>Partitur List</string>
+              <string>Part list</string>
              </property>
              <property name="alternatingRowColors">
               <bool>true</bool>

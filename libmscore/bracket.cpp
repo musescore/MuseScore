@@ -41,31 +41,6 @@ Bracket::~Bracket()
       {
       }
 
-#if 0
-//---------------------------------------------------------
-//   setSpan
-//---------------------------------------------------------
-
-void Bracket::setSpan(int v)
-      {
-      _span = v;
-      if (bracketType() == BracketType::BRACE) {
-            // total default height of a system of n staves / height of a 5 line staff
-            _magx = v + ((v - 1) * score()->styleS(Sid::akkoladeDistance).val() / 4.0);
-            if (v == 1)
-                  _braceSymbol = SymId::braceSmall;
-            else if (v <= 2)
-                  _braceSymbol = SymId::brace;
-            else if (v <= 3)
-                  _braceSymbol = SymId::braceLarge;
-            else
-                  _braceSymbol = SymId::braceLarger;
-            if (!symIsValid(_braceSymbol))
-                  _braceSymbol = SymId::brace;
-            }
-      }
-#endif
-
 //---------------------------------------------------------
 //   setHeight
 //---------------------------------------------------------
@@ -104,6 +79,32 @@ qreal Bracket::width() const
                   break;
             }
       return w;
+      }
+
+//---------------------------------------------------------
+//   setStaffSpan
+//---------------------------------------------------------
+
+void Bracket::setStaffSpan(int a, int b)
+      {
+      _firstStaff = a;
+      _lastStaff = b;
+
+      if (bracketType() == BracketType::BRACE &&
+         score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville")
+            {
+            int v = _lastStaff - _firstStaff + 1;
+            // total default height of a system of n staves / height of a 5 line staff
+            _magx = v + ((v - 1) * score()->styleS(Sid::akkoladeDistance).val() / 4.0);
+            if (v == 1)
+                  _braceSymbol = SymId::braceSmall;
+            else if (v <= 2)
+                  _braceSymbol = SymId::brace;
+            else if (v <= 3)
+                  _braceSymbol = SymId::braceLarge;
+            else
+                  _braceSymbol = SymId::braceLarger;
+            }
       }
 
 //---------------------------------------------------------
@@ -151,7 +152,6 @@ void Bracket::layout()
                         _shape.add(bbox());
                         }
                   else {
-                        _braceSymbol = SymId::brace;
                         qreal h = h2 * 2;
                         qreal w = symWidth(_braceSymbol) * _magx;
                         bbox().setRect(0, 0, w, h);
@@ -276,6 +276,7 @@ void Bracket::draw(QPainter* painter) const
 void Bracket::startEdit(EditData& ed)
       {
       Element::startEdit(ed);
+      ay1 = pagePos().y();
       ed.grips   = 1;
       ed.curGrip = Grip::START;
       }
@@ -295,7 +296,10 @@ void Bracket::updateGrips(EditData& ed) const
 
 void Bracket::endEdit(EditData& ed)
       {
-      endEditDrag(ed);
+//      endEditDrag(ed);
+      score()->setLayoutAll();
+      score()->update();
+      ed.element = 0;         // score layout invalidates element
       }
 
 //---------------------------------------------------------
@@ -315,7 +319,6 @@ void Bracket::editDrag(EditData& ed)
 
 void Bracket::endEditDrag(EditData&)
       {
-      qreal ay1 = pagePos().y();
       qreal ay2 = ay1 + h2 * 2;
 
       int staffIdx1 = staffIdx();
@@ -342,6 +345,9 @@ void Bracket::endEditDrag(EditData&)
       qreal ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
       h2 = (ey - sy) * .5;
       bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
+      // brackets do not survive layout
+      // make sure layout is not called:
+      score()->cmdState()._setUpdateMode(UpdateMode::Update);
       }
 
 //---------------------------------------------------------
@@ -350,7 +356,7 @@ void Bracket::endEditDrag(EditData&)
 
 bool Bracket::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::BRACKET;
+      return data.dropElement->type() == ElementType::BRACKET;
       }
 
 //---------------------------------------------------------
@@ -359,14 +365,14 @@ bool Bracket::acceptDrop(EditData& data) const
 
 Element* Bracket::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       Bracket* b = 0;
       if (e->isBracket()) {
             b = toBracket(e);
             undoChangeProperty(Pid::SYSTEM_BRACKET, int(b->bracketType()));
             }
       delete e;
-      return b;
+      return this;
       }
 
 //---------------------------------------------------------
@@ -419,10 +425,24 @@ bool Bracket::setProperty(Pid id, const QVariant& v)
 
 QVariant Bracket::propertyDefault(Pid id) const
       {
+      if (id == Pid::BRACKET_COLUMN)
+            return 0;
       QVariant v = Element::propertyDefault(id);
       if (!v.isValid())
             v = _bi->propertyDefault(id);
       return v;
+      }
+
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void Bracket::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+      {
+      // brackets do not survive layout() and therefore cannot be on
+      // the undo stack; delegate to BracketItem:
+      BracketItem* bi = bracketItem();
+      bi->undoChangeProperty(id, v, ps);
       }
 
 //---------------------------------------------------------
@@ -431,7 +451,7 @@ QVariant Bracket::propertyDefault(Pid id) const
 
 void Bracket::setSelected(bool f)
       {
-      _bi->setSelected(f);
+//      _bi->setSelected(f);
       Element::setSelected(f);
       }
 
@@ -444,16 +464,16 @@ void Bracket::write(XmlWriter& xml) const
       {
       switch (_bi->bracketType()) {
             case BracketType::BRACE:
-                  xml.stag("Bracket type=\"Brace\"");
+                  xml.stag(this, "type=\"Brace\"");
                   break;
             case BracketType::NORMAL:
-                  xml.stag("Bracket");
+                  xml.stag(this);
                   break;
             case BracketType::SQUARE:
-                  xml.stag("Bracket type=\"Square\"");
+                  xml.stag(this, "type=\"Square\"");
                   break;
             case BracketType::LINE:
-                  xml.stag("Bracket type=\"Line\"");
+                  xml.stag(this, "type=\"Line\"");
                   break;
             case BracketType::NO_BRACKET:
                   break;

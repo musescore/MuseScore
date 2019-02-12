@@ -5,7 +5,6 @@
 =====================================================================
     MuseScore
     Linux Music Score Editor
-    $Id: mscore.cpp 1850 2009-05-25 07:44:35Z wschweer $
 
     Copyright (C) 2009 Werner Schweer and others
 
@@ -462,7 +461,7 @@
          render   this is a script which contains render commands
                   commands:
                         xxx         draw symbol name xxx
-                        m:x:y       add x:y (point) to current position
+                        m:x:y       add x:y to current position (1/5 spatium units)
                         :push
                         :pop
                         :n          root or base note

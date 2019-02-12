@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2018 Werner Schweer and others -->
+<application>
+  <id type="desktop">mscore.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <name>MuseScore</name>
+  <summary>Create, playback, and print sheet music for free</summary>
+  <icon type="remote" height="128" width="128">https://raw.githubusercontent.com/musescore/MuseScore/master/assets/musescore-icon-round-128.png</icon>
+  <icon type="remote" height="64" width="64">https://raw.githubusercontent.com/musescore/MuseScore/master/assets/musescore-icon-round-64.png</icon>
+
+  <description>
+    <p>
+      Create, playback, and print sheet music for free. MuseScore is cross-platform, multi-lingual, open source music notation software. It features an easy to use WYSIWYG editor with audio score playback for results that look and sound beautiful. It supports unlimited staves with up to four voices each, dynamics, articulations, lyrics, chords, lead sheet notation, import/export of MIDI and MusicXML, export to PDF and WAV, plus online score sharing.
+    </p>
+    <p>
+      MuseScore can upload scores directly to the score sharing site musescore.com. Program support is provided on musescore.org.
+    </p>
+    <p>
+      Features supported by MuseScore include:
+    </p>
+    <ul>
+      <li>Unlimited score length</li>
+      <li>Unlimited number of staves per system</li>
+      <li>Up to four independent voices per staff</li>
+      <li>Score creation wizard and templates</li>
+      <li>Automatic part extraction and transposition</li>
+      <li>Repeats, including segnos, codas, and measure repeats</li>
+      <li>Dynamics, articulations, and other expression markings, with playback support for most</li>
+      <li>Custom text markings</li>
+      <li>Lyrics</li>
+      <li>Chord symbols</li>
+      <li>Jazz notation, including lead sheets, slash notation and a “handwritten” font for text</li>
+      <li>Swing and shuffle playback</li>
+      <li>Mixer for instrument levels and effects</li>
+      <li>Percussion notation</li>
+      <li>Early music notation</li>
+      <li>Cross-staff beaming</li>
+      <li>Import of graphics</li>
+      <li>Custom key signatures</li>
+      <li>Additive time signatures</li>
+      <li>User-defined score styles</li>
+    </ul>
+    <p>
+      Most elements in MuseScore are laid out automatically but can also be positioned manually. The capabilities of MuseScore can be extended via plugins, and the growing repository on musescore.org contains many plugins submitted by users.
+    </p>
+    <p>
+      MuseScore includes a set of sounds that reproduce common instruments (as defined by General MIDI) without taking up a lot of disk space or memory, but you can also substitute any SoundFont you prefer for a wider variety of sounds or for more realism.
+    </p>
+    <p>
+      MuseScore can import and export MIDI and MusicXML files, and it can also import from Capella and several other programs. MuseScore can export to PDF, PNG, and other graphic formats, to WAV and other audio formats, or to Lilypond for an alternative layout and print option.
+    </p>
+  </description>
+
+  <url type="homepage">https://musescore.org</url>
+  <url type="bugtracker">https://musescore.org/en/project/issues/musescore</url>
+  <url type="faq">https://musescore.org/en/faq</url>
+  <url type="help">https://musescore.org/en/handbook</url>
+  <url type="donation">https://musescore.org/en/donate</url>
+  <url type="translate">https://musescore.org/administrative-guidelines/translation-instructions</url>
+
+  <launchable type="desktop-id">mscore.desktop</launchable>
+  <project_license>GPL-2.0</project_license>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Start Center</caption>
+      <image>https://raw.githubusercontent.com/flathub/org.musescore.MuseScore/master/screenshots/01-start-center.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Main application window</caption>
+      <image>https://raw.githubusercontent.com/flathub/org.musescore.MuseScore/master/screenshots/02-main-window.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Note Inspector</caption>
+      <image>https://raw.githubusercontent.com/flathub/org.musescore.MuseScore/master/screenshots/03-inspector.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Score playback with Piano Keyboard</caption>
+      <image>https://raw.githubusercontent.com/flathub/org.musescore.MuseScore/master/screenshots/04-playback-piano.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Mixer and Play panels</caption>
+      <image>https://raw.githubusercontent.com/flathub/org.musescore.MuseScore/master/screenshots/05-panels.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Master Palette</caption>
+      <image>https://raw.githubusercontent.com/flathub/org.musescore.MuseScore/master/screenshots/06-master-palette.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>New Score Wizard</caption>
+      <image>https://raw.githubusercontent.com/flathub/org.musescore.MuseScore/master/screenshots/07-new-score-wizard.png</image>
+    </screenshot>
+  </screenshots>
+
+  <developer_name>MuseScore BVBA</developer_name>
+  <update_contact>jurf_AT_riseup.net</update_contact>
+  <translation>qt</translation>
+  
+  <kudos>
+    <kudo>ModernToolkit</kudo>
+    <kudo>UserDocs</kudo>
+  </kudos>
+
+  <releases>
+    <release version="3.0"/>
+    <release version="2.3.2" date="2018-07-31">
+      <description>
+        <p>
+          After the release of MuseScore 2.3.1 on July 6th 2018, we found a couple of regressions that we addressed in MuseScore 2.3.2, released on July 31st 2018. We also updated all languages to latest translations.
+        </p>
+        <p>
+          Features:
+        </p>
+        <ul>
+          <li>#208006: Embed MP3 support by default on macOS</li>
+          <li>Add access to MuseScore version and revision used to create a score in plugin framework</li>
+        </ul>
+        <p>
+          Improvements:
+        </p>
+        <ul>
+          <li>#274258: Zerberus: add support for "global_volume=" opcode</li>
+          <li>#274396: Zerberus (SFZ) instruments are too quiet compared to SoundFont instruments</li>
+        </ul>
+        <p>
+          Fixes:
+        </p>
+        <ul>
+          <li>#12971: Same note in different voices and lengths plays only the length of the shortest note</li>
+          <li>#197716: Pending issue with uploading score audio</li>
+          <li>#271236: "Line visible" property not honored on screen for text lines</li>
+          <li>#274026: Unable to save synth settings in two scores in the same session</li>
+          <li>#274204: Regression: Ambitus causes a crash just while clicking on it</li>
+          <li>#274309: "Regroup Rhythms" crashes the program if measures contain Measure repeat symbols</li>
+          <li>#274432: Regroup rhythms does not work if the expected notes are shorter than the initial notes</li>
+          <li>#274558: Crash when adding MDL instruments</li>
+          <li>#274659: Crash on adjust measure duration in part</li>
+          <li>#274803: MDL Workspace Not Displayed After Installation</li>
+          <li>Disable "Upload Score" menu item while uploading custom audio, to prevent uploading different scores at the same time with slow internet connection speed.</li>
+        </ul>
+      </description>
+    </release>
+
+    <release version="2.3.1" date="2018-07-06">
+      <description>
+        <p>
+          After the release of MuseScore 2.3 on June 29th 2018, we found a couple of regressions that we addressed in MuseScore 2.3.1 released on July 6th 2018. We also updated all languages to latest translations.
+        </p>
+        <p>
+          Bug Fixes:
+        </p>
+        <ul>
+          <li>Fix #273921: [Regression] Augm. dot misplaced for low stemless notes</li>
+          <li>Fix #273837: MDL install failure on Linux</li>
+          <li>Fix #273996: Crash when exporting audio with Zerberus sounds (MacOS only)</li>
+          <li>Fix #273973: Playback cursor disappears after splitting then restoring the display</li>
+        </ul>
+      </description>
+    </release>
+
+    <release version="2.3" date="2018-06-29">
+      <description>
+        <p>
+          New features:
+        </p>
+        <ul>
+          <li>#273032: Implement extensions to provide an easy way to install soundfont, templates and instruments.xml</li>
+          <li>#256021: Add buzz roll tremolo stem</li>
+          <li>#271198: Add a more flexible way to choose noteheads in drumset for percussion instrument</li>
+          <li>#271723: Implement filters in Zerberus</li>
+          <li>#272276: Add ability to have a different MIDI pitch for drum instrument based on articulation or tremolo</li>
+          <li>Implemented flams and crush notation for unpitched percussion</li>
+        </ul>
+        <p>
+          Playback:
+        </p>
+        <ul>
+          <li>Fix #270996: No sound on upgrade to 2.2 if default soundfont was saved as default</li>
+          <li>Fix #271717: Match the default tempo in New Score Wizard</li>
+          <li>Fix #272377: 'Follow text' is not applied to tempo text</li>
+        </ul>
+        <p>
+          Zerberus:
+        </p>
+        <ul>
+          <li>Fix #222031: remove ties and spanners when removing induvidual notes within a chord</li>
+          <li>Fix #271718: clicking noise fix</li>
+          <li>Fix #271719: sound accumulation on noteOff</li>
+          <li>Fix #271722: long release samples do not play in their entirety</li>
+          <li>Fix #272687: Unable to select an SFZ playback for a drum instrument</li>
+          <li>Fix #273150: incorrect off_by processing</li>
+          <li>Fix #273241: incorrect loading sample when use comment line</li>
+        </ul>
+        <p>
+          User interface:
+        </p>
+        <ul>
+          <li>#273511: Order notes in Drum Input Palette like in instruments.xml</li>
+          <li>#269952: Allow new templates to be seen without restart</li>
+          <li>Follow macOS platform conventions for window title and dirty state</li>
+          <li>Use setWindowModified to display * in window title</li>
+          <li>Fix #8808: Add option to limit scroll area of the navigator and the score view</li>
+          <li>Fix #117236: Honor 'pan score' button during edits</li>
+          <li>Fix #153691: Drumtools palette not closing when switching between files</li>
+          <li>Fix #268016: No message on second keyboard shortcut already in use</li>
+          <li>Fix #271074: Image capture with transparent background empty when pasting into other programs on Windows (reverted Fix #209596: Screencapture + Copy + Transparency issue)</li>
+          <li>Fix #271935: Wrong voice button is highlighted after unsuccessful voice change</li>
+          <li>Fix #273672: Right align "Double augmentation dot" in preferences dialog</li>
+          <li>Fix #272153: Notes for transposing instrument are shown in concert pitch on piano control</li>
+        </ul>
+        <p>
+          Crashes and corruptions fixed:
+        </p>
+        <ul>
+          <li>Fix #76751: MuseScore crashes when opening plugin manager after adding new plugin</li>
+          <li>Fix #270850: Changes to a score cause all fermatas over a barline to be discarded</li>
+          <li>Fix #271039: crash when closing score after changing tempo in play panel</li>
+          <li>Fix #271161: crashes on certain tuplets due to failure to sanitize</li>
+          <li>Fix #271299: Errors with multiple clefs</li>
+          <li>Fix #271325: Adjusting a note outside the range of a piano causes a crash when the piano keyboard is visible.</li>
+          <li>Fix #272172: Remove tuplets after inserting measures causes corruption/crash</li>
+          <li>Fix crash in MusicXML import when drumset instrument has no midi-unpitched</li>
+        </ul>
+        <p>
+          Score layout:
+        </p>
+        <ul>
+          <li>Fix #253926: Key signature not displaying correctly on clef change at the start of a score</li>
+          <li>Fix #267602: Measure shifts back and forth with each layout</li>
+          <li>Fix #269404: Line/Ottava Text properties do not apply user-defined vertical offsetting properly</li>
+          <li>Fix #271187: Bad canvas position when operating near right margin with vertical stacking</li>
+          <li>Fix #271450: Double-click to set breaks on frames</li>
+          <li>Fix #271529: Incorrect stem position for some noteheads in layout</li>
+          <li>Fix #272023: Downstem mirrored notes lose accidental</li>
+          <li>Fix #272066: Canvas improperly positioned when setting zoom level</li>
+          <li>Fix #272390: Measure numbering by interval should take 1st measure number into account</li>
+          <li>Fix #272691: No naturals in key sig after mmrest</li>
+          <li>Fix #273555: Checking "Show first" with an interval of 1 for measure numbers only shows measure number 1</li>
+          <li>Fix #273305: Courtesy clef hide/show issue</li>
+        </ul>
+        <p>
+          Instruments:
+        </p>
+        <ul>
+          <li>Reworked instruments.xml</li>
+          <li>Fix #271103: Add 7-string guitar and Cavaquinho (4-strings guitar)</li>
+          <li>Add missing 5-string staff type, append 7- and 8-string tablature types</li>
+          <li>Don't show presets for more strings than the instrument is set up for, esp. counting only fretted strings, i.e. non-open strings</li>
+        </ul>
+        <p>
+          Import/Export:
+        </p>
+        <ul>
+          <li>Fix #271707: MusicXML export: crash when exporting hairpins</li>
+          <li>Fix #271840: MusicXML import: no barlines when using property</li>
+          <li>Fix #272062: Opening of some MusicXML files caused MuseScore to crash</li>
+        </ul>
+        <p>
+          Miscellaneous:
+        </p>
+        <ul>
+          <li>Fix #270496: Add missing elements to incomplete tuplets when reading from a file</li>
+          <li>Fix #272042: Saved preferences override command line options</li>
+          <li>Debian fix: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=898757. Fix crash when starting with piano open.</li>
+          <li>Allow path to be relative to stored album file</li>
+          <li>Fix #273660 : MIDI Keyboard Not Responded when Pressed Before Opening a Score</li>
+        </ul>
+      </description>
+    </release>
+
+    <release version="2.2.1" date="2018-04-03"/>
+    <release version="2.2" date="2018-03-26"/>
+    <release version="2.1.0" date="2017-05-02"/>
+  </releases>
+  
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-cartoon">none</content_attribute>
+    <content_attribute id="violence-fantasy">none</content_attribute>
+    <content_attribute id="violence-realistic">none</content_attribute>
+    <content_attribute id="violence-bloodshed">none</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="violence-desecration">none</content_attribute>
+    <content_attribute id="violence-slavery">none</content_attribute>
+    <content_attribute id="violence-worship">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="sex-homosexuality">none</content_attribute>
+    <content_attribute id="sex-prostitution">none</content_attribute>
+    <content_attribute id="sex-adultery">none</content_attribute>
+    <content_attribute id="sex-appearance">none</content_attribute>
+    <content_attribute id="language-profanity">none</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
+    <content_attribute id="social-chat">none</content_attribute>
+    <content_attribute id="social-info">none</content_attribute>
+    <content_attribute id="social-audio">none</content_attribute>
+    <content_attribute id="social-location">none</content_attribute>
+    <content_attribute id="social-contacts">none</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
+  </content_rating>
+
+</application>

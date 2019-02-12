@@ -36,13 +36,13 @@ namespace Ms {
 const ClefInfo ClefInfo::clefTable[] = {
 // tag    xmlName    line oCh pOff|-lines for sharps---||---lines for flats--|  symbol                           | name                                   | valid in staff group
 { "G",    "G",         2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef,                    TR("Treble clef"),                       StaffGroup::STANDARD  },
-// { "G15mb","G",         2, -2, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15mb,                TR("Treble clef 15mb"),                  StaffGroup::STANDARD  },
-{ "G15mb","G",         2, -2, 31, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15mb,                TR("Treble clef 15mb"),                  StaffGroup::STANDARD  },
-{ "G8vb", "G",         2, -1, 38, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vb,                 TR("Treble clef 8vb"),                   StaffGroup::STANDARD  },
-{ "G8va", "G",         2,  1, 52, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8va,                 TR("Treble clef 8va"),                   StaffGroup::STANDARD  },
-{ "G15ma","G",         2,  2, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15ma,                TR("Treble clef 15ma"),                  StaffGroup::STANDARD  },
-{ "G8vbo","G",         2, -1, 38, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbOld,              TR("Double treble clef 8vb on 2nd line"),StaffGroup::STANDARD  },
-{ "G8vbp","G",         2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbParens,           TR("Treble clef optional 8vb"),          StaffGroup::STANDARD  },
+// { "G15mb","G",         2, -2, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15mb,                TR("Treble clef 15ma bassa"),                  StaffGroup::STANDARD  },
+{ "G15mb","G",         2, -2, 31, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15mb,                TR("Treble clef 15ma bassa"),                  StaffGroup::STANDARD  },
+{ "G8vb", "G",         2, -1, 38, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vb,                 TR("Treble clef 8va bassa"),                   StaffGroup::STANDARD  },
+{ "G8va", "G",         2,  1, 52, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8va,                 TR("Treble clef 8va alta"),                   StaffGroup::STANDARD  },
+{ "G15ma","G",         2,  2, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15ma,                TR("Treble clef 15ma alta"),                  StaffGroup::STANDARD  },
+{ "G8vbo","G",         2, -1, 38, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbOld,              TR("Double treble clef 8va bassa on 2nd line"),StaffGroup::STANDARD  },
+{ "G8vbp","G",         2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbParens,           TR("Treble clef optional 8va bassa"),          StaffGroup::STANDARD  },
 { "G1",   "G",         1,  0, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::gClef,                    TR("French violin clef"),                StaffGroup::STANDARD  },
 { "C1",   "C",         1,  0, 43, { 5, 1, 4, 0, 3,-1, 2, 2, 6, 3, 7, 4, 8, 5 }, SymId::cClef,                    TR("Soprano clef"),                      StaffGroup::STANDARD  },
 { "C2",   "C",         2,  0, 41, { 3, 6, 2, 5, 1, 4, 0, 0, 4, 1, 5, 2, 6, 3 }, SymId::cClef,                    TR("Mezzo-soprano clef"),                StaffGroup::STANDARD  },
@@ -55,10 +55,10 @@ const ClefInfo ClefInfo::clefTable[] = {
 { "C3_F20C", "C",      3,  0, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 }, SymId::cClefFrench20C,           TR("Alto clef (French, 20th century)"),  StaffGroup::STANDARD  },
 { "C4_F20C", "C",      4,  0, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, SymId::cClefFrench20C,           TR("Tenor clef (French, 20th century)"), StaffGroup::STANDARD  },
 { "F",    "F",         4,  0, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef,                    TR("Bass clef"),                         StaffGroup::STANDARD  },
-{ "F15mb","F",         4, -2, 19, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef15mb,                TR("Bass clef 15mb"),                    StaffGroup::STANDARD  },
-{ "F8vb", "F",         4, -1, 26, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef8vb,                 TR("Bass clef 8vb"),                     StaffGroup::STANDARD  },
-{ "F8va", "F",         4,  1, 40, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef8va,                 TR("Bass clef 8va"),                     StaffGroup::STANDARD  },
-{ "F15ma","F",         4,  2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef15ma,                TR("Bass clef 15ma"),                    StaffGroup::STANDARD  },
+{ "F15mb","F",         4, -2, 19, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef15mb,                TR("Bass clef 15ma bassa"),                    StaffGroup::STANDARD  },
+{ "F8vb", "F",         4, -1, 26, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef8vb,                 TR("Bass clef 8va bassa"),                     StaffGroup::STANDARD  },
+{ "F8va", "F",         4,  1, 40, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef8va,                 TR("Bass clef 8va alta"),                     StaffGroup::STANDARD  },
+{ "F15ma","F",         4,  2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef15ma,                TR("Bass clef 15ma alta"),                    StaffGroup::STANDARD  },
 { "F3",   "F",         3,  0, 35, { 4, 0, 3,-1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, SymId::fClef,                    TR("Baritone clef (F clef)"),            StaffGroup::STANDARD  },
 { "F5",   "F",         5,  0, 31, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fClef,                    TR("Subbass clef"),                      StaffGroup::STANDARD  },
 { "F_F18C","F",        4,  0, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClefFrench,              TR("F clef (French, 18th century)"),     StaffGroup::STANDARD  },
@@ -90,10 +90,8 @@ ClefType ClefInfo::tag2type(const QString& s)
 //---------------------------------------------------------
 
 Clef::Clef(Score* s)
-  : Element(s)
+  : Element(s, ElementFlag::ON_STAFF)
       {
-      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-
       _showCourtesy               = true;
       _small                      = false;
       _clefTypes._concertClef     = ClefType::INVALID;
@@ -135,7 +133,7 @@ void Clef::layout()
       // check clef visibility and type compatibility
       if (clefSeg && staff()) {
             int tick             = clefSeg->tick();
-            StaffType* staffType = staff()->staffType(tick);
+            const StaffType* staffType = staff()->constStaffType(tick);
             bool show            = staffType->genClef();        // check staff type allows clef display
 
             // check clef is compatible with staff type group:
@@ -148,6 +146,14 @@ void Clef::layout()
                         _clefTypes = staff()->clefType(0);
                   }
 
+            Measure* meas = clefSeg->measure();
+            if (meas && meas->system() && !score()->lineMode()) {
+                  const auto& ml = meas->system()->measures();
+                  bool found = (std::find(ml.begin(), ml.end(), meas) != ml.end());
+                  bool courtesy = (tick == meas->endTick() && (meas == meas->system()->lastMeasure() || !found));
+                  if (courtesy && (!showCourtesy() || !score()->styleB(Sid::genCourtesyClef) || meas->isFinalMeasureOfSection()))
+                        show = false;
+                  }
             // if clef not to show or not compatible with staff group
             if (!show) {
                   setbbox(QRectF());
@@ -218,7 +224,7 @@ void Clef::layout()
 
 void Clef::draw(QPainter* painter) const
       {
-      if (symId == SymId::noSym || (staff() && !staff()->staffType(tick())->genClef()))
+      if (symId == SymId::noSym || (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genClef()))
             return;
       painter->setPen(curColor());
       drawSymbol(symId, painter);
@@ -230,8 +236,8 @@ void Clef::draw(QPainter* painter) const
 
 bool Clef::acceptDrop(EditData& data) const
       {
-      return (data.element->type() == ElementType::CLEF
-         || (/*!generated() &&*/ data.element->type() == ElementType::AMBITUS) );
+      return (data.dropElement->type() == ElementType::CLEF
+         || (/*!generated() &&*/ data.dropElement->type() == ElementType::AMBITUS) );
       }
 
 //---------------------------------------------------------
@@ -240,7 +246,7 @@ bool Clef::acceptDrop(EditData& data) const
 
 Element* Clef::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       Clef* c = 0;
       if (e->isClef()) {
             Clef* clef = toClef(e);
@@ -304,7 +310,7 @@ void Clef::read(XmlReader& e)
 
 void Clef::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       if (_clefTypes._concertClef != ClefType::INVALID)
             xml.tag("concertClefType", ClefInfo::tag(_clefTypes._concertClef));
       if (_clefTypes._transposingClef != ClefType::INVALID)
@@ -425,6 +431,37 @@ void Clef::undoSetShowCourtesy(bool v)
       }
 
 //---------------------------------------------------------
+//   otherClef
+//    try to locate the 'other clef' of a courtesy / main pair
+//---------------------------------------------------------
+
+Clef* Clef::otherClef()
+      {
+      // if not in a clef-segment-measure hierarchy, do nothing
+      if (!parent() || !parent()->isSegment())
+            return nullptr;
+      Segment* segm = toSegment(parent());
+      int segmTick = segm->tick();
+      if (!segm->parent() || !segm->parent()->isMeasure())
+            return nullptr;
+      Measure* meas = toMeasure(segm->parent());
+      Measure* otherMeas = nullptr;
+      Segment* otherSegm = nullptr;
+      if (segmTick == meas->tick())                         // if clef segm is measure-initial
+            otherMeas = meas->prevMeasure();                // look for a previous measure
+      else if (segmTick == meas->tick() + meas->ticks())    // if clef segm is measure-final
+            otherMeas = meas->nextMeasure();                // look for a next measure
+      if (!otherMeas)
+            return nullptr;
+      // look for a clef segment in the 'other' measure at the same tick of this clef segment
+      otherSegm = otherMeas->findSegment(SegmentType::Clef | SegmentType::HeaderClef, segmTick);
+      if (!otherSegm)
+            return nullptr;
+      // if any 'other' segment found, look for a clef in the same track as this
+      return toClef(otherSegm->element(track()));
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -450,6 +487,7 @@ bool Clef::setProperty(Pid propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
+      triggerLayout();
       return true;
       }
 

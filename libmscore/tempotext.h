@@ -33,7 +33,9 @@ class TempoText final : public TextBase  {
       bool _isRelative;
 
       void updateScore();
-      void textChanged();
+      void updateTempo();
+      virtual void endEdit(EditData&) override;
+      virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
    public:
       TempoText(Score*);
@@ -66,6 +68,7 @@ class TempoText final : public TextBase  {
       QVariant getProperty(Pid propertyId) const override;
       bool setProperty(Pid propertyId, const QVariant&) override;
       QVariant propertyDefault(Pid id) const override;
+      Sid getPropertyStyle(Pid) const override;
       virtual QString accessibleInfo() const override;
       };
 

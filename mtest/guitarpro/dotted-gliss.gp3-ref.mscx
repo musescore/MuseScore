@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -26,6 +26,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Guitar 1</trackName>
@@ -53,102 +54,117 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <linkedMain/>
         <Text>
-          <lid>1</lid>
+          <linkedMain/>
           <style>Title</style>
           <text>All God´s People</text>
           </Text>
         <Text>
-          <lid>2</lid>
+          <linkedMain/>
           <style>Subtitle</style>
           <text>Queen
 Innuendo</text>
           </Text>
         <Text>
-          <lid>3</lid>
+          <linkedMain/>
           <style>Composer</style>
           <text>Queen</text>
           </Text>
         </VBox>
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
-          <lid>4</lid>
-          </Clef>
-        <TimeSig>
-          <lid>5</lid>
-          <sigN>12</sigN>
-          <sigD>8</sigD>
-          </TimeSig>
-        <Rest>
-          <lid>6</lid>
-          <durationType>eighth</durationType>
-          </Rest>
-        <Rest>
-          <lid>7</lid>
-          <durationType>eighth</durationType>
-          </Rest>
-        <Rest>
-          <lid>8</lid>
-          <durationType>eighth</durationType>
-          </Rest>
-        <Rest>
-          <lid>9</lid>
-          <durationType>eighth</durationType>
-          </Rest>
-        <Rest>
-          <lid>10</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>11</lid>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Dynamic>
-          <subtype>fff</subtype>
-          <velocity>126</velocity>
-          <lid>12</lid>
-          </Dynamic>
-        <Chord>
-          <lid>13</lid>
-          <dots>1</dots>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>14</lid>
-            <pitch>74</pitch>
-            <tpc>16</tpc>
-            <fret>15</fret>
-            <string>1</string>
-            <Glissando id="2">
-              <text>gliss.</text>
-              <lid>18</lid>
-              <diagonal>1</diagonal>
-              <anchor>3</anchor>
-              </Glissando>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>f</subtype>
-          <velocity>96</velocity>
-          <lid>15</lid>
-          </Dynamic>
-        <Chord>
-          <lid>16</lid>
-          <durationType>eighth</durationType>
-          <Note>
-            <lid>17</lid>
-            <Accidental>
-              <subtype>accidentalSharp</subtype>
-              </Accidental>
-            <pitch>66</pitch>
-            <tpc>20</tpc>
-            <fret>7</fret>
-            <string>1</string>
-            <endSpanner id="2"/>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>12</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          <Rest>
+            <linkedMain/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Dynamic>
+            <subtype>fff</subtype>
+            <velocity>126</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Chord>
+            <linkedMain/>
+            <dots>1</dots>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              <fret>15</fret>
+              <string>1</string>
+              <Spanner type="Glissando">
+                <Glissando>
+                  <text>gliss.</text>
+                  <linkedMain/>
+                  <diagonal>1</diagonal>
+                  <anchor>3</anchor>
+                  </Glissando>
+                <next>
+                  <location>
+                    <fractions>3/8</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Chord>
+            <linkedMain/>
+            <durationType>eighth</durationType>
+            <Note>
+              <linkedMain/>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                </Accidental>
+              <pitch>66</pitch>
+              <tpc>20</tpc>
+              <fret>7</fret>
+              <string>1</string>
+              <Spanner type="Glissando">
+                <prev>
+                  <location>
+                    <fractions>-3/8</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     <Score>
@@ -167,6 +183,7 @@ Innuendo</text>
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="0" span="2" col="0"/>
           </Staff>
@@ -219,20 +236,24 @@ Innuendo</text>
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            </linked>
           <Text>
-            <lid>1</lid>
+            <linked>
+              </linked>
             <style>Title</style>
             <text>All God´s People</text>
             </Text>
           <Text>
-            <lid>2</lid>
+            <linked>
+              </linked>
             <style>Subtitle</style>
             <text>Queen
 Innuendo</text>
             </Text>
           <Text>
-            <lid>3</lid>
+            <linked>
+              </linked>
             <style>Composer</style>
             <text>Queen</text>
             </Text>
@@ -241,142 +262,204 @@ Innuendo</text>
             <text>Guitar 1</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            <lid>4</lid>
-            </Clef>
-          <TimeSig>
-            <lid>5</lid>
-            <sigN>12</sigN>
-            <sigD>8</sigD>
-            </TimeSig>
-          <Rest>
-            <lid>6</lid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <lid>7</lid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <lid>8</lid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <lid>9</lid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <lid>10</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>11</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Dynamic>
-            <subtype>fff</subtype>
-            <velocity>126</velocity>
-            <lid>12</lid>
-            </Dynamic>
-          <Chord>
-            <lid>13</lid>
-            <dots>1</dots>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>14</lid>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              <fret>15</fret>
-              <string>1</string>
-              <Glissando id="3">
-                <text>gliss.</text>
-                <lid>18</lid>
-                <diagonal>1</diagonal>
-                <anchor>3</anchor>
-                </Glissando>
-              </Note>
-            </Chord>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
-            <lid>15</lid>
-            </Dynamic>
-          <Chord>
-            <lid>16</lid>
-            <durationType>eighth</durationType>
-            <Note>
-              <lid>17</lid>
-              <Accidental>
-                <subtype>accidentalSharp</subtype>
-                </Accidental>
-              <pitch>66</pitch>
-              <tpc>20</tpc>
-              <fret>7</fret>
-              <string>1</string>
-              <endSpanner id="3"/>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G8vb</concertClefType>
+              <transposingClefType>G8vb</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>12</sigN>
+              <sigD>8</sigD>
+              </TimeSig>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>eighth</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>eighth</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>eighth</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>eighth</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Dynamic>
+              <subtype>fff</subtype>
+              <velocity>126</velocity>
+              <linked>
+                </linked>
+              </Dynamic>
+            <Chord>
+              <linked>
+                </linked>
+              <dots>1</dots>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>74</pitch>
+                <tpc>16</tpc>
+                <fret>15</fret>
+                <string>1</string>
+                <Spanner type="Glissando">
+                  <Glissando>
+                    <text>gliss.</text>
+                    <linked>
+                      </linked>
+                    <diagonal>1</diagonal>
+                    <anchor>3</anchor>
+                    </Glissando>
+                  <next>
+                    <location>
+                      <fractions>3/8</fractions>
+                      </location>
+                    </next>
+                  </Spanner>
+                </Note>
+              </Chord>
+            <Dynamic>
+              <subtype>f</subtype>
+              <velocity>96</velocity>
+              <linked>
+                </linked>
+              </Dynamic>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>eighth</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <Accidental>
+                  <subtype>accidentalSharp</subtype>
+                  </Accidental>
+                <pitch>66</pitch>
+                <tpc>20</tpc>
+                <fret>7</fret>
+                <string>1</string>
+                <Spanner type="Glissando">
+                  <prev>
+                    <location>
+                      <fractions>-3/8</fractions>
+                      </location>
+                    </prev>
+                  </Spanner>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <Rest>
-            <lid>6</lid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <lid>7</lid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <lid>8</lid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <lid>9</lid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <lid>10</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>11</lid>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Chord>
-            <lid>13</lid>
-            <dots>1</dots>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>14</lid>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              <fret>15</fret>
-              <string>1</string>
-              <Glissando id="4">
-                <text>gliss.</text>
-                <lid>18</lid>
-                <diagonal>1</diagonal>
-                <anchor>3</anchor>
-                </Glissando>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>16</lid>
-            <durationType>eighth</durationType>
-            <Note>
-              <lid>17</lid>
-              <pitch>66</pitch>
-              <tpc>20</tpc>
-              <fret>7</fret>
-              <string>1</string>
-              <endSpanner id="4"/>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                <indexDiff>6</indexDiff>
+                </linked>
+              <durationType>eighth</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>eighth</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>eighth</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>eighth</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Chord>
+              <linked>
+                <indexDiff>1</indexDiff>
+                </linked>
+              <dots>1</dots>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>1</indexDiff>
+                  </linked>
+                <pitch>74</pitch>
+                <tpc>16</tpc>
+                <fret>15</fret>
+                <string>1</string>
+                <Spanner type="Glissando">
+                  <Glissando>
+                    <text>gliss.</text>
+                    <linked>
+                      <indexDiff>1</indexDiff>
+                      </linked>
+                    <diagonal>1</diagonal>
+                    <anchor>3</anchor>
+                    </Glissando>
+                  <next>
+                    <location>
+                      <fractions>3/8</fractions>
+                      </location>
+                    </next>
+                  </Spanner>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                <indexDiff>1</indexDiff>
+                </linked>
+              <durationType>eighth</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>1</indexDiff>
+                  </linked>
+                <pitch>66</pitch>
+                <tpc>20</tpc>
+                <fret>7</fret>
+                <string>1</string>
+                <Spanner type="Glissando">
+                  <prev>
+                    <location>
+                      <fractions>-3/8</fractions>
+                      </location>
+                    </prev>
+                  </Spanner>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <name>Guitar 1</name>

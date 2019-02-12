@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -111,181 +111,211 @@
           <text>measure</text>
           </Text>
         </VBox>
-      <Measure number="1">
-        <TimeSig>
-          <sigN>2</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Rest>
-          <lid>179</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
-        <Tempo>
-          <tempo>1.66667</tempo>
-          <text>𝅘𝅥 = 100</text>
-          </Tempo>
-        <Chord>
-          <lid>13</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>14</lid>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>15</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>16</lid>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Tempo>
+            <tempo>1.66667</tempo>
+            <text>𝅘𝅥 = 100</text>
+            </Tempo>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Chord>
-          <lid>17</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>18</lid>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>19</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>20</lid>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Rest>
-          <lid>5</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <Chord>
-          <lid>21</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>22</lid>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <lid>23</lid>
-          <durationType>quarter</durationType>
-          <Note>
-            <lid>24</lid>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>2</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Rest>
-          <lid>180</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
-        <Rest>
-          <lid>3</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Rest>
-          <lid>4</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Rest>
-          <lid>6</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <Rest>
-          <lid>7</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="3">
-      <Measure number="1">
-        <TimeSig>
-          <sigN>2</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Rest>
-          <lid>181</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>2</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
-        <Rest>
-          <lid>9</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <Rest>
-          <lid>10</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Rest>
-          <lid>11</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="5">
-        <Rest>
-          <lid>12</lid>
-          <durationType>measure</durationType>
-          <duration>2/4</duration>
-          </Rest>
+      <Measure>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>measure</durationType>
+            <duration>2/4</duration>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     <Score>
@@ -366,137 +396,176 @@
             <text>Piano</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <TimeSig>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Rest>
-            <lid>179</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              </Clef>
+            <TimeSig>
+              <sigN>2</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="2">
+        <Measure>
           <breakMultiMeasureRest>1</breakMultiMeasureRest>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
-          <Tempo>
-            <tempo>1.66667</tempo>
-            <text>𝅘𝅥 = 100</text>
-            </Tempo>
-          <Chord>
-            <lid>13</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>14</lid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>15</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>16</lid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
+          <voice>
+            <Tempo>
+              <tempo>1.66667</tempo>
+              <text>𝅘𝅥 = 100</text>
+              </Tempo>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>67</pitch>
+                <tpc>15</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>67</pitch>
+                <tpc>15</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="3">
-          <Chord>
-            <lid>17</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>18</lid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>19</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>20</lid>
-              <pitch>67</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>67</pitch>
+                <tpc>15</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>67</pitch>
+                <tpc>15</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="4">
-          <Rest>
-            <lid>5</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="5">
-          <Chord>
-            <lid>21</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>22</lid>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <lid>23</lid>
-            <durationType>quarter</durationType>
-            <Note>
-              <lid>24</lid>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>65</pitch>
+                <tpc>13</tpc>
+                </Note>
+              </Chord>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>65</pitch>
+                <tpc>13</tpc>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <TimeSig>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Rest>
-            <lid>180</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              </Clef>
+            <TimeSig>
+              <sigN>2</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="2">
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
-          <Rest>
-            <lid>3</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="3">
-          <Rest>
-            <lid>4</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="4">
-          <Rest>
-            <lid>6</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="5">
-          <Rest>
-            <lid>7</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <name>Piano</name>
@@ -571,66 +640,88 @@
             <text>Flute</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <TimeSig>
-            <sigN>2</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Rest>
-            <lid>181</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G</concertClefType>
+              <transposingClefType>G</transposingClefType>
+              </Clef>
+            <TimeSig>
+              <sigN>2</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="2">
+        <Measure>
           <breakMultiMeasureRest>1</breakMultiMeasureRest>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            </Clef>
-          <Tempo>
-            <tempo>1.66667</tempo>
-            <lid>25</lid>
-            <text>𝅘𝅥 = 100</text>
-            </Tempo>
-          <Rest>
-            <lid>9</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+          <voice>
+            <Tempo>
+              <tempo>1.66667</tempo>
+              <linkedMain/>
+              <text>𝅘𝅥 = 100</text>
+              </Tempo>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="2" len="8/4">
+        <Measure len="8/4">
           <multiMeasureRest>4</multiMeasureRest>
-          <Tempo>
-            <tempo>1.66667</tempo>
-            <lid>25</lid>
-            <text>𝅘𝅥 = 100</text>
-            </Tempo>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>8/4</duration>
-            </Rest>
+          <voice>
+            <Tempo>
+              <tempo>1.66667</tempo>
+              <linked>
+                <score>same</score>
+                <location>
+                  <staves>-2</staves>
+                  </location>
+                </linked>
+              <text>𝅘𝅥 = 100</text>
+              </Tempo>
+            <Rest>
+              <durationType>measure</durationType>
+              <duration>8/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="3">
-          <Rest>
-            <lid>10</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="4">
-          <Rest>
-            <lid>11</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
-        <Measure number="5">
-          <Rest>
-            <lid>12</lid>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
+        <Measure>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <name>Flute</name>

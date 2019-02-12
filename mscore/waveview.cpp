@@ -15,6 +15,7 @@
 #include "libmscore/audio.h"
 #include "libmscore/score.h"
 
+#define OV_EXCLUDE_STATIC_CALLBACKS
 #include <vorbis/vorbisfile.h>
 
 namespace Ms {
@@ -52,7 +53,7 @@ static size_t ovRead(void* ptr, size_t size, size_t nmemb, void* datasource)
       if (n) {
             const char* src = vd->data.data() + vd->pos;
             memcpy(ptr, src, n);
-            vd->pos += n;
+            vd->pos += int(n);
             }
       return n;
       }

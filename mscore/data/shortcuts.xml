@@ -165,6 +165,10 @@
     <seq>Shift+G</seq>
     </SC>
   <SC>
+    <key>chord-tie</key>
+    <seq>Alt++</seq>
+    </SC>
+  <SC>
     <key>insert-a</key>
     <seq>Ctrl+Shift+A</seq>
     </SC>
@@ -618,9 +622,9 @@
     <key>clef-bass</key>
     <seq>Ctrl+Y,Ctrl+2</seq>
     </SC>
-   <SC>
+  <SC>
     <key>system-break</key>
-   <seq>Return</seq>
+    <seq>Return</seq>
     </SC>
   <SC>
     <key>page-break</key>
@@ -979,10 +983,6 @@
     <seq>Ctrl+Left</seq>
     </SC>
   <SC>
-    <key>relayout</key>
-    <seq>Shift+L</seq>
-    </SC>
-  <SC>
     <key>text-word-right</key>
     <seq>Ctrl+Right</seq>
     </SC>
@@ -1006,6 +1006,4 @@
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
     </SC>
-
   </Shortcuts>
-

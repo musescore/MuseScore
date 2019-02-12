@@ -96,6 +96,7 @@ void ScoreView::startFotomode()
             // convert to absolute position
             _foto->setbbox(toPhysical(r));
             }
+      _foto->setFlag(ElementFlag::MOVABLE, true);
       _foto->setVisible(true);
       _score->select(_foto);
       editData.element = _foto;
@@ -135,9 +136,13 @@ void ScoreView::startFotoDrag()
 
 void ScoreView::doDragFoto(QMouseEvent* ev)
       {
+      _foto->setOffset(QPointF(0.0, 0.0));
       QPointF p = toLogical(ev->pos());
+      QPointF sm = editData.startMove;
+
       QRectF r;
-      r.setCoords(editData.startMove.x(), editData.startMove.y(), p.x(), p.y());
+      r.setCoords(sm.x(), sm.y(), p.x(), p.y());
+
       _foto->setbbox(r.normalized());
 
       QRectF rr(_foto->bbox());
@@ -322,7 +327,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       popup->addAction(a);
 
       popup->addSeparator();
-      a = popup->addAction(tr("Resolution (%1 DPI)...").arg(preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION)));
+      a = popup->addAction(tr("Resolution (%1 DPI)…").arg(preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION)));
       a->setData("set-res");
       QAction* bgAction = popup->addAction(tr("Transparent background"));
       bgAction->setCheckable(true);
@@ -338,7 +343,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             a->setData(resizeEntry[i].label);
             popup->addAction(a);
             }
-      QMenu* setSize = new QMenu(tr("Set Standard Size..."));
+      QMenu* setSize = new QMenu(tr("Set Standard Size…"));
       for (int i = 0; i < 4; ++i) {
             a = new QAction(qApp->translate("fotomode", setSizeEntry[i].text), this);
             a->setData(setSizeEntry[i].label);
@@ -347,10 +352,10 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       popup->addMenu(setSize);
 
       popup->addSeparator();
-      a = new QAction(tr("Save As (Print Mode)..."), this);
+      a = new QAction(tr("Save As (Print Mode)…"), this);
       a->setData("print");
       popup->addAction(a);
-      a = new QAction(tr("Save As (Screenshot Mode)..."), this);
+      a = new QAction(tr("Save As (Screenshot Mode)…"), this);
       a->setData("screenshot");
       popup->addAction(a);
 
@@ -405,6 +410,31 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
       }
 
 //---------------------------------------------------------
+//   getRectImage
+//---------------------------------------------------------
+
+QImage ScoreView::getRectImage(const QRectF& rect, double dpi, bool transparent, bool printMode)
+      {
+      const double mag = dpi / DPI;
+      const int w = lrint(rect.width()  * mag);
+      const int h = lrint(rect.height() * mag);
+
+      QImage::Format f = QImage::Format_ARGB32_Premultiplied;
+      QImage img(w, h, f);
+      img.setDotsPerMeterX(lrint((dpi * 1000) / INCH));
+      img.setDotsPerMeterY(lrint((dpi * 1000) / INCH));
+      img.fill(transparent ? 0 : 0xffffffff);
+
+      const auto pr = MScore::pixelRatio;
+      MScore::pixelRatio = 1.0 / mag;
+      QPainter p(&img);
+      paintRect(printMode, p, rect, mag);
+      MScore::pixelRatio = pr;
+
+      return img;
+      }
+
+//---------------------------------------------------------
 //   fotoModeCopy
 //---------------------------------------------------------
 
@@ -419,21 +449,9 @@ void ScoreView::fotoModeCopy()
       bool transparent = preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY);
 #endif
       double convDpi   = preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION);
-      double mag       = convDpi / DPI;
-
       QRectF r(_foto->canvasBoundingRect());
 
-      int w = lrint(r.width()  * mag);
-      int h = lrint(r.height() * mag);
-
-      QImage::Format f;
-      f = QImage::Format_ARGB32_Premultiplied;
-      QImage printer(w, h, f);
-      printer.setDotsPerMeterX(lrint(DPMM * 1000.0));
-      printer.setDotsPerMeterY(lrint(DPMM * 1000.0));
-      printer.fill(transparent ? 0 : 0xffffffff);
-      QPainter p(&printer);
-      paintRect(true, p, r, mag);
+      QImage printer(getRectImage(r, convDpi, transparent, /* printMode */ true));
       QApplication::clipboard()->setImage(printer);
       }
 
@@ -541,14 +559,7 @@ bool ScoreView::saveFotoAs(bool printMode, const QRectF& r)
             MScore::pdfPrinting = false;
             }
       else if (ext == "png") {
-            QImage::Format f = QImage::Format_ARGB32_Premultiplied;
-            QImage printer(w, h, f);
-            printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
-            printer.setDotsPerMeterY(lrint((convDpi * 1000) / INCH));
-            printer.fill(transparent ? 0 : 0xffffffff);
-            MScore::pixelRatio = 1.0 / mag;
-            QPainter p(&printer);
-            paintRect(printMode, p, r, mag);
+            QImage printer(getRectImage(r, convDpi, transparent, printMode));
             printer.save(fn, "png");
             }
       else
@@ -579,8 +590,7 @@ void ScoreView::paintRect(bool printMode, QPainter& p, const QRectF& r, double m
                   break;
             p.translate(page->pos());
             QList<Element*> ell = page->items(r.translated(-page->pos()));
-            qStableSort(ell.begin(), ell.end(), elementLessThan);
-            drawElements(p, ell);
+            drawElements(p, ell, nullptr);
             p.translate(-page->pos());
             }
 

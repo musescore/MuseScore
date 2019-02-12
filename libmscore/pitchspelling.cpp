@@ -246,7 +246,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
       switch (n) {
             case -2:
                   if (explicitAccidental) {
-                        acc = QObject::tr("double flat");
+                        acc = QObject::tr("double ♭");
                         }
                   else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
                         switch (tpc) {
@@ -261,7 +261,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
                   break;
             case -1:
                   if (explicitAccidental)
-                        acc = QObject::tr("flat");
+                        acc = QObject::tr("♭");
                   else if (noteSpelling == NoteSpellingType::GERMAN_PURE)
                         acc = (tpc == TPC_A_B || tpc == TPC_E_B) ? "s" : "es";
                   else
@@ -270,13 +270,13 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, QSt
             case  0: acc = ""; break;
             case  1:
                   if (explicitAccidental)
-                        acc = QObject::tr("sharp");
+                        acc = QObject::tr("♯");
                   else
                         acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "is" : "#";
                   break;
             case  2:
                   if (explicitAccidental)
-                        acc = QObject::tr("double sharp");
+                        acc = QObject::tr("double ♯");
                   else
                         acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? "isis" : "##";
                   break;
@@ -582,7 +582,7 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
             key[k]   = key[k-1];
             }
 
-      for (int i = 0; i < 512; ++i) {
+      for (i = 0; i < 512; ++i) {
             int pa    = 0;
             int pb    = 0;
             int l     = pitch[0] * 2 + (i & 1);
@@ -590,11 +590,11 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
             int lof1a = tab1[l];
             int lof1b = tab2[l];
 
-            for (int k = 1; k < 10; ++k) {
-                  int l = pitch[k] * 2 + ((i & (1 << k)) >> k);
-                  Q_ASSERT(l >= 0 && l <= (int)(sizeof(tab1)/sizeof(*tab1)));
-                  int lof2a = tab1[l];
-                  int lof2b = tab2[l];
+            for (k = 1; k < 10; ++k) {
+                  int l1 = pitch[k] * 2 + ((i & (1 << k)) >> k);
+                  Q_ASSERT(l1 >= 0 && l1 <= (int)(sizeof(tab1)/sizeof(*tab1)));
+                  int lof2a = tab1[l1];
+                  int lof2b = tab2[l1];
                   pa += penalty(lof1a, lof2a, key[k]);
                   pb += penalty(lof1b, lof2b, key[k]);
                   lof1a = lof2a;
@@ -649,7 +649,7 @@ void changeAllTpcs(Note* n, int tpc1)
 
 void Score::spellNotelist(std::vector<Note*>& notes)
       {
-      int n = notes.size();
+      int n = int(notes.size());
 
       int start = 0;
       while (start < n) {
@@ -678,15 +678,17 @@ void Score::spellNotelist(std::vector<Note*>& notes)
                   changeAllTpcs(notes[start+5], tab[(notes[start+5]->pitch() % 12) * 2 + ((opt & 32) >> 5)]);
                   }
             if (end == n) {
-                  int n = end - start;
+                  int n1 = end - start;
                   int k;
-                  switch(n - 6) {
+                  switch(n1 - 6) {
                         case 3:
                               k = end - start - 3;
                               changeAllTpcs(notes[end-3], tab[(notes[end-3]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              // FALLTHROUGH
                         case 2:
                               k = end - start - 2;
                               changeAllTpcs(notes[end-2], tab[(notes[end-2]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);
+                              // FALLTHROUGH
                         case 1:
                               k = end - start - 1;
                               changeAllTpcs(notes[end-1], tab[(notes[end-1]->pitch() % 12) * 2 + ((opt & (1<<k)) >> k)]);

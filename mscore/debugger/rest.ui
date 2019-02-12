@@ -136,7 +136,35 @@
       <item row="0" column="5">
        <widget class="QCheckBox" name="gap">
         <property name="text">
-         <string>gap</string>
+         <string notr="true">gap</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6">
+       <widget class="QPushButton" name="dot1">
+        <property name="text">
+         <string notr="true">Dot1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="QPushButton" name="dot2">
+        <property name="text">
+         <string notr="true">Dot2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6">
+       <widget class="QPushButton" name="dot3">
+        <property name="text">
+         <string notr="true">Dot3</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="7">
+       <widget class="QPushButton" name="dot4">
+        <property name="text">
+         <string notr="true">Dot4</string>
         </property>
        </widget>
       </item>

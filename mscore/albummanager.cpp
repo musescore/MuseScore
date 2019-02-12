@@ -57,7 +57,7 @@ AlbumManager::AlbumManager(QWidget* parent)
 
 void AlbumManager::buttonBoxClicked(QAbstractButton*)
       {
-      printf("buttonBox clicked\n");
+//printf("buttonBox clicked\n");
       }
 
 //---------------------------------------------------------
@@ -68,7 +68,7 @@ static QString getScoreTitle(Score* score)
       {
       QString name = score->metaTag("movementTitle");
       if (name.isEmpty()) {
-            Text* t = score->getText(SubStyleId::TITLE);
+            Text* t = score->getText(Tid::TITLE);
             if (t)
                   name = QTextDocumentFragment::fromHtml(t->xmlText()).toPlainText().replace("&amp;","&").replace("&gt;",">").replace("&lt;","<").replace("&quot;", "\"");
             name = name.simplified();

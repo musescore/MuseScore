@@ -13,6 +13,7 @@
 #include "paletteBoxButton.h"
 #include "palette.h"
 #include "preferences.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -45,13 +46,15 @@ void PaletteBoxButton::contextMenuEvent(QContextMenuEvent* event)
       {
       QMenu menu;
 
-      QAction* actionProperties = menu.addAction(tr("Palette Properties..."));
-      QAction* actionInsert     = menu.addAction(tr("Insert New Palette..."));
+      QAction* actionProperties = menu.addAction(tr("Palette Properties…"));
+      QAction* actionInsert     = menu.addAction(tr("Insert New Palette…"));
       QAction* actionUp         = menu.addAction(tr("Move Palette Up"));
       QAction* actionDown       = menu.addAction(tr("Move Palette Down"));
       QAction* actionEdit       = menu.addAction(tr("Enable Editing"));
       actionEdit->setCheckable(true);
       actionEdit->setChecked(!palette->readOnly());
+      if (palette->isFilterActive())
+            actionEdit->setVisible(false);
 
       bool _systemPalette = palette->systemPalette();
       actionProperties->setDisabled(_systemPalette);
@@ -61,8 +64,8 @@ void PaletteBoxButton::contextMenuEvent(QContextMenuEvent* event)
       actionEdit->setDisabled(_systemPalette);
 
       menu.addSeparator();
-      QAction* actionSave = menu.addAction(tr("Save Palette..."));
-      QAction* actionLoad = menu.addAction(tr("Load Palette..."));
+      QAction* actionSave = menu.addAction(tr("Save Palette…"));
+      QAction* actionLoad = menu.addAction(tr("Load Palette…"));
       actionLoad->setDisabled(_systemPalette);
 
       menu.addSeparator();
@@ -121,6 +124,8 @@ void PaletteBoxButton::showPalette(bool visible)
       palette->setVisible(visible);
       setChecked(visible);
       setArrowType(visible ? Qt::DownArrow : Qt::RightArrow );
+      if (visible)
+            TourHandler::startTour("show-palette");
       }
 
 //---------------------------------------------------------

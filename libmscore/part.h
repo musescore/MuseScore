@@ -51,6 +51,14 @@ class Part final : public ScoreElement {
       QString _id;                  ///< used for MusicXml import
       bool _show;                   ///< show part in partitur if true
 
+      static const int DEFAULT_COLOR = 0x3399ff;
+      int _color;                   ///User specified color for helping to label parts
+
+      const Part* masterPart() const;
+      Part* masterPart();
+      const Part* redirectPart() const;
+      Part* redirectPart();
+
    public:
       Part(Score* = 0);
       void initFromInstrTemplate(const InstrumentTemplate*);
@@ -89,17 +97,17 @@ class Part final : public ScoreElement {
 
       void setStaves(int);
 
-      int volume() const;
-      void setVolume(int volume);
+      double volume() const;
+      void setVolume(double volume);
       bool mute() const;
       void setMute(bool mute);
 
-      int reverb() const;
-      void setReverb(int);
-      int chorus() const;
-      void setChorus(int);
-      int pan() const;
-      void setPan(int pan);
+      double reverb() const;
+      void setReverb(double);
+      double chorus() const;
+      void setChorus(double);
+      double pan() const;
+      void setPan(double pan);
       int midiProgram() const;
       void setMidiProgram(int, int bank = 0);
 
@@ -118,12 +126,14 @@ class Part final : public ScoreElement {
       void setInstrument(const Instrument&&, int tick = -1);
       void setInstrument(const Instrument&, int tick = -1);
       void removeInstrument(int tick);
-      const InstrumentList* instruments() const   { return &_instruments;       }
+      const InstrumentList* instruments() const;
 
       void insertTime(int tick, int len);
 
       QString partName() const                 { return _partName; }
       void setPartName(const QString& s)       { _partName = s; }
+      int color() const { return _color; }
+      void setColor(int value) { _color = value; }
 
       QVariant getProperty(Pid) const override;
       bool setProperty(Pid, const QVariant&) override;
@@ -133,6 +143,10 @@ class Part final : public ScoreElement {
       bool hasPitchedStaff();
       bool hasTabStaff();
       bool hasDrumStaff();
+
+      // Allows not reading the same instrument twice on importing 2.X scores.
+      // TODO: do we need instruments info in parts at all?
+      friend void readPart206(Part*, XmlReader&);
       };
 
 }     // namespace Ms

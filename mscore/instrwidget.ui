@@ -39,12 +39,12 @@
        <item>
         <widget class="QComboBox" name="instrumentGenreFilter">
          <property name="accessibleName">
-          <string>Instrument Genre Filter</string>
+          <string>Instrument genre filter</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTreeWidget" name="instrumentList">
+        <widget class="Ms::FilterableTreeWidget" name="instrumentList">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -77,36 +77,29 @@
          </attribute>
          <column>
           <property name="text">
-           <string>Instrument List</string>
+           <string>Instrument list</string>
           </property>
          </column>
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="bottomMargin">
-          <number>0</number>
+        <widget class="Ms::SearchBox" name="instrumentSearch">
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
          </property>
-         <item>
-          <widget class="QLineEdit" name="search">
-           <property name="focusPolicy">
-            <enum>Qt::StrongFocus</enum>
-           </property>
-           <property name="accessibleName">
-            <string>Search</string>
-           </property>
-           <property name="inputMask">
-            <string notr="true"/>
-           </property>
-           <property name="placeholderText">
-            <string>Search</string>
-           </property>
-           <property name="clearButtonEnabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
+         <property name="accessibleName">
+          <string>Search</string>
+         </property>
+         <property name="inputMask">
+          <string notr="true"/>
+         </property>
+         <property name="placeholderText">
+          <string>Search</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -254,7 +247,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="belowButton">
+        <widget class="QPushButton" name="addStaffButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -270,7 +263,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="linkedButton">
+        <widget class="QPushButton" name="addLinkedStaffButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -355,16 +348,28 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::FilterableTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>widgets/filterabletreeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Ms::SearchBox</class>
+   <extends>QLineEdit</extends>
+   <header>widgets/searchbox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>instrumentGenreFilter</tabstop>
   <tabstop>instrumentList</tabstop>
-  <tabstop>search</tabstop>
+  <tabstop>instrumentSearch</tabstop>
   <tabstop>addButton</tabstop>
   <tabstop>removeButton</tabstop>
   <tabstop>upButton</tabstop>
   <tabstop>downButton</tabstop>
-  <tabstop>belowButton</tabstop>
-  <tabstop>linkedButton</tabstop>
+  <tabstop>addStaffButton</tabstop>
+  <tabstop>addLinkedStaffButton</tabstop>
   <tabstop>partiturList</tabstop>
  </tabstops>
  <resources>

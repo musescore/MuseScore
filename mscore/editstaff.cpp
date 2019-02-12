@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: editstaff.cpp 5149 2011-12-29 08:38:43Z wschweer $
 //
 //  Copyright (C) 2002-2010 Werner Schweer and others
 //
@@ -91,11 +90,11 @@ void EditStaff::setStaff(Staff* s)
       instrument        = *part->instrument(/*tick*/);
       Score* score      = part->score();
       staff             = new Staff(score);
+      staff->setStaffType(0, *orgStaff->staffType(0));
       staff->setSmall(0, orgStaff->small(0));
       staff->setInvisible(orgStaff->invisible());
       staff->setUserDist(orgStaff->userDist());
       staff->setColor(orgStaff->color());
-      staff->setStaffType(0, orgStaff->staffType(0));
       staff->setPart(part);
       staff->setCutaway(orgStaff->cutaway());
       staff->setHideWhenEmpty(orgStaff->hideWhenEmpty());
@@ -151,7 +150,7 @@ void EditStaff::hideEvent(QHideEvent* ev)
 
 void EditStaff::updateStaffType()
       {
-      StaffType* staffType = staff->staffType(0);
+      const StaffType* staffType = staff->staffType(0);
       lines->setValue(staffType->lines());
       lineDistance->setValue(staffType->lineDistance().val());
       showClef->setChecked(staffType->genClef());
@@ -336,7 +335,7 @@ void EditStaff::apply()
       instrument.setLongName(ln);
 
       bool inv       = invisible->isChecked();
-      ClefTypeList clefType = instrument.clefType(orgStaff->rstaff());
+      ClefTypeList clefType = orgStaff->defaultClefType();
       qreal userDist = spinExtraDistance->value();
       bool ifEmpty   = showIfEmpty->isChecked();
       bool hideSystemBL = hideSystemBarLine->isChecked();
@@ -344,7 +343,12 @@ void EditStaff::apply()
       Staff::HideMode hideEmpty = Staff::HideMode(hideMode->currentIndex());
 
       QString newPartName = partName->text().simplified();
-      if (!(instrument == *part->instrument()) || part->partName() != newPartName) {
+
+      bool instrumentFieldChanged = !(instrument == *part->instrument());
+      if (instrumentFieldChanged)
+            clefType = instrument.clefType(orgStaff->rstaff());
+
+      if (instrumentFieldChanged || part->partName() != newPartName) {
             // instrument has changed
             Interval v1 = instrument.transpose();
             Interval v2 = part->instrument()->transpose();
@@ -556,7 +560,7 @@ void EditStaff::showStaffTypeDialog()
       EditStaffType editor(this, staff);
       editor.setWindowModality(Qt::WindowModal);
       if (editor.exec()) {
-            staff->setStaffType(0, editor.getStaffType());
+            staff->setStaffType(0, *editor.getStaffType());
             updateStaffType();
             }
       }

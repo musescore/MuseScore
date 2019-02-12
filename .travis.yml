@@ -15,6 +15,7 @@ matrix:
             - env: "JOB=AppImage_i686"
             - env: "JOB=AppImage_armhf"
             - env: "JOB=MacOSX"
+            - env: "JOB=MacOS_lupdate"
   include:
     # 1st parallel build job - debug build on Ubuntu
     - env: "JOB=Tests"
@@ -109,7 +110,7 @@ matrix:
     # 5th parallel build job - mac osx build
     - env: "JOB=MacOSX"
       os: osx
-      osx_image: xcode7.3
+      osx_image: xcode9.4
       #cache:
       #  directories:
       #    - /usr/local/Cellar
@@ -119,6 +120,15 @@ matrix:
         - source ./build/travis/job_macos/install.sh
       script:
         - "./build/travis/job_macos/script.sh"
+
+    - env: "JOB=MacOS_lupdate"
+      os: osx
+      before_install:
+        - source build/travis/job_macos_lupdate/before_install.sh
+      install:
+        - source ./build/travis/job_macos_lupdate/install.sh
+      script:
+        - "./build/travis/job_macos_lupdate/script.sh"
 
 notifications:
   email:
@@ -135,3 +145,5 @@ notifications:
   webhooks:
     # trigger Buildtime Trend Service to parse Travis CI log
     - https://buildtimetrend.herokuapp.com/travis
+    # telegram webhooks
+    - http://jamespi.hopto.org/testwebhooks/travishooks.php

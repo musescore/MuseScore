@@ -32,19 +32,14 @@ enum class GlissandoType;
 
 class GlissandoSegment final : public LineSegment {
    public:
-      GlissandoSegment(Score* s) : LineSegment(s)           {}
+      GlissandoSegment(Spanner* sp, Score* s) : LineSegment(sp, s) {}
       Glissando* glissando() const                          { return toGlissando(spanner()); }
       virtual ElementType type() const override             { return ElementType::GLISSANDO_SEGMENT; }
       virtual GlissandoSegment* clone() const override      { return new GlissandoSegment(*this); }
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
 
-      virtual QVariant getProperty(Pid id) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
-      virtual PropertyFlags& propertyFlags(Pid) override;
-      virtual void setPropertyFlags(Pid id, PropertyFlags f) override;
-      virtual Sid getPropertyStyle(Pid) const override;
+      virtual Element* propertyDelegate(Pid) override;
       };
 
 //---------------------------------------------------------
@@ -59,9 +54,7 @@ class Glissando final : public SLine {
       M_PROPERTY(qreal, fontSize, setFontSize)
       M_PROPERTY(bool, showText, setShowText)
       M_PROPERTY(bool, playGlissando, setPlayGlissando)
-      M_PROPERTY(bool, fontBold, setFontBold)
-      M_PROPERTY(bool, fontItalic, setFontItalic)
-      M_PROPERTY(bool, fontUnderline, setFontUnderline)
+      M_PROPERTY(FontStyle, fontStyle, setFontStyle)
 
    public:
       Glissando(Score* s);

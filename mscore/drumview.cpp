@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2010 Werner Schweer and others
 //
@@ -163,12 +162,12 @@ void DrumView::drawBackground(QPainter* p, const QRectF& r)
       pos1.mbt(&bar1, &beat, &tick);
       pos2.mbt(&bar2, &beat, &tick);
 
-      int n = mag[magStep < 0 ? 0 : magStep];
+      int mi = mag[magStep < 0 ? 0 : magStep];
 
-      bar1 = (bar1 / n) * n;           // round down
-      if (bar1 && n >= 2)
+      bar1 = (bar1 / mi) * mi;           // round down
+      if (bar1 && mi >= 2)
             bar1 -= 1;
-      bar2 = ((bar2 + n - 1) / n) * n; // round up
+      bar2 = ((bar2 + mi - 1) / mi) * mi; // round up
 
       for (int bar = bar1; bar <= bar2;) {
             Pos stick(_score->tempomap(), _score->sigmap(), bar, 0, 0);
@@ -185,14 +184,14 @@ void DrumView::drawBackground(QPainter* p, const QRectF& r)
                   }
             else {
                   int z = stick.timesig().timesig().numerator();
-                  for (int beat = 0; beat < z; beat++) {
+                  for (int b = 0; b < z; b++) {
                         if (magStep == 0) {
-                              Pos xx(_score->tempomap(), _score->sigmap(), bar, beat, 0);
+                              Pos xx(_score->tempomap(), _score->sigmap(), bar, b, 0);
                               int xp = pos2pix(xx);
                               if (xp < 0)
                                     continue;
                               if (xp > 0) {
-                                    p->setPen(beat == 0 ? Qt::lightGray : Qt::gray);
+                                    p->setPen(b == 0 ? Qt::lightGray : Qt::gray);
                                     p->drawLine(xp, y1, xp, y2);
                                     }
                               else {
@@ -215,12 +214,12 @@ void DrumView::drawBackground(QPainter* p, const QRectF& r)
 
                               int n = (MScore::division * 4) / stick.timesig().timesig().denominator();
                               for (int i = 0; i < k; ++i) {
-                                    Pos xx(_score->tempomap(), _score->sigmap(), bar, beat, (n * i)/ k);
+                                    Pos xx(_score->tempomap(), _score->sigmap(), bar, b, (n * i)/ k);
                                     int xp = pos2pix(xx);
                                     if (xp < 0)
                                           continue;
                                     if (xp > 0) {
-                                          p->setPen(i == 0 && beat == 0 ? Qt::lightGray : Qt::gray);
+                                          p->setPen(i == 0 && b == 0 ? Qt::lightGray : Qt::gray);
                                           p->drawLine(xp, y1, xp, y2);
                                           }
                                     else {
@@ -231,10 +230,10 @@ void DrumView::drawBackground(QPainter* p, const QRectF& r)
                               }
                         }
                   }
-            if (bar == 0 && n >= 2)
-                  bar += (n-1);
+            if (bar == 0 && mi >= 2)
+                  bar += (mi-1);
             else
-                  bar += n;
+                  bar += mi;
             }
       }
 
@@ -283,9 +282,9 @@ void DrumView::setStaff(Staff* s, Pos* l)
       int staffIdx = staff->idx();
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
-      for (Segment* s = staff->score()->firstSegment(SegmentType::All); s; s = s->next1()) {
+      for (Segment* seg = staff->score()->firstSegment(SegmentType::All); seg; seg = seg->next1()) {
             for (int track = startTrack; track < endTrack; ++track) {
-                  Element* e = s->element(track);
+                  Element* e = seg->element(track);
                   if (e == 0 || e->type() != ElementType::CHORD)
                         continue;
                   Chord* chord = static_cast<Chord*>(e);

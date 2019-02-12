@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: selectionwindow.cpp 4775 2011-09-12 14:25:31Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -166,11 +165,12 @@ void SelectionWindow::changeCheckbox(QListWidgetItem* item)
             for (int row = 1; row < numLabels; row++)
                   _score->selectionFilter().setFiltered(static_cast<SelectionFilterType>(1 << (row - 1)), set);
             }
+      _score->startCmd();
       if (_score->selection().isRange())
             _score->selection().updateSelectedElements();
       updateFilteredElements();
-//      _score->setUpdateAll();
-//      _score->end();
+      _score->setUpdateAll();
+      _score->endCmd();
       ScoreAccessibility::instance()->updateAccessibilityInfo();
       }
 

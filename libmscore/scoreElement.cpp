@@ -16,20 +16,25 @@
 #include "xml.h"
 #include "bracket.h"
 #include "bracketItem.h"
+#include "spanner.h"
+#include "musescoreCore.h"
 
 namespace Ms {
+
+ElementStyle const ScoreElement::emptyStyle;
 
 //
 // list has to be synchronized with ElementType enum
 //
 static const ElementName elementNames[] = {
-      { ElementType::INVALID,              "invalid",              QT_TRANSLATE_NOOP("elementName", "invalid") },
-      { ElementType::BRACKET_ITEM,         "BracketItem",          QT_TRANSLATE_NOOP("elementName", "BracketItem") },
+      { ElementType::INVALID,              "invalid",              QT_TRANSLATE_NOOP("elementName", "Invalid") },
+      { ElementType::BRACKET_ITEM,         "BracketItem",          QT_TRANSLATE_NOOP("elementName", "Bracket") },
       { ElementType::PART,                 "Part",                 QT_TRANSLATE_NOOP("elementName", "Part") },
       { ElementType::STAFF,                "Staff",                QT_TRANSLATE_NOOP("elementName", "Staff") },
       { ElementType::SCORE,                "Score",                QT_TRANSLATE_NOOP("elementName", "Score") },
       { ElementType::SYMBOL,               "Symbol",               QT_TRANSLATE_NOOP("elementName", "Symbol") },
       { ElementType::TEXT,                 "Text",                 QT_TRANSLATE_NOOP("elementName", "Text") },
+      { ElementType::MEASURE_NUMBER,       "MeasureNumber",        QT_TRANSLATE_NOOP("elementName", "Measure Number") },
       { ElementType::INSTRUMENT_NAME,      "InstrumentName",       QT_TRANSLATE_NOOP("elementName", "Instrument Name") },
       { ElementType::SLUR_SEGMENT,         "SlurSegment",          QT_TRANSLATE_NOOP("elementName", "Slur Segment") },
       { ElementType::TIE_SEGMENT,          "TieSegment",           QT_TRANSLATE_NOOP("elementName", "Tie Segment") },
@@ -135,12 +140,14 @@ static const ElementName elementNames[] = {
 
 ScoreElement::ScoreElement(const ScoreElement& se)
       {
-      _score      = se._score;
-      _subStyleId = se._subStyleId;
-      int n       = subStyle(_subStyleId).size() - 1;       // don't count end of list marker
-      _propertyFlagsList = new PropertyFlags[n];
-      for (int i = 0; i < n; ++i)
-            _propertyFlagsList[i] = se._propertyFlagsList[i];
+      _score        = se._score;
+      _elementStyle = se._elementStyle;
+      if (_elementStyle) {
+            size_t n = _elementStyle->size();
+            _propertyFlagsList = new PropertyFlags[n];
+            for (size_t i = 0; i < n; ++i)
+                  _propertyFlagsList[i] = se._propertyFlagsList[i];
+            }
       _links = 0;
       }
 
@@ -161,82 +168,60 @@ ScoreElement::~ScoreElement()
       }
 
 //---------------------------------------------------------
-//   setSubStyleId
+//   propertyDefault
 //---------------------------------------------------------
 
-void ScoreElement::setSubStyleId(SubStyleId ssid)
+QVariant ScoreElement::propertyDefault(Pid pid, Tid tid) const
       {
-      _subStyleId = ssid;
-      delete[] _propertyFlagsList;
-      int n = subStyle(_subStyleId).size() - 1;       // don't count end of list marker
-      _propertyFlagsList = new PropertyFlags[n];
-      for (int i = 0; i < n; ++i)
-            _propertyFlagsList[i] = PropertyFlags::STYLED;
+      for (const StyledProperty& spp : *textStyle(tid)) {
+            if (spp.pid == pid)
+                  return styleValue(pid, spp.sid);
+            }
+      return QVariant();
       }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant ScoreElement::propertyDefault(Pid id) const
+QVariant ScoreElement::propertyDefault(Pid pid) const
       {
-      if (id == Pid::SUB_STYLE)
-            return int(SubStyleId::DEFAULT);
-#if 1       // this is wrong, styled properties should be considered first
-      for (const StyledProperty& p : subStyle(subStyleId())) {
-            if (p.pid == id)
-                  return score()->styleV(p.sid);
-            }
-#endif
-      qDebug("<%s> not found in <%s> style <%s>", propertyName(id), name(), subStyleName(subStyleId()));
+      Sid sid = getPropertyStyle(pid);
+      if (sid != Sid::NOSTYLE)
+            return styleValue(pid, sid);
+//      qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), name());
       return QVariant();
       }
 
 //---------------------------------------------------------
-//   styledPropertyDefault
+//   initElementStyle
 //---------------------------------------------------------
 
-QVariant ScoreElement::styledPropertyDefault(Pid id) const
+void ScoreElement::initElementStyle(const ElementStyle* ss)
       {
-      for (const StyledProperty& p : subStyle(subStyleId())) {
-            if (p.pid == id)
-                  return score()->styleV(p.sid);
-            }
-      return QVariant();
-      }
-
-//---------------------------------------------------------
-//   initSubStyle
-//---------------------------------------------------------
-
-void ScoreElement::initSubStyle(SubStyleId ssid)
-      {
-      setSubStyleId(ssid);
-      int i = 0;
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            Pid pid   = spp->pid;
-            QVariant v = propertyDefault(pid);
-            if (v.isValid()) {                  // should always be true?
-                  setProperty(pid, v);
-                  PropertyFlags& p = propertyFlagsList()[i];
-                  p = PropertyFlags::STYLED;
-                  }
-            ++i;
-            }
+      _elementStyle = ss;
+      size_t n      = _elementStyle->size();
+      delete[] _propertyFlagsList;
+      _propertyFlagsList = new PropertyFlags[n];
+      for (size_t i = 0; i < n; ++i)
+            _propertyFlagsList[i] = PropertyFlags::STYLED;
+      for (const StyledProperty& spp : *_elementStyle)
+//            setProperty(spp.pid, styleValue(spp.pid, spp.sid));
+            setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
       }
 
 //---------------------------------------------------------
 //   resetProperty
 //---------------------------------------------------------
 
-void ScoreElement::resetProperty(Pid id)
+void ScoreElement::resetProperty(Pid pid)
       {
-      QVariant v = propertyDefault(id);
+      QVariant v = propertyDefault(pid);
       if (v.isValid()) {
-            setProperty(id, v);
-            PropertyFlags& p = propertyFlags(id);
-            if (p != PropertyFlags::NOSTYLE)
-                  p = PropertyFlags::STYLED;
+            setProperty(pid, v);
+            PropertyFlags p = propertyFlags(pid);
+            if (p == PropertyFlags::UNSTYLED)
+                  setPropertyFlags(pid, PropertyFlags::STYLED);
             }
       }
 
@@ -248,9 +233,34 @@ void ScoreElement::undoResetProperty(Pid id)
       {
       PropertyFlags f = propertyFlags(id);
       if (f == PropertyFlags::UNSTYLED)
-            undoChangeProperty(id, propertyDefault(id), PropertyFlags::STYLED);
-      else
-            undoChangeProperty(id, propertyDefault(id), f);
+            f = PropertyFlags::STYLED;
+      undoChangeProperty(id, propertyDefault(id), f);
+      }
+
+//---------------------------------------------------------
+//   isStyled
+//---------------------------------------------------------
+
+bool ScoreElement::isStyled(Pid pid) const
+      {
+      PropertyFlags f = propertyFlags(pid);
+      return f == PropertyFlags::STYLED;
+      }
+
+//---------------------------------------------------------
+//   changeProperty
+//---------------------------------------------------------
+
+static void changeProperty(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
+      {
+      if (e->getProperty(t) != st || e->propertyFlags(t) != ps) {
+            if (e->isBracketItem()) {
+                  BracketItem* bi = toBracketItem(e);
+                  e->score()->undo(new ChangeBracketProperty(bi->staff(), bi->column(), t, st, ps));
+                  }
+            else
+                  e->score()->undo(new ChangeProperty(e, t, st, ps));
+            }
       }
 
 //---------------------------------------------------------
@@ -260,15 +270,11 @@ void ScoreElement::undoResetProperty(Pid id)
 static void changeProperties(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
       {
       if (propertyLink(t)) {
-            for (ScoreElement* ee : e->linkList()) {
-                  if (ee->getProperty(t) != st || ee->propertyFlags(t) != ps)
-                        ee->score()->undo(new ChangeProperty(ee, t, st, ps));
-                  }
+            for (ScoreElement* ee : e->linkList())
+                  changeProperty(ee, t, st, ps);
             }
-      else {
-            if (e->getProperty(t) != st || e->propertyFlags(t) != ps)
-                  e->score()->undo(new ChangeProperty(e, t, st, ps));
-            }
+      else
+            changeProperty(e, t, st, ps);
       }
 
 //---------------------------------------------------------
@@ -282,38 +288,34 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v)
 
 void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
       {
-      if (isBracket()) {
-            // brackets do not survive layout() and therefore cannot be on
-            // the undo stack; delegate to BracketItem:
-
-            BracketItem* bi = toBracket(this)->bracketItem();
-            bi->undoChangeProperty(id, v, ps);
+      if ((getProperty(id) == v) && (propertyFlags(id) == ps))
             return;
-            }
-      if (id == Pid::AUTOPLACE && v.toBool() && !getProperty(id).toBool()) {
-            // special case: if we switch to autoplace, we must save
-            // user offset values
-            undoResetProperty(Pid::USER_OFF);
-            if (isSlurSegment()) {
-                  undoResetProperty(Pid::SLUR_UOFF1);
-                  undoResetProperty(Pid::SLUR_UOFF2);
-                  undoResetProperty(Pid::SLUR_UOFF3);
-                  undoResetProperty(Pid::SLUR_UOFF4);
-                  }
+      bool doUpdateInspector = false;
+      if (id == Pid::PLACEMENT || id == Pid::HAIRPIN_TYPE) {
+            // first set property, then set offset for above/below if styled
+            changeProperties(this, id, v, ps);
+
+            if (isStyled(Pid::OFFSET))
+                  ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * score()->spatium());
+            doUpdateInspector = true;
             }
       else if (id == Pid::SUB_STYLE) {
             //
             // change a list of properties
             //
-            auto l = subStyle(SubStyleId(v.toInt()));
-            // Change to SubStyle defaults
-            for (const StyledProperty& p : l) {
+            auto l = textStyle(Tid(v.toInt()));
+            // Change to ElementStyle defaults
+            for (const StyledProperty& p : *l) {
                   if (p.sid == Sid::NOSTYLE)
                         break;
                   changeProperties(this, p.pid, score()->styleV(p.sid), PropertyFlags::STYLED);
                   }
             }
       changeProperties(this, id, v, ps);
+      if (id != Pid::GENERATED)
+            changeProperties(this, Pid::GENERATED, QVariant(false), PropertyFlags::NOSTYLE);
+      if (doUpdateInspector)
+            MuseScoreCore::mscoreCore->updateInspector();
       }
 
 //---------------------------------------------------------
@@ -330,37 +332,128 @@ void ScoreElement::undoPushProperty(Pid id)
 //   readProperty
 //---------------------------------------------------------
 
+void ScoreElement::readProperty(XmlReader& e, Pid id)
+      {
+      QVariant v = Ms::readProperty(id, e);
+      switch (propertyType(id)) {
+            case P_TYPE::SP_REAL:
+                  v = v.toReal() * score()->spatium();
+                  break;
+            case P_TYPE::POINT_SP:
+                  v = v.toPointF() * score()->spatium();
+                  break;
+            case P_TYPE::POINT_SP_MM:
+                  if (sizeIsSpatiumDependent())
+                        v = v.toPointF() * score()->spatium();
+                  else
+                        v = v.toPointF() * DPMM;
+                  break;
+            default:
+                  break;
+            }
+      setProperty(id, v);
+      if (isStyled(id))
+            setPropertyFlags(id, PropertyFlags::UNSTYLED);
+      }
+
 bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
       {
       if (s == propertyName(id)) {
-            if (id == Pid::SUB_STYLE)
-                  initSubStyle(SubStyleId(Ms::getProperty(id, e).toInt()));
-            else {
-                  setProperty(id, Ms::getProperty(id, e));
-                  setPropertyFlags(id, PropertyFlags::UNSTYLED);
-                  }
+            readProperty(e, id);
             return true;
             }
       return false;
       }
 
-//---------------------------------------------------------
+//-----------------------------------------------------------------------------
 //   writeProperty
+//
+//    - styled properties are never written
+//    - unstyled properties are always written regardless of value,
+//    - properties without style are written if different from default value
+//-----------------------------------------------------------------------------
+
+void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
+      {
+      if (isStyled(pid))
+            return;
+      QVariant p = getProperty(pid);
+      if (!p.isValid()) {
+            qDebug("%s invalid property %d <%s>", name(), int(pid), propertyName(pid));
+            return;
+            }
+      PropertyFlags f = propertyFlags(pid);
+      QVariant d = (f != PropertyFlags::STYLED) ? propertyDefault(pid) : QVariant();
+
+      if (pid == Pid::FONT_STYLE) {
+            FontStyle ds = FontStyle(d.isValid() ? d.toInt() : 0);
+            FontStyle fs = FontStyle(p.toInt());
+            if ((fs & FontStyle::Bold) != (ds & FontStyle::Bold))
+                  xml.tag("bold", fs & FontStyle::Bold);
+            if ((fs & FontStyle::Italic) != (ds & FontStyle::Italic))
+                  xml.tag("italic", fs & FontStyle::Italic);
+            if ((fs & FontStyle::Underline) != (ds & FontStyle::Underline))
+                  xml.tag("underline", fs & FontStyle::Underline);
+            return;
+            }
+
+      if (propertyType(pid) == P_TYPE::SP_REAL) {
+            qreal f1 = p.toReal();
+            if (d.isValid() && qAbs(f1 - d.toReal()) < 0.0001)          // fuzzy compare
+                  return;
+            p = QVariant(f1/score()->spatium());
+            d = QVariant();
+            }
+      else if (propertyType(pid) == P_TYPE::POINT_SP) {
+            QPointF p1 = p.toPointF();
+            if (d.isValid()) {
+                  QPointF p2 = d.toPointF();
+                  if ( (qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001))
+                        return;
+                  }
+            p = QVariant(p1/score()->spatium());
+            d = QVariant();
+            }
+      else if (propertyType(pid) == P_TYPE::POINT_SP_MM) {
+            QPointF p1 = p.toPointF();
+            if (d.isValid()) {
+                  QPointF p2 = d.toPointF();
+                  if ((qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001))
+                        return;
+                  }
+            qreal q = sizeIsSpatiumDependent() ? score()->spatium() : DPMM;
+            p = QVariant(p1/q);
+            d = QVariant();
+            }
+      xml.tag(pid, p, d);
+      }
+
+//---------------------------------------------------------
+//   propertyId
 //---------------------------------------------------------
 
-void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
+Pid ScoreElement::propertyId(const QStringRef& xmlName) const
       {
-      if (propertyType(id) == P_TYPE::SP_REAL) {
-            qreal _spatium = score()->spatium();
-            xml.tag(id, QVariant(getProperty(id).toReal()/_spatium),
-               QVariant(propertyDefault(id).toReal()/_spatium));
+      return Ms::propertyId(xmlName);
+      }
+
+//---------------------------------------------------------
+//   propertyUserValue
+//---------------------------------------------------------
+
+QString ScoreElement::propertyUserValue(Pid id) const
+      {
+      QVariant val = getProperty(id);
+      switch (propertyType(id)) {
+            case P_TYPE::POINT_SP:
+                  {
+                  QPointF p = val.toPointF();
+                  return QString("(%1, %2)").arg(p.x()).arg(p.y());
+                  }
+            default:
+                  break;
             }
-      else {
-            if (getProperty(id).isValid())
-                  xml.tag(id, getProperty(id), propertyDefault(id));
-            else
-                  qDebug("%s invalid property <%s>", name(), propertyName(id));
-            }
+      return val.toString();
       }
 
 //---------------------------------------------------------
@@ -369,8 +462,8 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid id) const
 
 bool ScoreElement::readStyledProperty(XmlReader& e, const QStringRef& tag)
       {
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            if (readProperty(tag, e, spp->pid))
+      for (const StyledProperty& spp : *styledProperties()) {
+            if (readProperty(tag, e, spp.pid))
                   return true;
             }
       return false;
@@ -382,8 +475,8 @@ bool ScoreElement::readStyledProperty(XmlReader& e, const QStringRef& tag)
 
 void ScoreElement::writeStyledProperties(XmlWriter& xml) const
       {
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
       }
 
 //---------------------------------------------------------
@@ -392,34 +485,44 @@ void ScoreElement::writeStyledProperties(XmlWriter& xml) const
 
 void ScoreElement::reset()
       {
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            undoResetProperty(spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            undoResetProperty(spp.pid);
+      }
+
+//---------------------------------------------------------
+//   readAddConnector
+//---------------------------------------------------------
+
+void ScoreElement::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+      {
+      Q_UNUSED(pasteMode);
+      qDebug("Cannot add connector %s to %s", info->connector()->name(), name());
       }
 
 //---------------------------------------------------------
 //   linkTo
+//    link this to element
 //---------------------------------------------------------
 
 void ScoreElement::linkTo(ScoreElement* element)
       {
       Q_ASSERT(element != this);
-      if (!_links) {
-            if (element->links()) {
-                  _links = element->_links;
-                  Q_ASSERT(_links->contains(element));
-                  }
-            else {
-                  _links = new LinkedElements(score());
-                  _links->append(element);
-                  element->_links = _links;
-                  }
-            Q_ASSERT(!_links->contains(this));
-            _links->append(this);
+      Q_ASSERT(!_links);
+
+      if (element->links()) {
+            _links = element->_links;
+            Q_ASSERT(_links->contains(element));
             }
       else {
+            if (isStaff())
+                  _links = new LinkedElements(score(), -1); // don’t use lid
+            else
+                  _links = new LinkedElements(score());
             _links->append(element);
             element->_links = _links;
             }
+      Q_ASSERT(!_links->contains(this));
+      _links->append(this);
       }
 
 //---------------------------------------------------------
@@ -428,18 +531,28 @@ void ScoreElement::linkTo(ScoreElement* element)
 
 void ScoreElement::unlink()
       {
-      if (_links) {
-            Q_ASSERT(_links->contains(this));
-            _links->removeOne(this);
+      Q_ASSERT(_links);
+      Q_ASSERT(_links->contains(this));
+      _links->removeOne(this);
 
-            // if link list is empty, remove list
-            if (_links->size() <= 1) {
-                  if (!_links->empty())         // abnormal case: only "this" is in list
-                        _links->front()->_links = 0;
-                  delete _links;
-                  }
-            _links = 0;
+      // if link list is empty, remove list
+      if (_links->size() <= 1) {
+            if (!_links->empty())
+                  _links->front()->_links = 0;
+            delete _links;
             }
+      _links = 0; // this element is not linked anymore
+      }
+
+//---------------------------------------------------------
+//   isLinked
+///  return true if se is different and
+///  linked to this element
+//---------------------------------------------------------
+
+bool ScoreElement::isLinked(ScoreElement* se)
+      {
+      return se != this && _links && _links->contains(se);
       }
 
 //---------------------------------------------------------
@@ -460,7 +573,7 @@ QList<ScoreElement*> ScoreElement::linkList() const
       {
       QList<ScoreElement*> el;
       if (_links)
-            el.append(*_links);
+            el = *_links;
       else
             el.append(const_cast<ScoreElement*>(this));
       return el;
@@ -478,7 +591,8 @@ LinkedElements::LinkedElements(Score* score)
 LinkedElements::LinkedElements(Score* score, int id)
       {
       _lid = id;
-      score->linkId(id);      // remember used id
+      if (_lid != -1)
+            score->linkId(id);      // remember used id
       }
 
 //---------------------------------------------------------
@@ -492,6 +606,37 @@ void LinkedElements::setLid(Score* score, int id)
       }
 
 //---------------------------------------------------------
+//   mainElement
+//    Returns "main" linked element which is expected to
+//    be written to the file prior to others.
+//---------------------------------------------------------
+
+ScoreElement* LinkedElements::mainElement()
+      {
+      if (isEmpty())
+            return nullptr;
+      MasterScore* ms = at(0)->masterScore();
+      const bool elements = at(0)->isElement();
+      return *std::min_element(begin(), end(), [ms, elements](ScoreElement* s1, ScoreElement* s2) {
+            if (s1->score() == ms && s2->score() != ms)
+                  return true;
+            if (elements) {
+                  if (s1->score() != s2->score())
+                        return false;
+                  // Now we compare either two elements from master score
+                  // or two elements from excerpt.
+                  Element* e1 = toElement(s1);
+                  Element* e2 = toElement(s2);
+                  if (e1->track() < e2->track())
+                        return true;
+                  if (e1->track() == e2->track() && e1->tick() < e2->tick())
+                        return true;
+                  }
+            return false;
+            });
+      }
+
+//---------------------------------------------------------
 //   masterScore
 //---------------------------------------------------------
 
@@ -501,22 +646,32 @@ MasterScore* ScoreElement::masterScore() const
       }
 
 //---------------------------------------------------------
+//   getPropertyFlagsIdx
+//---------------------------------------------------------
+
+int ScoreElement::getPropertyFlagsIdx(Pid id) const
+      {
+      int i = 0;
+      for (const StyledProperty& p : *_elementStyle) {
+            if (p.pid == id)
+                  return i;
+            ++i;
+            }
+      return -1;
+      }
+
+//---------------------------------------------------------
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags& ScoreElement::propertyFlags(Pid id)
+PropertyFlags ScoreElement::propertyFlags(Pid id) const
       {
       static PropertyFlags f = PropertyFlags::NOSTYLE;
 
-      const StyledProperty* spl = styledProperties();
-      for (int i = 0;;++i) {
-            const StyledProperty& k = spl[i];
-            if (k.sid == Sid::NOSTYLE)
-                  break;
-            if (k.pid == id)
-                  return propertyFlagsList()[i];
-            }
-      return f;
+      int i = getPropertyFlagsIdx(id);
+      if (i == -1)
+            return f;
+      return _propertyFlagsList[i];
       }
 
 //---------------------------------------------------------
@@ -525,9 +680,10 @@ PropertyFlags& ScoreElement::propertyFlags(Pid id)
 
 void ScoreElement::setPropertyFlags(Pid id, PropertyFlags f)
       {
-      PropertyFlags& p = propertyFlags(id);
-      if (p != PropertyFlags::NOSTYLE)
-            p = f;
+      int i = getPropertyFlagsIdx(id);
+      if (i == -1)
+            return;
+      _propertyFlagsList[i] = f;
       }
 
 //---------------------------------------------------------
@@ -536,13 +692,9 @@ void ScoreElement::setPropertyFlags(Pid id, PropertyFlags f)
 
 Sid ScoreElement::getPropertyStyle(Pid id) const
       {
-      const StyledProperty* spl = styledProperties();
-      for (int i = 0;;++i) {
-            const StyledProperty& k = spl[i];
-            if (k.sid == Sid::NOSTYLE)
-                  break;
-            if (k.pid == id)
-                  return k.sid;
+      for (const StyledProperty& p : *_elementStyle) {
+            if (p.pid == id)
+                  return p.sid;
             }
       return Sid::NOSTYLE;
       }
@@ -553,17 +705,10 @@ Sid ScoreElement::getPropertyStyle(Pid id) const
 
 void ScoreElement::styleChanged()
       {
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp) {
-            PropertyFlags& f = propertyFlags(spp->pid);
-            if (f == PropertyFlags::STYLED) {
-                  if (propertyType(spp->pid) == P_TYPE::SP_REAL) {
-                        qreal val = score()->styleP(spp->sid);
-                        setProperty(spp->pid, val);
-                        }
-                  else {
-                        setProperty(spp->pid, score()->styleV(spp->sid));
-                        }
-                  }
+      for (const StyledProperty& spp : *_elementStyle) {
+            PropertyFlags f = propertyFlags(spp.pid);
+            if (f == PropertyFlags::STYLED)
+                  setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
             }
       }
 
@@ -598,13 +743,14 @@ QString ScoreElement::userName() const
 //   name2type
 //---------------------------------------------------------
 
-ElementType ScoreElement::name2type(const QStringRef& s)
+ElementType ScoreElement::name2type(const QStringRef& s, bool silent)
       {
       for (int i = 0; i < int(ElementType::MAXTYPE); ++i) {
             if (s == elementNames[i].name)
                   return ElementType(i);
             }
-      qDebug("unknown type <%s>", qPrintable(s.toString()));
+      if (!silent)
+            qDebug("unknown type <%s>", qPrintable(s.toString()));
       return ElementType::INVALID;
       }
 
@@ -623,7 +769,7 @@ bool ScoreElement::isSLineSegment() const
 //   isText
 //---------------------------------------------------------
 
-bool ScoreElement::isText() const
+bool ScoreElement::isTextBase() const
       {
       return type()  == ElementType::TEXT
          || type() == ElementType::LYRICS
@@ -633,12 +779,38 @@ bool ScoreElement::isText() const
          || type() == ElementType::MARKER
          || type() == ElementType::JUMP
          || type() == ElementType::STAFF_TEXT
+         || type() == ElementType::SYSTEM_TEXT
          || type() == ElementType::REHEARSAL_MARK
          || type() == ElementType::INSTRUMENT_CHANGE
          || type() == ElementType::FIGURED_BASS
          || type() == ElementType::TEMPO_TEXT
          || type() == ElementType::INSTRUMENT_NAME
+         || type() == ElementType::MEASURE_NUMBER
          ;
+      }
+
+//---------------------------------------------------------
+//   styleValue
+//---------------------------------------------------------
+
+QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
+      {
+      switch (propertyType(pid)) {
+            case P_TYPE::SP_REAL:
+                  return score()->styleP(sid);
+            case P_TYPE::POINT_SP:
+                  return score()->styleV(sid).toPointF() * score()->spatium();
+            case P_TYPE::POINT_SP_MM: {
+                  QPointF val = score()->styleV(sid).toPointF();
+                  if (sizeIsSpatiumDependent())
+                        val *= score()->spatium();
+                  else
+                        val *= DPMM;
+                  return val;
+                  }
+            default:
+                  return score()->styleV(sid);
+            }
       }
 }
 

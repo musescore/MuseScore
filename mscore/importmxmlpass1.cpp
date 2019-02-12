@@ -492,13 +492,13 @@ static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>
 //---------------------------------------------------------
 
 /**
- Add text \a strTxt to VBox \a vbx using SubStyleId \a stl.
+ Add text \a strTxt to VBox \a vbx using Tid \a stl.
  */
 
-static void addText(VBox* vbx, Score* s, QString strTxt, SubStyleId stl)
+static void addText(VBox* vbx, Score* s, QString strTxt, Tid stl)
       {
       if (!strTxt.isEmpty()) {
-            Text* text = new Text(stl, s);
+            Text* text = new Text(s, stl);
             text->setXmlText(strTxt);
             vbx->add(text);
             }
@@ -509,14 +509,14 @@ static void addText(VBox* vbx, Score* s, QString strTxt, SubStyleId stl)
 //---------------------------------------------------------
 
 /**
- Add text \a strTxt to VBox \a vbx using SubStyleId \a stl.
+ Add text \a strTxt to VBox \a vbx using Tid \a stl.
  Also sets Align and Yoff.
  */
 
-static void addText2(VBox* vbx, Score* s, QString strTxt, SubStyleId stl, Align v, double yoffs)
+static void addText2(VBox* vbx, Score* s, QString strTxt, Tid stl, Align v, double yoffs)
       {
       if (!strTxt.isEmpty()) {
-            Text* text = new Text(stl, s);
+            Text* text = new Text(s, stl);
             text->setXmlText(strTxt);
             text->setAlign(v);
             text->setOffset(QPointF(0.0, yoffs));
@@ -628,14 +628,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                   if (pw2 < defx) {
                         // found composer
                         addText2(vbox, score, w->words,
-                                 SubStyleId::COMPOSER, Align::RIGHT | Align::BOTTOM,
+                                 Tid::COMPOSER, Align::RIGHT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet/lyricist
                         addText2(vbox, score, w->words,
-                                 SubStyleId::POET, Align::LEFT | Align::BOTTOM,
+                                 Tid::POET, Align::LEFT | Align::BOTTOM,
                                  (miny - w->defaultY) * score->spatium() / (10 * DPI));
                         }
                   // save others (in the middle column) to be handled later
@@ -678,7 +678,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             CreditWords* w = creditMap.value(keys.at(keys.size() - 1));
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
-                     SubStyleId::TITLE, Align::HCENTER | Align::TOP,
+                     Tid::TITLE, Align::HCENTER | Align::TOP,
                      (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
@@ -687,7 +687,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             CreditWords* w = creditMap.value(keys.at(i));
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
-                     SubStyleId::SUBTITLE, Align::HCENTER | Align::TOP,
+                     Tid::SUBTITLE, Align::HCENTER | Align::TOP,
                      (maxy - w->defaultY) * score->spatium() / (10 * DPI));
             }
 
@@ -718,11 +718,11 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             if (!metaPoet.isEmpty()) strPoet = metaPoet;
             if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
 
-            addText(vbox, score, strTitle.toHtmlEscaped(),      SubStyleId::TITLE);
-            addText(vbox, score, strSubTitle.toHtmlEscaped(),   SubStyleId::SUBTITLE);
-            addText(vbox, score, strComposer.toHtmlEscaped(),   SubStyleId::COMPOSER);
-            addText(vbox, score, strPoet.toHtmlEscaped(),       SubStyleId::POET);
-            addText(vbox, score, strTranslator.toHtmlEscaped(), SubStyleId::TRANSLATOR);
+            addText(vbox, score, strTitle.toHtmlEscaped(),      Tid::TITLE);
+            addText(vbox, score, strSubTitle.toHtmlEscaped(),   Tid::SUBTITLE);
+            addText(vbox, score, strComposer.toHtmlEscaped(),   Tid::COMPOSER);
+            addText(vbox, score, strPoet.toHtmlEscaped(),       Tid::POET);
+            addText(vbox, score, strTranslator.toHtmlEscaped(), Tid::TRANSLATOR);
             }
 
       if (vbox) {
@@ -828,7 +828,7 @@ Score::FileError MusicXMLParserPass1::parse()
 static bool allStaffGroupsIdentical(Part const* const p)
       {
       for (int i = 1; i < p->nstaves(); ++i) {
-            if (p->staff(0)->staffType(0)->group() != p->staff(i)->staffType(0)->group())
+            if (p->staff(0)->constStaffType(0)->group() != p->staff(i)->constStaffType(0)->group())
                   return false;
             }
       return true;
@@ -1209,23 +1209,23 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
 static bool mustSetSize(const int i)
       {
       return
-            i == int(SubStyleId::TITLE)
-            || i == int(SubStyleId::SUBTITLE)
-            || i == int(SubStyleId::COMPOSER)
-            || i == int(SubStyleId::POET)
-            || i == int(SubStyleId::INSTRUMENT_LONG)
-            || i == int(SubStyleId::INSTRUMENT_SHORT)
-            || i == int(SubStyleId::INSTRUMENT_EXCERPT)
-            || i == int(SubStyleId::TEMPO)
-            || i == int(SubStyleId::METRONOME)
-            || i == int(SubStyleId::TRANSLATOR)
-            || i == int(SubStyleId::SYSTEM)
-            || i == int(SubStyleId::STAFF)
-            || i == int(SubStyleId::REPEAT_LEFT)
-            || i == int(SubStyleId::REPEAT_RIGHT)
-            || i == int(SubStyleId::TEXTLINE)
-            || i == int(SubStyleId::GLISSANDO)
-            || i == int(SubStyleId::INSTRUMENT_CHANGE);
+            i == int(Tid::TITLE)
+            || i == int(Tid::SUBTITLE)
+            || i == int(Tid::COMPOSER)
+            || i == int(Tid::POET)
+            || i == int(Tid::INSTRUMENT_LONG)
+            || i == int(Tid::INSTRUMENT_SHORT)
+            || i == int(Tid::INSTRUMENT_EXCERPT)
+            || i == int(Tid::TEMPO)
+            || i == int(Tid::METRONOME)
+            || i == int(Tid::TRANSLATOR)
+            || i == int(Tid::SYSTEM)
+            || i == int(Tid::STAFF)
+            || i == int(Tid::REPEAT_LEFT)
+            || i == int(Tid::REPEAT_RIGHT)
+            || i == int(Tid::TEXTLINE)
+            || i == int(Tid::GLISSANDO)
+            || i == int(Tid::INSTRUMENT_CHANGE);
       }
 #endif
 
@@ -1242,14 +1242,15 @@ static void updateStyles(Score* score,
                          const QString& lyricFamily, const QString& lyricSize)
       {
 //TODO:ws       const float fWordSize = wordSize.toFloat();   // note conversion error results in value 0.0
-      const float fLyricSize = lyricSize.toFloat(); // but avoid comparing float with exact value later
+      const auto dblLyricSize = lyricSize.toDouble(); // but avoid comparing floating point number with exact value later
 
       // loop over all text styles (except the empty, always hidden, first one)
       // set all text styles to the MusicXML defaults
 #if 0 // TODO:ws
-      for (int i = int(SubStyleId::DEFAULT) + 1; i < int(SubStyleId::TEXT_STYLES); ++i) {
+      // TODO: check if fWordSize must be a double too (issue #277029)
+      for (int i = int(Tid::DEFAULT) + 1; i < int(Tid::TEXT_STYLES); ++i) {
             TextStyle ts = score->style().textStyle(TextStyleType(i));
-            if (i == int(SubStyleId::LYRIC1) || i == int(SubStyleId::LYRIC2)) {
+            if (i == int(Tid::LYRIC1) || i == int(Tid::LYRIC2)) {
                   if (lyricFamily != "")
                         ts.setFamily(lyricFamily);
                   if (fLyricSize > 0.001)
@@ -1268,9 +1269,9 @@ static void updateStyles(Score* score,
             score->style().set(Sid::lyricsOddFontFace, lyricFamily);
             score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
             }
-      if (fLyricSize > 0.001) {
-            score->style().set(Sid::lyricsOddFontSize, fLyricSize);
-            score->style().set(Sid::lyricsEvenFontSize, fLyricSize);
+      if (dblLyricSize > 0.001) {
+            score->style().set(Sid::lyricsOddFontSize, QVariant(dblLyricSize));
+            score->style().set(Sid::lyricsEvenFontSize, QVariant(dblLyricSize));
             }
       }
 
@@ -2128,11 +2129,10 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
 
 /**
  Parse the /score-partwise/part/measure/attributes/clef node.
- Set the staff type based on clef type
- TODO: check if staff type setting could be simplified
+ TODO: Store the clef type, to simplify staff type setting in pass 2.
  */
 
-void MusicXMLParserPass1::clef(const QString& partId)
+void MusicXMLParserPass1::clef(const QString& /* partId */)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "clef");
       _logger->logDebugTrace("MusicXMLParserPass1::clef", &_e);
@@ -2149,31 +2149,14 @@ void MusicXMLParserPass1::clef(const QString& partId)
                   n--;              // make zero-based
             }
 
-      StaffTypes staffType = StaffTypes::STANDARD;
-
       while (_e.readNextStartElement()) {
             if (_e.name() == "line")
                   _e.skipCurrentElement();  // skip but don't log
-            else if (_e.name() == "sign") {
+            else if (_e.name() == "sign")
                   QString sign = _e.readElementText();
-                  if (sign == "TAB")
-                        staffType = StaffTypes::TAB_DEFAULT;
-                  else if (sign == "percussion")
-                        staffType = StaffTypes::PERC_DEFAULT;
-                  }
             else
                   skipLogCurrElem();
             }
-
-      Part* part = getPart(partId);
-      Q_ASSERT(part);
-      int staves = part->nstaves();
-      int staffIdx = _score->staffIdx(part);
-
-      // TODO: changed for #55501, but now staff type init is shared between pass 1 and 2
-      // old code: if (0 <= n && n < staves && staffType != StaffTypes::STANDARD)
-      if (0 <= n && n < staves && staffType == StaffTypes::TAB_DEFAULT)
-            _score->staff(staffIdx + n)->setStaffType(0, StaffType::preset(staffType));
       }
 
 //---------------------------------------------------------

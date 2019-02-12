@@ -15,9 +15,12 @@
 
 #include "stringdata.h"
 #include "mscore.h"
+#include "notifier.hpp"
 #include "synthesizer/event.h"
 #include "interval.h"
 #include "clef.h"
+#include <QtGlobal>
+#include <QString>
 
 namespace Ms {
 
@@ -26,6 +29,7 @@ class XmlWriter;
 class XmlReader;
 class Drumset;
 class StringData;
+class ChannelListener;
 
 //---------------------------------------------------------
 //   StaffName
@@ -37,7 +41,7 @@ class StaffName {
 
    public:
       StaffName() {}
-      StaffName(const QString& s, int p=0) : _name(s), _pos(p) {}
+      StaffName(const QString& s, int p=0);
 
       bool operator==(const StaffName&) const;
       void read(XmlReader&);
@@ -91,30 +95,84 @@ struct MidiArticulation {
 //   Channel
 //---------------------------------------------------------
 
-struct Channel {
+class Channel {
       // this are the indexes of controllers which are always present in
       // Channel init EventList (maybe zero)
+      QString _name;
+      QString _descr;
+
+      static const int DEFAULT_COLOR = 0x3399ff;
+      int _color;  //rgb
+
+      QString _synti;
+
+      char _volume;
+      char _pan;
+
+      char _chorus;
+      char _reverb;
+
+      int _program;     // current values as shown in mixer
+      int _bank;        // initialized from "init"
+      int _channel { 0 };      // mscore channel number, mapped to midi port/channel
+
+      bool _soloMute;
+      bool _mute;
+      bool _solo;
+
+public:
+      static const char* DEFAULT_NAME;
 
       enum class A : char {
             HBANK, LBANK, PROGRAM, VOLUME, PAN, CHORUS, REVERB,
             INIT_COUNT
             };
-      QString name;
-      QString descr;
-      int channel { 0 };      // mscore channel number, mapped to midi port/channel
+
+      enum class Prop : char {
+            VOLUME, PAN, CHORUS, REVERB, NAME, DESCR, PROGRAM, BANK, COLOR,
+            SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL
+            };
+
+private:
+      Notifier<Channel::Prop> _notifier;
+      void firePropertyChanged(Channel::Prop prop) { _notifier.notify(prop); }
+
+public:
+
       mutable std::vector<MidiCoreEvent> init;
 
-      QString synti;
-      int program;     // current values as shown in mixer
-      int bank;        // initialized from "init"
-      char volume;
-      char pan;
-      char chorus;
-      char reverb;
 
-      bool mute;
-      bool solo;
-      bool soloMute;
+      QString name() const { return _name; }
+      void setName(const QString& value);
+      QString descr() const { return _descr; }
+      void setDescr(const QString& value);
+      QString synti() const { return _synti; }
+      void setSynti(const QString& value);
+      int color() const { return _color; }
+      void setColor(int value);
+
+      char volume() const { return _volume; }
+      void setVolume(char value);
+      char pan() const { return _pan; }
+      void setPan(char value);
+      char chorus() const { return _chorus; }
+      void setChorus(char value);
+      char reverb() const { return _reverb; }
+      void setReverb(char value);
+
+      int program() const { return _program; }
+      void setProgram(int value);
+      int bank() const { return _bank; }
+      void setBank(int value);
+      int channel() const { return _channel; }
+      void setChannel(int value);
+
+      bool soloMute() const { return _soloMute; }
+      void setSoloMute(bool value);
+      bool mute() const { return _mute; }
+      void setMute(bool value);
+      bool solo() const { return _solo; }
+      void setSolo(bool value);
 
       QList<NamedEventList> midiActions;
       QList<MidiArticulation> articulation;
@@ -123,7 +181,23 @@ struct Channel {
       void write(XmlWriter&, Part *part) const;
       void read(XmlReader&, Part *part);
       void updateInitList() const;
-      bool operator==(const Channel& c) { return (name == c.name) && (channel == c.channel); }
+      bool operator==(const Channel& c) { return (_name == c._name) && (_channel == c._channel); }
+
+      void addListener(ChannelListener* l);
+      void removeListener(ChannelListener* l);
+      };
+
+//---------------------------------------------------------
+//   ChannelListener
+//---------------------------------------------------------
+
+class ChannelListener : public Listener<Channel::Prop> {
+   public:
+      virtual void propertyChanged(Channel::Prop property) = 0;
+      void setNotifier(Channel* ch) { Listener::setNotifier(nullptr); if (ch) ch->addListener(this); }
+
+   private:
+      void receive(Channel::Prop prop) override { propertyChanged(prop); }
       };
 
 //---------------------------------------------------------

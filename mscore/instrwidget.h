@@ -16,6 +16,8 @@
 #include "ui_instrwidget.h"
 #include "libmscore/clef.h"
 
+class QTreeWidgetItem;
+
 namespace Ms {
 
 //class EditInstrument;
@@ -61,6 +63,12 @@ class StaffListItem : public QObject, public QTreeWidgetItem {
       QComboBox* _staffTypeCombo { nullptr };
       Staff* _staff              { 0       };
       ListItemOp _op             { ListItemOp::KEEP };
+      static int customStandardIdx;
+      static int customPercussionIdx;
+      static int customTablatureIdx;
+      static constexpr int CUSTOM_STAFF_TYPE_IDX = -1000;
+
+      int staffTypeIdx(int idx) const;
 
    private slots:
       void staffTypeChanged(int);
@@ -121,17 +129,16 @@ class InstrumentsWidget : public QWidget, public Ui::InstrumentsWidget {
 
    private slots:
       void on_instrumentList_itemSelectionChanged();
-      void on_instrumentList_itemDoubleClicked(QTreeWidgetItem* item, int);
+      void on_instrumentList_itemActivated(QTreeWidgetItem* item, int);
       void on_partiturList_itemSelectionChanged();
       void on_addButton_clicked();
       void on_removeButton_clicked();
       void on_upButton_clicked();
       void on_downButton_clicked();
-      StaffListItem* on_belowButton_clicked();
-      void on_linkedButton_clicked();
-      void expandOrCollapse(const QModelIndex &);
+      StaffListItem* on_addStaffButton_clicked();
+      void on_addLinkedStaffButton_clicked();
 
-      void on_search_textChanged(const QString &searchPhrase);
+      void on_instrumentSearch_textChanged(const QString &);
 
       void on_instrumentGenreFilter_currentIndexChanged(int);
       void filterInstrumentsByGenre(QTreeWidget *, QString);

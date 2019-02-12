@@ -2,7 +2,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -55,7 +54,7 @@ void TestOpcodes::testOpcodes()
 
       std::list<Zone *>::iterator curZone = synth->instrument(0)->zones().begin();
 
-      QCOMPARE(synth->instrument(0)->zones().size(), (size_t) 6);
+      QCOMPARE(synth->instrument(0)->zones().size(), (size_t) 12);
       QCOMPARE((*curZone)->keyLo, (char) 60);
       QCOMPARE((*curZone)->keyHi, (char) 70);
       QCOMPARE((*curZone)->keyBase, (char) 40);
@@ -110,6 +109,26 @@ void TestOpcodes::testOpcodes()
       QCOMPARE((*curZone)->trigger, Trigger::FIRST);
       curZone++;
       QCOMPARE((*curZone)->trigger, Trigger::LEGATO);
+      curZone++;
+      QCOMPARE((*curZone)->fil_type, FilterType::lpf_1p);
+      QCOMPARE((*curZone)->isCutoffDefined, true);
+      QCOMPARE((*curZone)->cutoff, 200.f);
+      QCOMPARE((*curZone)->fil_veltrack, 4000);
+      curZone++;
+      QCOMPARE((*curZone)->fil_type, FilterType::hpf_1p);
+      QCOMPARE((*curZone)->fil_keycenter, 60);
+      QCOMPARE((*curZone)->fil_keytrack, 400);
+      curZone++;
+      QCOMPARE((*curZone)->fil_type, FilterType::hpf_2p);
+      QCOMPARE((*curZone)->pan, 100);
+      QCOMPARE((*curZone)->offset, 16178ll);
+      curZone++;
+      QCOMPARE((*curZone)->fil_type, FilterType::lpf_2p);
+      QCOMPARE((*curZone)->delay, 2000.f); //ms
+      curZone++;
+      QCOMPARE((*curZone)->fil_type, FilterType::bpf_2p);
+      curZone++;
+      QCOMPARE((*curZone)->fil_type, FilterType::brf_2p);
       delete synth;
       }
 

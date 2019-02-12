@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: textpalette.cpp 4612 2011-07-27 13:14:35Z wschweer $
 //
 //  Copyright (C) 2002-2010 Werner Schweer and others
 //
@@ -19,6 +18,7 @@
 //=============================================================================
 
 #include "palette.h"
+#include "menus.h"
 #include "textpalette.h"
 #include "icons.h"
 #include "libmscore/text.h"
@@ -30,8 +30,6 @@
 #include "musescore.h"
 
 namespace Ms {
-
-extern QMap<QString, QStringList>* smuflRanges();
 
 //const int buttonSize = 40;
 //const int iconSize   = 20;
@@ -846,7 +844,7 @@ void TextPalette::populateUnicode()
 //   setText
 //---------------------------------------------------------
 
-void TextPalette::setText(Text* te)
+void TextPalette::setText(TextBase* te)
       {
       _textElement = te;
       }

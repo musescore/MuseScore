@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>121</width>
-    <height>108</height>
+    <width>183</width>
+    <height>459</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -53,6 +53,12 @@
    </item>
    <item>
     <widget class="QFrame" name="frame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="frameShape">
       <enum>QFrame::HLine</enum>
      </property>
@@ -66,7 +72,13 @@
    </item>
    <item>
     <widget class="QWidget" name="panel" native="true">
-     <layout class="QGridLayout" name="gridLayout">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>10</verstretch>
+      </sizepolicy>
+     </property>
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0">
       <property name="leftMargin">
        <number>3</number>
       </property>
@@ -79,22 +91,6 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="1" column="0">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -105,25 +101,11 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetMag">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Scale' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="mag">
+        <property name="accessibleName">
+         <string>Scale</string>
+        </property>
         <property name="minimum">
          <double>0.200000000000000</double>
         </property>
@@ -138,23 +120,171 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="3">
-       <widget class="QToolButton" name="properties">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Properties</string>
+         <string>Placement:</string>
+        </property>
+        <property name="buddy">
+         <cstring>placement</cstring>
         </property>
        </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="placement">
+        <property name="accessibleName">
+         <string>Placement</string>
+        </property>
+        <item>
+         <property name="text">
+          <string notr="true">Above</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">Below</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Frets:</string>
+        </property>
+        <property name="buddy">
+         <cstring>frets</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Barré:</string>
+        </property>
+        <property name="buddy">
+         <cstring>barre</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Strings:</string>
+        </property>
+        <property name="buddy">
+         <cstring>strings</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QSpinBox" name="frets">
+        <property name="accessibleName">
+         <string>Frets</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="strings">
+        <property name="accessibleName">
+         <string>Strings</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QSpinBox" name="barre">
+        <property name="accessibleName">
+         <string>Barré</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Offset:</string>
+        </property>
+        <property name="buddy">
+         <cstring>offset</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QSpinBox" name="offset">
+        <property name="accessibleName">
+         <string>Offset</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0" colspan="3">
+       <widget class="Ms::FretCanvas" name="diagram">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>10</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>250</height>
+         </size>
+        </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetMag"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetPlacement"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetStrings"/>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetFrets"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetBarre"/>
+      </item>
+      <item row="6" column="2">
+       <widget class="Ms::ResetButton" name="resetOffset"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Ms::FretCanvas</class>
+   <extends>QFrame</extends>
+   <header>fretcanvas.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>mag</tabstop>
-  <tabstop>resetMag</tabstop>
-  <tabstop>properties</tabstop>
+  <tabstop>placement</tabstop>
+  <tabstop>strings</tabstop>
+  <tabstop>frets</tabstop>
+  <tabstop>barre</tabstop>
+  <tabstop>offset</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

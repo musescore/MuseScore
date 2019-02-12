@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>226</width>
-    <height>201</height>
+    <width>447</width>
+    <height>232</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -81,25 +81,11 @@
         <property name="text">
          <string>Line color:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>lineColor</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QToolButton" name="resetLineColor">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Line color' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -107,6 +93,9 @@
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Line thickness:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>lineWidth</cstring>
@@ -118,6 +107,9 @@
         <property name="text">
          <string>Line style:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>lineStyle</cstring>
         </property>
@@ -128,33 +120,19 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Allow diagonal</string>
-        </property>
         <property name="text">
          <string>Allow diagonal</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="resetDiagonal">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Allow diagonal' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
        <widget class="Awl::ColorLabel" name="lineColor">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Line color</string>
         </property>
@@ -165,6 +143,12 @@
       </item>
       <item row="5" column="1">
        <widget class="QComboBox" name="lineStyle">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Line style</string>
         </property>
@@ -200,57 +184,6 @@
         </item>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="resetLineVisible">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Line visible' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QToolButton" name="resetLineWidth">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Line thickness' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QToolButton" name="resetLineStyle">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Line style' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0" colspan="2">
        <widget class="QCheckBox" name="lineVisible">
         <property name="focusPolicy">
@@ -266,6 +199,9 @@
         <property name="text">
          <string>Dash gap width:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>dashGapLength</cstring>
         </property>
@@ -276,6 +212,9 @@
         <property name="text">
          <string>Dash line length:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>dashLineLength</cstring>
         </property>
@@ -283,6 +222,12 @@
       </item>
       <item row="4" column="1">
        <widget class="QDoubleSpinBox" name="lineWidth">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Line thickness</string>
         </property>
@@ -297,7 +242,7 @@
       <item row="6" column="1">
        <widget class="QDoubleSpinBox" name="dashLineLength">
         <property name="accessibleName">
-         <string>Line thickness</string>
+         <string>Dash line length</string>
         </property>
         <property name="minimum">
          <double>1.000000000000000</double>
@@ -313,7 +258,7 @@
       <item row="7" column="1">
        <widget class="QDoubleSpinBox" name="dashGapLength">
         <property name="accessibleName">
-         <string>Line thickness</string>
+         <string>Dash gap width</string>
         </property>
         <property name="minimum">
          <double>1.000000000000000</double>
@@ -326,39 +271,26 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetLineVisible"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetDiagonal"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetLineColor"/>
+      </item>
+      <item row="4" column="2">
+       <widget class="Ms::ResetButton" name="resetLineWidth"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetLineStyle"/>
+      </item>
       <item row="6" column="2">
-       <widget class="QToolButton" name="resetDashLineLength">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Dash line length' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetDashLineLength"/>
       </item>
       <item row="7" column="2">
-       <widget class="QToolButton" name="resetDashGapLength">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Dash gap width' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetDashGapLength"/>
       </item>
      </layout>
     </widget>
@@ -372,22 +304,21 @@
    <header>awl/colorlabel.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>lineVisible</tabstop>
-  <tabstop>resetLineVisible</tabstop>
   <tabstop>diagonal</tabstop>
-  <tabstop>resetDiagonal</tabstop>
-  <tabstop>resetLineColor</tabstop>
   <tabstop>lineWidth</tabstop>
-  <tabstop>resetLineWidth</tabstop>
   <tabstop>lineStyle</tabstop>
-  <tabstop>resetLineStyle</tabstop>
   <tabstop>dashLineLength</tabstop>
-  <tabstop>resetDashLineLength</tabstop>
   <tabstop>dashGapLength</tabstop>
-  <tabstop>resetDashGapLength</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

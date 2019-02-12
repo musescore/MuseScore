@@ -39,16 +39,21 @@ struct ShapeElement : public QRectF {
 //   Shape
 //---------------------------------------------------------
 
-class Shape : std::vector<ShapeElement> {
+class Shape : public std::vector<ShapeElement> {
+// class Shape : std::vector<ShapeElement> {
    public:
+      enum HorizontalSpacingType {
+            SPACING_GENERAL = 0,
+            SPACING_LYRICS,
+            SPACING_HARMONY,
+            };
+
       Shape() {}
 #ifndef NDEBUG
       Shape(const QRectF& r, const char* s = 0) { add(r, s); }
 #else
       Shape(const QRectF& r) { add(r); }
 #endif
-      void draw(QPainter*) const;
-
       void add(const Shape& s)            { insert(end(), s.begin(), s.end()); }
 #ifndef NDEBUG
       void add(const QRectF& r, const char* t = 0);
@@ -57,6 +62,8 @@ class Shape : std::vector<ShapeElement> {
 #endif
       void remove(const QRectF&);
       void remove(const Shape&);
+
+      void addHorizontalSpacing(HorizontalSpacingType type, qreal left, qreal right);
 
       void translate(const QPointF&);
       void translateX(qreal);
@@ -72,13 +79,14 @@ class Shape : std::vector<ShapeElement> {
       qreal top() const;
       qreal bottom() const;
 
-      int size() const   { return std::vector<ShapeElement>::size(); }
-      bool empty() const { return std::vector<ShapeElement>::empty(); }
-      void clear()       { std::vector<ShapeElement>::clear();       }
+      size_t size() const { return std::vector<ShapeElement>::size();  }
+      bool empty() const  { return std::vector<ShapeElement>::empty(); }
+      void clear()        { std::vector<ShapeElement>::clear();        }
 
       bool contains(const QPointF&) const;
       bool intersects(const QRectF& rr) const;
-      void paint(QPainter&);
+      bool intersects(const Shape&) const;
+      void paint(QPainter&) const;
 
 #ifndef NDEBUG
       void dump(const char*) const;

@@ -11,7 +11,7 @@ then
 else
     LONG_NAME=MuseScore
     LONGER_NAME="MuseScore 3"
-    VERSION=3.0
+    VERSION=3.1.0
 fi
 
 
@@ -42,9 +42,7 @@ function set_bundle_display_options() {
             set arrangement of the icon view options of container window to not arranged
             set position of item "${LONGER_NAME}.app" to {400,125}
             close
-            open
             set position of item "Applications" to {150,125}
-            close
             open
             set background picture of the icon view options of container window to file "background.tiff" of folder "Pictures"
             set the bounds of the container window to {0, 0, 540, 300}
@@ -58,10 +56,50 @@ EOF
 
 }
 
+function change_rpath() {
+   for P in `otool -L $1 | awk '{print $1}'`
+   do
+      if [[ "$P" == *@rpath* ]]
+      then
+         if [[ "$P" == *Qt* ]]
+         then
+            PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../Frameworks,g')
+            FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+            install_name_tool -change $P $PSLASH $1
+            for P1 in `otool -L $FNAME | awk '{print $1}'`
+            do
+               if [[ "$P1" == *@rpath* ]]
+               then
+                   PSLASH1=$(echo $P1 | sed "s,@rpath,@loader_path/../../..,g")
+                   install_name_tool -change $P1 $PSLASH1 $FNAME
+               fi
+            done
+         else
+            PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../Frameworks,g')
+            FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+            install_name_tool -change $P $PSLASH $1
+         fi
+      fi
+   done
+}
+
+function change_rpath_QWebEngine() {
+   for P in `otool -L $1 | awk '{print $1}'`
+   do
+      if [[ "$P" == *@rpath* ]]
+      then
+         PSLASH=$(echo $P | sed 's,@rpath,@loader_path/../../../../../../..,g')
+         FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
+         install_name_tool -change $P $PSLASH $1
+      fi
+   done
+}
+
+
 rm ${WORKING_DIRECTORY}/${COMPRESSEDDMGNAME}
 
 #tip: increase the size if error on copy or macdeployqt
-hdiutil create -size 400m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
+hdiutil create -size 500m -fs HFS+ -volname ${VOLNAME} ${WORKING_DIRECTORY}/${DMGNAME}
 
 # Mount the disk image
 hdiutil attach ${WORKING_DIRECTORY}/${DMGNAME}
@@ -94,7 +132,6 @@ rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtPositioning
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtPurchasing
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtQuick/Particles*
 rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/Qt/WebSockets
-rm -rf ${VOLUME}/${APPNAME}.app/Contents/Resources/qml/QtWebEngine
 
 find ${VOLUME}/${APPNAME}.app/Contents -type d -name "*.dSYM" -exec rm -r {} +
 
@@ -104,23 +141,10 @@ macdeployqt ${VOLUME}/${APPNAME}.app
 
 # fix the libs, qt5.6 has @rpath...
 BIN_FILE=${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
-for P in `otool -L $BIN_FILE | awk '{print $1}'`
-do
-    if [[ "$P" == *@rpath* ]]
-    then
-        PSLASH=$(echo $P | sed 's,@rpath,@executable_path/../Frameworks,g')
-        FNAME=$(echo $P | sed "s,@rpath,${VOLUME}/${APPNAME}.app/Contents/Frameworks,g")
-        install_name_tool -change $P $PSLASH $BIN_FILE
-        for P1 in `otool -L $FNAME | awk '{print $1}'`
-        do
-            if [[ "$P1" == *@rpath* ]]
-            then
-                PSLASH1=$(echo $P1 | sed "s,@rpath,@executable_path/../Frameworks,g")
-                install_name_tool -change $P1 $PSLASH1 $FNAME
-            fi
-        done
-    fi
-done
+change_rpath $BIN_FILE
+# fix the QWebEngineProcess, qt5.9 has @rpath...
+WebEngineProcess=${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Versions/5/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
+change_rpath_QWebEngine $WebEngineProcess
 
 # Workaround:
 # fix Homebrew libraries with hard coded absolute path, see QTBUG-56814
@@ -149,24 +173,33 @@ do
 done
 
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
+otool -L ${VOLUME}/${APPNAME}.app/Contents/Frameworks/QtWebEngineCore.framework/Versions/5/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess
 
+echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"
 mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 
+
+echo "Copy in background image"
 # copy in background image
 mkdir -p ${VOLUME}/Pictures
 # fixme: path
 cp  ${BACKGROUND} ${VOLUME}/Pictures/background.tiff
 
-# symlink applications
+echo "symlink application"
+# nssymlink applicatio
 ln -s /Applications/ ${VOLUME}/Applications
 set_bundle_display_options ${VOLUME}
 mv ${VOLUME}/Pictures ${VOLUME}/.Pictures
 
 #codesign
+echo "Codesign"
 codesign --deep -s "Developer ID Application: MuseScore" "${VOLUME}/${LONGER_NAME}.app"
+echo "spctl"
 spctl --assess --type execute "${VOLUME}/${LONGER_NAME}.app"
+echo "Codesign verify"
 codesign --verify --deep --strict --verbose=2 "${VOLUME}/${LONGER_NAME}.app"
 
+echo "Unmount"
 # Unmount the disk image
 hdiutil detach $DEV
 

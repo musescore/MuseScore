@@ -16,7 +16,6 @@ cp $S/hor_frame_and_mmrest-test.mscx     hor_frame_and_mmrest-ref.mscx
 cp $S/keysig-test.mscx                   keysig-ref.mscx
 cp $S/noteheads-test.mscx                noteheads-ref.mscx
 cp $S/notes-test.mscx                    notes-ref.mscx
-cp $S/notes_useroffset-test.mscx         notes_useroffset-ref.mscx
 cp $S/slurs-test.mscx                    slurs-ref.mscx
 cp $S/style-test.mscx                    style-ref.mscx
 cp $S/text_scaling-test.mscx             text_scaling-ref.mscx
@@ -28,3 +27,7 @@ cp $S/drumset-test.mscx                  drumset-ref.mscx
 cp $S/tuplets-test.mscx                  tuplets-ref.mscx
 cp $S/tuplets_1-test.mscx                tuplets_1-ref.mscx
 cp $S/tuplets_2-test.mscx                tuplets_2-ref.mscx
+cp $S/fingering-test.mscx                fingering-ref.mscx
+cp $S/ottava-test.mscx                   ottava-ref.mscx
+cp $S/pedal-test.mscx                   pedal-ref.mscx
+cp $S/textline-test.mscx                 textline-ref.mscx

@@ -1,6 +1,7 @@
 #ifndef IMPORTMIDI_OPERATIONS_H
 #define IMPORTMIDI_OPERATIONS_H
 
+#include "importmidi_inner.h"
 #include "importmidi_operation.h"
 #include "midi/midifile.h"
 
@@ -67,6 +68,13 @@ class TrackOp
                   return;
             _operation[-1] = value;
             _canRedefineDefaultLater = canRedefineDefaultLater;
+            }
+
+      void clear()
+            {
+            T defaultVal = defaultValue();
+            _operation.clear();
+            _operation[-1] = defaultVal;
             }
    private:
                   // <track index, operation value>
@@ -184,6 +192,7 @@ struct HumanBeatData
 struct FileData
       {
       MidiFile midiFile;
+      QList<MTrack> tracks;
       int processingsOfOpenedFile = 0;
       bool hasTempoText = false;
       QByteArray HHeaderData;

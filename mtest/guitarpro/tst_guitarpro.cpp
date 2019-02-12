@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2013 Werner Schweer
 //
@@ -153,6 +152,10 @@ private slots:
       void gpxClefs() { gpReadTest("clefs", "gpx"); }
       void gpxTuplets()  { gpReadTest("tuplets", "gpx"); }
       void gpxTuplets2() { gpReadTest("tuplets2", "gpx"); }
+      void gp3CapoFret() { gpReadTest("capo-fret", "gp3"); }
+      void gp4CapoFret() { gpReadTest("capo-fret", "gp4"); }
+      void gp5CapoFret() { gpReadTest("capo-fret", "gp5"); }
+      void gp6UncompletedMeasure() { gpReadTest("UncompletedMeasure", "gpx"); }
       };
 
 //---------------------------------------------------------

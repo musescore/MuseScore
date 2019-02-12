@@ -148,9 +148,8 @@ AccidentalVal sym2accidentalVal(SymId id)
 //---------------------------------------------------------
 
 Accidental::Accidental(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::MOVABLE)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE);
       }
 
 //---------------------------------------------------------
@@ -188,7 +187,7 @@ void Accidental::read(XmlReader& e)
 
 void Accidental::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
       writeProperty(xml, Pid::ROLE);
       writeProperty(xml, Pid::SMALL);
@@ -302,8 +301,8 @@ void Accidental::layout()
       if (_bracket != AccidentalBracket::NONE) {
             SymId id = _bracket == AccidentalBracket::PARENTHESIS ? SymId::accidentalParensRight : SymId::accidentalBracketRight;
             x = r.x()+r.width();
-            SymElement e(id, x);
-            el.append(e);
+            SymElement e1(id, x);
+            el.append(e1);
             r |= symBbox(id).translated(x, 0.0);
             }
       setbbox(r);
@@ -347,7 +346,7 @@ void Accidental::draw(QPainter* painter) const
 
 bool Accidental::acceptDrop(EditData& data) const
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       return e->isIcon() && (toIcon(e)->iconType() == IconType::BRACKETS || toIcon(e)->iconType() == IconType::PARENTHESES);
       }
 
@@ -357,7 +356,7 @@ bool Accidental::acceptDrop(EditData& data) const
 
 Element* Accidental::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       switch(e->type()) {
             case ElementType::ICON :
                   switch(toIcon(e)->iconType()) {
@@ -439,6 +438,20 @@ bool Accidental::setProperty(Pid propertyId, const QVariant& v)
             }
       triggerLayout();
       return true;
+      }
+
+//---------------------------------------------------------
+//   propertyUserValue
+//---------------------------------------------------------
+
+QString Accidental::propertyUserValue(Pid pid) const
+      {
+      switch(pid) {
+            case Pid::SUBTYPE:
+                  return subtypeUserName();
+            default:
+                  return Element::propertyUserValue(pid);
+            }
       }
 
 //---------------------------------------------------------

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: mscore.cpp 4220 2011-04-22 10:31:26Z wschweer $
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -199,8 +198,8 @@ void LayerManager:: accept()
             l.name           = layers->item(i, 0)->text();
             l.tags           = 1;
             QString ts       = layers->item(i, 1)->text();
-            QStringList tags = ts.split(",");
-            foreach (QString tag, tags) {
+            QStringList tgs  = ts.split(",");
+            foreach (QString tag, tgs) {
                   for (int idx = 0; idx < 32; ++idx) {
                         if (tag == score->layerTags()[idx]) {
                               l.tags |= 1 << idx;

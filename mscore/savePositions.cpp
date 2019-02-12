@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011 Werner Schweer and others
 //
@@ -19,6 +18,9 @@
 #include "libmscore/xml.h"
 #include "mscore/globals.h"
 #include "mscore/preferences.h"
+#include "mscore/musescore.h"
+
+
 
 namespace Ms {
 
@@ -46,15 +48,10 @@ static void saveMeasureEvents(XmlWriter& xml, Measure* m, int offset)
 //    output in 100 dpi
 //---------------------------------------------------------
 
-bool savePositions(Score* score, const QString& name, bool segments)
+bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments)
       {
       segs.clear();
-      QFile fp(name);
-      if (!fp.open(QIODevice::WriteOnly)) {
-            qDebug("Open <%s> failed", qPrintable(name));
-            return false;
-            }
-      XmlWriter xml(score, &fp);
+      XmlWriter xml(score, device);
       xml.header();
       xml.stag("score");
       xml.stag("elements");
@@ -128,10 +125,10 @@ bool savePositions(Score* score, const QString& name, bool segments)
                               saveMeasureEvents(xml, m, tickOffset);
                         else {
                               int tick = m->tick() + tickOffset;
-                              int id = segs[(void*)m];
+                              int i = segs[(void*)m];
                               int time = lrint(m->score()->repeatList()->utick2utime(tick) * 1000);
                               xml.tagE(QString("event elid=\"%1\" position=\"%2\"")
-                                 .arg(id)
+                                 .arg(i)
                                  .arg(time)
                                  );
                               }
@@ -143,6 +140,16 @@ bool savePositions(Score* score, const QString& name, bool segments)
 
       xml.etag(); // score
       return true;
+      }
+
+bool MuseScore::savePositions(Score* score, const QString& name, bool segments)
+      {
+      QFile fp(name);
+      if (!fp.open(QIODevice::WriteOnly)) {
+            qDebug("Open <%s> failed", qPrintable(name));
+            return false;
+            }
+      return savePositions(score, &fp, segments);
       }
 }
 

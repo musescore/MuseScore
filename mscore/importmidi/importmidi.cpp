@@ -196,7 +196,7 @@ void findAllTupletsForDrums(
       for (size_t voice = 0; voice < drumVoiceCount; ++voice) {
             for (auto &chord: chords[voice]) {
                         // correct voice because it can be changed during tuplet detection
-                  setChordVoice(chord.second, voice);
+                  setChordVoice(chord.second, int(voice));
                   mtrack.chords.insert({chord.first, chord.second});
                   }
             }
@@ -307,25 +307,25 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             case META_SUBTITLE:
             case META_TITLE:
                   {
-                  SubStyleId ssid = SubStyleId::DEFAULT;
+                  Tid ssid = Tid::DEFAULT;
                   switch(mm.metaType()) {
                         case META_COMPOSER:
-                              ssid = SubStyleId::COMPOSER;
+                              ssid = Tid::COMPOSER;
                               break;
                         case META_TRANSLATOR:
-                              ssid = SubStyleId::TRANSLATOR;
+                              ssid = Tid::TRANSLATOR;
                               break;
                         case META_POET:
-                              ssid = SubStyleId::POET;
+                              ssid = Tid::POET;
                               break;
                         case META_SUBTITLE:
-                              ssid = SubStyleId::SUBTITLE;
+                              ssid = Tid::SUBTITLE;
                               break;
                         case META_TITLE:
-                              ssid = SubStyleId::TITLE;
+                              ssid = Tid::TITLE;
                               break;
                         }
-                  Text* text = new Text(ssid, cs);
+                  Text* text = new Text(cs, ssid);
 
                   text->setPlainText((const char*)(mm.edata()));
 
@@ -619,12 +619,12 @@ void MTrack::createNotes(const ReducedFraction &lastTick)
                               // collect all midiChords on current tick position
                   startChordTick = nextChordTick;       // debug
                   for ( ; it != chords.end(); ++it) {
-                        const MidiChord& midiChord = it->second;
+                        const MidiChord& midiChord1 = it->second;
                         if (it->first != startChordTick)
                               break;
-                        if (midiChord.voice != voice)
+                        if (midiChord1.voice != voice)
                               continue;
-                        midiChords.append(midiChord);
+                        midiChords.append(midiChord1);
                         }
                   if (midiChords.isEmpty())
                         break;
@@ -838,10 +838,10 @@ void createMeasures(const ReducedFraction &firstTick, ReducedFraction &lastTick,
 
       for (int i = begBarIndex; i < barCount; ++i) {
             Measure* m = new Measure(score);
-            const int tick = score->sigmap()->bar2tick(i, 0);
+            const int t = score->sigmap()->bar2tick(i, 0);
             m->setTick(tick);
             m->setNo(i);
-            const Fraction timeSig = score->sigmap()->timesig(tick).timesig();
+            const Fraction timeSig = score->sigmap()->timesig(t).timesig();
             m->setTimesig(timeSig);
             m->setLen(timeSig);
             score->measures()->add(m);
@@ -1071,7 +1071,7 @@ ReducedFraction findLastChordTick(const std::multimap<int, MTrack> &tracks)
       return lastTick;
       }
 
-void convertMidi(Score *score, const MidiFile *mf)
+QList<MTrack> convertMidi(Score *score, const MidiFile *mf)
       {
       auto *sigmap = score->sigmap();
 
@@ -1161,6 +1161,8 @@ void convertMidi(Score *score, const MidiFile *mf)
       MidiLyrics::setLyricsToScore(trackList);
       MidiTempo::setTempo(tracks, score);
       MidiChordName::setChordNames(trackList);
+
+      return trackList;
       }
 
 void loadMidiData(MidiFile &mf)
@@ -1211,7 +1213,7 @@ Score::FileError importMidi(MasterScore *score, const QString &name)
             opers.setMidiFileData(name, mf);
             }
 
-      convertMidi(score, opers.midiFile(name));
+      opers.data()->tracks = convertMidi(score, opers.midiFile(name));
       ++opers.data()->processingsOfOpenedFile;
 
       return Score::FileError::FILE_NO_ERROR;

@@ -45,6 +45,7 @@
 #include "keysig.h"
 #include "page.h"
 #include "hook.h"
+#include "rehearsalmark.h"
 
 namespace Ms {
 
@@ -171,13 +172,6 @@ void ChordRest::writeProperties(XmlWriter& xml) const
             //xml.tagE("duration z=\"%d\" n=\"%d\"", duration().numerator(), duration().denominator());
             }
 
-#ifndef NDEBUG
-      if (_beam && (MScore::testMode || !_beam->generated()))
-            xml.tag("Beam", _beam->id());
-#else
-      if (_beam && !_beam->generated())
-            xml.tag("Beam", _beam->id());
-#endif
       for (Lyrics* lyrics : _lyrics)
             lyrics->write(xml);
       if (!isGrace()) {
@@ -186,19 +180,15 @@ void ChordRest::writeProperties(XmlWriter& xml) const
                   t /= staff()->timeStretch(xml.curTick());
             xml.incCurTick(t.ticks());
             }
-      for (auto i : score()->spanner()) {     // TODO: dont search whole list
+      for (auto i : score()->spanner()) {     // TODO: don’t search whole list
             Spanner* s = i.second;
             if (s->generated() || !s->isSlur() || toSlur(s)->broken() || !xml.canWrite(s))
                   continue;
 
-            if (s->startElement() == this) {
-                  int id = xml.spannerId(s);
-                  xml.tagE(QString("Slur type=\"start\" id=\"%1\"").arg(id));
-                  }
-            else if (s->endElement() == this) {
-                  int id = xml.spannerId(s);
-                  xml.tagE(QString("Slur type=\"stop\" id=\"%1\"").arg(id));
-                  }
+            if (s->startElement() == this)
+                  s->writeSpannerStart(xml, this, track());
+            else if (s->endElement() == this)
+                  s->writeSpannerEnd(xml, this, track());
             }
       }
 
@@ -268,14 +258,6 @@ bool ChordRest::readProperties(XmlReader& e)
             qDebug("ChordRest: %s obsolete", tag.toLocal8Bit().data());
             e.skipCurrentElement();
             }
-      else if (tag == "Beam") {
-            int id = e.readInt();
-            Beam* beam = e.findBeam(id);
-            if (beam)
-                  beam->add(this);        // also calls this->setBeam(beam)
-            else
-                  qDebug("Beam id %d not found", id);
-            }
       else if (tag == "small")
             _small = e.readInt();
       else if (tag == "duration")
@@ -297,69 +279,78 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "dots")
             setDots(e.readInt());
-      else if (tag == "move")
+      else if (tag == "staffMove")
             _staffMove = e.readInt();
-      else if (tag == "Slur") {
-            int id = e.intAttribute("id");
-            if (id == 0)
-                  id = e.intAttribute("number");                  // obsolete
-            Spanner* spanner = e.findSpanner(id);
-            QString atype(e.attribute("type"));
+      else if (tag == "Spanner")
+            Spanner::readSpanner(e, this, track());
+      else if (tag == "Lyrics") {
+            Element* element = new Lyrics(score());
+            element->setTrack(e.track());
+            element->read(e);
+            add(element);
+            }
+      else if (tag == "pos") {
+            QPointF pt = e.readPoint();
+            setOffset(pt * spatium());
+            }
+//      else if (tag == "offset")
+//            DurationElement::readProperties(e);
+      else if (!DurationElement::readProperties(e))
+            return false;
+      return true;
+      }
 
-            if (!spanner) {
-                  if (atype == "stop") {
-                        SpannerValues sv;
-                        sv.spannerId = id;
-                        sv.track2    = track();
-                        sv.tick2     = e.tick();
-                        e.addSpannerValues(sv);
-                        }
-                  else if (atype == "start")
-                        qDebug("spanner: start without spanner");
-                  }
-            else {
-                  if (atype == "start") {
-                        if (spanner->ticks() > 0 && spanner->tick() == -1) // stop has been read first
-                              spanner->setTicks(spanner->ticks() - e.tick() - 1);
-                        spanner->setTick(e.tick());
-                        spanner->setTrack(track());
-                        if (spanner->type() == ElementType::SLUR)
-                              spanner->setStartElement(this);
-                        if (e.pasteMode()) {
-                              for (ScoreElement* e : spanner->linkList()) {
-                                    if (e == spanner)
+//---------------------------------------------------------
+//   ChordRest::readAddConnector
+//---------------------------------------------------------
+
+void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+      {
+      const ElementType type = info->type();
+      switch (type) {
+            case ElementType::SLUR:
+                  {
+                  Spanner* spanner = toSpanner(info->connector());
+                  const Location& l = info->location();
+
+                  if (info->isStart()) {
+                        spanner->setTrack(l.track());
+                        spanner->setTick(tick());
+                        spanner->setStartElement(this);
+                        if (pasteMode) {
+                              score()->undoAddElement(spanner);
+                              for (ScoreElement* ee : spanner->linkList()) {
+                                    if (ee == spanner)
                                           continue;
-                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    Spanner* ls = toSpanner(ee);
                                     ls->setTick(spanner->tick());
-                                    for (ScoreElement* ee : linkList()) {
-                                          ChordRest* cr = toChordRest(ee);
-                                          if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
+                                    for (ScoreElement* eee : linkList()) {
+                                          ChordRest* cr = toChordRest(eee);
+                                          if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack(cr->track());
-                                                if (ls->type() == ElementType::SLUR)
+                                                if (ls->isSlur())
                                                       ls->setStartElement(cr);
                                                 break;
                                                 }
                                           }
                                     }
                               }
+                        else
+                              score()->addSpanner(spanner);
                         }
-                  else if (atype == "stop") {
-                        spanner->setTick2(e.tick());
-                        spanner->setTrack2(track());
-                        if (spanner->isSlur())
-                              spanner->setEndElement(this);
-                        ChordRest* start = toChordRest(spanner->startElement());
-                        if (start)
-                              spanner->setTrack(start->track());
-                        if (e.pasteMode()) {
-                              for (ScoreElement* e : spanner->linkList()) {
-                                    if (e == spanner)
+                  else if (info->isEnd()) {
+                        spanner->setTrack2(l.track());
+                        spanner->setTick2(tick());
+                        spanner->setEndElement(this);
+                        if (pasteMode) {
+                              for (ScoreElement* ee : spanner->linkList()) {
+                                    if (ee == spanner)
                                           continue;
-                                    Spanner* ls = static_cast<Spanner*>(e);
+                                    Spanner* ls = static_cast<Spanner*>(ee);
                                     ls->setTick2(spanner->tick2());
-                                    for (ScoreElement* ee : linkList()) {
-                                          ChordRest* cr = toChordRest(ee);
-                                          if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
+                                    for (ScoreElement* eee : linkList()) {
+                                          ChordRest* cr = toChordRest(eee);
+                                          if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                                                 ls->setTrack2(cr->track());
                                                 if (ls->type() == ElementType::SLUR)
                                                       ls->setEndElement(cr);
@@ -370,25 +361,12 @@ bool ChordRest::readProperties(XmlReader& e)
                               }
                         }
                   else
-                        qDebug("ChordRest::read(): unknown Slur type <%s>", qPrintable(atype));
+                        qDebug("ChordRest::readAddConnector(): Slur end is neither start nor end");
                   }
-            e.readNext();
+                  break;
+            default:
+                  break;
             }
-      else if (tag == "Lyrics" /*|| tag == "FiguredBass"*/) {
-            Element* element = Element::name2Element(tag, score());
-            element->setTrack(e.track());
-            element->read(e);
-            add(element);
-            }
-      else if (tag == "pos") {
-            QPointF pt = e.readPoint();
-            setUserOff(pt * spatium());
-            }
-      else if (tag == "offset")
-            DurationElement::readProperties(e);
-      else if (!DurationElement::readProperties(e))
-            return false;
-      return true;
       }
 
 //---------------------------------------------------------
@@ -415,7 +393,7 @@ void ChordRest::undoSetSmall(bool val)
 
 Element* ChordRest::drop(EditData& data)
       {
-      Element* e       = data.element;
+      Element* e       = data.dropElement;
       Measure* m       = measure();
       bool fromPalette = (e->track() == -1);
       switch (e->type()) {
@@ -468,6 +446,7 @@ Element* ChordRest::drop(EditData& data)
                               l->setScore(score);
                               l->setParent(seg);
                               score->undoAddElement(l);
+                              l->layout();
                               }
                         }
                   delete e;
@@ -492,12 +471,28 @@ Element* ChordRest::drop(EditData& data)
                         return 0;
                         }
 
+            case ElementType::FERMATA:
+                  e->setPlacement(track() & 1 ? Placement::BELOW : Placement::ABOVE);
+                  for (Element* el: segment()->annotations())
+                        if (el->isFermata() && (el->track() == track())) {
+                              if (el->subtype() == e->subtype()) {
+                                    delete e;
+                                    return el;
+                                    }
+                              else {
+                                    e->setPlacement(el->placement());
+                                    e->setTrack(track());
+                                    e->setParent(segment());
+                                    score()->undoChangeElement(el, e);
+                                    return e;
+                                    }
+                              }
+                  // fall through
             case ElementType::TEMPO_TEXT:
             case ElementType::DYNAMIC:
             case ElementType::FRET_DIAGRAM:
             case ElementType::TREMOLOBAR:
             case ElementType::SYMBOL:
-            case ElementType::FERMATA:
                   e->setTrack(track());
                   e->setParent(segment());
                   score()->undoAddElement(e);
@@ -542,12 +537,19 @@ Element* ChordRest::drop(EditData& data)
                         return 0;
                         }
                   // fall through
+
             case ElementType::REHEARSAL_MARK:
+                  {
                   e->setParent(segment());
                   e->setTrack((track() / VOICES) * VOICES);
+                  if (e->isRehearsalMark()) {
+                        RehearsalMark* r = toRehearsalMark(e);
+                        if (fromPalette)
+                              r->setXmlText(score()->createRehearsalMarkText(r));
+                        }
                   score()->undoAddElement(e);
                   return e;
-
+                  }
             case ElementType::FIGURED_BASS:
                   {
                   bool bNew;
@@ -686,7 +688,7 @@ QString ChordRest::durationUserName() const
                         tupletType = QObject::tr("Nonuplet");
                         break;
                   default:
-                        tupletType = QObject::tr("Custom Tuplet");
+                        tupletType = QObject::tr("Custom tuplet");
                   }
             }
       QString dotString = "";
@@ -843,7 +845,8 @@ QVariant ChordRest::propertyDefault(Pid propertyId) const
             default:
                   return DurationElement::propertyDefault(propertyId);
             }
-      triggerLayout();
+      // Prevent unreachable code warning
+      // triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -881,11 +884,10 @@ bool ChordRest::isGraceAfter() const
 //   writeBeam
 //---------------------------------------------------------
 
-void ChordRest::writeBeam(XmlWriter& xml)
+void ChordRest::writeBeam(XmlWriter& xml) const
       {
       Beam* b = beam();
       if (b && b->elements().front() == this && (MScore::testMode || !b->generated())) {
-            b->setId(xml.nextBeamId());
             b->write(xml);
             }
       }
@@ -899,9 +901,18 @@ void ChordRest::writeBeam(XmlWriter& xml)
 Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
       {
       for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
-            // chordrest ends at tick+actualTicks
+            // chordrest ends at afrac+actualFraction
             // we return the segment at or after the end of the chordrest
-            if (s->tick() >= tick() + actualTicks())
+            // Segment::afrac() is based on ticks; use DurationElement::afrac() if possible
+            Element* e = s;
+            if (s->segmentType() == SegmentType::ChordRest)
+                  // Find the first non-NULL element in the segment
+                  for (Element* ee : s->elist())
+                        if (ee) {
+                              e = ee;
+                              break;
+                              }
+            if (e->afrac() >= afrac() + actualFraction())
                   return s;
             }
       return 0;
@@ -1162,18 +1173,50 @@ QString ChordRest::accessibleExtraInfo() const
 Shape ChordRest::shape() const
       {
       Shape shape;
-      qreal margin = spatium() * .5;
+      {
       qreal x1 = 1000000.0;
       qreal x2 = -1000000.0;
+      bool adjustWidth = false;
       for (Lyrics* l : _lyrics) {
-            if (l->autoplace())
-                  l->rUserYoffset() = 0.0;
+            if (!l || !l->visible() || !l->autoplace())
+                  continue;
+            static const qreal margin = spatium() * .5;
             // for horizontal spacing we only need the lyrics width:
             x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
-            x2 = qMax(x2, x1 + l->bbox().width() + margin);
+            x2 = qMax(x2, l->bbox().x() + l->bbox().width() + margin + l->pos().x());
+            if (l->ticks() == Lyrics::TEMP_MELISMA_TICKS)
+                  x2 += spatium();
+            adjustWidth = true;
             }
-      if (x2 > x1)
-            shape.add(QRectF(x1, 1.0, x2-x1, 0.0));
+      if (adjustWidth)
+            shape.addHorizontalSpacing(Shape::SPACING_LYRICS, x1, x2);
+      }
+
+      {
+      qreal x1 = 1000000.0;
+      qreal x2 = -1000000.0;
+      bool adjustWidth = false;
+      for (Element* e : segment()->annotations()) {
+            if (!e || !e->visible() || !e->autoplace())
+                  continue;
+            if (e->isHarmony() && e->staffIdx() == staffIdx()) {
+                  Harmony* h = toHarmony(e);
+                  // this layout is needed just to calculate the correct bbox
+                  // so only do it if necessary, as it will reset position to default
+                  // and there might not be an autoplace after this
+                  // since ChordRest::shape() can be called at several points
+                  if (h->isLayoutInvalid())
+                        h->layout();
+                  const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
+                  x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
+                  x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
+                  adjustWidth = true;
+                  }
+            }
+      if (adjustWidth)
+            shape.addHorizontalSpacing(Shape::SPACING_HARMONY, x1, x2);
+      }
+
       return shape;
       }
 
@@ -1209,23 +1252,6 @@ int ChordRest::lastVerse(Placement p) const
       }
 
 //---------------------------------------------------------
-//   flipLyrics
-//---------------------------------------------------------
-
-void ChordRest::flipLyrics(Lyrics* l)
-      {
-      Placement p = l->placement();
-      if (p == Placement::ABOVE)
-            p = Placement::BELOW;
-      else
-            p = Placement::ABOVE;
-      int verses = lastVerse(p);
-      l->undoChangeProperty(Pid::VERSE, verses + 1);
-      l->undoChangeProperty(Pid::AUTOPLACE, true);
-      l->undoChangeProperty(Pid::PLACEMENT, int(p));
-      }
-
-//---------------------------------------------------------
 //   removeMarkings
 //    - this is normally called after cloning a chord to tie a note over the barline
 //    - there is no special undo handling; the assumption is that undo will simply remove the cloned chord
@@ -1236,9 +1262,9 @@ void ChordRest::flipLyrics(Lyrics* l)
 void ChordRest::removeMarkings(bool /* keepTremolo */)
       {
       qDeleteAll(el());
-      if (isChord())
-            qDeleteAll(toChord(this)->articulations());
+      el().clear();
       qDeleteAll(lyrics());
+      lyrics().clear();
       }
 
 //---------------------------------------------------------
@@ -1269,6 +1295,22 @@ bool ChordRest::isBefore(ChordRest* o)
             t = t + (graceAfter ? 1 : -1) *  graceIndex;
             }
       return t < otick;
+      }
+
+//---------------------------------------------------------
+//   undoAddAnnotation
+//---------------------------------------------------------
+
+void ChordRest::undoAddAnnotation(Element* a)
+      {
+      Segment* seg = segment();
+      Measure* m = measure();
+      if (m && m->isMMRest())
+            seg = m->mmRestFirst()->findSegmentR(SegmentType::ChordRest, 0);
+
+      a->setTrack(a->systemFlag() ? 0 : track());
+      a->setParent(seg);
+      score()->undoAddElement(a);
       }
 
 }

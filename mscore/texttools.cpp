@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: textpalette.cpp 3592 2010-10-18 17:24:18Z wschweer $
 //
 //  Copyright (C) 2002-2010 Werner Schweer and others
 //
@@ -139,8 +138,9 @@ void TextTools::blockAllSignals(bool val)
 
 void TextTools::updateTools(EditData& ed)
       {
-      text   = toText(ed.element);
+      text   = toTextBase(ed.element);
       cursor = text->cursor(ed);
+
       blockAllSignals(true);
       CharFormat* format = cursor->format();
 

@@ -175,7 +175,8 @@ ChordRest* Selection::activeCR() const
 
 Segment* Selection::firstChordRestSegment() const
       {
-      if (!isRange()) return 0;
+      if (!isRange())
+            return 0;
 
       for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
             if (!s->enabled())
@@ -319,9 +320,10 @@ void Selection::clear()
 
 void Selection::remove(Element* el)
       {
-      _el.removeOne(el);
+      const bool removed = _el.removeOne(el);
       el->setSelected(false);
-      updateState();
+      if (removed)
+            updateState();
       }
 
 //---------------------------------------------------------
@@ -366,7 +368,7 @@ bool SelectionFilter::canSelect(const Element* e) const
           return isFiltered(SelectionFilterType::FRET_DIAGRAM);
       if (e->type() == ElementType::BREATH)
           return isFiltered(SelectionFilterType::BREATH);
-      if (e->isText()) // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
+      if (e->isTextBase()) // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
           return isFiltered(SelectionFilterType::OTHER_TEXT);
       if (e->isSLine()) // NoteLine, Volta
           return isFiltered(SelectionFilterType::OTHER_LINE);
@@ -450,6 +452,31 @@ void Selection::appendChord(Chord* chord)
 
 void Selection::updateSelectedElements()
       {
+      if (_state != SelState::RANGE) {
+            update();
+            return;
+            }
+      if (_state == SelState::RANGE && _plannedTick1 != -1 && _plannedTick2 != -1) {
+            const int staffStart = _staffStart;
+            const int staffEnd = _staffEnd;
+            deselectAll();
+            Segment* s1 = _score->tick2segmentMM(_plannedTick1);
+            Segment* s2 = _score->tick2segmentMM(_plannedTick2, /* first */ true);
+            if (s2 && s2->measure()->isMMRest())
+                  s2 = s2->prev1MM(); // HACK both this and the previous "true"
+                                      // are needed to prevent bug #173381.
+                                      // This should exclude any segments belonging
+                                      // to MM-rest range from the selection.
+            if (s1 && s2 && s1->tick() + s1->ticks() > s2->tick()) {
+                  // can happen with MM rests as tick2measure returns only
+                  // the first segment for them.
+                  return;
+                  }
+            setRange(s1, s2, staffStart, staffEnd);
+            _plannedTick1 = -1;
+            _plannedTick2 = -1;
+            }
+
       for (Element* e : _el)
             e->setSelected(false);
       _el.clear();
@@ -474,18 +501,16 @@ void Selection::updateSelectedElements()
                   for (Element* e : s->annotations()) {
                         if (e->track() != st)
                               continue;
-                        // if (e->systemFlag()) //exclude system text  // ws: why?
-                        //      continue;
                         appendFiltered(e);
                         }
                   Element* e = s->element(st);
-                  if (!e || e->generated() || e->type() == ElementType::TIMESIG || e->type() == ElementType::KEYSIG)
+                  if (!e || e->generated() || e->isTimeSig() || e->isKeySig())
                         continue;
                   if (e->isChordRest()) {
                         ChordRest* cr = toChordRest(e);
-                        for (Element* e : cr->lyrics()) {
-                              if (e)
-                                    appendFiltered(e);
+                        for (Element* el : cr->lyrics()) {
+                              if (el)
+                                    appendFiltered(el);
                               }
                         }
                   if (e->isChord()) {
@@ -498,6 +523,11 @@ void Selection::updateSelectedElements()
                         }
                   else {
                         appendFiltered(e);
+                        if (e->isRest()) {
+                              Rest* r = toRest(e);
+                              for (int i = 0; i < r->dots(); ++i)
+                                    appendFiltered(r->dot(i));
+                              }
                         }
                   }
             }
@@ -535,10 +565,32 @@ void Selection::updateSelectedElements()
 void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd)
       {
       Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
+      Q_ASSERT(!(endSegment && !startSegment));
 
       _startSegment  = startSegment;
       _endSegment    = endSegment;
       _activeSegment = endSegment;
+      _staffStart    = staffStart;
+      _staffEnd      = staffEnd;
+      setState(SelState::RANGE);
+      }
+
+//---------------------------------------------------------
+//   setRangeTicks
+//    sets the range to be selected on next
+//    updateSelectedElements() call. Can be used if some
+//    segment structure changes are expected (e.g. if
+//    creating MM rests is pending).
+//---------------------------------------------------------
+
+void Selection::setRangeTicks(int tick1, int tick2, int staffStart, int staffEnd)
+      {
+      Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
+
+      deselectAll();
+      _plannedTick1 = tick1;
+      _plannedTick2 = tick2;
+      _startSegment = _endSegment = _activeSegment = nullptr;
       _staffStart    = staffStart;
       _staffEnd      = staffEnd;
       setState(SelState::RANGE);
@@ -706,6 +758,7 @@ QByteArray Selection::staffMimeData() const
                   xml.tag("transposeChromatic", interval.chromatic);
             if (interval.diatonic)
                   xml.tag("transposeDiatonic", interval.diatonic);
+            xml.stag("voiceOffset");
             for (int voice = 0; voice < VOICES; voice++) {
                   if (hasElementInTrack(seg1, seg2, startTrack + voice)
                      && xml.canWriteVoice(voice)) {
@@ -713,7 +766,9 @@ QByteArray Selection::staffMimeData() const
                         xml.tag(QString("voice id=\"%1\"").arg(voice), offset);
                         }
                   }
-            _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, true, true, false);
+            xml.etag(); // </voiceOffset>
+            xml.setCurTrack(startTrack);
+            _score->writeSegments(xml, startTrack, endTrack, seg1, seg2, false, false);
             xml.etag();
             }
 
@@ -746,7 +801,6 @@ QByteArray Selection::symbolListMimeData() const
       int         firstTick   = 0x7FFFFFFF;
       MAPDATA     mapData;
       Segment*    seg         = nullptr;
-      int         track;
       std::multimap<qint64, MAPDATA> map;
 
       // scan selection element list, inserting relevant elements in a tick-sorted map
@@ -872,7 +926,7 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   default:
                         continue;
                   }
-            track = e->track();
+            int track = e->track();
             if (track < topTrack)
                   topTrack = track;
             if (track > bottomTrack)
@@ -1239,6 +1293,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
             }
       activeIsFirst ? _activeSegment = _startSegment : _activeSegment = _endSegment;
       _score->setSelectionChanged(true);
+      Q_ASSERT(!(_endSegment && !_startSegment));
       }
 
 //---------------------------------------------------------

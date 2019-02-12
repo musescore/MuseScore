@@ -27,19 +27,37 @@ InspectorFingering::InspectorFingering(QWidget* parent)
       f.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::SUB_STYLE, 0, f.subStyle,     f.resetSubStyle     },
+            { Pid::SUB_STYLE, 0, f.style,     f.resetStyle     },
             };
       const std::vector<InspectorPanel> ppList = {
             { f.title, f.panel }
             };
 
-      f.subStyle->clear();
-      for (auto ss : { SubStyleId::FINGERING, SubStyleId::LH_GUITAR_FINGERING, SubStyleId::RH_GUITAR_FINGERING, SubStyleId::STRING_NUMBER } )
-            {
-            f.subStyle->addItem(subStyleUserName(ss), int(ss));
-            }
+      populateStyle(f.style);
 
       mapSignals(iiList, ppList);
+      }
+
+//---------------------------------------------------------
+//   allowedTextStyles
+//---------------------------------------------------------
+
+const std::vector<Tid>& InspectorFingering::allowedTextStyles()
+      {
+      static const std::vector<Tid> _fingeringTextStyles = {
+            Tid::FINGERING,
+            Tid::LH_GUITAR_FINGERING,
+            Tid::RH_GUITAR_FINGERING,
+            Tid::STRING_NUMBER,
+            Tid::USER1,
+            Tid::USER2,
+            Tid::USER3,
+            Tid::USER4,
+            Tid::USER5,
+            Tid::USER6
+            };
+
+      return _fingeringTextStyles;
       }
 }
 

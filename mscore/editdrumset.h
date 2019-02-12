@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: editdrumset.h 4388 2011-06-18 13:17:58Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -36,13 +35,18 @@ class EditDrumset : public QDialog, private Ui::EditDrumsetBase {
       Drumset  nDrumset;
 
       void apply();
-      void updateList();
-      void updateList2();
+      void updatePitchesList();
+      void refreshPitchesList();
       void updateExample();
-
+      
       virtual void hideEvent(QHideEvent*);
 
-   private slots:
+      void fillCustomNoteheadsDataFromComboboxes(int pitch);
+      void setCustomNoteheadsGUIEnabled(bool enabled);
+      
+      void setEnabledPitchControls(bool enable);
+      void fillNoteheadsComboboxes(bool customGroup, int pitch);
+private slots:
       void bboxClicked(QAbstractButton* button);
       void itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
       void nameChanged(const QString&);
@@ -50,7 +54,9 @@ class EditDrumset : public QDialog, private Ui::EditDrumsetBase {
       void valueChanged();
       void load();
       void save();
-
+      void customGboxToggled(bool);
+      void customQuarterChanged(int);
+      
    public:
       EditDrumset(const Drumset* ds, QWidget* parent = 0);
       const Drumset* drumset() const { return &nDrumset; }

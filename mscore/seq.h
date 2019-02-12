@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: seq.h 5660 2012-05-22 14:17:39Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -40,7 +39,7 @@ class Measure;
 class Fraction;
 class Driver;
 class Part;
-struct Channel;
+class Channel;
 class ScoreView;
 class MasterSynthesizer;
 class Segment;

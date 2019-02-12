@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: debugger.h 5383 2012-02-27 07:38:15Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -56,6 +55,7 @@
 #include "ui_spanner.h"
 #include "ui_system.h"
 #include "ui_timesig.h"
+#include "ui_bracket.h"
 
 #include "globals.h"
 #include "libmscore/element.h"
@@ -261,6 +261,7 @@ class ShowNoteWidget : public ShowElementBase {
       void dot1Clicked();
       void dot2Clicked();
       void dot3Clicked();
+      void dot4Clicked();
 
    signals:
       void scoreChanged();
@@ -281,6 +282,10 @@ class RestView : public ShowElementBase {
       Ui::Rest rb;
 
    private slots:
+      void dot1Clicked();
+      void dot2Clicked();
+      void dot3Clicked();
+      void dot4Clicked();
       void tupletClicked();
       void beamClicked();
 
@@ -782,6 +787,21 @@ class TimeSigView : public ShowElementBase {
       TimeSigView();
       virtual void setElement(Element*);
       };
+
+//---------------------------------------------------------
+//   BracketView
+//---------------------------------------------------------
+
+class BracketView : public ShowElementBase {
+      Q_OBJECT;
+
+      Ui::Bracket br;
+
+   public:
+      BracketView();
+      virtual void setElement(Element*);
+      };
+
 
 } // namespace Ms
 #endif

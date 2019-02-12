@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="note-input">
+  <Event objectName="note-entry-methods">MouseButtonRelease</Event>
+  <Event objectName="pad-note-128">MouseButtonRelease</Event>
+  <Event objectName="pad-note-64">MouseButtonRelease</Event>
+  <Event objectName="pad-note-32">MouseButtonRelease</Event>
+  <Event objectName="pad-note-16">MouseButtonRelease</Event>
+  <Event objectName="pad-note-8">MouseButtonRelease</Event>
+  <Event objectName="pad-note-4">MouseButtonRelease</Event>
+  <Event objectName="pad-note-2">MouseButtonRelease</Event>
+  <Event objectName="pad-note-1">MouseButtonRelease</Event>
+  <Event objectName="note-breve">MouseButtonRelease</Event>
+  <Event objectName="note-longa">MouseButtonRelease</Event>
+  <Event objectName="pad-dot">MouseButtonRelease</Event>
+  <Event objectName="pad-dotdot">MouseButtonRelease</Event>
+  <Event objectName="pad-dot3">MouseButtonRelease</Event>
+  <Event objectName="pad-dot4">MouseButtonRelease</Event>
+  <Event objectName="tie">MouseButtonRelease</Event>
+  <Event objectName="pad-rest">MouseButtonRelease</Event>
+  <Event objectName="flip">MouseButtonRelease</Event>
+  <Event objectName="sharp2">MouseButtonRelease</Event>
+  <Event objectName="sharp">MouseButtonRelease</Event>
+  <Event objectName="nat">MouseButtonRelease</Event>
+  <Event objectName="flat">MouseButtonRelease</Event>
+  <Event objectName="flat2">MouseButtonRelease</Event>
+  <Event objectName="voice">MouseButtonRelease</Event>
+  <Message>
+    <Text>Welcome to note input, where you will enter notes and rests into your score.
+    Click "Next" to learn more.</Text>
+    <Widget>entry-tools</Widget>
+    </Message>
+  <Message>
+    <Text>To enable note input mode, click the "Note input" icon or press the shortcut "N".</Text>
+    <Widget>note-entry-methods</Widget>
+    </Message>
+  <Message>
+    <Text>Select a duration by clicking one of these icons or pressing the shortcuts "1" - "9".
+    To include an augmentation dot, click the appropriate icon or press the shortcut ".".</Text>
+    <Widget>pad-note-128</Widget>
+    <Widget>pad-note-64</Widget>
+    <Widget>pad-note-32</Widget>
+    <Widget>pad-note-16</Widget>
+    <Widget>pad-note-8</Widget>
+    <Widget>pad-note-4</Widget>
+    <Widget>pad-note-2</Widget>
+    <Widget>pad-note-1</Widget>
+    <Widget>note-breve</Widget>
+    <Widget>note-longa</Widget>
+    <Widget>pad-dot</Widget>
+    <Widget>pad-dotdot</Widget>
+    <Widget>pad-dot3</Widget>
+    <Widget>pad-dot4</Widget>
+    </Message>
+  <Message>
+    <Text>To enter a note of the selected duration, type its letter name or click on the staff.
+    Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>To enter a rest of the selected duration, press the shortcut "0", or select this icon then click on the staff.</Text>
+    <Widget>pad-rest</Widget>
+    </Message>
+  <Message>
+    <Text>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
+    or click one of these icons.</Text>
+    <Widget>sharp2</Widget>
+    <Widget>sharp</Widget>
+    <Widget>nat</Widget>
+    <Widget>flat</Widget>
+    <Widget>flat2</Widget>
+    </Message>
+  <Message>
+    <Text>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>To extend a note by adding a tied note, select the duration to extend by, then press "+" or click this button.</Text>
+    <Widget>tie</Widget>
+    </Message>
+  <Message>
+    <Text>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add > Tuplets.</Text>
+    <Widget>menu-add</Widget>
+    <Widget>menu-tuplet</Widget>
+    </Message>
+  <Message>
+    <Text>To enter notes with different rhythms in the same measure, use multiple voices.
+    Each staff can have up to four voices.
+    The default is voice 1, and it should be used first for each staff.
+    To enter notes into a different voice, click one of these icons.</Text>
+    <Widget>voice</Widget>
+    </Message>
+  </Tour>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>294</width>
-    <height>205</height>
+    <width>215</width>
+    <height>154</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -76,44 +76,13 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="resetAutoscale">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Scale to frame size' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Size:</string>
         </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="QToolButton" name="resetLockAspectRatio">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Lock aspect ratio' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -121,9 +90,6 @@
        <widget class="QCheckBox" name="lockAspectRatio">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="accessibleName">
-         <string>Lock aspect ratio</string>
         </property>
         <property name="text">
          <string>Lock aspect ratio</string>
@@ -135,48 +101,15 @@
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Scale to frame size</string>
-        </property>
         <property name="text">
          <string>Scale to frame size</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1" colspan="2">
-       <widget class="Ms::SizeSelect" name="size" native="true"/>
-      </item>
-      <item row="2" column="3">
-       <widget class="QToolButton" name="resetSize">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
+       <widget class="Ms::SizeSelect" name="size" native="true">
         <property name="accessibleName">
-         <string>Reset 'Size' values</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QToolButton" name="resetSizeIsSpatium">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Size in staff space units' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+         <string>Size</string>
         </property>
        </widget>
       </item>
@@ -188,16 +121,22 @@
         <property name="toolTip">
          <string>Distance between two lines on a standard 5-line staff</string>
         </property>
-        <property name="whatsThis">
-         <string>Distance between two lines on a standard 5-line staff</string>
-        </property>
-        <property name="accessibleName">
-         <string>Size in staff space units</string>
-        </property>
         <property name="text">
          <string>Size in staff space units</string>
         </property>
        </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="Ms::ResetButton" name="resetAutoscale"/>
+      </item>
+      <item row="2" column="3">
+       <widget class="Ms::ResetButton" name="resetSize"/>
+      </item>
+      <item row="3" column="3">
+       <widget class="Ms::ResetButton" name="resetSizeIsSpatium"/>
+      </item>
+      <item row="4" column="3">
+       <widget class="Ms::ResetButton" name="resetLockAspectRatio"/>
       </item>
      </layout>
     </widget>
@@ -205,6 +144,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>Ms::SizeSelect</class>
    <extends>QWidget</extends>
@@ -215,9 +160,8 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>autoscale</tabstop>
-  <tabstop>resetAutoscale</tabstop>
+  <tabstop>sizeIsSpatium</tabstop>
   <tabstop>lockAspectRatio</tabstop>
-  <tabstop>resetLockAspectRatio</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

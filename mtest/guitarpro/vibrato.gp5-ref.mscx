@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -26,6 +26,7 @@
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
+          <name>stdNormal</name>
           </StaffType>
         </Staff>
       <trackName>Steel Guitar</trackName>
@@ -51,93 +52,129 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <linkedMain/>
         </VBox>
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
-          <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>3</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Dynamic>
-          <subtype>mf</subtype>
-          <velocity>80</velocity>
-          <lid>4</lid>
-          </Dynamic>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>5</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
-          </Tempo>
-        <Vibrato id="2">
-          <subtype>guitarVibrato</subtype>
-          <lid>18</lid>
-          </Vibrato>
-        <Chord>
-          <lid>6</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>7</lid>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
-            <fret>5</fret>
-            <string>2</string>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <KeySig>
+            <linkedMain/>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Tempo>
+            <tempo>2</tempo>
+            <linkedMain/>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Spanner type="Vibrato">
+            <Vibrato>
+              <subtype>guitarVibrato</subtype>
+              <linkedMain/>
+              </Vibrato>
+            <next>
+              <location>
+                <measures>2</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="2">
-        <Chord>
-          <lid>9</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>10</lid>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
-            <fret>5</fret>
-            <string>2</string>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="3">
-        <endSpanner id="2"/>
-        <Vibrato id="3">
-          <subtype>vibratoSawtooth</subtype>
-          <lid>19</lid>
-          </Vibrato>
-        <Chord>
-          <lid>12</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>13</lid>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
-            <fret>5</fret>
-            <string>2</string>
-            </Note>
-          </Chord>
+      <Measure>
+        <voice>
+          <Spanner type="Vibrato">
+            <prev>
+              <location>
+                <measures>-2</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Spanner type="Vibrato">
+            <Vibrato>
+              <subtype>vibratoSawtooth</subtype>
+              <linkedMain/>
+              </Vibrato>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>1/1</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Chord>
-          <lid>15</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>16</lid>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
-            <fret>5</fret>
-            <string>2</string>
-            </Note>
-          </Chord>
-        <endSpanner id="3"/>
+      <Measure>
+        <voice>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>5</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Spanner type="Vibrato">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          </voice>
         </Measure>
       </Staff>
     <Score>
@@ -156,6 +193,7 @@
         <Staff id="1">
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
+            <name>stdNormal</name>
             </StaffType>
           <bracket type="0" span="2" col="0"/>
           </Staff>
@@ -206,165 +244,268 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Steel Guitar</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>3</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
-          <Dynamic>
-            <subtype>mf</subtype>
-            <velocity>80</velocity>
-            <lid>4</lid>
-            </Dynamic>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>5</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Vibrato id="4">
-            <subtype>guitarVibrato</subtype>
-            <lid>18</lid>
-            </Vibrato>
-          <Chord>
-            <lid>6</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>7</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G8vb</concertClefType>
+              <transposingClefType>G8vb</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <KeySig>
+              <linked>
+                </linked>
+              <accidental>0</accidental>
+              </KeySig>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Dynamic>
+              <subtype>mf</subtype>
+              <velocity>80</velocity>
+              <linked>
+                </linked>
+              </Dynamic>
+            <Tempo>
+              <tempo>2</tempo>
+              <linked>
+                </linked>
+              <text><sym>metNoteQuarterUp</sym> = 120</text>
+              </Tempo>
+            <Spanner type="Vibrato">
+              <Vibrato>
+                <subtype>guitarVibrato</subtype>
+                <linked>
+                  </linked>
+                </Vibrato>
+              <next>
+                <location>
+                  <measures>2</measures>
+                  </location>
+                </next>
+              </Spanner>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                <fret>5</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="2">
-          <Chord>
-            <lid>9</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>10</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                <fret>5</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="3">
-          <endSpanner id="4"/>
-          <Vibrato id="5">
-            <subtype>vibratoSawtooth</subtype>
-            <lid>19</lid>
-            </Vibrato>
-          <Chord>
-            <lid>12</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>13</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Spanner type="Vibrato">
+              <prev>
+                <location>
+                  <measures>-2</measures>
+                  </location>
+                </prev>
+              </Spanner>
+            <Spanner type="Vibrato">
+              <Vibrato>
+                <subtype>vibratoSawtooth</subtype>
+                <linked>
+                  </linked>
+                </Vibrato>
+              <next>
+                <location>
+                  <measures>1</measures>
+                  <fractions>1/1</fractions>
+                  </location>
+                </next>
+              </Spanner>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                <fret>5</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="4">
-          <Chord>
-            <lid>15</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>16</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
-          <endSpanner id="5"/>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                <fret>5</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            <Spanner type="Vibrato">
+              <prev>
+                <location>
+                  <measures>-1</measures>
+                  <fractions>-1/1</fractions>
+                  </location>
+                </prev>
+              </Spanner>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Vibrato id="6">
-            <subtype>guitarVibrato</subtype>
-            <lid>18</lid>
-            </Vibrato>
-          <Chord>
-            <lid>6</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>7</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <KeySig>
+              <linked>
+                <indexDiff>2</indexDiff>
+                </linked>
+              <accidental>0</accidental>
+              </KeySig>
+            <Spanner type="Vibrato">
+              <Vibrato>
+                <subtype>guitarVibrato</subtype>
+                <linked>
+                  <indexDiff>5</indexDiff>
+                  </linked>
+                </Vibrato>
+              <next>
+                <location>
+                  <measures>2</measures>
+                  </location>
+                </next>
+              </Spanner>
+            <Chord>
+              <linked>
+                <indexDiff>5</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>5</indexDiff>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                <fret>5</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="2">
-          <Chord>
-            <lid>9</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>10</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                <fret>5</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="3">
-          <endSpanner id="6"/>
-          <Vibrato id="7">
-            <subtype>vibratoSawtooth</subtype>
-            <lid>19</lid>
-            </Vibrato>
-          <Chord>
-            <lid>12</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>13</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
+        <Measure>
+          <voice>
+            <Spanner type="Vibrato">
+              <prev>
+                <location>
+                  <measures>-2</measures>
+                  </location>
+                </prev>
+              </Spanner>
+            <Spanner type="Vibrato">
+              <Vibrato>
+                <subtype>vibratoSawtooth</subtype>
+                <linked>
+                  </linked>
+                </Vibrato>
+              <next>
+                <location>
+                  <measures>1</measures>
+                  <fractions>1/1</fractions>
+                  </location>
+                </next>
+              </Spanner>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                <fret>5</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
           </Measure>
-        <Measure number="4">
-          <Chord>
-            <lid>15</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>16</lid>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>5</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
-          <endSpanner id="7"/>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>60</pitch>
+                <tpc>14</tpc>
+                <fret>5</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            <Spanner type="Vibrato">
+              <prev>
+                <location>
+                  <measures>-1</measures>
+                  <fractions>-1/1</fractions>
+                  </location>
+                </prev>
+              </Spanner>
+            </voice>
           </Measure>
         </Staff>
       <name>Steel Guitar</name>

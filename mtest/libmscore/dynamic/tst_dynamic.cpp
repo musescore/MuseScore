@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -51,22 +50,28 @@ void TestDynamic::test1()
       Dynamic* dynamic = new Dynamic(score);
       dynamic->setDynamicType(Dynamic::Type(1));
 
+      Dynamic* d;
+
       dynamic->setPlacement(Placement::ABOVE);
-      Dynamic* d = static_cast<Dynamic*>(writeReadElement(dynamic));
+      dynamic->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+      d = toDynamic(writeReadElement(dynamic));
       QCOMPARE(d->placement(), Placement::ABOVE);
       delete d;
 
       dynamic->setPlacement(Placement::BELOW);
+      dynamic->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
       QCOMPARE(d->placement(), Placement::BELOW);
       delete d;
 
       dynamic->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
+      dynamic->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
       QCOMPARE(d->placement(), Placement::ABOVE);
       delete d;
 
       dynamic->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
+      dynamic->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
       d = static_cast<Dynamic*>(writeReadElement(dynamic));
       QCOMPARE(d->placement(), Placement::BELOW);
       delete d;

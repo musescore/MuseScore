@@ -1,7 +1,6 @@
 #=============================================================================
 #  MuseScore
 #  Music Composition & Notation
-#  $Id:$
 #
 #  Copyright (C) 2011 Werner Schweer
 #
@@ -19,4 +18,4 @@ include_directories(
       ${SNDFILE_INCDIR}
       )
 
-target_link_libraries(tst_sfzglobal zerberus synthesizer audiofile ${SNDFILE_LIB})
+target_link_libraries(tst_sfzglobal zerberus synthesizer audiofile ${SNDFILE_LIB} testutils)

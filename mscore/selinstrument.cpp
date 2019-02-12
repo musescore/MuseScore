@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: editstaff.cpp 3629 2010-10-26 10:40:47Z wschweer $
 //
 //  Copyright (C) 2010 Werner Schweer and others
 //
@@ -42,7 +41,7 @@ SelectInstrument::SelectInstrument(const Instrument* instrument, QWidget* parent
       currentInstrument->setText(instrument->trackName());
       buildTemplateList();
       buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-      connect(instrumentList, SIGNAL(clicked(const QModelIndex &)), SLOT(expandOrCollapse(const QModelIndex &)));
+      instrumentSearch->setFilterableView(instrumentList);
       MuseScore::restoreGeometry(this);
       }
 
@@ -53,7 +52,7 @@ SelectInstrument::SelectInstrument(const Instrument* instrument, QWidget* parent
 void SelectInstrument::buildTemplateList()
       {
       // clear search if instrument list is updated
-      search->clear();
+      instrumentSearch->clear();
 
       populateInstrumentList(instrumentList);
       populateGenreCombo(instrumentGenreFilter);
@@ -110,12 +109,16 @@ const InstrumentTemplate* SelectInstrument::instrTemplate() const
 //   on_search_textChanged
 //---------------------------------------------------------
 
-void SelectInstrument::on_search_textChanged(const QString &searchPhrase)
+void SelectInstrument::on_search_textChanged(const QString&)
       {
-      instrumentGenreFilter->blockSignals(true);
-      instrumentGenreFilter->setCurrentIndex(0);
-      instrumentGenreFilter->blockSignals(false);
-      filterInstruments(instrumentList, searchPhrase);
+      // searching is done in Ms::SearchBox so here we just reset the
+      // genre dropdown to ensure that the search includes all genres
+      const int idxAllGenres = 0;
+      if (instrumentGenreFilter->currentIndex() != idxAllGenres) {
+            instrumentGenreFilter->blockSignals(true);
+            instrumentGenreFilter->setCurrentIndex(idxAllGenres);
+            instrumentGenreFilter->blockSignals(false);
+            }
       }
 
 
@@ -135,9 +138,9 @@ void SelectInstrument::on_instrumentGenreFilter_currentIndexChanged(int index)
 //   filterInstrumentsByGenre
 //---------------------------------------------------------
 
-void SelectInstrument::filterInstrumentsByGenre(QTreeWidget *instrumentList, QString genre)
+void SelectInstrument::filterInstrumentsByGenre(QTreeWidget *instrList, QString genre)
       {
-      QTreeWidgetItemIterator iList(instrumentList);
+      QTreeWidgetItemIterator iList(instrList);
       while (*iList) {
             (*iList)->setHidden(true);
             InstrumentTemplateListItem* itli = static_cast<InstrumentTemplateListItem*>(*iList);

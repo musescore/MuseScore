@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2012 Werner Schweer
 //
@@ -56,6 +55,7 @@ class TestMeasure : public QObject, public MTest
       void spanner_D();
       void deleteLast();
 //      void minWidth();
+      void undoDelInitialVBox_269919();
 
       void gap();
       void checkMeasure();
@@ -459,6 +459,42 @@ void TestMeasure::checkMeasure()
       delete score;
       }
 
+//---------------------------------------------------------
+///   undoDelInitialVBox_269919
+///    1. Delete first VBox
+///    2. Change duration of first chordrest
+///    3. Undo to restore first chordrest
+///    4. Undo to restore initial VBox results in assert failure crash
+//---------------------------------------------------------
+
+void TestMeasure::undoDelInitialVBox_269919()
+      {
+      MasterScore* score = readScore(DIR + "undoDelInitialVBox_269919.mscx");
+
+      // 1. delete initial VBox
+      score->startCmd();
+      MeasureBase* initialVBox = score->measure(0);
+      score->select(initialVBox);
+      score->cmdDeleteSelection();
+      score->endCmd();
+
+      // 2. change duration of first chordrest
+      score->startCmd();
+      Measure* m = score->firstMeasure();
+      ChordRest* cr = m->findChordRest(0, 0);
+      Fraction quarter(4, 1);
+      score->changeCRlen(cr, quarter);
+      score->endCmd();
+
+      // 3. Undo to restore first chordrest
+      score->undoRedo(true, 0);
+
+      // 4. Undo to restore initial VBox resulted in assert failure crash
+      score->undoRedo(true, 0);
+
+      QVERIFY(saveCompareScore(score, "undoDelInitialVBox_269919.mscx", DIR + "undoDelInitialVBox_269919-ref.mscx"));
+      delete score;
+      }
 
 
 QTEST_MAIN(TestMeasure)

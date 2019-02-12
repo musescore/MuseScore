@@ -28,6 +28,7 @@ enum class BracketType : signed char;
 
 class Bracket final : public Element {
       BracketItem* _bi;
+      qreal ay1;
       qreal h2;
 
       int _firstStaff;
@@ -53,13 +54,13 @@ class Bracket final : public Element {
       BracketType bracketType() const           { return _bi->bracketType(); }
 
       int firstStaff() const                    { return _firstStaff; }
-      void setFirstStaff(int val)               { _firstStaff = val;  }
-
       int lastStaff() const                     { return _lastStaff; }
-      void setLastStaff(int val)                { _lastStaff = val;  }
+      void setStaffSpan(int a, int b);
 
+      SymId braceSymbol() const                 { return _braceSymbol; }
       int column() const                        { return _bi->column();  }
       int span() const                          { return _bi->bracketSpan();    }
+      qreal magx() const                        { return _magx;                 }
 
       System* system() const                    { return (System*)parent(); }
 
@@ -88,6 +89,10 @@ class Bracket final : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
+
+      void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
+      using ScoreElement::undoChangeProperty;
+
       virtual void setSelected(bool f) override;
       };
 

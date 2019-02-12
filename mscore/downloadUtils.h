@@ -24,6 +24,8 @@ class DownloadUtils : public QObject
       QString _target;
       QString _localFile;
 
+      QProgressDialog* progressDialog = nullptr;
+
    public:
       explicit DownloadUtils(QWidget *parent=0);
 
@@ -36,7 +38,7 @@ class DownloadUtils : public QObject
       void done();
 
    public slots:
-      void download();
+      void download(bool showProgress = false);
       void downloadFinished(QNetworkReply* data);
       void downloadProgress(qint64 received, qint64 total);
       };

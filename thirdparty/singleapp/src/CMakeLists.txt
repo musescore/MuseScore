@@ -1,7 +1,6 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2009 by Werner Schweer and others
 #
@@ -20,21 +19,41 @@
 
 include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 
+if (NOT MSVC)
+   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+else (NOT MSVC)
+   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (NOT MSVC)
+
 add_library (
   qtsingleapp STATIC
-  ${PROJECT_BINARY_DIR}/all.h
+  ${_all_h_file}
   ${PCH}
   qtsingleapplication.cpp
   qtlocalpeer.cpp
   )
 
-set_target_properties (
-  qtsingleapp
-  PROPERTIES
-  COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-  )
+if (NOT MSVC)
+   set_target_properties (
+      qtsingleapp
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
+      )
+else (NOT MSVC)
+   set_target_properties (
+      qtsingleapp
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (NOT MSVC)   
 
 xcode_pch(qtsingleapp all)
 
-ADD_DEPENDENCIES(qtsingleapp mops1)
-ADD_DEPENDENCIES(qtsingleapp mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( qtsingleapp )
+
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(qtsingleapp mops1)
+   ADD_DEPENDENCIES(qtsingleapp mops2)
+endif (NOT MSVC)   

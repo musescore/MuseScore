@@ -178,7 +178,7 @@
            <item>
             <widget class="QRadioButton" name="noNumber">
              <property name="text">
-              <string>Nothing</string>
+              <string>None</string>
              </property>
             </widget>
            </item>
@@ -206,7 +206,7 @@
            <item>
             <widget class="QRadioButton" name="autoBracket">
              <property name="text">
-              <string>Auto bracket</string>
+              <string>Auto</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -223,7 +223,7 @@
            <item>
             <widget class="QRadioButton" name="noBracket">
              <property name="text">
-              <string>Nothing</string>
+              <string>None</string>
              </property>
             </widget>
            </item>

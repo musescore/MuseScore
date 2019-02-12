@@ -31,7 +31,7 @@ class StaffTypeList : public std::map<int, StaffType> {
       StaffTypeList() {}
       StaffType& staffType(int tick);
       const StaffType& staffType(int tick) const;
-      StaffType* setStaffType(int tick, const StaffType*);
+      StaffType* setStaffType(int tick, const StaffType&);
       void read(XmlReader&, Score*);
       };
 

@@ -571,6 +571,8 @@ Element* Score::nextElement()
                   case ElementType::TRILL_SEGMENT:
                   case ElementType::VIBRATO_SEGMENT:
                   case ElementType::VOLTA_SEGMENT:
+                  case ElementType::LET_RING_SEGMENT:
+                  case ElementType::PALM_MUTE_SEGMENT:
                   case ElementType::PEDAL_SEGMENT: {
                         SpannerSegment* s = toSpannerSegment(e);
                         Spanner* sp = s->spanner();

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id: palettebox.cpp 5576 2012-04-24 19:15:22Z wschweer $
 //
 //  Copyright (C) 2011-2016 Werner Schweer and others
 //
@@ -45,6 +44,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       hl->setContentsMargins(5,0,5,0);
 
       workspaceList = new QComboBox;
+      workspaceList->setObjectName("workspace-list");
       hl->addWidget(workspaceList);
       addWorkspaceButton = new QToolButton;
 
@@ -119,10 +119,7 @@ void PaletteBox::filterPalettes(const QString& text)
             bool f = p->filter(text);
             b->setVisible(!f);
             if (b->isVisible()) {
-                 if (text.isEmpty())
-                      b->showPalette(false);
-                 else
-                      b->showPalette(true);
+                 b->showPalette(!text.isEmpty());
                  }
             else
                  b->showPalette(false);
@@ -168,6 +165,17 @@ void PaletteBox::updateWorkspaces()
             }
       if (curIdx != -1)
             workspaceList->setCurrentIndex(curIdx);
+      }
+
+//---------------------------------------------------------
+//   selectWorkspace
+//---------------------------------------------------------
+
+void PaletteBox::selectWorkspace(QString path)
+      {
+      int idx = workspaceList->findData(path);
+      workspaceList->setCurrentIndex(idx);
+      workspaceSelected(idx);
       }
 
 //---------------------------------------------------------
@@ -272,7 +280,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                   QString path = mscore->getPaletteFilename(true);
                   if (!path.isEmpty()) {
                         QFileInfo fi(path);
-                        Palette* palette = newPalette(fi.completeBaseName(), slot);
+                        palette = newPalette(fi.completeBaseName(), slot);
                         palette->read(path);
                         }
                   }
@@ -280,7 +288,7 @@ void PaletteBox::paletteCmd(PaletteCommand cmd, int slot)
                   break;
 
             case PaletteCommand::NEW:
-                  palette = newPalette(tr("new Palette"), slot);
+                  palette = newPalette(tr("New Palette"), slot);
                   item   = vbox->itemAt(slot);
                   b = static_cast<PaletteBoxButton*>(item->widget());
                   // fall through

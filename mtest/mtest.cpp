@@ -22,6 +22,7 @@ const char* tests[] = {
 #if 1
       "libmscore/element/tst_element",
       "libmscore/note/tst_note",
+      "libmscore/readwriteundoreset/tst_readwriteundoreset",
       "libmscore/keysig/tst_keysig",
       "libmscore/barline/tst_barline",
       "libmscore/clef/tst_clef",
@@ -38,6 +39,7 @@ const char* tests[] = {
       "libmscore/measure/tst_measure",
       "libmscore/beam/tst_beam",
       "libmscore/layout/tst_benchmark",
+      "libmscore/layout_elements/tst_layout_elements",
       "libmscore/instrumentchange/tst_instrumentchange",
       "libmscore/join/tst_join",
       "libmscore/transpose/tst_transpose",
@@ -54,6 +56,7 @@ const char* tests[] = {
       "importmidi/tst_importmidi",
       "libmscore/selectionrangedelete/tst_selectionrangedelete",
       "libmscore/parts/tst_parts",
+      "testscript/tst_runscripts",
 #endif
 #if 0
       "libmscore/spanners/tst_spanners",              // FAIL
@@ -120,6 +123,8 @@ static void scanDir(QDir d)
 
 int main(int argc, char* argv[])
       {
+      Q_UNUSED(argc);
+      Q_UNUSED(argv);
 #if 0
       logFile.setFileName("mtest.log");
       if (!logFile.open(QIODevice::WriteOnly)) {

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -24,6 +23,7 @@
 #include "ui_prefsdialog.h"
 #include "preferences.h"
 #include "abstractdialog.h"
+#include "preferenceslistwidget.h"
 
 namespace Ms {
 
@@ -39,6 +39,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       QMap<QString, Shortcut*> localShortcuts;
       bool shortcutsChanged;
       QButtonGroup* recordButtons;
+      PreferencesListWidget* advancedWidget;
 
       virtual void hideEvent(QHideEvent*);
       void apply();
@@ -74,8 +75,12 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void selectTemplatesDirectory();
       void selectPluginsDirectory();
       void selectImagesDirectory();
+      void selectExtensionsDirectory();
       void printShortcutsClicked();
       void filterShortcutsTextChanged(const QString &);
+      void filterAdvancedPreferences(const QString&);
+      void resetAdvancedPreferenceToDefault();
+      void restartAudioEngine();
 
       void changeSoundfontPaths();
       void updateTranslationClicked();

@@ -27,18 +27,21 @@ class ScorePreview : public QWidget, public Ui::ScorePreview
       Q_OBJECT
 
       ScoreInfo scoreInfo;
+      QString messageNothingToShow;
 
       virtual void mouseDoubleClickEvent(QMouseEvent*) override { emit doubleClicked(scoreInfo.filePath()); }
 
    public slots:
       void setScore(const QString&);
       void setScore(const ScoreInfo&);
+      void unsetScore();
 
    signals:
       void doubleClicked(QString);
 
    public:
       ScorePreview(QWidget* parent = 0);
+      void displayInfo(bool show);
       };
 }
 

@@ -18,6 +18,14 @@
 
 namespace Ms {
 
+//---------------------------------------------------------
+//   markerStyle
+//---------------------------------------------------------
+
+static const ElementStyle markerStyle {
+      { Sid::repeatLeftPlacement, Pid::PLACEMENT },
+      };
+
 //must be in sync with Marker::Type enum
 const MarkerTypeItem markerTypeTable[] = {
       { Marker::Type::SEGNO   , QT_TRANSLATE_NOOP("markerType", "Segno")          },
@@ -40,20 +48,15 @@ int markerTypeTableSize()
 //---------------------------------------------------------
 
 Marker::Marker(Score* s)
-   : TextBase(s)
+   : Marker(s, Tid::REPEAT_LEFT)
       {
-      initSubStyle(SubStyleId::REPEAT_LEFT);
-      _markerType = Type::FINE;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
-      setLayoutToParentWidth(true);
       }
 
-Marker::Marker(SubStyleId ssid, Score* s)
-   : TextBase(s)
+Marker::Marker(Score* s, Tid tid)
+   : TextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
       {
-      initSubStyle(ssid);
+      initElementStyle(&markerStyle);
       _markerType = Type::FINE;
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       setLayoutToParentWidth(true);
       }
 
@@ -93,13 +96,13 @@ void Marker::setMarkerType(Type t)
 
             case Type::FINE:
                   txt = "Fine";
-//TODO-ws                  initSubStyle(SubStyleId::REPEAT_RIGHT);
+                  initTid(Tid::REPEAT_RIGHT, true);
                   setLabel("fine");
                   break;
 
             case Type::TOCODA:
                   txt = "To Coda";
-//TODO-ws                  initSubStyle(SubStyle::REPEAT_RIGHT);
+                  initTid(Tid::REPEAT_RIGHT, true);
                   setLabel("coda");
                   break;
 
@@ -114,6 +117,10 @@ void Marker::setMarkerType(Type t)
             setXmlText(txt);
       }
 
+//---------------------------------------------------------
+//   markerTypeUserName
+//---------------------------------------------------------
+
 QString Marker::markerTypeUserName() const
       {
       return qApp->translate("markerType", markerTypeTable[static_cast<int>(_markerType)].name.toUtf8().constData());
@@ -126,32 +133,7 @@ QString Marker::markerTypeUserName() const
 void Marker::styleChanged()
       {
       setMarkerType(_markerType);
-      }
-
-//---------------------------------------------------------
-//   adjustReadPos
-//---------------------------------------------------------
-
-void Marker::adjustReadPos()
-      {
-      if (!readPos().isNull()) {
-
-            QPointF uo;
-/*
-            if (score()->mscVersion() <= 114) {
-                  // rebase from Measure to Segment
-                  uo = userOff();
-                  uo.rx() -= segment()->pos().x();
-                  // 1.2 is always HCENTER aligned
-                  if ((textStyle().align() & Align::HMASK) == 0)    // Align::LEFT
-                        uo.rx() -= bbox().width() * .5;
-                  }
-            else
-*/
-                  uo = readPos() - ipos();
-            setUserOff(uo);
-            setReadPos(QPointF());
-            }
+      TextBase::styleChanged();
       }
 
 //---------------------------------------------------------
@@ -184,41 +166,15 @@ Marker::Type Marker::markerType(const QString& s) const
 
 void Marker::layout()
       {
-      setPos(QPointF(0.0, score()->styleP(Sid::markerPosAbove)));
-      TextBase::layout1();
+      TextBase::layout();
 
       // although normally laid out to parent (measure) width,
       // force to center over barline if left-aligned
+
       if (layoutToParentWidth() && !(align() & (Align::RIGHT | Align::HCENTER)))
             rxpos() -= width() * 0.5;
 
-      if (parent() && autoplace()) {
-            setUserOff(QPointF());
-            int si            = staffIdx();
-            qreal minDistance = 0.5 * spatium(); // score()->styleP(Sid::tempoMinDistance);
-            Shape& s1         = measure()->staffShape(si);
-            Shape s2          = shape().translated(pos());
-            if (placeAbove()) {
-                  qreal d = s2.minVerticalDistance(s1);
-                  if (d > -minDistance) {
-                        qreal yd       = -d - minDistance;
-                        rUserYoffset() = yd;
-                        s2.translate(QPointF(0.0, yd));
-                        }
-                  }
-            else {
-                  qreal d = s1.minVerticalDistance(s2);
-                  if (d > -minDistance) {
-                        qreal yd       = d + minDistance;
-                        rUserYoffset() = yd;
-                        s2.translate(QPointF(0.0, yd));
-                        }
-                  }
-            s1.add(s2);
-            }
-      else {
-            adjustReadPos();
-            }
+      autoplaceMeasureElement(0.5 * spatium());
       }
 
 //---------------------------------------------------------
@@ -248,7 +204,7 @@ void Marker::read(XmlReader& e)
 
 void Marker::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       TextBase::writeProperties(xml);
       xml.tag("label", _label);
       xml.etag();

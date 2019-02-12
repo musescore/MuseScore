@@ -27,16 +27,29 @@ namespace Ms {
 //
 
 //---------------------------------------------------------
+//   fretStyle
+//---------------------------------------------------------
+
+static const ElementStyle fretStyle {
+      { Sid::fretNumPos,                         Pid::FRET_NUM_POS            },
+      { Sid::fretMag,                            Pid::MAG                     },
+      { Sid::fretPlacement,                      Pid::PLACEMENT               },
+      { Sid::fretStrings,                        Pid::FRET_STRINGS            },
+      { Sid::fretFrets,                          Pid::FRET_FRETS              },
+      { Sid::fretOffset,                         Pid::FRET_OFFSET             },
+      { Sid::fretBarre,                          Pid::FRET_BARRE              },
+      };
+
+//---------------------------------------------------------
 //   FretDiagram
 //---------------------------------------------------------
 
 FretDiagram::FretDiagram(Score* score)
-   : Element(score)
+   : Element(score, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SELECTABLE);
       font.setFamily("FreeSans");
       font.setPointSize(4.0 * mag());
-      initSubStyle(SubStyleId::FRET);
+      initElementStyle(&fretStyle);
       }
 
 FretDiagram::FretDiagram(const FretDiagram& f)
@@ -95,7 +108,7 @@ FretDiagram* FretDiagram::fromString(Score* score, const QString &s)
       int barreString = -1;
       for (int i = 0; i < s.size(); i++) {
             QChar c = s.at(i);
-            if (c == 'X' or c == 'O')
+            if (c == 'X' || c == 'O')
                   fd->setMarker(i, c.unicode());
             else if (c == '-' && barreString == -1) {
                   fd->setBarre(1);
@@ -111,7 +124,7 @@ FretDiagram* FretDiagram::fromString(Score* score, const QString &s)
                   }
             }
       if (offset > 0) {
-            fd->setOffset(offset);
+            fd->setFretOffset(offset);
             for (int i = 0; i < fd->strings(); i++)
                   if (fd->dot(i))
                         fd->setDot(i, fd->dot(i) - offset);
@@ -160,7 +173,7 @@ QLineF FretDiagram::dragAnchor() const
       QPointF p1(xp, yp);
       return QLineF(p1, canvasPos());
 #if 0 // TODOxx
-      if (parent()->type() == ElementType::SEGMENT) {
+      if (parent()->isSegment()) {
             Segment* s     = toSegment(parent());
             Measure* m     = s->measure();
             System* system = m->system();
@@ -186,15 +199,6 @@ QLineF FretDiagram::dragAnchor() const
             }
       return QLineF(parent()->pagePos(), abbox().topLeft());
 #endif
-      }
-
-//---------------------------------------------------------
-//   setOffset
-//---------------------------------------------------------
-
-void FretDiagram::setOffset(int offset)
-      {
-      _fretOffset = offset;
       }
 
 //---------------------------------------------------------
@@ -318,7 +322,6 @@ void FretDiagram::draw(QPainter* painter) const
                   }
             if (string != -1) {
                   qreal x1   = stringDist * string;
-                  qreal x2   = stringDist * (_strings-1);
                   qreal y    = fretDist * (_barre-1) + fretDist * .5;
                   pen.setWidthF((dotd + lw2 * .5) * score()->styleD(Sid::barreLineWidth));
                   pen.setCapStyle(Qt::RoundCap);
@@ -328,7 +331,6 @@ void FretDiagram::draw(QPainter* painter) const
             }
       if (_fretOffset > 0) {
             qreal fretNumMag = score()->styleD(Sid::fretNumMag);
-            QFont scaledFont(font);
             scaledFont.setPointSizeF(font.pointSize() * fretNumMag * _userMag * score()->styleD(Sid::fretMag) * MScore::pixelRatio);
             painter->setFont(scaledFont);
             if (_numPos == 0) {
@@ -374,19 +376,34 @@ void FretDiagram::layout()
       bbox().setRect(x, y, w, h);
 
       setPos(-_spatium, -h - styleP(Sid::fretY) + _spatium );
-      if (!autoplace())
-            adjustReadPos();
-
-      if (_harmony)
-            _harmony->layout();
 
       if (!parent() || !parent()->isSegment()) {
             setPos(QPointF());
             return;
             }
-      autoplaceSegmentElement(styleP(Sid::fretMinDistance));
+      qreal minDistance = styleP(Sid::fretMinDistance);
+      autoplaceSegmentElement(minDistance);
       if (_harmony)
             _harmony->layout();
+      if (_harmony && _harmony->visible() && _harmony->autoplace() && _harmony->parent()) {
+            Segment* s = toSegment(parent());
+            Measure* m = s->measure();
+            int si     = staffIdx();
+
+            SysStaff* ss = m->system()->staff(si);
+            QRectF r     = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos());
+
+            SkylineLine sk(false);
+            sk.add(r.x(), r.bottom(), r.width());
+            qreal d = sk.minDistance(ss->skyline().north());
+            if (d > -minDistance) {
+                  qreal yd = d + minDistance;
+                  yd *= -1.0;
+                  _harmony->rypos() += yd;
+                  r.translate(QPointF(0.0, yd));
+                  }
+            ss->skyline().add(r);
+            }
       }
 
 //---------------------------------------------------------
@@ -397,7 +414,7 @@ void FretDiagram::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag("FretDiagram");
+      xml.stag(this);
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::FRET_STRINGS);
@@ -431,29 +448,29 @@ void FretDiagram::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "strings")
-                  _strings = e.readInt();
+                  readProperty(e, Pid::FRET_STRINGS);
             else if (tag == "frets")
-                  _frets = e.readInt();
+                  readProperty(e, Pid::FRET_FRETS);
             else if (tag == "fretOffset")
-                  _fretOffset = e.readInt();
+                  readProperty(e, Pid::FRET_OFFSET);
             else if (tag == "string") {
                   int no = e.intAttribute("no");
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "dot")
+                        const QStringRef& t(e.name());
+                        if (t == "dot")
                               setDot(no, e.readInt());
-                        else if (tag == "marker")
+                        else if (t == "marker")
                               setMarker(no, e.readInt());
-                        else if (tag == "fingering")
+                        else if (t == "fingering")
                               setFingering(no, e.readInt());
                         else
                               e.unknown();
                         }
                   }
             else if (tag == "barre")
-                  setBarre(e.readInt());
+                  readProperty(e, Pid::FRET_BARRE);
             else if (tag == "mag")
-                  _userMag = e.readDouble(0.1, 10.0);
+                  readProperty(e, Pid::MAG);
             else if (tag == "Harmony") {
                   Harmony* h = new Harmony(score());
                   h->read(e);
@@ -476,7 +493,7 @@ void FretDiagram::setDot(int string, int fret)
             }
       if (0 <= string && string < _strings) {
             _dots[string] = fret;
-            setMarker(string, 0);
+            setMarker(string, 0);   // TODO: does not work with undo/redo; should be called explicit
             }
       }
 
@@ -540,7 +557,7 @@ void FretDiagram::remove(Element* e)
 
 bool FretDiagram::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::HARMONY;
+      return data.dropElement->type() == ElementType::HARMONY;
       }
 
 //---------------------------------------------------------
@@ -549,7 +566,7 @@ bool FretDiagram::acceptDrop(EditData& data) const
 
 Element* FretDiagram::drop(EditData& data)
       {
-      Element* e = data.element;
+      Element* e = data.dropElement;
       if (e->isHarmony()) {
             Harmony* h = toHarmony(e);
             h->setParent(parent());
@@ -583,21 +600,24 @@ void FretDiagram::scanElements(void* data, void (*func)(void*, Element*), bool a
 void FretDiagram::writeMusicXML(XmlWriter& xml) const
       {
       qDebug("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
-      int _strings = strings();
+      int strings_ = strings();
       xml.stag("frame");
-      xml.tag("frame-strings", _strings);
+      xml.tag("frame-strings", strings_);
       xml.tag("frame-frets", frets());
       QString strDots = "'";
       QString strMarker = "'";
       QString strFingering = "'";
-      for (int i = 0; i < _strings; ++i) {
+      for (int i = 0; i < strings_; ++i) {
             // TODO print frame note
-            if (_dots) strDots += QString("%1'").arg(static_cast<int>(_dots[i]));
-            if (_marker) strMarker += QString("%1'").arg(static_cast<int>(_marker[i]));
-            if (_fingering) strFingering += QString("%1'").arg(static_cast<int>(_fingering[i]));
+            if (_dots)
+                  strDots += QString("%1'").arg(static_cast<int>(_dots[i]));
+            if (_marker)
+                  strMarker += QString("%1'").arg(static_cast<int>(_marker[i]));
+            if (_fingering)
+                  strFingering += QString("%1'").arg(static_cast<int>(_fingering[i]));
             if (_marker[i] != 88) {
                   xml.stag("frame-note");
-                  xml.tag("string", _strings - i);
+                  xml.tag("string", strings_ - i);
                   if (_dots)
                         xml.tag("fret", _dots[i]);
                   else
@@ -660,7 +680,7 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
                   setBarre(v.toInt());
                   break;
             case Pid::FRET_OFFSET:
-                  setOffset(v.toInt());
+                  setFretOffset(v.toInt());
                   break;
             case Pid::FRET_NUM_POS:
                   _numPos = v.toInt();
@@ -668,7 +688,7 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
             default:
                   return Element::setProperty(propertyId, v);
             }
-      score()->setLayoutAll();
+      triggerLayout();
       return true;
       }
 
@@ -676,17 +696,16 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant FretDiagram::propertyDefault(Pid propertyId) const
+QVariant FretDiagram::propertyDefault(Pid pid) const
       {
-      switch (propertyId) {
-            case Pid::MAG:            return 1.0;
-            case Pid::FRET_STRINGS:   return DEFAULT_STRINGS;
-            case Pid::FRET_FRETS:     return DEFAULT_FRETS;
-            case Pid::FRET_BARRE:     return 0;
-            case Pid::FRET_OFFSET:    return 0;
-            default:
-                  return Element::propertyDefault(propertyId);
+      for (const StyledProperty& p : *styledProperties()) {
+            if (p.pid == pid) {
+                  if (propertyType(pid) == P_TYPE::SP_REAL)
+                        return score()->styleP(p.sid);
+                  return score()->styleV(p.sid);
+                  }
             }
+      return Element::propertyDefault(pid);
       }
 
 }

@@ -45,7 +45,6 @@
 #include "score.h"
 #include "keysig.h"
 #include "harmony.h"
-#include "cursor.h"
 #include "stafftext.h"
 #include "mscoreview.h"
 #include "plugins.h"
@@ -57,6 +56,7 @@
 #include "excerpt.h"
 #include "spatium.h"
 #include "barline.h"
+#include "skyline.h"
 
 namespace Ms {
 
@@ -65,10 +65,12 @@ bool MScore::testMode = false;
 
 // #ifndef NDEBUG
 bool MScore::showSegmentShapes   = false;
+bool MScore::showSkylines        = false;
 bool MScore::showMeasureShapes   = false;
 bool MScore::noHorizontalStretch = false;
 bool MScore::noVerticalStretch   = false;
 bool MScore::showBoundingRect    = false;
+bool MScore::showSystemBoundingRect    = false;
 bool MScore::showCorruptedMeasures = true;
 bool MScore::useFallbackFont       = true;
 bool MScore::autoplaceSlurs        = true;
@@ -115,10 +117,6 @@ bool    MScore::svgPrinting = false;
 double  MScore::pixelRatio  = 0.8;        // DPI / logicalDPI
 
 MPaintDevice* MScore::_paintDevice;
-
-#ifdef SCRIPT_INTERFACE
-QQmlEngine* MScore::_qml = 0;
-#endif
 
 Sequencer* MScore::seq = 0;
 MuseScoreCore* MuseScoreCore::mscoreCore;
@@ -186,7 +184,12 @@ const char* toString(Direction val)
             case Direction::UP:   return "up";
             case Direction::DOWN: return "down";
             }
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       __builtin_unreachable();
+#else
+      // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
+      __assume(0);
+#endif
       }
 
 //---------------------------------------------------------
@@ -196,9 +199,9 @@ const char* toString(Direction val)
 void fillComboBoxDirection(QComboBox* cb)
       {
       cb->clear();
-      cb->addItem(qApp->translate("Direction", "auto"), QVariant::fromValue<Direction>(Direction::AUTO));
-      cb->addItem(qApp->translate("Direction", "up"),   QVariant::fromValue<Direction>(Direction::UP));
-      cb->addItem(qApp->translate("Direction", "down"), QVariant::fromValue<Direction>(Direction::DOWN));
+      cb->addItem(qApp->translate("Direction", "Auto"), QVariant::fromValue<Direction>(Direction::AUTO));
+      cb->addItem(qApp->translate("Direction", "Up"),   QVariant::fromValue<Direction>(Direction::UP));
+      cb->addItem(qApp->translate("Direction", "Down"), QVariant::fromValue<Direction>(Direction::DOWN));
       }
 
 //---------------------------------------------------------
@@ -250,6 +253,9 @@ void MScore::init()
 //      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
 #endif
       qRegisterMetaType<Fraction>("Fraction");
+
+      if (!QMetaType::registerConverter<Fraction, QString>(&Fraction::toString))
+          qFatal("registerConverter Fraction::toString failed");
 
 #ifdef Q_OS_WIN
       QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
@@ -339,10 +345,10 @@ void MScore::init()
             };
 
       for (unsigned i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {
-            QString s(fonts[i]);
-            if (-1 == QFontDatabase::addApplicationFont(s)) {
+            QString str(fonts[i]);
+            if (-1 == QFontDatabase::addApplicationFont(str)) {
                   if (!MScore::testMode)
-                        qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
+                        qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(str));
                   if (!MScore::debugMode && !MScore::testMode)
                         exit(-1);
                   }
@@ -414,88 +420,6 @@ const char* MScore::errorGroup()
       return "";
       }
 
-#ifdef SCRIPT_INTERFACE
-//---------------------------------------------------------
-//   qml
-//---------------------------------------------------------
-
-QQmlEngine* MScore::qml()
-      {
-      if (_qml == 0) {
-            //-----------some qt bindings
-            _qml = new QQmlEngine;
-
-#ifdef Q_OS_WIN
-            QStringList importPaths;
-            QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-            importPaths.append(dir.absolutePath());
-            _qml->setImportPathList(importPaths);
-#endif
-#ifdef Q_OS_MAC
-            QStringList importPaths;
-            QDir dir(mscoreGlobalShare + QString("/qml"));
-            importPaths.append(dir.absolutePath());
-            _qml->setImportPathList(importPaths);
-#endif
-            const char* enumErr = "You can't create an enumeration";
-//TODO-ws            qmlRegisterType<MsProcess>  ("MuseScore", 3, 0, "QProcess");
-            qmlRegisterType<FileIO, 1>  ("FileIO",    3, 0, "FileIO");
-            //-----------mscore bindings
-            qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
-//            qmlRegisterUncreatableType<Direction>("MuseScore", 3, 0, "Direction", QObject::tr(enumErr));
-
-            qmlRegisterType<MScore>     ("MuseScore", 3, 0, "MScore");
-//TODO-ws            qmlRegisterType<MsScoreView>("MuseScore", 3, 0, "ScoreView");
-
-            qmlRegisterType<Score>      ("MuseScore", 3, 0, "Score");
-            qmlRegisterType<Cursor>     ("MuseScore", 3, 0, "Cursor");
-            qmlRegisterType<ElementW>   ("MuseScore", 3, 0, "Element");
-            qRegisterMetaType<ElementW*>("ElementWrapper*");
-#if 0
-            qmlRegisterType<Segment>    ("MuseScore", 1, 0, "Segment");
-            qmlRegisterType<Chord>      ("MuseScore", 1, 0, "Chord");
-            qmlRegisterType<Note>       ("MuseScore", 1, 0, "Note");
-            qmlRegisterType<NoteHead>   ("MuseScore", 1, 0, "NoteHead");
-            qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
-            qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
-            qmlRegisterType<Measure>    ("MuseScore", 1, 0, "Measure");
-            qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
-            qmlRegisterType<Part>       ("MuseScore", 1, 0, "Part");
-            qmlRegisterType<Staff>      ("MuseScore", 1, 0, "Staff");
-            qmlRegisterType<Harmony>    ("MuseScore", 1, 0, "Harmony");
-            qmlRegisterType<TimeSig>    ("MuseScore", 1, 0, "TimeSig");
-            qmlRegisterType<KeySig>     ("MuseScore", 1, 0, "KeySig");
-            qmlRegisterType<Slur>       ("MuseScore", 1, 0, "Slur");
-            qmlRegisterType<Tie>        ("MuseScore", 1, 0, "Tie");
-            qmlRegisterType<NoteDot>    ("MuseScore", 1, 0, "NoteDot");
-            qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
-            qmlRegisterType<Text>       ("MuseScore", 1, 0, "MText");
-            qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
-            qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
-            qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
-            qmlRegisterType<Hook>       ("MuseScore", 1, 0, "Hook");
-            qmlRegisterType<Stem>       ("MuseScore", 1, 0, "Stem");
-            qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
-            qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
-            qmlRegisterType<Excerpt>    ("MuseScore", 1, 0, "Excerpt");
-            qmlRegisterType<BarLine>    ("MuseScore", 1, 0, "BarLine");
-
-
-            //classed enumerations
-            qmlRegisterUncreatableType<MSQE_StyledPropertyListIdx>("MuseScore", 1, 0, "StyledPropertyListIdx", QObject::tr("You can't create an enum"));
-            qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", enumErr);
-
-            //-----------virtual classes
-            qmlRegisterType<ChordRest>();
-            qmlRegisterType<SlurTie>();
-            qmlRegisterType<Spanner>();
-#endif
-            qmlRegisterType<FractionWrapper>   ("MuseScore", 3, 1, "Fraction");
-            qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
-            }
-      return _qml;
-      }
-
 //---------------------------------------------------------
 //   paintDevice
 //---------------------------------------------------------
@@ -517,10 +441,9 @@ int MPaintDevice::metric(PaintDeviceMetric m) const
             case QPaintDevice::PdmDpiY:
                   return int(DPI);
             default:
-                  printf("debug: metric %d\n", int(m));
+//printf("debug: metric %d\n", int(m));
                   return 1;
             }
-      return 0;
       }
 
 //---------------------------------------------------------
@@ -529,10 +452,9 @@ int MPaintDevice::metric(PaintDeviceMetric m) const
 
 QPaintEngine* MPaintDevice::paintEngine() const
       {
-      printf("paint engine\n");
+//printf("paint engine\n");
       return 0;
       }
 
-#endif
 }
 

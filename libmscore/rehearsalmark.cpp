@@ -18,13 +18,22 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   rehearsalMarkStyle
+//---------------------------------------------------------
+
+static const ElementStyle rehearsalMarkStyle {
+      { Sid::rehearsalMarkPlacement, Pid::PLACEMENT },
+      { Sid::rehearsalMarkPosAbove, Pid::OFFSET },
+      };
+
+//---------------------------------------------------------
 //   RehearsalMark
 //---------------------------------------------------------
 
 RehearsalMark::RehearsalMark(Score* s)
-   : TextBase(s)
+   : TextBase(s, Tid::REHEARSAL_MARK)
       {
-      initSubStyle(SubStyleId::REHEARSAL_MARK);
+      initElementStyle(&rehearsalMarkStyle);
       setSystemFlag(true);
       }
 
@@ -34,9 +43,8 @@ RehearsalMark::RehearsalMark(Score* s)
 
 void RehearsalMark::layout()
       {
-      qreal y = placeAbove() ? styleP(Sid::rehearsalMarkPosAbove) : styleP(Sid::rehearsalMarkPosBelow) + staff()->height();
-      setPos(QPointF(0.0, y));
-      TextBase::layout1();
+      TextBase::layout();
+
       Segment* s = segment();
       if (s) {
             if (!s->rtick()) {
@@ -65,12 +73,23 @@ QVariant RehearsalMark::propertyDefault(Pid id) const
       {
       switch (id) {
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::REHEARSAL_MARK);
+                  return int(Tid::REHEARSAL_MARK);
             case Pid::PLACEMENT:
                   return score()->styleV(Sid::rehearsalMarkPlacement);
             default:
                   return TextBase::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid RehearsalMark::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::rehearsalMarkPosAbove : Sid::rehearsalMarkPosBelow;
+      return TextBase::getPropertyStyle(pid);
       }
 
 } // namespace Ms

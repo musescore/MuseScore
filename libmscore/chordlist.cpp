@@ -1108,8 +1108,8 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   if (_xmlDegrees.removeAll(unalt) > 0) {
                         QString alt(d);
                         alt.replace("alt","add");
-                        int i = _xmlDegrees.indexOf(d);
-                        _xmlDegrees.replace(i,alt);
+                        int i1 = _xmlDegrees.indexOf(d);
+                        _xmlDegrees.replace(i1, alt);
                         }
                   }
             }
@@ -1147,7 +1147,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
       {
       QString kind = rawKind;
       QString kindText = rawKindText;
-      bool symbols = (useSymbols == "yes");
+      bool syms = (useSymbols == "yes");
       bool parens = (useParens == "yes");
       bool implied = false;
       bool extend = false;
@@ -1182,7 +1182,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             _quality = "augmented";
       else if (kind == "half-diminished") {
             _quality = "half-diminished";
-            if (symbols) {
+            if (syms) {
                   extension = 7;
                   extend = true;
                   }
@@ -1327,15 +1327,15 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             _name = _extension;
       else {
             if (_quality == "major")
-                  _name = symbols ? "^" : "maj";
+                  _name = syms ? "^" : "maj";
             else if (_quality == "minor")
-                  _name = symbols ? "-" : "m";
+                  _name = syms ? "-" : "m";
             else if (_quality == "augmented")
-                  _name = symbols ? "+" : "aug";
+                  _name = syms ? "+" : "aug";
             else if (_quality == "diminished")
-                  _name = symbols ? "o" : "dim";
+                  _name = syms ? "o" : "dim";
             else if (_quality == "half-diminished")
-                  _name = symbols ? "0" : "m7b5";
+                  _name = syms ? "0" : "m7b5";
             else
                   _name = _quality;
             _name += _extension;
@@ -1387,15 +1387,15 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             bool found = false;
             // potential definitions for token
             if (cl) {
-                  foreach (ChordToken ct, cl->chordTokenList) {
-                        foreach (QString ctn, ct.names) {
+                  for (ChordToken ct : cl->chordTokenList) {
+                        for (QString ctn : ct.names) {
                               if (ctn == n)
                                     definedTokens += ct;
                               }
                         }
                   }
             // find matching class, fallback on ChordTokenClass::ALL
-            foreach (ChordToken matchingTok, definedTokens) {
+            for (ChordToken matchingTok : definedTokens) {
                   if (tok.tokenClass == matchingTok.tokenClass) {
                         rl = matchingTok.renderList;
                         found = true;
@@ -1571,6 +1571,8 @@ void ChordList::read(XmlReader& e)
             if (tag == "font") {
                   ChordFont f;
                   f.family = e.attribute("family", "default");
+                  if (f.family == "MuseJazz")
+                        f.family = "MuseJazz Text";
                   f.mag    = 1.0;
                   while (e.readNextStartElement()) {
                         if (e.name() == "sym") {
@@ -1657,10 +1659,10 @@ void ChordList::read(XmlReader& e)
 void ChordList::write(XmlWriter& xml) const
       {
       int fontIdx = 0;
-      foreach (ChordFont f, fonts) {
+      for (ChordFont f : fonts) {
             xml.stag(QString("font id=\"%1\" family=\"%2\"").arg(fontIdx).arg(f.family));
             xml.tag("mag", f.mag);
-            foreach(ChordSymbol s, symbols) {
+            for (ChordSymbol s : symbols) {
                   if (s.fontIdx == fontIdx) {
                         if (s.code.isNull())
                               xml.tagE(QString("sym name=\"%1\" value=\"%2\"").arg(s.name).arg(s.value));
@@ -1677,8 +1679,8 @@ void ChordList::write(XmlWriter& xml) const
             writeRenderList(xml, &renderListRoot, "renderRoot");
       if (!renderListBase.empty())
             writeRenderList(xml, &renderListBase, "renderBase");
-      foreach(const ChordDescription& d, *this)
-            d.write(xml);
+      for (const ChordDescription& cd : *this)
+            cd.write(xml);
       }
 
 //---------------------------------------------------------
@@ -1722,7 +1724,6 @@ bool ChordList::read(const QString& name)
             return false;
             }
       XmlReader e(&f);
-      docName = f.fileName();
 
       while (e.readNextStartElement()) {
             if (e.name() == "museScore") {
@@ -1753,7 +1754,7 @@ bool ChordList::write(const QString& name) const
       QFile f(info.filePath());
 
       if (!f.open(QIODevice::WriteOnly)) {
-            MScore::lastError = QObject::tr("Open Chord Description\n%1\nfailed: %2").arg(f.fileName()).arg(f.errorString());
+            MScore::lastError = QObject::tr("Open chord description\n%1\nfailed: %2").arg(f.fileName()).arg(f.errorString());
             return false;
             }
 
@@ -1764,7 +1765,7 @@ bool ChordList::write(const QString& name) const
       write(xml);
       xml.etag();
       if (f.error() != QFile::NoError) {
-            MScore::lastError = QObject::tr("Write Chord Description failed: %1").arg(f.errorString());
+            MScore::lastError = QObject::tr("Write chord description failed: %1").arg(f.errorString());
             }
       return true;
       }
@@ -1794,6 +1795,20 @@ void ChordList::unload()
       renderListRoot.clear();
       renderListBase.clear();
       chordTokenList.clear();
+      }
+
+//---------------------------------------------------------
+//   print
+//    only for debugging
+//---------------------------------------------------------
+
+void RenderAction::print() const
+      {
+      static const char* names[] = {
+            "SET", "MOVE", "PUSH", "POP",
+            "NOTE", "ACCIDENTAL"
+            };
+      qDebug("%10s <%s> %f %f", names[int(type)], qPrintable(text), movex, movey);
       }
 
 

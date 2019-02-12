@@ -2,7 +2,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -118,8 +117,8 @@ void TestSfzLoop::testLoopAudio()
       QVERIFY(data[10 * 2 + 1] != 0.0f);
       QVERIFY(data[50 * 2] != 0.0f);
       QVERIFY(data[50 * 2 + 1] != 0.0f);
-      QVERIFY(data[60 * 2] < pow(10, -30.0f/20.0f)); // it is not zero due to the filter - assume at least -30dB right after stop
-      QVERIFY(data[60 * 2 + 1] < pow(10, -30.0f/20.0f));
+      QVERIFY(data[60 * 2] > pow(10, -30.0f/20.0f)); // it is not zero due to the filter - assume at least -30dB right after stop
+      QVERIFY(data[60 * 2 + 1] > pow(10, -30.0f/20.0f));
       QVERIFY(data[70 * 2] < pow(10, -85.0f/20.0f)); // and -85dB 10 samples later
       QVERIFY(data[70 * 2 + 1] < pow(10, -85.0f/20.0f));
       memset(data, 0, sizeof(data)); // clear data because each voice gets added to it!
@@ -160,8 +159,8 @@ void TestSfzLoop::testLoopAudio()
       QVERIFY(data[60 * 2 + 1] > pow(10, -15.0f/20.0f));
       QVERIFY(data[70 * 2] > pow(10, -15.0f/20.0f)); // it should not stop make sure it is loud enough!
       QVERIFY(data[70 * 2 + 1] > pow(10, -15.0f/20.0f));
-      QVERIFY(data[110 * 2] < pow(10, -30.0f/20.0f)); // it should play zeros after leaving sustain -> drastic volume reduce
-      QVERIFY(data[110 * 2 + 1] < pow(10, -30.0f/20.0f));
+      QVERIFY(data[110 * 2] < pow(10, -20.0f/20.0f)); // it should play zeros after leaving sustain -> drastic volume reduce
+      QVERIFY(data[110 * 2 + 1] < pow(10, -20.0f/20.0f));
       QVERIFY(data[120 * 2] < pow(10, -85.0f/20.0f));
       QVERIFY(data[120 * 2 + 1] < pow(10, -85.0f/20.0f));
 

@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2011-2016 Werner Schweer and others
 //
@@ -115,11 +114,15 @@ class Shortcut {
       QKeySequence::StandardKey _standardKey { QKeySequence::UnknownKey };
       mutable QAction* _action               { 0 };             //! cached action
 
+      static QString source;
+
       static Shortcut _sc[];
       static QHash<QByteArray, Shortcut*> _shortcuts;
       void translateAction(QAction* action) const;
 
    public:
+
+      static constexpr const char* defaultFileName = ":/data/shortcuts.xml";
 
       Shortcut() {}
       Shortcut(
@@ -154,6 +157,7 @@ class Shortcut {
       QKeySequence::StandardKey standardKey() const { return _standardKey; }
       void setStandardKey(QKeySequence::StandardKey k);
       void setKeys(const QList<QKeySequence>& ks);
+      void setKeys(const Shortcut&);
 
       bool compareKeys(const Shortcut&) const;
       QString keysToString() const;
@@ -164,12 +168,14 @@ class Shortcut {
 
       static void init();
       static void retranslate();
+      static void refreshIcons();
       static void load();
       static void loadFromNewFile(QString fileLocation);
       static void save();
       static void saveToNewFile(QString fileLocation);
       static void resetToDefault();
       static bool dirty;
+      static bool customSource() { return source != defaultFileName; }
       static Shortcut* getShortcut(const char* key);
       static const QHash<QByteArray, Shortcut*>& shortcuts() { return _shortcuts; }
       static QActionGroup* getActionGroupForWidget(MsWidget w);

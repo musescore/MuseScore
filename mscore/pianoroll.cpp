@@ -12,8 +12,10 @@
 
 #include "pianoroll.h"
 #include "config.h"
-#include "piano.h"
-#include "ruler.h"
+#include "pianokeyboard.h"
+#include "pianoruler.h"
+#include "pianolevels.h"
+#include "pianolevelschooser.h"
 #include "pianoview.h"
 #include "musescore.h"
 #include "seq.h"
@@ -48,7 +50,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       staff    = 0;
 
       QWidget* mainWidget = new QWidget;
-      QToolBar* tb = addToolBar(tr("Toolbar 1"));
+      QToolBar* tb = addToolBar("Toolbar 1");
       if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
             tb->addAction(getAction("undo"));
             tb->addAction(getAction("redo"));
@@ -83,8 +85,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       connect(showWave, SIGNAL(toggled(bool)), SLOT(showWaveView(bool)));
       tb->addAction(showWave);
 
-      //-------------
-      tb = addToolBar(tr("Toolbar 2"));
+      tb->addSeparator();
       for (int i = 0; i < VOICES; ++i) {
             QToolButton* b = new QToolButton(this);
             b->setToolButtonStyle(Qt::ToolButtonTextOnly);
@@ -97,6 +98,14 @@ PianorollEditor::PianorollEditor(QWidget* parent)
             }
 
       tb->addSeparator();
+
+      partLabel = new QLabel("Part:");
+      tb->addWidget(partLabel);
+
+
+      //-------------
+      tb = addToolBar("Toolbar 2");
+
       tb->addWidget(new QLabel(tr("Cursor:")));
       pos = new Awl::PosLabel;
       pos->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
@@ -107,6 +116,30 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addWidget(pl);
 
       tb->addSeparator();
+
+      tb->addWidget(new QLabel(tr("Subdiv.:")));
+      subdiv = new QSpinBox;
+      subdiv->setToolTip(tr("Subdivide the beat this many times"));
+      subdiv->setMinimum(0);
+      subdiv->setValue(0);
+      tb->addWidget(subdiv);
+
+      tb->addWidget(new QLabel(tr("Tuplet:")));
+      tuplet = new QSpinBox;
+      tuplet->setToolTip(tr("Edit notes aligned to tuplets of this many beats"));
+      tuplet->setMinimum(1);
+      tuplet->setValue(1);
+      tb->addWidget(tuplet);
+
+      tb->addWidget(new QLabel(tr("Stripe Pattern:")));
+      barPattern = new QComboBox;
+      barPattern->setToolTip(tr("White stripes show the tones of this chord."));
+      for (int i = 0; !PianoView::barPatterns[i].name.isEmpty(); ++i) {
+            barPattern->addItem(PianoView::barPatterns[i].name, i);
+            }
+      tb->addWidget(barPattern);
+
+      tb->addSeparator();
       tb->addWidget(new QLabel(tr("Velocity:")));
       veloType = new QComboBox;
       veloType->addItem(tr("Offset"), int(Note::ValueType::OFFSET_VAL));
@@ -114,8 +147,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tb->addWidget(veloType);
 
       velocity = new QSpinBox;
-      velocity->setRange(-1, 127);
-      velocity->setSpecialValueText("--");
+      velocity->setRange(-1000, 1000);
       velocity->setReadOnly(true);
       tb->addWidget(velocity);
 
@@ -133,82 +165,133 @@ PianorollEditor::PianorollEditor(QWidget* parent)
       tickLen->setRange(-2000, 2000);
 
       //-------------
-      qreal xmag = .1;
-      ruler = new Ruler;
+      //Empty area for spacing
+      QWidget* topLeftSpacer = new QWidget;
+      topLeftSpacer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+      topLeftSpacer->setFixedWidth(PIANO_KEYBOARD_WIDTH);
+      topLeftSpacer->setFixedHeight(pianoRulerHeight);
+
+      ruler = new PianoRuler;
       ruler->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-      ruler->setFixedHeight(rulerHeight);
+      ruler->setFixedHeight(pianoRulerHeight);
 
-      ruler->setMag(xmag, 1.0);
+      pianoKbd = new PianoKeyboard;
+      pianoKbd->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+      pianoKbd->setFixedWidth(PIANO_KEYBOARD_WIDTH);
 
-      Piano* piano = new Piano;
-      piano->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-      piano->setFixedWidth(pianoWidth);
-
-      gv  = new PianoView;
-      gv->scale(xmag, 1.0);
-      gv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-      gv->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+      pianoView = new PianoView;
+      pianoView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+      pianoView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
       hsb = new QScrollBar(Qt::Horizontal);
-      connect(gv->horizontalScrollBar(), SIGNAL(rangeChanged(int,int)),
+      connect(pianoView->horizontalScrollBar(), SIGNAL(rangeChanged(int,int)),
          SLOT(rangeChanged(int,int)));
 
+      QWidget* noteAreaWidget = new QWidget;
+
+      QGridLayout* noteAreaLayout = new QGridLayout;
+      noteAreaLayout->setContentsMargins(0, 0, 0, 0);
+      noteAreaLayout->setSpacing(0);
+      noteAreaLayout->addWidget(topLeftSpacer, 0, 0, 1, 1);
+      noteAreaLayout->addWidget(ruler, 0, 1, 1, 1);
+      noteAreaLayout->addWidget(pianoKbd, 1, 0, 1, 1);
+      noteAreaLayout->addWidget(pianoView, 1, 1, 1, 1);
+      noteAreaLayout->addWidget(hsb, 2, 1, 1, 1);
+      noteAreaWidget->setLayout(noteAreaLayout);
+
+      //Levels area
+      pianoLevelsChooser = new PianoLevelsChooser;
+      pianoLevelsChooser->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+      pianoLevelsChooser->setFixedWidth(PIANO_KEYBOARD_WIDTH);
+
+      pianoLevels = new PianoLevels;
+      pianoLevels->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+      QWidget* levelsAreaWidget = new QWidget;
+      QHBoxLayout* levelsAreaLayout = new QHBoxLayout;
+      levelsAreaLayout->setContentsMargins(0, 0, 0, 0);
+      levelsAreaLayout->setSpacing(0);
+      levelsAreaLayout->addWidget(pianoLevelsChooser);
+      levelsAreaLayout->addWidget(pianoLevels);
+      levelsAreaWidget->setLayout(levelsAreaLayout);
+
       // layout
-      QHBoxLayout* hbox = new QHBoxLayout;
-      hbox->setSpacing(0);
-      hbox->addWidget(piano);
-      hbox->addWidget(gv);
+      QSplitter* editAreaSplitter = new QSplitter(Qt::Vertical);
+      editAreaSplitter->addWidget(noteAreaWidget);
+      editAreaSplitter->addWidget(levelsAreaWidget);
+      editAreaSplitter->setFrameShape(QFrame::NoFrame);
+
+      editAreaSplitter->setSizes(QList<int>() << (height() * 3 / 4) << (height() * 1 / 4));
+
+
 
       split = new QSplitter(Qt::Vertical);
       split->setFrameShape(QFrame::NoFrame);
 
-      QWidget* split1 = new QWidget;      // piano - pianoview
-      split1->setLayout(hbox);
-      split->addWidget(split1);
-
       QGridLayout* layout = new QGridLayout;
       layout->setContentsMargins(0, 0, 0, 0);
       layout->setSpacing(0);
-      layout->setColumnMinimumWidth(0, pianoWidth + 5);
-      layout->addWidget(tb,    0, 0, 1, 2);
-      layout->addWidget(ruler, 1, 1);
-      layout->addWidget(split, 2, 0, 1, 2);
-      layout->addWidget(hsb,   3, 1);
+      layout->setColumnMinimumWidth(0, PIANO_KEYBOARD_WIDTH);
+      layout->addWidget(tb,    0, 0, 1, 1);
+      layout->addWidget(editAreaSplitter, 1, 0, 1, 1);
 
       mainWidget->setLayout(layout);
       setCentralWidget(mainWidget);
 
-      connect(gv->verticalScrollBar(), SIGNAL(valueChanged(int)), piano, SLOT(setYpos(int)));
+      connect(pianoView->verticalScrollBar(),   SIGNAL(valueChanged(int)), pianoKbd, SLOT(setYpos(int)));
+      connect(pianoView->horizontalScrollBar(), SIGNAL(valueChanged(int)), hsb,      SLOT(setValue(int)));
 
-      connect(gv,          SIGNAL(magChanged(double,double)),  ruler, SLOT(setMag(double,double)));
-      connect(gv,          SIGNAL(magChanged(double,double)),  piano, SLOT(setMag(double,double)));
-      connect(gv,          SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
-      connect(gv,          SIGNAL(pitchChanged(int)),          piano, SLOT(setPitch(int)));
-      connect(piano,       SIGNAL(pitchChanged(int)),          pl,    SLOT(setPitch(int)));
-      connect(gv,          SIGNAL(posChanged(const Pos&)),     pos,   SLOT(setValue(const Pos&)));
-      connect(gv,          SIGNAL(posChanged(const Pos&)),     ruler, SLOT(setPos(const Pos&)));
-      connect(ruler,       SIGNAL(posChanged(const Pos&)),     pos,   SLOT(setValue(const Pos&)));
+      connect(pianoView,          SIGNAL(xZoomChanged(qreal)),            ruler,       SLOT(setXZoom(qreal)));
+      connect(pianoView,          SIGNAL(xZoomChanged(qreal)),            pianoLevels, SLOT(setXZoom(qreal)));
+      connect(pianoView,          SIGNAL(noteHeightChanged(int)),         pianoKbd,    SLOT(setNoteHeight(int)));
+      connect(pianoView,          SIGNAL(pitchChanged(int)),              pl,          SLOT(setPitch(int)));
+      connect(pianoView,          SIGNAL(pitchChanged(int)),              pianoKbd,    SLOT(setPitch(int)));
+      connect(pianoKbd,           SIGNAL(pitchChanged(int)),              pl,          SLOT(setPitch(int)));
+      connect(pianoView,          SIGNAL(trackingPosChanged(const Pos&)), pos,         SLOT(setValue(const Pos&)));
+      connect(pianoView,          SIGNAL(trackingPosChanged(const Pos&)), ruler,       SLOT(setPos(const Pos&)));
+      connect(pianoView,          SIGNAL(trackingPosChanged(const Pos&)), pianoLevels, SLOT(setPos(const Pos&)));
+      connect(ruler,              SIGNAL(posChanged(const Pos&)),         pos,         SLOT(setValue(const Pos&)));
+      connect(pianoLevels,        SIGNAL(posChanged(const Pos&)),         pos,         SLOT(setValue(const Pos&)));
+      connect(tuplet,             SIGNAL(valueChanged(int)),              pianoView,   SLOT(setTuplet(int)));
+      connect(tuplet,             SIGNAL(valueChanged(int)),              pianoLevels, SLOT(setTuplet(int)));
+      connect(barPattern,         SIGNAL(activated(int)),                 pianoView,   SLOT(setBarPattern(int)));
+      connect(subdiv,             SIGNAL(valueChanged(int)),              pianoView,   SLOT(setSubdiv(int)));
+      connect(subdiv,             SIGNAL(valueChanged(int)),              pianoLevels, SLOT(setSubdiv(int)));
+      connect(pianoLevelsChooser, SIGNAL(levelsIndexChanged(int)),        pianoLevels, SLOT(setLevelsIndex(int)));
 
-      connect(hsb,         SIGNAL(valueChanged(int)),  SLOT(setXpos(int)));
-      connect(gv,          SIGNAL(xposChanged(int)),   SLOT(setXpos(int)));
-      connect(gv->horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(setXpos(int)));
+      connect(hsb,         SIGNAL(valueChanged(int)),                 SLOT(setXpos(int)));
+      connect(pianoView->horizontalScrollBar(), SIGNAL(valueChanged(int)),   SLOT(setXpos(int)));
 
       connect(ruler,       SIGNAL(locatorMoved(int, const Pos&)), SLOT(moveLocator(int, const Pos&)));
-      connect(veloType,    SIGNAL(activated(int)),     SLOT(veloTypeChanged(int)));
-      connect(velocity,    SIGNAL(valueChanged(int)),  SLOT(velocityChanged(int)));
-      connect(onTime,      SIGNAL(valueChanged(int)),  SLOT(onTimeChanged(int)));
-      connect(tickLen,     SIGNAL(valueChanged(int)),  SLOT(tickLenChanged(int)));
-      connect(gv->scene(), SIGNAL(selectionChanged()), SLOT(selectionChanged()));
-      connect(piano,       SIGNAL(keyPressed(int)),    SLOT(keyPressed(int)));
-      connect(piano,       SIGNAL(keyReleased(int)),   SLOT(keyReleased(int)));
+      connect(pianoLevels, SIGNAL(locatorMoved(int, const Pos&)), SLOT(moveLocator(int, const Pos&)));
+      connect(veloType,    SIGNAL(activated(int)),                SLOT(veloTypeChanged(int)));
+      connect(velocity,    SIGNAL(valueChanged(int)),             SLOT(velocityChanged(int)));
+      connect(onTime,      SIGNAL(valueChanged(int)),             SLOT(onTimeChanged(int)));
+      connect(tickLen,     SIGNAL(valueChanged(int)),             SLOT(tickLenChanged(int)));
+      connect(pianoView,   SIGNAL(selectionChanged()),            SLOT(selectionChanged()));
+      connect(pianoKbd,    SIGNAL(keyPressed(int)),               SLOT(keyPressed(int)));
+      connect(pianoKbd,    SIGNAL(keyReleased(int)),              SLOT(keyReleased(int)));
+      connect(pianoLevels, SIGNAL(noteLevelsChanged()),           SLOT(selectionChanged()));
 
       readSettings();
 
+      actions.append(getAction("tie"));
+      actions.append(getAction("play"));
       actions.append(getAction("delete"));
       actions.append(getAction("pitch-up"));
       actions.append(getAction("pitch-down"));
       actions.append(getAction("pitch-up-octave"));
       actions.append(getAction("pitch-down-octave"));
+
+//      QMenu* popup = new QMenu(this);
+//      popup->setSeparatorsCollapsible(false);
+//      QAction* a = popup->addSeparator();
+//      popup->addAction(getAction("cut"));
+//      popup->addAction(getAction("copy"));
+//      popup->addAction(getAction("paste"));
+//      popup->addAction(getAction("swap"));
+//      popup->addAction(getAction("delete"));
+
       addActions(actions);
       for (auto* action : actions)
             connect(action, &QAction::triggered, this, [this, action](bool){ cmd(action); });
@@ -229,11 +312,30 @@ PianorollEditor::~PianorollEditor()
       }
 
 //---------------------------------------------------------
+//   focucOnElement
+//---------------------------------------------------------
+
+void PianorollEditor::focusOnPosition(Position* p)
+      {
+      if (!p || !p->segment)
+            return;
+
+      //Move view so that view is centered on this element
+      pianoView->ensureVisible(p->segment->tick());
+      }
+
+//---------------------------------------------------------
 //   setStaff
 //---------------------------------------------------------
 
 void PianorollEditor::setStaff(Staff* st)
       {
+      if (staff == st)
+            return;
+
+      if (st)
+            partLabel->setText("Part: " + st->partName());
+
       if ((st && st->score() != _score) || (!st && _score)) {
             if (_score) {
                   _score->removeViewer(this);
@@ -260,8 +362,14 @@ void PianorollEditor::setStaff(Staff* st)
             pos->setContext(tl, sl);
             showWave->setEnabled(_score->audio() != 0);
             }
+      else
+            setWindowTitle(tr("Piano roll editor"));
       ruler->setScore(_score, locator);
-      gv->setStaff(staff, locator);
+      pianoView->setStaff(staff, locator);
+      pianoLevels->setScore(_score, locator);
+      pianoLevels->setStaff(staff, locator);
+      pianoKbd->setStaff(staff);
+
       updateSelection();
       setEnabled(st != nullptr);
       }
@@ -291,8 +399,9 @@ void PianorollEditor::readSettings()
 
 void PianorollEditor::setXpos(int x)
       {
-      gv->horizontalScrollBar()->setValue(x);
+      pianoView->horizontalScrollBar()->setValue(x);
       ruler->setXpos(x);
+      pianoLevels->setXpos(x);
       if (waveView && showWave->isChecked())
             waveView->setXpos(x);
       }
@@ -312,25 +421,30 @@ void PianorollEditor::rangeChanged(int min, int max)
 
 void PianorollEditor::updateSelection()
       {
-      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
+      QList<PianoItem*> items = pianoView->getSelectedItems();
+      bool enabled = false;
+
       if (items.size() == 1) {
-            PianoItem* item = static_cast<PianoItem*>(items[0]);
-            if (item->type() == PianoItemType) {
-                  Note* note = item->note();
-                  NoteEvent* event = item->event();
-                  pitch->setEnabled(true);
-                  pitch->setValue(note->pitch());
+            PianoItem* item = items[0];
+            Note* note = item->note();
+
+            pitch->setValue(note->pitch());
+
+            NoteEvent* event = item->getTweakNoteEvent();
+            if (event) {
                   onTime->setValue(event->ontime());
                   tickLen->setValue(event->len());
-                  updateVelocity(note);
                   }
+
+            updateVelocity(note);
+            enabled = true;
             }
-      bool b = items.size() != 0;
-      velocity->setEnabled(b);
-      pitch->setEnabled(b);
-      veloType->setEnabled(b);
-      onTime->setEnabled(b);
-      tickLen->setEnabled(b);
+
+      velocity->setEnabled(enabled);
+      pitch->setEnabled(enabled);
+      veloType->setEnabled(enabled);
+      onTime->setEnabled(enabled);
+      tickLen->setEnabled(enabled);
       }
 
 //---------------------------------------------------------
@@ -340,36 +454,26 @@ void PianorollEditor::updateSelection()
 
 void PianorollEditor::selectionChanged()
       {
-      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
+      QList<PianoItem*> items = pianoView->getSelectedItems();
       if (items.size() == 1) {
-            QGraphicsItem* item = items[0];
-            if (item->type() == PianoItemType) {
-                  Note* note = static_cast<PianoItem*>(item)->note();
-                  _score->select(note, SelectType::SINGLE, 0);
-                  }
+            Note* note = items[0]->note();
+            _score->select(note, SelectType::SINGLE, 0);
             }
       else if (items.size() == 0)
             _score->select(0, SelectType::SINGLE, 0);
       else {
             _score->deselectAll();
-            for (QGraphicsItem* item : items) {
-                  if (item->type() == PianoItemType) {
-                        Note* note = static_cast<PianoItem*>(item)->note();
-                        if (!note->selected())
-                              _score->select(note, SelectType::ADD, 0);
-                        }
+            for (PianoItem* item : items) {
+                  Note* note = item->note();
+                  if (!note->selected())
+                        _score->select(note, SelectType::ADD, 0);
                   }
             }
       for (MuseScoreView* view : score()->getViewer())
             view->updateAll();
 
-      gv->scene()->blockSignals(true);
-      for (QGraphicsItem* item : gv->scene()->items())
-            if (item->type() == PianoItemType)
-                item->setSelected(static_cast<PianoItem*>(item)->note()->selected());
-      gv->scene()->blockSignals(false);
-
-      gv->scene()->update();
+      pianoView->scene()->update();
+      pianoLevels->update();
       updateSelection();
       }
 
@@ -379,17 +483,8 @@ void PianorollEditor::selectionChanged()
 
 void PianorollEditor::changeSelection(SelState)
       {
-      gv->scene()->blockSignals(true);
-      gv->scene()->clearSelection();
-      QList<QGraphicsItem*> il = gv->scene()->items();
-      for (QGraphicsItem* item : il) {
-            if (item->type() == PianoItemType) {
-                  Note* note = static_cast<PianoItem*>(item)->note();
-                  item->setSelected(note->selected());
-                  }
-            }
-      gv->scene()->blockSignals(false);
       }
+
 
 //---------------------------------------------------------
 //   veloTypeChanged
@@ -397,19 +492,30 @@ void PianorollEditor::changeSelection(SelState)
 
 void PianorollEditor::veloTypeChanged(int val)
       {
-      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
+      QList<PianoItem*> items = pianoView->getSelectedItems();
       if (items.size() != 1)
             return;
-      QGraphicsItem* item = items[0];
-      if (item->type() != PianoItemType)
-            return;
-      Note* note = static_cast<PianoItem*>(item)->note();
+      PianoItem* item = items[0];
+      Note* note = item->note();
       if (Note::ValueType(val) == note->veloType())
             return;
 
-      _score->undoStack()->beginMacro();
-      _score->undo(new ChangeVelocity(note, Note::ValueType(val), note->veloOffset()));
-      _score->undoStack()->endMacro(_score->undoStack()->current()->childCount() == 0);
+      int newVelocity = note->veloOffset();
+      int dynamicsVel = staff->velocities().velo(note->tick());
+
+      //Change velocity to equivilent in new metric
+      switch (Note::ValueType(val)) {
+            case Note::ValueType::USER_VAL:
+                  newVelocity = (int)(dynamicsVel * (1 + newVelocity / 100.0));
+                  break;
+            case Note::ValueType::OFFSET_VAL:
+                  newVelocity = (int)((newVelocity / (qreal)dynamicsVel - 1) * 100);
+                  break;
+            }
+
+      _score->startCmd();
+      _score->undo(new ChangeVelocity(note, Note::ValueType(val), newVelocity));
+      _score->endCmd();
       updateVelocity(note);
       }
 
@@ -420,29 +526,28 @@ void PianorollEditor::veloTypeChanged(int val)
 void PianorollEditor::updateVelocity(Note* note)
       {
       Note::ValueType vt = note->veloType();
-      if (vt != Note::ValueType(veloType->currentIndex())) {
-            veloType->setCurrentIndex(int(vt));
-            switch(vt) {
-                  case Note::ValueType::USER_VAL:
-                        velocity->setReadOnly(false);
-                        velocity->setSuffix("");
-                        velocity->setRange(0, 127);
-                        break;
-                  case Note::ValueType::OFFSET_VAL:
-                        velocity->setReadOnly(false);
-                        velocity->setSuffix("%");
-                        velocity->setRange(-200, 200);
-                        break;
-                  }
-            }
+      veloType->setCurrentIndex(int(vt));
       switch(vt) {
             case Note::ValueType::USER_VAL:
-                  // TODO velocity->setValue(note->velocity());
+                  velocity->setReadOnly(false);
+                  velocity->setSuffix("");
+                  break;
+            case Note::ValueType::OFFSET_VAL:
+                  velocity->setReadOnly(false);
+                  velocity->setSuffix("%");
+                  break;
+            }
+
+      switch(vt) {
+            case Note::ValueType::USER_VAL:
+                  velocity->setValue(note->veloOffset());
                   break;
             case Note::ValueType::OFFSET_VAL:
                   velocity->setValue(note->veloOffset());
                   break;
             }
+
+      pianoLevels->update();
       }
 
 //---------------------------------------------------------
@@ -451,37 +556,37 @@ void PianorollEditor::updateVelocity(Note* note)
 
 void PianorollEditor::velocityChanged(int val)
       {
-      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
+      QList<PianoItem*> items = pianoView->getSelectedItems();
       if (items.size() != 1)
             return;
-      QGraphicsItem* item = items[0];
-      if (item->type() != PianoItemType)
-            return;
-      Note* note = static_cast<PianoItem*>(item)->note();
+      PianoItem* item = items[0];
+      Note* note = item->note();
       Note::ValueType vt = note->veloType();
 
-      if (vt == Note::ValueType::OFFSET_VAL)
+      if (val == note->veloOffset())
             return;
 
-      _score->undoStack()->beginMacro();
+      _score->startCmd();
       _score->undo(new ChangeVelocity(note, vt, val));
-      _score->undoStack()->endMacro(_score->undoStack()->current()->childCount() == 0);
+      _score->endCmd();
+
+      pianoLevels->update();
       }
 
 //---------------------------------------------------------
 //   keyPressed
 //---------------------------------------------------------
 
-void PianorollEditor::keyPressed(int pitch)
+void PianorollEditor::keyPressed(int p)
       {
-      seq->startNote(staff->part()->instrument()->channel(0)->channel, pitch, 80, 0, 0.0);
+      seq->startNote(staff->part()->instrument()->channel(0)->channel(), p, 80, 0, 0.0);
       }
 
 //---------------------------------------------------------
 //   keyReleased
 //---------------------------------------------------------
 
-void PianorollEditor::keyReleased(int /*pitch*/)
+void PianorollEditor::keyReleased(int /*p*/)
       {
       seq->stopNotes();
       }
@@ -490,15 +595,15 @@ void PianorollEditor::keyReleased(int /*pitch*/)
 //   heartBeat
 //---------------------------------------------------------
 
-void PianorollEditor::heartBeat(Seq* seq)
+void PianorollEditor::heartBeat(Seq* s)
       {
-      unsigned tick = seq->getCurTick();
+      unsigned tick = s->getCurTick();
       if (score()->repeatList())
             tick = score()->repeatList()->utick2tick(tick);
       if (locator[0].tick() != tick) {
             posChanged(POS::CURRENT, tick);
             if (preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG))
-                  gv->ensureVisible(tick);
+                  pianoView->ensureVisible(tick);
             }
       }
 
@@ -506,10 +611,10 @@ void PianorollEditor::heartBeat(Seq* seq)
 //   moveLocator
 //---------------------------------------------------------
 
-void PianorollEditor::moveLocator(int i, const Pos& pos)
+void PianorollEditor::moveLocator(int i, const Pos& p)
       {
       if (locator[i].valid())
-            score()->setPos(POS(i), pos.tick());
+            score()->setPos(POS(i), p.tick());
       }
 
 //---------------------------------------------------------
@@ -519,7 +624,9 @@ void PianorollEditor::moveLocator(int i, const Pos& pos)
 void PianorollEditor::cmd(QAction* /*a*/)
       {
       //score()->startCmd();
-      gv->setStaff(staff, locator);
+      pianoView->setStaff(staff, locator);
+      pianoLevels->setStaff(staff, locator);
+      pianoKbd->setStaff(staff);
       //score()->endCmd();
       }
 
@@ -532,20 +639,13 @@ void PianorollEditor::dataChanged(const QRectF&)
       }
 
 //---------------------------------------------------------
-//   adjustCanvasPosition
-//---------------------------------------------------------
-
-void PianorollEditor::adjustCanvasPosition(const Element*, bool)
-      {
-      }
-
-//---------------------------------------------------------
 //   removeScore
 //---------------------------------------------------------
 
 void PianorollEditor::removeScore()
       {
-      setStaff(0);
+      _score = nullptr;
+      setStaff(nullptr);
       }
 
 //---------------------------------------------------------
@@ -593,22 +693,6 @@ const QTransform& PianorollEditor::matrix() const
       }
 
 //---------------------------------------------------------
-//   setDropRectangle
-//---------------------------------------------------------
-
-void PianorollEditor::setDropRectangle(const QRectF&)
-      {
-      }
-
-//---------------------------------------------------------
-//   cmdAddSlur
-//---------------------------------------------------------
-
-void PianorollEditor::cmdAddSlur(Note*, Note*)
-      {
-      }
-
-//---------------------------------------------------------
 //   startEdit
 //---------------------------------------------------------
 
@@ -639,9 +723,27 @@ Element* PianorollEditor::elementNear(QPointF)
 
 void PianorollEditor::updateAll()
       {
-//      startTimer(0);    // delayed update
-//      gv->updateNotes();
-//      gv->update();
+      if (updateScheduled)
+            return;
+
+      QTimer::singleShot(0, this, &PianorollEditor::doUpdate);
+      updateScheduled = true;
+      }
+
+//---------------------------------------------------------
+//   doUpdate
+//---------------------------------------------------------
+
+void PianorollEditor::doUpdate()
+      {
+      updateScheduled = false;
+
+      if (staff && staff->idx() == -1) { // staff removed
+            removeScore();
+            return;
+            }
+      pianoView->updateNotes();
+      pianoLevels->updateNotes();
       }
 
 void PianorollEditor::playlistChanged()
@@ -657,12 +759,11 @@ void PianorollEditor::showWaveView(bool val)
       if (val) {
             if (waveView == 0) {
                   waveView = new WaveView;
-                  connect(gv, SIGNAL(magChanged(double,double)), waveView, SLOT(setMag(double,double)));
-                  connect(gv, SIGNAL(posChanged(const Pos&)), waveView,   SLOT(setValue(const Pos&)));
+                  connect(pianoView, SIGNAL(magChanged(double,double)), waveView, SLOT(setMag(double,double)));
+                  connect(pianoView, SIGNAL(posChanged(const Pos&)), waveView,   SLOT(setValue(const Pos&)));
                   waveView->setAudio(_score->audio());
                   waveView->setScore(_score, locator);
                   split->addWidget(waveView);
-                  waveView->setMag(ruler->xmag(), 1.0);
                   waveView->setXpos(ruler->xpos());
                   }
             waveView->setVisible(true);
@@ -678,15 +779,16 @@ void PianorollEditor::showWaveView(bool val)
 //    position in score has changed
 //---------------------------------------------------------
 
-void PianorollEditor::posChanged(POS pos, unsigned tick)
+void PianorollEditor::posChanged(POS p, unsigned tick)
       {
-      if (locator[int(pos)].tick() == unsigned(tick))
+      if (locator[int(p)].tick() == unsigned(tick))
             return;
-      setLocator(pos, tick);
-      gv->moveLocator(int(pos));
+      setLocator(p, tick);
+      pianoView->moveLocator(int(p));
       if (waveView)
-            waveView->moveLocator(int(pos));
+            waveView->moveLocator(int(p));
       ruler->update();
+      pianoLevels->update();
       }
 
 //---------------------------------------------------------
@@ -695,16 +797,13 @@ void PianorollEditor::posChanged(POS pos, unsigned tick)
 
 void PianorollEditor::onTimeChanged(int val)
       {
-      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
+      QList<PianoItem*> items = pianoView->getSelectedItems();
       if (items.size() != 1)
             return;
-      QGraphicsItem* item = items[0];
-      if (item->type() != PianoItemType)
-            return;
-      PianoItem* pi = static_cast<PianoItem*>(item);
-      Note* note       = pi->note();
-      NoteEvent* event = pi->event();
-      if (event->ontime() == val)
+      PianoItem* item = items[0];
+      Note* note       = item->note();
+      NoteEvent* event = item->getTweakNoteEvent();
+      if (!event || event->ontime() == val)
             return;
 
       NoteEvent ne = *event;
@@ -712,6 +811,9 @@ void PianorollEditor::onTimeChanged(int val)
       _score->startCmd();
       _score->undo(new ChangeNoteEvent(note, event, ne));
       _score->endCmd();
+
+      pianoView->updateNotes();
+      pianoLevels->updateNotes();
       }
 
 //---------------------------------------------------------
@@ -720,16 +822,13 @@ void PianorollEditor::onTimeChanged(int val)
 
 void PianorollEditor::tickLenChanged(int val)
       {
-      QList<QGraphicsItem*> items = gv->scene()->selectedItems();
+      QList<PianoItem*> items = pianoView->getSelectedItems();
       if (items.size() != 1)
             return;
-      QGraphicsItem* item = items[0];
-      if (item->type() != PianoItemType)
-            return;
-      PianoItem* pi = static_cast<PianoItem*>(item);
-      Note* note       = pi->note();
-      NoteEvent* event = pi->event();
-      if (event->len() == val)
+      PianoItem* item = items[0];
+      Note* note       = item->note();
+      NoteEvent* event = item->getTweakNoteEvent();
+      if (!event || event->len() == val)
             return;
 
       NoteEvent ne = *event;
@@ -737,6 +836,9 @@ void PianorollEditor::tickLenChanged(int val)
       _score->startCmd();
       _score->undo(new ChangeNoteEvent(note, event, ne));
       _score->endCmd();
+
+      pianoView->updateNotes();
+      pianoLevels->updateNotes();
       }
 
 }

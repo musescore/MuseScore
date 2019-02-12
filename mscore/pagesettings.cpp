@@ -29,6 +29,7 @@ namespace Ms {
 PageSettings::PageSettings(QWidget* parent)
    : AbstractDialog(parent)
       {
+      clonedScore = 0;
       setObjectName("PageSettings");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -36,7 +37,7 @@ PageSettings::PageSettings(QWidget* parent)
 
       NScrollArea* sa = new NScrollArea;
       preview = new Navigator(sa, this);
-      preview->setPreviewOnly(true);
+//      preview->setPreviewOnly(true);
 
       static_cast<QVBoxLayout*>(previewGroup->layout())->insertWidget(0, sa);
 
@@ -81,6 +82,7 @@ PageSettings::PageSettings(QWidget* parent)
 
 PageSettings::~PageSettings()
       {
+      delete clonedScore;
       }
 
 //---------------------------------------------------------
@@ -97,12 +99,16 @@ void PageSettings::hideEvent(QHideEvent* ev)
 //   setScore
 //---------------------------------------------------------
 
-void PageSettings::setScore(MasterScore* s)
+void PageSettings::setScore(Score* s)
       {
-      cs  = s;
-      MasterScore* sl = s->clone();
-      preview->setScore(sl);
-      buttonApplyToAllParts->setEnabled(!s->isMaster());
+      cs = s;
+      delete clonedScore;
+      clonedScore = s->clone();
+      clonedScore->setLayoutMode(LayoutMode::PAGE);
+
+      clonedScore->doLayout();
+      preview->setScore(clonedScore);
+      buttonApplyToAllParts->setEnabled(!cs->isMaster());
       updateValues();
       updatePreview(0);
       }
@@ -299,6 +305,7 @@ void PageSettings::applyToScore(Score* s)
       s->undoChangeStyleVal(Sid::pageOddLeftMargin, oddPageLeftMargin->value() * f);
       s->undoChangeStyleVal(Sid::pageTwosided, twosided->isChecked());
       s->undoChangeStyleVal(Sid::spatium, spatiumEntry->value() * f1);
+      s->undoChangePageNumberOffset(pageOffsetEntry->value() - 1);
 
       s->endCmd();
       }
@@ -528,8 +535,8 @@ void PageSettings::pageHeightChanged(double val)
             val2 /= INCH;
             }
       pageGroup->setCurrentIndex(0);      // custom
-      preview->score()->style().set(Sid::pageWidth, val);
-      preview->score()->style().set(Sid::pageHeight, val2);
+      preview->score()->style().set(Sid::pageHeight, val);
+      preview->score()->style().set(Sid::pageWidth, val2);
 
       updatePreview(1);
       }

@@ -27,9 +27,10 @@ class InspectorFretDiagram : public InspectorElementBase {
       Q_OBJECT
 
       Ui::InspectorFretDiagram   f;
+      virtual void setElement() override;
 
    private slots:
-      void propertiesClicked();
+      virtual void valueChanged(int idx) override;
 
    public:
       InspectorFretDiagram(QWidget* parent);

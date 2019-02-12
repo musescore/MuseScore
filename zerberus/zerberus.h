@@ -17,10 +17,14 @@
 #include <atomic>
 // #include <mutex>
 #include <list>
+#include <memory>
+#include <queue>
 
 #include "synthesizer/synthesizer.h"
 #include "synthesizer/event.h"
+#include "synthesizer/midipatch.h"
 #include "voice.h"
+
 
 class Channel;
 class ZInstrument;
@@ -35,32 +39,33 @@ static const int MAX_TRIGGER = 512;
 //---------------------------------------------------------
 
 class VoiceFifo {
-      Voice* buffer[MAX_VOICES];
-      std::atomic<int> n;
-      int writeIdx = 0;       // index of next slot to write
-      int readIdx  = 0;       // index of slot to read
+      std::queue<Voice*> buffer;
+      std::vector< std::unique_ptr<Voice> > voices;
 
    public:
       VoiceFifo() {
-            n = 0;
+            voices.resize(MAX_VOICES);
             }
-      ~VoiceFifo() {
-            for (Voice* v : buffer)
-                  delete v;
+
+      void init(Zerberus* z) {
+            for (int i = 0; i < MAX_VOICES; ++i) {
+                  voices.push_back(std::unique_ptr<Voice>(new Voice(z)));
+                  buffer.push(voices.back().get());
+                  }
             }
+
       void push(Voice* v) {
-            buffer[writeIdx++] = v;
-            writeIdx %= MAX_VOICES;
-            ++n;
+            buffer.push(v);
             }
-      Voice* pop()  {
-            Q_ASSERT(n != 0);
-            --n;
-            Voice* v = buffer[readIdx++];
-            readIdx %= MAX_VOICES;
+    
+      Voice* pop() {
+            Q_ASSERT(!buffer.empty());
+            Voice* v = buffer.front();
+            buffer.pop();
             return v;
             }
-      bool empty() const { return n == 0; }
+
+      bool empty() const { return buffer.empty(); }
       };
 
 //---------------------------------------------------------
@@ -70,7 +75,8 @@ class VoiceFifo {
 class Zerberus : public Ms::Synthesizer {
       static bool initialized;
       static std::list<ZInstrument*> globalInstruments;
-
+      QList<Ms::MidiPatch*> patches;
+      
       double _masterTuning = 440.0;
       std::atomic<bool> busy;
 
@@ -82,6 +88,8 @@ class Zerberus : public Ms::Synthesizer {
       Voice* activeVoices = 0;
       int _loadProgress = 0;
       bool _loadWasCanceled = false;
+
+      QMutex mutex;
 
       void programChange(int channel, int program);
       void trigger(Channel*, int key, int velo, Trigger, int cc, int ccVal, double durSinceNoteOn);
@@ -108,10 +116,9 @@ class Zerberus : public Ms::Synthesizer {
       virtual void setMasterTuning(double val) { _masterTuning = val;  }
       virtual double masterTuning() const      { return _masterTuning; }
 
-      double ct2hz(double c) { return pow(2.0, (c-6900.0) / 1200.0) * _masterTuning; }
+      double ct2hz(double c) const { return pow(2.0, (c-6900.0) / 1200.0) * masterTuning(); }
 
       virtual const char* name() const;
-      virtual const QList<Ms::MidiPatch*>& getPatchInfo() const;
 
       virtual Ms::SynthesizerGroup state() const;
       virtual bool setState(const Ms::SynthesizerGroup&);
@@ -122,8 +129,13 @@ class Zerberus : public Ms::Synthesizer {
       virtual bool addSoundFont(const QString&);
       virtual bool removeSoundFont(const QString&);
       virtual bool loadSoundFonts(const QStringList&);
+      virtual bool removeSoundFonts(const QStringList& fileNames);
       virtual QStringList soundFonts() const;
 
+      virtual const QList<Ms::MidiPatch*>& getPatchInfo() const override { return patches; }
+      
+      void updatePatchList();
+      
       virtual Ms::SynthesizerGui* gui();
       static QFileInfoList sfzFiles();
       };

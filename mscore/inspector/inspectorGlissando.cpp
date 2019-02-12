@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
-//  $Id:$
 //
 //  Copyright (C) 2013 Werner Schweer
 //
@@ -36,16 +35,11 @@ InspectorGlissando::InspectorGlissando(QWidget* parent)
             { Pid::PLAY,            0, g.playGlissando,  g.resetPlayGlissando  },
             { Pid::FONT_FACE,       0, g.fontFace,       g.resetFontFace       },
             { Pid::FONT_SIZE,       0, g.fontSize,       g.resetFontSize       },
-            { Pid::FONT_BOLD,       0, g.fontBold,       g.resetFontBold       },
-            { Pid::FONT_ITALIC,     0, g.fontItalic,     g.resetFontItalic     },
-            { Pid::FONT_UNDERLINE,  0, g.fontUnderline,  g.resetFontUnderline  },
+            { Pid::FONT_STYLE,      0, g.fontStyle,      g.resetFontStyle      },
             };
       const std::vector<InspectorPanel> ppList = {
             { g.title, g.panel }
             };
-      g.fontBold->setIcon(*icons[int(Icons::textBold_ICON)]);
-      g.fontUnderline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
-      g.fontItalic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       mapSignals(iiList, ppList);
       }
 }

@@ -39,6 +39,9 @@ class ScoreListWidget : public QListWidget
       int cellHeight() const { return CELLH; }
       int space() const { return SPACE; }
       QSize cellSize() const { return QSize(CELLW, CELLH); }
+
+      // override so we pass wheel event to the parent scroll area
+      virtual void wheelEvent(QWheelEvent*) {};
       };
 
 //---------------------------------------------------------
@@ -61,7 +64,7 @@ class ScoreBrowser : public QWidget, public Ui::ScoreBrowser
       ScoreItem* genScoreItem(const QFileInfo&, ScoreListWidget*);
 
    private slots:
-      void scoreChanged(QListWidgetItem*);
+      void scoreClicked(QListWidgetItem*);
       void setScoreActivated(QListWidgetItem*);
 
    signals:

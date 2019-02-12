@@ -24,13 +24,15 @@ namespace Ms {
 class Fingering final : public TextBase {
 
    public:
-      Fingering(SubStyleId ssid, Score* s, ElementFlag ef = ElementFlag::HAS_TAG);
-      Fingering(Score* s);
+      Fingering(Score*, Tid tid, ElementFlags ef = ElementFlag::HAS_TAG);
+      Fingering(Score* s, ElementFlags ef = ElementFlag::HAS_TAG);
 
       virtual Fingering* clone() const override { return new Fingering(*this); }
       virtual ElementType type() const override { return ElementType::FINGERING; }
 
       Note* note() const { return toNote(parent()); }
+      ElementType layoutType();
+      void calculatePlacement();
 
       virtual void draw(QPainter*) const override;
       virtual void layout() override;

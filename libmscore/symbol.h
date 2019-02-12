@@ -34,7 +34,7 @@ class Symbol : public BSymbol {
       const ScoreFont* _scoreFont = nullptr;
 
    public:
-      Symbol(Score* s);
+      Symbol(Score* s, ElementFlags f = ElementFlag::MOVABLE);
       Symbol(const Symbol&);
 
       Symbol &operator=(const Symbol&) = delete;
@@ -50,7 +50,6 @@ class Symbol : public BSymbol {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void layout() override;
-      void setAbove(bool);
 
       virtual qreal baseLine() const     { return 0.0; }
       virtual Segment* segment() const   { return (Segment*)parent(); }

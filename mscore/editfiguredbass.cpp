@@ -85,7 +85,7 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
             int maxTrack = minTrack + (VOICES-1);
 
             while (nextSegm) {                   // look for a ChordRest in the compatible track range
-                  if(nextSegm->findAnnotationOrElement(ElementType::FIGURED_BASS, minTrack, maxTrack))
+                  if(nextSegm->hasAnnotationOrElement(ElementType::FIGURED_BASS, minTrack, maxTrack))
                         break;
                   nextSegm = bBack ? nextSegm->prev1(SegmentType::ChordRest) : nextSegm->next1(SegmentType::ChordRest);
                   }
@@ -98,17 +98,20 @@ void ScoreView::figuredBassTab(bool bMeas, bool bBack)
 
       changeState(ViewState::NORMAL);
 
-      _score->startCmd();
       bool bNew;
       // add a (new) FB element, using chord duration as default duration
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, 0, &bNew);
-      if (bNew)
+      if (bNew) {
+            _score->startCmd();
             _score->undoAddElement(fbNew);
+            _score->endCmd();
+            }
       _score->select(fbNew, SelectType::SINGLE, 0);
       startEdit(fbNew, Grip::NO_GRIP);
+
       mscore->changeState(mscoreState());
       adjustCanvasPosition(fbNew, false);
-//TODO-edit      ((FiguredBass*)editData.element)->moveCursorToEnd();
+      fbNew->cursor(editData)->moveCursorToEnd();
 //      _score->update();                         // used by lyricsTab() but not by harmonyTab(): needed or not?
       }
 
@@ -149,16 +152,20 @@ void ScoreView::figuredBassTicksTab(int ticks)
                   qDebug("figuredBassTicksTab: no next segment");
                   return;
                   }
+            _score->startCmd();
             _score->undoAddElement(nextSegm);
+            _score->endCmd();
             }
 
       changeState(ViewState::NORMAL);
 
-      _score->startCmd();
       bool bNew;
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, ticks, &bNew);
-      if (bNew)
+      if (bNew) {
+            _score->startCmd();
             _score->undoAddElement(fbNew);
+            _score->endCmd();
+            }
       _score->select(fbNew, SelectType::SINGLE, 0);
       startEdit(fbNew, Grip::NO_GRIP);
       mscore->changeState(mscoreState());

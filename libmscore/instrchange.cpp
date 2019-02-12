@@ -24,21 +24,28 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   instrumentChangeStyle
+//---------------------------------------------------------
+
+static const ElementStyle instrumentChangeStyle {
+      { Sid::instrumentChangePlacement,          Pid::PLACEMENT              },
+      };
+
+//---------------------------------------------------------
 //   InstrumentChange
 //---------------------------------------------------------
 
 InstrumentChange::InstrumentChange(Score* s)
-   : TextBase(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF)
+   : TextBase(s, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::INSTRUMENT_CHANGE);
+      initElementStyle(&instrumentChangeStyle);
       _instrument = new Instrument();
       }
 
 InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
-   : TextBase(s)
+   : TextBase(s, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initSubStyle(SubStyleId::INSTRUMENT_CHANGE);
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
+      initElementStyle(&instrumentChangeStyle);
       _instrument = new Instrument(i);
       }
 
@@ -55,8 +62,9 @@ InstrumentChange::~InstrumentChange()
 
 void InstrumentChange::setInstrument(const Instrument& i)
       {
-      delete _instrument;
-      _instrument = new Instrument(i);
+      *_instrument = i;
+      //delete _instrument;
+      //_instrument = new Instrument(i);
       }
 
 //---------------------------------------------------------
@@ -65,7 +73,7 @@ void InstrumentChange::setInstrument(const Instrument& i)
 
 void InstrumentChange::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       _instrument->write(xml, part());
       TextBase::writeProperties(xml);
       xml.etag();
@@ -84,7 +92,7 @@ void InstrumentChange::read(XmlReader& e)
             else if (!TextBase::readProperties(e))
                   e.unknown();
             }
-      if (score()->mscVersion() <= 206) {
+      if (score()->mscVersion() < 206) {
             // previous versions did not honor transposition of instrument change
             // except in ways that it should not have
             // notes entered before the instrument change was added would not be altered,
@@ -92,21 +100,11 @@ void InstrumentChange::read(XmlReader& e)
             // notes added afterwards would be transposed by both intervals, resulting in tpc corruption
             // here we set the instrument change to inherit the staff transposition to emulate previous versions
             // in Note::read(), we attempt to fix the tpc corruption
+            // There is also code in read206 to try to deal with this, but it is out of date and therefore disabled
+            // What this means is, scores created in 2.1 or later should be fine, scores created in 2.0 maybe not so much
 
             Interval v = staff() ? staff()->part()->instrument()->transpose() : 0;
             _instrument->setTranspose(v);
-            }
-      }
-
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-QVariant InstrumentChange::getProperty(Pid propertyId) const
-      {
-      switch (propertyId) {
-            default:
-                  return TextBase::getProperty(propertyId);
             }
       }
 
@@ -118,23 +116,20 @@ QVariant InstrumentChange::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::SUB_STYLE:
-                  return int(SubStyleId::INSTRUMENT_CHANGE);
+                  return int(Tid::INSTRUMENT_CHANGE);
             default:
                   return TextBase::propertyDefault(propertyId);
             }
       }
 
 //---------------------------------------------------------
-//   setProperty
+//   layout
 //---------------------------------------------------------
 
-bool InstrumentChange::setProperty(Pid propertyId, const QVariant& v)
+void InstrumentChange::layout()
       {
-      switch (propertyId) {
-            default:
-                  return TextBase::setProperty(propertyId, v);
-            }
-      return true;
+      TextBase::layout();
+      autoplaceSegmentElement(styleP(Sid::instrumentChangeMinDistance));
       }
 
 }

@@ -21,35 +21,31 @@
 
 namespace Ms {
 
+static const ElementStyle letRingStyle {
+      { Sid::letRingFontFace,                      Pid::BEGIN_FONT_FACE        },
+      { Sid::letRingFontFace,                      Pid::CONTINUE_FONT_FACE     },
+      { Sid::letRingFontFace,                      Pid::END_FONT_FACE          },
+      { Sid::letRingFontSize,                      Pid::BEGIN_FONT_SIZE        },
+      { Sid::letRingFontSize,                      Pid::CONTINUE_FONT_SIZE     },
+      { Sid::letRingFontSize,                      Pid::END_FONT_SIZE          },
+      { Sid::letRingFontStyle,                     Pid::BEGIN_FONT_STYLE       },
+      { Sid::letRingFontStyle,                     Pid::CONTINUE_FONT_STYLE    },
+      { Sid::letRingFontStyle,                     Pid::END_FONT_STYLE         },
+      { Sid::letRingTextAlign,                     Pid::BEGIN_TEXT_ALIGN       },
+      { Sid::letRingTextAlign,                     Pid::CONTINUE_TEXT_ALIGN    },
+      { Sid::letRingTextAlign,                     Pid::END_TEXT_ALIGN         },
+      { Sid::letRingHookHeight,                    Pid::BEGIN_HOOK_HEIGHT      },
+      { Sid::letRingHookHeight,                    Pid::END_HOOK_HEIGHT        },
+      };
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void LetRingSegment::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
       TextLineBaseSegment::layout();
-      if (parent()) {     // for palette
-            rypos() += score()->styleP(letRing()->placeBelow() ? Sid::letRingPosBelow : Sid::letRingPosAbove);
-            if (autoplace()) {
-                  qreal minDistance = spatium() * .7;
-                  Shape s1 = shape().translated(pos());
-
-                  if (letRing()->placeBelow()) {
-                        qreal d  = system()->bottomDistance(staffIdx(), s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = d + minDistance;
-                        }
-                  else {
-                        qreal d  = system()->topDistance(staffIdx(), s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = -(d + minDistance);
-                        }
-                  }
-            else
-                  adjustReadPos();
-            }
+      autoplaceSpannerSegment(spatium() * .7);
       }
 
 //---------------------------------------------------------
@@ -59,7 +55,7 @@ void LetRingSegment::layout()
 LetRing::LetRing(Score* s)
    : TextLineBase(s)
       {
-      initSubStyle(SubStyleId::LET_RING);
+      initElementStyle(&letRingStyle);
       resetProperty(Pid::LINE_VISIBLE);
       }
 
@@ -69,8 +65,8 @@ LetRing::LetRing(Score* s)
 
 void LetRing::read(XmlReader& e)
       {
-      int id = e.intAttribute("id", -1);
-      e.addSpanner(id, this);
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement()) {
             if (!TextLineBase::readProperties(e))
                   e.unknown();
@@ -85,10 +81,12 @@ void LetRing::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(this);
 
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties()) {
+            if (!isStyled(spp.pid))
+                  writeProperty(xml, spp.pid);
+            }
 
       Element::writeProperties(xml);
       xml.etag();
@@ -100,16 +98,9 @@ void LetRing::write(XmlWriter& xml) const
 
 LineSegment* LetRing::createLineSegment()
       {
-      return new LetRingSegment(score());
-      }
-
-//---------------------------------------------------------
-//   setYoff
-//---------------------------------------------------------
-
-void LetRing::setYoff(qreal val)
-      {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::letRingPosAbove : Sid::letRingPosBelow);
+      LetRingSegment* lr = new LetRingSegment(this, score());
+      lr->setTrack(track());
+      return lr;
       }
 
 //---------------------------------------------------------
@@ -143,8 +134,8 @@ QVariant LetRing::propertyDefault(Pid propertyId) const
             case Pid::END_HOOK_HEIGHT:
                   return score()->styleV(Sid::letRingHookHeight);
 
-            case Pid::BEGIN_FONT_ITALIC:
-                  return score()->styleV(Sid::letRingFontItalic);
+            case Pid::BEGIN_FONT_STYLE:
+                  return score()->styleV(Sid::letRingFontStyle);
 
             case Pid::BEGIN_TEXT:
                   return score()->styleV(Sid::letRingText);
@@ -169,13 +160,13 @@ Sid LetRing::getPropertyStyle(Pid id) const
             case Pid::BEGIN_FONT_FACE:
                   return Sid::letRingFontFace;
             case Pid::BEGIN_FONT_SIZE:
+            case Pid::CONTINUE_FONT_SIZE:
+            case Pid::END_FONT_SIZE:
                   return Sid::letRingFontSize;
-            case Pid::BEGIN_FONT_BOLD:
-                  return Sid::letRingFontBold;
-            case Pid::BEGIN_FONT_ITALIC:
-                  return Sid::letRingFontItalic;
-            case Pid::BEGIN_FONT_UNDERLINE:
-                  return Sid::letRingFontUnderline;
+            case Pid::BEGIN_FONT_STYLE:
+            case Pid::CONTINUE_FONT_STYLE:
+            case Pid::END_FONT_STYLE:
+                  return Sid::letRingFontStyle;
             case Pid::BEGIN_TEXT_ALIGN:
             case Pid::CONTINUE_TEXT_ALIGN:
             case Pid::END_TEXT_ALIGN:
@@ -188,7 +179,7 @@ Sid LetRing::getPropertyStyle(Pid id) const
             default:
                   break;
             }
-      return Sid::NOSTYLE;
+      return TextLineBase::getPropertyStyle(id);
       }
 
 
@@ -199,7 +190,7 @@ Sid LetRing::getPropertyStyle(Pid id) const
 
 QPointF LetRing::linePos(Grip grip, System** sys) const
       {
-      qreal x;
+      qreal x = 0.0;
       qreal nhw = score()->noteHeadWidth();
       System* s = nullptr;
       if (grip == Grip::START) {

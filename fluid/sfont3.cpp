@@ -23,7 +23,7 @@ bool Sample::decompressOggVorbis(char* src, int size)
             }
       int frames = af.frames();
       data = new short[frames * af.channels()];
-      if (frames != af.read(data, frames)) {
+      if (frames != af.readData(data, frames)) {
             qDebug("Sample read failed: %s", af.error());
             delete[] data;
             data = 0;

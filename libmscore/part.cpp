@@ -34,6 +34,7 @@ namespace Ms {
 Part::Part(Score* s)
    : ScoreElement(s)
       {
+      _color = DEFAULT_COLOR;
       _show  = true;
       _instruments.setInstrument(new Instrument, -1);   // default instrument
       }
@@ -58,6 +59,64 @@ Staff* Part::staff(int idx) const
       }
 
 //---------------------------------------------------------
+//   Part::masterPart
+//---------------------------------------------------------
+
+const Part* Part::masterPart() const
+      {
+      if (score()->isMaster())
+            return this;
+      if (_staves.empty())
+            return this;
+
+      Staff* st = _staves[0];
+      LinkedElements* links = st->links();
+      if (!links)
+            return this;
+
+      for (ScoreElement* le : *links) {
+            if (le->isStaff() && toStaff(le)->score()->isMaster()) {
+                  if (Part* p = toStaff(le)->part())
+                        return p;
+                  }
+            }
+      return this;
+      }
+
+//---------------------------------------------------------
+//   Part::masterPart
+//---------------------------------------------------------
+
+Part* Part::masterPart()
+      {
+      return const_cast<Part*>(const_cast<const Part*>(this)->masterPart());
+      }
+
+//---------------------------------------------------------
+//   Part::redirectPart
+//---------------------------------------------------------
+
+const Part* Part::redirectPart() const
+      {
+      const Part* p = masterPart();
+      if (p != this)
+            return p;
+      return nullptr;
+      }
+
+//---------------------------------------------------------
+//   Part::redirectPart
+//---------------------------------------------------------
+
+Part* Part::redirectPart()
+      {
+      Part* p = masterPart();
+      if (p != this)
+            return p;
+      return nullptr;
+      }
+
+//---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
 
@@ -78,6 +137,8 @@ bool Part::readProperties(XmlReader& e)
             }
       else if (tag == "name")
             instrument()->setLongName(e.readElementText());
+      else if (tag == "color")
+            _color = e.readInt();
       else if (tag == "shortName")
             instrument()->setShortName(e.readElementText());
       else if (tag == "trackName")
@@ -109,12 +170,14 @@ void Part::read(XmlReader& e)
 
 void Part::write(XmlWriter& xml) const
       {
-      xml.stag("Part");
-      foreach(const Staff* staff, _staves)
+      xml.stag(this);
+      for (const Staff* staff : _staves)
             staff->write(xml);
       if (!_show)
             xml.tag("show", _show);
       xml.tag("trackName", _partName);
+      if (_color != DEFAULT_COLOR)
+            xml.tag("color", _color);
       instrument()->write(xml, const_cast<Part*>(this)); // Safe, we do not write anything to it
       xml.etag();
       }
@@ -191,8 +254,8 @@ void Part::removeStaff(Staff* staff)
 void Part::setMidiProgram(int program, int bank)
       {
       Channel* c = instrument()->channel(0);
-      c->program = program;
-      c->bank    = bank;
+      c->setProgram(program);
+      c->setBank(bank);
       c->updateInitList();
 //      instrument()->setChannel(0, c);
       }
@@ -201,18 +264,18 @@ void Part::setMidiProgram(int program, int bank)
 //   volume
 //---------------------------------------------------------
 
-int Part::volume() const
+double Part::volume() const
       {
-      return instrument()->channel(0)->volume;
+      return instrument()->channel(0)->volume();
       }
 
 //---------------------------------------------------------
 //   setVolume
 //---------------------------------------------------------
 
-void Part::setVolume(int volume)
+void Part::setVolume(double volume)
       {
-      instrument()->channel(0)->volume = volume;
+      instrument()->channel(0)->setVolume(volume);
       }
 
 //---------------------------------------------------------
@@ -221,7 +284,7 @@ void Part::setVolume(int volume)
 
 bool Part::mute() const
       {
-      return instrument()->channel(0)->mute;
+      return instrument()->channel(0)->mute();
       }
 
 //---------------------------------------------------------
@@ -230,61 +293,61 @@ bool Part::mute() const
 
 void Part::setMute(bool mute)
       {
-      instrument()->channel(0)->mute = mute;
+      instrument()->channel(0)->setMute(mute);
       }
 
 //---------------------------------------------------------
 //   reverb
 //---------------------------------------------------------
 
-int Part::reverb() const
+double Part::reverb() const
       {
-      return instrument()->channel(0)->reverb;
+      return instrument()->channel(0)->reverb();
       }
 
 //---------------------------------------------------------
 //   setReverb
 //---------------------------------------------------------
 
-void Part::setReverb(int val)
+void Part::setReverb(double val)
       {
-      instrument()->channel(0)->reverb = val;
+      instrument()->channel(0)->setReverb(val);
       }
 
 //---------------------------------------------------------
 //   chorus
 //---------------------------------------------------------
 
-int Part::chorus() const
+double Part::chorus() const
       {
-      return instrument()->channel(0)->chorus;
+      return instrument()->channel(0)->chorus();
       }
 
 //---------------------------------------------------------
 //   setChorus
 //---------------------------------------------------------
 
-void Part::setChorus(int val)
+void Part::setChorus(double val)
       {
-      instrument()->channel(0)->chorus = val;
+      instrument()->channel(0)->setChorus(val);
       }
 
 //---------------------------------------------------------
 //   pan
 //---------------------------------------------------------
 
-int Part::pan() const
+double Part::pan() const
       {
-      return instrument()->channel(0)->pan;
+      return instrument()->channel(0)->pan();
       }
 
 //---------------------------------------------------------
 //   setPan
 //---------------------------------------------------------
 
-void Part::setPan(int pan)
+void Part::setPan(double pan)
       {
-      instrument()->channel(0)->pan = pan;
+      instrument()->channel(0)->setPan(pan);
       }
 
 //---------------------------------------------------------
@@ -293,7 +356,7 @@ void Part::setPan(int pan)
 
 int Part::midiProgram() const
       {
-      return instrument()->channel(0)->program;
+      return instrument()->channel(0)->program();
       }
 
 //---------------------------------------------------------
@@ -302,7 +365,7 @@ int Part::midiProgram() const
 
 int Part::midiChannel() const
       {
-      return masterScore()->midiChannel(instrument()->channel(0)->channel);
+      return masterScore()->midiChannel(instrument()->channel(0)->channel());
       }
 
 //---------------------------------------------------------
@@ -311,7 +374,7 @@ int Part::midiChannel() const
 
 int Part::midiPort() const
       {
-      return masterScore()->midiPort(instrument()->channel(0)->channel);
+      return masterScore()->midiPort(instrument()->channel(0)->channel());
       }
 
 //---------------------------------------------------------
@@ -327,7 +390,7 @@ int Part::midiPort() const
 void Part::setMidiChannel(int ch, int port, int tick)
       {
       Channel* channel = instrument(tick)->channel(0);
-      if (channel->channel == -1) {
+      if (channel->channel() == -1) {
             // Add new mapping
             MidiMapping mm;
             mm.part = this;
@@ -338,21 +401,21 @@ void Part::setMidiChannel(int ch, int port, int tick)
                   mm.channel = ch;
             if (port != -1)
                   mm.port = port;
-            channel->channel = masterScore()->midiMapping()->size();
+            channel->setChannel(masterScore()->midiMapping()->size());
             masterScore()->midiMapping()->append(mm);
             }
       else {
             // Update existing mapping
-            if (channel->channel >= masterScore()->midiMapping()->size()) {
+            if (channel->channel() >= masterScore()->midiMapping()->size()) {
                   qDebug()<<"Can't' set midi channel: midiMapping is empty!";
                   return;
                   }
 
             if (ch != -1)
-                  masterScore()->midiMapping(channel->channel)->channel = ch;
+                  masterScore()->midiMapping(channel->channel())->channel = ch;
             if (port != -1)
-                  masterScore()->midiMapping(channel->channel)->port = port;
-            masterScore()->midiMapping(channel->channel)->part = this;
+                  masterScore()->midiMapping(channel->channel())->port = port;
+            masterScore()->midiMapping(channel->channel())->part = this;
             }
       }
 
@@ -394,6 +457,8 @@ void Part::removeInstrument(int tick)
 
 Instrument* Part::instrument(int tick)
       {
+      if (Part* p = redirectPart())
+            return p->instrument(tick);
       return _instruments.instrument(tick);
       }
 
@@ -403,7 +468,20 @@ Instrument* Part::instrument(int tick)
 
 const Instrument* Part::instrument(int tick) const
       {
+      if (const Part* p = redirectPart())
+            return p->instrument(tick);
       return _instruments.instrument(tick);
+      }
+
+//---------------------------------------------------------
+//   instruments
+//---------------------------------------------------------
+
+const InstrumentList* Part::instruments() const
+      {
+      if (const Part* p = redirectPart())
+            return p->instruments();
+      return &_instruments;
       }
 
 //---------------------------------------------------------
@@ -583,9 +661,9 @@ void Part::insertTime(int tick, int len)
       InstrumentList il;
       for (auto i = _instruments.lower_bound(tick); i != _instruments.end();) {
             Instrument* instrument = i->second;
-            int tick = i->first;
+            int t = i->first;
             _instruments.erase(i++);
-            _instruments[tick + len] = instrument;
+            _instruments[t + len] = instrument;
             }
       _instruments.insert(il.begin(), il.end());
       }
@@ -598,7 +676,7 @@ int Part::lyricCount()
       {
       if (!score())
             return 0;
-      int count = 0;
+      size_t count = 0;
       SegmentType st = SegmentType::ChordRest;
       for (Segment* seg = score()->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
             for (int i = startTrack(); i < endTrack() ; ++i) {
@@ -607,7 +685,7 @@ int Part::lyricCount()
                         count += cr->lyrics().size();
                   }
             }
-      return count;
+      return int(count);
       }
 
 //---------------------------------------------------------

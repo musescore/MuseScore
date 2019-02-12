@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: instrdialog.cpp 5580 2012-04-27 15:36:57Z wschweer $
 //
 //  Copyright (C) 2002-2009 Werner Schweer and others
 //
@@ -52,7 +51,8 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       QAction* a = getAction("instruments");
       connect(a, SIGNAL(triggered()), SLOT(reject()));
       addAction(a);
-
+      saveButton->setVisible(false);
+      loadButton->setVisible(false);
       readSettings();
       }
 
@@ -172,6 +172,24 @@ QTreeWidget* InstrumentsDialog::partiturList()
       }
 
 //---------------------------------------------------------
+//   buildInstrumentsList
+//---------------------------------------------------------
+
+void InstrumentsDialog::buildInstrumentsList()
+      {
+      instrumentsWidget->buildTemplateList();
+      }
+
+//---------------------------------------------------------
+//   updateInstrumentDialog
+//---------------------------------------------------------
+
+void MuseScore::updateInstrumentDialog()
+      {
+      if (instrList)
+            instrList->buildInstrumentsList();
+      }
+//---------------------------------------------------------
 //   editInstrList
 //---------------------------------------------------------
 
@@ -195,11 +213,11 @@ void MuseScore::editInstrList()
             masterScore->endCmd();
             return;
             }
-      ScoreView* cv = currentScoreView();
-      if (cv && cv->noteEntryMode()) {
-		cv->cmd(getAction("escape"));
+      ScoreView* csv = currentScoreView();
+      if (csv && csv->noteEntryMode()) {
+		csv->cmd(getAction("escape"));
             qApp->processEvents();
-            updateInputState(cv->score());
+            updateInputState(csv->score());
             }
       masterScore->inputState().setTrack(-1);
 
@@ -299,7 +317,6 @@ void MuseScore::editInstrList()
                   for (int cidx = 0; pli->child(cidx); ++cidx) {
                         StaffListItem* sli = static_cast<StaffListItem*>(pli->child(cidx));
                         if (sli->op() == ListItemOp::I_DELETE) {
-                              masterScore->systems().clear();
                               Staff* staff = sli->staff();
                               int sidx = staff->idx();
                               masterScore->cmdRemoveStaff(sidx);
@@ -335,8 +352,8 @@ void MuseScore::editInstrList()
                               if (linkedStaff) {
                                     // do not create a link if linkedStaff will be removed,
                                     for (int k = 0; pli->child(k); ++k) {
-                                          StaffListItem* i = static_cast<StaffListItem*>(pli->child(k));
-                                          if (i->op() == ListItemOp::I_DELETE && i->staff() == linkedStaff) {
+                                          StaffListItem* li = static_cast<StaffListItem*>(pli->child(k));
+                                          if (li->op() == ListItemOp::I_DELETE && li->staff() == linkedStaff) {
                                                 linkedStaff = 0;
                                                 break;
                                                 }
@@ -410,8 +427,8 @@ void MuseScore::editInstrList()
       for (Score* s : masterScore->scoreList()) {
             int n = s->nstaves();
             int curSpan = 0;
-            for (int i = 0; i < n; ++i) {
-                  Staff* staff = s->staff(i);
+            for (int j = 0; j < n; ++j) {
+                  Staff* staff = s->staff(j);
                   int span = staff->barLineSpan();
                   int setSpan = -1;
 
@@ -421,12 +438,12 @@ void MuseScore::editInstrList()
                         if (span == 0) {
                               // no span; this staff must have been within a span
                               // update it to a span of 1
-                              setSpan = 1;
+                              setSpan = j;
                               }
-                        else if (span > (n - i)) {
+                        else if (span > (n - j)) {
                               // span too big; staves must have been removed
                               // reduce span to last staff
-                              setSpan = n - i;
+                              setSpan = n - j;
                               }
                         else if (span > 1 && staff->barLineTo() > 0) {
                               // TODO: check if span is still valid
@@ -466,8 +483,8 @@ void MuseScore::editInstrList()
 
                   // update brackets
                   for (BracketItem* bi : staff->brackets()) {
-                        if ((bi->bracketSpan() > (n - i)))
-                              bi->undoChangeProperty(Pid::BRACKET_SPAN, n - i);
+                        if ((bi->bracketSpan() > (n - j)))
+                              bi->undoChangeProperty(Pid::BRACKET_SPAN, n - j);
                         }
                   }
             }
@@ -478,24 +495,27 @@ void MuseScore::editInstrList()
       if (masterScore->measures()->size() == 0)
             masterScore->insertMeasure(ElementType::MEASURE, 0, false);
 
-      for (Excerpt* excerpt : masterScore->excerpts()) {
+      const QList<Excerpt*> excerpts(masterScore->excerpts()); // excerpts list may change in the loop below
+      for (Excerpt* excerpt : excerpts) {
             QList<Staff*> sl       = excerpt->partScore()->staves();
             QMultiMap<int, int> tr = excerpt->tracks();
             if (sl.size() == 0)
                   masterScore->undo(new RemoveExcerpt(excerpt));
             else {
                   for (Staff* s : sl) {
-                        LinkedStaves* sll = s->linkedStaves();
-                        for (Staff* ss : sll->staves())
+                        const LinkedElements* sll = s->links();
+                        for (auto le : *sll) {
+                              Staff* ss = toStaff(le);
                               if (ss->primaryStaff()) {
-                                    for (int i = s->idx() * VOICES; i < (s->idx() + 1) * VOICES; i++) {
-                                          int strack = tr.key(i, -1);
+                                    for (int j = s->idx() * VOICES; j < (s->idx() + 1) * VOICES; j++) {
+                                          int strack = tr.key(j, -1);
                                           if (strack != -1 && ((strack & ~3) == ss->idx()))
                                                 break;
                                           else if (strack != -1)
                                                 tr.insert(ss->idx() + strack % VOICES, tr.value(strack, -1));
                                           }
                                     }
+                              }
                         }
                   }
             }

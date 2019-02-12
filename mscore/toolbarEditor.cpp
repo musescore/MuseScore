@@ -49,6 +49,11 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
             toolbarList->addItem(QString(i));
       toolbarList->setCurrentRow(0);
 
+      new_toolbars = new std::vector<std::list<const char*>*>();
+      new_toolbars->push_back(mscore->noteInputMenuEntries());
+      new_toolbars->push_back(mscore->fileOperationEntries());
+      new_toolbars->push_back(mscore->playbackControlEntries());
+
       connect(toolbarList, SIGNAL(currentRowChanged(int)), SLOT(toolbarChanged(int)));
       connect(add, SIGNAL(clicked()), SLOT(addAction()));
       connect(remove, SIGNAL(clicked()), SLOT(removeAction()));
@@ -74,8 +79,13 @@ void ToolbarEditor::init()
       remove->setEnabled(writable);
       up->setEnabled(writable);
       down->setEnabled(writable);
-      workspace->setText(name);
-      toolbarChanged(0);  // populate lists
+      workspaceName->setText(name);
+
+      // Syncs the editor with the current toolbars
+      new_toolbars->at(0) = mscore->noteInputMenuEntries();
+      new_toolbars->at(1) = mscore->fileOperationEntries();
+      new_toolbars->at(2) = mscore->playbackControlEntries();
+      toolbarChanged(toolbarList->currentRow());  // populate lists
       }
 
 //---------------------------------------------------------
@@ -86,13 +96,13 @@ void ToolbarEditor::accepted()
       {
       if (Workspace::currentWorkspace->readOnly())
             return;
-      std::list<const char*> l;
-      for (int i = 0; i < actionList->count(); ++i) {
-            QListWidgetItem* a = actionList->item(i);
-            l.push_back((const char*)(a->data(Qt::UserRole).value<void*>()));
-            }
-      mscore->setNoteInputMenuEntries(l);
+      // Updates the toolbars
+      mscore->setNoteInputMenuEntries(*(new_toolbars->at(0)));
+      mscore->setFileOperationEntries(*(new_toolbars->at(1)));
+      mscore->setPlaybackControlEntries(*(new_toolbars->at(2)));
       mscore->populateNoteInputMenu();
+      mscore->populateFileOperations();
+      mscore->populatePlaybackControls();
       Workspace::currentWorkspace->setDirty(true);
       }
 
@@ -107,10 +117,13 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
       for (auto i : *current) {
             QAction* a = getAction(i);
             QListWidgetItem* item;
+            QString actionName = QString(i);
             if (a)
-                  item = new QListWidgetItem(a->icon(), QString(i));
+                  item = new QListWidgetItem(a->icon(), actionName);
+            else if (actionName.isEmpty())
+                  item = new QListWidgetItem(tr("Spacer"));
             else
-                  item = new QListWidgetItem(QString(i));
+                  item = new QListWidgetItem(actionName);
             item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
             actionList->addItem(item);
             }
@@ -124,16 +137,19 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
                   }
             if (!found) {
                   QAction* a = getAction(i);
-                  QListWidgetItem* item;
+                  QListWidgetItem* item = 0;
+                  QString actionName = QString(i);
                   if (a)
-                        item = new QListWidgetItem(a->icon(), QString(i));
-                  else
+                        item = new QListWidgetItem(a->icon(), actionName);
+                  else if (!actionName.isEmpty())
                         item = new QListWidgetItem(QString(i));
-                  item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
-                  availableList->addItem(item);
+				  if (item) {
+                        item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
+                        availableList->addItem(item);
+                        }
                   }
             }
-      QListWidgetItem* item = new QListWidgetItem(tr("spacer"));
+      QListWidgetItem* item = new QListWidgetItem(tr("Spacer"));
       item->setData(Qt::UserRole, QVariant::fromValue((void*)""));
       availableList->addItem(item);
       }
@@ -170,6 +186,7 @@ void ToolbarEditor::addAction()
             actionList->addItem(item);
       else
             actionList->insertItem(cr, item);
+      updateNewToolbar(toolbarList->currentRow());
       }
 
 //---------------------------------------------------------
@@ -184,6 +201,7 @@ void ToolbarEditor::removeAction()
       QListWidgetItem* item = actionList->takeItem(cr);
       if (!isSpacer(item))
             availableList->addItem(item);
+      updateNewToolbar(toolbarList->currentRow());
       }
 
 //---------------------------------------------------------
@@ -198,6 +216,7 @@ void ToolbarEditor::upAction()
       QListWidgetItem* item = actionList->takeItem(cr);
       actionList->insertItem(cr - 1, item);
       actionList->setCurrentRow(cr - 1);
+      updateNewToolbar(toolbarList->currentRow());
       }
 
 //---------------------------------------------------------
@@ -212,6 +231,7 @@ void ToolbarEditor::downAction()
       QListWidgetItem* item = actionList->takeItem(cr);
       actionList->insertItem(cr + 1, item);
       actionList->setCurrentRow(cr + 1);
+      updateNewToolbar(toolbarList->currentRow());
       }
 
 //---------------------------------------------------------
@@ -222,13 +242,13 @@ void ToolbarEditor::toolbarChanged(int tb)
       {
       switch (tb) {
             case 0:     // NoteInput
-                  populateLists(MuseScore::allNoteInputMenuEntries(), mscore->noteInputMenuEntries());
+                  populateLists(MuseScore::allNoteInputMenuEntries(), new_toolbars->at(tb));
                   break;
             case 1:     //FileOperations
-                  populateLists(MuseScore::allFileOperationEntries(), mscore->fileOperationEntries());
+                  populateLists(MuseScore::allFileOperationEntries(), new_toolbars->at(tb));
                   break;
             case 2:     //PlaybackControls
-                  populateLists(MuseScore::allPlaybackControlEntries(), mscore->playbackControlEntries());
+                  populateLists(MuseScore::allPlaybackControlEntries(), new_toolbars->at(tb));
             }
       }
 
@@ -240,6 +260,20 @@ void ToolbarEditor::hideEvent(QHideEvent* event)
       {
       MuseScore::saveGeometry(this);
       QWidget::hideEvent(event);
+      }
+
+//---------------------------------------------------------
+//   updateNewToolbar
+//---------------------------------------------------------
+
+void ToolbarEditor::updateNewToolbar(int toolbar_to_update) {
+      // Updates the current toolbar to the actionList
+      std::list<const char*> *toolbar_action_list = new std::list<const char*>();
+      for (int i = 0; i < actionList->count(); ++i) {
+            QListWidgetItem* a = actionList->item(i);
+            toolbar_action_list->push_back((const char*)(a->data(Qt::UserRole).value<void*>()));
+            }
+      new_toolbars->at(toolbar_to_update) = toolbar_action_list;
       }
 
 } // namespace Ms

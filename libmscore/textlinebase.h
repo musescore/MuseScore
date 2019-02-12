@@ -37,7 +37,7 @@ class TextLineBaseSegment : public LineSegment {
       bool twoLines { false };
 
    public:
-      TextLineBaseSegment(Score* s);
+      TextLineBaseSegment(Spanner*, Score* s, ElementFlags f = ElementFlag::NOTHING);
       TextLineBaseSegment(const TextLineBaseSegment&);
       ~TextLineBaseSegment();
 
@@ -49,9 +49,8 @@ class TextLineBaseSegment : public LineSegment {
 
       virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-      virtual QVariant getProperty(Pid id) const override;
-      virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      virtual Element* propertyDelegate(Pid) override;
+
       virtual Shape shape() const override;
       };
 
@@ -81,9 +80,7 @@ class TextLineBase : public SLine {
       M_PROPERTY(Align,     beginTextAlign,        setBeginTextAlign)
       M_PROPERTY(QString,   beginFontFamily,       setBeginFontFamily)
       M_PROPERTY(qreal,     beginFontSize,         setBeginFontSize)
-      M_PROPERTY(bool,      beginFontBold,         setBeginFontBold)
-      M_PROPERTY(bool,      beginFontItalic,       setBeginFontItalic)
-      M_PROPERTY(bool,      beginFontUnderline,    setBeginFontUnderline)
+      M_PROPERTY(FontStyle, beginFontStyle,        setBeginFontStyle)
       M_PROPERTY(QPointF,   beginTextOffset,       setBeginTextOffset)
 
       M_PROPERTY(PlaceText, continueTextPlace,     setContinueTextPlace)
@@ -91,9 +88,7 @@ class TextLineBase : public SLine {
       M_PROPERTY(Align,     continueTextAlign,     setContinueTextAlign)
       M_PROPERTY(QString,   continueFontFamily,    setContinueFontFamily)
       M_PROPERTY(qreal,     continueFontSize,      setContinueFontSize)
-      M_PROPERTY(bool,      continueFontBold,      setContinueFontBold)
-      M_PROPERTY(bool,      continueFontItalic,    setContinueFontItalic)
-      M_PROPERTY(bool,      continueFontUnderline, setContinueFontUnderline)
+      M_PROPERTY(FontStyle, continueFontStyle,     setContinueFontStyle)
       M_PROPERTY(QPointF,   continueTextOffset,    setContinueTextOffset)
 
       M_PROPERTY(PlaceText, endTextPlace,          setEndTextPlace)
@@ -101,9 +96,7 @@ class TextLineBase : public SLine {
       M_PROPERTY(Align,     endTextAlign,          setEndTextAlign)
       M_PROPERTY(QString,   endFontFamily,         setEndFontFamily)
       M_PROPERTY(qreal,     endFontSize,           setEndFontSize)
-      M_PROPERTY(bool,      endFontBold,           setEndFontBold)
-      M_PROPERTY(bool,      endFontItalic,         setEndFontItalic)
-      M_PROPERTY(bool,      endFontUnderline,      setEndFontUnderline)
+      M_PROPERTY(FontStyle, endFontStyle,          setEndFontStyle)
       M_PROPERTY(QPointF,   endTextOffset,         setEndTextOffset)
 
    protected:
@@ -122,7 +115,7 @@ class TextLineBase : public SLine {
 
       virtual QVariant getProperty(Pid id) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
-      virtual QVariant propertyDefault(Pid id) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
       };
 
 }     // namespace Ms

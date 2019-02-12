@@ -6,7 +6,7 @@
   <language code="ar_EG" name="(العربية (مصر" />
   <language code="ar_SD" name="(العربية (السودان" />
   <language code="ast" name="Asturianu" />
-  <language code="be" name="Беларуская" />
+  <language code="be" name="Беларуская мова" />
   <language code="bg" name="български" />
   <language code="ca" name="Català" />
   <language code="ca@valencia" name="Valencià" />
@@ -23,6 +23,7 @@
   <language code="eu" name="Euskara" />
   <language code="fa" name="فارسی" />
   <language code="fi" name="Suomi" />
+  <language code="fil" name="Filipino" />
   <language code="fo" name="Føroyskt" />
   <language code="fr" name="Français" />
   <language code="ga" name="Gaeilge" />
@@ -46,22 +47,22 @@
   <language code="mn_MN" name="Монгол" />
   <language code="nl" name="Nederlands" />
   <language code="nl_BE" name="Vlaams" />
-  <language code="nb" name="Norsk bokmål" />
-  <language code="nn" name="Norsk nynorsk" />
+  <language code="nb" name="Norsk (Bokmål)" />
+  <language code="nn" name="Norsk (Nynorsk)" />
   <language code="pl" name="Polski" />
   <language code="pt" name="Português" />
   <language code="pt_BR" name="Português brasileiro" />
   <language code="ro" name="Română" />
   <language code="ru" name="Русский" />
-  <language code="sr" name="Srpski" />
-  <language code="sr_RS" name="Српски" />
   <language code="sk" name="Slovenčina" />
   <language code="sl" name="Slovenščina" />
+  <language code="sr" name="Srpski" />
+  <language code="sr_RS" name="Српски" />
   <language code="sv" name="Svenska" />
   <language code="th" name="ภาษาไทย" />
   <language code="tr" name="Türkçe" />
   <language code="uk" name="Українська" />
-  <language code="uz@Latn" name="Oʻzbekcha" />
+  <language code="uz@Latn" name="Oʻzbek tili" />
   <language code="vi" name="Tiếng Việt" />
   <language code="zh_CN" name="简体中文" />
   <language code="zh_TW" name="繁體中文 (台灣)" />

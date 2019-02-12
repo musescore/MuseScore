@@ -127,4 +127,8 @@ cp   $MSCORE/clefs.gpx.mscx clefs.gpx-ref.mscx
 cp   $MSCORE/fret-diagram_2instruments.gpx.mscx fret-diagram_2instruments.gpx-ref.mscx
 cp   $MSCORE/tuplets.gpx.mscx tuplets.gpx-ref.mscx
 cp   $MSCORE/tuplets2.gpx.mscx tuplets2.gpx-ref.mscx
+cp   $MSCORE/capo-fret.gp3.mscx capo-fret.gp3-ref.mscx
+cp   $MSCORE/capo-fret.gp4.mscx capo-fret.gp4-ref.mscx
+cp   $MSCORE/capo-fret.gp5.mscx capo-fret.gp5-ref.mscx
+cp   $MSCORE/UncompletedMeasure.gpx.mscx UncompletedMeasure.gpx-ref.mscx
 

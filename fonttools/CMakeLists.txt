@@ -1,7 +1,6 @@
 #=============================================================================
 #  MuseScore
 #  Music Composition & Notation
-#  $Id:$
 #
 #  Copyright (C) 2011 Werner Schweer
 #
@@ -19,5 +18,14 @@ add_executable(
       )
 
 target_link_libraries(genft ${QT_LIBRARIES} -lfreetype)
-set_target_properties(genft PROPERTIES COMPILE_FLAGS "-I/usr/include/freetype2 -g -Wall -Wextra -Winvalid-pch")
+
+if (NOT MSVC)
+   set_target_properties(genft PROPERTIES COMPILE_FLAGS "-I/usr/include/freetype2 -g -Wall -Wextra -Winvalid-pch")
+else (NOT MSVC)
+   set_target_properties (
+      genft
+      PROPERTIES
+         COMPILE_FLAGS ""     # Might be enough, have to check if a forced directory or forced include is needed.
+      )
+endif (NOT MSVC)   
 

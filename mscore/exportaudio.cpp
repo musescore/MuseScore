@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: exportaudio.cpp 5660 2012-05-22 14:17:39Z wschweer $
 //
 //  Copyright (C) 2009 Werner Schweer and others
 //
@@ -58,19 +57,19 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
     if(events.size() == 0)
           return false;
 
-    MasterSynthesizer* synti = synthesizerFactory();
-    synti->init();
+    MasterSynthesizer* synth = synthesizerFactory();
+    synth->init();
     int sampleRate = preferences.getInt(PREF_EXPORT_AUDIO_SAMPLERATE);
-    synti->setSampleRate(sampleRate);
+    synth->setSampleRate(sampleRate);
     if (MScore::noGui) { // use score settings if possible
-          bool r = synti->setState(score->synthesizerState());
+          bool r = synth->setState(score->synthesizerState());
           if (!r)
-                synti->init();
+                synth->init();
           }
     else { // use current synth settings
-          bool r = synti->setState(mscore->synthesizerState());
+          bool r = synth->setState(mscore->synthesizerState());
           if (!r)
-                synti->init();
+                synth->init();
           }
 
     int oldSampleRate  = MScore::sampleRate;
@@ -84,10 +83,11 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
     const int maxEndTime = (score->utick2utime(endPos->first) + 3) * MScore::sampleRate;
 
     bool cancelled = false;
-    for (int pass = 0; pass < 2; ++pass) {
+    int passes = preferences.getBool(PREF_EXPORT_AUDIO_NORMALIZE) ? 2 : 1;
+    for (int pass = 0; pass < passes; ++pass) {
           EventMap::const_iterator playPos;
           playPos = events.cbegin();
-          synti->allSoundsOff(-1);
+          synth->allSoundsOff(-1);
 
           //
           // init instruments
@@ -95,14 +95,14 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
           foreach(Part* part, score->parts()) {
                 const InstrumentList* il = part->instruments();
                 for(auto i = il->begin(); i!= il->end(); i++) {
-                      foreach(const Channel* a, i->second->channel()) {
+                      for (const Channel* a : i->second->channel()) {
                             a->updateInitList();
-                            foreach(MidiCoreEvent e, a->init) {
+                            for (MidiCoreEvent e : a->init) {
                                   if (e.type() == ME_INVALID)
                                         continue;
-                                  e.setChannel(a->channel);
-                                  int syntiIdx = synti->index(score->masterScore()->midiMapping(a->channel)->articulation->synti);
-                                  synti->play(e, syntiIdx);
+                                  e.setChannel(a->channel());
+                                  int syntiIdx = synth->index(score->masterScore()->midiMapping(a->channel())->articulation->synti());
+								  synth->play(e, syntiIdx);
                                   }
                             }
                       }
@@ -127,7 +127,7 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                             break;
                       int n = f - playTime;
                       if (n) {
-                            synti->process(n, p);
+                            synth->process(n, p);
                             p += 2 * n;
                             }
 
@@ -137,13 +137,13 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                       if (e.isChannelEvent()) {
                             int channelIdx = e.channel();
                             Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation;
-                            if (!c->mute) {
-                                  synti->play(e, synti->index(c->synti));
+                            if (!c->mute()) {
+                                  synth->play(e, synth->index(c->synti()));
                                   }
                             }
                       }
                 if (frames) {
-                      synti->process(frames, p);
+                      synth->process(frames, p);
                       playTime += frames;
                       }
                 if (pass == 1) {
@@ -151,7 +151,6 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                             max = qMax(max, qAbs(buffer[i]));
                             buffer[i] *= gain;
                             }
-                      device->write(reinterpret_cast<const char*>(buffer), 2 * FRAMES * sizeof(float));
                       }
                 else {
                       for (unsigned i = 0; i < FRAMES * 2; ++i) {
@@ -159,16 +158,18 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                             peak = qMax(peak, qAbs(buffer[i]));
                             }
                       }
+                if (pass == (passes - 1))
+                      device->write(reinterpret_cast<const char*>(buffer), 2 * FRAMES * sizeof(float));
                 playTime = endTime;
                 if (updateProgress) {
                     // normalize to [0, 1] range
-                    if (!updateProgress((pass * et + playTime) / 2.0 / et)) {
+                    if (!updateProgress(float(pass * et + playTime) / passes / et)) {
                         cancelled = true;
                         break;
                     }
                       }
                 if (playTime >= et)
-                      synti->allNotesOff(-1);
+                      synth->allNotesOff(-1);
                 // create sound until the sound decays
                 if (playTime >= et && max*peak < 0.000001)
                       break;
@@ -186,7 +187,7 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
           }
 
     MScore::sampleRate = oldSampleRate;
-    delete synti;
+    delete synth;
 
     device->close();
 
@@ -223,15 +224,15 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             }
         }
 
-        virtual qint64 readData(char *data, qint64 maxlen) override final {
-            Q_UNUSED(data);
+        virtual qint64 readData(char *dta, qint64 maxlen) override final {
+            Q_UNUSED(dta);
             qDebug() << "Error: No write supported!";
             return maxlen;
         }
 
-        virtual qint64 writeData(const char *data, qint64 len) override final {
-            int trueFrames = len / sizeof(float) / 2;
-            sf_writef_float(sf, reinterpret_cast<const float*>(data), trueFrames);
+        virtual qint64 writeData(const char *dta, qint64 len) override final {
+            size_t trueFrames = len / sizeof(float) / 2;
+            sf_writef_float(sf, reinterpret_cast<const float*>(dta), trueFrames);
             return trueFrames * 2 * sizeof(float);
         }
 
@@ -240,7 +241,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
                 return false;
             }
             sf     = sf_open(qPrintable(filename), SFM_WRITE, &info);
-            if (sf == 0) {
+            if (sf == nullptr) {
                   qDebug("open soundfile failed: %s", sf_strerror(sf));
                   return false;
             }
@@ -271,13 +272,13 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       if(events.size() == 0)
             return false;
 
-      MasterSynthesizer* synti = synthesizerFactory();
-      synti->init();
+      MasterSynthesizer* synth = synthesizerFactory();
+	  synth->init();
       int sampleRate = preferences.getInt(PREF_EXPORT_AUDIO_SAMPLERATE);
-      synti->setSampleRate(sampleRate);
-      bool r = synti->setState(score->synthesizerState());
+	  synth->setSampleRate(sampleRate);
+      bool r = synth->setState(score->synthesizerState());
       if (!r)
-          synti->init();
+          synth->init();
 
       int oldSampleRate  = MScore::sampleRate;
       MScore::sampleRate = sampleRate;
@@ -293,7 +294,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       progress.setWindowModality(Qt::ApplicationModal);
       //progress.setCancelButton(0);
       progress.setCancelButtonText(tr("Cancel"));
-      progress.setLabelText(tr("Exporting..."));
+      progress.setLabelText(tr("Exporting…"));
       if (!MScore::noGui) {
           // callback function that will update the progress bar
           // it will return false and thus cancel the export if the user
@@ -322,7 +323,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       progress.close();
 
       MScore::sampleRate = oldSampleRate;
-      delete synti;
+      delete synth;
 
       if (wasCanceled)
             QFile::remove(name);

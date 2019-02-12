@@ -114,15 +114,6 @@ bool Excerpt::operator==(const Excerpt& e) const
       }
 
 //---------------------------------------------------------
-//   localSetScore
-//---------------------------------------------------------
-
-static void localSetScore(void* score, Element* element)
-      {
-      element->setScore((Score*)score);
-      }
-
-//---------------------------------------------------------
 //   createExcerpt
 //---------------------------------------------------------
 
@@ -155,9 +146,13 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             for (Staff* staff : *part->staves()) {
                   Staff* s = new Staff(score);
                   s->setPart(p);
-                  s->setStaffType(0, staff->staffType(0));              // TODO
+//                  s->setStaffType(0, *staff->staffType(0));              // TODO
+                  s->init(staff);
                   s->setDefaultClefType(staff->defaultClefType());
-                  score->undo(new LinkStaff(s, staff));
+                  // the order of staff - s matters as staff should be the first entry in the
+                  // created link list to make primaryStaff() work
+                  // TODO: change implementation, maybe create an explicit "primary" flag
+                  score->undo(new Link(s, staff));
                   p->staves()->append(s);
                   score->staves().append(s);
                   srcStaves.append(staff->idx());
@@ -169,13 +164,15 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       if (excerpt->tracks().isEmpty()) {
             QMultiMap<int, int> tracks;
             for (Staff* s : score->staves()) {
-                  LinkedStaves* ls = s->linkedStaves();
+                  const LinkedElements* ls = s->links();
                   if (ls == 0)
                         continue;
-                  for (Staff* ps : ls->staves()) {
+                  for (auto le : *ls) {
+                        Staff* ps = toStaff(le);
                         if (ps->primaryStaff()) {
-                              for (int i = 0; i < VOICES; i++)
+                              for (int i = 0; i < VOICES; i++) {
                                     tracks.insert(ps->idx() * VOICES + i % VOICES, s->idx() * VOICES + i % VOICES);
+                                    }
                               break;
                               }
                         }
@@ -202,7 +199,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       titleFramePart->copyValues(titleFrameScore);
       QString partLabel = excerpt->title();     // parts.front()->longName();
       if (!partLabel.isEmpty()) {
-            Text* txt = new Text(SubStyleId::INSTRUMENT_EXCERPT, score);
+            Text* txt = new Text(score, Tid::INSTRUMENT_EXCERPT);
             txt->setPlainText(partLabel);
             txt->setTrack(0);
             measure->add(txt);
@@ -215,7 +212,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
       // handle transposing instruments
       if (oscore->styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch)) {
-            for (Staff* staff : score->staves()) {
+            for (const Staff* staff : score->staves()) {
                   if (staff->staffType(0)->group() == StaffGroup::PERCUSSION)
                         continue;
 
@@ -238,8 +235,8 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         endTick = score->lastSegment()->tick();
                   score->transposeKeys(staffIdx, staffIdx+1, 0, endTick, interval, true, flip);
 
-                  for (auto segment = score->firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
-                        Interval interval = staff->part()->instrument(segment->tick())->transpose();
+                  for (auto segment = score->firstSegmentMM(SegmentType::ChordRest); segment; segment = segment->next1MM(SegmentType::ChordRest)) {
+                        interval = staff->part()->instrument(segment->tick())->transpose();
                         if (interval.isZero())
                               continue;
                         if (oscore->styleB(Sid::concertPitch))
@@ -251,7 +248,16 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                               Harmony* h  = toHarmony(e);
                               int rootTpc = Ms::transposeTpc(h->rootTpc(), interval, true);
                               int baseTpc = Ms::transposeTpc(h->baseTpc(), interval, true);
-                              score->undoTransposeHarmony(h, rootTpc, baseTpc);
+                              // mmrests are on by default in part
+                              // if this harmony is attached to an mmrest,
+                              // be sure to transpose harmony in underlying measure as well
+                              for (ScoreElement* se : h->linkList()) {
+                                    Harmony* hh = static_cast<Harmony*>(se);
+                                    // skip links to other staves (including in other scores)
+                                    if (hh->staff() != h->staff())
+                                          continue;
+                                    score->undoTransposeHarmony(hh, rootTpc, baseTpc);
+                                    }
                               }
                         }
                   }
@@ -281,24 +287,23 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
             }
 
       // unlink the staves in the excerpt
-      for (Staff* s : partScore->staves()) {
-            Staff* staff = nullptr;
-            // find staff in the main score
-            if (s->linkedStaves()) {
-                  for (Staff* s2 : s->linkedStaves()->staves()) {
-                        if ((s2->score() == this) && s2->primaryStaff()) {
-                              staff = s2;
+      for (Staff* st : partScore->staves()) {
+            bool hasLinksInMaster = false;
+            if (st->links()) {
+                  for (auto le : *st->links()) {
+                        if (le->score() == this) {
+                              hasLinksInMaster = true;
                               break;
                               }
                         }
                   }
-            if (staff) {
-                  int staffIdx = s->idx();
+            if (hasLinksInMaster) {
+                  int staffIdx = st->idx();
                   // unlink the spanners
                   for (auto i = partScore->spanner().begin(); i != partScore->spanner().cend(); ++i) {
-                        Spanner* s = i->second;
-                        if (s->staffIdx() == staffIdx)
-                              s->undoUnlink();
+                        Spanner* sp = i->second;
+                        if (sp->staffIdx() == staffIdx)
+                              sp->undoUnlink();
                         }
                   int sTrack = staffIdx * VOICES;
                   int eTrack = sTrack + VOICES;
@@ -315,7 +320,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
                               }
                         }
                   // unlink the staff
-                  undo(new UnlinkStaff(staff, s));
+                  undo(new Unlink(st));
                   }
             }
       undo(new RemoveExcerpt(excerpt));
@@ -327,7 +332,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
 
 static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
       {
-      // dont clone voltas for track != 0
+      // don’t clone voltas for track != 0
       if (s->type() == ElementType::VOLTA && s->track() != 0)
             return;
       Spanner* ns = toSpanner(s->linkedClone());
@@ -391,18 +396,18 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
 
             Tuplet* nt1 = nt;
             while (ot->tuplet()) {
-                  Tuplet* nt = tupletMap.findNew(ot->tuplet());
-                  if (nt == 0) {
-                        nt = toTuplet(ot->tuplet()->linkedClone());
-                        nt->setTrack(track);
-                        nt->setParent(m);
-                        nt->setScore(ncr->score());
-                        tupletMap.add(ot->tuplet(), nt);
+                  Tuplet* nt2 = tupletMap.findNew(ot->tuplet());
+                  if (nt2 == 0) {
+                        nt2 = toTuplet(ot->tuplet()->linkedClone());
+                        nt2->setTrack(track);
+                        nt2->setParent(m);
+                        nt2->setScore(ncr->score());
+                        tupletMap.add(ot->tuplet(), nt2);
                         }
-                  nt->add(nt1);
-                  nt1->setTuplet(nt);
+                  nt2->add(nt1);
+                  nt1->setTuplet(nt2);
                   ot = ot->tuplet();
-                  nt1 = nt;
+                  nt1 = nt2;
                   }
             }
       nt->add(ncr);
@@ -459,7 +464,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                   for (int srcTrack = 0; srcTrack < tracks; ++srcTrack) {
                         TupletMap tupletMap;    // tuplets cannot cross measure boundaries
 
-                        int track = trackList.value(srcTrack, -1);
+                        int strack = trackList.value(srcTrack, -1);
 
                         Tremolo* tremolo = 0;
                         for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
@@ -467,12 +472,15 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                               for (Element* e : oseg->annotations()) {
                                     if (e->generated())
                                           continue;
-                                    if ((e->track() == srcTrack && track != -1) || (e->systemFlag() && srcTrack == 0)) {
+                                    if ((e->track() == srcTrack && strack != -1) || (e->systemFlag() && srcTrack == 0)) {
                                           Element* ne = e->linkedClone();
-                                          // reset user offset as most likely it will not fit
-                                          ne->setUserOff(QPointF());
-                                          ne->setReadPos(QPointF());
-                                          ne->setTrack(track == -1 ? 0 : track);
+                                          // reset offset as most likely it will not fit
+                                          PropertyFlags f = ne->propertyFlags(Pid::OFFSET);
+                                          if (f == PropertyFlags::UNSTYLED) {
+                                                ne->setPropertyFlags(Pid::OFFSET, PropertyFlags::STYLED);
+                                                ne->resetProperty(Pid::OFFSET);
+                                                }
+                                          ne->setTrack(strack == -1 ? 0 : strack);
                                           ne->setScore(score);
                                           if (!ns)
                                                 ns = nm->getSegment(oseg->segmentType(), oseg->tick());
@@ -546,7 +554,6 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                           if (!(ne->track() % VOICES) && ne->isRest())
                                                 toRest(ne)->setGap(false);
 
-                                          ne->scanElements(score, localSetScore);   //necessary?
                                           ne->setScore(score);
                                           if (oe->type() == ElementType::BAR_LINE && adjustedBarlineSpan) {
                                                 BarLine* nbl = toBarLine(ne);
@@ -574,8 +581,8 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                                       Chord* och = toChord(ocr);
                                                       Chord* nch = toChord(ncr);
 
-                                                      int n = och->notes().size();
-                                                      for (int i = 0; i < n; ++i) {
+                                                      size_t n = och->notes().size();
+                                                      for (size_t i = 0; i < n; ++i) {
                                                             Note* on = och->notes().at(i);
                                                             Note* nn = nch->notes().at(i);
                                                             if (on->tieFor()) {
@@ -672,8 +679,8 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                   }
 
             nmb->linkTo(mb);
-            foreach (Element* e, mb->el()) {
-                  if (e->type() == ElementType::LAYOUT_BREAK) {
+            for (Element* e : mb->el()) {
+                  if (e->isLayoutBreak()) {
                         LayoutBreak::Type st = toLayoutBreak(e)->layoutBreakType();
                         if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE)
                               continue;
@@ -697,8 +704,11 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                   // layout breaks other than section were skipped above,
                   // but section breaks do need to be cloned & linked
                   // other measure-attached elements (?) are cloned but not linked
-                  if (e->isText() || e->type() == ElementType::LAYOUT_BREAK)
-                        ne = e->linkedClone();
+                  if (e->isTextBase() || e->isLayoutBreak()) {
+                        ne = e->clone();
+                        ne->setAutoplace(true);
+                        ne->linkTo(e);
+                        }
                   else
                         ne = e->clone();
                   ne->setScore(score);
@@ -759,8 +769,8 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                   //always export these spanners to first voice of the destination staff
 
                   QList<int> track1;
-                  for (int i = s->track(); i < s->track() + VOICES; i++) {
-                        track1 += trackList.values(i);
+                  for (int ii = s->track(); ii < s->track() + VOICES; ii++) {
+                        track1 += trackList.values(ii);
                         }
 
                   for (int track : track1) {
@@ -779,9 +789,9 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                         continue;
 
                   //export other spanner if staffidx matches
-                  for (int i = 0; i < track1.length(); i++) {
-                        dstTrack = track1.at(i);
-                        dstTrack2 = track2.at(i);
+                  for (int ii = 0; ii < track1.length(); ii++) {
+                        dstTrack = track1.at(ii);
+                        dstTrack2 = track2.at(ii);
                         cloneSpanner(s, score, dstTrack, dstTrack2);
                         }
                   }
@@ -798,7 +808,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
       Score* score = srcStaff->score();
       TieMap tieMap;
 
-      score->undo(new LinkStaff(dstStaff, srcStaff));
+      score->undo(new Link(dstStaff, srcStaff));
 
       int srcStaffIdx = srcStaff->idx();
       int dstStaffIdx = dstStaff->idx();
@@ -821,7 +831,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                               // only clone clef if it matches staff group and does not exists yet
                               Clef* clef = toClef(oe);
                               int   tick = seg->tick();
-                              if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->staffType(0)->group()
+                              if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->constStaffType(0)->group()
                                           && dstStaff->clefType(tick) != clef->clefTypeList()) {
                                     ne = oe->clone();
                                     }
@@ -873,18 +883,18 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                                           case ElementType::LYRICS:   // not normally segment-attached
                                                 continue;
                                           default:
-                                                Element* ne = e->clone();
-                                                ne->setTrack(dstTrack);
-                                                ne->setParent(seg);
-                                                ne->setScore(score);
-                                                score->undoAddElement(ne);
+                                                Element* ne1 = e->clone();
+                                                ne1->setTrack(dstTrack);
+                                                ne1->setParent(seg);
+                                                ne1->setScore(score);
+                                                score->undoAddElement(ne1);
                                           }
                                     }
                               if (oe->isChord()) {
                                     Chord* och = toChord(ocr);
                                     Chord* nch = toChord(ncr);
-                                    int n = och->notes().size();
-                                    for (int i = 0; i < n; ++i) {
+                                    size_t n = och->notes().size();
+                                    for (size_t i = 0; i < n; ++i) {
                                           Note* on = och->notes().at(i);
                                           Note* nn = nch->notes().at(i);
                                           if (on->tieFor()) {
@@ -1063,7 +1073,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick
                                     nt->add(ncr);
                                     }
 
-                              foreach (Element* e, oseg->annotations()) {
+                              for (Element* e : oseg->annotations()) {
                                     if (e->generated() || e->systemFlag())
                                           continue;
                                     if (e->track() != srcTrack)
@@ -1080,18 +1090,18 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick
                                           case ElementType::LYRICS:   // not normally segment-attached
                                                 continue;
                                           default:
-                                                Element* ne = e->clone();
-                                                ne->setTrack(dstTrack);
-                                                ne->setParent(ns);
-                                                ne->setScore(score);
-                                                score->undoAddElement(ne);
+                                                Element* ne1 = e->clone();
+                                                ne1->setTrack(dstTrack);
+                                                ne1->setParent(ns);
+                                                ne1->setScore(score);
+                                                score->undoAddElement(ne1);
                                           }
                                     }
-                              if (oe->type() == ElementType::CHORD) {
+                              if (oe->isChord()) {
                                     Chord* och = toChord(ocr);
                                     Chord* nch = toChord(ncr);
-                                    int n = och->notes().size();
-                                    for (int i = 0; i < n; ++i) {
+                                    size_t n = och->notes().size();
+                                    for (size_t i = 0; i < n; ++i) {
                                           Note* on = och->notes().at(i);
                                           Note* nn = nch->notes().at(i);
                                           if (on->tieFor()) {

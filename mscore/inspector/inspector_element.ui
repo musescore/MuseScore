@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>227</width>
-    <height>216</height>
+    <width>208</width>
+    <height>180</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -49,9 +49,6 @@
      <property name="text">
       <string>Element</string>
      </property>
-     <property name="arrowType">
-      <enum>Qt::NoArrow</enum>
-     </property>
     </widget>
    </item>
    <item>
@@ -89,54 +86,10 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="3">
-       <widget class="QToolButton" name="resetOffset">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
+      <item row="5" column="1" colspan="2">
+       <widget class="Ms::OffsetSelect" name="offset" native="true">
         <property name="accessibleName">
-         <string>Reset 'Offset' values</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="QToolButton" name="resetZ">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Stacking order' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="resetVisible">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Visible' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+         <string>Offset</string>
         </property>
        </widget>
       </item>
@@ -144,6 +97,9 @@
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Color:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>color</cstring>
@@ -154,6 +110,9 @@
        <widget class="QLabel" name="offsetLabel">
         <property name="text">
          <string>Offset:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>offset</cstring>
@@ -180,50 +139,6 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="3">
-       <widget class="QToolButton" name="resetAutoplace">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Automatic placement' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QToolButton" name="resetColor">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Color' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1" colspan="2">
-       <widget class="Ms::OffsetSelect" name="offset" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0" colspan="3">
        <widget class="QWidget" name="widget" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout">
@@ -247,6 +162,9 @@
            <property name="text">
             <string>Stacking order:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
            <property name="buddy">
             <cstring>z</cstring>
            </property>
@@ -268,6 +186,28 @@
         </layout>
        </widget>
       </item>
+      <item row="1" column="3">
+       <widget class="Ms::ResetButton" name="resetVisible">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="Ms::ResetButton" name="resetZ"/>
+      </item>
+      <item row="3" column="3">
+       <widget class="Ms::ResetButton" name="resetColor"/>
+      </item>
+      <item row="4" column="3">
+       <widget class="Ms::ResetButton" name="resetAutoplace"/>
+      </item>
+      <item row="5" column="3">
+       <widget class="Ms::ResetButton" name="resetOffset"/>
+      </item>
      </layout>
     </widget>
    </item>
@@ -281,6 +221,11 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+  </customwidget>
+  <customwidget>
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
    <header>inspector/offsetSelect.h</header>
@@ -288,10 +233,10 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>title</tabstop>
   <tabstop>visible</tabstop>
-  <tabstop>resetVisible</tabstop>
-  <tabstop>resetColor</tabstop>
-  <tabstop>resetOffset</tabstop>
+  <tabstop>z</tabstop>
+  <tabstop>autoplace</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

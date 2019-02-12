@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: musedata.cpp 5497 2012-03-26 10:59:16Z lasconic $
 //
 //  Copyright (C) 2007 Werner Schweer and others
 //
@@ -56,7 +55,7 @@ void MuseData::musicalAttribute(QString s, Part* part)
                   int key = item.mid(2).toInt();
                   KeySigEvent ke;
                   ke.setKey(Key(key));
-                  foreach(Staff* staff, *(part->staves()))
+                  for (Staff* staff : *(part->staves()))
                         staff->setKey(curTick, ke);
                   }
             else if (item.startsWith("Q:")) {
@@ -75,9 +74,9 @@ void MuseData::musicalAttribute(QString s, Part* part)
                         TimeSig* ts = new TimeSig(score);
                         Staff* staff = part->staff(0);
                         ts->setTrack(staff->idx() * VOICES);
-                        Measure* measure = score->tick2measure(curTick);
-                        Segment* s = measure->getSegment(SegmentType::TimeSig, curTick);
-                        s->add(ts);
+                        Measure* mes = score->tick2measure(curTick);
+                        Segment* seg = mes->getSegment(SegmentType::TimeSig, curTick);
+                        seg->add(ts);
                         }
                   }
             else if (item.startsWith("X:"))
@@ -156,7 +155,7 @@ void MuseData::readChord(Part*, const QString& s)
 //   openSlur
 //---------------------------------------------------------
 
-void MuseData::openSlur(int idx, int tick, Staff* staff, int voice)
+void MuseData::openSlur(int idx, int tick, Staff* staff, int voc)
       {
       int staffIdx = staff->idx();
       if (slur[idx]) {
@@ -165,7 +164,7 @@ void MuseData::openSlur(int idx, int tick, Staff* staff, int voice)
             }
       slur[idx] = new Slur(score);
       slur[idx]->setTick(tick);
-      slur[idx]->setTrack(staffIdx * VOICES + voice);
+      slur[idx]->setTrack(staffIdx * VOICES + voc);
       score->addElement(slur[idx]);
       }
 
@@ -173,12 +172,12 @@ void MuseData::openSlur(int idx, int tick, Staff* staff, int voice)
 //   closeSlur
 //---------------------------------------------------------
 
-void MuseData::closeSlur(int idx, int tick, Staff* staff, int voice)
+void MuseData::closeSlur(int idx, int tick, Staff* staff, int voc)
       {
       int staffIdx = staff->idx();
       if (slur[idx]) {
             slur[idx]->setTick2(tick);
-            slur[idx]->setTrack2(staffIdx * VOICES + voice);
+            slur[idx]->setTrack2(staffIdx * VOICES + voc);
             slur[idx] = 0;
             }
       else
@@ -392,8 +391,8 @@ void MuseData::readNote(Part* part, const QString& s)
             Dynamic* dyn = new Dynamic(score);
             dyn->setDynamicType(dynamics);
             dyn->setTrack(gstaff * VOICES);
-            Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
-            s->add(dyn);
+            Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
+            seg->add(dyn);
             }
 
       QString txt = s.mid(43, 36);
@@ -406,8 +405,8 @@ void MuseData::readNote(Part* part, const QString& s)
                   l->setPlainText(w);
                   l->setNo(no++);
                   l->setTrack(gstaff * VOICES);
-                  Segment* segment = measure->tick2segment(tick);
-                  segment->add(l);
+                  Segment* seg = measure->tick2segment(tick);
+                  seg->add(l);
                   }
             }
       }
@@ -526,20 +525,20 @@ Measure* MuseData::createMeasure()
                   return 0;
                   }
             }
-      Measure* measure  = new Measure(score);
-      measure->setTick(curTick);
+      Measure* mes  = new Measure(score);
+      mes->setTick(curTick);
 
 #if 0
       foreach(Staff* s, score->staves()) {
             if (s->isTop()) {
                   BarLine* barLine = new BarLine(score);
                   barLine->setStaff(s);
-                  measure->setEndBarLine(barLine);
+                  mes->setEndBarLine(barLine);
                   }
             }
 #endif
-      score->measures()->add(measure);
-      return measure;
+      score->measures()->add(mes);
+      return mes;
       }
 
 //---------------------------------------------------------

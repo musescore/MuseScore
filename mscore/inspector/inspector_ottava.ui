@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>150</width>
-    <height>113</height>
+    <width>183</width>
+    <height>129</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -81,25 +81,11 @@
         <property name="text">
          <string>Type:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>ottavaType</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="resetOttavaType">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Type' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -107,6 +93,9 @@
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Placement:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>placement</cstring>
@@ -120,32 +109,32 @@
         </property>
         <item>
          <property name="text">
-          <string>8va</string>
+          <string>8va alta</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>8vb</string>
+          <string>8va bassa</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>15ma</string>
+          <string>15ma alta</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>15mb</string>
+          <string>15ma bassa</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>22ma</string>
+          <string>22ma alta</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>22mb</string>
+          <string>22ma bassa</string>
          </property>
         </item>
        </widget>
@@ -167,69 +156,41 @@
         </item>
        </widget>
       </item>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="resetPlacement">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="numbersOnly">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
-        <property name="accessibleName">
-         <string>Numbers only</string>
-        </property>
         <property name="text">
          <string>Numbers only</string>
         </property>
        </widget>
       </item>
+      <item row="1" column="3">
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true"/>
+      </item>
       <item row="2" column="3">
-       <widget class="QToolButton" name="resetNumbersOnly">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Numbers only' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
+       <widget class="Ms::ResetButton" name="resetNumbersOnly" native="true"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>ottavaType</tabstop>
-  <tabstop>resetOttavaType</tabstop>
   <tabstop>placement</tabstop>
-  <tabstop>resetPlacement</tabstop>
   <tabstop>numbersOnly</tabstop>
-  <tabstop>resetNumbersOnly</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

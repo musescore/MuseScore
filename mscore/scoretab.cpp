@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2009-2010 Werner Schweer and others
 //
@@ -105,7 +104,7 @@ ScoreView* ScoreTab::view(int n) const
 
 QSplitter* ScoreTab::viewSplitter(int n) const
       {
-      TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(n).value<void*>());
+      const TabScoreView* tsv = tabScoreView(n);
       if (tsv == 0) {
             // qDebug("ScoreTab::viewSplitter %d is zero", n);
             return 0;
@@ -169,6 +168,9 @@ void ScoreTab::tabMoved(int from, int to)
 
 //---------------------------------------------------------
 //   setCurrent
+//    Sets current view to the content of n-th tab.
+//    You will rarely need to call this function directly,
+//    consider using setCurrentIndex instead.
 //---------------------------------------------------------
 
 void ScoreTab::setCurrent(int n)
@@ -180,7 +182,7 @@ void ScoreTab::setCurrent(int n)
             emit currentScoreViewChanged(0);
             return;
             }
-      TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(n).value<void*>());
+      TabScoreView* tsv = tabScoreView(n);
       QSplitter* vs = viewSplitter(n);
 
       ScoreView* v;
@@ -260,11 +262,11 @@ void ScoreTab::updateExcerpts()
       int idx = currentIndex();
       if (idx == -1)
             return;
-      ScoreView* v = view(idx);
-      if (!v)
+      TabScoreView* tsv = tabScoreView(idx);
+      MasterScore* score = tsv->score;
+      if (!score->excerptsChanged())
             return;
 
-      MasterScore* score = v->score()->masterScore();
       clearTab2();
       //delete all scoreviews for parts, especially for the deleted ones
       int n = stack->count() - 1;
@@ -290,15 +292,17 @@ void ScoreTab::updateExcerpts()
       else {
             tab2->setVisible(false);
             }
-      blockSignals(true);
       setExcerpt(0);
-      blockSignals(false);
 
       getAction("file-part-export")->setEnabled(excerpts.size() > 0);
       }
 
 //---------------------------------------------------------
 //   setExcerpt
+//    Sets the currently selected excerpt tab to the n-th
+//    excerpt tab (where 0 is a tab for a master score).
+//    For selecting the current score see
+//    ScoreTab::setCurrentIndex
 //---------------------------------------------------------
 
 void ScoreTab::setExcerpt(int n)
@@ -306,7 +310,7 @@ void ScoreTab::setExcerpt(int n)
       if (n == -1)
             return;
       int idx           = tab->currentIndex();
-      TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(idx).value<void*>());
+      TabScoreView* tsv = tabScoreView(idx);
       if (tsv == 0)
             return;
       tsv->part     = n;
@@ -343,6 +347,7 @@ void ScoreTab::insertTab(MasterScore* s)
       tab->insertTab(idx, s->fileInfo()->completeBaseName().replace("&","&&"));
       tab->setTabData(idx, QVariant::fromValue<void*>(new TabScoreView(s)));
       tab->blockSignals(false);
+      emit tabInserted(idx);
       }
 
 //---------------------------------------------------------
@@ -356,6 +361,7 @@ void ScoreTab::setTabText(int idx, const QString& s)
       tab->setTabText(idx, text);
       if (tab2)
             tab2->setTabText(0, text);
+      emit tabRenamed(idx);
       }
 
 //---------------------------------------------------------
@@ -369,6 +375,10 @@ int ScoreTab::currentIndex() const
 
 //---------------------------------------------------------
 //   setCurrentIndex
+//    Sets the currently selected score tab to the tab
+//    number idx.
+//    For selecting the current excerpt see
+//    ScoreTab::setExcerpt.
 //---------------------------------------------------------
 
 void ScoreTab::setCurrentIndex(int idx)
@@ -381,12 +391,34 @@ void ScoreTab::setCurrentIndex(int idx)
       }
 
 //---------------------------------------------------------
+//   setCurrentScore
+//    Changes the currently selected score tab and excerpt
+//    tab to display the given score.
+//    Returns true on success.
+//---------------------------------------------------------
+
+bool ScoreTab::setCurrentScore(Score* s)
+      {
+      MasterScore* ms = s->masterScore();
+      const int idx = scoreList->indexOf(ms);
+      if (idx == -1)
+            return false;
+      const int exIdx = (ms == s) ? 0 : ms->scoreList().indexOf(s);
+      if (exIdx == -1)
+            return false;
+
+      setCurrentIndex(idx);
+      setExcerpt(exIdx);
+      return true;
+      }
+
+//---------------------------------------------------------
 //   removeTab
 //---------------------------------------------------------
 
-void ScoreTab::removeTab(int idx)
+void ScoreTab::removeTab(int idx, bool noCurrentChangedSignal)
       {
-      TabScoreView* tsv = static_cast<TabScoreView*>(tab->tabData(idx).value<void*>());
+      TabScoreView* tsv = tabScoreView(idx);
       Score* score = tsv->score;
 
       for (int i = 0; i < stack->count(); ++i) {
@@ -411,12 +443,16 @@ void ScoreTab::removeTab(int idx)
                   }
             }
 
-      int cidx = currentIndex();
-      tab->removeTab(idx);
+      bool blocked = false;
+      if (noCurrentChangedSignal)
+            blocked = blockSignals(true);
 
-      if (cidx > idx)
-            cidx -= 1;
-      setCurrentIndex(cidx);
+      tab->removeTab(idx); // Will call setCurrent via a signal-slot connection
+
+      if (noCurrentChangedSignal)
+            blockSignals(blocked);
+
+      emit tabRemoved(idx);
       }
 
 //---------------------------------------------------------

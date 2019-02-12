@@ -40,13 +40,22 @@ enum class OffMode : char {
       FAST, NORMAL
       };
 
+enum class FilterType {
+      lpf_2p, //default, double-pole low-pass filter
+      lpf_1p, //single-pole low-pass filter
+      hpf_2p, //double-pole high-pass filter
+      hpf_1p, //single-pole high-pass filter
+      bpf_2p, //double-pole band-pass filter
+      brf_2p //double-pole band-reject filter
+      };
+
 //---------------------------------------------------------
 //   Zone
 //---------------------------------------------------------
 
 struct Zone {
       Sample* sample = 0;
-      int  offset  = 0;
+      long long offset  = 0; //[0, 4294967295]
       int  seq     = 0;
       int seqLen   = 0;
       int seqPos   = 0;
@@ -76,13 +85,25 @@ struct Zone {
       float ampegVel2Sustain  = 0.0;
       float ampegVel2Release  = 0.0;
       float rtDecay = 0.0;
+      float delay = 0.0;
+      int pan = 0;
+      float group_volume = 1.0;
+      float global_volume = 1.0;
+
+      //filters
+      bool isCutoffDefined;
+      float cutoff; //[0, sampleRate / 2] Hz
+      int fil_keytrack; //[0, 1200] cents
+      int fil_keycenter; //[0, 127]
+      int fil_veltrack; //[-9600, 9600] cents
+      FilterType fil_type = FilterType::lpf_2p;
 
       Trigger trigger = Trigger::ATTACK;
       LoopMode loopMode = LoopMode::NO_LOOP;
       OffMode offMode = OffMode::FAST;
       int group = 0;
       int offBy = 0;
-      int loopStart, loopEnd;
+      long long loopStart, loopEnd;
       double loRand = 0.0;
       double hiRand = 1.0;
 

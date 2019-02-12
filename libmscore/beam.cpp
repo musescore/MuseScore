@@ -35,6 +35,10 @@
 
 namespace Ms {
 
+static const ElementStyle beamStyle {
+      { Sid::beamNoSlope,                        Pid::BEAM_NO_SLOPE           },
+      };
+
 //---------------------------------------------------------
 //   BeamFragment
 //    position of primary beam
@@ -52,9 +56,9 @@ struct BeamFragment {
 //---------------------------------------------------------
 
 Beam::Beam(Score* s)
-   : Element(s, ElementFlag::SELECTABLE)
+   : Element(s)
       {
-      initSubStyle(SubStyleId::BEAM);
+      initElementStyle(&beamStyle);
       _direction       = Direction::AUTO;
       _up              = true;
       _distribute      = false;
@@ -214,13 +218,13 @@ void Beam::draw(QPainter* painter) const
             d = M_PI/6.0;
       double ww = lw2 / sin(M_PI_2 - atan(d));
 
-      for (const QLineF* bs : beamSegments) {
+      for (const QLineF* bs1 : beamSegments) {
             painter->drawPolygon(
                QPolygonF({
-                  QPointF(bs->x1(), bs->y1() - ww),
-                  QPointF(bs->x2(), bs->y2() - ww),
-                  QPointF(bs->x2(), bs->y2() + ww),
-                  QPointF(bs->x1(), bs->y1() + ww),
+                  QPointF(bs1->x1(), bs1->y1() - ww),
+                  QPointF(bs1->x2(), bs1->y2() - ww),
+                  QPointF(bs1->x2(), bs1->y2() + ww),
+                  QPointF(bs1->x1(), bs1->y1() + ww),
                   }),
             Qt::OddEvenFill);
             }
@@ -282,6 +286,7 @@ bool Beam::twoBeamedNotes()
 //---------------------------------------------------------
 //   layout1
 //    - remove beam segments
+//    - detach from system
 //    - calculate stem direction and set chord
 //---------------------------------------------------------
 
@@ -290,6 +295,8 @@ void Beam::layout1()
       //delete old segments
       qDeleteAll(beamSegments);
       beamSegments.clear();
+
+      setParent(nullptr); // parent is System
 
       maxDuration.setType(TDuration::DurationType::V_INVALID);
       Chord* c1 = 0;
@@ -406,13 +413,11 @@ void Beam::layout1()
             // otherwise, assume beam direction is stem direction
 
             for (ChordRest* cr : _elements) {
-                  if (!cr->isChord())
-                        continue;
-                  Chord* chord = toChord(cr);
-                  if (!(_cross || chord->staffMove())) {
-                        if (chord->up() != _up) {
-                              chord->setUp(_up);
-                              chord->layoutStem1();
+                  const bool staffMove = cr->isChord() ? toChord(cr)->staffMove() : false;
+                  if (!(_cross || staffMove)) {
+                        if (cr->up() != _up) {
+                              cr->setUp(_up);
+                              cr->layoutStem1();
                               }
                         }
                   }
@@ -1067,7 +1072,7 @@ static Bm beamMetric1(bool up, char l1, char l2)
 
 static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
       {
-      int n = cl.size();
+      size_t n = cl.size();
       const ChordRest* c1 = cl[0];
       const ChordRest* c2 = cl[n-1];
 
@@ -1075,7 +1080,7 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
       qreal slope = (slant * _spatium4) / (c2->stemPosBeam().x() - p1.x());
       int ml = -1000;
       if (c1->up()) {
-            for (int i = 1; i < n; ++i) {
+            for (size_t i = 1; i < n; ++i) {
                   QPointF p3(cl[i]->stemPosBeam());
                   qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
                   int l       = lrint((yUp - p3.y()) / (_spatium4));
@@ -1083,7 +1088,7 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
                   }
             }
       else {
-            for (int i = 1; i < n; ++i) {
+            for (size_t i = 1; i < n; ++i) {
                   const ChordRest* c = cl[i];
                   QPointF p3(c->stemPosBeam());
                   qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
@@ -1454,8 +1459,9 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
             bm.l = ll1 - l1;
             }
       else { // if (beamLevels > 4) {
-            static const int t[] = { 0, 0, 4, 4, 8, 12, 16 }; // spatium4 added to stem len
-            int n = t[beamLevels] + 12;
+            //static const int t[] = { 0, 0, 4, 4, 8, 12, 15, 18, 21 }; // spatium4 added to stem len
+            //int n = t[beamLevels] + 12;
+            int n = (3 * (beamLevels - 5)) + 24;
             bm.s = 0;
             if (_up) {
                   bm.l = -n;
@@ -1515,9 +1521,9 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
 
       _beamDist *= mag();
       _beamDist *= c1->staff()->mag(c1->tick());
-      int n = crl.size();
+      size_t n = crl.size();
 
-      StaffType* tab = 0;
+      const StaffType* tab = 0;
       if (staff()->isTabStaff(0) )
             tab = staff()->staffType(0);
       if (tab && !tab->stemThrough()) {
@@ -1548,10 +1554,11 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   // set stem direction for every chord
                   //
                   bool relayoutGrace = false;
-                  for (int i = 0; i < n; ++i) {
-                        Chord* c = toChord(crl.at(i));
-                        if (c->isRest())
+                  for (size_t i = 0; i < n; ++i) {
+                        ChordRest* cr = crl.at(i);
+                        if (!cr->isChord())
                               continue;
+                        Chord* c = toChord(cr);
                         QPointF p = c->upNote()->pagePos();
                         qreal y1  = beamY + (p.x() - px1) * slope;
                         bool nup  = y1 < p.y();
@@ -1579,7 +1586,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal beamY   = 0.0;  // y position of main beam start
                   qreal y1   = -200000;
                   qreal y2   = 200000;
-                  for (int i = 0; i < n; ++i) {
+                  for (size_t i = 0; i < n; ++i) {
                         Chord* c = toChord(crl.at(i));
                         qreal y;
                         if (c->isRest())
@@ -1623,9 +1630,9 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         if (!cr->isChord())
                               continue;
                         Chord* c = toChord(cr);
-                        bool _up = c->up();
-                        qreal y = (_up ? c->upNote() : c->downNote())->pagePos().y();
-                        if (_up)
+                        bool _up1 = c->up();
+                        qreal y = (_up1 ? c->upNote() : c->downNote())->pagePos().y();
+                        if (_up1)
                               yUpMin = qMin(y, yUpMin);
                         else
                               yDownMax = qMax(y, yDownMax);
@@ -1655,25 +1662,31 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
       qreal x1 = crl[0]->stemPosX() + crl[0]->pageX() - pageX();
 
       int baseLevel = 0;      // beam level that covers all notes of beam
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
       int crBase[n];          // offset of beam level 0 for each chord
+#else
+      // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+      //    heap allocation is slow, an optimization might be used.
+      std::vector<int> crBase(n);
+#endif
       bool growDown = _up;
 
       for (int beamLevel = 0; beamLevel < beamLevels; ++beamLevel) {
 
             // loop through the different groups for this beam level
             // inner loop will advance through chordrests within each group
-            for (int i = 0; i < n;) {
+            for (size_t i = 0; i < n;) {
                   ChordRest* cr1 = crl[i];
-                  int l = cr1->durationType().hooks() - 1;
+                  int l1 = cr1->durationType().hooks() - 1;
 
-                  if ((cr1->type() == ElementType::REST && i) || l < beamLevel) {
+                  if ((cr1->type() == ElementType::REST && i) || l1 < beamLevel) {
                         ++i;
                         continue;
                         }
 
                   // at the beginning of a group
                   // loop through chordrests looking for end
-                  int c1 = i;
+                  size_t currentChordRestIndex = i;
                   ++i;
                   bool b32 = false, b64 = false;
                   for (; i < n; ++i) {
@@ -1694,11 +1707,11 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         }
 
                   // found end of group
-                  int c2 = i;
-                  ChordRest* cr2 = crl[c2 - 1];
+                  size_t chordRestEndGroupIndex = i;
+                  ChordRest* cr2 = crl[chordRestEndGroupIndex - 1];
 
                   // if group covers whole beam, we are still at base level
-                  if (c1 == 0 && c2 == n)
+                  if (currentChordRestIndex == 0 && chordRestEndGroupIndex == n)
                         baseLevel = beamLevel;
 
                   // default assumption - everything grows in same direction
@@ -1708,22 +1721,22 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   // calculate direction for this group
                   if (beamLevel > baseLevel) {
 
-                        if ((c1 && (cr1->up() == cr2->up()))
-                            || ((c2 == n) && (cr1->up() != cr2->up()))) {
+                        if ((currentChordRestIndex && (cr1->up() == cr2->up()))
+                            || ((chordRestEndGroupIndex == n) && (cr1->up() != cr2->up()))) {
                               // matching direction for outer stems, not first group
                               // or, opposing direction for outer stems, last group
                               // recalculate beam for this group based on its *first* cr
                               growDownGroup = cr1->up();
                               }
 
-                        else if (!c1 && (c2 < n) && (cr1->up() != cr2->up())) {
+                        else if (!currentChordRestIndex && (chordRestEndGroupIndex < n) && (cr1->up() != cr2->up())) {
                               // opposing directions for outer stems, first (but not only) group
                               // recalculate beam for this group if necessary based on its *last* cr
                               growDownGroup = cr2->up();
                               }
 
                         // recalculate segment offset bl
-                        int base = crBase[c1];
+                        int base = crBase[currentChordRestIndex];
                         if (growDownGroup && base <= 0)
                               bl = base + beamLevel;
                         else if (growDownGroup)
@@ -1738,18 +1751,18 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   // if there are more beam levels,
                   // record current beam offsets for all notes of this group for re-use
                   if (beamLevel < beamLevels - 1) {
-                        for (int i = c1; i < c2; ++i)
-                              crBase[i] = bl;
+                        for (size_t i1 = currentChordRestIndex; i1 < chordRestEndGroupIndex; ++i1)
+                              crBase[i1] = bl;
                         }
 
                   qreal stemWidth  = score()->styleP(Sid::stemWidth);
                   qreal x2         = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
                   qreal x3;
 
-                  if ((c2 - c1) > 1) {
-                        ChordRest* cr2 = crl[c2-1];
+                  if ((chordRestEndGroupIndex - currentChordRestIndex) > 1) {
+                        ChordRest* chordRest2 = crl[chordRestEndGroupIndex-1];
                         // create segment
-                        x3 = cr2->stemPosX() + cr2->pageX() - _pagePos.x();
+                        x3 = chordRest2->stemPosX() + chordRest2->pageX() - _pagePos.x();
 
                         if (tab) {
                               x2 -= stemWidth * 0.5;
@@ -1758,7 +1771,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         else {
                               if (cr1->up())
                                     x2 -= stemWidth;
-                              if (!cr2->up())
+                              if (!chordRest2->up())
                                     x3 += stemWidth;
                               }
                         }
@@ -1767,7 +1780,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         if (cr1->type() == ElementType::REST)
                               continue;
 
-                        int n = crl.size();
+                        size_t sizeChordRests = crl.size();
                         qreal len = beamMinLen;
                         //
                         // find direction (by default, segment points to right)
@@ -1775,9 +1788,9 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                         // if first or last of group (including tuplet groups)
                         // unconditionally set beam at right or left side
                         Tuplet* tuplet = cr1->tuplet();
-                        if (c1 == 0)
+                        if (currentChordRestIndex == 0)
                               ;
-                        else if (c1 == n - 1)
+                        else if (currentChordRestIndex == sizeChordRests - 1)
                               len = -len;
                         else if (tuplet && cr1 == tuplet->elements().front())
                               ;
@@ -1799,8 +1812,8 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               // caused by mismatches between number of incoming versus outgoing beams
                               // so, we favor the side with more beams (to the extent we can count reliably)
                               // if there is a corner case missed, this would probably be where
-                              ChordRest* prevCR = crl[c1-1];
-                              ChordRest* nextCR = crl[c1+1];
+                              ChordRest* prevCR = crl[currentChordRestIndex-1];
+                              ChordRest* nextCR = crl[currentChordRestIndex+1];
                               TDuration currentDuration = cr1->durationType();
                               int currentHooks = currentDuration.hooks();
 
@@ -1909,7 +1922,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
             if (c->hook())
                   score()->undoRemoveElement(c->hook());
 
-            QPointF stemPos(c->stemPos());
+            QPointF stemPos(c->stemPosX() + c->pagePos().x(), c->stemPos().y());
             qreal x2   = stemPos.x() - _pagePos.x();
             qreal y1   = (x2 - x1) * slope + py1 + _pagePos.y();
             qreal y2   = stemPos.y();
@@ -1936,7 +1949,8 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
 
             Stem* stem = c->stem();
             if (stem) {
-                  qreal sw2  = stem->lineWidth() * .5;
+                  bool useTablature = staff() && staff()->isTabStaff(cr->tick());
+                  qreal sw2  = useTablature ? 0.f : stem->lineWidth() * .5;
                   if (c->up())
                         sw2 = -sw2;
                   stem->rxpos() = c->stemPosX() + sw2;
@@ -1978,7 +1992,7 @@ void Beam::write(XmlWriter& xml) const
       {
       if (_elements.empty())
             return;
-      xml.stag(QString("Beam id=\"%1\"").arg(_id));
+      xml.stag(this);
       Element::writeProperties(xml);
 
       writeProperty(xml, Pid::STEM_DIRECTION);
@@ -2019,11 +2033,12 @@ void Beam::read(XmlReader& e)
       {
       QPointF p1, p2;
       qreal _spatium = spatium();
-      _id = e.intAttribute("id");
+      if (score()->mscVersion() < 301)
+            _id = e.intAttribute("id");
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "StemDirection") {
-                  setProperty(Pid::STEM_DIRECTION, Ms::getProperty(Pid::STEM_DIRECTION, e));
+                  readProperty(e, Pid::STEM_DIRECTION);
                   e.readNext();
                   }
             else if (tag == "distribute")
@@ -2054,14 +2069,14 @@ void Beam::read(XmlReader& e)
                   BeamFragment* f = new BeamFragment;
                   int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
                   _userModified[idx] = true;
-                  qreal _spatium = spatium();
+                  qreal _spatium1 = spatium();
 
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "y1")
-                              f->py1[idx] = e.readDouble() * _spatium;
-                        else if (tag == "y2")
-                              f->py2[idx] = e.readDouble() * _spatium;
+                        const QStringRef& tag1(e.name());
+                        if (tag1 == "y1")
+                              f->py1[idx] = e.readDouble() * _spatium1;
+                        else if (tag1 == "y2")
+                              f->py2[idx] = e.readDouble() * _spatium1;
                         else
                               e.unknown();
                         }
@@ -2225,9 +2240,9 @@ void Beam::triggerLayout() const
 
 bool Beam::acceptDrop(EditData& data) const
       {
-      return (data.element->type() == ElementType::ICON)
-         && ((toIcon(data.element)->iconType() == IconType::FBEAM1)
-         || (toIcon(data.element)->iconType() == IconType::FBEAM2));
+      return (data.dropElement->type() == ElementType::ICON)
+         && ((toIcon(data.dropElement)->iconType() == IconType::FBEAM1)
+         || (toIcon(data.dropElement)->iconType() == IconType::FBEAM2));
       }
 
 //---------------------------------------------------------
@@ -2236,9 +2251,9 @@ bool Beam::acceptDrop(EditData& data) const
 
 Element* Beam::drop(EditData& data)
       {
-      if (!data.element->isIcon())
+      if (!data.dropElement->isIcon())
             return 0;
-      Icon* e = toIcon(data.element);
+      Icon* e = toIcon(data.dropElement);
       qreal g1;
       qreal g2;
 
@@ -2379,7 +2394,7 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
 QVariant Beam::propertyDefault(Pid id) const
       {
       switch (id) {
-            case Pid::SUB_STYLE:      return int(SubStyleId::BEAM);
+//            case Pid::SUB_STYLE:      return int(Tid::BEAM);
             case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
             case Pid::DISTRIBUTE:     return false;
             case Pid::GROW_LEFT:      return 1.0;
@@ -2391,11 +2406,14 @@ QVariant Beam::propertyDefault(Pid id) const
       }
 
 //---------------------------------------------------------
-//   shape
+//   addSkyline
+//    add beam shape to skyline
 //---------------------------------------------------------
 
-Shape Beam::shape() const
+void Beam::addSkyline(Skyline& sk)
       {
+      if (beamSegments.empty() || !autoplace() || !visible())
+            return;
       qreal lw2 = score()->styleP(Sid::beamWidth) * .5 * mag();
       const QLineF* bs = beamSegments.front();
       double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
@@ -2404,30 +2422,31 @@ Shape Beam::shape() const
       double ww      = lw2 / sin(M_PI_2 - atan(d));
       qreal _spatium = spatium();
 
-      Shape shape;
-      for (const QLineF* bs : beamSegments) {
-            qreal x = bs->x1();
-            qreal y = bs->y1();
-            qreal w = bs->x2() - x;
-            int n   = int(ceil(w / _spatium));
-            qreal s = (bs->y2() - y) / w;
+      for (const QLineF* beamSegment : beamSegments) {
+            qreal x = beamSegment->x1();
+            qreal y = beamSegment->y1();
+            qreal w = beamSegment->x2() - x;
+            int n   = (d < 0.01) ? 1 : int(ceil(w / _spatium));
+
+            qreal s = (beamSegment->y2() - y) / w;
             w /= n;
-            for (int i = 1; i < n; ++i) {
-                  qreal xx = bs->x1() + i * w;
-                  qreal yy = bs->y1() + i * w * s;
-                  if (yy > y)
-                        shape.add(QRectF(x, y-ww, w, yy - y + ww*2));
-                  else
-                        shape.add(QRectF(x, yy-ww, w, y - yy + ww*2));
-                  x = xx;
-                  y = yy;
+            for (int i = 1; i <= n; ++i) {
+                  qreal y2 = y + w * s;
+                  qreal yn, ys;
+                  if (y2 > y) {
+                        yn = y;
+                        ys = y2;
+                        }
+                  else {
+                        yn = y2;
+                        ys = y;
+                        }
+                  sk.north().add(x, yn - ww, w);
+                  sk.south().add(x, ys + ww, w);
+                  x += w;
+                  y = y2;
                   }
-            if (y > bs->y2())
-                  shape.add(QRectF(x, bs->y2()-ww, w, y - bs->y2() + ww*2));
-            else
-                  shape.add(QRectF(x, y-ww, w, bs->y2() - y + ww*2));
             }
-      return shape;
       }
 
 //---------------------------------------------------------

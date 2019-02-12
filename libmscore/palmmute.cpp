@@ -21,35 +21,50 @@
 
 namespace Ms {
 
+static const ElementStyle palmMuteStyle {
+      { Sid::palmMuteFontFace,                      Pid::BEGIN_FONT_FACE        },
+      { Sid::palmMuteFontFace,                      Pid::CONTINUE_FONT_FACE     },
+      { Sid::palmMuteFontFace,                      Pid::END_FONT_FACE          },
+      { Sid::palmMuteFontSize,                      Pid::BEGIN_FONT_SIZE        },
+      { Sid::palmMuteFontSize,                      Pid::CONTINUE_FONT_SIZE     },
+      { Sid::palmMuteFontSize,                      Pid::END_FONT_SIZE          },
+      { Sid::palmMuteFontStyle,                     Pid::BEGIN_FONT_STYLE       },
+      { Sid::palmMuteFontStyle,                     Pid::CONTINUE_FONT_STYLE    },
+      { Sid::palmMuteFontStyle,                     Pid::END_FONT_STYLE         },
+      { Sid::palmMuteTextAlign,                     Pid::BEGIN_TEXT_ALIGN       },
+      { Sid::palmMuteTextAlign,                     Pid::CONTINUE_TEXT_ALIGN    },
+      { Sid::palmMuteTextAlign,                     Pid::END_TEXT_ALIGN         },
+      { Sid::palmMuteHookHeight,                    Pid::BEGIN_HOOK_HEIGHT      },
+      { Sid::palmMuteHookHeight,                    Pid::END_HOOK_HEIGHT        },
+      { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
+      };
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void PalmMuteSegment::layout()
       {
-      if (autoplace())
-            setUserOff(QPointF());
       TextLineBaseSegment::layout();
-      if (parent()) {     // for palette
-            rypos() += score()->styleP(palmMute()->placeBelow() ? Sid::palmMutePosBelow : Sid::palmMutePosAbove);
-            if (autoplace()) {
-                  qreal minDistance = spatium() * .7;
-                  Shape s1 = shape().translated(pos());
+      autoplaceSpannerSegment(spatium() * .7);
+      }
 
-                  if (palmMute()->placeBelow()) {
-                        qreal d  = system()->bottomDistance(staffIdx(), s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = d + minDistance;
-                        }
-                  else {
-                        qreal d  = system()->topDistance(staffIdx(), s1);
-                        if (d > -minDistance)
-                              rUserYoffset() = -(d + minDistance);
-                        }
-                  }
-            else
-                  adjustReadPos();
-            }
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid PalmMuteSegment::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return spanner()->placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow;
+      return TextLineBaseSegment::getPropertyStyle(pid);
+      }
+
+Sid PalmMute::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow;
+      return TextLineBase::getPropertyStyle(pid);
       }
 
 //---------------------------------------------------------
@@ -59,7 +74,7 @@ void PalmMuteSegment::layout()
 PalmMute::PalmMute(Score* s)
    : TextLineBase(s)
       {
-      initSubStyle(SubStyleId::PALM_MUTE);
+      initElementStyle(&palmMuteStyle);
       resetProperty(Pid::LINE_VISIBLE);
       }
 
@@ -69,8 +84,8 @@ PalmMute::PalmMute(Score* s)
 
 void PalmMute::read(XmlReader& e)
       {
-      int id = e.intAttribute("id", -1);
-      e.addSpanner(id, this);
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
       while (e.readNextStartElement()) {
             if (!TextLineBase::readProperties(e))
                   e.unknown();
@@ -85,10 +100,10 @@ void PalmMute::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(this);
 
-      for (const StyledProperty* spp = styledProperties(); spp->sid != Sid::NOSTYLE; ++spp)
-            writeProperty(xml, spp->pid);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
 
       Element::writeProperties(xml);
       xml.etag();
@@ -98,18 +113,16 @@ void PalmMute::write(XmlWriter& xml) const
 //   createLineSegment
 //---------------------------------------------------------
 
+static const ElementStyle palmMuteSegmentStyle {
+      { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
+      };
+
 LineSegment* PalmMute::createLineSegment()
       {
-      return new PalmMuteSegment(score());
-      }
-
-//---------------------------------------------------------
-//   setYoff
-//---------------------------------------------------------
-
-void PalmMute::setYoff(qreal val)
-      {
-      rUserYoffset() += val * spatium() - score()->styleP(placeAbove() ? Sid::palmMutePosAbove : Sid::palmMutePosBelow);
+      PalmMuteSegment* pms = new PalmMuteSegment(this, score());
+      pms->setTrack(track());
+      pms->initElementStyle(&palmMuteSegmentStyle);
+      return pms;
       }
 
 //---------------------------------------------------------
@@ -143,8 +156,8 @@ QVariant PalmMute::propertyDefault(Pid propertyId) const
             case Pid::END_HOOK_HEIGHT:
                   return score()->styleV(Sid::palmMuteHookHeight);
 
-            case Pid::BEGIN_FONT_ITALIC:
-                  return score()->styleV(Sid::palmMuteFontItalic);
+//TODOws            case Pid::BEGIN_FONT_ITALIC:
+//                  return score()->styleV(Sid::palmMuteFontItalic);
 
             case Pid::BEGIN_TEXT:
                   return score()->styleV(Sid::palmMuteText);
@@ -158,48 +171,13 @@ QVariant PalmMute::propertyDefault(Pid propertyId) const
       }
 
 //---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid PalmMute::getPropertyStyle(Pid id) const
-      {
-      switch (id) {
-            case Pid::PLACEMENT:
-                  return Sid::pedalPlacement;
-            case Pid::BEGIN_FONT_FACE:
-                  return Sid::pedalFontFace;
-            case Pid::BEGIN_FONT_SIZE:
-                  return Sid::pedalFontSize;
-            case Pid::BEGIN_FONT_BOLD:
-                  return Sid::pedalFontBold;
-            case Pid::BEGIN_FONT_ITALIC:
-                  return Sid::pedalFontItalic;
-            case Pid::BEGIN_FONT_UNDERLINE:
-                  return Sid::pedalFontUnderline;
-            case Pid::BEGIN_TEXT_ALIGN:
-            case Pid::CONTINUE_TEXT_ALIGN:
-            case Pid::END_TEXT_ALIGN:
-                  return Sid::pedalTextAlign;
-            case Pid::BEGIN_HOOK_HEIGHT:
-            case Pid::END_HOOK_HEIGHT:
-                  return Sid::pedalHookHeight;
-            case Pid::BEGIN_TEXT:
-                  return Sid::palmMuteText;
-            default:
-                  break;
-            }
-      return Sid::NOSTYLE;
-      }
-
-
-//---------------------------------------------------------
 //   linePos
 //    return System() coordinates
 //---------------------------------------------------------
 
 QPointF PalmMute::linePos(Grip grip, System** sys) const
       {
-      qreal x;
+      qreal x = 0.0;
       qreal nhw = score()->noteHeadWidth();
       System* s = nullptr;
       if (grip == Grip::START) {

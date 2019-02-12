@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>194</width>
-    <height>135</height>
+    <width>347</width>
+    <height>178</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -81,25 +81,11 @@
         <property name="text">
          <string>Type:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>trillType</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="resetTrillType">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Type' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -108,42 +94,11 @@
         <property name="text">
          <string>Ornament style:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>ornamentStyle</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="QToolButton" name="resetOrnamentStyle">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Ornament style' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QToolButton" name="resetPlayArticulation">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Play' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
         </property>
        </widget>
       </item>
@@ -152,30 +107,22 @@
         <property name="text">
          <string>Placement:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
         <property name="buddy">
          <cstring>placement</cstring>
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
-       <widget class="QToolButton" name="resetPlacement">
-        <property name="toolTip">
-         <string>Reset to default</string>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
-        <property name="icon">
-         <iconset resource="../musescore.qrc">
-          <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="trillType">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Type</string>
         </property>
@@ -199,35 +146,16 @@
           <string>Prall Prall</string>
          </property>
         </item>
-        <item>
-         <property name="text">
-          <string>Guitar vibrato</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Guitar vibrato wide</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Vibrato sawtooth narrow</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Vibrato sawtooth</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Vibrato sawtooth wide</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QComboBox" name="placement">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Placement</string>
         </property>
@@ -245,6 +173,12 @@
       </item>
       <item row="2" column="1">
        <widget class="QComboBox" name="ornamentStyle">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Direction</string>
         </property>
@@ -265,26 +199,39 @@
         <property name="text">
          <string>Play</string>
         </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
        </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="Ms::ResetButton" name="resetTrillType"/>
+      </item>
+      <item row="1" column="3">
+       <widget class="Ms::ResetButton" name="resetPlacement"/>
+      </item>
+      <item row="2" column="3">
+       <widget class="Ms::ResetButton" name="resetOrnamentStyle"/>
+      </item>
+      <item row="3" column="3">
+       <widget class="Ms::ResetButton" name="resetPlayArticulation"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>trillType</tabstop>
-  <tabstop>resetTrillType</tabstop>
   <tabstop>placement</tabstop>
-  <tabstop>resetPlacement</tabstop>
   <tabstop>ornamentStyle</tabstop>
-  <tabstop>resetOrnamentStyle</tabstop>
   <tabstop>playArticulation</tabstop>
-  <tabstop>resetPlayArticulation</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

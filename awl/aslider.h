@@ -1,7 +1,6 @@
 //=============================================================================
 //  Awl
 //  Audio Widget Library
-//  $Id:$
 //
 //  Copyright (C) 2002-2006 by Werner Schweer and others
 //
@@ -59,12 +58,13 @@ class AbstractSlider : public QWidget {
       Q_PROPERTY(double dclickValue2 READ dclickValue2 WRITE setDclickValue2)
 
    protected:
-      int _id;
+      int __id;
       double _value;
       double _minValue, _maxValue, _lineStep, _pageStep;
       double _dclickValue1;
       double _dclickValue2;
       bool _center;
+      bool _enableMouseWheel;
       bool _invert;
       int _scaleWidth;        //! scale line width
       QColor _scaleColor;
@@ -91,6 +91,9 @@ class AbstractSlider : public QWidget {
       virtual void setScaleColor(const QColor&);
       virtual void setScaleValueColor(const QColor&);
 
+      bool enableMouseWheel() { return _enableMouseWheel; }
+      virtual void setEnableMouseWheel(bool enabled);
+
       //! return the center flag
       bool center() const            { return _center; }
 
@@ -106,8 +109,8 @@ class AbstractSlider : public QWidget {
       virtual void setInvertedAppearance(bool val) { _invert = val; }
       bool invertedAppearance() const              { return _invert; }
 
-      int id() const { return _id; }
-      void setId(int i) { _id = i; }
+      int id() const { return __id; }
+      void setId(int i) { __id = i; }
 
       virtual double value() const;
       virtual QString userValue() const;

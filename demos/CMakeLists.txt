@@ -1,7 +1,6 @@
 #=============================================================================
 #  MusE
 #  Linux Music Editor
-#  $Id:$
 #
 #  Copyright (C) 2002-2008 by Werner Schweer and others
 #
@@ -19,9 +18,9 @@
 #=============================================================================
 
 install(FILES
-      All_Dudes.mscz
+      Fugue_1.mscx
       Reunion.mscz
-      Triumph.mscz
+      Unclaimed_Gift.mscx
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}demos
       )
 

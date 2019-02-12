@@ -26,8 +26,8 @@ namespace Ms {
 //   Symbol
 //---------------------------------------------------------
 
-Symbol::Symbol(Score* s)
-   : BSymbol(s)
+Symbol::Symbol(Score* s, ElementFlags f)
+   : BSymbol(s, f)
       {
       _sym = SymId::accidentalSharp;        // arbitrary valid default
       }
@@ -49,15 +49,6 @@ QString Symbol::symName() const
       }
 
 //---------------------------------------------------------
-//   setAbove
-//---------------------------------------------------------
-
-void Symbol::setAbove(bool val)
-      {
-      setYoff(val ? -2.0 : 7.0);
-      }
-
-//---------------------------------------------------------
 //   layout
 //    height() and width() should return sensible
 //    values when calling this method
@@ -68,8 +59,21 @@ void Symbol::layout()
       // foreach(Element* e, leafs())     done in BSymbol::layout() ?
       //      e->layout();
       setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
-      ElementLayout::layout(this);
-      BSymbol::layout();      // adjustReadPos() happens here
+      QPointF o(offset());
+      qreal w = width();
+      QPointF p;
+      if (align() & Align::BOTTOM)
+            p.setY(- height());
+      else if (align() & Align::VCENTER)
+            p.setY((- height()) * .5);
+      else if (align() & Align::BASELINE)
+            p.setY(-baseLine());
+      if (align() & Align::RIGHT)
+            p.setX(-w);
+      else if (align() & Align::HCENTER)
+            p.setX(-(w * .5));
+      setPos(p);
+      BSymbol::layout();
       }
 
 //---------------------------------------------------------
@@ -78,7 +82,7 @@ void Symbol::layout()
 
 void Symbol::draw(QPainter* p) const
       {
-      if (type() != ElementType::NOTEDOT || !staff()->isTabStaff(tick())) {
+      if (!isNoteDot() || !staff()->isTabStaff(tick())) {
             p->setPen(curColor());
             if (_scoreFont)
                   _scoreFont->draw(_sym, p, magS(), QPointF());
@@ -93,7 +97,7 @@ void Symbol::draw(QPainter* p) const
 
 void Symbol::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("name", Sym::id2name(_sym));
       if (_scoreFont)
             xml.tag("font", _scoreFont->name());
@@ -132,7 +136,6 @@ void Symbol::read(XmlReader& e)
             else if (tag == "Symbol") {
                   Symbol* s = new Symbol(score());
                   s->read(e);
-                  s->adjustReadPos();
                   add(s);
                   }
             else if (tag == "Image") {
@@ -150,68 +153,6 @@ void Symbol::read(XmlReader& e)
                   e.unknown();
             }
       setPos(pos);
-      }
-
-//---------------------------------------------------------
-//   dragAnchor
-//---------------------------------------------------------
-
-QLineF BSymbol::dragAnchor() const
-      {
-      if (parent() && parent()->type() == ElementType::SEGMENT) {
-            System* system = segment()->measure()->system();
-            qreal y        = system->staffCanvasYpage(staffIdx());
-//            QPointF anchor(segment()->pageX(), y);
-            QPointF anchor(segment()->canvasPos().x(), y);
-            return QLineF(canvasPos(), anchor);
-            }
-      else {
-            return QLineF(canvasPos(), parent()->canvasPos());
-            }
-      }
-
-//---------------------------------------------------------
-//   pagePos
-//---------------------------------------------------------
-
-QPointF BSymbol::pagePos() const
-      {
-      if (parent() && (parent()->type() == ElementType::SEGMENT)) {
-            QPointF p(pos());
-            System* system = segment()->measure()->system();
-            if (system) {
-                  p.ry() += system->staff(staffIdx())->y() + system->y();
-                  }
-            p.rx() = pageX();
-            return p;
-            }
-      else
-            return Element::pagePos();
-      }
-
-//---------------------------------------------------------
-//   canvasPos
-//---------------------------------------------------------
-
-QPointF BSymbol::canvasPos() const
-      {
-      if (parent() && (parent()->type() == ElementType::SEGMENT)) {
-            QPointF p(pos());
-            Segment* s = toSegment(parent());
-
-            System* system = s->measure()->system();
-            if (system) {
-                  int si = staffIdx();
-                  p.ry() += system->staff(si)->y() + system->y();
-                  Page* page = system->page();
-                  if (page)
-                        p.ry() += page->y();
-                  }
-            p.rx() = canvasX();
-            return p;
-            }
-      else
-            return Element::canvasPos();
       }
 
 //---------------------------------------------------------
@@ -258,7 +199,7 @@ void FSymbol::draw(QPainter* painter) const
 
 void FSymbol::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("font",     _font.family());
       xml.tag("fontsize", _font.pointSizeF());
       xml.tag("code",     _code);
@@ -301,7 +242,6 @@ void FSymbol::layout()
             s = QChar(_code);
       QFontMetricsF fm(_font, MScore::paintDevice());
       setbbox(fm.boundingRect(s));
-      adjustReadPos();
       }
 
 //---------------------------------------------------------

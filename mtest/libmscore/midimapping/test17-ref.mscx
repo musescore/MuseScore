@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -743,288 +743,258 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <lid>0</lid>
+        <linkedMain/>
         </VBox>
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
-          <lid>1</lid>
-          </Clef>
-        <KeySig>
-          <lid>2</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>3</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Dynamic>
-          <subtype>f</subtype>
-          <velocity>96</velocity>
-          <lid>4</lid>
-          </Dynamic>
-        <Tempo>
-          <tempo>2</tempo>
-          <lid>5</lid>
-          <text><sym>metNoteQuarterUp</sym> = 120</text>
-          </Tempo>
-        <Chord>
-          <lid>6</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>7</lid>
-            <pitch>48</pitch>
-            <tpc>14</tpc>
-            <fret>3</fret>
-            <string>4</string>
-            </Note>
-          </Chord>
-        <move>0/1</move>
-        <Rest>
-          <lid>8</lid>
-          <track>1</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>9</lid>
-          <track>1</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>10</lid>
-          <track>1</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>11</lid>
-          <track>1</track>
-          <durationType>quarter</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Tempo>
+            <tempo>2</tempo>
+            <linkedMain/>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              <fret>3</fret>
+              <string>4</string>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
-          <lid>13</lid>
-          </Clef>
-        <KeySig>
-          <lid>14</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>15</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Dynamic>
-          <subtype>f</subtype>
-          <velocity>96</velocity>
-          <lid>16</lid>
-          </Dynamic>
-        <Chord>
-          <lid>17</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>18</lid>
-            <pitch>52</pitch>
-            <tpc>18</tpc>
-            <fret>2</fret>
-            <string>3</string>
-            </Note>
-          </Chord>
-        <move>0/1</move>
-        <Rest>
-          <lid>19</lid>
-          <track>5</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>20</lid>
-          <track>5</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>21</lid>
-          <track>5</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>22</lid>
-          <track>5</track>
-          <durationType>quarter</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              <fret>2</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="3">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
-          <lid>23</lid>
-          </Clef>
-        <KeySig>
-          <lid>24</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>25</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Dynamic>
-          <subtype>f</subtype>
-          <velocity>96</velocity>
-          <lid>26</lid>
-          </Dynamic>
-        <Chord>
-          <lid>27</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>28</lid>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            <fret>0</fret>
-            <string>2</string>
-            </Note>
-          </Chord>
-        <move>0/1</move>
-        <Rest>
-          <lid>29</lid>
-          <track>9</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>30</lid>
-          <track>9</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>31</lid>
-          <track>9</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>32</lid>
-          <track>9</track>
-          <durationType>quarter</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>0</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="4">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G8vb</concertClefType>
-          <transposingClefType>G8vb</transposingClefType>
-          <lid>33</lid>
-          </Clef>
-        <KeySig>
-          <lid>34</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>35</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Dynamic>
-          <subtype>f</subtype>
-          <velocity>96</velocity>
-          <lid>36</lid>
-          </Dynamic>
-        <Chord>
-          <lid>37</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>38</lid>
-            <pitch>59</pitch>
-            <tpc>19</tpc>
-            <fret>0</fret>
-            <string>1</string>
-            </Note>
-          </Chord>
-        <move>0/1</move>
-        <Rest>
-          <lid>39</lid>
-          <track>13</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>40</lid>
-          <track>13</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>41</lid>
-          <track>13</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>42</lid>
-          <track>13</track>
-          <durationType>quarter</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>0</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="5">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>PERC</concertClefType>
-          <transposingClefType>PERC</transposingClefType>
-          <lid>43</lid>
-          </Clef>
-        <KeySig>
-          <lid>44</lid>
-          <accidental>0</accidental>
-          </KeySig>
-        <TimeSig>
-          <lid>45</lid>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          <showCourtesySig>1</showCourtesySig>
-          </TimeSig>
-        <Dynamic>
-          <subtype>f</subtype>
-          <velocity>96</velocity>
-          <lid>46</lid>
-          </Dynamic>
-        <Chord>
-          <lid>47</lid>
-          <durationType>whole</durationType>
-          <Note>
-            <lid>48</lid>
-            <pitch>38</pitch>
-            <tpc>16</tpc>
-            </Note>
-          </Chord>
-        <move>0/1</move>
-        <Rest>
-          <lid>49</lid>
-          <track>17</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>50</lid>
-          <track>17</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>51</lid>
-          <track>17</track>
-          <durationType>quarter</durationType>
-          </Rest>
-        <Rest>
-          <lid>52</lid>
-          <track>17</track>
-          <durationType>quarter</durationType>
-          </Rest>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>PERC</concertClefType>
+            <transposingClefType>PERC</transposingClefType>
+            <linkedMain/>
+            </Clef>
+          <TimeSig>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>f</subtype>
+            <velocity>96</velocity>
+            <linkedMain/>
+            </Dynamic>
+          <Chord>
+            <linkedMain/>
+            <durationType>whole</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        <voice>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
         </Measure>
       </Staff>
     <Score>
@@ -1044,7 +1014,7 @@
           <linkedTo>1</linkedTo>
           <StaffType group="pitched">
             </StaffType>
-          <bracket type="0" span="2"/>
+          <bracket type="0" span="2" col="0"/>
           </Staff>
         <Staff id="2">
           <linkedTo>1</linkedTo>
@@ -1052,7 +1022,6 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
-            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -1070,9 +1039,8 @@
             <upsideDown>0</upsideDown>
             <useNumbers>1</useNumbers>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Acoustic Guitar</trackName>
         <Instrument>
           <longName>Acoustic Guitar</longName>
           <shortName>Guit.</shortName>
@@ -1128,110 +1096,118 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            <lid>1</lid>
-            </Clef>
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>3</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
-            <lid>4</lid>
-            </Dynamic>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>5</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Chord>
-            <lid>6</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>7</lid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
-              </Note>
-            </Chord>
-          <move>0/1</move>
-          <Rest>
-            <lid>8</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>9</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>10</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>11</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G8vb</concertClefType>
+              <transposingClefType>G8vb</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Dynamic>
+              <subtype>f</subtype>
+              <velocity>96</velocity>
+              <linked>
+                </linked>
+              </Dynamic>
+            <Tempo>
+              <tempo>2</tempo>
+              <linked>
+                </linked>
+              <text><sym>metNoteQuarterUp</sym> = 120</text>
+              </Tempo>
+            <Chord>
+              <linked>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  </linked>
+                <pitch>48</pitch>
+                <tpc>14</tpc>
+                <fret>3</fret>
+                <string>4</string>
+                </Note>
+              </Chord>
+            </voice>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <KeySig>
-            <lid>2</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Chord>
-            <lid>6</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>7</lid>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              <fret>3</fret>
-              <string>4</string>
-              </Note>
-            </Chord>
-          <move>0/1</move>
-          <Rest>
-            <lid>8</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>9</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>10</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>11</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                <indexDiff>5</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>5</indexDiff>
+                  </linked>
+                <pitch>48</pitch>
+                <tpc>14</tpc>
+                <fret>3</fret>
+                <string>4</string>
+                </Note>
+              </Chord>
+            </voice>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <name>S-Gt</name>
@@ -1253,7 +1229,7 @@
           <linkedTo>2</linkedTo>
           <StaffType group="pitched">
             </StaffType>
-          <bracket type="0" span="2"/>
+          <bracket type="0" span="2" col="0"/>
           </Staff>
         <Staff id="2">
           <linkedTo>2</linkedTo>
@@ -1261,7 +1237,6 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
-            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -1279,9 +1254,8 @@
             <upsideDown>0</upsideDown>
             <useNumbers>1</useNumbers>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Acoustic Guitar</trackName>
         <Instrument>
           <longName>Acoustic Guitar</longName>
           <shortName>Guit.</shortName>
@@ -1337,110 +1311,128 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            <lid>13</lid>
-            </Clef>
-          <KeySig>
-            <lid>14</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>15</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>5</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
-            <lid>16</lid>
-            </Dynamic>
-          <Chord>
-            <lid>17</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>18</lid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
-          <move>0/1</move>
-          <Rest>
-            <lid>19</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>20</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>21</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>22</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G8vb</concertClefType>
+              <transposingClefType>G8vb</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Tempo>
+              <tempo>2</tempo>
+              <linked>
+                <location>
+                  <staves>-1</staves>
+                  </location>
+                <indexDiff>4</indexDiff>
+                </linked>
+              <text><sym>metNoteQuarterUp</sym> = 120</text>
+              </Tempo>
+            <Dynamic>
+              <subtype>f</subtype>
+              <velocity>96</velocity>
+              <linked>
+                <indexDiff>2</indexDiff>
+                </linked>
+              </Dynamic>
+            <Chord>
+              <linked>
+                <indexDiff>2</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>2</indexDiff>
+                  </linked>
+                <pitch>52</pitch>
+                <tpc>18</tpc>
+                <fret>2</fret>
+                <string>3</string>
+                </Note>
+              </Chord>
+            </voice>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <KeySig>
-            <lid>14</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Chord>
-            <lid>17</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>18</lid>
-              <pitch>52</pitch>
-              <tpc>18</tpc>
-              <fret>2</fret>
-              <string>3</string>
-              </Note>
-            </Chord>
-          <move>0/1</move>
-          <Rest>
-            <lid>19</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>20</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>21</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>22</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                <indexDiff>3</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>3</indexDiff>
+                  </linked>
+                <pitch>52</pitch>
+                <tpc>18</tpc>
+                <fret>2</fret>
+                <string>3</string>
+                </Note>
+              </Chord>
+            </voice>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <name>S-Gt</name>
@@ -1462,7 +1454,7 @@
           <linkedTo>3</linkedTo>
           <StaffType group="pitched">
             </StaffType>
-          <bracket type="0" span="2"/>
+          <bracket type="0" span="2" col="0"/>
           </Staff>
         <Staff id="2">
           <linkedTo>3</linkedTo>
@@ -1470,7 +1462,6 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
-            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -1488,9 +1479,8 @@
             <upsideDown>0</upsideDown>
             <useNumbers>1</useNumbers>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Acoustic Guitar</trackName>
         <Instrument>
           <longName>Acoustic Guitar</longName>
           <shortName>Guit.</shortName>
@@ -1546,110 +1536,128 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            <location>
+              <staves>-2</staves>
+              </location>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            <lid>23</lid>
-            </Clef>
-          <KeySig>
-            <lid>24</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>25</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>5</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
-            <lid>26</lid>
-            </Dynamic>
-          <Chord>
-            <lid>27</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>28</lid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>0</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
-          <move>0/1</move>
-          <Rest>
-            <lid>29</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>30</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>31</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>32</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G8vb</concertClefType>
+              <transposingClefType>G8vb</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Tempo>
+              <tempo>2</tempo>
+              <linked>
+                <location>
+                  <staves>-2</staves>
+                  </location>
+                <indexDiff>4</indexDiff>
+                </linked>
+              <text><sym>metNoteQuarterUp</sym> = 120</text>
+              </Tempo>
+            <Dynamic>
+              <subtype>f</subtype>
+              <velocity>96</velocity>
+              <linked>
+                <indexDiff>2</indexDiff>
+                </linked>
+              </Dynamic>
+            <Chord>
+              <linked>
+                <indexDiff>2</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>2</indexDiff>
+                  </linked>
+                <pitch>55</pitch>
+                <tpc>15</tpc>
+                <fret>0</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <KeySig>
-            <lid>24</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Chord>
-            <lid>27</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>28</lid>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              <fret>0</fret>
-              <string>2</string>
-              </Note>
-            </Chord>
-          <move>0/1</move>
-          <Rest>
-            <lid>29</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>30</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>31</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>32</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                <indexDiff>3</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>3</indexDiff>
+                  </linked>
+                <pitch>55</pitch>
+                <tpc>15</tpc>
+                <fret>0</fret>
+                <string>2</string>
+                </Note>
+              </Chord>
+            </voice>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <name>S-Gt</name>
@@ -1671,7 +1679,7 @@
           <linkedTo>4</linkedTo>
           <StaffType group="pitched">
             </StaffType>
-          <bracket type="0" span="2"/>
+          <bracket type="0" span="2" col="0"/>
           </Staff>
         <Staff id="2">
           <linkedTo>4</linkedTo>
@@ -1679,7 +1687,6 @@
             <name>tab6StrCommon</name>
             <lines>6</lines>
             <lineDistance>1.5</lineDistance>
-            <stepOffset>2</stepOffset>
             <timesig>0</timesig>
             <durations>0</durations>
             <durationFontName>MuseScore Tab Modern</durationFontName>
@@ -1697,9 +1704,8 @@
             <upsideDown>0</upsideDown>
             <useNumbers>1</useNumbers>
             </StaffType>
-          <bracket type="-1" span="0"/>
           </Staff>
-        <trackName></trackName>
+        <trackName>Acoustic Guitar</trackName>
         <Instrument>
           <longName>Acoustic Guitar</longName>
           <shortName>Guit.</shortName>
@@ -1755,110 +1761,128 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            <location>
+              <staves>-3</staves>
+              </location>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            <lid>33</lid>
-            </Clef>
-          <KeySig>
-            <lid>34</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>35</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>5</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
-            <lid>36</lid>
-            </Dynamic>
-          <Chord>
-            <lid>37</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>38</lid>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <fret>0</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <move>0/1</move>
-          <Rest>
-            <lid>39</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>40</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>41</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>42</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>G8vb</concertClefType>
+              <transposingClefType>G8vb</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Tempo>
+              <tempo>2</tempo>
+              <linked>
+                <location>
+                  <staves>-3</staves>
+                  </location>
+                <indexDiff>4</indexDiff>
+                </linked>
+              <text><sym>metNoteQuarterUp</sym> = 120</text>
+              </Tempo>
+            <Dynamic>
+              <subtype>f</subtype>
+              <velocity>96</velocity>
+              <linked>
+                <indexDiff>2</indexDiff>
+                </linked>
+              </Dynamic>
+            <Chord>
+              <linked>
+                <indexDiff>2</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>2</indexDiff>
+                  </linked>
+                <pitch>59</pitch>
+                <tpc>19</tpc>
+                <fret>0</fret>
+                <string>1</string>
+                </Note>
+              </Chord>
+            </voice>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <Staff id="2">
-        <Measure number="1">
-          <KeySig>
-            <lid>34</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <Chord>
-            <lid>37</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>38</lid>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              <fret>0</fret>
-              <string>1</string>
-              </Note>
-            </Chord>
-          <move>0/1</move>
-          <Rest>
-            <lid>39</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>40</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>41</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>42</lid>
-            <track>5</track>
-            <durationType>quarter</durationType>
-            </Rest>
+        <Measure>
+          <voice>
+            <Chord>
+              <linked>
+                <indexDiff>3</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>3</indexDiff>
+                  </linked>
+                <pitch>59</pitch>
+                <tpc>19</tpc>
+                <fret>0</fret>
+                <string>1</string>
+                </Note>
+              </Chord>
+            </voice>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <name>S-Gt</name>
@@ -1883,7 +1907,7 @@
             <keysig>0</keysig>
             </StaffType>
           </Staff>
-        <trackName></trackName>
+        <trackName>Drumset</trackName>
         <Instrument>
           <longName>Drumset</longName>
           <shortName>Drs.</shortName>
@@ -2355,68 +2379,83 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <lid>0</lid>
+          <linked>
+            <location>
+              <staves>-4</staves>
+              </location>
+            </linked>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Drumset</text>
             </Text>
           </VBox>
-        <Measure number="1">
-          <Clef>
-            <concertClefType>PERC</concertClefType>
-            <transposingClefType>PERC</transposingClefType>
-            <lid>43</lid>
-            </Clef>
-          <KeySig>
-            <lid>44</lid>
-            <accidental>0</accidental>
-            </KeySig>
-          <TimeSig>
-            <lid>45</lid>
-            <sigN>4</sigN>
-            <sigD>4</sigD>
-            <showCourtesySig>1</showCourtesySig>
-            </TimeSig>
-          <Tempo>
-            <tempo>2</tempo>
-            <lid>5</lid>
-            <text><sym>metNoteQuarterUp</sym> = 120</text>
-            </Tempo>
-          <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
-            <lid>46</lid>
-            </Dynamic>
-          <Chord>
-            <lid>47</lid>
-            <durationType>whole</durationType>
-            <Note>
-              <lid>48</lid>
-              <pitch>38</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <move>0/1</move>
-          <Rest>
-            <lid>49</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>50</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>51</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <lid>52</lid>
-            <track>1</track>
-            <durationType>quarter</durationType>
-            </Rest>
+        <Measure>
+          <voice>
+            <Clef>
+              <concertClefType>PERC</concertClefType>
+              <transposingClefType>PERC</transposingClefType>
+              <linked>
+                </linked>
+              </Clef>
+            <TimeSig>
+              <linked>
+                </linked>
+              <sigN>4</sigN>
+              <sigD>4</sigD>
+              </TimeSig>
+            <Tempo>
+              <tempo>2</tempo>
+              <linked>
+                <location>
+                  <staves>-4</staves>
+                  </location>
+                <indexDiff>4</indexDiff>
+                </linked>
+              <text><sym>metNoteQuarterUp</sym> = 120</text>
+              </Tempo>
+            <Dynamic>
+              <subtype>f</subtype>
+              <velocity>96</velocity>
+              <linked>
+                <indexDiff>2</indexDiff>
+                </linked>
+              </Dynamic>
+            <Chord>
+              <linked>
+                <indexDiff>2</indexDiff>
+                </linked>
+              <durationType>whole</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>2</indexDiff>
+                  </linked>
+                <pitch>38</pitch>
+                <tpc>16</tpc>
+                </Note>
+              </Chord>
+            </voice>
+          <voice>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            <Rest>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
+              </Rest>
+            </voice>
           </Measure>
         </Staff>
       <name>Drums</name>

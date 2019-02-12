@@ -14,6 +14,7 @@
 #define __REST_H__
 
 #include "chordrest.h"
+#include "notedot.h"
 
 namespace Ms {
 
@@ -23,7 +24,6 @@ enum class SymId;
 //---------------------------------------------------------
 //    @@ Rest
 ///     This class implements a rest.
-//    @P isFullMeasure  bool  (read only)
 //---------------------------------------------------------
 
 class Rest : public ChordRest {
@@ -32,18 +32,19 @@ class Rest : public ChordRest {
       int dotline    { -1  };       // depends on rest symbol
       qreal _mmWidth;               // width of multi measure rest
       bool _gap      { false };     // invisible and not selectable for user
+      std::vector<NoteDot*> _dots;
 
       virtual QRectF drag(EditData&) override;
       virtual qreal upPos()   const override;
       virtual qreal downPos() const override;
-      virtual void setUserOff(const QPointF& o) override;
+      virtual void setOffset(const QPointF& o) override;
 
 
    public:
       Rest(Score* s = 0);
       Rest(Score*, const TDuration&);
       Rest(const Rest&, bool link = false);
-      ~Rest() {}
+      ~Rest() { qDeleteAll(_dots); }
 
       virtual ElementType type() const override { return ElementType::REST; }
       Rest &operator=(const Rest&) = delete;
@@ -54,6 +55,7 @@ class Rest : public ChordRest {
       virtual qreal mag() const override;
       virtual void draw(QPainter*) const override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      void setTrack(int val);
 
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
@@ -74,6 +76,9 @@ class Rest : public ChordRest {
       qreal mmWidth() const        { return _mmWidth; }
       SymId getSymbol(TDuration::DurationType type, int line, int lines,  int* yoffset);
 
+      void checkDots();
+      void layoutDots();
+      NoteDot* dot(int n);
       int getDotline() const   { return dotline; }
       static int getDotline(TDuration::DurationType durationType);
       SymId sym() const        { return _sym;    }

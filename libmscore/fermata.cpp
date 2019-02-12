@@ -26,15 +26,22 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   fermataStyle
+//---------------------------------------------------------
+
+static const ElementStyle fermataStyle {
+      { Sid::fermataPosAbove, Pid::OFFSET },
+      };
+
+//---------------------------------------------------------
 //   Fermata
 //---------------------------------------------------------
 
 Fermata::Fermata(Score* s)
-   : Element(s)
+   : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      setFlags(ElementFlag::MOVABLE | ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
+      initElementStyle(&fermataStyle);
       setPlacement(Placement::ABOVE);
-
       _symId         = SymId::noSym;
       _timeStretch   = 1.0;
       setPlay(true);
@@ -98,12 +105,25 @@ void Fermata::write(XmlWriter& xml) const
             qDebug("%s not written", name());
             return;
             }
-      xml.stag("Fermata");
+      xml.stag(this);
       xml.tag("subtype", Sym::id2name(_symId));
       writeProperty(xml, Pid::TIME_STRETCH);
       writeProperty(xml, Pid::PLAY);
       Element::writeProperties(xml);
       xml.etag();
+      }
+
+//---------------------------------------------------------
+//   subtype
+//---------------------------------------------------------
+
+int Fermata::subtype() const
+      {
+      QString s = Sym::id2name(_symId);
+      if (s.endsWith("Below"))
+            return int(Sym::name2id(s.left(s.size() - 5) + "Above"));
+      else
+            return int(_symId);
       }
 
 //---------------------------------------------------------
@@ -188,52 +208,38 @@ Page* Fermata::page() const
 
 void Fermata::layout()
       {
-      QRectF b(symBbox(_symId));
-      setbbox(b.translated(-0.5 * b.width(), 0.0));
-
       Segment* s = segment();
+      setPos(QPointF());
       if (!s) {          // for use in palette
-            setPos(QPointF());
+            setOffset(0.0, 0.0);
+            QRectF b(symBbox(_symId));
+            setbbox(b.translated(-0.5 * b.width(), 0.0));
             return;
             }
 
-      qreal x = 0.0;
+      if (isStyled(Pid::OFFSET))
+            setOffset(propertyDefault(Pid::OFFSET).toPointF());
       Element* e = s->element(track());
-      if (e)
-            x = e->x() + e->width() * staff()->mag(0) * .5;
-      else
-            x = score()->noteHeadWidth() * staff()->mag(0) * .5;
-      qreal y = placeAbove() ? styleP(Sid::fermataPosAbove) : styleP(Sid::fermataPosBelow) + staff()->height();
-
-      setPos(QPointF(x, y));
-
-      // check used symbol
+      if (e) {
+            if (e->isChord())
+                  rxpos() += score()->noteHeadWidth() * staff()->mag(0) * .5;
+            else
+                  rxpos() += e->x() + e->width() * staff()->mag(0) * .5;
+            }
 
       QString name = Sym::id2name(_symId);
       if (placeAbove()) {
-            if (name.endsWith("Below")) {
+            if (name.endsWith("Below"))
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Above");
-                  QRectF b(symBbox(_symId));
-                  setbbox(b.translated(-0.5 * b.width(), 0.0));
-                  }
             }
       else {
-            if (name.endsWith("Above")) {
+            rypos() += staff()->height();
+            if (name.endsWith("Above"))
                   _symId = Sym::name2id(name.left(name.size() - 5) + "Below");
-                  QRectF b(symBbox(_symId));
-                  setbbox(b.translated(-0.5 * b.width(), 0.0));
-                  }
             }
+      QRectF b(symBbox(_symId));
+      setbbox(b.translated(-0.5 * b.width(), 0.0));
       autoplaceSegmentElement(styleP(Sid::fermataMinDistance));
-      }
-
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void Fermata::reset()
-      {
-      Element::reset();
       }
 
 //---------------------------------------------------------
@@ -303,7 +309,7 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::PLACEMENT:
-                  return int(Placement::ABOVE);
+                  return int(track() & 1 ? Placement::BELOW : Placement::ABOVE);
             case Pid::TIME_STRETCH:
                   return 1.0; // articulationList[int(articulationType())].timeStretch;
             case Pid::PLAY:
@@ -312,19 +318,6 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
                   break;
             }
       return Element::propertyDefault(propertyId);
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid Fermata::getPropertyStyle(Pid id) const
-      {
-      switch (id) {
-            default:
-                  break;
-            }
-      return Sid::NOSTYLE;
       }
 
 //---------------------------------------------------------
@@ -342,6 +335,17 @@ void Fermata::resetProperty(Pid id)
                   break;
             }
       Element::resetProperty(id);
+      }
+
+//---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid Fermata::getPropertyStyle(Pid pid) const
+      {
+      if (pid == Pid::OFFSET)
+            return placeAbove() ? Sid::fermataPosAbove : Sid::fermataPosBelow;
+      return ScoreElement::getPropertyStyle(pid);
       }
 
 //---------------------------------------------------------

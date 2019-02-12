@@ -1,7 +1,6 @@
 #=============================================================================
 #  Mscore
 #  Linux Music Score Editor
-#  $Id:$
 #
 #  Copyright (C) 2007 by Werner Schweer and others
 #
@@ -32,24 +31,45 @@ endif (SOUNDFONT3)
 
 QT5_WRAP_UI (fluidUi fluid_gui.ui)
 
+if (NOT MSVC)
+   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
+else (NOT MSVC)
+   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
+endif (NOT MSVC)
+
 add_library (fluid STATIC
-      ${PROJECT_BINARY_DIR}/all.h
+      ${_all_h_file}
       ${PCH}
       ${fluidUi}
       fluidgui.cpp
       dsp.cpp fluid.cpp voice.cpp chan.cpp sfont.cpp
-      conv.cpp gen.cpp mod.cpp tuning.cpp
+      conv.cpp gen.cpp mod.cpp
+      conv.h fluid.h fluidgui.h gen.h sfont.h voice.h
       ${SF3_SRC}
       ${INCS}
       )
-set_target_properties (
+if (NOT MSVC)
+   set_target_properties (
       fluid
       PROPERTIES
          COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
       )
+else (NOT MSVC)
+   set_target_properties (
+      fluid
+      PROPERTIES
+         COMPILE_FLAGS "${PCH_INCLUDE}"
+      )
+endif (NOT MSVC)   
 
 xcode_pch(fluid all)
 
-ADD_DEPENDENCIES(fluid mops1)
-ADD_DEPENDENCIES(fluid mops2)
+# Use MSVC pre-compiled headers
+vstudio_pch( fluid )
+
+# MSVC does not depend on mops1 & mops2 for PCH
+if (NOT MSVC)
+   ADD_DEPENDENCIES(fluid mops1)
+   ADD_DEPENDENCIES(fluid mops2)
+endif (NOT MSVC)   
 

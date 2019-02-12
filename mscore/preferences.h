@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id: preferences.h 5660 2012-05-22 14:17:39Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -80,6 +79,7 @@ enum class MusicxmlExportBreaks : char {
 //
 #define PREF_APP_AUTOSAVE_AUTOSAVETIME                      "application/autosave/autosaveTime"
 #define PREF_APP_AUTOSAVE_USEAUTOSAVE                       "application/autosave/useAutosave"
+#define PREF_APP_KEYBOARDLAYOUT                             "application/keyboardLayout"
 // file path of instrument templates
 #define PREF_APP_PATHS_INSTRUMENTLIST1                      "application/paths/instrumentList1"
 #define PREF_APP_PATHS_INSTRUMENTLIST2                      "application/paths/instrumentList2"
@@ -90,13 +90,17 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_APP_PATHS_MYSOUNDFONTS                         "application/paths/mySoundfonts"
 #define PREF_APP_PATHS_MYSTYLES                             "application/paths/myStyles"
 #define PREF_APP_PATHS_MYTEMPLATES                          "application/paths/myTemplates"
+#define PREF_APP_PATHS_MYEXTENSIONS                         "application/paths/myExtensions"
 #define PREF_APP_PLAYBACK_FOLLOWSONG                        "application/playback/followSong"
 #define PREF_APP_PLAYBACK_PANPLAYBACK                       "application/playback/panPlayback"
 #define PREF_APP_PLAYBACK_PLAYREPEATS                       "application/playback/playRepeats"
+#define PREF_APP_PLAYBACK_LOOPTOSELECTIONONPLAY             "application/playback/setLoopToSelectionOnPlay"
 #define PREF_APP_USESINGLEPALETTE                           "application/useSinglePalette"
+#define PREF_APP_STARTUP_FIRSTSTART                         "application/startup/firstStart"
 #define PREF_APP_STARTUP_SESSIONSTART                       "application/startup/sessionStart"
 #define PREF_APP_STARTUP_STARTSCORE                         "application/startup/startScore"
 #define PREF_APP_WORKSPACE                                  "application/workspace"
+#define PREF_EXPORT_AUDIO_NORMALIZE                         "export/audio/normalize"
 #define PREF_EXPORT_AUDIO_SAMPLERATE                        "export/audio/sampleRate"
 #define PREF_EXPORT_MP3_BITRATE                             "export/mp3/bitRate"
 #define PREF_EXPORT_MUSICXML_EXPORTLAYOUT                   "export/musicXML/exportLayout"
@@ -154,11 +158,14 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_UI_CANVAS_MISC_ANTIALIASEDDRAWING              "ui/canvas/misc/antialiasedDrawing"
 #define PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY              "ui/canvas/misc/selectionProximity"
 #define PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION           "ui/canvas/scroll/verticalOrientation"
+#define PREF_UI_CANVAS_SCROLL_LIMITSCROLLAREA               "ui/canvas/scroll/limitScrollArea"
 #define PREF_UI_APP_STARTUP_CHECKUPDATE                     "ui/application/startup/checkUpdate"
+#define PREF_UI_APP_STARTUP_CHECK_EXTENSIONS_UPDATE         "ui/application/startup/checkExtensionsUpdate"
 #define PREF_UI_APP_STARTUP_SHOWNAVIGATOR                   "ui/application/startup/showNavigator"
 #define PREF_UI_APP_STARTUP_SHOWPLAYPANEL                   "ui/application/startup/showPlayPanel"
 #define PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN                "ui/application/startup/showSplashScreen"
 #define PREF_UI_APP_STARTUP_SHOWSTARTCENTER                 "ui/application/startup/showStartCenter"
+#define PREF_UI_APP_STARTUP_SHOWTOURS                       "ui/application/startup/showTours"
 #define PREF_UI_APP_GLOBALSTYLE                             "ui/application/globalStyle"
 #define PREF_UI_APP_LANGUAGE                                "ui/application/language"
 #define PREF_UI_APP_RASTER_HORIZONTAL                       "ui/application/raster/horizontal"
@@ -176,19 +183,85 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_UI_SCORE_VOICE4_COLOR                          "ui/score/voice4/color"
 #define PREF_UI_THEME_ICONHEIGHT                            "ui/theme/iconHeight"
 #define PREF_UI_THEME_ICONWIDTH                             "ui/theme/iconWidth"
+#define PREF_UI_THEME_FONTFAMILY                            "ui/theme/fontFamily"
+#define PREF_UI_THEME_FONTSIZE                              "ui/theme/fontSize"
+#define PREF_UI_PIANOROLL_DARK_SELECTION_BOX_COLOR          "ui/pianoroll/dark/selectionBox/color"
+#define PREF_UI_PIANOROLL_DARK_NOTE_UNSEL_COLOR             "ui/pianoroll/dark/note/unselected/color"
+#define PREF_UI_PIANOROLL_DARK_NOTE_SEL_COLOR               "ui/pianoroll/dark/note/selected/color"
+#define PREF_UI_PIANOROLL_DARK_BG_BASE_COLOR                "ui/pianoroll/dark/background/base/color"
+#define PREF_UI_PIANOROLL_DARK_BG_KEY_WHITE_COLOR           "ui/pianoroll/dark/background/keys/white/color"
+#define PREF_UI_PIANOROLL_DARK_BG_KEY_BLACK_COLOR           "ui/pianoroll/dark/background/keys/black/color"
+#define PREF_UI_PIANOROLL_DARK_BG_GRIDLINE_COLOR            "ui/pianoroll/dark/background/gridLine/color"
+#define PREF_UI_PIANOROLL_DARK_BG_TEXT_COLOR                "ui/pianoroll/dark/background/text/color"
+#define PREF_UI_PIANOROLL_LIGHT_SELECTION_BOX_COLOR         "ui/pianoroll/light/selectionBox/color"
+#define PREF_UI_PIANOROLL_LIGHT_NOTE_UNSEL_COLOR            "ui/pianoroll/light/note/unselected/color"
+#define PREF_UI_PIANOROLL_LIGHT_NOTE_SEL_COLOR              "ui/pianoroll/light/note/selected/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_BASE_COLOR               "ui/pianoroll/light/background/base/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_KEY_WHITE_COLOR          "ui/pianoroll/light/background/keys/white/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR          "ui/pianoroll/light/background/keys/black/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_GRIDLINE_COLOR           "ui/pianoroll/light/background/gridLine/color"
+#define PREF_UI_PIANOROLL_LIGHT_BG_TEXT_COLOR               "ui/pianoroll/light/background/text/color"
+
+
+class PreferenceVisitor;
 
 //---------------------------------------------------------
 //   Preference
 //---------------------------------------------------------
-
 class Preference {
    private:
       QVariant _defaultValue = 0;
+      bool _showInAdvancedList = true;
 
-   public:
+   protected:
+      QMetaType::Type _type = QMetaType::UnknownType;
       Preference(QVariant defaultValue) : _defaultValue(defaultValue) {}
 
+   public:
+      Preference(QVariant defaultValue, QMetaType::Type type, bool showInAdvancedList = true);
+      virtual ~Preference() {}
+
       QVariant defaultValue() const {return _defaultValue;}
+      bool showInAdvancedList() const {return _showInAdvancedList;}
+      QMetaType::Type type() {return _type;}
+      virtual void accept(QString key, PreferenceVisitor&) = 0;
+      };
+
+class IntPreference : public Preference {
+   public:
+      IntPreference(int defaultValue, bool showInAdvancedList = true);
+      virtual void accept(QString key, PreferenceVisitor&);
+      };
+
+class DoublePreference : public Preference {
+   public:
+      DoublePreference(double defaultValue, bool showInAdvancedList = true);
+      virtual void accept(QString key, PreferenceVisitor&);
+      };
+
+class BoolPreference : public Preference {
+   public:
+      BoolPreference(bool defaultValue, bool showInAdvancedList = true);
+      virtual void accept(QString key, PreferenceVisitor&);
+      };
+
+class StringPreference: public Preference {
+   public:
+      StringPreference(QString defaultValue, bool showInAdvancedList = true);
+      virtual void accept(QString key, PreferenceVisitor&);
+      };
+
+class ColorPreference: public Preference {
+   public:
+      ColorPreference(QColor defaultValue, bool showInAdvancedList = true);
+      virtual void accept(QString key, PreferenceVisitor&);
+      };
+
+// Support for EnumPreference is currently not fully implemented
+class EnumPreference: public Preference {
+   public:
+      EnumPreference(QVariant defaultValue, bool showInAdvancedList = true);
+      virtual void accept(QString, PreferenceVisitor&);
       };
 
 //---------------------------------------------------------
@@ -196,14 +269,18 @@ class Preference {
 //---------------------------------------------------------
 
 class Preferences {
+   public:
+      typedef QHash<QString, Preference*> prefs_map_t;
+
+   private:
 
       // Map of all preferences and their default values
       // A preference can not be read or set if it is not present in this map
       // This map is not used for storing a preference it is only for default values
-      std::unordered_map<std::string, Preference> _allPreferences;
+      prefs_map_t _allPreferences;
       // used for storing preferences in memory when _storeInMemoryOnly is true
       // and for storing temporary preferences
-      std::unordered_map<std::string, QVariant> _inMemorySettings;
+      QHash<QString, QVariant> _inMemorySettings;
       bool _storeInMemoryOnly = false;
       bool _returnDefaultValues = false;
       bool _initialized = false;
@@ -218,13 +295,24 @@ class Preferences {
       void remove(const QString key);
 
       QVariant preference(const QString key) const;
-      void checkIfKeyExists(const QString key) const;
+      QMetaType::Type type(const QString key) const;
+      bool checkIfKeyExists(const QString key) const;
+      bool checkType(const QString key, QMetaType::Type t) const;
+
+      // Used with workspace
+      QHash<QString, QVariant> localPreferences;
+      QHash<QString, QVariant> getDefaultLocalPreferences();
+      bool useLocalPrefs = false;
 
    public:
       Preferences();
       ~Preferences();
       void init(bool storeInMemoryOnly = false);
       void save();
+      // set to true to let getters return default values instead of values from QSettings
+      void setReturnDefaultValuesMode(bool returnDefaultValues) {_returnDefaultValues = returnDefaultValues;}
+
+      const prefs_map_t& allPreferences() const {return _allPreferences;}
 
       // general getters
       QVariant defaultValue(const QString key) const;
@@ -235,10 +323,9 @@ class Preferences {
       double getDouble(const QString key) const;
 
       // general setters
-      void revertToDefaultValue(const QString key);
-      // set to true to let getters return default values instead of values from QSettings
-      void setReturnDefaultValues(bool returnDefaultValues);
+      void setToDefaultValue(const QString key);
       void setPreference(const QString key, QVariant value);
+
       // A temporary preference is stored "in memory" only and not written to file.
       // If there is both a "normal" preference and a temporary preference with the same
       // key the temporary preference is used
@@ -263,8 +350,15 @@ class Preferences {
       MidiRemote midiRemote(int recordId) const;
       void updateMidiRemote(int recordId, MidiRemoteType type, int data);
       void clearMidiRemote(int recordId);
+
+      QHash<QString, QVariant> getLocalPreferences()  { return localPreferences; }
+      void setLocalPreference(QString key, QVariant value);
+      void setUseLocalPreferences(bool value)         { useLocalPrefs = value;   }
+      bool getUseLocalPreferences()                   { return useLocalPrefs;    }
+      void updateLocalPreferences() { localPreferences = getDefaultLocalPreferences(); }
       };
 
+// singleton
 extern Preferences preferences;
 
 // Stream operators for enum classes
@@ -283,6 +377,15 @@ inline QDataStream &operator>>(QDataStream &in, T &val)
     val = static_cast<T>(tmp);
     return in;
 }
+
+class PreferenceVisitor {
+   public:
+      virtual void visit(QString key, IntPreference*) = 0;
+      virtual void visit(QString key, DoublePreference*) = 0;
+      virtual void visit(QString key, BoolPreference*) = 0;
+      virtual void visit(QString key, StringPreference*) = 0;
+      virtual void visit(QString key, ColorPreference*) = 0;
+      };
 
 
 } // namespace Ms

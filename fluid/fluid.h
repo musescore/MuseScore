@@ -308,8 +308,14 @@ class Fluid : public Synthesizer {
       float _masterTuning;                // usually 440.0
       double _tuning[128];                // the pitch of every key, in cents
 
+      int _loadProgress = 0;
+      bool _loadWasCanceled = false;
+
       QMutex mutex;
       void updatePatchList();
+
+      //the variable is used to stop loading samples from the sf files
+      bool _globalTerminate = false;
 
    protected:
       int _state;                         // the synthesizer state
@@ -342,6 +348,11 @@ class Fluid : public Synthesizer {
 
       virtual void allSoundsOff(int);
       virtual void allNotesOff(int);
+
+      int loadProgress()            { return _loadProgress; }
+      void setLoadProgress(int val) { _loadProgress = val; }
+      bool loadWasCanceled()        { return _loadWasCanceled; }
+      void setLoadWasCanceled(bool status)     { _loadWasCanceled = status; }
 
       Preset* get_preset(unsigned int sfontnum, unsigned int banknum, unsigned int prognum);
       Preset* find_preset(unsigned int banknum, unsigned int prognum);
@@ -404,6 +415,9 @@ class Fluid : public Synthesizer {
       virtual SynthesizerGui* gui();
 
       static QFileInfoList sfFiles();
+
+      bool globalTerminate() { return _globalTerminate; }
+      void setGlobalTerminate(bool terminate = true) { _globalTerminate = terminate; }
 
       friend class Voice;
       friend class Preset;

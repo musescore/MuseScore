@@ -399,11 +399,8 @@
      <property name="toolTip">
       <string>RMS</string>
      </property>
-     <property name="statusTip">
-      <string/>
-     </property>
      <property name="whatsThis">
-      <string>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.</string>
+      <string>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and peak is better for heavier, fast compression and percussion.</string>
      </property>
      <property name="value" stdset="0">
       <double>0.000000000000000</double>
@@ -530,7 +527,7 @@
       <set>Qt::AlignCenter</set>
      </property>
      <property name="suffix">
-      <string>ms</string>
+      <string extracomment="milliseconds">ms</string>
      </property>
      <property name="decimals">
       <number>1</number>
@@ -552,7 +549,7 @@
       <set>Qt::AlignCenter</set>
      </property>
      <property name="suffix">
-      <string>ms</string>
+      <string extracomment="milliseconds">ms</string>
      </property>
      <property name="decimals">
       <number>1</number>
@@ -574,7 +571,7 @@
       <set>Qt::AlignCenter</set>
      </property>
      <property name="suffix">
-      <string>dB</string>
+      <string extracomment="decibel">dB</string>
      </property>
      <property name="decimals">
       <number>1</number>
@@ -612,7 +609,7 @@
       <set>Qt::AlignCenter</set>
      </property>
      <property name="suffix">
-      <string>dB</string>
+      <string extracomment="decibel">dB</string>
      </property>
      <property name="decimals">
       <number>1</number>
@@ -637,7 +634,7 @@
       <enum>QAbstractSpinBox::UpDownArrows</enum>
      </property>
      <property name="suffix">
-      <string>dB</string>
+      <string extracomment="decibel">dB</string>
      </property>
      <property name="decimals">
       <number>1</number>

@@ -13,6 +13,7 @@
 #include "drumset.h"
 #include "xml.h"
 #include "note.h"
+#include "articulation.h"
 
 namespace Ms {
 
@@ -29,7 +30,17 @@ void Drumset::save(XmlWriter& xml) const
             if (!isValid(i))
                   continue;
             xml.stag(QString("Drum pitch=\"%1\"").arg(i));
-            xml.tag("head", NoteHead::group2name(noteHead(i)));
+            const NoteHead::Group nh = noteHead(i);
+            //write custom as Normal notehead group + noteheads tag to keep compatibility with 2.X versions
+            const NoteHead::Group saveNHValue = (nh == NoteHead::Group::HEAD_CUSTOM) ? NoteHead::Group::HEAD_NORMAL : nh;
+            xml.tag("head", NoteHead::group2name(saveNHValue));
+            if (nh == NoteHead::Group::HEAD_CUSTOM) {
+                  xml.stag("noteheads");
+                  for (int j = 0; j < int(NoteHead::Type::HEAD_TYPES); j++) {
+                        xml.tag(NoteHead::type2name(NoteHead::Type(j)), Sym::id2name(noteHeads(i, NoteHead::Type(j))));
+                        }
+                  xml.etag();
+                  }
             xml.tag("line", line(i));
             xml.tag("voice", voice(i));
             xml.tag("name", name(i));
@@ -55,15 +66,42 @@ void Drumset::save(XmlWriter& xml) const
                               break;
                         }
                   }
+            auto vs = variants(i);
+            if (!vs.isEmpty()) {
+                  xml.stag("variants");
+                  for (auto v : vs) {
+                        xml.stag(QString("variant pitch=\"%1\"").arg(v.pitch));
+                        if (!v.articulationName.isEmpty())
+                              xml.tag("articulation", v.articulationName);
+                        if (v.tremolo != TremoloType::INVALID_TREMOLO)
+                              xml.tag("tremolo", Tremolo::type2name(v.tremolo));
+                        xml.etag();
+                        }
+                  xml.etag();
+                  }
             xml.etag();
             }
       }
 
 bool Drumset::readProperties(XmlReader& e, int pitch)
       {
+      if (pitch < 0 || pitch > DRUM_INSTRUMENTS - 1)
+            return false;
+            
       const QStringRef& tag(e.name());
       if (tag == "head")
             _drum[pitch].notehead = NoteHead::name2group(e.readElementText());
+      else if (tag == "noteheads") {
+            _drum[pitch].notehead = NoteHead::Group::HEAD_CUSTOM;
+            while (e.readNextStartElement()) {
+                  const QStringRef& nhTag(e.name());
+                  int noteType = int(NoteHead::name2type(nhTag.toString()));
+                  if (noteType > int(NoteHead::Type::HEAD_TYPES) - 1 || noteType < 0)
+                        return false;
+                  
+                  _drum[pitch].noteheads[noteType] = Sym::name2id(e.readElementText());
+                  }
+            }
       else if (tag == "line")
             _drum[pitch].line = e.readInt();
       else if (tag == "voice")
@@ -77,6 +115,25 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
             QString val(e.readElementText());
             int i = val.toInt(&isNum);
             _drum[pitch].shortcut = isNum ? i : toupper(val[0].toLatin1());
+            }
+      else if (tag == "variants") {
+            while(e.readNextStartElement()) {
+                  const QStringRef& tagv(e.name());
+                  if (tagv == "variant") {
+                        DrumInstrumentVariant div;
+                        div.pitch = e.attribute("pitch").toInt();
+                        while (e.readNextStartElement()) {
+                              const QStringRef& taga(e.name());
+                              if (taga == "articulation") {
+                                    div.articulationName = e.readElementText();
+                                    }
+                              else if (taga == "tremolo") {
+                                    div.tremolo = Tremolo::name2Type(e.readElementText());
+                                    }
+                              }
+                        _drum[pitch].addVariant(div);
+                        }
+                  }
             }
       else
             return false;
@@ -112,6 +169,7 @@ void Drumset::clear()
             _drum[i].name = "";
             _drum[i].notehead = NoteHead::Group::HEAD_INVALID;
             _drum[i].shortcut = 0;
+            _drum[i].variants.clear();
             }
       }
 
@@ -147,6 +205,31 @@ int Drumset::prevPitch(int ii) const
                   return i;
             }
       return 0;
+      }
+
+//---------------------------------------------------------
+//   findVariant
+/// find a variant for the given pitch with matching chord articulation and tremolo
+//---------------------------------------------------------
+
+DrumInstrumentVariant Drumset::findVariant(int p, const QVector<Articulation*> articulations, Tremolo* tremolo) const
+      {
+      DrumInstrumentVariant div;
+      auto vs = variants(p);
+      for (auto v : vs) {
+            bool matchTremolo = (!tremolo && v.tremolo == TremoloType::INVALID_TREMOLO) || (tremolo && v.tremolo == tremolo->tremoloType());
+            bool matchArticulation = v.articulationName.isEmpty() && articulations.isEmpty();
+            for (auto a : articulations) {
+                  matchArticulation = a->articulationName() == v.articulationName;
+                  if (!matchArticulation)
+                        break;
+                  }
+            if (matchArticulation && matchTremolo) {
+                  div = v;
+                  break;
+                  }
+            }
+      return div;
       }
 
 //---------------------------------------------------------

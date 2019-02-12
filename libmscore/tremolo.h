@@ -13,6 +13,7 @@
 #ifndef __TREMOLO_H__
 #define __TREMOLO_H__
 
+#include "durationtype.h"
 #include "symbol.h"
 
 namespace Ms {
@@ -20,15 +21,9 @@ namespace Ms {
 class Chord;
 
 // Tremolo subtypes:
-enum class TremoloType : char {
-      OLD_R8 = 0,
-      OLD_R16,
-      OLD_R32,
-      OLD_C8,
-      OLD_C16,
-      OLD_C32,
-
-      R8=6, R16, R32, R64,  // one note tremolo (repeat)
+enum class TremoloType : signed char {
+      INVALID_TREMOLO = -1,
+      R8=0, R16, R32, R64, BUZZ_ROLL,  // one note tremolo (repeat)
       C8, C16, C32, C64     // two note tremolo (change)
       };
 
@@ -40,6 +35,7 @@ class Tremolo final : public Element {
       TremoloType _tremoloType;
       Chord* _chord1;
       Chord* _chord2;
+      TDuration _durationType;
       QPainterPath path;
 
       int _lines;       // derived from _subtype
@@ -48,15 +44,17 @@ class Tremolo final : public Element {
       Tremolo(Score*);
       Tremolo(const Tremolo&);
       Tremolo &operator=(const Tremolo&) = delete;
-      virtual Tremolo* clone() const     { return new Tremolo(*this); }
-      virtual ElementType type() const   { return ElementType::TREMOLO; }
-      virtual int subtype() const        { return (int) _tremoloType; }
-      virtual QString subtypeName() const;
+      virtual Tremolo* clone() const       { return new Tremolo(*this); }
+      virtual ElementType type() const     { return ElementType::TREMOLO; }
+      virtual int subtype() const override { return (int) _tremoloType; }
+      virtual QString subtypeName() const override;
 
       QString tremoloTypeName() const;
       void setTremoloType(const QString& s);
+      static TremoloType name2Type(const QString& s);
+      static QString type2name(TremoloType t);
 
-      Chord* chord() const { return (Chord*)parent(); }
+      Chord* chord() const { return toChord(parent()); }
 
       void setTremoloType(TremoloType t);
       TremoloType tremoloType() const      { return _tremoloType; }
@@ -71,12 +69,15 @@ class Tremolo final : public Element {
       Chord* chord1() const { return _chord1; }
       Chord* chord2() const { return _chord2; }
 
+      TDuration durationType() const { return _durationType; }
+      void setDurationType(TDuration d) { _durationType = d; }
+
       void setChords(Chord* c1, Chord* c2) {
             _chord1 = c1;
             _chord2 = c2;
             }
       Fraction tremoloLen() const;
-      bool twoNotes() const { return tremoloType() > TremoloType::R64; } // is it a two note tremolo?
+      bool twoNotes() const { return tremoloType() >= TremoloType::C8; } // is it a two note tremolo?
       int lines() const { return _lines; }
 
       virtual QString accessibleInfo() const override;

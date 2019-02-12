@@ -1,7 +1,6 @@
 //=============================================================================
 //  Awl
 //  Audio Widget Library
-//  $Id:$
 //
 //  Copyright (C) 2002-2006 by Werner Schweer and others
 //
@@ -30,13 +29,14 @@ namespace Awl {
 AbstractSlider::AbstractSlider(QWidget* parent)
    : QWidget(parent), _scaleColor(Qt::darkGray), _scaleValueColor(QColor("#2456aa"))
       {
-      _id         = 0;
+      __id         = 0;
       _value      = 0.5;
       _minValue   = 0.0;
       _maxValue   = 1.0;
       _lineStep   = 0.1;
       _pageStep   = 0.2;
       _center     = false;
+      _enableMouseWheel = true;
       _invert     = false;
       _scaleWidth = 4;
       _log        = false;
@@ -54,6 +54,15 @@ void AbstractSlider::setEnabled(bool val)
       {
       QWidget::setEnabled(val);
       update();
+      }
+
+//---------------------------------------------------------
+//   setEnableMouseWheel
+//---------------------------------------------------------
+
+void AbstractSlider::setEnableMouseWheel(bool enabled)
+      {
+            _enableMouseWheel = enabled;
       }
 
 //---------------------------------------------------------
@@ -112,6 +121,9 @@ void AbstractSlider::setScaleValueColor(const QColor& c)
 
 void AbstractSlider::wheelEvent(QWheelEvent* ev)
       {
+      if (!_enableMouseWheel)
+            return;
+
       int div = 50;
       if (ev->modifiers() & Qt::ShiftModifier)
             div = 15;
@@ -172,6 +184,8 @@ void AbstractSlider::mouseDoubleClickEvent(QMouseEvent* ev)
 
 void AbstractSlider::setValue(double val)
       {
+      double oldValue = _value;
+
       if (_log) {
             if (val == 0.0f)
                   _value = _minValue;
@@ -183,6 +197,10 @@ void AbstractSlider::setValue(double val)
             }
       else
             _value = val;
+
+      if (oldValue != _value)
+            emit valueChanged(val, __id);
+
       update();
       }
 
@@ -192,7 +210,7 @@ void AbstractSlider::setValue(double val)
 
 void AbstractSlider::valueChange()
       {
-      emit valueChanged(value(), _id);
+      emit valueChanged(value(), __id);
       update();
       }
 
@@ -302,7 +320,8 @@ QString AccessibleAbstractSlider::text(QAccessible::Text t) const
             default:
                   return QString();
             }
-      return QString();
+      // Eliminate "unreachable code" 
+      // return QString();
       }
 
 void AccessibleAbstractSlider::valueChanged(double, int)

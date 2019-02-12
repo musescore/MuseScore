@@ -79,17 +79,18 @@ class Articulation final : public Element {
 
       SymId symId() const                       { return _symId; }
       void setSymId(SymId id);
-      virtual int subtype() const override      { return int(_symId); }
+      virtual int subtype() const override;
       QString userName() const;
       const char* articulationName() const;  // type-name of articulation; used for midi rendering
+      static const char* symId2ArticulationName(SymId symId);
 
       virtual void layout() override;
+      bool layoutCloseToNote() const;
 
       virtual void read(XmlReader&) override;
       virtual void write(XmlWriter& xml) const override;
       virtual bool readProperties(XmlReader&) override;
 
-      virtual void reset() override;
       virtual QLineF dragAnchor() const override;
 
       virtual QVariant getProperty(Pid propertyId) const override;
@@ -123,9 +124,11 @@ class Articulation final : public Element {
 
       QString accessibleInfo() const override;
 
+      bool isDouble() const;
       bool isTenuto() const;
       bool isStaccato() const;
       bool isAccent() const;
+      bool isMarcato() const;
       bool isLuteFingering() const;
 
       void doAutoplace();

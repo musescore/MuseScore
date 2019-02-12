@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.00">
+<museScore version="3.01">
   <programVersion>3.0.0</programVersion>
   <programRevision>3543170</programRevision>
   <Score>
@@ -24,6 +24,8 @@
       <minSystemDistance>9</minSystemDistance>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <lyricsLineThickness>0.3</lyricsLineThickness>
+      <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
+      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
       <barWidth>0.3</barWidth>
       <doubleBarWidth>0.3</doubleBarWidth>
       <endBarWidth>0.6</endBarWidth>
@@ -55,7 +57,11 @@
       <voltaY>-6</voltaY>
       <voltaLineWidth>0.2</voltaLineWidth>
       <ottavaLineWidth>0.2</ottavaLineWidth>
+      <ottavaFontFace>MuseJazz Text</ottavaFontFace>
+      <ottavaFontSize>10</ottavaFontSize>
+      <ottavaFontItalic>1</ottavaFontItalic>
       <tupletBracketWidth>0.2</tupletBracketWidth>
+      <tupletFontFace>MuseJazz Text</tupletFontFace>
       <defaultAlign>left,baseline</defaultAlign>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
@@ -67,8 +73,6 @@
       <composerFontFace>MuseJazz Text</composerFontFace>
       <composerFontSpatiumDependent>1</composerFontSpatiumDependent>
       <lyricistFontFace>MuseJazz Text</lyricistFontFace>
-      <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
-      <lyricsEvenFontFace>MuseJazz Text</lyricsEvenFontFace>
       <fingeringFontFace>MuseJazz Text</fingeringFontFace>
       <fingeringFramePadding>0</fingeringFramePadding>
       <fingeringFrameWidth>0</fingeringFrameWidth>
@@ -90,15 +94,12 @@
       <metronomeFontFace>MuseJazz Text</metronomeFontFace>
       <measureNumberFontFace>MuseJazz Text</measureNumberFontFace>
       <translatorFontFace>MuseJazz Text</translatorFontFace>
-      <tupletFontFace>MuseJazz Text</tupletFontFace>
       <systemFontFace>MuseJazz Text</systemFontFace>
       <systemFontSize>11</systemFontSize>
       <systemOffset x="0" y="-2"/>
       <staffFontFace>MuseJazz Text</staffFontFace>
       <staffFontSize>11</staffFontSize>
       <staffOffset x="0" y="5.5"/>
-      <chordSymbolFontFace>MuseJazz Text</chordSymbolFontFace>
-      <chordSymbolFontSize>15</chordSymbolFontSize>
       <rehearsalMarkFontFace>MuseJazz Text</rehearsalMarkFontFace>
       <rehearsalMarkFontBold>0</rehearsalMarkFontBold>
       <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
@@ -110,9 +111,6 @@
       <textLineFontFace>MuseJazz Text</textLineFontFace>
       <textLineFontSize>10</textLineFontSize>
       <glissandoFontFace>MuseJazz Text</glissandoFontFace>
-      <ottavaFontFace>MuseJazz Text</ottavaFontFace>
-      <ottavaFontSize>10</ottavaFontSize>
-      <ottavaFontItalic>1</ottavaFontItalic>
       <bendFontFace>MuseJazz Text</bendFontFace>
       <headerFontFace>MuseJazz Text</headerFontFace>
       <footerFontFace>MuseJazz Text</footerFontFace>
@@ -177,125 +175,127 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <StaffText>
-          <style>System</style>
-          <frameWidth>0.1</frameWidth>
-          <framePadding>0.2</framePadding>
-          <text>MuseJazz - Articulation 1</text>
-          </StaffText>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <StaffText>
+            <style>System</style>
+            <framePadding>0.2</framePadding>
+            <frameWidth>0.1</frameWidth>
+            <text>MuseJazz - Articulation 1</text>
+            </StaffText>
+          <Fermata>
             <subtype>fermataAbove</subtype>
-            </Articulation>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
             <subtype>fermataShortAbove</subtype>
-            </Articulation>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
             <subtype>fermataLongAbove</subtype>
-            </Articulation>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <subtype>fermataVeryLongAbove</subtype>
-            </Articulation>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <subtype>fermataVeryLongAbove</subtype>
+              </Articulation>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     <Staff id="2">
-      <Measure number="1">
-        <Clef>
-          <concertClefType>F</concertClefType>
-          <transposingClefType>F</transposingClefType>
-          </Clef>
-        <TimeSig>
-          <sigN>4</sigN>
-          <sigD>4</sigD>
-          </TimeSig>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <direction>down</direction>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Fermata>
             <subtype>fermataBelow</subtype>
-            </Articulation>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <direction>down</direction>
+            <placement>below</placement>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
             <subtype>fermataShortBelow</subtype>
-            </Articulation>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <direction>down</direction>
+            <placement>below</placement>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
             <subtype>fermataLongBelow</subtype>
-            </Articulation>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Articulation>
-            <direction>down</direction>
-            <subtype>fermataVeryLongBelow</subtype>
-            </Articulation>
-          <Note>
-            <pitch>55</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>normal</subtype>
-          <span>1</span>
-          </BarLine>
+            <placement>below</placement>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Articulation>
+              <direction>down</direction>
+              <subtype>fermataVeryLongBelow</subtype>
+              </Articulation>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>

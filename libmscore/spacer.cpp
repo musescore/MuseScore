@@ -176,7 +176,7 @@ void Spacer::updateGrips(EditData& ed) const
 
 void Spacer::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       xml.tag("subtype", int(_spacerType));
       Element::writeProperties(xml);
       xml.tag("space", _gap / spatium());

@@ -23,6 +23,8 @@ class ChordRest;
 class MuseScoreView;
 class Chord;
 class System;
+class Skyline;
+
 enum class SpannerSegmentType;
 
 struct BeamFragment;
@@ -32,6 +34,7 @@ struct BeamFragment;
 //---------------------------------------------------------
 
 class Beam final : public Element {
+      Q_GADGET
       QVector<ChordRest*> _elements;        // must be sorted by tick
       QVector<QLineF*> beamSegments;
       Direction _direction;
@@ -69,7 +72,7 @@ class Beam final : public Element {
       enum class Mode : signed char {
             AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
             };
-      Q_ENUMS(Mode)
+      Q_ENUM(Mode)
 
       Beam(Score* = 0);
       Beam(const Beam&);
@@ -94,7 +97,7 @@ class Beam final : public Element {
 
       virtual void reset() override;
 
-      System* system() const { return (System*)parent(); }
+      System* system() const { return toSystem(parent()); }
 
       void layout1();
       void layoutGraceNotes();
@@ -145,14 +148,12 @@ class Beam final : public Element {
 
       bool isGrace() const { return _isGrace; }  // for debugger
       bool cross() const   { return _cross; }
-      virtual Shape shape() const override;
+
+      void addSkyline(Skyline&);
+
       virtual void triggerLayout() const override;
       };
 
 
 }     // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::Beam::Mode);
-
 #endif
-

@@ -449,7 +449,7 @@ static void genJson()
             i.next();
 
             if (!nmap.contains(i.key())) {
-                  printf("not found: <%s>\n", qPrintable(i.key()));
+                  fprintf(stderr, "not found: <%s>\n", qPrintable(i.key()));
                   continue;
                   }
 

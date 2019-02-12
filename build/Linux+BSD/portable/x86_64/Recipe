@@ -114,6 +114,7 @@ appimage="$(echo "$appdir" | sed 's|\.AppDir$|.AppImage|')"
 ##########################################################################
 
 cd ../AppImageKit/AppImageAssistant.AppDir
+chmod u+x /$appdir/bin/QtWebEngineProcess 
 
 ./package "$appdir" "$appimage"
 

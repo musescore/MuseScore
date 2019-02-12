@@ -17,6 +17,7 @@
 #include "measure.h"
 #include "segment.h"
 #include "score.h"
+#include "system.h"
 #include "undo.h"
 #include "xml.h"
 
@@ -24,18 +25,18 @@ namespace Ms {
 
 const char* keyNames[] = {
       QT_TRANSLATE_NOOP("MuseScore", "G major, E minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "Cb major, Ab minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "C♭ major, A♭ minor"),
       QT_TRANSLATE_NOOP("MuseScore", "D major, B minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "Gb major, Eb minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "A major, F# minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "Db major, Bb minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "E major, C# minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "Ab major, F minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "B major, G# minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "Eb major, C minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "F# major, D# minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "Bb major, G minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "C# major, A# minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "G♭ major, E♭ minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "A major, F♯ minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "D♭ major, B♭ minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "E major, C♯ minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "A♭ major, F minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "B major, G♯ minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "E♭ major, C minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "F♯ major, D♯ minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "B♭ major, G minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "C♯ major, A♯ minor"),
       QT_TRANSLATE_NOOP("MuseScore", "F major, D minor"),
       QT_TRANSLATE_NOOP("MuseScore", "C major, A minor"),
       QT_TRANSLATE_NOOP("MuseScore", "Open/Atonal")
@@ -46,9 +47,8 @@ const char* keyNames[] = {
 //---------------------------------------------------------
 
 KeySig::KeySig(Score* s)
-  : Element(s)
+  : Element(s, ElementFlag::ON_STAFF)
       {
-      setFlags(ElementFlag::SELECTABLE | ElementFlag::ON_STAFF);
       _showCourtesy = true;
       _hideNaturals = false;
       }
@@ -107,7 +107,7 @@ void KeySig::layout()
       // determine current clef for this staff
       ClefType clef = ClefType::G;
       if (staff())
-            clef = staff()->clef(segment()->tick());
+            clef = staff()->clef(tick());
 
       int accidentals = 0, naturals = 0;
       int t1 = int(_sig.key());
@@ -134,13 +134,17 @@ void KeySig::layout()
       Measure* prevMeasure = measure() ? measure()->prevMeasure() : 0;
 
       // If we're not force hiding naturals (Continuous panel), use score style settings
-      if (!_hideNaturals)
-            naturalsOn = (prevMeasure && !prevMeasure->sectionBreak()
-               && (score()->styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE))) || (t1 == 0);
+      if (!_hideNaturals) {
+            const bool newSection = (!segment()
+               || (segment()->rtick() == 0 && (!prevMeasure || prevMeasure->sectionBreak()))
+               );
+            naturalsOn = !newSection && (score()->styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
+            }
 
 
       // Don't repeat naturals if shown in courtesy
-      if (prevMeasure && prevMeasure->findSegment(SegmentType::KeySigAnnounce, segment()->tick())
+      if (measure() && measure()->system() && measure() == measure()->system()->firstMeasure()
+          && prevMeasure && prevMeasure->findSegment(SegmentType::KeySigAnnounce, tick())
           && !segment()->isKeySigAnnounceType())
             naturalsOn = false;
       if (track() == -1)
@@ -149,7 +153,8 @@ void KeySig::layout()
       int coffset = 0;
       Key t2      = Key::C;
       if (naturalsOn) {
-            t2 = staff()->key(segment()->tick() - 1);
+            if (staff())
+                  t2 = staff()->key(tick() - 1);
             if (t2 == Key::C)
                   naturalsOn = false;
             else {
@@ -260,6 +265,26 @@ void KeySig::layout()
       }
 
 //---------------------------------------------------------
+//   shape
+//---------------------------------------------------------
+
+Shape KeySig::shape() const
+      {
+      QRectF box(bbox());
+      const Staff* st = staff();
+      if (st && autoplace() && visible()) {
+            // Extend key signature shape up and down to
+            // the first ledger line height to ensure that
+            // no notes will be too close to the keysig.
+            const qreal sp = spatium();
+            const qreal y = pos().y();
+            box.setTop(std::min(-sp - y, box.top()));
+            box.setBottom(std::max(st->height() - y + sp, box.bottom()));
+            }
+      return Shape(box);
+      }
+
+//---------------------------------------------------------
 //   set
 //---------------------------------------------------------
 
@@ -281,7 +306,7 @@ void KeySig::draw(QPainter* p) const
 
 bool KeySig::acceptDrop(EditData& data) const
       {
-      return data.element->type() == ElementType::KEYSIG;
+      return data.dropElement->type() == ElementType::KEYSIG;
       }
 
 //---------------------------------------------------------
@@ -290,7 +315,7 @@ bool KeySig::acceptDrop(EditData& data) const
 
 Element* KeySig::drop(EditData& data)
       {
-      KeySig* ks = toKeySig(data.element);
+      KeySig* ks = toKeySig(data.dropElement);
       if (ks->type() != ElementType::KEYSIG) {
             delete ks;
             return 0;
@@ -327,7 +352,7 @@ void KeySig::setKey(Key key)
 
 void KeySig::write(XmlWriter& xml) const
       {
-      xml.stag(name());
+      xml.stag(this);
       Element::writeProperties(xml);
       if (_sig.isAtonal()) {
             xml.tag("custom", 1);
@@ -371,8 +396,8 @@ void KeySig::read(XmlReader& e)
             if (tag == "KeySym") {
                   KeySym ks;
                   while (e.readNextStartElement()) {
-                        const QStringRef& tag(e.name());
-                        if (tag == "sym") {
+                        const QStringRef& t(e.name());
+                        if (t == "sym") {
                               QString val(e.readElementText());
                               bool valid;
                               SymId id = SymId(val.toInt(&valid));
@@ -386,7 +411,7 @@ void KeySig::read(XmlReader& e)
                                     }
                               ks.sym = id;
                               }
-                        else if (tag == "pos")
+                        else if (t == "pos")
                               ks.spos = e.readPoint();
                         else
                               e.unknown();

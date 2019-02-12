@@ -9,6 +9,8 @@ build.debug
 build.qtc
 win32build
 win32install
+win64build
+win64install
 build.xcode
 applebuild
 /*.config
@@ -34,6 +36,8 @@ vtest/LOG
 vtest/META-INF
 vtest/Thumbnails
 vtest/Pictures
+.vs
+dependencies
 
 # Downloaded files during build process
 MS_General.sf3
@@ -43,3 +47,5 @@ MuseScore_General.sf3
 MuseScore_General-License.md
 MuseScore_General-changelog.txt
 VERSION
+/mscore/data/mscore.aps
+/msvc.*

@@ -63,7 +63,6 @@ QString AccessibleScoreView::text(QAccessible::Text t) const
             default:
                   return QString();
            }
-      return QString();
       }
 
 QWindow* AccessibleScoreView::window() const {
@@ -87,7 +86,8 @@ ScoreAccessibility* ScoreAccessibility::inst = 0;
 ScoreAccessibility::ScoreAccessibility(QMainWindow* mainWindow) : QObject(mainWindow)
       {
       this->mainWindow = mainWindow;
-      statusBarLabel = 0;
+      statusBarLabel = new QLabel(mainWindow->statusBar());
+      mainWindow->statusBar()->addWidget(statusBarLabel);
       }
 
 void ScoreAccessibility::createInstance(QMainWindow* mainWindow)
@@ -103,18 +103,13 @@ ScoreAccessibility::~ScoreAccessibility()
 
 void ScoreAccessibility::clearAccessibilityInfo()
       {
-      if(statusBarLabel != 0) {
-            mainWindow->statusBar()->removeWidget(statusBarLabel);
-            delete statusBarLabel;
-            statusBarLabel = 0;
-            static_cast<MuseScore*>(mainWindow)->currentScoreView()->score()->setAccessibleInfo(tr("No selection"));
-            }
+      statusBarLabel->setText("");
+      static_cast<MuseScore*>(mainWindow)->currentScoreView()->score()->setAccessibleInfo(tr("No selection"));
       }
 
 void ScoreAccessibility::currentInfoChanged()
       {
       clearAccessibilityInfo();
-      statusBarLabel  = new QLabel(mainWindow->statusBar());
       ScoreView* scoreView =  static_cast<MuseScore*>(mainWindow)->currentScoreView();
       Score* score = scoreView->score();
       if (score->selection().isSingle()) {
@@ -124,10 +119,9 @@ void ScoreAccessibility::currentInfoChanged()
                   }
             Element* el = e->isSpannerSegment() ? static_cast<SpannerSegment*>(e)->spanner() : e;
             QString barsAndBeats = "";
-            std::pair<int, float> bar_beat;
             if (el->isSpanner()){
                   Spanner* s = static_cast<Spanner*>(el);
-                  bar_beat = barbeat(s->startSegment());
+                  std::pair<int, float> bar_beat = barbeat(s->startSegment());
                   barsAndBeats += tr("Start Measure: %1; Start Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
                   Segment* seg = s->endSegment();
                   if(!seg)
@@ -186,7 +180,6 @@ void ScoreAccessibility::currentInfoChanged()
             statusBarLabel->setText(tr("List Selection"));
             score->setAccessibleInfo(tr("List Selection"));
             }
-      mainWindow->statusBar()->addWidget(statusBarLabel);
       }
 
 ScoreAccessibility* ScoreAccessibility::instance()
@@ -225,7 +218,7 @@ void ScoreAccessibility::updateAccessibilityInfo()
 std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
       {
       if (!e) {
-            return std::pair<int, float>(0, 0);
+            return std::pair<int, float>(0, 0.0F);
             }
 
       int bar = 0;
@@ -237,7 +230,7 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
             p = p->parent();
 
       if (!p) {
-            return std::pair<int, float>(0, 0);
+            return std::pair<int, float>(0, 0.0F);
             }
       else if (p->type() == ElementType::SEGMENT) {
             Segment* seg = static_cast<Segment*>(p);

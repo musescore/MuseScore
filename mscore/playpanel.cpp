@@ -1,7 +1,6 @@
 //=============================================================================
 //  MuseScore
 //  Linux Music Score Editor
-//  $Id: playpanel.cpp 4775 2011-09-12 14:25:31Z wschweer $
 //
 //  Copyright (C) 2002-2016 Werner Schweer and others
 //
@@ -33,9 +32,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 PlayPanel::PlayPanel(QWidget* parent)
-   : QWidget(parent, Qt::Dialog)
+    : QDockWidget("Play Panel", parent)
       {
-      setObjectName("PlayPanel");
       cachedTickPosition = -1;
       cachedTimePosition = -1;
       cs                 = 0;
@@ -43,6 +41,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       setupUi(this);
       setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
 
       MuseScore::restoreGeometry(this);
 

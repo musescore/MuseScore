@@ -290,10 +290,13 @@ void Score::putNote(const QPointF& pos, bool replace, bool insert)
             return;
             }
       Score* score = p.segment->score();
-      if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH))
+      // it is not safe to call Score::repitchNote() if p is on a TAB staff
+      bool isTablature = staff(p.staffIdx)->isTabStaff(p.segment->tick());
+      if (score->inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH) && !isTablature)
             score->repitchNote(p, replace);
       else {
-            if (insert)
+            if (insert
+               || score->inputState().usingNoteEntryMethod(NoteEntryMethod::TIMEWISE))
                   score->insertChord(p);
             else
                   score->putNote(p, replace);
@@ -543,59 +546,87 @@ void Score::insertChord(const Position& pos)
 
 void Score::localInsertChord(const Position& pos)
       {
-      TDuration duration = _is.duration();
-      Fraction fraction  = duration.fraction();
-      int len            = fraction.ticks();
-      Segment* seg       = pos.segment;
-      int tick           = seg->tick();
-      Measure* m         = seg->measure();
+      const TDuration duration = _is.duration();
+      const Fraction fraction  = duration.fraction();
+      const int len            = fraction.ticks();
+      Segment* seg             = pos.segment;
+      const int tick           = seg->tick();
+      Measure* measure         = seg->measure()->isMMRest() ? seg->measure()->mmRestFirst() : seg->measure();
+      const Fraction targetMeasureLen = measure->len() + fraction;
 
+      // Shift spanners, enlarge the measure.
+      // The approach is similar to that in Measure::adjustToLen() but does
+      // insert time to the middle of the measure rather than to the end.
       undoInsertTime(tick, len);
       undo(new InsertTime(this, tick, len));
 
-      for (Segment* s = pos.segment; s; s = s-> next())
-            s->undoChangeProperty(Pid::TICK, s->rtick() + len);
-      undo(new ChangeMeasureLen(m, m->len() + fraction));
+      for (Score* score : scoreList()) {
+            Measure* m = score->tick2measure(tick);
+            undo(new ChangeMeasureLen(m, targetMeasureLen));
+            Segment* scoreSeg = m->tick2segment(tick);
+            for (Segment* s = scoreSeg; s; s = s->next())
+                  s->undoChangeProperty(Pid::TICK, s->rtick() + len);
+            }
 
-      Segment* s = m->undoGetSegment(SegmentType::ChordRest, tick);
-      Position p(pos);
-      p.segment = s;
+      // Fill the inserted time with rests.
+      // This is better to be done in master score to cover all staves.
+      MasterScore* ms = masterScore();
+      Measure* msMeasure = ms->tick2measure(tick);
+      const int msTracks = ms->ntracks();
 
-      int trackI = p.staffIdx * VOICES + _is.voice();
-      for (int track = 0; track < _staves.size() * VOICES; ++track) {
-            if (track == trackI)
-                  putNote(p, true);
-            else {
-                  Segment* fs = m->first(SegmentType::ChordRest);
-                  if (fs->tick() == tick && m->hasVoice(track)) {
-                        setRest(fs->tick(),  track, fraction, false, nullptr, false);
-                        continue;
-                        }
-                  Segment* seg1 = 0;
-                  for (Segment* s = fs; s; s = s->next(SegmentType::ChordRest)) {
-                        if (s->element(track)) {
-                              ChordRest* cr = toChordRest(s->element(track));
-                              if (s->tick() > tick)
-                                    break;
-                              if (s->tick() + cr->duration().ticks() < tick)
-                                    continue;
-                              seg1 = s;
-                              break;
+      Segment* firstSeg = msMeasure->first(SegmentType::ChordRest);
+      for (int track = 0; track < msTracks; ++track) {
+            Element* maybeRest = firstSeg->element(track);
+            bool measureIsFull = false;
+
+            // I. Convert any measure rests into normal (non-measure) rest(s) of equivalent duration
+            if (maybeRest && maybeRest->isRest() && toRest(maybeRest)->durationType().isMeasure()) {
+                  ms->undoRemoveElement(maybeRest);
+                  Rest* measureRest = toRest(maybeRest);
+                  // If measure rest is situated at measure start we will fill
+                  // the whole measure with rests.
+                  measureIsFull = (measureRest->rtick() == 0);
+                  const Fraction fillLen = measureIsFull ? targetMeasureLen : measureRest->duration();
+                  ms->setRest(measureRest->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr, /* useFullMeasureRest */ false);
+                  }
+
+            // II. Make chord or rest in other track longer if it crosses the insert area
+            if (!measureIsFull) {
+                  ChordRest* cr = ms->findCR(tick, track);
+                  if (cr && cr->tick() < tick && (cr->tick() + cr->actualTicks()) > tick) {
+                        if (cr->isRest()) {
+                              const Fraction fillLen = cr->duration() + fraction;
+                              ms->undoRemoveElement(cr);
+                              ms->setRest(cr->tick(), track, fillLen, /* useDots */ false, /* tuplet */ nullptr, /* useFullMeasureRest */ false);
                               }
-                        }
-                  if (seg1) {
-                        ChordRest* cr = toChordRest(seg1->element(track));
-                        if (seg1->tick() + cr->duration().ticks() == tick) {
-                              addRest(s, track, duration, nullptr);
+                        else if (cr->isChord()) {
+                              Chord* chord = toChord(cr);
+                              std::vector<TDuration> durations = toDurationList(chord->duration() + fraction, /* useDots */ true);
+                              Fraction p = chord->afrac();
+                              ms->undoRemoveElement(chord);
+                              Chord* prevChord = nullptr;
+                              for (const TDuration& dur : durations) {
+                                    Chord* prototype = prevChord ? prevChord : chord;
+                                    const bool genTie = bool(prevChord);
+                                    prevChord = ms->addChord(p.ticks(), dur, prototype, genTie, /* tuplet */ nullptr);
+                                    p += dur.fraction();
+                                    }
+                              // TODO: reconnect ties if this chord was tied to other
                               }
-                        else if (cr->isFullMeasureRest()) {
-                              // do nothing
-                              }
-                        else
-                              changeCRlen(cr, fraction + cr->duration());
+                        measureIsFull = true;
                         }
                   }
+
+            // III. insert rest(s) to fill the inserted space
+            if (!measureIsFull && msMeasure->hasVoice(track))
+                  ms->setRest(tick, track, fraction, /* useDots */ false, /* tuplet */ nullptr);
             }
+
+      // Put the note itself.
+      Segment* s = measure->undoGetSegment(SegmentType::ChordRest, tick);
+      Position p(pos);
+      p.segment = s;
+      putNote(p, true);
       }
 
 //---------------------------------------------------------

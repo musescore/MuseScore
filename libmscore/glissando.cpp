@@ -36,6 +36,14 @@ NICE-TO-HAVE TODO:
 
 namespace Ms {
 
+static const ElementStyle glissandoElementStyle {
+      { Sid::glissandoFontFace,                  Pid::FONT_FACE               },
+      { Sid::glissandoFontSize,                  Pid::FONT_SIZE               },
+      { Sid::glissandoFontStyle,                 Pid::FONT_STYLE              },
+      { Sid::glissandoLineWidth,                 Pid::LINE_WIDTH              },
+      { Sid::glissandoText,                      Pid::GLISS_TEXT              },
+      };
+
 static const qreal      GLISS_PALETTE_WIDTH           = 4.0;
 static const qreal      GLISS_PALETTE_HEIGHT          = 4.0;
 
@@ -52,9 +60,8 @@ void GlissandoSegment::layout()
       if (staff())
             setMag(staff()->mag(tick()));
       QRectF r = QRectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
-      qreal lw = spatium() * glissando()->lineWidth().val() * .5;
+      qreal lw = glissando()->lineWidth() * .5;
       setbbox(r.adjusted(-lw, -lw, lw, lw));
-      adjustReadPos();
       }
 
 //---------------------------------------------------------
@@ -67,7 +74,7 @@ void GlissandoSegment::draw(QPainter* painter) const
       qreal _spatium = spatium();
 
       QPen pen(glissando()->curColor());
-      pen.setWidthF(glissando()->lineWidth().val() * spatium());
+      pen.setWidthF(glissando()->lineWidth());
       pen.setCapStyle(Qt::RoundCap);
       painter->setPen(pen);
 
@@ -84,25 +91,25 @@ void GlissandoSegment::draw(QPainter* painter) const
             }
       else if (glissando()->glissandoType() == GlissandoType::WAVY) {
             QRectF b = symBbox(SymId::wiggleTrill);
-            qreal w  = symAdvance(SymId::wiggleTrill);
-            int n    = (int)(l / w);      // always round down (truncate) to avoid overlap
-            qreal x  = (l - n*w) * 0.5;   // centre line in available space
+            qreal a  = symAdvance(SymId::wiggleTrill);
+            int n    = (int)(l / a);      // always round down (truncate) to avoid overlap
+            qreal x  = (l - n*a) * 0.5;   // centre line in available space
             std::vector<SymId> ids;
             for (int i = 0; i < n; ++i)
                   ids.push_back(SymId::wiggleTrill);
             // this is very ugly but fix #68846 for now
-//            bool tmp = MScore::pdfPrinting;
-//            MScore::pdfPrinting = true;
+            bool tmp = MScore::pdfPrinting;
+            MScore::pdfPrinting = true;
             score()->scoreFont()->draw(ids, painter, magS(), QPointF(x, -(b.y() + b.height()*0.5) ), scale);
-//            MScore::pdfPrinting = tmp;
+            MScore::pdfPrinting = tmp;
             }
 
       if (glissando()->showText()) {
             QFont f(glissando()->fontFace());
             f.setPointSizeF(glissando()->fontSize() * MScore::pixelRatio * _spatium / SPATIUM20);
-            f.setBold(glissando()->fontBold());
-            f.setItalic(glissando()->fontItalic());
-            f.setUnderline(glissando()->fontUnderline());
+            f.setBold(glissando()->fontStyle() & FontStyle::Bold);
+            f.setItalic(glissando()->fontStyle() & FontStyle::Italic);
+            f.setUnderline(glissando()->fontStyle() & FontStyle::Underline);
             QFontMetricsF fm(f);
             QRectF r = fm.boundingRect(glissando()->text());
 
@@ -120,13 +127,12 @@ void GlissandoSegment::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   getProperty
+//   propertyDelegate
 //---------------------------------------------------------
 
-QVariant GlissandoSegment::getProperty(Pid id) const
+Element* GlissandoSegment::propertyDelegate(Pid pid)
       {
-      switch (id) {
-            // route properties of the whole Glissando element to it
+      switch (pid) {
             case Pid::GLISS_TYPE:
             case Pid::GLISS_TEXT:
             case Pid::GLISS_SHOW_TEXT:
@@ -134,123 +140,11 @@ QVariant GlissandoSegment::getProperty(Pid id) const
             case Pid::PLAY:
             case Pid::FONT_FACE:
             case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
+            case Pid::FONT_STYLE:
             case Pid::LINE_WIDTH:
-                  return glissando()->getProperty(id);
+                  return glissando();
             default:
-                  return LineSegment::getProperty(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool GlissandoSegment::setProperty(Pid id, const QVariant& v)
-      {
-      switch (id) {
-            case Pid::GLISS_TYPE:
-            case Pid::GLISS_TEXT:
-            case Pid::GLISS_SHOW_TEXT:
-            case Pid::GLISSANDO_STYLE:
-            case Pid::PLAY:
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->setProperty(id, v);
-            default:
-                  return LineSegment::setProperty(id, v);
-            }
-      }
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-QVariant GlissandoSegment::propertyDefault(Pid id) const
-      {
-      switch (id) {
-            case Pid::GLISS_TYPE:
-            case Pid::GLISS_TEXT:
-            case Pid::GLISS_SHOW_TEXT:
-            case Pid::GLISSANDO_STYLE:
-            case Pid::PLAY:
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->propertyDefault(id);
-            default:
-                  return LineSegment::propertyDefault(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   propertyFlags
-//---------------------------------------------------------
-
-PropertyFlags& GlissandoSegment::propertyFlags(Pid id)
-      {
-      switch (id) {
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->propertyFlags(id);
-
-            default:
-                  return LineSegment::propertyFlags(id);
-            }
-      }
-
-//---------------------------------------------------------
-//   setPropertyFlags
-//---------------------------------------------------------
-
-void GlissandoSegment::setPropertyFlags(Pid id, PropertyFlags f)
-      {
-      switch (id) {
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  glissando()->setPropertyFlags(id, f);
-                  break;
-
-            default:
-                  LineSegment::setPropertyFlags(id, f);
-                  break;
-            }
-      }
-
-//---------------------------------------------------------
-//   getPropertyStyle
-//---------------------------------------------------------
-
-Sid GlissandoSegment::getPropertyStyle(Pid id) const
-      {
-      switch (id) {
-            case Pid::FONT_FACE:
-            case Pid::FONT_SIZE:
-            case Pid::FONT_BOLD:
-            case Pid::FONT_ITALIC:
-            case Pid::FONT_UNDERLINE:
-            case Pid::LINE_WIDTH:
-                  return glissando()->getPropertyStyle(id);
-
-            default:
-                  return LineSegment::getPropertyStyle(id);
+                  return LineSegment::propertyDelegate(pid);
             }
       }
 
@@ -259,12 +153,12 @@ Sid GlissandoSegment::getPropertyStyle(Pid id) const
 //=========================================================
 
 Glissando::Glissando(Score* s)
-  : SLine(s, ElementFlag::MOVABLE | ElementFlag::SELECTABLE)
+  : SLine(s, ElementFlag::MOVABLE)
       {
       setAnchor(Spanner::Anchor::NOTE);
       setDiagonal(true);
 
-      initSubStyle(SubStyleId::GLISSANDO);
+      initElementStyle(&glissandoElementStyle);
 
       resetProperty(Pid::GLISS_SHOW_TEXT);
       resetProperty(Pid::PLAY);
@@ -283,9 +177,7 @@ Glissando::Glissando(const Glissando& g)
       _glissandoStyle = g._glissandoStyle;
       _showText       = g._showText;
       _playGlissando  = g._playGlissando;
-      _fontBold       = g._fontBold;
-      _fontItalic     = g._fontItalic;
-      _fontUnderline  = g._fontUnderline;
+      _fontStyle      = g._fontStyle;
       }
 
 //---------------------------------------------------------
@@ -294,8 +186,7 @@ Glissando::Glissando(const Glissando& g)
 
 LineSegment* Glissando::createLineSegment()
       {
-      GlissandoSegment* seg = new GlissandoSegment(score());
-      seg->setFlag(ElementFlag::ON_STAFF, false);
+      GlissandoSegment* seg = new GlissandoSegment(this, score());
       seg->setTrack(track());
       seg->setColor(color());
       return seg;
@@ -309,7 +200,7 @@ void Glissando::scanElements(void* data, void (*func)(void*, Element*), bool all
       {
       func(data, this);
       // don't scan segments belonging to systems; the systems themselves will scan them
-      for (SpannerSegment* seg : segments) {
+      for (SpannerSegment* seg : spannerSegments()) {
             if (!seg->parent() || !seg->parent()->isSystem())
                   seg->scanElements(data, func, all);
             }
@@ -332,13 +223,12 @@ void Glissando::layout()
             s->layout();
             return;
             }
+      SLine::layout();
       if (spannerSegments().empty()) {
             qDebug("no segments");
             return;
             }
-      SLine::layout();
       setPos(0.0, 0.0);
-      adjustReadPos();
 
       Note*       anchor1     = toNote(startElement());
       Note*       anchor2     = toNote(endElement());
@@ -410,7 +300,7 @@ void Glissando::layout()
       // interpolate y-coord of intermediate points across total width and height
       qreal xCurr = 0.0;
       qreal yCurr;
-      for (int i = 0; i < spannerSegments().count()-1; i++) {
+      for (int i = 0; i < int(spannerSegments().size()-1); i++) {
             SpannerSegment* segm = segmentAt(i);
             xCurr += segm->ipos2().x();
             yCurr = y0 + ratio * xCurr;
@@ -425,7 +315,7 @@ void Glissando::layout()
 
       // initial note dots / ledger line / notehead
       offs1 *= -1.0;          // discount changes already applied
-      int dots = cr1->dots();
+      int dots = anchor1->dots().size();
       LedgerLine * ledLin = cr1->ledgerLines();
       // if dots, start at right of last dot
       // if no dots, from right of ledger line, if any; from right of notehead, if no ledger line
@@ -434,10 +324,10 @@ void Glissando::layout()
 
       // final note arpeggio / accidental / ledger line / accidental / arpeggio (i.e. from outermost to innermost)
       offs2 *= -1.0;          // discount changes already applied
-      if (Arpeggio* a = cr2->arpeggio())
-            offs2.rx() += a->pos().x() + a->userOff().x();
-      else if (Accidental* a = anchor2->accidental())
-            offs2.rx() += a->pos().x() + a->userOff().x();
+      if (Arpeggio* ap = cr2->arpeggio())
+            offs2.rx() += ap->pos().x() + ap->offset().x();
+      else if (Accidental* ac = anchor2->accidental())
+            offs2.rx() += ac->pos().x() + ac->offset().x();
       else if ( (ledLin = cr2->ledgerLines()) != nullptr)
             offs2.rx() += ledLin->pos().x();
 
@@ -461,7 +351,7 @@ void Glissando::layout()
       QPointF system2PagePos = cr2->segment()->system()->pagePos();
       QPointF anchor2SystPos = anchor2PagePos - system2PagePos;
       QRectF r = QRectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
-      qreal lw = _spatium * lineWidth().val() * .5;
+      qreal lw = lineWidth() * .5;
       setbbox(r.adjusted(-lw, -lw, lw, lw));
       }
 
@@ -473,7 +363,7 @@ void Glissando::write(XmlWriter& xml) const
       {
       if (!xml.canWrite(this))
             return;
-      xml.stag(QString("%1 id=\"%2\"").arg(name()).arg(xml.spannerId(this)));
+      xml.stag(this);
       if (_showText && !_text.isEmpty())
             xml.tag("text", _text);
 
@@ -490,9 +380,10 @@ void Glissando::write(XmlWriter& xml) const
 
 void Glissando::read(XmlReader& e)
       {
-      qDeleteAll(spannerSegments());
-      spannerSegments().clear();
-      e.addSpanner(e.intAttribute("id", -1), this);
+      eraseSpannerSegments();
+
+      if (score()->mscVersion() < 301)
+            e.addSpanner(e.intAttribute("id", -1), this);
 
       _showText = false;
       while (e.readNextStartElement()) {
@@ -504,7 +395,7 @@ void Glissando::read(XmlReader& e)
             else if (tag == "subtype")
                   _glissandoType = GlissandoType(e.readInt());
             else if (tag == "glissandoStyle")
-                  setProperty(Pid::GLISSANDO_STYLE, Ms::getProperty(Pid::GLISSANDO_STYLE, e));
+                  readProperty(e, Pid::GLISSANDO_STYLE);
             else if (tag == "play")
                   setPlayGlissando(e.readBool());
             else if (readStyledProperty(e, tag))
@@ -721,12 +612,8 @@ QVariant Glissando::getProperty(Pid propertyId) const
                   return _fontFace;
             case Pid::FONT_SIZE:
                   return _fontSize;
-            case Pid::FONT_BOLD:
-                  return _fontBold;
-            case Pid::FONT_ITALIC:
-                  return _fontItalic;
-            case Pid::FONT_UNDERLINE:
-                  return _fontUnderline;
+            case Pid::FONT_STYLE:
+                  return int(_fontStyle);
             default:
                   break;
             }
@@ -761,14 +648,8 @@ bool Glissando::setProperty(Pid propertyId, const QVariant& v)
             case Pid::FONT_SIZE:
                   setFontSize(v.toReal());
                   break;
-            case Pid::FONT_BOLD:
-                  setFontBold(v.toBool());
-                  break;
-            case Pid::FONT_ITALIC:
-                  setFontItalic(v.toBool());
-                  break;
-            case Pid::FONT_UNDERLINE:
-                  setFontUnderline(v.toBool());
+            case Pid::FONT_STYLE:
+                  setFontStyle(FontStyle(v.toBool()));
                   break;
             default:
                   if (!SLine::setProperty(propertyId, v))
@@ -785,10 +666,6 @@ bool Glissando::setProperty(Pid propertyId, const QVariant& v)
 
 QVariant Glissando::propertyDefault(Pid propertyId) const
       {
-      Sid si = getPropertyStyle(propertyId);
-      if (si != Sid::NOSTYLE)
-            return score()->styleV(si);
-
       switch (propertyId) {
             case Pid::GLISS_TYPE:
                   return int(GlissandoType::STRAIGHT);

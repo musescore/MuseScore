@@ -14,7 +14,6 @@
 #define __BSYMBOL_H__
 
 #include "element.h"
-#include "elementlayout.h"
 
 namespace Ms {
 
@@ -23,12 +22,12 @@ namespace Ms {
 ///    base class for Symbol and Image
 //---------------------------------------------------------
 
-class BSymbol : public Element, public ElementLayout {
+class BSymbol : public Element {
       QList<Element*> _leafs;
-      bool _systemFlag;
+      Align _align;
 
    public:
-      BSymbol(Score* s);
+      BSymbol(Score* s, ElementFlags f = ElementFlag::NOTHING);
       BSymbol(const BSymbol&);
 
       BSymbol &operator=(const BSymbol&) = delete;
@@ -44,14 +43,15 @@ class BSymbol : public Element, public ElementLayout {
       void writeProperties(XmlWriter& xml) const;
       bool readProperties(XmlReader&);
 
+      Align align() const { return _align; }
+      void setAlign(Align a) { _align = a; }
+
       const QList<Element*>& leafs() const { return _leafs; }
       QList<Element*>& leafs()             { return _leafs; }
       virtual QPointF pagePos() const override;
       virtual QPointF canvasPos() const override;
       virtual QLineF dragAnchor() const override;
       Segment* segment() const            { return (Segment*)parent(); }
-      bool systemFlag() const             { return _systemFlag; }
-      void setSystemFlag(bool val)        { _systemFlag = val;  }
       };
 
 }     // namespace Ms

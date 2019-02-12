@@ -30,8 +30,8 @@ Channel::Channel(Zerberus* ms, int i)
       _instrument = 0;
       _gain       = 1.0;
       _midiVolume = 1.0;
-      _panLeftGain  = cosf(M_PI_2 * 64.0/126.0);
-      _panRightGain = sinf(M_PI_2 * 64.0/126.0);
+      _panLeftGain  = cosf(static_cast<float>(M_PI_2 * 64.0/126.0));
+      _panRightGain = sinf(static_cast<float>(M_PI_2 * 64.0/126.0));
       memset(ctrl, 0, 128 * sizeof(char));
       ctrl[Ms::CTRL_EXPRESSION] = 127;
       }
@@ -56,7 +56,7 @@ void Channel::controller(int c, int val)
             if (val < 0x40) {
                   for (Voice* v = _msynth->getActiveVoices(); v; v = v->next()) {
                         if (v->isSustained()) {
-                              // printf("sustain off %p\n", v);
+//printf("sustain off %p\n", v);
                               v->stop();
                               }
                         }

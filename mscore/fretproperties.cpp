@@ -1,7 +1,6 @@
 //=============================================================================
 //  MusE Score
 //  Linux Music Score Editor
-//  $Id:$
 //
 //  Copyright (C) 2010-2011 Werner Schweer and others
 //
@@ -29,6 +28,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/segment.h"
+#include "libmscore/undo.h"
 #include "musescore.h"
 
 namespace Ms {
@@ -176,9 +176,8 @@ void FretCanvas::paintEvent(QPaintEvent* ev)
                   }
             if (string != -1) {
                   qreal x1   = stringDist * string;
-                  qreal x2   = stringDist * (_strings-1);
                   qreal y    = fretDist * (_barre-1) + fretDist * .5;
-                  pen.setWidthF(stringDist * .6 * .7);      // dont use style barreLineWidth
+                  pen.setWidthF(stringDist * .6 * .7);      // don’t use style barreLineWidth
                   pen.setCapStyle(Qt::RoundCap);
                   p.setPen(pen);
                   p.drawLine(QLineF(x1, y, x2, y));
@@ -250,24 +249,25 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
       if (fret < 0 || fret > _frets || string < 0 || string >= _strings)
             return;
 
+      diagram->score()->startCmd();
       if (fret == 0) {
             switch (diagram->marker(string)) {
                   case 'O':
-                        diagram->setMarker(string, 'X');
+                        diagram->score()->undo(new FretMarker(diagram, string, 'X'));
                         break;
                   case 'X':
-                        diagram->setMarker(string, 0);
+                        diagram->score()->undo(new FretMarker(diagram, string, 0));
                         break;
                   default:
-                        diagram->setDot(string, 0);
-                        diagram->setMarker(string, 'O');
+                        diagram->score()->undo(new FretDot(diagram, string, 0));
+                        diagram->score()->undo(new FretMarker(diagram, string, 'O'));
                         break;
                   }
             }
       else {
             if (diagram->dot(string) == fret) {
-                  diagram->setDot(string, 0);
-                  diagram->setMarker(string, 'O');
+                  diagram->score()->undo(new FretDot(diagram, string, 0));
+                  diagram->score()->undo(new FretMarker(diagram, string, 'O'));
                   bool removeBarre = true;
                   if (ev->modifiers() & Qt::ShiftModifier) {
                         for (int i = 0; i < _strings; ++i) {
@@ -278,17 +278,20 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
                               }
                         }
                   if (removeBarre)
-                        diagram->setBarre(0);
+                        diagram->undoChangeProperty(Pid::FRET_BARRE, 0);
                   }
             else {
-                  diagram->setDot(string, fret);
-                  diagram->setMarker(string, 0);
+                  diagram->score()->undo(new FretDot(diagram, string, fret));
+                  diagram->score()->undo(new FretMarker(diagram, string, 'O'));
+
                   if (ev->modifiers() & Qt::ShiftModifier)
-                        diagram->setBarre(diagram->barre() == fret ? 0 : fret);
+                        diagram->undoChangeProperty(Pid::FRET_BARRE, diagram->barre() == fret ? 0 : fret);
                   else
-                        diagram->setBarre(0);
+                        diagram->undoChangeProperty(Pid::FRET_BARRE, 0);
                   }
             }
+      diagram->triggerLayout();
+      diagram->score()->endCmd();
       update();
       }
 
@@ -309,38 +312,6 @@ void FretCanvas::mouseMoveEvent(QMouseEvent* ev)
       }
 
 //---------------------------------------------------------
-//   mouseReleaseEvent
-//---------------------------------------------------------
-
-void FretCanvas::mouseReleaseEvent(QMouseEvent*)
-      {
-      }
-
-//---------------------------------------------------------
-//   dragEnterEvent
-//---------------------------------------------------------
-
-void FretCanvas::dragEnterEvent(QDragEnterEvent*)
-      {
-      }
-
-//---------------------------------------------------------
-//   dragMoveEvent
-//---------------------------------------------------------
-
-void FretCanvas::dragMoveEvent(QDragMoveEvent*)
-      {
-      }
-
-//---------------------------------------------------------
-//   dropEvent
-//---------------------------------------------------------
-
-void FretCanvas::dropEvent(QDropEvent*)
-      {
-      }
-
-//---------------------------------------------------------
 //   FretCanvas
 //---------------------------------------------------------
 
@@ -348,7 +319,7 @@ FretCanvas::FretCanvas(QWidget* parent)
    : QFrame(parent)
       {
       setAcceptDrops(true);
-      setFrameStyle(QFrame::Raised | QFrame::Panel);
+//      setFrameStyle(QFrame::Raised | QFrame::Panel);
       cstring = -2;
       cfret   = -2;
       }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="welcome">
+  <Message>
+    <Text>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</Text>
+    </Message>
+  <Message>
+    <Text>This is the score view, where you can view and edit your score.
+    Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
+    If you have multiple scores open, you can switch between them using tabs at the top of your score view.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>These are the toolbars.
+    The main three are File Operations, Playback Controls, and Note Input.</Text>
+    <Widget>entry-tools</Widget>
+    <Widget>file-operations</Widget>
+    <Widget>pitch-tools</Widget>
+    <Widget>foto-tools</Widget>
+    <Widget>transport-tools</Widget>
+    </Message>
+  <Message>
+    <Text>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
+    You can also save to your musescore.com account if you go to File > Save Online.
+    The controls at the right of this toolbar control the display of your score.</Text>
+    <Widget>file-operations</Widget>
+    </Message>
+  <Message>
+    <Text>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</Text>
+    <Widget>transport-tools</Widget>
+    </Message>
+  <Message>
+    <Text>The Note Input toolbar allows you to enter notes and rests into your score.</Text>
+    <Widget>entry-tools</Widget>
+    </Message>
+  <Message>
+    <Text>The Palettes allow you to add most other notation elements to your score.</Text>
+    <Widget>palette-box</Widget>
+    </Message>
+  <Message>
+    <Text>The Inspector allows you to control various properties of the elements in your score.</Text>
+    <Widget>inspector</Widget>
+    </Message>
+  <Message>
+    <Text>The main menu contains most other commands.
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</Text>
+    <Widget>menubar</Widget>
+    <Widget>File</Widget>
+    </Message>
+  <Message>
+    <Text>That's the end of this tour!
+    As you use MuseScore, more tours will pop up to further explain functionality.
+    To disable these, deselect "Continue showing tours" before closing this window.
+    You can also enable/disable and reset tours in Help > Tours.</Text>
+    </Message>
+  </Tour>
