@@ -3042,11 +3042,14 @@ bool MuseScore::saveMetadataJSON(Score* score, const QString& name)
 //---------------------------------------------------------
 static void findTextByType(void* data, Element* element)
       {
-      if (!element->isTextBase())
+      if (!element->isText())
             return;
-      TextBase* text = toTextBase(element);
-      auto* typeStringsData = static_cast<std::pair<Tid, QStringList*>*>(data);
-      if (text->tid() == typeStringsData->first) {
+      Text* text = static_cast<Text*>(element);
+      if (!text)
+            return;
+      
+      auto* typeStringsData = static_cast<std::pair<TextStyleType, QStringList*>*>(data);
+      if (text->textStyleType() == typeStringsData->first) {
             // or if score->getTextStyleUserName().contains("Title") ???
             // That is bad since it may be localized
             QStringList* titleStrings = typeStringsData->second;
@@ -3148,16 +3151,16 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
       
       //text frames metadata
       QJsonObject jsonTypeData;
-      static std::vector<std::pair<QString, Tid>> namesTypesList {
-            {"titles", Tid::TITLE},
-            {"subtitles", Tid::SUBTITLE},
-            {"composers", Tid::COMPOSER},
-            {"poets", Tid::POET}
+      static std::vector<std::pair<QString, TextStyleType>> namesTypesList {
+            {"titles", TextStyleType::TITLE},
+            {"subtitles", TextStyleType::SUBTITLE},
+            {"composers", TextStyleType::COMPOSER},
+            {"poets", TextStyleType::POET}
             };
       for (auto nameType : namesTypesList) {
             QJsonArray typeData;
             QStringList typeTextStrings;
-            std::pair<Tid, QStringList*> extendedTitleData = std::make_pair(nameType.second, &typeTextStrings);
+            std::pair<TextStyleType, QStringList*> extendedTitleData = std::make_pair(nameType.second, &typeTextStrings);
             score->scanElements(&extendedTitleData, findTextByType);
             for (auto typeStr : typeTextStrings)
                   typeData.append(typeStr);
