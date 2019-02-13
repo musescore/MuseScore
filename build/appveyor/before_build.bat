@@ -1,3 +1,23 @@
+:: SET "QTCACHE=qt-5.12.1-msvc.7z" & :: bump version here and .appveyor.yml to trigger cache rebuild when upgrading Qt
+:: set platform-dependent variables
+IF "%PLATFORM%" == "x64" (
+  :: SET "QTURL=https://utils.musescore.org.s3.amazonaws.com/qt5120_msvc2017_64.7z"
+  :: SET "QTDIR=%cd%\qt\msvc2017_64" & :: uncomment to use our Qt
+  SET "QTDIR=C:\Qt\5.12\msvc2017_64" & :: uncomment to use AppVeyor's Qt
+  SET "TARGET_PROCESSOR_BITS=64"
+  SET "TARGET_PROCESSOR_ARCH=x86_64"
+) ELSE (
+  :: SET "QTURL=https://utils.musescore.org.s3.amazonaws.com/qt5120_msvc2017_32.7z"
+  :: SET "QTDIR=%cd%\qt\msvc2017" & :: uncomment to use our Qt
+  SET "QTDIR=C:\Qt\5.12\msvc2017" & :: uncomment to use AppVeyor's Qt
+  SET "TARGET_PROCESSOR_BITS=32"
+  SET "TARGET_PROCESSOR_ARCH=x86"
+)
+
+:: Download Qt if necessary
+:: IF NOT EXIST "%QTCACHE%" ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "%QTURL%" -O "%QTCACHE%" )
+:: START " " /wait "7z" x -y "%QTCACHE%" "-oqt" & :: extract into `qt` directory
+
 :: keep full PATH for later
 SET OLD_PATH=%PATH%
 mkdir archive
@@ -27,7 +47,8 @@ for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:
 ::)
 
 :: get revision number
-SET PATH=C:\Qt\5.9\msvc2017_64\bin;%PATH%
+SET "PATH=%QTDIR%\bin;%PATH%"
+qmake --version & :: check qt is in %PATH%
 call C:\MuseScore\msvc_build.bat revision
 git rev-parse --short=7 HEAD > mscore/revision.h
 SET /p MSREVISION=<mscore\revision.h

@@ -13,6 +13,7 @@ branches:
 # build cache to preserve files/folders between builds
 cache:
   - dependencies.7z
+  # - qt-5.12.1-msvc.7z # if not using AppVeyor's built-in Qt in before_build.bat
   - C:\Qt\Tools\mingw530_32\lib
   - C:\Qt\Tools\mingw530_32\i686-w64-mingw32
   - C:\Program Files (x86)\Jack
@@ -22,6 +23,7 @@ cache:
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
 platform:
   - x86
+  - x64
 
 #environment:
 
@@ -30,6 +32,10 @@ configuration: Release
 
 # Stop Appveyor from "Discovering Tests"
 test: off
+
+matrix:
+  fast_finish: true # stop all jobs if any job fails
+  #allow_failures: # list jobs allowed to fail without stopping the rest
 
 install:
   - IF DEFINED ENCRYPT_SECRET_SSH (
@@ -81,4 +87,3 @@ deploy:
 #    region: us-east-1
 #    set_public: true
 #    artifact: appcast.xml
-
