@@ -516,12 +516,19 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
       int measureEnd = measure->endTick();
       bool isGrace = cr->isChord() && toChord(cr)->noteType() != NoteType::NORMAL;
 
+      // find out if the chordrest was only partially contained in the copied range
+      bool partialCopy = false;
+      if (cr->isRepeatMeasure())
+            partialCopy = toRepeatMeasure(cr)->actualDuration() != measure->len();
+      else if (!isGrace && !cr->tuplet())
+            partialCopy = cr->durationTypeTicks() != cr->actualTicks();
+
       // if note is too long to fit in measure, split it up with a tie across the barline
       // exclude tuplets from consideration
       // we have already disallowed a tuplet from crossing the barline, so there is no problem here
       // but due to rounding, it might appear from actualTicks() that the last note is too long by a couple of ticks
 
-      if (!isGrace && !cr->tuplet() && (tick + cr->actualTicks() > measureEnd || (cr->durationTypeTicks() != cr->actualTicks()) || convertMeasureRest)) {
+      if (!isGrace && !cr->tuplet() && (tick + cr->actualTicks() > measureEnd || partialCopy || convertMeasureRest)) {
             if (cr->isChord()) {
                   // split Chord
                   Chord* c = toChord(cr);
