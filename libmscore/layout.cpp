@@ -1959,7 +1959,8 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                               }
                         else {
                               if (!(nts->keySigEvent() == ts->keySigEvent())) {
-                                    undo(new ChangeKeySig(nts, ts->keySigEvent(), nts->showCourtesy()));
+                                    bool addKey = ts->isChange();
+                                    undo(new ChangeKeySig(nts, ts->keySigEvent(), nts->showCourtesy(), addKey));
                                     }
                               }
                         }
