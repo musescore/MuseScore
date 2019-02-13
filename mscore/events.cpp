@@ -359,14 +359,11 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       editData.buttons   = ev->buttons();
       editData.modifiers = qApp->keyboardModifiers();
 
-      Element* e         = elementNear(editData.startMove);
-//       qDebug("element %s", e ? e->name() : "--");
-
       switch (state) {
             case ViewState::NORMAL:
                   if (ev->button() == Qt::RightButton)   // context menu?
                         break;
-                  editData.element = e;
+                  editData.element = elementNear(editData.startMove);
                   mousePressEventNormal(ev);
                   break;
 
@@ -421,7 +418,9 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                               }
                         if (!gripFound) {
                               changeState(ViewState::NORMAL);
-                              editData.element = e;
+                              // changeState may trigger layout and destroy some elements
+                              // so we should search elementNear after changeState.
+                              editData.element = elementNear(editData.startMove);
                               mousePressEventNormal(ev);
                               break;
                               }
@@ -429,7 +428,9 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   else {
                         if (!editData.element->canvasBoundingRect().contains(editData.startMove)) {
                               changeState(ViewState::NORMAL);
-                              editData.element = e;
+                              // changeState may trigger layout and destroy some elements
+                              // so we should search elementNear after changeState.
+                              editData.element = elementNear(editData.startMove);
                               mousePressEventNormal(ev);
                               }
                         else {
@@ -441,6 +442,7 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   break;
 
             case ViewState::PLAY: {
+                  Element* e = elementNear(editData.startMove);
                   if (seq && e && (e->isNote() || e->isRest())) {
                         if (e->isNote())
                               e = e->parent();
