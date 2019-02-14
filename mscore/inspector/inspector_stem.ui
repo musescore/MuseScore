@@ -82,7 +82,7 @@
          <string>Line thickness</string>
         </property>
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="singleStep">
          <double>0.010000000000000</double>
@@ -121,7 +121,7 @@
          <string>Length offset</string>
         </property>
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="minimum">
          <double>-99.000000000000000</double>

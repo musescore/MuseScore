@@ -73,7 +73,7 @@ void InspectorImage::postInit()
       b.size->setEnabled(v);
       b.sizeIsSpatium->setEnabled(v);
 
-      b.size->setSuffix(image->sizeIsSpatium() ? "sp" : "mm");
+      b.size->setSuffix(image->sizeIsSpatium() ? " sp" : " mm");
       }
 }
 

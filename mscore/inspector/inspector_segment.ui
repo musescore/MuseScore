@@ -82,7 +82,7 @@
          <string>Leading space</string>
         </property>
         <property name="suffix">
-         <string extracomment="spatium unit">sp</string>
+         <string notr="true" extracomment="spatium unit"> sp</string>
         </property>
         <property name="minimum">
          <double>-10.000000000000000</double>

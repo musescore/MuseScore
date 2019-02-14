@@ -43,9 +43,9 @@ void InspectorElementBase::setElement()
       {
       InspectorBase::setElement();
       if (inspector->element()->sizeIsSpatiumDependent())
-            e.offset->setSuffix("sp");
+            e.offset->setSuffix(" sp");
       else
-            e.offset->setSuffix("mm");
+            e.offset->setSuffix(" mm");
       }
 
 } // namespace Ms

@@ -77,7 +77,7 @@
       <item row="1" column="2">
        <widget class="QDoubleSpinBox" name="xoffset">
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="minimum">
          <double>-99.000000000000000</double>
@@ -87,7 +87,7 @@
       <item row="1" column="4">
        <widget class="QDoubleSpinBox" name="yoffset">
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="minimum">
          <double>-99.000000000000000</double>

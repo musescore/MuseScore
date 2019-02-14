@@ -354,7 +354,7 @@
          <string/>
         </property>
         <property name="suffix">
-         <string notr="true">%</string>
+         <string notr="true"> %</string>
         </property>
         <property name="decimals">
          <number>0</number>

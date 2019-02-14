@@ -44,7 +44,7 @@
           <string>Horizontal offset</string>
          </property>
          <property name="suffix">
-          <string>sp</string>
+          <string notr="true"> sp</string>
          </property>
          <property name="minimum">
           <double>-999.000000000000000</double>
@@ -97,7 +97,7 @@
           <string>Vertical offset</string>
          </property>
          <property name="suffix">
-          <string>sp</string>
+          <string notr="true"> sp</string>
          </property>
          <property name="minimum">
           <double>-999.000000000000000</double>

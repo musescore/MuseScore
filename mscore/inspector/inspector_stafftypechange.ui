@@ -149,7 +149,7 @@
         <string>Line distance</string>
        </property>
        <property name="suffix">
-        <string>sp</string>
+        <string notr="true"> sp</string>
        </property>
        <property name="decimals">
         <number>1</number>
@@ -291,7 +291,7 @@
         <string>Offset Y</string>
        </property>
        <property name="suffix">
-        <string>sp</string>
+        <string notr="true"> sp</string>
        </property>
        <property name="decimals">
         <number>1</number>

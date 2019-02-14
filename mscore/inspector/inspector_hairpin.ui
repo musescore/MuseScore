@@ -107,7 +107,7 @@
          <string>Continue height</string>
         </property>
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -208,7 +208,7 @@
          <string>Height</string>
         </property>
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>

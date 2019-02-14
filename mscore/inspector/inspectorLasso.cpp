@@ -30,8 +30,8 @@ InspectorLasso::InspectorLasso(QWidget* parent)
             { Pid::LASSO_SIZE,   0, b.size,  0 },
             };
 
-      b.pos->setSuffix(tr("mm"));
-      b.size->setSuffix(tr("mm"));
+      b.pos->setSuffix(" mm");
+      b.size->setSuffix(" mm");
 
       mapSignals();
       }

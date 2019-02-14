@@ -136,7 +136,7 @@
             <string>Font size</string>
            </property>
            <property name="suffix">
-            <string>pt</string>
+            <string notr="true"> pt</string>
            </property>
            <property name="minimum">
             <number>1</number>
@@ -305,7 +305,7 @@
                <string>Text margin</string>
               </property>
               <property name="suffix">
-               <string>sp</string>
+               <string notr="true"> sp</string>
               </property>
               <property name="singleStep">
                <double>0.200000000000000</double>
@@ -369,7 +369,7 @@
                <string/>
               </property>
               <property name="suffix">
-               <string>sp</string>
+               <string notr="true"> sp</string>
               </property>
               <property name="singleStep">
                <double>0.100000000000000</double>

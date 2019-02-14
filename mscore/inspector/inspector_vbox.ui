@@ -108,7 +108,7 @@
          <string>Left margin</string>
         </property>
         <property name="suffix">
-         <string>mm</string>
+         <string notr="true"> mm</string>
         </property>
         <property name="minimum">
          <double>-10000.000000000000000</double>
@@ -127,7 +127,7 @@
          <string>Top gap</string>
         </property>
         <property name="suffix">
-         <string extracomment="spatium unit">sp</string>
+         <string notr="true" extracomment="spatium unit"> sp</string>
         </property>
         <property name="minimum">
          <double>-10000.000000000000000</double>
@@ -159,7 +159,7 @@
          <string>Height</string>
         </property>
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="minimum">
          <double>-10000.000000000000000</double>
@@ -188,7 +188,7 @@
          <string>Bottom gap</string>
         </property>
         <property name="suffix">
-         <string extracomment="spatium unit">sp</string>
+         <string notr="true" extracomment="spatium unit"> sp</string>
         </property>
         <property name="minimum">
          <double>-10000.000000000000000</double>
@@ -246,7 +246,7 @@
          <string>Top margin</string>
         </property>
         <property name="suffix">
-         <string>mm</string>
+         <string notr="true"> mm</string>
         </property>
         <property name="minimum">
          <double>-10000.000000000000000</double>
@@ -262,7 +262,7 @@
          <string>Right margin</string>
         </property>
         <property name="suffix">
-         <string>mm</string>
+         <string notr="true"> mm</string>
         </property>
         <property name="minimum">
          <double>-10000.000000000000000</double>
@@ -278,7 +278,7 @@
          <string>Bottom margin</string>
         </property>
         <property name="suffix">
-         <string>mm</string>
+         <string notr="true"> mm</string>
         </property>
         <property name="minimum">
          <double>-10000.000000000000000</double>

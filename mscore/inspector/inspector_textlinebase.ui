@@ -88,7 +88,7 @@
          <string>Height</string>
         </property>
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="minimum">
          <double>-99.989999999999995</double>
@@ -172,7 +172,7 @@
          <string>Begin hook height</string>
         </property>
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="minimum">
          <double>-99.989999999999995</double>
@@ -259,7 +259,7 @@
             <string>Font size</string>
            </property>
            <property name="suffix">
-            <string>pt</string>
+            <string notr="true"> pt</string>
            </property>
            <property name="minimum">
             <number>1</number>
@@ -508,7 +508,7 @@
             <string>Font size</string>
            </property>
            <property name="suffix">
-            <string>pt</string>
+            <string notr="true"> pt</string>
            </property>
            <property name="minimum">
             <number>1</number>
@@ -781,7 +781,7 @@
             <string>Font size</string>
            </property>
            <property name="suffix">
-            <string>pt</string>
+            <string notr="true"> pt</string>
            </property>
            <property name="minimum">
             <number>1</number>

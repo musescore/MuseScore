@@ -51,7 +51,7 @@
           <item row="0" column="2" rowspan="2">
            <widget class="QSpinBox" name="hraster">
             <property name="suffix">
-             <string>sp</string>
+             <string notr="true"> sp</string>
             </property>
             <property name="minimum">
              <number>1</number>
@@ -74,7 +74,7 @@
           <item row="2" column="2">
            <widget class="QSpinBox" name="vraster">
             <property name="suffix">
-             <string>sp</string>
+             <string notr="true"> sp</string>
             </property>
             <property name="minimum">
              <number>1</number>

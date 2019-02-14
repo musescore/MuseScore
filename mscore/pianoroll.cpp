@@ -534,7 +534,7 @@ void PianorollEditor::updateVelocity(Note* note)
                   break;
             case Note::ValueType::OFFSET_VAL:
                   velocity->setReadOnly(false);
-                  velocity->setSuffix("%");
+                  velocity->setSuffix(" %");
                   break;
             }
 

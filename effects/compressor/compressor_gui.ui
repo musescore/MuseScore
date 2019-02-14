@@ -530,7 +530,7 @@
       <set>Qt::AlignCenter</set>
      </property>
      <property name="suffix">
-      <string extracomment="milliseconds">ms</string>
+      <string notr="true" extracomment="milliseconds"> ms</string>
      </property>
      <property name="decimals">
       <number>1</number>
@@ -552,7 +552,7 @@
       <set>Qt::AlignCenter</set>
      </property>
      <property name="suffix">
-      <string extracomment="milliseconds">ms</string>
+      <string notr="true" extracomment="milliseconds"> ms</string>
      </property>
      <property name="decimals">
       <number>1</number>
@@ -574,7 +574,7 @@
       <set>Qt::AlignCenter</set>
      </property>
      <property name="suffix">
-      <string extracomment="decibel">dB</string>
+      <string notr="true" extracomment="decibel"> dB</string>
      </property>
      <property name="decimals">
       <number>1</number>
@@ -612,7 +612,7 @@
       <set>Qt::AlignCenter</set>
      </property>
      <property name="suffix">
-      <string extracomment="decibel">dB</string>
+      <string notr="true" extracomment="decibel"> dB</string>
      </property>
      <property name="decimals">
       <number>1</number>
@@ -637,7 +637,7 @@
       <enum>QAbstractSpinBox::UpDownArrows</enum>
      </property>
      <property name="suffix">
-      <string extracomment="decibel">dB</string>
+      <string notr="true" extracomment="decibel"> dB</string>
      </property>
      <property name="decimals">
       <number>1</number>

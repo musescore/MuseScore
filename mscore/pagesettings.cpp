@@ -157,12 +157,12 @@ void PageSettings::updateValues()
       double singleStepSize;
       double singleStepScale;
       if (mm) {
-            suffix = "mm";
+            suffix = " mm";
             singleStepSize = 1.0;
             singleStepScale = 0.2;
             }
       else {
-            suffix = "in";
+            suffix = " in";
             singleStepSize = 0.05;
             singleStepScale = 0.005;
             }

@@ -82,7 +82,7 @@
          <string>Right gap</string>
         </property>
         <property name="suffix">
-         <string extracomment="spatium unit">sp</string>
+         <string notr="true" extracomment="spatium unit"> sp</string>
         </property>
         <property name="minimum">
          <double>-10000.000000000000000</double>
@@ -114,7 +114,7 @@
          <string>Width</string>
         </property>
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="minimum">
          <double>-10000.000000000000000</double>
@@ -130,7 +130,7 @@
          <string>Left gap</string>
         </property>
         <property name="suffix">
-         <string extracomment="spatium unit">sp</string>
+         <string notr="true" extracomment="spatium unit"> sp</string>
         </property>
         <property name="minimum">
          <double>-10000.000000000000000</double>

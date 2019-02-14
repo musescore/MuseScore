@@ -95,7 +95,7 @@
          <string>Tempo</string>
         </property>
         <property name="suffix">
-         <string>BPM</string>
+         <string notr="true"> BPM</string>
         </property>
         <property name="decimals">
          <number>1</number>

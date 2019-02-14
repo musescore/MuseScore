@@ -175,7 +175,7 @@
          <string>Line thickness</string>
         </property>
         <property name="suffix">
-         <string>sp</string>
+         <string notr="true"> sp</string>
         </property>
         <property name="maximum">
          <double>10.000000000000000</double>
