@@ -47,10 +47,13 @@
           <string>sp</string>
          </property>
          <property name="minimum">
-          <double>-99.000000000000000</double>
+          <double>-999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>999.990000000000009</double>
          </property>
          <property name="singleStep">
-          <double>0.200000000000000</double>
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -97,10 +100,13 @@
           <string>sp</string>
          </property>
          <property name="minimum">
-          <double>-99.000000000000000</double>
+          <double>-999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>999.990000000000009</double>
          </property>
          <property name="singleStep">
-          <double>0.200000000000000</double>
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
