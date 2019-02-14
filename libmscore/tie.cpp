@@ -305,17 +305,15 @@ void TieSegment::computeBezier(QPointF p6o)
 //      path.translate(staffOffset);
 //      shapePath.translate(staffOffset);
 
-      QPainterPath p;
-      p.moveTo(QPointF());
-      p.cubicTo(p3 + p3o, p4 + p4o, p2);
       _shape.clear();
       QPointF start;
       start = t.map(start);
 
       qreal minH = qAbs(3.0 * w);
       int nbShapes = 15;
+      const CubicBezier b(pp1, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
       for (int i = 1; i <= nbShapes; i++) {
-            QPointF point = t.map(p.pointAtPercent(i/float(nbShapes)));
+            const QPointF point = b.pointAtPercent(i/float(nbShapes));
             QRectF re = QRectF(start, point).normalized();
             if (re.height() < minH) {
                   d = (minH - re.height()) * .5;

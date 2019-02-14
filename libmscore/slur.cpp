@@ -311,17 +311,13 @@ void SlurSegment::computeBezier(QPointF p6o)
       ups(Grip::DRAG).p     = t.map(p5);
       ups(Grip::SHOULDER).p = t.map(p6);
 
-      QPainterPath p;
-      p.moveTo(QPointF());
-      p.cubicTo(p3 + p3o, p4 + p4o, p2);
-      p = t.map(p);
-
       _shape.clear();
       QPointF start = pp1;
       int nbShapes  = 32;  // (pp2.x() - pp1.x()) / _spatium;
       qreal minH    = qAbs(3 * w);
+      const CubicBezier b(pp1, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
       for (int i = 1; i <= nbShapes; i++) {
-            QPointF point = p.pointAtPercent(i/float(nbShapes));
+            const QPointF point = b.pointAtPercent(i/float(nbShapes));
             QRectF re     = QRectF(start, point).normalized();
             if (re.height() < minH) {
                   qreal d1 = (minH - re.height()) * .5;
