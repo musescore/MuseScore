@@ -2518,13 +2518,12 @@ void Score::getNextMeasure(LayoutContext& lc)
                   int n       = 0;
                   Fraction len;
 
-                  lc.measureNo = m->no();
-
                   while (validMMRestMeasure(nm)) {
                         MeasureBase* mb = _showVBox ? nm->next() : nm->nextMeasure();
                         if (breakMultiMeasureRest(nm) && n)
                               break;
-                        lc.adjustMeasureNo(nm);
+                        if (nm != m)
+                              lc.adjustMeasureNo(nm);
                         ++n;
                         len += nm->len();
                         lm = nm;
