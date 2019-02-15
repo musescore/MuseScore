@@ -17,7 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(CMAKE_C_FLAGS "-DNEWBUFFER -DPMNULL")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNEWBUFFER -DPMNULL")
 
 if (APPLE)
   file(GLOB_RECURSE INCS "*.h")
