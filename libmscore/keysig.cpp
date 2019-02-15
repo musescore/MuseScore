@@ -106,8 +106,18 @@ void KeySig::layout()
 
       // determine current clef for this staff
       ClefType clef = ClefType::G;
-      if (staff())
-            clef = staff()->clef(tick());
+      if (staff()) {
+            // Look for a clef before the key signature at the same tick
+            Clef* c = nullptr;
+            for (Segment* seg = segment()->prev1(); !c && seg && seg->tick() == tick(); seg = seg->prev1())
+                  if (seg->isClefType() || seg->isHeaderClefType())
+                        c = toClef(seg->element(track()));
+            if (c)
+                  clef = c->clefType();
+            else
+                  // no clef found, so get the clef type from the clefs list, using the previous tick
+                  clef = staff()->clef(tick() - 1);
+            }
 
       int accidentals = 0, naturals = 0;
       int t1 = int(_sig.key());
