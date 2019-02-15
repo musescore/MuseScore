@@ -162,6 +162,8 @@ void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
                         }
                   else if (m->header())
                         m->removeSystemHeader();
+                  if (m->trailer())
+                        m->removeSystemTrailer();
                   m->createEndBarLines(true);
                   m->computeMinWidth();
                   ww = m->width();
