@@ -2745,6 +2745,8 @@ void Score::cmdSlashFill()
             for (Segment* s = startSegment; s && s->tick() < endTick; s = s->next1()) {
                   if (s->segmentType() != SegmentType::ChordRest)
                         continue;
+                  if (s->measure()->isMMRest())
+                        continue;
                   // determine beat type based on time signature
                   int d = s->measure()->timesig().denominator();
                   int n = (d > 4 && s->measure()->timesig().numerator() % 3 == 0) ? 3 : 1;
