@@ -5014,7 +5014,7 @@ static void partList(XmlWriter& xml, Score* score, const QList<Part*>& il, MxmlI
                         int instNr = ii.key();
                         int midiPort = part->midiPort() + 1;
                         if (ii.value()->channel().size() > 0)
-                              midiPort = score->masterScore()->midiMapping(ii.value()->channel(0)->channel())->port + 1;
+                              midiPort = score->masterScore()->midiMapping(ii.value()->channel(0)->channel())->port() + 1;
                         if (midiPort >= 1 && midiPort <= 16)
                               xml.tag(QString("midi-device %1 port=\"%2\"").arg(instrId(idx+1, instNr + 1)).arg(midiPort), "");
                         else

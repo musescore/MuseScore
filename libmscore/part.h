@@ -54,11 +54,6 @@ class Part final : public ScoreElement {
       static const int DEFAULT_COLOR = 0x3399ff;
       int _color;                   ///User specified color for helping to label parts
 
-      const Part* masterPart() const;
-      Part* masterPart();
-      const Part* redirectPart() const;
-      Part* redirectPart();
-
    public:
       Part(Score* = 0);
       void initFromInstrTemplate(const InstrumentTemplate*);
@@ -97,17 +92,6 @@ class Part final : public ScoreElement {
 
       void setStaves(int);
 
-      double volume() const;
-      void setVolume(double volume);
-      bool mute() const;
-      void setMute(bool mute);
-
-      double reverb() const;
-      void setReverb(double);
-      double chorus() const;
-      void setChorus(double);
-      double pan() const;
-      void setPan(double pan);
       int midiProgram() const;
       void setMidiProgram(int, int bank = 0);
 
@@ -143,6 +127,9 @@ class Part final : public ScoreElement {
       bool hasPitchedStaff();
       bool hasTabStaff();
       bool hasDrumStaff();
+
+      const Part* masterPart() const;
+      Part* masterPart();
 
       // Allows not reading the same instrument twice on importing 2.X scores.
       // TODO: do we need instruments info in parts at all?

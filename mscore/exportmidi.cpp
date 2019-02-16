@@ -237,7 +237,8 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                   // Pass through the all channels of the instrument
                   // "normal", "pizzicato", "tremolo" for Strings,
                   // "normal", "mute" for Trumpet
-                  foreach(const Channel* ch, j->second->channel()) {
+                  for (const Channel* instrChan : j->second->channel()) {
+                        const Channel* ch = part->masterScore()->playbackChannel(instrChan);
                         char port    = part->masterScore()->midiPort(ch->channel());
                         char channel = part->masterScore()->midiChannel(ch->channel());
 

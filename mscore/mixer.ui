@@ -28,6 +28,13 @@
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QCheckBox" name="partOnlyCheckBox">
+      <property name="text">
+       <string>Play part only</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QWidget" name="detailsArea" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

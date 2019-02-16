@@ -113,8 +113,8 @@ void PartEdit::setPart(Part* p, Channel* a)
                   }
             }
       _setChecked(drumset, p->instrument()->useDrumset());
-      _setValue(portSpinBox,    part->masterScore()->midiMapping(a->channel())->port + 1);
-      _setValue(channelSpinBox, part->masterScore()->midiMapping(a->channel())->channel + 1);
+      _setValue(portSpinBox,    part->masterScore()->midiMapping(a->channel())->port() + 1);
+      _setValue(channelSpinBox, part->masterScore()->midiMapping(a->channel())->channel() + 1);
 
       QHBoxLayout* hb = voiceButtonBox;
       int idx = 0;
@@ -286,7 +286,8 @@ void PartEdit::soloToggled(bool val, bool syncControls)
                   const InstrumentList* il = p->instruments();
                   for (auto i = il->begin(); i != il->end(); ++i) {
                         const Instrument* instr = i->second;
-                        for (Channel* a : instr->channel()) {
+                        for (Channel* instrChan : instr->channel()) {
+                              Channel* a = part->masterScore()->playbackChannel(instrChan);
                               a->setSoloMute((channel != a && !a->solo()));
                               a->setSolo(channel == a || a->solo());
                               if (a->soloMute())
@@ -302,7 +303,8 @@ void PartEdit::soloToggled(bool val, bool syncControls)
                   const InstrumentList* il = p->instruments();
                   for (auto i = il->begin(); i != il->end(); ++i) {
                         const Instrument* instr = i->second;
-                        for (Channel* a : instr->channel()) {
+                        for (Channel* instrChan : instr->channel()) {
+                              Channel* a = part->masterScore()->playbackChannel(instrChan);
                               if (a->solo()){
                                     found = true;
                                     break;
@@ -315,7 +317,8 @@ void PartEdit::soloToggled(bool val, bool syncControls)
                         const InstrumentList* il = p->instruments();
                         for (auto i = il->begin(); i != il->end(); ++i) {
                               const Instrument* instr = i->second;
-                              for (Channel* a : instr->channel()) {
+                              for (Channel* instrChan : instr->channel()) {
+                                    Channel* a = part->masterScore()->playbackChannel(instrChan);
                                     a->setSoloMute(false);
                                     a->setSolo(false);
                                     }
@@ -428,7 +431,7 @@ void PartEdit::midiChannelChanged(int)
       int c = channelSpinBox->value() - 1;
 
       // 1 is for going up, -1 for going down
-      int direction = copysign(1, c - part->masterScore()->midiMapping(channel->channel())->channel);
+      int direction = copysign(1, c - part->masterScore()->midiMapping(channel->channel())->channel());
 
       // Channel 9 is special for drums
       if (part->instrument()->useDrumset() && c != 9) {
@@ -484,8 +487,8 @@ void PartEdit::midiChannelChanged(int)
                   QPushButton *assignFreeChannel = msgBox.addButton(tr("Assign next free MIDI channel"), QMessageBox::HelpRole);
                   msgBox.setDefaultButton(QMessageBox::Ok);
                   if (msgBox.exec() == QMessageBox::Cancel) {
-                        _setValue(channelSpinBox, part->masterScore()->midiMapping(channel->channel())->channel + 1);
-                        _setValue(portSpinBox,    part->masterScore()->midiMapping(channel->channel())->port + 1);
+                        _setValue(channelSpinBox, part->masterScore()->midiMapping(channel->channel())->channel() + 1);
+                        _setValue(portSpinBox,    part->masterScore()->midiMapping(channel->channel())->port() + 1);
                         needSync = false;
                         break;
                         }
@@ -495,10 +498,12 @@ void PartEdit::midiChannelChanged(int)
                         break;
                         }
                   // Sync
-                  _setValue(channelSpinBox, newChannel % 16 + 1);
-                  _setValue(portSpinBox,    newChannel / 16 + 1);
-                  part->masterScore()->midiMapping(channel->channel())->channel = newChannel % 16;
-                  part->masterScore()->midiMapping(channel->channel())->port    = newChannel / 16;
+                  const int port = newChannel / 16;
+                  const int channelNo = newChannel % 16;
+                  _setValue(channelSpinBox, channelNo + 1);
+                  _setValue(portSpinBox,    port + 1);
+                  MasterScore* ms = part->masterScore();
+                  ms->updateMidiMapping(ms->playbackChannel(channel), part, port, channelNo);
                   channel->setVolume(lrint(pe->volume->value()));
                   channel->setPan(lrint(pe->pan->value()));
                   channel->setReverb(lrint(pe->reverb->value()));
@@ -522,12 +527,14 @@ void PartEdit::midiChannelChanged(int)
             }
       channel->updateInitList();
       if (needSync) {
-            _setValue(channelSpinBox, newChannel % 16 + 1);
-            _setValue(portSpinBox,    newChannel / 16 + 1);
-            part->masterScore()->midiMapping(channel->channel())->channel = newChannel % 16;
-            part->masterScore()->midiMapping(channel->channel())->port    = newChannel / 16;
-            part->score()->setInstrumentsChanged(true);
-            part->score()->setLayoutAll();
+            const int port = newChannel / 16;
+            const int channelNo = newChannel % 16;
+            _setValue(channelSpinBox, channelNo + 1);
+            _setValue(portSpinBox,    port + 1);
+            MasterScore* ms = part->masterScore();
+            ms->updateMidiMapping(ms->playbackChannel(channel), part, port, channelNo);
+            ms->setInstrumentsChanged(true);
+            ms->setLayoutAll();
             seq->initInstruments();
             }
       else {

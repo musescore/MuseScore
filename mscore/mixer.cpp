@@ -20,6 +20,7 @@
 #include "musescore.h"
 #include "parteditbase.h"
 
+#include "libmscore/excerpt.h"
 #include "libmscore/score.h"
 #include "libmscore/part.h"
 #include "mixer.h"
@@ -177,7 +178,6 @@ void Mixer::keepScrollPosition()
       _needToKeepScrollPosition = true;
       }
 
-
 //---------------------------------------------------------
 //   masterVolumeChanged
 //---------------------------------------------------------
@@ -195,6 +195,26 @@ void Mixer::masterVolumeChanged(double decibels)
       masterSpin->blockSignals(true);
       masterSpin->setValue(decibels);
       masterSpin->blockSignals(false);
+      }
+
+//---------------------------------------------------------
+//   on_partOnlyCheckBox_toggled
+//---------------------------------------------------------
+
+void Mixer::on_partOnlyCheckBox_toggled(bool checked)
+      {
+      if (!_activeScore->excerpt())
+            return;
+
+      mscore->setPlayPartOnly(checked);
+      setPlaybackScore(_activeScore->masterScore()->playbackScore());
+
+      // Prevent muted channels from sounding
+      for (const MidiMapping& mm : _activeScore->masterScore()->midiMapping()) {
+            const Channel* ch = mm.articulation();
+            if (ch && (ch->mute() || ch->soloMute()))
+                  seq->stopNotes(ch->channel());
+            }
       }
 
 //---------------------------------------------------------
@@ -278,16 +298,31 @@ PartEdit* Mixer::getPartAtIndex(int)
       }
 
 //---------------------------------------------------------
-//   setScore
+//   setPlaybackScore
 //---------------------------------------------------------
 
-void Mixer::setScore(MasterScore* score)
+void Mixer::setPlaybackScore(Score* score)
       {
       if (_score != score) {
             _score = score;
             mixerDetails->setTrack(0);
             }
       updateTracks();
+      }
+
+//---------------------------------------------------------
+//   setScore
+//---------------------------------------------------------
+
+void Mixer::setScore(Score* score)
+      {
+      // No equality check, this function seems to need to cause
+      // mixer update every time it gets called.
+      _activeScore = score;
+      setPlaybackScore(_activeScore->masterScore()->playbackScore());
+
+      partOnlyCheckBox->setChecked(mscore->playPartOnly());
+      partOnlyCheckBox->setEnabled(_activeScore && !_activeScore->isMaster());
       }
 
 //---------------------------------------------------------
@@ -305,8 +340,8 @@ void Mixer::updateTracks()
             //If nothing selected, select first available track
             if (!_score->parts().isEmpty())
                   {
-                  selPart = _score->parts()[0];
-                  selChan = selPart->instrument(0)->channel(0);
+                  selPart = _score->parts()[0]->masterPart();
+                  selChan = selPart->instrument(0)->playbackChannel(0, _score->masterScore());
                   }
 
             }
@@ -333,7 +368,8 @@ void Mixer::updateTracks()
 
       trackAreaLayout->addWidget(trackHolder);
 
-      for (Part* part : _score->parts()) {
+      for (Part* localPart : _score->parts()) {
+            Part* part = localPart->masterPart();
             //Add per part tracks
             bool expanded = expandedParts.contains(part);
             const InstrumentList* il = part->instruments();
@@ -342,7 +378,7 @@ void Mixer::updateTracks()
             if (!il->empty()) {
                   il->begin();
                   proxyInstr = il->begin()->second;
-                  proxyChan = proxyInstr->channel(0);
+                  proxyChan = proxyInstr->playbackChannel(0, _score->masterScore());
                   }
 
             MixerTrackItemPtr mti = std::make_shared<MixerTrackItem>(
@@ -365,7 +401,7 @@ void Mixer::updateTracks()
                   for (auto it = il1->begin(); it != il1->end(); ++it) {
                         Instrument* instr = it->second;
                         for (int i = 0; i < instr->channel().size(); ++i) {
-                              Channel *chan = instr->channel()[i];
+                              Channel* chan = instr->playbackChannel(i, _score->masterScore());
                               MixerTrackItemPtr mti1 = std::make_shared<MixerTrackItem>(
                                                 MixerTrackItem::TrackType::CHANNEL, part, instr, chan);
 //                              MixerTrackItemPtr mti = new MixerTrackItem(
@@ -467,7 +503,7 @@ void MuseScore::showMixer(bool val)
             connect(synti, SIGNAL(soundFontChanged()), mixer, SLOT(updateTracks()));
             connect(mixer, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
             }
-      mixer->setScore(cs->masterScore());
+      mixer->setScore(cs);
       mixer->setVisible(val);
       }
 

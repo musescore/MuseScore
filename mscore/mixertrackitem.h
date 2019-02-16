@@ -50,6 +50,8 @@ private:
       Instrument* _instr;
       Channel* _chan;
 
+      Channel* playbackChannel(const Channel* channel);
+
 public:
       MixerTrackItem(TrackType tt, Part* part, Instrument* _instr, Channel* _chan);
 
