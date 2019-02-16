@@ -238,6 +238,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static const std::list<const char*> _allPlaybackControlEntries;
       std::list<const char*> _playbackControlEntries { _allPlaybackControlEntries };
 
+      bool _playPartOnly = true; // play part only vs. full score
+
       QVBoxLayout* layout;    // main window layout
       QSplitter* splitter;
       ScoreTab* tab1;
@@ -846,6 +848,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       std::list<const char*>* playbackControlEntries()               { return &_playbackControlEntries; }
       void setPlaybackControlEntries(std::list<const char*> l)       { _playbackControlEntries = l; }
       void populatePlaybackControls();
+
+      bool playPartOnly() const { return _playPartOnly; }
+      void setPlayPartOnly(bool val);
 
       static void updateUiStyleAndTheme();
 

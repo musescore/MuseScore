@@ -25,6 +25,7 @@
 namespace Ms {
 
 Instrument InstrumentList::defaultInstrument;
+constexpr std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptProperties;
 
 //---------------------------------------------------------
 //   write
@@ -197,7 +198,7 @@ void StaffName::read(XmlReader& e)
 //   Instrument::write
 //---------------------------------------------------------
 
-void Instrument::write(XmlWriter& xml, Part* part) const
+void Instrument::write(XmlWriter& xml, const Part* part) const
       {
       xml.stag("Instrument");
       _longNames.write(xml, "longName");
@@ -600,7 +601,7 @@ void Channel::setSolo(bool value)
 //   write
 //---------------------------------------------------------
 
-void Channel::write(XmlWriter& xml, Part* part) const
+void Channel::write(XmlWriter& xml, const Part* part) const
       {
       if (_name.isEmpty() || _name == DEFAULT_NAME)
             xml.stag("Channel");
@@ -640,8 +641,8 @@ void Channel::write(XmlWriter& xml, Part* part) const
       if (_solo)
             xml.tag("solo", _solo);
       if (part && part->masterScore()->exportMidiMapping() && part->score() == part->masterScore()) {
-            xml.tag("midiPort",    part->masterScore()->midiMapping(_channel)->port);
-            xml.tag("midiChannel", part->masterScore()->midiMapping(_channel)->channel);
+            xml.tag("midiPort",    part->masterScore()->midiMapping(_channel)->port());
+            xml.tag("midiChannel", part->masterScore()->midiMapping(_channel)->channel());
             }
       for (const NamedEventList& a : midiActions)
             a.write(xml, "MidiAction");
@@ -727,20 +728,13 @@ void Channel::read(XmlReader& e, Part* part)
                   _solo = e.readInt();
             else if (tag == "midiPort") {
                   int midiPort = e.readInt();
-                  if (part) {
-                        MidiMapping mm;
-                        mm.port = midiPort;
-                        mm.channel = -1;
-                        mm.part = part;
-                        mm.articulation = this;
-                        part->masterScore()->midiMapping()->append(mm);
-                        _channel = part->masterScore()->midiMapping()->size() - 1;
-                        }
+                  if (part && part->score()->isMaster())
+                        part->masterScore()->addMidiMapping(this, part, midiPort, -1);
                   }
             else if (tag == "midiChannel") {
                   int midiChannel = e.readInt();
-                  if (part)
-                        part->masterScore()->midiMapping(_channel)->channel = midiChannel;
+                  if (part && part->score()->isMaster())
+                        part->masterScore()->updateMidiMapping(this, part, -1, midiChannel);
                   }
             else
                   e.unknown();
@@ -800,6 +794,138 @@ void Channel::addListener(ChannelListener* l)
 void Channel::removeListener(ChannelListener* l)
       {
       _notifier.removeListener(l);
+      }
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink
+//---------------------------------------------------------
+
+PartChannelSettingsLink::PartChannelSettingsLink(Channel* main, Channel* bound, bool excerpt)
+   : _main(main), _bound(bound), _excerpt(excerpt)
+      {
+      if (excerpt) {
+            for (Channel::Prop p : excerptProperties)
+                  applyProperty(p, /* from */ bound, /* to */ main);
+            }
+      // Maybe it would be good to assign common properties if the link
+      // is constructed in non-excerpt mode. But it is not currently
+      // necessary as playback channels are currently recreated on each
+      // MIDI remapping.
+
+      main->addListener(this);
+      }
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink
+//---------------------------------------------------------
+
+PartChannelSettingsLink::PartChannelSettingsLink(PartChannelSettingsLink&& other)
+   : _main(nullptr), _bound(nullptr), _excerpt(false)
+      {
+      swap(*this, other);
+      }
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink::operator=
+//---------------------------------------------------------
+
+PartChannelSettingsLink& PartChannelSettingsLink::operator=(PartChannelSettingsLink&& other)
+      {
+      if (this != &other)
+            swap(*this, other);
+      return *this;
+      }
+
+//---------------------------------------------------------
+//   ~PartChannelSettingsLink
+//---------------------------------------------------------
+
+PartChannelSettingsLink::~PartChannelSettingsLink()
+      {
+      if (_main)
+            _main->removeListener(this);
+      }
+
+//---------------------------------------------------------
+//   swap
+//---------------------------------------------------------
+
+void swap(PartChannelSettingsLink& l1, PartChannelSettingsLink& l2)
+      {
+      using std::swap;
+      if (l1._main)
+            l1._main->removeListener(&l1);
+      if (l2._main)
+            l2._main->removeListener(&l2);
+      swap(l1._main, l2._main);
+      swap(l1._bound, l2._bound);
+      swap(l1._excerpt, l2._excerpt);
+      if (l1._main)
+            l1._main->addListener(&l1);
+      if (l2._main)
+            l2._main->addListener(&l2);
+      }
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink::applyProperty
+//---------------------------------------------------------
+
+void PartChannelSettingsLink::applyProperty(Channel::Prop p, const Channel* from, Channel* to)
+      {
+      switch (p) {
+            case Channel::Prop::VOLUME:
+                  to->setVolume(from->volume());
+                  break;
+            case Channel::Prop::PAN:
+                  to->setPan(from->pan());
+                  break;
+            case Channel::Prop::CHORUS:
+                  to->setChorus(from->chorus());
+                  break;
+            case Channel::Prop::REVERB:
+                  to->setReverb(from->reverb());
+                  break;
+            case Channel::Prop::NAME:
+                  to->setName(from->name());
+                  break;
+            case Channel::Prop::DESCR:
+                  to->setDescr(from->descr());
+                  break;
+            case Channel::Prop::PROGRAM:
+                  to->setProgram(from->program());
+                  break;
+            case Channel::Prop::BANK:
+                  to->setBank(from->bank());
+                  break;
+            case Channel::Prop::COLOR:
+                  to->setColor(from->color());
+                  break;
+            case Channel::Prop::SOLOMUTE:
+                  to->setSoloMute(from->soloMute());
+                  break;
+            case Channel::Prop::SOLO:
+                  to->setSolo(from->solo());
+                  break;
+            case Channel::Prop::MUTE:
+                  to->setMute(from->mute());
+                  break;
+            case Channel::Prop::SYNTI:
+                  to->setSynti(from->synti());
+                  break;
+            case Channel::Prop::CHANNEL:
+                  to->setChannel(from->channel());
+                  break;
+            };
+      }
+
+//---------------------------------------------------------
+//   PartChannelSettingsLink::propertyChanged
+//---------------------------------------------------------
+
+void PartChannelSettingsLink::propertyChanged(Channel::Prop p)
+      {
+      if (isExcerptProperty(p) == _excerpt)
+            applyProperty(p, _main, _bound);
       }
 
 //---------------------------------------------------------
@@ -1200,6 +1326,25 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
             instr._channel.append(new Channel(c));
       instr.setStringData(t->stringData);
       return instr;
+      }
+
+//---------------------------------------------------------
+//   Instrument::playbackChannel
+//---------------------------------------------------------
+
+const Channel* Instrument::playbackChannel(int idx, const MasterScore* score) const
+      {
+      return score->playbackChannel(channel(idx));
+      }
+
+
+//---------------------------------------------------------
+//   Instrument::playbackChannel
+//---------------------------------------------------------
+
+Channel* Instrument::playbackChannel(int idx, MasterScore* score)
+      {
+      return score->playbackChannel(channel(idx));
       }
 
 //---------------------------------------------------------

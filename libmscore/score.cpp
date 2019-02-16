@@ -3721,13 +3721,13 @@ ChordRest* Score::findCRinStaff(int tick, int staffIdx) const
 
 void MasterScore::setSoloMute()
       {
-      for (int i = 0; i < _midiMapping.size(); i++) {
-            Channel* b = _midiMapping[i].articulation;
+      for (unsigned i = 0; i < _midiMapping.size(); i++) {
+            Channel* b = _midiMapping[i].articulation();
             if (b->solo()) {
                   b->setSoloMute(false);
-                  for (int j = 0; j < _midiMapping.size(); j++) {
-                        Channel* a = _midiMapping[j].articulation;
-                        bool sameMidiMapping = _midiMapping[i].port == _midiMapping[j].port && _midiMapping[i].channel == _midiMapping[j].channel;
+                  for (unsigned j = 0; j < _midiMapping.size(); j++) {
+                        Channel* a = _midiMapping[j].articulation();
+                        bool sameMidiMapping = _midiMapping[i].port() == _midiMapping[j].port() && _midiMapping[i].channel() == _midiMapping[j].channel();
                         a->setSoloMute((i != j && !a->solo() && !sameMidiMapping));
                         a->setSolo(i == j || a->solo() || sameMidiMapping);
                         }
@@ -4443,6 +4443,37 @@ void MasterScore::setLayoutAll()
       {
       _cmdState.setTick(0);
       _cmdState.setTick(measures()->last() ? measures()->last()->endTick() : 0);
+      }
+
+//---------------------------------------------------------
+//   setPlaybackScore
+//---------------------------------------------------------
+
+void MasterScore::setPlaybackScore(Score* score)
+      {
+      if (_playbackScore == score)
+            return;
+
+      _playbackScore = score;
+      _playbackSettingsLinks.clear();
+
+      if (!_playbackScore)
+            return;
+
+      for (MidiMapping& mm : _midiMapping)
+            mm.articulation()->setSoloMute(true);
+      for (Part* part : score->parts()) {
+            for (auto& i : *part->instruments()) {
+                  Instrument* instr = i.second;
+                  for (Channel* ch : instr->channel()) {
+                        Channel* pChannel = playbackChannel(ch);
+                        Q_ASSERT(pChannel);
+                        if (!pChannel)
+                              continue;
+                        _playbackSettingsLinks.emplace_back(pChannel, ch, /* excerpt */ true);
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------

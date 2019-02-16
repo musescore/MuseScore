@@ -383,7 +383,7 @@ void StaffTextProperties::channelItemChanged(QTreeWidgetItem* item, QTreeWidgetI
 
       int channelIdx      = item->data(0, Qt::UserRole).toInt();
       int tick = static_cast<Segment*>(_staffText->parent())->tick();
-      Channel* channel    = part->instrument(tick)->channel(channelIdx);
+      const Channel* channel = part->instrument(tick)->channel(channelIdx);
       QString channelName = channel->name();
 
       for (const NamedEventList& e : part->instrument(tick)->midiActions()) {
@@ -441,7 +441,7 @@ void StaffTextProperties::saveValues()
                   if (vb[voice][row]->isChecked()) {
                         int idx     = channelCombo[row]->currentIndex();
                         int instrId = static_cast<Segment*>(_staffText->parent())->tick();
-                        _staffText->setChannelName(voice, part->instrument(instrId)->channel()[idx]->name());
+                        _staffText->setChannelName(voice, part->instrument(instrId)->channel(idx)->name());
                         break;
                         }
                   }

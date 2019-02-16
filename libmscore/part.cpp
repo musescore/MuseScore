@@ -93,30 +93,6 @@ Part* Part::masterPart()
       }
 
 //---------------------------------------------------------
-//   Part::redirectPart
-//---------------------------------------------------------
-
-const Part* Part::redirectPart() const
-      {
-      const Part* p = masterPart();
-      if (p != this)
-            return p;
-      return nullptr;
-      }
-
-//---------------------------------------------------------
-//   Part::redirectPart
-//---------------------------------------------------------
-
-Part* Part::redirectPart()
-      {
-      Part* p = masterPart();
-      if (p != this)
-            return p;
-      return nullptr;
-      }
-
-//---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
 
@@ -178,7 +154,7 @@ void Part::write(XmlWriter& xml) const
       xml.tag("trackName", _partName);
       if (_color != DEFAULT_COLOR)
             xml.tag("color", _color);
-      instrument()->write(xml, const_cast<Part*>(this)); // Safe, we do not write anything to it
+      instrument()->write(xml, this);
       xml.etag();
       }
 
@@ -261,102 +237,12 @@ void Part::setMidiProgram(int program, int bank)
       }
 
 //---------------------------------------------------------
-//   volume
-//---------------------------------------------------------
-
-double Part::volume() const
-      {
-      return instrument()->channel(0)->volume();
-      }
-
-//---------------------------------------------------------
-//   setVolume
-//---------------------------------------------------------
-
-void Part::setVolume(double volume)
-      {
-      instrument()->channel(0)->setVolume(volume);
-      }
-
-//---------------------------------------------------------
-//   mute
-//---------------------------------------------------------
-
-bool Part::mute() const
-      {
-      return instrument()->channel(0)->mute();
-      }
-
-//---------------------------------------------------------
-//   setMute
-//---------------------------------------------------------
-
-void Part::setMute(bool mute)
-      {
-      instrument()->channel(0)->setMute(mute);
-      }
-
-//---------------------------------------------------------
-//   reverb
-//---------------------------------------------------------
-
-double Part::reverb() const
-      {
-      return instrument()->channel(0)->reverb();
-      }
-
-//---------------------------------------------------------
-//   setReverb
-//---------------------------------------------------------
-
-void Part::setReverb(double val)
-      {
-      instrument()->channel(0)->setReverb(val);
-      }
-
-//---------------------------------------------------------
-//   chorus
-//---------------------------------------------------------
-
-double Part::chorus() const
-      {
-      return instrument()->channel(0)->chorus();
-      }
-
-//---------------------------------------------------------
-//   setChorus
-//---------------------------------------------------------
-
-void Part::setChorus(double val)
-      {
-      instrument()->channel(0)->setChorus(val);
-      }
-
-//---------------------------------------------------------
-//   pan
-//---------------------------------------------------------
-
-double Part::pan() const
-      {
-      return instrument()->channel(0)->pan();
-      }
-
-//---------------------------------------------------------
-//   setPan
-//---------------------------------------------------------
-
-void Part::setPan(double pan)
-      {
-      instrument()->channel(0)->setPan(pan);
-      }
-
-//---------------------------------------------------------
 //   midiProgram
 //---------------------------------------------------------
 
 int Part::midiProgram() const
       {
-      return instrument()->channel(0)->program();
+      return instrument()->playbackChannel(0, masterScore())->program();
       }
 
 //---------------------------------------------------------
@@ -390,33 +276,10 @@ int Part::midiPort() const
 void Part::setMidiChannel(int ch, int port, int tick)
       {
       Channel* channel = instrument(tick)->channel(0);
-      if (channel->channel() == -1) {
-            // Add new mapping
-            MidiMapping mm;
-            mm.part = this;
-            mm.articulation = channel;
-            mm.channel = -1;
-            mm.port = -1;
-            if (ch != -1)
-                  mm.channel = ch;
-            if (port != -1)
-                  mm.port = port;
-            channel->setChannel(masterScore()->midiMapping()->size());
-            masterScore()->midiMapping()->append(mm);
-            }
-      else {
-            // Update existing mapping
-            if (channel->channel() >= masterScore()->midiMapping()->size()) {
-                  qDebug()<<"Can't' set midi channel: midiMapping is empty!";
-                  return;
-                  }
-
-            if (ch != -1)
-                  masterScore()->midiMapping(channel->channel())->channel = ch;
-            if (port != -1)
-                  masterScore()->midiMapping(channel->channel())->port = port;
-            masterScore()->midiMapping(channel->channel())->part = this;
-            }
+      if (channel->channel() == -1)
+            masterScore()->addMidiMapping(channel, this, port, ch);
+      else
+            masterScore()->updateMidiMapping(channel, this, port, ch);
       }
 
 //---------------------------------------------------------
@@ -457,8 +320,6 @@ void Part::removeInstrument(int tick)
 
 Instrument* Part::instrument(int tick)
       {
-      if (Part* p = redirectPart())
-            return p->instrument(tick);
       return _instruments.instrument(tick);
       }
 
@@ -468,8 +329,6 @@ Instrument* Part::instrument(int tick)
 
 const Instrument* Part::instrument(int tick) const
       {
-      if (const Part* p = redirectPart())
-            return p->instrument(tick);
       return _instruments.instrument(tick);
       }
 
@@ -479,8 +338,6 @@ const Instrument* Part::instrument(int tick) const
 
 const InstrumentList* Part::instruments() const
       {
-      if (const Part* p = redirectPart())
-            return p->instruments();
       return &_instruments;
       }
 
@@ -569,16 +426,6 @@ QVariant Part::getProperty(Pid id) const
                   return QVariant(_show);
             case Pid::USE_DRUMSET:
                   return instrument()->useDrumset();
-            case Pid::PART_VOLUME:
-                  return volume();
-            case Pid::PART_MUTE:
-                  return mute();
-            case Pid::PART_PAN:
-                  return pan();
-            case Pid::PART_REVERB:
-                  return reverb();
-            case Pid::PART_CHORUS:
-                  return chorus();
             default:
                   return QVariant();
             }
@@ -596,21 +443,6 @@ bool Part::setProperty(Pid id, const QVariant& property)
                   break;
             case Pid::USE_DRUMSET:
                   instrument()->setUseDrumset(property.toBool());
-                  break;
-            case Pid::PART_VOLUME:
-                  setVolume(property.toInt());
-                  break;
-            case Pid::PART_MUTE:
-                  setMute(property.toBool());
-                  break;
-            case Pid::PART_PAN:
-                  setPan(property.toInt());
-                  break;
-            case Pid::PART_REVERB:
-                  setReverb(property.toInt());
-                  break;
-            case Pid::PART_CHORUS:
-                  setChorus(property.toInt());
                   break;
             default:
                   qDebug("Part::setProperty: unknown id %d", int(id));

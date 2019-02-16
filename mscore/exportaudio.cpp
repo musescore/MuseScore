@@ -95,13 +95,14 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
           foreach(Part* part, score->parts()) {
                 const InstrumentList* il = part->instruments();
                 for(auto i = il->begin(); i!= il->end(); i++) {
-                      for (const Channel* a : i->second->channel()) {
+                      for (const Channel* instrChan : i->second->channel()) {
+                            const Channel* a = score->masterScore()->playbackChannel(instrChan);
                             a->updateInitList();
                             for (MidiCoreEvent e : a->init) {
                                   if (e.type() == ME_INVALID)
                                         continue;
                                   e.setChannel(a->channel());
-                                  int syntiIdx = synth->index(score->masterScore()->midiMapping(a->channel())->articulation->synti());
+                                  int syntiIdx = synth->index(score->masterScore()->midiMapping(a->channel())->articulation()->synti());
 								  synth->play(e, syntiIdx);
                                   }
                             }
@@ -136,7 +137,7 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                       const NPlayEvent& e = playPos->second;
                       if (e.isChannelEvent()) {
                             int channelIdx = e.channel();
-                            Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation;
+                            const Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation();
                             if (!c->mute()) {
                                   synth->play(e, synth->index(c->synti()));
                                   }
