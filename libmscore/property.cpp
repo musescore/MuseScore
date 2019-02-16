@@ -202,16 +202,11 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::LINE_VISIBLE,            true,  "lineVisible",           P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "visible line")     },
       { Pid::MAG,                     false, "mag",                   P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "mag")              },
       { Pid::USE_DRUMSET,             false, "useDrumset",            P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "using drumset")    },
-      { Pid::PART_VOLUME,             false, "volume",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "volume")           },
-      { Pid::PART_MUTE,               false, "mute",                  P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "mute")             },
-      { Pid::PART_PAN,                false, "pan",                   P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "pan")              },
-      { Pid::PART_REVERB,             false, "reverb",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "reverb")           },
-
-      { Pid::PART_CHORUS,             false, "chorus",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "chorus")           },
       { Pid::DURATION,                false, 0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "duration")         },
       { Pid::DURATION_TYPE,           false, 0,                       P_TYPE::TDURATION,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "duration type")    },
       { Pid::ROLE,                    false, "role",                  P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "role")             },
       { Pid::TRACK,                   false, 0,                       P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "track")            },
+
       { Pid::GLISSANDO_STYLE,         true,  "glissandoStyle",        P_TYPE::GLISSANDO_STYLE,     DUMMY_QT_TRANSLATE_NOOP("propertyName", "glissando style")  },
       { Pid::FRET_STRINGS,            false, "strings",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "strings")          },
       { Pid::FRET_FRETS,              false, "frets",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "frets")            },

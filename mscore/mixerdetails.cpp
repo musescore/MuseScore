@@ -161,7 +161,7 @@ void MixerDetails::updateFromTrack()
       Channel* chan = _mti->focusedChan();
 
       //Check if drumkit
-      bool drum = midiMap->part->instrument()->useDrumset();
+      const bool drum = midiMap->part()->instrument()->useDrumset();
       drumkitCheck->blockSignals(true);
       drumkitCheck->setChecked(drum);
       drumkitCheck->blockSignals(false);
@@ -235,8 +235,8 @@ void MixerDetails::updateFromTrack()
       chorusSlider->setValue((int)chan->chorus());
       chorusSpinBox->setValue(chan->chorus());
 
-      portSpinBox->setValue(part->masterScore()->midiMapping(chan->channel())->port + 1);
-      channelSpinBox->setValue(part->masterScore()->midiMapping(chan->channel())->channel + 1);
+      portSpinBox->setValue(part->masterScore()->midiMapping(chan->channel())->port() + 1);
+      channelSpinBox->setValue(part->masterScore()->midiMapping(chan->channel())->channel() + 1);
 
       trackColorLabel->blockSignals(false);
       volumeSlider->blockSignals(false);
@@ -351,7 +351,7 @@ void MixerDetails::propertyChanged(Channel::Prop property)
             return;
 
       MidiMapping* _midiMap = _mti->midiMap();
-      Channel* chan = _midiMap->articulation;
+      Channel* chan = _midiMap->articulation();
 
       switch (property) {
             case Channel::Prop::VOLUME: {
@@ -480,8 +480,8 @@ void MixerDetails::patchChanged(int n)
             return;
             }
 
-      Part* part = _mti->midiMap()->part;
-      Channel* channel = _mti->midiMap()->articulation;
+      Part* part = _mti->midiMap()->part();
+      Channel* channel = _mti->midiMap()->articulation();
       Score* score = part->score();
       if (score) {
             score->startCmd();
@@ -552,8 +552,7 @@ void MixerDetails::midiChannelChanged(int)
       int c = channelSpinBox->value() - 1;
 
       MidiMapping* midiMap = _mti->midiMap();
-      midiMap->port = p;
-      midiMap->channel = c;
+      part->masterScore()->updateMidiMapping(midiMap->articulation(), part, p, c);
 
 //      channel->updateInitList();
       part->score()->setInstrumentsChanged(true);

@@ -220,16 +220,11 @@ enum class Pid {
       LINE_VISIBLE,
       MAG,
       USE_DRUMSET,
-      PART_VOLUME,
-      PART_MUTE,
-      PART_PAN,
-      PART_REVERB,
-
-      PART_CHORUS,
       DURATION,
       DURATION_TYPE,
       ROLE,
       TRACK,
+
       GLISSANDO_STYLE,
       FRET_STRINGS,
       FRET_FRETS,
