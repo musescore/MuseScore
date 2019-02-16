@@ -9285,6 +9285,49 @@
              </property>
             </widget>
            </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_minDistance">
+             <property name="text">
+              <string>Min. distance:</string>
+             </property>
+             <property name="buddy">
+              <cstring>lyricsMinDistance</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QDoubleSpinBox" name="lyricsMinDistance">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="minimum">
+              <double>-100.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.050000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="resetLyricsMinDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Min. distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
            <item row="7" column="0" colspan="2">
             <widget class="QCheckBox" name="lyricsAlignVerseNumber">
              <property name="text">
@@ -9405,7 +9448,7 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="0">
+           <item row="8" column="0">
             <spacer name="verticalSpacer_2">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -11337,13 +11380,18 @@
   <tabstop>resetTupletDirection</tabstop>
   <tabstop>lyricsPlacement</tabstop>
   <tabstop>resetLyricsPlacement</tabstop>
+  <tabstop>lyricsPosAbove</tabstop>
   <tabstop>resetLyricsPosAbove</tabstop>
+  <tabstop>lyricsPosBelow</tabstop>
   <tabstop>resetLyricsPosBelow</tabstop>
+  <tabstop>lyricsLineHeight</tabstop>
   <tabstop>resetLyricsLineHeight</tabstop>
   <tabstop>lyricsMinTopDistance</tabstop>
   <tabstop>resetLyricsMinTopDistance</tabstop>
   <tabstop>lyricsMinBottomDistance</tabstop>
   <tabstop>resetLyricsMinBottomDistance</tabstop>
+  <tabstop>lyricsMinDistance</tabstop>
+  <tabstop>resetLyricsMinDistance</tabstop>
   <tabstop>lyricsAlignVerseNumber</tabstop>
   <tabstop>resetLyricsAlignVerseNumber</tabstop>
   <tabstop>lyricsDashMinLength</tabstop>
@@ -11352,13 +11400,22 @@
   <tabstop>resetLyricsDashMaxLength</tabstop>
   <tabstop>lyricsDashMaxDistance</tabstop>
   <tabstop>resetLyricsDashMaxDistance</tabstop>
+  <tabstop>lyricsDashLineThickness</tabstop>
+  <tabstop>resetLyricsDashLineThickness</tabstop>
+  <tabstop>lyricsDashPad</tabstop>
+  <tabstop>resetLyricsDashPad</tabstop>
+  <tabstop>lyricsDashYposRatio</tabstop>
+  <tabstop>resetLyricsDashYposRatio</tabstop>
   <tabstop>lyricsDashForce</tabstop>
   <tabstop>resetLyricsDashForce</tabstop>
   <tabstop>lyricsLineThickness</tabstop>
   <tabstop>resetLyricsLineThickness</tabstop>
+  <tabstop>lyricsMelismaPad</tabstop>
+  <tabstop>resetLyricsMelismaPad</tabstop>
+  <tabstop>lyricsMelismaAlign</tabstop>
+  <tabstop>resetLyricsMelismaAlign</tabstop>
  </tabstops>
  <resources>
-  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

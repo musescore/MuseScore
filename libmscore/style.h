@@ -57,6 +57,7 @@ enum class Sid {
       lyricsPosBelow,
       lyricsMinTopDistance,
       lyricsMinBottomDistance,
+      lyricsMinDistance,
       lyricsLineHeight,
       lyricsDashMinLength,
       lyricsDashMaxLength,
