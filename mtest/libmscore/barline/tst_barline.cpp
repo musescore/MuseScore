@@ -40,6 +40,7 @@ class TestBarline : public QObject, public MTest
       void barline05();
       void barline06();
       void barline179726();
+      void deleteSkipBarlines();
       };
 
 //---------------------------------------------------------
@@ -439,6 +440,28 @@ void TestBarline::barline179726()
       delete score;
       }
 
+//---------------------------------------------------------
+//   deleteSkipBarlines
+//---------------------------------------------------------
+
+void TestBarline::deleteSkipBarlines()
+      {
+      MasterScore* score = readScore(DIR + "barlinedelete.mscx");
+
+      Measure* m1 = score->firstMeasure();
+      QVERIFY(m1);
+
+      score->startCmd();
+      score->cmdSelectAll();
+      score->cmdDeleteSelection();
+      score->endCmd();
+
+      score->doLayout();
+
+      QVERIFY(saveCompareScore(score, QString("barlinedelete.mscx"),
+         DIR + QString("barlinedelete-ref.mscx")));
+      delete score;
+      }
 
 QTEST_MAIN(TestBarline)
 #include "tst_barline.moc"
