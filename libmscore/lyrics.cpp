@@ -588,6 +588,8 @@ void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
             TextBase::undoChangeProperty(id, v, ps);
             return;
             }
+#if 0
+      // TODO: create new command to do this
       if (id == Pid::PLACEMENT) {
             if (Placement(v.toInt()) == Placement::ABOVE) {
                   // change placment of all verse for the same voice upto this one to ABOVE
@@ -605,6 +607,7 @@ void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
                   }
             return;
             }
+#endif
 
       TextBase::undoChangeProperty(id, v, ps);
       }
