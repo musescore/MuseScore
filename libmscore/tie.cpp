@@ -481,7 +481,7 @@ void Tie::slurPos(SlurPos* sp)
             }
       Chord* ec = endNote()->chord();
       sp->p2    = ec->pos() + ec->segment()->pos() + ec->measure()->pos();
-      if ((sc->measure() == sp->system1->lastMeasure()) && (ec->measure() != sc->measure()))
+      if (sp->system1 && (sc->measure() == sp->system1->lastMeasure()) && (ec->measure() != sc->measure()))
             sp->system2 = nullptr;
       else
             sp->system2 = ec->measure()->system();

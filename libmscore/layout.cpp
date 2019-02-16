@@ -3123,17 +3123,20 @@ void Score::layoutLyrics(System* system)
 
 void layoutTies(Chord* ch, System* system, int stick)
       {
+      SysStaff* staff = system->staff(ch->staffIdx());
+      if (!staff->show())
+            return;
       for (Note* note : ch->notes()) {
             Tie* t = note->tieFor();
             if (t) {
                   TieSegment* ts = t->layoutFor(system);
-                  system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->pos()));
+                  staff->skyline().add(ts->shape().translated(ts->pos()));
                   }
             t = note->tieBack();
             if (t) {
                   if (t->startNote()->tick() < stick) {
                         TieSegment* ts = t->layoutBack(system);
-                        system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->pos()));
+                        staff->skyline().add(ts->shape().translated(ts->pos()));
                         }
                   }
             }
