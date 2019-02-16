@@ -206,11 +206,7 @@ class ChannelListener : public Listener<Channel::Prop> {
 
 class PartChannelSettingsLink final : private ChannelListener {
       // A list of properties which may vary for different excerpts.
-      static constexpr std::initializer_list<Channel::Prop> excerptProperties {
-            Channel::Prop::SOLOMUTE,
-            Channel::Prop::SOLO,
-            Channel::Prop::MUTE,
-            };
+      static const std::initializer_list<Channel::Prop> excerptProperties;
 
    private:
       Channel* _main;
