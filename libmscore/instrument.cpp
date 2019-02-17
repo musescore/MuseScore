@@ -25,7 +25,11 @@
 namespace Ms {
 
 Instrument InstrumentList::defaultInstrument;
-constexpr std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptProperties;
+const std::initializer_list<Channel::Prop> PartChannelSettingsLink::excerptProperties {
+      Channel::Prop::SOLOMUTE,
+      Channel::Prop::SOLO,
+      Channel::Prop::MUTE,
+      };
 
 //---------------------------------------------------------
 //   write
