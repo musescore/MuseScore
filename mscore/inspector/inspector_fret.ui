@@ -137,12 +137,12 @@
         </property>
         <item>
          <property name="text">
-          <string notr="true">Above</string>
+          <string>Above</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string notr="true">Below</string>
+          <string>Below</string>
          </property>
         </item>
        </widget>
@@ -241,22 +241,22 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetMag"/>
+       <widget class="Ms::ResetButton" name="resetMag" native="true"/>
       </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetPlacement"/>
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true"/>
       </item>
       <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetStrings"/>
+       <widget class="Ms::ResetButton" name="resetStrings" native="true"/>
       </item>
       <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetFrets"/>
+       <widget class="Ms::ResetButton" name="resetFrets" native="true"/>
       </item>
       <item row="5" column="2">
-       <widget class="Ms::ResetButton" name="resetBarre"/>
+       <widget class="Ms::ResetButton" name="resetBarre" native="true"/>
       </item>
       <item row="6" column="2">
-       <widget class="Ms::ResetButton" name="resetOffset"/>
+       <widget class="Ms::ResetButton" name="resetOffset" native="true"/>
       </item>
      </layout>
     </widget>
@@ -286,8 +286,6 @@
   <tabstop>barre</tabstop>
   <tabstop>offset</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

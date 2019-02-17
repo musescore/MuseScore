@@ -113,21 +113,21 @@
         </property>
         <item>
          <property name="text">
-          <string notr="true">Above</string>
+          <string>Above</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string notr="true">Below</string>
+          <string>Below</string>
          </property>
         </item>
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetStyle"/>
+       <widget class="Ms::ResetButton" name="resetStyle" native="true"/>
       </item>
       <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetPlacement"/>
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true"/>
       </item>
      </layout>
     </widget>
@@ -145,8 +145,6 @@
  <tabstops>
   <tabstop>title</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
