@@ -38,7 +38,7 @@ class Part;
 class PartEdit;
 class MixerDetails;
 class MixerTrack;
-struct MidiMapping;
+class MidiMapping;
 
 double volumeToUserRange(char v);
 double panToUserRange(char v);
