@@ -465,30 +465,30 @@ int quantizeLen(int len, int raster)
 
 static const char* vall[] = {
       QT_TRANSLATE_NOOP("utils", "c"),
-      QT_TRANSLATE_NOOP("utils", "c#"),
+      QT_TRANSLATE_NOOP("utils", "c♯"),
       QT_TRANSLATE_NOOP("utils", "d"),
-      QT_TRANSLATE_NOOP("utils", "d#"),
+      QT_TRANSLATE_NOOP("utils", "d♯"),
       QT_TRANSLATE_NOOP("utils", "e"),
       QT_TRANSLATE_NOOP("utils", "f"),
-      QT_TRANSLATE_NOOP("utils", "f#"),
+      QT_TRANSLATE_NOOP("utils", "f♯"),
       QT_TRANSLATE_NOOP("utils", "g"),
-      QT_TRANSLATE_NOOP("utils", "g#"),
+      QT_TRANSLATE_NOOP("utils", "g♯"),
       QT_TRANSLATE_NOOP("utils", "a"),
-      QT_TRANSLATE_NOOP("utils", "a#"),
+      QT_TRANSLATE_NOOP("utils", "a♯"),
       QT_TRANSLATE_NOOP("utils", "b")
       };
 static const char* valu[] = {
       QT_TRANSLATE_NOOP("utils", "C"),
-      QT_TRANSLATE_NOOP("utils", "C#"),
+      QT_TRANSLATE_NOOP("utils", "C♯"),
       QT_TRANSLATE_NOOP("utils", "D"),
-      QT_TRANSLATE_NOOP("utils", "D#"),
+      QT_TRANSLATE_NOOP("utils", "D♯"),
       QT_TRANSLATE_NOOP("utils", "E"),
       QT_TRANSLATE_NOOP("utils", "F"),
-      QT_TRANSLATE_NOOP("utils", "F#"),
+      QT_TRANSLATE_NOOP("utils", "F♯"),
       QT_TRANSLATE_NOOP("utils", "G"),
       QT_TRANSLATE_NOOP("utils", "G#"),
       QT_TRANSLATE_NOOP("utils", "A"),
-      QT_TRANSLATE_NOOP("utils", "A#"),
+      QT_TRANSLATE_NOOP("utils", "A♯"),
       QT_TRANSLATE_NOOP("utils", "B")
       };
 
