@@ -2065,7 +2065,7 @@ void Score::cmdDeleteSelection()
                               // do not delete TimeSig/KeySig,
                               // it doesn't make sense to do it, except on full system
                               if (s->segmentType() != SegmentType::TimeSig && s->segmentType() != SegmentType::KeySig) {
-                                    if (!(e->isBarLine() && e->generated()))
+                                    if (!(e->isBarLine()))
                                           undoRemoveElement(e);
                                     }
                               continue;
