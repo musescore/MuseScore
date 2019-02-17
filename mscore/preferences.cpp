@@ -431,10 +431,10 @@ void Preferences::clearMidiRemote(int recordId)
       remove(baseKey);
       }
 
-QHash<QString, QVariant> Preferences::getDefaultLocalPreferences() {
+QMap<QString, QVariant> Preferences::getDefaultLocalPreferences() {
       bool tmp = useLocalPrefs;
       useLocalPrefs = false;
-      QHash<QString, QVariant> defaultLocalPreferences;
+      QMap<QString, QVariant> defaultLocalPreferences;
       for (QString s : {PREF_UI_CANVAS_BG_USECOLOR,
                         PREF_UI_CANVAS_FG_USECOLOR,
                         PREF_UI_CANVAS_BG_COLOR,

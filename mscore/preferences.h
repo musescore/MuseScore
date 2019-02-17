@@ -300,8 +300,8 @@ class Preferences {
       bool checkType(const QString key, QMetaType::Type t) const;
 
       // Used with workspace
-      QHash<QString, QVariant> localPreferences;
-      QHash<QString, QVariant> getDefaultLocalPreferences();
+      QMap<QString, QVariant> localPreferences;
+      QMap<QString, QVariant> getDefaultLocalPreferences();
       bool useLocalPrefs = false;
 
    public:
@@ -351,7 +351,7 @@ class Preferences {
       void updateMidiRemote(int recordId, MidiRemoteType type, int data);
       void clearMidiRemote(int recordId);
 
-      QHash<QString, QVariant> getLocalPreferences()  { return localPreferences; }
+      QMap<QString, QVariant> getLocalPreferences()  { return localPreferences; }
       void setLocalPreference(QString key, QVariant value);
       void setUseLocalPreferences(bool value)         { useLocalPrefs = value;   }
       bool getUseLocalPreferences()                   { return useLocalPrefs;    }
