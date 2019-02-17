@@ -8,7 +8,7 @@
       <staffUpperBorder>6</staffUpperBorder>
       <staffLowerBorder>2</staffLowerBorder>
       <minSystemDistance>9.5</minSystemDistance>
-      <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <systemFrameDistance>1</systemFrameDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>

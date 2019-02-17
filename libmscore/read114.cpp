@@ -77,7 +77,8 @@ struct StyleVal2 {
       };
 
 static const StyleVal2 style114[] = {
-      { Sid::lyricsMinBottomDistance,      Spatium(2) },
+//      { Sid::lyricsMinBottomDistance,      Spatium(2) },
+      { Sid::lyricsDashForce,              QVariant(false) },
       { Sid::frameSystemDistance,          Spatium(1.0) },
       { Sid::minMeasureWidth,              Spatium(4.0) },
       { Sid::endBarDistance,               Spatium(0.30) },
@@ -2676,6 +2677,11 @@ static void readStyle(MStyle* style, XmlReader& e)
 //                  style->setTextStyle(s);
                   e.skipCurrentElement();
                   }
+            else if (tag == "lyricsMinBottomDistance") {
+                  // no longer meaningful since it is now measured from skyline rather than staff
+                  //style->set(Sid::lyricsMinBottomDistance, QPointF(0.0, y));
+                  e.skipCurrentElement();
+                  }
             else if (tag == "Spatium")
                   style->set(Sid::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout") {
@@ -3187,8 +3193,6 @@ Score::FileError MasterScore::read114(XmlReader& e)
             }
 
       // adjust some styles
-      Spatium lmbd = styleS(Sid::lyricsMinBottomDistance);
-      style().set(Sid::lyricsMinBottomDistance, Spatium(lmbd.val() + 4.0));
       if (styleB(Sid::hideEmptyStaves))        // http://musescore.org/en/node/16228
             style().set(Sid::dontHideStavesInFirstSystem, false);
       if (styleB(Sid::showPageNumberOne)) {    // http://musescore.org/en/node/21207
