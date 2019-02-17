@@ -96,8 +96,9 @@ struct StyleVal2 {
       { Sid::minSystemDistance,           Spatium(8.5)  },
       { Sid::maxSystemDistance,           Spatium(15.0) },
 
-      { Sid::lyricsMinBottomDistance,     Spatium(4.0)  },
+//      { Sid::lyricsMinBottomDistance,     Spatium(4.0)  },      // no longer makes sense
       { Sid::lyricsLineHeight,            QVariant(1.0) },
+      { Sid::lyricsDashForce,             QVariant(false) },
       { Sid::figuredBassFontFamily,       QVariant(QString("MScoreBC")) },
       { Sid::figuredBassFontSize,         QVariant(8.0) },
       { Sid::figuredBassYOffset,          QVariant(6.0) },
@@ -3537,6 +3538,11 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "lyricsDistance") {
                   qreal y = e.readDouble();
                   style->set(Sid::lyricsPosBelow, QPointF(0.0, y));
+                  }
+            else if (tag == "lyricsMinBottomDistance") {
+                  // no longer meaningful since it is now measured from skyline rather than staff
+                  //style->set(Sid::lyricsMinBottomDistance, QPointF(0.0, y));
+                  e.skipCurrentElement();
                   }
             else if (tag == "ottavaHook") {
                   qreal y = qAbs(e.readDouble());
