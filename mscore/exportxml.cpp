@@ -236,7 +236,7 @@ class SlurHandler {
 
 public:
       SlurHandler();
-      void doSlurs(Chord* chord, Notations& notations, XmlWriter& xml);
+      void doSlurs(const ChordRest* chordRest, Notations& notations, XmlWriter& xml);
 
 private:
       void doSlurStart(const Slur* s, Notations& notations, XmlWriter& xml);
@@ -562,56 +562,59 @@ int SlurHandler::findSlur(const Slur* s) const
       }
 
 //---------------------------------------------------------
-//   findFirstChord -- find first chord (in musical order) for slur s
+//   findFirstChordRest -- find first chord or rest (in musical order) for slur s
 //   note that this is not necessarily the same as s->startElement()
 //---------------------------------------------------------
 
-static const Chord* findFirstChord(const Slur* s)
+static const ChordRest* findFirstChordRest(const Slur* s)
       {
       const Element* e1 = s->startElement();
-      if (e1 == 0 || e1->type() != ElementType::CHORD) {
-            qDebug("no valid start chord for slur %p", s);
-            return 0;
+      if (!e1 || !(e1->isChordRest())) {
+            qDebug("no valid start element for slur %p", s);
+            return nullptr;
             }
 
       const Element* e2 = s->endElement();
-      if (e2 == 0 || e2->type() != ElementType::CHORD) {
-            qDebug("no valid stop chord for slur %p", s);
-            return 0;
+      if (!e2 || !(e2->isChordRest())) {
+            qDebug("no valid end element for slur %p", s);
+            return nullptr;
             }
 
-      const Chord* c1 = static_cast<const Chord*>(e1);
-      const Chord* c2 = static_cast<const Chord*>(e2);
+      if (e1->tick() < e2->tick())
+            return static_cast<const ChordRest*>(e1);
+      else if (e1->tick() > e2->tick())
+            return static_cast<const ChordRest*>(e2);
 
-      if (c1->tick() < c2->tick())
-            return c1;
-      else if (c1->tick() > c2->tick())
-            return c2;
+      if (e1->isRest() || e2->isRest()) {
+            return nullptr;
+            }
+
+      const auto c1 = static_cast<const Chord*>(e1);
+      const auto c2 = static_cast<const Chord*>(e2);
+
+      // c1->tick() == c2->tick()
+      if (!c1->isGrace() && !c2->isGrace()) {
+            // slur between two regular notes at the same tick
+            // probably shouldn't happen but handle just in case
+            qDebug("invalid slur between chords %p and %p at tick %d", c1, c2, c1->tick());
+            return 0;
+            }
+      else if (c1->isGraceBefore() && !c2->isGraceBefore())
+            return c1;        // easy case: c1 first
+      else if (c1->isGraceAfter() && !c2->isGraceAfter())
+            return c2;        // easy case: c2 first
+      else if (c2->isGraceBefore() && !c1->isGraceBefore())
+            return c2;        // easy case: c2 first
+      else if (c2->isGraceAfter() && !c1->isGraceAfter())
+            return c1;        // easy case: c1 first
       else {
-            // c1->tick() == c2->tick()
-            if (!c1->isGrace() && !c2->isGrace()) {
-                  // slur between two regular notes at the same tick
-                  // probably shouldn't happen but handle just in case
-                  qDebug("invalid slur between chords %p and %p at tick %d", c1, c2, c1->tick().ticks());
-                  return 0;
-                  }
-            else if (c1->isGraceBefore() && !c2->isGraceBefore())
-                  return c1;  // easy case: c1 first
-            else if (c1->isGraceAfter() && !c2->isGraceAfter())
-                  return c2;  // easy case: c2 first
-            else if (c2->isGraceBefore() && !c1->isGraceBefore())
-                  return c2;  // easy case: c2 first
-            else if (c2->isGraceAfter() && !c1->isGraceAfter())
-                  return c1;  // easy case: c1 first
-            else {
-                  // both are grace before or both are grace after -> compare grace indexes
-                  // (note: higher means closer to the non-grace chord it is attached to)
-                  if ((c1->isGraceBefore() && c1->graceIndex() < c2->graceIndex())
-                      || (c1->isGraceAfter() && c1->graceIndex() > c2->graceIndex()))
-                        return c1;
-                  else
-                        return c2;
-                  }
+            // both are grace before or both are grace after -> compare grace indexes
+            // (note: higher means closer to the non-grace chord it is attached to)
+            if ((c1->isGraceBefore() && c1->graceIndex() < c2->graceIndex())
+                || (c1->isGraceAfter() && c1->graceIndex() > c2->graceIndex()))
+                  return c1;
+            else
+                  return c2;
             }
       }
 
@@ -619,27 +622,27 @@ static const Chord* findFirstChord(const Slur* s)
 //   doSlurs
 //---------------------------------------------------------
 
-void SlurHandler::doSlurs(Chord* chord, Notations& notations, XmlWriter& xml)
+void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlWriter& xml)
       {
       // loop over all slurs twice, first to handle the stops, then the starts
       for (int i = 0; i < 2; ++i) {
             // search for slur(s) starting or stopping at this chord
-            for (auto it : chord->score()->spanner()) {
-                  Spanner* sp = it.second;
+            for (const auto it : chordRest->score()->spanner()) {
+                  auto sp = it.second;
                   if (sp->generated() || sp->type() != ElementType::SLUR)
                         continue;
-                  if (chord == sp->startElement() || chord == sp->endElement()) {
-                        const Slur* s = static_cast<const Slur*>(sp);
-                        const Chord* firstChord = findFirstChord(s);
-                        if (firstChord) {
+                  if (chordRest == sp->startElement() || chordRest == sp->endElement()) {
+                        const auto s = static_cast<const Slur*>(sp);
+                        const auto firstChordRest = findFirstChordRest(s);
+                        if (firstChordRest) {
                               if (i == 0) {
                                     // first time: do slur stops
-                                    if (firstChord != chord)
+                                    if (firstChordRest != chordRest)
                                           doSlurStop(s, notations, xml);
                                     }
                               else {
                                     // second time: do slur starts
-                                    if (firstChord == chord)
+                                    if (firstChordRest == chordRest)
                                           doSlurStart(s, notations, xml);
                                     }
                               }
@@ -2977,6 +2980,8 @@ void ExportMusicXml::rest(Rest* rest, int staff)
                   fl.push_back(e);
             }
       fermatas(fl, _xml, notations);
+
+      sh.doSlurs(rest, notations, _xml);
 
       tupletStartStop(rest, notations, _xml);
       notations.etag(_xml);
@@ -5437,12 +5442,12 @@ bool saveXml(Score* score, const QString& name)
       QFile f(name);
       if (!f.open(QIODevice::WriteOnly))
             return false;
-      
+
       bool res = saveXml(score, &f) && (f.error() == QFile::NoError);
       f.close();
       return res;
       }
-      
+
 //---------------------------------------------------------
 //   saveMxl
 //    return false on error
@@ -5466,7 +5471,7 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
       {
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      
+
       XmlWriter xml(score);
       xml.setDevice(&cbuf);
       xml.setCodec("UTF-8");
@@ -5478,10 +5483,10 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      
+
       //uz.addDirectory("META-INF");
       zipwriter.addFile("META-INF/container.xml", cbuf.data());
-      
+
       QBuffer dbuf;
       dbuf.open(QIODevice::ReadWrite);
       ExportMusicXml em(score);
@@ -5489,19 +5494,19 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
       dbuf.seek(0);
       zipwriter.addFile(filename, dbuf.data());
       }
-      
+
 bool saveMxl(Score* score, QIODevice* device)
       {
       MQZipWriter uz(device);
-      
+
       //anonymized filename since we don't know the actual one here
       QString fn = "score.xml";
       writeMxlArchive(score, uz, fn);
       uz.close();
-      
+
       return true;
       }
-      
+
 bool saveMxl(Score* score, const QString& name)
       {
       MQZipWriter uz(name);
