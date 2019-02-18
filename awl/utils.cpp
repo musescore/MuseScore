@@ -30,7 +30,7 @@ static const char* vall[] = {
       QT_TRANSLATE_NOOP("awlutils", "g"),
       QT_TRANSLATE_NOOP("awlutils", "g♯"),
       QT_TRANSLATE_NOOP("awlutils", "a"),
-      QT_TRANSLATE_NOOP("awlutils", "a#"),
+      QT_TRANSLATE_NOOP("awlutils", "a♯"),
       QT_TRANSLATE_NOOP("awlutils", "b")
       };
 static const char* valu[] = {
