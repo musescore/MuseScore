@@ -130,6 +130,7 @@ option(SOUNDFONT3    "Ogg Vorbis compressed fonts" ON)         # Enable Ogg Vorb
 option(HAS_AUDIOFILE "Enable audio export" ON)                 # Requires libsndfile
 option(USE_SYSTEM_QTSINGLEAPPLICATION "Use system QtSingleApplication" OFF)
 option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF)          # requires freetype >= 2.5.2, does not work on win
+option(USE_SYSTEM_POPPLER  "Use system Poppler for OMR" OFF)
 option(BUILD_LAME    "Enable MP3 export" ON)                   # Requires libmp3lame, call CMake with -DBUILD_LAME="OFF" to disable
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 
@@ -781,7 +782,10 @@ if (ZERBERUS)
 endif (ZERBERUS)
 
 if (OMR)
-      subdirs (omr thirdparty/poppler)
+      subdirs (omr)
+      if (NOT USE_SYSTEM_POPPLER)
+            subdirs (thirdparty/poppler)
+      endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
 if (OSC)
@@ -824,8 +828,13 @@ else (USE_SYSTEM_FREETYPE)
 endif (USE_SYSTEM_FREETYPE)
 
 if (OMR)
+ if (NOT USE_SYSTEM_POPPLER)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
+ else (NOT USE_SYSTEM_POPPLER)
+   include_directories(/usr/include/poppler)
+   include_directories(/usr/include/poppler/qt5)
+ endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
 ##
