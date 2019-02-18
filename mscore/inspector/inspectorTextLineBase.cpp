@@ -57,7 +57,7 @@ InspectorTextLineBase::InspectorTextLineBase(QWidget* parent)
       const std::vector<InspectorItem> iiList = {
             { Pid::DIAGONAL,                0, l.diagonal,                l.resetDiagonal              },
             { Pid::LINE_VISIBLE,            0, l.lineVisible,             l.resetLineVisible           },
-            { Pid::LINE_COLOR,              0, l.lineColor,               l.resetLineColor             },
+            { Pid::COLOR,                   0, l.lineColor,               l.resetLineColor             },
             { Pid::LINE_WIDTH,              0, l.lineWidth,               l.resetLineWidth             },
             { Pid::LINE_STYLE,              0, l.lineStyle,               l.resetLineStyle             },
             { Pid::DASH_LINE_LEN,           0, l.dashLineLength,          l.resetDashLineLength        },
@@ -196,6 +196,8 @@ void InspectorTextLineBase::valueChanged(int idx)
             updateBeginHookType();
       else if (iList[idx].t == Pid::END_HOOK_TYPE)
             updateEndHookType();
+      else if (iList[idx].t == Pid::COLOR)
+            inspector->update();
       }
 
 

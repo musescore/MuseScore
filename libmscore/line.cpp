@@ -405,7 +405,7 @@ void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
 Element* LineSegment::propertyDelegate(Pid pid)
       {
       if (pid == Pid::DIAGONAL
-         || pid == Pid::LINE_COLOR
+         || pid == Pid::COLOR
          || pid ==   Pid::LINE_WIDTH
          || pid ==   Pid::LINE_STYLE
          || pid ==   Pid::DASH_LINE_LEN
@@ -959,7 +959,7 @@ void SLine::writeProperties(XmlWriter& xml) const
             xml.tag("diagonal", _diagonal);
       writeProperty(xml, Pid::LINE_WIDTH);
       writeProperty(xml, Pid::LINE_STYLE);
-      writeProperty(xml, Pid::LINE_COLOR);
+      writeProperty(xml, Pid::COLOR);
       writeProperty(xml, Pid::ANCHOR);
       writeProperty(xml, Pid::DASH_LINE_LEN);
       writeProperty(xml, Pid::DASH_GAP_LEN);
@@ -1040,6 +1040,8 @@ bool SLine::readProperties(XmlReader& e)
             _dashGapLen = e.readDouble();
       else if (tag == "lineColor")
             _lineColor = e.readColor();
+      else if (tag == "color")
+            _lineColor = e.readColor();
       else if (!Element::readProperties(e))
             return false;
       return true;
@@ -1110,7 +1112,7 @@ QVariant SLine::getProperty(Pid id) const
       switch (id) {
             case Pid::DIAGONAL:
                   return _diagonal;
-            case Pid::LINE_COLOR:
+            case Pid::COLOR:
                   return _lineColor;
             case Pid::LINE_WIDTH:
                   return _lineWidth;
@@ -1135,7 +1137,7 @@ bool SLine::setProperty(Pid id, const QVariant& v)
             case Pid::DIAGONAL:
                   _diagonal = v.toBool();
                   break;
-            case Pid::LINE_COLOR:
+            case Pid::COLOR:
                   _lineColor = v.value<QColor>();
                   break;
             case Pid::LINE_WIDTH:
@@ -1166,7 +1168,7 @@ QVariant SLine::propertyDefault(Pid pid) const
       switch (pid) {
             case Pid::DIAGONAL:
                   return false;
-            case Pid::LINE_COLOR:
+            case Pid::COLOR:
                   return MScore::defaultColor;
             case Pid::LINE_WIDTH:
                   if (propertyFlags(pid) != PropertyFlags::NOSTYLE)
