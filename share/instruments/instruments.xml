@@ -10039,12 +10039,6 @@
                   <Channel name="pop">
                         <program value="37"/> <!--Slap Bass 2-->
                   </Channel>
-                  <Channel name="slap">
-                        <program value="36"/>
-                  </Channel>
-                  <Channel name="pop">
-                        <program value="37"/>
-                  </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
                   <genre>popular</genre>
