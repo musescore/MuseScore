@@ -185,7 +185,6 @@ enum class Pid {
       DIAGONAL,
       GROUPS,
       LINE_STYLE,
-      LINE_COLOR,
       LINE_WIDTH,
       LASSO_POS,
       LASSO_SIZE,
