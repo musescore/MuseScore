@@ -2085,7 +2085,8 @@ void Note::layout2()
                   }
             else if (e->isFingering()) {
                   Fingering* f = toFingering(e);
-                  f->calculatePlacement();
+                  if (f->propertyFlags(Pid::PLACEMENT) == PropertyFlags::STYLED)
+                        f->setPlacement(f->calculatePlacement());
                   // layout fingerings that are placed relative to notehead
                   // fingerings placed relative to chord will be laid out later
                   if (f->layoutType() == ElementType::NOTE)

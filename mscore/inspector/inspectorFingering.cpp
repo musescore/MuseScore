@@ -22,20 +22,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 InspectorFingering::InspectorFingering(QWidget* parent)
-   : InspectorTextBase(parent)
+   : InspectorStaffText(parent)
       {
-      f.setupUi(addWidget());
-
-      const std::vector<InspectorItem> iiList = {
-            { Pid::SUB_STYLE, 0, f.style,     f.resetStyle     },
-            };
-      const std::vector<InspectorPanel> ppList = {
-            { f.title, f.panel }
-            };
-
-      populateStyle(f.style);
-
-      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
