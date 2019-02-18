@@ -524,7 +524,7 @@ bool KeySig::isChange() const
       {
       if (!staff())
             return false;
-      int keyTick = tick();
+      Fraction keyTick = tick();
       return staff()->currentKeyTick(keyTick) == keyTick;
       }
 
