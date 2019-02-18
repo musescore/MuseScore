@@ -11,7 +11,7 @@
     </Message>
   <Message>
     <Text>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
-    To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</Text>
+    To scroll horizontally, hold "Shift" while using the mouse wheel or touch gesture.</Text>
     <Widget>scoreview</Widget>
     </Message>
   <Message>
@@ -22,7 +22,7 @@
     </Message>
   <Message>
     <Text>You can move the score short distances by clicking an empty area of the page and dragging.
-    By the way, you can also select regions by holding Shift while dragging.</Text>
+    By the way, you can also select regions by holding "Shift" while dragging.</Text>
     <Widget>scoreview</Widget>
     </Message>
   <Message>
