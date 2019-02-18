@@ -486,7 +486,7 @@ static const char* valu[] = {
       QT_TRANSLATE_NOOP("utils", "F"),
       QT_TRANSLATE_NOOP("utils", "F♯"),
       QT_TRANSLATE_NOOP("utils", "G"),
-      QT_TRANSLATE_NOOP("utils", "G#"),
+      QT_TRANSLATE_NOOP("utils", "G♯"),
       QT_TRANSLATE_NOOP("utils", "A"),
       QT_TRANSLATE_NOOP("utils", "A♯"),
       QT_TRANSLATE_NOOP("utils", "B")
