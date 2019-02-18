@@ -3438,7 +3438,7 @@
                 <string>Reset to default</string>
                </property>
                <property name="accessibleName">
-                <string>Reset 'Clef/Key right margin' valua</string>
+                <string>Reset 'Clef/Key right margin' value</string>
                </property>
                <property name="text">
                 <string notr="true"/>
