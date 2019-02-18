@@ -358,6 +358,7 @@ class ScoreElement {
       bool isSlurTieSegment() const  { return isSlurSegment() || isTieSegment(); }
       bool isSLineSegment() const;
       bool isBox() const { return isVBox() || isHBox() || isTBox() || isFBox(); }
+      bool isVBoxBase() const { return isVBox() || isTBox() || isFBox(); }
       bool isMeasureBase() const { return isMeasure() || isBox(); }
       bool isTextBase() const;
       bool isTextLineBaseSegment() const {
