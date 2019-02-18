@@ -326,7 +326,7 @@ void ContinuousPanel::paint(const QRect&, QPainter& painter)
 
                   // Draw staff lines
                   StaffLines newStaffLines(*toStaffLines(e));
-                  newStaffLines.setParent(parent);
+                  newStaffLines.setParent(parent->measure());
                   newStaffLines.setTrack(e->track());
                   newStaffLines.layoutForWidth(bg.width());
                   newStaffLines.setColor(color);
