@@ -955,8 +955,7 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
                   setOffset(v.toPointF());
                   layout();
                   score()->addRefresh(canvasBoundingRect());
-                  if (beam())
-                        score()->setLayout(tick());
+                  score()->setLayout(tick());
                   break;
             default:
                   return ChordRest::setProperty(propertyId, v);
