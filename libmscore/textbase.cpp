@@ -1696,6 +1696,7 @@ static constexpr std::array<Pid, 18> pids { {
       Pid::FONT_FACE,
       Pid::FONT_SIZE,
       Pid::FONT_STYLE,
+      Pid::COLOR,
       Pid::FRAME_TYPE,
       Pid::FRAME_WIDTH,
       Pid::FRAME_PADDING,
