@@ -158,7 +158,7 @@ void Dynamic::setChangeInVelocity(int val)
 Fraction Dynamic::velocityChangeLength() const
       {
       if (changeInVelocity() == 0)
-            return 0;
+            return Fraction::fromTicks(0);
 
       double ratio = double(score()->tempomap()->tempo(segment()->tick().ticks())) / double(Score::defaultTempo());
       double speedMult;
