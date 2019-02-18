@@ -84,7 +84,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void resetUserStyleName();
 
 public:
-      static const int PAGE_NOTE = 6;
+      static const int PAGE_NOTE = 10;
       EditStyle(Score*, QWidget*);
       void setPage(int no);
       };
