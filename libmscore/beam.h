@@ -88,8 +88,8 @@ class Beam final : public Element {
       virtual void editDrag(EditData&) override;
       virtual void updateGrips(EditData&) const override;
 
-      virtual int tick() const override;
-      virtual int rtick() const override;
+      virtual Fraction tick() const override;
+      virtual Fraction rtick() const override;
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;

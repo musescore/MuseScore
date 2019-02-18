@@ -305,14 +305,14 @@ void System::layoutSystem(qreal xo1)
                   continue;
                   }
             ++nVisible;
-            qreal staffMag = staff->mag(0);     // ??? TODO
-            int staffLines = staff->lines(0);
+            qreal staffMag = staff->mag(Fraction(0,1));     // ??? TODO
+            int staffLines = staff->lines(Fraction(0,1));
             if (staffLines == 1) {
-                  qreal h = staff->lineDistance(0) * staffMag * spatium();
+                  qreal h = staff->lineDistance(Fraction(0,1)) * staffMag * spatium();
                   s->bbox().setRect(_leftMargin + xo1, -h, 0.0, 2 * h);
                   }
             else {
-                  qreal h = (staffLines - 1) * staff->lineDistance(0);
+                  qreal h = (staffLines - 1) * staff->lineDistance(Fraction(0,1));
                   h = h * staffMag * spatium();
                   s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0, h);
                   }
@@ -626,7 +626,7 @@ void System::layout2()
 //   setInstrumentNames
 //---------------------------------------------------------
 
-void System::setInstrumentNames(bool longName, int tick)
+void System::setInstrumentNames(bool longName, Fraction tick)
       {
       //
       // remark: add/remove instrument names is not undo/redoable
@@ -865,26 +865,26 @@ void System::change(Element* o, Element* n)
 //   snap
 //---------------------------------------------------------
 
-int System::snap(int tick, const QPointF p) const
+Fraction System::snap(const Fraction& tick, const QPointF p) const
       {
-      foreach(const MeasureBase* m, ml) {
+      for (const MeasureBase* m : ml) {
             if (p.x() < m->x() + m->width())
-                  return ((Measure*)m)->snap(tick, p - m->pos()); //TODO: MeasureBase
+                  return toMeasure(m)->snap(tick, p - m->pos()); //TODO: MeasureBase
             }
-      return ((Measure*)ml.back())->snap(tick, p-pos());          //TODO: MeasureBase
+      return toMeasure(ml.back())->snap(tick, p-pos());          //TODO: MeasureBase
       }
 
 //---------------------------------------------------------
 //   snap
 //---------------------------------------------------------
 
-int System::snapNote(int tick, const QPointF p, int staff) const
+Fraction System::snapNote(const Fraction& tick, const QPointF p, int staff) const
       {
-      foreach(const MeasureBase* m, ml) {
+      for (const MeasureBase* m : ml) {
             if (p.x() < m->x() + m->width())
-                  return ((Measure*)m)->snapNote(tick, p - m->pos(), staff);  //TODO: MeasureBase
+                  return toMeasure(m)->snapNote(tick, p - m->pos(), staff);  //TODO: MeasureBase
             }
-      return ((Measure*)ml.back())->snap(tick, p-pos());          // TODO: MeasureBase
+      return toMeasure(ml.back())->snap(tick, p-pos());          // TODO: MeasureBase
       }
 
 //---------------------------------------------------------
@@ -1256,7 +1256,7 @@ bool System::pageBreak() const
 //   endTick
 //---------------------------------------------------------
 
-int System::endTick() const
+Fraction System::endTick() const
       {
       return measures().back()->endTick();
       }

@@ -99,14 +99,14 @@ RepeatSegment::RepeatSegment(RepeatSegment * const rs, Measure * const fromMeasu
             ++it;
             }
       if (!measureList.empty()) {
-            tick = measureList.cbegin()->first->tick();
+            tick = measureList.cbegin()->first->tick().ticks();
             }
       }
 
 void RepeatSegment::addMeasure(Measure * const m)
       {
       if (measureList.empty()) {
-            tick = m->tick();
+            tick = m->tick().ticks();
             }
       measureList.push_back(std::make_pair(m, m->playbackCount()));
       }
@@ -123,7 +123,7 @@ bool RepeatSegment::containsMeasure(Measure const * const m) const
 
 int RepeatSegment::len() const
       {
-      return (measureList.empty()) ? 0 : (measureList.last().first->endTick() - tick);
+      return (measureList.empty()) ? 0 : (measureList.last().first->endTick().ticks() - tick);
       }
 
 //---------------------------------------------------------
@@ -616,7 +616,7 @@ void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* cons
                                                                   // this is the most recent playthrough of this measure -> copy it
                                                                   if (nullptr == rs) {
                                                                         rs = new RepeatSegment();
-                                                                        rs->tick = referenceIt->first->tick();
+                                                                        rs->tick = referenceIt->first->tick().ticks();
                                                                         }
                                                                   rs->measureList.push_back(std::make_pair(referenceIt->first, referenceIt->second));
                                                                   }

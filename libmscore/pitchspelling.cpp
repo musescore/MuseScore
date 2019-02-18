@@ -565,11 +565,11 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
       int k = 0;
       while (i < end) {
             pitch[k] = notes[i]->pitch() % 12;
-            int tick = notes[i]->chord()->tick();
+            Fraction tick = notes[i]->chord()->tick();
             key[k]   = int(notes[i]->staff()->key(tick)) + 7;
             if (key[k] < 0 || key[k] > 14) {
                   qDebug("illegal key at tick %d: %d, window %d-%d",
-                     tick, key[k] - 7, start, end);
+                     tick.ticks(), key[k] - 7, start, end);
                   return 0;
                   // abort();
                   }
@@ -633,7 +633,7 @@ int computeWindow(const std::vector<Note*>& notes, int start, int end)
 void changeAllTpcs(Note* n, int tpc1)
       {
       Interval v;
-      int tick = n && n->chord() ? n->chord()->tick() : -1;
+      Fraction tick = n && n->chord() ? n->chord()->tick() : Fraction(-1,1);
       if (n && n->part() && n->part()->instrument()) {
             v = n->part()->instrument(tick)->transpose();
             v.flip();

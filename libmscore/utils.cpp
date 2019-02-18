@@ -44,22 +44,25 @@ QRectF handleRect(const QPointF& pos)
 //   tick2measure
 //---------------------------------------------------------
 
-Measure* Score::tick2measure(int tick) const
+Measure* Score::tick2measure(const Fraction& tick) const
       {
-      if (tick == -1)
+      if (tick == Fraction(-1,1))   // special number
             return lastMeasure();
+      if (tick <= Fraction(0,1))
+            return firstMeasure();
 
-//      Q_ASSERT(firstMeasure());
       Measure* lm = 0;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            if (tick < m->tick())
+            if (tick < m->tick()) {
+                  Q_ASSERT(lm);
                   return lm;
+                  }
             lm = m;
             }
       // check last measure
       if (lm && (tick >= lm->tick()) && (tick <= lm->endTick()))
             return lm;
-      qDebug("tick2measure %d (max %d) not found", tick, lm ? lm->tick() : -1);
+      qDebug("tick2measure %d (max %d) not found", tick.ticks(), lm ? lm->tick().ticks() : -1);
       return 0;
       }
 
@@ -67,21 +70,27 @@ Measure* Score::tick2measure(int tick) const
 //   tick2measureMM
 //---------------------------------------------------------
 
-Measure* Score::tick2measureMM(int tick) const
+Measure* Score::tick2measureMM(const Fraction& t) const
       {
-      if (tick == -1)
+      Fraction tick(t);
+      if (tick == Fraction(-1,1))
             return lastMeasureMM();
+      if (tick < Fraction(0,1))
+            tick = Fraction(0,1);
+
       Measure* lm = 0;
 
       for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
-            if (tick < m->tick())
+            if (tick < m->tick()) {
+                  Q_ASSERT(lm);
                   return lm;
+                  }
             lm = m;
             }
       // check last measure
       if (lm && (tick >= lm->tick()) && (tick <= lm->endTick()))
             return lm;
-      qDebug("tick2measureMM %d (max %d) not found", tick, lm ? lm->tick() : -1);
+      qDebug("tick2measureMM %d (max %d) not found", tick.ticks(), lm ? lm->tick().ticks() : -1);
       return 0;
       }
 
@@ -89,11 +98,11 @@ Measure* Score::tick2measureMM(int tick) const
 //   tick2measureBase
 //---------------------------------------------------------
 
-MeasureBase* Score::tick2measureBase(int tick) const
+MeasureBase* Score::tick2measureBase(const Fraction& tick) const
       {
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
-            int st = mb->tick();
-            int l  = mb->ticks();
+            Fraction st = mb->tick();
+            Fraction l  = mb->ticks();
             if (tick >= st && tick < (st+l))
                   return mb;
             }
@@ -105,22 +114,23 @@ MeasureBase* Score::tick2measureBase(int tick) const
 //   tick2segment
 //---------------------------------------------------------
 
-Segment* Score::tick2segmentMM(int tick, bool first, SegmentType st) const
+Segment* Score::tick2segmentMM(const Fraction& tick, bool first, SegmentType st) const
       {
       return tick2segment(tick,first,st,true);
       }
 
-Segment* Score::tick2segmentMM(int tick) const
+Segment* Score::tick2segmentMM(const Fraction& tick) const
       {
       return tick2segment(tick, false, SegmentType::All, true);
       }
-Segment* Score::tick2segmentMM(int tick, bool first) const
+Segment* Score::tick2segmentMM(const Fraction& tick, bool first) const
       {
       return tick2segment(tick, first, SegmentType::All, true);
       }
 
-Segment* Score::tick2segment(int tick, bool first, SegmentType st, bool useMMrest ) const
+Segment* Score::tick2segment(const Fraction& t, bool first, SegmentType st, bool useMMrest ) const
       {
+      Fraction tick(t);
       Measure* m;
       if (useMMrest) {
             m = tick2measureMM(tick);
@@ -132,44 +142,47 @@ Segment* Score::tick2segment(int tick, bool first, SegmentType st, bool useMMres
             m = tick2measure(tick);
 
       if (m == 0) {
-            qDebug("   no segment for tick %d", tick);
+            qDebug("no measure for tick %d", tick.ticks());
             return 0;
             }
-      for (Segment* segment = m->first(st); segment;) {
-            int t1 = segment->tick();
+      for (Segment* segment   = m->first(st); segment;) {
+            Fraction t1       = segment->tick();
             Segment* nsegment = segment->next(st);
-            int t2 = nsegment ? nsegment->tick() : INT_MAX;
-            if ((tick == t1) && (first || (tick < t2)))
-                  return segment;
+            if (tick == t1) {
+                  if (first)
+                        return segment;
+                  else {
+                        if (!nsegment || tick < nsegment->tick())
+                              return segment;
+                        }
+                  }
             segment = nsegment;
             }
+      qDebug("no segment for tick %d (start search at %d (measure %d))", tick.ticks(), t.ticks(), m->tick().ticks());
       return 0;
       }
 
-Segment* Score::tick2segment(int tick) const
+Segment* Score::tick2segment(const Fraction& tick) const
       {
       return tick2segment(tick, false, SegmentType::All, false);
       }
 
-Segment* Score::tick2segment(int tick, bool first) const
+Segment* Score::tick2segment(const Fraction& tick, bool first) const
       {
       return tick2segment(tick, first, SegmentType::All, false);
       }
 
 //---------------------------------------------------------
 //   tick2segmentEnd
+//    Find a segment containing a note or rest in track ending at tick
+//    Return the segment or null
 //---------------------------------------------------------
 
-/**
- Find a segment containing a note or rest in \a track ending at \a tick
- Return the segment or null
- */
-
-Segment* Score::tick2segmentEnd(int track, int tick) const
+Segment* Score::tick2segmentEnd(int track, const Fraction& tick) const
       {
       Measure* m = tick2measure(tick);
       if (m == 0) {
-            qDebug("tick2segment(): not found tick %d", tick);
+            qDebug("tick2segment(): not found tick %d", tick.ticks());
             return 0;
             }
       // loop over all segments
@@ -179,7 +192,7 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
                   continue;
             // TODO LVI: check if following is correct, see exceptions in
             // ExportMusicXmlchord() and ExportMusicXmlrest()
-            int endTick = cr->tick() + cr->actualTicks();
+            Fraction endTick = cr->tick() + cr->actualTicks();
             if (endTick < tick)
                   continue; // not found yet
             else if (endTick == tick) {
@@ -199,11 +212,11 @@ Segment* Score::tick2segmentEnd(int track, int tick) const
 /// the first segment *before* this tick position
 //---------------------------------------------------------
 
-Segment* Score::tick2leftSegment(int tick) const
+Segment* Score::tick2leftSegment(const Fraction& tick) const
       {
       Measure* m = tick2measure(tick);
       if (m == 0) {
-            qDebug("tick2leftSegment(): not found tick %d", tick);
+            qDebug("tick2leftSegment(): not found tick %d", tick.ticks());
             return 0;
             }
       // loop over all segments
@@ -224,11 +237,11 @@ Segment* Score::tick2leftSegment(int tick) const
 /// the first segment *after* this tick position
 //---------------------------------------------------------
 
-Segment* Score::tick2rightSegment(int tick) const
+Segment* Score::tick2rightSegment(const Fraction& tick) const
       {
       Measure* m = tick2measure(tick);
       if (m == 0) {
-            qDebug("tick2nearestSegment(): not found tick %d", tick);
+            qDebug("tick2nearestSegment(): not found tick %d", tick.ticks());
             return 0;
             }
       // loop over all segments
@@ -243,16 +256,16 @@ Segment* Score::tick2rightSegment(int tick) const
 //   tick2beatType
 //---------------------------------------------------------
 
-BeatType Score::tick2beatType(int tick)
+BeatType Score::tick2beatType(const Fraction& tick)
       {
       Measure* m = tick2measure(tick);
-      const int msrTick = m->tick();
+      Fraction msrTick = m->tick();
       TimeSigFrac timeSig = sigmap()->timesig(msrTick).nominal();
 
-      int rtick = tick - msrTick;
+      int rtick = (tick - msrTick).ticks();
 
       if (m->isAnacrusis()) // measure is incomplete (anacrusis)
-            rtick += timeSig.ticksPerMeasure() - m->ticks();
+            rtick += timeSig.ticksPerMeasure() - m->ticks().ticks();
 
       return timeSig.rtick2beatType(rtick);
       }
@@ -277,7 +290,7 @@ int getStaff(System* system, const QPointF& p)
 //   nextSeg
 //---------------------------------------------------------
 
-int Score::nextSeg(int tick, int track)
+Fraction Score::nextSeg(const Fraction& tick, int track)
       {
       Segment* seg = tick2segment(tick);
       while (seg) {
@@ -287,7 +300,7 @@ int Score::nextSeg(int tick, int track)
             if (seg->element(track))
                   break;
             }
-      return seg ? seg->tick() : -1;
+      return seg ? seg->tick() : Fraction(-1,1);
       }
 
 //---------------------------------------------------------
@@ -331,9 +344,10 @@ Segment* prevSeg1(Segment* seg, int& track)
       }
 
 //---------------------------------------------------------
-// next/prevChordNote
+//    next/prevChordNote
 //
-//    returns the top note of the next/previous chord. If a chord exists in the same track as note,
+//    returns the top note of the next/previous chord. If a
+//    chord exists in the same track as note,
 //    it is used. If not, the topmost existing chord is used.
 //    May return nullptr if there is no next/prev note
 //---------------------------------------------------------
@@ -841,7 +855,7 @@ Note* searchTieNote(Note* note)
 
       // calculate end of current note duration
       // but err on the safe side in case there is roundoff in tick count
-      int endTick = chord->tick() + chord->actualTicks() - 1;
+      Fraction endTick = chord->tick() + chord->actualTicks() - Fraction(1, 4 * 480);
 
       while ((seg = seg->next1(SegmentType::ChordRest))) {
             // skip ahead to end of current note duration as calculated above

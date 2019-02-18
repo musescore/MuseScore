@@ -534,12 +534,12 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           }
                                     }
                               }
-                        else if (isLyricsLine() && toLyrics(parent())->ticks() > 0) {
+                        else if (isLyricsLine() && toLyrics(parent())->ticks() > Fraction(0,1)) {
                               // melisma line
                               // it is possible CR won't be in correct track
                               // prefer element in current track if available
                               if (!cr)
-                                    qDebug("no end for lyricsline segment - start %d, ticks %d", tick(), ticks());
+                                    qDebug("no end for lyricsline segment - start %d, ticks %d", tick().ticks(), ticks().ticks());
                               else if (cr->track() != track()) {
                                     Element* e = cr->segment()->element(track());
                                     if (e)
@@ -610,7 +610,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                               }
                         }
 
-                  int t = grip == Grip::START ? tick() : tick2();
+                  Fraction t = grip == Grip::START ? tick() : tick2();
                   Measure* m = cr ? cr->measure() : score()->tick2measure(t);
 
                   if (m) {
@@ -737,8 +737,8 @@ QPointF SLine::linePos(Grip grip, System** sys) const
 
 SpannerSegment* SLine::layoutSystem(System* system)
       {
-      int stick = system->firstMeasure()->tick();
-      int etick = system->lastMeasure()->endTick();
+      Fraction stick = system->firstMeasure()->tick();
+      Fraction etick = system->lastMeasure()->endTick();
 
       LineSegment* lineSegm = toLineSegment(getNextLayoutSystemSegment(system, [this]() { return createLineSegment(); }));
 
@@ -825,7 +825,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
 
 void SLine::layout()
       {
-      if (score() == gscore || tick() == -1 || tick2() == 1) {
+      if (score() == gscore || (tick() == Fraction(-1,1)) || (ticks() == Fraction(0,1))) {
             //
             // when used in a palette or while dragging from palette,
             // SLine has no parent and
@@ -1009,14 +1009,14 @@ bool SLine::readProperties(XmlReader& e)
       const QStringRef& tag(e.name());
 
       if (tag == "tick2") {                // obsolete
-            if (tick() == -1) // not necessarily set (for first note of score?) #30151
+            if (tick() == Fraction(-1,1)) // not necessarily set (for first note of score?) #30151
                   setTick(e.tick());
-            setTick2(e.readInt());
+            setTick2(Fraction::fromTicks(e.readInt()));
             }
       else if (tag == "tick")             // obsolete
-            setTick(e.readInt());
+            setTick(Fraction::fromTicks(e.readInt()));
       else if (tag == "ticks")
-            setTicks(e.readInt());
+            setTicks(Fraction::fromTicks(e.readInt()));
       else if (tag == "Segment") {
             LineSegment* ls = createLineSegment();
             ls->setTrack(track()); // needed in read to get the right staff mag

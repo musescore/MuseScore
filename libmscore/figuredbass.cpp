@@ -983,7 +983,7 @@ FiguredBass::FiguredBass(Score* s)
       st.setSizeIsSpatiumDependent(true);
       setElementStyle(st);
 #endif
-      setTicks(0);
+      setTicks(Fraction(0,1));
       qDeleteAll(items);
       items.clear();
       }
@@ -1018,7 +1018,7 @@ void FiguredBass::write(XmlWriter& xml) const
       xml.stag(this);
       if(!onNote())
             xml.tag("onNote", onNote());
-      if (ticks() > 0)
+      if (ticks().isNotZero())
             xml.tag("ticks", ticks());
       // if unparseable items, write full text data
       if (items.size() < 1)
@@ -1045,7 +1045,7 @@ void FiguredBass::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "ticks")
-                  setTicks(e.readInt());
+                  setTicks(Fraction::fromTicks(e.readInt()));
             else if (tag == "onNote")
                   setOnNote(e.readInt() != 0l);
             else if (tag == "FiguredBassItem") {
@@ -1115,15 +1115,15 @@ void FiguredBass::layout()
 
 void FiguredBass::layoutLines()
       {
-      if (_ticks <= 0 || !segment()) {
+      if (_ticks <= Fraction(0,1) || !segment()) {
             _lineLengths.resize(1);                         // be sure to always have
             _lineLengths[0] = 0;                            // at least 1 item in array
             return;
             }
 
-      ChordRest* lastCR = nullptr;                                   // the last ChordRest of this
-      Segment *  nextSegm = nullptr;                                 // the Segment beyond this' segment
-      int        nextTick = segment()->tick() + _ticks;    // the tick beyond this' duration
+      ChordRest* lastCR  = nullptr;                       // the last ChordRest of this
+      Segment*  nextSegm = nullptr;                       // the Segment beyond this' segment
+      Fraction  nextTick = segment()->tick() + _ticks;    // the tick beyond this' duration
 
       // locate the measure containing the last tick of this; it is either:
       // the same measure containing nextTick, if nextTick is not the first tick of a measure
@@ -1131,7 +1131,7 @@ void FiguredBass::layoutLines()
       // or the previous measure, if nextTick is the first tick of a measure
       //    (and line should stop before any measure terminal segment (bar, clef, ...) )
 
-      Measure* m = score()->tick2measure(nextTick-1);
+      Measure* m = score()->tick2measure(nextTick-Fraction::fromTicks(1));
       if (m) {
             // locate the first segment (of ANY type) right after this' last tick
             for (nextSegm = m->first(SegmentType::All); nextSegm; nextSegm = nextSegm->next()) {
@@ -1143,7 +1143,7 @@ void FiguredBass::layoutLines()
                   lastCR = nextSegm->prev1()->nextChordRest(track(), true);
             }
       if (!m || !nextSegm) {
-            qDebug("FiguredBass layout: no segment found for tick %d", nextTick);
+            qDebug("FiguredBass layout: no segment found for tick %d", nextTick.ticks());
             _lineLengths.resize(1);                         // be sure to always have
             _lineLengths[0] = 0;                            // at least 1 item in array
             return;
@@ -1326,10 +1326,10 @@ void FiguredBass::setVisible(bool flag)
 
 FiguredBass* FiguredBass::nextFiguredBass() const
       {
-      if (_ticks <= 0)                                      // if _ticks unset, no clear idea of when 'this' ends
+      if (_ticks <= Fraction(0,1))                                      // if _ticks unset, no clear idea of when 'this' ends
             return 0;
-      Segment *   nextSegm;                                 // the Segment beyond this' segment
-      int         nextTick = segment()->tick() + _ticks;    // the tick beyond this' duration
+      Segment* nextSegm;                                 // the Segment beyond this' segment
+      Fraction nextTick = segment()->tick() + _ticks;    // the tick beyond this' duration
 
       // locate the ChordRest segment right after this' end
       nextSegm = score()->tick2segment(nextTick, true, SegmentType::ChordRest);
@@ -1420,10 +1420,10 @@ FiguredBassItem * FiguredBass::addItem()
 //    FiguredBass elements are created and looked for only in the first track of the staff.
 //---------------------------------------------------------
 
-FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int extTicks, bool * pNew)
+FiguredBass* FiguredBass::addFiguredBassToSegment(Segment * seg, int track, const Fraction& extTicks, bool * pNew)
       {
-      int         endTick;                      // where this FB is initially assumed to end
-      int         staff = track / VOICES;       // convert track to staff
+      Fraction endTick;                      // where this FB is initially assumed to end
+      int  staff = track / VOICES;       // convert track to staff
       track = staff * VOICES;                   // first track for this staff
 
       // scan segment annotations for an existing FB element in the same staff
@@ -1443,14 +1443,14 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
             fb->setParent(seg);
 
             // locate next SegChordRest in the same staff to estimate presumed duration of element
-            endTick = INT_MAX;
+            endTick = Fraction(INT_MAX,1);
             Segment *   nextSegm;
             for (int iVoice = 0; iVoice < VOICES; iVoice++) {
                   nextSegm = seg->nextCR(track + iVoice);
                   if(nextSegm && nextSegm->tick() < endTick)
                         endTick = nextSegm->tick();
                   }
-            if(endTick == INT_MAX) {            // no next segment: set up to score end
+            if(endTick == Fraction(INT_MAX,1)) {            // no next segment: set up to score end
                   Measure * meas = seg->score()->lastMeasure();
                   endTick = meas->tick() + meas->ticks();
                   }
@@ -1467,7 +1467,7 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
             }
 
       // if we are extending a previous FB
-      if(extTicks > 0) {
+      if (extTicks > Fraction(0,1)) {
             // locate previous FB for same staff
             Segment *         prevSegm;
             FiguredBass*      prevFB = 0;
@@ -1480,8 +1480,8 @@ FiguredBass * FiguredBass::addFiguredBassToSegment(Segment * seg, int track, int
                         }
                   if(prevFB) {
                         // if previous FB did not stop more than extTicks before this FB...
-                        int delta = seg->tick() - prevFB->segment()->tick();
-                        if(prevFB->ticks() + extTicks >= delta)
+                        Fraction delta = seg->tick() - prevFB->segment()->tick();
+                        if (prevFB->ticks() + extTicks >= delta)
                               prevFB->setTicks(delta);      // update prev FB ticks to last up to this FB
                         break;
                         }
@@ -1649,7 +1649,7 @@ QList<QString> FiguredBass::fontNames()
 
 bool FiguredBass::fontData(int nIdx, QString * pFamily, QString * pDisplayName,
             qreal * pSize, qreal * pLineHeight)
-{
+      {
       if(nIdx >= 0 && nIdx < g_FBFonts.size()) {
             FiguredBassFont f = g_FBFonts.at(nIdx);
             if(pFamily)       *pFamily          = f.family;
@@ -1659,66 +1659,7 @@ bool FiguredBass::fontData(int nIdx, QString * pFamily, QString * pDisplayName,
             return true;
       }
       return false;
-}
-
-//---------------------------------------------------------
-//
-//    MusicXML I/O
-//
-//---------------------------------------------------------
-
-//---------------------------------------------------------
-//   Read MusicXML
-//
-// Set the FiguredBass state based on the MusicXML <figured-bass> node de.
-// Note that onNote and ticks must be set by the MusicXML importer,
-// as the required context is not present in the items DOM tree.
-// Exception: if a <duration> element is present, tick can be set.
-// Return true if valid, non-empty figure(s) are found
-//---------------------------------------------------------
-
-#if 0
-bool FiguredBass::readMusicXML(XmlReader& e, int divisions)
-      {
-      bool parentheses = e.attribute("parentheses") == "yes";
-      QString normalizedText;
-      int idx = 0;
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "duration") {
-                  QString val(e.readElementText());
-                  bool ok = true;
-                  int duration = val.toInt(&ok);
-                  if (ok) {
-                        duration *= MScore::division;
-                        duration /= divisions;
-                        setTicks(duration);
-                        }
-                  else
-                        qDebug("MusicXml-Import: bad duration value: <%s>",
-                               qPrintable(val));
-                  }
-            else if (tag == "figure") {
-                  FiguredBassItem * pItem = new FiguredBassItem(score(), idx++);
-                  pItem->setTrack(track());
-                  pItem->setParent(this);
-                  pItem->readMusicXML(e, parentheses);
-                  items.append(*pItem);
-                  // add item normalized text
-                  if (!normalizedText.empty())
-                        normalizedText.append('\n');
-                  normalizedText.append(pItem->normalizedText());
-                  }
-            else {
-                  e.unknown();
-                  return false;
-                  }
-            }
-      setText(normalizedText);                  // this is the text to show while editing
-      bool res = !normalizedText.empty();
-      return res;
       }
-#endif
 
 //---------------------------------------------------------
 //   hasParentheses
@@ -1728,7 +1669,7 @@ bool FiguredBass::readMusicXML(XmlReader& e, int divisions)
 
 bool FiguredBass::hasParentheses() const
       {
-      for(FiguredBassItem* item : items)
+      for (FiguredBassItem* item : items)
             if (item->startsWithParenthesis())
                   return true;
       return false;
@@ -1747,7 +1688,7 @@ void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEnd
       for(FiguredBassItem* item : items)
             item->writeMusicXML(xml, isOriginalFigure, crEndTick, fbEndTick);
       if (writeDuration)
-            xml.tag("duration", ticks() / divisions);
+            xml.tag("duration", ticks().ticks() / divisions);
       xml.etag();
       }
 
@@ -1778,7 +1719,7 @@ FiguredBass* Score::addFiguredBass()
       bool bNew;
       if (el->isNote()) {
             ChordRest * cr = toNote(el)->chord();
-            fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, 0, &bNew);
+            fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0,1), &bNew);
             }
       else if (el->isFiguredBass()) {
             fb = toFiguredBass(el);

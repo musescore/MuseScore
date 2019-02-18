@@ -154,7 +154,7 @@ void GuitarPro5::readPageSetup()
 //   readBeat
 //---------------------------------------------------------
 
-int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets,
+Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, Tuplet** tuplets,
    bool /*mixChange*/)
       {
       uchar beatBits = readUChar();
@@ -265,7 +265,7 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
 
       int strings = readUChar();   // used strings mask
 
-      Fraction l    = len2fraction(len);
+      Fraction l  = len2fraction(len);
 
       // Some beat effects could add a Chord before this
       ChordRest* cr = segment->cr(track);
@@ -284,13 +284,14 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                   if (!cr)
                         cr = new Chord(score);
                   }
+            cr->setParent(segment);
             cr->setTrack(track);
 
             TDuration d(l);
             d.setDots(dotted ? 1 : 0);
 
             if (dotted)
-                  l = l + (l/2);
+                  l = l + (l * Fraction(1,2));
 
             if (tuple) {
                   Tuplet* tuplet = tuplets[staffIdx * 2 + voice];
@@ -305,15 +306,15 @@ int GuitarPro5::readBeat(int tick, int voice, Measure* measure, int staffIdx, Tu
                         }
                   tuplet->setTrack(cr->track());
                   tuplet->setBaseLen(l);
-                  tuplet->setDuration(l * tuplet->ratio().denominator());
+                  tuplet->setTicks(l * tuplet->ratio().denominator());
                   cr->setTuplet(tuplet);
                   tuplet->add(cr);
                   }
 
-            cr->setDuration(l);
-            if (cr->isRest() && (pause == 0 || l >= measure->len())) {
+            cr->setTicks(l);
+            if (cr->isRest() && (pause == 0 || l >= measure->ticks())) {
                   cr->setDurationType(TDuration::DurationType::V_MEASURE);
-                  cr->setDuration(measure->len());
+                  cr->setTicks(measure->ticks());
                   }
             else
                   cr->setDurationType(d);
@@ -421,18 +422,19 @@ qDebug("  3beat read 0x%02x", rrr);
 void GuitarPro5::readMeasure(Measure* measure, int staffIdx, Tuplet** tuplets, bool mixChange)
       {
       for (int voice = 0; voice < 2; ++voice) {
-            Fraction measureLen = 0;
-            int tick = measure->tick();
-            int beats = readInt();
-			if (beats > 100) return;
+            Fraction measureLen = { 0,1 };
+            Fraction tick       = measure->tick();
+            int beats           = readInt();
+            if (beats > 100)
+                  return;
             for (int beat = 0; beat < beats; ++beat) {
-                  int ticks = readBeat(tick, voice, measure, staffIdx, tuplets, mixChange);
-				  ++_beat_counter;
+                  Fraction ticks = readBeat(tick, voice, measure, staffIdx, tuplets, mixChange);
+			++_beat_counter;
                   tick += ticks;
-                  measureLen += Fraction::fromTicks(ticks);
+                  measureLen += ticks;
                   }
-            if (measureLen < measure->len()) {
-                  score->setRest(tick, staffIdx * VOICES + voice, measure->len() - measureLen, false, nullptr, false);
+            if (measureLen < measure->ticks()) {
+                  score->setRest(tick, staffIdx * VOICES + voice, measure->ticks() - measureLen, false, nullptr, false);
                   }
             }
       }
@@ -553,7 +555,7 @@ bool GuitarPro5::readTracks()
                   clefId = ClefType::PERC;
                   // instr->setUseDrumset(DrumsetKind::GUITAR_PRO);
                   instr->setDrumset(gpDrumset);
-                  staff->setStaffType(0, *StaffType::preset(StaffTypes::PERC_DEFAULT));
+                  staff->setStaffType(Fraction(0,1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
                   }
             else
                   clefId = defaultClef(patch);
@@ -561,7 +563,7 @@ bool GuitarPro5::readTracks()
             Clef* clef = new Clef(score);
             clef->setClefType(clefId);
             clef->setTrack(i * VOICES);
-            Segment* segment = measure->getSegment(SegmentType::HeaderClef, 0);
+            Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0,1));
             segment->add(clef);
 
             if (capo > 0) {
@@ -1057,7 +1059,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             gn->setFret(fret);
             gn->setString(note->string());
 #endif
-            int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr, 0);
+            int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr, Fraction(0,1));
 #if 0
             gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
@@ -1072,7 +1074,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             if (grace_len == MScore::division/6)
                   d.setDots(1);
             gc->setDurationType(d);
-            gc->setDuration(d.fraction());
+            gc->setTicks(d.fraction());
             gc->setNoteType(note_type);
             gc->setMag(note->chord()->staff()->mag(0) * score->styleD(Sid::graceNoteMag));
             note->chord()->add(gc);
@@ -1278,7 +1280,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
 			      }
 		      harmonicNote->setString(note->string());
 			harmonicNote->setFret(fret);
-			harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr, 0));
+			harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr, Fraction(0,1)));
 			harmonicNote->setTpcFromPitch();
 			addTextToNote("A.H.", Align::CENTER, harmonicNote);
 		      }
@@ -1435,7 +1437,7 @@ bool GuitarPro5::readNote(int string, Note* note)
             note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
             note->setGhost(true);
             }
-      int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, 0);
+      int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, Fraction(0,1));
       note->setFret(fretNumber);
       note->setString(string);
       note->setPitch(pitch);
@@ -1501,7 +1503,7 @@ bool GuitarPro5::readNote(int string, Note* note)
                               chord1 = toChord(cr);
                         else {
 				      auto rest = toRest(cr);
-					auto dur = rest->duration();
+					auto dur = rest->ticks();
 					auto dut = rest->durationType();
 					auto seg = rest->segment();
 					seg->remove(rest);
@@ -1511,7 +1513,7 @@ bool GuitarPro5::readNote(int string, Note* note)
 					delete rest;
 					chord1 = new Chord(score);
 					chord1->setTrack(note->track());
-					chord1->setDuration(dur);
+					chord1->setTicks(dur);
 					chord1->setDurationType(dut);
 					seg->add(chord1);
 					if (tuplet)

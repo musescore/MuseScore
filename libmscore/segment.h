@@ -73,7 +73,7 @@ class Segment final : public Element {
 
    public:
       Segment(Measure* m = 0);
-      Segment(Measure*, SegmentType, int tick);
+      Segment(Measure*, SegmentType, const Fraction&);
       Segment(const Segment&);
       ~Segment();
 
@@ -154,14 +154,12 @@ class Segment final : public Element {
       qreal stretch() const                      { return _stretch; }
       void setStretch(qreal v)                   { _stretch = v;    }
 
-      void setTick(int t);
-      virtual int tick() const override;
-      virtual int rtick() const override;
-      Fraction rfrac() const;
-      Fraction afrac() const;
-      void setRtick(int val);
-      int ticks() const;
-      void setTicks(int val);
+      virtual Fraction rtick() const override    { return _tick;    }
+      void setRtick(const Fraction& v)           { Q_ASSERT(v >= Fraction(0,1));  _tick = v;       }
+      virtual Fraction tick() const override;
+
+      Fraction ticks() const                     { return _ticks;   }
+      void setTicks(const Fraction& v)           { _ticks = v;      }
 
       bool splitsTuplet() const;
 
@@ -191,7 +189,6 @@ class Segment final : public Element {
       bool operator>(const Segment&) const;
 
       virtual QString accessibleExtraInfo() const override;
-
 
       Element* firstInNextSegments(int activeStaff); //<
       Element* lastInPrevSegments(int activeStaff);   //<

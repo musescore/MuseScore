@@ -135,7 +135,7 @@ BestTrack findBestTrack(
 
 bool isTitlePrefix(const QString &text)
       {
-      return (text.left(int(TEXT_PREFIX.size())) == QString::fromUtf8(TEXT_PREFIX.data(), int(TEXT_PREFIX.size()))); 
+      return (text.left(int(TEXT_PREFIX.size())) == QString::fromUtf8(TEXT_PREFIX.data(), int(TEXT_PREFIX.size())));
       }
 
 void addTitleToScore(Score *score, const QString &string, int textCounter)
@@ -152,7 +152,7 @@ void addTitleToScore(Score *score, const QString &string, int textCounter)
       MeasureBase* measure = score->first();
       if (!measure->isVBox()) {
             measure = new VBox(score);
-            measure->setTick(0);
+            measure->setTick(Fraction(0,1));
             measure->setNext(score->first());
             score->measures()->add(measure);
             }
@@ -205,8 +205,8 @@ void addLyricsToScore(
       addTitleIfAny(lyricTrack, score);
 
       for (const auto &timePair: matchedLyricTimes) {
-            const auto quantizedTime = timePair.first;
-            const auto originalTime = timePair.second;
+            const ReducedFraction quantizedTime = timePair.first;
+            const ReducedFraction originalTime = timePair.second;
             const auto it = lyricTrack.find(originalTime);
 
             Q_ASSERT_X(it != lyricTrack.end(),
@@ -214,8 +214,7 @@ void addLyricsToScore(
 
             QString text = MidiCharset::convertToCharset(it->second);
             if (originalTime != ReducedFraction(0, 1) || !isTitlePrefix(text)) { // not title
-                  score->addLyrics(quantizedTime.ticks(), staffAddTo->idx(),
-                                   removeSlashes(text).toHtmlEscaped());
+                  score->addLyrics(quantizedTime.fraction(), staffAddTo->idx(), removeSlashes(text).toHtmlEscaped());
                   }
             }
       }

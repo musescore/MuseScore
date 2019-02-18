@@ -283,14 +283,10 @@
               </Ottava>
             <next>
               <location>
+                <measures>2</measures>
+                <fractions>1/1</fractions>
                 </location>
               </next>
-            </Spanner>
-          <Spanner type="Ottava">
-            <prev>
-              <location>
-                </location>
-              </prev>
             </Spanner>
           <Chord>
             <linkedMain/>
@@ -327,6 +323,14 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-2</measures>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
           </voice>
         </Measure>
       </Staff>

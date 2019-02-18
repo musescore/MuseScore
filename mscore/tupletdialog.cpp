@@ -105,8 +105,8 @@ Tuplet* MuseScore::tupletDialog()
       tuplet->setTrack(cr->track());
       tuplet->setTick(cr->tick());
       td.setupTuplet(tuplet);
-      Fraction f1(cr->duration());
-      tuplet->setDuration(f1);
+      Fraction f1(cr->ticks());
+      tuplet->setTicks(f1);
       Fraction f = f1 * Fraction(1, tuplet->ratio().denominator());
       f.reduce();
 

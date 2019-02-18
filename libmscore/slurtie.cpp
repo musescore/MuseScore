@@ -155,7 +155,7 @@ void SlurTieSegment::editDrag(EditData& ed)
                         Element* e = ed.view->elementNear(ed.pos);
                         if (e && e->isNote()) {
                               Note* note = toNote(e);
-                              int tick = note->chord()->tick();
+                              Fraction tick = note->chord()->tick();
                               if ((g == Grip::END && tick > slurTie()->tick()) || (g == Grip::START && tick < slurTie()->tick2())) {
                                     if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
                                           Chord* c = note->chord();

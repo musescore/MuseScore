@@ -108,10 +108,10 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
             const int track = staff->idx() * VOICES;
             clef->setTrack(track);
             clef->setGenerated(false);
-            clef->setMag(staff->mag(tick));
+            clef->setMag(staff->mag(Fraction::fromTicks(tick)));
             clef->setSmall(isSmall);
-            Measure* m = staff->score()->tick2measure(tick);
-            Segment* seg = m->getSegment(SegmentType::Clef, tick);
+            Measure* m = staff->score()->tick2measure(Fraction::fromTicks(tick));
+            Segment* seg = m->getSegment(SegmentType::Clef, Fraction::fromTicks(tick));
             seg->add(clef);
             }
       }
@@ -232,7 +232,7 @@ findChordRest(const Segment *seg, int strack)
                   }
             else if (cr->isRest()) {
                   elType = ElementType::REST;
-                  newRestLen = qMax(newRestLen, ReducedFraction(cr->globalDuration()));
+                  newRestLen = qMax(newRestLen, ReducedFraction(cr->globalTicks()));
                   }
             }
       return {elType, newRestLen};
@@ -380,7 +380,7 @@ bool createClefs(
       for (size_t i = optimalPaths[0].size() - 1; i; --i) {
             const int prevClef = optimalPaths[currentClef][i];
             if (prevClef != currentClef) {
-                  clefsAndTicks.push_back({clefFromIndex(currentClef), segments[i]->tick()});
+                  clefsAndTicks.push_back({clefFromIndex(currentClef), segments[i]->tick().ticks()});
                   currentClef = prevClef;
                   }
             }

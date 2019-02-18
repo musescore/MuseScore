@@ -409,7 +409,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
 
       a = popup->addAction(tr("Delete Selected Measures"));
       a->setData("delete-selected-measures");
-      
+
       popup->addSeparator();
 
       a = popup->addAction(tr("Measure Properties…"));
@@ -461,7 +461,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
             mscore->editInPianoroll(staff, foundPos ? &pp : 0);
             }
       else if (cmd == "staff-properties") {
-            int tick = obj ? obj->tick() : -1;
+            Fraction tick = obj ? obj->tick() : Fraction(-1,1);
             EditStaff editStaff(staff, tick, this);
             connect(&editStaff, SIGNAL(instrumentChanged()), mscore, SLOT(instrumentChanged()));
             editStaff.exec();
@@ -534,7 +534,7 @@ void ScoreView::dataChanged(const QRectF& r)
 //    move cursor during playback
 //---------------------------------------------------------
 
-void ScoreView::moveCursor(int tick)
+void ScoreView::moveCursor(const Fraction& tick)
       {
       Measure* measure = score()->tick2measureMM(tick);
       if (measure == 0)
@@ -543,10 +543,10 @@ void ScoreView::moveCursor(int tick)
       qreal x = 0.0;
       Segment* s;
       for (s = measure->first(SegmentType::ChordRest); s;) {
-            int t1 = s->tick();
+            Fraction t1 = s->tick();
             int x1 = s->canvasPos().x();
             qreal x2;
-            int t2;
+            Fraction t2;
             Segment* ns = s->next(SegmentType::ChordRest);
             if (ns) {
                   t2 = ns->tick();
@@ -562,9 +562,9 @@ void ScoreView::moveCursor(int tick)
                         x2 = measure->canvasPos().x() + measure->width(); //safety, should not happen
                   }
             if (tick >= t1 && tick < t2) {
-                  int   dt = t2 - t1;
+                  Fraction   dt = t2 - t1;
                   qreal dx = x2 - x1;
-                  x = x1 + dx * (tick-t1) / dt;
+                  x = x1 + dx * (tick-t1).ticks() / dt.ticks();
                   break;
                   }
             s = ns;
@@ -724,7 +724,7 @@ void ScoreView::moveCursor()
 //   cursorTick
 //---------------------------------------------------------
 
-int ScoreView::cursorTick() const
+Fraction ScoreView::cursorTick() const
       {
       return _cursor->tick();
       }
@@ -747,7 +747,7 @@ void ScoreView::setCursorOn(bool val)
 //    isInPos is used to adjust the x position of In vs Out mark
 //---------------------------------------------------------
 
-void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
+void ScoreView::setLoopCursor(PositionCursor *curLoop, const Fraction& tick, bool isInPos)
       {
       //
       // set mark height for whole system
@@ -759,10 +759,10 @@ void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
 
       Segment* s;
       for (s = measure->first(SegmentType::ChordRest); s;) {
-            int t1 = s->tick();
+            Fraction t1 = s->tick();
             int x1 = s->canvasPos().x();
             qreal x2;
-            int t2;
+            Fraction t2;
             Segment* ns = s->next(SegmentType::ChordRest);
             if (ns) {
                   t2 = ns->tick();
@@ -773,9 +773,9 @@ void ScoreView::setLoopCursor(PositionCursor *curLoop, int tick, bool isInPos)
                   x2 = measure->canvasPos().x() + measure->width();
                   }
             if (tick >= t1 && tick < t2) {
-                  int   dt = t2 - t1;
+                  Fraction   dt = t2 - t1;
                   qreal dx = x2 - x1;
-                  x = x1 + dx * (tick-t1) / dt;
+                  x = x1 + dx * (tick.ticks() - t1.ticks()) / dt.ticks();
                   break;
                   }
             s = ns;
@@ -832,13 +832,13 @@ void ScoreView::setShadowNote(const QPointF& p)
             }
       // in any empty measure, pos will be right next to barline
       // so pad this by barNoteDistance
-      qreal mag     = score()->staff(pos.staffIdx)->mag(0);
+      qreal mag     = score()->staff(pos.staffIdx)->mag(Fraction(0,1));
       qreal relX    = pos.pos.x() - pos.segment->measure()->canvasPos().x();
       pos.pos.rx() -= qMin(relX - score()->styleP(Sid::barNoteDistance) * mag, 0.0);
 
       shadowNote->setVisible(true);
       Staff* staff = score()->staff(pos.staffIdx);
-      shadowNote->setMag(staff->mag(0));
+      shadowNote->setMag(staff->mag(Fraction(0,1)));
       const Instrument* instr       = staff->part()->instrument();
       NoteHead::Group noteheadGroup = NoteHead::Group::HEAD_NORMAL;
       int line                      = pos.line;
@@ -867,7 +867,7 @@ void ScoreView::setShadowNote(const QPointF& p)
       if (is.rest()) {
             int yo;
             Rest rest(gscore, d.type());
-            rest.setDuration(d.fraction());
+            rest.setTicks(d.fraction());
             symNotehead = rest.getSymbol(is.duration().type(), 0, staff->lines(pos.segment->tick()), &yo);
             shadowNote->setState(symNotehead, voice, d, true);
             }
@@ -1248,8 +1248,8 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   }
             SysStaff* ss2 = system2->staff(lastStaff);
 
-            double y1 = ss1->y() - 2 * score()->staff(staffStart)->spatium(0) + y;
-            double y2 = ss2->y() + ss2->bbox().height() + 2 * score()->staff(lastStaff)->spatium(0) + y;
+            double y1 = ss1->y() - 2 * score()->staff(staffStart)->spatium(Fraction(0,1)) + y;
+            double y2 = ss2->y() + ss2->bbox().height() + 2 * score()->staff(lastStaff)->spatium(Fraction(0,1)) + y;
 
             // drag vertical start line
             p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
@@ -1672,23 +1672,24 @@ void ScoreView::normalSwap()
       QString mimeType = _score->selection().mimeType();
       const QMimeData* ms = QApplication::clipboard()->mimeData();
       if (mimeType == mimeStaffListFormat) { // determine size of clipboard selection
-            int tickLen = 0, staves = 0;
+            Fraction tickLen = Fraction(0,1);
+            int staves = 0;
             QByteArray d(ms->data(mimeStaffListFormat));
             XmlReader e(d);
             e.readNextStartElement();
             if (e.name() == "StaffList") {
-                  tickLen         = e.intAttribute("len", 0);
-                  staves          = e.intAttribute("staves", 0);
+                  tickLen = Fraction::fromTicks(e.intAttribute("len", 0));
+                  staves  = e.intAttribute("staves", 0);
                   }
-            if (tickLen > 0) { // attempt to extend selection to match clipboard size
+            if (tickLen > Fraction(0,1)) { // attempt to extend selection to match clipboard size
                   Segment* seg = _score->selection().startSegment();
-                  int tick = _score->selection().tickStart() + tickLen;
+                  Fraction tick = _score->selection().tickStart() + tickLen;
                   Segment* segAfter = _score->tick2leftSegment(tick);
                   int staffIdx = _score->selection().staffStart() + staves - 1;
                   if (staffIdx >= _score->nstaves())
                         staffIdx = _score->nstaves() - 1;
                   tick = _score->selection().tickStart();
-                  int etick = tick + tickLen;
+                  Fraction  etick = tick + tickLen;
                   if (MScore::debugMode)
                         _score->selection().dump();
                   _score->selection().extendRangeSelection(seg, segAfter, staffIdx, tick, etick);
@@ -1742,7 +1743,7 @@ void ScoreView::cmdGotoElement(Element* e)
 //   ticksTab
 //---------------------------------------------------------
 
-void ScoreView::ticksTab(int ticks)
+void ScoreView::ticksTab(const Fraction& ticks)
       {
       if (editData.element->isHarmony())
             harmonyTicksTab(ticks);
@@ -2243,23 +2244,23 @@ void ScoreView::cmd(const char* s)
       // STATE_HARMONY_FIGBASS_EDIT actions
 
       else if (cmd == "advance-longa")
-            ticksTab(MScore::division << 4);
+            ticksTab(Fraction(4,1));
       else if (cmd == "advance-breve")
-            ticksTab(MScore::division << 3);
+            ticksTab(Fraction(2,1));
       else if (cmd == "advance-1")
-            ticksTab(MScore::division << 2);
+            ticksTab(Fraction(1,1));
       else if (cmd == "advance-2")
-            ticksTab(MScore::division << 1);
+            ticksTab(Fraction(1,2));
       else if (cmd == "advance-4")
-            ticksTab(MScore::division);
+            ticksTab(Fraction(1,4));
       else if (cmd == "advance-8")
-            ticksTab(MScore::division >> 1);
+            ticksTab(Fraction(1,8));
       else if (cmd == "advance-16")
-            ticksTab(MScore::division >> 2);
+            ticksTab(Fraction(1,16));
       else if (cmd == "advance-32")
-            ticksTab(MScore::division >> 3);
+            ticksTab(Fraction(1,32));
       else if (cmd == "advance-64")
-            ticksTab(MScore::division >> 4);
+            ticksTab(Fraction(1,64));
       else if (cmd == "prev-measure-TEXT") {
             if (editData.element->isHarmony())
                   harmonyTab(true);
@@ -2488,7 +2489,7 @@ void ScoreView::startNoteEntry()
             if (p) {
                   ChordRest* topLeft = nullptr;
                   qreal tlY = 0.0;
-                  int tlTick = 0;
+                  Fraction tlTick = Fraction(0,1);
                   QRectF viewRect  = toLogical(QRectF(0.0, 0.0, width(), height()));
                   QRectF pageRect  = p->bbox().translated(p->x(), p->y());
                   QRectF intersect = viewRect & pageRect;
@@ -2513,7 +2514,7 @@ void ScoreView::startNoteEntry()
                               // compare ticks rather than x position
                               // to make sure we favor earlier rather than later systems
                               // even though later system might have note farther to left
-                              int crTick = 0;
+                              Fraction crTick = Fraction(0,1);
                               if (cr->segment())
                                     crTick = cr->segment()->tick();
                               else
@@ -2554,10 +2555,10 @@ void ScoreView::startNoteEntry()
             // try to find an appropriate measure to start in
             while (el && el->type() != ElementType::MEASURE)
                   el = el->parent();
-            int tick = el ? static_cast<Measure*>(el)->tick() : 0;
+            Fraction tick = el ? static_cast<Measure*>(el)->tick() : Fraction(0,1);
             el = _score->searchNote(tick, track);
             if (!el)
-                  el = _score->searchNote(0, track);
+                  el = _score->searchNote(Fraction(0,1), track);
             }
       if (!el)
             return;
@@ -2726,7 +2727,7 @@ QVariant ScoreView::inputMethodQuery(Qt::InputMethodQuery query) const
                               r = toPhysical(text->canvasBoundingRect());
                         r.setHeight(r.height() + 10); // add a little margin under the cursor
                         qDebug("ScoreView::inputMethodQuery() updating cursorRect to: (%3f, %3f) + (%3f, %3f)", r.x(), r.y(), r.width(), r.height());
-                        return QVariant(r);     
+                        return QVariant(r);
                         }
                   case Qt::ImEnabled:
                         return true; // TextBase will always accept input method input
@@ -3388,7 +3389,7 @@ void ScoreView::cmdAddHairpin(HairpinType type)
                   cr2 = cr1;
 
             _score->startCmd();
-            int tick2 = twoNotesSameStaff ? cr2->tick() : cr2->tick() + cr2->actualTicks();
+            Fraction tick2 = twoNotesSameStaff ? cr2->tick() : cr2->tick() + cr2->actualTicks();
             Hairpin* pin = _score->addHairpin(type, cr1->tick(), tick2, cr1->track());
 //          pin->layout();
             _score->endCmd();
@@ -3583,15 +3584,15 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
       if (measure && measure->isMMRest())
             return;
 
-      Fraction f(cr->duration());
+      Fraction f(cr->ticks());
       Tuplet* ot  = cr->tuplet();
 
       f.reduce();       //measure duration might not be reduced
       Fraction ratio(n, f.numerator());
       Fraction fr(1, f.denominator());
       while (ratio.numerator() >= ratio.denominator()*2) {
-            ratio /= 2;
-            fr    /= 2;
+            ratio *= Fraction(1,2);
+            fr    *= Fraction(1,2);
             }
 
       Tuplet* tuplet = new Tuplet(_score);
@@ -3605,7 +3606,7 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
       //             has a tick duration of 240 / (3/2) = 160 ticks
       //
 
-      tuplet->setDuration(f);
+      tuplet->setTicks(f);
       TDuration baseLen(fr);
       tuplet->setBaseLen(baseLen);
 
@@ -3799,8 +3800,8 @@ void ScoreView::cmdRealtimeAdvance()
       if (!is.noteEntryMode())
             return;
       _score->startCmd();
-      int ticks2measureEnd = is.segment()->measure()->ticks() - is.segment()->rtick();
-      if (!is.cr() || (is.cr()->duration() != is.duration().fraction() && is.duration().ticks() < ticks2measureEnd))
+      Fraction ticks2measureEnd = is.segment()->measure()->ticks() - is.segment()->rtick();
+      if (!is.cr() || (is.cr()->ticks() != is.duration().fraction() && is.duration() < ticks2measureEnd))
             _score->setNoteRest(is.segment(), is.track(), NoteVal(), is.duration().fraction(), Direction::AUTO);
       ChordRest* prevCR = toChordRest(is.cr());
       is.moveToNextInputPos();
@@ -4399,7 +4400,7 @@ void ScoreView::posChanged(POS pos, unsigned tick)
                   if (noteEntryMode())
                         moveCursor();     // update input cursor position
                   else
-                        moveCursor(tick); // update play position
+                        moveCursor(Fraction::fromTicks(tick)); // update play position
                   break;
             case POS::LEFT:
                   _curLoopIn->move(_score->pos(POS::LEFT));
@@ -4418,7 +4419,7 @@ void ScoreView::loopToggled(bool val)
       {
       if (_score->lastMeasure() == 0)
             return;
-      if (_score->pos(POS::LEFT) == 0 && _score->pos(POS::RIGHT) == 0)
+      if (_score->pos(POS::LEFT).isZero() && _score->pos(POS::RIGHT).isZero())
             _score->setPos(POS::RIGHT, _score->lastMeasure()->endTick());
       _curLoopIn->move(_score->loopInTick());
       _curLoopOut->move(_score->loopOutTick());
@@ -4456,7 +4457,7 @@ void ScoreView::cmdMoveCR(bool left)
                         }
                   ChordRest* cr2 = left ? prevChordRest(cr1) : nextChordRest(cr1);
                   if (cr2 && cr1->measure() == cr2->measure() && !cr1->tuplet() && !cr2->tuplet()
-                      && cr1->durationType() == cr2->durationType() && cr1->duration() == cr2->duration()) {
+                      && cr1->durationType() == cr2->durationType() && cr1->ticks() == cr2->ticks()) {
                         if (!cmdActive) {
                               _score->startCmd();
                               cmdActive = true;

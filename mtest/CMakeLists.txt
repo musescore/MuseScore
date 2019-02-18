@@ -231,7 +231,7 @@ subdirs (
         biab
         musicxml
         guitarpro
-        scripting
+#        scripting            # ws:disabled during fraction integration
         stringutils
 #        testoves
         zerberus/comments

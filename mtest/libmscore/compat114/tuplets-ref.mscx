@@ -415,7 +415,7 @@
             </Chord>
           <endTuplet/>
           <location>
-            <fractions>-1/384</fractions>
+            <fractions>-1/720</fractions>
             </location>
           <Chord>
             <durationType>16th</durationType>
@@ -454,7 +454,7 @@
             </Chord>
           <endTuplet/>
           <location>
-            <fractions>1/1920</fractions>
+            <fractions>1/720</fractions>
             </location>
           <Rest>
             <durationType>half</durationType>

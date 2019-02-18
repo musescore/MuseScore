@@ -31,7 +31,7 @@ enum class Key;
 
 class MCursor {
       MasterScore* _score;
-      int _tick;
+      Fraction _tick;
       int _track;
       Fraction _sig;
 
@@ -47,10 +47,10 @@ class MCursor {
       void addKeySig(Key);
       TimeSig* addTimeSig(const Fraction&);
 
-      void move(int track, int tick);
+      void move(int track, const Fraction& tick);
       MasterScore* score() const    { return _score; }
       void setScore(MasterScore* s) { _score = s;    }
-      void setTimeSig(Fraction f) { _sig = f; }
+      void setTimeSig(Fraction f)   { _sig = f; }
       };
 
 

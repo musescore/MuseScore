@@ -226,7 +226,7 @@ void MuseScore::editInstrList()
       Staff* firstStaff = 0;
       for (Staff* s : masterScore->staves()) {
             KeyList* km = s->keyList();
-            if (!s->isDrumStaff(0)) {     // TODO
+            if (!s->isDrumStaff(Fraction(0,1))) {     // TODO
                   tmpKeymap.insert(km->begin(), km->end());
                   firstStaff = s;
                   break;
@@ -332,9 +332,9 @@ void MuseScore::editInstrList()
                               if (part->staves()->empty())
                                     ke.setKey(Key::C);
                               else
-                                    ke = part->staff(0)->keySigEvent(0);
+                                    ke = part->staff(0)->keySigEvent(Fraction(0,1));
 
-                              staff->setKey(0, ke);
+                              staff->setKey(Fraction(0,1), ke);
 
                               Staff* linkedStaff = 0;
                               if (sli->linked()) {
@@ -375,7 +375,7 @@ void MuseScore::editInstrList()
                               const StaffType* stfType = sli->staffType();
 
                               // use selected staff type
-                              if (stfType->name() != staff->staffType(0)->name())
+                              if (stfType->name() != staff->staffType(Fraction(0,1))->name())
                                     masterScore->undo(new ChangeStaffType(staff, *stfType));
                               }
                         else {

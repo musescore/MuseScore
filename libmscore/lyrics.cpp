@@ -43,7 +43,7 @@ Lyrics::Lyrics(Score* s)
       _even       = false;
       initElementStyle(&lyricsElementStyle);
       _no         = 0;
-      _ticks      = 0;
+      _ticks      = Fraction(0,1);
       _syllabic   = Syllabic::SINGLE;
       _separator  = 0;
       }
@@ -134,8 +134,8 @@ bool Lyrics::readProperties(XmlReader& e)
             else
                   qDebug("bad syllabic property");
             }
-      else if (tag == "ticks")
-            _ticks = e.readInt();
+      else if (tag == "ticks")            // obsolete
+            _ticks = e.readFraction();
       else if (readProperty(tag, e, Pid::PLACEMENT))
             ;
       else if (!TextBase::readProperties(e))
@@ -186,7 +186,7 @@ void Lyrics::remove(Element* el)
 bool Lyrics::isMelisma() const
       {
       // entered as melisma using underscore?
-      if (_ticks > 0)
+      if (_ticks > Fraction(0,1))
             return true;
 
       // hyphenated?
@@ -300,7 +300,7 @@ void Lyrics::layout()
 
       rxpos() = x;
 
-      if (_ticks > 0 || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
+      if (_ticks > Fraction(0,1) || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
             if (!_separator) {
                   _separator = new LyricsLine(score());
                   _separator->setTick(cr->tick());
@@ -311,7 +311,7 @@ void Lyrics::layout()
             // HACK separator should have non-zero length to get its layout
             // always triggered. A proper ticks length will be set later on the
             // separator layout.
-            _separator->setTicks(1);
+            _separator->setTicks(Fraction::fromTicks(1));
             _separator->setTrack(track());
             _separator->setTrack2(track());
             // bbox().setWidth(bbox().width());  // ??
@@ -421,7 +421,7 @@ void Lyrics::paste(EditData& ed)
 //   endTick
 //---------------------------------------------------------
 
-int Lyrics::endTick() const
+Fraction Lyrics::endTick() const
       {
       return segment()->tick() + ticks();
       }
@@ -512,7 +512,7 @@ bool Lyrics::setProperty(Pid propertyId, const QVariant& v)
                   _syllabic = Syllabic(v.toInt());
                   break;
             case Pid::LYRIC_TICKS:
-                  _ticks = v.toInt();
+                  _ticks = v.value<Fraction>();
                   break;
             case Pid::VERSE:
                   _no = v.toInt();
@@ -540,6 +540,7 @@ QVariant Lyrics::propertyDefault(Pid id) const
             case Pid::SYLLABIC:
                   return int(Syllabic::SINGLE);
             case Pid::LYRIC_TICKS:
+                  return Fraction(0,1);
             case Pid::VERSE:
                   return 0;
             case Pid::ALIGN:

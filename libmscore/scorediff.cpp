@@ -1283,17 +1283,17 @@ Fraction BaseDiff::afrac(int score) const
       {
       Q_ASSERT(score == 0 || score == 1);
       if (ctx[score] && ctx[score]->isElement())
-            return toElement(ctx[score])->afrac();
+            return toElement(ctx[score])->tick();
       if (before[score] && before[score]->isElement()) {
             const Element* bef = toElement(before[score]);
-            Fraction f = bef->afrac();
+            Fraction f = bef->tick();
             if (bef->isDurationElement()) {
                   const DurationElement* de = toDurationElement(bef);
-                  return f + de->actualFraction();
+                  return f + de->actualTicks();
                   }
             return f;
             }
-      return 0;
+      return Fraction(0,1);
       }
 
 //---------------------------------------------------------
@@ -1349,7 +1349,7 @@ Fraction ElementDiff::afrac(int score) const
       Q_ASSERT(score == 0 || score == 1);
       const ScoreElement* se = el[score];
       if (se && se->isElement())
-            return toElement(se)->afrac();
+            return toElement(se)->tick();
       return BaseDiff::afrac(score);
       }
 

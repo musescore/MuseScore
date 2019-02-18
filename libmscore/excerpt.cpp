@@ -213,7 +213,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       // handle transposing instruments
       if (oscore->styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch)) {
             for (const Staff* staff : score->staves()) {
-                  if (staff->staffType(0)->group() == StaffGroup::PERCUSSION)
+                  if (staff->staffType(Fraction(0,1))->group() == StaffGroup::PERCUSSION)
                         continue;
 
                   // if this staff has no transposition, and no instrument changes, we can skip it
@@ -230,10 +230,10 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                   int startTrack = staffIdx * VOICES;
                   int endTrack   = startTrack + VOICES;
 
-                  int endTick = 0;
+                  Fraction endTick = Fraction(0,1);
                   if (score->lastSegment())
                         endTick = score->lastSegment()->tick();
-                  score->transposeKeys(staffIdx, staffIdx+1, 0, endTick, interval, true, flip);
+                  score->transposeKeys(staffIdx, staffIdx+1, Fraction(0,1), endTick, interval, true, flip);
 
                   for (auto segment = score->firstSegmentMM(SegmentType::ChordRest); segment; segment = segment->next1MM(SegmentType::ChordRest)) {
                         interval = staff->part()->instrument(segment->tick())->transpose();
@@ -441,7 +441,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                   Measure* nm = new Measure(score);
                   nmb = nm;
                   nm->setTick(m->tick());
-                  nm->setLen(m->len());
+                  nm->setTicks(m->ticks());
                   nm->setTimesig(m->timesig());
 
                   nm->setRepeatCount(m->repeatCount());
@@ -504,7 +504,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                               for (int track : t) {
                                     //Clone KeySig TimeSig and Clefs if voice 1 of source staff is not mapped to a track
                                     Element* oef = oseg->element(srcTrack & ~3);
-                                    if (oef && (oef->isTimeSig() || oef->isKeySig()) && oef->tick() == 0
+                                    if (oef && (oef->isTimeSig() || oef->isKeySig()) && oef->tick().isZero()
                                         && !(trackList.size() == (score->excerpt()->parts().size() * VOICES))) {
                                           Element* ne = oef->linkedClone();
                                           ne->setTrack(track & ~3);
@@ -666,8 +666,8 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                                     Segment* tst = nm->segments().firstCRSegment();
                                     if (srcTrack % VOICES && !(track % VOICES) && (!tst || (!tst->element(track)))) {
                                           Rest* rest = new Rest(score);
-                                          rest->setDuration(nm->len());
-                                          rest->setDurationType(nm->len().ticks());
+                                          rest->setTicks(nm->ticks());
+                                          rest->setDurationType(nm->ticks());
                                           rest->setTrack(track);
                                           Segment* segment = nm->getSegment(SegmentType::ChordRest, nm->tick());
                                           segment->add(rest);
@@ -830,8 +830,8 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                         if (oe->isClef()) {
                               // only clone clef if it matches staff group and does not exists yet
                               Clef* clef = toClef(oe);
-                              int   tick = seg->tick();
-                              if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->constStaffType(0)->group()
+                              Fraction   tick = seg->tick();
+                              if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->constStaffType(Fraction(0,1))->group()
                                           && dstStaff->clefType(tick) != clef->clefTypeList()) {
                                     ne = oe->clone();
                                     }
@@ -982,7 +982,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
 //    staves are potentially in different scores
 //---------------------------------------------------------
 
-void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, int stick, int etick)
+void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& stick, const Fraction& etick)
       {
       Score* oscore = srcStaff->score();
       Score* score  = dstStaff->score();
