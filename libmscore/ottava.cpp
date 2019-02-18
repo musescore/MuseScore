@@ -357,12 +357,12 @@ bool Ottava::setProperty(Pid propertyId, const QVariant& val)
                   break;
 
             case Pid::SPANNER_TICKS:
-                  setTicks(val.toInt());
+                  setTicks(val.value<Fraction>());
                   staff()->updateOttava();
                   break;
 
             case Pid::SPANNER_TICK:
-                  setTick(val.toInt());
+                  setTick(val.value<Fraction>());
                   staff()->updateOttava();
                   break;
 

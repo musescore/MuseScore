@@ -163,7 +163,7 @@ bool SlurSegment::edit(EditData& ed)
 void SlurSegment::changeAnchor(EditData& ed, Element* element)
       {
       if (ed.curGrip == Grip::START) {
-            int ticks = spanner()->endElement()->tick() - element->tick();
+            Fraction ticks = spanner()->endElement()->tick() - element->tick();
             spanner()->undoChangeProperty(Pid::SPANNER_TICK, element->tick());
             spanner()->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
             int diff = element->track() - spanner()->track();
@@ -183,6 +183,7 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
                   s->undoChangeProperty(Pid::SPANNER_TRACK2, s->track() + diff);
                   }
             }
+
       const size_t segments  = spanner()->spannerSegments().size();
       ups(ed.curGrip).off = QPointF();
       spanner()->layout();
@@ -215,7 +216,7 @@ void SlurSegment::computeBezier(QPointF p6o)
             Measure* m1 = slur()->startCR()->segment()->measure();
             Measure* m2 = slur()->endCR()->segment()->measure();
             qDebug("zero slur at tick %d(%d) track %d in measure %d-%d  tick %d ticks %d",
-               m1->tick(), tick(), track(), m1->no(), m2->no(), slur()->tick(), slur()->ticks());
+               m1->tick().ticks(), tick().ticks(), track(), m1->no(), m2->no(), slur()->tick().ticks(), slur()->ticks().ticks());
             slur()->setBroken(true);
             return;
             }
@@ -944,8 +945,8 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 
 SpannerSegment* Slur::layoutSystem(System* system)
       {
-      int stick = system->firstMeasure()->tick();
-      int etick = system->lastMeasure()->endTick();
+      Fraction stick = system->firstMeasure()->tick();
+      Fraction etick = system->lastMeasure()->endTick();
 
       SlurSegment* slurSegment = toSlurSegment(getNextLayoutSystemSegment(system, [this]() { return new SlurSegment(score()); }));
 
@@ -959,7 +960,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
                   setTrack2(track());
             if (startCR() == 0 || startCR()->measure() == 0) {
                   qDebug("Slur::layout(): track %d-%d  %p - %p tick %d-%d null start anchor",
-                     track(), track2(), startCR(), endCR(), tick(), tick2());
+                     track(), track2(), startCR(), endCR(), tick().ticks(), tick2().ticks());
                   return slurSegment;
                   }
             if (endCR() == 0) {     // sanity check
@@ -1054,7 +1055,7 @@ void Slur::layout()
 
       qreal _spatium = spatium();
 
-      if (score() == gscore || tick() == -1) {
+      if (score() == gscore || tick() == Fraction(-1,1)) {
             //
             // when used in a palette, slur has no parent and
             // tick and tick2 has no meaning so no layout is
@@ -1076,11 +1077,12 @@ void Slur::layout()
             }
 
       if (startCR() == 0 || startCR()->measure() == 0) {
-            qDebug("Slur::layout(): track %d-%d  %p - %p tick %d-%d null start anchor",
-               track(), track2(), startCR(), endCR(), tick(), tick2());
+            qDebug("track %d-%d  %p - %p tick %d-%d null start anchor",
+               track(), track2(), startCR(), endCR(), tick().ticks(), tick2().ticks());
             return;
             }
       if (endCR() == 0) {     // sanity check
+            qDebug("no end CR for %d", (tick()+ticks()).ticks());
             setEndElement(startCR());
             setTick2(tick());
             }

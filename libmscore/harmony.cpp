@@ -209,7 +209,7 @@ void Harmony::write(XmlWriter& xml) const
             if (staff()) {
                   // parent can be a fret diagram
                   Segment* segment = parent()->isSegment() ? toSegment(parent()) : toSegment(parent()->parent());
-                  int tick = segment ? segment->tick() : -1;
+                  Fraction tick = segment ? segment->tick() : Fraction(-1,1);
                   const Interval& interval = part()->instrument(tick)->transpose();
                   if (xml.clipboardmode() && !score()->styleB(Sid::concertPitch) && interval.chromatic) {
                         rRootTpc = transposeTpc(_rootTpc, interval, true);
@@ -762,7 +762,7 @@ void Harmony::endEdit(EditData& ed)
                   if (score()->styleB(Sid::concertPitch) != h->score()->styleB(Sid::concertPitch)) {
                         Part* partDest = h->part();
                         Segment* segment = toSegment(parent());
-                        int tick = segment ? segment->tick() : -1;
+                        Fraction tick = segment ? segment->tick() : Fraction(-1,1);
                         Interval interval = partDest->instrument(tick)->transpose();
                         if (!interval.isZero()) {
                               if (!h->score()->styleB(Sid::concertPitch))

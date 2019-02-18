@@ -187,8 +187,8 @@ void PlayPanel::setScore(Score* s)
             setTempo(cs->tempomap()->tempo(0));
             setRelTempo(cs->tempomap()->relTempo());
             setEndpos(cs->repeatList()->ticks());
-            int tick = cs->pos(POS::CURRENT);
-            heartBeat(tick, tick, 0);
+            Fraction tick = cs->pos(POS::CURRENT);
+            heartBeat(tick.ticks(), tick.ticks(), 0);
             }
       else {
             setTempo(2.0);

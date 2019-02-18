@@ -395,7 +395,7 @@ class Segment : public Element {
       //@ returns the element at track 'track' (null if none)
       Q_INVOKABLE Ms::PluginAPI::Element* elementAt(int track);
 
-      int tick() const { return segment()->tick(); }
+      int tick() const { return segment()->tick().ticks(); }
 
       Segment* nextInScore() { return wrap<Segment>(segment()->next1()); }
       Segment* nextInMeasure() { return wrap<Segment>(segment()->next()); }

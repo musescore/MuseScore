@@ -135,7 +135,7 @@
                 <next>
                   <location>
                     <measures>1</measures>
-                    <fractions>-11/12</fractions>
+                    <fractions>-2/3</fractions>
                     </location>
                   </next>
                 </Spanner>
@@ -168,7 +168,7 @@
                 <prev>
                   <location>
                     <measures>-1</measures>
-                    <fractions>11/12</fractions>
+                    <fractions>2/3</fractions>
                     </location>
                   </prev>
                 </Spanner>
@@ -199,9 +199,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>eighth</durationType>
             <Note>

@@ -43,14 +43,6 @@ DurationElement::DurationElement(const DurationElement& e)
       }
 
 //---------------------------------------------------------
-//   DurationElement
-//---------------------------------------------------------
-
-DurationElement::~DurationElement()
-      {
-      }
-
-//---------------------------------------------------------
 //   topTuplet
 //---------------------------------------------------------
 
@@ -65,10 +57,10 @@ Tuplet* DurationElement::topTuplet() const
       }
 
 //---------------------------------------------------------
-//   globalDuration
+//   globalTicks
 //---------------------------------------------------------
 
-Fraction DurationElement::globalDuration() const
+Fraction DurationElement::globalTicks() const
       {
       Fraction f(_duration);
       for (Tuplet* t = tuplet(); t; t = t->tuplet())
@@ -77,55 +69,12 @@ Fraction DurationElement::globalDuration() const
       }
 
 //---------------------------------------------------------
-//  actualTicks
+//   actualTicks
 //---------------------------------------------------------
 
-int DurationElement::actualTicks() const
+Fraction DurationElement::actualTicks() const
       {
-      return actualFraction().ticks();
-      }
-
-//---------------------------------------------------------
-//   actualFraction
-//---------------------------------------------------------
-
-Fraction DurationElement::actualFraction() const
-      {
-      return globalDuration() / staff()->timeStretch(tick());
-      }
-
-//---------------------------------------------------------
-//   afrac
-//    Absolute position of element in fractions.
-//---------------------------------------------------------
-
-Fraction DurationElement::afrac() const
-      {
-      Tuplet* t = tuplet();
-      if (t) {
-            Fraction f = t->afrac();
-            for (DurationElement* de : t->elements()) {
-                  if (de == this)
-                        break;
-                  f += de->actualFraction();
-                  }
-            return f.reduced();
-            }
-      else
-            return Fraction::fromTicks(tick());
-      }
-
-//---------------------------------------------------------
-//   rfrac
-//---------------------------------------------------------
-
-Fraction DurationElement::rfrac() const
-      {
-      if (tuplet()) {
-            if (Measure* m = measure())
-                  return afrac() - m->afrac();
-            }
-      return Fraction::fromTicks(rtick());
+      return globalTicks() / staff()->timeStretch(tick());
       }
 
 //---------------------------------------------------------
@@ -134,11 +83,9 @@ Fraction DurationElement::rfrac() const
 
 void DurationElement::readAddTuplet(Tuplet* t)
       {
-      if (t) {
-            setTuplet(t);
-            if (!score()->undoStack()->active())     // HACK, also added in Undo::AddElement()
-                  t->add(this);
-            }
+      setTuplet(t);
+      if (!score()->undoStack()->active())     // HACK, also added in Undo::AddElement()
+            t->add(this);
       }
 
 //---------------------------------------------------------
@@ -188,7 +135,7 @@ bool DurationElement::setProperty(Pid propertyId, const QVariant& v)
       switch (propertyId) {
             case Pid::DURATION: {
                   Fraction f(v.value<Fraction>());
-                  setDuration(f);
+                  setTicks(f);
                   // TODO: do we really need to re-layout all here?
                   score()->setLayoutAll();
                   }

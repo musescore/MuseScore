@@ -171,7 +171,7 @@ void MasterScore::updateChannel()
                         }
                   }
             }
-      
+
       for (auto it = spanner().cbegin(); it != spanner().cend(); ++it) {
             Spanner* spanner = (*it).second;
             if (!spanner->isVolta())
@@ -245,11 +245,11 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
       if (chord->isGrace()) {
             Q_ASSERT( !graceNotesMerged(chord)); // this function should not be called on a grace note if grace notes are merged
             chord = toChord(chord->parent());
-            ticks = chord->actualTicks(); // ticks of the parent note
+            ticks = chord->actualTicks().ticks(); // ticks of the parent note
             tieLen = 0;
             }
       else {
-            ticks = chord->actualTicks(); // ticks of the actual note
+            ticks = chord->actualTicks().ticks(); // ticks of the actual note
             // calculate additional length due to ties forward
             // taking NoteEvent length adjustments into account
             // but stopping at any note with multiple NoteEvents
@@ -262,7 +262,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                               // add value of this note to main note
                               // if we wish to suppress first note of ornament,
                               // then do this regardless of number of NoteEvents
-                              tieLen += (n->chord()->actualTicks() * (nel[0].len())) / 1000;
+                              tieLen += (n->chord()->actualTicks().ticks() * (nel[0].len())) / 1000;
                               }
                         else {
                               // recurse
@@ -277,8 +277,8 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                   }
             }
 
-      int tick1 = chord->tick() + tickOffset;
-      bool tieFor = note->tieFor();
+      int tick1    = chord->tick().ticks() + tickOffset;
+      bool tieFor  = note->tieFor();
       bool tieBack = note->tieBack();
 
       NoteEventList nel = note->playEvents();
@@ -403,7 +403,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
       int etrack = nextStaffIdx * VOICES;
 
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-            int tick = seg->tick();
+            int tick = seg->tick().ticks();
             for (int track = strack; track < etrack; ++track) {
                   // skip linked staves, except primary
                   if (!m->score()->staff(track / VOICES)->primaryStaff()) {
@@ -417,8 +417,8 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   Chord* chord = toChord(cr);
                   Staff* st1   = chord->staff();
                   int staffIdx = st1->idx();
-                  int velocity = st1->velocities().velo(seg->tick());
-                  Instrument* instr = chord->part()->instrument(tick);
+                  int velocity = st1->velocities().velo(seg->tick().ticks());
+                  Instrument* instr = chord->part()->instrument(Fraction::fromTicks(tick));
                   int channel = instr->channel(chord->upNote()->subchannel())->channel();
                   events->registerChannel(channel);
 
@@ -449,7 +449,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   if (!e->isStaffTextBase() || e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx)
                         continue;
                   const StaffTextBase* st1 = toStaffTextBase(e);
-                  int tick = s->tick() + tickOffset;
+                  Fraction tick = s->tick() + Fraction::fromTicks(tickOffset);
 
                   Instrument* instr = e->part()->instrument(tick);
                   for (const ChannelActions& ca : *st1->channelActions()) {
@@ -463,9 +463,9 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                                     NPlayEvent e1(event);
                                     e1.setOriginatingStaff(firstStaffIdx);
                                     if (e1.dataA() == CTRL_PROGRAM)
-                                          events->insert(std::pair<int, NPlayEvent>(tick-1, e1));
+                                          events->insert(std::pair<int, NPlayEvent>(tick.ticks()-1, e1));
                                     else
-                                          events->insert(std::pair<int, NPlayEvent>(tick, e1));
+                                          events->insert(std::pair<int, NPlayEvent>(tick.ticks(), e1));
                                     }
                               }
                         }
@@ -477,7 +477,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                         for (int i = 0; i < 4; ++i) {
                               static int num[4] = { 12, 13, 16, 16 };
                               for (int k = 0; k < num[i]; ++k)
-                                    aeolusSetStop(tick, channel, i, k, st1->getAeolusStop(i, k), events);
+                                    aeolusSetStop(tick.ticks(), channel, i, k, st1->getAeolusStop(i, k), events);
                               }
                         }
                   }
@@ -523,10 +523,10 @@ void Score::updateRepeatList(bool expandRepeats)
 void Score::updateHairpin(Hairpin* h)
       {
       Staff* st = h->staff();
-      int tick  = h->tick();
-      int velo  = st->velocities().velo(tick);
+      Fraction tick  = h->tick();
+      int velo  = st->velocities().velo(tick.ticks());
       int incr  = h->veloChange();
-      int tick2 = h->tick2();
+      Fraction tick2 = h->tick2();
 
       //
       // If velocity increase/decrease is zero, then assume
@@ -536,14 +536,14 @@ void Score::updateHairpin(Hairpin* h)
 
       int endVelo = velo;
       if (h->hairpinType() == HairpinType::CRESC_HAIRPIN || h->hairpinType() == HairpinType::CRESC_LINE) {
-            if (incr == 0 && velo < st->velocities().nextVelo(tick2-1))
-                  endVelo = st->velocities().nextVelo(tick2-1);
+            if (incr == 0 && velo < st->velocities().nextVelo(tick2.ticks()-1))
+                  endVelo = st->velocities().nextVelo(tick2.ticks()-1);
             else
                   endVelo += incr;
             }
       else {
-            if (incr == 0 && velo > st->velocities().nextVelo(tick2-1))
-                  endVelo = st->velocities().nextVelo(tick2-1);
+            if (incr == 0 && velo > st->velocities().nextVelo(tick2.ticks()-1))
+                  endVelo = st->velocities().nextVelo(tick2.ticks()-1);
             else
                   endVelo -= incr;
             }
@@ -555,19 +555,19 @@ void Score::updateHairpin(Hairpin* h)
 
       switch (h->dynRange()) {
             case Dynamic::Range::STAFF:
-                  st->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
-                  st->velocities().setVelo(tick2-1, VeloEvent(VeloType::FIX, endVelo));
+                  st->velocities().setVelo(tick.ticks(),  VeloEvent(VeloType::RAMP, velo));
+                  st->velocities().setVelo(tick2.ticks()-1, VeloEvent(VeloType::FIX, endVelo));
                   break;
             case Dynamic::Range::PART:
                   for (Staff* s : *st->part()->staves()) {
-                        s->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
-                        s->velocities().setVelo(tick2-1, VeloEvent(VeloType::FIX, endVelo));
+                        s->velocities().setVelo(tick.ticks(),  VeloEvent(VeloType::RAMP, velo));
+                        s->velocities().setVelo(tick2.ticks()-1, VeloEvent(VeloType::FIX, endVelo));
                         }
                   break;
             case Dynamic::Range::SYSTEM:
                   for (Staff* s : _staves) {
-                        s->velocities().setVelo(tick,  VeloEvent(VeloType::RAMP, velo));
-                        s->velocities().setVelo(tick2-1, VeloEvent(VeloType::FIX, endVelo));
+                        s->velocities().setVelo(tick.ticks(),  VeloEvent(VeloType::RAMP, velo));
+                        s->velocities().setVelo(tick2.ticks()-1, VeloEvent(VeloType::FIX, endVelo));
                         }
                   break;
             }
@@ -580,10 +580,10 @@ void Score::updateHairpin(Hairpin* h)
 void Score::removeHairpin(Hairpin* h)
       {
       Staff* st = h->staff();
-      int tick  = h->tick();
-      int tick2 = h->tick2() - 1;
+      int tick  = h->tick().ticks();
+      int tick2 = h->tick2().ticks() - 1;
 
-      switch(h->dynRange()) {
+      switch (h->dynRange()) {
             case Dynamic::Range::STAFF:
                   st->velocities().remove(tick);
                   st->velocities().remove(tick2);
@@ -629,7 +629,7 @@ void Score::updateVelo()
             int partStaff  = Score::staffIdx(prt);
 
             for (Segment* s = firstMeasure()->first(); s; s = s->next1()) {
-                  int tick = s->tick();
+                  Fraction tick = s->tick();
                   for (const Element* e : s->annotations()) {
                         if (e->staffIdx() != staffIdx)
                               continue;
@@ -643,17 +643,17 @@ void Score::updateVelo()
                         switch(d->dynRange()) {
                               case Dynamic::Range::STAFF:
                                     if (dStaffIdx == staffIdx)
-                                          velo.setVelo(tick, v);
+                                          velo.setVelo(tick.ticks(), v);
                                     break;
                               case Dynamic::Range::PART:
                                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff+partStaves) {
                                           for (int i = partStaff; i < partStaff+partStaves; ++i)
-                                                staff(i)->velocities().setVelo(tick, v);
+                                                staff(i)->velocities().setVelo(tick.ticks(), v);
                                           }
                                     break;
                               case Dynamic::Range::SYSTEM:
                                     for (int i = 0; i < nstaves(); ++i)
-                                          staff(i)->velocities().setVelo(tick, v);
+                                          staff(i)->velocities().setVelo(tick.ticks(), v);
                                     break;
                               }
                         }
@@ -666,7 +666,7 @@ void Score::updateVelo()
                   updateHairpin(h);
                   }
             }
-      
+
       for (auto it = spanner().cbegin(); it != spanner().cend(); ++it) {
             Spanner* spanner = (*it).second;
             if (!spanner->isVolta())
@@ -684,12 +684,12 @@ void Score::renderStaff(EventMap* events, Staff* staff)
       {
       Measure* lastMeasure = 0;
       for (const RepeatSegment* rs : *repeatList()) {
-            int startTick  = rs->tick;
-            int endTick    = startTick + rs->len();
+            Fraction startTick  = Fraction::fromTicks(rs->tick);
+            Fraction endTick    = startTick + Fraction::fromTicks(rs->len());
             int tickOffset = rs->utick - rs->tick;
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                   if (lastMeasure && m->isRepeatMeasure(staff)) {
-                        int offset = m->tick() - lastMeasure->tick();
+                        int offset = (m->tick() - lastMeasure->tick()).ticks();
                         collectMeasureEvents(events, lastMeasure, staff, tickOffset + offset);
                         }
                   else {
@@ -731,24 +731,26 @@ void Score::renderSpanners(EventMap* events)
                         else
                               lastEvent = std::pair<int, std::pair<bool, int>>(0, std::pair<bool, int>(true, staff));
 
-                        if (s->tick() >= tick1 && s->tick() < tick2) {
+                        int st = s->tick().ticks();
+                        if (st >= tick1 && st < tick2) {
                               // Handle "overlapping" pedal segments (usual case for connected pedal line)
-                              if (lastEvent.second.first == false && lastEvent.first >= (s->tick() + tickOffset + 2)) {
+                              if (lastEvent.second.first == false && lastEvent.first >= (st + tickOffset + 2)) {
                                     channelPedalEvents.at(channel).pop_back();
-                                    channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(s->tick() + tickOffset + 1, std::pair<bool, int>(false, staff)));
+                                    channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(st + tickOffset + 1, std::pair<bool, int>(false, staff)));
                                     }
-                              channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(s->tick() + tickOffset + 2, std::pair<bool, int>(true, staff)));
+                              int a = st + tickOffset + 2;
+                              channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(a, std::pair<bool, int>(true, staff)));
                               }
-                        if (s->tick2() >= tick1 && s->tick2() <= tick2) {
-                              int t = s->tick2() + tickOffset + 1;
+                        if (s->tick2().ticks() >= tick1 && s->tick2().ticks() <= tick2) {
+                              int t = s->tick2().ticks() + tickOffset + 1;
                               if (t > repeatList()->last()->utick + repeatList()->last()->len())
                                     t = repeatList()->last()->utick + repeatList()->last()->len();
                               channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(t, std::pair<bool, int>(false, staff)));
                               }
                         }
                   else if (s->isVibrato()) {
-                        int stick = s->tick();
-                        int etick = s->tick2();
+                        int stick = s->tick().ticks();
+                        int etick = s->tick2().ticks();
                         if (stick >= tick2 || etick < tick1)
                               continue;
 
@@ -825,7 +827,7 @@ void Score::renderSpanners(EventMap* events)
 
 void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swingUnit, int swingRatio)
       {
-      int tick = chord->rtick();
+      Fraction tick = chord->rtick();
       // adjust for anacrusis
       Measure* cm     = chord->measure();
       MeasureBase* pm = cm->prev();
@@ -833,25 +835,25 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
       if (!pm || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
          || pt == ElementType::VBOX || pt == ElementType::HBOX
          || pt == ElementType::FBOX || pt == ElementType::TBOX) {
-            int offset = (cm->timesig() - cm->len()).ticks();
-            if (offset > 0) {
+            Fraction offset = cm->timesig() - cm->ticks();
+            if (offset > Fraction(0,1)) {
                   tick += offset;
                   }
             }
 
       int swingBeat           = swingUnit * 2;
-      qreal ticksDuration     = (qreal)chord->actualTicks();
+      qreal ticksDuration     = (qreal)chord->actualTicks().ticks();
       qreal swingTickAdjust   = ((qreal)swingBeat) * (((qreal)(swingRatio-50))/100.0);
       qreal swingActualAdjust = (swingTickAdjust/ticksDuration) * 1000.0;
       ChordRest *ncr          = nextChordRest(chord);
 
       //Check the position of the chord to apply changes accordingly
-      if (tick % swingBeat == swingUnit) {
+      if (tick.ticks() % swingBeat == swingUnit) {
             if (!isSubdivided(chord,swingUnit)) {
                   ontime = ontime + swingActualAdjust;
                   }
             }
-      int endTick = tick + ticksDuration;
+      int endTick = tick.ticks() + ticksDuration;
       if ((endTick % swingBeat == swingUnit) && (!isSubdivided(ncr,swingUnit))) {
             gateTime = gateTime + (swingActualAdjust/10);
             }
@@ -867,7 +869,7 @@ bool Score::isSubdivided(ChordRest* chord, int swingUnit)
       if (!chord)
             return false;
       ChordRest* prev = prevChordRest(chord);
-      if (chord->actualTicks() < swingUnit || (prev && prev->actualTicks() < swingUnit))
+      if (chord->actualTicks().ticks() < swingUnit || (prev && prev->actualTicks().ticks() < swingUnit))
             return true;
       else
             return false;
@@ -930,7 +932,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
             if (c2->type() == ElementType::CHORD) {
                   int notes2 = int(c2->notes().size());
                   int tnotes = qMax(notes, notes2);
-                  int tticks = chord->actualTicks() * 2; // use twice the size
+                  int tticks = chord->actualTicks().ticks() * 2; // use twice the size
                   int n = tticks / t;
                   n /= 2;
                   int l = 2000 * t / tticks;
@@ -984,7 +986,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
             int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
             if (t == 0) // avoid crash on very short tremolo
                   t = 1;
-            int n = chord->duration().ticks() / t;
+            int n = chord->ticks().ticks() / t;
             int l = 1000 / n;
             for (int k = 0; k < notes; ++k) {
                   NoteEventList* events = &(ell)[k];
@@ -1022,8 +1024,8 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
             NoteEventList* events = &(ell)[i];
             events->clear();
 
-            auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick()) / Score::defaultTempo();
-            int ot = (l * j * 1000) / chord->upNote()->playTicks() * 
+            auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()) / Score::defaultTempo();
+            int ot = (l * j * 1000) / chord->upNote()->playTicks() *
                         tempoRatio * chord->arpeggio()->Stretch();
 
             events->append(NoteEvent(0, ot, 1000 - ot));
@@ -1092,7 +1094,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
       Chord *chordL = noteL->chord();
       Chord *chordR = noteR->chord();
       int epitchL = noteL->epitch();
-      int tickL = chordL->tick();
+      Fraction tickL = chordL->tick();
       // we canot use staffL = chord->staff() because that won't correspond to the noteL->line()
       //   in the case the user has pressed Shift-Cmd->Up or Shift-Cmd-Down.
       //   Therefore we have to take staffMove() into account using vStaffIdx().
@@ -1154,16 +1156,16 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
 //      return the total of the actualTicks of the given note plus
 //      the chain of zero or more notes tied to it to the right.
 //---------------------------------------------------------
+
 int totalTiedNoteTicks(Note* note)
       {
-      int total = note->chord()->actualTicks();
+      Fraction total = note->chord()->actualTicks();
       while (note->tieFor() && note->tieFor()->endNote() && (note->chord()->tick() < note->tieFor()->endNote()->chord()->tick())) {
             note = note->tieFor()->endNote();
             total += note->chord()->actualTicks();
             }
-      return total;
-      };
-
+      return total.ticks();
+      }
 
 //---------------------------------------------------------
 //   renderNoteArticulation
@@ -1199,7 +1201,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
       if (gnb + p + b + s + gna <= 0 )
             return false;
 
-      int tick = chord->tick();
+      Fraction tick = chord->tick();
       qreal tempo = chord->score()->tempo(tick);
       int ticksPerSecond = tempo * MScore::division;
 
@@ -1269,8 +1271,8 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
       //   RETURNS the new ontime value.  The caller is expected to assign this value.
       auto makeEvent = [note,chord,chromatic,events] (int pitch, int ontime, int duration) {
             events->append( NoteEvent(chromatic ? pitch : articulationExcursion(note,note,pitch),
-               ontime/chord->actualTicks(),
-               duration/chord->actualTicks()));
+               ontime/chord->actualTicks().ticks(),
+               duration/chord->actualTicks().ticks()));
             return ontime + duration;
             };
 
@@ -1289,8 +1291,8 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
                         // The pitch is relative to the pitch of the note, the event is rendering
                         if (n->play())
                               events->append( NoteEvent(n->pitch() - notePitch,
-                                 ontime/chord->actualTicks(),
-                                 millespernote/chord->actualTicks()));
+                                 ontime/chord->actualTicks().ticks(),
+                                 millespernote/chord->actualTicks().ticks()));
                         }
                   ontime += millespernote;
                   }
@@ -1534,8 +1536,10 @@ void renderGlissando(NoteEventList* events, Note *notestart)
 //  which overlaps this chord and is of type ElementType::TRILL
 //---------------------------------------------------------
 
-Trill* findFirstTrill(Chord *chord) {
-      auto spanners = chord->score()->spannerMap().findOverlapping(1+chord->tick(), chord->tick() + chord->actualTicks() - 1);
+Trill* findFirstTrill(Chord *chord)
+      {
+      auto spanners = chord->score()->spannerMap().findOverlapping(1+chord->tick().ticks(),
+         chord->tick().ticks() + chord->actualTicks().ticks() - 1);
       for (auto i : spanners) {
             if (i.value->type() != ElementType::TRILL)
                   continue;
@@ -1674,7 +1678,7 @@ static QList<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, 
 // to effect the on/off time of the main note
 //---------------------------------------------------------
 
-void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int &trailtime)
+void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& ontime, int& trailtime)
       {
       QVector<Chord*> gnb = chord->graceNotesBefore();
       QVector<Chord*> gna = chord->graceNotesAfter();
@@ -1700,7 +1704,7 @@ void Score::createGraceNotesPlayEvents(int tick, Chord* chord, int &ontime, int 
       int graceDuration = 0;
       bool drumset = (getDrumset(chord) != nullptr);
       const qreal ticksPerSecond = tempo(tick) * MScore::division;
-      const qreal chordTimeMS = (chord->actualTicks() / ticksPerSecond) * 1000;
+      const qreal chordTimeMS = (chord->actualTicks().ticks() / ticksPerSecond) * 1000;
       if (drumset) {
             int flamDuration = 15; //ms
             graceDuration = flamDuration / chordTimeMS * 1000; //ratio 1/1000 from the main note length
@@ -1791,10 +1795,10 @@ void Score::createPlayEvents(Chord* chord)
       {
       int gateTime = 100;
 
-      int tick = chord->tick();
+      Fraction tick = chord->tick();
       Slur* slur = 0;
       for (auto sp : _spanner.map()) {
-            if (sp.second->type() != ElementType::SLUR || sp.second->staffIdx() != chord->staffIdx())
+            if (!sp.second->isSlur() || sp.second->staffIdx() != chord->staffIdx())
                   continue;
             Slur* s = toSlur(sp.second);
             if (tick >= s->tick() && tick < s->tick2()) {
@@ -1857,28 +1861,27 @@ void Score::createPlayEvents()
 //   renderMetronome
 //---------------------------------------------------------
 
-void Score::renderMetronome(EventMap* events, Measure* m, int tickOffset)
+void Score::renderMetronome(EventMap* events, Measure* m, const Fraction& tickOffset)
       {
-      int msrTick = m->tick();
-      qreal tempo = tempomap()->tempo(msrTick);
+      int msrTick         = m->tick().ticks();
+      qreal tempo         = tempomap()->tempo(msrTick);
       TimeSigFrac timeSig = sigmap()->timesig(msrTick).nominal();
 
-
-      int clickTicks = timeSig.isBeatedCompound(tempo) ? timeSig.beatTicks() : timeSig.dUnitTicks();
-      int endTick = m->endTick();
+      int clickTicks      = timeSig.isBeatedCompound(tempo) ? timeSig.beatTicks() : timeSig.dUnitTicks();
+      int endTick         = m->endTick().ticks();
 
       int rtick;
 
       if (m->isAnacrusis()) {
-            int rem = m->ticks() % clickTicks;
+            int rem = m->ticks().ticks() % clickTicks;
             msrTick += rem;
-            rtick = rem + timeSig.ticksPerMeasure() - m->ticks();
+            rtick = rem + timeSig.ticksPerMeasure() - m->ticks().ticks();
             }
       else
             rtick = 0;
 
-      for (int tick = msrTick; tick < endTick; tick += clickTicks, rtick+=clickTicks)
-            events->insert(std::pair<int,NPlayEvent>(tick + tickOffset, NPlayEvent(timeSig.rtick2beatType(rtick))));
+      for (int tick = msrTick; tick < endTick; tick += clickTicks, rtick += clickTicks)
+            events->insert(std::pair<int,NPlayEvent>(tick + tickOffset.ticks(), NPlayEvent(timeSig.rtick2beatType(rtick))));
       }
 
 //---------------------------------------------------------
@@ -1920,9 +1923,9 @@ void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats)
             //
             //    add metronome tick events
             //
-            for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                  renderMetronome(events, m, tickOffset);
-                  if (m->tick() + m->ticks() >= endTick)
+            for (Measure* m = tick2measure(Fraction::fromTicks(startTick)); m; m = m->nextMeasure()) {
+                  renderMetronome(events, m, Fraction::fromTicks(tickOffset));
+                  if (m->endTick().ticks() >= endTick)
                         break;
                   }
             }

@@ -42,7 +42,7 @@ namespace Ms {
 //   transposeChord
 //---------------------------------------------------------
 
-static void transposeChord(Chord* c, Interval srcTranspose, int tick)
+static void transposeChord(Chord* c, Interval srcTranspose, const Fraction& tick)
       {
       // set note track
       // check if staffMove moves a note to a
@@ -84,9 +84,9 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
       QList<Chord*> graceNotes;
       Beam* startingBeam = nullptr;
       Tuplet* tuplet = nullptr;
-      int dstTick = dst->tick();
+      Fraction dstTick = dst->tick();
       bool pasted = false;
-      int tickLen = 0;
+      Fraction tickLen = Fraction(0,1);
       int staves  = 0;
       bool done   = false;
       while (e.readNextStartElement()) {
@@ -103,13 +103,13 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                         break;
                         }
                   }
-            int tickStart     = e.intAttribute("tick", 0);
-                tickLen       = e.intAttribute("len", 0);
+            Fraction tickStart = Fraction::fromTicks(e.intAttribute("tick", 0));
+                tickLen       =  Fraction::fromTicks(e.intAttribute("len", 0));
             int staffStart    = e.intAttribute("staff", 0);
                 staves        = e.intAttribute("staves", 0);
 
             e.setTickOffset(dstTick - tickStart);
-            e.initTick(0);
+            e.setTick(Fraction(0,1));
 
             while (e.readNextStartElement()) {
                   if (done)
@@ -150,8 +150,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     voiceOffset[voiceId] = e.readInt();
                                     }
                               e.readNext();
-                              if (!makeGap1(dstTick, dstStaffIdx, Fraction::fromTicks(tickLen), voiceOffset)) {
-                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick);
+                              if (!makeGap1(dstTick, dstStaffIdx, tickLen, voiceOffset)) {
+                                    qDebug("cannot make gap in staff %d at tick %d", dstStaffIdx, dstTick.ticks());
                                     done = true; // break main loop, cannot make gap
                                     break;
                                     }
@@ -163,7 +163,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               }
                         else if (tag == "Tuplet") {
                               Tuplet* oldTuplet = tuplet;
-                              int tick = e.tick();
+                              Fraction tick = e.tick();
                               // no paste into local time signature
                               if (staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
                                     MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
@@ -178,7 +178,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
                               tuplet->setTuplet(oldTuplet);
-                              if (tuplet->rfrac() + tuplet->actualFraction() > measure->len()) {
+                              if (tuplet->rtick() + tuplet->actualTicks() > measure->ticks()) {
                                     delete tuplet;
                                     if (oldTuplet && oldTuplet->elements().empty())
                                           delete oldTuplet;
@@ -211,7 +211,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               cr->setTrack(e.track());
                               cr->read(e);
                               cr->setSelected(false);
-                              int tick = e.tick();
+                              Fraction tick = e.tick();
                               // no paste into local time signature
                               if (staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
                                     MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
@@ -221,11 +221,11 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     startingBeam->add(cr); // also calls cr->setBeam(startingBeam)
                                     startingBeam = nullptr;
                                     }
-                              if (tuplet)
-                                    cr->readAddTuplet(tuplet);
                               if (cr->isGrace())
                                     graceNotes.push_back(toChord(cr));
                               else {
+                                    if (tuplet)
+                                          cr->readAddTuplet(tuplet);
                                     e.incTick(cr->actualTicks());
                                     if (cr->isChord()) {
                                           Chord* chord = toChord(cr);
@@ -234,8 +234,8 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                           // but these will be removed later
                                           if (chord->tremolo() && chord->tremolo()->twoNotes()) {
                                                 Measure* m = tick2measure(tick);
-                                                int ticks = cr->actualTicks();
-                                                int rticks = m->endTick() - tick;
+                                                Fraction ticks = cr->actualTicks();
+                                                Fraction rticks = m->endTick() - tick;
                                                 if (rticks < ticks || (rticks != ticks && rticks < ticks * 2)) {
                                                       MScore::setError(DEST_TREMOLO);
                                                       return false;
@@ -264,11 +264,11 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                           }
                                     // shorten last cr to fit in the space made by makeGap
                                     if ((tick - dstTick) + cr->actualTicks() > tickLen) {
-                                          int newLength = tickLen - (tick - dstTick);
+                                          Fraction newLength = tickLen - (tick - dstTick);
                                           // check previous CR on same track, if it has tremolo, delete the tremolo
                                           // we don't want a tremolo and two different chord durations
                                           if (cr->isChord()) {
-                                                Segment* s = tick2leftSegment(tick - 1);
+                                                Segment* s = tick2leftSegment(tick - Fraction::fromTicks(1));
                                                 if (s) {
                                                       ChordRest* crt = toChordRest(s->element(cr->track()));
                                                       if (!crt)
@@ -284,11 +284,11 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                                             }
                                                       }
                                                 }
-                                          if (!cr->tuplet()/*|| cr->actualTicks() - newLength > (cr->tuplet()->ratio().numerator() + 1 ) / 2*/) {
+                                          if (!cr->tuplet()) {
                                                 // shorten duration
                                                 // exempt notes in tuplets, since we don't allow copy of partial tuplet anyhow
                                                 // TODO: figure out a reasonable fudge factor to make sure shorten tuplets appropriately if we do ever copy a partial tuplet
-                                                cr->setDuration(Fraction::fromTicks(newLength));
+                                                cr->setTicks(newLength);
                                                 cr->setDurationType(newLength);
                                                 }
                                           }
@@ -312,7 +312,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                                     undoTransposeHarmony(harmony, rootTpc, baseTpc);
                                     }
 
-                              int tick = e.tick();
+                              Fraction tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(SegmentType::ChordRest, tick);
                               for (Element* el : seg->findAnnotations(ElementType::HARMONY, e.track(), e.track()))
@@ -354,9 +354,9 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Clef* clef = new Clef(this);
                               clef->read(e);
                               clef->setTrack(e.track());
-                              int tick = e.tick();
+                              Fraction tick = e.tick();
                               Measure* m = tick2measure(tick);
-                              if (m->tick() && m->tick() == tick)
+                              if (m->tick().isNotZero() && m->tick() == tick)
                                     m = m->prevMeasure();
                               Segment* segment = m->undoGetSegment(SegmentType::Clef, tick);
                               clef->setParent(segment);
@@ -366,7 +366,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff)
                               Breath* breath = new Breath(this);
                               breath->read(e);
                               breath->setTrack(e.track());
-                              int tick = e.tick();
+                              Fraction tick = e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* segment = m->undoGetSegment(SegmentType::Breath, tick);
                               breath->setParent(segment);
@@ -477,10 +477,10 @@ void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                         sp->setAnchor(Spanner::Anchor::SEGMENT);
                         sp->setTrack(l.track());
                         sp->setTrack2(l.track());
-                        sp->setTick(l.frac().ticks());
+                        sp->setTick(l.frac());
                         }
                   else if (info->isEnd()) {
-                        sp->setTick2(l.frac().ticks());
+                        sp->setTick2(l.frac());
                         undoAddElement(sp);
                         if (sp->isOttava())
                               sp->staff()->updateOttava();
@@ -496,9 +496,10 @@ void Score::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 //   pasteChordRest
 //---------------------------------------------------------
 
-void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose)
+void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& srcTranspose)
       {
-// qDebug("pasteChordRest %s at %d, len %d/%d", cr->name(), tick, cr->duration().numerator(), cr->duration().denominator() );
+      Fraction tick(t);
+// qDebug("pasteChordRest %s at %d, len %d/%d", cr->name(), tick, cr->ticks().numerator(), cr->ticks().denominator() );
       if (cr->isChord())
             transposeChord(toChord(cr), srcTranspose, tick);
 
@@ -511,9 +512,9 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
       // otherwise, we need to convert to duration rest(s)
       // and potentially split the rest up (eg, 5/4 => whole + quarter)
       bool convertMeasureRest = cr->isRest() && cr->durationType().type() == TDuration::DurationType::V_MEASURE
-         && (tick != measure->tick() || cr->duration() != measure->len());
+         && (tick != measure->tick() || cr->ticks() != measure->ticks());
 
-      int measureEnd = measure->endTick();
+      Fraction measureEnd = measure->endTick();
       bool isGrace = cr->isChord() && toChord(cr)->noteType() != NoteType::NORMAL;
 
       // if note is too long to fit in measure, split it up with a tie across the barline
@@ -525,19 +526,19 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
             if (cr->isChord()) {
                   // split Chord
                   Chord* c = toChord(cr);
-                  int rest = c->actualTicks();
+                  Fraction rest = c->actualTicks();
                   bool firstpart = true;
-                  while (rest) {
+                  while (rest.isNotZero()) {
                         measure = tick2measure(tick);
                         Chord* c2 = firstpart ? c : toChord(c->clone());
                         if (!firstpart)
                               c2->removeMarkings(true);
-                        int mlen = measure->tick() + measure->ticks() - tick;
-                        int len = mlen > rest ? rest : mlen;
-                        std::vector<TDuration> dl = toRhythmicDurationList(Fraction::fromTicks(len), false, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, MAX_DOTS);
+                        Fraction mlen = measure->tick() + measure->ticks() - tick;
+                        Fraction len = mlen > rest ? rest : mlen;
+                        std::vector<TDuration> dl = toRhythmicDurationList(len, false, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, MAX_DOTS);
                         TDuration d = dl[0];
                         c2->setDurationType(d);
-                        c2->setDuration(d.fraction());
+                        c2->setTicks(d.fraction());
                         rest -= c2->actualTicks();
                         undoAddCR(c2, measure, tick);
 
@@ -566,39 +567,39 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
             else if (cr->isRest()) {
                   // split Rest
                   Rest* r       = toRest(cr);
-                  Fraction rest = r->duration();
+                  Fraction rest = r->ticks();
 
                   bool firstpart = true;
                   while (!rest.isZero()) {
                         Rest* r2      = firstpart ? r : toRest(r->clone());
                         measure       = tick2measure(tick);
-                        Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
+                        Fraction mlen = measure->tick() + measure->ticks() - tick;
                         Fraction len  = rest > mlen ? mlen : rest;
                         std::vector<TDuration> dl = toRhythmicDurationList(len, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, MAX_DOTS);
                         TDuration d = dl[0];
                         r2->setDurationType(d);
-                        r2->setDuration(d.isMeasure() ? measure->len() : d.fraction());
+                        r2->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
                         undoAddCR(r2, measure, tick);
-                        rest -= r2->duration();
+                        rest -= r2->ticks();
                         tick += r2->actualTicks();
                         firstpart = false;
                         }
                   }
             else if (cr->isRepeatMeasure()) {
                   RepeatMeasure* rm = toRepeatMeasure(cr);
-                  std::vector<TDuration> list = toDurationList(rm->actualDuration(), true);
+                  std::vector<TDuration> list = toDurationList(rm->actualTicks(), true);
                   for (auto dur : list) {
                         Rest* r = new Rest(this, dur);
                         r->setTrack(cr->track());
-                        Fraction rest = r->duration();
+                        Fraction rest = r->ticks();
                         while (!rest.isZero()) {
                               Rest* r2      = toRest(r->clone());
                               measure       = tick2measure(tick);
-                              Fraction mlen = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
+                              Fraction mlen = measure->tick() + measure->ticks() - tick;
                               Fraction len  = rest > mlen ? mlen : rest;
                               std::vector<TDuration> dl = toDurationList(len, false);
                               TDuration d = dl[0];
-                              r2->setDuration(d.fraction());
+                              r2->setTicks(d.fraction());
                               r2->setDurationType(d);
                               undoAddCR(r2, measure, tick);
                               rest -= d.fraction();
@@ -626,15 +627,15 @@ void Score::pasteChordRest(ChordRest* cr, int tick, const Interval& srcTranspose
 void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
       {
       Segment* currSegm = dst->segment();
-      int   destTick    = 0;              // the tick and track to place the pasted element at
+      Fraction destTick = Fraction(0,1);              // the tick and track to place the pasted element at
       int   destTrack   = 0;
       bool  done        = false;
       int   segDelta    = 0;
       Segment* startSegm= currSegm;
-      int   startTick   = dst->tick();    // the initial tick and track where to start pasting
+      Fraction   startTick   = dst->tick();    // the initial tick and track where to start pasting
       int   startTrack  = dst->track();
       int   maxTrack    = ntracks();
-      int   lastTick    = lastSegment()->tick();
+      Fraction lastTick = lastSegment()->tick();
 
       while (e.readNextStartElement()) {
             if (done)
@@ -657,7 +658,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         currSegm  = startSegm;
                         }
                   else if (tag == "tickOffset")
-                        destTick = startTick + e.readInt();
+                        destTick = startTick + Fraction::fromTicks(e.readInt());
                   else if (tag == "segDelta")
                         segDelta = e.readInt();
                   else {
@@ -744,7 +745,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                               else if (tag == "FiguredBass") {
                                     // FiguredBass always belongs to first staff voice
                                     destTrack = trackZeroVoice(destTrack);
-                                    int ticks;
+                                    Fraction ticks;
                                     FiguredBass* el = new FiguredBass(this);
                                     el->setTrack(destTrack);
                                     el->read(e);
@@ -783,11 +784,11 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                                 continue;
                                                 }
                                           // by default, split on-note duration in half: half on-note and half off-note
-                                          int totTicks  = currSegm->tick() - prevSegm->tick();
-                                          int destTick1 = prevSegm->tick() + totTicks / 2;
-                                          ticks         = totTicks / 2;
+                                          Fraction totTicks  = currSegm->tick() - prevSegm->tick();
+                                          Fraction destTick1 = prevSegm->tick() + (totTicks * Fraction(1,2));
+                                          ticks         = totTicks * Fraction(1, 2);
                                           if (onNoteFB)
-                                                onNoteFB->setTicks(totTicks / 2);
+                                                onNoteFB->setTicks(totTicks * Fraction(1,2));
                                           // look for a segment at this tick; if none, create one
                                           Segment * nextSegm = prevSegm;
                                           while (nextSegm && nextSegm->tick() < destTick1)
@@ -805,7 +806,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                           }
                                     else
                                           // by default, assign to FiguredBass element the duration of the chord it refers to
-                                          ticks = toChordRest(currSegm->element(destTrack))->duration().ticks();
+                                          ticks = toChordRest(currSegm->element(destTrack))->ticks();
                                     // in both cases, look for an existing f.b. element in segment and remove it, if found
                                     FiguredBass* oldFB = nullptr;
                                     foreach (Element* a, currSegm->annotations()) {

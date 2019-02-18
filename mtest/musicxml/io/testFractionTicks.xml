@@ -372,9 +372,6 @@
         <duration>9240</duration>
         <type>quarter</type>
       </note>
-      <forward>
-        <duration>1</duration>
-        </forward>
       <direction>
         <direction-type>
           <dynamics>
@@ -382,9 +379,6 @@
             </dynamics>
           </direction-type>
         </direction>
-      <backup>
-        <duration>1</duration>
-        </backup>
       <note>
         <pitch>
           <step>C</step>

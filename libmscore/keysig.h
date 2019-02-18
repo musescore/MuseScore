@@ -61,7 +61,6 @@ class KeySig final : public Element {
       bool operator==(const KeySig&) const;
       void changeKeySigEvent(const KeySigEvent&);
       void setKeySigEvent(const KeySigEvent& e)      { _sig = e; }
-      int tick() const;
 
       bool showCourtesy() const           { return _showCourtesy; }
       void setShowCourtesy(bool v)        { _showCourtesy = v;    }

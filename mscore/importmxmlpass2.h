@@ -84,7 +84,7 @@ public:
       MusicXmlLyricsExtend() {}
       void init();
       void addLyric(Lyrics* const lyric);
-      void setExtend(const int no, const int track, const int tick);
+      void setExtend(const int no, const int track, const Fraction& tick);
 
 private:
       QSet<Lyrics*> _lyrics;
@@ -229,13 +229,13 @@ private:
       void measChordNote( /*, const MxmlPhase2Note note, ChordRest& currChord */);
       void measChordFlush( /*, ChordRest& currChord */);
       void measure(const QString& partId, const Fraction time);
-      void attributes(const QString& partId, Measure* measure, const int tick);
+      void attributes(const QString& partId, Measure* measure, const Fraction& tick);
       void measureStyle(Measure* measure);
       void print(Measure* measure);
       void barline(const QString& partId, Measure* measure);
-      void key(const QString& partId, Measure* measure, const int tick);
-      void clef(const QString& partId, Measure* measure, const int tick);
-      void time(const QString& partId, Measure* measure, const int tick);
+      void key(const QString& partId, Measure* measure, const Fraction& tick);
+      void clef(const QString& partId, Measure* measure, const Fraction& tick);
+      void time(const QString& partId, Measure* measure, const Fraction& tick);
       void divisions();
       void transpose(const QString& partId);
       Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,
@@ -310,7 +310,7 @@ private:
 class MusicXMLParserDirection {
 public:
       MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
-      void direction(const QString& partId, Measure* measure, const int tick, MusicXmlSpannerMap& spanners);
+      void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners);
 
 private:
       QXmlStreamReader& _e;

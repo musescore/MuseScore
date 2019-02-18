@@ -116,12 +116,14 @@ Segment::Segment(Measure* m)
       init();
       }
 
-Segment::Segment(Measure* m, SegmentType st, int t)
+Segment::Segment(Measure* m, SegmentType st, const Fraction& t)
    : Element(m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
       {
       setParent(m);
+//      Q_ASSERT(t >= Fraction(0,1));
+//      Q_ASSERT(t <= m->ticks());
       _segmentType = st;
-      setRtick(t);
+      _tick = t;
       init();
       }
 
@@ -203,6 +205,15 @@ void Segment::init()
       _shapes.assign(staves, Shape());
       _prev = 0;
       _next = 0;
+      }
+
+//---------------------------------------------------------
+//   tick
+//---------------------------------------------------------
+
+Fraction Segment::tick() const
+      {
+      return _tick + measure()->tick();
       }
 
 //---------------------------------------------------------
@@ -445,9 +456,12 @@ void Segment::checkElement(Element* el, int track)
       {
       // generated elements can be overwritten
       if (_elist[track] && !_elist[track]->generated()) {
-            qDebug("add(%s): there is already a %s at %s(%d) track %d. score %p %s",
-               el->name(), _elist[track]->name(),
-               qPrintable(score()->sigmap()->pos(tick())), tick(), track, score(), score()->isMaster() ? "Master" : "Part");
+            qDebug("add(%s): there is already a %s at track %d tick %d",
+               el->name(),
+               _elist[track]->name(),
+               track,
+               tick().ticks()
+               );
 //            abort();
             }
       }
@@ -561,9 +575,9 @@ void Segment::add(Element* el)
                         }
                   // the tick position of a tuplet is the tick position of its
                   // first element:
-                  ChordRest* cr = toChordRest(el);
-                  if (cr->tuplet() && !cr->tuplet()->elements().empty() && cr->tuplet()->elements().front() == cr && cr->tuplet()->tick() < 0)
-                        cr->tuplet()->setTick(cr->tick());
+//                  ChordRest* cr = toChordRest(el);
+//                  if (cr->tuplet() && !cr->tuplet()->elements().empty() && cr->tuplet()->elements().front() == cr && cr->tuplet()->tick() < 0)
+//                        cr->tuplet()->setTick(cr->tick());
                   }
                   // fall through
 
@@ -607,7 +621,7 @@ void Segment::remove(Element* el)
                   measure()->checkMultiVoices(staffIdx);
                   // spanners with this cr as start or end element will need relayout
                   SpannerMap& smap = score()->spannerMap();
-                  auto spanners = smap.findOverlapping(tick(), tick());
+                  auto spanners = smap.findOverlapping(tick().ticks(), tick().ticks());
                   for (auto interval : spanners) {
                         Spanner* s = interval.value;
                         Element* start = s->startElement();
@@ -845,7 +859,7 @@ QVariant Segment::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::TICK:
-                  return _tick.ticks();
+                  return _tick;
             case Pid::LEADING_SPACE:
                   return extraLeadingSpace();
             default:
@@ -875,7 +889,7 @@ bool Segment::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
             case Pid::TICK:
-                  setRtick(v.toInt());
+                  setRtick(v.value<Fraction>());
                   break;
             case Pid::LEADING_SPACE:
                   setExtraLeadingSpace(v.value<Spatium>());
@@ -1069,24 +1083,18 @@ void Segment::scanElements(void* data, void (*func)(void*, Element*), bool all)
 
 Element* Segment::firstElement(int staff)
       {
-      if (segmentType() == SegmentType::ChordRest) {
-            for (int v = staff * VOICES; v/VOICES == staff; v++) {
-                Element* el = element(v);
-                if (!el) {      //there is no chord or rest on this voice
-                      continue;
-                      }
-                if (el->isChord()) {
-                      return toChord(el)->notes().back();
-                      }
-                else {
-                      return el;
-                      }
-                }
+      if (isChordRestType()) {
+            int strack = staff * VOICES;
+            int etrack = strack + VOICES;
+            for (int v = strack; v < etrack; ++v) {
+                  Element* el = element(v);
+                  if (!el)
+                        continue;
+                  return el->isChord() ? toChord(el)->notes().back() : el;
+                  }
             }
-      else {
+      else
             return getElement(staff);
-            }
-
       return 0;
       }
 
@@ -1395,7 +1403,7 @@ Element* Segment::lastElementOfSegment(Segment* s, int activeStaff)
 Spanner* Segment::firstSpanner(int activeStaff)
       {
       std::multimap<int, Spanner*> mmap = score()->spanner();
-      auto range = mmap.equal_range(tick());
+      auto range = mmap.equal_range(tick().ticks());
       if (range.first != range.second){ // range not empty
             for (auto i = range.first; i != range.second; ++i) {
                   Spanner* s = i->second;
@@ -1416,7 +1424,7 @@ Spanner* Segment::firstSpanner(int activeStaff)
 Spanner* Segment::lastSpanner(int activeStaff)
       {
       std::multimap<int, Spanner*> mmap = score()->spanner();
-      auto range = mmap.equal_range(tick());
+      auto range = mmap.equal_range(tick().ticks());
       if (range.first != range.second){ // range not empty
             for (auto i = --range.second; i != range.first; --i) {
                   Spanner* s = i->second;
@@ -1795,7 +1803,7 @@ QString Segment::accessibleExtraInfo() const
       QString startSpanners = "";
       QString endSpanners = "";
 
-      auto spanners = score()->spannerMap().findOverlapping(this->tick(), this->tick());
+      auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), tick().ticks());
       for (auto interval : spanners) {
             Spanner* s = interval.value;
             if (!score()->selectionFilter().canSelect(s)) continue;
@@ -2067,84 +2075,6 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       if (ns)
             w += ns->extraLeadingSpace().val() * spatium();
       return w;
-      }
-
-//---------------------------------------------------------
-//   setTick
-//    *** deprecated ***
-//---------------------------------------------------------
-
-void Segment::setTick(int t)
-      {
-      setRtick(t - measure()->tick());
-      }
-
-//---------------------------------------------------------
-//   tick
-//    *** deprecated ***
-//---------------------------------------------------------
-
-int Segment::tick() const
-      {
-      return rtick() + measure()->tick();
-      }
-
-//---------------------------------------------------------
-//   ticks
-//---------------------------------------------------------
-
-int Segment::ticks() const
-      {
-      return _ticks.ticks();
-      }
-
-//---------------------------------------------------------
-//   setTicks
-//---------------------------------------------------------
-
-void Segment::setTicks(int val)
-      {
-      _ticks = Fraction::fromTicks(val);
-      }
-
-//---------------------------------------------------------
-//   rtick
-//    tickposition relative to measure start
-//---------------------------------------------------------
-
-int Segment::rtick() const
-      {
-      return _tick.ticks();
-      }
-
-//---------------------------------------------------------
-//   setRtick
-//---------------------------------------------------------
-
-void Segment::setRtick(int val)
-      {
-      _tick = Fraction::fromTicks(val);
-      }
-
-//---------------------------------------------------------
-//   rfrac
-//    return relative position of segment in measure
-//---------------------------------------------------------
-
-Fraction Segment::rfrac() const
-      {
-      return _tick;
-      }
-
-//---------------------------------------------------------
-//   afrac
-//    return absolute position of segment
-//    *** deprecated ***
-//---------------------------------------------------------
-
-Fraction Segment::afrac() const
-      {
-      return _tick + Fraction::fromTicks(measure()->tick());
       }
 
 }           // namespace Ms

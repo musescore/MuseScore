@@ -172,9 +172,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>1/1920</fractions>
-            </location>
           <Tuplet>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
@@ -206,9 +203,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>1/1920</fractions>
-            </location>
           <Tuplet>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
@@ -241,9 +235,6 @@
             </Chord>
           <endTuplet/>
           <endTuplet/>
-          <location>
-            <fractions>1/1920</fractions>
-            </location>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
@@ -298,9 +289,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>1/1920</fractions>
-            </location>
           <Tuplet>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
@@ -332,9 +320,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>1/1920</fractions>
-            </location>
           <Rest>
             <durationType>eighth</durationType>
             </Rest>

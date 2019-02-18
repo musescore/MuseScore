@@ -71,10 +71,10 @@ void RepeatMeasure::layout()
       }
 
 //---------------------------------------------------------
-//   duration
+//   ticks
 //---------------------------------------------------------
 
-Fraction RepeatMeasure::duration() const
+Fraction RepeatMeasure::ticks() const
       {
       if (measure())
             return measure()->stretchedLen(staff());

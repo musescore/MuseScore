@@ -136,7 +136,7 @@ QSet<ChordRest*> Score::getSelectedChordRests() const
 //   pos
 //---------------------------------------------------------
 
-int Score::pos()
+Fraction Score::pos()
       {
       Element* el = selection().element();
       if (selection().activeCR())
@@ -154,7 +154,7 @@ int Score::pos()
                         break;
                   }
             }
-      return -1;
+      return Fraction(-1, 1);
       }
 
 //---------------------------------------------------------
@@ -163,14 +163,14 @@ int Score::pos()
 //    create segment if necessary
 //---------------------------------------------------------
 
-Rest* Score::addRest(int tick, int track, TDuration d, Tuplet* tuplet)
+Rest* Score::addRest(const Fraction& tick, int track, TDuration d, Tuplet* tuplet)
       {
       Measure* measure = tick2measure(tick);
       Rest* rest       = new Rest(this, d);
       if (d.type() == TDuration::DurationType::V_MEASURE)
-            rest->setDuration(measure->stretchedLen(staff(track/VOICES)));
+            rest->setTicks(measure->stretchedLen(staff(track/VOICES)));
       else
-            rest->setDuration(d.fraction());
+            rest->setTicks(d.fraction());
       rest->setTrack(track);
       rest->setTuplet(tuplet);
       undoAddCR(rest, measure, tick);
@@ -185,9 +185,9 @@ Rest* Score::addRest(Segment* s, int track, TDuration d, Tuplet* tuplet)
       {
       Rest* rest = new Rest(this, d);
       if (d.type() == TDuration::DurationType::V_MEASURE)
-            rest->setDuration(s->measure()->stretchedLen(staff(track/VOICES)));
+            rest->setTicks(s->measure()->stretchedLen(staff(track/VOICES)));
       else
-            rest->setDuration(d.fraction());
+            rest->setTicks(d.fraction());
       rest->setTrack(track);
       rest->setParent(s);
       rest->setTuplet(tuplet);
@@ -203,7 +203,7 @@ Rest* Score::addRest(Segment* s, int track, TDuration d, Tuplet* tuplet)
 //    - if "genTie" then tie to chord "oc"
 //---------------------------------------------------------
 
-Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tuplet)
+Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie, Tuplet* tuplet)
       {
       Measure* measure = tick2measure(tick);
       if (measure->endTick() <= tick) {
@@ -215,9 +215,9 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
       chord->setTuplet(tuplet);
       chord->setTrack(oc->track());
       chord->setDurationType(d);
-      chord->setDuration(d.fraction());
+      chord->setTicks(d.fraction());
 
-      foreach(Note* n, oc->notes()) {
+      for (Note* n : oc->notes()) {
             Note* nn = new Note(this);
             nn->setPitch(n->pitch());
             nn->setTpc1(n->tpc1());
@@ -250,7 +250,7 @@ Chord* Score::addChord(int tick, TDuration d, Chord* oc, bool genTie, Tuplet* tu
 //   addClone
 //---------------------------------------------------------
 
-ChordRest* Score::addClone(ChordRest* cr, int tick, const TDuration& d)
+ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration& d)
       {
       ChordRest* newcr;
       // change a RepeatMeasure() into an Rest()
@@ -260,7 +260,7 @@ ChordRest* Score::addClone(ChordRest* cr, int tick, const TDuration& d)
             newcr = toChordRest(cr->clone());
       newcr->rxpos() = 0.0;
       newcr->setDurationType(d);
-      newcr->setDuration(d.fraction());
+      newcr->setTicks(d.fraction());
       newcr->setTuplet(cr->tuplet());
       newcr->setSelected(false);
 
@@ -273,11 +273,13 @@ ChordRest* Score::addClone(ChordRest* cr, int tick, const TDuration& d)
 //    create one or more rests to fill "l"
 //---------------------------------------------------------
 
-Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
+Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
       {
+      Fraction l       = _l;
+      Fraction tick    = _tick;
       Measure* measure = tick2measure(tick);
-      Rest* r = 0;
-      Staff* staff = Score::staff(track / VOICES);
+      Rest* r          = 0;
+      Staff* staff     = Score::staff(track / VOICES);
 
       while (!l.isZero()) {
             //
@@ -289,7 +291,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                   for (DurationElement* de : tuplet->elements()) {
                         if (de->tick() >= tick)
                               break;
-                        f -= de->duration();
+                        f -= de->ticks();
                         }
                   //
                   // restrict to tuplet len
@@ -298,9 +300,9 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                         l = f;
                   }
             else if (measure->tick() < tick)
-                  f = Fraction::fromTicks(measure->tick() + measure->ticks() - tick);
+                  f = measure->tick() + measure->ticks() - tick;
             else
-                  f = measure->len();
+                  f = measure->ticks();
             f *= staff->timeStretch(tick);
             f.reduce();
 
@@ -316,7 +318,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                   continue;
                   }
 
-            if ((measure->timesig() == measure->len())   // not in pickup measure
+            if ((measure->timesig() == measure->ticks())   // not in pickup measure
                && (measure->tick() == tick)
                && (measure->stretchedLen(staff) == f)
                && !tuplet
@@ -335,7 +337,7 @@ Rest* Score::setRest(int tick, int track, Fraction l, bool useDots, Tuplet* tupl
                         return 0;
 
                   Rest* rest = 0;
-                  if (((tick - measure->tick()) % dList[0].ticks()) == 0) {
+                  if (((tick - measure->tick()).ticks() % dList[0].ticks().ticks()) == 0) {
                         for (const TDuration& d : dList) {
                               rest = addRest(tick, track, d, tuplet);
                               if (r == 0)
@@ -417,7 +419,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
             return true;
             }
       int measures = 1;
-      bool fmr = true;
+      bool fmr     = true;
       for (Measure* m = fm; m; m = m->nextMeasure()) {
             if (!m->isFullMeasureRest())
                   fmr = false;
@@ -446,22 +448,22 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
       //
       // calculate number of required measures = nm
       //
-      Fraction k = range.duration() / ns;
+      Fraction k = range.ticks() / ns;
       int nm     = (k.numerator() + k.denominator() - 1)/ k.denominator();
 
-      Fraction nd(nm * ns.numerator(), ns.denominator()); // total new duration
+      Fraction nd = ns * Fraction(nm,1);
 
       // evtl. we have to fill the last measure
-      Fraction fill = nd - range.duration();
+      Fraction fill = nd - range.ticks();
       range.fill(fill);
 
       for (Score* s : scoreList()) {
             Measure* m1 = s->tick2measure(fm->tick());
             Measure* m2 = s->tick2measure(lm->tick());
 
-            int tick1 = m1->tick();
-            int tick2 = m2->endTick();
-            auto spanners = s->spannerMap().findOverlapping(tick1, tick2);
+            Fraction tick1 = m1->tick();
+            Fraction tick2 = m2->endTick();
+            auto spanners = s->spannerMap().findOverlapping(tick1.ticks(), tick2.ticks());
             for (auto i : spanners) {
                   if (i.value->tick() >= tick1)
                         undo(new RemoveElement(i.value));
@@ -470,17 +472,15 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
 
             Measure* nfm = 0;
             Measure* nlm = 0;
-            int tick     = 0;
-//            bool endBarGenerated = m1->endBarLineGenerated();
+            Fraction tick     = { 0, 1};
             for (int i = 0; i < nm; ++i) {
                   Measure* m = new Measure(s);
                   m->setPrev(nlm);
                   if (nlm)
                         nlm->setNext(m);
                   m->setTimesig(ns);
-                  m->setLen(ns);
+                  m->setTicks(ns);
                   m->setTick(tick);
-//                  m->setEndBarLineType(BarLineType::NORMAL, endBarGenerated);
                   tick += m->ticks();
                   nlm = m;
                   if (nfm == 0)
@@ -496,7 +496,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
             s->undo(new InsertMeasures(nfm, nlm));
             }
       if (!fill.isZero())
-            undoInsertTime(lm->endTick(), fill.ticks());
+            undoInsertTime(lm->endTick(), fill);
 
       if (!range.write(masterScore(), fm->tick()))
             return false;
@@ -504,7 +504,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
 
       if (noteEntryMode()) {
             // set input cursor to possibly re-written segment
-            int icTick = inputPos();
+            Fraction icTick = inputPos();
             Segment* icSegment = tick2segment(icTick, false, SegmentType::ChordRest);
             if (!icSegment) {
                   // this can happen if cursor was on a rest
@@ -678,9 +678,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
       if (fm->isMMRest())
             fm = fm->mmRestFirst();
 
-      Fraction ns  = ts->sig();
-      int tick     = fm->tick();
-      TimeSig* lts = staff(staffIdx)->timeSig(tick);
+      Fraction ns   = ts->sig();
+      Fraction tick = fm->tick();
+      TimeSig* lts  = staff(staffIdx)->timeSig(tick);
       if (local) {
             Fraction stretch = (ns / fm->timesig()).reduced();
             ts->setStretch(stretch);
@@ -710,19 +710,18 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             return;
             }
 
-//      if (ots && ots->sig().identical(ns) && ots->stretch() == ts->stretch()) {
       if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
             //
             // the measure duration does not change,
             // so its ok to just update the time signatures
             //
-            TimeSig* nts = staff(staffIdx)->nextTimeSig(tick+1);
-            const int lmTick = nts ? nts->segment()->tick() : -1;
+            TimeSig* nts = staff(staffIdx)->nextTimeSig(tick + Fraction::fromTicks(1));
+            const Fraction lmTick = nts ? nts->segment()->tick() : Fraction(-1,1);
             for (Score* score : scoreList()) {
                   Measure* mf = score->tick2measure(tick);
-                  Measure* lm = (lmTick != -1) ? score->tick2measure(lmTick) : nullptr;
+                  Measure* lm = (lmTick != Fraction(-1,1)) ? score->tick2measure(lmTick) : nullptr;
                   for (Measure* m = mf; m != lm; m = m->nextMeasure()) {
-                        bool changeActual = m->len() == m->timesig();
+                        bool changeActual = m->ticks() == m->timesig();
                         m->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                         if (changeActual)
                               m->undoChangeProperty(Pid::TIMESIG_ACTUAL,  QVariant::fromValue(ns));
@@ -749,7 +748,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             //
             // rewrite all measures up to the next time signature
             //
-            if (mf == mScore->firstMeasure() && mf->nextMeasure() && (mf->len() != mf->timesig())) {
+            if (mf == mScore->firstMeasure() && mf->nextMeasure() && (mf->ticks() != mf->timesig())) {
                   // handle upbeat
                   mf->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
                   Measure* m = mf->nextMeasure();
@@ -757,7 +756,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   mf = s ? 0 : mf->nextMeasure();
                   }
             else {
-                  if (sigmap()->timesig(seg->tick()).nominal().identical(ns)) {
+                  if (sigmap()->timesig(seg->tick().ticks()).nominal().identical(ns)) {
                         // no change to global time signature,
                         // but we need to rewrite any staves with local time signatures
                         for (int i = 0; i < nstaves(); ++i) {
@@ -860,7 +859,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
       //
       if (m->tick() != s->tick())
             return;
-      int tick = m->tick();
+      Fraction tick = m->tick();
 
       // if we remove all time sigs from segment, segment will be already removed by now
       // but this would leave us no means of detecting that we have have measures in a local timesig
@@ -899,7 +898,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
                               ChordRest* cr = nm->findChordRest(nm->tick(), i * VOICES);
                               if (cr && cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE)
                                     cr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(nm->stretchedLen(staff(i))));
-                                    //cr->setDuration(nm->stretchedLen(staff(i)));
+                                    //cr->setTicks(nm->stretchedLen(staff(i)));
                               }
                         }
                   }
@@ -953,7 +952,7 @@ Note* Score::addMidiPitch(int pitch, bool addFlag)
 //    in staff
 //---------------------------------------------------------
 
-ChordRest* Score::searchNote(int tick, int track) const
+ChordRest* Score::searchNote(const Fraction& tick, int track) const
       {
       ChordRest* ipe = 0;
       SegmentType st = SegmentType::ChordRest;
@@ -977,12 +976,12 @@ ChordRest* Score::searchNote(int tick, int track) const
 //    Only operates on one voice - protects manual layout adjustment, etc.
 //---------------------------------------------------------
 
-void Score::regroupNotesAndRests(int startTick, int endTick, int track)
+void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, int track)
       {
       Segment* inputSegment = _is.segment(); // store this so we can get back to it later.
       Segment* seg = tick2segment(startTick, true, SegmentType::ChordRest);
       for (Measure* msr = seg->measure(); msr && msr->tick() < endTick; msr = msr->nextMeasure()) {
-            int maxTick = endTick > msr->endTick() ? msr->endTick() : endTick;
+            Fraction maxTick = endTick > msr->endTick() ? msr->endTick() : endTick;
             if (!seg || seg->measure() != msr)
                   seg = msr->first(SegmentType::ChordRest);
             for (; seg; seg = seg->next(SegmentType::ChordRest)) {
@@ -1002,19 +1001,19 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                                     break; // next element in the same voice is not a rest, or it exceeds the selection, or it is a gap
                               lastRest = cr;
                               }
-                        int restTicks = lastRest->tick() + lastRest->duration().ticks() - curr->tick();
-                        seg = setNoteRest(seg, curr->track(), NoteVal(), Fraction::fromTicks(restTicks), Direction::AUTO, true);
+                        Fraction restTicks = lastRest->tick() + lastRest->ticks() - curr->tick();
+                        seg = setNoteRest(seg, curr->track(), NoteVal(), restTicks, Direction::AUTO, true);
                         }
                   else if (curr->isChord()) {
                         // combine tied chords
                         Chord* chord = toChord(curr);
                         Chord* lastTiedChord = chord;
-                        for (Chord* next = chord->nextTiedChord(); next && next->tick() + next->duration().ticks() <= maxTick; next = next->nextTiedChord()) {
+                        for (Chord* next = chord->nextTiedChord(); next && next->tick() + next->ticks() <= maxTick; next = next->nextTiedChord()) {
                               lastTiedChord = next;
                               }
                         if (!lastTiedChord)
                               lastTiedChord = chord;
-                        int noteTicks = lastTiedChord->tick() + lastTiedChord->duration().ticks() - chord->tick();
+                        Fraction noteTicks = lastTiedChord->tick() + lastTiedChord->ticks() - chord->tick();
                         if (!(curr->tuplet())) {
                               // store start/end note for backward/forward ties ending/starting on the group of notes being rewritten
                               size_t numNotes = chord->notes().size();
@@ -1039,9 +1038,9 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                                     else
                                           tieFor[i] = 0;
                                     }
-                              int tick      = seg->tick();
+                              Fraction tick = seg->tick();
                               int tr        = chord->track();
-                              Fraction sd   = Fraction::fromTicks(noteTicks);
+                              Fraction sd   = noteTicks;
                               Tie* tie      = 0;
                               Segment* segment = seg;
                               ChordRest* cr = toChordRest(segment->element(tr));
@@ -1063,7 +1062,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                                           break;
                                     measure = segment->measure();
                                     std::vector<TDuration> dl;
-                                    dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
+                                    dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(tick.ticks()).nominal(), measure, 1);
                                     size_t n = dl.size();
                                     for (size_t i = 0; i < n; ++i) {
                                           const TDuration& d = dl[i];
@@ -1071,7 +1070,7 @@ void Score::regroupNotesAndRests(int startTick, int endTick, int track)
                                           if (!firstpart)
                                                 nchord2->removeMarkings(true);
                                           nchord2->setDurationType(d);
-                                          nchord2->setDuration(d.fraction());
+                                          nchord2->setTicks(d.fraction());
                                           std::vector<Note*> nl1 = nchord->notes();
                                           std::vector<Note*> nl2 = nchord2->notes();
                                           if (!firstpart)
@@ -1241,6 +1240,8 @@ void Score::cmdAddTie(bool addToChord)
                               tie->setStartNote(note);
                               tie->setEndNote(nnote);
                               tie->setTrack(note->track());
+tie->setTick(note->chord()->segment()->tick());
+tie->setTicks(nnote->chord()->segment()->tick() - note->chord()->segment()->tick());
                               undoAddElement(tie);
                               if (!addFlag || nnote->chord()->tick() >= lastAddedChord->tick() || nnote->chord()->isGrace()) {
                                     break;
@@ -1260,6 +1261,8 @@ void Score::cmdAddTie(bool addToChord)
                         tie->setStartNote(note);
                         tie->setEndNote(note2);
                         tie->setTrack(note->track());
+tie->setTick(note->chord()->segment()->tick());
+tie->setTicks(note2->chord()->segment()->tick() - note->chord()->segment()->tick());
                         undoAddElement(tie);
                         }
                   }
@@ -1488,9 +1491,9 @@ void Score::deleteItem(Element* el)
                   Part* part = el->part();
                   InstrumentName* in = toInstrumentName(el);
                   if (in->instrumentNameType() == InstrumentNameType::LONG)
-                        undo(new ChangeInstrumentLong(0, part, QList<StaffName>()));
+                        undo(new ChangeInstrumentLong(Fraction(0,1), part, QList<StaffName>()));
                   else if (in->instrumentNameType() == InstrumentNameType::SHORT)
-                        undo(new ChangeInstrumentShort(0, part, QList<StaffName>()));
+                        undo(new ChangeInstrumentShort(Fraction(0,1), part, QList<StaffName>()));
                   }
                   break;
 
@@ -1534,7 +1537,7 @@ void Score::deleteItem(Element* el)
                   if (chord->noteType() == NoteType::NORMAL) {
                         Rest* rest = new Rest(this, chord->durationType());
                         rest->setDurationType(chord->durationType());
-                        rest->setDuration(chord->duration());
+                        rest->setTicks(chord->ticks());
 
                         rest->setTrack(el->track());
                         rest->setParent(chord->parent());
@@ -1574,7 +1577,7 @@ void Score::deleteItem(Element* el)
                   removeChordRest(rm, false);
                   Rest* rest = new Rest(this);
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
-                  rest->setDuration(rm->measure()->stretchedLen(rm->staff()));
+                  rest->setTicks(rm->measure()->stretchedLen(rm->staff()));
                   rest->setTrack(rm->track());
                   rest->setParent(rm->parent());
                   Segment* segment = rm->segment();
@@ -1642,13 +1645,8 @@ void Score::deleteItem(Element* el)
                                           break;
                                     }
 
-                              int stick = 0;
-                              int ticks = 0;
-
-                              if (pe)
-                                    stick = pe->tick();
-                              else
-                                    stick = s->tick();
+                              Fraction stick = pe ? pe->tick() : s->tick();
+                              Fraction ticks = { 0, 1 };
 
                               if (ne)
                                     ticks = ne->tick() - stick + toRest(ne)->actualTicks();
@@ -1663,7 +1661,7 @@ void Score::deleteItem(Element* el)
                                           undoRemoveElement(r);
                                           }
 
-                                    Fraction f = Fraction::fromTicks(ticks);
+                                    Fraction f = ticks;
 
                                     std::vector<TDuration> dList = toDurationList(f, true);
                                     if (dList.empty())
@@ -1671,7 +1669,7 @@ void Score::deleteItem(Element* el)
 
                                     for (const TDuration& d : dList) {
                                           Rest* rr = new Rest(this);
-                                          rr->setDuration(d.fraction());
+                                          rr->setTicks(d.fraction());
                                           rr->setDurationType(d);
                                           rr->setTrack(track);
                                           rr->setGap(true);
@@ -1762,7 +1760,7 @@ void Score::deleteItem(Element* el)
                         if (clef->generated()) {
                               // find the real clef if this is a cautionary one
                               if (m && m->prevMeasure()) {
-                                    int tick = m->tick();
+                                    Fraction tick = m->tick();
                                     m = m->prevMeasure();
                                     Segment* s = m->findSegment(SegmentType::Clef, tick);
                                     if (s && s->element(clef->track()))
@@ -1830,17 +1828,17 @@ void Score::deleteItem(Element* el)
             case ElementType::INSTRUMENT_CHANGE:
                   {
                   InstrumentChange* ic = static_cast<InstrumentChange*>(el);
-                  int tickStart = ic->segment()->tick();
+                  Fraction tickStart = ic->segment()->tick();
                   Part* part = ic->part();
                   Interval oldV = part->instrument(tickStart)->transpose();
                   undoRemoveElement(el);
                   if (part->instrument(tickStart)->transpose() != oldV) {
-                        auto i = part->instruments()->upper_bound(tickStart);
-                        int tickEnd;
+                        auto i = part->instruments()->upper_bound(tickStart.ticks());
+                        Fraction tickEnd;
                         if (i == part->instruments()->end())
-                              tickEnd = -1;
+                              tickEnd = Fraction(-1, 1);
                         else
-                              tickEnd = i->first;
+                              tickEnd = Fraction::fromTicks(i->first);
                         transpositionChanged(part, oldV, tickStart, tickEnd);
                         }
                   }
@@ -1923,8 +1921,8 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
             if (mb == is)
                   break;
             }
-      int startTick = is->tick();
-      int endTick   = ie->tick();
+      Fraction startTick = is->tick();
+      Fraction endTick   = ie->tick();
 
       undoInsertTime(is->tick(), -(ie->endTick() - is->tick()));
       for (Score* score : scoreList()) {
@@ -1974,7 +1972,7 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
                         for (int staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
                               KeySigEvent nkse = lastDeletedKeySigEvent;
                               if (transposeKeySigEvent) {
-                                    Interval v = score->staff(staffIdx)->part()->instrument(0)->transpose();
+                                    Interval v = score->staff(staffIdx)->part()->instrument(Fraction(0,1))->transpose();
                                     v.flip();
                                     nkse.setKey(transposeKey(nkse.key(), v));
                                     }
@@ -2009,8 +2007,8 @@ void Score::cmdDeleteSelection()
             if (s2 && s2->measure() && s2->measure()->isMMRest())
                   s2 = s2->measure()->mmRestLast()->last();
 
-            int stick1 = selection().tickStart();
-            int stick2 = selection().tickEnd();
+            Fraction stick1 = selection().tickStart();
+            Fraction stick2 = selection().tickEnd();
 
             Segment* ss1 = s1;
             if (!ss1->isChordRestType())
@@ -2018,10 +2016,10 @@ void Score::cmdDeleteSelection()
             bool fullMeasure = ss1 && (ss1->measure()->first(SegmentType::ChordRest) == ss1)
                   && (s2 == 0 || s2->isEndBarLineType());
 
-            int tick2   = s2 ? s2->tick() : INT_MAX;
-            int track1  = selection().staffStart() * VOICES;
-            int track2  = selection().staffEnd() * VOICES;
-            auto spanners = _spanner.findOverlapping(stick1, stick2 - 1);
+            Fraction tick2 = s2 ? s2->tick() : Fraction(INT_MAX, 1);
+            int track1     = selection().staffStart() * VOICES;
+            int track2     = selection().staffEnd() * VOICES;
+            auto spanners  = _spanner.findOverlapping(stick1.ticks(), stick2.ticks() - 1);
             for (auto i : spanners) {
                   Spanner* sp = i.value;
                   if (sp->isVolta())
@@ -2043,7 +2041,7 @@ void Score::cmdDeleteSelection()
                   if (!selectionFilter().canSelectVoice(track))
                         continue;
                   Fraction f;
-                  int tick  = -1;
+                  Fraction tick  = Fraction(-1, 1);
                   Tuplet* tuplet = 0;
                   for (Segment* s = s1; s && (s->tick() < stick2); s = s->next1()) {
                         if (s->element(track) && s->isBreathType()) {
@@ -2071,16 +2069,16 @@ void Score::cmdDeleteSelection()
                               continue;
                               }
                         ChordRest* cr1 = toChordRest(e);
-                        if (tick == -1) {
+                        if (tick == Fraction(-1, 1)) {
                               // first ChordRest found:
-                              int offset = cr1->rtick();
-                              if (cr1->measure()->tick() >= s1->tick() && offset) {
-                                    f = Fraction::fromTicks(offset);
+                              Fraction offset = cr1->rtick();
+                              if (cr1->measure()->tick() >= s1->tick() && offset.isNotZero()) {
+                                    f = offset;
                                     tick = s->measure()->tick();
                                     }
                               else {
-                                    tick   = s->tick();
-                                    f      = Fraction();
+                                    tick = s->tick();
+                                    f    = Fraction(0, 1);
                                     }
                               tuplet = cr1->tuplet();
                               if (tuplet && (tuplet->tick() == tick) && ((tuplet->tick() + tuplet->actualTicks()) <= tick2) ) {
@@ -2090,7 +2088,7 @@ void Score::cmdDeleteSelection()
                                     while (t->tuplet())
                                           t = t->tuplet();
                                     cmdDeleteTuplet(t, false);
-                                    f += t->duration();
+                                    f += t->ticks();
                                     tuplet = 0;
                                     continue;
                                     }
@@ -2103,7 +2101,7 @@ void Score::cmdDeleteSelection()
                                     while (t->tuplet())
                                           t = t->tuplet();
                                     cmdDeleteTuplet(t, false);
-                                    f += t->duration();
+                                    f += t->ticks();
                                     tuplet = 0;
                                     continue;
                                     }
@@ -2112,11 +2110,11 @@ void Score::cmdDeleteSelection()
                               tick = cr1->tick();
                               tuplet = cr1->tuplet();
                               removeChordRest(cr1, true);
-                              f = cr1->duration();
+                              f = cr1->ticks();
                               }
                         else {
                               removeChordRest(cr1, true);
-                              f += cr1->duration();
+                              f += cr1->ticks();
                               }
                         }
                   if (f.isValid() && !f.isZero()) {
@@ -2125,7 +2123,7 @@ void Score::cmdDeleteSelection()
                               // fix broken measures:
                               Staff* staff = Score::staff(track / VOICES);
                               for (Measure* m = s1->measure(); m; m = m->nextMeasure()) {
-                                    int tick3   = m->tick();
+                                    Fraction tick3   = m->tick();
                                     Fraction ff = m->stretchedLen(staff);
                                     Rest* r = setRest(tick3, track, ff, false, 0);
                                     if (!cr)
@@ -2170,7 +2168,7 @@ void Score::cmdDeleteSelection()
                         links = *e->links();
 
                   // find location of element to select after deleting notes
-                  int tick  = -1;
+                  Fraction tick  = { -1, 1 };
                   int track = -1;
                   if (!cr) {
                         if (e->isNote())
@@ -2202,7 +2200,7 @@ void Score::cmdDeleteSelection()
                         }
 
                   // find element to select
-                  if (!cr && tick >= 0 && track >= 0)
+                  if (!cr && tick >= Fraction(0,1) && track >= 0)
                         cr = findCR(tick, track);
 
                   // add these linked elements to list of already-deleted elements
@@ -2230,17 +2228,17 @@ void Score::cmdDeleteSelection()
 
 void Score::cmdFullMeasureRest()
       {
-      Segment* s1 = nullptr;
-      Segment* s2 = nullptr;
-      int stick1 = -1;
-      int stick2 = -1;
-      int track1 = -1;
-      int track2 = -1;
-      Rest* r = nullptr;
+      Segment* s1     = nullptr;
+      Segment* s2     = nullptr;
+      Fraction stick1 = { -1, 1 };
+      Fraction stick2 = { -1, 1 };
+      int track1      = -1;
+      int track2      = -1;
+      Rest* r         = nullptr;
 
       if (noteEntryMode()) {
             s1 = inputState().segment();
-            if (!s1 || s1->rtick() != 0)
+            if (!s1 || s1->rtick().isNotZero())
                   return;
             Measure* m = s1->measure();
             s2 = m->last();
@@ -2276,7 +2274,7 @@ void Score::cmdFullMeasureRest()
             }
       else if (selection().cr()) {
             ChordRest* cr = selection().cr();
-            if (!cr || cr->rtick() != 0)
+            if (!cr || cr->rtick().isNotZero())
                   return;
             Measure* m = cr->measure();
             s1 = m->first();
@@ -2302,7 +2300,7 @@ void Score::cmdFullMeasureRest()
                   ChordRest* cr = toChordRest(s->element(track));
                   // keep first rest of measure as placeholder (replaced in second pass)
                   // but delete all others
-                  if (s->rtick())
+                  if (s->rtick().isNotZero())
                         removeChordRest(cr, true);
                   }
             // second pass - replace placeholders with full measure rests
@@ -2382,7 +2380,7 @@ Lyrics* Score::addLyrics()
 //   addHairpin
 //---------------------------------------------------------
 
-Hairpin* Score::addHairpin(HairpinType t, int tickStart, int tickEnd, int track)
+Hairpin* Score::addHairpin(HairpinType t, const Fraction& tickStart, const Fraction& tickEnd, int track)
       {
       Hairpin* pin = new Hairpin(this);
       pin->setHairpinType(t);
@@ -2409,16 +2407,9 @@ Hairpin* Score::addHairpin(HairpinType t, int tickStart, int tickEnd, int track)
 
 void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
       {
-qDebug("cmdCreateTuplet at %d <%s> track %d duration <%s> ratio <%s> baseLen <%s>",
-  ocr->tick(), ocr->name(), ocr->track(),
-  qPrintable(ocr->duration().print()),
-  qPrintable(tuplet->ratio().print()),
-  qPrintable(tuplet->baseLen().fraction().print())
-            );
-
       int track        = ocr->track();
       Measure* measure = ocr->measure();
-      int tick         = ocr->tick();
+      Fraction tick     = ocr->tick();
 
       if (ocr->tuplet())
             tuplet->setTuplet(ocr->tuplet());
@@ -2438,21 +2429,18 @@ qDebug("cmdCreateTuplet at %d <%s> track %d duration <%s> ratio <%s> baseLen <%s
       else
             cr = new Rest(this);
 
-      Fraction an     = (tuplet->duration() * tuplet->ratio()) / tuplet->baseLen().fraction();
+      Fraction an     = (tuplet->ticks() * tuplet->ratio()) / tuplet->baseLen().fraction();
       int actualNotes = an.numerator() / an.denominator();
 
       tuplet->setTrack(track);
       cr->setTuplet(tuplet);
       cr->setTrack(track);
       cr->setDurationType(tuplet->baseLen());
-      cr->setDuration(tuplet->baseLen().fraction());
-
-qDebug("tuplet note duration %s  actualNotes %d  ticks %d track %d tuplet track %d",
-      qPrintable(tuplet->baseLen().name()), actualNotes, cr->actualTicks(), track, tuplet->track());
+      cr->setTicks(tuplet->baseLen().fraction());
 
       undoAddCR(cr, measure, tick);
 
-      int ticks = cr->actualTicks();
+      Fraction ticks = cr->actualTicks();
 
       for (int i = 0; i < (actualNotes-1); ++i) {
             tick += ticks;
@@ -2460,7 +2448,7 @@ qDebug("tuplet note duration %s  actualNotes %d  ticks %d track %d tuplet track 
             rest->setTuplet(tuplet);
             rest->setTrack(track);
             rest->setDurationType(tuplet->baseLen());
-            rest->setDuration(tuplet->baseLen().fraction());
+            rest->setTicks(tuplet->baseLen().fraction());
             undoAddCR(rest, measure, tick);
             }
       }
@@ -2504,8 +2492,8 @@ void Score::cmdExchangeVoice(int s, int d)
             MScore::setError(NO_STAFF_SELECTED);
             return;
             }
-      int t1 = selection().tickStart();
-      int t2 = selection().tickEnd();
+      Fraction t1 = selection().tickStart();
+      Fraction t2 = selection().tickEnd();
 
       Measure* m1 = tick2measure(t1);
       Measure* m2 = tick2measure(t2);
@@ -2600,7 +2588,7 @@ void Score::cmdDeleteTuplet(Tuplet* tuplet, bool replaceWithRest)
                   }
             }
       if (replaceWithRest)
-            setRest(tuplet->tick(), tuplet->track(), tuplet->duration(), true, tuplet->tuplet());
+            setRest(tuplet->tick(), tuplet->track(), tuplet->ticks(), true, tuplet->tuplet());
       }
 
 //---------------------------------------------------------
@@ -2634,7 +2622,7 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
 
 void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmptyMeasures)
       {
-      int tick;
+      Fraction tick;
       if (measure) {
             if (measure->isMeasure() && toMeasure(measure)->isMMRest()) {
                   measure = toMeasure(measure)->prev();
@@ -2644,12 +2632,12 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
             tick = measure->tick();
             }
       else
-            tick = last() ? last()->endTick() : 0;
+            tick = last() ? last()->endTick() : Fraction(0,1);
 
-      Fraction f       = sigmap()->timesig(tick).nominal();       // use nominal time signature of current measure
+      Fraction f       = sigmap()->timesig(tick.ticks()).nominal(); // use nominal time signature of current measure
       Measure* om      = 0;                                       // measure base in "this" score
       MeasureBase* rmb = 0;                                       // measure base in root score (for linking)
-      int ticks        = 0;
+      Fraction ticks   = { 0, 1 };
 
       for (Score* score : scoreList()) {
             MeasureBase* im = 0;
@@ -2683,7 +2671,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
             if (mb->isMeasure()) {
                   Measure* m = toMeasure(mb);
                   m->setTimesig(f);
-                  m->setLen(f);
+                  m->setTicks(f);
                   }
             undo(new InsertMeasures(mb, mb));
 
@@ -2724,7 +2712,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                                                 }
                                           }
                                     }
-                              for (Segment* s = mi->first(); s && s->rtick() == 0; s = s->next()) {
+                              for (Segment* s = mi->first(); s && s->rtick().isZero(); s = s->next()) {
                                     if (!s->enabled())
                                           continue;
                                     Element* e = s->element(staffIdx * VOICES);
@@ -2741,7 +2729,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                                           tsl.push_back(ts);
                                           ee = e;
                                           }
-                                    if (tick == 0 && e->isClef()) {
+                                    if (tick.isZero() && e->isClef()) {
                                           Clef* clef = toClef(e);
                                           cl.push_back(clef);
                                           ee = e;
@@ -2761,19 +2749,19 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                   //
                   for (TimeSig* ts : tsl) {
                         TimeSig* nts = new TimeSig(*ts);
-                        Segment* s   = m->undoGetSegmentR(SegmentType::TimeSig, 0);
+                        Segment* s   = m->undoGetSegmentR(SegmentType::TimeSig, Fraction(0,1));
                         nts->setParent(s);
                         undoAddElement(nts);
                         }
                   for (KeySig* ks : ksl) {
                         KeySig* nks = new KeySig(*ks);
-                        Segment* s  = m->undoGetSegmentR(SegmentType::KeySig, 0);
+                        Segment* s  = m->undoGetSegmentR(SegmentType::KeySig, Fraction(0,1));
                         nks->setParent(s);
                         undoAddElement(nks);
                         }
                   for (Clef* clef : cl) {
                         Clef* nClef = new Clef(*clef);
-                        Segment* s  = m->undoGetSegmentR(SegmentType::HeaderClef, 0);
+                        Segment* s  = m->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0,1));
                         nClef->setParent(s);
                         undoAddElement(nClef);
                         }
@@ -2810,7 +2798,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                   int track = staffIdx * VOICES;
                   Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
                   Fraction timeStretch(score->staff(staffIdx)->timeStretch(om->tick()));
-                  rest->setDuration(om->len() * timeStretch);
+                  rest->setTicks(om->ticks() * timeStretch);
                   rest->setTrack(track);
                   score->undoAddCR(rest, om, tick);
                   }
@@ -2826,35 +2814,28 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
 //    start and end anchor.
 //---------------------------------------------------------
 
-void Score::checkSpanner(int startTick, int endTick)
+void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick)
       {
       QList<Spanner*> sl;     // spanners to remove
       QList<Spanner*> sl2;    // spanners to shorten
-      auto spanners = _spanner.findOverlapping(startTick, endTick);
-//printf("checkSpanner %d %d\n", startTick, endTick);
-//      for (auto i = spanners.begin(); i < spanners.end(); i++) {
+      auto spanners = _spanner.findOverlapping(startTick.ticks(), endTick.ticks());
 
       // DEBUG: check all spanner
       //        there may be spanners outside of score bc. some measures were deleted
 
-      int lastTick = lastMeasure()->endTick();
+      Fraction lastTick = lastMeasure()->endTick();
 
       for (auto i : _spanner.map()) {
             Spanner* s = i.second;
 
             if (s->isSlur()) {
                   Segment* seg = tick2segmentMM(s->tick(), false, SegmentType::ChordRest);
-                  if (!seg || !seg->element(s->track())) {
-                        qDebug("checkSpanner::remove (1) tick %d seg %p", s->tick(), seg);
+                  if (!seg || !seg->element(s->track()))
                         sl.append(s);
-                        }
                   else {
                         seg = tick2segmentMM(s->tick2(), false, SegmentType::ChordRest);
-                        if (!seg || !seg->element(s->track2())) {
-                              qDebug("checkSpanner::remove (2) %d - tick %d track %d",
-                                 s->tick(), s->tick2(), s->track2());
+                        if (!seg || !seg->element(s->track2()))
                               sl.append(s);
-                              }
                         }
                   }
             else {
@@ -2885,6 +2866,7 @@ static constexpr SegmentType CR_TYPE = SegmentType::ChordRest;
 //---------------------------------------------------------
 //   checkTimeDelete
 //---------------------------------------------------------
+
 bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
       {
       Measure* m = startSegment->measure();
@@ -2895,9 +2877,9 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
       else
             endMeasure = lastMeasure();
 
-      int endTick = endSegment ? endSegment->tick() : endMeasure->endTick();
-      int tick = startSegment->tick();
-      int etick = (m == endMeasure ? endTick : m->endTick());
+      Fraction endTick = endSegment ? endSegment->tick() : endMeasure->endTick();
+      Fraction tick = startSegment->tick();
+      Fraction etick = (m == endMeasure ? endTick : m->endTick());
       bool canDeleteTime = true;
 
       while (canDeleteTime) {
@@ -2906,11 +2888,11 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
                         Segment* fs = m->first(CR_TYPE);
                         for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
                               if (s->element(track)) {
-                                    ChordRest* cr = toChordRest(s->element(track));
-                                    Tuplet* t = cr->tuplet();
+                                    ChordRest* cr       = toChordRest(s->element(track));
+                                    Tuplet* t           = cr->tuplet();
                                     DurationElement* de = t ? toDurationElement(t) : toDurationElement(cr);
-                                    Fraction f = de->afrac() + de->actualFraction();
-                                    int cetick = f.ticks();
+                                    Fraction f          = de->tick() + de->actualTicks();
+                                    Fraction cetick     = f;
                                     if (cetick <= tick)
                                           continue;
                                     if (de->tick() >= etick)
@@ -2925,8 +2907,8 @@ bool Score::checkTimeDelete(Segment* startSegment, Segment* endSegment)
                   }
             if (m == endMeasure)
                   break;
-            m = endMeasure;
-            tick = m->tick();
+            m     = endMeasure;
+            tick  = m->tick();
             etick = endTick;
             }
       if (!canDeleteTime) {
@@ -2967,9 +2949,9 @@ void Score::localTimeDelete()
                   cr = toChordRest(el);
             else
                   return;
-            startSegment = cr->segment();
-            int endTick  = startSegment->tick() + cr->actualTicks();
-            endSegment   = tick2measure(endTick)->findSegment(CR_TYPE, endTick);
+            startSegment     = cr->segment();
+            Fraction endTick = startSegment->tick() + cr->actualTicks();
+            endSegment       = tick2measure(endTick)->findSegment(CR_TYPE, endTick);
             }
       else {
             startSegment = selection().startSegment();
@@ -2989,25 +2971,25 @@ void Score::localTimeDelete()
       else
             ie = lastMeasure();
 
-      int endTick = endSegment ? endSegment->tick() : ie->endTick();
+      Fraction endTick = endSegment ? endSegment->tick() : ie->endTick();
 
       for (;;) {
             if (is->tick() != startSegment->tick()) {
-                  int tick = startSegment->tick();
-                  int len;
+                  Fraction tick = startSegment->tick();
+                  Fraction len;
                   if (ie == is)
                         len = endTick - tick;
                   else
                         len = is->endTick() - tick;
-                  timeDelete(toMeasure(is), startSegment, Fraction::fromTicks(len));
+                  timeDelete(toMeasure(is), startSegment, len);
                   if (is == ie)
                         break;
                   is = is->next();
                   }
             endTick = endSegment ? endSegment->tick() : ie->endTick();
             if (ie->endTick() != endTick) {
-                  int len = endTick - ie->tick();
-                  timeDelete(toMeasure(ie), toMeasure(ie)->first(), Fraction::fromTicks(len));
+                  Fraction len = endTick - ie->tick();
+                  timeDelete(toMeasure(ie), toMeasure(ie)->first(), len);
                   if (is == ie)
                         break;
                   ie = ie->prev();
@@ -3025,11 +3007,9 @@ void Score::localTimeDelete()
 
 void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
       {
-      const int tick  = startSegment->rtick();
-      const int len   = f.ticks();
-      const int etick = tick + len;
-
-//printf("time delete %d at %d, start %s\n", len, tick, startSegment->subTypeName());
+      Fraction tick  = startSegment->rtick();
+      Fraction len   = f;
+      Fraction etick = tick + len;
 
       Segment* fs = m->first(CR_TYPE);
 
@@ -3037,27 +3017,24 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
             if (m->hasVoice(track)) {
                   for (Segment* s = fs; s; s = s->next(CR_TYPE)) {
                         if (s->element(track)) {
-                              ChordRest* cr  = toChordRest(s->element(track));
-                              Fraction afrac = cr->afrac() + cr->actualFraction();
-                              int cetick     = afrac.ticks() - m->tick();
+                              ChordRest* cr   = toChordRest(s->element(track));
+                              Fraction cetick = cr->rtick() + cr->actualTicks();
 
-                              if (cetick <= tick) {
+                              if (cetick <= tick)
                                     continue;
-                                    }
-                              if (s->rtick() >= etick) {
+                              if (s->rtick() >= etick)
                                     break;
-                                    }
 
                               if (cr->isFullMeasureRest()) {
                                     if (cr->rtick() >= tick) {
                                           // Move full-measure rest from the deleted area
                                           undoRemoveElement(cr);
                                           ChordRest* newCR = toChordRest(cr->clone());
-                                          newCR->setDuration(cr->duration() - f);
+                                          newCR->setTicks(cr->ticks() - f);
                                           undoAddCR(newCR, m, m->tick() + etick);
                                           }
                                     else
-                                          cr->undoChangeProperty(Pid::DURATION, cr->duration() - f);
+                                          cr->undoChangeProperty(Pid::DURATION, cr->ticks() - f);
                                     }
                               // inside deleted area
                               else if (s->rtick() >= tick && cetick <= etick) {
@@ -3066,32 +3043,31 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                                     }
                               else if (s->rtick() >= tick) {
                                     // running out
-                                    Fraction ff = Fraction::fromTicks(cetick - etick);
+                                    Fraction ff = cetick - etick;
                                     undoRemoveElement(cr);
                                     createCRSequence(ff, cr, tick + len);
                                     }
                               else if (s->rtick() < tick && cetick <= etick) {
                                     // running in
-                                    Fraction f1 = Fraction::fromTicks(tick - s->rtick());
+                                    Fraction f1 = tick - s->rtick();
                                     changeCRlen(cr, f1, false);
                                     }
                               else {
                                     // running in/out
-                                    Fraction f1 = cr->duration() - f;
+                                    Fraction f1 = cr->ticks() - f;
                                     changeCRlen(cr, f1, false);
                                     }
                               }
                         }
                   }
             }
-      const int abstick = startSegment->tick();
+      Fraction abstick = startSegment->tick();
       undoInsertTime(abstick, -len);
       undo(new InsertTime(this, abstick, -len));
 
-      int updatedTick = tick;
+      Fraction updatedTick = tick;
       for (Segment* s = startSegment; s; s = s->next()) {
             if (s->rtick() >= etick && s->rtick() != updatedTick) {
-//printf("   change segment %s tick %d -> %d\n", s->subTypeName(), s->tick(), m->tick() + updatedTick),
                   s->undoChangeProperty(Pid::TICK, updatedTick);
                   updatedTick += s->ticks();
                   }
@@ -3110,16 +3086,16 @@ void Score::timeDelete(Measure* m, Segment* startSegment, const Fraction& f)
                   }
             }
 
-      undo(new ChangeMeasureLen(m, m->len() - f));
+      undo(new ChangeMeasureLen(m, m->ticks() - f));
       }
 
 //---------------------------------------------------------
 //   cloneVoice
 //---------------------------------------------------------
 
-void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link, bool spanner)
+void Score::cloneVoice(int strack, int dtrack, Segment* sf, const Fraction& lTick, bool link, bool spanner)
       {
-      int start = sf->tick();
+      Fraction start = sf->tick();
       TieMap  tieMap;
       TupletMap tupletMap;    // tuplets cannot cross measure boundaries
       Score* score = sf->score();
@@ -3214,7 +3190,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
                                     Note* on = och->notes().at(i);
                                     Note* nn = nch->notes().at(i);
                                     int idx = track2staff(dtrack);
-                                    int tick = oseg->tick();
+                                    Fraction tick = oseg->tick();
                                     Interval v = staff(idx) ? staff(idx)->part()->instrument(tick)->transpose() : Interval();
                                     nn->setTpc1(on->tpc1());
                                     if (v.isZero())
@@ -3308,7 +3284,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
             Segment* tst = dm->segments().firstCRSegment();
             if (strack % VOICES && !(dtrack % VOICES) && (!tst || (!tst->element(dtrack)))) {
                   Rest* rest = new Rest(this);
-                  rest->setDuration(dm->len());
+                  rest->setTicks(dm->ticks());
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
                   rest->setTrack(dtrack);
                   if (link) {
@@ -3322,21 +3298,17 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, int lTick, bool link
 
       if (spanner) {
             // Find and add corresponding slurs
-            auto spanners = score->spannerMap().findOverlapping(start, lTick);
+            auto spanners = score->spannerMap().findOverlapping(start.ticks(), lTick.ticks());
             for (auto i = spanners.begin(); i < spanners.end(); i++) {
-                  Spanner* sp = i->value;
-                  int spStart = sp->tick();
-                  int track   = sp->track();
-                  int track2  = sp->track2();
-                  int spEnd = spStart + sp->ticks();
-                  qDebug("Start %d End %d Diff %d \n Measure Start %d End %d", spStart, spEnd, spEnd-spStart, start, lTick);
+                  Spanner* sp      = i->value;
+                  Fraction spStart = sp->tick();
+                  int track        = sp->track();
+                  int track2       = sp->track2();
+                  Fraction spEnd   = spStart + sp->ticks();
+
                   if (sp->isSlur() && (spStart >= start && spEnd < lTick)) {
                         if (track == strack && track2 == strack){
-                              Spanner* ns;
-                              if (link)
-                                    ns =  toSpanner(sp->linkedClone());
-                              else
-                                    ns = toSpanner(sp->clone());
+                              Spanner* ns = toSpanner(link ? sp->linkedClone() : sp->clone());
 
                               ns->setScore(this);
                               ns->setParent(0);
@@ -3493,7 +3465,7 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
 //   undoChangeKeySig
 //---------------------------------------------------------
 
-void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
+void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key)
       {
       KeySig* lks = 0;
 
@@ -3504,7 +3476,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
             Score* score = staff->score();
             Measure* measure = score->tick2measure(tick);
             if (!measure) {
-                  qWarning("measure for tick %d not found!", tick);
+                  qWarning("measure for tick %d not found!", tick.ticks());
                   continue;
                   }
             Segment* s   = measure->undoGetSegment(SegmentType::KeySig, tick);
@@ -3526,7 +3498,7 @@ void Score::undoChangeKeySig(Staff* ostaff, int tick, KeySigEvent key)
                   }
             else {
                   // do not create empty keysig unless custom or atonal
-                  if (tick != 0 || nkey.key() != Key::C || nkey.custom() || nkey.isAtonal()) {
+                  if (tick.isNotZero() || nkey.key() != Key::C || nkey.custom() || nkey.isAtonal()) {
                         KeySig* nks = new KeySig(score);
                         nks->setParent(s);
                         nks->setTrack(track);
@@ -3571,8 +3543,8 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct)
             }
 
       Clef* gclef = 0;
-      int tick = e->tick();
-      int rtick = e->rtick();
+      Fraction tick = e->tick();
+      Fraction rtick = e->rtick();
       bool small = (st == SegmentType::Clef);
       for (Staff* staff : ostaff->staffList()) {
             if (staff->staffType(tick)->group() != ClefInfo::staffGroup(ct))
@@ -3582,12 +3554,12 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct)
             Measure* measure = score->tick2measure(tick);
 
             if (!measure) {
-                  qWarning("measure for tick %d not found!", tick);
+                  qWarning("measure for tick %d not found!", tick.ticks());
                   continue;
                   }
 
             Segment* destSeg;
-            int rt;
+            Fraction rt;
             if (moveClef) {            // if at start of measure and there is a previous measure
                   measure = measure->prevMeasure();
                   rt      = measure->ticks();
@@ -3770,7 +3742,7 @@ void Score::undoTransposeHarmony(Harmony* h, int rootTpc, int baseTpc)
 
 void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int srcStaff, int dstStaff)
       {
-      int tick = measure->tick();
+      Fraction tick = measure->tick();
 
       for (int staffIdx = srcStaff; staffIdx < dstStaff; ++staffIdx) {
             QSet<Staff*> staffList;
@@ -3838,11 +3810,11 @@ void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int 
                                     dstTrackList.removeOne(dstTrack2);
                                     }
                               }
-                        } else if (srcStaffTrack != staffTrack) {
-                              // linked staff in same score (all voices present can be assumed)
-                              undo(new ExchangeVoice(measure2, staffTrack + srcVoice, staffTrack + dstVoice, st->idx()));
-                              }
-
+                        }
+                  else if (srcStaffTrack != staffTrack) {
+                        // linked staff in same score (all voices present can be assumed)
+                        undo(new ExchangeVoice(measure2, staffTrack + srcVoice, staffTrack + dstVoice, st->idx()));
+                        }
                   }
             }
 
@@ -3851,7 +3823,7 @@ void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int 
       if (srcVoice == 0 || dstVoice == 0) {
             for (int staffIdx = srcStaff; staffIdx < dstStaff; ++staffIdx) {
                   // check for complete timeline of voice 0
-                  int ctick  = measure->tick();
+                  Fraction ctick  = measure->tick();
                   int track = staffIdx * VOICES;
                   for (Segment* s = measure->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                         ChordRest* cr = toChordRest(s->element(track));
@@ -3862,19 +3834,13 @@ void Score::undoExchangeVoice(Measure* measure, int srcVoice, int dstVoice, int 
                               if (r->isGap())
                                     r->undoChangeProperty(Pid::GAP, false);
                               }
-                        if (ctick < s->tick()) {
-                              // fill gap
-                              int ticks = s->tick() - ctick;
-                              setRest(ctick, track, Fraction::fromTicks(ticks), false, 0);
-                              }
+                        if (ctick < s->tick())
+                              setRest(ctick, track, s->tick() - ctick, false, 0);   // fill gap
                         ctick = s->tick() + cr->actualTicks();
                         }
-                  int etick = measure->tick() + measure->ticks();
-                  if (ctick < etick) {
-                        // fill gap
-                        int ticks = etick - ctick;
-                        setRest(ctick, track, Fraction::fromTicks(ticks), false, 0);
-                        }
+                  Fraction etick = measure->endTick();
+                  if (ctick < etick)
+                        setRest(ctick, track, etick - ctick, false, 0);       // fill gap
                   }
             }
       }
@@ -4034,7 +4000,7 @@ void Score::undoAddElement(Element* element)
                         }
                   else {
                         Segment* segment  = toSegment(element->parent());
-                        int tick          = segment->tick();
+                        Fraction tick     = segment->tick();
                         Measure* m        = score->tick2measure(tick);
                         Segment* seg      = m->undoGetSegment(SegmentType::ChordRest, tick);
                         ne->setTrack(ntrack);
@@ -4219,7 +4185,7 @@ void Score::undoAddElement(Element* element)
                         Segment* segment;
                         SegmentType st;
                         Measure* m;
-                        int tick;
+                        Fraction tick;
                         if (a->parent()->isChordRest()) {
                               ChordRest* cr = a->chordRest();
                               segment       = cr->segment();
@@ -4260,7 +4226,7 @@ void Score::undoAddElement(Element* element)
                   else if (element->isChordLine() || element->isLyrics()) {
                         ChordRest* cr    = toChordRest(element->parent());
                         Segment* segment = cr->segment();
-                        int tick         = segment->tick();
+                        Fraction tick    = segment->tick();
                         Measure* m       = score->tick2measure(tick);
                         Segment* seg     = m->findSegment(SegmentType::ChordRest, tick);
                         if (seg == 0) {
@@ -4284,7 +4250,7 @@ void Score::undoAddElement(Element* element)
                      || element->isFermata()
                      || element->isHarmony()) {
                         Segment* segment = toSegment(element->parent());
-                        int tick         = segment->tick();
+                        Fraction tick    = segment->tick();
                         Measure* m       = score->tick2measure(tick);
                         if ((segment->segmentType() == SegmentType::EndBarLine) && (m->tick() == tick))
                               m = m->prevMeasure();
@@ -4437,7 +4403,7 @@ void Score::undoAddElement(Element* element)
                         Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
                         InstrumentChange* nis = toInstrumentChange(ne);
                         nis->setParent(ns1);
-                        int tickStart = nis->segment()->tick();
+                        Fraction tickStart = nis->segment()->tick();
                         Part* part = nis->part();
                         Interval oldV = nis->part()->instrument(tickStart)->transpose();
                         // ws: instrument should not be changed here
@@ -4448,18 +4414,14 @@ void Score::undoAddElement(Element* element)
                         undo(new AddElement(nis));
                         // transpose root score; parts will follow
                         if (score->isMaster() && part->instrument(tickStart)->transpose() != oldV) {
-                              auto i = part->instruments()->upper_bound(tickStart);
-                              int tickEnd;
-                              if (i == part->instruments()->end())
-                                    tickEnd = -1;
-                              else
-                                    tickEnd = i->first;
+                              auto i = part->instruments()->upper_bound(tickStart.ticks());
+                              Fraction tickEnd = i == part->instruments()->end() ? Fraction(-1, 1) : Fraction::fromTicks(i->first);
                               transpositionChanged(part, oldV, tickStart, tickEnd);
                               }
                         }
                   else if (element->isBreath()) {
                         Breath* breath   = toBreath(element);
-                        int tick         = breath->segment()->tick();
+                        Fraction tick    = breath->segment()->tick();
                         Measure* m       = score->tick2measure(tick);
                         // breath appears before barline
                         if (m->tick() == tick)
@@ -4482,7 +4444,7 @@ void Score::undoAddElement(Element* element)
 //   undoAddCR
 //---------------------------------------------------------
 
-void Score::undoAddCR(ChordRest* cr, Measure* measure, int tick)
+void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
       {
       Q_ASSERT(!cr->isChord() || !(toChord(cr)->notes()).empty());
       if (!cr->lyrics().empty()) {
@@ -4699,9 +4661,9 @@ void Score::undoRemoveBracket(Bracket* b)
 //   acts on the linked scores as well
 //---------------------------------------------------------
 
-void Score::undoInsertTime(int tick, int len)
+void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
       {
-      if (len == 0)
+      if (len.isZero())
             return;
 
       QList<Spanner*> sl;
@@ -4710,20 +4672,20 @@ void Score::undoInsertTime(int tick, int len)
             if (s->tick2() < tick)
                   continue;
             bool append = false;
-            if (len > 0) {
+            if (len > Fraction(0, 1)) {
                   if (tick > s->tick() && tick < s->tick2())
                         append = true;
                   else if (tick <= s->tick())
                         append = true;
                   }
             else {
-                  int tick2 = tick - len;
+                  Fraction tick2 = tick - len;
                   if (s->tick() >= tick2)
                         append = true;
                   else if (s->tick() >= tick && s->tick2() <= tick2)
                         append = true;
                   else if ((s->tick() <= tick) && (s->tick2() >= tick2)) {
-                        int t2 = s->tick2() + len;
+                        Fraction t2 = s->tick2() + len;
                         if (t2 > s->tick())
                               append = true;
                         }
@@ -4742,7 +4704,7 @@ void Score::undoInsertTime(int tick, int len)
                   sl.append(s);
             }
       for (Spanner* s : sl) {
-            if (len > 0) {
+            if (len > Fraction(0, 1)) {
                   if (tick > s->tick() && tick < s->tick2()) {
                         //
                         //  case a:
@@ -4763,18 +4725,17 @@ void Score::undoInsertTime(int tick, int len)
                         }
                   }
             else {
-                  int tick2 = tick - len;
+                  Fraction tick2 = tick - len;
                   if (s->tick() >= tick2) {
                         //
                         //  case A:
                         //  +----remove---+ +---spanner---+
                         //
-                        int t = s->tick() + len;
-                        if (t < 0)
-                              t = 0;
+                        Fraction t = s->tick() + len;
+                        if (t < Fraction(0,1))
+                              t = Fraction(0,1);
                         s->undoChangeProperty(Pid::SPANNER_TICK, t);
                         }
-//                  else if (s->tick() >= tick && s->tick2() < tick2) {
                   else if (s->tick() >= tick && s->tick2() <= tick2) {
                         //
                         //  case B:
@@ -4789,7 +4750,7 @@ void Score::undoInsertTime(int tick, int len)
                         //  +----spanner--------+
                         //    +---remove---+
                         //
-                        int t2 = s->tick2() + len;
+                        Fraction t2 = s->tick2() + len;
                         if (t2 > s->tick())
                               s->undoChangeProperty(Pid::SPANNER_TICKS, s->ticks() + len);
                         }
@@ -4799,10 +4760,10 @@ void Score::undoInsertTime(int tick, int len)
                         //       +----spanner--------+
                         //  +---remove---+
                         //
-                        int d1 = s->tick() - tick;
-                        int d2 = tick2 - s->tick();
-                        int le = s->ticks() - d2;
-                        if (le == 0)
+                        Fraction d1 = s->tick() - tick;
+                        Fraction d2 = tick2 - s->tick();
+                        Fraction le = s->ticks() - d2;
+                        if (le.isZero())
                               undoRemoveElement(s);
                         else {
                               s->undoChangeProperty(Pid::SPANNER_TICK, s->tick() - d1);
@@ -4815,9 +4776,9 @@ void Score::undoInsertTime(int tick, int len)
                         //       +----spanner--------+
                         //                     +---remove---+
                         //
-                        int d  = s->tick2() - tick;
-                        int le = s->ticks() - d;
-                        if (le == 0)
+                        Fraction d  = s->tick2() - tick;
+                        Fraction le = s->ticks() - d;
+                        if (le.isZero())
                               undoRemoveElement(s);
                         else
                               s->undoChangeProperty(Pid::SPANNER_TICKS, le);

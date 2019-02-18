@@ -569,7 +569,7 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
             else if (element->isClef() || element->isKeySig() || element->isTimeSig()) {
                   Measure* m1 = sel.startSegment()->measure();
                   Measure* m2 = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
-                  if (m2 == m1 && sel.startSegment()->rtick() == 0)
+                  if (m2 == m1 && sel.startSegment()->rtick().isZero())
                         m2 = nullptr;     // don't restore original if one full measure selected
                   else if (m2)
                         m2 = m2->nextMeasureMM();
@@ -583,7 +583,7 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
                         Element* e2 = nullptr;
                         // use mid-measure clef changes as appropriate
                         if (element->type() == ElementType::CLEF) {
-                              if (sel.startSegment()->segmentType() == SegmentType::ChordRest && sel.startSegment()->rtick() != 0) {
+                              if (sel.startSegment()->isChordRestType() && sel.startSegment()->rtick().isNotZero()) {
                                     ChordRest* cr = static_cast<ChordRest*>(sel.startSegment()->nextChordRest(i * VOICES));
                                     if (cr && cr->isChord())
                                           e1 = static_cast<Chord*>(cr)->upNote();
@@ -601,7 +601,7 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
                         if (m2 || e2) {
                               // restore original clef/keysig/timesig
                               Staff* staff = score->staff(i);
-                              int tick1 = sel.startSegment()->tick();
+                              Fraction tick1 = sel.startSegment()->tick();
                               Element* oelement = nullptr;
                               switch (element->type()) {
                                     case ElementType::CLEF:

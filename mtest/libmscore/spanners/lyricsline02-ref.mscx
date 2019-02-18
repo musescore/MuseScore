@@ -88,7 +88,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
-              <ticks>480</ticks>
+              <ticks>1/4</ticks>
               <text>A</text>
               </Lyrics>
             <Note>

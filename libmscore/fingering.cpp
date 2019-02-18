@@ -89,10 +89,9 @@ void Fingering::calculatePlacement()
 void Fingering::layout()
       {
       if (parent()) {
-            const int tick = parent()->tick();
+            Fraction tick = parent()->tick();
             const Staff* st = staff();
-            if (st && st->isTabStaff(tick)
-               && !st->staffType(tick)->showTabFingering()) {
+            if (st && st->isTabStaff(tick) && !st->staffType(tick)->showTabFingering()) {
                   setbbox(QRectF());
                   return;
                   }

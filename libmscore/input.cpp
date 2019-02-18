@@ -49,9 +49,9 @@ StaffGroup InputState::staffGroup() const
 //   tick
 //---------------------------------------------------------
 
-int InputState::tick() const
+Fraction InputState::tick() const
       {
-      return _segment ? _segment->tick() : 0;
+      return _segment ? _segment->tick() : Fraction(0,1);
       }
 
 //---------------------------------------------------------

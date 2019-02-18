@@ -50,7 +50,7 @@ Rest::Rest(Score* s, const TDuration& d)
       _sym       = SymId::restQuarter;
       setDurationType(d);
       if (d.fraction().isValid())
-            setDuration(d.fraction());
+            setTicks(d.fraction());
       }
 
 Rest::Rest(const Rest& r, bool link)
@@ -233,7 +233,7 @@ Element* Rest::drop(EditData& data)
                   NoteVal nval;
                   nval.pitch = n->pitch();
                   nval.headGroup = n->headGroup();
-                  Fraction d = score()->inputState().duration().fraction();
+                  Fraction d = score()->inputState().ticks();
                   if (!d.isZero()) {
                         Segment* seg = score()->setNoteRest(segment(), track(), nval, d, dir);
                         if (seg) {
@@ -277,7 +277,7 @@ SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yo
             case TDuration::DurationType::V_BREVE:
                   return SymId::restDoubleWhole;
             case TDuration::DurationType::V_MEASURE:
-                  if (duration() >= Fraction(2, 1))
+                  if (ticks() >= Fraction(2, 1))
                         return SymId::restDoubleWhole;
                   // fall through
             case TDuration::DurationType::V_WHOLE:
@@ -355,10 +355,10 @@ void Rest::layout()
                   int                     dots = durationType().dots();
                   // if rest is whole measure, convert into actual type and dot values
                   if (type == TDuration::DurationType::V_MEASURE) {
-                        int       ticks = measure()->ticks();
-                        TDuration dur   = TDuration(Fraction::fromTicks(ticks)).type();
-                        type = dur.type();
-                        dots = dur.dots();
+                        Fraction ticks = measure()->ticks();
+                        TDuration dur  = TDuration(ticks).type();
+                        type           = dur.type();
+                        dots           = dur.dots();
                         }
                   // symbol needed; if not exist, create, if exists, update duration
                   if (!_tabDur)
@@ -483,7 +483,7 @@ int Rest::computeLineOffset(int lines)
             Element* e = s->element(track() + 1);
             if (e && e->isRest() && (!e->visible() || toRest(e)->isGap())) {
                   Rest* r = toRest(e);
-                  if (r->globalDuration() == globalDuration()) {
+                  if (r->globalTicks() == globalTicks()) {
                         offsetVoices = false;
                         }
                   }
@@ -542,7 +542,7 @@ int Rest::computeLineOffset(int lines)
                         lineOffset = up ? -3 : 5;
                         break;
                   case TDuration::DurationType::V_MEASURE:
-                        if (duration() >= Fraction(2, 1))   // breve symbol
+                        if (ticks() >= Fraction(2, 1))   // breve symbol
                               lineOffset = up ? -3 : 5;
                         else
                               lineOffset = up ? -4 : 6;     // whole symbol

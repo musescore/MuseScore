@@ -744,13 +744,13 @@ static void readNote(Note* note, XmlReader& e)
                   }
             else if (tag == "onTimeOffset") {
                   if (note->onTimeType() == 1)
-                        note->setOnTimeOffset(e.readInt() * 1000 / note->chord()->actualTicks());
+                        note->setOnTimeOffset(e.readInt() * 1000 / note->chord()->actualTicks().ticks());
                   else
                         note->setOnTimeOffset(e.readInt() * 10);
                   }
             else if (tag == "offTimeOffset") {
                   if (note->offTimeType() == 1)
-                        note->setOffTimeOffset(1000 + (e.readInt() * 1000 / note->chord()->actualTicks()));
+                        note->setOffTimeOffset(1000 + (e.readInt() * 1000 / note->chord()->actualTicks().ticks()));
                   else
                         note->setOffTimeOffset(1000 + (e.readInt() * 10));
                   }
@@ -865,7 +865,7 @@ static void readNote(Note* note, XmlReader& e)
                   note->setTpc2(tpc);
             }
       if (!(tpcIsValid(note->tpc1()) && tpcIsValid(note->tpc2()))) {
-            int tick = note->chord() ? note->chord()->tick() : -1;
+            Fraction tick = note->chord() ? note->chord()->tick() : Fraction(-1,1);
             Interval v = note->staff() ? note->part()->instrument(tick)->transpose() : Interval();
             if (tpcIsValid(note->tpc1())) {
                   v.flip();
@@ -985,21 +985,21 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             else if (tag == "baseLen")    // obsolete even in 1.3
                   bl = e.readInt();
             else if (tag == "tick")
-                  tuplet->setTick(e.readInt());
+                  tuplet->setTick(Fraction::fromTicks(e.readInt()));
             else if (!readTupletProperties206(e, tuplet))
                   e.unknown();
             }
-      Fraction r = (tuplet->ratio() == 1) ? tuplet->ratio() : tuplet->ratio().reduced();
+      Fraction r = (tuplet->ratio() == Fraction(1,1)) ? tuplet->ratio() : tuplet->ratio().reduced();
       // this may be wrong, but at this stage it is kept for compatibility. It will be corrected afterwards
       // during "sanitize" step
       Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
-      tuplet->setDuration(f.reduced());
+      tuplet->setTicks(f.reduced());
       if (bl != -1) {         // obsolete, even in 1.3
             TDuration d;
             d.setVal(bl);
             tuplet->setBaseLen(d);
             d.setVal(bl * tuplet->ratio().denominator());
-            tuplet->setDuration(d.fraction());
+            tuplet->setTicks(d.fraction());
             }
       }
 
@@ -1524,16 +1524,16 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
 
       // tick is obsolete
       if (e.hasAttribute("tick"))
-            e.initTick(m->score()->fileDivision(e.intAttribute("tick")));
+            e.setTick(Fraction::fromTicks(m->score()->fileDivision(e.intAttribute("tick"))));
 
       if (e.hasAttribute("len")) {
             QStringList sl = e.attribute("len").split('/');
             if (sl.size() == 2)
-                  m->setLen(Fraction(sl[0].toInt(), sl[1].toInt()));
+                  m->setTicks(Fraction(sl[0].toInt(), sl[1].toInt()));
             else
                   qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
-            m->score()->sigmap()->add(m->tick(), SigEvent(m->len(), m->timesig()));
-            m->score()->sigmap()->add(m->endTick(), SigEvent(m->timesig()));
+            m->score()->sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
+            m->score()->sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
             }
 
       Staff* staff = m->score()->staff(staffIdx);
@@ -1542,15 +1542,15 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
       // keep track of tick of previous element
       // this allows markings that need to apply to previous element to do so
       // even though we may have already advanced to next tick position
-      int lastTick = e.tick();
+      Fraction lastTick = e.tick();
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
             if (tag == "move")
-                  e.initTick(e.readFraction().ticks() + m->tick());
+                  e.setTick(e.readFraction() + m->tick());
             else if (tag == "tick") {
-                  e.initTick(m->score()->fileDivision(e.readInt()));
+                  e.setTick(Fraction::fromTicks(m->score()->fileDivision(e.readInt())));
                   lastTick = e.tick();
                   }
             else if (tag == "BarLine") {
@@ -1632,7 +1632,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               chord->add(gc);
                               }
                         graceNotes.clear();
-                        int crticks = chord->actualTicks();
+                        Fraction crticks = chord->actualTicks();
 
                         if (chord->tremolo()) {
                               Tremolo* tremolo = chord->tremolo();
@@ -1656,15 +1656,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                                           pch->setTremolo(tremolo);
                                           chord->setTremolo(0);
                                           // force duration to half
-                                          Fraction pts(timeStretch * pch->globalDuration());
-                                          int pcrticks = pts.ticks();
-                                          pch->setDuration(Fraction::fromTicks(pcrticks / 2));
-                                          chord->setDuration(Fraction::fromTicks(crticks / 2));
+                                          Fraction pts(timeStretch * pch->globalTicks());
+                                          pch->setTicks(pts * Fraction(1,2));
+                                          chord->setTicks(crticks * Fraction(1,2));
                                           }
                                     else {
                                           qDebug("tremolo: first note not found");
                                           }
-                                    crticks /= 2;
+                                    crticks = crticks * Fraction(1,2);
                                     }
                               else {
                                     tremolo->setParent(chord);
@@ -1677,7 +1676,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Rest") {
                   Rest* rest = new Rest(m->score());
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
-                  rest->setDuration(m->timesig()/timeStretch);
+                  rest->setTicks(m->timesig()/timeStretch);
                   rest->setTrack(e.track());
                   readRest(m, rest, e);
                   if (!rest->segment())
@@ -1685,8 +1684,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   segment = rest->segment();
                   segment->add(rest);
 
-                  if (!rest->duration().isValid())     // hack
-                        rest->setDuration(m->timesig()/timeStretch);
+                  if (!rest->ticks().isValid())     // hack
+                        rest->setTicks(m->timesig()/timeStretch);
 
                   lastTick = e.tick();
                   e.incTick(rest->actualTicks());
@@ -1694,13 +1693,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Breath") {
                   Breath* breath = new Breath(m->score());
                   breath->setTrack(e.track());
-                  int tick = e.tick();
+                  Fraction tick = e.tick();
                   breath->read(e);
                   // older scores placed the breath segment right after the chord to which it applies
                   // rather than before the next chordrest segment with an element for the staff
                   // result would be layout too far left if there are other segments due to notes in other staves
                   // we need to find tick of chord to which this applies, and add its duration
-                  int prevTick;
+                  Fraction prevTick;
                   if (e.tick() < tick)
                         prevTick = e.tick();    // use our own tick if we explicitly reset to earlier position
                   else
@@ -1783,9 +1782,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   readRest(m, rm, e);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(rm);
-                  if (rm->actualDuration().isZero()) { // might happen with 1.3 scores
-                        rm->setDuration(m->len());
-                        }
+                  if (rm->actualTicks().isZero()) // might happen with 1.3 scores
+                        rm->setTicks(m->ticks());
                   lastTick = e.tick();
                   e.incTick(m->ticks());
                   }
@@ -1802,8 +1800,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                       || (clef->clefType() == ClefType::PERC && !isDrumStaff)
                       || (clef->clefType() != ClefType::PERC && isDrumStaff)) {
                         clef->setClefType(ClefType::G);
-                        staff->clefList().erase(e.tick());
-                        staff->clefList().insert(std::pair<int,ClefType>(e.tick(), ClefType::G));
+                        staff->clefList().erase(e.tick().ticks());
+                        staff->clefList().insert(std::pair<int,ClefType>(e.tick().ticks(), ClefType::G));
                         }
 
                   // there may be more than one clef segment for same tick position
@@ -1816,7 +1814,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         header = true;
                   else {
                         header = true;
-                        for (Segment* s = m->segments().first(); s && !s->rtick(); s = s->next()) {
+                        for (Segment* s = m->segments().first(); s && s->rtick().isZero(); s = s->next()) {
                               if (s->isKeySigType() || s->isTimeSigType()) {
                                     // hack: there may be other segment types which should
                                     // generate a clef at current position
@@ -1833,7 +1831,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   ts->setTrack(e.track());
                   ts->read(e);
                   // if time sig not at beginning of measure => courtesy time sig
-                  int currTick = e.tick();
+                  Fraction currTick = e.tick();
                   bool courtesySig = (currTick > m->tick());
                   if (courtesySig) {
                         // if courtesy sig., just add it without map processing
@@ -1853,8 +1851,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   KeySig* ks = new KeySig(m->score());
                   ks->setTrack(e.track());
                   ks->read(e);
-                  int curTick = e.tick();
-                  if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick == 0) {
+                  Fraction curTick = e.tick();
+                  if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick.isZero()) {
                         // ignore empty key signature
                         qDebug("remove keysig c at tick 0");
                         if (ks->links()) {
@@ -1875,7 +1873,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Lyrics* l = new Lyrics(m->score());
                   l->setTrack(e.track());
 
-                  int   iEndTick = 0;           // used for backward compatibility
+                  int iEndTick = 0;           // used for backward compatibility
                   Text* _verseNumber = 0;
 
                   while (e.readNextStartElement()) {
@@ -1901,7 +1899,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               iEndTick = e.readInt();
                               }
                         else if (t == "ticks")
-                              l->setTicks(e.readInt());
+                              l->setTicks(Fraction::fromTicks(e.readInt()));
                         else if (t == "Number") {                           // obsolete
                               _verseNumber = new Text(l->score());
                               readText114(e, _verseNumber, l);
@@ -1912,7 +1910,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   // if any endTick, make it relative to current tick
                   if (iEndTick) {
-                        l->setTicks(iEndTick - e.tick());
+                        l->setTicks(Fraction::fromTicks(iEndTick - e.tick().ticks()));
                         // qDebug("Lyrics::endTick: %d  ticks %d", iEndTick, _ticks);
                         }
                   if (_verseNumber) {
@@ -2138,7 +2136,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   m->setMMRestCount(e.readInt());
                   // set tick to previous measure
                   m->setTick(e.lastMeasure()->tick());
-                  e.initTick(e.lastMeasure()->tick());
+                  e.setTick(e.lastMeasure()->tick());
                   }
             else if (m->MeasureBase::readProperties(e))
                   ;
@@ -2148,13 +2146,15 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
       // For nested tuplets created with MuseScore 1.3 tuplet dialog (i.e. "Other..." dialog),
       // the parent tuplet was not set. Try to infere if the tuplet was actually a nested tuplet
       for (Tuplet* tuplet : e.tuplets()) {
-            int tupletTick = tuplet->tick();
-            int tupletDuration = tuplet->actualTicks() - 1;
+            Fraction tupletTick = tuplet->tick();
+            Fraction tupletDuration = tuplet->actualTicks() - Fraction::fromTicks(1);
             std::vector<DurationElement*> tElements = tuplet->elements();
             for (Tuplet* tuplet2 : e.tuplets()) {
                   if ((tuplet2->tuplet()) || (tuplet2->voice() != tuplet->voice())) // already a nested tuplet or in a different voice
                         continue;
-                  int possibleDuration = tuplet2->duration().ticks() * tuplet->ratio().denominator() / tuplet->ratio().numerator() - 1;
+                  // int possibleDuration = tuplet2->duration().ticks() * tuplet->ratio().denominator() / tuplet->ratio().numerator() - 1;
+                  Fraction possibleDuration = tuplet2->ticks() * Fraction(tuplet->ratio().denominator(), (tuplet->ratio().numerator()-1));
+
                   if ((tuplet2 != tuplet) && (tuplet2->tick() >= tupletTick) && (tuplet2->tick() < tupletTick + tupletDuration) && (tuplet2->tick() + possibleDuration < tupletTick + tupletDuration)) {
                         bool found = false;
                         for (DurationElement* de : tElements) {
@@ -2286,7 +2286,7 @@ static void readBox(XmlReader& e, Box* b)
 static void readStaffContent(Score* score, XmlReader& e)
       {
       int staff = e.intAttribute("id", 1) - 1;
-      e.initTick(0);
+      e.setTick(Fraction(0,1));
       e.setTrack(staff * VOICES);
 
       Measure* measure = score->firstMeasure();
@@ -2298,7 +2298,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                         measure = new Measure(score);
                         measure->setTick(e.tick());
                         const SigEvent& ev = score->sigmap()->timesig(measure->tick());
-                        measure->setLen(ev.timesig());
+                        measure->setTicks(ev.timesig());
                         measure->setTimesig(ev.nominal());
 
                         readMeasure(measure, staff, e);
@@ -2307,7 +2307,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                         if (!measure->isMMRest()) {
                               score->measures()->add(measure);
                               e.setLastMeasure(measure);
-                              e.initTick(measure->tick() + measure->ticks());
+                              e.setTick(measure->tick() + measure->ticks());
                               }
                         else {
                               // this is a multi measure rest
@@ -2327,7 +2327,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                               measure->setTick(e.tick());
                               score->measures()->add(measure);
                               }
-                        e.initTick(measure->tick());
+                        e.setTick(measure->tick());
 
                         readMeasure(measure, staff, e);
                         measure->checkMeasure(staff);
@@ -2350,7 +2350,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                   score->measures()->add(mb);
                   }
             else if (tag == "tick")
-                  e.initTick(score->fileDivision(e.readInt()));
+                  e.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
             else
                   e.unknown();
             }
@@ -2367,14 +2367,14 @@ static void readStaff(Staff* staff, XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "lines") {
                   int lines = e.readInt();
-                  staff->setLines(0, lines);
+                  staff->setLines(Fraction(0,1), lines);
                   if (lines != 5) {
                         staff->setBarLineFrom(lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
                         staff->setBarLineTo(lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO   : (lines - 1) * 2);
                         }
                   }
             else if (tag == "small")
-                  staff->setSmall(0, e.readInt());
+                  staff->setSmall(Fraction(0,1), e.readInt());
             else if (tag == "invisible")
                   staff->setInvisible(e.readInt());
             else if (tag == "slashStyle")
@@ -2507,7 +2507,7 @@ static void readPart(Part* part, XmlReader& e)
             if (tag == "Staff") {
                   Staff* staff = new Staff(_score);
                   staff->setPart(part);
-                  staff->setStaffType(0, StaffType()); // will reset later if needed
+                  staff->setStaffType(Fraction(0,1), StaffType()); // will reset later if needed
                   _score->staves().push_back(staff);
                   part->staves()->push_back(staff);
                   readStaff(staff, e);
@@ -2533,9 +2533,9 @@ static void readPart(Part* part, XmlReader& e)
                         }
                   Drumset* d = i->drumset();
                   Staff*   st = part->staff(0);
-                  if (d && st && st->lines(0) != 5) {
+                  if (d && st && st->lines(Fraction(0,1)) != 5) {
                         int n = 0;
-                        if (st->lines(0) == 1)
+                        if (st->lines(Fraction(0,1)) == 1)
                               n = 4;
                         for (int  j = 0; j < DRUM_INSTRUMENTS; ++j)
                               d->drum(j).line -= n;
@@ -2565,17 +2565,17 @@ static void readPart(Part* part, XmlReader& e)
 
       if (part->instrument()->useDrumset()) {
             for (Staff* staff : *part->staves()) {
-                  int lines = staff->lines(0);
+                  int lines = staff->lines(Fraction(0,1));
                   int bf    = staff->barLineFrom();
                   int bt    = staff->barLineTo();
-                  staff->setStaffType(0, *StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
+                  staff->setStaffType(Fraction(0,1), *StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
 
                   // this allows 2/3-line percussion staves to keep the double spacing they had in 1.3
 
                   if (lines == 2 || lines == 3)
-                        ((StaffType*)(staff->staffType(0)))->setLineDistance(Spatium(2.0));
+                        ((StaffType*)(staff->staffType(Fraction(0,1))))->setLineDistance(Spatium(2.0));
 
-                  staff->setLines(0, lines);       // this also sets stepOffset
+                  staff->setLines(Fraction(0,1), lines);       // this also sets stepOffset
                   staff->setBarLineFrom(bf);
                   staff->setBarLineTo(bt);
                   }
@@ -2970,14 +2970,14 @@ Score::FileError MasterScore::read114(XmlReader& e)
                         s->setTrack(e.track());
                   else
                         e.setTrack(s->track());       // update current track
-                  if (s->tick() == -1)
+                  if (s->tick() == Fraction(-1,1))
                         s->setTick(e.tick());
                   else
-                        e.initTick(s->tick());      // update current tick
+                        e.setTick(s->tick());      // update current tick
                   if (s->track2() == -1)
                         s->setTrack2(s->track());
-                  if (s->ticks() == 0) {
-                        qDebug("zero spanner %s ticks: %d", s->name(), s->ticks());
+                  if (s->ticks().isZero()) {
+                        qDebug("zero spanner %s ticks: %d", s->name(), s->ticks().ticks());
                         delete s;
                         }
                   else {
@@ -3021,9 +3021,9 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   s->setBarLineSpan(nstaves() - idx);
                   }
             for (auto i : s->clefList()) {
-                  int tick = i.first;
+                  Fraction tick   = Fraction::fromTicks(i.first);
                   ClefType clefId = i.second._concertClef;
-                  Measure* m = tick2measure(tick);
+                  Measure* m      = tick2measure(tick);
                   if (!m)
                         continue;
                   SegmentType st = SegmentType::Clef;
@@ -3049,12 +3049,12 @@ Score::FileError MasterScore::read114(XmlReader& e)
             // create missing KeySig
             KeyList* km = s->keyList();
             for (auto i = km->begin(); i != km->end(); ++i) {
-                  int tick = i->first;
-                  if (tick < 0) {
-                        qDebug("read114: Key tick %d", tick);
+                  Fraction tick = Fraction::fromTicks(i->first);
+                  if (tick < Fraction(0,1)) {
+                        qDebug("read114: Key tick %d", tick.ticks());
                         continue;
                         }
-                  if (tick == 0 && i->second.key() == Key::C)
+                  if (tick.isZero() && i->second.key() == Key::C)
                         continue;
                   Measure* m = tick2measure(tick);
                   if (!m)           //empty score
@@ -3208,9 +3208,9 @@ Score::FileError MasterScore::read114(XmlReader& e)
       // some 1.3 scores have tempolist but no tempo text
       fixTicks();
       for (auto i : tm) {
-            int tick    = i.first;
-            qreal tempo = i.second.tempo;
-            if (tempomap()->tempo(tick) != tempo) {
+            Fraction tick = Fraction::fromTicks(i.first);
+            qreal tempo   = i.second.tempo;
+            if (tempomap()->tempo(tick.ticks()) != tempo) {
                   TempoText* tt = new TempoText(this);
                   tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tempo*60)));
                   tt->setTempo(tempo);

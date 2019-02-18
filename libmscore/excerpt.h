@@ -13,6 +13,8 @@
 #ifndef __EXCERPT_H__
 #define __EXCERPT_H__
 
+#include "fraction.h"
+
 namespace Ms {
 
 class MasterScore;
@@ -67,7 +69,7 @@ class Excerpt : public QObject {
       static void createExcerpt(Excerpt*);
       static void cloneStaves(Score* oscore, Score* score, const QList<int>& map, QMultiMap<int, int>& allTracks);
       static void cloneStaff(Staff* ostaff, Staff* nstaff);
-      static void cloneStaff2(Staff* ostaff, Staff* nstaff, int stick, int etick);
+      static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& stick, const Fraction& etick);
       };
 
 }     // namespace Ms

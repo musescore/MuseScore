@@ -367,13 +367,13 @@ void ScoreView::lyricsMinus()
 
 void ScoreView::lyricsUnderscore()
       {
-      Lyrics* lyrics   = toLyrics(editData.element);
-      int track        = lyrics->track();
-      Segment* segment = lyrics->segment();
-      int verse        = lyrics->no();
-      Placement placement = lyrics->placement();
+      Lyrics* lyrics       = toLyrics(editData.element);
+      int track            = lyrics->track();
+      Segment* segment     = lyrics->segment();
+      int verse            = lyrics->no();
+      Placement placement  = lyrics->placement();
       PropertyFlags pFlags = lyrics->propertyFlags(Pid::PLACEMENT);
-      int endTick      = segment->tick(); // a previous melisma cannot extend beyond this point
+      Fraction endTick     = segment->tick(); // a previous melisma cannot extend beyond this point
 
       changeState(ViewState::NORMAL);
 
@@ -541,7 +541,7 @@ void ScoreView::lyricsEndEdit()
             segment = segment->prev1(SegmentType::ChordRest);
             }
       if (prevLyrics && prevLyrics->syllabic() == Lyrics::Syllabic::END) {
-            int endTick = prevSegment->tick();      // a prev. melisma should not go beyond this segment
+            Fraction endTick = prevSegment->tick();      // a prev. melisma should not go beyond this segment
             if (prevLyrics->endTick() >= endTick)
                   prevLyrics->undoChangeProperty(Pid::LYRIC_TICKS, endTick - prevLyrics->segment()->tick());
             }

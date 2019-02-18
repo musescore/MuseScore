@@ -34,7 +34,7 @@ ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac)
       // it may be corrected later.
       if (track >= 0)
             _currentLoc.setTrack(track);
-      if (frac >= 0)
+      if (frac >= Fraction(0,1))
             _currentLoc.setFrac(frac);
       }
 
@@ -59,11 +59,12 @@ void ConnectorInfo::updateLocation(const Element* e, Location& l, bool clipboard
 //   ConnectorInfo::updateCurrentInfo
 //---------------------------------------------------------
 
-void ConnectorInfo::updateCurrentInfo(bool clipboardmode) {
+void ConnectorInfo::updateCurrentInfo(bool clipboardmode)
+      {
       if (!currentUpdated() && _current)
             updateLocation(_current, _currentLoc, clipboardmode);
       setCurrentUpdated(true);
-}
+      }
 
 //---------------------------------------------------------
 //   ConnectorInfo::connect
