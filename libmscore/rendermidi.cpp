@@ -532,6 +532,7 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
 
 //---------------------------------------------------------
 //   changeCCBetween
+//    since we're adding events, pass ticks as ints rather than fractions
 //---------------------------------------------------------
 
 static void changeCCBetween(EventMap* events, int stick, int etick, int startExpr, int endExpr, int channel, int controller, VeloChangeMethod changeMethod, int tickOffset)
@@ -655,8 +656,8 @@ static void changeCCBetween(EventMap* events, int stick, int etick, int startExp
 //---------------------------------------------------------
 //   collectMeasureEventsDefault
 //    this uses only CC events to control note velocity, and sets the
-//    note-on velocity to always be 127 (max). This is the best method
-//    of single note dynamics, but only works if the soundfont supports it.
+//    note-on velocity to always be 127 (max). This is the method that allows
+//    single note dynamics, but only works if the soundfont supports it.
 //    Method is one of:
 //          FIXED_MAX - default: velocity is fixed at 127
 //          SEG_START - note-on velocity is the same as the start velocity of the seg
@@ -678,13 +679,12 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
       int strack = firstStaffIdx * VOICES;
       int etrack = nextStaffIdx * VOICES;
 
-
       static const VeloChangeMethod defaultChangeMethod = VeloChangeMethod::NORMAL;
 
       int lastSubchannel = -1;
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-            int tick = seg->tick().ticks();
-            int tick2 = tick + seg->ticks().ticks() - 1;
+            Fraction tick = seg->tick();
+            Fraction tick2 = tick + seg->ticks();
 
             int highestVelocity = 0;
             for (int track = strack; track < etrack; ++track) {
@@ -710,7 +710,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                         continue;
 
                   int staffIdx = st1->idx();
-                  int velocity = st1->velocities().velo(seg->tick());
+                  int velocity = st1->velocities().velo(tick.ticks());
 
                   Instrument* instr = st1->part()->instrument(tick);
                   int channel;
@@ -731,43 +731,43 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                   //
 
                   if (instr->singleNoteDynamics()) {
-                        int hairpinStartTick = -1;
-                        int hairpinStopTick = -1;
+                        Fraction hairpinStartTick;
+                        Fraction hairpinStopTick;
+                        bool hasHairpin = false;
                         
                         bool singleNoteDynamics = false;
                         Hairpin* h = nullptr;
                         VeloChangeMethod changeMethod = VeloChangeMethod::NORMAL;
 
                         // Check for hairpin crossing segment
-                        for (auto it : staff->score()->spannerMap().findOverlapping(tick, tick2)) {
-                              Spanner *s = it.value;
-                              if (it.stop == tick)
+                        for (auto it : staff->score()->spannerMap().findOverlapping(tick.ticks(), tick2.ticks()-1)) {
+                              Spanner* s = it.value;
+                              if (it.stop == tick.ticks())
                                     continue;
 
                               if (s->isHairpin() && s->staff() == st1) {
                                     h = toHairpin(s);
                                     singleNoteDynamics = h->singleNoteDynamics() || singleNoteDynamics;
                                     if (singleNoteDynamics) {
-                                          hairpinStartTick = it.start;
-                                          hairpinStopTick = it.stop;
+                                          hairpinStartTick = Fraction::fromTicks(it.start);
+                                          hairpinStopTick = Fraction::fromTicks(it.stop);
+                                          hasHairpin = true;
                                           changeMethod = h->veloChangeMethod();
                                           break;
                                           }
                                     }
                               }
 
-                        bool hasHairpin = (hairpinStartTick != -1 && hairpinStopTick != -1);
-
                         // From this, work out a start and end tick to apply CC events for
-                        int stick;
-                        int etick;
+                        Fraction stick;
+                        Fraction etick;
                         if (hasHairpin) {
                               stick = hairpinStartTick;
                               etick = hairpinStopTick;  
                               }
                         else {
-                              stick = 0;
-                              etick = seg->tick() + seg->ticks() + 1;
+                              stick = Fraction(0, 1);
+                              etick = seg->tick() + seg->ticks() + Fraction::fromTicks(1);
                               }
 
                         if (stick < seg->tick())
@@ -808,12 +808,12 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                               }
 
                         // We have a start and end tick, so get the velocities at these points
-                        int velocityStart = staff->velocities().velo(stick);
+                        int velocityStart = staff->velocities().velo(stick.ticks());
                         int velocityMiddle = hasChangingDynamic ? velocityStart + changingDyn->changeInVelocity() : -1;
-                        int velocityEnd = staff->velocities().velo(etick);
+                        int velocityEnd = staff->velocities().velo(etick.ticks());
 
                         // Attempt to fix invalid hairpin
-                        int hairpinStartVel = velocityMiddle == -1 ? velocityStart : velocityMiddle;
+                        int hairpinStartVel = (velocityMiddle == -1) ? velocityStart : velocityMiddle;
                         if (hasHairpin) {
                               if (h->isCrescendo() && hairpinStartVel > velocityEnd)
                                     singleNoteDynamics = false;
@@ -837,7 +837,6 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                                                 velocityMiddle = velocityStart;
                                           instr->updateVelocity(&velocityStart, channel, a->articulationName());
                                           }
->>>>>>> Add single-note dynamics
                                     }
 
                               // Highest velocity is a hack to stop weird, sudden changes in velocity
@@ -848,40 +847,42 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                                           int startExpr = velocityStart;
                                           int endExpr = velocityMiddle;
 
-                                          int accentTicks = MScore::division / 4;
+                                          Fraction accentTicks = Fraction(1, 16);
                                           if (hasChangingDynamic)
                                                 accentTicks = changingDyn->velocityChangeLength();
 
                                           // Determine how long to 'hold' the initial velocity
                                           // This is shorter with a dynamic than an articulation
-                                          int stickToUse = stick + accentTicks / (hasChangingDynamic ? 4 : 2);
-                                          int etickToUse = stick + accentTicks;
+                                          // Also, since we're about to add CC events, we can use int ticks instead of fractions
+                                          int stickToUse = stick.ticks() + accentTicks.ticks() / (hasChangingDynamic ? 4 : 2);
+                                          int etickToUse = stick.ticks() + accentTicks.ticks();
 
-                                          stickToUse = qMin(stickToUse, etick);
-                                          etickToUse = qMin(etickToUse, etick);
+                                          stickToUse = qMin(stickToUse, etick.ticks());
+                                          etickToUse = qMin(etickToUse, etick.ticks());
 
                                           // First, add an initial accent velocity
                                           // stick is the seg start tick, stickToUse is where we should dim to the rest velocity
-                                          changeCCBetween(events, stick, stickToUse, startExpr, startExpr, channel, controller, defaultChangeMethod, tickOffset);
+                                          changeCCBetween(events, stick.ticks(), stickToUse, startExpr, startExpr, channel, controller, defaultChangeMethod, tickOffset);
 
                                           // Then dimenuendo back down to normal
                                           // eticktouse is the end of the dim back to normal for an accent,
                                           // but etick is the segment end tick.
                                           changeCCBetween(events, stickToUse, etickToUse, startExpr, endExpr, channel, controller, defaultChangeMethod, tickOffset);
 
-                                          if (etickToUse != etick) {
+                                          // if there's a cresc or dim after the dynamic, apply it
+                                          if (etickToUse != etick.ticks()) {
                                                 startExpr = velocityMiddle;
                                                 endExpr = velocityEnd;
 
-                                                stickToUse = qMin(stick + accentTicks + 1, etick);
+                                                stickToUse = qMin(stick.ticks() + accentTicks.ticks() + 1, etick.ticks());
 
-                                                changeCCBetween(events, stickToUse, etick, startExpr, endExpr, channel, controller, changeMethod, tickOffset);
+                                                changeCCBetween(events, stickToUse, etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset);
                                                 }
                                           }
                                     else {
                                           int startExpr = velocityStart;
                                           int endExpr = velocityEnd;
-                                          changeCCBetween(events, stick, etick, startExpr, endExpr, channel, controller, changeMethod, tickOffset);
+                                          changeCCBetween(events, stick.ticks(), etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset);
                                           }
 
                                     highestVelocity = velocityStart;
@@ -890,7 +891,8 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                         else if (velocityStart >= highestVelocity) {
                               // Add a single expression value to match the velocity, since there is no hairpin
                               int exprVal = velocityStart;
-                              changeCCBetween(events, seg->tick(), seg->tick(), exprVal, exprVal, channel, controller, defaultChangeMethod, tickOffset);
+                              int staticTick = seg->tick().ticks();
+                              changeCCBetween(events, staticTick, staticTick, exprVal, exprVal, channel, controller, defaultChangeMethod, tickOffset);
                               }
 
                         } // if instr->singleNoteDynamics()
@@ -901,7 +903,8 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                               }
                         // Add a single expression value to match the velocity, since this instrument should
                         // not use single note dynamics.
-                        changeCCBetween(events, seg->tick(), seg->tick(), velocity, velocity, channel, controller, defaultChangeMethod, tickOffset);
+                        int staticTick = seg->tick().ticks();
+                        changeCCBetween(events, staticTick, staticTick, velocity, velocity, channel, controller, defaultChangeMethod, tickOffset);
                         }
 
                   //
@@ -939,10 +942,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
 
 //---------------------------------------------------------
 //   collectMeasureEvents
-//    methods:
-//          0 - default velocity/CC simultaneously
-//          1 - velocity only
-//          2 - cc only with constant velocity
+//    redirects to the correct function based on the passed method
 //---------------------------------------------------------
 
 static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int tickOffset, DynamicsRenderMethod method, int cc)
