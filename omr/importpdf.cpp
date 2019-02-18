@@ -70,7 +70,7 @@ void OmrState::importPdfMeasure(OmrMeasure* m, const OmrSystem* omrSystem)
             score->sigmap()->add(tick.ticks(), SigEvent(timesig));
             }
       measure->setTimesig(timesig);
-      measure->setLen(timesig);
+      measure->setTicks(timesig);
       TDuration d(TDuration::DurationType::V_MEASURE);
       Rest* rest;
       Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
