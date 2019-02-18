@@ -284,6 +284,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                   if (!cr)
                         cr = new Chord(score);
                   }
+            cr->setParent(segment);
             cr->setTrack(track);
 
             TDuration d(l);

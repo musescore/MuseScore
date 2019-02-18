@@ -1126,7 +1126,6 @@ void Spanner::layoutSystemsDone()
 //   fraction
 //---------------------------------------------------------
 
-#if 0
 static Fraction fraction(const XmlWriter& xml, const Element* current, const Fraction& t)
       {
       Fraction tick(t);
@@ -1137,14 +1136,14 @@ static Fraction fraction(const XmlWriter& xml, const Element* current, const Fra
             }
       return tick;
       }
-#endif
 
 //--------------------------------------------------
 //   Spanner::writeSpannerStart
 //---------------------------------------------------------
 
-void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac) const
+void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction tick) const
       {
+      Fraction frac = fraction(xml, current, tick);
       SpannerWriter w(xml, current, this, track, frac, true);
       w.write();
       }
@@ -1153,8 +1152,9 @@ void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int trac
 //   Spanner::writeSpannerEnd
 //---------------------------------------------------------
 
-void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction frac) const
+void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction tick) const
       {
+      Fraction frac = fraction(xml, current, tick);
       SpannerWriter w(xml, current, this, track, frac, false);
       w.write();
       }

@@ -261,6 +261,12 @@ void XmlReader::setLocation(const Location& l)
       if (l.isRelative()) {
             Location newLoc = l;
             newLoc.toAbsolute(location());
+            int intTicks = l.frac().ticks();
+            if (_tick == Fraction::fromTicks(_intTick + intTicks)) {
+                  _intTick += intTicks;
+                  setTrack(newLoc.track() - _trackOffset);
+                  return;
+                  }
             setLocation(newLoc); // recursion
             return;
             }
@@ -738,6 +744,7 @@ Fraction XmlReader::rtick() const
 void XmlReader::setTick(const Fraction& f)
       {
       _tick = f.reduced();
+      _intTick = _tick.ticks();
       }
 
 //---------------------------------------------------------
@@ -748,6 +755,7 @@ void XmlReader::incTick(const Fraction& f)
       {
       _tick += f;
       _tick.reduce();
+      _intTick += f.ticks();
       }
 }
 

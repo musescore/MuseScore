@@ -1650,6 +1650,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                               else if (currentNode1.nodeName() == "PrimaryTuplet") {
                                     tupletSet = true;
                                     cr        = new Chord(score);
+                                    cr->setParent(segment);
                                     cr->setTrack(track);
                                     if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                                           tuplet                           = new Tuplet(score);
@@ -2370,6 +2371,9 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                         else if (!masterBarElement.nodeName().compare("Bars") && stave == staves - 1) {
                               readBars(&masterBarElement, measure, &oldClefId[0], partInfo, measureCounter);
                               for (int i = 0; i < staves * VOICES; ++i) {
+                                    Ottava* o = ottava.at(i);
+                                    if (o && o->ticks().isZero())
+                                          o->setTick2(score->endTick());
                                     Slur* slur = legatos[i];
                                     if (slur) {
                                           if (measure->prevMeasure() && !measure->hasVoice(i)) {

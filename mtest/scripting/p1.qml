@@ -16,7 +16,7 @@ MuseScore {
             while (cursor.segment) {
                   var e = cursor.element;
                   if (e) {
-                        log2("found:", e.name + " (" + e.type + ") at " + e.tick);
+                        log2("found:", e.name + " (" + e.type + ") at " + e.tick.ticks);
                         if (e.type == Element.CHORD) {
 //                             log2("  durationType:",  e.durationType); // TODO: some wrapper/string conversion?
                             log2("  beamMode:",      e.beamMode);

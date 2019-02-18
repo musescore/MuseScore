@@ -241,7 +241,7 @@ subdirs (
         zerberus/opcodeparse
         zerberus/inputControls
         zerberus/loop
-#        testscript           ws:disabled during fraction migration
+        testscript
         )
 
 
