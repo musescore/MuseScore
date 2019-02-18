@@ -5,7 +5,7 @@
     </Message>
   <Message>
     <Text>This is the score view, where you can view and edit your score.
-    Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
+    Use your mouse wheel or touchpad to scroll (with "Shift" to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</Text>
     <Widget>scoreview</Widget>
     </Message>
@@ -42,7 +42,7 @@
     </Message>
   <Message>
     <Text>The main menu contains most other commands.
-    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</Text>
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: "Ctrl"+clicking) within the score view.</Text>
     <Widget>menubar</Widget>
     <Widget>File</Widget>
     </Message>

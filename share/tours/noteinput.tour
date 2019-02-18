@@ -53,7 +53,7 @@
     </Message>
   <Message>
     <Text>To enter a note of the selected duration, type its letter name or click on the staff.
-    Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</Text>
+    Press "Ctrl+Up/Down" (macOS: "Cmd+Up/Down") to change octave.</Text>
     <Widget>scoreview</Widget>
     </Message>
   <Message>
@@ -61,7 +61,7 @@
     <Widget>pad-rest</Widget>
     </Message>
   <Message>
-    <Text>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
+    <Text>To add an accidental to a note, press the shortcut "Up" or "Down" to raise or lower its pitch,
     or click one of these icons.</Text>
     <Widget>sharp2</Widget>
     <Widget>sharp</Widget>
@@ -70,7 +70,7 @@
     <Widget>flat2</Widget>
     </Message>
   <Message>
-    <Text>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</Text>
+    <Text>To add a note to a chord, press "Shift" while typing its letter name, or click on the staff.</Text>
     <Widget>scoreview</Widget>
     </Message>
   <Message>
@@ -78,7 +78,7 @@
     <Widget>tie</Widget>
     </Message>
   <Message>
-    <Text>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add > Tuplets.</Text>
+    <Text>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press "Ctrl+number" or use Add > Tuplets.</Text>
     <Widget>menu-add</Widget>
     <Widget>menu-tuplet</Widget>
     </Message>
