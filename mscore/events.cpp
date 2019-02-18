@@ -397,13 +397,19 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   }
                   break;
 
-            case ViewState::NOTE_ENTRY:
+            case ViewState::NOTE_ENTRY: {
                   _score->startCmd();
+                  bool restMode = _score->inputState().rest();
+                  if (ev->button() == Qt::RightButton)
+                        _score->inputState().setRest(!restMode);
                   _score->putNote(editData.startMove, ev->modifiers() & Qt::ShiftModifier, ev->modifiers() & Qt::ControlModifier);
+                  if (ev->button() == Qt::RightButton)
+                        _score->inputState().setRest(restMode);
                   _score->endCmd();
                   if (_score->inputState().cr())
                         adjustCanvasPosition(_score->inputState().cr(), false);
                   shadowNote->setVisible(false);
+                  }
                   break;
 
             case ViewState::EDIT: {
