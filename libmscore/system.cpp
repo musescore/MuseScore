@@ -1100,11 +1100,11 @@ qreal System::minDistance(System* s2) const
       int lastStaff;
 
       for (firstStaff = 0; firstStaff < _staves.size()-1; ++firstStaff) {
-            if (s2->staff(firstStaff)->show())
+            if (score()->staff(firstStaff)->show() && s2->staff(firstStaff)->show())
                   break;
             }
       for (lastStaff = _staves.size() -1; lastStaff > 0; --lastStaff) {
-            if (staff(lastStaff)->show())
+            if (score()->staff(lastStaff)->show() && staff(lastStaff)->show())
                   break;
             }
 
