@@ -422,14 +422,16 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                               }
                         }
                   else if (e->isKeySig() && trKeys && mode != TransposeMode::DIATONICALLY) {
+                        bool startKey = segment->tick() == s1->tick();
                         QList<ScoreElement*> ll = e->linkList();
                         for (ScoreElement* scoreElement : ll) {
                               KeySig* ks = toKeySig(scoreElement);
+                              bool addKey = ks->isChange();
                               if (!ks->isCustom() && !ks->isAtonal()) {
                                     Key nKey = transposeKey(ks->key(), interval);
                                     KeySigEvent ke = ks->keySigEvent();
                                     ke.setKey(nKey);
-                                    undo(new ChangeKeySig(ks, ke, ks->showCourtesy()));
+                                    undo(new ChangeKeySig(ks, ke, ks->showCourtesy(), startKey || addKey));
                                     }
                               }
                         }
