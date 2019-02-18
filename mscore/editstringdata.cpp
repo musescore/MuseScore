@@ -211,16 +211,16 @@ void EditStringData::accept()
 
 static const char* g_cNoteName[] = {
       QT_TRANSLATE_NOOP("editstringdata", "C"),
-      QT_TRANSLATE_NOOP("editstringdata", "C#"),
+      QT_TRANSLATE_NOOP("editstringdata", "C♯"),
       QT_TRANSLATE_NOOP("editstringdata", "D"),
-      QT_TRANSLATE_NOOP("editstringdata", "Eb"),
+      QT_TRANSLATE_NOOP("editstringdata", "E♭"),
       QT_TRANSLATE_NOOP("editstringdata", "E"),
       QT_TRANSLATE_NOOP("editstringdata", "F"),
-      QT_TRANSLATE_NOOP("editstringdata", "F#"),
+      QT_TRANSLATE_NOOP("editstringdata", "F♯"),
       QT_TRANSLATE_NOOP("editstringdata", "G"),
-      QT_TRANSLATE_NOOP("editstringdata", "Ab"),
+      QT_TRANSLATE_NOOP("editstringdata", "A♭"),
       QT_TRANSLATE_NOOP("editstringdata", "A"),
-      QT_TRANSLATE_NOOP("editstringdata", "Bb"),
+      QT_TRANSLATE_NOOP("editstringdata", "B♭"),
       QT_TRANSLATE_NOOP("editstringdata", "B")
       };
 
