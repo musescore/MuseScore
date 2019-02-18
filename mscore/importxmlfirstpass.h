@@ -68,6 +68,7 @@ public:
       void setPrintAbbr(bool b) { printAbbr = b; }
       bool getPrintAbbr() const { return printAbbr; }
       LyricNumberHandler& lyricNumberHandler() { return _lyricNumberHandler; }
+      const LyricNumberHandler& lyricNumberHandler() const { return _lyricNumberHandler; }
       void setMaxStaff(const int staff);
       int maxStaff() const { return _maxStaff; }
 private:
