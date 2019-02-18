@@ -2304,8 +2304,8 @@ Element* Score::selectMove(const QString& cmd)
 void Score::cmdMirrorNoteHead()
       {
       const QList<Element*>& el = selection().elements();
-      foreach(Element* e, el) {
-            if (e->type() == ElementType::NOTE) {
+      for (Element* e : el) {
+            if (e->isNote()) {
                   Note* note = toNote(e);
                   if (note->staff() && note->staff()->isTabStaff(note->chord()->tick()))
                         e->undoChangeProperty(Pid::GHOST, !note->ghost());
@@ -2317,6 +2317,27 @@ void Score::cmdMirrorNoteHead()
                               d = d == MScore::DirectionH::LEFT ? MScore::DirectionH::RIGHT : MScore::DirectionH::LEFT;
                         undoChangeUserMirror(note, d);
                         }
+                  }
+            else if (e->isHairpinSegment()) {
+                  Hairpin* h = toHairpinSegment(e)->hairpin();
+                  HairpinType st = h->hairpinType();
+                  switch (st)  {
+                        case HairpinType::CRESC_HAIRPIN:
+                              st = HairpinType::DECRESC_HAIRPIN;
+                              break;
+                        case HairpinType::DECRESC_HAIRPIN:
+                              st = HairpinType::CRESC_HAIRPIN;
+                              break;
+                        case HairpinType::CRESC_LINE:
+                              st = HairpinType::DECRESC_LINE;
+                              break;
+                        case HairpinType::DECRESC_LINE:
+                              st = HairpinType::CRESC_LINE;
+                              break;
+                        case HairpinType::INVALID:
+                              break;
+                        }
+                  h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(st));
                   }
             }
       }

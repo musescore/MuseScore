@@ -1390,27 +1390,6 @@ void Score::cmdFlip()
                         slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(dir));
                         });
                   }
-            else if (e->isHairpinSegment()) {
-                  Hairpin* h = toHairpinSegment(e)->hairpin();
-                  HairpinType st = h->hairpinType();
-                  switch (st)  {
-                        case HairpinType::CRESC_HAIRPIN:
-                              st = HairpinType::DECRESC_HAIRPIN;
-                              break;
-                        case HairpinType::DECRESC_HAIRPIN:
-                              st = HairpinType::CRESC_HAIRPIN;
-                              break;
-                        case HairpinType::CRESC_LINE:
-                              st = HairpinType::DECRESC_LINE;
-                              break;
-                        case HairpinType::DECRESC_LINE:
-                              st = HairpinType::CRESC_LINE;
-                              break;
-                        case HairpinType::INVALID:
-                              break;
-                        }
-                  h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(st));
-                  }
             else if (e->isArticulation()) {
                   auto articulation = toArticulation(e);
                   flipOnce(articulation, [articulation](){
@@ -1451,6 +1430,7 @@ void Score::cmdFlip()
                || e->isStaffText()
                || e->isDynamic()
                || e->isHairpin()
+               || e->isHairpinSegment()
                || e->isOttavaSegment()
                || e->isTextLineSegment()
                || e->isPedalSegment()
