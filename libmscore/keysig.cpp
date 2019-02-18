@@ -517,6 +517,18 @@ bool KeySig::operator==(const KeySig& k) const
       }
 
 //---------------------------------------------------------
+//   isChange
+//---------------------------------------------------------
+
+bool KeySig::isChange() const
+      {
+      if (!staff())
+            return false;
+      int keyTick = tick();
+      return staff()->currentKeyTick(keyTick) == keyTick;
+      }
+
+//---------------------------------------------------------
 //   changeKeySigEvent
 //---------------------------------------------------------
 
