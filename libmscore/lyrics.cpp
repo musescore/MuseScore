@@ -314,6 +314,7 @@ void Lyrics::layout()
             _separator->setTicks(1);
             _separator->setTrack(track());
             _separator->setTrack2(track());
+            _separator->setVisible(visible());
             // bbox().setWidth(bbox().width());  // ??
             }
       else {
