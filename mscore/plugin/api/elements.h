@@ -159,7 +159,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( diagonal,                DIAGONAL                  )
       API_PROPERTY( groups,                  GROUPS                    )
       API_PROPERTY( lineStyle,               LINE_STYLE                )
-      API_PROPERTY( lineColor,               LINE_COLOR                )
+      API_PROPERTY( lineColor,               COLOR                     )
       API_PROPERTY( lineWidth,               LINE_WIDTH                )
       API_PROPERTY( lassoPos,                LASSO_POS                 )
       API_PROPERTY( lassoSize,               LASSO_SIZE                )

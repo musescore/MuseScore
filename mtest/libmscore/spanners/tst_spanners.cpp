@@ -23,6 +23,7 @@
 #include "libmscore/score.h"
 #include "libmscore/system.h"
 #include "libmscore/undo.h"
+#include "libmscore/line.h"
 
 #define DIR QString("libmscore/spanners/")
 
@@ -52,6 +53,7 @@ class TestSpanners : public QObject, public MTest
       void spanners12();            // remove a measure containing the middle portion of a LyricsLine and undo
 //      void spanners13();            // drop a line break at the middle of a LyricsLine and check LyricsLineSegments
       void spanners14();            // creating part from an existing grand staff containing a cross staff glissando
+      void spanners15();            // change the color of a line and save it
       };
 
 //---------------------------------------------------------
@@ -618,6 +620,26 @@ void TestSpanners::spanners14()
       score->Score::undo(new AddExcerpt(ex));
 
       QVERIFY(saveCompareScore(score, "glissando-cloning05.mscx", DIR + "glissando-cloning05-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///  spanners15
+///   set the color of a spanner and save
+//---------------------------------------------------------
+
+void TestSpanners::spanners15()
+      {
+      MasterScore* score = readScore(DIR + "linecolor01.mscx");
+      QVERIFY(score);
+
+      for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+            Spanner* spanner = (*it).second;
+            SLine* sl = static_cast<SLine*>(spanner);
+            sl->setProperty(Pid::COLOR, QVariant::fromValue(QColor(255, 0, 0, 255)));
+            }
+
+      QVERIFY(saveCompareScore(score, "linecolor01.mscx", DIR + "linecolor01-ref.mscx"));
       delete score;
       }
 
