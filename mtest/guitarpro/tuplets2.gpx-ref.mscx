@@ -29,7 +29,7 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>N-Gt</trackName>
+      <trackName>Guitar</trackName>
       <Instrument>
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
@@ -2214,7 +2214,7 @@ solo concert</text>
             </voice>
           </Measure>
         </Staff>
-      <name>N-Gt</name>
+      <name>Guitar</name>
       </Score>
     </Score>
   </museScore>

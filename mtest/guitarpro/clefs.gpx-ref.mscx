@@ -29,7 +29,7 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>A-Piano</trackName>
+      <trackName>Acoustic Piano</trackName>
       <Instrument>
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
@@ -494,7 +494,7 @@
             </voice>
           </Measure>
         </Staff>
-      <name>A-Piano</name>
+      <name>Acoustic Piano</name>
       </Score>
     </Score>
   </museScore>

@@ -29,7 +29,7 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>S-Gt</trackName>
+      <trackName>Track 1</trackName>
       <Instrument>
         <longName>Guitar</longName>
         <shortName>Guit.</shortName>
@@ -463,7 +463,7 @@
             </voice>
           </Measure>
         </Staff>
-      <name>S-Gt</name>
+      <name>Track 1</name>
       </Score>
     </Score>
   </museScore>
