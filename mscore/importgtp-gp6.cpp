@@ -61,6 +61,7 @@
 #include "libmscore/textline.h"
 #include <libmscore/repeat.h>
 // #include <symtext.h>
+#include "qzip/qzipreader_p.h"
 
 namespace Ms {
 
@@ -474,13 +475,16 @@ void GuitarPro6::readTracks(QDomNode* track)
             score->staves().push_back(s);
             while (!currentNode.isNull()) {
                   QString nodeName = currentNode.nodeName();
-                  if (nodeName == "Name")
+                  if (nodeName == "Name") {
+                        part->setPartName(currentNode.toElement().text());
                         part->setPlainLongName(currentNode.toElement().text());
+                        }
                   else if (nodeName == "Color") {}
                   // this is a typo is guitar pro - 'defaut' is correct here
                   else if (nodeName == "SystemsDefautLayout") {}
                   else if (nodeName == "SystemsLayout") {}
                   else if (nodeName == "RSE") {}
+                  // GP6 only
                   else if (nodeName == "GeneralMidi") {
                         if (currentNode.toElement().hasChildNodes()) {
                               auto prog = currentNode.firstChildElement("Program");
@@ -502,8 +506,9 @@ void GuitarPro6::readTracks(QDomNode* track)
                   else if (nodeName == "PlayingStyle") {}
                   else if (nodeName == "PageSetup") {}
                   else if (nodeName == "MultiVoice") {}
-                  else if (nodeName == "ShortName")
-                        part->setPartName(currentNode.toElement().text());
+                  else if (nodeName == "ShortName") {
+                        part->setPlainShortName(currentNode.toElement().text());
+                        }
                   else if (nodeName == "Instrument") {
                         QString ref = currentNode.attributes().namedItem("ref").toAttr().value();
                         auto it     = instrumentMapping.find(ref);
@@ -521,8 +526,33 @@ void GuitarPro6::readTracks(QDomNode* track)
                               s->setBarLineSpan(2);
                               }
                         }
-                  else if (nodeName == "Properties") {
-                        QDomNode currentProperty = currentNode.firstChild();
+                  // GP6 only
+                  else if (nodeName == "PartSounding") {
+                        part->instrument()->setTranspose(Interval(currentNode.firstChildElement("TranspositionPitch").text().toInt()));
+                        }
+                  // GP7 only
+                  else if (nodeName == "Transpose") {
+                        part->instrument()->setTranspose(Interval(currentNode.firstChildElement("Octave").text().toInt() * 12));
+                        }
+                  // GP7 only
+                  else if (nodeName == "Sounds") {
+                        part->instrument()->channel(0)->setProgram(currentNode.firstChildElement("Sound").firstChildElement("MIDI").firstChildElement("Program").text().toInt());
+                        }
+                  // GP7 only
+                  else if (nodeName == "MidiConnection") {
+                        part->setMidiChannel(currentNode.firstChildElement("PrimaryChannel").text().toInt());
+                        if (part->midiChannel() == GP_DEFAULT_PERCUSSION_CHANNEL) {
+                              part->instrument()->setDrumset(gpDrumset);
+                              s->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
+                              }
+                        }
+                  // GP6 has Properties, GP7 has Staves
+                  else if (nodeName == "Properties" || nodeName == "Staves") {
+                        QDomNode currentProperty;
+                        if (nodeName == "Properties")
+                              currentProperty = currentNode.firstChild();
+                        else
+                              currentProperty = currentNode.firstChildElement("Staff").firstChildElement("Properties").firstChild();
                         while (!currentProperty.isNull()) {
                               QString propertyName = currentProperty.attributes().namedItem("name").toAttr().value();
                               if (!propertyName.compare("Tuning")) {
@@ -2567,7 +2597,7 @@ void GuitarPro6::readGpif(QByteArray* data)
 //   parseFile
 //---------------------------------------------------------
 
-void GuitarPro6::parseFile(char* filename, QByteArray* data)
+void GuitarPro6::parseFile(const char* filename, QByteArray* data)
       {
       // test to check if we are dealing with the score
       if (!strcmp(filename, "score.gpif"))
@@ -2669,10 +2699,19 @@ bool GuitarPro6::read(QFile* fp)
       slides = new QMap<int,int>();
 
       previousTempo = -1;
-      QByteArray buffer = fp->readAll();
+      
+      if (fp->fileName().endsWith(".gp", Qt::CaseInsensitive)) {
+            MQZipReader zip(fp);
+            QByteArray fileData = zip.fileData("Content/score.gpif");
+            zip.close();
+            readGpif(&fileData);
+            }
+      else {
+            QByteArray buffer = fp->readAll();
+            // decompress and read files contained within GPX file
+            readGPX(&buffer);
+            }
 
-      // decompress and read files contained within GPX file
-      readGPX(&buffer);
       delete slides;
 
       return true;
