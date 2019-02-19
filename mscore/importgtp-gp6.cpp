@@ -477,7 +477,6 @@ void GuitarPro6::readTracks(QDomNode* track)
                   QString nodeName = currentNode.nodeName();
                   if (nodeName == "Name") {
                         part->setPartName(currentNode.toElement().text());
-                        part->setPlainLongName(currentNode.toElement().text());
                         }
                   else if (nodeName == "Color") {}
                   // this is a typo is guitar pro - 'defaut' is correct here
@@ -506,9 +505,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                   else if (nodeName == "PlayingStyle") {}
                   else if (nodeName == "PageSetup") {}
                   else if (nodeName == "MultiVoice") {}
-                  else if (nodeName == "ShortName") {
-                        part->setPlainShortName(currentNode.toElement().text());
-                        }
+                  else if (nodeName == "ShortName") {}
                   else if (nodeName == "Instrument") {
                         QString ref = currentNode.attributes().namedItem("ref").toAttr().value();
                         auto it     = instrumentMapping.find(ref);
