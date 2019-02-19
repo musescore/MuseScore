@@ -115,8 +115,8 @@ class TRowLabels : public QGraphicsView {
 class Timeline : public QGraphicsView {
       Q_OBJECT
 
-      int grid_width = 20;
-      int grid_height = 20;
+      int grid_width = 25;
+      int grid_height = 25;
       int max_zoom = 50;
       int min_zoom = 5;
       int spacing = 5;

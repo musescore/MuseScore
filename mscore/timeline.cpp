@@ -329,7 +329,7 @@ void TRowLabels::restrict_scroll(int value)
             if (graphics_rect_item) {
                   QRectF rectf = graphics_rect_item->rect();
                   rectf.setY(qreal(scrollbar_value + y));
-                  rectf.setHeight(20);
+                  rectf.setHeight(25);
                   graphics_rect_item->setRect(rectf);
                   }
             else if (graphics_line_item) {
