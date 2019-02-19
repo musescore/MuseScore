@@ -601,7 +601,6 @@
                   <linked>
                     <indexDiff>5</indexDiff>
                     </linked>
-                  <placement>below</placement>
                   <text>T</text>
                   </Fingering>
                 <pitch>62</pitch>
@@ -620,7 +619,6 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <placement>below</placement>
                   <text>1</text>
                   </Fingering>
                 <pitch>53</pitch>
@@ -639,7 +637,6 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <placement>below</placement>
                   <text>2</text>
                   </Fingering>
                 <pitch>47</pitch>
@@ -658,7 +655,6 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <placement>below</placement>
                   <text>3</text>
                   </Fingering>
                 <pitch>55</pitch>
@@ -681,7 +677,6 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <placement>below</placement>
                   <text>4</text>
                   </Fingering>
                 <pitch>59</pitch>
@@ -700,7 +695,6 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <placement>below</placement>
                   <text>T</text>
                   </Fingering>
                 <pitch>51</pitch>
@@ -719,7 +713,6 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <placement>below</placement>
                   <text>I</text>
                   </Fingering>
                 <pitch>61</pitch>
@@ -738,7 +731,6 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <placement>below</placement>
                   <text>M</text>
                   </Fingering>
                 <pitch>52</pitch>
@@ -761,7 +753,6 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <placement>below</placement>
                   <text>A</text>
                   </Fingering>
                 <pitch>55</pitch>
@@ -780,7 +771,6 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <placement>below</placement>
                   <text>O</text>
                   </Fingering>
                 <pitch>56</pitch>
