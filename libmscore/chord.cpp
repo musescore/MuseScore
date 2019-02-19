@@ -2161,6 +2161,8 @@ void Chord::layoutTablature()
                   score()->undo(new RemoveElement(_stem));
             if (_hook)
                   score()->undo(new RemoveElement(_hook));
+            if (_beam)
+                  score()->undo(new RemoveElement(_beam));
             }
       // if stem is required but missing, add it;
       // set stem position (stem length is set in Chord:layoutStem() )
