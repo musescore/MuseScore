@@ -85,7 +85,7 @@ add_library (
       utils.cpp velo.cpp volta.cpp xmlreader.cpp xmlwriter.cpp mscore.cpp
       undo.cpp cmd.cpp scorefile.cpp revisions.cpp
       check.cpp input.cpp icon.cpp ossia.cpp
-      tempo.cpp sig.cpp pos.cpp fraction.cpp duration.cpp
+      tempo.cpp sig.cpp pos.cpp duration.cpp
       figuredbass.cpp rehearsalmark.cpp transpose.cpp
       property.cpp range.cpp elementmap.cpp notedot.cpp imageStore.cpp
       audio.cpp splitMeasure.cpp joinMeasure.cpp
