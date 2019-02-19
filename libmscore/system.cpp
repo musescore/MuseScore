@@ -442,6 +442,17 @@ void System::layout2()
             Staff* staff2  = score()->staff(si2);
             qreal dist     = h;
 
+#if 1
+            if (staff->part() == staff2->part()) {
+                  Measure* m = firstMeasure();
+                  qreal mag = m ? staff->mag(m->tick()) : 1.0;
+                  dist += akkoladeDistance * mag;
+                  }
+            else {
+                  dist += staffDistance;
+                  }
+#else
+            // TODO: provide style setting or brace property to allow braces to also define a grand staff
             switch (staff2->innerBracket()) {
                   case BracketType::BRACE:
                         dist += akkoladeDistance;
@@ -453,6 +464,7 @@ void System::layout2()
                         dist += staffDistance;
                         break;
                   }
+#endif
             dist += staff2->userDist();
 #if 0
             for (MeasureBase* mb : ml) {
