@@ -543,44 +543,15 @@ void GuitarPro6::readTracks(QDomNode* track)
                               s->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
                               }
                         }
-                  // GP6 has Properties, GP7 has Staves
-                  else if (nodeName == "Properties" || nodeName == "Staves") {
-                        QDomNode currentProperty;
-                        if (nodeName == "Properties")
-                              currentProperty = currentNode.firstChild();
-                        else
-                              currentProperty = currentNode.firstChildElement("Staff").firstChildElement("Properties").firstChild();
-                        while (!currentProperty.isNull()) {
-                              QString propertyName = currentProperty.attributes().namedItem("name").toAttr().value();
-                              if (!propertyName.compare("Tuning")) {
-                                    // set up the tuning for the part
-                                    QString tuningString         = currentProperty.firstChild().toElement().text();
-                                    QStringList tuningStringList = tuningString.split(" ");
-                                    int strings                  = 0;
-                                    std::vector<int> tuning(tuningStringList.length());
-                                    //int tuning[tuningStringList.length()];
-                                    int frets = 24;
-                                    for (auto iter = tuningStringList.begin(); iter != tuningStringList.end(); ++iter) {
-                                          int currentString = (*iter).toInt();
-                                          tuning[strings] = currentString;
-                                          strings++;
-                                          }
-                                    StringData* stringData = new StringData(frets, strings, &tuning[0]);
-                                    Instrument* instr      = part->instrument();
-                                    instr->setStringData(*stringData);
-                                    hasTuning = true;
-                                    createTuningString(strings, &tuning[0]);
-                                    }
-                              else if (!propertyName.compare("DiagramCollection")) {
-                                    QDomNode items       = currentProperty.firstChild();
-                                    QDomNode currentItem = items.firstChild();
-                                    while (!currentItem.isNull()) {
-                                          readChord(&currentItem, trackCounter);
-                                          currentItem = currentItem.nextSibling();
-                                          }
-                                    }
-                              currentProperty = currentProperty.nextSibling();
-                              }
+                  // GP6 only
+                  else if (nodeName == "Properties") {
+                        readTrackProperties(currentNode, part, trackCounter, hasTuning);
+                        }
+                  // GP7 only
+                  else if (nodeName == "Staves") {
+                        QDomNode staff = currentNode.firstChild();
+                        QDomNode properties = staff.firstChildElement("Properties");
+                        readTrackProperties(properties, part, trackCounter, hasTuning);
                         }
                   currentNode = currentNode.nextSibling();
                   }
@@ -601,6 +572,46 @@ void GuitarPro6::readTracks(QDomNode* track)
             previousDynamic[i] = 0;
       // set the number of staves we need
       staves = score->staves().length();
+      }
+
+//---------------------------------------------------------
+//   readTrackProperties
+//---------------------------------------------------------
+
+void GuitarPro6::readTrackProperties(const QDomNode& currentNode, Part* part, int trackCounter, bool& hasTuning)
+      {
+      QDomNode currentProperty = currentNode.firstChild();
+      while (!currentProperty.isNull()) {
+            QString propertyName = currentProperty.attributes().namedItem("name").toAttr().value();
+            if (!propertyName.compare("Tuning")) {
+                  // set up the tuning for the part
+                  QString tuningString = currentProperty.firstChild().toElement().text();
+                  QStringList tuningStringList = tuningString.split(" ");
+                  int strings = 0;
+                  std::vector<int> tuning(tuningStringList.length());
+                  //int tuning[tuningStringList.length()];
+                  int frets = 24;
+                  for (auto iter = tuningStringList.begin(); iter != tuningStringList.end(); ++iter) {
+                        int currentString = (*iter).toInt();
+                        tuning[strings] = currentString;
+                        strings++;
+                        }
+                  StringData* stringData = new StringData(frets, strings, &tuning[0]);
+                  Instrument* instr = part->instrument();
+                  instr->setStringData(*stringData);
+                  hasTuning = true;
+                  createTuningString(strings, &tuning[0]);
+                  }
+            else if (!propertyName.compare("DiagramCollection")) {
+                  QDomNode items = currentProperty.firstChild();
+                  QDomNode currentItem = items.firstChild();
+                  while (!currentItem.isNull()) {
+                        readChord(&currentItem, trackCounter);
+                        currentItem = currentItem.nextSibling();
+                        }
+                  }
+            currentProperty = currentProperty.nextSibling();
+            }
       }
 
 //---------------------------------------------------------
@@ -860,8 +871,8 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
       bool endSlur = false;
       for (auto currentBeat = currentBeatList.begin(); currentBeat != currentBeatList.end(); currentBeat++) {
             int sl = -1;
-            if (slides->contains(staffIdx * VOICES + voiceNum))
-                  sl = slides->take(staffIdx * VOICES + voiceNum);
+            if (slides.contains(staffIdx * VOICES + voiceNum))
+                  sl = slides.take(staffIdx * VOICES + voiceNum);
 
             Fraction l;
             int dotted           = 0;
@@ -2689,25 +2700,26 @@ int GuitarPro6::readBeatEffects(int, Segment*)
 
 bool GuitarPro6::read(QFile* fp)
       {
-      f      = fp;
-      slides = new QMap<int,int>();
-
+      f = fp;
       previousTempo = -1;
-      
-      if (fp->fileName().endsWith(".gp", Qt::CaseInsensitive)) {
-            MQZipReader zip(fp);
-            QByteArray fileData = zip.fileData("Content/score.gpif");
-            zip.close();
-            readGpif(&fileData);
-            }
-      else {
-            QByteArray buffer = fp->readAll();
-            // decompress and read files contained within GPX file
-            readGPX(&buffer);
-            }
+      QByteArray buffer = fp->readAll();
+      // decompress and read files contained within GPX file
+      readGPX(&buffer);
+      return true;
+      }
 
-      delete slides;
+//---------------------------------------------------------
+//   GuitarPro7::read
+//---------------------------------------------------------
 
+bool GuitarPro7::read(QFile* fp)
+      {
+      f = fp;
+      previousTempo = -1;
+      MQZipReader zip(fp);
+      QByteArray fileData = zip.fileData("Content/score.gpif");
+      zip.close();
+      readGpif(&fileData);
       return true;
       }
 
