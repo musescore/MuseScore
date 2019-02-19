@@ -371,7 +371,6 @@ class GuitarPro6 : public GuitarPro {
       // an integer stored in the header indicating that the file is not compressed (BCFZ).
       const int GPX_HEADER_COMPRESSED = 1514554178;
       int position = 0;
-      QMap<int, int>* slides;
       // a constant storing the amount of bits per byte
       const int BITS_IN_BYTE = 8;
       // contains all the information about notes that will go in the parts
@@ -394,7 +393,6 @@ class GuitarPro6 : public GuitarPro {
       QByteArray readString(QByteArray* buffer, int offset, int length);
       int readBits(QByteArray* buffer, int bitsToRead);
       int readBitsReversed(QByteArray* buffer, int bitsToRead);
-      void readGpif(QByteArray* data);
       void readScore(QDomNode* metadata);
       void readChord(QDomNode* diagram, int track);
       int findNumMeasures(GPPartInfo* partInfo);
@@ -403,6 +401,7 @@ class GuitarPro6 : public GuitarPro {
       Fraction readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, const Fraction& startTick, int staffIdx, int voiceNum, Tuplet* tuplets[], int measureCounter);
       void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter);
       void readTracks(QDomNode* tracks);
+      void readTrackProperties(const QDomNode& currentNode, Part* part, int trackCounter, bool& hasTuning);
       void readMasterBars(GPPartInfo* partInfo);
       Fraction rhythmToDuration(QString value);
       Fraction fermataToFraction(int numerator, int denominator);
@@ -415,11 +414,19 @@ class GuitarPro6 : public GuitarPro {
       std::map<std::pair<int, int>, Note*> slideMap;
 
    protected:
+      void readGpif(QByteArray* data);
       void readNote(int string, Note* note);
       virtual int readBeatEffects(int track, Segment*);
 
    public:
       GuitarPro6(MasterScore* s) : GuitarPro(s, 6) {}
+      GuitarPro6(MasterScore* s, int v) : GuitarPro(s, v) {}
+      virtual bool read(QFile*);
+      };
+
+class GuitarPro7 : public GuitarPro6 {
+   public:
+      GuitarPro7(MasterScore* s) : GuitarPro6(s, 7) {}
       virtual bool read(QFile*);
       };
 
