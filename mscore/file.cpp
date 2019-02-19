@@ -142,6 +142,11 @@ static QString createDefaultFileName(QString fn)
       return fn;
       }
 
+QString MuseScore::saveFilename(QString fn)
+      {
+      return createDefaultFileName(fn);
+      }
+
 //---------------------------------------------------------
 //   readScoreError
 //    if "ask" is true, ask to ignore; returns true if
