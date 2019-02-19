@@ -386,7 +386,7 @@ class GuitarPro6 : public GuitarPro {
       Slur** legatos;
       // a mapping from identifiers to fret diagrams
       QMap<int, FretDiagram*> fretDiagrams;
-      void parseFile(char* filename, QByteArray* data);
+      void parseFile(const char* filename, QByteArray* data);
       int readBit(QByteArray* buffer);
       QByteArray getBytes(QByteArray* buffer, int offset, int length);
       void readGPX(QByteArray* buffer);
