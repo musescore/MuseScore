@@ -61,7 +61,7 @@
 #include "libmscore/textline.h"
 #include <libmscore/repeat.h>
 // #include <symtext.h>
-#include "qzip/qzipreader_p.h"
+#include "thirdparty/qzip/qzipreader_p.h"
 
 namespace Ms {
 
