@@ -276,6 +276,8 @@ Fraction Element::tick() const
       while (e->parent()) {
             if (e->parent()->isSegment())
                   return toSegment(e->parent())->tick();
+            else if (e->parent()->isMeasureBase())
+                  return toMeasureBase(e->parent())->tick();
             e = e->parent();
             }
       return Fraction(0, 1);
