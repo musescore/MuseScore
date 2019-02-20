@@ -1565,7 +1565,7 @@ void renderArpeggio(Chord *chord, QList<NoteEventList> & ell)
             NoteEventList* events = &(ell)[i];
             events->clear();
 
-            auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()) / Score::defaultTempo();
+            auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick()) / Score::defaultTempo();
             int ot = (l * j * 1000) / chord->upNote()->playTicks() *
                         tempoRatio * chord->arpeggio()->Stretch();
 
@@ -2404,9 +2404,9 @@ void Score::createPlayEvents()
 
 void Score::renderMetronome(EventMap* events, Measure* m, const Fraction& tickOffset)
       {
-      int msrTick         = m->tick().ticks();
+      Fraction msrTick    = m->tick();
       qreal tempo         = tempomap()->tempo(msrTick);
-      TimeSigFrac timeSig = sigmap()->timesig(msrTick).nominal();
+      TimeSigFrac timeSig = sigmap()->timesig(m->tick()).nominal();
 
       int clickTicks      = timeSig.isBeatedCompound(tempo) ? timeSig.beatTicks() : timeSig.dUnitTicks();
       int endTick         = m->endTick().ticks();
@@ -2414,14 +2414,14 @@ void Score::renderMetronome(EventMap* events, Measure* m, const Fraction& tickOf
       int rtick;
 
       if (m->isAnacrusis()) {
-            int rem = m->ticks().ticks() % clickTicks;
+            Fraction rem = Fraction::fromTicks(m->ticks().ticks() % clickTicks);
             msrTick += rem;
-            rtick = rem + timeSig.ticksPerMeasure() - m->ticks().ticks();
+            rtick = rem.ticks() + timeSig.ticksPerMeasure() - m->ticks().ticks();
             }
       else
             rtick = 0;
 
-      for (int tick = msrTick; tick < endTick; tick += clickTicks, rtick += clickTicks)
+      for (int tick = msrTick.ticks(); tick < endTick; tick += clickTicks, rtick += clickTicks)
             events->insert(std::pair<int,NPlayEvent>(tick + tickOffset.ticks(), NPlayEvent(timeSig.rtick2beatType(rtick))));
       }
 

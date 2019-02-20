@@ -341,9 +341,9 @@ void Volta::setTempo() const
       if (startMeasure && endMeasure) {
             if (!endMeasure->repeatEnd())
                   return;
-            Fraction startTick = startMeasure->tick() - Fraction::fromTicks(1);
+            Fraction startTick = startMeasure->tick() - Fraction::fromTicks(1);     // HACK
             Fraction endTick  = endMeasure->endTick() - Fraction::fromTicks(1);
-            qreal tempoBeforeVolta = score()->tempomap()->tempo(startTick.ticks());
+            qreal tempoBeforeVolta = score()->tempomap()->tempo(startTick);
             score()->setTempo(endTick, tempoBeforeVolta);
             }
       }

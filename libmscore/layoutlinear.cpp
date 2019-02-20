@@ -675,11 +675,11 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
                               stretch = qMax(stretch, toFermata(e)->timeStretch());
                         }
                   if (stretch != 0.0 && stretch != 1.0) {
-                        qreal otempo = score->tempomap()->tempo(segment.tick().ticks());
+                        qreal otempo = score->tempomap()->tempo(segment.tick());
                         qreal ntempo = otempo / stretch;
                         score->setTempo(segment.tick(), ntempo);
                         Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480*4);
-                        auto e = score->tempomap()->find(etick.ticks());
+                        auto e = score->tempomap()->find(etick);
                         if (e == score->tempomap()->end())
                               score->setTempo(etick, otempo);
                         }
@@ -706,7 +706,7 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
                   sig = measure->mmRestFirst()->ticks();
             else
                   sig = measure->ticks();
-            score->sigmap()->add(tick.ticks(), SigEvent(sig, measure->timesig(), measure->no()));
+            score->sigmap()->add(tick, SigEvent(sig, measure->timesig(), measure->no()));
             }
 
       Segment* seg = measure->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));

@@ -594,7 +594,7 @@ MasterScore* MuseScore::getNewFile()
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
 
-      score->sigmap()->add(0, timesig);
+      score->sigmap()->add(Fraction(0,1), timesig);
 
       Fraction firstMeasureTicks = pickupMeasure ? Fraction(pickupTimesigZ, pickupTimesigN) : timesig;
 

@@ -430,7 +430,7 @@ void Score::fixTicks()
       if (isMaster()) {
             tempomap()->clear();
             sigmap()->clear();
-            sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
+            sigmap()->add(Fraction(0,1), SigEvent(fm->ticks(),  fm->timesig(), 0));
             }
 
       for (MeasureBase* mb = first(); mb; mb = mb->next()) {
@@ -521,14 +521,14 @@ void Score::fixTicks()
             if (isMaster() && (!sig.identical(m->ticks()) || !nomSig.identical(m->timesig()))) {
                   sig    = m->ticks();
                   nomSig = m->timesig();
-                  sigmap()->add(tick.ticks(), SigEvent(sig, nomSig,  m->no()));
+                  sigmap()->add(tick, SigEvent(sig, nomSig,  m->no()));
                   }
 
             tick += measureTicks;
             }
       // Now done in getNextMeasure(), do we keep?
       if (tempomap()->empty())
-            tempomap()->setTempo(0, _defaultTempo);
+            tempomap()->setTempo(Fraction(0,1), _defaultTempo);
       }
 
 //---------------------------------------------------------
@@ -1308,7 +1308,7 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
                   m->setTimesig(ts);
                   m->setTicks(ts);
                   measures()->add(toMeasureBase(m));
-                  lastTick += Fraction::fromTicks(ts.ticks());
+                  lastTick += ts;
                   }
             }
       return tick2measure(tick);
@@ -1572,7 +1572,7 @@ void Score::removeElement(Element* element)
                   {
                   TempoText* tt = toTempoText(element);
                   Fraction tick = tt->segment()->tick();
-                  tempomap()->delTempo(tick.ticks());
+                  tempomap()->delTempo(tick);
                   }
                   break;
             case ElementType::INSTRUMENT_CHANGE: {
@@ -2510,7 +2510,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
       for (int staffIdx = sidx; staffIdx < eidx; ++staffIdx) {
             Staff* staff = _staves[staffIdx];
             for (auto i = km.begin(); i != km.end(); ++i) {
-                  Fraction tick = Fraction::fromTicks(i->first);
+                  Fraction tick = i->first.tick();
                   Measure* measure = tick2measure(tick);
                   if (!measure)
                         continue;
@@ -3333,7 +3333,7 @@ void Score::setTempo(Segment* segment, qreal tempo)
 
 void Score::setTempo(const Fraction& tick, qreal tempo)
       {
-      tempomap()->setTempo(tick.ticks(), tempo);
+      tempomap()->setTempo(tick, tempo);
       _playlistDirty = true;
       }
 
@@ -3343,7 +3343,7 @@ void Score::setTempo(const Fraction& tick, qreal tempo)
 
 void Score::removeTempo(const Fraction& tick)
       {
-      tempomap()->delTempo(tick.ticks());
+      tempomap()->delTempo(tick);
       _playlistDirty = true;
       }
 
@@ -3365,14 +3365,14 @@ void Score::resetTempo()
 void Score::resetTempoRange(const Fraction& tick1, const Fraction& tick2)
       {
       const bool zeroInRange = (tick1 <= Fraction(0,1) && tick2 > Fraction(0,1));
-      tempomap()->clearRange(tick1.ticks(), tick2.ticks());
+      tempomap()->clearRange(tick1, tick2);
       if (zeroInRange)
-            tempomap()->setTempo(0, _defaultTempo);
-      sigmap()->clearRange(tick1.ticks(), tick2.ticks());
+            tempomap()->setTempo(Fraction(0,1), _defaultTempo);
+      sigmap()->clearRange(tick1, tick2);
       if (zeroInRange) {
             Measure* m = firstMeasure();
             if (m)
-                  sigmap()->add(0, SigEvent(m->ticks(),  m->timesig(), 0));
+                  sigmap()->add(Fraction(0,1), SigEvent(m->ticks(),  m->timesig(), 0));
             }
       }
 
@@ -3382,7 +3382,7 @@ void Score::resetTempoRange(const Fraction& tick1, const Fraction& tick2)
 
 void Score::setPause(const Fraction& tick, qreal seconds)
       {
-      tempomap()->setPause(tick.ticks(), seconds);
+      tempomap()->setPause(tick, seconds);
       _playlistDirty = true;
       }
 
@@ -3392,7 +3392,7 @@ void Score::setPause(const Fraction& tick, qreal seconds)
 
 qreal Score::tempo(const Fraction& tick) const
       {
-      return tempomap()->tempo(tick.ticks());
+      return tempomap()->tempo(tick);
       }
 
 //---------------------------------------------------------

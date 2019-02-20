@@ -14,6 +14,7 @@
 #define __TYPES_H__
 
 #include "config.h"
+#include "fraction.h"
 
 namespace Ms {
 #ifdef SCRIPT_INTERFACE
@@ -431,6 +432,22 @@ Q_ENUM_NS(Placement)
 Q_ENUM_NS(SegmentType)
 Q_ENUM_NS(Tid)
 #endif
+
+//---------------------------------------------------------
+//   TimePosition
+//    helper class used as key in std::map for
+//    ClefList, KeyList, StafftypeList
+//---------------------------------------------------------
+
+class TimePosition {
+      Fraction f;
+      qreal t;                // cached float value of fraction
+
+   public:
+      TimePosition(const Fraction& t) : f(t), t(qreal(t.numerator())/qreal(t.denominator())) {}
+      const Fraction& tick() const                 { return f; }
+      bool operator<(const TimePosition& tp) const { return t < tp.t; }
+      };
 
 //hack: to force the build system to run moc on this file
 class Mops : public QObject {

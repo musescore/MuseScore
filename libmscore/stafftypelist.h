@@ -13,6 +13,7 @@
 #ifndef __STAFFTYPELIST_H__
 #define __STAFFTYPELIST_H__
 
+#include "types.h"
 #include "stafftype.h"
 
 namespace Ms {
@@ -25,14 +26,20 @@ class XmlReader;
 //    to keep track of key signature changes
 //---------------------------------------------------------
 
-class StaffTypeList : public std::map<int, StaffType> {
+typedef std::map<TimePosition, StaffType> StaffTypeMap;
+
+class StaffTypeList : StaffTypeMap {
 
    public:
       StaffTypeList() {}
       StaffType& staffType(const Fraction&);
       const StaffType& staffType(const Fraction&) const;
       StaffType* setStaffType(const Fraction&, const StaffType&);
-      void read(XmlReader&, Score*);
+//      void read(XmlReader&, Score*);
+
+      iterator find(const Fraction& t) { return StaffTypeMap::find(TimePosition(t)); }
+      iterator end()                   { return StaffTypeMap::end(); }
+      const_iterator end() const       { return StaffTypeMap::end(); }
       };
 
 }

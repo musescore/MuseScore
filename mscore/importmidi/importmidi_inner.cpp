@@ -260,7 +260,7 @@ namespace MidiBar {
 ReducedFraction findBarStart(const ReducedFraction &time, const TimeSigMap *sigmap)
       {
       int barIndex, beat, tick;
-      sigmap->tickValues(time.ticks(), &barIndex, &beat, &tick);
+      sigmap->tickValues(time.fraction(), &barIndex, &beat, &tick);
       return ReducedFraction::fromTicks(sigmap->bar2tick(barIndex, 0));
       }
 

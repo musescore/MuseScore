@@ -742,7 +742,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
 
 static void fixupSigmap(MxmlLogger* logger, Score* score, const QVector<Fraction>& measureLength)
       {
-      auto it = score->sigmap()->find(0);
+      auto it = score->sigmap()->find(Fraction(0,1));
 
       if (it == score->sigmap()->end()) {
             // no valid timesig at tick = 0
@@ -751,7 +751,7 @@ static void fixupSigmap(MxmlLogger* logger, Score* score, const QVector<Fraction
             // if there is no first measure, we probably don't care,
             // but set a default anyway.
             Fraction tsig = measureLength.isEmpty() ? Fraction(4, 4) : measureLength.at(0);
-            score->sigmap()->add(0, tsig);
+            score->sigmap()->add(Fraction(0,1), tsig);
             }
       }
 
@@ -2247,7 +2247,7 @@ void MusicXMLParserPass1::time(const Fraction cTime)
             int btp = 0;       // beat-type as integer
             if (determineTimeSig(_logger, &_e, beats, beatType, timeSymbol, st, bts, btp)) {
                   _timeSigDura = Fraction(bts, btp);
-                  _score->sigmap()->add(cTime.ticks(), _timeSigDura);
+                  _score->sigmap()->add(cTime, _timeSigDura);
                   }
             }
       }

@@ -92,7 +92,7 @@ BBFile::~BBFile()
 bool BBFile::read(const QString& name)
       {
       _siglist.clear();
-      _siglist.add(0, Fraction(4, 4));        // debug
+      _siglist.add(Fraction(0,1), Fraction(4, 4));        // debug
 
       _path = name;
       QFile f(name);
@@ -413,7 +413,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
             Measure* measure  = new Measure(score);
             Fraction tick = Fraction::fromTicks(score->sigmap()->bar2tick(i, 0));
             measure->setTick(tick);
-            Fraction ts = score->sigmap()->timesig(tick.ticks()).timesig();
+            Fraction ts = score->sigmap()->timesig(tick).timesig();
             measure->setTimesig(ts);
             measure->setTicks(ts);
             score->measures()->add(measure);

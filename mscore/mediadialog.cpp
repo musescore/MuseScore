@@ -159,10 +159,10 @@ void MediaDialog::addAudioPressed()
             return;
 
       qreal t = 0;
-      int tick = 0;
-      qreal lastTempo = tmo->tempo(0);
+      Fraction tick = Fraction(0,1);
+      qreal lastTempo = tmo->tempo(Fraction(0,1));
       TempoMap* tmn = new TempoMap();
-      tmn->setTempo(0, lastTempo);
+      tmn->setTempo(Fraction(0,1), lastTempo);
       int resolution = 25;
       while (!syncFile.atEnd()) {
             for (int i = 0; !syncFile.atEnd() && i < resolution-1; i++)
@@ -179,13 +179,13 @@ void MediaDialog::addAudioPressed()
             qreal tPerformance = sl[1].trimmed().toDouble();
 
             // timestamp of last
-            int scoreTick = tmo->time2tick(tScore);
+            Fraction scoreTick = tmo->time2tick(tScore);
             qreal deltaError = tmo->tick2time(scoreTick) - tScore;
-            int dt = scoreTick - tick;
+            Fraction dt = scoreTick - tick;
             qreal deltaTime = tPerformance - t;
 
             if (deltaTime > 0) {
-                  qreal tempo = dt / (480 * deltaTime);
+                  qreal tempo = dt.ticks() / (480 * deltaTime);
                   if(tempo != lastTempo) {
                   qDebug() << tempo;
                         tmn->setTempo(tick, tempo);

@@ -353,10 +353,10 @@ bool isHumanPerformance(
                                     quantForLen(MChord::maxNoteLen(chord), basicQuant));
             const auto onTime = quantizeValue(chord.first, quant);
             int barIndex, beat, tick;
-            sigmap->tickValues(onTime.ticks(), &barIndex, &beat, &tick);
+            sigmap->tickValues(onTime.fraction(), &barIndex, &beat, &tick);
 
             const auto barStart = ReducedFraction::fromTicks(sigmap->bar2tick(barIndex, 0));
-            const auto barFraction = ReducedFraction(sigmap->timesig(barStart.ticks()).timesig());
+            const auto barFraction = ReducedFraction(sigmap->timesig(barStart.fraction()).timesig());
             const auto beatLen = Meter::beatLength(barFraction);
 
             if (((onTime - barStart) / beatLen).reduced().denominator() == 1
@@ -1262,7 +1262,7 @@ void quantizeOnTimes(
                               currentBarIndex = chordIt->second.barIndex;
                               barStart = ReducedFraction::fromTicks(
                                                 sigmap->bar2tick(currentBarIndex, 0));
-                              barFraction = ReducedFraction(sigmap->timesig(barStart.ticks()).timesig());
+                              barFraction = ReducedFraction(sigmap->timesig(barStart.fraction()).timesig());
                               if (!currentlyInTuplet)
                                     rangeStart = barStart;
                               }

@@ -221,7 +221,7 @@ void minimizeNumberOfRests(
 
                   const auto barStart = MidiBar::findBarStart(note.offTime, sigmap);
                   const auto barFraction = ReducedFraction(
-                                                sigmap->timesig(barStart.ticks()).timesig());
+                                                sigmap->timesig(barStart.fraction()).timesig());
                   auto durationStart = (it->first > barStart) ? it->first : barStart;
 
                   if (it->second.isInTuplet) {

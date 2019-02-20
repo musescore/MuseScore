@@ -583,7 +583,7 @@ void MTrack::createKeys(Key defaultKey, const KeyList &allKeyList)
             if (allKeyList.empty()) {
                   KeySigEvent ke;
                   ke.setKey(defaultKey);
-                  staffKeyList[0] = ke;
+                  staffKeyList[TimePosition(Fraction(0,1))] = ke;
                   MidiKey::assignKeyListToStaff(staffKeyList, staff);
                   }
             else {
@@ -658,7 +658,7 @@ QList<MTrack> prepareTrackList(const std::multimap<int, MTrack> &tracks)
 std::multimap<int, MTrack> createMTrackList(TimeSigMap *sigmap, const MidiFile *mf)
       {
       sigmap->clear();
-      sigmap->add(0, Fraction(4, 4));   // default time signature
+      sigmap->add(Fraction(0,1), Fraction(4, 4));   // default time signature
 
       std::multimap<int, MTrack> tracks;   // <track index, track>
       int trackIndex = -1;
@@ -681,8 +681,8 @@ std::multimap<int, MTrack> createMTrackList(TimeSigMap *sigmap, const MidiFile *
                                     // like time sig event not at the beginning of bar
                                     // we need to round tick value to integral bar count
                         int bars, beats, ticks;
-                        sigmap->tickValues(tick.ticks(), &bars, &beats, &ticks);
-                        sigmap->add(sigmap->bar2tick(bars, 0), metaTimeSignature(e));
+                        sigmap->tickValues(tick.fraction(), &bars, &beats, &ticks);
+                        sigmap->add(Fraction::fromTicks(sigmap->bar2tick(bars, 0)), metaTimeSignature(e));
                         }
                   else if (e.type() == ME_NOTE) {
                         hasNotes = true;
@@ -757,12 +757,12 @@ bool isPickupWithGreaterTimeSig(
 bool areNextBarsEqual(const Score *score, int barCount)
       {
       const int baseBarTick = score->sigmap()->bar2tick(1, 0);
-      const Fraction baseTimeSig = score->sigmap()->timesig(baseBarTick).timesig();
+      const Fraction baseTimeSig = score->sigmap()->timesig(Fraction::fromTicks(baseBarTick)).timesig();
 
       const int equalTimeSigCount = 3;
       for (int i = 2; i <= equalTimeSigCount - 1 && i < barCount; ++i) {
             const int barTick = score->sigmap()->bar2tick(i, 0);
-            const Fraction timeSig = score->sigmap()->timesig(barTick).timesig();
+            const Fraction timeSig = score->sigmap()->timesig(Fraction::fromTicks(barTick)).timesig();
             if (timeSig != baseTimeSig)
                   return false;
             }
@@ -777,8 +777,8 @@ void tryCreatePickupMeasure(
       {
       const int firstBarTick  = score->sigmap()->bar2tick(0, 0);
       const int secondBarTick = score->sigmap()->bar2tick(1, 0);
-      const Fraction firstTimeSig = score->sigmap()->timesig(firstBarTick).timesig();
-      const Fraction secondTimeSig = score->sigmap()->timesig(secondBarTick).timesig();
+      const Fraction firstTimeSig = score->sigmap()->timesig(Fraction::fromTicks(firstBarTick)).timesig();
+      const Fraction secondTimeSig = score->sigmap()->timesig(Fraction::fromTicks(secondBarTick)).timesig();
 
       if (isPickupWithLessTimeSig(firstTimeSig, secondTimeSig)) {
             Measure* pickup = new Measure(score);
@@ -796,7 +796,7 @@ void tryCreatePickupMeasure(
                         // leave its actual length equal to nominal length
             ++(*barCount);
 
-            score->sigmap()->add(firstBarTick, secondTimeSig);
+            score->sigmap()->add(Fraction::fromTicks(firstBarTick), secondTimeSig);
 
             Measure* firstBar = new Measure(score);
             firstBar->setTick(Fraction::fromTicks(firstBarTick));
@@ -819,7 +819,7 @@ void tryCreatePickupMeasure(
 void createMeasures(const ReducedFraction &firstTick, ReducedFraction &lastTick, Score *score)
       {
       int barCount, beat, tick;
-      score->sigmap()->tickValues(lastTick.ticks(), &barCount, &beat, &tick);
+      score->sigmap()->tickValues(lastTick.fraction(), &barCount, &beat, &tick);
       if (beat > 0 || tick > 0)
             ++barCount;           // convert bar index to number of bars
 
@@ -840,7 +840,7 @@ void createMeasures(const ReducedFraction &firstTick, ReducedFraction &lastTick,
             const int t = score->sigmap()->bar2tick(i, 0);
             m->setTick(Fraction::fromTicks(tick));
             m->setNo(i);
-            const Fraction timeSig = score->sigmap()->timesig(t).timesig();
+            const Fraction timeSig = score->sigmap()->timesig(Fraction::fromTicks(t)).timesig();
             m->setTimesig(timeSig);
             m->setTicks(timeSig);
             score->measures()->add(m);
@@ -888,8 +888,8 @@ void createTimeSignatures(Score *score)
       {
       for (auto is = score->sigmap()->begin(); is != score->sigmap()->end(); ++is) {
             const SigEvent& se = is->second;
-            const int tick = is->first;
-            Measure* m = score->tick2measure(Fraction::fromTicks(tick));
+            const Fraction tick = is->first.tick();
+            Measure* m = score->tick2measure(tick);
             if (!m)
                   continue;
             Fraction newTimeSig = se.timesig();
@@ -900,7 +900,7 @@ void createTimeSignatures(Score *score)
             if (pickupMeasure && is == score->sigmap()->begin()) {
                   auto next = std::next(is);
                   if (next != score->sigmap()->end()) {
-                        Measure* mm = score->tick2measure(Fraction::fromTicks(next->first));
+                        Measure* mm = score->tick2measure(next->first.tick());
                         if (m && mm && m == barFromIndex(score, 0) && mm == barFromIndex(score, 1)
                                     && m->timesig() == mm->timesig() && newTimeSig != mm->timesig())
                               {
@@ -913,7 +913,7 @@ void createTimeSignatures(Score *score)
                   TimeSig* ts = new TimeSig(score);
                   ts->setSig(newTimeSig);
                   ts->setTrack(staffIdx * VOICES);
-                  Segment* seg = m->getSegment(SegmentType::TimeSig, Fraction::fromTicks(tick));
+                  Segment* seg = m->getSegment(SegmentType::TimeSig, tick);
                   seg->add(ts);
                   }
             if (newTimeSig != se.timesig())   // was a pickup measure - skip next timesig
@@ -939,7 +939,7 @@ KeyList findAllKeyList(const QList<MTrack> &tracks)
       for (int i = 0; i < tracks.size(); ++i) {
             if (tracks[i].hasKey) {
                   for (const auto &key: *tracks[i].staff->keyList())
-                        kl.setKey(key.first, key.second);
+                        kl.setKey(key.first.tick(), key.second);
                   }
             }
       return kl;

@@ -41,7 +41,7 @@ double findBasicTempo(const std::multimap<int, MTrack> &tracks, bool isHumanPerf
 
 void setTempoToScore(Score *score, int tick, double beatsPerSecond)
       {
-      if (score->tempomap()->find(tick) != score->tempomap()->end())
+      if (score->tempomap()->find(Fraction::fromTicks(tick)) != score->tempomap()->end())
             return;
                   // don't repeat tempo, always set only tempo for tick 0
       if (tick > 0 && score->tempo(Fraction::fromTicks(tick)) == beatsPerSecond)
@@ -145,7 +145,7 @@ void setTempo(const std::multimap<int, MTrack> &tracks, Score *score)
             }
 
       if (score->tempomap()->empty())
-            score->tempomap()->setTempo(0, 2.0);      // default tempo
+            score->tempomap()->setTempo(Fraction(0,1), 2.0);      // default tempo
       }
 
 } // namespace MidiTempo

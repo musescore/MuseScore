@@ -1533,8 +1533,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   m->setTicks(Fraction(sl[0].toInt(), sl[1].toInt()));
             else
                   qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
-            m->score()->sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
-            m->score()->sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
+            m->score()->sigmap()->add(m->tick(), SigEvent(m->ticks(), m->timesig()));
+            m->score()->sigmap()->add(m->endTick(), SigEvent(m->timesig()));
             }
 
       Staff* staff = m->score()->staff(staffIdx);
@@ -1801,8 +1801,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                       || (clef->clefType() == ClefType::PERC && !isDrumStaff)
                       || (clef->clefType() != ClefType::PERC && isDrumStaff)) {
                         clef->setClefType(ClefType::G);
-                        staff->clefList().erase(e.tick().ticks());
-                        staff->clefList().insert(std::pair<int,ClefType>(e.tick().ticks(), ClefType::G));
+                        staff->clefList().erase(e.tick());
+                        staff->clefList().insert(e.tick(), ClefType::G);
                         }
 
                   // there may be more than one clef segment for same tick position
@@ -2387,14 +2387,14 @@ static void readStaff(Staff* staff, XmlReader& e)
                         if (e.name() == "clef") {
                               int tick    = e.intAttribute("tick", 0);
                               ClefType ct = readClefType(e.attribute("idx", "0"));
-                              staff->clefList().insert(std::pair<int,ClefType>(_score->fileDivision(tick), ct));
+                              staff->clefList().insert(Fraction::fromTicks(_score->fileDivision(tick)), ct);
                               e.readNext();
                               }
                         else
                               e.unknown();
                         }
                   if (staff->clefList().empty())
-                        staff->clefList().insert(std::pair<int,ClefType>(0, ClefType::G));
+                        staff->clefList().insert(Fraction(0,1), ClefType::G);
                   }
             else if (tag == "keylist")
                   staff->keyList()->read(e, _score);
@@ -2858,10 +2858,10 @@ Score::FileError MasterScore::read114(XmlReader& e)
                               int tick   = e.attribute("tick").toInt();
                               double tmp = e.readElementText().toDouble();
                               tick       = (tick * MScore::division + _fileDivision/2) / _fileDivision;
-                              auto pos   = tm.find(tick);
+                              auto pos   = tm.find(Fraction::fromTicks(tick));
                               if (pos != tm.end())
                                     tm.erase(pos);
-                              tm.setTempo(tick, tmp);
+                              tm.setTempo(Fraction::fromTicks(tick), tmp);
                         }
                         else if (e.name() == "relTempo")
                               e.readElementText();
@@ -3030,7 +3030,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   s->setBarLineSpan(nstaves() - idx);
                   }
             for (auto i : s->clefList()) {
-                  Fraction tick   = Fraction::fromTicks(i.first);
+                  Fraction tick   = i.first.tick();
                   ClefType clefId = i.second._concertClef;
                   Measure* m      = tick2measure(tick);
                   if (!m)
@@ -3058,7 +3058,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             // create missing KeySig
             KeyList* km = s->keyList();
             for (auto i = km->begin(); i != km->end(); ++i) {
-                  Fraction tick = Fraction::fromTicks(i->first);
+                  Fraction tick = i->first.tick();
                   if (tick < Fraction(0,1)) {
                         qDebug("read114: Key tick %d", tick.ticks());
                         continue;
@@ -3215,9 +3215,9 @@ Score::FileError MasterScore::read114(XmlReader& e)
       // some 1.3 scores have tempolist but no tempo text
       fixTicks();
       for (auto i : tm) {
-            Fraction tick = Fraction::fromTicks(i.first);
+            Fraction tick = i.first.tick();
             qreal tempo   = i.second.tempo;
-            if (tempomap()->tempo(tick.ticks()) != tempo) {
+            if (tempomap()->tempo(tick) != tempo) {
                   TempoText* tt = new TempoText(this);
                   tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tempo*60)));
                   tt->setTempo(tempo);

@@ -117,35 +117,33 @@ qDebug("checkScore: remove empty ChordRest segment");
                               }
 #if 0
                         if (cr->tick() > tick) {
-                              int ttick = tick;
-                              int ticks = cr->tick() - tick;
+                              Fraction ttick = tick;
+                              Fraction ticks = cr->tick() - tick;
 
-                              Fraction f = Fraction::fromTicks(ticks) / st->timeStretch(ttick);
+                              Fraction f = ticks / st->timeStretch(ttick);
                               qDebug("  insert %d/%d", f.numerator(), f.denominator());
 
-                              while (ticks > 0) {
+                              while (ticks > Fraction(0,1)) {
                                     Measure* m = tick2measure(ttick);
-                                    int len    = ticks;
+                                    Fraction len    = ticks;
                                     // split notes on measure boundary
                                     if ((ttick + len) > m->tick() + m->ticks())
                                           len = m->tick() + m->ticks() - ttick;
                                     Fraction timeStretch = st->timeStretch(ttick);
-                                    Fraction ff          = Fraction::fromTicks(len);
-qDebug("    - insert %d/%d", ff.numerator(), ff.denominator());
+                                    Fraction ff          = len;
                                     if (ff.numerator() == 0)
                                           break;
                                     Fraction fff = ff / timeStretch;
 
-                                    for (const Duration& d, toDurationList(fff, true)) {
+                                    for (const TDuration& d : toDurationList(fff, true)) {
                                           Rest* rest = new Rest(this);
                                           rest->setDurationType(d);
-                                          rest->setDuration(d.fraction());
+                                          rest->setTicks(d.fraction());
                                           rest->setColor(Qt::red);
-qDebug("    -   Rest %d/%d", d.fraction().numerator(), d.fraction().denominator());
                                           rest->setTrack(track);
-                                          Segment* s = m->getSegment(rest, ttick);
+                                          Segment* s = m->getSegment(SegmentType::ChordRest, ttick);
                                           s->add(rest);
-                                          ttick += (d.fraction() * timeStretch).ticks();
+                                          ttick += d.fraction() * timeStretch;
                                           }
                                     ticks -= len;
                                     }
@@ -155,7 +153,6 @@ qDebug("    -   Rest %d/%d", d.fraction().numerator(), d.fraction().denominator(
                         }
                   Fraction timeStretch = st->timeStretch(tick);
                   Fraction f = cr->globalTicks() * timeStretch;
-//                  qDebug("%s %d + %d = %d", cr->name(), tick, f.ticks(), tick + f.ticks());
                   tick      += f;
                   lcr        = cr;
                   }

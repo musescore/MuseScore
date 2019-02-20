@@ -48,7 +48,7 @@ void assignKeyListToStaff(const KeyList &kl, Staff *staff)
       Key pkey = Key::C;
 
       for (auto it = kl.begin(); it != kl.end(); ++it) {
-            const int tick = it->first;
+            const Fraction tick = it->first.tick();
             Key key  = it->second.key();
             if ((key == Key::C) && (key == pkey))     // don’t insert unnecessary C key
                   continue;
@@ -57,11 +57,11 @@ void assignKeyListToStaff(const KeyList &kl, Staff *staff)
             ks->setTrack(track);
             ks->setGenerated(false);
             ks->setKey(key);
-            ks->setMag(staff->mag(Fraction::fromTicks(tick)));
-            Measure* m = score->tick2measure(Fraction::fromTicks(tick));
+            ks->setMag(staff->mag(tick));
+            Measure* m = score->tick2measure(tick);
             if (!m)
                   continue;
-            Segment* seg = m->getSegment(SegmentType::KeySig, Fraction::fromTicks(tick));
+            Segment* seg = m->getSegment(SegmentType::KeySig, tick);
             seg->add(ks);
             }
       }
@@ -144,7 +144,7 @@ void recognizeMainKeySig(QList<MTrack> &tracks)
                   ke.setKey(key);
 
                   KeyList &staffKeyList = *track.staff->keyList();
-                  staffKeyList[0] = ke;
+                  staffKeyList[TimePosition(Fraction(0,1))] = ke;
                   assignKeyListToStaff(staffKeyList, track.staff);
                   }
             }

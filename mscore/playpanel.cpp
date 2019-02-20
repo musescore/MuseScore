@@ -184,7 +184,7 @@ void PlayPanel::setScore(Score* s)
       posSlider->setEnabled(enable);
       tempoSlider->setEnabled(enable);
       if (cs && seq && seq->canStart()) {
-            setTempo(cs->tempomap()->tempo(0));
+            setTempo(cs->tempomap()->tempo(Fraction(0,1)));
             setRelTempo(cs->tempomap()->relTempo());
             setEndpos(cs->repeatList()->ticks());
             Fraction tick = cs->pos(POS::CURRENT);
@@ -316,8 +316,8 @@ void PlayPanel::updatePosLabel(int utick)
       int tick = 0;
       if (cs) {
             tick = cs->repeatList()->utick2tick(utick);
-            cs->sigmap()->tickValues(tick, &bar, &beat, &t);
-            double tpo = cs->tempomap()->tempo(tick) * cs->tempomap()->relTempo();
+            cs->sigmap()->tickValues(Fraction::fromTicks(tick), &bar, &beat, &t);
+            double tpo = cs->tempomap()->tempo(Fraction::fromTicks(tick)) * cs->tempomap()->relTempo();
             setTempo(tpo);
             }
       char buffer[32];

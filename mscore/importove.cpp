@@ -748,7 +748,7 @@ void OveToMScore::convertSignatures(){
             Fraction f(tt.numerator_, tt.denominator_);
 
             TimeSigMap* sigmap = score_->sigmap();
-            sigmap->add(tt.tick_, f);
+            sigmap->add(Fraction::fromTicks(tt.tick_), f);
 
             Measure* measure  = score_->tick2measure(Fraction::fromTicks(tt.tick_));
             if(measure){
@@ -1134,7 +1134,7 @@ void OveToMScore::convertMeasures() {
             if (mb->type() != ElementType::MEASURE)
                   continue;
             Measure* measure = static_cast<Measure*>(mb);
-            int tick = measure->tick().ticks();
+            Fraction tick = measure->tick();
             measure->setTicks(score_->sigmap()->timesig(tick).timesig());
             measure->setTimesig(score_->sigmap()->timesig(tick).timesig()); //?
             convertMeasure(measure);

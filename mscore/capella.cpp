@@ -842,7 +842,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         Fraction f(o->numerator, 1 << o->log2Denom);
                         SigEvent ne(f);
                         if (!(se == ne))
-                              score->sigmap()->add(tick.ticks(), ne);
+                              score->sigmap()->add(tick, ne);
 
                         // do not add timesig again
                         Measure* m = score->getCreateMeasure(tick);
@@ -1155,7 +1155,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
       // set the initial time signature
       CapStaff* cs = cap->systems[0]->staves[0];
       if (cs->log2Denom <= 7)
-            score->sigmap()->add(0, Fraction(cs->numerator, 1 << cs->log2Denom));
+            score->sigmap()->add(Fraction(0,1), Fraction(cs->numerator, 1 << cs->log2Denom));
 
       // create parts and staves
       Staff* bstaff = 0;

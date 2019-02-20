@@ -13,6 +13,7 @@
 #include "cleflist.h"
 #include "clef.h"
 #include "score.h"
+#include "timeposition.h"
 #include "xml.h"
 
 namespace Ms {
@@ -39,11 +40,11 @@ bool ClefTypeList::operator!=(const ClefTypeList& t) const
 //   clef
 //---------------------------------------------------------
 
-ClefTypeList ClefList::clef(int tick) const
+ClefTypeList ClefList::clef(const Fraction& tick) const
       {
       if (empty())
             return ClefTypeList(ClefType::INVALID, ClefType::INVALID);
-      auto i = upper_bound(tick);
+      auto i = upper_bound(TimePosition(tick));
       if (i == begin())
             return ClefTypeList(ClefType::INVALID, ClefType::INVALID);
       return (--i)->second;
@@ -53,11 +54,11 @@ ClefTypeList ClefList::clef(int tick) const
 //   setClef
 //---------------------------------------------------------
 
-void ClefList::setClef(int tick, ClefTypeList ctl)
+void ClefList::setClef(const Fraction& tick, ClefTypeList ctl)
       {
       auto i = find(tick);
       if (i == end())
-            insert(std::pair<int, ClefTypeList>(tick, ctl));
+            insert(tick, ctl);
       else
             i->second = ctl;
       }
@@ -69,14 +70,16 @@ void ClefList::setClef(int tick, ClefTypeList ctl)
 //    return -1, if no such clef
 //---------------------------------------------------------
 
-int ClefList::nextClefTick(int tick) const
+Fraction ClefList::nextClefTick(const Fraction& tick) const
       {
       if (empty())
-            return -1;
-      auto i = upper_bound(tick+1);
+            return Fraction(-1, 1);
+//      auto i = upper_bound(tick+1);
+//      auto i = upper_bound(TimePosition(tick + Fraction::fromTicks(1)));
+      auto i = upper_bound(TimePosition(tick));
       if (i == end())
-            return -1;
-      return i->first;
+            return Fraction(-1, 1);
+      return i->first.tick();
       }
 
 //---------------------------------------------------------
@@ -86,14 +89,14 @@ int ClefList::nextClefTick(int tick) const
 //    in effect at tick
 //---------------------------------------------------------
 
-int ClefList::currentClefTick(int tick) const
+Fraction ClefList::currentClefTick(const Fraction& tick) const
       {
       if (empty())
-            return 0;
-      auto i = upper_bound(tick);
+            return 0_Fr;
+      auto i = upper_bound(TimePosition(tick));
       if (i == begin())
-            return 0;
+            return 0_Fr;
       --i;
-      return i->first;
+      return i->first.tick();
       }
 }

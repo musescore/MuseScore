@@ -116,11 +116,11 @@ void Pos::setType(TType t)
 
       if (_type == TType::TICKS) {
             // convert from ticks to frames
-            _frame = tempo->tick2time(_tick, _frame, &sn) * MScore::sampleRate;
+            _frame = tempo->tick2time(Fraction::fromTicks(_tick), _frame, &sn) * MScore::sampleRate;
             }
       else {
             // convert from frames to ticks
-            _tick = tempo->time2tick(_frame / MScore::sampleRate, _tick, &sn);
+            _tick = tempo->time2tick(_frame / MScore::sampleRate, Fraction::fromTicks(_tick), &sn).ticks();
             }
       _type = t;
       }
@@ -260,7 +260,7 @@ bool Pos::operator!=(const Pos& s) const
 unsigned Pos::tick() const
       {
       if (_type == TType::FRAMES)
-            _tick = tempo->time2tick(_frame / MScore::sampleRate, _tick, &sn);
+            _tick = tempo->time2tick(_frame / MScore::sampleRate, Fraction::fromTicks(_tick), &sn).ticks();
       return _tick;
       }
 
@@ -272,8 +272,8 @@ unsigned Pos::frame() const
       {
    if (_type == TType::TICKS) {
             // qreal time = _frame / MScore::sampleRate;
-            // _frame = tempo->tick2time(_tick, time, &sn) * MScore::sampleRate;
-            _frame = tempo->tick2time(_tick) * MScore::sampleRate;
+            // _frame = tempo->tick2time(Fraction::fromTicks(_tick), time, &sn) * MScore::sampleRate;
+            _frame = tempo->tick2time(Fraction::fromTicks(_tick)) * MScore::sampleRate;
             }
       return _frame;
       }
@@ -287,7 +287,7 @@ void Pos::setTick(unsigned pos)
       _tick = pos;
       sn    = -1;
       if (_type == TType::FRAMES)
-            _frame = tempo->tick2time(pos, &sn) * MScore::sampleRate;
+            _frame = tempo->tick2time(Fraction::fromTicks(pos), &sn) * MScore::sampleRate;
       _valid = true;
       }
 
@@ -300,7 +300,7 @@ void Pos::setFrame(unsigned pos)
       _frame = pos;
       sn     = -1;
       if (_type == TType::TICKS)
-            _tick = tempo->time2tick(pos/MScore::sampleRate, &sn);
+            _tick = tempo->time2tick(pos/MScore::sampleRate, &sn).ticks();
       _valid = true;
       }
 
@@ -429,7 +429,7 @@ void PosLen::setLenTick(unsigned len)
       _lenTick = len;
       sn       = -1;
       if (type() == TType::FRAMES)
-            _lenFrame = tempo->tick2time(len, &sn) * MScore::sampleRate;
+            _lenFrame = tempo->tick2time(Fraction::fromTicks(len), &sn) * MScore::sampleRate;
       else
             _lenTick = len;
       }
@@ -442,7 +442,7 @@ void PosLen::setLenFrame(unsigned len)
       {
       sn      = -1;
       if (type() == TType::TICKS)
-            _lenTick = tempo->time2tick(len/MScore::sampleRate, &sn);
+            _lenTick = tempo->time2tick(len/MScore::sampleRate, &sn).ticks();
       else
             _lenFrame = len;
       }
@@ -454,7 +454,7 @@ void PosLen::setLenFrame(unsigned len)
 unsigned PosLen::lenTick() const
       {
       if (type() == TType::FRAMES)
-            _lenTick = tempo->time2tick(_lenFrame/MScore::sampleRate, _lenTick, &sn);
+            _lenTick = tempo->time2tick(_lenFrame/MScore::sampleRate, Fraction::fromTicks(_lenTick), &sn).ticks();
       return _lenTick;
       }
 
@@ -465,7 +465,7 @@ unsigned PosLen::lenTick() const
 unsigned PosLen::lenFrame() const
       {
       if (type() == TType::TICKS)
-            _lenFrame = tempo->tick2time(_lenTick, _lenFrame, &sn) * MScore::sampleRate;
+            _lenFrame = tempo->tick2time(Fraction::fromTicks(_lenTick), _lenFrame, &sn) * MScore::sampleRate;
       return _lenFrame;
       }
 
@@ -522,7 +522,7 @@ bool PosLen::operator==(const PosLen& pl) const
 
 void Pos::mbt(int* bar, int* beat, int* tk) const
       {
-      sig->tickValues(tick(), bar, beat, tk);
+      sig->tickValues(Fraction::fromTicks(tick()), bar, beat, tk);
       }
 
 //---------------------------------------------------------
@@ -561,7 +561,7 @@ void Pos::msf(int* min, int* sec, int* fr, int* subFrame) const
 
 SigEvent Pos::timesig() const
       {
-      return sig->timesig(tick());
+      return sig->timesig(Fraction::fromTicks(tick()));
       }
 
 //---------------------------------------------------------
@@ -573,32 +573,32 @@ SigEvent Pos::timesig() const
 
 void Pos::snap(int raster)
       {
-      setTick(sig->raster(tick(), raster));
+      setTick(sig->raster(Fraction::fromTicks(tick()), raster).ticks());
       }
 
 void Pos::upSnap(int raster)
       {
-      setTick(sig->raster2(tick(), raster));
+      setTick(sig->raster2(Fraction::fromTicks(tick()), raster).ticks());
       }
 
 void Pos::downSnap(int raster)
       {
-      setTick(sig->raster1(tick(), raster));
+      setTick(sig->raster1(Fraction::fromTicks(tick()), raster).ticks());
       }
 
 Pos Pos::snaped(int raster) const
       {
-      return Pos(tempo, sig, sig->raster(tick(), raster));
+      return Pos(tempo, sig, sig->raster(Fraction::fromTicks(tick()), raster).ticks());
       }
 
 Pos Pos::upSnaped(int raster) const
       {
-      return Pos(tempo, sig, sig->raster2(tick(), raster));
+      return Pos(tempo, sig, sig->raster2(Fraction::fromTicks(tick()), raster).ticks());
       }
 
 Pos Pos::downSnaped(int raster) const
       {
-      return Pos(tempo, sig, sig->raster1(tick(), raster));
+      return Pos(tempo, sig, sig->raster1(Fraction::fromTicks(tick()), raster).ticks());
       }
 
 }
