@@ -210,7 +210,7 @@ static const StyleType styleTypes[] {
       { Sid::hairpinPosAbove,         "hairpinPosAbove",         QPointF(0.0, -3.5) },
       { Sid::hairpinPosBelow,         "hairpinPosBelow",         QPointF(.0, 3.5) },
       { Sid::hairpinLinePosAbove,     "hairpinLinePosAbove",     QPointF(0.0, -3.0) },
-      { Sid::hairpinLinePosBelow,     "hairpinLinePosBelow",     QPointF(.0, 3.0) },
+      { Sid::hairpinLinePosBelow,     "hairpinLinePosBelow",     QPointF(.0, 4.0) },
       { Sid::hairpinHeight,           "hairpinHeight",           Spatium(1.2) },
       { Sid::hairpinContHeight,       "hairpinContHeight",       Spatium(0.5) },
       { Sid::hairpinLineWidth,        "hairpinWidth",            Spatium(0.13) },
