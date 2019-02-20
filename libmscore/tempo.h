@@ -13,6 +13,8 @@
 #ifndef __AL_TEMPO_H__
 #define __AL_TEMPO_H__
 
+#include "types.h"
+
 namespace Ms {
 
 class XmlWriter;
@@ -42,33 +44,33 @@ struct TEvent {
 //   Tempomap
 //---------------------------------------------------------
 
-class TempoMap : public std::map<int, TEvent> {
+class TempoMap : public std::map<TimePosition, TEvent> {
       int _tempoSN;           // serial no to track tempo changes
       qreal _tempo;           // tempo if not using tempo list (beats per second)
       qreal _relTempo;        // rel. tempo
 
       void normalize();
-      void del(int tick);
+      void del(const Fraction& tick);
 
    public:
       TempoMap();
       void clear();
-      void clearRange(int tick1, int tick2);
+      void clearRange(const Fraction& tick1, const Fraction& tick2);
 
       void dump() const;
 
-      qreal tempo(int tick) const;
+      qreal tempo(const Fraction& tick) const;
 
-      qreal tick2time(int tick, int* sn = 0) const;
-      qreal tick2timeLC(int tick, int* sn) const;
-      qreal tick2time(int tick, qreal time, int* sn) const;
-      int time2tick(qreal time, int* sn = 0) const;
-      int time2tick(qreal time, int tick, int* sn) const;
+      qreal tick2time(const Fraction& tick, int* sn = 0) const;
+      qreal tick2timeLC(const Fraction& tick, int* sn) const;
+      qreal tick2time(const Fraction& tick, qreal time, int* sn) const;
+      Fraction time2tick(qreal time, int* sn = 0) const;
+      Fraction time2tick(qreal time, const Fraction& tick, int* sn) const;
       int tempoSN() const { return _tempoSN; }
 
-      void setTempo(int t, qreal);
-      void setPause(int t, qreal);
-      void delTempo(int tick);
+      void setTempo(const Fraction& t, qreal);
+      void setPause(const Fraction& t, qreal);
+      void delTempo(const Fraction& tick);
 
       void setRelTempo(qreal val);
       qreal relTempo() const { return _relTempo; }

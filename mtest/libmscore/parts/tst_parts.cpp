@@ -265,7 +265,9 @@ void TestParts::appendMeasure()
 
       QVERIFY(saveCompareScore(score, "part-all-appendmeasures.mscx", DIR + "part-all-appendmeasures.mscx"));
 
+      score->startCmd();
       score->undoRedo(true, 0);
+      score->endCmd();
 
       QVERIFY(saveCompareScore(score, "part-all-uappendmeasures.mscx", DIR + "part-all-uappendmeasures.mscx"));
       delete score;
@@ -288,7 +290,9 @@ void TestParts::insertMeasure()
 
       // QVERIFY(saveCompareScore(score, "part-all-insertmeasures.mscx", DIR + "part-all-insertmeasures.mscx"));
 
+      score->startCmd();
       score->undoRedo(true, 0);
+      score->endCmd();
 
       QVERIFY(saveCompareScore(score, "part-all-uinsertmeasures.mscx", DIR + "part-all-uinsertmeasures.mscx"));
       delete score;

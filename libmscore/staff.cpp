@@ -284,7 +284,7 @@ QString Staff::partName() const
 
 ClefTypeList Staff::clefType(const Fraction& tick) const
       {
-      ClefTypeList ct = clefs.clef(tick.ticks());
+      ClefTypeList ct = clefs.clef(tick);
       if (ct._concertClef == ClefType::INVALID) {
             switch (staffType(tick)->group()) {
                   case StaffGroup::TAB:
@@ -323,12 +323,11 @@ ClefType Staff::clef(const Fraction& tick) const
 
 Fraction Staff::nextClefTick(const Fraction& tick) const
       {
-      Fraction t = Fraction::fromTicks(clefs.nextClefTick(tick.ticks()));
+      Fraction t = clefs.nextClefTick(tick);
       return t != Fraction(-1,1) ? t : score()->endTick();
       }
 
-
-#ifndef NDEBUG
+#if 0
 //---------------------------------------------------------
 //   dumpClef
 //---------------------------------------------------------
@@ -383,7 +382,7 @@ void Staff::setClef(Clef* clef)
                   return;
                   }
             }
-      clefs.setClef(clef->segment()->tick().ticks(), clef->clefTypeList());
+      clefs.setClef(clef->segment()->tick(), clef->clefTypeList());
       DUMP_CLEFS("setClef");
       }
 
@@ -404,13 +403,13 @@ void Staff::removeClef(const Clef* clef)
                   return;
                   }
             }
-      clefs.erase(clef->segment()->tick().ticks());
+      clefs.erase(clef->segment()->tick());
       for (Segment* s = clef->segment()->prev1(); s && s->tick() == tick; s = s->prev1()) {
             if ((s->segmentType() == SegmentType::Clef || s->segmentType() == SegmentType::HeaderClef)
                && s->element(clef->track())
                && !s->element(clef->track())->generated()) {
                   // a previous clef at the same tick position gets valid
-                  clefs.setClef(tick.ticks(), toClef(s->element(clef->track()))->clefTypeList());
+                  clefs.setClef(tick, toClef(s->element(clef->track()))->clefTypeList());
                   break;
                   }
             }
@@ -434,12 +433,12 @@ Fraction Staff::timeStretch(const Fraction& tick) const
 
 TimeSig* Staff::timeSig(const Fraction& tick) const
       {
-      auto i = timesigs.upper_bound(tick.ticks());
+      auto i = timesigs.upper_bound(TimePosition(tick));
       if (i != timesigs.begin())
             --i;
       if (i == timesigs.end())
             return 0;
-      else if (tick < Fraction::fromTicks(i->first))
+      else if (tick < i->first.tick())
             return 0;
       return i->second;
       }
@@ -451,7 +450,7 @@ TimeSig* Staff::timeSig(const Fraction& tick) const
 
 TimeSig* Staff::nextTimeSig(const Fraction& tick) const
       {
-      auto i = timesigs.lower_bound(tick.ticks());
+      auto i = timesigs.lower_bound(TimePosition(tick));
       return (i == timesigs.end()) ? 0 : i->second;
       }
 
@@ -478,7 +477,7 @@ const Groups& Staff::group(const Fraction& tick) const
 void Staff::addTimeSig(TimeSig* timesig)
       {
       if (timesig->segment()->segmentType() == SegmentType::TimeSig)
-            timesigs[timesig->segment()->tick().ticks()] = timesig;
+            timesigs[TimePosition(timesig->segment()->tick())] = timesig;
 //      dumpTimeSigs("after addTimeSig");
       }
 
@@ -489,7 +488,7 @@ void Staff::addTimeSig(TimeSig* timesig)
 void Staff::removeTimeSig(TimeSig* timesig)
       {
       if (timesig->segment()->segmentType() == SegmentType::TimeSig)
-            timesigs.erase(timesig->segment()->tick().ticks());
+            timesigs.erase(TimePosition(timesig->segment()->tick()));
 //      dumpTimeSigs("after removeTimeSig");
       }
 
@@ -503,23 +502,12 @@ void Staff::clearTimeSig()
       }
 
 //---------------------------------------------------------
-//   Staff::keySigEvent
-//
-//    locates the key sig currently in effect at tick
-//---------------------------------------------------------
-
-KeySigEvent Staff::keySigEvent(const Fraction& tick) const
-      {
-      return _keys.key(tick.ticks());
-      }
-
-//---------------------------------------------------------
 //   setKey
 //---------------------------------------------------------
 
 void Staff::setKey(const Fraction& tick, KeySigEvent k)
       {
-      _keys.setKey(tick.ticks(), k);
+      _keys.setKey(tick, k);
       }
 
 //---------------------------------------------------------
@@ -528,7 +516,7 @@ void Staff::setKey(const Fraction& tick, KeySigEvent k)
 
 void Staff::removeKey(const Fraction& tick)
       {
-      _keys.erase(tick.ticks());
+      _keys.erase(tick);
       }
 
 //---------------------------------------------------------
@@ -537,7 +525,7 @@ void Staff::removeKey(const Fraction& tick)
 
 KeySigEvent Staff::prevKey(const Fraction& tick) const
       {
-      return _keys.prevKey(tick.ticks());
+      return _keys.prevKey(tick);
       }
 
 //---------------------------------------------------------
@@ -549,7 +537,7 @@ KeySigEvent Staff::prevKey(const Fraction& tick) const
 
 Fraction Staff::nextKeyTick(const Fraction& tick) const
       {
-      Fraction t = Fraction::fromTicks(_keys.nextKeyTick(tick.ticks()));
+      Fraction t = _keys.nextKeyTick(tick);
       return t != Fraction(-1,1) ? t : score()->endTick();
       }
 
@@ -563,7 +551,7 @@ Fraction Staff::nextKeyTick(const Fraction& tick) const
 
 Fraction Staff::currentKeyTick(const Fraction& tick) const
       {
-      return Fraction::fromTicks(_keys.currentKeyTick(tick.ticks()));
+      return _keys.currentKeyTick(tick);
       }
 
 //---------------------------------------------------------
@@ -959,10 +947,10 @@ StaffType* Staff::staffType(const Fraction& tick)
 void Staff::staffTypeListChanged(const Fraction& tick)
       {
       score()->setLayout(tick);
-      auto i = _staffTypeList.find(tick.ticks());
+      auto i = _staffTypeList.find(tick);
       ++i;
       if (i != _staffTypeList.end())
-            score()->setLayout(Fraction::fromTicks(i->first));
+            score()->setLayout(i->first.tick());
       else
             score()->setLayout(score()->lastMeasure()->endTick());
       }
@@ -1119,16 +1107,16 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
 
       if (len < Fraction(0,1)) {
             // remove entries between tickpos >= tick and tickpos < (tick+len)
-            _keys.erase(_keys.lower_bound(tick.ticks()), _keys.lower_bound((tick - len).ticks()));
-            clefs.erase(clefs.lower_bound(tick.ticks()), clefs.lower_bound((tick - len).ticks()));
+            _keys.erase(_keys.lower_bound(tick), _keys.lower_bound(tick - len));
+            clefs.erase(tick, tick - len);
             }
 
       KeyList kl2;
-      for (auto i = _keys.lower_bound(tick.ticks()); i != _keys.end();) {
+      for (auto i = _keys.lower_bound(tick); i != _keys.end();) {
             KeySigEvent kse = i->second;
-            Fraction t = Fraction::fromTicks(i->first);
+            Fraction t = i->first.tick();
             _keys.erase(i++);
-            kl2[(t + len).ticks()] = kse;
+            kl2[TimePosition(t + len)] = kse;
             }
       _keys.insert(kl2.begin(), kl2.end());
 
@@ -1146,15 +1134,15 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
             }
 
       ClefList cl2;
-      for (auto i = clefs.lower_bound(tick.ticks()); i != clefs.end();) {
+      for (auto i = clefs.lower_bound(tick); i != clefs.end();) {
             ClefTypeList ctl = i->second;
-            Fraction t = Fraction::fromTicks(i->first);
+            Fraction t = i->first.tick();
             if (clef && tick == t) {
                   ++i;
                   continue;
                   }
             clefs.erase(i++);
-            cl2.setClef((t + len).ticks(), ctl);
+            cl2.setClef((t + len), ctl);
             }
       clefs.insert(cl2.begin(), cl2.end());
 

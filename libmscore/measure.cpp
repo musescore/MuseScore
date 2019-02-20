@@ -1868,8 +1868,8 @@ void Measure::read(XmlReader& e, int staffIdx)
             else
                   qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
             irregular = true;
-            score()->sigmap()->add(tick().ticks(), SigEvent(_len, _timesig));
-            score()->sigmap()->add((tick() + ticks()).ticks(), SigEvent(_timesig));
+            score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
+            score()->sigmap()->add((endTick()), SigEvent(_timesig));
             }
       else
             irregular = false;
@@ -2153,12 +2153,12 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         _timesig    = ts->sig() / timeStretch;
 
                         if (irregular) {
-                              score()->sigmap()->add(tick().ticks(), SigEvent(_len, _timesig));
-                              score()->sigmap()->add((tick() + ticks()).ticks(), SigEvent(_timesig));
+                              score()->sigmap()->add(tick(), SigEvent(_len, _timesig));
+                              score()->sigmap()->add(endTick(), SigEvent(_timesig));
                               }
                         else {
                               _len = _timesig;
-                              score()->sigmap()->add(tick().ticks(), SigEvent(_timesig));
+                              score()->sigmap()->add(tick(), SigEvent(_timesig));
                               }
                         }
                   }
@@ -2404,7 +2404,7 @@ bool Measure::isFinalMeasureOfSection() const
 
 bool Measure::isAnacrusis() const
       {
-      TimeSigFrac timeSig = score()->sigmap()->timesig(tick().ticks()).nominal();
+      TimeSigFrac timeSig = score()->sigmap()->timesig(tick()).nominal();
       return irregular() && ticks() < Fraction::fromTicks(timeSig.ticksPerMeasure());
       }
 

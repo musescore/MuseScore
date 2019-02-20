@@ -756,7 +756,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                   mf = s ? 0 : mf->nextMeasure();
                   }
             else {
-                  if (sigmap()->timesig(seg->tick().ticks()).nominal().identical(ns)) {
+                  if (sigmap()->timesig(seg->tick()).nominal().identical(ns)) {
                         // no change to global time signature,
                         // but we need to rewrite any staves with local time signatures
                         for (int i = 0; i < nstaves(); ++i) {
@@ -1062,7 +1062,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                                           break;
                                     measure = segment->measure();
                                     std::vector<TDuration> dl;
-                                    dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(tick.ticks()).nominal(), measure, 1);
+                                    dl = toRhythmicDurationList(dd, false, segment->rtick(), sigmap()->timesig(tick).nominal(), measure, 1);
                                     size_t n = dl.size();
                                     for (size_t i = 0; i < n; ++i) {
                                           const TDuration& d = dl[i];
@@ -2614,7 +2614,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
       else
             tick = last() ? last()->endTick() : Fraction(0,1);
 
-      Fraction f       = sigmap()->timesig(tick.ticks()).nominal(); // use nominal time signature of current measure
+      Fraction f       = sigmap()->timesig(tick).nominal(); // use nominal time signature of current measure
       Measure* om      = 0;                                       // measure base in "this" score
       MeasureBase* rmb = 0;                                       // measure base in root score (for linking)
       Fraction ticks   = { 0, 1 };

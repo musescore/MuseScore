@@ -13,7 +13,7 @@
 #ifndef __AL_SIG_H__
 #define __AL_SIG_H__
 
-#include "fraction.h"
+#include "types.h"
 
 namespace Ms {
 
@@ -122,34 +122,33 @@ class SigEvent {
 //   SigList
 //---------------------------------------------------------
 
-class TimeSigMap : public std::map<int, SigEvent > {
+class TimeSigMap : public std::map<TimePosition, SigEvent > {
       void normalize();
 
    public:
       TimeSigMap() {}
 
-      void add(int tick, const Fraction&);
-      void add(int tick, const SigEvent& ev);
+      void add(const Fraction& tick, const Fraction&);
+      void add(const Fraction& tick, const SigEvent& ev);
 
-      void del(int tick);
+      void del(const Fraction& tick);
 
-      void clearRange(int tick1, int tick2);
+      void clearRange(const Fraction& tick1, const Fraction& tick2);
 
       void read(XmlReader&, int fileDiv);
       void write(XmlWriter&) const;
       void dump() const;
 
-      const SigEvent& timesig(int tick) const;
-      const SigEvent& timesig(const Fraction& f) const { return timesig(f.ticks()); }
+      const SigEvent& timesig(const Fraction& tick) const;
 
-      void tickValues(int t, int* bar, int* beat, int* tick) const;
+      void tickValues(const Fraction& t, int* bar, int* beat, int* tick) const;
       int bar2tick(int bar, int beat) const;
-      QString pos(int t) const;
+      QString pos(const Fraction& tick) const;
 
-      unsigned raster(unsigned tick, int raster) const;
-      unsigned raster1(unsigned tick, int raster) const;    // round down
-      unsigned raster2(unsigned tick, int raster) const;    // round up
-      int rasterStep(unsigned tick, int raster) const;
+      Fraction raster(const Fraction& tick, int raster) const;
+      Fraction raster1(const Fraction& tick, int raster) const;    // round down
+      Fraction raster2(const Fraction& tick, int raster) const;    // round up
+      int rasterStep(const Fraction& tick, int raster) const;
       };
 
 }     // namespace Ms

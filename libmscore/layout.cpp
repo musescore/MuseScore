@@ -2739,11 +2739,11 @@ void Score::getNextMeasure(LayoutContext& lc)
                               }
                         }
                   if (stretch != 0.0 && stretch != 1.0) {
-                        qreal otempo = tempomap()->tempo(segment.tick().ticks());
+                        qreal otempo = tempomap()->tempo(segment.tick());
                         qreal ntempo = otempo / stretch;
                         setTempo(segment.tick(), ntempo);
                         Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480*4);
-                        auto e = tempomap()->find(etick.ticks());
+                        auto e = tempomap()->find(etick);
                         if (e == tempomap()->end())
                               setTempo(etick, otempo);
                         }
@@ -2764,7 +2764,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                   lc.sig = measure->mmRestFirst()->ticks();
             else
                   lc.sig = measure->ticks();
-            sigmap()->add(lc.tick.ticks(), SigEvent(lc.sig, measure->timesig(), measure->no()));
+            sigmap()->add(lc.tick, SigEvent(lc.sig, measure->timesig(), measure->no()));
             }
 
       Segment* seg = measure->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));

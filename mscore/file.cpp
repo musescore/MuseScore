@@ -593,7 +593,7 @@ MasterScore* MuseScore::getNewFile()
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
 
-      score->sigmap()->add(0, timesig);
+      score->sigmap()->add(Fraction(0,1), timesig);
 
       Fraction firstMeasureTicks = pickupMeasure ? Fraction(pickupTimesigZ, pickupTimesigN) : timesig;
 
@@ -3026,7 +3026,7 @@ static void findTextByType(void* data, Element* element)
             titleStrings->append(text->plainText());
             }
       }
-      
+
 QJsonObject MuseScore::saveMetadataJSON(Score* score)
       {
       auto boolToString = [](bool b) { return b ? "true" : "false"; };
@@ -3144,7 +3144,7 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
       jsonPageformat.insert("width", round(score->styleD(Sid::pageWidth) * INCH));
       jsonPageformat.insert("twosided", boolToString(score->styleB(Sid::pageTwosided)));
       json.insert("pageFormat", jsonPageformat);
-      
+
       //text frames metadata
       QJsonObject jsonTypeData;
       static std::vector<std::pair<QString, Tid>> namesTypesList {
@@ -3163,7 +3163,7 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
             jsonTypeData.insert(nameType.first, typeData);
             }
       json.insert("textFramesData", jsonTypeData);
-      
+
       return json;
       }
 
@@ -3176,20 +3176,20 @@ public:
       jsonFormatFile.open(QIODevice::WriteOnly);
       jsonFormatFile.write("{\n");
       }
-      
+
       ~CustomJsonWriter()
       {
       jsonFormatFile.write("\n}\n");
       jsonFormatFile.close();
       }
-      
+
       void addKey(const char* arrayName)
       {
       jsonFormatFile.write("\"");
       jsonFormatFile.write(arrayName);
       jsonFormatFile.write("\": ");
       }
-      
+
       void addValue(const QByteArray& data, bool lastJsonElement = false, bool isJson = false)
       {
       if (!isJson)
@@ -3200,12 +3200,12 @@ public:
       if (!lastJsonElement)
             jsonFormatFile.write(",\n");
       }
-      
+
       void openArray()
       {
       jsonFormatFile.write(" [");
       }
-      
+
       void closeArray(bool lastJsonElement = false)
       {
       jsonFormatFile.write("]");
@@ -3213,11 +3213,11 @@ public:
             jsonFormatFile.write(",");
       jsonFormatFile.write("\n");
       }
-      
+
 private:
       QFile jsonFormatFile;
 };
-      
+
 //---------------------------------------------------------
 //   exportMp3AsJSON
 //---------------------------------------------------------
@@ -3294,7 +3294,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
             jsonWriter.addValue(pngData.toBase64(), lastArrayValue);
             }
       jsonWriter.closeArray();
-      
+
       jsonWriter.addKey("svgs");
       jsonWriter.openArray();
       for (int i = 0; i < score->pages().size(); ++i) {
@@ -3317,14 +3317,14 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       jsonWriter.addValue(partDataPos.toBase64());
       partPosDevice.close();
       partDataPos.clear();
-      
+
       //export score .mpos
       partPosDevice.open(QIODevice::ReadWrite);
       savePositions(score.get(), &partPosDevice, false);
       jsonWriter.addKey("mposXML");
       jsonWriter.addValue(partDataPos.toBase64());
       }
-      
+
       //export score pdf
       jsonWriter.addKey("pdf");
       jsonWriter.addValue(exportPdfAsJSON(score.get()));
@@ -3338,7 +3338,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       jsonWriter.addKey("midi");
       jsonWriter.addValue(midiData.toBase64());
       }
-      
+
       {
       //export musicxml
       QByteArray mxmlData;
@@ -3348,7 +3348,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       jsonWriter.addKey("mxml");
       jsonWriter.addValue(mxmlData.toBase64());
       }
-      
+
       //export metadata
       QJsonDocument doc(mscore->saveMetadataJSON(score.get()));
       jsonWriter.addKey("metadata");

@@ -293,8 +293,6 @@ bool ChordRest::readProperties(XmlReader& e)
             QPointF pt = e.readPoint();
             setOffset(pt * spatium());
             }
-//      else if (tag == "offset")
-//            DurationElement::readProperties(e);
       else if (!DurationElement::readProperties(e))
             return false;
       return true;

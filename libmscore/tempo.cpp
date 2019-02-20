@@ -62,16 +62,16 @@ TempoMap::TempoMap()
 //   setPause
 //---------------------------------------------------------
 
-void TempoMap::setPause(int tick, qreal pause)
+void TempoMap::setPause(const Fraction& tick, qreal pause)
       {
-      auto e = find(tick);
+      auto e = find(TimePosition(tick));
       if (e != end()) {
             e->second.pause = pause;
             e->second.type |= TempoType::PAUSE;
             }
       else {
             qreal t = tempo(tick);
-            insert(std::pair<const int, TEvent> (tick, TEvent(t, pause, TempoType::PAUSE)));
+            insert(std::pair<const TimePosition, TEvent> (TimePosition(tick), TEvent(t, pause, TempoType::PAUSE)));
             }
       normalize();
       }
@@ -80,7 +80,7 @@ void TempoMap::setPause(int tick, qreal pause)
 //   setTempo
 //---------------------------------------------------------
 
-void TempoMap::setTempo(int tick, qreal tempo)
+void TempoMap::setTempo(const Fraction& tick, qreal tempo)
       {
       auto e = find(tick);
       if (e != end()) {
@@ -88,7 +88,7 @@ void TempoMap::setTempo(int tick, qreal tempo)
             e->second.type |= TempoType::FIX;
             }
       else
-            insert(std::pair<const int, TEvent> (tick, TEvent(tempo, 0.0, TempoType::FIX)));
+            insert(std::pair<const TimePosition, TEvent> (TimePosition(tick), TEvent(tempo, 0.0, TempoType::FIX)));
       normalize();
       }
 
@@ -99,18 +99,18 @@ void TempoMap::setTempo(int tick, qreal tempo)
 void TempoMap::normalize()
       {
       qreal time  = 0;
-      int tick    = 0;
+      Fraction tick { 0, 1 };
       qreal tempo = 2.0;
       for (auto e = begin(); e != end(); ++e) {
             // entries that represent a pause *only* (not tempo change also)
             // need to be corrected to continue previous tempo
             if (!(e->second.type & (TempoType::FIX|TempoType::RAMP)))
                   e->second.tempo = tempo;
-            int delta = e->first - tick;
-            time += qreal(delta) / (MScore::division * tempo * _relTempo);
+            Fraction delta = e->first.tick() - tick;
+            time += qreal(delta.ticks()) / (MScore::division * tempo * _relTempo);   // TODO: simplify
             time += e->second.pause;
             e->second.time = time;
-            tick  = e->first;
+            tick  = e->first.tick();
             tempo = e->second.tempo;
             }
       ++_tempoSN;
@@ -125,7 +125,7 @@ void TempoMap::dump() const
       qDebug("\nTempoMap:");
       for (auto i = begin(); i != end(); ++i)
             qDebug("%6d type: %2d tempo: %f pause: %f time: %f",
-               i->first, static_cast<int>(i->second.type), i->second.tempo, i->second.pause, i->second.time);
+               i->first.tick().ticks(), static_cast<int>(i->second.type), i->second.tempo, i->second.pause, i->second.time);
       }
 
 //---------------------------------------------------------
@@ -134,7 +134,7 @@ void TempoMap::dump() const
 
 void TempoMap::clear()
       {
-      std::map<int,TEvent>::clear();
+      std::map<TimePosition,TEvent>::clear();
       ++_tempoSN;
       }
 
@@ -144,10 +144,10 @@ void TempoMap::clear()
 //    excluded.
 //---------------------------------------------------------
 
-void TempoMap::clearRange(int tick1, int tick2)
+void TempoMap::clearRange(const Fraction& tick1, const Fraction& tick2)
       {
-      iterator first = lower_bound(tick1);
-      iterator last = lower_bound(tick2);
+      iterator first = lower_bound(TimePosition(tick1));
+      iterator last  = lower_bound(TimePosition(tick2));
       if (first == last)
             return;
       erase(first, last);
@@ -158,16 +158,16 @@ void TempoMap::clearRange(int tick1, int tick2)
 //   tempo
 //---------------------------------------------------------
 
-qreal TempoMap::tempo(int tick) const
+qreal TempoMap::tempo(const Fraction& tick) const
       {
       if (empty())
             return 2.0;
-      auto i = lower_bound(tick);
+      auto i = lower_bound(TimePosition(tick));
       if (i == end()) {
             --i;
             return i->second.tempo;
             }
-      if (i->first == tick)
+      if (i->first.tick() == tick)
             return i->second.tempo;
       if (i == begin())
             return 2.0;
@@ -179,11 +179,11 @@ qreal TempoMap::tempo(int tick) const
 //   del
 //---------------------------------------------------------
 
-void TempoMap::del(int tick)
+void TempoMap::del(const Fraction& tick)
       {
-      auto e = find(tick);
+      auto e = find(TimePosition(tick));
       if (e == end()) {
-            qDebug("TempoMap::del event at (%d): not found", tick);
+            qDebug("TempoMap::del event at (%d): not found", tick.ticks());
             // abort();
             return;
             }
@@ -209,7 +209,7 @@ void TempoMap::setRelTempo(qreal val)
 //   delTempo
 //---------------------------------------------------------
 
-void TempoMap::delTempo(int tick)
+void TempoMap::delTempo(const Fraction& tick)
       {
       del(tick);
       ++_tempoSN;
@@ -219,7 +219,7 @@ void TempoMap::delTempo(int tick)
 //   tick2time
 //---------------------------------------------------------
 
-qreal TempoMap::tick2time(int tick, qreal time, int* sn) const
+qreal TempoMap::tick2time(const Fraction& tick, qreal time, int* sn) const
       {
       return (*sn == _tempoSN) ? time : tick2time(tick, sn);
       }
@@ -229,7 +229,7 @@ qreal TempoMap::tick2time(int tick, qreal time, int* sn) const
 //    return cached value t if list did not change
 //---------------------------------------------------------
 
-int TempoMap::time2tick(qreal time, int t, int* sn) const
+Fraction TempoMap::time2tick(qreal time, const Fraction& t, int* sn) const
       {
       return (*sn == _tempoSN) ? t : time2tick(time, sn);
       }
@@ -238,35 +238,35 @@ int TempoMap::time2tick(qreal time, int t, int* sn) const
 //   tick2time
 //---------------------------------------------------------
 
-qreal TempoMap::tick2time(int tick, int* sn) const
+qreal TempoMap::tick2time(const Fraction& tick, int* sn) const
       {
       qreal time  = 0.0;
-      qreal delta = qreal(tick);
+      qreal delta = qreal(tick.ticks());
       qreal tempo = 2.0;
 
       if (!empty()) {
             int ptick  = 0;
-            auto e = lower_bound(tick);
+            auto e = lower_bound(TimePosition(tick));
             if (e == end()) {
                   auto pe = e;
                   --pe;
-                  ptick = pe->first;
+                  ptick = pe->first.tick().ticks();
                   tempo = pe->second.tempo;
                   time  = pe->second.time;
                   }
-            else if (e->first == tick) {
-                  ptick = tick;
+            else if (e->first.tick() == tick) {
+                  ptick = tick.ticks();
                   tempo = e->second.tempo;
                   time  = e->second.time;
                   }
             else if (e != begin()) {
                   auto pe = e;
                   --pe;
-                  ptick = pe->first;
+                  ptick = pe->first.tick().ticks();
                   tempo = pe->second.tempo;
                   time  = pe->second.time;
                   }
-            delta = qreal(tick - ptick);
+            delta = qreal(tick.ticks() - ptick);
             }
       else
             qDebug("TempoMap: empty");
@@ -280,9 +280,9 @@ qreal TempoMap::tick2time(int tick, int* sn) const
 //   time2tick
 //---------------------------------------------------------
 
-int TempoMap::time2tick(qreal time, int* sn) const
+Fraction TempoMap::time2tick(qreal time, int* sn) const
       {
-      int tick     = 0;
+      Fraction tick { 0, 1 };
       qreal delta = time;
       qreal tempo = _tempo;
 
@@ -297,11 +297,11 @@ int TempoMap::time2tick(qreal time, int* sn) const
             if (e->second.time >= time)
                   break;
             delta = e->second.time;
-            tick  = e->first;
+            tick  = e->first.tick();
             tempo = e->second.tempo;
             }
       delta = time - delta;
-      tick += lrint(delta * _relTempo * MScore::division * tempo);
+      tick += Fraction::fromTicks(lrint(delta * _relTempo * MScore::division * tempo));
       if (sn)
             *sn = _tempoSN;
       return tick;

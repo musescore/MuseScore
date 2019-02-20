@@ -861,11 +861,11 @@ void SegmentView::setElement(Element* e)
 
       Segment* s = (Segment*)e;
       ShowElementBase::setElement(e);
-      int tick = s->tick().ticks();
+      Fraction tick = s->tick();
       TimeSigMap* sm = s->score()->sigmap();
 
       int bar = -1, beat = -1, ticks = -1;
-      if (tick >= 0)
+      if (tick >= Fraction(0,1))
             sm->tickValues(tick, &bar, &beat, &ticks);
       sb.bar->setValue(bar);
       sb.beat->setValue(beat);

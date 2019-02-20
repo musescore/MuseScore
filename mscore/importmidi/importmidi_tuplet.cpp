@@ -1038,7 +1038,7 @@ void findTuplets(
       const auto endBarTick = ReducedFraction::fromTicks(
                                     sigmap->bar2tick(startBarChordIt->second.barIndex + 1, 0));
 
-      const auto barFraction = ReducedFraction(sigmap->timesig(startBarTick.ticks()).timesig());
+      const auto barFraction = ReducedFraction(sigmap->timesig(startBarTick.fraction()).timesig());
       std::vector<TupletInfo> tuplets = detectTuplets(startBarChordIt, endBarChordIt, startBarTick,
                                                       barFraction, chords, basicQuant, barIndex);
       if (tuplets.empty())

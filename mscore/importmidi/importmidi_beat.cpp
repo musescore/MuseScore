@@ -269,7 +269,7 @@ std::vector<ReducedFraction> findTimeSignatures(const ReducedFraction &timeSigFr
 void setTimeSig(TimeSigMap *sigmap, const ReducedFraction &timeSig)
       {
       sigmap->clear();
-      sigmap->add(0, timeSig.fraction());
+      sigmap->add(Fraction(0,1), timeSig.fraction());
       }
 
 void findBeatLocations(
@@ -278,7 +278,7 @@ void findBeatLocations(
             double ticksPerSec)
       {
       const size_t MIN_BEAT_COUNT = 8;
-      const auto barFractions = findTimeSignatures(ReducedFraction(sigmap->timesig(0).timesig()));
+      const auto barFractions = findTimeSignatures(ReducedFraction(sigmap->timesig(Fraction(0,1)).timesig()));
       const std::vector<
                  std::function<double(const std::pair<const ReducedFraction, MidiChord> &, double)>
                        >
@@ -327,7 +327,7 @@ void findBeatLocations(
                               Meter::fractionDenominatorToUserValue(beatData.timeSig.denominator()));
             }
       else {
-            const auto currentTimeSig = ReducedFraction(sigmap->timesig(0).timesig());
+            const auto currentTimeSig = ReducedFraction(sigmap->timesig(Fraction(0,1)).timesig());
             data->trackOpers.timeSigNumerator.setDefaultValue(
                               Meter::fractionNumeratorToUserValue(currentTimeSig.numerator()));
             data->trackOpers.timeSigDenominator.setDefaultValue(

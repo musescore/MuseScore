@@ -205,18 +205,18 @@ bool SigEvent::operator==(const SigEvent& e) const
 //   add
 //---------------------------------------------------------
 
-void TimeSigMap::add(int tick, const Fraction& f)
+void TimeSigMap::add(const Fraction& tick, const Fraction& f)
       {
       if (!f.isValid()) {
             qDebug("illegal signature %d/%d", f.numerator(), f.denominator());
             }
-      (*this)[tick] = SigEvent(f);
+      (*this)[TimePosition(tick)] = SigEvent(f);
       normalize();
       }
 
-void TimeSigMap::add(int tick, const SigEvent& ev)
+void TimeSigMap::add(const Fraction& tick, const SigEvent& ev)
       {
-      (*this)[tick] = ev;
+      (*this)[TimePosition(tick)] = ev;
       normalize();
       }
 
@@ -224,9 +224,9 @@ void TimeSigMap::add(int tick, const SigEvent& ev)
 //   del
 //---------------------------------------------------------
 
-void TimeSigMap::del(int tick)
+void TimeSigMap::del(const Fraction& tick)
       {
-      erase(tick);
+      erase(TimePosition(tick));
       normalize();
       }
 
@@ -236,10 +236,10 @@ void TimeSigMap::del(int tick)
 //    excluded.
 //---------------------------------------------------------
 
-void TimeSigMap::clearRange(int tick1, int tick2)
+void TimeSigMap::clearRange(const Fraction& tick1, const Fraction& tick2)
       {
-      iterator first = lower_bound(tick1);
-      iterator last = lower_bound(tick2);
+      iterator first = lower_bound(TimePosition(tick1));
+      iterator last = lower_bound(TimePosition(tick2));
       if (first == last)
             return;
       erase(first, last);
@@ -254,15 +254,15 @@ void TimeSigMap::normalize()
       {
       int z    = 4;
       int n    = 4;
-      int tick = 0;
+      Fraction tick { 0, 1 };
       TimeSigFrac bar;
       int tm   = ticks_measure(TimeSigFrac(z, n));
 
       for (auto i = begin(); i != end(); ++i) {
             SigEvent& e  = i->second;
-            bar += TimeSigFrac(i->first - tick, tm).reduced();
+            bar += TimeSigFrac((i->first.tick() - tick).ticks(), tm).reduced();
             e.setBar(bar.numerator() / bar.denominator());
-            tick = i->first;
+            tick = i->first.tick();
             tm   = ticks_measure(e.timesig());
             }
       }
@@ -271,12 +271,12 @@ void TimeSigMap::normalize()
 //   timesig
 //---------------------------------------------------------
 
-const SigEvent& TimeSigMap::timesig(int tick) const
+const SigEvent& TimeSigMap::timesig(const Fraction& tick) const
       {
       static const SigEvent ev(TimeSigFrac(4, 4));
       if (empty())
             return ev;
-      auto i = upper_bound(tick);
+      auto i = upper_bound(TimePosition(tick));
       if (i != begin())
             --i;
       return i->second;
@@ -292,7 +292,7 @@ const SigEvent& TimeSigMap::timesig(int tick) const
 //    tick - position of t in beat (in ticks)
 //---------------------------------------------------------
 
-void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
+void TimeSigMap::tickValues(const Fraction& t, int* bar, int* beat, int* tick) const
       {
       if (empty()) {
             *bar  = 0;
@@ -300,23 +300,23 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
             *tick = 0;
             return;
             }
-      auto e = upper_bound(t);
+      auto e = upper_bound(TimePosition(t));
       if (empty() || e == begin()) {
-            qFatal("tickValue(0x%x) not found", t);
+            qFatal("tickValue(0x%x) not found", t.ticks());
             }
       --e;
-      int delta  = t - e->first;
+      Fraction delta  = t - e->first.tick();
       int ticksB = ticks_beat(e->second.timesig().denominator()); // ticks in beat
       int ticksM = ticksB * e->second.timesig().numerator();      // ticks in measure (bar)
       if (ticksM == 0) {
-            qDebug("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().print()));
+            qDebug("TimeSigMap::tickValues: at %d %s", t.ticks(), qPrintable(e->second.timesig().print()));
             *bar  = 0;
             *beat = 0;
             *tick = 0;
             return;
             }
-      *bar       = e->second.bar() + delta / ticksM;
-      int rest   = delta % ticksM;
+      *bar       = e->second.bar() + delta.ticks() / ticksM;
+      int rest   = delta.ticks() % ticksM;
       *beat      = rest / ticksB;
       *tick      = rest % ticksB;
       }
@@ -327,7 +327,7 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
 //    This is not reentrant and only for debugging!
 //---------------------------------------------------------
 
-QString TimeSigMap::pos(int t) const
+QString TimeSigMap::pos(const Fraction& t) const
       {
       int bar, beat, tick;
       tickValues(t, &bar, &beat, &tick);
@@ -359,23 +359,25 @@ int TimeSigMap::bar2tick(int bar, int beat) const
       --e; // current TimeSigMap value
       int ticksB = ticks_beat(e->second.timesig().denominator()); // ticks per beat
       int ticksM = ticksB * e->second.timesig().numerator();      // bar length in ticks
-      return e->first + (bar - e->second.bar()) * ticksM + ticksB * beat;
+      return e->first.tick().ticks() + (bar - e->second.bar()) * ticksM + ticksB * beat;
       }
 
 //---------------------------------------------------------
 //   TimeSigMap::write
+//    used somewhere??
 //---------------------------------------------------------
 
 void TimeSigMap::write(XmlWriter& xml) const
       {
       xml.stag("siglist");
       for (auto i = begin(); i != end(); ++i)
-            i->second.write(xml, i->first);
+            i->second.write(xml, i->first.tick().ticks());
       xml.etag();
       }
 
 //---------------------------------------------------------
 //   TimeSigMap::read
+//    used somewhere??
 //---------------------------------------------------------
 
 void TimeSigMap::read(XmlReader& e, int fileDivision)
@@ -385,7 +387,7 @@ void TimeSigMap::read(XmlReader& e, int fileDivision)
             if (tag == "sig") {
                   SigEvent t;
                   int tick = t.read(e, fileDivision);
-                  (*this)[tick] = t;
+                  (*this)[TimePosition(Fraction::fromTicks(tick))] = t;
                   }
             else
                   e.unknown();
@@ -456,7 +458,7 @@ int SigEvent::read(XmlReader& e, int fileDivision)
 //   ticksPerMeasure
 //---------------------------------------------------------
 
-int ticksPerMeasure(int numerator, int denominator)
+static int ticksPerMeasure(int numerator, int denominator)
       {
       return ticks_beat(denominator) * numerator;
       }
@@ -465,34 +467,32 @@ int ticksPerMeasure(int numerator, int denominator)
 //   rasterEval
 //---------------------------------------------------------
 
-unsigned rasterEval(unsigned t, int raster, int startTick,
-         int numerator, int denominator, int addition)
+static Fraction rasterEval(const Fraction& t, int raster, const Fraction& startTick, int numerator, int denominator, int addition)
       {
-      int delta  = t - startTick;
+      Fraction delta  = t - startTick;
       int ticksM = ticksPerMeasure(numerator, denominator);
       if (raster == 0)
             raster = ticksM;
-      int rest   = delta % ticksM;
-      int bb     = (delta / ticksM) * ticksM;
-      return startTick + bb + ((rest + addition) / raster) * raster;
+      int rest   = delta.ticks() % ticksM;
+      int bb     = (delta.ticks() / ticksM) * ticksM;
+      return startTick + Fraction::fromTicks(bb + ((rest + addition) / raster) * raster);
       }
 
 //---------------------------------------------------------
 //   raster
 //---------------------------------------------------------
 
-unsigned TimeSigMap::raster(unsigned t, int raster) const
+Fraction TimeSigMap::raster(const Fraction& t, int raster) const
       {
       if (raster == 1)
             return t;
-      auto e = upper_bound(t);
+      auto e = upper_bound(TimePosition(t));
       if (e == end()) {
-            qDebug("TimeSigMap::raster(%x,)", t);
+            qDebug("TimeSigMap::raster(%x,)", t.ticks());
             return t;
             }
       auto timesig = e->second.timesig();
-      return rasterEval(t, raster, e->first, timesig.numerator(),
-                        timesig.denominator(), raster / 2);
+      return rasterEval(t, raster, e->first.tick(), timesig.numerator(), timesig.denominator(), raster / 2);
       }
 
 //---------------------------------------------------------
@@ -500,14 +500,13 @@ unsigned TimeSigMap::raster(unsigned t, int raster) const
 //    round down
 //---------------------------------------------------------
 
-unsigned TimeSigMap::raster1(unsigned t, int raster) const
+Fraction TimeSigMap::raster1(const Fraction& t, int raster) const
       {
       if (raster == 1)
             return t;
-      auto e = upper_bound(t);
+      auto e = upper_bound(TimePosition(t));
       auto timesig = e->second.timesig();
-      return rasterEval(t, raster, e->first, timesig.numerator(),
-                        timesig.denominator(), 0);
+      return rasterEval(t, raster, e->first.tick(), timesig.numerator(), timesig.denominator(), 0);
       }
 
 //---------------------------------------------------------
@@ -515,24 +514,23 @@ unsigned TimeSigMap::raster1(unsigned t, int raster) const
 //    round up
 //---------------------------------------------------------
 
-unsigned TimeSigMap::raster2(unsigned t, int raster) const
+Fraction TimeSigMap::raster2(const Fraction& t, int raster) const
       {
       if (raster == 1)
             return t;
-      auto e = upper_bound(t);
+      auto e = upper_bound(TimePosition(t));
       auto timesig = e->second.timesig();
-      return rasterEval(t, raster, e->first, timesig.numerator(),
-                        timesig.denominator(), raster - 1);
+      return rasterEval(t, raster, e->first.tick(), timesig.numerator(), timesig.denominator(), raster - 1);
       }
 
 //---------------------------------------------------------
 //   rasterStep
 //---------------------------------------------------------
 
-int TimeSigMap::rasterStep(unsigned t, int raster) const
+int TimeSigMap::rasterStep(const Fraction& t, int raster) const
       {
       if (raster == 0) {
-            auto timesig = upper_bound(t)->second.timesig();
+            auto timesig = upper_bound(TimePosition(t))->second.timesig();
             return ticksPerMeasure(timesig.denominator(), timesig.numerator());
             }
       return raster;
@@ -547,7 +545,7 @@ void TimeSigMap::dump() const
       qDebug("TimeSigMap:");
       for (auto i = begin(); i != end(); ++i)
             qDebug("%6d timesig: %s measure: %d",
-               i->first, qPrintable(i->second.timesig().print()), i->second.bar());
+               i->first.tick().ticks(), qPrintable(i->second.timesig().print()), i->second.bar());
       }
 
 //---------------------------------------------------------

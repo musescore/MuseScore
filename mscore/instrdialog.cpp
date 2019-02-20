@@ -238,15 +238,15 @@ void MuseScore::editInstrList()
             int interval = firstStaff->part()->instrument()->transpose().chromatic;
             normalizedC = transposeKey(normalizedC, interval);
             for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
-                  int tick = i->first;
+                  TimePosition tp = i->first;
                   Key oKey = i->second.key();
-                  tmpKeymap[tick].setKey(transposeKey(oKey, interval));
+                  tmpKeymap[tp].setKey(transposeKey(oKey, interval));
                   }
             }
       // create initial keyevent for transposing instrument if necessary
       auto i = tmpKeymap.begin();
-      if (i == tmpKeymap.end() || i->first != 0)
-            tmpKeymap[0].setKey(normalizedC);
+      if (i == tmpKeymap.end() || !i->first.tick().isZero())
+            tmpKeymap[TimePosition(Fraction(0,1))].setKey(normalizedC);
 
       //
       // process modified partitur list

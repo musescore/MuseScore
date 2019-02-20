@@ -26,6 +26,7 @@
 #include "stafftypelist.h"
 #include "groups.h"
 #include "scoreElement.h"
+#include "sig.h"
 
 namespace Ms {
 
@@ -67,10 +68,11 @@ class Staff final : public ScoreElement {
       Part* _part       { 0 };
 
       ClefList clefs;
-      ClefTypeList _defaultClefType;
-
       KeyList _keys;
-      std::map<int,TimeSig*> timesigs;
+      std::map<TimePosition, TimeSig*> timesigs;
+      StaffTypeList _staffTypeList;
+
+      ClefTypeList _defaultClefType;
 
       QList <BracketItem*> _brackets;
       int  _barLineSpan        { false };    ///< true - span barline to next staff
@@ -85,8 +87,6 @@ class Staff final : public ScoreElement {
 
       QColor _color            { MScore::defaultColor };
       qreal _userDist          { 0.0   };       ///< user edited extra distance
-
-      StaffTypeList _staffTypeList;
 
       QMap<int,int> _channelList[VOICES];
       QMap<int,SwingParameters> _swingList;
@@ -150,9 +150,9 @@ class Staff final : public ScoreElement {
 
       const Groups& group(const Fraction&) const;
 
-      KeyList* keyList()                      { return &_keys;                  }
-      Key key(const Fraction& tick) const     { return keySigEvent(tick).key(); }
-      KeySigEvent keySigEvent(const Fraction&) const;
+      KeyList* keyList()                               { return &_keys;                  }
+      Key key(const Fraction& tick) const              { return keySigEvent(tick).key(); }
+      KeySigEvent keySigEvent(const Fraction& t) const { return _keys.key(t); }
       Fraction nextKeyTick(const Fraction&) const;
       Fraction currentKeyTick(const Fraction&) const;
       KeySigEvent prevKey(const Fraction&) const;

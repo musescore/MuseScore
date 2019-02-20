@@ -130,7 +130,7 @@ int findDurationCountInGroup(
       auto onTime = chordOnTime;
       auto onTimeBarStart = MidiBar::findBarStart(onTime, sigmap);
       auto onTimeBarFraction = ReducedFraction(
-                        sigmap->timesig(onTimeBarStart.ticks()).timesig());
+                        sigmap->timesig(onTimeBarStart.fraction()).timesig());
 
       for (int i: groupOfIndexes) {
             const auto &offTime = notes[i].offTime;
@@ -140,7 +140,7 @@ int findDurationCountInGroup(
 
             if (offTimeBarStart != onTimeBarStart) {
                   const auto offTimeBarFraction = ReducedFraction(
-                              sigmap->timesig(offTimeBarStart.ticks()).timesig());
+                              sigmap->timesig(offTimeBarStart.fraction()).timesig());
 
                   const auto tupletsForDuration = MidiTuplet::findTupletsInBarForDuration(
                               voice, onTimeBarStart, onTime, offTimeBarStart - onTime, tuplets);
@@ -896,7 +896,7 @@ bool doVoiceSeparation(
 int findBarIndexForOffTime(const ReducedFraction &offTime, const TimeSigMap *sigmap)
       {
       int barIndex, beat, tick;
-      sigmap->tickValues(offTime.ticks(), &barIndex, &beat, &tick);
+      sigmap->tickValues(offTime.fraction(), &barIndex, &beat, &tick);
       if (beat == 0 && tick == 0)
             --barIndex;
       return barIndex;

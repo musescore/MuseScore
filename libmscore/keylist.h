@@ -13,6 +13,7 @@
 #ifndef __KEYLIST_H__
 #define __KEYLIST_H__
 
+#include "types.h"
 #include "key.h"
 
 namespace Ms {
@@ -25,16 +26,24 @@ class XmlReader;
 //    to keep track of key signature changes
 //---------------------------------------------------------
 
-class KeyList : public std::map<const int, KeySigEvent> {
+typedef std::map<TimePosition, KeySigEvent> KeyMap;
+
+class KeyList : public KeyMap {
 
    public:
-      KeyList() {}
-      KeySigEvent key(int tick) const;
-      KeySigEvent prevKey(int tick) const;
-      void setKey(int tick, KeySigEvent);
-      int nextKeyTick(int tick) const;
-      int currentKeyTick(int tick) const;
+      KeySigEvent key(const Fraction& tick) const;
+      KeySigEvent prevKey(const Fraction& tick) const;
+      void setKey(const Fraction& tick, KeySigEvent);
+      Fraction nextKeyTick(const Fraction& tick) const;
+      Fraction currentKeyTick(const Fraction& tick) const;
+
       void read(XmlReader&, Score*);
+
+      iterator lower_bound(const Fraction& t)          { return KeyMap::lower_bound(TimePosition(t)); }
+      iterator begin()                                 { return KeyMap::begin(); }
+      const_iterator begin() const                     { return KeyMap::begin(); }
+      iterator end()                                   { return KeyMap::end(); }
+      const_iterator end() const                       { return KeyMap::end(); }
       };
 
 }

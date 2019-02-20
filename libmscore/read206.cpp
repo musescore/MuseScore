@@ -2752,8 +2752,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else
                   qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
             irregular = true;
-            score->sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
-            score->sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
+            score->sigmap()->add(m->tick(), SigEvent(m->ticks(), m->timesig()));
+            score->sigmap()->add(m->endTick(), SigEvent(m->timesig()));
             }
       else
             irregular = false;
@@ -3061,12 +3061,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         m->setTimesig(ts->sig() / timeStretch);
 
                         if (irregular) {
-                              score->sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
-                              score->sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
+                              score->sigmap()->add(m->tick(), SigEvent(m->ticks(), m->timesig()));
+                              score->sigmap()->add(m->endTick(), SigEvent(m->timesig()));
                               }
                         else {
                               m->setTicks(m->timesig());
-                              score->sigmap()->add(m->tick().ticks(), SigEvent(m->timesig()));
+                              score->sigmap()->add(m->tick(), SigEvent(m->timesig()));
                               }
                         }
                   }

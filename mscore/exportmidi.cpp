@@ -83,13 +83,13 @@ void ExportMidi::writeHeader()
       //--------------------------------------------
 
       TimeSigMap* sigmap = cs->sigmap();
-      foreach(const RepeatSegment* rs, *cs->repeatList()) {
+      foreach (const RepeatSegment* rs, *cs->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
 
-            auto bs = sigmap->lower_bound(startTick);
-            auto es = sigmap->lower_bound(endTick);
+            auto bs = sigmap->lower_bound(TimePosition(Fraction::fromTicks(startTick)));
+            auto es = sigmap->lower_bound(TimePosition(Fraction::fromTicks(endTick)));
 
             for (auto is = bs; is != es; ++is) {
                   SigEvent se   = is->second;
@@ -119,7 +119,7 @@ void ExportMidi::writeHeader()
                   ev.setMetaType(META_TIME_SIGNATURE);
                   ev.setEData(data);
                   ev.setLen(4);
-                  track.insert(pauseMap.addPauseTicks(is->first + tickOffset), ev);
+                  track.insert(pauseMap.addPauseTicks(is->first.tick().ticks() + tickOffset), ev);
                   }
             }
 
@@ -139,8 +139,8 @@ void ExportMidi::writeHeader()
                   int endTick    = startTick + rs->len();
                   int tickOffset = rs->utick - rs->tick;
 
-                  auto sk = keys->lower_bound(startTick);
-                  auto ek = keys->lower_bound(endTick);
+                  auto sk = keys->lower_bound(Fraction::fromTicks(startTick));
+                  auto ek = keys->lower_bound(Fraction::fromTicks(endTick));
 
                   for (auto ik = sk; ik != ek; ++ik) {
                         MidiEvent ev;
@@ -152,7 +152,7 @@ void ExportMidi::writeHeader()
                         data[0]   = int(key);
                         data[1]   = 0;  // major
                         ev.setEData(data);
-                        int tick = ik->first + tickOffset;
+                        int tick = ik->first.tick().ticks() + tickOffset;
                         track1.insert(pauseMap.addPauseTicks(tick), ev);
                         if (tick == 0)
                               initialKeySigFound = true;
@@ -198,7 +198,7 @@ void ExportMidi::writeHeader()
             data[1]   = tempo >> 8;
             data[2]   = tempo;
             ev.setEData(data);
-            track.insert(it->first, ev);
+            track.insert(it->first.tick().ticks(), ev);
             }
       }
 
@@ -356,27 +356,31 @@ void ExportMidi::PauseMap::calculate(const Score* s)
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
 
-            auto se = tempomap->lower_bound(startTick);
-            auto ee = tempomap->lower_bound(endTick+1); // +1 to include first tick of next RepeatSegment
+            auto se = tempomap->lower_bound(TimePosition(Fraction::fromTicks(startTick)));
+            auto ee = tempomap->lower_bound(TimePosition(Fraction::fromTicks(endTick+1))); // +1 to include first tick of next RepeatSegment
 
             for (auto it = se; it != ee; ++it) {
-                  int tick = it->first;
+                  int tick = it->first.tick().ticks();
                   int utick = tick + tickOffset;
 
                   if (it->second.pause == 0.0) {
                         // We have a regular tempo change. Don't include tempo change from first tick of next RepeatSegment (it will be included later).
                         if (tick != endTick)
-                              tempomapWithPauses->insert(std::pair<const int, TEvent> (this->addPauseTicks(utick), it->second));
+                              tempomapWithPauses->insert(std::pair<const TimePosition, TEvent> (
+                                 TimePosition(Fraction::fromTicks(this->addPauseTicks(utick))),
+                                 it->second
+                                 ));
                         }
                   else {
                         // We have a pause event. Don't include pauses from first tick of current RepeatSegment (it was included in the previous one).
                         if (tick != startTick) {
-                              Fraction timeSig(sigmap->timesig(tick).timesig());
+                              Fraction timeSig(sigmap->timesig(Fraction::fromTicks(tick)).timesig());
                               qreal quarterNotesPerMeasure = (4.0 * timeSig.numerator()) / timeSig.denominator();
                               int ticksPerMeasure =  quarterNotesPerMeasure * MScore::division; // store a full measure of ticks to keep barlines in same places
-                              tempomapWithPauses->setTempo(this->addPauseTicks(utick), quarterNotesPerMeasure / it->second.pause); // new tempo for pause
+                              tempomapWithPauses->setTempo(
+                                 Fraction::fromTicks(this->addPauseTicks(utick)), quarterNotesPerMeasure / it->second.pause); // new tempo for pause
                               this->insert(std::pair<const int, int> (utick, ticksPerMeasure + this->offsetAtUTick(utick))); // store running total of extra ticks
-                              tempomapWithPauses->setTempo(this->addPauseTicks(utick), it->second.tempo); // restore previous tempo
+                              tempomapWithPauses->setTempo(Fraction::fromTicks(this->addPauseTicks(utick)), it->second.tempo); // restore previous tempo
                               }
                         }
                   }

@@ -10,9 +10,10 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "types.h"
 #include "stafftypelist.h"
 #include "xml.h"
-#include "score.h"
+//#include "score.h"
 
 namespace Ms {
 
@@ -25,7 +26,7 @@ const StaffType& StaffTypeList::staffType(const Fraction& tick) const
       static const StaffType st;
       if (empty())
             return st;
-      auto i = upper_bound(tick.ticks());
+      auto i = upper_bound(TimePosition(tick));
       if (i == begin())
             return st;
       return (--i)->second;
@@ -38,7 +39,7 @@ const StaffType& StaffTypeList::staffType(const Fraction& tick) const
 StaffType& StaffTypeList::staffType(const Fraction& tick)
       {
       Q_ASSERT(!empty());
-      auto i = upper_bound(tick.ticks());
+      auto i = upper_bound(TimePosition(tick));
       Q_ASSERT(i != begin());
       return (--i)->second;
       }
@@ -50,10 +51,10 @@ StaffType& StaffTypeList::staffType(const Fraction& tick)
 StaffType* StaffTypeList::setStaffType(const Fraction& tick, const StaffType& st)
       {
       Q_ASSERT(tick >= Fraction(0,1));
-      auto i = find(tick.ticks());
+      auto i = find(tick);
       StaffType* nst;
       if (i == end()) {
-            auto k = insert(std::pair<int, StaffType>(tick.ticks(), st));
+            auto k = insert(std::pair<TimePosition, StaffType>(TimePosition(tick), st));
             nst = &(k.first->second);
             }
       else {
@@ -67,9 +68,9 @@ StaffType* StaffTypeList::setStaffType(const Fraction& tick, const StaffType& st
 //   StaffTypeList::read
 //---------------------------------------------------------
 
+#if 0
 void StaffTypeList::read(XmlReader& /*e*/, Score* /*cs*/)
       {
-#if 0
       while (e.readNextStartElement()) {
             if (e.name() == "key") {
                   Key k;
@@ -86,8 +87,8 @@ void StaffTypeList::read(XmlReader& /*e*/, Score* /*cs*/)
             else
                   e.unknown();
             }
-#endif
       }
+#endif
 
 }
 

@@ -22,14 +22,14 @@ namespace Ms {
 //    locates the key sig currently in effect at tick
 //---------------------------------------------------------
 
-KeySigEvent KeyList::key(int tick) const
+KeySigEvent KeyList::key(const Fraction& tick) const
       {
       KeySigEvent ke;
       ke.setKey(Key::C);
 
       if (empty())
             return ke;
-      auto i = upper_bound(tick);
+      auto i = upper_bound(TimePosition(tick));
       if (i == begin())
             return ke;
       return (--i)->second;
@@ -39,11 +39,11 @@ KeySigEvent KeyList::key(int tick) const
 //   setKey
 //---------------------------------------------------------
 
-void KeyList::setKey(int tick, KeySigEvent k)
+void KeyList::setKey(const Fraction& tick, KeySigEvent k)
       {
-      auto i = find(tick);
+      auto i = find(TimePosition(tick));
       if (i == end())
-            insert(std::pair<int, KeySigEvent>(tick, k));
+            insert(std::pair<TimePosition, KeySigEvent>(TimePosition(tick), k));
       else
             i->second = k;
       }
@@ -55,12 +55,13 @@ void KeyList::setKey(int tick, KeySigEvent k)
 //    return -1, if no such a key sig
 //---------------------------------------------------------
 
-int KeyList::nextKeyTick(int tick) const
+Fraction KeyList::nextKeyTick(const Fraction& tick) const
       {
       if (empty())
-            return -1;
-      auto i = upper_bound(tick+1);
-      return i == end() ? -1 : i->first;
+            return Fraction(-1, 1);
+//      auto i = upper_bound(tick+1);
+      auto i = upper_bound(TimePosition(tick));
+      return i == end() ? Fraction(-1,1) : i->first.tick();
       }
 
 //---------------------------------------------------------
@@ -69,14 +70,14 @@ int KeyList::nextKeyTick(int tick) const
 //    returns the key before the current key for tick
 //---------------------------------------------------------
 
-KeySigEvent KeyList::prevKey(int tick) const
+KeySigEvent KeyList::prevKey(const Fraction& tick) const
       {
       KeySigEvent kc;
       kc.setKey(Key::C);
 
       if (empty())
             return kc;
-      auto i = upper_bound(tick);
+      auto i = upper_bound(TimePosition(tick));
       if (i == begin())
             return kc;
       --i;
@@ -92,15 +93,15 @@ KeySigEvent KeyList::prevKey(int tick) const
 //    in effect at tick
 //---------------------------------------------------------
 
-int KeyList::currentKeyTick(int tick) const
+Fraction KeyList::currentKeyTick(const Fraction& tick) const
       {
       if (empty())
-            return 0;
-      auto i = upper_bound(tick);
+            return Fraction(0,1);
+      auto i = upper_bound(TimePosition(tick));
       if (i == begin())
-            return 0;
+            return Fraction(0,1);
       --i;
-      return i->first;
+      return i->first.tick();
       }
 
 //---------------------------------------------------------
@@ -119,7 +120,7 @@ void KeyList::read(XmlReader& e, Score* cs)
                         k = Key(e.intAttribute("idx"));
                   KeySigEvent ke;
                   ke.setKey(k);
-                  (*this)[cs->fileDivision(tick)] = ke;
+                  (*this)[TimePosition(Fraction::fromTicks(cs->fileDivision(tick)))] = ke;
                   e.readNext();
                   }
             else
