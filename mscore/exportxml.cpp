@@ -5424,17 +5424,24 @@ void ExportMusicXml::write(QIODevice* dev)
  Return false on error.
  */
 
+bool saveXml(Score* score, QIODevice* device)
+      {
+      ExportMusicXml em(score);
+      em.write(device);
+      return true;
+      }
+
 bool saveXml(Score* score, const QString& name)
       {
       QFile f(name);
       if (!f.open(QIODevice::WriteOnly))
             return false;
-      ExportMusicXml em(score);
-      em.write(&f);
-      return f.error() == QFile::NoError;
+      
+      bool res = saveXml(score, &f) && (f.error() == QFile::NoError);
+      f.close();
+      return res;
       }
-
-
+      
 //---------------------------------------------------------
 //   saveMxl
 //    return false on error
@@ -5454,50 +5461,54 @@ bool saveXml(Score* score, const QString& name)
 //     </rootfiles>
 // </container>
 
-bool saveMxl(Score* score, const QString& name)
+static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString& filename)
       {
-      MQZipWriter uz(name);
-
-      QFileInfo fi(name);
-#if 0
-      QDateTime dt;
-      if (MScore::debugMode)
-            dt = QDateTime(QDate(2007, 9, 10), QTime(12, 0));
-      else
-            dt = QDateTime::currentDateTime();
-#endif
-      QString fn = fi.completeBaseName() + ".xml";
-
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
+      
       XmlWriter xml(score);
       xml.setDevice(&cbuf);
       xml.setCodec("UTF-8");
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("container");
       xml.stag("rootfiles");
-      xml.stag(QString("rootfile full-path=\"%1\"").arg(fn));
+      xml.stag(QString("rootfile full-path=\"%1\"").arg(filename));
       xml.etag();
       xml.etag();
       xml.etag();
       cbuf.seek(0);
+      
       //uz.addDirectory("META-INF");
-      uz.addFile("META-INF/container.xml", cbuf.data());
-
+      zipwriter.addFile("META-INF/container.xml", cbuf.data());
+      
       QBuffer dbuf;
       dbuf.open(QIODevice::ReadWrite);
       ExportMusicXml em(score);
       em.write(&dbuf);
       dbuf.seek(0);
-      uz.addFile(fn, dbuf.data());
-      uz.close();
-      return true;
+      zipwriter.addFile(filename, dbuf.data());
       }
-
+      
 bool saveMxl(Score* score, QIODevice* device)
       {
-      ExportMusicXml em(score);
-      em.write(device);
+      MQZipWriter uz(device);
+      
+      //anonymized filename since we don't know the actual one here
+      QString fn = "score.xml";
+      writeMxlArchive(score, uz, fn);
+      uz.close();
+      
+      return true;
+      }
+      
+bool saveMxl(Score* score, const QString& name)
+      {
+      MQZipWriter uz(name);
+
+      QFileInfo fi(name);
+      QString fn = fi.completeBaseName() + ".xml";
+      writeMxlArchive(score, uz, fn);
+
       return true;
       }
 
