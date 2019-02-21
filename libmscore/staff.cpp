@@ -327,6 +327,19 @@ Fraction Staff::nextClefTick(const Fraction& tick) const
       return t != Fraction(-1,1) ? t : score()->endTick();
       }
 
+//---------------------------------------------------------
+//   Staff::currentClefTick
+//
+//    return the tick position of the clef currently
+//    in effect at tick
+//    return 0, if no such clef
+//---------------------------------------------------------
+
+Fraction Staff::currentClefTick(const Fraction& tick) const
+      {
+      return Fraction::fromTicks(clefs.currentClefTick(tick.ticks()));
+      }
+
 
 #ifndef NDEBUG
 //---------------------------------------------------------
@@ -453,6 +466,25 @@ TimeSig* Staff::nextTimeSig(const Fraction& tick) const
       {
       auto i = timesigs.lower_bound(tick.ticks());
       return (i == timesigs.end()) ? 0 : i->second;
+      }
+
+
+//---------------------------------------------------------
+//   currentTimeSigTick
+//
+//    return the tick position of the time sig currently
+//    in effect at tick
+//---------------------------------------------------------
+
+Fraction Staff::currentTimeSigTick(const Fraction& tick) const
+      {
+      if (timesigs.empty())
+            return Fraction(0, 1);
+      auto i = timesigs.upper_bound(tick.ticks());
+      if (i == timesigs.begin())
+            return Fraction(0, 1);
+      --i;
+      return Fraction::fromTicks(i->first);
       }
 
 //---------------------------------------------------------

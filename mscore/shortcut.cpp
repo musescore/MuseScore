@@ -3562,6 +3562,16 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::MAIN_WINDOW,
+         STATE_NORMAL,
+         "unroll-repeats",
+         QT_TRANSLATE_NOOP("action","Unroll Repeats"),
+         QT_TRANSLATE_NOOP("action","Unroll Repeats"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::MAIN_WINDOW,
          STATE_DISABLED | STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_PLAY,
          "toggle-insert-mode",
          QT_TRANSLATE_NOOP("action","Toggle Insert Mode"),

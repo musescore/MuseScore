@@ -70,6 +70,7 @@ class TimeSig final : public Element {
       TimeSigType timeSigType() const    { return _timeSigType; }
 
       bool operator==(const TimeSig&) const;
+      bool operator!=(const TimeSig& ts) const { return !(*this == ts); }
 
       virtual qreal mag() const override;
       virtual void draw(QPainter*) const override;

@@ -217,6 +217,7 @@ subdirs (
         libmscore/rhythmicGrouping
         libmscore/selectionfilter
         libmscore/selectionrangedelete
+        libmscore/unrollrepeats
         libmscore/spanners
         libmscore/split
         libmscore/splitstaff
