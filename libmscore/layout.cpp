@@ -2646,10 +2646,6 @@ void Score::getNextMeasure(LayoutContext& lc)
                                           if (l)
                                                 l->layout();
                                           }
-                                    if (cr->isChord()) {
-                                          Chord* c = toChord(cr);
-                                          c->layoutArticulations();
-                                          }
                                     }
                               }
                         }
@@ -3624,8 +3620,11 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         continue;
                   ChordRest* cr = toChordRest(e);
                   // articulations
-                  if (cr->isChord())
-                        toChord(cr)->layoutArticulations2();
+                  if (cr->isChord()) {
+                        Chord* c = toChord(cr);
+                        c->layoutArticulations();
+                        c->layoutArticulations2();
+                        }
                   // tuplets
                   // sanity check
                   if (notTopBeam(cr))
