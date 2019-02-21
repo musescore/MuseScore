@@ -10,6 +10,11 @@ FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_MINOR" %
 FOR /f tokens^=2^ delims^=^" %%A IN ('findstr /C:"SET(MUSESCORE_VERSION_PATCH" %input%') DO set VERSION_PATCH=%%A
 SET MUSESCORE_VERSION=%VERSION_MAJOR%.%VERSION_MINOR%.%VERSION_PATCH%.%APPVEYOR_BUILD_NUMBER%
 
+SET DEBUG_SYMS_FILE=musescore_win%TARGET_PROCESSOR_BITS%.sym
+@echo on
+C:\MuseScore\breakpad_tools\dump_syms.exe %APPVEYOR_BUILD_FOLDER%\%BUILD_FOLDER%\mscore\RelWithDebInfo\MuseScore3.pdb > %DEBUG_SYMS_FILE%
+@echo off
+
 :: Test MuseScore stability
 IF "%NIGHTLY_BUILD%" == "" (
   goto :STABLE_LABEL

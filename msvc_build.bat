@@ -122,7 +122,7 @@ IF /I "%1"=="clean" (
    echo "Building CMake configuration..."
 @echo off
 
-IF "%CRASH_LOG_SERVER_URL%" == "" (
+IF NOT "%CRASH_LOG_SERVER_URL%" == "" (
     SET CRASH_REPORT_URL_OPT=-DCRASH_REPORT_URL=%CRASH_LOG_SERVER_URL%
     )
 
