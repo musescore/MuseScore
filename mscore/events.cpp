@@ -305,12 +305,29 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                         }
                   }
             else {
-                  if (st == SelectType::ADD && e->selected())
-                        e->score()->deselect(e);
-                  else
+                  if (st == SelectType::ADD) {
+                        // e is the top element in stacking order,
+                        // but we want to replace it with "first non-measure element after a selected element"
+                        // (if such an element exists)
+                        QList<Element*> ll = elementsNear(editData.startMove);
+                        bool found = false;
+                        for (Element* ee : ll) {
+                              if (found) {
+                                    e = ee;
+                                    if (!e->isMeasure())
+                                          break;
+                                    }
+                              else if (ee->selected()) {
+                                    found = true;
+                                    ee->score()->deselect(ee);
+                                    e = nullptr;
+                                    }
+                              }
+                        }
+                  if (e)
                         e->score()->select(e, st, -1);
                   }
-            if (e->isNote()) {
+            if (e && e->isNote()) {
                   e->score()->updateCapo();
                   mscore->play(e);
                   }
