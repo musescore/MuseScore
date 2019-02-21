@@ -336,10 +336,14 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                         _score->setUpdateAll();
                         clickOffElement = false;
                         }
+                  else if (st == SelectType::ADD)
+                        clickOffElement = false;
                   else
                         clickOffElement = true;
                   }
-            else if (st != SelectType::ADD)
+            else if (st == SelectType::ADD)
+                  clickOffElement = false;
+            else
                   clickOffElement = true;
             }
       _score->update();
