@@ -38,6 +38,13 @@ START " " /wait "7z" x -y dependencies.zip > nul
 CD dependencies\include
 CD C:\MuseScore
 
+MKDIR breakpad_tools
+CD breakpad_tools
+SET TOOLS_ARCHIVE=dump_syms.7z
+IF NOT EXIST %TOOLS_ARCHIVE% ( START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dump_syms.7z" -O %TOOLS_ARCHIVE% )
+START " " /wait "7z" x -y %TOOLS_ARCHIVE% > nul
+CD C:\MuseScore
+
 :: is MuseScore stable? Check here, no grep in PATH later on
 for /f "delims=" %%i in ('grep "^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)" C:\MuseScore\CMakeLists.txt') do set NIGHTLY_BUILD=%%i
 
