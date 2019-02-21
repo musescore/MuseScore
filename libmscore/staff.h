@@ -136,6 +136,7 @@ class Staff final : public ScoreElement {
       void setDefaultClefType(const ClefTypeList& l) { _defaultClefType = l; }
       ClefType clef(const Fraction&) const;
       Fraction nextClefTick(const Fraction&) const;
+      Fraction currentClefTick(const Fraction&) const;
 
       void setClef(Clef*);
       void removeClef(const Clef*);
@@ -146,6 +147,8 @@ class Staff final : public ScoreElement {
       Fraction timeStretch(const Fraction&) const;
       TimeSig* timeSig(const Fraction&) const;
       TimeSig* nextTimeSig(const Fraction&) const;
+      Fraction currentTimeSigTick(const Fraction&) const;
+
       bool isLocalTimeSignature(const Fraction& tick) { return timeStretch(tick) != Fraction(1, 1); }
 
       const Groups& group(const Fraction&) const;

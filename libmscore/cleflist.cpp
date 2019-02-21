@@ -78,5 +78,22 @@ int ClefList::nextClefTick(int tick) const
             return -1;
       return i->first;
       }
-}
 
+//---------------------------------------------------------
+//   currentClefTick
+//
+//    return the tick position of the clef currently
+//    in effect at tick
+//---------------------------------------------------------
+
+int ClefList::currentClefTick(int tick) const
+      {
+      if (empty())
+            return 0;
+      auto i = upper_bound(tick);
+      if (i == begin())
+            return 0;
+      --i;
+      return i->first;
+      }
+}
