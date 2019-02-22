@@ -48,7 +48,7 @@
 #include <libmscore/glissando.h>
 #include <libmscore/dynamic.h>
 #include <libmscore/arpeggio.h>
-#include <libmscore//volta.h>
+#include <libmscore/volta.h>
 #include <libmscore/instrtemplate.h>
 #include <libmscore/hairpin.h>
 #include <libmscore/fingering.h>
