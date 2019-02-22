@@ -1219,10 +1219,10 @@ qreal System::minTop() const
 qreal System::minBottom() const
       {
       if (vbox())
-            return vbox()->height() + vbox()->bottomGap();
+            return vbox()->bottomGap();
       SysStaff* s = lastVisibleSysStaff();
       if (s)
-            return s->skyline().south().max();
+            return s->skyline().south().max() - s->bbox().height();
       return 0.0;
       }
 

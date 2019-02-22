@@ -1130,7 +1130,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                         if (MScore::showSystemBoundingRect) {
                               for (const System* system : page->systems()) {
                                     QPointF pt(system->ipos());
-                                    qreal h = system->minBottom() + system->minTop();
+                                    qreal h = system->height() + system->minBottom() + system->minTop();
                                     p.translate(pt);
                                     QRectF rect(0.0, -system->minTop(), system->width(), h);
                                     p.drawRect(rect);
