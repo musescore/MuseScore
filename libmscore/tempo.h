@@ -14,6 +14,7 @@
 #define __AL_TEMPO_H__
 
 #include "types.h"
+#include "timeposition.h"
 
 namespace Ms {
 

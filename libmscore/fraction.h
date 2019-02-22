@@ -15,7 +15,6 @@
 #ifndef __FRACTION_H__
 #define __FRACTION_H__
 
-#include "config.h"
 #include "mscore.h"
 
 namespace Ms {
@@ -38,13 +37,11 @@ static int_least64_t gcd(int_least64_t a, int_least64_t b)
       return (a >= 0 ? a : -a);
       }
 
-
 //---------------------------------------------------------
 //   Fraction
 //---------------------------------------------------------
 
 class Fraction {
-
       // ensure 64 bit to avoid overflows in comparisons
       int_least64_t _numerator   { 0 };
       int_least64_t _denominator { 1 };
@@ -58,9 +55,10 @@ class Fraction {
       // no implicit conversion from int to Fraction:
       constexpr Fraction()  {}
       constexpr Fraction(int z, int n) : _numerator { n < 0 ? -z : z }, _denominator { n < 0 ? -n : n } { }
+      explicit constexpr Fraction(int z) : _numerator(z) {}
 #endif
-      int numerator() const      { return _numerator;           }
-      int denominator() const    { return _denominator;         }
+      constexpr int numerator() const      { return _numerator;           }
+      constexpr int denominator() const    { return _denominator;         }
       int_least64_t& rnumerator()          { return _numerator;           }
       int_least64_t& rdenominator()        { return _denominator;         }
 
@@ -76,7 +74,10 @@ class Fraction {
 
       bool isZero() const        { return _numerator == 0;      }
       bool isNotZero() const     { return _numerator != 0;      }
-
+      bool gtZero() const        { return _numerator > 0;       }
+      bool geZero() const        { return _numerator >= 0;      }
+      bool ltZero() const        { return _numerator < 0;       }
+      bool leZero() const        { return _numerator <= 0;      }
       bool isValid() const       { return _denominator != 0;    }
 
       // check if two fractions are identical (numerator & denominator)
@@ -88,7 +89,6 @@ class Fraction {
 
       Fraction absValue() const  {
             return Fraction(qAbs(_numerator), _denominator); }
-
 
       // --- reduction --- //
 
@@ -102,7 +102,7 @@ class Fraction {
             {
             const int g = gcd(_numerator, _denominator);
             return Fraction(_numerator / g, _denominator / g);
-            }      
+            }
 
       // --- comparison --- //
 
@@ -197,7 +197,7 @@ class Fraction {
 
       Fraction operator+(const Fraction& v) const { return Fraction(*this) += v; }
       Fraction operator-(const Fraction& v) const { return Fraction(*this) -= v; }
-      Fraction operator-() const                  { return Fraction(-_numerator, _denominator); }
+      constexpr Fraction operator-() const        { return Fraction(-_numerator, _denominator); }
       Fraction operator*(const Fraction& v) const { return Fraction(*this) *= v; }
       Fraction operator/(const Fraction& v) const { return Fraction(*this) /= v; }
       //      Fraction operator/(int v)             const { return Fraction(*this) /= v; }
@@ -237,8 +237,6 @@ class Fraction {
             return static_cast<int>(result);
             }
 
-
-
       QString print() const     { return QString("%1/%2").arg(_numerator).arg(_denominator); }
       QString toString() const  { return print(); }
       static Fraction fromString(const QString& str) {
@@ -250,6 +248,8 @@ class Fraction {
 
  inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }
  inline Fraction operator*(int v, const Fraction& f) { return Fraction(f) *= v; }
+
+constexpr Fraction operator "" _Fr(unsigned long long i) { return Fraction(static_cast<int_least64_t>(i), 1); };
 
 }     // namespace Ms
 
