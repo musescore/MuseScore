@@ -15,6 +15,7 @@
 
 #include "types.h"
 #include "key.h"
+#include "timeposition.h"
 
 namespace Ms {
 

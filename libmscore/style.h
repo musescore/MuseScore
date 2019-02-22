@@ -1148,6 +1148,7 @@ typedef std::vector<StyledProperty> ElementStyle;
 
 typedef std::array<StyledProperty, TEXT_STYLE_SIZE> TextStyle;
 
+enum class Tid;
 
 const TextStyle* textStyle(Tid);
 const TextStyle* textStyle(const char*);

@@ -15,6 +15,7 @@
 
 #include "types.h"
 #include "stafftype.h"
+#include "timeposition.h"
 
 namespace Ms {
 

@@ -73,11 +73,11 @@ Fraction ClefList::nextClefTick(const Fraction& tick) const
       {
       if (empty())
             return Fraction(-1, 1);
-//      auto i = upper_bound(tick+1);
-//      auto i = upper_bound(TimePosition(tick + Fraction::fromTicks(1)));
+//      auto i = upper_bound(tick + Fraction::fromTicks(1));
       auto i = upper_bound(TimePosition(tick));
       if (i == end())
-            return Fraction(-1, 1);
+            return -1_Fr;
+
       return i->first.tick();
       }
 }
