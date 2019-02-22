@@ -31,19 +31,19 @@ REM CLEAN:
 REM    "msvc_build.bat clean" remove all files in msvc.* folders and the folders itself
 
 REM BUILD_64 and BUILD_FOR_WINSTORE are used in CMakeLists.txt
-SET BUILD_FOR_WINSTORE="OFF"
-SET BUILD_64="ON"
+SET BUILD_FOR_WINSTORE=OFF
+SET BUILD_64=ON
 
-SET BUILD_FOLDER="msvc.build"
-SET INSTALL_FOLDER="msvc.install"
-SET ARCH="x64"
+SET BUILD_FOLDER=msvc.build
+SET INSTALL_FOLDER=msvc.install
+SET ARCH=x64
 SET GENERATOR_NAME="Visual Studio 15 2017 Win64"
 
 IF NOT "%2"=="" (
    IF "%2"=="32" (
-       SET ARCH="x86"
+       SET ARCH=x86
        SET GENERATOR_NAME="Visual Studio 15 2017"
-       SET BUILD_64="OFF"
+       SET BUILD_64=OFF
        )
    )
 
