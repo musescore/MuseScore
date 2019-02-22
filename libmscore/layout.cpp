@@ -3949,7 +3949,7 @@ void LayoutContext::collectPage()
                                     }
                               }
                         if (!fixedDistance)
-                              distance = qMax(distance, -curSystem->minTop());
+                              distance = qMax(distance, curSystem->minTop());
                         }
                   }
 //TODO-ws ??
