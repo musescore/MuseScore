@@ -512,6 +512,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       connect(swingEighth,         SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
       connect(swingSixteenth,      SIGNAL(toggled(bool)),             SLOT(setSwingParams(bool)));
 
+      connect(concertPitch,        SIGNAL(toggled(bool)),             SLOT(concertPitchToggled(bool)));
       connect(hideEmptyStaves,     SIGNAL(clicked(bool)), dontHideStavesInFirstSystem, SLOT(setEnabled(bool)));
       connect(lyricsDashMinLength, SIGNAL(valueChanged(double)),      SLOT(lyricsDashMinLengthValueChanged(double)));
       connect(lyricsDashMaxLength, SIGNAL(valueChanged(double)),      SLOT(lyricsDashMaxLengthValueChanged(double)));
@@ -1066,6 +1067,15 @@ void EditStyle::setSwingParams(bool checked)
             }
       cs->undo(new ChangeStyleVal(cs, Sid::swingUnit, val));
       cs->update();
+      }
+
+//---------------------------------------------------------
+//   concertPitchToggled
+//---------------------------------------------------------
+
+void EditStyle::concertPitchToggled(bool checked)
+      {
+      cs->cmdConcertPitchChanged(checked, true);
       }
 
 //---------------------------------------------------------
