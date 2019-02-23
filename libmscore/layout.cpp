@@ -3932,10 +3932,11 @@ void LayoutContext::collectPage()
                   else {
                         distance = score->styleP(Sid::staffUpperBorder);
                         bool fixedDistance = false;
+                        // TODO: curSystem->spacerDistance(true)
                         for (MeasureBase* mb : curSystem->measures()) {
                               if (mb->isMeasure()) {
                                     Measure* m = toMeasure(mb);
-                                    Spacer* sp = m->vspacerUp(0);
+                                    Spacer* sp = m->vspacerUp(0);       // TODO: first visible?
                                     if (sp) {
                                           if (sp->spacerType() == SpacerType::FIXED) {
                                                 distance = sp->gap();
@@ -4025,15 +4026,18 @@ void LayoutContext::collectPage()
             if (!breakPage) {
                   qreal dist = prevSystem->minDistance(curSystem) + curSystem->height();
                   Box* vbox = curSystem->vbox();
-                  if (vbox)
+                  if (vbox) {
                         dist += vbox->bottomGap();
-                  else if (!prevSystem->hasFixedDownDistance())
-                        dist += qMax(curSystem->minBottom(), slb);
-
-                  breakPage  = (y + dist) >= ey && breakPages;
+                        }
+                  else if (!prevSystem->hasFixedDownDistance()) {
+                        qreal margin = qMax(curSystem->minBottom(), curSystem->spacerDistance(false));
+                        dist += qMax(margin, slb);
+                        }
+                  breakPage = (y + dist) >= ey && breakPages;
                   }
             if (breakPage) {
-                  qreal dist = qMax(prevSystem->minBottom(), slb);
+                  qreal dist = qMax(prevSystem->minBottom(), prevSystem->spacerDistance(false));
+                  dist = qMax(dist, slb);
                   layoutPage(page, ey - (y + dist));
                   // We don't accept current system to this page
                   // so rollback rangeDone variable as well.
