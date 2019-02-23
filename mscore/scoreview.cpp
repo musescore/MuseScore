@@ -2812,6 +2812,9 @@ void ScoreView::pageNext()
       if (score()->layoutMode() == LayoutMode::LINE) {
             qreal x = xoffset() - width() * .8;
             MeasureBase* lm = score()->last();
+            // Vertical frames aren't laid out in continuous view
+            while (lm->isVBoxBase())
+                  lm = lm->prev();
             qreal lx = (lm->pos().x() + lm->width()) * mag() - width() * .8;
             if (x < -lx)
                   x = -lx;
@@ -2896,8 +2899,10 @@ void ScoreView::pageEnd()
             return;
       if (score()->layoutMode() == LayoutMode::LINE) {
             MeasureBase* lm = score()->last();
-            qreal lx = (lm->canvasPos().x() + lm->width()) * mag();
-            lx -= width() * .8;
+            // Vertical frames aren't laid out in continuous view
+            while (lm->isVBoxBase())
+                  lm = lm->prev();
+            qreal lx = (lm->pos().x() + lm->width()) * mag() - width() * .8;
             setOffset(-lx, yoffset());
             }
       else {
