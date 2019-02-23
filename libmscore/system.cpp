@@ -1227,6 +1227,35 @@ qreal System::minBottom() const
       }
 
 //---------------------------------------------------------
+//   spacerDistance
+//    Return the distance needed due to spacers
+//---------------------------------------------------------
+
+qreal System::spacerDistance(bool up) const
+      {
+      SysStaff* ss = up ? firstVisibleSysStaff() : lastVisibleSysStaff();
+      if (!ss)
+            return 0.0;
+      qreal dist = 0.0;
+      int staff = ss->idx;
+      for (MeasureBase* mb : measures()) {
+            if (mb->isMeasure()) {
+                  Measure* m = toMeasure(mb);
+                  Spacer* sp = up ? m->vspacerUp(staff) : m->vspacerDown(staff);
+                  if (sp) {
+                        if (sp->spacerType() == SpacerType::FIXED) {
+                              dist = sp->gap();
+                              break;
+                              }
+                        else
+                              dist = qMax(dist, sp->gap());
+                        }
+                  }
+            }
+      return dist;
+      }
+
+//---------------------------------------------------------
 //   moveBracket
 //---------------------------------------------------------
 
