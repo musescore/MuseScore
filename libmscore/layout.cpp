@@ -1294,6 +1294,10 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                   if (ss->show())
                         systemIsEmpty = false;
                   }
+            else if (!staff->show()) {
+                  // TODO: OK to check this first and not bother with checking if empty?
+                  ss->setShow(false);
+                  }
             else {
                   systemIsEmpty = false;
                   ss->setShow(true);
