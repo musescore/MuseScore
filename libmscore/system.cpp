@@ -496,7 +496,7 @@ void System::layout2()
                         }
                   sp = m->vspacerUp(si2);
                   if (sp)
-                        dist = qMax(dist, sp->gap());
+                        dist = qMax(dist, sp->gap() + h);
                   }
             if (!fixedSpace) {
                   qreal d = score()->lineMode() ? 0.0 : ss->skyline().minDistance(System::staff(si2)->skyline());
