@@ -68,6 +68,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       void toggleFooterOddEven(bool);
       void buttonClicked(QAbstractButton*);
       void setSwingParams(bool);
+      void concertPitchToggled(bool);
       void lyricsDashMinLengthValueChanged(double);
       void lyricsDashMaxLengthValueChanged(double);
       void systemMinDistanceValueChanged(double);
