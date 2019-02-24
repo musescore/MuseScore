@@ -872,7 +872,7 @@ void Score::layoutChords3(std::vector<Note*>& notes, const Staff* staff, Segment
             else if (sx < lx)
                   lx = sx;
 
-            qreal xx = x + note->headBodyWidth() + chord->pos().x();
+            qreal xx = x + note->headBodyWidth() + chord->posWithUserOffset().x();
 
             Direction dotPosition = note->userDotPosition();
             if (chord->dots()) {
@@ -1605,8 +1605,8 @@ void Score::respace(std::vector<ChordRest*>* elements)
       ChordRest* cr1 = elements->front();
       ChordRest* cr2 = elements->back();
       int n          = int(elements->size());
-      qreal x1       = cr1->segment()->pos().x();
-      qreal x2       = cr2->segment()->pos().x();
+      qreal x1       = cr1->segment()->posWithUserOffset().x();
+      qreal x2       = cr2->segment()->posWithUserOffset().x();
 
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
       qreal width[n-1];
@@ -1658,7 +1658,7 @@ void Score::respace(std::vector<ChordRest*>* elements)
       for (int i = 1; i < n-1; ++i) {
             x += width[i-1];
             ChordRest* cr = (*elements)[i];
-            qreal dx = x - cr->segment()->pos().x();
+            qreal dx = x - cr->segment()->posWithUserOffset().x();
             cr->rxpos() += dx;
             }
       }
@@ -1695,10 +1695,10 @@ void LayoutContext::getNextPage()
       if (curPage) {
             Page* prevPage = score->pages()[curPage - 1];
             if (MScore::verticalOrientation())
-                  y = prevPage->pos().y() + page->height() + MScore::verticalPageGap;
+                  y = prevPage->posWithUserOffset().y() + page->height() + MScore::verticalPageGap;
             else {
                   qreal gap = (curPage + score->pageNumberOffset()) & 1 ? MScore::horizontalPageGapOdd : MScore::horizontalPageGapEven;
-                  x = prevPage->pos().x() + page->width() + gap;
+                  x = prevPage->posWithUserOffset().x() + page->width() + gap;
                   }
             }
       ++curPage;
@@ -2860,7 +2860,7 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
                               l->ryoffset() = 0.0;
-                              QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
+                              QPointF offset = l->posWithUserOffset() + cr->posWithUserOffset() + s.posWithUserOffset() + s.measure()->posWithUserOffset();
                               QRectF r = l->bbox().translated(offset);
                               sk.add(r.x(), r.top(), r.width());
                               }
@@ -2896,7 +2896,7 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeAbove()) {
                               l->ryoffset() = 0.0;
-                              QRectF r = l->bbox().translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
+                              QRectF r = l->bbox().translated(l->posWithUserOffset() + cr->posWithUserOffset() + s.posWithUserOffset() + s.measure()->posWithUserOffset());
                               sk.add(r.x(), r.bottom(), r.width());
                               }
                         }
@@ -2945,7 +2945,7 @@ static void applyLyricsMax(Segment& s, int staffIdx, qreal yMax)
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->visible() && l->autoplace() && l->placeBelow()) {
                               l->ryoffset() = yMax;
-                              QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
+                              QPointF offset = l->posWithUserOffset() + cr->posWithUserOffset() + s.posWithUserOffset() + s.measure()->posWithUserOffset();
                               sk.add(l->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
                               }
                         }
@@ -2969,7 +2969,7 @@ static void applyLyricsMin(ChordRest* cr, int staffIdx, qreal yMin)
       for (Lyrics* l : cr->lyrics()) {
             if (l->visible() && l->autoplace() && l->placeAbove()) {
                   l->ryoffset() = yMin;
-                  QPointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
+                  QPointF offset = l->posWithUserOffset() + cr->posWithUserOffset() + cr->segment()->posWithUserOffset() + cr->segment()->measure()->posWithUserOffset();
                   sk.add(l->bbox().translated(offset));
                   }
             }
@@ -3124,13 +3124,13 @@ void layoutTies(Chord* ch, System* system, const Fraction& stick)
             Tie* t = note->tieFor();
             if (t) {
                   TieSegment* ts = t->layoutFor(system);
-                  system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->pos()));
+                  system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->posWithUserOffset()));
                   }
             t = note->tieBack();
             if (t) {
                   if (t->startNote()->tick() < stick) {
                         TieSegment* ts = t->layoutBack(system);
-                        system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->pos()));
+                        system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->posWithUserOffset()));
                         }
                   }
             }
@@ -3183,7 +3183,7 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
       // add shapes to skyline
       //
       for (SpannerSegment* ss : segments)
-            system->staff(ss->staffIdx())->skyline().add(ss->shape().translated(ss->pos()));
+            system->staff(ss->staffIdx())->skyline().add(ss->shape().translated(ss->posWithUserOffset()));
       }
 
 //---------------------------------------------------------
@@ -3503,12 +3503,12 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   for (Segment& s : m->segments()) {
                         if (!s.enabled() || s.isTimeSigType())       // hack: ignore time signatures
                               continue;
-                        QPointF p(s.pos() + m->pos());
+                        QPointF p(s.posWithUserOffset() + m->posWithUserOffset());
                         if (s.segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
                               BarLine* bl = toBarLine(s.element(0));
                               if (bl) {
                                     qreal w = BarLine::layoutWidth(score(), bl->barLineType());
-                                    skyline.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos() + p));
+                                    skyline.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->posWithUserOffset() + p));
                                     }
                               }
                         else {
@@ -3544,18 +3544,18 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                           continue;
                                     int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
                                     if (effectiveTrack >= strack && effectiveTrack < etrack)
-                                          skyline.add(e->shape().translated(e->pos() + p));
+                                          skyline.add(e->shape().translated(e->posWithUserOffset() + p));
                                     if (e->isChord() && toChord(e)->tremolo()) {
                                           Tremolo* t = toChord(e)->tremolo();
-                                          skyline.add(t->shape().translated(t->pos() + p));
+                                          skyline.add(t->shape().translated(t->posWithUserOffset() + p));
                                           }
                                     }
                               }
                         }
-                  ss->skyline().add(m->staffLines(staffIdx)->bbox().translated(m->pos()));
+                  ss->skyline().add(m->staffLines(staffIdx)->bbox().translated(m->posWithUserOffset()));
                   MeasureNumber* mno = m->noText(staffIdx);
                   if (mno)
-                        ss->skyline().add(mno->bbox().translated(m->pos() + mno->pos()));
+                        ss->skyline().add(mno->bbox().translated(m->posWithUserOffset() + mno->posWithUserOffset()));
                   }
             }
 
@@ -3603,7 +3603,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                               f->layout();
                               if (f->autoplace() && f->visible()) {
                                     Note* n = f->note();
-                                    QRectF r = f->bbox().translated(f->pos() + n->pos() + n->chord()->pos() + s->pos() + s->measure()->pos());
+                                    QRectF r = f->bbox().translated(f->posWithUserOffset() + n->posWithUserOffset() + n->chord()->posWithUserOffset() + s->posWithUserOffset() + s->measure()->posWithUserOffset());
                                     system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r);
                                     }
                               }
@@ -3635,7 +3635,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         Tuplet* t = de->tuplet();
                         t->layout();
                         if (t->autoplace() && t->visible())
-                              system->staff(t->staffIdx())->skyline().add(t->shape().translated(t->pos() + t->measure()->pos()));
+                              system->staff(t->staffIdx())->skyline().add(t->shape().translated(t->posWithUserOffset() + t->measure()->posWithUserOffset()));
                         de = t;
                         }
                   }
@@ -3704,7 +3704,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             int si = d->staffIdx();
             Segment* s = d->segment();
             Measure* m = s->measure();
-            system->staff(si)->skyline().add(d->shape().translated(d->pos() + s->pos() + m->pos()));
+            system->staff(si)->skyline().add(d->shape().translated(d->posWithUserOffset() + s->posWithUserOffset() + m->posWithUserOffset()));
             }
 
       //-------------------------------------------------------------
@@ -3864,7 +3864,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   for (int i = 0; i < idx; ++i) {
                         SpannerSegment* ss = voltaSegments[i];
                         ss->rypos() = y;
-                        system->staff(staffIdx)->skyline().add(ss->shape().translated(ss->pos()));
+                        system->staff(staffIdx)->skyline().add(ss->shape().translated(ss->posWithUserOffset()));
                         }
 
                   voltaSegments.erase(voltaSegments.begin(), voltaSegments.begin() + idx);
@@ -4071,7 +4071,7 @@ void LayoutContext::collectPage()
                                           while (de->tuplet() && de->tuplet()->elements().front() == de) {
                                                 Tuplet* t = de->tuplet();
                                                 t->layout();
-                                                m->system()->staff(t->staffIdx())->skyline().add(t->shape().translated(t->measure()->pos()));
+                                                m->system()->staff(t->staffIdx())->skyline().add(t->shape().translated(t->measure()->posWithUserOffset()));
                                                 de = de->tuplet();
                                                 }
                                           }

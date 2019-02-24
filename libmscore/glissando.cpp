@@ -238,7 +238,7 @@ void Glissando::layout()
       GlissandoSegment* segm2 = toGlissandoSegment(backSegment());
 
       // Note: line segments are defined by
-      // initial point: ipos() (relative to system origin)
+      // initial point: pos() (relative to system origin)
       // ending point:  pos2() (relative to initial point)
 
       // LINE ENDING POINTS TO NOTEHEAD CENTRES
@@ -267,7 +267,7 @@ void Glissando::layout()
             }
 
       // move initial point of first segment and adjust its length accordingly
-      segm1->setPos (segm1->ipos()  + offs1);
+      segm1->setPos (segm1->pos()  + offs1);
       segm1->setPos2(segm1->ipos2() - offs1);
       // adjust ending point of last segment
       segm2->setPos2(segm2->ipos2() + offs2);
@@ -294,8 +294,8 @@ void Glissando::layout()
       qreal xTot = 0.0;
       for (SpannerSegment* segm : spannerSegments())
             xTot += segm->ipos2().x();
-      qreal y0   = segm1->ipos().y();
-      qreal yTot = segm2->ipos().y() + segm2->ipos2().y() - y0;
+      qreal y0   = segm1->pos().y();
+      qreal yTot = segm2->pos().y() + segm2->ipos2().y() - y0;
       qreal ratio = yTot / xTot;
       // interpolate y-coord of intermediate points across total width and height
       qreal xCurr = 0.0;
@@ -304,10 +304,10 @@ void Glissando::layout()
             SpannerSegment* segm = segmentAt(i);
             xCurr += segm->ipos2().x();
             yCurr = y0 + ratio * xCurr;
-            segm->rypos2() = yCurr - segm->ipos().y();       // position segm. end point at yCurr
+            segm->rypos2() = yCurr - segm->pos().y();       // position segm. end point at yCurr
             // next segment shall start where this segment stopped
             segm = segmentAt(i+1);
-            segm->rypos2() += segm->ipos().y() - yCurr;      // adjust next segm. vertical length
+            segm->rypos2() += segm->pos().y() - yCurr;      // adjust next segm. vertical length
             segm->rypos() = yCurr;                           // position next segm. start point at yCurr
             }
 
@@ -319,17 +319,17 @@ void Glissando::layout()
       LedgerLine * ledLin = cr1->ledgerLines();
       // if dots, start at right of last dot
       // if no dots, from right of ledger line, if any; from right of notehead, if no ledger line
-      offs1.rx() += (dots && anchor1->dot(dots-1) ? anchor1->dot(dots-1)->pos().x() + anchor1->dot(dots-1)->width()
-                  : (ledLin ? ledLin->pos().x() + ledLin->width() : anchor1->headWidth()) );
+      offs1.rx() += (dots && anchor1->dot(dots-1) ? anchor1->dot(dots-1)->posWithUserOffset().x() + anchor1->dot(dots-1)->width()
+                  : (ledLin ? ledLin->posWithUserOffset().x() + ledLin->width() : anchor1->headWidth()) );
 
       // final note arpeggio / accidental / ledger line / accidental / arpeggio (i.e. from outermost to innermost)
       offs2 *= -1.0;          // discount changes already applied
       if (Arpeggio* ap = cr2->arpeggio())
-            offs2.rx() += ap->pos().x() + ap->offset().x();
+            offs2.rx() += ap->posWithUserOffset().x() + ap->offset().x();
       else if (Accidental* ac = anchor2->accidental())
-            offs2.rx() += ac->pos().x() + ac->offset().x();
+            offs2.rx() += ac->posWithUserOffset().x() + ac->offset().x();
       else if ( (ledLin = cr2->ledgerLines()) != nullptr)
-            offs2.rx() += ledLin->pos().x();
+            offs2.rx() += ledLin->posWithUserOffset().x();
 
       // add another a quarter spatium of 'air'
       offs1.rx() += _spatium * 0.25;
@@ -337,7 +337,7 @@ void Glissando::layout()
 
       // apply offsets: shorten first segment by x1 (and proportionally y) and adjust its length accordingly
       offs1.ry() = segm1->ipos2().y() * offs1.x() / segm1->ipos2().x();
-      segm1->setPos(segm1->ipos() + offs1);
+      segm1->setPos(segm1->pos() + offs1);
       segm1->setPos2(segm1->ipos2() - offs1);
       // adjust last segment length by x2 (and proportionally y)
       offs2.ry() = segm2->ipos2().y() * offs2.x() / segm2->ipos2().x();
@@ -350,7 +350,7 @@ void Glissando::layout()
       QPointF anchor2PagePos = anchor2->pagePos();
       QPointF system2PagePos = cr2->segment()->system()->pagePos();
       QPointF anchor2SystPos = anchor2PagePos - system2PagePos;
-      QRectF r = QRectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
+      QRectF r = QRectF(anchor2SystPos - segm2->posWithUserOffset(), anchor2SystPos - segm2->posWithUserOffset() - segm2->pos2()).normalized();
       qreal lw = lineWidth() * .5;
       setbbox(r.adjusted(-lw, -lw, lw, lw));
       }

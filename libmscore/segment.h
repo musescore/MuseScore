@@ -126,7 +126,7 @@ class Segment final : public Element {
 
       Measure* measure() const                   { return toMeasure(parent()); }
       System* system() const                     { return toSystem(parent()->parent()); }
-      qreal x() const                            { return ipos().x();         }
+      qreal x() const                            { return pos().x();         }
       void setX(qreal v)                         { rxpos() = v;               }
 
       void insertStaff(int staff);

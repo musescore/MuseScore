@@ -225,7 +225,7 @@ QLineF BSymbol::dragAnchor() const
 QPointF BSymbol::pagePos() const
       {
       if (parent() && (parent()->type() == ElementType::SEGMENT)) {
-            QPointF p(pos());
+            QPointF p(posWithUserOffset());
             System* system = segment()->measure()->system();
             if (system) {
                   p.ry() += system->staff(staffIdx())->y() + system->y();
@@ -244,7 +244,7 @@ QPointF BSymbol::pagePos() const
 QPointF BSymbol::canvasPos() const
       {
       if (parent() && (parent()->type() == ElementType::SEGMENT)) {
-            QPointF p(pos());
+            QPointF p(posWithUserOffset());
             Segment* s = toSegment(parent());
 
             System* system = s->measure()->system();

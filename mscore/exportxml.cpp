@@ -345,7 +345,7 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
             return "";
 
       //qDebug("single el %p _pos x,y %f %f _userOff x,y %f %f spatium %f",
-      //       el, el->ipos().x(), el->ipos().y(), el->offset().x(), el->offset().y(), el->spatium());
+      //       el, el->pos().x(), el->pos().y(), el->offset().x(), el->offset().y(), el->spatium());
 
       const float positionElipson = 0.1f;
       float defaultX = 0;
@@ -374,7 +374,7 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
                   const auto seg = span->backSegment();
                   const auto userOff = seg->offset(); // This is the offset accessible from the inspector
                   const auto userOff2 = seg->userOff2(); // Offset of the actual dragged anchor, which doesn't affect the inspector offset
-                  //auto pos = seg->pos();
+                  //auto pos = seg->posWithUserOffset();
                   //auto pos2 = seg->pos2();
 
                   //qDebug("sline stop seg %p seg->pos2 x,y %f %f seg->userOff2 x,y %f %f spatium %f",
@@ -389,8 +389,8 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
                   }
             }
       else {
-            defaultX = el->ipos().x();   // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
-            defaultY = el->ipos().y();
+            defaultX = el->pos().x();   // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
+            defaultY = el->pos().y();
             relativeX = el->offset().x();
             relativeY = el->offset().y();
             }
@@ -3057,7 +3057,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                   const System* sys = static_cast<const System*>(pel);
                   QRectF bb = sys->staff(el->staffIdx())->bbox();
                   qDebug("directionTag()  syst=%p sys x=%g y=%g cpx=%g cpy=%g",
-                         sys, sys->pos().x(),  sys->pos().y(),
+                         sys, sys->posWithUserOffset().x(),  sys->posWithUserOffset().y(),
                          sys->pagePos().x(),
                          sys->pagePos().y()
                         );

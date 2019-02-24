@@ -1180,7 +1180,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
             toIcon(e)->setExtent(w < h ? w : h);
       p.scale(cellMag, cellMag);
 
-      QPointF pos = e->ipos();
+      QPointF pos = e->pos();
       e->setPos(-r.topLeft());
 
       QColor color;

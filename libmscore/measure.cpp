@@ -452,7 +452,7 @@ qreal Measure::tick2pos(Fraction tck) const
             x2    = s->x();
             tick2 = s->rtick();
             if (tck == tick2)
-                  return x2 + pos().x();
+                  return x2 + posWithUserOffset().x();
             if (tck <= tick2)
                   break;
             x1    = x2;
@@ -465,7 +465,7 @@ qreal Measure::tick2pos(Fraction tck) const
       qreal dx = x2 - x1;
       Fraction dt   = tick2 - tick1;
       x1      += dt.isZero() ? 0.0 : (dx * (tck.ticks() - tick1.ticks()) / dt.ticks());
-      return x1 + pos().x();
+      return x1 + posWithUserOffset().x();
       }
 
 //---------------------------------------------------------
@@ -3144,7 +3144,7 @@ void Measure::stretchMeasure(qreal targetWidth)
             Segment* s = first();
             while (s && !s->enabled())
                   s = s->next();
-            qreal x = s->pos().x();
+            qreal x = s->posWithUserOffset().x();
             while (s) {
                   s->rxpos() = x;
                   x += s->width();

@@ -183,7 +183,7 @@ QPointF PalmMute::linePos(Grip grip, System** sys) const
       if (grip == Grip::START) {
             ChordRest* c = toChordRest(startElement());
             s = c->segment()->system();
-            x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
+            x = c->posWithUserOffset().x() + c->segment()->posWithUserOffset().x() + c->segment()->measure()->posWithUserOffset().x();
             if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE)
                   x -= c->x();
             }
@@ -221,12 +221,12 @@ QPointF PalmMute::linePos(Grip grip, System** sys) const
                         }
                   if (seg) {
                         s = seg->system();
-                        x = seg->pos().x() + seg->measure()->pos().x() - nhw * 2;
+                        x = seg->posWithUserOffset().x() + seg->measure()->posWithUserOffset().x() - nhw * 2;
                         }
                   }
             else if (c) {
                   s = c->segment()->system();
-                  x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
+                  x = c->posWithUserOffset().x() + c->segment()->posWithUserOffset().x() + c->segment()->measure()->posWithUserOffset().x();
                   if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE)
                         x -= c->x();
                   }

@@ -336,12 +336,12 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         text->setPlainText(st->text());
                         QPointF p(st->pos());
                         p = p / 32.0 * score->spatium();
-                        // text->setUserOff(st->pos());
+                        // text->setUserOff(st->posWithUserOffset());
                         text->setAutoplace(false);
                         text->setOffset(p);
                         // qDebug("setText %s (%f %f)(%f %f) <%s>",
                         //            qPrintable(st->font().family()),
-                        //            st->pos().x(), st->pos().y(), p.x(), p.y(), qPrintable(st->text()));
+                        //            st->posWithUserOffset().x(), st->posWithUserOffset().y(), p.x(), p.y(), qPrintable(st->text()));
                         Align textalign;
                         switch (st->textalign()) {
                               default:

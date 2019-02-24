@@ -160,7 +160,7 @@ static int plainTextPlusSymbolsListSize(const QList<TextFragment>& list)
 bool MScoreTextToMXML::split(const QList<TextFragment>& in, const int pos, const int len,
                              QList<TextFragment>& left, QList<TextFragment>& mid, QList<TextFragment>& right)
       {
-      //qDebug("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), pos, len);
+      //qDebug("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), , len);
       //qDebug("-> in");
       //dumpText(in);
 

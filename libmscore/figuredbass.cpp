@@ -610,7 +610,7 @@ void FiguredBassItem::draw(QPainter* painter) const
             // if some line, draw it
             if (lineEndX > 0.0) {
                   qreal h = bbox().height() * FB_CONTLINE_HEIGHT;
-                  painter->drawLine(lineStartX, h, lineEndX - ipos().x(), h);
+                  painter->drawLine(lineStartX, h, lineEndX - pos().x(), h);
                   }
             }
 
@@ -1101,7 +1101,7 @@ void FiguredBass::layout()
             // layout each item and enlarge bbox to include items bboxes
             for (FiguredBassItem* item : items) {
                   item->layout();
-                  addbbox(item->bbox().translated(item->pos()));
+                  addbbox(item->bbox().translated(item->posWithUserOffset()));
                   }
             }
       }
@@ -1227,9 +1227,9 @@ void FiguredBass::draw(QPainter* painter) const
                   TextBase::draw(painter);                      // draw as standard text
             else
                   for (FiguredBassItem* item : items) {     // if parseable into f.b. items
-                        painter->translate(item->pos());    // draw each item in its proper position
+                        painter->translate(item->posWithUserOffset());    // draw each item in its proper position
                         item->draw(painter);
-                        painter->translate(-item->pos());
+                        painter->translate(-item->posWithUserOffset());
                         }
             }
 /* DEBUG
@@ -1367,8 +1367,8 @@ qreal FiguredBass::additionalContLineX(qreal pagePosY) const
                      && fbi->prefix() == FiguredBassItem::Modifier::NONE
                         && fbi->suffix() == FiguredBassItem::Modifier::NONE
                            && fbi->parenth4() == FiguredBassItem::Parenthesis::NONE
-                              && qAbs(pgPos.y() + fbi->ipos().y() - pagePosY) < 0.05)
-                  return pgPos.x() + fbi->ipos().x();
+                              && qAbs(pgPos.y() + fbi->pos().y() - pagePosY) < 0.05)
+                  return pgPos.x() + fbi->pos().x();
 
       return 0.0;                               // no suitable line
 }

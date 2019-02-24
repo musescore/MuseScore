@@ -136,7 +136,7 @@ void Breath::draw(QPainter* p) const
 QPointF Breath::pagePos() const
       {
       if (parent() == 0)
-            return pos();
+            return posWithUserOffset();
       System* system = segment()->measure()->system();
       qreal yp = y();
       if (system)

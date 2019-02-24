@@ -251,7 +251,7 @@ void KeyCanvas::dropEvent(QDropEvent*)
 
 void KeyCanvas::snap(Accidental* a)
       {
-      double y        = a->ipos().y();
+      double y        = a->pos().y();
       double spatium2 = gscore->spatium() * .5;
       int line        = int((y + spatium2 * .5) / spatium2);
       y               = line * spatium2;
@@ -329,7 +329,7 @@ void KeyEditor::addClicked()
       double xoff = 10000000.0;
 
       for (Accidental* a : al) {
-            QPointF pos = a->ipos();
+            QPointF pos = a->pos();
             if (pos.x() < xoff)
                   xoff = pos.x();
             }
@@ -339,7 +339,7 @@ void KeyEditor::addClicked()
       for (Accidental* a : al) {
             KeySym s;
             s.sym       = a->symbol();
-            QPointF pos = a->ipos();
+            QPointF pos = a->pos();
             pos.rx()   -= xoff;
             s.spos      = pos / spatium;
             e.keySymbols().append(s);

@@ -61,7 +61,7 @@ bool LineSegment::readProperties(XmlReader& e)
       else if (tag == "off2") {
             setUserOff2(e.readPoint() * spatium());
             }
-/*      else if (tag == "pos") {
+/*      else if (tag == "posWithUserOffset") {
             setOffset(QPointF());
             e.readNext();
             }
@@ -107,7 +107,7 @@ QPointF LineSegment::gripAnchor(Grip grip) const
             return QPointF(0, 0);
       // note-anchored spanners are relative to the system
       qreal y = spanner()->anchor() == Spanner::Anchor::NOTE ?
-                  system()->pos().y() : system()->staffYpage(staffIdx());
+                  system()->posWithUserOffset().y() : system()->staffYpage(staffIdx());
       if (isMiddleType()) {
             qreal x;
             switch (grip) {
@@ -130,9 +130,9 @@ QPointF LineSegment::gripAnchor(Grip grip) const
             else {
                   System* s;
                   QPointF p(line()->linePos(grip, &s));
-                  p.ry() += y - system()->pos().y();
+                  p.ry() += y - system()->posWithUserOffset().y();
                   if (s)
-                        p += s->pos();    // to page coordinates
+                        p += s->posWithUserOffset();    // to page coordinates
                   return p;
                   }
             }
@@ -502,10 +502,10 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                                 continue;
                                           if (cr1->isChord()) {
                                                 for (Note* n : toChord(cr1)->notes())
-                                                      width = qMax(width, n->shape().right() + n->pos().x() + cr1->pos().x());
+                                                      width = qMax(width, n->shape().right() + n->posWithUserOffset().x() + cr1->posWithUserOffset().x());
                                                 }
                                           else if (cr1->isRest() && (cr1->actualDurationType() != TDuration::DurationType::V_MEASURE))
-                                                width = qMax(width, cr1->bbox().right() + cr1->pos().x());
+                                                width = qMax(width, cr1->bbox().right() + cr1->posWithUserOffset().x());
                                           }
 
                                     x = width + sp;
@@ -614,7 +614,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                   Measure* m = cr ? cr->measure() : score()->tick2measure(t);
 
                   if (m) {
-                        x += cr ? cr->segment()->pos().x() + m->pos().x() : m->tick2pos(t);
+                        x += cr ? cr->segment()->posWithUserOffset().x() + m->posWithUserOffset().x() : m->tick2pos(t);
                         *sys = m->system();
                         }
                   else
@@ -640,9 +640,9 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           offset += e->width();
                                     }
                               }
-                        x = m->pos().x() + offset;
+                        x = m->posWithUserOffset().x() + offset;
                         if (score()->styleB(Sid::createMultiMeasureRests) && m->hasMMRest()) {
-                              x = m->mmRest()->pos().x();
+                              x = m->mmRest()->posWithUserOffset().x();
                               }
                         }
                   else {
@@ -671,7 +671,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     seg = nm->first(SegmentType::BeginBarLine);
                               }
                         qreal mwidth = seg ? seg->x() : m->bbox().right();
-                        x = m->pos().x() + mwidth;
+                        x = m->posWithUserOffset().x() + mwidth;
                         // align to barline
                         if (seg && seg->isEndBarLineType()) {
                               Element* e = seg->element(0);
@@ -785,7 +785,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
             case SpannerSegmentType::MIDDLE: {
                   Measure* firstMeasure = system->firstMeasure();
                   Segment* firstCRSeg   = firstMeasure->first(SegmentType::ChordRest);
-                  qreal x1              = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeasure->pos().x();
+                  qreal x1              = (firstCRSeg ? firstCRSeg->posWithUserOffset().x() : 0) + firstMeasure->posWithUserOffset().x();
                   qreal x2              = system->bbox().right();
                   System* s;
                   QPointF p1 = linePos(Grip::START, &s);
@@ -806,7 +806,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
                         if (e)
                               offset = e->width();
                         }
-                  qreal x1  = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x() + offset;
+                  qreal x1  = (firstCRSeg ? firstCRSeg->posWithUserOffset().x() : 0) + firstMeas->posWithUserOffset().x() + offset;
                   qreal len = p2.x() - x1;
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
                   lineSegm->setPos2(QPointF(len, 0.0));
@@ -912,7 +912,7 @@ void SLine::layout()
             else if (i > 0 && i != sysIdx2) {
                   // middle segment
                   lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
-                  qreal x1 = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x();
+                  qreal x1 = (firstCRSeg ? firstCRSeg->posWithUserOffset().x() : 0) + firstMeas->posWithUserOffset().x();
                   qreal x2 = system->bbox().right();
                   lineSegm->setPos(QPointF(x1, p1.y()));
                   lineSegm->setPos2(QPointF(x2 - x1, 0.0));
@@ -932,7 +932,7 @@ void SLine::layout()
                         //if (type() != ElementType::PEDAL)
                         //      minLen = 1.0 * spatium();
                         }
-                  qreal x1 = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x() + offset;
+                  qreal x1 = (firstCRSeg ? firstCRSeg->posWithUserOffset().x() : 0) + firstMeas->posWithUserOffset().x() + offset;
                   qreal len = qMax(minLen, p2.x() - x1);
                   lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));

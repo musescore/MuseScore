@@ -143,7 +143,7 @@ qreal StaffLines::y1() const
 /*      if (system == 0 || staffIdx() >= system->staves()->size())
             return 0.0;
       */
-      return system->staff(staffIdx())->y() + ipos().y();
+      return system->staff(staffIdx())->y() + pos().y();
       }
 
 }

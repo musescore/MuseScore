@@ -56,7 +56,7 @@ Page* MuseScoreView::point2page(const QPointF& p)
       if (score()->layoutMode() == LayoutMode::LINE)
             return score()->pages().isEmpty() ? 0 : score()->pages().front();
       foreach(Page* page, score()->pages()) {
-            if (page->bbox().translated(page->pos()).contains(p))
+            if (page->bbox().translated(page->posWithUserOffset()).contains(p))
                   return page;
             }
       return 0;
@@ -73,7 +73,7 @@ const QList<Element*> MuseScoreView::elementsAt(const QPointF& p)
 
       Page* page = point2page(p);
       if (page) {
-            el = page->items(p - page->pos());
+            el = page->items(p - page->posWithUserOffset());
             qSort(el.begin(), el.end(), elementLower);
             }
       return el;

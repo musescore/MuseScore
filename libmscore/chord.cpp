@@ -390,10 +390,10 @@ QPointF Chord::stemPos() const
       if (_up) {
             qreal nhw = _notes.size() == 1 ? downNote()->bboxRightPos() : noteHeadWidth();
             p.rx() += nhw;
-            p.ry() += downNote()->pos().y();
+            p.ry() += downNote()->posWithUserOffset().y();
             }
       else
-            p.ry() += upNote()->pos().y();
+            p.ry() += upNote()->posWithUserOffset().y();
       return p;
       }
 
@@ -417,10 +417,10 @@ QPointF Chord::stemPosBeam() const
       if (_up) {
             qreal nhw = noteHeadWidth();
             p.rx() += nhw;
-            p.ry() += upNote()->pos().y();
+            p.ry() += upNote()->posWithUserOffset().y();
             }
       else
-            p.ry() += downNote()->pos().y();
+            p.ry() += downNote()->posWithUserOffset().y();
 
       return p;
       }
@@ -744,7 +744,7 @@ void Chord::addLedgerLines()
 //                  note->layout();
 
                   //ledger lines need the leftmost point of the notehead with a respect of bbox
-                  x = note->pos().x() + note->bboxXShift();
+                  x = note->posWithUserOffset().x() + note->bboxXShift();
                   if (x - extraLen < minX) {
                         minX  = x - extraLen;
                         // increase width of all lines between this one and the staff
@@ -1119,7 +1119,7 @@ bool Chord::readProperties(XmlReader& e)
 
 qreal Chord::upPos() const
       {
-      return upNote()->pos().y();
+      return upNote()->posWithUserOffset().y();
       }
 
 //---------------------------------------------------------
@@ -1128,7 +1128,7 @@ qreal Chord::upPos() const
 
 qreal Chord::downPos() const
       {
-      return downNote()->pos().y();
+      return downNote()->posWithUserOffset().y();
       }
 
 //---------------------------------------------------------
@@ -1144,7 +1144,7 @@ qreal Chord::centerX() const
             return st->staffType(tick())->chordStemPosX(this) * spatium();
 
       const Note* note = up() ? upNote() : downNote();
-      qreal x = note->pos().x() + note->noteheadCenterX();
+      qreal x = note->posWithUserOffset().x() + note->noteheadCenterX();
       if (note->mirror())
                   x += (note->headBodyWidth()) * (up() ? -1.0 : 1.0);
       return x;
@@ -1366,7 +1366,7 @@ qreal Chord::defaultStemLength()
             qreal staffHlfHgt = staffHeight * 0.5;
             if (up()) {                   // stem up
                   qreal dy  = dl * .5;                      // note-side vert. pos.
-                  qreal sel = ul * .5 - normalStemLen;      // stem end vert. pos
+                  qreal sel = ul * .5 - normalStemLen;      // stem end vert. pos.
 
                   // if stem ends above top line (with some exceptions), shorten it
                   if (shortenStem && (sel < 0.0) && (hookIdx == 0 || tab || !downnote->mirror()))
@@ -1614,7 +1614,7 @@ void Chord::layout2()
                   s = nullptr;
             // start from the right (if next segment found, x of it relative to this chord;
             // chord right space otherwise)
-            qreal xOff =  s ? s->pos().x() - (segment()->pos().x() + pos().x()) : _spaceRw;
+            qreal xOff =  s ? s->posWithUserOffset().x() - (segment()->posWithUserOffset().x() + posWithUserOffset().x()) : _spaceRw;
             // final distance: if near to another chord, leave minNoteDist at right of last grace
             // else leave note-to-barline distance;
             xOff -= (s != nullptr && s->segmentType() != SegmentType::ChordRest)
@@ -1723,7 +1723,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
 QPointF Chord::pagePos() const
       {
       if (isGrace()) {
-            QPointF p(pos());
+            QPointF p(posWithUserOffset());
             if (parent() == 0)
                   return p;
             p.rx() = pageX();
@@ -1783,7 +1783,7 @@ void Chord::layoutPitched()
       qreal minTieLength     = score()->styleP(Sid::MinTieLength)     * mag_;
 
       qreal graceMag         = score()->styleD(Sid::graceNoteMag);
-      qreal chordX           = (_noteType == NoteType::NORMAL) ? ipos().x() : 0.0;
+      qreal chordX           = (_noteType == NoteType::NORMAL) ? pos().x() : 0.0;
 
       while (_ledgerLines) {
             LedgerLine* l = _ledgerLines->next();
@@ -1828,7 +1828,7 @@ void Chord::layoutPitched()
       for (Note* note : _notes) {
             note->layout();
 
-            qreal x1 = note->pos().x() + chordX;
+            qreal x1 = note->posWithUserOffset().x() + chordX;
             qreal x2 = x1 + note->headWidth();
             lll      = qMax(lll, -x1);
             rrr      = qMax(rrr, x2);
@@ -1838,7 +1838,7 @@ void Chord::layoutPitched()
             Accidental* accidental = note->accidental();
             if (accidental && !note->fixed()) {
                   // convert x position of accidental to segment coordinate system
-                  qreal x = accidental->pos().x() + note->pos().x() + chordX;
+                  qreal x = accidental->posWithUserOffset().x() + note->posWithUserOffset().x() + chordX;
                   // distance from accidental to note already taken into account
                   // but here perhaps we create more padding in *front* of accidental?
                   x -= score()->styleP(Sid::accidentalDistance) * mag_;
@@ -1879,8 +1879,8 @@ void Chord::layoutPitched()
                               //    use available space
                               // for negative x offset:
                               //    space is allocated elsewhere, so don't re-allocate here
-                              if (note->ipos().x() != 0.0)
-                                    overlap += qAbs(note->ipos().x());
+                              if (note->pos().x() != 0.0)
+                                    overlap += qAbs(note->pos().x());
                               else
                                     overlap -= note->headWidth() * 0.12;
                               }
@@ -1919,7 +1919,7 @@ void Chord::layoutPitched()
             _arpeggio->layout();    // only for width() !
             _arpeggio->setHeight(0.0);
             lll        += _arpeggio->width() + arpeggioDistance + chordX;
-            qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
+            qreal y1   = upnote->posWithUserOffset().y() - upnote->headHeight() * .5;
             _arpeggio->setPos(-lll, y1);
             // _arpeggio->layout() called in layoutArpeggio2()
 
@@ -1986,7 +1986,7 @@ void Chord::layoutPitched()
                   continue;
             e->layout();
             if (e->type() == ElementType::CHORDLINE) {
-                  QRectF tbbox = e->bbox().translated(e->pos());
+                  QRectF tbbox = e->bbox().translated(e->posWithUserOffset());
                   qreal lx = tbbox.left() + chordX;
                   qreal rx = tbbox.right() + chordX;
                   if (-lx > _spaceLw)
@@ -2011,7 +2011,7 @@ void Chord::layoutPitched()
                               alignNote.push_back(f);
                               if (!leftFound) {
                                     leftFound = true;
-                                    qreal xf = f->ipos().x();
+                                    qreal xf = f->pos().x();
                                     xNote = qMin(xNote, xf);
                                     }
                               }
@@ -2103,8 +2103,8 @@ void Chord::layoutTablature()
                               //    use available space
                               // for negative x offset:
                               //    space is allocated elsewhere, so don't re-allocate here
-                              if (note->ipos().x() != 0.0)              // this probably does not work for TAB, as
-                                    overlap += qAbs(note->ipos().x());  // _pos is used to centre the fret on the stem
+                              if (note->pos().x() != 0.0)              // this probably does not work for TAB, as
+                                    overlap += qAbs(note->pos().x());  // _pos is used to centre the fret on the stem
                               else
                                     overlap -= fretWidth * 0.125;
                               }
@@ -2251,8 +2251,8 @@ void Chord::layoutTablature()
             qreal headHeight = upnote->headHeight();
             _arpeggio->layout();
             lll += _arpeggio->width() + _spatium * .5;
-            qreal y = upNote()->pos().y() - headHeight * .5;
-            qreal h = downNote()->pos().y() + downNote()->headHeight() - y;
+            qreal y = upNote()->posWithUserOffset().y() - headHeight * .5;
+            qreal h = downNote()->posWithUserOffset().y() + downNote()->headHeight() - y;
             _arpeggio->setHeight(h);
             _arpeggio->setPos(-lll, y);
 
@@ -2348,7 +2348,7 @@ void Chord::layoutTablature()
       for (Element* e : el()) {
             e->layout();
             if (e->type() == ElementType::CHORDLINE) {
-                  QRectF tbbox = e->bbox().translated(e->pos());
+                  QRectF tbbox = e->bbox().translated(e->posWithUserOffset());
                   qreal lx = tbbox.left();
                   qreal rx = tbbox.right();
                   if (-lx > _spaceLw)
@@ -2361,9 +2361,9 @@ void Chord::layoutTablature()
       for (size_t i = 0; i < numOfNotes; ++i)
             _notes.at(i)->layout2();
       QRectF bb;
-      processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->pos()); } );
+      processSiblings([&bb] (Element* e) { bb |= e->bbox().translated(e->posWithUserOffset()); } );
       if (_tabDur)
-            bb |= _tabDur->bbox().translated(_tabDur->pos());
+            bb |= _tabDur->bbox().translated(_tabDur->posWithUserOffset());
       setbbox(bb);
       }
 
@@ -3152,26 +3152,26 @@ Shape Chord::shape() const
       {
       Shape shape;
       if (_hook && _hook->autoplace() && _hook->visible())
-            shape.add(_hook->shape().translated(_hook->pos()));
+            shape.add(_hook->shape().translated(_hook->posWithUserOffset()));
       if (_stem && _stem->autoplace() && _stem->visible())
-            shape.add(_stem->shape().translated(_stem->pos()));
+            shape.add(_stem->shape().translated(_stem->posWithUserOffset()));
       if (_stemSlash && _stemSlash->autoplace() && _stemSlash->visible())
-            shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
+            shape.add(_stemSlash->shape().translated(_stemSlash->posWithUserOffset()));
       if (_arpeggio && _arpeggio->autoplace() && _arpeggio->visible())
-            shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
+            shape.add(_arpeggio->shape().translated(_arpeggio->posWithUserOffset()));
 //      if (_tremolo)
-//            shape.add(_tremolo->shape().translated(_tremolo->pos()));
+//            shape.add(_tremolo->shape().translated(_tremolo->posWithUserOffset()));
       for (Note* note : _notes)
-            shape.add(note->shape().translated(note->pos()));
+            shape.add(note->shape().translated(note->posWithUserOffset()));
       for (Element* e : el()) {
             if (e->autoplace() && e->visible())
-                  shape.add(e->shape().translated(e->pos()));
+                  shape.add(e->shape().translated(e->posWithUserOffset()));
             }
       for (Chord* chord : _graceNotes)    // process grace notes last, needed for correct shape calculation
-            shape.add(chord->shape().translated(chord->pos()));
+            shape.add(chord->shape().translated(chord->posWithUserOffset()));
       shape.add(ChordRest::shape());      // add lyrics
       for (LedgerLine* l = _ledgerLines; l; l = l->next())
-            shape.add(l->shape().translated(l->pos()));
+            shape.add(l->shape().translated(l->posWithUserOffset()));
       if (_spaceLw || _spaceRw)
             shape.addHorizontalSpacing(Shape::SPACING_GENERAL, -_spaceLw, _spaceRw);
       return shape;
@@ -3287,7 +3287,7 @@ void Chord::layoutArticulations()
                   }
             a->setPos(x, y);
             prevArticulation = a;
-//            measure()->system()->staff(a->staffIdx())->skyline().add(a->shape().translated(a->pos() + segment()->pos() + measure()->pos()));
+//            measure()->system()->staff(a->staffIdx())->skyline().add(a->shape().translated(a->posWithUserOffset() + segment()->posWithUserOffset() + measure()->posWithUserOffset()));
             }
       }
 
@@ -3320,7 +3320,7 @@ void Chord::layoutArticulations2()
       // gap between note and staff articulation is distance0 + 0.5 spatium
 
       if (stem()) {
-            qreal y = stem()->pos().y() + pos().y() + stem()->stemLen();
+            qreal y = stem()->posWithUserOffset().y() + posWithUserOffset().y() + stem()->stemLen();
             if (beam()) {
                   qreal bw = score()->styleS(Sid::beamWidth).val() * _spatium;
                   y += up() ? -bw : bw;
@@ -3384,9 +3384,9 @@ void Chord::layoutArticulations2()
             if (a->autoplace() && a->visible()) {
                   Segment* s = segment();
                   Measure* m = s->measure();
-                  QRectF r = a->bbox().translated(a->pos() + pos());
+                  QRectF r = a->bbox().translated(a->posWithUserOffset() + posWithUserOffset());
                   s->staffShape(staffIdx()).add(r);
-                  r = a->bbox().translated(a->pos() + pos() + s->pos() + m->pos());
+                  r = a->bbox().translated(a->posWithUserOffset() + posWithUserOffset() + s->posWithUserOffset() + m->posWithUserOffset());
                   m->system()->staff(staffIdx())->skyline().add(r);
                   }
             }
@@ -3413,8 +3413,8 @@ void Chord::layoutArticulations3(Slur* slur)
       for (Articulation* a : _articulations) {
             if (a->layoutCloseToNote() || !a->autoplace() || !slur->autoplace() || !slur->visible())
                   continue;
-            Shape aShape = a->shape().translated(a->pos() + pos() + s->pos() + m->pos());
-            Shape sShape = ss->shape().translated(ss->pos());
+            Shape aShape = a->shape().translated(a->posWithUserOffset() + posWithUserOffset() + s->posWithUserOffset() + m->posWithUserOffset());
+            Shape sShape = ss->shape().translated(ss->posWithUserOffset());
             if (aShape.intersects(sShape)) {
                   qreal d = score()->styleP(Sid::dynamicsMinDistance);
                   if (slur->up()) {

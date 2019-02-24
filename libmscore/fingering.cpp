@@ -118,7 +118,7 @@ void Fingering::layout()
                   SysStaff* ss = m->system()->staff(chord->vStaffIdx());
                   Staff* vStaff = chord->staff();     // TODO: use current height at tick
                   if (n->mirror())
-                        rxpos() -= n->ipos().x();
+                        rxpos() -= n->pos().x();
                   rxpos() += headWidth * .5;
                   if (placeAbove()) {
                         if (tight) {
@@ -127,7 +127,7 @@ void Fingering::layout()
                               rypos() -= spatium() * 1.5;
                               }
                         else {
-                              QRectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
+                              QRectF r = bbox().translated(m->posWithUserOffset() + s->posWithUserOffset() + chord->posWithUserOffset() + n->posWithUserOffset() + posWithUserOffset());
                               SkylineLine sk(false);
                               sk.add(r.x(), r.bottom(), r.width());
                               qreal d = sk.minDistance(ss->skyline().north());
@@ -143,7 +143,7 @@ void Fingering::layout()
                                     top = qMin(0.0, un->y() + un->bbox().top());
                                     }
                               top -= spatium() * 0.5;
-                              qreal diff = (bbox().bottom() + ipos().y() + n->y()) - top;
+                              qreal diff = (bbox().bottom() + pos().y() + n->y()) - top;
                               if (diff > 0.0)
                                     rypos() -= diff;
                               }
@@ -155,7 +155,7 @@ void Fingering::layout()
                               rypos() += spatium() * 1.5;
                               }
                         else {
-                              QRectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
+                              QRectF r = bbox().translated(m->posWithUserOffset() + s->posWithUserOffset() + chord->posWithUserOffset() + n->posWithUserOffset() + posWithUserOffset());
                               SkylineLine sk(true);
                               sk.add(r.x(), r.top(), r.width());
                               qreal d = ss->skyline().south().minDistance(sk);
@@ -171,7 +171,7 @@ void Fingering::layout()
                                     bottom = qMax(vStaff->height(), dn->y() + dn->bbox().bottom());
                                     }
                               bottom += spatium() * 0.5;
-                              qreal diff = bottom - (bbox().top() + ipos().y() + n->y());
+                              qreal diff = bottom - (bbox().top() + pos().y() + n->y());
                               if (diff > 0.0)
                                     rypos() += diff;
                               }

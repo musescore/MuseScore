@@ -31,7 +31,7 @@ struct MaxLevel
       {
       int level = 0;                   // 0 - the biggest, whole bar level; other: -1, -2, ...
       int levelCount = 0;              // number of positions with 'level' value
-      ReducedFraction pos = {-1, 1};   // first position with value 'level'; -1 - undefined pos
+      ReducedFraction pos = {-1, 1};   // first position with value 'level'; -1 - undefined posWithUserOffset
       };
 
 struct DivLengthInfo

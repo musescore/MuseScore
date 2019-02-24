@@ -141,7 +141,7 @@ FretDiagram* FretDiagram::fromString(Score* score, const QString &s)
 QPointF FretDiagram::pagePos() const
       {
       if (parent() == 0)
-            return pos();
+            return posWithUserOffset();
       if (parent()->isSegment()) {
             Measure* m = toSegment(parent())->measure();
             System* system = m->system();
@@ -391,7 +391,7 @@ void FretDiagram::layout()
             int si     = staffIdx();
 
             SysStaff* ss = m->system()->staff(si);
-            QRectF r     = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos());
+            QRectF r     = _harmony->bbox().translated(m->posWithUserOffset() + s->posWithUserOffset() + posWithUserOffset() + _harmony->posWithUserOffset());
 
             SkylineLine sk(false);
             sk.add(r.x(), r.bottom(), r.width());

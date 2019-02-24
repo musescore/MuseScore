@@ -287,7 +287,7 @@ Shape KeySig::shape() const
             // the first ledger line height to ensure that
             // no notes will be too close to the keysig.
             const qreal sp = spatium();
-            const qreal y = pos().y();
+            const qreal y = posWithUserOffset().y();
             box.setTop(std::min(-sp - y, box.top()));
             box.setBottom(std::max(st->height() - y + sp, box.bottom()));
             }

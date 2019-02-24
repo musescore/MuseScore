@@ -569,7 +569,7 @@ void Tuplet::layout()
                   x3 = p1.x() + deltax * .5;
                   }
 
-            _number->setPos(QPointF(x3, y3) - ipos());
+            _number->setPos(QPointF(x3, y3) - pos());
             }
 
       if (_hasBracket) {

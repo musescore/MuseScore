@@ -232,7 +232,7 @@ BarLine::~BarLine()
 QPointF BarLine::pagePos() const
       {
       if (segment() == 0)
-            return pos();
+            return posWithUserOffset();
       System* system = segment()->measure()->system();
 
       qreal yp = y();

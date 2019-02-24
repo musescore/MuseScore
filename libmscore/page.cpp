@@ -180,9 +180,9 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
       text->setAlign(flags);
       text->setXmlText(s);
       text->layout();
-      p->translate(text->pos());
+      p->translate(text->posWithUserOffset());
       text->draw(p);
-      p->translate(-text->pos());
+      p->translate(-text->posWithUserOffset());
       text->setParent(0);
       }
 

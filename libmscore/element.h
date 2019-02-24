@@ -206,10 +206,8 @@ class Element : public ScoreElement {
       bool generated() const                  { return flag(ElementFlag::GENERATED);  }
       void setGenerated(bool val)             { setFlag(ElementFlag::GENERATED, val);   }
 
-      //TODO: rename to pos()
-      const QPointF& ipos() const             { return _pos;                    }
-      //TODO: rename to posWithUserOffset()
-      virtual const QPointF pos() const       { return _pos + _offset;          }
+      const QPointF& pos() const             { return _pos;                    }
+      virtual const QPointF posWithUserOffset() const       { return _pos + _offset;          }
       virtual qreal x() const                 { return _pos.x() + _offset.x(); }
       virtual qreal y() const                 { return _pos.y() + _offset.y(); }
       void setPos(qreal x, qreal y)           { _pos.rx() = x, _pos.ry() = y;   }

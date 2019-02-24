@@ -1593,7 +1593,7 @@ void Seq::setLoopIn()
             }
       else
             t = cs->pos();        // Otherwise, use the selected note.
-      if (t >= cs->loopOutTick())         // If In pos >= Out pos, reset Out pos to end of score
+      if (t >= cs->loopOutTick())         // If In posWithUserOffset >= Out pos, reset Out posWithUserOffset to end of score
             cs->setPos(POS::RIGHT, cs->lastMeasure()->endTick());
       cs->setPos(POS::LEFT, t);
       }
@@ -1610,7 +1610,7 @@ void Seq::setLoopOut()
             }
       else
             t = cs->pos() + cs->inputState().ticks();   // Otherwise, use the selected note.
-      if (t <= cs->loopInTick())                        // If Out pos <= In pos, reset In pos to beginning of score
+      if (t <= cs->loopInTick())                        // If Out pos <= In posWithUserOffset, reset In posWithUserOffset to beginning of score
             cs->setPos(POS::LEFT, Fraction(0,1));
       else
           if (t > cs->lastMeasure()->endTick())

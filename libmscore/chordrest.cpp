@@ -463,7 +463,7 @@ Element* ChordRest::drop(EditData& data)
                         if (!fromPalette)
                               ndd.pos = pagePos();
                         // convert page-relative pos to score-relative
-                        ndd.pos += measure()->system()->page()->pos();
+                        ndd.pos += measure()->system()->page()->posWithUserOffset();
                         return measure()->drop(ndd);
                         }
                   else {
@@ -1184,8 +1184,8 @@ Shape ChordRest::shape() const
                   continue;
             static const qreal margin = spatium() * .5;
             // for horizontal spacing we only need the lyrics width:
-            x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
-            x2 = qMax(x2, l->bbox().x() + l->bbox().width() + margin + l->pos().x());
+            x1 = qMin(x1, l->bbox().x() - margin + l->posWithUserOffset().x());
+            x2 = qMax(x2, l->bbox().x() + l->bbox().width() + margin + l->posWithUserOffset().x());
             if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS))
                   x2 += spatium();
             adjustWidth = true;
@@ -1210,8 +1210,8 @@ Shape ChordRest::shape() const
                   if (h->isLayoutInvalid())
                         h->layout();
                   const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
-                  x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
-                  x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
+                  x1 = qMin(x1, e->bbox().x() - margin + e->posWithUserOffset().x());
+                  x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->posWithUserOffset().x());
                   adjustWidth = true;
                   }
             }

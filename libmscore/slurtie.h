@@ -38,7 +38,7 @@ struct SlurOffsets {
 //---------------------------------------------------------
 
 struct UP {
-      QPointF p;            // layout position relative to pos()
+      QPointF p;            // layout position relative to posWithUserOffset()
       QPointF off;          // user offset in point units
 
       QPointF pos() const { return p + off; }

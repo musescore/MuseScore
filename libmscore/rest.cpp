@@ -700,7 +700,7 @@ qreal Rest::mag() const
 int Rest::upLine() const
       {
       qreal _spatium = spatium();
-      return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
+      return lrint((posWithUserOffset().y() + bbox().top() + _spatium) * 2 / _spatium);
       }
 
 //---------------------------------------------------------

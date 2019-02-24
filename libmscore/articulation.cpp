@@ -583,7 +583,7 @@ void Articulation::doAutoplace()
             int si     = staffIdx();
 
             SysStaff* ss = m->system()->staff(si);
-            QRectF r = bbox().translated(chordRest()->pos() + m->pos() + s->pos() + pos());
+            QRectF r = bbox().translated(chordRest()->posWithUserOffset() + m->posWithUserOffset() + s->posWithUserOffset() + posWithUserOffset());
 
             qreal d;
             bool above = up(); // (anchor() == ArticulationAnchor::TOP_STAFF || anchor() == ArticulationAnchor::TOP_CHORD);

@@ -122,7 +122,7 @@ QPointF Beam::pagePos() const
       {
       System* s = system();
       if (s == 0)
-            return pos();
+            return posWithUserOffset();
       qreal yp = y() + s->staff(staffIdx())->y() + s->y();
       return QPointF(pageX(), yp);
       }
@@ -135,7 +135,7 @@ QPointF Beam::canvasPos() const
       {
       QPointF p(pagePos());
       if (system() && system()->parent())
-            p += system()->parent()->pos();
+            p += system()->parent()->posWithUserOffset();
       return p;
       }
 
@@ -534,7 +534,7 @@ void Beam::layout()
             qreal lw2      = score()->styleP(Sid::beamWidth) * .5 * mag();
 //            ChordRest* cr  = crl.front();
 //            Shape& s       = cr->segment()->shape(staffIdx());
-//            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
+//            QPointF offset = cr->posWithUserOffset() + cr->segment()->posWithUserOffset() + cr->segment()->measure()->posWithUserOffset();
 
             for (const QLineF* bs : beamSegments) {
                   QPolygonF a(4);

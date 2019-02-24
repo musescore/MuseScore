@@ -112,7 +112,7 @@ void ChordLine::layout()
       qreal _spatium = spatium();
       if (parent()) {
             Note* note = chord()->upNote();
-            QPointF p(note->pos());
+            QPointF p(note->posWithUserOffset());
             // chordlines to the right of the note
             if (_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT)
                   setPos(p.x() + note->bboxRightPos() + _spatium * .2, p.y());

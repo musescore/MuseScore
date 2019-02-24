@@ -368,7 +368,7 @@ QColor Element::curColor(bool isVisible, QColor normalColor) const
 
 QPointF Element::pagePos() const
       {
-      QPointF p(pos());
+      QPointF p(posWithUserOffset());
       if (parent() == 0)
             return p;
 
@@ -411,7 +411,7 @@ QPointF Element::pagePos() const
 
 QPointF Element::canvasPos() const
       {
-      QPointF p(pos());
+      QPointF p(posWithUserOffset());
       if (parent() == nullptr)
             return p;
 
@@ -785,7 +785,7 @@ Compound::Compound(const Compound& c)
 void Compound::draw(QPainter* painter) const
       {
       foreach(Element* e, elements) {
-            QPointF pt(e->pos());
+            QPointF pt(e->posWithUserOffset());
             painter->translate(pt);
             e->draw(painter);
             painter->translate(-pt);
@@ -817,7 +817,7 @@ void Compound::layout()
       for (auto i = elements.begin(); i != elements.end(); ++i) {
             Element* e = *i;
             e->layout();
-            addbbox(e->bbox().translated(e->pos()));
+            addbbox(e->bbox().translated(e->posWithUserOffset()));
             }
       }
 
@@ -867,7 +867,7 @@ void Element::dump() const
          "\n   bbox(%g,%g,%g,%g)"
          "\n   abox(%g,%g,%g,%g)"
          "\n  parent: %p",
-         name(), ipos().x(), ipos().y(),
+         name(), pos().x(), pos().y(),
          _bbox.x(), _bbox.y(), _bbox.width(), _bbox.height(),
          abbox().x(), abbox().y(), abbox().width(), abbox().height(),
          parent());
@@ -2135,7 +2135,7 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                   }
 
             SysStaff* ss = m->system()->staff(si);
-            QRectF r = bbox().translated(m->pos() + s->pos() + pos());
+            QRectF r = bbox().translated(m->posWithUserOffset() + s->posWithUserOffset() + posWithUserOffset());
 
             SkylineLine sk(!placeAbove());
             qreal d;
@@ -2170,7 +2170,7 @@ void Element::autoplaceMeasureElement(qreal minDistance)
             int si     = staffIdx();
 
             SysStaff* ss = m->system()->staff(si);
-            QRectF r = bbox().translated(m->pos() + pos());
+            QRectF r = bbox().translated(m->posWithUserOffset() + posWithUserOffset());
 
             SkylineLine sk(!placeAbove());
             qreal d;

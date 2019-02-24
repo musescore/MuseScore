@@ -279,7 +279,7 @@ void Lyrics::layout()
             }
       QPointF o(propertyDefault(Pid::OFFSET).toPointF());
       rxpos() = o.x();
-      qreal x = pos().x();
+      qreal x = posWithUserOffset().x();
       TextBase::layout1();
 
       ChordRest* cr = chordRest();

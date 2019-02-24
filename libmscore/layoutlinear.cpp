@@ -488,12 +488,12 @@ void LayoutContext::layoutLinear()
             }
       page->setPos(0, 0);
       system->setPos(page->lm(), page->tm() + score->styleP(Sid::staffUpperBorder));
-      page->setWidth(system->width() + system->pos().x());
+      page->setWidth(system->width() + system->posWithUserOffset().x());
       // Set buffer space after the last system to avoid problems with mouse input.
       // Mouse input divides space between systems equally (see Score::searchSystem),
       // hence the choice of the value.
       const qreal buffer = 0.5 * score->styleS(Sid::maxSystemDistance).val() * score->spatium();
-      page->setHeight(system->height() + system->pos().y() + buffer);
+      page->setHeight(system->height() + system->posWithUserOffset().y() + buffer);
       page->rebuildBspTree();
       }
 

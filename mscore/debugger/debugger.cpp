@@ -1863,8 +1863,8 @@ void ShowElementBase::setElement(Element* e)
 
       eb.track->setValue(e->track());
       eb.z->setValue(e->z());
-      eb.posx->setValue(e->ipos().x());
-      eb.posy->setValue(e->ipos().y());
+      eb.posx->setValue(e->pos().x());
+      eb.posy->setValue(e->pos().y());
       eb.cposx->setValue(e->pagePos().x());
       eb.cposy->setValue(e->pagePos().y());
       eb.offsetx->setValue(e->offset().x());

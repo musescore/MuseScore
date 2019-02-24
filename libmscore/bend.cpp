@@ -89,7 +89,7 @@ void Bend::layout()
             notePos = QPointF();
             }
       else {
-            notePos   = note->pos();
+            notePos   = note->posWithUserOffset();
             noteWidth = note->width();
             }
       QRectF bb;

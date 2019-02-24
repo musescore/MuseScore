@@ -378,8 +378,8 @@ void Ambitus::layout()
       // if top accidental extends down more than bottom accidental extends up,
       // AND ambitus is not leaning right, bottom accidental needs to be displaced
       bool collision =
-            (_topAccid.ipos().y() + _topAccid.bbox().y() + _topAccid.height()
-                   > _bottomAccid.ipos().y() + _bottomAccid.bbox().y() )
+            (_topAccid.pos().y() + _topAccid.bbox().y() + _topAccid.height()
+                   > _bottomAccid.pos().y() + _bottomAccid.bbox().y() )
             && _dir != MScore::DirectionH::RIGHT;
       if (collision) {
             // displace bottom accidental (also attempting to 'undercut' flats)
@@ -432,8 +432,8 @@ void Ambitus::layout()
 
       QRectF headRect = QRectF(0, -0.5*_spatium, headWdt, 1*_spatium);
       setbbox(headRect.translated(_topPos).united(headRect.translated(_bottomPos))
-            .united(_topAccid.bbox().translated(_topAccid.ipos()))
-            .united(_bottomAccid.bbox().translated(_bottomAccid.ipos()))
+            .united(_topAccid.bbox().translated(_topAccid.pos()))
+            .united(_bottomAccid.bbox().translated(_bottomAccid.pos()))
             );
       }
 
@@ -531,7 +531,7 @@ qreal Ambitus::headWidth() const
 QPointF Ambitus::pagePos() const
       {
       if (parent() == 0)
-            return pos();
+            return posWithUserOffset();
       System* system = segment()->measure()->system();
       qreal yp = y();
       if (system)

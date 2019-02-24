@@ -543,7 +543,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                         }
                   }
             else if (e->isBarLine()) {
-//                  if (pos.numerator() == 0 && m) {
+//                  if (posWithUserOffset.numerator() == 0 && m) {
 //                        BarLineType t = toBarLine(e)->barLineType();
 //                        Measure* pm = m->prevMeasure();
 //TODO                        if (pm)

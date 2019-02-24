@@ -226,7 +226,7 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
             case SpannerSegmentType::MIDDLE: {
                   Measure* firstMeasure = system->firstMeasure();
                   Segment* firstCRSeg   = firstMeasure->first(SegmentType::ChordRest);
-                  qreal x1              = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeasure->pos().x();
+                  qreal x1              = (firstCRSeg ? firstCRSeg->posWithUserOffset().x() : 0) + firstMeasure->posWithUserOffset().x();
                   qreal x2              = system->bbox().right();
                   System* s;
                   QPointF p1 = linePos(Grip::START, &s);
@@ -247,7 +247,7 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
                         if (e)
                               offset = e->width();
                         }
-                  qreal x1  = (firstCRSeg ? firstCRSeg->pos().x() : 0) + firstMeas->pos().x() + offset;
+                  qreal x1  = (firstCRSeg ? firstCRSeg->posWithUserOffset().x() : 0) + firstMeas->posWithUserOffset().x() + offset;
                   qreal len = p2.x() - x1;
                   lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
                   lineSegm->setPos2(QPointF(len, 0.0));
@@ -360,9 +360,9 @@ void LyricsLineSegment::layout()
                   qreal lyrX        = lyr->bbox().x();
                   qreal lyrXp       = lyr->pagePos().x();
                   qreal sysXp       = sys->pagePos().x();
-                  toX               = lyrXp - sysXp + lyrX;       // syst.rel. X pos.
-                  qreal offsetX     = toX - pos().x() - pos2().x() - score()->styleP(Sid::lyricsDashPad);
-                  //                    delta from current end pos.| ending padding
+                  toX               = lyrXp - sysXp + lyrX;       // syst.rel. X posWithUserOffset.
+                  qreal offsetX     = toX - posWithUserOffset().x() - pos2().x() - score()->styleP(Sid::lyricsDashPad);
+                  //                    delta from current end posWithUserOffset.| ending padding
                   rxpos2()          += offsetX;
                   }
             }
@@ -375,29 +375,29 @@ void LyricsLineSegment::layout()
             qreal lyrW        = lyr->bbox().width();
             qreal sysXp       = sys->pagePos().x();
             fromX             = lyrXp - sysXp + lyrX + lyrW;
-            //               syst.rel. X pos. | lyr.advance
-            qreal offsetX     = fromX - pos().x();
+            //               syst.rel. X posWithUserOffset. | lyr.advance
+            qreal offsetX     = fromX - posWithUserOffset().x();
             offsetX           += score()->styleP(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
 
-            //               delta from curr.pos. | add initial padding
+            //               delta from curr.posWithUserOffset. | add initial padding
             rxpos()           += offsetX;
             rxpos2()          -= offsetX;
             }
 
       // VERTICAL POSITION: at the base line of the syllable text
       if (!isEndType()) {
-            rypos() = lyr->ipos().y();
+            rypos() = lyr->pos().y();
             ryoffset() = lyr->offset().y();
             }
       else {
             // use Y position of *next* syllable if there is one on same system
             Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
             if (nextLyr1 && nextLyr1->segment()->system() == system()) {
-                  rypos() = nextLyr1->ipos().y();
+                  rypos() = nextLyr1->pos().y();
                   ryoffset() = nextLyr1->offset().y();
                   }
             else {
-                  rypos() = lyr->ipos().y();
+                  rypos() = lyr->pos().y();
                   ryoffset() = lyr->offset().y();
                   }
             }

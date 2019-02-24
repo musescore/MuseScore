@@ -1129,7 +1129,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   if (!score()->printing()) {
                         if (MScore::showSystemBoundingRect) {
                               for (const System* system : page->systems()) {
-                                    QPointF pt(system->ipos());
+                                    QPointF pt(system->pos());
                                     qreal h = system->minBottom() + system->minTop();
                                     p.translate(pt);
                                     QRectF rect(0.0, -system->minTop(), system->width(), h);
@@ -1160,7 +1160,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                         if (MScore::showSkylines) {
                               for (const System* system : page->systems()) {
                                     for (SysStaff* ss : *system->staves()) {
-                                          QPointF pt(system->ipos().x(), system->ipos().y() + ss->y());
+                                          QPointF pt(system->pos().x(), system->pos().y() + ss->y());
                                           p.translate(pt);
                                           ss->skyline().paint(p);
                                           p.translate(-pt);

@@ -708,7 +708,7 @@ void Harmony::startEdit(EditData& ed)
       if (!textList.empty()) {
             setXmlText(harmonyName());
             // force layout, but restore original position
-            QPointF p = ipos();
+            QPointF p = pos();
             layout();
             setPos(p);
             }
@@ -728,7 +728,7 @@ bool Harmony::edit(EditData& ed)
       setHarmony(plainText());
 
       // force layout, but restore original position
-      QPointF p = ipos();
+      QPointF p = pos();
       layout();
       setPos(p);
 

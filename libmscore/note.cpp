@@ -2038,7 +2038,7 @@ void Note::layout2()
       if (dots) {
             qreal d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
             qreal dd = score()->point(score()->styleS(Sid::dotDotDistance)) * mag();
-            qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
+            qreal x  = chord()->dotPosX() - posWithUserOffset().x() - chord()->posWithUserOffset().x();
             // if TAB and stems through staff
             if (staff()->isTabStaff(chord()->tick())) {
                   const Staff* st = staff();
@@ -3178,12 +3178,12 @@ Shape Note::shape() const
 #else
       Shape shape(r);
       for (NoteDot* dot : _dots)
-            shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
+            shape.add(symBbox(SymId::augmentationDot).translated(dot->posWithUserOffset()));
       if (_accidental)
-            shape.add(_accidental->bbox().translated(_accidental->pos()));
+            shape.add(_accidental->bbox().translated(_accidental->posWithUserOffset()));
       for (auto e : _el) {
             if (e->autoplace() && e->visible())
-                  shape.add(e->bbox().translated(e->pos()));
+                  shape.add(e->bbox().translated(e->posWithUserOffset()));
             }
 #endif
       return shape;

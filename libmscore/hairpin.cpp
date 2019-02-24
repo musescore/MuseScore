@@ -98,13 +98,13 @@ void HairpinSegment::layout()
                   if (start && start->system() == sys)
                         sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
                   if (sd && sd->visible() && sd->autoplace() && sd->placement() == hairpin()->placement()) {
-                        const qreal sdRight = sd->bbox().right() + sd->pos().x()
-                                              + sd->segment()->pos().x() + sd->measure()->pos().x();
-                        const qreal dist    = sdRight - pos().x() + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
+                        const qreal sdRight = sd->bbox().right() + sd->posWithUserOffset().x()
+                                              + sd->segment()->posWithUserOffset().x() + sd->measure()->posWithUserOffset().x();
+                        const qreal dist    = sdRight - posWithUserOffset().x() + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
                         rxpos()  += dist;
                         rxpos2() -= dist;
                         // prepare to align vertically
-                        dymax = sd->pos().y();
+                        dymax = sd->posWithUserOffset().y();
                         }
                   }
             if (isSingleType() || isEndType()) {
@@ -115,16 +115,16 @@ void HairpinSegment::layout()
                         ed = toDynamic(end->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
                         }
                   if (ed && ed->visible() && ed->autoplace() && ed->placement() == hairpin()->placement()) {
-                        const qreal edLeft  = ed->bbox().left() + ed->pos().x()
-                                              + ed->segment()->pos().x() + ed->measure()->pos().x();
-                        const qreal dist    = edLeft - pos2().x() - pos().x() - score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
+                        const qreal edLeft  = ed->bbox().left() + ed->posWithUserOffset().x()
+                                              + ed->segment()->posWithUserOffset().x() + ed->measure()->posWithUserOffset().x();
+                        const qreal dist    = edLeft - pos2().x() - posWithUserOffset().x() - score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
                         if (dist < 0.0 || dist >= 3.0 * _spatium)
                               rxpos2() += dist;
                         // prepare to align vertically
                         if (hairpin()->placeBelow())
-                              dymax = qMax(dymax, ed->pos().y());
+                              dymax = qMax(dymax, ed->posWithUserOffset().y());
                         else
-                              dymax = qMin(dymax, ed->pos().y());
+                              dymax = qMin(dymax, ed->posWithUserOffset().y());
                         }
                   }
             }
@@ -238,12 +238,12 @@ void HairpinSegment::layout()
             roffset() = hairpin()->propertyDefault(Pid::OFFSET).toPointF();
       if (autoplace()) {
             qreal minDistance = spatium() * .7;
-            qreal ymax = pos().y();
+            qreal ymax = posWithUserOffset().y();
             qreal d;
             qreal ddiff = hairpin()->isLineType() ? 0.0 : _spatium * 0.5;
 
             SkylineLine sl(!hairpin()->placeAbove());
-            sl.add(shape().translated(pos()));
+            sl.add(shape().translated(posWithUserOffset()));
             if (hairpin()->placeAbove()) {
                   d  = system()->topDistance(staffIdx(), sl);
                   if (d > -minDistance)
@@ -259,39 +259,39 @@ void HairpinSegment::layout()
                   if (!hairpin()->diagonal())
                         ymax = qMax(ymax, dymax - ddiff);
                   }
-            rypos() += ymax - pos().y();
+            rypos() += ymax - posWithUserOffset().y();
 
             if (hairpin()->visible() && !hairpin()->diagonal()) {
                   // align dynamics with hairpin
                   if (sd && sd->autoplace() && sd->placement() == hairpin()->placement()) {
                         qreal ny = y() + ddiff - sd->offset().y();
                         if (sd->placeAbove())
-                              ny = qMin(ny, sd->ipos().y());
+                              ny = qMin(ny, sd->pos().y());
                         else
-                              ny = qMax(ny, sd->ipos().y());
-                        if (sd->ipos().y() != ny) {
+                              ny = qMax(ny, sd->pos().y());
+                        if (sd->pos().y() != ny) {
                               sd->rypos() = ny;
                               Segment* s = sd->segment();
                               Measure* m = s->measure();
-                              QRectF r = sd->bbox().translated(sd->pos());
+                              QRectF r = sd->bbox().translated(sd->posWithUserOffset());
                               s->staffShape(sd->staffIdx()).add(r);
-                              r = sd->bbox().translated(sd->pos() + s->pos() + m->pos());
+                              r = sd->bbox().translated(sd->posWithUserOffset() + s->posWithUserOffset() + m->posWithUserOffset());
                               m->system()->staff(sd->staffIdx())->skyline().add(r);
                               }
                         }
                   if (ed && ed->autoplace() && visible() && ed->placement() == hairpin()->placement()) {
                         qreal ny = y() + ddiff - ed->offset().y();
                         if (ed->placeAbove())
-                              ny = qMin(ny, ed->ipos().y());
+                              ny = qMin(ny, ed->pos().y());
                         else
-                              ny = qMax(ny, ed->ipos().y());
-                        if (ed->ipos().y() != ny) {
+                              ny = qMax(ny, ed->pos().y());
+                        if (ed->pos().y() != ny) {
                               ed->rypos() = ny;
                               Segment* s = ed->segment();
                               Measure* m = s->measure();
-                              QRectF r = ed->bbox().translated(ed->pos());
+                              QRectF r = ed->bbox().translated(ed->posWithUserOffset());
                               s->staffShape(ed->staffIdx()).add(r);
-                              r = ed->bbox().translated(ed->pos() + s->pos() + m->pos());
+                              r = ed->bbox().translated(ed->posWithUserOffset() + s->posWithUserOffset() + m->posWithUserOffset());
                               m->system()->staff(ed->staffIdx())->skyline().add(r);
                               }
                         }
