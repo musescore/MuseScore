@@ -94,10 +94,10 @@ include (CreatePrecompiledHeader)
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(CMAKE_AUTOMOC     TRUE)
-set(MSCORE_UNSTABLE   TRUE)          # Mark as unstable
-set(MSCORE_RELEASE_CHANNEL "devel")
+set(MSCORE_UNSTABLE   FALSE)          # Mark as unstable
+#set(MSCORE_RELEASE_CHANNEL "devel")
 #set(MSCORE_RELEASE_CHANNEL "testing")
-#set(MSCORE_RELEASE_CHANNEL "stable")
+set(MSCORE_RELEASE_CHANNEL "stable")
 set(USE_SSE           TRUE)
 
 # Disable components not supported on Windows
@@ -148,7 +148,7 @@ option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
-option(BUILD_CRASH_REPORTER "Build with crash reporter" OFF)
+option(BUILD_CRASH_REPORTER "Build with crash reporter" ON)
 set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to send crash reports (valid if BUILD_CRASH_REPORTER is set to ON)")
 
 if (APPLE)
