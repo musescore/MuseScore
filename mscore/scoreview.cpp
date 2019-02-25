@@ -2821,6 +2821,14 @@ void ScoreView::pageNext()
                   x = -lx;
             setOffset(x, yoffset());
             }
+      else if (score()->layoutMode() == LayoutMode::SYSTEM) {
+            qreal y { yoffset() - height() * .8 };
+            MeasureBase* lm { score()->last() };
+            qreal ly { (lm->canvasPos().y() + lm->height()) * mag() - height() * .8 };
+            if (y < -ly)
+                  y = -ly;
+            setOffset(xoffset(), y);
+            }
       else {
             Page* page = score()->pages().back();
             qreal x, y;
@@ -2856,6 +2864,12 @@ void ScoreView::pagePrev()
             if (x > 10.0)
                   x = 10.0;
             setOffset(x, yoffset());
+            }
+      else if (score()->layoutMode() == LayoutMode::SYSTEM) {
+            qreal y { yoffset() + height() * .8 };
+            if (y > 10.0)
+                  y = 10.0;
+            setOffset(xoffset(), y);
             }
       else {
             Page* page = score()->pages().front();
@@ -2905,6 +2919,11 @@ void ScoreView::pageEnd()
                   lm = lm->prev();
             qreal lx = (lm->pos().x() + lm->width()) * mag() - width() * .8;
             setOffset(-lx, yoffset());
+            }
+      else if (score()->layoutMode() == LayoutMode::SYSTEM) {
+            MeasureBase* lm { score()->last() };
+            qreal ly { (lm->canvasPos().y() + lm->height()) * mag() - height() * .8 };
+            setOffset(xoffset(), -ly);
             }
       else {
             Page* lastPage = score()->pages().back();
