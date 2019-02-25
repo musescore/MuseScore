@@ -165,7 +165,7 @@ void TrillSegment::layout()
       else
             symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
 
-      autoplaceSpannerSegment(spatium() * 1.0);
+      autoplaceSpannerSegment(styleP(Sid::trillMinDistance));
       }
 
 //---------------------------------------------------------

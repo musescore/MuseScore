@@ -1897,7 +1897,7 @@ void Segment::createShape(int staffIdx)
             int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
             if (effectiveTrack >= strack && effectiveTrack < etrack) {
                   setVisible(true);
-                  if (e->autoplace())
+                  if (e->addToSkyline())
                         s.add(e->shape().translated(e->pos()));
                   }
             }
@@ -1906,7 +1906,7 @@ void Segment::createShape(int staffIdx)
             if (!e || e->staffIdx() != staffIdx)
                   continue;
             setVisible(true);
-            if (!e->autoplace())
+            if (!e->addToSkyline())
                   continue;
 
             if (e->isHarmony()) {

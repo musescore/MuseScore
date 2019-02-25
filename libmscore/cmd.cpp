@@ -3562,6 +3562,39 @@ void Score::cmdRelayout()
       }
 
 //---------------------------------------------------------
+//   cmdToggleAutoplace
+//---------------------------------------------------------
+
+void Score::cmdToggleAutoplace(bool all)
+      {
+      if (all) {
+            bool val = !styleB(Sid::autoplaceEnabled);
+            undoChangeStyleVal(Sid::autoplaceEnabled, val);
+            setLayoutAll();
+            }
+      else {
+            QSet<Element*> spanners;
+            for (Element* e : selection().elements()) {
+                  if (e->isSpannerSegment()) {
+                        if (Element* ee = e->propertyDelegate(Pid::AUTOPLACE))
+                              e = ee;
+                        // spanner segments may each have their own autoplace setting
+                        // but if they delegate to spanner, only toggle once
+                        if (e->isSpanner()) {
+                              if (spanners.contains(e))
+                                    continue;
+                              spanners.insert(e);
+                              }
+                        }
+                  PropertyFlags pf = e->propertyFlags(Pid::AUTOPLACE);
+                  if (pf == PropertyFlags::STYLED)
+                        pf = PropertyFlags::UNSTYLED;
+                  e->undoChangeProperty(Pid::AUTOPLACE, !e->getProperty(Pid::AUTOPLACE).toBool(), pf);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
 
@@ -3718,6 +3751,8 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "page-break",                 [this]{ cmdToggleLayoutBreak(LayoutBreak::Type::PAGE);              }},
             { "section-break",              [this]{ cmdToggleLayoutBreak(LayoutBreak::Type::SECTION);           }},
             { "relayout",                   [this]{ cmdRelayout();                                              }},
+            { "toggle-autoplace",           [this]{ cmdToggleAutoplace(false);                                  }},
+            { "autoplace-enabled",          [this]{ cmdToggleAutoplace(true);                                   }},
             { "",                           [this]{                                                             }},
             };
 

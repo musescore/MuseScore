@@ -1196,9 +1196,9 @@ Shape ChordRest::shape() const
       qreal x2 = -1000000.0;
       bool adjustWidth = false;
       for (Lyrics* l : _lyrics) {
-            if (!l || !l->visible() || !l->autoplace())
+            if (!l || !l->addToSkyline())
                   continue;
-            qreal lmargin = styleP(Sid::lyricsMinDistance) * .5;
+            qreal lmargin = score()->styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
             qreal rmargin = lmargin;
             Lyrics::Syllabic syl = l->syllabic();
             if ((syl == Lyrics::Syllabic::BEGIN || syl == Lyrics::Syllabic::MIDDLE) && score()->styleB(Sid::lyricsDashForce))
@@ -1219,7 +1219,7 @@ Shape ChordRest::shape() const
       qreal x2 = -1000000.0;
       bool adjustWidth = false;
       for (Element* e : segment()->annotations()) {
-            if (!e || !e->visible() || !e->autoplace())
+            if (!e || !e->addToSkyline())
                   continue;
             if (e->isHarmony() && e->staffIdx() == staffIdx()) {
                   Harmony* h = toHarmony(e);

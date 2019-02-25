@@ -143,7 +143,8 @@ void Fingering::layout()
                                     Note* un = chord->upNote();
                                     top = qMin(0.0, un->y() + un->bbox().top());
                                     }
-                              top -= spatium() * 0.5;
+                              qreal minDistance = score()->styleS(Sid::fingeringMinDistance).val() * spatium();
+                              top -= minDistance;
                               qreal diff = (bbox().bottom() + ipos().y() + n->y()) - top;
                               if (diff > 0.0)
                                     rypos() -= diff;
@@ -171,7 +172,8 @@ void Fingering::layout()
                                     Note* dn = chord->downNote();
                                     bottom = qMax(vStaff->height(), dn->y() + dn->bbox().bottom());
                                     }
-                              bottom += spatium() * 0.5;
+                              qreal minDistance = score()->styleS(Sid::fingeringMinDistance).val() * spatium();
+                              bottom += minDistance;
                               qreal diff = bottom - (bbox().top() + ipos().y() + n->y());
                               if (diff > 0.0)
                                     rypos() += diff;
