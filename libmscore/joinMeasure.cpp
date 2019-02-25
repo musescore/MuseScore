@@ -25,8 +25,12 @@ namespace Ms {
 
 void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
       {
-      if (!m2)
+      if (!m1 || !m2)
             return;
+      if (m1->isMMRest())
+            m1 = m1->mmRestFirst();
+      if (m2->isMMRest())
+            m2 = m2->mmRestLast();
       startCmd();
 
       deselectAll();
