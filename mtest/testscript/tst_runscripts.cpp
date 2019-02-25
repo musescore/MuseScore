@@ -63,9 +63,9 @@ void TestScripts::runTestScripts()
       QStringList args({ "--run-test-script" });
       args << scripts;
 
-      if (!QFileInfo(MSCORE_EXECUTABLE).exists())
-            qFatal("Cannot find executable: %s", MSCORE_EXECUTABLE);
-      QVERIFY(QProcess::execute(MSCORE_EXECUTABLE, args) == 0);
+      if (!QFileInfo(MSCORE_EXECUTABLE_PATH).exists())
+            qFatal("Cannot find executable: %s", MSCORE_EXECUTABLE_PATH);
+      QVERIFY(QProcess::execute(MSCORE_EXECUTABLE_PATH, args) == 0);
       }
 
 QTEST_MAIN(TestScripts)

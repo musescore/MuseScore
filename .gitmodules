@@ -1,0 +1,3 @@
+[submodule "thirdparty/libcrashreporter-qt"]
+	path = thirdparty/libcrashreporter-qt
+	url = https://github.com/dmitrio95/libcrashreporter-qt.git
