@@ -148,6 +148,8 @@ option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(COVERAGE "Build with instrumentation to record code coverage." OFF)
 option(BUILD_64 "Build 64 bit version of editor" ON)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
+option(BUILD_CRASH_REPORTER "Build with crash reporter" ON)
+set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to send crash reports (valid if BUILD_CRASH_REPORTER is set to ON)")
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
@@ -615,14 +617,6 @@ else(USE_SYSTEM_QTSINGLEAPPLICATION)
       set(QTSINGLEAPPLICATION_LIBRARIES qtsingleapp)
 endif(USE_SYSTEM_QTSINGLEAPPLICATION)
 
-##
-## produce config.h file
-##
-configure_file (
-      ${PROJECT_SOURCE_DIR}/build/config.h.in
-      ${PROJECT_BINARY_DIR}/config.h
-      )
-
 if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     #### PACKAGING for Linux and BSD based systems (more in mscore/CMakeLists.txt) ####
     #
@@ -749,10 +743,15 @@ endif (NOT MSVC)
 ## Add subdirs
 ##
 subdirs(
-      mscore awl bww2mxml share midi audiofile fluid libmscore synthesizer
+      awl bww2mxml share midi audiofile fluid libmscore synthesizer
       effects thirdparty/rtf2html thirdparty/beatroot
       thirdparty/qzip thirdparty/kQOAuth
       )
+
+if (BUILD_CRASH_REPORTER)
+      set(ENABLE_CRASH_REPORTER OFF CACHE BOOL "Disable libcrashreporter-qt GUI component")
+      add_subdirectory(thirdparty/libcrashreporter-qt)
+endif (BUILD_CRASH_REPORTER)
 
 string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 if (APPLE AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
@@ -827,6 +826,24 @@ if (OMR)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler)
    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/poppler/poppler)
 endif (OMR)
+
+add_subdirectory(mscore)
+
+if (BUILD_CRASH_REPORTER)
+      set (CRASHREPORTER_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}-crash-reporter")
+      add_subdirectory(crashreporter)
+      add_dependencies(mscore mscore-crash-reporter)
+      set (CRASHREPORTER_EXECUTABLE "${CRASHREPORTER_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
+      set (MSCORE_EXECUTABLE "${MSCORE_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
+endif (BUILD_CRASH_REPORTER)
+
+##
+## produce config.h file
+##
+configure_file (
+      ${PROJECT_SOURCE_DIR}/build/config.h.in
+      ${PROJECT_BINARY_DIR}/config.h
+      )
 
 ##
 ##  Include packaging

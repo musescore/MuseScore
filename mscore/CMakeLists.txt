@@ -503,6 +503,10 @@ target_link_libraries(mscore
       kqoauth
       )
 
+if (BUILD_CRASH_REPORTER)
+      target_link_libraries(mscore crashreporter-handler)
+endif (BUILD_CRASH_REPORTER)
+
 add_dependencies(mscore workspaces)
 
 if (USE_SYSTEM_FREETYPE)
@@ -1079,3 +1083,11 @@ endif (NOT MSVC)
 
 target_link_libraries (inspectorplugin ${QT_LIBRARIES})
 set_target_properties(inspectorplugin PROPERTIES EXCLUDE_FROM_ALL 1)
+
+if (MSCORE_OUTPUT_NAME)
+      set (MSCORE_EXECUTABLE_NAME ${MSCORE_OUTPUT_NAME})
+else (MSCORE_OUTPUT_NAME)
+      set (MSCORE_EXECUTABLE_NAME ${ExecutableName})
+endif (MSCORE_OUTPUT_NAME)
+# Export the executable name to the global context
+set (MSCORE_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}" PARENT_SCOPE)

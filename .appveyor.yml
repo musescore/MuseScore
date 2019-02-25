@@ -39,6 +39,8 @@ matrix:
   #allow_failures: # list jobs allowed to fail without stopping the rest
 
 install:
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - git submodule update --init --recursive
   - IF DEFINED ENCRYPT_SECRET_SSH (
     nuget install secure-file -ExcludeVersion &&
     secure-file\tools\secure-file -decrypt C:\MuseScore\build\appveyor\resources\osuosl_nighlies_rsa_nopp.enc -secret %ENCRYPT_SECRET_SSH%
@@ -61,6 +63,8 @@ after_build:
 artifacts:
   - path: $(ARTIFACT_NAME)
     name: musescore-binary
+  - path: $(DEBUG_SYMS_FILE)
+    name: musescore-dbg-info.sym
   - path: update_win_nightly.xml
     name: update_win_nightly.xml
   - path: appcast.xml

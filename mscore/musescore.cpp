@@ -150,7 +150,15 @@ extern Ms::Synthesizer* createZerberus();
 //      Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
 #endif
 
+#ifdef BUILD_CRASH_REPORTER
+#include "thirdparty/libcrashreporter-qt/src/libcrashreporter-handler/Handler.h"
+#endif
+
 namespace Ms {
+
+#ifdef BUILD_CRASH_REPORTER
+static std::unique_ptr<CrashReporter::Handler> crashHandler;
+#endif
 
 MuseScore* mscore;
 MasterSynthesizer* synti;
@@ -7515,6 +7523,13 @@ int main(int argc, char* av[])
             mscore->showSynthControl(true);
       if (settings.value("mixerVisible", false).toBool())
             mscore->showMixer(true);
+
+#ifdef BUILD_CRASH_REPORTER
+      static_assert(sizeof(CRASHREPORTER_EXECUTABLE) > 1,
+         "CRASHREPORTER_EXECUTABLE should be defined to build with crash reporter"
+         );
+      crashHandler.reset(new CrashReporter::Handler(QDir::tempPath(), true, CRASHREPORTER_EXECUTABLE));
+#endif
 
       return qApp->exec();
       }
