@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CrashReporter</class>
+ <widget class="QWidget" name="CrashReporter">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MuseScore Crash Reporter</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0" colspan="3">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Unfortunately MuseScore has crashed. Would you like to send a report to make it possible for us to fix the problem?</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QPlainTextEdit" name="commentText">
+     <property name="toolTip">
+      <string>Describe your actions when the crash occurred (optional)</string>
+     </property>
+     <property name="accessibleName">
+      <string>Detailed crash info</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QPushButton" name="sendReportButton">
+     <property name="text">
+      <string>Send report</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Please describe your actions when the crash occurred (optional):</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="buddy">
+      <cstring>commentText</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QPushButton" name="cancelButton">
+     <property name="text">
+      <string>Cancel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3">
+    <widget class="QCheckBox" name="restartCheckBox">
+     <property name="toolTip">
+      <string>Restart MuseScore after this report is sent</string>
+     </property>
+     <property name="text">
+      <string>Restart MuseScore</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>commentText</tabstop>
+  <tabstop>restartCheckBox</tabstop>
+  <tabstop>sendReportButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
