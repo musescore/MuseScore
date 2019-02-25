@@ -174,7 +174,7 @@ void Marker::layout()
       if (layoutToParentWidth() && !(align() & (Align::RIGHT | Align::HCENTER)))
             rxpos() -= width() * 0.5;
 
-      autoplaceMeasureElement(0.5 * spatium());
+      autoplaceMeasureElement(styleP(Sid::repeatMinDistance));
       }
 
 //---------------------------------------------------------

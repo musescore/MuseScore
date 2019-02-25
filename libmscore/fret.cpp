@@ -20,6 +20,7 @@
 #include "segment.h"
 #include "mscore.h"
 #include "harmony.h"
+#include "staff.h"
 
 namespace Ms {
 
@@ -385,7 +386,7 @@ void FretDiagram::layout()
       autoplaceSegmentElement(minDistance);
       if (_harmony)
             _harmony->layout();
-      if (_harmony && _harmony->visible() && _harmony->autoplace() && _harmony->parent()) {
+      if (_harmony && _harmony->autoplace() && _harmony->parent()) {
             Segment* s = toSegment(parent());
             Measure* m = s->measure();
             int si     = staffIdx();
@@ -396,13 +397,15 @@ void FretDiagram::layout()
             SkylineLine sk(false);
             sk.add(r.x(), r.bottom(), r.width());
             qreal d = sk.minDistance(ss->skyline().north());
+            minDistance *= staff()->mag(tick());
             if (d > -minDistance) {
                   qreal yd = d + minDistance;
                   yd *= -1.0;
                   _harmony->rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
-            ss->skyline().add(r);
+            if (_harmony->addToSkyline())
+                  ss->skyline().add(r);
             }
       }
 

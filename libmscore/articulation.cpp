@@ -426,11 +426,11 @@ const char* Articulation::symId2ArticulationName(SymId symId)
             case SymId::articStaccatoAbove:
             case SymId::articStaccatoBelow:
                   return "staccato";
-                  
+
             case SymId::articAccentStaccatoAbove:
             case SymId::articAccentStaccatoBelow:
                   return "sforzatoStaccato";
-                  
+
             case SymId::articMarcatoStaccatoAbove:
             case SymId::articMarcatoStaccatoBelow:
                   return "marcatoStaccato";
@@ -442,7 +442,7 @@ const char* Articulation::symId2ArticulationName(SymId symId)
             case SymId::articMarcatoTenutoAbove:
             case SymId::articMarcatoTenutoBelow:
                   return "marcatoTenuto";
-                  
+
             case SymId::articTenutoAbove:
             case SymId::articTenutoBelow:
                   return "tenuto";
@@ -591,8 +591,8 @@ QString Articulation::accessibleInfo() const
 
 void Articulation::doAutoplace()
       {
-      qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
-      if (autoplace() && visible() && parent()) {
+      qreal minDistance = score()->styleS(Sid::articulationMinDistance).val() * spatium();
+      if (autoplace() && parent()) {
             Segment* s = segment();
             Measure* m = measure();
             int si     = staffIdx();

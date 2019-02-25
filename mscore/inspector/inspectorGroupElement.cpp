@@ -32,6 +32,8 @@ InspectorGroupElement::InspectorGroupElement(QWidget* parent)
       connect(ge.setColor, SIGNAL(clicked()), SLOT(setColor()));
       connect(ge.setVisible, SIGNAL(clicked()), SLOT(setVisible()));
       connect(ge.setInvisible, SIGNAL(clicked()), SLOT(setInvisible()));
+      connect(ge.enableAutoplace, SIGNAL(clicked()), SLOT(enableAutoplace()));
+      connect(ge.disableAutoplace, SIGNAL(clicked()), SLOT(disableAutoplace()));
 
       //
       // Select
@@ -119,6 +121,40 @@ void InspectorGroupElement::setInvisible()
       for (Element* e : *inspector->el()) {
             if (e->getProperty(Pid::VISIBLE).toBool())
                   e->undoChangeProperty(Pid::VISIBLE, false);
+            }
+      score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   enableAutoplace
+//---------------------------------------------------------
+
+void InspectorGroupElement::enableAutoplace()
+      {
+      if (inspector->el()->isEmpty())
+            return;
+      Score* score = inspector->el()->front()->score();
+      score->startCmd();
+      for (Element* e : *inspector->el()) {
+            if (!e->getProperty(Pid::AUTOPLACE).toBool())
+                  e->undoChangeProperty(Pid::AUTOPLACE, true);
+            }
+      score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   disableAutoplace
+//---------------------------------------------------------
+
+void InspectorGroupElement::disableAutoplace()
+      {
+      if (inspector->el()->isEmpty())
+            return;
+      Score* score = inspector->el()->front()->score();
+      score->startCmd();
+      for (Element* e : *inspector->el()) {
+            if (e->getProperty(Pid::AUTOPLACE).toBool())
+                  e->undoChangeProperty(Pid::AUTOPLACE, false);
             }
       score->endCmd();
       }

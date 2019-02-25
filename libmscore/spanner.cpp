@@ -858,6 +858,17 @@ void Spanner::setVisible(bool f)
       }
 
 //---------------------------------------------------------
+//   setAutoplace
+//---------------------------------------------------------
+
+void Spanner::setAutoplace(bool f)
+      {
+      for (SpannerSegment* ss : spannerSegments())
+            ss->Element::setAutoplace(f);
+      Element::setAutoplace(f);
+      }
+
+//---------------------------------------------------------
 //   setColor
 //---------------------------------------------------------
 
@@ -1341,7 +1352,9 @@ void SpannerSegment::autoplaceSpannerSegment(qreal minDistance)
       if (spanner()->anchor() == Spanner::Anchor::NOTE)
             return;
 
-      if (visible() && autoplace()) {
+      if (autoplace()) {
+            if (!systemFlag() && !spanner()->systemFlag())
+                  minDistance *= staff()->mag(spanner()->tick());
             SkylineLine sl(!spanner()->placeAbove());
             sl.add(shape().translated(pos()));
             if (spanner()->placeAbove()) {

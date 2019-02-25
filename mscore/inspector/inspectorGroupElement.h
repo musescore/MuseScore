@@ -34,6 +34,8 @@ class InspectorGroupElement : public InspectorBase {
       void setColor();
       void setVisible();
       void setInvisible();
+      void enableAutoplace();
+      void disableAutoplace();
       void notesClicked();
       void graceNotesClicked();
       void restsClicked();
