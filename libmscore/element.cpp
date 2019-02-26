@@ -1080,6 +1080,18 @@ Element* Element::name2Element(const QStringRef& s, Score* sc)
 
 bool elementLessThan(const Element* const e1, const Element* const e2)
       {
+      if (e1->z() == e2->z()) {
+            if (e1->selected())
+                  return false;
+            else if (e2->selected())
+                  return true;
+            else if (!e1->visible())
+                  return true;
+            else if (!e2->visible())
+                  return false;
+            else
+                  return e1->track() > e2->track();
+            }
       return e1->z() <= e2->z();
       }
 
