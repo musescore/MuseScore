@@ -2226,6 +2226,9 @@ void Timeline::wheelEvent(QWheelEvent* event)
 
 void Timeline::updateGrid()
       {
+      if (!isVisible())
+            return;
+
       if (_score && _score->firstMeasure()) {
             drawGrid(nstaves(), _score->nmeasures());
             updateView();
@@ -2299,6 +2302,9 @@ void Timeline::objectDestroyed(QObject* obj)
 
 void Timeline::updateView()
       {
+      if (!isVisible())
+            return;
+
       if (_cv && _score) {
             QRectF canvas = QRectF(_cv->matrix().inverted().mapRect(_cv->geometry()));
 
