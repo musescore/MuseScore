@@ -104,7 +104,9 @@ ScoreAccessibility::~ScoreAccessibility()
 void ScoreAccessibility::clearAccessibilityInfo()
       {
       statusBarLabel->setText("");
-      static_cast<MuseScore*>(mainWindow)->currentScoreView()->score()->setAccessibleInfo(tr("No selection"));
+      MuseScoreView* view = static_cast<MuseScore*>(mainWindow)->currentScoreView();
+      if (view)
+            view->score()->setAccessibleInfo(tr("No selection"));
       }
 
 void ScoreAccessibility::currentInfoChanged()
