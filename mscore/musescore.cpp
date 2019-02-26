@@ -2452,6 +2452,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             if (_drumTools)
                   _drumTools->hide();
             changeState(STATE_DISABLED);
+            ScoreAccessibility::instance()->clearAccessibilityInfo();
             return;
             }
 
