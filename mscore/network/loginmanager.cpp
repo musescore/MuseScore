@@ -313,6 +313,14 @@ void LoginManager::loginInteractive()
       profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
       profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));
 
+      //workaround for the crashes sometimes happend in Chromium on macOS with Qt 5.12
+      connect(webView, &QWebEngineView::renderProcessTerminated, this, [profile, webView](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
+              {
+              qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
+              profile->clearHttpCache();
+              webView->show();
+              });
+      
       connect(page, &QWebEnginePage::loadFinished, this, [this, page, webView](bool ok) {
             if (!ok)
                   return;
