@@ -214,7 +214,7 @@ if (BUILD_AUTOUPDATE STREQUAL "ON")
                    set_target_properties(winsparkledll PROPERTIES IMPORTED_IMPLIB ${WINSPARKLE_LIBRARY})
                    set(WIN_SPARKLE_ENABLED 1)
                    set(WIN_SPARKLE_APPCAST_URL "https://sparkle.musescore.org/${MSCORE_RELEASE_CHANNEL}/3/win/appcast${ARCH_TYPE}.xml")
-                   message("Win Sparkle Url: " ${WIN_SPARKLE_APPCAST_URL});
+                   message("Win Sparkle Url: " ${WIN_SPARKLE_APPCAST_URL})
              endif (NOT MSCORE_UNSTABLE)
       else (APPLE)
              message("Sparkle is not supported on your system.")
