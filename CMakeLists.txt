@@ -151,6 +151,11 @@ option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
 option(BUILD_CRASH_REPORTER "Build with crash reporter" ON)
 set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to send crash reports (valid if BUILD_CRASH_REPORTER is set to ON)")
 
+# temporarily switch off the crash reporter on macOS
+if (APPLE)
+      set (BUILD_CRASH_REPORTER OFF)
+endif (APPLE)
+
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
       set (CMAKE_CXX_COMPILER_ID "Clang")
