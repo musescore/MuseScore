@@ -209,7 +209,9 @@
     such as by moving tempo markings above other text or by shortening hairpins to avoid dynamics.
     In many cases, this means that no further adjustments will be required at all.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Automaattisijoitus sijoittaa useimmat elementit nuotinkirjoituksen käytäntöjen mukaan,
+    kuten siirtämällä tempomerkintöjä muun tekstin yläpuolelle tai lyhentämällä dynamiikkaviivoja väistämällä itse merkkejä.
+    Monissa tapauksissa tämä tarkoittaa, ettei mitään muita muutoksia vaadita lainkaan.</translation>
     </message>
     <message>
         <source>If necessary, you can fine-tune the position of elements by dragging, by using the cursor keys while in Edit mode (double-click),
@@ -224,7 +226,8 @@
         <source>For larger adjustments, it may be more convenient to disable autoplace for selected elements using the Inspector.
     This will remove them from collision detection and allow you to place them more freely.</source>
         <comment>autoplace-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Suuremmille muutoksille saattaa olla kätevämpää poistaa automaattisijoitus päältä valituilta elementeiltä käyttämällä tarkastajaa.
+    Tämä toiminto poistaa valitut elementit törmäyksen havaitsemisesta ja sallii sinun sijoittaa ne vapaammin.</translation>
     </message>
     <message>
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
@@ -295,21 +298,23 @@
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Luodaksesi triolin tai muun poikkeusjaon, valitse kesto, joka vastaa poikkeusjaon kokonaiskestoa, sen jälkeen paina Ctrl+numero tai käytä Luo / Tupletit.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Tiedostotoimintojen työkalupalkkissa voit luoda/tallentaa/avata/tulostaa tiedostoja ja kumota/tehdä uudelleen muutoksia.
+    Voit myös tallentaa musescore.com-tiliisi, jos menet kohteeseen Tiedosto / Tallenna verkkoon.
+    Tämän työkalupalkin oikeanpuoleiset säätimet säätävät partituurisi näkymää.</translation>
     </message>
     <message>
         <source>That's the end of this tour!
@@ -317,7 +322,10 @@
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Tähän loppui tämänkertainen esittely!
+    Kun käytät MuseScorea, muita esittelykierroksia putkahtaa esiin selittämään toiminnallisuutta.
+    Poistaaksesi nämä käytöstä, poista valinta kohdasta &quot;Jatka esittelykierrosten näyttämistä&quot; ennen kuin suljet tämän ikkunan.
+    Voit myös ottaa/poistaa käytöstä ja palauttaa esittelykierrokset kohdasta Ohje / Esittelykierrokset.</translation>
     </message>
 </context>
 </TS>

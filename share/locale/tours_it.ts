@@ -315,11 +315,11 @@ altrimenti verrà effettuata come selezione di un elenco.</translation>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation>Se hai modificato un valore, puoi cliccare sul pulsante &apos;Ripristina&apos; per ripristinare il valore predefinito.
+        <translation>Se si è modificato un valore, è possibile fare clic sul pulsante &quot;Ripristina&quot; per ripristinare il valore predefinito.
 Se il valore è controllato da un&apos;impostazione di stile, è possibile fare clic sul pulsante &quot;Imposta come stile&quot; per impostare il valore corrente come nuovo valore predefinito per lo stile.
-È inoltre possibile impostare i valori predefiniti dello stile utilizzando Formato &gt; Stile.</translation>
+È inoltre possibile impostare i valori predefiniti dello stile utilizzando Formato &gt; Stile...</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>

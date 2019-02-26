@@ -4,49 +4,51 @@
     <message>
         <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>화음의 구성음을 추가하려면, 음이름을 누르는 도중 시프트 키를 누르거나, 악보에서 클릭하십시오.</translation>
     </message>
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>MuseScore에 오신 것을 환영합니다! 간단한 안내를 통해 당신은 MuseScore의 사용자 인터페이스에 적응하실 수 있습니다.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>재생 컨트롤 툴바는 재생/정지 혹은 다양한 조절을 통해 곡의 재생을 돕습니다.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>음표 입력 툴바는 음표를 악보에 입력할 수 있게 해줍니다.</translation>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>팔레트는 다른 많은 악상 기호들을 입력할 수 있게 해줍니다.</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>각 팔레트에는 악보에 입력할 수 있는 악상 기호가 있습니다.</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>팔레트에 오신 것을 환영합니다. 팔레트에서는 많은 작업들을 할 수 있습니다. [다음]을 클릭하여 더 알아보기...</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>선택한 길이의 음표를 입력하려면, 음이름을 입력하거나 악보의 해당 부분을 클릭합니다.
+    Ctrl+Up/Down(macOS의 경우 Cmd+Up/down)을 눌러 옥타브를 이동하십시오.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>음에 임시표를 넣으려면, 단축키인 위쪽 혹은 아래쪽 화살표를 눌러 음을 조절하시거나,
+    아이콘 중 하나를 클릭하십시오.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -54,7 +56,10 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>같은 마디에 서로 다른 리듬을 넣으려면, 여러 개의 성부를 쓰십시오.
+ 각각의 보표는 최대 4개의 성부를 가질 수 있습니다.
+ 기본 성부는 제1성부이며, 제1성부는 각 보표에서 가장 먼저 사용되어야 합니다.
+ 다른 성부를 입력하려면 다음 아이콘 중 하나를 누르십시오.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
@@ -67,7 +72,8 @@
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>이것들은 툴바입니다.
+ 세가지 주요 기능은 파일 작업, 재생 제어, 악보 입력 입니다.</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
@@ -103,7 +109,7 @@
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>악보 입력 모드를 사용하려면, &quot;악보 입력&quot; 아이콘을 클릭하거나 단축키 &quot;N&quot;을 누르세요.</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
@@ -267,7 +273,7 @@
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation type="unfinished"/>
     </message>

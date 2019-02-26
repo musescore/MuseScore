@@ -308,7 +308,7 @@
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation>Jeśli zmieniłeś/aś wartość, możesz kliknąć przycisk &quot;Resetuj&quot;, aby przywrócić wartość domyślną.
     Jeśli wartość jest kontrolowana przez ustawienie stylu, możesz kliknąć przycisk &quot;Ustaw jako styl&quot;, aby ustawić bieżącą wartość jako nową domyślną dla stylu.
@@ -325,7 +325,7 @@
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
         <translation>Pasek narzędziowy &quot;Operacje na plikach&quot; umożliwia tworzenie/zapisywanie/otwieranie/drukowanie plików oraz cofanie/ponawianie zmian.
-    Możesz również zapisywać na swoim koncie na musescore.com, jeśli przejdziesz do: Plik &gt; Zapisz online.
+    Możesz również zapisywać na swoim koncie na MuseScore.com, jeśli przejdziesz do: Plik &gt; Zapisz na MuseScore.com.
     Przyciski po prawej stronie tego paska narzędziowego kontrolują wyświetlanie Twojej partytury.</translation>
     </message>
     <message>

@@ -316,21 +316,24 @@ Ctrlキー（macOS：Cmd）を押しながら、未選択部分をクリック�
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>3連符やその他の連符を作成するには、作りたい連符の長さを選択したあとに、Ctrlキー＋作りたい連符の数を入力します。この操作はメニューの &quot;追加(A)&quot; → &quot;連符(U)&quot; からでもできます。</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>ファイル操作ツールバーは、/ 作成 / 開く / 保存 / 印刷 / 元に戻す / やり直し / を行います。
+musescore.com のアカウントを持っている場合、 &quot; ファイル(F) &quot; → &quot; オンライン上にアップロード &quot; からオンライン上に保存することもできます。
+このツールバーの右隣にあるプルダウンメニューは、スコアの拡大率や表示方法を操作することができます。
+</translation>
     </message>
     <message>
         <source>That's the end of this tour!
@@ -338,7 +341,10 @@ Ctrlキー（macOS：Cmd）を押しながら、未選択部分をクリック�
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>以上でツアーを終わります。
+MuseScoreで初めて機能を使う際、さらに機能を説明するためのツアーが表示されます。
+これらを無効にするには、このウィンドウを閉じる前に「今後もツアーを表示する」の選択を解除してください。
+ &quot; ヘルプ &quot;→ &quot; ツアー &quot; でツアーを有効/無効にしたりリセットしたりすることもできます。</translation>
     </message>
 </context>
 </TS>

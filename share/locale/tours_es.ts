@@ -314,7 +314,7 @@ Pulse &quot;Siguiente&quot; para saber más.</translation>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation>Si ha modificado un valor, puede hacer clic en &quot;Restablecer&quot; para restablecerlo al valor por defecto.
    Si el valor es controlado por una configuración de estilo, puede hacer clic en &quot;Establecer como estilo&quot; para establecer el valor actual como el valor por defecto para el estilo.

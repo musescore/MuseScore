@@ -119,7 +119,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="111"/>
         <source>Add new Score…</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել նոր պարտիտուր</translation>
     </message>
 </context>
 <context>
@@ -195,7 +195,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="56"/>
         <source>Anchor:</source>
-        <translation>Խարիսխ՝</translation>
+        <translation>Ուղղահայաց դիրքը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="64"/>
@@ -210,7 +210,7 @@
     <message>
         <location filename="../../mscore/articulation.ui" line="74"/>
         <source>Chord Automatic</source>
-        <translation>Ինքնաշխատորեն ակորդի համար</translation>
+        <translation>Ինքնաշխատորեն</translation>
     </message>
     <message>
         <location filename="../../mscore/articulation.ui" line="79"/>
@@ -251,7 +251,7 @@
     <message>
         <location filename="../../mscore/bend.ui" line="23"/>
         <source>Bend type:</source>
-        <translation>Բենդի տեսակ՝</translation>
+        <translation>Բենդի տեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/bend.ui" line="30"/>
@@ -289,17 +289,17 @@
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="14"/>
         <source>Add/Remove System Breaks</source>
-        <translation>Ավելացնել/Հեռացնել համակարգի ընդհատումները</translation>
+        <translation>Ավելացնել/Հեռացնել տողադարձեր</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="24"/>
         <source>Break systems every X measures</source>
-        <translation>Ընդհատել համակարգերը յուրաքանչյուր X տակտ</translation>
+        <translation>Տողադարձ ավելացնել ամեն X տակտից հետո</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="27"/>
         <source>Break systems every</source>
-        <translation>Ընդհատել համակարգերը յուրաքանչյուր</translation>
+        <translation>Տողադարձ ավելացնել ամեն</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="34"/>
@@ -309,19 +309,19 @@
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="47"/>
         <source>measures</source>
-        <translation>տակտեր</translation>
+        <translation>տակտից հետո</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="69"/>
         <location filename="../../mscore/breaksdialog.ui" line="72"/>
         <source>Add system break at end of each system</source>
-        <translation>Ավելացնել համակարգի ընդհատում յուրաքանչյուր համակարգի վերջում</translation>
+        <translation>Տողադարձ ավելացնել յուրաքանչյուր համակարգի վերջում</translation>
     </message>
     <message>
         <location filename="../../mscore/breaksdialog.ui" line="79"/>
         <location filename="../../mscore/breaksdialog.ui" line="82"/>
         <source>Remove current system breaks</source>
-        <translation>Հեռացնել համակարգի ընթացիկ ընդհատումները</translation>
+        <translation>Հեռացնել բոլոր առկա տողադարձերը</translation>
     </message>
 </context>
 <context>
@@ -357,7 +357,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="88"/>
         <source>Release</source>
-        <translation>Հապաղում</translation>
+        <translation>Բացթողում</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="103"/>
@@ -393,7 +393,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="202"/>
         <source>Release time (ms)</source>
-        <translation type="unfinished"/>
+        <translation>Բացթողման ժամանակ (մվ)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="205"/>
@@ -426,10 +426,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="432"/>
         <source>Makeup gain (dB)</source>
         <translation type="unfinished"/>
@@ -442,7 +438,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="470"/>
         <source>Threshold level (dB)</source>
-        <translation type="unfinished"/>
+        <translation>Շեմի մակարդակ (դԲ)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="473"/>
@@ -466,19 +462,138 @@
     </message>
 </context>
 <context>
+    <name>CrashReporter</name>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="14"/>
+        <source>MuseScore Crash Reporter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="20"/>
+        <source>Unfortunately MuseScore has crashed. Would you like to send a report to make it possible for us to fix the problem?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="30"/>
+        <source>Describe your actions when the crash occurred (optional)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="33"/>
+        <source>Detailed crash info</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="40"/>
+        <source>Send report</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="47"/>
+        <source>Please describe your actions when the crash occurred (optional):</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="60"/>
+        <source>Cancel</source>
+        <translation>Չեղարկել</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="67"/>
+        <source>Restart MuseScore after this report is sent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="70"/>
+        <source>Restart MuseScore</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="29"/>
+        <source>Tomahawk Crash Reporter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="104"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="213"/>
+        <source>Abort</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="257"/>
+        <source>Send this report</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="264"/>
+        <source>Don&apos;t send</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="284"/>
+        <source>You can disable sending crash reports in the configuration dialog.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="109"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="116"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="152"/>
+        <source>We cannot gather useful debug information on your system.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="110"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="117"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="153"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="274"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="295"/>
+        <source>Close</source>
+        <translation>Փակել</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="145"/>
+        <source>Ready to send debug information (&lt;a href=&quot;%1&quot;&gt;view backtrace&lt;/a&gt;).</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="161"/>
+        <source>Gathering debug information...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="260"/>
+        <source>Uploaded %L1 of %L2 KB.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="287"/>
+        <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;. Please refer to crash &lt;b&gt;%1&lt;/b&gt; in bug reports.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="296"/>
+        <source>Failed to send crash info.</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Direction</name>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="207"/>
+        <location filename="../../libmscore/mscore.cpp" line="202"/>
         <source>Auto</source>
         <translation>Ինքնաշխատորեն</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="208"/>
+        <location filename="../../libmscore/mscore.cpp" line="203"/>
         <source>Up</source>
         <translation>Վերև</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="209"/>
+        <location filename="../../libmscore/mscore.cpp" line="204"/>
         <source>Down</source>
         <translation>Ներքև</translation>
     </message>
@@ -488,7 +603,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="14"/>
         <source>Edit Drumset</source>
-        <translation>Հարվածային գործիքների խմբագիր</translation>
+        <translation>Խմբագրել հարվածայինների հավաքածուն</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="92"/>
@@ -509,7 +624,7 @@
         <location filename="../../mscore/editdrumset.ui" line="53"/>
         <source>No.</source>
         <extracomment>Number</extracomment>
-        <translation>№</translation>
+        <translation>Համար</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="58"/>
@@ -534,12 +649,12 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="176"/>
         <source>Notehead group:</source>
-        <translation type="unfinished"/>
+        <translation>Նոտաների գլխիկների խումբը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="186"/>
         <source>Edit noteheads</source>
-        <translation type="unfinished"/>
+        <translation>Խմբագրել գլխիկները</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="218"/>
@@ -554,7 +669,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="242"/>
         <source>Quarter note</source>
-        <translation>Քարորդ նոտա</translation>
+        <translation>Քառորդ նոտա</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="249"/>
@@ -564,12 +679,12 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="375"/>
         <source>Staff line:</source>
-        <translation>Նոտակիրի գծիկ՝</translation>
+        <translation>Նոտակիրի գծիկը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="478"/>
         <source>Stem direction:</source>
-        <translation>Ցողունի ուղղություն՝</translation>
+        <translation>Ցողունի ուղղությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="501"/>
@@ -589,7 +704,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="322"/>
         <source>Default voice:</source>
-        <translation>Սկզբնադիր ձայն՝</translation>
+        <translation>Սկզբնադիր ձայնը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="345"/>
@@ -622,12 +737,12 @@
     <message>
         <location filename="../../mscore/editinstrument.ui" line="14"/>
         <source>Edit Instrument Properties</source>
-        <translation>Խմբագրել գործիքի հատկությունները</translation>
+        <translation>Խմբագրել նվագարանի հատկությունները</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="20"/>
         <source>Instrument Properties</source>
-        <translation>Գործիքի հատկություններ</translation>
+        <translation>Նվագարանի հատկություններ</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="26"/>
@@ -670,12 +785,12 @@
     <message>
         <location filename="../../mscore/editpitch.ui" line="20"/>
         <source>Select Note:</source>
-        <translation>Ընտրեք նոտան՝</translation>
+        <translation>Ընտրել նոտան՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="54"/>
         <source>Octave 9</source>
-        <translation type="unfinished"/>
+        <translation>Օկտավա 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="59"/>
@@ -730,717 +845,717 @@
     <message>
         <location filename="../../mscore/editpitch.ui" line="109"/>
         <source>C</source>
-        <translation>C</translation>
+        <translation>Դո</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="114"/>
         <source>C♯</source>
-        <translation>C♯</translation>
+        <translation>Դո♯</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="119"/>
         <source>D</source>
-        <translation>D</translation>
+        <translation>Ռե</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="124"/>
         <source>E♭</source>
-        <translation>E♭</translation>
+        <translation>Մի♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="129"/>
         <source>E</source>
-        <translation>E</translation>
+        <translation>Մի</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="134"/>
         <source>F</source>
-        <translation>F</translation>
+        <translation>Ֆա</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="139"/>
         <source>F♯</source>
-        <translation>F♯</translation>
+        <translation>Ֆա♯</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="144"/>
         <source>G</source>
-        <translation>G</translation>
+        <translation>Սոլ</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="149"/>
         <source>A♭</source>
-        <translation>A♭</translation>
+        <translation>Լա♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="154"/>
         <source>A</source>
-        <translation>A</translation>
+        <translation>Լա</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="159"/>
         <source>B♭</source>
-        <translation>B♭</translation>
+        <translation>Սի♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="164"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation>Սի</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="169"/>
         <source>»C</source>
-        <translation type="unfinished"/>
+        <translation>»Դո</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="174"/>
         <location filename="../../mscore/editpitch.ui" line="341"/>
         <source>C 9</source>
-        <translation type="unfinished"/>
+        <translation>Դո 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="179"/>
         <source>C♯ 9</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="184"/>
         <source>D 9</source>
-        <translation type="unfinished"/>
+        <translation>Ռե 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="189"/>
         <source>E♭ 9</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="194"/>
         <source>E 9</source>
-        <translation type="unfinished"/>
+        <translation>Մի 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="199"/>
         <source>F 9</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="204"/>
         <source>F♯ 9</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="209"/>
         <source>G 9</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ 9</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="239"/>
         <location filename="../../mscore/editpitch.ui" line="451"/>
         <source>C 8</source>
-        <translation type="unfinished"/>
+        <translation>Դո 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="253"/>
         <source>C♯ 8</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="261"/>
         <source>D 8</source>
-        <translation type="unfinished"/>
+        <translation>Ռե 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="269"/>
         <source>E♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="277"/>
         <source>E 8</source>
-        <translation type="unfinished"/>
+        <translation>Մի 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="285"/>
         <source>F 8</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="293"/>
         <source>F♯ 8</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="301"/>
         <source>G 8</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="309"/>
         <source>A♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="317"/>
         <source>A 8</source>
-        <translation type="unfinished"/>
+        <translation>Լա 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="325"/>
         <source>B♭ 8</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="333"/>
         <source>B 8</source>
-        <translation type="unfinished"/>
+        <translation>Սի 8</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="349"/>
         <location filename="../../mscore/editpitch.ui" line="561"/>
         <source>C 7</source>
-        <translation type="unfinished"/>
+        <translation>Դո 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="363"/>
         <source>C♯ 7</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="371"/>
         <source>D 7</source>
-        <translation type="unfinished"/>
+        <translation>Դո 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="379"/>
         <source>E♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="387"/>
         <source>E 7</source>
-        <translation type="unfinished"/>
+        <translation>Մի 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="395"/>
         <source>F 7</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="403"/>
         <source>F♯ 7</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="411"/>
         <source>G 7</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="419"/>
         <source>A♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="427"/>
         <source>A 7</source>
-        <translation type="unfinished"/>
+        <translation>Լա 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="435"/>
         <source>B♭ 7</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="443"/>
         <source>B 7</source>
-        <translation type="unfinished"/>
+        <translation>Սի 7</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="459"/>
         <location filename="../../mscore/editpitch.ui" line="671"/>
         <source>C 6</source>
-        <translation type="unfinished"/>
+        <translation>Դո 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="473"/>
         <source>C♯ 6</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="481"/>
         <source>D 6</source>
-        <translation type="unfinished"/>
+        <translation>Ռե 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="489"/>
         <source>E♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="497"/>
         <source>E 6</source>
-        <translation type="unfinished"/>
+        <translation>Մի 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="505"/>
         <source>F 6</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="513"/>
         <source>F♯ 6</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="521"/>
         <source>G 6</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="529"/>
         <source>A♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="537"/>
         <source>A 6</source>
-        <translation type="unfinished"/>
+        <translation>Լա 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="545"/>
         <source>B♭ 6</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="553"/>
         <source>B 6</source>
-        <translation type="unfinished"/>
+        <translation>Սի 6</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="569"/>
         <location filename="../../mscore/editpitch.ui" line="785"/>
         <source>C 5</source>
-        <translation type="unfinished"/>
+        <translation>Դո 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="583"/>
         <source>C♯ 5</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="591"/>
         <source>D 5</source>
-        <translation type="unfinished"/>
+        <translation>Ռե 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="599"/>
         <source>E♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="607"/>
         <source>E 5</source>
-        <translation type="unfinished"/>
+        <translation>Մի 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="615"/>
         <source>F 5</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="623"/>
         <source>F♯ 5</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="631"/>
         <source>G 5</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="639"/>
         <source>A♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="647"/>
         <source>A 5</source>
-        <translation type="unfinished"/>
+        <translation>Լա 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="655"/>
         <source>B♭ 5</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="663"/>
         <source>B 5</source>
-        <translation type="unfinished"/>
+        <translation>Սի 5</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="679"/>
         <location filename="../../mscore/editpitch.ui" line="899"/>
         <source>C 4</source>
-        <translation type="unfinished"/>
+        <translation>Դո 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="693"/>
         <source>C♯ 4</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="701"/>
         <source>D 4</source>
-        <translation type="unfinished"/>
+        <translation>Դո 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="709"/>
         <source>E♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="717"/>
         <source>E 4</source>
-        <translation type="unfinished"/>
+        <translation>Մի 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="725"/>
         <source>F 4</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="733"/>
         <source>F♯ 4</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="741"/>
         <source>G 4</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="753"/>
         <source>A♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="761"/>
         <source>A 4</source>
-        <translation type="unfinished"/>
+        <translation>Լա 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="769"/>
         <source>B♭ 4</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="777"/>
         <source>B 4</source>
-        <translation type="unfinished"/>
+        <translation>Սի 4</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="793"/>
         <location filename="../../mscore/editpitch.ui" line="1009"/>
         <source>C 3</source>
-        <translation type="unfinished"/>
+        <translation>Դո 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="807"/>
         <source>C♯ 3</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="815"/>
         <source>D 3</source>
-        <translation type="unfinished"/>
+        <translation>Դո 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="823"/>
         <source>E♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="831"/>
         <source>E 3</source>
-        <translation type="unfinished"/>
+        <translation>Մի 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="839"/>
         <source>F 3</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="851"/>
         <source>F♯ 3</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="859"/>
         <source>G 3</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="867"/>
         <source>A♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="875"/>
         <source>A 3</source>
-        <translation type="unfinished"/>
+        <translation>Լա 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="883"/>
         <source>B♭ 3</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="891"/>
         <source>B 3</source>
-        <translation type="unfinished"/>
+        <translation>Սի 3</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="907"/>
         <location filename="../../mscore/editpitch.ui" line="1119"/>
         <source>C 2</source>
-        <translation type="unfinished"/>
+        <translation>Դո 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="921"/>
         <source>C♯ 2</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="929"/>
         <source>D 2</source>
-        <translation type="unfinished"/>
+        <translation>Ռե 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="937"/>
         <source>E♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="945"/>
         <source>E 2</source>
-        <translation type="unfinished"/>
+        <translation>Մի 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="953"/>
         <source>F 2</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="961"/>
         <source>F♯ 2</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="969"/>
         <source>G 2</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="977"/>
         <source>A♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="985"/>
         <source>A 2</source>
-        <translation type="unfinished"/>
+        <translation>Լա 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="993"/>
         <source>B♭ 2</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1001"/>
         <source>B 2</source>
-        <translation type="unfinished"/>
+        <translation>Սի 2</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1017"/>
         <location filename="../../mscore/editpitch.ui" line="1229"/>
         <source>C 1</source>
-        <translation type="unfinished"/>
+        <translation>Դո 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1031"/>
         <source>C♯ 1</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1039"/>
         <source>D 1</source>
-        <translation type="unfinished"/>
+        <translation>Ռե 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1047"/>
         <source>E♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1055"/>
         <source>E 1</source>
-        <translation type="unfinished"/>
+        <translation>Մի 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1063"/>
         <source>F 1</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1071"/>
         <source>F♯ 1</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1079"/>
         <source>G 1</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1087"/>
         <source>A♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1095"/>
         <source>A 1</source>
-        <translation type="unfinished"/>
+        <translation>Լա 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1103"/>
         <source>B♭ 1</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1111"/>
         <source>B 1</source>
-        <translation type="unfinished"/>
+        <translation>Սի 1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1127"/>
         <location filename="../../mscore/editpitch.ui" line="1339"/>
         <source>C 0</source>
-        <translation type="unfinished"/>
+        <translation>Դո 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1141"/>
         <source>C♯ 0</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1149"/>
         <source>D 0</source>
-        <translation type="unfinished"/>
+        <translation>Ռե 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1157"/>
         <source>E♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1165"/>
         <source>E 0</source>
-        <translation type="unfinished"/>
+        <translation>Մի 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1173"/>
         <source>F 0</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1181"/>
         <source>F♯ 0</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1189"/>
         <source>G 0</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1197"/>
         <source>A♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1205"/>
         <source>A 0</source>
-        <translation type="unfinished"/>
+        <translation>Լա 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1213"/>
         <source>B♭ 0</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1221"/>
         <source>B 0</source>
-        <translation type="unfinished"/>
+        <translation>Սի 0</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1237"/>
         <source>C -1</source>
-        <translation type="unfinished"/>
+        <translation>Դո -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1251"/>
         <source>C♯ -1</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1259"/>
         <source>D -1</source>
-        <translation type="unfinished"/>
+        <translation>Ռե -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1267"/>
         <source>E♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1275"/>
         <source>E -1</source>
-        <translation type="unfinished"/>
+        <translation>Մի -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1283"/>
         <source>F -1</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1291"/>
         <source>F♯ -1</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1299"/>
         <source>G -1</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1307"/>
         <source>A♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1315"/>
         <source>A -1</source>
-        <translation type="unfinished"/>
+        <translation>Լա -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1323"/>
         <source>B♭ -1</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ -1</translation>
     </message>
     <message>
         <location filename="../../mscore/editpitch.ui" line="1331"/>
         <source>B -1</source>
-        <translation type="unfinished"/>
+        <translation>Սի -1</translation>
     </message>
 </context>
 <context>
@@ -1460,10 +1575,6 @@
         <location filename="../../mscore/editraster.ui" line="37"/>
         <source>Vertical grid:</source>
         <translation>Ուղղահայաց ցանց՝</translation>
-    </message>
-    <message>
-        <source>Vertical  grid:</source>
-        <translation type="vanished">Ուղղահայաց ցանց՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editraster.ui" line="44"/>
@@ -1488,7 +1599,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="334"/>
         <source>Instrument:</source>
-        <translation>Գործիք՝</translation>
+        <translation>Նվագարան՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="369"/>
@@ -1498,32 +1609,34 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="347"/>
         <source>Change Instrument…</source>
-        <translation>Փոխել գործիքը…</translation>
+        <translation>Փոխել նվագարանը…</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="408"/>
         <source>Short instrument name:</source>
-        <translation>Գործիքի կարճ անվանում՝</translation>
+        <translation>Նվագարանի կարճ անվանումը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="392"/>
         <source>Long instrument name:</source>
-        <translation>Գործիքի լրիվ անվանում՝</translation>
+        <translation>Նվագարանի ամբողջական անվանումը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
         <source>Staff/Part Properties</source>
-        <translation type="unfinished"/>
+        <translation>Նոտակիրի/Դերանվագի հատկություններ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="52"/>
         <source>Cutaway</source>
-        <translation type="unfinished"/>
+        <translation>Դատարկ տակտերը
+անտեսանելի սարքել</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="274"/>
         <source>Hide when empty:</source>
-        <translation type="unfinished"/>
+        <translation>Թաքցնել դատարկ
+նոտակիրի դեպքում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="282"/>
@@ -1543,12 +1656,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="297"/>
         <source>Instrument</source>
-        <translation>Գործիք</translation>
+        <translation>Նվագարան</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="440"/>
         <source>Usable pitch range:</source>
-        <translation type="unfinished"/>
+        <translation>Օգտագործվող հնչյունածավալ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="449"/>
@@ -1568,22 +1681,22 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="596"/>
         <source>Octave(s) +</source>
-        <translation type="unfinished"/>
+        <translation>Ակտավա +</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="613"/>
         <source>0 - Perfect Unison</source>
-        <translation>0 - Մաքուր պրիմա</translation>
+        <translation>0 - Մաքուր ունիսոն</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="618"/>
         <source>1 - Augmented Unison</source>
-        <translation>1 - Ավելացված պրիմա</translation>
+        <translation>1 - Մեծացրած պրիմա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="623"/>
         <source>0 - Diminished Second</source>
-        <translation>0 - Նվազեցված սեկունդա</translation>
+        <translation>0 - Փոքրացրած սեկունդա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="628"/>
@@ -1598,12 +1711,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="638"/>
         <source>3 - Augmented Second</source>
-        <translation>3 - Ավելացված սեկունդա</translation>
+        <translation>3 - Մեծացրած սեկունդա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="643"/>
         <source>2 - Diminished Third</source>
-        <translation>2 - Նվազեցված տերցիա</translation>
+        <translation>2 - Փոքրացրած տերցիա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="648"/>
@@ -1618,12 +1731,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="658"/>
         <source>5 - Augmented Third</source>
-        <translation>5 - Ավելացված տերցիա</translation>
+        <translation>5 - Մեծացրած տերցիա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="663"/>
         <source>4 - Diminished Fourth</source>
-        <translation>4 - Նվազեցված տերցիա</translation>
+        <translation>4 - Փոքրացրած տերցիա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="668"/>
@@ -1633,12 +1746,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="673"/>
         <source>6 - Augmented Fourth</source>
-        <translation>6 - Աելացված կվարտա</translation>
+        <translation>6 - Մեծացրած կվարտա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="678"/>
         <source>6 - Diminished Fifth</source>
-        <translation>6 - Նվազեցված կվինտա</translation>
+        <translation>6 - Փոքրացրած կվինտա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="683"/>
@@ -1648,12 +1761,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="688"/>
         <source>8 - Augmented Fifth</source>
-        <translation>8 - Ավելացված կվիինտա</translation>
+        <translation>8 - Մեծացրած կվիինտա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="693"/>
         <source>7 - Diminished Sixth</source>
-        <translation>7 - Նվազեցված սեկստա</translation>
+        <translation>7 - Փոքրացրած սեկստա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="698"/>
@@ -1668,12 +1781,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="708"/>
         <source>10 - Augmented Sixth</source>
-        <translation>10 - Ավելացված սեկստա</translation>
+        <translation>10 - Մեծացրած սեկստա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="713"/>
         <source>9 - Diminished Seventh</source>
-        <translation>9 - Նվազեցված սեպտիմա</translation>
+        <translation>9 - Փոքրացրած սեպտիմա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="718"/>
@@ -1688,12 +1801,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="728"/>
         <source>12 - Augmented Seventh</source>
-        <translation>12 - Ավելացված սեպտիմա</translation>
+        <translation>12 - Մեծացրած սեպտիմա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="733"/>
         <source>11 - Diminished Octave</source>
-        <translation>11 - Նվազեցված օկտավա</translation>
+        <translation>11 - Փոքրացրած օկտավա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="738"/>
@@ -1713,7 +1826,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="793"/>
         <source>Number of strings:</source>
-        <translation>Լարերի քանակ՝</translation>
+        <translation>Լարերի քանակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="806"/>
@@ -1723,12 +1836,12 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="840"/>
         <source>Go to previous staff</source>
-        <translation type="unfinished"/>
+        <translation>Անցնել նախորդ նոտակիրին</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="860"/>
         <source>Go to next staff</source>
-        <translation type="unfinished"/>
+        <translation>Անցնել հաջորդ նոտակիրին</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="44"/>
@@ -1788,7 +1901,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="179"/>
         <source>Line distance:</source>
-        <translation>Գծերի միջև հեռավորությունը՝</translation>
+        <translation>Գծերի միջև հեռավորություն՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="195"/>
@@ -1814,7 +1927,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="257"/>
         <source>Style group:</source>
-        <translation>Ոճերի խումբ՝</translation>
+        <translation>Ոճերի խումբը՝</translation>
     </message>
 </context>
 <context>
@@ -1837,7 +1950,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="140"/>
         <source>Line distance:</source>
-        <translation>Գծերի միջև հեռավորությունը՝</translation>
+        <translation>Գծերի միջև հեռավորություն՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="156"/>
@@ -1911,12 +2024,12 @@
         <location filename="../../mscore/editstafftype.ui" line="489"/>
         <location filename="../../mscore/editstafftype.ui" line="770"/>
         <source>Vertical offset:</source>
-        <translation>Ուղղահայաց տեղաշարժում՝</translation>
+        <translation>Ուղղահայաց շեղում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="527"/>
         <source>Marks are drawn:</source>
-        <translation>Նշիչները գտնվում են՝</translation>
+        <translation>Նշիչները այստեղ են՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="543"/>
@@ -1987,7 +2100,7 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="867"/>
         <source>Stems and beams</source>
-        <translation type="unfinished"/>
+        <translation>Ցողուններ և խմբագծեր</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="917"/>
@@ -2037,12 +2150,12 @@
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1105"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1112"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
     <message>
         <location filename="../../mscore/editstafftype.ui" line="1162"/>
@@ -2155,12 +2268,13 @@
     <message>
         <location filename="../../mscore/editstyle.ui" line="275"/>
         <source>Musical symbols font:</source>
-        <translation>Երաժշտական նշանների տառատեսակը</translation>
+        <translation>Երաժշտական նշանների
+տառատեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="285"/>
         <source>Musical text font:</source>
-        <translation>Գրվածքի տառատեսակը</translation>
+        <translation>Գրվածքի տառատեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="369"/>
@@ -2175,12 +2289,12 @@
     <message>
         <location filename="../../mscore/editstyle.ui" line="423"/>
         <source>Minimum number of empty measures:</source>
-        <translation>Դատարկ տակտերի նվազագույն քանակ</translation>
+        <translation>Դատարկ տակտերի նվազագույն քանակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="452"/>
         <source>Minimum width of measure:</source>
-        <translation>Տակտի նվազագույն լայնություն՝</translation>
+        <translation>Տակտի նվազագույն լայնությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="439"/>
@@ -2189,102 +2303,102 @@
         <location filename="../../mscore/editstyle.ui" line="958"/>
         <location filename="../../mscore/editstyle.ui" line="1094"/>
         <location filename="../../mscore/editstyle.ui" line="1116"/>
-        <location filename="../../mscore/editstyle.ui" line="1160"/>
-        <location filename="../../mscore/editstyle.ui" line="1202"/>
-        <location filename="../../mscore/editstyle.ui" line="1243"/>
-        <location filename="../../mscore/editstyle.ui" line="2561"/>
-        <location filename="../../mscore/editstyle.ui" line="2596"/>
-        <location filename="../../mscore/editstyle.ui" line="2651"/>
-        <location filename="../../mscore/editstyle.ui" line="2677"/>
-        <location filename="../../mscore/editstyle.ui" line="2752"/>
-        <location filename="../../mscore/editstyle.ui" line="2778"/>
-        <location filename="../../mscore/editstyle.ui" line="2845"/>
-        <location filename="../../mscore/editstyle.ui" line="2871"/>
-        <location filename="../../mscore/editstyle.ui" line="3370"/>
-        <location filename="../../mscore/editstyle.ui" line="3380"/>
-        <location filename="../../mscore/editstyle.ui" line="3390"/>
-        <location filename="../../mscore/editstyle.ui" line="3573"/>
-        <location filename="../../mscore/editstyle.ui" line="3654"/>
-        <location filename="../../mscore/editstyle.ui" line="3699"/>
-        <location filename="../../mscore/editstyle.ui" line="3832"/>
-        <location filename="../../mscore/editstyle.ui" line="3848"/>
-        <location filename="../../mscore/editstyle.ui" line="3891"/>
-        <location filename="../../mscore/editstyle.ui" line="3901"/>
-        <location filename="../../mscore/editstyle.ui" line="3946"/>
-        <location filename="../../mscore/editstyle.ui" line="3997"/>
-        <location filename="../../mscore/editstyle.ui" line="4013"/>
-        <location filename="../../mscore/editstyle.ui" line="4029"/>
-        <location filename="../../mscore/editstyle.ui" line="4109"/>
-        <location filename="../../mscore/editstyle.ui" line="4125"/>
-        <location filename="../../mscore/editstyle.ui" line="4141"/>
-        <location filename="../../mscore/editstyle.ui" line="4167"/>
-        <location filename="../../mscore/editstyle.ui" line="4285"/>
-        <location filename="../../mscore/editstyle.ui" line="4318"/>
-        <location filename="../../mscore/editstyle.ui" line="4411"/>
-        <location filename="../../mscore/editstyle.ui" line="4421"/>
-        <location filename="../../mscore/editstyle.ui" line="4601"/>
-        <location filename="../../mscore/editstyle.ui" line="4618"/>
-        <location filename="../../mscore/editstyle.ui" line="4686"/>
-        <location filename="../../mscore/editstyle.ui" line="4713"/>
-        <location filename="../../mscore/editstyle.ui" line="4748"/>
-        <location filename="../../mscore/editstyle.ui" line="4767"/>
-        <location filename="../../mscore/editstyle.ui" line="4790"/>
-        <location filename="../../mscore/editstyle.ui" line="4829"/>
-        <location filename="../../mscore/editstyle.ui" line="4907"/>
-        <location filename="../../mscore/editstyle.ui" line="4923"/>
-        <location filename="../../mscore/editstyle.ui" line="4939"/>
-        <location filename="../../mscore/editstyle.ui" line="5008"/>
-        <location filename="../../mscore/editstyle.ui" line="5024"/>
-        <location filename="../../mscore/editstyle.ui" line="5063"/>
-        <location filename="../../mscore/editstyle.ui" line="5080"/>
-        <location filename="../../mscore/editstyle.ui" line="5178"/>
-        <location filename="../../mscore/editstyle.ui" line="5197"/>
-        <location filename="../../mscore/editstyle.ui" line="5233"/>
-        <location filename="../../mscore/editstyle.ui" line="5363"/>
-        <location filename="../../mscore/editstyle.ui" line="5392"/>
-        <location filename="../../mscore/editstyle.ui" line="5418"/>
-        <location filename="../../mscore/editstyle.ui" line="5447"/>
-        <location filename="../../mscore/editstyle.ui" line="5630"/>
-        <location filename="../../mscore/editstyle.ui" line="5649"/>
-        <location filename="../../mscore/editstyle.ui" line="5919"/>
-        <location filename="../../mscore/editstyle.ui" line="5942"/>
-        <location filename="../../mscore/editstyle.ui" line="5965"/>
-        <location filename="../../mscore/editstyle.ui" line="6025"/>
-        <location filename="../../mscore/editstyle.ui" line="6051"/>
-        <location filename="../../mscore/editstyle.ui" line="6078"/>
-        <location filename="../../mscore/editstyle.ui" line="6107"/>
-        <location filename="../../mscore/editstyle.ui" line="6143"/>
-        <location filename="../../mscore/editstyle.ui" line="6286"/>
-        <location filename="../../mscore/editstyle.ui" line="6405"/>
-        <location filename="../../mscore/editstyle.ui" line="6415"/>
-        <location filename="../../mscore/editstyle.ui" line="6561"/>
-        <location filename="../../mscore/editstyle.ui" line="6675"/>
-        <location filename="../../mscore/editstyle.ui" line="6695"/>
-        <location filename="../../mscore/editstyle.ui" line="6873"/>
-        <location filename="../../mscore/editstyle.ui" line="6995"/>
-        <location filename="../../mscore/editstyle.ui" line="7114"/>
-        <location filename="../../mscore/editstyle.ui" line="7361"/>
-        <location filename="../../mscore/editstyle.ui" line="7689"/>
-        <location filename="../../mscore/editstyle.ui" line="7735"/>
-        <location filename="../../mscore/editstyle.ui" line="8306"/>
-        <location filename="../../mscore/editstyle.ui" line="8516"/>
-        <location filename="../../mscore/editstyle.ui" line="8708"/>
-        <location filename="../../mscore/editstyle.ui" line="8780"/>
-        <location filename="../../mscore/editstyle.ui" line="8806"/>
-        <location filename="../../mscore/editstyle.ui" line="8835"/>
-        <location filename="../../mscore/editstyle.ui" line="8946"/>
-        <location filename="../../mscore/editstyle.ui" line="8969"/>
-        <location filename="../../mscore/editstyle.ui" line="9089"/>
-        <location filename="../../mscore/editstyle.ui" line="9122"/>
-        <location filename="../../mscore/editstyle.ui" line="9264"/>
-        <location filename="../../mscore/editstyle.ui" line="9357"/>
-        <location filename="../../mscore/editstyle.ui" line="9472"/>
-        <location filename="../../mscore/editstyle.ui" line="9785"/>
-        <location filename="../../mscore/editstyle.ui" line="9873"/>
-        <location filename="../../mscore/editstyle.ui" line="10301"/>
-        <location filename="../../mscore/editstyle.ui" line="10333"/>
-        <location filename="../../mscore/editstyle.ui" line="10385"/>
-        <location filename="../../mscore/editstyle.ui" line="10485"/>
+        <location filename="../../mscore/editstyle.ui" line="1157"/>
+        <location filename="../../mscore/editstyle.ui" line="1199"/>
+        <location filename="../../mscore/editstyle.ui" line="1237"/>
+        <location filename="../../mscore/editstyle.ui" line="2555"/>
+        <location filename="../../mscore/editstyle.ui" line="2590"/>
+        <location filename="../../mscore/editstyle.ui" line="2645"/>
+        <location filename="../../mscore/editstyle.ui" line="2671"/>
+        <location filename="../../mscore/editstyle.ui" line="2746"/>
+        <location filename="../../mscore/editstyle.ui" line="2772"/>
+        <location filename="../../mscore/editstyle.ui" line="2839"/>
+        <location filename="../../mscore/editstyle.ui" line="2865"/>
+        <location filename="../../mscore/editstyle.ui" line="3364"/>
+        <location filename="../../mscore/editstyle.ui" line="3374"/>
+        <location filename="../../mscore/editstyle.ui" line="3384"/>
+        <location filename="../../mscore/editstyle.ui" line="3567"/>
+        <location filename="../../mscore/editstyle.ui" line="3648"/>
+        <location filename="../../mscore/editstyle.ui" line="3693"/>
+        <location filename="../../mscore/editstyle.ui" line="3826"/>
+        <location filename="../../mscore/editstyle.ui" line="3842"/>
+        <location filename="../../mscore/editstyle.ui" line="3885"/>
+        <location filename="../../mscore/editstyle.ui" line="3895"/>
+        <location filename="../../mscore/editstyle.ui" line="3940"/>
+        <location filename="../../mscore/editstyle.ui" line="3991"/>
+        <location filename="../../mscore/editstyle.ui" line="4007"/>
+        <location filename="../../mscore/editstyle.ui" line="4023"/>
+        <location filename="../../mscore/editstyle.ui" line="4103"/>
+        <location filename="../../mscore/editstyle.ui" line="4119"/>
+        <location filename="../../mscore/editstyle.ui" line="4135"/>
+        <location filename="../../mscore/editstyle.ui" line="4161"/>
+        <location filename="../../mscore/editstyle.ui" line="4279"/>
+        <location filename="../../mscore/editstyle.ui" line="4312"/>
+        <location filename="../../mscore/editstyle.ui" line="4405"/>
+        <location filename="../../mscore/editstyle.ui" line="4415"/>
+        <location filename="../../mscore/editstyle.ui" line="4595"/>
+        <location filename="../../mscore/editstyle.ui" line="4612"/>
+        <location filename="../../mscore/editstyle.ui" line="4680"/>
+        <location filename="../../mscore/editstyle.ui" line="4707"/>
+        <location filename="../../mscore/editstyle.ui" line="4742"/>
+        <location filename="../../mscore/editstyle.ui" line="4761"/>
+        <location filename="../../mscore/editstyle.ui" line="4784"/>
+        <location filename="../../mscore/editstyle.ui" line="4823"/>
+        <location filename="../../mscore/editstyle.ui" line="4901"/>
+        <location filename="../../mscore/editstyle.ui" line="4917"/>
+        <location filename="../../mscore/editstyle.ui" line="4933"/>
+        <location filename="../../mscore/editstyle.ui" line="5002"/>
+        <location filename="../../mscore/editstyle.ui" line="5018"/>
+        <location filename="../../mscore/editstyle.ui" line="5057"/>
+        <location filename="../../mscore/editstyle.ui" line="5074"/>
+        <location filename="../../mscore/editstyle.ui" line="5172"/>
+        <location filename="../../mscore/editstyle.ui" line="5191"/>
+        <location filename="../../mscore/editstyle.ui" line="5227"/>
+        <location filename="../../mscore/editstyle.ui" line="5357"/>
+        <location filename="../../mscore/editstyle.ui" line="5386"/>
+        <location filename="../../mscore/editstyle.ui" line="5412"/>
+        <location filename="../../mscore/editstyle.ui" line="5441"/>
+        <location filename="../../mscore/editstyle.ui" line="5624"/>
+        <location filename="../../mscore/editstyle.ui" line="5643"/>
+        <location filename="../../mscore/editstyle.ui" line="5913"/>
+        <location filename="../../mscore/editstyle.ui" line="5936"/>
+        <location filename="../../mscore/editstyle.ui" line="5959"/>
+        <location filename="../../mscore/editstyle.ui" line="6019"/>
+        <location filename="../../mscore/editstyle.ui" line="6045"/>
+        <location filename="../../mscore/editstyle.ui" line="6072"/>
+        <location filename="../../mscore/editstyle.ui" line="6101"/>
+        <location filename="../../mscore/editstyle.ui" line="6137"/>
+        <location filename="../../mscore/editstyle.ui" line="6280"/>
+        <location filename="../../mscore/editstyle.ui" line="6399"/>
+        <location filename="../../mscore/editstyle.ui" line="6409"/>
+        <location filename="../../mscore/editstyle.ui" line="6555"/>
+        <location filename="../../mscore/editstyle.ui" line="6669"/>
+        <location filename="../../mscore/editstyle.ui" line="6689"/>
+        <location filename="../../mscore/editstyle.ui" line="6867"/>
+        <location filename="../../mscore/editstyle.ui" line="6989"/>
+        <location filename="../../mscore/editstyle.ui" line="7108"/>
+        <location filename="../../mscore/editstyle.ui" line="7355"/>
+        <location filename="../../mscore/editstyle.ui" line="7683"/>
+        <location filename="../../mscore/editstyle.ui" line="7729"/>
+        <location filename="../../mscore/editstyle.ui" line="8300"/>
+        <location filename="../../mscore/editstyle.ui" line="8510"/>
+        <location filename="../../mscore/editstyle.ui" line="8702"/>
+        <location filename="../../mscore/editstyle.ui" line="8774"/>
+        <location filename="../../mscore/editstyle.ui" line="8800"/>
+        <location filename="../../mscore/editstyle.ui" line="8829"/>
+        <location filename="../../mscore/editstyle.ui" line="8940"/>
+        <location filename="../../mscore/editstyle.ui" line="8963"/>
+        <location filename="../../mscore/editstyle.ui" line="9083"/>
+        <location filename="../../mscore/editstyle.ui" line="9116"/>
+        <location filename="../../mscore/editstyle.ui" line="9258"/>
+        <location filename="../../mscore/editstyle.ui" line="9351"/>
+        <location filename="../../mscore/editstyle.ui" line="9466"/>
+        <location filename="../../mscore/editstyle.ui" line="9779"/>
+        <location filename="../../mscore/editstyle.ui" line="9867"/>
+        <location filename="../../mscore/editstyle.ui" line="10295"/>
+        <location filename="../../mscore/editstyle.ui" line="10327"/>
+        <location filename="../../mscore/editstyle.ui" line="10379"/>
+        <location filename="../../mscore/editstyle.ui" line="10479"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2294,17 +2408,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="487"/>
         <source>Don&apos;t hide empty staves in first system</source>
-        <translation type="unfinished"/>
+        <translation>Չթաքցնել դատարկ նոտակիրները առաջին համակարգում</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="501"/>
         <source>Hide instrument name if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Թաքցնել նվագարանի անվանումը, եթե այն միակն է</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="524"/>
         <source>Swing Settings</source>
-        <translation>Սվինգի կարգավորումներ</translation>
+        <translation>Սվինգի կարգավորումները</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="532"/>
@@ -2324,834 +2438,848 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="556"/>
         <source>Sixteenth Note</source>
-        <translation>Տասնվեցերորդական նոտան</translation>
+        <translation>16-երորդական նոտա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="580"/>
         <source>Select swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրեք սվինգի հարաբերությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="596"/>
-        <location filename="../../mscore/editstyle.ui" line="5133"/>
-        <location filename="../../mscore/editstyle.ui" line="9191"/>
+        <location filename="../../mscore/editstyle.ui" line="5127"/>
+        <location filename="../../mscore/editstyle.ui" line="9185"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="60"/>
         <location filename="../../mscore/editstyle.ui" line="702"/>
-        <location filename="../../mscore/editstyle.ui" line="1782"/>
-        <location filename="../../mscore/editstyle.ui" line="2135"/>
+        <location filename="../../mscore/editstyle.ui" line="1776"/>
+        <location filename="../../mscore/editstyle.ui" line="2129"/>
         <source>Page</source>
         <translation>Էջ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="983"/>
         <source>Music top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Վերևի նոտակիրի
+խորությունը եզրից՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="720"/>
         <source>Create clef for all systems</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղծել բանալիներ բոլոր
+համակարգերի համար</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1022"/>
         <source>Music bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Ներքևի նոտակիրի
+խորությունը եզրից՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="999"/>
         <source>Staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Նոտակիրների միջև
+հեռավորությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1302"/>
+        <location filename="../../mscore/editstyle.ui" line="1296"/>
         <source>Grand staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Երկակի նոտակիրների
+հեռավորությունը իրարից՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1065"/>
         <source>Min. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Համակարգերի միջև
+նվազագույն
+հեռավորությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1141"/>
-        <source>Vertical frame upper margin</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1144"/>
         <source>Vertical frame top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Ուղղահայաց շրջանակի
+խորությունը վերևի եզրից՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1224"/>
-        <source>Vertical frame lower margin</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1227"/>
+        <location filename="../../mscore/editstyle.ui" line="1221"/>
         <source>Vertical frame bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Ուղղահայաց շրջանակի
+խորությունը ներքևի եզրից՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="833"/>
         <source>Max. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Համակարգերի միջև
+առավելագույն
+հեռավորությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1325"/>
+        <location filename="../../mscore/editstyle.ui" line="1319"/>
         <source>Last system fill threshold:</source>
-        <translation type="unfinished"/>
+        <translation>Վերջին համակարգի
+լցման շեմը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="926"/>
         <source>Create key signature for all systems</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղծել բանալիների
+նշաններ բոլոր
+համակարգերի համար</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1009"/>
         <source>Create courtesy clefs</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղծել զգուշացնող
+բանալիներ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1081"/>
         <source>Create courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղծել տակտի չափի 
+փոփոխության մասին
+զգուշացնող գրառումներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1312"/>
+        <location filename="../../mscore/editstyle.ui" line="1306"/>
         <source>Create courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղծել զգուշացնող
+բանալիների նշաններ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1923"/>
+        <location filename="../../mscore/editstyle.ui" line="1917"/>
         <source>Header Text</source>
-        <translation type="unfinished"/>
+        <translation>Էջագլխի գրվածք</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1937"/>
+        <location filename="../../mscore/editstyle.ui" line="1931"/>
         <source>Show header also on first page</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել էջագլուխը նաև առաջին էջին</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1645"/>
-        <location filename="../../mscore/editstyle.ui" line="1940"/>
-        <location filename="../../mscore/editstyle.ui" line="2363"/>
+        <location filename="../../mscore/editstyle.ui" line="1639"/>
+        <location filename="../../mscore/editstyle.ui" line="1934"/>
+        <location filename="../../mscore/editstyle.ui" line="2357"/>
         <source>Show first</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել նաև
+առաջին էջին</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1947"/>
+        <location filename="../../mscore/editstyle.ui" line="1941"/>
         <source>Use odd/even page header</source>
-        <translation type="unfinished"/>
+        <translation>Օգտագործել տարբեր էջագլուխներ կենտ/զույգ էջերի համար</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1655"/>
-        <location filename="../../mscore/editstyle.ui" line="1950"/>
+        <location filename="../../mscore/editstyle.ui" line="1649"/>
+        <location filename="../../mscore/editstyle.ui" line="1944"/>
         <source>Odd/Even</source>
-        <translation type="unfinished"/>
+        <translation>Կենտ/Զույգ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1742"/>
-        <location filename="../../mscore/editstyle.ui" line="1977"/>
-        <location filename="../../mscore/editstyle.ui" line="2708"/>
-        <location filename="../../mscore/editstyle.ui" line="10534"/>
+        <location filename="../../mscore/editstyle.ui" line="1736"/>
+        <location filename="../../mscore/editstyle.ui" line="1971"/>
+        <location filename="../../mscore/editstyle.ui" line="2702"/>
+        <location filename="../../mscore/editstyle.ui" line="10528"/>
         <source>Left</source>
         <translation>Ձախից</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1699"/>
-        <location filename="../../mscore/editstyle.ui" line="1987"/>
+        <location filename="../../mscore/editstyle.ui" line="1693"/>
+        <location filename="../../mscore/editstyle.ui" line="1981"/>
         <source>Middle</source>
-        <translation type="unfinished"/>
+        <translation>Միջնամաս</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1789"/>
-        <location filename="../../mscore/editstyle.ui" line="1997"/>
-        <location filename="../../mscore/editstyle.ui" line="2804"/>
-        <location filename="../../mscore/editstyle.ui" line="10520"/>
+        <location filename="../../mscore/editstyle.ui" line="1783"/>
+        <location filename="../../mscore/editstyle.ui" line="1991"/>
+        <location filename="../../mscore/editstyle.ui" line="2798"/>
+        <location filename="../../mscore/editstyle.ui" line="10514"/>
         <source>Right</source>
         <translation>Աջից</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1682"/>
-        <location filename="../../mscore/editstyle.ui" line="2007"/>
+        <location filename="../../mscore/editstyle.ui" line="1676"/>
+        <location filename="../../mscore/editstyle.ui" line="2001"/>
         <source>Odd</source>
-        <translation type="unfinished"/>
+        <translation>Կենտ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1729"/>
-        <location filename="../../mscore/editstyle.ui" line="2096"/>
+        <location filename="../../mscore/editstyle.ui" line="1723"/>
+        <location filename="../../mscore/editstyle.ui" line="2090"/>
         <source>Even</source>
-        <translation type="unfinished"/>
+        <translation>Զույգ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1628"/>
+        <location filename="../../mscore/editstyle.ui" line="1622"/>
         <source>Footer Text</source>
-        <translation type="unfinished"/>
+        <translation>Էջատակի գրվածք</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1642"/>
+        <location filename="../../mscore/editstyle.ui" line="1636"/>
         <source>Show footer also on first page</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել էջատակը նաև առաջին էջին</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1652"/>
+        <location filename="../../mscore/editstyle.ui" line="1646"/>
         <source>Use odd/even page footer</source>
-        <translation type="unfinished"/>
+        <translation>Օգտագործել տարբեր էջատակեր կենտ/զույգ էջերի համար</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="75"/>
-        <location filename="../../mscore/editstyle.ui" line="2264"/>
+        <location filename="../../mscore/editstyle.ui" line="2258"/>
         <source>Measure Numbers</source>
-        <translation type="unfinished"/>
+        <translation>Տակտերի համարակալում</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2326"/>
+        <location filename="../../mscore/editstyle.ui" line="2320"/>
         <source>All staves</source>
-        <translation type="unfinished"/>
+        <translation>Համարակալել 
+բոլոր նոտակիրները</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2295"/>
+        <location filename="../../mscore/editstyle.ui" line="2289"/>
         <source>Every system</source>
-        <translation type="unfinished"/>
+        <translation>Համարակալել 
+յուրաքանչյուր
+համակարգը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2304"/>
+        <location filename="../../mscore/editstyle.ui" line="2298"/>
         <source>Interval:</source>
-        <translation type="unfinished"/>
+        <translation>Համարակալել 
+յուրաքանչյուր ...-րդ տակտը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="80"/>
-        <location filename="../../mscore/editstyle.ui" line="2531"/>
+        <location filename="../../mscore/editstyle.ui" line="2525"/>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
-        <translation>Գործավար համակարգ</translation>
+        <translation>Համակարգ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2551"/>
+        <location filename="../../mscore/editstyle.ui" line="2545"/>
         <source>System bracket thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Ուղիղ ակոլադայի
+հաստությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2580"/>
+        <location filename="../../mscore/editstyle.ui" line="2574"/>
         <source>System bracket distance:</source>
-        <translation type="unfinished"/>
+        <translation>Ուղիղ ակոլադայի
+նահանջը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2632"/>
+        <location filename="../../mscore/editstyle.ui" line="2626"/>
         <source>Brace thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Ձևավոր ակոլադայի
+հաստությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2658"/>
+        <location filename="../../mscore/editstyle.ui" line="2652"/>
         <source>Brace distance:</source>
-        <translation type="unfinished"/>
+        <translation>Ձևավոր ակոլադայի
+նահանջը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="95"/>
-        <location filename="../../mscore/editstyle.ui" line="3362"/>
+        <location filename="../../mscore/editstyle.ui" line="3356"/>
         <source>Measure</source>
         <translation>Տակտ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4199"/>
+        <location filename="../../mscore/editstyle.ui" line="4193"/>
         <source>Spacing (1=tight):</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3715"/>
+        <location filename="../../mscore/editstyle.ui" line="3709"/>
         <source>Minimum measure width:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4093"/>
+        <location filename="../../mscore/editstyle.ui" line="4087"/>
         <source>Note to barline distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4183"/>
+        <location filename="../../mscore/editstyle.ui" line="4177"/>
         <source>Clef left margin:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4157"/>
+        <location filename="../../mscore/editstyle.ui" line="4151"/>
         <source>Minimum note distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4061"/>
+        <location filename="../../mscore/editstyle.ui" line="4055"/>
         <source>Key signature left margin:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4045"/>
+        <location filename="../../mscore/editstyle.ui" line="4039"/>
         <source>Time signature left margin:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3978"/>
+        <location filename="../../mscore/editstyle.ui" line="3972"/>
         <source>Clef/Key right margin:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3962"/>
+        <location filename="../../mscore/editstyle.ui" line="3956"/>
         <source>Clef to barline distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3933"/>
+        <location filename="../../mscore/editstyle.ui" line="3927"/>
         <source>Staff line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Նոտակիրի գծի հաստությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3917"/>
+        <location filename="../../mscore/editstyle.ui" line="3911"/>
         <source>Barline to accidental distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3858"/>
+        <location filename="../../mscore/editstyle.ui" line="3852"/>
         <source>Multimeasure rest margin:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3782"/>
+        <location filename="../../mscore/editstyle.ui" line="3776"/>
         <source>Barline to grace note distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="100"/>
-        <location filename="../../mscore/editstyle.ui" line="4369"/>
+        <location filename="../../mscore/editstyle.ui" line="4363"/>
         <source>Barlines</source>
         <translation>Տակտի գծեր</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="494"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել նոտաների երկարությունը առանց տակտի գծերը հաշվի առնելու
+(Փորձնական գործառույթ. օգտագործվում է միջնադարյան երաժշտության
+նոտագրության համար)</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4587"/>
+        <location filename="../../mscore/editstyle.ui" line="4581"/>
         <source>Show repeat barline tips (&quot;winged&quot; repeats)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4496"/>
+        <location filename="../../mscore/editstyle.ui" line="4490"/>
         <source>Barline at start of single staff</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4577"/>
+        <location filename="../../mscore/editstyle.ui" line="4571"/>
         <source>Barline at start of multiple staves</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4570"/>
+        <location filename="../../mscore/editstyle.ui" line="4564"/>
         <source>Scale barlines to staff size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4489"/>
+        <location filename="../../mscore/editstyle.ui" line="4483"/>
         <source>Double barline thickness:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4611"/>
+        <location filename="../../mscore/editstyle.ui" line="4605"/>
         <source>Double barline distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="105"/>
-        <location filename="../../mscore/editstyle.ui" line="4733"/>
+        <location filename="../../mscore/editstyle.ui" line="4727"/>
         <source>Notes</source>
         <translation>Նոտաներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4758"/>
+        <location filename="../../mscore/editstyle.ui" line="4752"/>
         <source>Shorten stems</source>
-        <translation type="unfinished"/>
+        <translation>Կարճացնել ցողունները</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4780"/>
+        <location filename="../../mscore/editstyle.ui" line="4774"/>
         <source>Progression:</source>
-        <translation type="unfinished"/>
+        <translation>Սեկվենցիա՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4800"/>
+        <location filename="../../mscore/editstyle.ui" line="4794"/>
         <source>Shortest stem:</source>
-        <translation type="unfinished"/>
+        <translation>Ամենակարճ ցողունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4839"/>
+        <location filename="../../mscore/editstyle.ui" line="4833"/>
         <source>Accidental distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4813"/>
+        <location filename="../../mscore/editstyle.ui" line="4807"/>
         <source>Ledger line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Լրացուցիչ գծերի հաստությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4972"/>
+        <location filename="../../mscore/editstyle.ui" line="4966"/>
         <source>Ledger line length:</source>
-        <translation type="unfinished"/>
+        <translation>Լրացուցիչ գծերի երկարությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4962"/>
+        <location filename="../../mscore/editstyle.ui" line="4956"/>
         <source>Stem thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Ցողունի հաստությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4872"/>
+        <location filename="../../mscore/editstyle.ui" line="4866"/>
         <source>Dot size:</source>
-        <translation type="unfinished"/>
+        <translation>Կետի չափը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="85"/>
-        <location filename="../../mscore/editstyle.ui" line="3229"/>
+        <location filename="../../mscore/editstyle.ui" line="3223"/>
         <source>Clefs</source>
         <translation>Բանալիներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3235"/>
+        <location filename="../../mscore/editstyle.ui" line="3229"/>
         <source>Default TAB Clef</source>
-        <translation type="unfinished"/>
+        <translation>Սկզբնադիր TAB բանալի</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3241"/>
+        <location filename="../../mscore/editstyle.ui" line="3235"/>
         <source>Standard TAB clef</source>
-        <translation type="unfinished"/>
+        <translation>Ստանդարտ TAB բանալի</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3248"/>
+        <location filename="../../mscore/editstyle.ui" line="3242"/>
         <source>Serif TAB clef</source>
-        <translation type="unfinished"/>
+        <translation>Փակոցներով TAB բանալի</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="120"/>
-        <location filename="../../mscore/editstyle.ui" line="5895"/>
+        <location filename="../../mscore/editstyle.ui" line="5889"/>
         <source>Arpeggios</source>
         <translation>Արպեջո</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5909"/>
+        <location filename="../../mscore/editstyle.ui" line="5903"/>
         <source>Distance to note:</source>
-        <translation type="unfinished"/>
+        <translation>Հեռավորությունը նոտայից՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5932"/>
-        <location filename="../../mscore/editstyle.ui" line="6571"/>
-        <location filename="../../mscore/editstyle.ui" line="6702"/>
-        <location filename="../../mscore/editstyle.ui" line="6978"/>
-        <location filename="../../mscore/editstyle.ui" line="7230"/>
-        <location filename="../../mscore/editstyle.ui" line="7754"/>
+        <location filename="../../mscore/editstyle.ui" line="5926"/>
+        <location filename="../../mscore/editstyle.ui" line="6565"/>
+        <location filename="../../mscore/editstyle.ui" line="6696"/>
+        <location filename="../../mscore/editstyle.ui" line="6972"/>
+        <location filename="../../mscore/editstyle.ui" line="7224"/>
+        <location filename="../../mscore/editstyle.ui" line="7748"/>
         <source>Line thickness:</source>
-        <translation>Գծի հաստություն՝</translation>
+        <translation>Գծի հաստությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5955"/>
+        <location filename="../../mscore/editstyle.ui" line="5949"/>
         <source>Hook length:</source>
-        <translation type="unfinished"/>
+        <translation>Պոչի երկարությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="110"/>
-        <location filename="../../mscore/editstyle.ui" line="5044"/>
+        <location filename="../../mscore/editstyle.ui" line="5038"/>
         <source>Beams</source>
-        <translation type="unfinished"/>
+        <translation>Խմբագծեր</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5053"/>
+        <location filename="../../mscore/editstyle.ui" line="5047"/>
         <source>Beam thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Խմբագծի հաստությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5073"/>
-        <source>Beam distance (in beam thickness units):</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="5090"/>
+        <location filename="../../mscore/editstyle.ui" line="5084"/>
         <source>Broken beam minimum length:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5126"/>
+        <location filename="../../mscore/editstyle.ui" line="5120"/>
         <source>Flatten all beams</source>
-        <translation type="unfinished"/>
+        <translation>Հորիզոնական սարքել բոլոր խմբագծերը</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="125"/>
-        <location filename="../../mscore/editstyle.ui" line="6010"/>
+        <location filename="../../mscore/editstyle.ui" line="6004"/>
         <source>Slurs/Ties</source>
         <translation>Լիգաներ/Կապակցող լիգաներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6068"/>
+        <location filename="../../mscore/editstyle.ui" line="6062"/>
         <source>Line thickness at end:</source>
         <translation>Գծի հաստությունը վերջում՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6117"/>
+        <location filename="../../mscore/editstyle.ui" line="6111"/>
         <source>Line thickness middle:</source>
-        <translation type="unfinished"/>
+        <translation>Գծի հաստությունը միջնամասում՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6035"/>
+        <location filename="../../mscore/editstyle.ui" line="6029"/>
         <source>Dotted line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Կետագծի հաստությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6127"/>
+        <location filename="../../mscore/editstyle.ui" line="6121"/>
         <source>Minimum tie length:</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="65"/>
-        <location filename="../../mscore/editstyle.ui" line="1345"/>
+        <location filename="../../mscore/editstyle.ui" line="1339"/>
         <source>Sizes</source>
-        <translation type="unfinished"/>
+        <translation>Չափս</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1360"/>
+        <location filename="../../mscore/editstyle.ui" line="1354"/>
         <source>Small staff size:</source>
-        <translation type="unfinished"/>
+        <translation>Փոքր նոտակիրի չափսը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1428"/>
+        <location filename="../../mscore/editstyle.ui" line="1422"/>
         <source>Small note size:</source>
-        <translation type="unfinished"/>
+        <translation>Փոքր նոտայի չափսը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1466"/>
+        <location filename="../../mscore/editstyle.ui" line="1460"/>
         <source>Grace note size:</source>
-        <translation type="unfinished"/>
+        <translation>Ֆորշլագի չափսը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1504"/>
+        <location filename="../../mscore/editstyle.ui" line="1498"/>
         <source>Small clef size:</source>
-        <translation type="unfinished"/>
+        <translation>Փոքր բանալու չափսը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="130"/>
-        <location filename="../../mscore/editstyle.ui" line="6267"/>
+        <location filename="../../mscore/editstyle.ui" line="6261"/>
         <source>Hairpins</source>
         <translation>Ծամկալներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6276"/>
+        <location filename="../../mscore/editstyle.ui" line="6270"/>
         <source>Height:</source>
         <translation>Բարձրություն՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6296"/>
+        <location filename="../../mscore/editstyle.ui" line="6290"/>
         <source>Continue height:</source>
-        <translation>Շարունակելու բարձրություն՝</translation>
+        <translation>Շարունակելու բարձրությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10541"/>
+        <location filename="../../mscore/editstyle.ui" line="10535"/>
         <source>Default vertical position:</source>
-        <translation type="unfinished"/>
+        <translation>Սկզբնադիր ուղղահայաց դիրքը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="135"/>
-        <location filename="../../mscore/editstyle.ui" line="6601"/>
+        <location filename="../../mscore/editstyle.ui" line="6595"/>
         <source>Volta</source>
         <translation>Վոլտա</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6636"/>
+        <location filename="../../mscore/editstyle.ui" line="6630"/>
         <source>Hook height:</source>
-        <translation type="unfinished"/>
+        <translation>Կեռի բարձրությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6647"/>
-        <location filename="../../mscore/editstyle.ui" line="7003"/>
-        <location filename="../../mscore/editstyle.ui" line="7172"/>
+        <location filename="../../mscore/editstyle.ui" line="6641"/>
+        <location filename="../../mscore/editstyle.ui" line="6997"/>
+        <location filename="../../mscore/editstyle.ui" line="7166"/>
         <location filename="../../mscore/editstyle.cpp" line="79"/>
         <source>Continuous</source>
         <translation>Անընդհատ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6652"/>
-        <location filename="../../mscore/editstyle.ui" line="7008"/>
-        <location filename="../../mscore/editstyle.ui" line="7177"/>
+        <location filename="../../mscore/editstyle.ui" line="6646"/>
+        <location filename="../../mscore/editstyle.ui" line="7002"/>
+        <location filename="../../mscore/editstyle.ui" line="7171"/>
         <location filename="../../mscore/editstyle.cpp" line="80"/>
         <source>Dashed</source>
         <translation>Ստվերագիծ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6657"/>
-        <location filename="../../mscore/editstyle.ui" line="7013"/>
-        <location filename="../../mscore/editstyle.ui" line="7182"/>
+        <location filename="../../mscore/editstyle.ui" line="6651"/>
+        <location filename="../../mscore/editstyle.ui" line="7007"/>
+        <location filename="../../mscore/editstyle.ui" line="7176"/>
         <location filename="../../mscore/editstyle.cpp" line="81"/>
         <source>Dotted</source>
         <translation>Կետավոր</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6662"/>
-        <location filename="../../mscore/editstyle.ui" line="7018"/>
-        <location filename="../../mscore/editstyle.ui" line="7187"/>
+        <location filename="../../mscore/editstyle.ui" line="6656"/>
+        <location filename="../../mscore/editstyle.ui" line="7012"/>
+        <location filename="../../mscore/editstyle.ui" line="7181"/>
         <location filename="../../mscore/editstyle.cpp" line="82"/>
         <source>Dash-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Գիծ-կետ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6667"/>
-        <location filename="../../mscore/editstyle.ui" line="7023"/>
-        <location filename="../../mscore/editstyle.ui" line="7192"/>
+        <location filename="../../mscore/editstyle.ui" line="6661"/>
+        <location filename="../../mscore/editstyle.ui" line="7017"/>
+        <location filename="../../mscore/editstyle.ui" line="7186"/>
         <location filename="../../mscore/editstyle.cpp" line="83"/>
         <source>Dash-dot-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Գիծ-կետ-կետ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6801"/>
-        <location filename="../../mscore/editstyle.ui" line="6968"/>
-        <location filename="../../mscore/editstyle.ui" line="7220"/>
+        <location filename="../../mscore/editstyle.ui" line="6795"/>
+        <location filename="../../mscore/editstyle.ui" line="6962"/>
+        <location filename="../../mscore/editstyle.ui" line="7214"/>
         <source>Line style:</source>
-        <translation>Գծի ոճ՝</translation>
+        <translation>Գծի ոճը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="140"/>
-        <location filename="../../mscore/editstyle.ui" line="6831"/>
+        <location filename="../../mscore/editstyle.ui" line="6825"/>
         <source>Ottava</source>
         <translation>Օկտավա</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7084"/>
+        <location filename="../../mscore/editstyle.ui" line="7078"/>
         <source>Numbers only</source>
         <translation>Միայն թվեր</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7165"/>
+        <location filename="../../mscore/editstyle.ui" line="7159"/>
         <source>Pedal Line</source>
         <translation>Ոտնակ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7402"/>
+        <location filename="../../mscore/editstyle.ui" line="7396"/>
         <source>Trill Line</source>
         <translation>Տրել</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="210"/>
-        <location filename="../../mscore/editstyle.ui" line="10054"/>
+        <location filename="../../mscore/editstyle.ui" line="10048"/>
         <source>Chord Symbols</source>
         <translation>Ակորդների նշանները</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5165"/>
+        <location filename="../../mscore/editstyle.ui" line="5159"/>
         <source>Vertical Distance from Notes</source>
-        <translation type="unfinished"/>
+        <translation>Ուղղահայաց հեռավորությունը նոտաներից</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5171"/>
+        <location filename="../../mscore/editstyle.ui" line="5165"/>
         <source>Avoid staves</source>
-        <translation type="unfinished"/>
+        <translation>Խոսափել նոտակիրներից</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5347"/>
+        <location filename="../../mscore/editstyle.ui" line="5341"/>
         <source>Horizontal Distance from Notes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5353"/>
+        <location filename="../../mscore/editstyle.ui" line="5347"/>
         <source>Distance before stem of first note:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5382"/>
+        <location filename="../../mscore/editstyle.ui" line="5376"/>
         <source>Distance before head of first note:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5408"/>
+        <location filename="../../mscore/editstyle.ui" line="5402"/>
         <source>Distance after stem of last note:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5437"/>
+        <location filename="../../mscore/editstyle.ui" line="5431"/>
         <source>Distance after head of last note:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5485"/>
+        <location filename="../../mscore/editstyle.ui" line="5479"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5508"/>
+        <location filename="../../mscore/editstyle.ui" line="5502"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5531"/>
+        <location filename="../../mscore/editstyle.ui" line="5525"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5554"/>
+        <location filename="../../mscore/editstyle.ui" line="5548"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5763"/>
-        <location filename="../../mscore/editstyle.ui" line="5815"/>
+        <location filename="../../mscore/editstyle.ui" line="5757"/>
+        <location filename="../../mscore/editstyle.ui" line="5809"/>
         <source>None</source>
         <translation>Չկա</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10060"/>
+        <location filename="../../mscore/editstyle.ui" line="10054"/>
         <source>Appearance</source>
         <translation>Տեսք</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10069"/>
-        <location filename="../../mscore/editstyle.ui" line="10181"/>
+        <location filename="../../mscore/editstyle.ui" line="10063"/>
+        <location filename="../../mscore/editstyle.ui" line="10175"/>
         <source>Standard</source>
         <translation>Ստանդարտ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10076"/>
+        <location filename="../../mscore/editstyle.ui" line="10070"/>
         <source>Jazz</source>
         <translation>Ջազ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10083"/>
+        <location filename="../../mscore/editstyle.ui" line="10077"/>
         <source>Custom</source>
         <translation>Հարմարեցրած</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10150"/>
+        <location filename="../../mscore/editstyle.ui" line="10144"/>
         <source>Chord symbols style file:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10160"/>
+        <location filename="../../mscore/editstyle.ui" line="10154"/>
         <source>Load chords.xml</source>
-        <translation type="unfinished"/>
+        <translation>Բեռնել chords.xml</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10170"/>
+        <location filename="../../mscore/editstyle.ui" line="10164"/>
         <source>Note Spelling</source>
-        <translation type="unfinished"/>
+        <translation>Նոտաների ուղղագրությունը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10191"/>
+        <location filename="../../mscore/editstyle.ui" line="10185"/>
         <source>German</source>
-        <translation type="unfinished"/>
+        <translation>Գերմանական</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10201"/>
+        <location filename="../../mscore/editstyle.ui" line="10195"/>
         <source>Full German</source>
-        <translation type="unfinished"/>
+        <translation>Գերմանական լրիվ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10211"/>
+        <location filename="../../mscore/editstyle.ui" line="10205"/>
         <source>Solfeggio</source>
-        <translation type="unfinished"/>
+        <translation>Սոլֆեջո</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10221"/>
+        <location filename="../../mscore/editstyle.ui" line="10215"/>
         <source>French</source>
-        <translation type="unfinished"/>
+        <translation>Ֆրանսիական</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10243"/>
+        <location filename="../../mscore/editstyle.ui" line="10237"/>
         <source>Automatic Capitalization</source>
-        <translation type="unfinished"/>
+        <translation>Ինքնաշխատ մեծատառ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10252"/>
+        <location filename="../../mscore/editstyle.ui" line="10246"/>
         <source>Lower case minor chords</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10259"/>
+        <location filename="../../mscore/editstyle.ui" line="10253"/>
         <source>Lower case bass notes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10266"/>
+        <location filename="../../mscore/editstyle.ui" line="10260"/>
         <source>All caps note names</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10292"/>
+        <location filename="../../mscore/editstyle.ui" line="10286"/>
         <source>Positioning</source>
-        <translation type="unfinished"/>
+        <translation>Դիրք</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10320"/>
+        <location filename="../../mscore/editstyle.ui" line="10314"/>
         <source>Distance to fretboard diagram:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10352"/>
+        <location filename="../../mscore/editstyle.ui" line="10346"/>
         <source>Minimum chord spacing:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10375"/>
+        <location filename="../../mscore/editstyle.ui" line="10369"/>
         <source>Maximum barline distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10407"/>
+        <location filename="../../mscore/editstyle.ui" line="10401"/>
         <source>Capo</source>
         <extracomment>Capodastro</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10433"/>
+        <location filename="../../mscore/editstyle.ui" line="10427"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="215"/>
-        <location filename="../../mscore/editstyle.ui" line="10466"/>
+        <location filename="../../mscore/editstyle.ui" line="10460"/>
         <source>Fretboard Diagrams</source>
         <translation>Նվագակոթի դիագրամ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10527"/>
+        <location filename="../../mscore/editstyle.ui" line="10521"/>
         <source>Position:</source>
-        <translation>Դիրք՝</translation>
+        <translation>Դիրք՝ </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10551"/>
+        <location filename="../../mscore/editstyle.ui" line="10545"/>
         <source>Barré line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Բառերի գծի հաստությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10593"/>
+        <location filename="../../mscore/editstyle.ui" line="10587"/>
         <source>Scale:</source>
         <translation>Մասշտաբ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="205"/>
-        <location filename="../../mscore/editstyle.ui" line="9831"/>
+        <location filename="../../mscore/editstyle.ui" line="9825"/>
         <source>Figured Bass</source>
         <translation>Գեներալ-բաս</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9860"/>
+        <location filename="../../mscore/editstyle.ui" line="9854"/>
         <source>Font:</source>
         <translation>Տառատեսակ՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1824"/>
-        <location filename="../../mscore/editstyle.ui" line="2150"/>
-        <location filename="../../mscore/editstyle.ui" line="9892"/>
+        <location filename="../../mscore/editstyle.ui" line="1818"/>
+        <location filename="../../mscore/editstyle.ui" line="2144"/>
+        <location filename="../../mscore/editstyle.ui" line="9886"/>
         <source>Size:</source>
         <translation>Չափ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="70"/>
         <source>Header, Footer</source>
-        <translation type="unfinished"/>
+        <translation>Էջագլուխ, Էջատակ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="145"/>
@@ -3166,59 +3294,59 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="155"/>
         <source>Vibrato</source>
-        <translation type="unfinished"/>
+        <translation>Վիբրատո</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="195"/>
-        <location filename="../../mscore/editstyle.ui" line="9456"/>
+        <location filename="../../mscore/editstyle.ui" line="9450"/>
         <source>Dynamics</source>
-        <translation>Ուժաբանություն</translation>
+        <translation>Դինամիկա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="175"/>
-        <location filename="../../mscore/editstyle.ui" line="8227"/>
+        <location filename="../../mscore/editstyle.ui" line="8221"/>
         <source>Fermatas</source>
-        <translation type="unfinished"/>
+        <translation>Ֆերմատաներ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="165"/>
-        <location filename="../../mscore/editstyle.ui" line="7899"/>
+        <location filename="../../mscore/editstyle.ui" line="7893"/>
         <source>Text Line</source>
         <translation>Գրվածքի տող</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="180"/>
-        <location filename="../../mscore/editstyle.ui" line="8370"/>
+        <location filename="../../mscore/editstyle.ui" line="8364"/>
         <source>Staff Text</source>
-        <translation>Նոտակիրի գրվածքը</translation>
+        <translation>Նոտակիրի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="185"/>
-        <location filename="../../mscore/editstyle.ui" line="8562"/>
+        <location filename="../../mscore/editstyle.ui" line="8556"/>
         <source>Tempo Text</source>
-        <translation type="unfinished"/>
+        <translation>Տեմպի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="200"/>
-        <location filename="../../mscore/editstyle.ui" line="9639"/>
+        <location filename="../../mscore/editstyle.ui" line="9633"/>
         <source>Rehearsal Marks</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուրի նշումներ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="160"/>
-        <location filename="../../mscore/editstyle.ui" line="7670"/>
+        <location filename="../../mscore/editstyle.ui" line="7664"/>
         <source>Bend</source>
         <translation>Բենդ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="190"/>
         <source>Lyrics</source>
-        <translation>Երգի բառերը</translation>
+        <translation>Երգի խոսքեր</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="220"/>
         <source>Text Styles</source>
-        <translation type="unfinished"/>
+        <translation>Գրվածքի ոճեր</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="262"/>
@@ -3228,7 +3356,9 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="265"/>
         <source>Automatically load style settings based on font</source>
-        <translation type="unfinished"/>
+        <translation>Ինքնաշխատորեն բեռնել
+ոճի կարգավորումները՝
+հիմնվելով տառատեսակի վրա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="390"/>
@@ -3239,168 +3369,169 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="886"/>
         <location filename="../../mscore/editstyle.ui" line="903"/>
         <location filename="../../mscore/editstyle.ui" line="1032"/>
-        <location filename="../../mscore/editstyle.ui" line="1179"/>
-        <location filename="../../mscore/editstyle.ui" line="1262"/>
-        <location filename="../../mscore/editstyle.ui" line="1279"/>
-        <location filename="../../mscore/editstyle.ui" line="1392"/>
-        <location filename="../../mscore/editstyle.ui" line="1536"/>
-        <location filename="../../mscore/editstyle.ui" line="1553"/>
-        <location filename="../../mscore/editstyle.ui" line="1570"/>
-        <location filename="../../mscore/editstyle.ui" line="1847"/>
-        <location filename="../../mscore/editstyle.ui" line="1874"/>
-        <location filename="../../mscore/editstyle.ui" line="1894"/>
-        <location filename="../../mscore/editstyle.ui" line="2180"/>
-        <location filename="../../mscore/editstyle.ui" line="2197"/>
-        <location filename="../../mscore/editstyle.ui" line="2237"/>
-        <location filename="../../mscore/editstyle.ui" line="2333"/>
-        <location filename="../../mscore/editstyle.ui" line="2370"/>
-        <location filename="../../mscore/editstyle.ui" line="2394"/>
-        <location filename="../../mscore/editstyle.ui" line="2455"/>
-        <location filename="../../mscore/editstyle.ui" line="2482"/>
-        <location filename="../../mscore/editstyle.ui" line="2912"/>
-        <location filename="../../mscore/editstyle.ui" line="2952"/>
-        <location filename="../../mscore/editstyle.ui" line="3003"/>
-        <location filename="../../mscore/editstyle.ui" line="3020"/>
-        <location filename="../../mscore/editstyle.ui" line="3071"/>
-        <location filename="../../mscore/editstyle.ui" line="3129"/>
-        <location filename="../../mscore/editstyle.ui" line="3146"/>
-        <location filename="../../mscore/editstyle.ui" line="3163"/>
-        <location filename="../../mscore/editstyle.ui" line="3410"/>
-        <location filename="../../mscore/editstyle.ui" line="3427"/>
-        <location filename="../../mscore/editstyle.ui" line="3444"/>
-        <location filename="../../mscore/editstyle.ui" line="3471"/>
-        <location filename="../../mscore/editstyle.ui" line="3488"/>
-        <location filename="../../mscore/editstyle.ui" line="3505"/>
-        <location filename="../../mscore/editstyle.ui" line="3522"/>
-        <location filename="../../mscore/editstyle.ui" line="3539"/>
-        <location filename="../../mscore/editstyle.ui" line="3556"/>
-        <location filename="../../mscore/editstyle.ui" line="3583"/>
-        <location filename="../../mscore/editstyle.ui" line="3600"/>
-        <location filename="../../mscore/editstyle.ui" line="3637"/>
-        <location filename="../../mscore/editstyle.ui" line="3725"/>
-        <location filename="../../mscore/editstyle.ui" line="3742"/>
-        <location filename="../../mscore/editstyle.ui" line="3759"/>
-        <location filename="../../mscore/editstyle.ui" line="3792"/>
-        <location filename="../../mscore/editstyle.ui" line="3809"/>
-        <location filename="../../mscore/editstyle.ui" line="3868"/>
-        <location filename="../../mscore/editstyle.ui" line="4209"/>
-        <location filename="../../mscore/editstyle.ui" line="4252"/>
-        <location filename="../../mscore/editstyle.ui" line="4295"/>
-        <location filename="../../mscore/editstyle.ui" line="4375"/>
-        <location filename="../../mscore/editstyle.ui" line="4438"/>
-        <location filename="../../mscore/editstyle.ui" line="4455"/>
-        <location filename="../../mscore/editstyle.ui" line="4472"/>
-        <location filename="../../mscore/editstyle.ui" line="4503"/>
-        <location filename="../../mscore/editstyle.ui" line="4546"/>
-        <location filename="../../mscore/editstyle.ui" line="4628"/>
-        <location filename="../../mscore/editstyle.ui" line="4645"/>
-        <location filename="../../mscore/editstyle.ui" line="4669"/>
-        <location filename="../../mscore/editstyle.ui" line="4696"/>
-        <location filename="../../mscore/editstyle.ui" line="5281"/>
-        <location filename="../../mscore/editstyle.ui" line="5304"/>
-        <location filename="../../mscore/editstyle.ui" line="5327"/>
-        <location filename="../../mscore/editstyle.ui" line="5482"/>
-        <location filename="../../mscore/editstyle.ui" line="5505"/>
-        <location filename="../../mscore/editstyle.ui" line="5528"/>
-        <location filename="../../mscore/editstyle.ui" line="5551"/>
-        <location filename="../../mscore/editstyle.ui" line="5606"/>
-        <location filename="../../mscore/editstyle.ui" line="5674"/>
-        <location filename="../../mscore/editstyle.ui" line="5735"/>
-        <location filename="../../mscore/editstyle.ui" line="5787"/>
-        <location filename="../../mscore/editstyle.ui" line="5839"/>
-        <location filename="../../mscore/editstyle.ui" line="6159"/>
-        <location filename="../../mscore/editstyle.ui" line="6189"/>
-        <location filename="../../mscore/editstyle.ui" line="6206"/>
-        <location filename="../../mscore/editstyle.ui" line="6223"/>
-        <location filename="../../mscore/editstyle.ui" line="6240"/>
-        <location filename="../../mscore/editstyle.ui" line="6332"/>
-        <location filename="../../mscore/editstyle.ui" line="6355"/>
-        <location filename="../../mscore/editstyle.ui" line="6378"/>
-        <location filename="../../mscore/editstyle.ui" line="6431"/>
-        <location filename="../../mscore/editstyle.ui" line="6478"/>
-        <location filename="../../mscore/editstyle.ui" line="6508"/>
-        <location filename="../../mscore/editstyle.ui" line="6544"/>
-        <location filename="../../mscore/editstyle.ui" line="6616"/>
-        <location filename="../../mscore/editstyle.ui" line="6731"/>
-        <location filename="../../mscore/editstyle.ui" line="6761"/>
-        <location filename="../../mscore/editstyle.ui" line="6784"/>
-        <location filename="../../mscore/editstyle.ui" line="6846"/>
-        <location filename="../../mscore/editstyle.ui" line="6928"/>
-        <location filename="../../mscore/editstyle.ui" line="6951"/>
-        <location filename="../../mscore/editstyle.ui" line="7037"/>
-        <location filename="../../mscore/editstyle.ui" line="7060"/>
-        <location filename="../../mscore/editstyle.ui" line="7097"/>
-        <location filename="../../mscore/editstyle.ui" line="7127"/>
-        <location filename="../../mscore/editstyle.ui" line="7253"/>
-        <location filename="../../mscore/editstyle.ui" line="7270"/>
-        <location filename="../../mscore/editstyle.ui" line="7287"/>
-        <location filename="../../mscore/editstyle.ui" line="7314"/>
-        <location filename="../../mscore/editstyle.ui" line="7331"/>
-        <location filename="../../mscore/editstyle.ui" line="7441"/>
-        <location filename="../../mscore/editstyle.ui" line="7482"/>
-        <location filename="../../mscore/editstyle.ui" line="7506"/>
-        <location filename="../../mscore/editstyle.ui" line="7575"/>
-        <location filename="../../mscore/editstyle.ui" line="7616"/>
-        <location filename="../../mscore/editstyle.ui" line="7640"/>
-        <location filename="../../mscore/editstyle.ui" line="7708"/>
-        <location filename="../../mscore/editstyle.ui" line="7784"/>
-        <location filename="../../mscore/editstyle.ui" line="7801"/>
-        <location filename="../../mscore/editstyle.ui" line="7848"/>
-        <location filename="../../mscore/editstyle.ui" line="7875"/>
-        <location filename="../../mscore/editstyle.ui" line="7945"/>
-        <location filename="../../mscore/editstyle.ui" line="7962"/>
-        <location filename="../../mscore/editstyle.ui" line="7992"/>
-        <location filename="../../mscore/editstyle.ui" line="8255"/>
-        <location filename="../../mscore/editstyle.ui" line="8279"/>
-        <location filename="../../mscore/editstyle.ui" line="8325"/>
-        <location filename="../../mscore/editstyle.ui" line="8416"/>
-        <location filename="../../mscore/editstyle.ui" line="8433"/>
-        <location filename="../../mscore/editstyle.ui" line="8486"/>
-        <location filename="../../mscore/editstyle.ui" line="8532"/>
-        <location filename="../../mscore/editstyle.ui" line="8615"/>
-        <location filename="../../mscore/editstyle.ui" line="8632"/>
-        <location filename="../../mscore/editstyle.ui" line="8662"/>
-        <location filename="../../mscore/editstyle.ui" line="8724"/>
-        <location filename="../../mscore/editstyle.ui" line="8861"/>
-        <location filename="../../mscore/editstyle.ui" line="8878"/>
-        <location filename="../../mscore/editstyle.ui" line="8895"/>
-        <location filename="../../mscore/editstyle.ui" line="8912"/>
-        <location filename="../../mscore/editstyle.ui" line="8929"/>
-        <location filename="../../mscore/editstyle.ui" line="8985"/>
-        <location filename="../../mscore/editstyle.ui" line="9012"/>
-        <location filename="../../mscore/editstyle.ui" line="9041"/>
-        <location filename="../../mscore/editstyle.ui" line="9072"/>
-        <location filename="../../mscore/editstyle.ui" line="9105"/>
-        <location filename="../../mscore/editstyle.ui" line="9167"/>
-        <location filename="../../mscore/editstyle.ui" line="9204"/>
-        <location filename="../../mscore/editstyle.ui" line="9237"/>
-        <location filename="../../mscore/editstyle.ui" line="9280"/>
-        <location filename="../../mscore/editstyle.ui" line="9304"/>
-        <location filename="../../mscore/editstyle.ui" line="9321"/>
-        <location filename="../../mscore/editstyle.ui" line="9387"/>
-        <location filename="../../mscore/editstyle.ui" line="9520"/>
-        <location filename="../../mscore/editstyle.ui" line="9537"/>
-        <location filename="../../mscore/editstyle.ui" line="9578"/>
-        <location filename="../../mscore/editstyle.ui" line="9609"/>
-        <location filename="../../mscore/editstyle.ui" line="9692"/>
-        <location filename="../../mscore/editstyle.ui" line="9709"/>
-        <location filename="../../mscore/editstyle.ui" line="9739"/>
-        <location filename="../../mscore/editstyle.ui" line="9801"/>
-        <location filename="../../mscore/editstyle.ui" line="10698"/>
-        <location filename="../../mscore/editstyle.ui" line="10732"/>
-        <location filename="../../mscore/editstyle.ui" line="10749"/>
-        <location filename="../../mscore/editstyle.ui" line="10780"/>
-        <location filename="../../mscore/editstyle.ui" line="10804"/>
-        <location filename="../../mscore/editstyle.ui" line="10821"/>
-        <location filename="../../mscore/editstyle.ui" line="10838"/>
-        <location filename="../../mscore/editstyle.ui" line="10880"/>
-        <location filename="../../mscore/editstyle.ui" line="10935"/>
-        <location filename="../../mscore/editstyle.ui" line="10952"/>
-        <location filename="../../mscore/editstyle.ui" line="10969"/>
-        <location filename="../../mscore/editstyle.ui" line="10986"/>
-        <location filename="../../mscore/editstyle.ui" line="11033"/>
+        <location filename="../../mscore/editstyle.ui" line="1176"/>
+        <location filename="../../mscore/editstyle.ui" line="1256"/>
+        <location filename="../../mscore/editstyle.ui" line="1273"/>
+        <location filename="../../mscore/editstyle.ui" line="1386"/>
+        <location filename="../../mscore/editstyle.ui" line="1530"/>
+        <location filename="../../mscore/editstyle.ui" line="1547"/>
+        <location filename="../../mscore/editstyle.ui" line="1564"/>
+        <location filename="../../mscore/editstyle.ui" line="1841"/>
+        <location filename="../../mscore/editstyle.ui" line="1868"/>
+        <location filename="../../mscore/editstyle.ui" line="1888"/>
+        <location filename="../../mscore/editstyle.ui" line="2174"/>
+        <location filename="../../mscore/editstyle.ui" line="2191"/>
+        <location filename="../../mscore/editstyle.ui" line="2231"/>
+        <location filename="../../mscore/editstyle.ui" line="2327"/>
+        <location filename="../../mscore/editstyle.ui" line="2364"/>
+        <location filename="../../mscore/editstyle.ui" line="2388"/>
+        <location filename="../../mscore/editstyle.ui" line="2449"/>
+        <location filename="../../mscore/editstyle.ui" line="2476"/>
+        <location filename="../../mscore/editstyle.ui" line="2906"/>
+        <location filename="../../mscore/editstyle.ui" line="2946"/>
+        <location filename="../../mscore/editstyle.ui" line="2997"/>
+        <location filename="../../mscore/editstyle.ui" line="3014"/>
+        <location filename="../../mscore/editstyle.ui" line="3065"/>
+        <location filename="../../mscore/editstyle.ui" line="3123"/>
+        <location filename="../../mscore/editstyle.ui" line="3140"/>
+        <location filename="../../mscore/editstyle.ui" line="3157"/>
+        <location filename="../../mscore/editstyle.ui" line="3404"/>
+        <location filename="../../mscore/editstyle.ui" line="3421"/>
+        <location filename="../../mscore/editstyle.ui" line="3438"/>
+        <location filename="../../mscore/editstyle.ui" line="3465"/>
+        <location filename="../../mscore/editstyle.ui" line="3482"/>
+        <location filename="../../mscore/editstyle.ui" line="3499"/>
+        <location filename="../../mscore/editstyle.ui" line="3516"/>
+        <location filename="../../mscore/editstyle.ui" line="3533"/>
+        <location filename="../../mscore/editstyle.ui" line="3550"/>
+        <location filename="../../mscore/editstyle.ui" line="3577"/>
+        <location filename="../../mscore/editstyle.ui" line="3594"/>
+        <location filename="../../mscore/editstyle.ui" line="3631"/>
+        <location filename="../../mscore/editstyle.ui" line="3719"/>
+        <location filename="../../mscore/editstyle.ui" line="3736"/>
+        <location filename="../../mscore/editstyle.ui" line="3753"/>
+        <location filename="../../mscore/editstyle.ui" line="3786"/>
+        <location filename="../../mscore/editstyle.ui" line="3803"/>
+        <location filename="../../mscore/editstyle.ui" line="3862"/>
+        <location filename="../../mscore/editstyle.ui" line="4203"/>
+        <location filename="../../mscore/editstyle.ui" line="4246"/>
+        <location filename="../../mscore/editstyle.ui" line="4289"/>
+        <location filename="../../mscore/editstyle.ui" line="4369"/>
+        <location filename="../../mscore/editstyle.ui" line="4432"/>
+        <location filename="../../mscore/editstyle.ui" line="4449"/>
+        <location filename="../../mscore/editstyle.ui" line="4466"/>
+        <location filename="../../mscore/editstyle.ui" line="4497"/>
+        <location filename="../../mscore/editstyle.ui" line="4540"/>
+        <location filename="../../mscore/editstyle.ui" line="4622"/>
+        <location filename="../../mscore/editstyle.ui" line="4639"/>
+        <location filename="../../mscore/editstyle.ui" line="4663"/>
+        <location filename="../../mscore/editstyle.ui" line="4690"/>
+        <location filename="../../mscore/editstyle.ui" line="5275"/>
+        <location filename="../../mscore/editstyle.ui" line="5298"/>
+        <location filename="../../mscore/editstyle.ui" line="5321"/>
+        <location filename="../../mscore/editstyle.ui" line="5476"/>
+        <location filename="../../mscore/editstyle.ui" line="5499"/>
+        <location filename="../../mscore/editstyle.ui" line="5522"/>
+        <location filename="../../mscore/editstyle.ui" line="5545"/>
+        <location filename="../../mscore/editstyle.ui" line="5600"/>
+        <location filename="../../mscore/editstyle.ui" line="5668"/>
+        <location filename="../../mscore/editstyle.ui" line="5729"/>
+        <location filename="../../mscore/editstyle.ui" line="5781"/>
+        <location filename="../../mscore/editstyle.ui" line="5833"/>
+        <location filename="../../mscore/editstyle.ui" line="6153"/>
+        <location filename="../../mscore/editstyle.ui" line="6183"/>
+        <location filename="../../mscore/editstyle.ui" line="6200"/>
+        <location filename="../../mscore/editstyle.ui" line="6217"/>
+        <location filename="../../mscore/editstyle.ui" line="6234"/>
+        <location filename="../../mscore/editstyle.ui" line="6326"/>
+        <location filename="../../mscore/editstyle.ui" line="6349"/>
+        <location filename="../../mscore/editstyle.ui" line="6372"/>
+        <location filename="../../mscore/editstyle.ui" line="6425"/>
+        <location filename="../../mscore/editstyle.ui" line="6472"/>
+        <location filename="../../mscore/editstyle.ui" line="6502"/>
+        <location filename="../../mscore/editstyle.ui" line="6538"/>
+        <location filename="../../mscore/editstyle.ui" line="6610"/>
+        <location filename="../../mscore/editstyle.ui" line="6725"/>
+        <location filename="../../mscore/editstyle.ui" line="6755"/>
+        <location filename="../../mscore/editstyle.ui" line="6778"/>
+        <location filename="../../mscore/editstyle.ui" line="6840"/>
+        <location filename="../../mscore/editstyle.ui" line="6922"/>
+        <location filename="../../mscore/editstyle.ui" line="6945"/>
+        <location filename="../../mscore/editstyle.ui" line="7031"/>
+        <location filename="../../mscore/editstyle.ui" line="7054"/>
+        <location filename="../../mscore/editstyle.ui" line="7091"/>
+        <location filename="../../mscore/editstyle.ui" line="7121"/>
+        <location filename="../../mscore/editstyle.ui" line="7247"/>
+        <location filename="../../mscore/editstyle.ui" line="7264"/>
+        <location filename="../../mscore/editstyle.ui" line="7281"/>
+        <location filename="../../mscore/editstyle.ui" line="7308"/>
+        <location filename="../../mscore/editstyle.ui" line="7325"/>
+        <location filename="../../mscore/editstyle.ui" line="7435"/>
+        <location filename="../../mscore/editstyle.ui" line="7476"/>
+        <location filename="../../mscore/editstyle.ui" line="7500"/>
+        <location filename="../../mscore/editstyle.ui" line="7569"/>
+        <location filename="../../mscore/editstyle.ui" line="7610"/>
+        <location filename="../../mscore/editstyle.ui" line="7634"/>
+        <location filename="../../mscore/editstyle.ui" line="7702"/>
+        <location filename="../../mscore/editstyle.ui" line="7778"/>
+        <location filename="../../mscore/editstyle.ui" line="7795"/>
+        <location filename="../../mscore/editstyle.ui" line="7842"/>
+        <location filename="../../mscore/editstyle.ui" line="7869"/>
+        <location filename="../../mscore/editstyle.ui" line="7939"/>
+        <location filename="../../mscore/editstyle.ui" line="7956"/>
+        <location filename="../../mscore/editstyle.ui" line="7986"/>
+        <location filename="../../mscore/editstyle.ui" line="8249"/>
+        <location filename="../../mscore/editstyle.ui" line="8273"/>
+        <location filename="../../mscore/editstyle.ui" line="8319"/>
+        <location filename="../../mscore/editstyle.ui" line="8410"/>
+        <location filename="../../mscore/editstyle.ui" line="8427"/>
+        <location filename="../../mscore/editstyle.ui" line="8480"/>
+        <location filename="../../mscore/editstyle.ui" line="8526"/>
+        <location filename="../../mscore/editstyle.ui" line="8609"/>
+        <location filename="../../mscore/editstyle.ui" line="8626"/>
+        <location filename="../../mscore/editstyle.ui" line="8656"/>
+        <location filename="../../mscore/editstyle.ui" line="8718"/>
+        <location filename="../../mscore/editstyle.ui" line="8855"/>
+        <location filename="../../mscore/editstyle.ui" line="8872"/>
+        <location filename="../../mscore/editstyle.ui" line="8889"/>
+        <location filename="../../mscore/editstyle.ui" line="8906"/>
+        <location filename="../../mscore/editstyle.ui" line="8923"/>
+        <location filename="../../mscore/editstyle.ui" line="8979"/>
+        <location filename="../../mscore/editstyle.ui" line="9006"/>
+        <location filename="../../mscore/editstyle.ui" line="9035"/>
+        <location filename="../../mscore/editstyle.ui" line="9066"/>
+        <location filename="../../mscore/editstyle.ui" line="9099"/>
+        <location filename="../../mscore/editstyle.ui" line="9161"/>
+        <location filename="../../mscore/editstyle.ui" line="9198"/>
+        <location filename="../../mscore/editstyle.ui" line="9231"/>
+        <location filename="../../mscore/editstyle.ui" line="9274"/>
+        <location filename="../../mscore/editstyle.ui" line="9298"/>
+        <location filename="../../mscore/editstyle.ui" line="9315"/>
+        <location filename="../../mscore/editstyle.ui" line="9381"/>
+        <location filename="../../mscore/editstyle.ui" line="9514"/>
+        <location filename="../../mscore/editstyle.ui" line="9531"/>
+        <location filename="../../mscore/editstyle.ui" line="9572"/>
+        <location filename="../../mscore/editstyle.ui" line="9603"/>
+        <location filename="../../mscore/editstyle.ui" line="9686"/>
+        <location filename="../../mscore/editstyle.ui" line="9703"/>
+        <location filename="../../mscore/editstyle.ui" line="9733"/>
+        <location filename="../../mscore/editstyle.ui" line="9795"/>
+        <location filename="../../mscore/editstyle.ui" line="10692"/>
+        <location filename="../../mscore/editstyle.ui" line="10726"/>
+        <location filename="../../mscore/editstyle.ui" line="10743"/>
+        <location filename="../../mscore/editstyle.ui" line="10774"/>
+        <location filename="../../mscore/editstyle.ui" line="10805"/>
+        <location filename="../../mscore/editstyle.ui" line="10829"/>
+        <location filename="../../mscore/editstyle.ui" line="10846"/>
+        <location filename="../../mscore/editstyle.ui" line="10863"/>
+        <location filename="../../mscore/editstyle.ui" line="10905"/>
+        <location filename="../../mscore/editstyle.ui" line="10960"/>
+        <location filename="../../mscore/editstyle.ui" line="10977"/>
+        <location filename="../../mscore/editstyle.ui" line="10994"/>
+        <location filename="../../mscore/editstyle.ui" line="11011"/>
+        <location filename="../../mscore/editstyle.ui" line="11058"/>
         <source>Reset to default</source>
-        <translation>Վերակայել սկզբնադիրի</translation>
+        <translation>Վերակայել սկզբնադիրին</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="393"/>
@@ -3410,17 +3541,18 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="480"/>
         <source>Hide empty staves within systems</source>
-        <translation type="unfinished"/>
+        <translation>Թաքցնել համակարգերում առկա դատարկ նոտակիրները</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="627"/>
         <source>Autoplace</source>
-        <translation type="unfinished"/>
+        <translation>Ինքնատեղավորություն</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="636"/>
         <source>Vertical align range:</source>
-        <translation type="unfinished"/>
+        <translation>Ուղղահայաց հավասարեցումը
+ընդգրկում է՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="662"/>
@@ -3428,7 +3560,7 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1182"/>
+        <location filename="../../mscore/editstyle.ui" line="1179"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
@@ -3448,12 +3580,12 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1265"/>
+        <location filename="../../mscore/editstyle.ui" line="1259"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1282"/>
+        <location filename="../../mscore/editstyle.ui" line="1276"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
         <translation type="unfinished"/>
     </message>
@@ -3473,1127 +3605,1145 @@ space unit</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1807"/>
-        <location filename="../../mscore/editstyle.ui" line="2214"/>
-        <location filename="../../mscore/editstyle.ui" line="2438"/>
-        <location filename="../../mscore/editstyle.ui" line="2929"/>
-        <location filename="../../mscore/editstyle.ui" line="3180"/>
-        <location filename="../../mscore/editstyle.ui" line="7725"/>
-        <location filename="../../mscore/editstyle.ui" line="9905"/>
-        <location filename="../../mscore/editstyle.ui" line="10675"/>
+        <location filename="../../mscore/editstyle.ui" line="1801"/>
+        <location filename="../../mscore/editstyle.ui" line="2208"/>
+        <location filename="../../mscore/editstyle.ui" line="2432"/>
+        <location filename="../../mscore/editstyle.ui" line="2923"/>
+        <location filename="../../mscore/editstyle.ui" line="3174"/>
+        <location filename="../../mscore/editstyle.ui" line="7719"/>
+        <location filename="../../mscore/editstyle.ui" line="9899"/>
+        <location filename="../../mscore/editstyle.ui" line="10669"/>
         <source>pt</source>
         <translation> կչ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1817"/>
-        <location filename="../../mscore/editstyle.ui" line="2173"/>
-        <location filename="../../mscore/editstyle.ui" line="2285"/>
-        <location filename="../../mscore/editstyle.ui" line="2996"/>
-        <location filename="../../mscore/editstyle.ui" line="3122"/>
-        <location filename="../../mscore/editstyle.ui" line="7764"/>
-        <location filename="../../mscore/editstyle.ui" line="10715"/>
+        <location filename="../../mscore/editstyle.ui" line="1811"/>
+        <location filename="../../mscore/editstyle.ui" line="2167"/>
+        <location filename="../../mscore/editstyle.ui" line="2279"/>
+        <location filename="../../mscore/editstyle.ui" line="2990"/>
+        <location filename="../../mscore/editstyle.ui" line="3116"/>
+        <location filename="../../mscore/editstyle.ui" line="7758"/>
+        <location filename="../../mscore/editstyle.ui" line="10709"/>
         <source>Font face:</source>
-        <translation type="unfinished"/>
+        <translation>Տառատեսակ՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1850"/>
-        <location filename="../../mscore/editstyle.ui" line="2183"/>
-        <location filename="../../mscore/editstyle.ui" line="2397"/>
-        <location filename="../../mscore/editstyle.ui" line="2915"/>
-        <location filename="../../mscore/editstyle.ui" line="3149"/>
-        <location filename="../../mscore/editstyle.ui" line="7851"/>
-        <location filename="../../mscore/editstyle.ui" line="10752"/>
+        <location filename="../../mscore/editstyle.ui" line="1844"/>
+        <location filename="../../mscore/editstyle.ui" line="2177"/>
+        <location filename="../../mscore/editstyle.ui" line="2391"/>
+        <location filename="../../mscore/editstyle.ui" line="2909"/>
+        <location filename="../../mscore/editstyle.ui" line="3143"/>
+        <location filename="../../mscore/editstyle.ui" line="7845"/>
+        <location filename="../../mscore/editstyle.ui" line="10746"/>
         <source>Reset &apos;Font face&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1864"/>
-        <location filename="../../mscore/editstyle.ui" line="2224"/>
+        <location filename="../../mscore/editstyle.ui" line="1858"/>
+        <location filename="../../mscore/editstyle.ui" line="2218"/>
         <source>Style:</source>
         <translation>Ոճ՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1877"/>
-        <location filename="../../mscore/editstyle.ui" line="1897"/>
-        <location filename="../../mscore/editstyle.ui" line="2200"/>
-        <location filename="../../mscore/editstyle.ui" line="2240"/>
-        <location filename="../../mscore/editstyle.ui" line="2458"/>
-        <location filename="../../mscore/editstyle.ui" line="3023"/>
-        <location filename="../../mscore/editstyle.ui" line="3132"/>
-        <location filename="../../mscore/editstyle.ui" line="7711"/>
-        <location filename="../../mscore/editstyle.ui" line="10783"/>
+        <location filename="../../mscore/editstyle.ui" line="1871"/>
+        <location filename="../../mscore/editstyle.ui" line="1891"/>
+        <location filename="../../mscore/editstyle.ui" line="2194"/>
+        <location filename="../../mscore/editstyle.ui" line="2234"/>
+        <location filename="../../mscore/editstyle.ui" line="2452"/>
+        <location filename="../../mscore/editstyle.ui" line="3017"/>
+        <location filename="../../mscore/editstyle.ui" line="3126"/>
+        <location filename="../../mscore/editstyle.ui" line="7705"/>
+        <location filename="../../mscore/editstyle.ui" line="10777"/>
         <source>Reset &apos;Font size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Տառաչափ&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2540"/>
-        <location filename="../../mscore/editstyle.ui" line="5571"/>
+        <location filename="../../mscore/editstyle.ui" line="2534"/>
+        <location filename="../../mscore/editstyle.ui" line="5565"/>
         <source>Brackets</source>
         <translation>Ակոլադաներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2702"/>
+        <location filename="../../mscore/editstyle.ui" line="2696"/>
         <source>Dividers</source>
-        <translation type="unfinished"/>
+        <translation>Բաժանիչներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2723"/>
-        <location filename="../../mscore/editstyle.ui" line="2816"/>
+        <location filename="../../mscore/editstyle.ui" line="2717"/>
+        <location filename="../../mscore/editstyle.ui" line="2810"/>
         <source>Symbol:</source>
-        <translation type="unfinished"/>
+        <translation>Նշան՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2736"/>
-        <location filename="../../mscore/editstyle.ui" line="2829"/>
+        <location filename="../../mscore/editstyle.ui" line="2730"/>
+        <location filename="../../mscore/editstyle.ui" line="2823"/>
         <source>Horizontal offset:</source>
-        <translation>Հորիզոնական տեղաշարժում՝</translation>
+        <translation>Հորիզոնական
+շեղում՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2762"/>
-        <location filename="../../mscore/editstyle.ui" line="2855"/>
+        <location filename="../../mscore/editstyle.ui" line="2756"/>
+        <location filename="../../mscore/editstyle.ui" line="2849"/>
         <source>Vertical offset:</source>
-        <translation>Ուղղահայաց տեղաշարժում՝</translation>
+        <translation>Ուղղահայաց
+շեղում՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2900"/>
+        <location filename="../../mscore/editstyle.ui" line="2894"/>
         <source>Long Instrument Names</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարանների ամբողջական անվանումները</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2448"/>
-        <location filename="../../mscore/editstyle.ui" line="2939"/>
-        <location filename="../../mscore/editstyle.ui" line="3115"/>
-        <location filename="../../mscore/editstyle.ui" line="7818"/>
-        <location filename="../../mscore/editstyle.ui" line="10725"/>
+        <location filename="../../mscore/editstyle.ui" line="2442"/>
+        <location filename="../../mscore/editstyle.ui" line="2933"/>
+        <location filename="../../mscore/editstyle.ui" line="3109"/>
+        <location filename="../../mscore/editstyle.ui" line="7812"/>
+        <location filename="../../mscore/editstyle.ui" line="10719"/>
         <source>Font size:</source>
-        <translation type="unfinished"/>
+        <translation>Տառաչափ՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2424"/>
-        <location filename="../../mscore/editstyle.ui" line="2982"/>
-        <location filename="../../mscore/editstyle.ui" line="3108"/>
-        <location filename="../../mscore/editstyle.ui" line="7865"/>
-        <location filename="../../mscore/editstyle.ui" line="10773"/>
+        <location filename="../../mscore/editstyle.ui" line="2418"/>
+        <location filename="../../mscore/editstyle.ui" line="2976"/>
+        <location filename="../../mscore/editstyle.ui" line="3102"/>
+        <location filename="../../mscore/editstyle.ui" line="7859"/>
+        <location filename="../../mscore/editstyle.ui" line="10767"/>
         <source>Font style:</source>
-        <translation type="unfinished"/>
+        <translation>Տառատեսակի ոճը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2485"/>
-        <location filename="../../mscore/editstyle.ui" line="2955"/>
-        <location filename="../../mscore/editstyle.ui" line="3166"/>
-        <location filename="../../mscore/editstyle.ui" line="10735"/>
+        <location filename="../../mscore/editstyle.ui" line="2479"/>
+        <location filename="../../mscore/editstyle.ui" line="2949"/>
+        <location filename="../../mscore/editstyle.ui" line="3160"/>
+        <location filename="../../mscore/editstyle.ui" line="10729"/>
         <source>Reset &apos;Align&apos; values</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2472"/>
-        <location filename="../../mscore/editstyle.ui" line="2989"/>
-        <location filename="../../mscore/editstyle.ui" line="3088"/>
-        <location filename="../../mscore/editstyle.ui" line="9138"/>
-        <location filename="../../mscore/editstyle.ui" line="10766"/>
+        <location filename="../../mscore/editstyle.ui" line="2466"/>
+        <location filename="../../mscore/editstyle.ui" line="2983"/>
+        <location filename="../../mscore/editstyle.ui" line="3082"/>
+        <location filename="../../mscore/editstyle.ui" line="9132"/>
+        <location filename="../../mscore/editstyle.ui" line="10760"/>
         <source>Align:</source>
-        <translation type="unfinished"/>
+        <translation>Հավասարեցում՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2336"/>
-        <location filename="../../mscore/editstyle.ui" line="3006"/>
-        <location filename="../../mscore/editstyle.ui" line="3074"/>
-        <location filename="../../mscore/editstyle.ui" line="7878"/>
-        <location filename="../../mscore/editstyle.ui" line="10841"/>
+        <location filename="../../mscore/editstyle.ui" line="2330"/>
+        <location filename="../../mscore/editstyle.ui" line="3000"/>
+        <location filename="../../mscore/editstyle.ui" line="3068"/>
+        <location filename="../../mscore/editstyle.ui" line="7872"/>
+        <location filename="../../mscore/editstyle.ui" line="10866"/>
         <source>Reset &apos;Font style&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Տառատեսակի ոճ&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3053"/>
+        <location filename="../../mscore/editstyle.ui" line="3047"/>
         <source>Short Instrument Names</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարանների կարճ անվանումները</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3400"/>
+        <location filename="../../mscore/editstyle.ui" line="3394"/>
         <source>Clef to key distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3413"/>
+        <location filename="../../mscore/editstyle.ui" line="3407"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3430"/>
+        <location filename="../../mscore/editstyle.ui" line="3424"/>
         <source>Reset &apos;Multimeasure rest margin&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3447"/>
-        <source>Reset &apos;Clef/Key right margin&apos; valua</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3461"/>
+        <location filename="../../mscore/editstyle.ui" line="3455"/>
         <source>Key to time signature distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3474"/>
+        <location filename="../../mscore/editstyle.ui" line="3468"/>
         <source>Reset &apos;Time signature left margin&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3491"/>
+        <location filename="../../mscore/editstyle.ui" line="3485"/>
         <source>Reset &apos;Clef left margin&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3508"/>
+        <location filename="../../mscore/editstyle.ui" line="3502"/>
         <source>Reset &apos;Minimum note distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3525"/>
+        <location filename="../../mscore/editstyle.ui" line="3519"/>
         <source>Reset &apos;Note to barline distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3542"/>
+        <location filename="../../mscore/editstyle.ui" line="3536"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3559"/>
+        <location filename="../../mscore/editstyle.ui" line="3553"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3586"/>
+        <location filename="../../mscore/editstyle.ui" line="3580"/>
         <source>Reset &apos;Clef to key distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3603"/>
+        <location filename="../../mscore/editstyle.ui" line="3597"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3617"/>
+        <location filename="../../mscore/editstyle.ui" line="3611"/>
         <source>System header distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3627"/>
+        <location filename="../../mscore/editstyle.ui" line="3621"/>
         <source>Key to barline distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3640"/>
+        <location filename="../../mscore/editstyle.ui" line="3634"/>
         <source>Reset &apos;System header distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3683"/>
+        <location filename="../../mscore/editstyle.ui" line="3677"/>
         <source>Clef to time signature distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3728"/>
+        <location filename="../../mscore/editstyle.ui" line="3722"/>
         <source>Reset &apos;Barline to accidental distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3745"/>
+        <location filename="../../mscore/editstyle.ui" line="3739"/>
         <source>Reset &apos;Clef to barline distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3762"/>
+        <location filename="../../mscore/editstyle.ui" line="3756"/>
         <source>Reset &apos;Key signature left margin&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3795"/>
+        <location filename="../../mscore/editstyle.ui" line="3789"/>
         <source>Reset &apos;Minimum measure width&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3812"/>
+        <location filename="../../mscore/editstyle.ui" line="3806"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3871"/>
+        <location filename="../../mscore/editstyle.ui" line="3865"/>
         <source>Reset &apos;Note left margin&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4077"/>
+        <location filename="../../mscore/editstyle.ui" line="4071"/>
         <source>Note left margin:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4212"/>
+        <location filename="../../mscore/editstyle.ui" line="4206"/>
         <source>Reset &apos;Spacing&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4226"/>
+        <location filename="../../mscore/editstyle.ui" line="4220"/>
         <source>System header with time signature distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4255"/>
+        <location filename="../../mscore/editstyle.ui" line="4249"/>
         <source>Reset &apos;System header to time signature distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4275"/>
+        <location filename="../../mscore/editstyle.ui" line="4269"/>
         <source>Time signature to barline distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4298"/>
+        <location filename="../../mscore/editstyle.ui" line="4292"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2373"/>
-        <location filename="../../mscore/editstyle.ui" line="10807"/>
+        <location filename="../../mscore/editstyle.ui" line="2367"/>
+        <location filename="../../mscore/editstyle.ui" line="10832"/>
         <source>Reset &apos;Offset&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Շեղում&apos;-ի արժեքները</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2387"/>
-        <location filename="../../mscore/editstyle.ui" line="10797"/>
+        <location filename="../../mscore/editstyle.ui" line="2381"/>
+        <location filename="../../mscore/editstyle.ui" line="10822"/>
         <source>Offset:</source>
-        <translation type="unfinished"/>
+        <translation>Շեղում՝ </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4458"/>
+        <location filename="../../mscore/editstyle.ui" line="4452"/>
         <source>Reset &apos;Repeat barline to dots distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4378"/>
+        <location filename="../../mscore/editstyle.ui" line="4372"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4441"/>
+        <location filename="../../mscore/editstyle.ui" line="4435"/>
         <source>Reset &apos;Double barline thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4475"/>
+        <location filename="../../mscore/editstyle.ui" line="4469"/>
         <source>Reset &apos;Thick barline distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4662"/>
+        <location filename="../../mscore/editstyle.ui" line="4656"/>
         <source>Thick barline distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4431"/>
+        <location filename="../../mscore/editstyle.ui" line="4425"/>
         <source>Thick barline thickness:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4594"/>
+        <location filename="../../mscore/editstyle.ui" line="4588"/>
         <source>Thin barline thickness:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4631"/>
+        <location filename="../../mscore/editstyle.ui" line="4625"/>
         <source>Reset &apos;Thick barline thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4563"/>
+        <location filename="../../mscore/editstyle.ui" line="4557"/>
         <source>Repeat barline to dots distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4549"/>
+        <location filename="../../mscore/editstyle.ui" line="4543"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4506"/>
+        <location filename="../../mscore/editstyle.ui" line="4500"/>
         <source>Reset &apos;Scale barlines to staff size&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4648"/>
+        <location filename="../../mscore/editstyle.ui" line="4642"/>
         <source>Reset &apos;Barline at start of multiple staves&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4672"/>
+        <location filename="../../mscore/editstyle.ui" line="4666"/>
         <source>Reset &apos;Barline at start of single staff&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4699"/>
+        <location filename="../../mscore/editstyle.ui" line="4693"/>
         <source>Reset &apos;Show repeat barline tips (&quot;winged&quot; repeats)&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4982"/>
+        <location filename="../../mscore/editstyle.ui" line="4976"/>
         <source>Accidental to note distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4849"/>
+        <location filename="../../mscore/editstyle.ui" line="4843"/>
         <source>Note to dot distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4992"/>
+        <location filename="../../mscore/editstyle.ui" line="4986"/>
         <source>Dot to dot distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5978"/>
+        <location filename="../../mscore/editstyle.ui" line="5972"/>
         <source>Do not show arpeggio in standard notation when displayed in tablature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6061"/>
-        <location filename="../../mscore/editstyle.ui" line="8296"/>
-        <location filename="../../mscore/editstyle.ui" line="8503"/>
-        <location filename="../../mscore/editstyle.ui" line="8568"/>
-        <location filename="../../mscore/editstyle.ui" line="9462"/>
-        <location filename="../../mscore/editstyle.ui" line="9645"/>
+        <location filename="../../mscore/editstyle.ui" line="6055"/>
+        <location filename="../../mscore/editstyle.ui" line="8290"/>
+        <location filename="../../mscore/editstyle.ui" line="8497"/>
+        <location filename="../../mscore/editstyle.ui" line="8562"/>
+        <location filename="../../mscore/editstyle.ui" line="9456"/>
+        <location filename="../../mscore/editstyle.ui" line="9639"/>
         <source>Autoplace min. distance:</source>
-        <translation type="unfinished"/>
+        <translation>Նվազագույն հեռավորությունը
+ինքնատեղավորելիս՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6162"/>
-        <location filename="../../mscore/editstyle.ui" line="8328"/>
-        <location filename="../../mscore/editstyle.ui" line="9523"/>
-        <location filename="../../mscore/editstyle.ui" line="9804"/>
+        <location filename="../../mscore/editstyle.ui" line="6156"/>
+        <location filename="../../mscore/editstyle.ui" line="8322"/>
+        <location filename="../../mscore/editstyle.ui" line="9517"/>
+        <location filename="../../mscore/editstyle.ui" line="9798"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Նվազագույն հեռավորությունը ինքնատեղավորելիս&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6192"/>
+        <location filename="../../mscore/editstyle.ui" line="6186"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Գծի հաստությունը վերջում&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6209"/>
+        <location filename="../../mscore/editstyle.ui" line="6203"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Գծի հաստությունը միջնամասում&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6226"/>
+        <location filename="../../mscore/editstyle.ui" line="6220"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Կետագծի հաստությունը&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6243"/>
+        <location filename="../../mscore/editstyle.ui" line="6237"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1395"/>
+        <location filename="../../mscore/editstyle.ui" line="1389"/>
         <source>Reset &apos;Small staff size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Փոքր նոտակիրի չափսը&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1539"/>
+        <location filename="../../mscore/editstyle.ui" line="1533"/>
         <source>Reset &apos;Small note size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Փոքր նոտայի չափսը&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1556"/>
+        <location filename="../../mscore/editstyle.ui" line="1550"/>
         <source>Reset &apos;Grace note size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Ֆորշլագի չափսը&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1573"/>
+        <location filename="../../mscore/editstyle.ui" line="1567"/>
         <source>Reset &apos;Small clef size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Փոքր բանալու չափսը&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6319"/>
-        <location filename="../../mscore/editstyle.ui" line="6988"/>
-        <location filename="../../mscore/editstyle.ui" line="7200"/>
-        <location filename="../../mscore/editstyle.ui" line="7421"/>
-        <location filename="../../mscore/editstyle.ui" line="7555"/>
-        <location filename="../../mscore/editstyle.ui" line="7985"/>
-        <location filename="../../mscore/editstyle.ui" line="8248"/>
-        <location filename="../../mscore/editstyle.ui" line="8479"/>
-        <location filename="../../mscore/editstyle.ui" line="8655"/>
-        <location filename="../../mscore/editstyle.ui" line="9410"/>
-        <location filename="../../mscore/editstyle.ui" line="9595"/>
-        <location filename="../../mscore/editstyle.ui" line="9732"/>
+        <location filename="../../mscore/editstyle.ui" line="6313"/>
+        <location filename="../../mscore/editstyle.ui" line="6982"/>
+        <location filename="../../mscore/editstyle.ui" line="7194"/>
+        <location filename="../../mscore/editstyle.ui" line="7415"/>
+        <location filename="../../mscore/editstyle.ui" line="7549"/>
+        <location filename="../../mscore/editstyle.ui" line="7979"/>
+        <location filename="../../mscore/editstyle.ui" line="8242"/>
+        <location filename="../../mscore/editstyle.ui" line="8473"/>
+        <location filename="../../mscore/editstyle.ui" line="8649"/>
+        <location filename="../../mscore/editstyle.ui" line="9404"/>
+        <location filename="../../mscore/editstyle.ui" line="9589"/>
+        <location filename="../../mscore/editstyle.ui" line="9726"/>
         <source>Position above:</source>
-        <translation type="unfinished"/>
+        <translation>Դիրքը վերևում՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6335"/>
-        <location filename="../../mscore/editstyle.ui" line="7273"/>
-        <location filename="../../mscore/editstyle.ui" line="7444"/>
-        <location filename="../../mscore/editstyle.ui" line="7578"/>
-        <location filename="../../mscore/editstyle.ui" line="7995"/>
-        <location filename="../../mscore/editstyle.ui" line="8258"/>
-        <location filename="../../mscore/editstyle.ui" line="8436"/>
-        <location filename="../../mscore/editstyle.ui" line="8665"/>
-        <location filename="../../mscore/editstyle.ui" line="9324"/>
-        <location filename="../../mscore/editstyle.ui" line="9540"/>
+        <location filename="../../mscore/editstyle.ui" line="6329"/>
+        <location filename="../../mscore/editstyle.ui" line="7267"/>
+        <location filename="../../mscore/editstyle.ui" line="7438"/>
+        <location filename="../../mscore/editstyle.ui" line="7572"/>
+        <location filename="../../mscore/editstyle.ui" line="7989"/>
+        <location filename="../../mscore/editstyle.ui" line="8252"/>
+        <location filename="../../mscore/editstyle.ui" line="8430"/>
+        <location filename="../../mscore/editstyle.ui" line="8659"/>
+        <location filename="../../mscore/editstyle.ui" line="9318"/>
+        <location filename="../../mscore/editstyle.ui" line="9534"/>
         <source>Reset &apos;Position above&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Դիրքը վերևում&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6547"/>
-        <location filename="../../mscore/editstyle.ui" line="6619"/>
-        <location filename="../../mscore/editstyle.ui" line="7063"/>
-        <location filename="../../mscore/editstyle.ui" line="7290"/>
-        <location filename="../../mscore/editstyle.ui" line="7804"/>
+        <location filename="../../mscore/editstyle.ui" line="6541"/>
+        <location filename="../../mscore/editstyle.ui" line="6613"/>
+        <location filename="../../mscore/editstyle.ui" line="7057"/>
+        <location filename="../../mscore/editstyle.ui" line="7284"/>
+        <location filename="../../mscore/editstyle.ui" line="7798"/>
         <source>Reset &apos;Line thickness&apos; value</source>
-        <translation>«Գծի հաստություն»-ի արժեքը վերատեղադրել</translation>
+        <translation>Վերակայել &apos;Գծի հաստությունը&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6358"/>
+        <location filename="../../mscore/editstyle.ui" line="6352"/>
         <source>Reset &apos;Height&apos; value</source>
-        <translation>«Բարձրություն»-ի արժեքը զրոյացնել</translation>
+        <translation>Վերակայել &apos;Բարձրություն&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6381"/>
+        <location filename="../../mscore/editstyle.ui" line="6375"/>
         <source>Reset &apos;Continue height&apos; value</source>
-        <translation>«Շարունակության բարձրություն»-ի արժեքը վերատեղադրել</translation>
+        <translation>Վերակայել &apos;Շարունակության բարձրություն&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6395"/>
+        <location filename="../../mscore/editstyle.ui" line="6389"/>
         <source>Autoplace, distance to dynamics:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6434"/>
+        <location filename="../../mscore/editstyle.ui" line="6428"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6448"/>
-        <location filename="../../mscore/editstyle.ui" line="7304"/>
-        <location filename="../../mscore/editstyle.ui" line="7472"/>
-        <location filename="../../mscore/editstyle.ui" line="7606"/>
-        <location filename="../../mscore/editstyle.ui" line="8009"/>
-        <location filename="../../mscore/editstyle.ui" line="8450"/>
-        <location filename="../../mscore/editstyle.ui" line="8679"/>
-        <location filename="../../mscore/editstyle.ui" line="9157"/>
-        <location filename="../../mscore/editstyle.ui" line="9568"/>
-        <location filename="../../mscore/editstyle.ui" line="9756"/>
+        <location filename="../../mscore/editstyle.ui" line="6442"/>
+        <location filename="../../mscore/editstyle.ui" line="7298"/>
+        <location filename="../../mscore/editstyle.ui" line="7466"/>
+        <location filename="../../mscore/editstyle.ui" line="7600"/>
+        <location filename="../../mscore/editstyle.ui" line="8003"/>
+        <location filename="../../mscore/editstyle.ui" line="8444"/>
+        <location filename="../../mscore/editstyle.ui" line="8673"/>
+        <location filename="../../mscore/editstyle.ui" line="9151"/>
+        <location filename="../../mscore/editstyle.ui" line="9562"/>
+        <location filename="../../mscore/editstyle.ui" line="9750"/>
         <source>Placement:</source>
         <translation>Տեղավորություն՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6481"/>
-        <location filename="../../mscore/editstyle.ui" line="7317"/>
-        <location filename="../../mscore/editstyle.ui" line="7485"/>
-        <location filename="../../mscore/editstyle.ui" line="7619"/>
-        <location filename="../../mscore/editstyle.ui" line="7948"/>
-        <location filename="../../mscore/editstyle.ui" line="8419"/>
-        <location filename="../../mscore/editstyle.ui" line="8618"/>
-        <location filename="../../mscore/editstyle.ui" line="9390"/>
-        <location filename="../../mscore/editstyle.ui" line="9581"/>
-        <location filename="../../mscore/editstyle.ui" line="9695"/>
+        <location filename="../../mscore/editstyle.ui" line="6475"/>
+        <location filename="../../mscore/editstyle.ui" line="7311"/>
+        <location filename="../../mscore/editstyle.ui" line="7479"/>
+        <location filename="../../mscore/editstyle.ui" line="7613"/>
+        <location filename="../../mscore/editstyle.ui" line="7942"/>
+        <location filename="../../mscore/editstyle.ui" line="8413"/>
+        <location filename="../../mscore/editstyle.ui" line="8612"/>
+        <location filename="../../mscore/editstyle.ui" line="9384"/>
+        <location filename="../../mscore/editstyle.ui" line="9575"/>
+        <location filename="../../mscore/editstyle.ui" line="9689"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>«Տեղավորություն»-ի արժեքը վերատեղադրել</translation>
+        <translation>Վերակայել &apos;Տեղավորություն&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6495"/>
-        <location filename="../../mscore/editstyle.ui" line="7077"/>
-        <location filename="../../mscore/editstyle.ui" line="7348"/>
-        <location filename="../../mscore/editstyle.ui" line="7499"/>
-        <location filename="../../mscore/editstyle.ui" line="7633"/>
-        <location filename="../../mscore/editstyle.ui" line="7911"/>
-        <location filename="../../mscore/editstyle.ui" line="8272"/>
-        <location filename="../../mscore/editstyle.ui" line="8409"/>
-        <location filename="../../mscore/editstyle.ui" line="8581"/>
-        <location filename="../../mscore/editstyle.ui" line="9344"/>
-        <location filename="../../mscore/editstyle.ui" line="9602"/>
-        <location filename="../../mscore/editstyle.ui" line="9658"/>
+        <location filename="../../mscore/editstyle.ui" line="6489"/>
+        <location filename="../../mscore/editstyle.ui" line="7071"/>
+        <location filename="../../mscore/editstyle.ui" line="7342"/>
+        <location filename="../../mscore/editstyle.ui" line="7493"/>
+        <location filename="../../mscore/editstyle.ui" line="7627"/>
+        <location filename="../../mscore/editstyle.ui" line="7905"/>
+        <location filename="../../mscore/editstyle.ui" line="8266"/>
+        <location filename="../../mscore/editstyle.ui" line="8403"/>
+        <location filename="../../mscore/editstyle.ui" line="8575"/>
+        <location filename="../../mscore/editstyle.ui" line="9338"/>
+        <location filename="../../mscore/editstyle.ui" line="9596"/>
+        <location filename="../../mscore/editstyle.ui" line="9652"/>
         <source>Position below:</source>
-        <translation type="unfinished"/>
+        <translation>Դիրքը ներքևում՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6511"/>
-        <location filename="../../mscore/editstyle.ui" line="7334"/>
-        <location filename="../../mscore/editstyle.ui" line="7509"/>
-        <location filename="../../mscore/editstyle.ui" line="7643"/>
-        <location filename="../../mscore/editstyle.ui" line="7965"/>
-        <location filename="../../mscore/editstyle.ui" line="8282"/>
-        <location filename="../../mscore/editstyle.ui" line="8489"/>
-        <location filename="../../mscore/editstyle.ui" line="8535"/>
-        <location filename="../../mscore/editstyle.ui" line="8635"/>
-        <location filename="../../mscore/editstyle.ui" line="9170"/>
-        <location filename="../../mscore/editstyle.ui" line="9612"/>
+        <location filename="../../mscore/editstyle.ui" line="6505"/>
+        <location filename="../../mscore/editstyle.ui" line="7328"/>
+        <location filename="../../mscore/editstyle.ui" line="7503"/>
+        <location filename="../../mscore/editstyle.ui" line="7637"/>
+        <location filename="../../mscore/editstyle.ui" line="7959"/>
+        <location filename="../../mscore/editstyle.ui" line="8276"/>
+        <location filename="../../mscore/editstyle.ui" line="8483"/>
+        <location filename="../../mscore/editstyle.ui" line="8529"/>
+        <location filename="../../mscore/editstyle.ui" line="8629"/>
+        <location filename="../../mscore/editstyle.ui" line="9164"/>
+        <location filename="../../mscore/editstyle.ui" line="9606"/>
         <source>Reset &apos;Position below&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Դիրքը ներքևում&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6748"/>
+        <location filename="../../mscore/editstyle.ui" line="6742"/>
         <source>Default position:</source>
-        <translation type="unfinished"/>
+        <translation>Սկզբնադիր տեղավորություն՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6787"/>
+        <location filename="../../mscore/editstyle.ui" line="6781"/>
         <source>Reset &apos;Default position&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Սկզբնադիր տեղավորություն&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6764"/>
-        <location filename="../../mscore/editstyle.ui" line="7100"/>
-        <location filename="../../mscore/editstyle.ui" line="7130"/>
+        <location filename="../../mscore/editstyle.ui" line="6758"/>
+        <location filename="../../mscore/editstyle.ui" line="7094"/>
+        <location filename="../../mscore/editstyle.ui" line="7124"/>
         <source>Reset &apos;Hook height&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6734"/>
-        <location filename="../../mscore/editstyle.ui" line="7040"/>
-        <location filename="../../mscore/editstyle.ui" line="7256"/>
+        <location filename="../../mscore/editstyle.ui" line="6728"/>
+        <location filename="../../mscore/editstyle.ui" line="7034"/>
+        <location filename="../../mscore/editstyle.ui" line="7250"/>
         <source>Reset &apos;Line style&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6931"/>
-        <location filename="../../mscore/editstyle.ui" line="9742"/>
+        <location filename="../../mscore/editstyle.ui" line="6925"/>
+        <location filename="../../mscore/editstyle.ui" line="9736"/>
         <source>Reset &apos;Position Above&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6863"/>
+        <location filename="../../mscore/editstyle.ui" line="6857"/>
         <source>Hook height above:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6954"/>
+        <location filename="../../mscore/editstyle.ui" line="6948"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation>«Միայն թվեր»-ի արժեքը վերատեղադրել</translation>
+        <translation>Վերակայել &apos;Միայն թվեր&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6849"/>
-        <location filename="../../mscore/editstyle.ui" line="8727"/>
-        <location filename="../../mscore/editstyle.ui" line="9712"/>
+        <location filename="../../mscore/editstyle.ui" line="6843"/>
+        <location filename="../../mscore/editstyle.ui" line="8721"/>
+        <location filename="../../mscore/editstyle.ui" line="9706"/>
         <source>Reset &apos;Position Below&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6880"/>
+        <location filename="../../mscore/editstyle.ui" line="6874"/>
         <source>Hook height below:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7536"/>
+        <location filename="../../mscore/editstyle.ui" line="7530"/>
         <source>Vibrato Line</source>
-        <translation type="unfinished"/>
+        <translation>Վիբրատոյի գիծ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10475"/>
+        <location filename="../../mscore/editstyle.ui" line="10469"/>
         <source>Fret number font size:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7787"/>
+        <location filename="../../mscore/editstyle.ui" line="7781"/>
         <source>Reset &apos;Arrow width&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7825"/>
+        <location filename="../../mscore/editstyle.ui" line="7819"/>
         <source>Arrow width:</source>
-        <translation type="unfinished"/>
+        <translation>Սլաքի հաստությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9184"/>
-        <location filename="../../mscore/editstyle.ui" line="9921"/>
+        <location filename="../../mscore/editstyle.ui" line="9178"/>
+        <location filename="../../mscore/editstyle.ui" line="9915"/>
         <source>Line height:</source>
-        <translation>Գծի բարձրություն՝</translation>
+        <translation>Գծի բարձրությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9934"/>
+        <location filename="../../mscore/editstyle.ui" line="9928"/>
         <source>Vertical position:</source>
-        <translation type="unfinished"/>
+        <translation>Ուղղահայաց դիրքը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9954"/>
+        <location filename="../../mscore/editstyle.ui" line="9948"/>
         <source>from top of staff</source>
-        <translation type="unfinished"/>
+        <translation>նոտակիրի վերևից</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9961"/>
+        <location filename="../../mscore/editstyle.ui" line="9955"/>
         <source>of font height</source>
-        <translation type="unfinished"/>
+        <translation>տառատեսակի բարձրությունից</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9985"/>
+        <location filename="../../mscore/editstyle.ui" line="9979"/>
         <source>Alignment</source>
         <translation>Հավասարեցում</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9991"/>
+        <location filename="../../mscore/editstyle.ui" line="9985"/>
         <source>Top</source>
         <translation>Վերև</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9998"/>
+        <location filename="../../mscore/editstyle.ui" line="9992"/>
         <source>Bottom</source>
         <translation>Ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="32"/>
-        <location filename="../../mscore/editstyle.ui" line="10008"/>
+        <location filename="../../mscore/editstyle.ui" line="10002"/>
         <source>Style</source>
         <translation>Ոճ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10014"/>
+        <location filename="../../mscore/editstyle.ui" line="10008"/>
         <source>Modern</source>
         <translation>Ժամանակակից</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10021"/>
+        <location filename="../../mscore/editstyle.ui" line="10015"/>
         <source>Historic</source>
         <translation>Պատմական</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="170"/>
-        <location filename="../../mscore/editstyle.ui" line="8048"/>
+        <location filename="../../mscore/editstyle.ui" line="8042"/>
         <source>Articulations, Ornaments</source>
         <translation>Արտասանություն, Ձայնազարդություն</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8079"/>
+        <location filename="../../mscore/editstyle.ui" line="8073"/>
         <source>Stem distance:</source>
-        <translation>Ցողունների միջև հեռավորություն՝</translation>
+        <translation>Ցողունների միջև հեռավորությունը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8069"/>
-        <location filename="../../mscore/editstyle.ui" line="8125"/>
-        <location filename="../../mscore/editstyle.ui" line="8145"/>
+        <location filename="../../mscore/editstyle.ui" line="8063"/>
+        <location filename="../../mscore/editstyle.ui" line="8119"/>
+        <location filename="../../mscore/editstyle.ui" line="8139"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation> տրծ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8135"/>
+        <location filename="../../mscore/editstyle.ui" line="8129"/>
         <source>Articulation distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8115"/>
+        <location filename="../../mscore/editstyle.ui" line="8109"/>
         <source>Notehead distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3312"/>
+        <location filename="../../mscore/editstyle.ui" line="3306"/>
         <source>♮ in Key Signatures</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3325"/>
+        <location filename="../../mscore/editstyle.ui" line="3319"/>
         <source>Before key signature if changing to fewer ♯ or ♭</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3332"/>
+        <location filename="../../mscore/editstyle.ui" line="3326"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5223"/>
+        <location filename="../../mscore/editstyle.ui" line="3441"/>
+        <source>Reset &apos;Clef/Key right margin&apos; value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="5067"/>
+        <source>Beam distance (relative to beam thickness):</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="5217"/>
         <source>Vertical distance from notehead:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5577"/>
+        <location filename="../../mscore/editstyle.ui" line="5571"/>
         <source>Bracket thickness:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5609"/>
+        <location filename="../../mscore/editstyle.ui" line="5603"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5623"/>
+        <location filename="../../mscore/editstyle.ui" line="5617"/>
         <source>Bracket hook height:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5677"/>
+        <location filename="../../mscore/editstyle.ui" line="5671"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5694"/>
+        <location filename="../../mscore/editstyle.ui" line="5688"/>
         <source>Properties</source>
         <translation>Հատկություններ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5700"/>
+        <location filename="../../mscore/editstyle.ui" line="5694"/>
         <source>Direction:</source>
         <translation>Ուղղություն՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5711"/>
-        <location filename="../../mscore/editstyle.ui" line="5805"/>
+        <location filename="../../mscore/editstyle.ui" line="5705"/>
+        <location filename="../../mscore/editstyle.ui" line="5799"/>
         <source>Auto</source>
         <translation>Ինքնաշխատորեն</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5716"/>
+        <location filename="../../mscore/editstyle.ui" line="5710"/>
         <source>Up</source>
         <translation>Վերև</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5721"/>
+        <location filename="../../mscore/editstyle.ui" line="5715"/>
         <source>Down</source>
         <translation>Ներքև</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5738"/>
+        <location filename="../../mscore/editstyle.ui" line="5732"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation>«Ուղղություն»-ի արժեքը զրոյացնել</translation>
+        <translation>Վերակայել &apos;Ուղղություն&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5753"/>
+        <location filename="../../mscore/editstyle.ui" line="5747"/>
         <source>Number</source>
         <translation>Համար</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5758"/>
+        <location filename="../../mscore/editstyle.ui" line="5752"/>
         <source>Ratio</source>
         <translation>Հարաբերակցություն</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5771"/>
+        <location filename="../../mscore/editstyle.ui" line="5765"/>
         <source>Number type:</source>
-        <translation type="unfinished"/>
+        <translation>Համարի տեսակը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5790"/>
+        <location filename="../../mscore/editstyle.ui" line="5784"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5810"/>
+        <location filename="../../mscore/editstyle.ui" line="5804"/>
         <source>Bracket</source>
         <translation>Ակոլադա</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5823"/>
+        <location filename="../../mscore/editstyle.ui" line="5817"/>
         <source>Bracket type:</source>
-        <translation>Ակոլադայի տեսակ՝</translation>
+        <translation>Ակոլադայի տեսակը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5842"/>
+        <location filename="../../mscore/editstyle.ui" line="5836"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8155"/>
+        <location filename="../../mscore/editstyle.ui" line="8149"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8166"/>
+        <location filename="../../mscore/editstyle.ui" line="8160"/>
         <source>Reset &apos;Stem distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8177"/>
+        <location filename="../../mscore/editstyle.ui" line="8171"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8188"/>
+        <location filename="../../mscore/editstyle.ui" line="8182"/>
         <source>Reset &apos;Articulation size&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8754"/>
+        <location filename="../../mscore/editstyle.ui" line="8748"/>
         <source>Lyrics Dash</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8763"/>
+        <location filename="../../mscore/editstyle.ui" line="8757"/>
         <source>Dash thickness:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8770"/>
+        <location filename="../../mscore/editstyle.ui" line="8764"/>
         <source>Min. dash length:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8796"/>
+        <location filename="../../mscore/editstyle.ui" line="8790"/>
         <source>Max. dash length:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8825"/>
+        <location filename="../../mscore/editstyle.ui" line="8819"/>
         <source>Max. dash distance:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8854"/>
+        <location filename="../../mscore/editstyle.ui" line="8848"/>
         <source>Always force dash</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8864"/>
+        <location filename="../../mscore/editstyle.ui" line="8858"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8881"/>
+        <location filename="../../mscore/editstyle.ui" line="8875"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8898"/>
+        <location filename="../../mscore/editstyle.ui" line="8892"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8915"/>
+        <location filename="../../mscore/editstyle.ui" line="8909"/>
         <source>Reset &apos;Always force dash&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8932"/>
+        <location filename="../../mscore/editstyle.ui" line="8926"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8962"/>
+        <location filename="../../mscore/editstyle.ui" line="8956"/>
         <source>Dash pad:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8988"/>
+        <location filename="../../mscore/editstyle.ui" line="8982"/>
         <source>Reset &apos;Dash pad&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9002"/>
+        <location filename="../../mscore/editstyle.ui" line="8996"/>
         <source>Dash Y position ratio:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9015"/>
+        <location filename="../../mscore/editstyle.ui" line="9009"/>
         <source>Reset &apos;Dash Y position ratio&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9032"/>
+        <location filename="../../mscore/editstyle.ui" line="9026"/>
         <source>Lyrics Melisma</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9044"/>
+        <location filename="../../mscore/editstyle.ui" line="9038"/>
         <source>Reset &apos;Melisma pad&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9058"/>
+        <location filename="../../mscore/editstyle.ui" line="9052"/>
         <source>Melisma pad:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9065"/>
+        <location filename="../../mscore/editstyle.ui" line="9059"/>
         <source>Melisma thickness:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9075"/>
+        <location filename="../../mscore/editstyle.ui" line="9069"/>
         <source>Reset &apos;Melisma thickness&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9108"/>
+        <location filename="../../mscore/editstyle.ui" line="9102"/>
         <source>Reset &apos;Align&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10658"/>
+        <location filename="../../mscore/editstyle.ui" line="10652"/>
         <source>Name:</source>
         <translation>Անվանում՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10665"/>
+        <location filename="../../mscore/editstyle.ui" line="10659"/>
         <source>Size changes with staff space setting</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9148"/>
+        <location filename="../../mscore/editstyle.ui" line="9142"/>
         <source>Lyrics Text</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9207"/>
+        <location filename="../../mscore/editstyle.ui" line="9201"/>
         <source>Reset &apos;Line height&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9227"/>
+        <location filename="../../mscore/editstyle.ui" line="9221"/>
         <source>Min. top margin:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9240"/>
+        <location filename="../../mscore/editstyle.ui" line="9234"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9254"/>
+        <location filename="../../mscore/editstyle.ui" line="9248"/>
         <source>Min. bottom margin:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9283"/>
+        <location filename="../../mscore/editstyle.ui" line="9277"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9297"/>
+        <location filename="../../mscore/editstyle.ui" line="9291"/>
         <source>Align verse number</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9307"/>
+        <location filename="../../mscore/editstyle.ui" line="9301"/>
         <source>Reset &apos;Align verse number&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10701"/>
+        <location filename="../../mscore/editstyle.ui" line="10695"/>
         <source>Reset &apos;Name&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10897"/>
+        <location filename="../../mscore/editstyle.ui" line="10791"/>
+        <source>Color:</source>
+        <translation>Գույն՝</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="10808"/>
+        <source>Reset &apos;Color&apos; value</source>
+        <translation>Վերակայել &apos;Գույն&apos;-ի արժեքը</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="10922"/>
         <source>Background:</source>
-        <translation type="unfinished"/>
+        <translation>Խորք՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="11003"/>
+        <location filename="../../mscore/editstyle.ui" line="11028"/>
         <source>Frame:</source>
-        <translation type="unfinished"/>
+        <translation>Շրջանակ՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10914"/>
+        <location filename="../../mscore/editstyle.ui" line="10939"/>
         <source>Text margin:</source>
-        <translation>Գրվածքի լուսանցք՝</translation>
+        <translation>Գրվածքի լուսանցքը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10907"/>
+        <location filename="../../mscore/editstyle.ui" line="10932"/>
         <source>Border:</source>
-        <translation type="unfinished"/>
+        <translation>Սահման՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="11023"/>
+        <location filename="../../mscore/editstyle.ui" line="11048"/>
         <source>Border radius:</source>
-        <translation>Սահմանի շառավիղ՝</translation>
+        <translation>Սահմանի շառավիղը՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10928"/>
+        <location filename="../../mscore/editstyle.ui" line="10953"/>
         <source>Foreground:</source>
-        <translation type="unfinished"/>
+        <translation>Առջևք՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10989"/>
+        <location filename="../../mscore/editstyle.ui" line="11014"/>
         <source>Reset &apos;Foreground&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Առջևք&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10972"/>
+        <location filename="../../mscore/editstyle.ui" line="10997"/>
         <source>Reset &apos;Background&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Խորք&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10955"/>
+        <location filename="../../mscore/editstyle.ui" line="10980"/>
         <source>Reset &apos;Border&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Սահման&apos;-ի արժեքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10883"/>
+        <location filename="../../mscore/editstyle.ui" line="10908"/>
         <source>Reset &apos;Text margin&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="11036"/>
+        <location filename="../../mscore/editstyle.ui" line="11061"/>
         <source>Reset &apos;Border radius&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10938"/>
+        <location filename="../../mscore/editstyle.ui" line="10963"/>
         <source>Reset &apos;Frame&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10824"/>
+        <location filename="../../mscore/editstyle.ui" line="10849"/>
         <source>Reset &apos;Size changes with staff space setting&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8089"/>
+        <location filename="../../mscore/editstyle.ui" line="8083"/>
         <source>Articulation size:</source>
-        <translation>Արտասանության չափ՝</translation>
+        <translation>Արտասանության չափը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="90"/>
-        <location filename="../../mscore/editstyle.ui" line="3281"/>
+        <location filename="../../mscore/editstyle.ui" line="3275"/>
         <source>Accidentals</source>
         <translation>Փոփոխայնության նշաններ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3291"/>
+        <location filename="../../mscore/editstyle.ui" line="3285"/>
         <source>Accidental</source>
         <translation>Փոփոխայնության նշան</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3296"/>
+        <location filename="../../mscore/editstyle.ui" line="3290"/>
         <source>Semitones offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3301"/>
+        <location filename="../../mscore/editstyle.ui" line="3295"/>
         <source>Cents offset</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3318"/>
+        <location filename="../../mscore/editstyle.ui" line="3312"/>
         <source>Only for a change to C Maj / A min</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="115"/>
-        <location filename="../../mscore/editstyle.ui" line="5159"/>
+        <location filename="../../mscore/editstyle.ui" line="5153"/>
         <source>Tuplets</source>
         <translation>Մուլտիօլ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5213"/>
+        <location filename="../../mscore/editstyle.ui" line="5207"/>
         <source>Maximum slope:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5252"/>
+        <location filename="../../mscore/editstyle.ui" line="5246"/>
         <source>Vertical distance from stem:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5284"/>
+        <location filename="../../mscore/editstyle.ui" line="5278"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5307"/>
+        <location filename="../../mscore/editstyle.ui" line="5301"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5330"/>
+        <location filename="../../mscore/editstyle.ui" line="5324"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
         <translation type="unfinished"/>
     </message>
@@ -4630,32 +4780,32 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="236"/>
         <source>Instruments in Score</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարանները պարտիտուրի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="248"/>
         <source>Part list</source>
-        <translation type="unfinished"/>
+        <translation>Դերանվագների ցանկ</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="273"/>
         <source>Add instrument</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել նվագարան</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="283"/>
         <source>Remove instrument</source>
-        <translation type="unfinished"/>
+        <translation>Հեռացնել նվագարան</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="315"/>
         <source>Instruments in Part</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարանները դերանվագի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="334"/>
         <source>Instrument</source>
-        <translation>Գործիք</translation>
+        <translation>Նվագարան</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="339"/>
@@ -4680,7 +4830,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="154"/>
         <source>Generate new part for each instrument</source>
-        <translation>Նոր դերանվագ ստեղծել յուրաքանչյուր գործիքի համար</translation>
+        <translation>Նոր դերանվագ ստեղծել յուրաքանչյուր նվագարանի համար</translation>
     </message>
     <message>
         <location filename="../../mscore/excerptsdialog.ui" line="157"/>
@@ -4796,7 +4946,7 @@ space unit</extracomment>
 <context>
     <name>GreendotButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5446"/>
+        <location filename="../../mscore/musescore.cpp" line="5459"/>
         <source>Record</source>
         <translation>Ձայնագրություն</translation>
     </message>
@@ -4892,12 +5042,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="89"/>
         <source>Bracket type:</source>
-        <translation>Ակոլադայի տեսակ՝</translation>
+        <translation>Ակոլադայի տեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_accidental.ui" line="105"/>
         <source>Small</source>
-        <translation>Փոքրացրած չափ</translation>
+        <translation>Փոքր չափսի</translation>
     </message>
 </context>
 <context>
@@ -4915,7 +5065,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="82"/>
         <source>Head group:</source>
-        <translation>Գլխիկների խումբ՝</translation>
+        <translation>Գլխիկների խումբը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="95"/>
@@ -5005,7 +5155,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="191"/>
         <source>Bottom note:</source>
-        <translation>Ներքևի նոտա՝</translation>
+        <translation>Ներքևի նոտան՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="206"/>
@@ -5016,211 +5166,211 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="224"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="476"/>
         <source>C♭♭</source>
-        <translation>C♭♭</translation>
+        <translation>Դո♭♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="229"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="481"/>
         <source>C♭</source>
-        <translation>C♭</translation>
+        <translation>Դո♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="234"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="486"/>
         <source>C</source>
-        <translation>C</translation>
+        <translation>Դո</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="239"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="491"/>
         <source>C♯</source>
-        <translation>C♯</translation>
+        <translation>Դո♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="244"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="496"/>
         <source>C♯♯</source>
-        <translation>C♯♯</translation>
+        <translation>Դո♯♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="249"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="501"/>
         <source>D♭♭</source>
-        <translation>D♭♭</translation>
+        <translation>Ռե♭♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="254"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="506"/>
         <source>D♭</source>
-        <translation>D♭</translation>
+        <translation>Ռե♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="259"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="511"/>
         <source>D</source>
-        <translation>D</translation>
+        <translation>Ռե</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="264"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="516"/>
         <source>D♯</source>
-        <translation>D♯</translation>
+        <translation>Ռե♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="269"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="521"/>
         <source>D♯♯</source>
-        <translation>D♯♯</translation>
+        <translation>Ռե♯♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="274"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="526"/>
         <source>E♭♭</source>
-        <translation>E♭♭</translation>
+        <translation>Մի♭♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="279"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="531"/>
         <source>E♭</source>
-        <translation>E♭</translation>
+        <translation>Մի♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="284"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="536"/>
         <source>E</source>
-        <translation>E</translation>
+        <translation>Մի</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="289"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="541"/>
         <source>E♯</source>
-        <translation>E♯</translation>
+        <translation>Մի♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="294"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="546"/>
         <source>E♯♯</source>
-        <translation>E♯♯</translation>
+        <translation>Մի♯♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="299"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="551"/>
         <source>F♭♭</source>
-        <translation>F♭♭</translation>
+        <translation>Ֆա♭♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="304"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="556"/>
         <source>F♭</source>
-        <translation>F♭</translation>
+        <translation>Ֆա♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="309"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="561"/>
         <source>F</source>
-        <translation>F</translation>
+        <translation>Ֆա</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="314"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="566"/>
         <source>F♯</source>
-        <translation>F♯</translation>
+        <translation>Ֆա♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="319"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="571"/>
         <source>F♯♯</source>
-        <translation>F♯♯</translation>
+        <translation>Ֆա♯♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="324"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="576"/>
         <source>G♭♭</source>
-        <translation>G♭♭</translation>
+        <translation>Սոլ♭♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="329"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="581"/>
         <source>G♭</source>
-        <translation>G♭</translation>
+        <translation>Սոլ♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="334"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="586"/>
         <source>G</source>
-        <translation>G</translation>
+        <translation>Սոլ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="339"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="591"/>
         <source>G♯</source>
-        <translation>G♯</translation>
+        <translation>Սոլ♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="344"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="596"/>
         <source>G♯♯</source>
-        <translation>G♯♯</translation>
+        <translation>Սոլ♯♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="349"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="601"/>
         <source>A♭♭</source>
-        <translation>A♭♭</translation>
+        <translation>Լա♭♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="354"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="606"/>
         <source>A♭</source>
-        <translation>A♭</translation>
+        <translation>Լա♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="359"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="611"/>
         <source>A</source>
-        <translation>A</translation>
+        <translation>Լա</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="364"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="616"/>
         <source>A♯</source>
-        <translation>A♯</translation>
+        <translation>Լա♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="369"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="621"/>
         <source>A♯♯</source>
-        <translation>A♯♯</translation>
+        <translation>Լա♯♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="374"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="626"/>
         <source>B♭♭</source>
-        <translation>B♭♭</translation>
+        <translation>Սի♭♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="379"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="631"/>
         <source>B♭</source>
-        <translation>B♭</translation>
+        <translation>Սի♭</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="384"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="636"/>
         <source>B</source>
-        <translation>B</translation>
+        <translation>Սի</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="389"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="641"/>
         <source>B♯</source>
-        <translation>B♯</translation>
+        <translation>Սի♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="394"/>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="646"/>
         <source>B♯♯</source>
-        <translation>B♯♯</translation>
+        <translation>Սի♯♯</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="402"/>
@@ -5232,7 +5382,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="415"/>
         <source>Bottom octave</source>
-        <translation type="unfinished"/>
+        <translation>Ներքևի օկտավա</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="811"/>
@@ -5242,12 +5392,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="430"/>
         <source>Line thickness:</source>
-        <translation>Գծի հաստություն՝</translation>
+        <translation>Գծի հաստությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="443"/>
         <source>Top note:</source>
-        <translation>Վերևի նոտա՝</translation>
+        <translation>Վերևի նոտան՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="458"/>
@@ -5257,7 +5407,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="667"/>
         <source>Top octave</source>
-        <translation type="unfinished"/>
+        <translation>Վերևի օկտավա</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="682"/>
@@ -5282,7 +5432,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="704"/>
         <source>Quarter</source>
-        <translation>Քարորդ</translation>
+        <translation>Քառորդ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="709"/>
@@ -5292,12 +5442,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="717"/>
         <source>Head type:</source>
-        <translation>Գլխիկի տեսակ՝</translation>
+        <translation>Գլխիկի տեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="748"/>
         <source>Update Range</source>
-        <translation>Թարմացնել ձայնածավալը</translation>
+        <translation>Թարմացնել հնչյունածավալը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ambitus.ui" line="770"/>
@@ -5330,7 +5480,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="14"/>
         <source>Arpeggio Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Արպեջոյի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="47"/>
@@ -5345,12 +5495,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="89"/>
         <source>Stretch:</source>
-        <translation type="unfinished"/>
+        <translation>Ձգում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="102"/>
         <source>Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Ձգում</translation>
     </message>
 </context>
 <context>
@@ -5358,7 +5508,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="14"/>
         <source>Articulation Inspector</source>
-        <translation>Արտիկուլյացիայի տեսուչ</translation>
+        <translation>Արտասանության տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="47"/>
@@ -5373,12 +5523,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="95"/>
         <source>Anchor:</source>
-        <translation>Խարիսխ՝</translation>
+        <translation>Ուղղահայաց դիրքը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="108"/>
         <source>Anchor</source>
-        <translation>Խարիսխ</translation>
+        <translation>Ուղղահայաց դիրքը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="112"/>
@@ -5393,7 +5543,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="122"/>
         <source>Chord Automatic</source>
-        <translation>Ինքնաշխատորեն ակորդի համար</translation>
+        <translation>Ինքնաշխատորեն</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="127"/>
@@ -5428,12 +5578,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="185"/>
         <source>Ornament style:</source>
-        <translation type="unfinished"/>
+        <translation>Ձայնազարդի ոճը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="198"/>
         <source>Ornament style</source>
-        <translation type="unfinished"/>
+        <translation>Ձայնազարդի ոճ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="162"/>
@@ -5453,7 +5603,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="207"/>
         <source>Baroque</source>
-        <translation>Բառոկկային</translation>
+        <translation>Բառոկկո</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_articulation.ui" line="215"/>
@@ -5506,17 +5656,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="200"/>
         <source>Span presets:</source>
-        <translation type="unfinished"/>
+        <translation>Տակտի գծի նախակայումները՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="207"/>
         <source>Span to next staff</source>
-        <translation type="unfinished"/>
+        <translation>Տակտի գիծը ձգել մինչև հաջորդ նոտակիր</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="214"/>
         <source>Set as staff default</source>
-        <translation type="unfinished"/>
+        <translation>Կայել որպես սկզբնադիր</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="89"/>
@@ -5526,22 +5676,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="108"/>
         <source>Span from:</source>
-        <translation type="unfinished"/>
+        <translation>Գծի սկզբնակետը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="131"/>
         <source>Span from</source>
-        <translation type="unfinished"/>
+        <translation>Գծի սկզբնակետ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="144"/>
         <source>Span to:</source>
-        <translation type="unfinished"/>
+        <translation>Գծի վերջնակետը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_barline.ui" line="121"/>
         <source>Span to</source>
-        <translation type="unfinished"/>
+        <translation>Գծի վերջնակետ</translation>
     </message>
 </context>
 <context>
@@ -5554,7 +5704,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="47"/>
         <source>Beam</source>
-        <translation>Խումբ</translation>
+        <translation>Խմբագիծ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="177"/>
@@ -5594,7 +5744,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="82"/>
         <source>Position:</source>
-        <translation>Դիրք՝</translation>
+        <translation>Դիրք՝ </translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="131"/>
@@ -5614,7 +5764,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="202"/>
         <source>User position</source>
-        <translation>Օգտատիրական դիրք</translation>
+        <translation>Օգտատիրոջ նշած դիրք</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="170"/>
@@ -5627,7 +5777,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="17"/>
         <source>Bend Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Բենդի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="50"/>
@@ -5637,7 +5787,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="85"/>
         <source>Font size:</source>
-        <translation type="unfinished"/>
+        <translation>Տառաչափ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="104"/>
@@ -5652,12 +5802,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="150"/>
         <source>Font face:</source>
-        <translation type="unfinished"/>
+        <translation>Տառատեսակ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="163"/>
         <source>Font size</source>
-        <translation type="unfinished"/>
+        <translation>Տառաչափ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="166"/>
@@ -5667,17 +5817,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="176"/>
         <source>Font style:</source>
-        <translation type="unfinished"/>
+        <translation>Տառատեսակի ոճը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="186"/>
-        <source>Line width:</source>
-        <translation type="unfinished"/>
+        <source>Line thickness:</source>
+        <translation>Գծի հաստությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="199"/>
-        <source>Line width</source>
-        <translation type="unfinished"/>
+        <source>Line thickness</source>
+        <translation>Գծի հաստություն</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bend.ui" line="202"/>
@@ -5695,7 +5845,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bracket.ui" line="14"/>
         <source>Bracket Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Ակոլադայի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bracket.ui" line="47"/>
@@ -5705,12 +5855,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_bracket.ui" line="82"/>
         <source>Column</source>
-        <translation type="unfinished"/>
+        <translation>Սյունակ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_bracket.ui" line="89"/>
         <source>Column:</source>
-        <translation type="unfinished"/>
+        <translation>Սյունակ՝</translation>
     </message>
 </context>
 <context>
@@ -5718,7 +5868,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_break.ui" line="14"/>
         <source>Layout Break Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Շարվածքի ընդհատման տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_break.ui" line="44"/>
@@ -5731,7 +5881,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="14"/>
         <source>Breath/Caesura Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Շնչի/Ցեզուրայի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="47"/>
@@ -5742,7 +5892,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="85"/>
         <source>s</source>
         <extracomment>seconds</extracomment>
-        <translation type="unfinished"/>
+        <translation>վ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_caesura.ui" line="101"/>
@@ -5770,7 +5920,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="82"/>
         <source>Stem direction:</source>
-        <translation>Ցողունի ուղղություն՝</translation>
+        <translation>Ցողունի ուղղությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="95"/>
@@ -5795,12 +5945,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="117"/>
         <source>Offset:</source>
-        <translation type="unfinished"/>
+        <translation>Շեղում՝ </translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="133"/>
         <source>Small</source>
-        <translation>Փոքրացրած չափ</translation>
+        <translation>Փոքր չափսի</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_chord.ui" line="143"/>
@@ -5823,7 +5973,8 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_clef.ui" line="91"/>
         <source>Show courtesy</source>
-        <translation>Զգուշացնել կատարված փոփոխությունների մասին</translation>
+        <translation>Զգուշացնել կատարված
+փոփոխությունների մասին</translation>
     </message>
 </context>
 <context>
@@ -5831,22 +5982,23 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="14"/>
         <source>Dynamic Inspector</source>
-        <translation>Ուժաբանության տեսուչ</translation>
+        <translation>Դինամիկայի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="47"/>
         <source>Dynamic</source>
-        <translation>Ուժաբանություն</translation>
+        <translation>Դինամիկա</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="82"/>
         <source>Dynamic range:</source>
-        <translation>Ուժաբանության ձայնածավալ՝</translation>
+        <translation>Դինամիկ
+հնչյունածավալ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="118"/>
         <source>Dynamic range</source>
-        <translation>Ուժաբանության ձայնածավալ</translation>
+        <translation>Դինամիկ հնչյունածավալ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="140"/>
@@ -5871,12 +6023,13 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="95"/>
         <source>Velocity:</source>
-        <translation>Velocity-ն սեղմելու ուժը՝</translation>
+        <translation>Ստեղնը սեղմելու
+ուժը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="108"/>
         <source>Velocity</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղնը սեղմելու ուժը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_dynamic.ui" line="122"/>
@@ -5909,27 +6062,27 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="85"/>
         <source>Automatic placement</source>
-        <translation type="unfinished"/>
+        <translation>Ինքնատեղադրում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="92"/>
         <source>Offset</source>
-        <translation>Տեղաշարժում</translation>
+        <translation>Շեղում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="112"/>
         <source>Offset:</source>
-        <translation type="unfinished"/>
+        <translation>Շեղում՝ </translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="163"/>
         <source>Stacking order:</source>
-        <translation type="unfinished"/>
+        <translation>Դարսման կարգը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="176"/>
         <source>Stacking order</source>
-        <translation type="unfinished"/>
+        <translation>Դարսման կարգ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_element.ui" line="99"/>
@@ -5965,7 +6118,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="14"/>
         <source>Fermata Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Ֆերմատայի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="47"/>
@@ -5985,12 +6138,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="99"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="104"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fermata.ui" line="112"/>
@@ -6013,7 +6166,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fingering.ui" line="14"/>
         <source>Fingering Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Մատադրման տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fingering.ui" line="47"/>
@@ -6036,12 +6189,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_frametext.ui" line="6"/>
         <source>Frame Text Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Գրվածքի շրջանակման տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_frametext.ui" line="39"/>
         <source>Frame Text</source>
-        <translation type="unfinished"/>
+        <translation>Գրվածքի շրջանակում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_frametext.ui" line="74"/>
@@ -6059,7 +6212,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="14"/>
         <source>Fretboard Diagram Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Նվագակոթի դիագրամի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="50"/>
@@ -6074,7 +6227,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="107"/>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Մասշտաբ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="126"/>
@@ -6087,6 +6240,16 @@ space unit</extracomment>
         <translation>Տեղավորություն</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="140"/>
+        <source>Above</source>
+        <translation>Վերևից</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="145"/>
+        <source>Below</source>
+        <translation>Ներքևից</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="153"/>
         <source>Frets:</source>
         <translation>Լադեր՝</translation>
@@ -6094,7 +6257,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="163"/>
         <source>Barré:</source>
-        <translation type="unfinished"/>
+        <translation>Բառե՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="173"/>
@@ -6104,27 +6267,27 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="183"/>
         <source>Frets</source>
-        <translation type="unfinished"/>
+        <translation>Լադեր</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="193"/>
         <source>Strings</source>
-        <translation type="unfinished"/>
+        <translation>Լարայիններ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="203"/>
         <source>Barré</source>
-        <translation type="unfinished"/>
+        <translation>Բառե</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="210"/>
         <source>Offset:</source>
-        <translation type="unfinished"/>
+        <translation>Շեղում՝ </translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_fret.ui" line="220"/>
         <source>Offset</source>
-        <translation>Տեղաշարժում</translation>
+        <translation>Շեղում</translation>
     </message>
 </context>
 <context>
@@ -6147,7 +6310,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="95"/>
         <source>Font size:</source>
-        <translation type="unfinished"/>
+        <translation>Տառաչափ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="108"/>
@@ -6157,27 +6320,27 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="121"/>
         <source>Play style:</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարկման ոճը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="134"/>
         <source>Play style</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարկման ոճ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="143"/>
         <source>White Keys</source>
-        <translation type="unfinished"/>
+        <translation>Սպիտակ ստեղներ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="148"/>
         <source>Black Keys</source>
-        <translation type="unfinished"/>
+        <translation>Սև ստեղներ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="195"/>
         <source>Font face:</source>
-        <translation type="unfinished"/>
+        <translation>Տառատեսակ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="214"/>
@@ -6187,7 +6350,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="221"/>
         <source>Font size</source>
-        <translation type="unfinished"/>
+        <translation>Տառաչափ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="224"/>
@@ -6200,7 +6363,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="311"/>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="325"/>
         <source>Reset to default</source>
-        <translation>Վերակայել սկզբնադիրի</translation>
+        <translation>Վերակայել սկզբնադիրին</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="234"/>
@@ -6210,12 +6373,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="138"/>
         <source>Chromatic</source>
-        <translation type="unfinished"/>
+        <translation>Խրոմատիկ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="153"/>
         <source>Diatonic</source>
-        <translation type="unfinished"/>
+        <translation>Դիատոնիկ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="161"/>
@@ -6238,7 +6401,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="314"/>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="328"/>
         <source>Reset &apos;Font size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել &apos;Տառաչափ&apos;-ի արժեքը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_glissando.ui" line="258"/>
@@ -6342,7 +6505,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hbox.ui" line="175"/>
         <source>Create system header</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղծել համակարգի էջագլուխ</translation>
     </message>
 </context>
 <context>
@@ -6375,22 +6538,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="134"/>
         <source>Dynamic range:</source>
-        <translation>Ուժաբանության ձայնածավալ՝</translation>
+        <translation>Դինամիկ հնչյունածավալ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="147"/>
         <source>Continue height:</source>
-        <translation>Շարունակելու բարձրություն՝</translation>
+        <translation>Շարունակելու բարձրությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="98"/>
         <source>Velocity change:</source>
-        <translation>Velocity-ին սեղմելու ուժի փոփոխություն՝</translation>
+        <translation>Ստեղնը սեղմելու ուժի փոփոխությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="88"/>
         <source>Velocity change</source>
-        <translation>Velocity-ին սեղմելու ուժի փոփոխություն</translation>
+        <translation>Ստեղնը սեղմելու ուժի փոփոխությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="160"/>
@@ -6421,7 +6584,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="212"/>
         <source>Dynamic range</source>
-        <translation>Ուժաբանության ձայնածավալ</translation>
+        <translation>Դինամիկ հնչյունածավալ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="216"/>
@@ -6451,12 +6614,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="251"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="256"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_hairpin.ui" line="267"/>
@@ -6469,7 +6632,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_harmony.ui" line="14"/>
         <source>Chord Symbol Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Ակորդի նշանի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_harmony.ui" line="47"/>
@@ -6495,6 +6658,16 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_harmony.ui" line="112"/>
         <source>Placement</source>
         <translation>Տեղավորություն</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_harmony.ui" line="116"/>
+        <source>Above</source>
+        <translation>Վերևից</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_harmony.ui" line="121"/>
+        <source>Below</source>
+        <translation>Ներքևից</translation>
     </message>
 </context>
 <context>
@@ -6522,7 +6695,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="112"/>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>Չափ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_image.ui" line="122"/>
@@ -6545,22 +6718,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_iname.ui" line="14"/>
         <source>Instrument Name Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարանի անվանման տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_iname.ui" line="47"/>
         <source>Instrument Name</source>
-        <translation>Գործիքի անվանում</translation>
+        <translation>Նվագարանի անվանում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_iname.ui" line="82"/>
         <source>Layout position</source>
-        <translation type="unfinished"/>
+        <translation>Շարվածքի դիրք</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_iname.ui" line="92"/>
         <source>Layout position:</source>
-        <translation type="unfinished"/>
+        <translation>Շարվածքի դիրքը՝</translation>
     </message>
 </context>
 <context>
@@ -6568,12 +6741,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_instrchange.ui" line="14"/>
         <source>Change Instrument Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարանի փոխարինման տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_instrchange.ui" line="47"/>
         <source>Change Instrument</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարանի փոխարինում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_instrchange.ui" line="82"/>
@@ -6649,7 +6822,8 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="85"/>
         <source>Show courtesy</source>
-        <translation>Ցուցադրել կատարված փոփոխությունների մասին զգուշացում</translation>
+        <translation>Ցուցադրել զգուշացում կատարված 
+փոփոխությունների մասին</translation>
     </message>
 </context>
 <context>
@@ -6667,17 +6841,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="74"/>
         <source>Position:</source>
-        <translation>Դիրք՝</translation>
+        <translation>Դիրք՝ </translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="94"/>
         <source>Offset</source>
-        <translation>Տեղաշարժում</translation>
+        <translation>Շեղում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="101"/>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>Չափ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lasso.ui" line="84"/>
@@ -6690,12 +6864,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="14"/>
         <source>Let Ring Inspector</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Թող զրնգա&apos;-ի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="47"/>
         <source>Let Ring</source>
-        <translation type="unfinished"/>
+        <translation>Թող զրնգա</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="82"/>
@@ -6710,12 +6884,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="99"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_letring.ui" line="104"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
 </context>
 <context>
@@ -6733,22 +6907,22 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="82"/>
         <source>Line color:</source>
-        <translation>Գծի գույն՝</translation>
+        <translation>Գծի գույնը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="95"/>
         <source>Line thickness:</source>
-        <translation>Գծի հաստություն՝</translation>
+        <translation>Գծի հաստությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="108"/>
         <source>Line style:</source>
-        <translation>Գծի ոճ՝</translation>
+        <translation>Գծի ոճը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="124"/>
         <source>Allow diagonal</source>
-        <translation type="unfinished"/>
+        <translation>Թույլատրել շեղակիությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="137"/>
@@ -6758,17 +6932,19 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="182"/>
         <source>Custom dashed</source>
-        <translation type="unfinished"/>
+        <translation>Սեփական ստվերագիծ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="200"/>
         <source>Dash gap width:</source>
-        <translation type="unfinished"/>
+        <translation>Ստվերագծի բացվածքի
+լայնությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="213"/>
         <source>Dash line length:</source>
-        <translation type="unfinished"/>
+        <translation>Ստվերագծի գծիկների
+լայնությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="232"/>
@@ -6779,17 +6955,17 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_line.ui" line="235"/>
         <source>sp</source>
         <extracomment>Staff space unit</extracomment>
-        <translation>տրծ</translation>
+        <translation> տրծ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="245"/>
         <source>Dash line length</source>
-        <translation type="unfinished"/>
+        <translation>Ստվերագծի գծիկների լայնություն</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="261"/>
         <source>Dash gap width</source>
-        <translation type="unfinished"/>
+        <translation>Ստվերագծի բացվածքի լայնություն</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="153"/>
@@ -6814,17 +6990,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="172"/>
         <source>Dash-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Գիծ-կետ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="177"/>
         <source>Dash-dot-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Գիծ-կետ-կետ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_line.ui" line="193"/>
         <source>Line visible</source>
-        <translation>Գիծը տեսանելի է</translation>
+        <translation>Գիծը տեսանելի</translation>
     </message>
 </context>
 <context>
@@ -6832,12 +7008,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="14"/>
         <source>Lyrics Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Երգի խոսքերի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="47"/>
         <source>Lyrics</source>
-        <translation>Երգի բառերը</translation>
+        <translation>Երգի խոսքեր</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="82"/>
@@ -6862,12 +7038,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="132"/>
         <source>Verse:</source>
-        <translation type="unfinished"/>
+        <translation>Բանաստեղծություն՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_lyric.ui" line="145"/>
         <source>Verse</source>
-        <translation type="unfinished"/>
+        <translation>Բանաստեղծություն</translation>
     </message>
 </context>
 <context>
@@ -6905,17 +7081,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="94"/>
         <source>Marker type</source>
-        <translation type="unfinished"/>
+        <translation>Նշիչի տեսակ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="103"/>
         <source>Segno Variation</source>
-        <translation type="unfinished"/>
+        <translation>Սենյոյի վարիացիա</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="113"/>
         <source>Varied Coda</source>
-        <translation type="unfinished"/>
+        <translation>Փոփոխակվող կոդա</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="118"/>
@@ -6940,7 +7116,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_marker.ui" line="141"/>
         <source>Marker type:</source>
-        <translation>Նշիչի տեսակ՝</translation>
+        <translation>Նշիչի տեսակը՝</translation>
     </message>
 </context>
 <context>
@@ -6968,12 +7144,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="105"/>
         <source>Velocity type</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղնը սեղմելու ուժի տեսակը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="109"/>
         <source>Offset</source>
-        <translation>Տեղաշարժում</translation>
+        <translation>Շեղում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="114"/>
@@ -6983,12 +7159,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="122"/>
         <source>Velocity</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղնը սեղմելու ուժը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="155"/>
         <source>Mirror head</source>
-        <translation type="unfinished"/>
+        <translation>Արտացոլված գլխիկ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="284"/>
@@ -7003,27 +7179,27 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="375"/>
         <source>Dot 3</source>
-        <translation type="unfinished"/>
+        <translation>Կետ 3</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="382"/>
         <source>Dot 2</source>
-        <translation type="unfinished"/>
+        <translation>Կետ 2</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="389"/>
         <source>Dot 1</source>
-        <translation type="unfinished"/>
+        <translation>Կետ 1</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="396"/>
         <source>Dot 4</source>
-        <translation type="unfinished"/>
+        <translation>Կետ 4</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="403"/>
         <source>Hook</source>
-        <translation>Ծալվածք</translation>
+        <translation>Պոչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="410"/>
@@ -7033,7 +7209,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="417"/>
         <source>Beam</source>
-        <translation>Խումբ</translation>
+        <translation>Խմբագիծ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="424"/>
@@ -7073,12 +7249,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="193"/>
         <source>Head type:</source>
-        <translation>Գլխիկի տեսակ՝</translation>
+        <translation>Գլխիկի տեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="206"/>
         <source>Head group:</source>
-        <translation>Գլխիկների խումբ՝</translation>
+        <translation>Գլխիկների խումբը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="219"/>
@@ -7088,7 +7264,8 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="232"/>
         <source>Velocity:</source>
-        <translation>Velocity-ն սեղմելու ուժը՝</translation>
+        <translation>Ստեղնը սեղմելու
+ուժը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="245"/>
@@ -7098,12 +7275,13 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="274"/>
         <source>Small</source>
-        <translation>Փոքրացրած չափ</translation>
+        <translation>Փոքր չափսի</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="258"/>
         <source>Velocity type:</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղնը սեղմելու 
+ուժի տեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_note.ui" line="294"/>
@@ -7116,7 +7294,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_notedot.ui" line="14"/>
         <source>Note Dot Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Նոտայի կետի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_notedot.ui" line="47"/>
@@ -7126,7 +7304,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_notedot.ui" line="82"/>
         <source>Dot position:</source>
-        <translation>Կետի դիրք՝</translation>
+        <translation>Կետի դիրքը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_notedot.ui" line="95"/>
@@ -7179,12 +7357,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="112"/>
         <source>8va alta</source>
-        <translation type="unfinished"/>
+        <translation>Մեկ օկտավա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="117"/>
         <source>8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>Մեկ օկտավա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="122"/>
@@ -7214,12 +7392,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="149"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="154"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_ottava.ui" line="165"/>
@@ -7232,12 +7410,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_palmmute.ui" line="14"/>
         <source>Palm Mute Inspector</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Համրեցնել ափով&apos;-ի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_palmmute.ui" line="47"/>
         <source>Palm Mute</source>
-        <translation type="unfinished"/>
+        <translation>Համրեցնել ափով</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_palmmute.ui" line="82"/>
@@ -7252,12 +7430,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_palmmute.ui" line="99"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_palmmute.ui" line="104"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
 </context>
 <context>
@@ -7265,7 +7443,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="14"/>
         <source>Pedal Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Ոտնակի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="47"/>
@@ -7285,12 +7463,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="99"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_pedal.ui" line="104"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
 </context>
 <context>
@@ -7308,7 +7486,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_rest.ui" line="85"/>
         <source>Small</source>
-        <translation>Փոքրացրած չափ</translation>
+        <translation>Փոքր չափսի</translation>
     </message>
 </context>
 <context>
@@ -7337,7 +7515,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_segment.ui" line="101"/>
         <source>Leading space:</source>
-        <translation>Բացատ սկզբից՝</translation>
+        <translation>Բացատ առջևից՝</translation>
     </message>
 </context>
 <context>
@@ -7350,7 +7528,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="109"/>
         <source>Line type:</source>
-        <translation>Գծի տեսակ՝</translation>
+        <translation>Գծի տեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="82"/>
@@ -7360,7 +7538,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="14"/>
         <source>Slur/Tie Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Լիգայի/Կապակցող լիգայի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="86"/>
@@ -7380,7 +7558,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="101"/>
         <source>Wide Dashed</source>
-        <translation type="unfinished"/>
+        <translation>Լայն ստվերագիծ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_slur.ui" line="122"/>
@@ -7442,12 +7620,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftext.ui" line="14"/>
         <source>Staff/System Text Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Նոտակիրի/Համակարգի գրվածքի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftext.ui" line="47"/>
         <source>Staff/System Text</source>
-        <translation type="unfinished"/>
+        <translation>Նոտակիրի/Համակարգի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftext.ui" line="82"/>
@@ -7505,7 +7683,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="136"/>
         <source>Line distance:</source>
-        <translation>Գծերի միջև հեռավորությունը՝</translation>
+        <translation>Գծերի միջև հեռավորություն՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="149"/>
@@ -7566,7 +7744,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="252"/>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Մասշտաբ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="271"/>
@@ -7576,7 +7754,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="284"/>
         <source>Small</source>
-        <translation>Փոքրացրած չափ</translation>
+        <translation>Փոքր չափսի</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="291"/>
@@ -7589,7 +7767,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="14"/>
         <source>Stem Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Ցողունի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="47"/>
@@ -7598,8 +7776,13 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="82"/>
-        <source>Line width</source>
-        <translation type="unfinished"/>
+        <source>Line thickness</source>
+        <translation>Գծի հաստություն</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_stem.ui" line="95"/>
+        <source>Line thickness:</source>
+        <translation>Գծի հաստությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="85"/>
@@ -7608,19 +7791,14 @@ space unit</extracomment>
         <translation> տրծ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stem.ui" line="95"/>
-        <source>Line width:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="108"/>
         <source>Length offset:</source>
-        <translation type="unfinished"/>
+        <translation>Երկարության շեղումը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stem.ui" line="121"/>
         <source>Length offset</source>
-        <translation type="unfinished"/>
+        <translation>Երկարության շեղում</translation>
     </message>
 </context>
 <context>
@@ -7638,7 +7816,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="82"/>
         <source>Bottom gap:</source>
-        <translation>Ներքևի նահանջ՝</translation>
+        <translation>Ներքևի նահանջը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="95"/>
@@ -7656,7 +7834,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="169"/>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="259"/>
         <source>mm</source>
-        <translation>մմ</translation>
+        <translation> մմ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tbox.ui" line="124"/>
@@ -7731,17 +7909,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="14"/>
         <source>Tempo Text Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Տեմպի գրվածքի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="47"/>
         <source>Tempo Text</source>
-        <translation type="unfinished"/>
+        <translation>Տեմպի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="98"/>
         <source>BPM</source>
-        <translation>ՀՄՐ</translation>
+        <translation> հարված րոպեում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tempotext.ui" line="127"/>
@@ -7779,18 +7957,18 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="88"/>
         <source>Remove Custom Formatting</source>
-        <translation type="unfinished"/>
+        <translation>Հեռացնել սեփական ձևաչափումը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="113"/>
         <source>Frame:</source>
-        <translation type="unfinished"/>
+        <translation>Շրջանակ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="133"/>
         <location filename="../../mscore/inspector/inspector_text.ui" line="136"/>
         <source>Font size</source>
-        <translation type="unfinished"/>
+        <translation>Տառաչափ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="139"/>
@@ -7811,42 +7989,42 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="181"/>
         <source>Font size:</source>
-        <translation type="unfinished"/>
+        <translation>Տառաչափ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="197"/>
         <source>Font face:</source>
-        <translation type="unfinished"/>
+        <translation>Տառատեսակ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="216"/>
         <source>Font style:</source>
-        <translation type="unfinished"/>
+        <translation>Տառատեսակի ոճը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="256"/>
         <source>Border radius:</source>
-        <translation>Սահմանի շառավիղ՝</translation>
+        <translation>Սահմանի շառավիղը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="269"/>
         <source>Background:</source>
-        <translation type="unfinished"/>
+        <translation>Խորք՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="282"/>
         <source>Text margin:</source>
-        <translation>Գրվածքի լուսանցք՝</translation>
+        <translation>Գրվածքի լուսանցքը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="295"/>
         <source>Foreground color</source>
-        <translation type="unfinished"/>
+        <translation>Առջևքի գույն</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="305"/>
         <source>Text margin</source>
-        <translation type="unfinished"/>
+        <translation>Գրվածքի լուսանցք</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="308"/>
@@ -7857,37 +8035,39 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="318"/>
         <source>Background color</source>
-        <translation type="unfinished"/>
+        <translation>Խորքի գույն</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="328"/>
         <source>Border:</source>
-        <translation type="unfinished"/>
+        <translation>Սահման՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="350"/>
         <source>Foreground:</source>
-        <translation type="unfinished"/>
+        <translation>Առջևք՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="366"/>
         <source>Border</source>
-        <translation type="unfinished"/>
+        <translation>Սահման</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="385"/>
         <source>Border radius</source>
-        <translation type="unfinished"/>
+        <translation>Սահմանի շառավիղ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="395"/>
         <source>Text alignment</source>
-        <translation type="unfinished"/>
+        <translation>Գրվածքի հավասարեցում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="411"/>
         <source>Size follows &apos;Staff space&apos; setting</source>
-        <translation>Չափը հետևում է «Նոտակիրի տարածության» արժեքին</translation>
+        <translation>Չափը հաշվի է առնում 
+&apos;Նոտակիրի տարածություն&apos;
+արժեքը</translation>
     </message>
 </context>
 <context>
@@ -7910,12 +8090,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="86"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="91"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textline.ui" line="99"/>
@@ -7928,12 +8108,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="14"/>
         <source>Text Line Core Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Գրվածքային տողի միջուկի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="47"/>
         <source>Text Line Core</source>
-        <translation type="unfinished"/>
+        <translation>Գրվածքային տողի միջուկ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="88"/>
@@ -7949,7 +8129,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="101"/>
         <source>End hook height</source>
-        <translation type="unfinished"/>
+        <translation>Վերջի կեռի բարձրությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="104"/>
@@ -7961,42 +8141,42 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="123"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="156"/>
         <source>End hook</source>
-        <translation type="unfinished"/>
+        <translation>Վերջի կեռ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="130"/>
         <source>Begin hook:</source>
-        <translation type="unfinished"/>
+        <translation>Սկզբի կեռը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="159"/>
         <source>End hook:</source>
-        <translation type="unfinished"/>
+        <translation>Վերջի կեռը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="172"/>
         <source>Begin hook height</source>
-        <translation type="unfinished"/>
+        <translation>Սկզբի կեռի բարձրությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="191"/>
         <source>Begin Text</source>
-        <translation type="unfinished"/>
+        <translation>Սկզբի գրվածքը</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="204"/>
         <source>Continue Text</source>
-        <translation type="unfinished"/>
+        <translation>Միջնամասի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="217"/>
         <source>End Text</source>
-        <translation type="unfinished"/>
+        <translation>Վերջի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="242"/>
         <source>End text</source>
-        <translation type="unfinished"/>
+        <translation>Վերջի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="249"/>
@@ -8010,7 +8190,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="508"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="781"/>
         <source>Font size</source>
-        <translation type="unfinished"/>
+        <translation>Տառաչափ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="262"/>
@@ -8038,7 +8218,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="600"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="830"/>
         <source>Offset</source>
-        <translation>Տեղաշարժում</translation>
+        <translation>Շեղում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="317"/>
@@ -8059,14 +8239,14 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="561"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="723"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="333"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="566"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="728"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="341"/>
@@ -8080,28 +8260,28 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="574"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="794"/>
         <source>Font face:</source>
-        <translation type="unfinished"/>
+        <translation>Տառատեսակ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="367"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="587"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="736"/>
         <source>Offset:</source>
-        <translation type="unfinished"/>
+        <translation>Շեղում՝ </translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="380"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="607"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="847"/>
         <source>Alignment:</source>
-        <translation type="unfinished"/>
+        <translation>Հավասարեցում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="390"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="617"/>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="837"/>
         <source>Text alignment</source>
-        <translation type="unfinished"/>
+        <translation>Գրվածքի հավասարեցում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="393"/>
@@ -8113,17 +8293,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="469"/>
         <source>Continue text</source>
-        <translation type="unfinished"/>
+        <translation>Միջնամասի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="699"/>
         <source>Begin text</source>
-        <translation type="unfinished"/>
+        <translation>Սկզբի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="914"/>
         <source>Begin hook</source>
-        <translation type="unfinished"/>
+        <translation>Սկզբի կեռ</translation>
     </message>
 </context>
 <context>
@@ -8146,12 +8326,13 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="102"/>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Մասշտաբ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="85"/>
         <source>Show courtesy</source>
-        <translation>Զգուշացնել կատարված փոփոխությունների մասին</translation>
+        <translation>Զգուշացնել կատարված
+փոփոխությունների մասին</translation>
     </message>
 </context>
 <context>
@@ -8159,7 +8340,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="14"/>
         <source>Tremolo Bar Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Տրեմոլոյի տակտի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="50"/>
@@ -8167,19 +8348,19 @@ space unit</extracomment>
         <translation>Տրեմոլոյի տակտ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="85"/>
-        <source>Line width</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="88"/>
         <source>sp</source>
         <translation> տրծ</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="85"/>
+        <source>Line thickness</source>
+        <translation>Գծի հաստություն</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="107"/>
-        <source>Line Width:</source>
-        <translation type="unfinished"/>
+        <source>Line thickness:</source>
+        <translation>Գծի հաստությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="139"/>
@@ -8194,7 +8375,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="159"/>
         <source>Scale</source>
-        <translation type="unfinished"/>
+        <translation>Մասշտաբ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tremolo.ui" line="178"/>
@@ -8222,7 +8403,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="95"/>
         <source>Ornament style:</source>
-        <translation type="unfinished"/>
+        <translation>Ձայնազարդի ոճը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="108"/>
@@ -8262,12 +8443,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="164"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="169"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="183"/>
@@ -8282,7 +8463,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="192"/>
         <source>Baroque</source>
-        <translation>Բառոկկային</translation>
+        <translation>Բառոկկո</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_trill.ui" line="200"/>
@@ -8295,7 +8476,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="14"/>
         <source>Tuplet Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Մուլտիօլի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="156"/>
@@ -8305,7 +8486,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="191"/>
         <source>Number type</source>
-        <translation type="unfinished"/>
+        <translation>Համարի տեսակ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="195"/>
@@ -8320,12 +8501,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="213"/>
         <source>Number type:</source>
-        <translation type="unfinished"/>
+        <translation>Համարի տեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="226"/>
         <source>Bracket type:</source>
-        <translation>Ակոլադայի տեսակ՝</translation>
+        <translation>Ակոլադայի տեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="239"/>
@@ -8348,6 +8529,16 @@ space unit</extracomment>
         <translation>Ուղղություն</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="302"/>
+        <source>Line thickness:</source>
+        <translation>Գծի հաստությունը՝</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="315"/>
+        <source>Line thickness</source>
+        <translation>Գծի հաստություն</translation>
+    </message>
+    <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="243"/>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="284"/>
         <source>Auto</source>
@@ -8362,7 +8553,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="103"/>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="106"/>
         <source>Font size</source>
-        <translation type="unfinished"/>
+        <translation>Տառաչափ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="109"/>
@@ -8390,16 +8581,6 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="294"/>
         <source>Down</source>
         <translation>Ներքև</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="302"/>
-        <source>Line width:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="315"/>
-        <source>Line width</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_tuplet.ui" line="318"/>
@@ -8440,7 +8621,7 @@ space unit</extracomment>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="265"/>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="281"/>
         <source>mm</source>
-        <translation>մմ</translation>
+        <translation> մմ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vbox.ui" line="127"/>
@@ -8511,13 +8692,13 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="14"/>
         <source>Vibrato Inspector</source>
-        <translation type="unfinished"/>
+        <translation>Վիբրատոյի տեսուչ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="47"/>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="136"/>
         <source>Vibrato</source>
-        <translation type="unfinished"/>
+        <translation>Վիբրատո</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="82"/>
@@ -8532,12 +8713,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="99"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="104"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_vibrato.ui" line="112"/>
@@ -8590,7 +8771,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/inspector/inspector_volta.ui" line="87"/>
         <source>Repeat list</source>
-        <translation type="unfinished"/>
+        <translation>Կրկնությունների ցանկ</translation>
     </message>
 </context>
 <context>
@@ -8598,17 +8779,17 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="17"/>
         <source>Instrument wizard</source>
-        <translation>Գործիքների մոգ</translation>
+        <translation>Նվագարանների մոգ</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="25"/>
         <source>Instrument genre filter</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարանների ժանրի զտիչ</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="32"/>
         <source>Instrument list</source>
-        <translation>Գործիքների ցանկ</translation>
+        <translation>Նվագարանների ցանկ</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="70"/>
@@ -8659,7 +8840,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="248"/>
         <source>Added instruments</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացված նվագարաններ</translation>
     </message>
 </context>
 <context>
@@ -8667,7 +8848,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="14"/>
         <source>Instruments</source>
-        <translation>Գործիքներ</translation>
+        <translation>Նվագարաններ</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.ui" line="47"/>
@@ -8692,7 +8873,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwidget.cpp" line="399"/>
         <source>All instruments</source>
-        <translation>Բոլոր գործիքները</translation>
+        <translation>Բոլոր նվագարանները</translation>
     </message>
 </context>
 <context>
@@ -8700,18 +8881,18 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="14"/>
         <source>Instruments</source>
-        <translation>Գործիքներ</translation>
+        <translation>Նվագարաններ</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="55"/>
         <location filename="../../mscore/instrwidget.ui" line="80"/>
         <source>Instrument list</source>
-        <translation>Գործիքների ցանկ</translation>
+        <translation>Նվագարանների ցանկ</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="42"/>
         <source>Instrument genre filter</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարանների ժանրի զտիչ</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="91"/>
@@ -8756,7 +8937,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="304"/>
         <source>Part list</source>
-        <translation type="unfinished"/>
+        <translation>Դերանվագների ցանկ</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="320"/>
@@ -8882,7 +9063,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/logindialog.ui" line="110"/>
         <source>Password:</source>
-        <translation>Գաղտնաբար՝</translation>
+        <translation>Գաղտնաբառ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/logindialog.ui" line="123"/>
@@ -8915,12 +9096,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="159"/>
         <source>MuseScore instrument</source>
-        <translation>MuseScore գործիք</translation>
+        <translation>MuseScore նվագարան</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="211"/>
         <source>Lyrics</source>
-        <translation>Երգի բառերը</translation>
+        <translation>Երգի խոսքեր</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="250"/>
@@ -9119,7 +9300,8 @@ notes</source>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="653"/>
         <source>Show
 tempo text</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել
+տեմպի գրվածքը</translation>
     </message>
     <message>
         <location filename="../../mscore/importmidi/importmidi_model.cpp" line="674"/>
@@ -9180,17 +9362,7 @@ pickup measure</source>
 You only need to do this once.
 
 Would you like to locate %2 now?</source>
-        <translation>MuseScore-ը ուղիղ MP3 նիշքի մեջ արտահանում չի կատարում, դրա փոխարեն կիրառվում է ազատ հասանելի LAME գրադարանը: Դուք պետք է %1 առանձին ստանաք (ավելի մանրամասն կարդացեք ձեռնարկում), հետո MuseScore-ի համար ցույց տաք նիշքի ուղղին:
-Սա հարկավոր է միայն մեկ անգամ կատարել:
-
-Ուզո՞ւմ եք %2-ի ուղղին հիմա ցույց տալ:</translation>
-    </message>
-    <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
-You only need to do this once.
-
-Would you like to locate %2 now?</source>
-        <translation type="vanished">MuseScore-ը ուղիղ MP3 նիշքի մեջ արտահանում չի կատարում, դրա փոխարեն կիրառվում է ազատ հասանելի LAME գրադարանը: Դուք պետք է %1 առանձին ստանաք (ավելի մանրամասն կարդացեք ձեռնարկում), հետո MuseScore-ի համար ցույց տաք նիշքի ուղղին:
+        <translation>MuseScore-ն ուղիղ MP3 նիշքի մեջ արտահանում չի կատարում, դրա փոխարեն կիրառվում է ազատ հասանելի LAME գրադարանը: Դուք պետք է %1 առանձին ստանաք (ավելի մանրամասն կարդացեք ձեռնարկում), հետո MuseScore-ի համար ցույց տաք նիշքի ուղղին:
 Սա հարկավոր է միայն մեկ անգամ կատարել:
 
 Ուզո՞ւմ եք %2-ի ուղղին հիմա ցույց տալ:</translation>
@@ -9206,7 +9378,7 @@ Would you like to locate %2 now?</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="195"/>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
-        <location filename="../../mscore/musescore.cpp" line="5821"/>
+        <location filename="../../mscore/musescore.cpp" line="5845"/>
         <source>Symbols</source>
         <translation>Նշաններ</translation>
     </message>
@@ -9222,7 +9394,8 @@ Would you like to locate %2 now?</source>
         <location filename="../../mscore/measureproperties.cpp" line="270"/>
         <source>Cannot change measure length:
 tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>Չստացվեց փոխել տակտի չափը:
+Մուլտիօլը կհատեր տակտը:</translation>
     </message>
 </context>
 <context>
@@ -9250,7 +9423,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="59"/>
         <source>Visible</source>
-        <translation>Տեսանելի</translation>
+        <translation>Տեսանելիություն</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="64"/>
@@ -9352,7 +9525,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="301"/>
         <source>Play count:</source>
-        <translation>Նվագարկումների քանակ՝</translation>
+        <translation>Նվագարկումների քանակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="343"/>
@@ -9497,23 +9670,24 @@ tuplet would cross measure</source>
 <context>
     <name>Mixer</name>
     <message>
-        <location filename="../../mscore/mixer.ui" line="43"/>
-        <source>Show/hide details</source>
+        <location filename="../../mscore/mixer.ui" line="33"/>
+        <source>Play part only</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/mixer.ui" line="106"/>
+        <location filename="../../mscore/mixer.ui" line="50"/>
+        <source>Show/hide details</source>
+        <translation>Ցուցադրել/թաքցնել մանրամասները</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/mixer.ui" line="113"/>
         <source>Master Gain</source>
-        <translation type="unfinished"/>
+        <translation>Ընդհանուր
+ուժգնություն</translation>
     </message>
 </context>
 <context>
     <name>MixerDetails</name>
-    <message>
-        <location filename="../../mscore/mixerdetails.ui" line="42"/>
-        <source>MIDI Out controllers</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="45"/>
         <source>MIDI</source>
@@ -9522,29 +9696,34 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="53"/>
         <source>Chorus:</source>
-        <translation type="unfinished"/>
+        <translation>Խորուս՝</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="66"/>
         <location filename="../../mscore/mixerdetails.ui" line="187"/>
         <source>MIDI OUT reverb</source>
-        <translation type="unfinished"/>
+        <translation>MIDI OUT րեվերբ.</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="91"/>
         <location filename="../../mscore/mixerdetails.ui" line="200"/>
         <source>MIDI OUT chorus</source>
-        <translation type="unfinished"/>
+        <translation>MIDI OUT խորուս</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="158"/>
         <source>Port:</source>
-        <translation type="unfinished"/>
+        <translation>Միացք՝</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="125"/>
         <source>MIDI port number</source>
-        <translation type="unfinished"/>
+        <translation>MIDI միացքի համարը</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/mixerdetails.ui" line="42"/>
+        <source>MIDI OUT controllers</source>
+        <translation>MIDI OUT հսկիչներ</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="138"/>
@@ -9555,32 +9734,29 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="145"/>
         <source>MIDI channel number</source>
-        <translation type="unfinished"/>
+        <translation>MIDI ալիքների քանակ</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="180"/>
         <source>Reverb:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Mute Per Voice</source>
-        <translation type="unfinished"/>
+        <translation>Րեվերբ.՝</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="311"/>
         <location filename="../../mscore/mixerdetails.ui" line="432"/>
         <source>Pan</source>
-        <translation type="unfinished"/>
+        <translation>Դիրքավորում</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="419"/>
         <source>Pan:</source>
-        <translation type="unfinished"/>
+        <translation>Դիրքավորում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="334"/>
         <source>Patch:</source>
-        <translation type="unfinished"/>
+        <translation>Հնչողության
+ծրագիր՝</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="469"/>
@@ -9590,12 +9766,12 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="384"/>
         <source>Channel name</source>
-        <translation type="unfinished"/>
+        <translation>Ալիքի անվանում</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="224"/>
         <source>Mute Voice</source>
-        <translation type="unfinished"/>
+        <translation>Համրեցնել ձայնը</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="403"/>
@@ -9616,12 +9792,12 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="484"/>
         <source>Track color:</source>
-        <translation type="unfinished"/>
+        <translation>Հետագծի գույնը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="510"/>
         <source>Track color</source>
-        <translation type="unfinished"/>
+        <translation>Հետագծի գույն</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="375"/>
@@ -9631,7 +9807,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="304"/>
         <source>Volume:</source>
-        <translation type="unfinished"/>
+        <translation>Ուժգնություն՝</translation>
     </message>
 </context>
 <context>
@@ -9644,7 +9820,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixertrackchannel.ui" line="160"/>
         <source>Pan</source>
-        <translation type="unfinished"/>
+        <translation>Դիրքավորում</translation>
     </message>
     <message>
         <location filename="../../mscore/mixertrackchannel.ui" line="206"/>
@@ -9654,7 +9830,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixertrackchannel.ui" line="264"/>
         <source>Channel name</source>
-        <translation type="unfinished"/>
+        <translation>Ալիքի անվանում</translation>
     </message>
 </context>
 <context>
@@ -9662,7 +9838,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixertrackpart.ui" line="88"/>
         <source>Show channels</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել ալիքները</translation>
     </message>
     <message>
         <location filename="../../mscore/mixertrackpart.ui" line="136"/>
@@ -9672,7 +9848,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixertrackpart.ui" line="195"/>
         <source>Pan</source>
-        <translation type="unfinished"/>
+        <translation>Դիրքավորում</translation>
     </message>
     <message>
         <location filename="../../mscore/mixertrackpart.ui" line="241"/>
@@ -9711,26 +9887,31 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::AboutBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4483"/>
+        <location filename="../../mscore/musescore.cpp" line="4494"/>
         <source>Unstable Prerelease for Version: %1</source>
         <translation>Անկայուն թողարկում %1 տարբերակի համար</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4486"/>
+        <location filename="../../mscore/musescore.cpp" line="4497"/>
         <source>Version: %1</source>
         <translation>Տարբերակ՝ %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4489"/>
+        <location filename="../../mscore/musescore.cpp" line="4500"/>
         <source>Revision: %1</source>
         <translation>Վերանայում՝ %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4493"/>
+        <location filename="../../mscore/musescore.cpp" line="4505"/>
         <source>Visit %1www.musescore.org%2 for new versions and more information.
-Support MuseScore with your %3donation%4.
-
-Copyright &amp;copy; 1999-2019 Werner Schweer and Others.
+Support MuseScore with your %3donation%4.</source>
+        <translation>Այցելեք %1www.musescore.org%2 նոր տարբերակների և
+լրացուցիչ տեղեկությունների համար:
+Աջակցեք MuseScore-ին՝ կատարելով %3նվիրատվություն%4:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="4512"/>
+        <source>Copyright &amp;copy; 1999-2019 Werner Schweer and Others.
 Published under the GNU General Public License.</source>
         <translation type="unfinished"/>
     </message>
@@ -9738,7 +9919,7 @@ Published under the GNU General Public License.</source>
 <context>
     <name>Ms::AboutMusicXMLBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4535"/>
+        <location filename="../../mscore/musescore.cpp" line="4548"/>
         <source>MusicXML is an open file format for exchanging digital sheet music,
 supported by many applications.
 Copyright © 2004-2018 the Contributors to the MusicXML
@@ -9748,7 +9929,14 @@ Group under the W3C Community Contributor License Agreement
 %1
 A human-readable summary is available:
 %2</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML-ը նիշքային բաց ձևաչափ է, որը օժանդակվում է բազմաթիվ ծրագրերի կողմից,
+կիրառվում է թվայնացված պարտիտուրների փոխանակման համար:
+Հեղինակային իրավունքներ © 2004-2018 թվականի MusicXML-ին աջակցողներ
+Հատկավորումը տպագրված է W3C Music Notation Community Group-ի կողմից
+W3C Community Contributor License Agreement (CLA) ներքո՝
+%1
+Մարդու կողմից ընթեռնելի համառոտ ամփոփումը հասանելի է՝
+%2</translation>
     </message>
 </context>
 <context>
@@ -9766,7 +9954,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/searchComboBox.cpp" line="104"/>
         <source>Rehearsal Mark</source>
-        <translation>Պարտիրուրի կողմնորոշիչ / թիվ</translation>
+        <translation>Պարտիտուրի նշում</translation>
     </message>
     <message>
         <location filename="../../mscore/searchComboBox.cpp" line="107"/>
@@ -9796,6 +9984,30 @@ A human-readable summary is available:
     </message>
 </context>
 <context>
+    <name>Ms::CrashReporter</name>
+    <message>
+        <location filename="../../crashreporter/crashreporter.cpp" line="108"/>
+        <source>Success!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.cpp" line="108"/>
+        <source>Crash report uploaded successfully!</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.cpp" line="119"/>
+        <source>Error</source>
+        <translation>Սխալ</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.cpp" line="119"/>
+        <source>Error while uploading crash report:
+%1</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Ms::DownloadUtils</name>
     <message>
         <location filename="../../mscore/downloadUtils.cpp" line="62"/>
@@ -9805,7 +10017,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/downloadUtils.cpp" line="63"/>
         <source>Downloading…</source>
-        <translation type="unfinished"/>
+        <translation>Ներբեռնում...</translation>
     </message>
 </context>
 <context>
@@ -9813,12 +10025,12 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/drumtools.cpp" line="98"/>
         <source>Drumset Tools</source>
-        <translation type="unfinished"/>
+        <translation>Հարվածայինների հետ աշխատելու գործիքներ</translation>
     </message>
     <message>
         <location filename="../../mscore/drumtools.cpp" line="99"/>
         <source>Edit Drumset</source>
-        <translation>Հարվածային գործիքների խմբագիր</translation>
+        <translation>Խմբագրել հարվածայինների հավաքածուն</translation>
     </message>
     <message>
         <location filename="../../mscore/drumtools.cpp" line="100"/>
@@ -9836,12 +10048,12 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/drumroll.cpp" line="104"/>
         <source>Velocity:</source>
-        <translation>Velocity-ն սեղմելու ուժը՝</translation>
+        <translation>Ստեղնը սեղմելու ուժը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/drumroll.cpp" line="106"/>
         <source>Offset</source>
-        <translation>Տեղաշարժում</translation>
+        <translation>Շեղում</translation>
     </message>
     <message>
         <location filename="../../mscore/drumroll.cpp" line="107"/>
@@ -9851,7 +10063,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/drumroll.cpp" line="116"/>
         <source>Pitch:</source>
-        <translation>Տոնի բարձրություն՝</translation>
+        <translation>Տոնի բարձրությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/drumroll.cpp" line="196"/>
@@ -9864,19 +10076,21 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="571"/>
         <source>Drumset too old</source>
-        <translation type="unfinished"/>
+        <translation>Հարվածայինները շատ հին են</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="571"/>
         <source>MuseScore cannot load this drumset file.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore-ին չի հաջողվում բեռնել հարվածայինների նիշքը:</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="598"/>
         <source>Open File
 %1
 failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 
+նիշքի բացումը
+չհաջողվեց՝ %1</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="599"/>
@@ -9886,12 +10100,12 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="609"/>
         <source>Write File failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Չհաջողվեց նիշքը գրել՝ %1</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.cpp" line="610"/>
         <source>Write Drumset</source>
-        <translation>Գրել հարվածային գործիքները</translation>
+        <translation>Գրել հարվածայինները</translation>
     </message>
 </context>
 <context>
@@ -9899,7 +10113,7 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="311"/>
         <source>The instrument name is invalid.</source>
-        <translation>Գործիքի անվանումը անվավեր է:</translation>
+        <translation>Նվագարանի անվանումը անվավեր է:</translation>
     </message>
 </context>
 <context>
@@ -9927,12 +10141,12 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="392"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="393"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="397"/>
@@ -9978,77 +10192,77 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="447"/>
         <source>Page number, except on first page</source>
-        <translation type="unfinished"/>
+        <translation>Էջի համարը, բացի առաջին էջից</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="449"/>
         <source>Page number, if there is more than one page</source>
-        <translation type="unfinished"/>
+        <translation>Էջի համարը, եթե առկա է մեկից ավել էջ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="451"/>
         <source>Page number, on all pages</source>
-        <translation type="unfinished"/>
+        <translation>Էջի համարը, բոլոր էջերի վրա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="453"/>
         <source>Number of pages</source>
-        <translation type="unfinished"/>
+        <translation>Էջերի քանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="455"/>
         <source>File name</source>
-        <translation type="unfinished"/>
+        <translation>Նիշքի անվանումը</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="457"/>
         <source>File path+name</source>
-        <translation type="unfinished"/>
+        <translation>Նիշքի ուղին+անվանումը</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="459"/>
         <source>Part name, except on first page</source>
-        <translation type="unfinished"/>
+        <translation>Դերանվագի համարը, բացի առաջին էջից</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="461"/>
         <source>Part name, on all pages</source>
-        <translation type="unfinished"/>
+        <translation>Դերանվագի համարը, բոլոր էջերի վրա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="463"/>
         <source>Current date</source>
-        <translation type="unfinished"/>
+        <translation>Ընթացիկ ամսաթիվը</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="465"/>
         <source>Creation date</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղծման ամսաթիվը</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="467"/>
         <source>Last modification time</source>
-        <translation type="unfinished"/>
+        <translation>Վերջին փոփոխման ժամանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="469"/>
         <source>Last modification date</source>
-        <translation type="unfinished"/>
+        <translation>Վերջին փոփոխման ամսաթիվը</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="471"/>
         <source>Copyright, on first page only</source>
-        <translation type="unfinished"/>
+        <translation>Հեղինակային իրավունքը, միայն առաջին էջին</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="473"/>
         <source>Copyright, on all pages</source>
-        <translation type="unfinished"/>
+        <translation>Հեղինակային իրավունքը, բոլոր էջերի վրա</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="475"/>
         <source>The $ sign itself</source>
-        <translation type="unfinished"/>
+        <translation>$ նշանը դնելու համար</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="477"/>
@@ -10058,32 +10272,32 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="479"/>
         <source>Available metadata tags and their current values</source>
-        <translation type="unfinished"/>
+        <translation>Մետատվյալների հասանելի պիտակները և իրենց ընթացիկ արժեքները</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="481"/>
         <source>(in File &gt; Score Properties…):</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.cpp" line="584"/>
-        <source>No frame</source>
-        <translation type="unfinished"/>
+        <translation>(Նիշք &gt;Պարտիտուրի հատկություններ…)՝</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="585"/>
+        <source>No frame</source>
+        <translation>Առանց շրջանակի</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.cpp" line="586"/>
         <source>Square</source>
         <translation>Ուղիղ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="586"/>
+        <location filename="../../mscore/editstyle.cpp" line="587"/>
         <source>Circle</source>
         <translation>Շրջանագիծ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="444"/>
         <source>Special symbols in header/footer</source>
-        <translation type="unfinished"/>
+        <translation>Հատուկ նշաններ էջագլխում/էջատակում</translation>
     </message>
 </context>
 <context>
@@ -10091,16 +10305,12 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="235"/>
         <source>Extension Updates Available</source>
-        <translation type="unfinished"/>
+        <translation>Հասանելի են ընդլայնումների արդիացումներ</translation>
     </message>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="236"/>
         <source>One or more installed extensions have updates available in Help &gt; Resource Manager…</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>One or more installed extensions have updates available in Help / Resource Manager…</source>
-        <translation type="unfinished"/>
+        <translation>Մեկ կամ մի քանի ընդլայնումների համար առկա են արդիացումներ: Մտե՛ք Օգնություն &gt;Պաշարների կառավարիչ...</translation>
     </message>
 </context>
 <context>
@@ -10135,7 +10345,7 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="844"/>
         <source>Parenthesis</source>
-        <translation type="unfinished"/>
+        <translation>Կլոր փակագիծ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="845"/>
@@ -10153,7 +10363,7 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/inspector/inspectorBase.cpp" line="545"/>
         <source>Set as style</source>
-        <translation type="unfinished"/>
+        <translation>Կայել որպես սկզբնադիր</translation>
     </message>
 </context>
 <context>
@@ -10184,22 +10394,22 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/inspector/inspectorHairpin.cpp" line="34"/>
         <source>Crescendo Hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Կրեշենդոյի ծամկալ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspectorHairpin.cpp" line="35"/>
         <source>Decrescendo Hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Դիմինուենդոյի ծամկալ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspectorHairpin.cpp" line="36"/>
         <source>Crescendo Line</source>
-        <translation type="unfinished"/>
+        <translation>Կրեշենդոյի գիծ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspectorHairpin.cpp" line="37"/>
         <source>Decrescendo Line</source>
-        <translation type="unfinished"/>
+        <translation>Դիմինուենդոյի գիծ</translation>
     </message>
 </context>
 <context>
@@ -10208,7 +10418,7 @@ failed: %1</source>
         <location filename="../../mscore/inspector/inspectorLasso.cpp" line="33"/>
         <location filename="../../mscore/inspector/inspectorLasso.cpp" line="34"/>
         <source>mm</source>
-        <translation>մմ</translation>
+        <translation> մմ</translation>
     </message>
 </context>
 <context>
@@ -10221,22 +10431,22 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="627"/>
         <source>Dot 1</source>
-        <translation type="unfinished"/>
+        <translation>Կետ 1</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="630"/>
         <source>Dot 2</source>
-        <translation type="unfinished"/>
+        <translation>Կետ 2</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="633"/>
         <source>Dot 3</source>
-        <translation type="unfinished"/>
+        <translation>Կետ 3</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="636"/>
         <source>Dot 4</source>
-        <translation type="unfinished"/>
+        <translation>Կետ 4</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="641"/>
@@ -10249,40 +10459,42 @@ failed: %1</source>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="76"/>
         <source>Save Instrument List</source>
-        <translation>Պահել գործիքների ցանկը</translation>
+        <translation>Պահել նվագարանների ցանկը</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="78"/>
         <location filename="../../mscore/instrdialog.cpp" line="121"/>
         <source>MuseScore Instruments</source>
-        <translation>MuseScore գործիքներ</translation>
+        <translation>MuseScore նվագարաններ</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="91"/>
         <source>Open Instruments File
 %1
 failed: %2</source>
-        <translation type="unfinished"/>
+        <translation>%1
+նվագարանների նիշքի բացումը
+չհաջողվեց՝ %2</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="107"/>
         <source>Write Instruments File failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 նվագարանների նիշքի գրումը հաջողվեց</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="92"/>
         <source>Open Instruments File</source>
-        <translation>Բացել գործիքների նիշքը</translation>
+        <translation>Բացել նվագարանների նիշքը</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="108"/>
         <source>Write Instruments File</source>
-        <translation>Գործիքների նիշքի գրում</translation>
+        <translation>Նվագարանների նիշքի գրում</translation>
     </message>
     <message>
         <location filename="../../mscore/instrdialog.cpp" line="119"/>
         <source>Load Instrument List</source>
-        <translation>Բեռնել գործիքների ցանկը</translation>
+        <translation>Բեռնել նվագարանների ցանկը</translation>
     </message>
 </context>
 <context>
@@ -10290,7 +10502,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/instrwidget.cpp" line="127"/>
         <source>Staff %1</source>
-        <translation>Նոտակիր %1</translation>
+        <translation>Նոտակիր №%1</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.cpp" line="375"/>
@@ -10344,116 +10556,122 @@ failed: %2</source>
 <context>
     <name>Ms::LoginDialog</name>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="48"/>
+        <location filename="../../mscore/logindialog.cpp" line="49"/>
         <source>%1Create an account%2</source>
         <translation>%1Ստեղծել հաշիվ%2</translation>
     </message>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="51"/>
+        <location filename="../../mscore/logindialog.cpp" line="52"/>
         <source>%1Forgot password?%2</source>
         <translation>%1Մոռացե՞լ եք գաղտնաբառը:%2</translation>
     </message>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="69"/>
-        <location filename="../../mscore/logindialog.cpp" line="91"/>
+        <location filename="../../mscore/logindialog.cpp" line="70"/>
+        <location filename="../../mscore/logindialog.cpp" line="92"/>
         <source>Login error</source>
         <translation>Մուտք գործելու սխալ</translation>
     </message>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="69"/>
+        <location filename="../../mscore/logindialog.cpp" line="70"/>
         <source>Please fill in your username and password</source>
-        <translation>Մուտքագրեք օգտանունը և գաղտնաբառը</translation>
+        <translation>Մուտքագրեք օգտանունն ու գաղտնաբառը</translation>
     </message>
 </context>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="240"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="226"/>
+        <source>Error</source>
+        <translation>Սխալ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/network/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="429"/>
         <source>Network error</source>
         <translation>Ցանցի սխալ</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="240"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="238"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="429"/>
         <source>Please check your Internet connection</source>
         <translation>Ստուգեք Համացանցի հետ կապի առկայությունը</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="114"/>
-        <location filename="../../mscore/loginmanager.cpp" line="243"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="240"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="432"/>
         <source>Please upgrade</source>
         <translation>Բարելավեք</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="114"/>
-        <location filename="../../mscore/loginmanager.cpp" line="243"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="240"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="432"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
         <translation>MuseScore-ի այս տարբերակը շատ հին է այս հատկանիշը օգտագործելու համար: %1Նախ արդիացրեք ծրագիրը%2:</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="212"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="370"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="477"/>
+        <source>Wrong response from the server</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/network/loginmanager.cpp" line="401"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>Մուտք գործելու անհաջող փորձ: Կրկին փորձեք:</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="218"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="407"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="223"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="412"/>
         <source>This account has been blocked.</source>
         <translation>Այս հաշիվը արգելափակված է:</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="226"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="415"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="231"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="420"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="294"/>
-        <source>Error while getting user info. Please try again</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/loginmanager.cpp" line="298"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="480"/>
         <source>Error while getting user info: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="435"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="666"/>
         <source>Uploading…</source>
         <translation>Բեռնում…</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="436"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="667"/>
         <source>Cancel</source>
         <translation>Չեղարկել</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="472"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="703"/>
         <source>Upload Error</source>
         <translation>Բեռնման սխալ</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="473"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="704"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file. Error %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="576"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="820"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="580"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="824"/>
         <source>Cannot upload: %1</source>
         <translation>Չհաջողվեց վերբեռնել՝ %1</translation>
     </message>
@@ -10507,7 +10725,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="119"/>
         <source>Measure Properties for Measure %1</source>
-        <translation>%1 տակտի հատկությունները</translation>
+        <translation>%1-րդ տակտի հատկությունները</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="152"/>
@@ -10530,7 +10748,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/mediadialog.cpp" line="201"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Արված է</translation>
     </message>
 </context>
 <context>
@@ -10549,24 +10767,24 @@ failed: %2</source>
 <context>
     <name>Ms::Mixer</name>
     <message>
-        <location filename="../../mscore/mixer.cpp" line="104"/>
-        <location filename="../../mscore/mixer.cpp" line="151"/>
+        <location filename="../../mscore/mixer.cpp" line="105"/>
+        <location filename="../../mscore/mixer.cpp" line="152"/>
         <location filename="../../mscore/mixer.cpp" line="192"/>
         <source>Decibels: %1</source>
-        <translation type="unfinished"/>
+        <translation>Դեցիբել՝ %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/mixer.cpp" line="206"/>
+        <location filename="../../mscore/mixer.cpp" line="226"/>
         <source>Mixer</source>
-        <translation>Խառնիչ</translation>
+        <translation>Զուգակցիչ</translation>
     </message>
 </context>
 <context>
     <name>Ms::MixerDetails</name>
     <message>
-        <location filename="../../mscore/mixerdetails.cpp" line="252"/>
+        <location filename="../../mscore/mixerdetails.cpp" line="271"/>
         <source>Staff #%1</source>
-        <translation type="unfinished"/>
+        <translation>Նոտակիր №%1</translation>
     </message>
 </context>
 <context>
@@ -10576,14 +10794,14 @@ failed: %2</source>
         <location filename="../../mscore/mixertrackchannel.cpp" line="235"/>
         <location filename="../../mscore/mixertrackchannel.cpp" line="274"/>
         <source>Volume: %1</source>
-        <translation type="unfinished"/>
+        <translation>Ուժգնություն՝ %1</translation>
     </message>
     <message>
         <location filename="../../mscore/mixertrackchannel.cpp" line="107"/>
         <location filename="../../mscore/mixertrackchannel.cpp" line="242"/>
         <location filename="../../mscore/mixertrackchannel.cpp" line="284"/>
         <source>Pan: %1</source>
-        <translation type="unfinished"/>
+        <translation>Դիրքավորում՝ %1</translation>
     </message>
     <message>
         <location filename="../../mscore/mixertrackchannel.cpp" line="159"/>
@@ -10613,14 +10831,14 @@ Patch: %6</source>
         <location filename="../../mscore/mixertrackpart.cpp" line="233"/>
         <location filename="../../mscore/mixertrackpart.cpp" line="272"/>
         <source>Volume: %1</source>
-        <translation type="unfinished"/>
+        <translation>Ուժգնություն՝ %1</translation>
     </message>
     <message>
         <location filename="../../mscore/mixertrackpart.cpp" line="124"/>
         <location filename="../../mscore/mixertrackpart.cpp" line="240"/>
         <location filename="../../mscore/mixertrackpart.cpp" line="282"/>
         <source>Pan: %1</source>
-        <translation type="unfinished"/>
+        <translation>Դիրքավորում՝ %1</translation>
     </message>
     <message>
         <location filename="../../mscore/mixertrackpart.cpp" line="176"/>
@@ -10640,83 +10858,83 @@ Patch: %5</source>
 <context>
     <name>Ms::MuseScore</name>
     <message>
-        <location filename="../../mscore/exportaudio.cpp" line="296"/>
-        <location filename="../../mscore/musescore.cpp" line="6638"/>
+        <location filename="../../mscore/exportaudio.cpp" line="297"/>
+        <location filename="../../mscore/musescore.cpp" line="6672"/>
         <source>Cancel</source>
         <translation>Չեղարկել</translation>
     </message>
     <message>
-        <location filename="../../mscore/exportaudio.cpp" line="297"/>
-        <location filename="../../mscore/musescore.cpp" line="6639"/>
+        <location filename="../../mscore/exportaudio.cpp" line="298"/>
+        <location filename="../../mscore/musescore.cpp" line="6673"/>
         <source>Exporting…</source>
         <translation>Արտահանվում է…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6570"/>
-        <location filename="../../mscore/musescore.cpp" line="6582"/>
+        <location filename="../../mscore/musescore.cpp" line="6604"/>
+        <location filename="../../mscore/musescore.cpp" line="6616"/>
         <source>Error Opening LAME library</source>
         <translation>LAME դարանի բացման սխալ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6571"/>
+        <location filename="../../mscore/musescore.cpp" line="6605"/>
         <source>Could not open MP3 encoding library!</source>
         <translation>Չհաջողվեց բացել MP3կոդավորման դարանը:</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6583"/>
+        <location filename="../../mscore/musescore.cpp" line="6617"/>
         <source>Not a valid or supported MP3 encoding library!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6538"/>
-        <location filename="../../mscore/musescore.cpp" line="6607"/>
-        <location filename="../../mscore/musescore.cpp" line="6764"/>
+        <location filename="../../mscore/musescore.cpp" line="6572"/>
+        <location filename="../../mscore/musescore.cpp" line="6641"/>
+        <location filename="../../mscore/musescore.cpp" line="6799"/>
         <source>Encoding Error</source>
         <translation>Կոդավորման սխալ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2327"/>
+        <location filename="../../mscore/musescore.cpp" line="2335"/>
         <source>Reset the positions of all elements?</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայե՞լ բոլոր տարրերի տեղավորությունները:</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2329"/>
+        <location filename="../../mscore/musescore.cpp" line="2337"/>
         <source>To best take advantage of automatic placement in MuseScore 3 when importing &apos;%1&apos; from MuseScore %2, it is recommended to reset the positions of all elements.</source>
-        <translation type="unfinished"/>
+        <translation>Տարրերի ինքնաշխատ տեղավորության MuseScore 3-ի գործառույթը լավագույնս կիրառելու համար &apos;%1&apos; նիշքը MuseScore %2-ից ներմուծելիս խորհուրդ է տրվում վերակայել բոլոր տարրերի տեղավորությունները:</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4087"/>
+        <location filename="../../mscore/musescore.cpp" line="4098"/>
         <source>Drumset input mode</source>
-        <translation type="unfinished"/>
+        <translation>Հարվածայինների նոտաների մուտքագրման գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5550"/>
+        <location filename="../../mscore/musescore.cpp" line="5563"/>
         <source>Invalid Command</source>
         <translation>Անվավեր հրահանգ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5551"/>
+        <location filename="../../mscore/musescore.cpp" line="5564"/>
         <source>Command %1 not valid in current state</source>
-        <translation type="unfinished"/>
+        <translation>%1 հրամանը անվավեր է ընթացիկ վիճակում</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6608"/>
+        <location filename="../../mscore/musescore.cpp" line="6642"/>
         <source>Unable to initialize MP3 stream</source>
-        <translation type="unfinished"/>
+        <translation>Չհաջողվեց նախապատրաստել MP3 հոսքը</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6539"/>
+        <location filename="../../mscore/musescore.cpp" line="6573"/>
         <source>Unable to open target file for writing</source>
-        <translation type="unfinished"/>
+        <translation>Չհաջողվեց բացել թիրախային նիշքը՝ գրելու համար</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6765"/>
+        <location filename="../../mscore/musescore.cpp" line="6800"/>
         <source>Error %1 returned from MP3 encoder</source>
-        <translation type="unfinished"/>
+        <translation>MP3 կոդավորիչի սխալ %1</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="243"/>
-        <location filename="../../mscore/musescore.cpp" line="4931"/>
+        <location filename="../../mscore/musescore.cpp" line="4944"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
@@ -10761,12 +10979,12 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="288"/>
         <source>BB Files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>BB նիշքեր (փորձնական)</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="290"/>
         <source>PDF Files (experimental OMR)</source>
-        <translation type="unfinished"/>
+        <translation>PDF նիշքեր (փորձնական OMR)</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="292"/>
@@ -10823,7 +11041,7 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1009"/>
         <location filename="../../mscore/file.cpp" line="1036"/>
-        <location filename="../../mscore/musescore.cpp" line="5968"/>
+        <location filename="../../mscore/musescore.cpp" line="5992"/>
         <source>Load Style</source>
         <translation>Բեռնել ոճը</translation>
     </message>
@@ -10836,7 +11054,7 @@ before closing?</source>
         <location filename="../../mscore/file.cpp" line="1016"/>
         <location filename="../../mscore/file.cpp" line="1053"/>
         <location filename="../../mscore/file.cpp" line="1136"/>
-        <location filename="../../mscore/musescore.cpp" line="5958"/>
+        <location filename="../../mscore/musescore.cpp" line="5982"/>
         <source>Save Style</source>
         <translation>Պահել ոճը</translation>
     </message>
@@ -10934,22 +11152,22 @@ before closing?</source>
     <message>
         <location filename="../../mscore/file.cpp" line="1505"/>
         <source>Load Drumset</source>
-        <translation>Բեռնել հարվածային գործիքները</translation>
+        <translation>Բեռնել հարվածայինները</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1506"/>
         <source>MuseScore Drumset</source>
-        <translation>MuseScore հարվածային գործիքները</translation>
+        <translation>MuseScore հարվածայինները</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1509"/>
         <source>Save Drumset</source>
-        <translation>Պահել հարվածային գործիքները</translation>
+        <translation>Պահել հարվածայինները</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1510"/>
         <source>MuseScore Drumset File</source>
-        <translation>MuseScore հարվածային գործիքների նիշքը</translation>
+        <translation>MuseScore հարվածայինների հավաքածուի նիշք</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1668"/>
@@ -11126,7 +11344,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/file.cpp" line="2421"/>
         <source>Please select one or more measures</source>
-        <translation>Ընտրեք մեկ կամ մի քանի տակտ</translation>
+        <translation>Ընտրել մեկ կամ մի քանի տակտ</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="2461"/>
@@ -11166,7 +11384,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="416"/>
         <source>System break</source>
-        <translation>Համակարգի ընդհատում</translation>
+        <translation>Տողադարձ</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="421"/>
@@ -11237,27 +11455,27 @@ Do you want to replace it?
         <location filename="../../mscore/menus.cpp" line="1249"/>
         <location filename="../../mscore/menus.cpp" line="1253"/>
         <source>Tempo text</source>
-        <translation>Տեմպի գրվածքը</translation>
+        <translation>Տեմպի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1275"/>
         <source>Staff Text</source>
-        <translation>Նոտակիրի գրվածքը</translation>
+        <translation>Նոտակիրի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1276"/>
         <source>Staff text</source>
-        <translation>Նոտակիրի գրվածքը</translation>
+        <translation>Նոտակիրի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1279"/>
         <source>Expression</source>
-        <translation type="unfinished"/>
+        <translation>Արտահայտություն</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1282"/>
         <source>Expression text</source>
-        <translation type="unfinished"/>
+        <translation>Արտահայտության գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1285"/>
@@ -11288,12 +11506,12 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/menus.cpp" line="1293"/>
         <source>Rehearsal mark</source>
-        <translation>Պարտիրուրի կողմնորոշիչ / թիվ</translation>
+        <translation>Պարտիտուրի նշում</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1286"/>
         <source>Instrument change</source>
-        <translation>Գործիքի փոխում</translation>
+        <translation>Նվագարանի փոխարինում</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1306"/>
@@ -11336,278 +11554,278 @@ Do you want to replace it?
         <translation>2/2 ալլա բրեվե</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1938"/>
+        <location filename="../../mscore/musescore.cpp" line="1946"/>
         <source>&amp;Add</source>
         <translation>&amp;Ավելացնել</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1939"/>
+        <location filename="../../mscore/musescore.cpp" line="1947"/>
         <source>&amp;Measures</source>
         <translation>&amp;Տակտեր</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1940"/>
+        <location filename="../../mscore/musescore.cpp" line="1948"/>
         <source>&amp;Frames</source>
         <translation>&amp;Շրջանակներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1941"/>
+        <location filename="../../mscore/musescore.cpp" line="1949"/>
         <source>&amp;Text</source>
         <translation>&amp;Գրվածք</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1942"/>
+        <location filename="../../mscore/musescore.cpp" line="1950"/>
         <source>&amp;Lines</source>
         <translation>&amp;Գծեր</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="274"/>
+        <location filename="../../mscore/musescore.cpp" line="283"/>
         <source>No measure selected:
 Please select a measure and try again</source>
-        <translation>Նշված տակտ չկա՝
-Ընտրեք տակտը և կրկին փորձեք</translation>
+        <translation>Ոչ մի տակտ ընտրված չէ:
+Ընտրեք տակտն ու կրկին փորձեք:</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1928"/>
+        <location filename="../../mscore/musescore.cpp" line="1936"/>
         <source>Measure:Beat:Tick</source>
-        <translation>Տակտ:Բիտ:Տիկ</translation>
+        <translation>Տակտ:Մաս:Տիկ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1045"/>
+        <location filename="../../mscore/musescore.cpp" line="1054"/>
         <source>Switch layer</source>
         <translation>Փոխարկել շերտը</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1050"/>
+        <location filename="../../mscore/musescore.cpp" line="1059"/>
         <source>Switch play mode</source>
         <translation>Փոխարկել նվագարկման գործելաձևը</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1977"/>
+        <location filename="../../mscore/musescore.cpp" line="1985"/>
         <source>Show MIDI import panel</source>
         <translation>Ցուցադրել MIDI ներմուծման վահանակը</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1965"/>
+        <location filename="../../mscore/musescore.cpp" line="1973"/>
         <source>File Operations</source>
         <translation>Գործողություններ նիշքերի հետ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="932"/>
-        <location filename="../../mscore/musescore.cpp" line="1972"/>
+        <location filename="../../mscore/musescore.cpp" line="941"/>
+        <location filename="../../mscore/musescore.cpp" line="1980"/>
         <source>View Mode</source>
         <translation>Դիտման գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="933"/>
-        <location filename="../../mscore/musescore.cpp" line="1973"/>
+        <location filename="../../mscore/musescore.cpp" line="942"/>
+        <location filename="../../mscore/musescore.cpp" line="1981"/>
         <source>Page View</source>
         <translation>Էջերի տեսքով</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="934"/>
-        <location filename="../../mscore/musescore.cpp" line="1974"/>
+        <location filename="../../mscore/musescore.cpp" line="943"/>
+        <location filename="../../mscore/musescore.cpp" line="1982"/>
         <source>Continuous View</source>
         <translation>Անընդհատ տեսքով</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1966"/>
+        <location filename="../../mscore/musescore.cpp" line="1974"/>
         <source>Playback Controls</source>
         <translation>Նվագարկման կառավարում</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1967"/>
+        <location filename="../../mscore/musescore.cpp" line="1975"/>
         <source>Concert Pitch</source>
         <translation>Համերգային լարվածք</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1968"/>
+        <location filename="../../mscore/musescore.cpp" line="1976"/>
         <source>Image Capture</source>
         <translation>Պատկերի կորզիչ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1969"/>
+        <location filename="../../mscore/musescore.cpp" line="1977"/>
         <source>Note Input</source>
         <translation>Նոտաների մուտքագրում</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="566"/>
+        <location filename="../../mscore/musescore.cpp" line="575"/>
         <source>Note Entry Methods</source>
         <translation>Նոտաների մուտքագրման միջոց</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1931"/>
+        <location filename="../../mscore/musescore.cpp" line="1939"/>
         <source>&amp;File</source>
         <translation>&amp;Նիշք</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1932"/>
+        <location filename="../../mscore/musescore.cpp" line="1940"/>
         <source>Open &amp;Recent</source>
         <translation>Բացել &amp;վերջիններից</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1933"/>
+        <location filename="../../mscore/musescore.cpp" line="1941"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Խմբագել</translation>
+        <translation>Խ&amp;մբագել</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1949"/>
+        <location filename="../../mscore/musescore.cpp" line="1957"/>
         <source>&amp;Measure</source>
         <translation>&amp;Տակտ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1947"/>
+        <location filename="../../mscore/musescore.cpp" line="1955"/>
         <source>&amp;Tools</source>
         <translation>&amp;Գործիքներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1948"/>
+        <location filename="../../mscore/musescore.cpp" line="1956"/>
         <source>&amp;Voices</source>
         <translation>&amp;Ձայներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1936"/>
+        <location filename="../../mscore/musescore.cpp" line="1944"/>
         <source>W&amp;orkspaces</source>
         <translation>&amp;Աշխատատարածքներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1937"/>
+        <location filename="../../mscore/musescore.cpp" line="1945"/>
         <source>&amp;Preferences…</source>
         <translation>&amp;Նախընտրություններ…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1934"/>
+        <location filename="../../mscore/musescore.cpp" line="1942"/>
         <source>&amp;View</source>
         <translation>&amp;Տեսք</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1935"/>
+        <location filename="../../mscore/musescore.cpp" line="1943"/>
         <source>&amp;Toolbars</source>
         <translation>&amp;Գործիքագոտիներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1945"/>
+        <location filename="../../mscore/musescore.cpp" line="1953"/>
         <source>T&amp;uplets</source>
         <translation>&amp;Մուլտիօլեր</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1950"/>
+        <location filename="../../mscore/musescore.cpp" line="1958"/>
         <source>&amp;Plugins</source>
         <translation>&amp;Խրվակներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1951"/>
+        <location filename="../../mscore/musescore.cpp" line="1959"/>
         <source>&amp;Help</source>
         <translation>&amp;Օգնություն</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1957"/>
+        <location filename="../../mscore/musescore.cpp" line="1965"/>
         <source>&amp;Online Handbook</source>
         <translation>&amp;Առցանց ձեռնարկ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1954"/>
+        <location filename="../../mscore/musescore.cpp" line="1962"/>
         <source>&amp;About…</source>
         <translation>&amp;Ծրագրի մասին</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="725"/>
+        <location filename="../../mscore/musescore.cpp" line="734"/>
         <source>Please wait, unpacking extension…</source>
-        <translation type="unfinished"/>
+        <translation>Սպասեք. ընդլայնումը ապափաթեթավորվում է…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="799"/>
+        <location filename="../../mscore/musescore.cpp" line="808"/>
         <source>Please wait, loading soundfonts…</source>
-        <translation type="unfinished"/>
+        <translation>Սպասեք. soundfont-երը բեռնվում են…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="935"/>
-        <location filename="../../mscore/musescore.cpp" line="1975"/>
+        <location filename="../../mscore/musescore.cpp" line="944"/>
+        <location filename="../../mscore/musescore.cpp" line="1983"/>
         <source>Single Page</source>
-        <translation type="unfinished"/>
+        <translation>Մեկ էջի տեսքով</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1048"/>
+        <location filename="../../mscore/musescore.cpp" line="1057"/>
         <source>Synthesizer</source>
         <translation>Սինտեզատոր</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1049"/>
+        <location filename="../../mscore/musescore.cpp" line="1058"/>
         <source>Audio track</source>
-        <translation type="unfinished"/>
+        <translation>Ձայնային շավիղ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1602"/>
+        <location filename="../../mscore/musescore.cpp" line="1610"/>
         <source>&amp;Stretch</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ձգել</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1943"/>
+        <location filename="../../mscore/musescore.cpp" line="1951"/>
         <source>N&amp;otes</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="1944"/>
-        <source>&amp;Intervals</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="1946"/>
-        <source>F&amp;ormat</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Նոտաներ</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1952"/>
-        <source>&amp;Tours</source>
-        <translation type="unfinished"/>
+        <source>&amp;Intervals</source>
+        <translation>&amp;Ինտերվալներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1955"/>
+        <location filename="../../mscore/musescore.cpp" line="1954"/>
+        <source>F&amp;ormat</source>
+        <translation>&amp;Ձևաչափ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="1960"/>
+        <source>&amp;Tours</source>
+        <translation>&amp;Բացատրություններ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="1963"/>
         <source>About &amp;Qt…</source>
         <translation>&amp;Qt-ի մասին…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1956"/>
+        <location filename="../../mscore/musescore.cpp" line="1964"/>
         <source>About &amp;MusicXML…</source>
         <translation>&amp;MusicXML-ի մասին…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1959"/>
+        <location filename="../../mscore/musescore.cpp" line="1967"/>
         <source>Check for &amp;Update</source>
-        <translation>Ստուգել &amp;արդիացումների առկայությունը</translation>
+        <translation>&amp;Ստուգել արդիացումների առկայությունը</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1960"/>
+        <location filename="../../mscore/musescore.cpp" line="1968"/>
         <source>Ask for Help</source>
         <translation>Օգնություն խնդրել</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1961"/>
+        <location filename="../../mscore/musescore.cpp" line="1969"/>
         <source>Report a Bug</source>
         <translation>Տեղեկացնել վրեպի մասին</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1962"/>
+        <location filename="../../mscore/musescore.cpp" line="1970"/>
         <source>Leave feedback</source>
-        <translation type="unfinished"/>
+        <translation>Կարծիք թողնել</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1963"/>
+        <location filename="../../mscore/musescore.cpp" line="1971"/>
         <source>Revert to Factory Settings</source>
         <translation>Հետադարձել սկզբնական կարգավորումների</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1970"/>
+        <location filename="../../mscore/musescore.cpp" line="1978"/>
         <source>Feedback</source>
-        <translation type="unfinished"/>
+        <translation>Կարծիք</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2071"/>
+        <location filename="../../mscore/musescore.cpp" line="2079"/>
         <source>Are you sure?</source>
         <translation>Վստա՞հ եք:</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2072"/>
+        <location filename="../../mscore/musescore.cpp" line="2080"/>
         <source>This will reset all your preferences.
 Custom palettes, custom shortcuts, and the list of recent scores will be deleted. MuseScore will restart with its default settings.
 Reverting will not remove any scores from your computer.
@@ -11615,131 +11833,125 @@ Are you sure you want to proceed?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2285"/>
+        <location filename="../../mscore/musescore.cpp" line="2293"/>
         <source>Clear Recent Files</source>
         <translation>Մաքրել ցանկը</translation>
     </message>
     <message>
-        <source>Reset all elements positions?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>This score was created in older versions of MuseScore. For a better experience of using MuseScore 3.0 it is recommended to reset elements positions to their default values.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="3792"/>
+        <location filename="../../mscore/musescore.cpp" line="3803"/>
         <source>System</source>
         <extracomment>The default language of the operating system. NOT a music system.</extracomment>
         <translation>Գործավար համակարգի լեզուն</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3800"/>
+        <location filename="../../mscore/musescore.cpp" line="3811"/>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4039"/>
+        <location filename="../../mscore/musescore.cpp" line="4050"/>
         <source>No score</source>
         <translation>Բաց պարտիտուր չկա</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4053"/>
+        <location filename="../../mscore/musescore.cpp" line="4064"/>
         <source>Repitch input mode</source>
-        <translation type="unfinished"/>
+        <translation>Բարձրության վերահաշվարկի գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4058"/>
+        <location filename="../../mscore/musescore.cpp" line="4069"/>
         <source>Rhythm input mode</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրման ռիթմային գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4063"/>
+        <location filename="../../mscore/musescore.cpp" line="4074"/>
         <source>Realtime (automatic) note input mode</source>
-        <translation type="unfinished"/>
+        <translation>Իրական ժամանակում (ինքնաշխատ) գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4068"/>
+        <location filename="../../mscore/musescore.cpp" line="4079"/>
         <source>Realtime (manual) note input mode</source>
-        <translation type="unfinished"/>
+        <translation>Իրական ժամանակում (ձեռքով) գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4073"/>
+        <location filename="../../mscore/musescore.cpp" line="4084"/>
         <source>Timewise input mode</source>
-        <translation type="unfinished"/>
+        <translation>Տակտի չափը փոխելով գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4078"/>
+        <location filename="../../mscore/musescore.cpp" line="4089"/>
         <source>Steptime note input mode</source>
-        <translation type="unfinished"/>
+        <translation>Քայլ առ քայլ գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4095"/>
+        <location filename="../../mscore/musescore.cpp" line="4106"/>
         <source>TAB input mode</source>
-        <translation type="unfinished"/>
+        <translation>Տաբուլատուրայի մուտքագրման գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4098"/>
+        <location filename="../../mscore/musescore.cpp" line="4109"/>
         <source>Edit mode</source>
         <translation>Խմբագրման գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4101"/>
+        <location filename="../../mscore/musescore.cpp" line="4112"/>
         <source>Text edit mode</source>
         <translation>Գրվածքի խմբագրման գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4104"/>
+        <location filename="../../mscore/musescore.cpp" line="4115"/>
         <source>Lyrics edit mode</source>
-        <translation type="unfinished"/>
+        <translation>Երգի խոսքերի խմբագրման գործելաձև</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4107"/>
+        <location filename="../../mscore/musescore.cpp" line="4118"/>
         <source>Chord symbol/figured bass edit mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4110"/>
+        <location filename="../../mscore/musescore.cpp" line="4121"/>
         <source>Play</source>
         <translation>Նվագարկել</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4113"/>
+        <location filename="../../mscore/musescore.cpp" line="4124"/>
         <source>Image capture mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4117"/>
+        <location filename="../../mscore/musescore.cpp" line="4128"/>
         <source>Score locked</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4932"/>
+        <location filename="../../mscore/musescore.cpp" line="4945"/>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
-        <translation type="unfinished"/>
+        <translation>Նախորդ նիստը անսպասելիորեն ավարտվեց:
+
+Վերականգնե՞լ այդ նիստը:</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6224"/>
+        <location filename="../../mscore/musescore.cpp" line="6258"/>
         <source>Warning</source>
         <translation>Զգուշացում</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6225"/>
+        <location filename="../../mscore/musescore.cpp" line="6259"/>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6383"/>
+        <location filename="../../mscore/musescore.cpp" line="6417"/>
         <source>Go To: </source>
         <translation>Անցնել՝</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="125"/>
         <source>Tuplet Error</source>
-        <translation type="unfinished"/>
+        <translation>Մուլտիօլօ սխալ</translation>
     </message>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="126"/>
@@ -11747,7 +11959,7 @@ Restore session?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="31"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="32"/>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation type="unfinished"/>
     </message>
@@ -11831,7 +12043,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="195"/>
         <source>Choose instruments on the left to add to instrument list on the right:</source>
-        <translation>Ընտրեք գործիքը ձախ կողմից՝ աջ կողմի գործիքների ցանկի մեջ ավելացնելու համար՝</translation>
+        <translation>Ընտրել նվագարանը ձախ կողմից՝ նվագարանների աջ կողմի ցանկի մեջ ավելացնելու համար՝</translation>
     </message>
 </context>
 <context>
@@ -11844,7 +12056,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="373"/>
         <source>Choose key signature and tempo:</source>
-        <translation>Ընտրեք բանալու նշանները ու տեմպը՝</translation>
+        <translation>Ընտրել բանալու նշաններն ու տեմպը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="378"/>
@@ -11854,12 +12066,12 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="380"/>
         <source>Choose a key signature</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել բանալու նշանը</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="391"/>
         <source>Key Signature: %1</source>
-        <translation type="unfinished"/>
+        <translation>Բանալու նշան՝ %1</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="401"/>
@@ -11869,17 +12081,17 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="403"/>
         <source>Add tempo marking to score</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել տեմպի նշումը պարտիտուրին</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="405"/>
         <source>BPM:</source>
-        <translation>ՀՄՐ՝</translation>
+        <translation>Հարված րոպեում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="407"/>
         <source>Beats per minute</source>
-        <translation>Հարված մեկ րոպեում</translation>
+        <translation>Հարված րոպեում</translation>
     </message>
 </context>
 <context>
@@ -11905,7 +12117,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="254"/>
         <source>Choose time signature:</source>
-        <translation>Ընտրեք տակտի չափը՝</translation>
+        <translation>Ընտրել տակտի չափը՝</translation>
     </message>
 </context>
 <context>
@@ -11921,7 +12133,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/omrpanel.cpp" line="52"/>
         <source>PDF Transcribing Assistant</source>
-        <translation type="unfinished"/>
+        <translation>PDF-ի արտագրության օգնական</translation>
     </message>
 </context>
 <context>
@@ -11964,7 +12176,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="100"/>
         <source>Select workspace</source>
-        <translation>Ընտրել աշխատատարածք</translation>
+        <translation>Ընտրել աշխատատարածքը</translation>
     </message>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="101"/>
@@ -11979,7 +12191,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="291"/>
         <source>New Palette</source>
-        <translation type="unfinished"/>
+        <translation>Նոր պալիտրա</translation>
     </message>
 </context>
 <context>
@@ -12028,69 +12240,65 @@ connection enabled</source>
 <context>
     <name>Ms::PartEdit</name>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="461"/>
+        <location filename="../../mscore/parteditbase.cpp" line="464"/>
         <source>Sound: '%1' vs. '%2'
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="463"/>
+        <location filename="../../mscore/parteditbase.cpp" line="466"/>
         <source>Volume: %1 vs. %2
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="465"/>
+        <location filename="../../mscore/parteditbase.cpp" line="468"/>
         <source>Pan: %1 vs. %2
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="467"/>
+        <location filename="../../mscore/parteditbase.cpp" line="470"/>
         <source>Reverb: %1 vs. %2
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="469"/>
+        <location filename="../../mscore/parteditbase.cpp" line="472"/>
         <source>Chorus: %1 vs. %2
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="471"/>
+        <location filename="../../mscore/parteditbase.cpp" line="474"/>
         <source>Solo: %1 vs. %2
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="473"/>
+        <location filename="../../mscore/parteditbase.cpp" line="476"/>
         <source>Mute: %1 vs. %2
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="476"/>
+        <location filename="../../mscore/parteditbase.cpp" line="479"/>
         <source>Instrument '%1'	Instrument '%2'
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="479"/>
+        <location filename="../../mscore/parteditbase.cpp" line="482"/>
         <source>There is already an instrument &apos;%1&apos; with MIDI port = %2 and channel = %3.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="481"/>
+        <location filename="../../mscore/parteditbase.cpp" line="484"/>
         <source>Do you want to synchronize the current instrument with an existing one?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Do you want to synchronize current instrument with an existing one?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/parteditbase.cpp" line="484"/>
+        <location filename="../../mscore/parteditbase.cpp" line="487"/>
         <source>Assign next free MIDI channel</source>
         <translation type="unfinished"/>
     </message>
@@ -12100,13 +12308,13 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pathlistdialog.cpp" line="52"/>
         <source>Choose a directory</source>
-        <translation>Ընտրել պանակ</translation>
+        <translation>Ընտրել պանակը</translation>
     </message>
 </context>
 <context>
     <name>Ms::PianoTools</name>
     <message>
-        <location filename="../../mscore/pianotools.cpp" line="439"/>
+        <location filename="../../mscore/pianotools.cpp" line="440"/>
         <source>Piano Keyboard</source>
         <translation>Դաշնամուրի ստեղնաշար</translation>
     </message>
@@ -12131,17 +12339,19 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="120"/>
         <source>Subdiv.:</source>
-        <translation type="unfinished"/>
+        <translation>Ստորա-
+բաժանում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="122"/>
         <source>Subdivide the beat this many times</source>
-        <translation type="unfinished"/>
+        <translation>Ստորաբաժանել մասերը
+այսքան անգամ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="127"/>
         <source>Tuplet:</source>
-        <translation type="unfinished"/>
+        <translation>Մուլտիօլ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="129"/>
@@ -12151,22 +12361,23 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="134"/>
         <source>Stripe Pattern:</source>
-        <translation type="unfinished"/>
+        <translation>Նախշի ձևը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="136"/>
         <source>White stripes show the tones of this chord.</source>
-        <translation type="unfinished"/>
+        <translation>Սպիտակ ոլորները ցուցադրում են ակորդի տոները:</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="143"/>
         <source>Velocity:</source>
-        <translation>Velocity-ն սեղմելու ուժը՝</translation>
+        <translation>Ստեղնը սեղմելու
+ուժը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="145"/>
         <source>Offset</source>
-        <translation>Տեղաշարժում</translation>
+        <translation>Շեղում</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="146"/>
@@ -12181,7 +12392,8 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="159"/>
         <source>OnTime:</source>
-        <translation>Սկզբի ժամանակ՝</translation>
+        <translation>Սկզբի
+ժամանակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="163"/>
@@ -12196,117 +12408,119 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="366"/>
         <source>Piano roll editor</source>
-        <translation type="unfinished"/>
+        <translation>Պիանորոլի խմբագրիչ</translation>
     </message>
 </context>
 <context>
     <name>Ms::PluginCreator</name>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="50"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="51"/>
         <source>File Operations</source>
         <translation>Գործողություններ նիշքերի հետ</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="75"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="76"/>
         <source>Edit Operations</source>
         <translation>Խմբագրման գործողություններ</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="199"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="200"/>
         <source>Plugin Creator</source>
-        <translation type="unfinished"/>
+        <translation>Խրվակների ստեղծիչ</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="245"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="323"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="416"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="502"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="246"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="324"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="417"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="503"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="246"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="417"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="503"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="247"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="418"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="504"/>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
         <translation>&quot;%1&quot; խրվակը փոփոխվել է:
 Պահե՞լ փակելուց առաջ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="295"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="296"/>
         <source>Running…
 </source>
         <translation>Աշխատում է…
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="305"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="306"/>
         <source>Creating component failed
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="307"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="308"/>
         <source>line %1: %2
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="316"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="317"/>
         <source>Plugin Details:</source>
-        <translation>Խրավակի մանրամասներ՝</translation>
+        <translation>Խրվակի մանրամասները՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="317"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="318"/>
         <source>Menu Path:</source>
         <translation>Ընտրացուցակի ուղին՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="318"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="319"/>
         <source>Version:</source>
         <translation>Տարբերակ՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="319"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="320"/>
         <source>Description:</source>
         <translation>Նկարագրություն՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="320"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="321"/>
         <source>Requires Score
 </source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուր է անհրաժեշտ
+</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="324"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="325"/>
         <source>No score open.
 This plugin requires an open score to run.
 </source>
-        <translation type="unfinished"/>
+        <translation>Բացված պարտիտուր չկա:
+Այս խրվակը մեկնարկելու համար բացված պարտիտուր է անհրաժեշտ:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="464"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="465"/>
         <source>Saving to:</source>
         <translation>Պահել այստեղ՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="466"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="467"/>
         <source>Save Plugin</source>
         <translation>Պահել խրվակը</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="466"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="467"/>
         <source>Cannot determine file type</source>
         <translation>Չի հաջողվում որոշել նիշքի տեսակը</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="512"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="513"/>
         <source>Untitled</source>
         <translation>Անանուն</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="572"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="573"/>
         <source>Manual</source>
         <translation>Ձեռնարկ</translation>
     </message>
@@ -12314,12 +12528,12 @@ This plugin requires an open score to run.
 <context>
     <name>Ms::PluginManager</name>
     <message>
-        <location filename="../../mscore/pluginManager.cpp" line="356"/>
+        <location filename="../../mscore/plugin/pluginManager.cpp" line="357"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.cpp" line="357"/>
+        <location filename="../../mscore/plugin/pluginManager.cpp" line="358"/>
         <source>Plugins reloaded.</source>
         <translation>Խրվակները վերաբեռնված են:</translation>
     </message>
@@ -12458,49 +12672,45 @@ This plugin requires an open score to run.
         <translation>320</translation>
     </message>
     <message>
-        <source>Warning: You used the same CoreMIDI IAC bus for input and output.  This will cause problematic loopback, whereby MuseScore&apos;s output MIDI messages will be sent back to MuseScore as input, causing confusion.  To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output.  Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.cpp" line="610"/>
         <source>Action: %1; Shortcut: %2</source>
-        <translation type="unfinished"/>
+        <translation>Գործողություն՝ %1, Կարճատ՝ %2</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="612"/>
         <source>No shortcut defined</source>
-        <translation type="unfinished"/>
+        <translation>Կարճատը սահմանված չէ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="652"/>
         <source>Save Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Պահել կարճատների նիշքը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="652"/>
         <location filename="../../mscore/prefsdialog.cpp" line="659"/>
         <source>MuseScore Shortcuts File</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore-ի կարճատների նիշք</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="659"/>
         <source>Load Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Բեռնել կարճատների նիշքը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="738"/>
         <source>Choose Notepaper</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել էջի խորքը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="751"/>
         <source>Choose Background Wallpaper</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել խորքի պաստառը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="764"/>
         <source>Choose Default Style</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել սկզբնադիր ոճը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="775"/>
@@ -12517,12 +12727,12 @@ This plugin requires an open score to run.
         <location filename="../../mscore/prefsdialog.cpp" line="790"/>
         <location filename="../../mscore/prefsdialog.cpp" line="808"/>
         <source>Instrument List</source>
-        <translation>Գործիքների ցանկ</translation>
+        <translation>Նվագարանների ցանկ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="824"/>
         <source>Choose Starting Score</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել սկզբնական պարտիտուրը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="826"/>
@@ -12537,7 +12747,7 @@ This plugin requires an open score to run.
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1023"/>
         <source>Possible MIDI Loopback</source>
-        <translation type="unfinished"/>
+        <translation>Հնարավոր MIDI շրջանակում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1025"/>
@@ -12547,76 +12757,76 @@ This plugin requires an open score to run.
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1146"/>
         <source>Choose Default Style for Imports</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել ներմուծվողների սկզբնադիր ոճը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1232"/>
         <source>Choose Score Folder</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել պարտիտուրների պանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1248"/>
         <source>Choose Style Folder</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել ոճերի պանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1264"/>
         <source>Choose Template Folder</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել ձևանմուշների պանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1280"/>
         <source>Choose Plugin Folder</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել խրվակների պանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1296"/>
         <source>Choose Image Folder</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել պատկերների պանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1311"/>
         <source>SoundFont Folders</source>
-        <translation type="unfinished"/>
+        <translation>SoundFont-երի պանակներ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1325"/>
         <source>Choose Extensions Folder</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել ընդլայնումների պանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1385"/>
         <location filename="../../mscore/prefsdialog.cpp" line="1425"/>
         <source>MuseScore Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore-ի կարճատներ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="1389"/>
         <source>Print Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Տպել MuseScore-ի կարճատները</translation>
     </message>
 </context>
 <context>
     <name>Ms::PreferencesListWidget</name>
     <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="29"/>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="30"/>
         <source>Preference</source>
-        <translation type="unfinished"/>
+        <translation>Նախընտրություն</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="29"/>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="30"/>
         <source>Value</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="32"/>
-        <source>Advanced preferences</source>
-        <translation type="unfinished"/>
+        <translation>Արժեք</translation>
     </message>
     <message>
         <location filename="../../mscore/preferenceslistwidget.cpp" line="33"/>
+        <source>Advanced preferences</source>
+        <translation>Ընդլայնված նախընտրություններ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="34"/>
         <source>Access to more advanced preferences</source>
-        <translation type="unfinished"/>
+        <translation>Մատչում ավելի ընդլայնված նախընտրություններին</translation>
     </message>
 </context>
 <context>
@@ -12624,17 +12834,17 @@ This plugin requires an open score to run.
     <message>
         <location filename="../../mscore/inspector/resetButton.cpp" line="26"/>
         <source>Reset to style default</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել սկզբնադիր ոճին</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/resetButton.cpp" line="31"/>
         <source>S</source>
-        <translation type="unfinished"/>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/resetButton.cpp" line="32"/>
         <source>Set as style</source>
-        <translation type="unfinished"/>
+        <translation>Կայել որպես սկզբնադիր</translation>
     </message>
 </context>
 <context>
@@ -12648,17 +12858,17 @@ This plugin requires an open score to run.
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="115"/>
         <source>Install</source>
-        <translation type="unfinished"/>
+        <translation>Տեղադրել</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="116"/>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation>Ապատեղադրել</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="212"/>
         <source>%1 kB</source>
-        <translation type="unfinished"/>
+        <translation>%1 կԲ</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="277"/>
@@ -12672,23 +12882,24 @@ This plugin requires an open score to run.
         <location filename="../../mscore/resourceManager.cpp" line="346"/>
         <location filename="../../mscore/resourceManager.cpp" line="370"/>
         <source>Failed, try again</source>
-        <translation>Ձախողվեց, կրկին փորձեք</translation>
+        <translation>Ձհաջողվեց, կրկին փորձեք</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="352"/>
         <source>Extensions Installation Failed</source>
-        <translation type="unfinished"/>
+        <translation>Հավելումների տեղադրումը չհաջողվեց</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="354"/>
         <source>Unable to save the extension file on disk</source>
-        <translation type="unfinished"/>
+        <translation>Անհնար է պահել հավելումի նիշքը սկավառակի վրա</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="356"/>
         <source>Unable to download, save and verify the package.
 Check your internet connection.</source>
-        <translation type="unfinished"/>
+        <translation>Անհնար է ներբեռնել, պահել ու ստուգել փաթեթը:
+Ստուգեք Ձեր միացումը Համացանցին:</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.cpp" line="134"/>
@@ -12713,7 +12924,7 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="617"/>
         <source>Save file: cannot save image (%1x%2)</source>
-        <translation type="unfinished"/>
+        <translation>Նիշքի պահում՝ չի հաջողվում պահել պատկերը (%1x%2)</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="670"/>
@@ -12725,7 +12936,7 @@ failed: %2</source>
         <source>Open Style File
 %1
 failed: %2</source>
-        <translation>%1 ոճի նիշքը բացելը չհաջողվեց՝ %2</translation>
+        <translation>%1 ոճի նիշքի բացումը չհաջողվեց՝ %2</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorefile.cpp" line="701"/>
@@ -12733,9 +12944,9 @@ failed: %2</source>
         <translation>Չհաջողվեց ոճը գրել՝ %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2934"/>
+        <location filename="../../libmscore/edit.cpp" line="2914"/>
         <source>Please select the complete tuplet and retry the command</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրեք ամբողջական մուլտիօլն ու կրկին փորձեք հրամանը</translation>
     </message>
 </context>
 <context>
@@ -12749,13 +12960,13 @@ failed: %2</source>
         <location filename="../../mscore/scoreaccessibility.cpp" line="125"/>
         <location filename="../../mscore/scoreaccessibility.cpp" line="166"/>
         <source>Start Measure: %1; Start Beat: %2</source>
-        <translation>Սկսել տակտից՝ %1; Բիտ՝ %2</translation>
+        <translation>Սկիզբ՝ տակտ %1, մաս %2:</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="136"/>
         <location filename="../../mscore/scoreaccessibility.cpp" line="175"/>
         <source>End Measure: %1; End Beat: %2</source>
-        <translation>Ավարտել տակտով՝ %1; Բիտ՝ %2</translation>
+        <translation>Վերջ՝ տակտ %1, մաս %2:</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="141"/>
@@ -12765,18 +12976,18 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="143"/>
         <source>Beat: %1</source>
-        <translation>Բիտ՝ %1</translation>
+        <translation>Մաս՝ %1</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="153"/>
         <source>Staff %1</source>
-        <translation>Նոտակիր %1</translation>
+        <translation>Նոտակիր №%1</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="176"/>
         <location filename="../../mscore/scoreaccessibility.cpp" line="177"/>
         <source>Range Selection</source>
-        <translation>Ձայնածավալի ընտրվածք</translation>
+        <translation>Ընտրվածք.</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreaccessibility.cpp" line="180"/>
@@ -12795,7 +13006,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/scoreBrowser.cpp" line="154"/>
         <source>Choose Instruments</source>
-        <translation>Ընտրել նվագախմբի գործիքները</translation>
+        <translation>Ընտրել նվագախմբի նվագարանները</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreBrowser.cpp" line="158"/>
@@ -12813,12 +13024,12 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp.cpp" line="146"/>
         <source>Comparison of &quot;%1&quot; and &quot;%2&quot;</source>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot;-ի ու &quot;%2&quot;-ի համեմատություն</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp.cpp" line="151"/>
         <source>Comparison</source>
-        <translation type="unfinished"/>
+        <translation>Համեմատություն</translation>
     </message>
 </context>
 <context>
@@ -12834,17 +13045,17 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/scorecmp/scorelistmodel.cpp" line="137"/>
         <source>Current version</source>
-        <translation type="unfinished"/>
+        <translation>Ընթացիկ տարբերակ</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorelistmodel.cpp" line="139"/>
         <source>Last saved version</source>
-        <translation type="unfinished"/>
+        <translation>Վերջին պահված տարբերակ</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorelistmodel.cpp" line="141"/>
         <source>Session start</source>
-        <translation type="unfinished"/>
+        <translation>Նիստի սկիզբ</translation>
     </message>
 </context>
 <context>
@@ -12862,7 +13073,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="332"/>
         <source>Transparent background</source>
-        <translation>Թափանցիկ ետնաշերտ</translation>
+        <translation>Թափանցիկ խորք</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="338"/>
@@ -12887,12 +13098,12 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="375"/>
         <source>Set Output Resolution</source>
-        <translation type="unfinished"/>
+        <translation>Կայել արտածման տարլուծումը</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="376"/>
         <source>Set output resolution for PNG</source>
-        <translation type="unfinished"/>
+        <translation>Կայել արտածման տարլուծումը PNG-ի համար</translation>
     </message>
     <message>
         <location filename="../../mscore/fotomode.cpp" line="481"/>
@@ -12960,7 +13171,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="181"/>
         <source>Time Signature Properties…</source>
-        <translation type="unfinished"/>
+        <translation>Տակտի չափի հատկություններ…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="190"/>
@@ -12975,7 +13186,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="201"/>
         <source>System Text Properties…</source>
-        <translation type="unfinished"/>
+        <translation>Համակարգի գրառման հատկություններ…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="236"/>
@@ -12983,12 +13194,12 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="283"/>
         <location filename="../../mscore/scoreview.cpp" line="390"/>
         <source>Staff/Part Properties…</source>
-        <translation type="unfinished"/>
+        <translation>Նոտակիրի/Դերանվագի հատկություններ</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="197"/>
         <source>Staff Text Properties…</source>
-        <translation type="unfinished"/>
+        <translation>Նոտակիրի գրվածքի հատկություններ…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="221"/>
@@ -13003,7 +13214,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="227"/>
         <source>Change Instrument Properties…</source>
-        <translation type="unfinished"/>
+        <translation>Փոխել նվագարանի հատկությունները…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="235"/>
@@ -13034,7 +13245,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="272"/>
         <source>Chord Articulation…</source>
-        <translation>Ակորդի արտիկուլյացիա…</translation>
+        <translation>Ակորդի շտրիխեր…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="275"/>
@@ -13044,7 +13255,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="278"/>
         <source>Change Instrument…</source>
-        <translation>Փոխել գործիքը…</translation>
+        <translation>Փոխել նվագարանը…</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="283"/>
@@ -13084,12 +13295,12 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="383"/>
         <source>Edit Drumset…</source>
-        <translation>Հարվածային գործիքների խմբագիր</translation>
+        <translation>Խմբագրել հարվածայինների հավաքածուն...</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="387"/>
         <source>Piano Roll Editor…</source>
-        <translation type="unfinished"/>
+        <translation>Պիանորոլի խմբագրիչ</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="392"/>
@@ -13102,24 +13313,27 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2216"/>
+        <location filename="../../mscore/scoreview.cpp" line="2224"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրված տակտեր չկան՝
+Ընտրեք ընդգրկվող տակտերն ու կրկին փորձեք:</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3894"/>
+        <location filename="../../mscore/scoreview.cpp" line="4029"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
-        <translation type="unfinished"/>
+        <translation>Նոտակիրներ չկան.
+նախ օգտագործեք նվագարանների վահանակը՝
+մի քանի նոտակիրներ ստեղծելու համար</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3976"/>
+        <location filename="../../mscore/scoreview.cpp" line="4111"/>
         <source>No measure selected:
 Please select a measure and try again</source>
-        <translation>Նշված տակտ չկա՝
-Ընտրեք տակտը և կրկին փորձեք</translation>
+        <translation>Ոչ մի տակտ ընտրված չէ:
+Ընտրեք տակտն ու կրկին փորձեք:</translation>
     </message>
 </context>
 <context>
@@ -13213,7 +13427,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="197"/>
         <source>Startup Wizard</source>
-        <translation type="unfinished"/>
+        <translation>Մեկնարկի մոգ</translation>
     </message>
 </context>
 <context>
@@ -13221,12 +13435,12 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="180"/>
         <source>Thank you!</source>
-        <translation type="unfinished"/>
+        <translation>Շնորհակալություն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="181"/>
         <source>Your preferences have been successfully saved. Enjoy MuseScore!</source>
-        <translation type="unfinished"/>
+        <translation>Ձեր նախընտրությունները հաջողությամբ պահպանվեցին:</translation>
     </message>
 </context>
 <context>
@@ -13234,13 +13448,14 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="69"/>
         <source>Welcome to MuseScore!</source>
-        <translation type="unfinished"/>
+        <translation>Բարի գալուստ MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="70"/>
         <source>This wizard will help you choose settings for MuseScore based on your locale,
  music level, and personal preferences.</source>
-        <translation type="unfinished"/>
+        <translation>Մոգը կօգնի ընտրել MuseScore-ի կարգավորումները՝ հիմնվելով տեղույթի,
+երաժշտության մակարդակի և անձնական նախընտրությունների վրա:</translation>
     </message>
 </context>
 <context>
@@ -13253,7 +13468,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="80"/>
         <source>Choose your language</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել Ձեր լեզուն</translation>
     </message>
 </context>
 <context>
@@ -13261,12 +13476,12 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="114"/>
         <source>Keyboard Layout</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղնաշարի շարվածքը</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="115"/>
         <source>Enter your keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրեք ստեղնաշարի Ձեր շարվածքը</translation>
     </message>
 </context>
 <context>
@@ -13274,12 +13489,12 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="146"/>
         <source>Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Աշխատատարածք</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="147"/>
         <source>Choose your workspace</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել Ձեր աշխատատարածքը</translation>
     </message>
 </context>
 <context>
@@ -13287,24 +13502,26 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="162"/>
         <source>Tours</source>
-        <translation type="unfinished"/>
+        <translation>Բացատրություններ</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="163"/>
         <source>Tours will help guide you through the functionality of MuseScore.
 
  Would you like to see these tours?</source>
-        <translation type="unfinished"/>
+        <translation>Բացատրությունները կօնգեն պատկերացում կազմել MuseScore-ի գործառույթների մասին:
+
+Ուզո՞ւմ եք տեսնել բացատրությունները:</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="166"/>
         <source>Yes</source>
-        <translation type="unfinished"/>
+        <translation>Այո</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="167"/>
         <source>No</source>
-        <translation type="unfinished"/>
+        <translation>Ոչ</translation>
     </message>
 </context>
 <context>
@@ -13312,7 +13529,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/timeline.cpp" line="81"/>
         <source>Timeline</source>
-        <translation type="unfinished"/>
+        <translation>Ժամանակագիծ</translation>
     </message>
 </context>
 <context>
@@ -13358,7 +13575,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/templateBrowser.cpp" line="120"/>
         <source>Choose Instruments</source>
-        <translation>Ընտրել նվագախմբի գործիքները</translation>
+        <translation>Ընտրել նվագախմբի նվագարանները</translation>
     </message>
     <message>
         <location filename="../../mscore/templateBrowser.cpp" line="123"/>
@@ -13453,7 +13670,7 @@ Please select a measure and try again</source>
         <location filename="../../mscore/timeline.cpp" line="754"/>
         <location filename="../../mscore/timeline.cpp" line="1090"/>
         <source>Rehearsal Mark</source>
-        <translation>Պարտիրուրի կողմնորոշիչ / թիվ</translation>
+        <translation>Պարտիտուրի նշում</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="755"/>
@@ -13499,7 +13716,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/timeline.cpp" line="2697"/>
         <source>Context menu</source>
-        <translation type="unfinished"/>
+        <translation>Համատեքստի ընտրացուցակ</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="2699"/>
@@ -13510,13 +13727,13 @@ Please select a measure and try again</source>
         <location filename="../../mscore/timeline.cpp" line="2717"/>
         <location filename="../../mscore/timeline.cpp" line="2737"/>
         <source>Hide all</source>
-        <translation type="unfinished"/>
+        <translation>Թաքցնել բոլորը</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="2720"/>
         <location filename="../../mscore/timeline.cpp" line="2746"/>
         <source>Show all</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել բոլորը</translation>
     </message>
 </context>
 <context>
@@ -13524,7 +13741,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="76"/>
         <source> (not changeable)</source>
-        <translation type="unfinished"/>
+        <translation> (չփոխվող)</translation>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="124"/>
@@ -13538,7 +13755,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/tourhandler.cpp" line="434"/>
         <source>Tour</source>
-        <translation type="unfinished"/>
+        <translation>Բացատրություն</translation>
     </message>
     <message>
         <location filename="../../mscore/tourhandler.cpp" line="440"/>
@@ -13548,12 +13765,12 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/tourhandler.cpp" line="442"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Հետ</translation>
     </message>
     <message>
         <location filename="../../mscore/tourhandler.cpp" line="444"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Հաջորդը</translation>
     </message>
     <message>
         <location filename="../../mscore/tourhandler.cpp" line="446"/>
@@ -13563,7 +13780,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/tourhandler.cpp" line="459"/>
         <source>Continue showing tours</source>
-        <translation type="unfinished"/>
+        <translation>Շարունակել բացատրությունների ցուցադրումը</translation>
     </message>
 </context>
 <context>
@@ -13588,92 +13805,92 @@ Please select a measure and try again</source>
 <context>
     <name>Ms::UploadScoreDialog</name>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="58"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="59"/>
         <source>All Rights reserved</source>
-        <translation type="unfinished"/>
+        <translation>Բոլոր իրավունքները պաշտպանված են</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="59"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="60"/>
         <source>Creative Commons Attribution</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="60"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="61"/>
         <source>Creative Commons Attribution No Derivative Works</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="61"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="62"/>
         <source>Creative Commons Attribution Share Alike</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="62"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="63"/>
         <source>Creative Commons Attribution Noncommercial</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="63"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="64"/>
         <source>Creative Commons Attribution Noncommercial Non Derivate Works</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="64"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="65"/>
         <source>Creative Commons Attribution Noncommercial Share Alike</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="65"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="66"/>
         <source>Creative Commons Copyright Waiver</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="67"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="68"/>
         <source>%1What does this mean?%2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="75"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="76"/>
         <source>Respect the %1community guidelines%2. Only make your scores accessible to anyone with permission from the right holders.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="80"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="81"/>
         <source>Use a comma to separate the tags</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="88"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="89"/>
         <source>Render the score with the current synth settings. %1More info%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="131"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="132"/>
         <source>Missing title</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="131"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="132"/>
         <source>Please provide a title</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="172"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="173"/>
         <source>Success</source>
-        <translation type="unfinished"/>
+        <translation>Հաջողվեց</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="173"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="174"/>
         <source>Finished! %1Go to my score%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="186"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="187"/>
         <source>Error</source>
-        <translation type="unfinished"/>
+        <translation>Սխալ</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="250"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="251"/>
         <source>[%1Link%2]</source>
         <translation type="unfinished"/>
     </message>
@@ -13729,12 +13946,12 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="81"/>
         <source>Edit Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Խմբագրել աշխատատարածքը</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="89"/>
         <source>Create New Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Ստեղծել նոր աշխատատարածք</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="117"/>
@@ -13746,7 +13963,7 @@ Please select a measure and try again</source>
         <source>'%1' does already exist,
 please choose a different name:</source>
         <translation>&apos;%1&apos; արդեն գոյություն ունի,
-այլ անվանում օգնեք՝</translation>
+այլ անվանում ընտրեք՝</translation>
     </message>
 </context>
 <context>
@@ -13777,57 +13994,57 @@ please choose a different name:</source>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="28"/>
         <source>C♭ major, A♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>Դո♭ մաժոր, Լա♭ մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="30"/>
         <source>G♭ major, E♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ♭ մաժոր, Մի♭ մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="31"/>
         <source>A major, F♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>Լա մաժոր, Ֆա♯ մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="32"/>
         <source>D♭ major, B♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>Ռե♭ մաժոր, Մի♭ մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="33"/>
         <source>E major, C♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>Մի մաժոր, Դո♯ մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="34"/>
         <source>A♭ major, F minor</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ մաժոր, Ֆա մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="35"/>
         <source>B major, G♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>Սի մաժոր, Սոլ♯ մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="36"/>
         <source>E♭ major, C minor</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ մաժոր, Դո մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="37"/>
         <source>F♯ major, D♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ մաժոր, Ռե♯ մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="38"/>
         <source>B♭ major, G minor</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ մաժոր, Սոլ մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="39"/>
         <source>C♯ major, A♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ մաժոր, Լա♯ մինոր</translation>
     </message>
     <message>
         <location filename="../../libmscore/keysig.cpp" line="40"/>
@@ -13860,27 +14077,27 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/newwizard.ui" line="30"/>
         <source>Enter score title</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրեք պարտիտուրի վերնագիրը</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="47"/>
         <source>Enter score subtitle</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրեք պարտիտուրի ենթավերնագիրը</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="64"/>
         <source>Enter the composer&apos;s name</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրեք կոմպոզիտորի անունը</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="81"/>
         <source>Enter the lyricist&apos;s name</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրեք խոսքերի հեղինակի անունը</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="98"/>
         <source>Enter copyright information</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրեք հեղինակային իրավունքների մասին տեղեկությունները</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="37"/>
@@ -13895,22 +14112,22 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/newwizard.ui" line="54"/>
         <source>Composer:</source>
-        <translation>Կոմպոզիտոր՝</translation>
+        <translation>Երգահան՝</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="61"/>
         <source>Composer</source>
-        <translation>Կոմպոզիտոր</translation>
+        <translation>Երգահան</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="71"/>
         <source>Lyricist:</source>
-        <translation>Երգահան՝</translation>
+        <translation>Խոսքերի հեղինակ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="78"/>
         <source>Lyricist</source>
-        <translation>Երգահան</translation>
+        <translation>Խոսքերի հեղինակ</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="88"/>
@@ -13934,7 +14151,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/note_groups.ui" line="23"/>
         <source>Also change shorter notes</source>
-        <translation>Նաև փոխել ավելի կարճ նոտաները</translation>
+        <translation>Փոխել նաև ավելի կարճ նոտաները</translation>
     </message>
     <message>
         <location filename="../../mscore/note_groups.ui" line="44"/>
@@ -13972,34 +14189,34 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/inspector/offset_select.ui" line="31"/>
         <source>X:</source>
-        <translation>X:</translation>
+        <translation>X՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/offset_select.ui" line="44"/>
         <source>Horizontal offset</source>
-        <translation>Հորիզոնական տեղաշարժում</translation>
+        <translation>Հորիզոնական շեղում</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/offset_select.ui" line="47"/>
-        <location filename="../../mscore/inspector/offset_select.ui" line="97"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="100"/>
         <source>sp</source>
         <translation> տրծ</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/offset_select.ui" line="60"/>
-        <location filename="../../mscore/inspector/offset_select.ui" line="110"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="63"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="116"/>
         <source>Snap to grid</source>
-        <translation type="unfinished"/>
+        <translation>Կապել ցանցին</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/offset_select.ui" line="81"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="84"/>
         <source>Y:</source>
-        <translation>Y:</translation>
+        <translation>Y՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/offset_select.ui" line="94"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="97"/>
         <source>Vertical offset</source>
-        <translation>Ուղղահայաց տեղաշարժում</translation>
+        <translation>Ուղղահայաց շեղում</translation>
     </message>
 </context>
 <context>
@@ -14007,7 +14224,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/omrpanel.ui" line="20"/>
         <source>mm</source>
-        <translation>մմ</translation>
+        <translation> մմ</translation>
     </message>
     <message>
         <location filename="../../mscore/omrpanel.ui" line="33"/>
@@ -14102,7 +14319,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="176"/>
         <source>Staff space (sp):</source>
-        <translation>Նոտակիրի բացատ (տրծ)՝</translation>
+        <translation>Նոտակիրի բացատը (տրծ)՝</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="214"/>
@@ -14112,12 +14329,12 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="220"/>
         <source>Inch (in)</source>
-        <translation type="unfinished"/>
+        <translation>Դյույմ (″)</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="227"/>
         <source>Millimeter (mm)</source>
-        <translation type="unfinished"/>
+        <translation>Միլիմետր (մմ)</translation>
     </message>
     <message>
         <location filename="../../mscore/pagesettings.ui" line="266"/>
@@ -14158,37 +14375,37 @@ please choose a different name:</source>
 <context>
     <name>Palette</name>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="119"/>
+        <location filename="../../libmscore/barline.cpp" line="120"/>
         <source>Normal barline</source>
         <translation>Նորմալ գիծ (տակտի)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="123"/>
+        <location filename="../../libmscore/barline.cpp" line="124"/>
         <source>Dashed barline</source>
         <translation>Ստվերագիծ (տակտի)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="125"/>
+        <location filename="../../libmscore/barline.cpp" line="126"/>
         <source>Dotted barline</source>
         <translation>Կետագիծ (տակտի)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="124"/>
+        <location filename="../../libmscore/barline.cpp" line="125"/>
         <source>Final barline</source>
         <translation>Վերջնագիծ (տակտի)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="120"/>
+        <location filename="../../libmscore/barline.cpp" line="121"/>
         <source>Double barline</source>
         <translation>Կրկնակի գիծ (տակտի)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="121"/>
+        <location filename="../../libmscore/barline.cpp" line="122"/>
         <source>Start repeat</source>
         <translation>Կրկնության սկիզբ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="122"/>
+        <location filename="../../libmscore/barline.cpp" line="123"/>
         <source>End repeat</source>
         <translation>Կրկնության վերջ</translation>
     </message>
@@ -14206,12 +14423,12 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="180"/>
         <source>Dynamics</source>
-        <translation>Ուժաբանություն</translation>
+        <translation>Դինամիկա</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="226"/>
         <location filename="../../mscore/menus.cpp" line="224"/>
-        <location filename="../../mscore/musescore.cpp" line="5817"/>
+        <location filename="../../mscore/musescore.cpp" line="5841"/>
         <source>Key Signatures</source>
         <translation>Բանալու նշաններ</translation>
     </message>
@@ -14273,22 +14490,37 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="564"/>
         <source>Articulations</source>
-        <translation type="unfinished"/>
+        <translation>Շտրիխեր</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="649"/>
         <source>Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Ձայնազարդեր</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="685"/>
         <source>Accordion</source>
-        <translation type="unfinished"/>
+        <translation>Ակորդեոն</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="768"/>
         <source>Brackets</source>
         <translation>Ակոլադաներ</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/menus.cpp" line="774"/>
+        <source>Bracket</source>
+        <translation>Ակոլադա</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/menus.cpp" line="775"/>
+        <source>Brace</source>
+        <translation>Ձևավոր ակոլադա</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/menus.cpp" line="776"/>
+        <source>Square</source>
+        <translation>Ուղիղ</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="795"/>
@@ -14353,12 +14585,12 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="1048"/>
         <source>8va alta</source>
-        <translation type="unfinished"/>
+        <translation>Մեկ օկտավա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1055"/>
         <source>8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>Մեկ օկտավա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1061"/>
@@ -14396,6 +14628,7 @@ please choose a different name:</source>
         <translation>Գրվածքային տող</translation>
     </message>
     <message>
+        <location filename="../../mscore/menus.cpp" line="777"/>
         <location filename="../../mscore/menus.cpp" line="1138"/>
         <source>Line</source>
         <translation>Գիծ</translation>
@@ -14408,12 +14641,12 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="1145"/>
         <source>Let Ring</source>
-        <translation type="unfinished"/>
+        <translation>Թող զրնգա</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1156"/>
         <source>Palm Mute</source>
-        <translation type="unfinished"/>
+        <translation>Համրեցնել ափով</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1201"/>
@@ -14428,7 +14661,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
         <location filename="../../mscore/menus.cpp" line="1363"/>
-        <location filename="../../mscore/musescore.cpp" line="5819"/>
+        <location filename="../../mscore/musescore.cpp" line="5843"/>
         <source>Time Signatures</source>
         <translation>Տակտերի չափեր</translation>
     </message>
@@ -14438,7 +14671,7 @@ please choose a different name:</source>
         <translation>Նվագակոթի դիագրամներ</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1409"/>
+        <location filename="../../mscore/palette.cpp" line="1408"/>
         <source>Writing Palette File
 %1
 failed: </source>
@@ -14446,7 +14679,7 @@ failed: </source>
 գրման սխալ՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1410"/>
+        <location filename="../../mscore/palette.cpp" line="1409"/>
         <source>Writing Palette File</source>
         <translation>Պալիտրայի նիշքի գրում</translation>
     </message>
@@ -14471,7 +14704,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="33"/>
         <source>Content offset</source>
-        <translation>Պարունակության տեղաշարժում</translation>
+        <translation>Պարունակության շեղում</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="53"/>
@@ -14481,12 +14714,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="60"/>
         <source>Y:</source>
-        <translation>Y:</translation>
+        <translation>Y՝</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="70"/>
         <source>X:</source>
-        <translation>X:</translation>
+        <translation>X՝</translation>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="80"/>
@@ -14530,7 +14763,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/palette.ui" line="90"/>
         <source>Element offset:</source>
-        <translation>Տարրի տեղաշարժում՝</translation>
+        <translation>Տարրի շեղում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/palette.ui" line="97"/>
@@ -14550,7 +14783,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/palette.ui" line="141"/>
         <source>Show &apos;More Elements…&apos;</source>
-        <translation>Ցուցադրել «Ավելի շատ տարրեր…»</translation>
+        <translation>Ցուցադրել &apos;Ավելի շատ տարրեր…&apos;-ը</translation>
     </message>
 </context>
 <context>
@@ -14564,7 +14797,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="80"/>
         <source>Part Name</source>
-        <translation>Դերանվագի անվանումը</translation>
+        <translation>Դերանվագի անվանում</translation>
     </message>
     <message>
         <location filename="../../mscore/partedit.ui" line="88"/>
@@ -14600,7 +14833,7 @@ failed: </source>
         <location filename="../../mscore/parteditbase.ui" line="258"/>
         <location filename="../../mscore/parteditbase.ui" line="261"/>
         <source>Chorus</source>
-        <translation>Քորըս</translation>
+        <translation>Խորուս</translation>
     </message>
     <message>
         <location filename="../../mscore/partedit.ui" line="237"/>
@@ -14611,7 +14844,7 @@ failed: </source>
         <location filename="../../mscore/partedit.ui" line="265"/>
         <location filename="../../mscore/parteditbase.ui" line="329"/>
         <source>Pan</source>
-        <translation type="unfinished"/>
+        <translation>Դիրքավորում</translation>
     </message>
     <message>
         <location filename="../../mscore/partedit.ui" line="293"/>
@@ -14652,24 +14885,24 @@ failed: </source>
         <location filename="../../mscore/parteditbase.ui" line="301"/>
         <source>Vol.</source>
         <extracomment>volume</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ուժգնություն</translation>
     </message>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="357"/>
         <source>Rev.</source>
         <extracomment>reverb</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ռեվեր</translation>
     </message>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="385"/>
         <source>Cho.</source>
         <extracomment>chorus</extracomment>
-        <translation type="unfinished"/>
+        <translation>Խորուս</translation>
     </message>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="406"/>
         <source>Show details</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել մանրամասները</translation>
     </message>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="409"/>
@@ -14680,13 +14913,13 @@ failed: </source>
         <location filename="../../mscore/parteditbase.ui" line="437"/>
         <source>M</source>
         <extracomment>mute</extracomment>
-        <translation type="unfinished"/>
+        <translation>M</translation>
     </message>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="465"/>
         <source>S</source>
         <extracomment>solo</extracomment>
-        <translation type="unfinished"/>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="481"/>
@@ -14701,17 +14934,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="515"/>
         <source>MIDI:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI՝</translation>
     </message>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="522"/>
         <source>Port:</source>
-        <translation type="unfinished"/>
+        <translation>Միացք՝</translation>
     </message>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="529"/>
         <source>Voice Playback:</source>
-        <translation type="unfinished"/>
+        <translation>Ձայնի նվագարկում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/parteditbase.ui" line="536"/>
@@ -14752,7 +14985,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/playpanel.ui" line="70"/>
         <source>Measure.Beat</source>
-        <translation>Տակտ.Բիտ</translation>
+        <translation>Տակտ.Մաս</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="110"/>
@@ -14777,12 +15010,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/playpanel.ui" line="404"/>
         <source>Metronome volume</source>
-        <translation type="unfinished"/>
+        <translation>Չափահարի ձայնի ուժգնություն</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="407"/>
         <source>Metronome Volume</source>
-        <translation type="unfinished"/>
+        <translation>Չափահարի ձայնի ուժգնություն</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="196"/>
@@ -14810,7 +15043,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/playpanel.ui" line="212"/>
         <source>Actual tempo in quarter notes per minute</source>
-        <translation>Տեմպը քարորդներով մեկ րոպեում</translation>
+        <translation>Տեմպը քառորդներով մեկ րոպեում</translation>
     </message>
     <message>
         <location filename="../../mscore/playpanel.ui" line="379"/>
@@ -14827,78 +15060,78 @@ failed: </source>
 <context>
     <name>PluginCreatorBase</name>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="49"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="49"/>
         <source>Run</source>
         <translation>Գործարկել</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="62"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="62"/>
         <source>Stop</source>
         <translation>Կանգնեցնել</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="91"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="91"/>
         <source>File</source>
         <translation>Նիշք</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="102"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="102"/>
         <source>Help</source>
         <translation>Օգնություն</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="108"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="108"/>
         <source>Edit</source>
         <translation>Խմբագրել</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="120"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="120"/>
         <source>New</source>
         <translation>Նոր</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="128"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="128"/>
         <source>Open…</source>
         <translation>Բացել…</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="136"/>
-        <location filename="../../mscore/pluginCreator.ui" line="139"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="136"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="139"/>
         <source>Save</source>
         <translation>Պահել</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="179"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="179"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>Վերաբեռնել</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="187"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="187"/>
         <source>Save As…</source>
         <translation>Պահել իբրև…</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="147"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="147"/>
         <source>Manual</source>
         <translation>Ձեռքով</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="155"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="155"/>
         <source>Undo</source>
         <translation>Հետարկել</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="163"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="163"/>
         <source>Redo</source>
         <translation>Վերարկել</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="171"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="171"/>
         <source>Close Plugin Creator</source>
         <translation>Փակել խրվակների ստեղծիչը</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="182"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
         <translation>Վերաբեռնել ընթացիկ խրվակի սկզբնաղբյուրը</translation>
     </message>
@@ -14906,49 +15139,49 @@ failed: </source>
 <context>
     <name>PluginManager</name>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="17"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="17"/>
         <source>Plugin Manager</source>
         <translation>Խրվակների կառավարիչ</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="44"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="44"/>
         <source>Name:</source>
         <translation>Անվանում՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="88"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="88"/>
         <source>Version:</source>
         <translation>Տարբերակ՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="81"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="81"/>
         <source>Path:</source>
         <translation>Ուղի՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="102"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="102"/>
         <source>Shortcut:</source>
         <translation>Կարճատ՝</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="114"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="114"/>
         <source>Define Shortcut</source>
-        <translation>Կարճատ սահմանել</translation>
+        <translation>Սահմանել կարճատ</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="121"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="121"/>
         <source>Clear Shortcut</source>
         <translation>Մաքրել կարճատը</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="128"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="128"/>
         <source>Reload all plugins.
 This will re-evaluate all plugins, picking up any changes that may have occurred.</source>
         <translation>Վերաբեռնեք բոլոր խրվակները:
 Դա կբերի բոլոր խրվակների վերագնահատմանը, ցանկացած կատարված փոփոխություն վերցնելով:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="132"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="132"/>
         <source>Reload Plugins</source>
         <translation>Վերաբեռնել խրվակները</translation>
     </message>
@@ -14964,7 +15197,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="46"/>
         <source>Reset All Preferences to Default</source>
-        <translation>Վերատեղադրել սկզբնադիր նախընտրությունները</translation>
+        <translation>Վերակայել բոլոր նախընտրությունները սկզբնադիրներին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="69"/>
@@ -15009,42 +15242,43 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="147"/>
         <source>Start with score:</source>
-        <translation>Պարտիտուրից սկսել՝</translation>
+        <translation>Բացել այս կաղապարը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="154"/>
         <source>Start with score</source>
-        <translation>Պարտիտուրից սկսել՝</translation>
+        <translation>Բացել այս կաղապարը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="157"/>
         <source>Insert path to starting score</source>
-        <translation>Զետեղեք սկզբնական պարտիտուրի ուղին</translation>
+        <translation>Զետեղել սկզբնական պարտիտուրի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="167"/>
         <source>Choose starting score</source>
-        <translation>Ընտրեք սկզբնական պարտիտուրը</translation>
+        <translation>Ընտրել սկզբնական պարտիտուրը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="170"/>
         <source>Opens a file dialog for selecting the starting score</source>
-        <translation>Բացում է երկխոսության վահանակը սկզբնական պարտիտուրն ընտրելու համար</translation>
+        <translation>Բացում է երկխոսության վահանակը՝ սկզբնական պարտիտուրն ընտրելու համար</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="186"/>
         <source>Show splash screen</source>
-        <translation>Ցուցադրել մեկնարկի պատուհանը</translation>
+        <translation>Ցուցադրել ցայտուքը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="122"/>
         <source>Show start center</source>
-        <translation>Ցուցադրել մեկնարկային կենտրոնը</translation>
+        <translation>Ցուցադրել Արագ 
+մեկնարկի պատուհանը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="100"/>
         <source>General tab</source>
-        <translation type="unfinished"/>
+        <translation>Ընդհանուր ներդիր</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="129"/>
@@ -15054,7 +15288,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="193"/>
         <source>Start with new score</source>
-        <translation>Սկսել նոր պարտիտուրից</translation>
+        <translation>Բացել Նոր պարտիտուրի մոգը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="200"/>
@@ -15069,12 +15303,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="214"/>
         <source>Show tours</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել բացատրությունները</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="350"/>
         <source>Select the language of the user interface</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել միջերեսի լեզուն</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="367"/>
@@ -15089,7 +15323,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="394"/>
         <source>Insert path to score folder.</source>
-        <translation>Ներդրեք պարտիտուրների պանակի ուղին</translation>
+        <translation>Զետեղել պարտիտուրների պանակի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="401"/>
@@ -15099,7 +15333,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="411"/>
         <source>Extensions:</source>
-        <translation type="unfinished"/>
+        <translation>Ընդլայնումներ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="421"/>
@@ -15114,12 +15348,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="441"/>
         <source>Style folder</source>
-        <translation>Ոճերի պանակ՝</translation>
+        <translation>Ոճերի պանակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="444"/>
         <source>Insert path for style folder</source>
-        <translation>Ներդրեք ոճերի պանակի ուղին</translation>
+        <translation>Զետեղել ոճերի պանակի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="451"/>
@@ -15129,22 +15363,22 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="464"/>
         <source>Choose score folder</source>
-        <translation>Ընտրեք պարտիտուրների պանակը</translation>
+        <translation>Ընտրել պարտիտուրների պանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="467"/>
         <source>Opens a folder dialog for selecting the score folder</source>
-        <translation>Բացում է երկխոսության վահանակը պարտիտուրների պանակը ընտրելու համար</translation>
+        <translation>Բացում է երկխոսության վահանակը՝ պարտիտուրների պանակը ընտրելու համար</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="484"/>
         <source>Choose style folder</source>
-        <translation>Ընտրեք ոճերի պանակը</translation>
+        <translation>Ընտրել ոճերի պանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="487"/>
         <source>Opens a folder dialog for selecting the style folder</source>
-        <translation>Բացում է երկխոսության վահանակը ոճերի պանակը ընտրելու համար</translation>
+        <translation>Բացում է երկխոսության վահանակը՝ ոճերի պանակը ընտրելու համար</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="501"/>
@@ -15159,38 +15393,38 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="514"/>
         <source>Insert path to Template folder</source>
-        <translation type="unfinished"/>
+        <translation>Զետեղել ձևանմուշների պանակի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="521"/>
         <source>Plugin folder</source>
-        <translation type="unfinished"/>
+        <translation>Խրվակների պանակ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="524"/>
         <source>Insert path to plugin folder</source>
-        <translation type="unfinished"/>
+        <translation>Զետեղել խրվակների պանակի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="531"/>
         <location filename="../../mscore/prefsdialog.ui" line="654"/>
         <source>SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>SoundFont-երի պանակները</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="534"/>
         <source>Insert path to SoundFont folders</source>
-        <translation type="unfinished"/>
+        <translation>Զետեղել SoundFont-երի պանակների ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="544"/>
         <source>Choose plugin folder</source>
-        <translation>Ընտրեք խրվակների պանակը</translation>
+        <translation>Ընտրել խրվակների պանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="547"/>
         <source>Opens a folder dialog for selecting the plugin folder</source>
-        <translation type="unfinished"/>
+        <translation>Բացում է երկխոսության վահանակը՝ խրվակների պանակը ընտրելու համար</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="561"/>
@@ -15206,18 +15440,18 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="574"/>
         <source>Insert path to image folder</source>
-        <translation>Ներդրեք պատկերների պանակի ուղին</translation>
+        <translation>Զետեղել պատկերների պանակի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="581"/>
         <location filename="../../mscore/prefsdialog.ui" line="634"/>
         <source>Extensions folder</source>
-        <translation type="unfinished"/>
+        <translation>Ընդլայնումների պանակ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="584"/>
         <source>Insert path to extensions folder</source>
-        <translation type="unfinished"/>
+        <translation>Զետեղել ընդլայնումների պանակի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="594"/>
@@ -15263,18 +15497,18 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="309"/>
         <source>min</source>
         <extracomment>minutes</extracomment>
-        <translation>րոպե</translation>
+        <translation> րոպե</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="224"/>
         <source>OSC Remote Control</source>
-        <translation>OSC հեռակառավարում</translation>
+        <translation>Open Sound Control (OSC) հեռակառավարում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="236"/>
         <source>Port number:</source>
         <extracomment>The UDP port number on which the MuseScore OSC server will listen on</extracomment>
-        <translation>Միացքի համար՝</translation>
+        <translation>Միացքի համարը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="243"/>
@@ -15289,7 +15523,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="726"/>
         <source>Select style</source>
-        <translation>Ընտրել ոճ</translation>
+        <translation>Ընտրել ոճը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="730"/>
@@ -15304,7 +15538,8 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="703"/>
         <source>Icon width:</source>
-        <translation>Պատկերակի լայնություն՝</translation>
+        <translation>Պատկերակի 
+լայնությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="680"/>
@@ -15322,7 +15557,8 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="696"/>
         <source>Icon height:</source>
-        <translation>Պատկերակի բարձրություն՝</translation>
+        <translation>Պատկերակի
+բարձրությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="710"/>
@@ -15338,7 +15574,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="804"/>
         <location filename="../../mscore/prefsdialog.ui" line="807"/>
         <source>Background</source>
-        <translation>Ետնաշերտ</translation>
+        <translation>Խորք</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="828"/>
@@ -15355,7 +15591,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="878"/>
         <source>Choose Background wallpaper file</source>
-        <translation>Ընտրել ետնաշերտի պաստառի նիշքը</translation>
+        <translation>Ընտրել խորքի պաստառի նիշքը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="881"/>
@@ -15371,17 +15607,17 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="900"/>
         <source>Insert path to background wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Զետեղել խորքի պաստառի նիշքի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="910"/>
         <source>Select background color</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել խորքի գույնը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="913"/>
         <source>Opens a dialog for selecting the background color</source>
-        <translation type="unfinished"/>
+        <translation>Բացում է երկխոսության վահանակը՝ խորքի գույնը ընտրելու համար</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="926"/>
@@ -15392,7 +15628,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="993"/>
         <source>Choose paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել թղթե պաստառի նիշքը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1022"/>
@@ -15402,17 +15638,17 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1025"/>
         <source>Opens a dialog for selecting the paper color</source>
-        <translation type="unfinished"/>
+        <translation>Բացում է երկխոսության վահանակը՝ թղթի գույնը ընտրելու համար</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1035"/>
         <source>Paper wallpaper path</source>
-        <translation type="unfinished"/>
+        <translation>Թղթե պաստառի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1038"/>
         <source>Insert path to paper wallpaper file</source>
-        <translation type="unfinished"/>
+        <translation>Զետեղել թղթե պաստառի նիշքի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1054"/>
@@ -15459,12 +15695,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1199"/>
         <source>Enable MIDI input</source>
-        <translation>Միացնել MIDI-մուտքագրումը</translation>
+        <translation>Միացնել MIDI մուտքագրումը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1206"/>
         <source>Color notes outside of usable pitch range</source>
-        <translation>Ձայնածավալից դուրս նոտաների գունավորում</translation>
+        <translation>Հնչյունածավալից դուրս նոտաների գունավորում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1223"/>
@@ -15487,17 +15723,17 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1302"/>
         <source>Play whole chord when adding note</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարկել ամբողջ ակորդը նոտա ավելացնելիս</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1325"/>
         <source>Enable MIDI remote control</source>
-        <translation type="unfinished"/>
+        <translation>Միացնել MIDI հեռակառավարումը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1328"/>
         <source>MIDI Remote Control</source>
-        <translation type="unfinished"/>
+        <translation>MIDI հեռակառավարում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1352"/>
@@ -15529,7 +15765,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1368"/>
         <source>Rewind is active</source>
-        <translation type="unfinished"/>
+        <translation>Հետանցումը գործուն է</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1386"/>
@@ -15556,17 +15792,17 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1389"/>
         <source>Rewind record</source>
-        <translation type="unfinished"/>
+        <translation>Հետանցել ձայնագրությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1404"/>
         <source>Toggle play</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. նվագարկումը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1438"/>
         <source>Toggle play record</source>
-        <translation type="unfinished"/>
+        <translation>Փոխարկել &apos;Նվագարկել&apos;-ն ու &apos;Ձայնագրել&apos;-ը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1466"/>
@@ -15601,7 +15837,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1570"/>
         <source>Quarter note</source>
-        <translation>Քարորդ նոտա</translation>
+        <translation>Քառորդ նոտա</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1580"/>
@@ -15621,12 +15857,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1627"/>
         <source>Quarter note is active</source>
-        <translation>Քարորդ նոտան գործուն է</translation>
+        <translation>Քառորդ նոտան գործուն է</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1648"/>
         <source>Quarter note record</source>
-        <translation>Քարորդ նոտաների գրում</translation>
+        <translation>Քառորդ նոտաների գրում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1669"/>
@@ -15666,12 +15902,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1793"/>
         <source>Double augmentation dot is active</source>
-        <translation type="unfinished"/>
+        <translation>Երկարացման երկու կետը գործուն է</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1814"/>
         <source>Double augmentation dot record</source>
-        <translation type="unfinished"/>
+        <translation>Գրել երկարացման երկու կետով</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1835"/>
@@ -15686,12 +15922,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1877"/>
         <source>Real-time Advance is active</source>
-        <translation type="unfinished"/>
+        <translation>Իրական ժամանակի առաջխաղացումը գործուն է</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1898"/>
         <source>Real-time Advance record</source>
-        <translation type="unfinished"/>
+        <translation>Իրական ժամանակի առաջխաղացման գրում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1919"/>
@@ -15807,7 +16043,8 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="2337"/>
         <location filename="../../mscore/prefsdialog.ui" line="2347"/>
         <source>Advance on release?</source>
-        <translation type="unfinished"/>
+        <translation>Առաջարկներ թողարկման
+վերաբերյա՞լ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2354"/>
@@ -15829,7 +16066,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="2393"/>
         <location filename="../../mscore/prefsdialog.ui" line="2399"/>
         <source>Default scale for new score views</source>
-        <translation type="unfinished"/>
+        <translation>Նոր պարտիտուրի սկզբնադիր մասշտաբ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2396"/>
@@ -15850,7 +16087,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3187"/>
         <source>Audio Engine</source>
-        <translation type="unfinished"/>
+        <translation>Ձայնասարք</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3484"/>
@@ -15870,22 +16107,22 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2478"/>
         <source>Instrument list 2:</source>
-        <translation>Գործիքների ցանկ 2՝</translation>
+        <translation>Նվագարանների ցանկ №2՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2491"/>
         <source>Choose Instrument list 1</source>
-        <translation>Ընտրեք գործիքների ցանկը 1</translation>
+        <translation>Ընտրել նվագարանների ցանկ №1-ը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2508"/>
         <source>Instrument list 1:</source>
-        <translation>Գործիքների ցանկ 1՝</translation>
+        <translation>Նվագարանների ցանկ №1՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2518"/>
         <source>Instrument list 1</source>
-        <translation>Գործիքների ցանկ 1</translation>
+        <translation>Նվագարանների ցանկ №1</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2528"/>
@@ -15901,54 +16138,54 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
         <location filename="../../mscore/prefsdialog.ui" line="2541"/>
         <location filename="../../mscore/prefsdialog.ui" line="3264"/>
         <source>Insert path to style file</source>
-        <translation>Ներդրեք ոճի նիշքի պանակի ուղին</translation>
+        <translation>Զետեղել ոճի նիշքի պանակի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2551"/>
         <location filename="../../mscore/prefsdialog.ui" line="3271"/>
         <source>Choose style</source>
-        <translation>Ընտրեք ոճը</translation>
+        <translation>Ընտրել ոճը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2554"/>
         <location filename="../../mscore/prefsdialog.ui" line="3274"/>
         <source>Opens a file dialog for selecting a style file</source>
-        <translation type="unfinished"/>
+        <translation>Բացում է երկխոսության վահանակը՝ ոճի նիշքը ընտրելու համար</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2568"/>
         <source>Style for part:</source>
-        <translation>Ոճ դերանվագի համար՝</translation>
+        <translation>Դերանվագի ոճը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2578"/>
         <source>Style for part</source>
-        <translation>Ոճ դերանվագի համար</translation>
+        <translation>Դերանվագի ոճ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2581"/>
         <source>Insert path to style file for part</source>
-        <translation type="unfinished"/>
+        <translation>Զետեղել դերանվագի ոճի նիշքի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2591"/>
         <source>Choose style for part</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրեք դերանվագի ոճը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2594"/>
         <source>Opens a file dialog for selecting a style file for part</source>
-        <translation type="unfinished"/>
+        <translation>Բացում է երկխոսության վահանակը՝ դերանվագի ոճի նիշքը ընտրելու համար</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2608"/>
         <source>Instrument list 2</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարանների ցանկ №2</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2621"/>
         <source>Choose Instrument list 2</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել նվագարանների ցանկ №2-ը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2658"/>
@@ -15973,17 +16210,17 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2720"/>
         <source>API:</source>
-        <translation>API:</translation>
+        <translation>API՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2736"/>
         <source>API</source>
-        <translation>API:</translation>
+        <translation>API</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2739"/>
         <source>Choose API</source>
-        <translation>Ընտրեք API</translation>
+        <translation>Ընտրել API</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2765"/>
@@ -16015,12 +16252,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2820"/>
         <source>MIDI Output</source>
-        <translation type="unfinished"/>
+        <translation>MIDI արտածում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2823"/>
         <source>Choose MIDI Output</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել MIDI արտածումը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2839"/>
@@ -16036,7 +16273,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2848"/>
         <source>MIDI Output Latency</source>
-        <translation type="unfinished"/>
+        <translation>MIDI արտածման ուշացում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2851"/>
@@ -16046,17 +16283,17 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2890"/>
         <source>Fragments</source>
-        <translation type="unfinished"/>
+        <translation>Ֆրագմենտներ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2893"/>
         <source>Choose number of fragments</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել ֆրագմենտների քանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2919"/>
         <source>Fragments:</source>
-        <translation type="unfinished"/>
+        <translation>Ֆրագմենտներ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2946"/>
@@ -16067,7 +16304,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2972"/>
         <source>Choose period size</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել պարբերության չափը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3017"/>
@@ -16099,10 +16336,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>Օգտագործել JACK MIDI</translation>
     </message>
     <message>
-        <source>Attention: Any changes on this page require a restart of MuseScore.  Precise MIDI output timing is only possible via JACK.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="3233"/>
         <source>Import</source>
         <translation>Ներմուծում</translation>
@@ -16130,124 +16363,125 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="749"/>
         <source>Font face:</source>
-        <translation type="unfinished"/>
+        <translation>Տառատեսակ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="756"/>
         <source>Font size:</source>
-        <translation type="unfinished"/>
+        <translation>Տառաչափ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="780"/>
         <source>Canvas tab</source>
-        <translation type="unfinished"/>
+        <translation>Կտավի ներդիր</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1048"/>
         <source>Scroll Pages</source>
-        <translation type="unfinished"/>
+        <translation>Էջերի ոլորում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1084"/>
         <source>Limit the scroll area to the edges of the score</source>
-        <translation type="unfinished"/>
+        <translation>Սահմանափակել ոլորման տարածքը պարտիտուրի չափսով</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1087"/>
         <location filename="../../mscore/prefsdialog.ui" line="1090"/>
         <source>If this is checked, scrolling will stop at the edge of the score.</source>
-        <translation type="unfinished"/>
+        <translation>Եթե ընտրված է, ապա ոլորումը կանգ կառնի պարտիտուրի եզրին:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1093"/>
         <source>Limit scroll area to page borders</source>
-        <translation type="unfinished"/>
+        <translation>Սահմանափակել ոլորման տարածքն էջի չափսով</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1131"/>
         <source>Proximity for selecting elements</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրվող տարրերի մոտիկությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1184"/>
         <source>Note input tab</source>
-        <translation type="unfinished"/>
+        <translation>Նոտաների մուտքագրման ներդիր</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1213"/>
         <source>Delay between notes in automatic real-time mode</source>
-        <translation type="unfinished"/>
+        <translation>Նոտաների միջև ուշացումը իրական ժամանակի ինքնաշխատ գործելաձևում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1216"/>
         <source>Delay between notes in automatic real-time mode:</source>
-        <translation type="unfinished"/>
+        <translation>Նոտաների միջև ուշացումը իրական ժամանակի ինքնաշխատ գործելաձևում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1261"/>
         <source>Play Notes When Editing</source>
-        <translation type="unfinished"/>
+        <translation>Նվագարկել նոտաները խմբագրելու ժամանակ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1735"/>
         <source>Real-time advance</source>
-        <translation type="unfinished"/>
+        <translation>Իրական ժամանակի առաջխաղացում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2378"/>
         <source>Score tab</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուրի ներդիր</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2444"/>
         <source>Show MIDI controls in mixer</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել MIDI կառավարները զուգակցիչի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2521"/>
         <location filename="../../mscore/prefsdialog.ui" line="2611"/>
         <source>Insert path to a instrument list file</source>
-        <translation type="unfinished"/>
+        <translation>Զետեղել նվագարանների ցանկի նիշքի ուղին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2655"/>
         <source>I/O tab</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրման/Արտածման ներդիր</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2746"/>
         <source>MIDI input:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI մուտքագրում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2801"/>
         <source>MIDI output:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI արտածում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2832"/>
         <source>MIDI output latency:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI արտածման 
+ուշացում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2878"/>
         <source>ALSA Audio</source>
-        <translation type="unfinished"/>
+        <translation>ALSA Audio</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2929"/>
         <source>Period size:</source>
-        <translation type="unfinished"/>
+        <translation>Պարբերության չափ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2969"/>
         <source>Period size</source>
-        <translation type="unfinished"/>
+        <translation>Պարբերության չափ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3094"/>
         <source>JACK Audio Server</source>
-        <translation type="unfinished"/>
+        <translation>JACK ձայնային սպասարկիչ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3109"/>
@@ -16257,22 +16491,22 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3122"/>
         <source>Use JACK transport</source>
-        <translation type="unfinished"/>
+        <translation>Օգտագործել JACK transport</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3129"/>
         <source>Use JACK audio</source>
-        <translation type="unfinished"/>
+        <translation>Օգտագործել JACK audio</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3193"/>
         <source>Restart Audio and MIDI Devices</source>
-        <translation type="unfinished"/>
+        <translation>Վերամեկնարկել ձայնային և MIDI սարքերը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3230"/>
         <source>Import tab</source>
-        <translation type="unfinished"/>
+        <translation>Ներմուծման ներդիր</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3293"/>
@@ -16348,12 +16582,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3397"/>
         <source>Choose the shortest note value</source>
-        <translation>Ընտրեք ամենակարճ նոտայի երկարությունը</translation>
+        <translation>Ընտրել ամենակարճ նոտայի արժեքը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3404"/>
         <source>Quarter</source>
-        <translation>Քարորդ</translation>
+        <translation>Քառորդ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3409"/>
@@ -16378,22 +16612,22 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3813"/>
         <source>kBit/s</source>
-        <translation type="unfinished"/>
+        <translation>կԲիթ/վ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3833"/>
         <source>MP3 Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>MP3 բիթաչափ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3840"/>
         <source>Normalize</source>
-        <translation type="unfinished"/>
+        <translation>Չափորոշել</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3851"/>
         <source>Shortcuts tab</source>
-        <translation type="unfinished"/>
+        <translation>Կարճատների ներդիր</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3956"/>
@@ -16403,17 +16637,17 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4022"/>
         <source>Update tab</source>
-        <translation type="unfinished"/>
+        <translation>Արդիացման ներդիր</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4077"/>
         <source>Check for new version of MuseScore extensions</source>
-        <translation type="unfinished"/>
+        <translation>Ստուգել MuseScore-ի ընդլայնումների նոր տարբերակների առկայությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4088"/>
         <source>Advanced tab</source>
-        <translation type="unfinished"/>
+        <translation>Ընդլայնված ներդիր</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4091"/>
@@ -16429,12 +16663,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4107"/>
         <source>Reset to default</source>
-        <translation>Վերակայել սկզբնադիրի</translation>
+        <translation>Վերակայել սկզբնադիրին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3465"/>
         <source>Export</source>
-        <translation>Արտահանել</translation>
+        <translation>Արտահանում</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3490"/>
@@ -16446,13 +16680,13 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <location filename="../../mscore/prefsdialog.ui" line="3497"/>
         <location filename="../../mscore/prefsdialog.ui" line="3500"/>
         <source>Transparent background</source>
-        <translation>Թափանցիկ ետնաշերտ</translation>
+        <translation>Թափանցիկ խորք</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3523"/>
         <location filename="../../mscore/prefsdialog.ui" line="3647"/>
         <source>Choose resolution DPI</source>
-        <translation>Ընտրեք տարլուծման DPI</translation>
+        <translation>Ընտրել տարլուծման DPI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3560"/>
@@ -16498,14 +16732,14 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3462"/>
         <source>Export tab</source>
-        <translation type="unfinished"/>
+        <translation>Արտահանման ներդիր</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3526"/>
         <location filename="../../mscore/prefsdialog.ui" line="3650"/>
         <source>DPI</source>
         <extracomment>dots per inch</extracomment>
-        <translation type="unfinished"/>
+        <translation> DPI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3682"/>
@@ -16526,12 +16760,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3875"/>
         <source>Shortcuts table</source>
-        <translation type="unfinished"/>
+        <translation>Կարճատների աղյուսակ</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3878"/>
         <source>Here you can configure shortcuts for actions</source>
-        <translation type="unfinished"/>
+        <translation>Այստեղ կարելի է նշանակել կարճատների գործողությունները</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3903"/>
@@ -16546,17 +16780,17 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3933"/>
         <source>Resets the shortcuts to their default assignment</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել բոլոր կարճատները իրենց սկզբնադիրներին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3936"/>
         <source>Reset Shortcut to Default</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել սկզբնադիր կարճատներին</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3943"/>
         <source>Saves a Shortcut List</source>
-        <translation type="unfinished"/>
+        <translation>Պահել կարճատների նիշքը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3946"/>
@@ -16566,7 +16800,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3953"/>
         <source>Loads a Shortcut List</source>
-        <translation type="unfinished"/>
+        <translation>Բեռնել կարճատների նիշքը</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3963"/>
@@ -16619,16 +16853,17 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../mscore/mscorePlugins.cpp" line="419"/>
+        <location filename="../../mscore/plugin/mscorePlugins.cpp" line="419"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/mscorePlugins.cpp" line="420"/>
+        <location filename="../../mscore/plugin/mscorePlugins.cpp" line="420"/>
         <source>No score open.
 This plugin requires an open score to run.
 </source>
-        <translation type="unfinished"/>
+        <translation>Բացված պարտիտուր չկա:
+Այս խրվակը մեկնարկելու համար բացված պարտիտուր է անհրաժեշտ:</translation>
     </message>
 </context>
 <context>
@@ -16684,7 +16919,7 @@ failed: %2</source>
     <message>
         <location filename="../../libmscore/durationtype.cpp" line="791"/>
         <source>Quarter</source>
-        <translation>Քարորդ</translation>
+        <translation>Քառորդ</translation>
     </message>
     <message>
         <location filename="../../libmscore/durationtype.cpp" line="792"/>
@@ -16740,24 +16975,6 @@ failed: %2</source>
         <location filename="../../libmscore/durationtype.cpp" line="802"/>
         <source>Invalid</source>
         <translation>Անվավեր</translation>
-    </message>
-    <message>
-        <source>double flat</source>
-        <translation type="vanished">դուբլ-բեմոլ</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/harmony.cpp" line="1571"/>
-        <source>flat</source>
-        <translation>բեմոլ</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/harmony.cpp" line="1566"/>
-        <source>sharp</source>
-        <translation>դիեզ</translation>
-    </message>
-    <message>
-        <source>double sharp</source>
-        <translation type="vanished">դուբլ-դիեզ</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1203"/>
@@ -16901,7 +17118,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/file.cpp" line="190"/>
         <source>File &quot;%1&quot; corrupted.</source>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; նիշքը վնասված է:</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="195"/>
@@ -16912,7 +17129,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/file.cpp" line="213"/>
         <source>Load Error</source>
-        <translation type="unfinished"/>
+        <translation>Բեռնման սխալ</translation>
     </message>
     <message>
         <location filename="../../mscore/importxml.cpp" line="67"/>
@@ -16961,42 +17178,42 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="30"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="31"/>
         <source>Upload Error</source>
-        <translation>Բեռնման սխալ</translation>
+        <translation>Վերեռնման սխալ</translation>
     </message>
     <message>
         <location filename="../../libmscore/ambitus.cpp" line="758"/>
         <source>%1; Top pitch: %2%3; Bottom pitch: %4%5</source>
-        <translation>%1; Վերև՝ %2%3; Ներքև՝ %4%5</translation>
+        <translation>%1. Վերև՝ %2%3, Ներքև՝ %4%5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="1324"/>
+        <location filename="../../libmscore/barline.cpp" line="1346"/>
         <location filename="../../libmscore/chordrest.cpp" line="1151"/>
         <location filename="../../libmscore/chordrest.cpp" line="1157"/>
-        <location filename="../../libmscore/note.cpp" line="2904"/>
-        <location filename="../../libmscore/note.cpp" line="2913"/>
+        <location filename="../../libmscore/note.cpp" line="2802"/>
+        <location filename="../../libmscore/note.cpp" line="2811"/>
         <source>%1 Start of %2</source>
         <translation>%1 սկիզբ %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="1326"/>
+        <location filename="../../libmscore/barline.cpp" line="1348"/>
         <location filename="../../libmscore/chordrest.cpp" line="1153"/>
         <location filename="../../libmscore/chordrest.cpp" line="1162"/>
-        <location filename="../../libmscore/note.cpp" line="2907"/>
-        <location filename="../../libmscore/note.cpp" line="2920"/>
+        <location filename="../../libmscore/note.cpp" line="2805"/>
+        <location filename="../../libmscore/note.cpp" line="2818"/>
         <source>%1 End of %2</source>
         <translation>%1 վերջ %2</translation>
     </message>
     <message>
         <location filename="../../libmscore/check.cpp" line="200"/>
         <source>Measure %1, staff %2 incomplete. Expected: %3; Found: %4</source>
-        <translation type="unfinished"/>
+        <translation>Տակտ %1, նոտակիր №%2-ը անավարտ է: Սպասվում էր՝ %3: Հիմա՝ %4</translation>
     </message>
     <message>
         <location filename="../../libmscore/check.cpp" line="217"/>
         <source>Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5</source>
-        <translation>Տակտ %1, նոտակիր %2, %3 ձայնը շատ երկար է: Սպասվում է՝ %4; Հիմա՝ %5</translation>
+        <translation>Տակտ %1, նոտակիր %2, %3 ձայնը շատ երկար է: Սպասվում էր՝ %4: Հիմա՝ %5</translation>
     </message>
     <message>
         <location filename="../../libmscore/chordrest.cpp" line="667"/>
@@ -17047,7 +17264,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../libmscore/chordrest.cpp" line="700"/>
         <location filename="../../libmscore/tempotext.cpp" line="428"/>
         <source>Dotted %1</source>
-        <translation>Կետ %1</translation>
+        <translation>Կետավոր %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/chordrest.cpp" line="703"/>
@@ -17059,7 +17276,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../libmscore/chordrest.cpp" line="706"/>
         <location filename="../../libmscore/tempotext.cpp" line="432"/>
         <source>Triple dotted %1</source>
-        <translation>Եռեք կետ %1</translation>
+        <translation>Եռակի կետավոր %1</translation>
     </message>
     <message>
         <location filename="../../libmscore/chordrest.cpp" line="709"/>
@@ -17077,7 +17294,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/fingering.cpp" line="137"/>
+        <location filename="../../libmscore/fingering.cpp" line="213"/>
         <source>String number</source>
         <translation>Լարի համարը</translation>
     </message>
@@ -17092,83 +17309,83 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>Դիմինուենդո</translation>
     </message>
     <message>
-        <location filename="../../libmscore/keysig.cpp" line="614"/>
+        <location filename="../../libmscore/keysig.cpp" line="624"/>
         <source>%1: Custom</source>
         <translation>%1՝ Հարմարեցրած</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="496"/>
+        <location filename="../../mscore/plugin/api/qmlpluginapi.cpp" line="336"/>
         <source>You can&apos;t create an enum</source>
         <translation>Դուք չեք կարող ստեղծել թվարկում</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2203"/>
+        <location filename="../../libmscore/note.cpp" line="2209"/>
         <source>Acciaccatura</source>
         <translation>Կարճ ֆորշլագ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2205"/>
+        <location filename="../../libmscore/note.cpp" line="2211"/>
         <source>Appoggiatura</source>
         <translation>1/8 ֆորշլագ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2209"/>
+        <location filename="../../libmscore/note.cpp" line="2215"/>
         <source>Grace note after</source>
         <translation>Ֆորշլագ նոտայից հետո</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2213"/>
+        <location filename="../../libmscore/note.cpp" line="2219"/>
         <source>Grace note before</source>
         <translation>Ֆորշլագ նոտայից առաջ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2215"/>
+        <location filename="../../libmscore/note.cpp" line="2221"/>
         <source>Note</source>
         <translation>Նոտա</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2856"/>
-        <location filename="../../libmscore/note.cpp" line="2875"/>
+        <location filename="../../libmscore/note.cpp" line="2754"/>
+        <location filename="../../libmscore/note.cpp" line="2773"/>
         <location filename="../../libmscore/rest.cpp" line="790"/>
         <location filename="../../libmscore/rest.cpp" line="800"/>
         <source>Voice: %1</source>
         <translation>Ձայն՝ %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2860"/>
+        <location filename="../../libmscore/note.cpp" line="2758"/>
         <source>Beat slash</source>
-        <translation type="unfinished"/>
+        <translation>Մասի շեղ գծիկներ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2860"/>
+        <location filename="../../libmscore/note.cpp" line="2758"/>
         <source>Rhythm slash</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2865"/>
+        <location filename="../../libmscore/note.cpp" line="2763"/>
         <source>%1; Pitch: %2; Duration: %3%4</source>
-        <translation>%1; Բարձրություն՝ %2; Երկարություն՝ %3%4</translation>
+        <translation>%1. Բարձրություն՝ %2, Երկարություն՝ %3%4</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2879"/>
+        <location filename="../../libmscore/note.cpp" line="2777"/>
         <source>Beat Slash</source>
-        <translation>Բիտի շեղ գծիկներ</translation>
+        <translation>Մասի շեղ գծիկներ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2879"/>
+        <location filename="../../libmscore/note.cpp" line="2777"/>
         <source>Rhythm Slash</source>
         <translation>Ռիթմի շեղ գծիկներ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/read206.cpp" line="3730"/>
-        <location filename="../../libmscore/read301.cpp" line="199"/>
+        <location filename="../../libmscore/read206.cpp" line="3788"/>
+        <location filename="../../libmscore/read301.cpp" line="201"/>
         <source>XML read error at line %1, column %2: %3</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/rest.cpp" line="791"/>
         <source>%1; Duration: %2; %3</source>
-        <translation>%1; Երկարություն՝ %2; %3</translation>
+        <translation>%1. Երկարություն՝ %2, %3</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorediff.cpp" line="1365"/>
@@ -17225,17 +17442,17 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1798"/>
+        <location filename="../../libmscore/segment.cpp" line="1792"/>
         <source>Annotations:</source>
         <translation>Ծանոթագրություններ՝</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1820"/>
+        <location filename="../../libmscore/segment.cpp" line="1814"/>
         <source>Start of </source>
         <translation>Սկիզբ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1834"/>
+        <location filename="../../libmscore/segment.cpp" line="1828"/>
         <source>End of </source>
         <translation>Վերջ</translation>
     </message>
@@ -17258,24 +17475,24 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../libmscore/timesig.cpp" line="558"/>
         <source>%1/%2 time</source>
-        <translation>չափ %1/%2</translation>
+        <translation>%1/%2</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="983"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="41"/>
         <source>Above</source>
-        <translation>Վրա</translation>
+        <translation>Վերևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="984"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="42"/>
         <source>Below</source>
-        <translation>Տակ</translation>
+        <translation>Ներքևից</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspectorTextBase.cpp" line="53"/>
         <source>No frame</source>
-        <translation type="unfinished"/>
+        <translation>Առանց շրջանակի</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspectorTextBase.cpp" line="54"/>
@@ -17320,7 +17537,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4165"/>
         <source>Load Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Բեռնել կարճատների նիշքը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="4165"/>
@@ -17333,14 +17550,16 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>դուբլ-բեմոլ</translation>
     </message>
     <message>
+        <location filename="../../libmscore/harmony.cpp" line="1571"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
         <source>♭</source>
         <translation>Բեմոլ</translation>
     </message>
     <message>
+        <location filename="../../libmscore/harmony.cpp" line="1566"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="273"/>
         <source>♯</source>
-        <translation>դիեզ</translation>
+        <translation>Դիեզ</translation>
     </message>
     <message>
         <location filename="../../libmscore/pitchspelling.cpp" line="279"/>
@@ -17360,13 +17579,13 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <location filename="../../mscore/capella.cpp" line="2722"/>
         <location filename="../../mscore/importmidi/importmidi.cpp" line="1203"/>
         <source>Load failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Բեռնումը ձախողվեց՝ %1</translation>
     </message>
     <message>
         <location filename="../../mscore/capella.cpp" line="2723"/>
         <location filename="../../mscore/importmidi/importmidi.cpp" line="1204"/>
         <location filename="../../mscore/instrdialog.cpp" line="132"/>
-        <location filename="../../mscore/musescore.cpp" line="3805"/>
+        <location filename="../../mscore/musescore.cpp" line="3816"/>
         <source>Quit</source>
         <translation>Ելք</translation>
     </message>
@@ -17418,65 +17637,65 @@ Do you want to overwrite it?</source>
         <translation>Ոճի բեռնումը ձախողվեց</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="621"/>
-        <location filename="../../mscore/musescore.cpp" line="626"/>
-        <location filename="../../mscore/musescore.cpp" line="656"/>
-        <location filename="../../mscore/musescore.cpp" line="661"/>
-        <location filename="../../mscore/musescore.cpp" line="666"/>
-        <location filename="../../mscore/musescore.cpp" line="681"/>
-        <location filename="../../mscore/musescore.cpp" line="700"/>
-        <location filename="../../mscore/musescore.cpp" line="711"/>
-        <location filename="../../mscore/musescore.cpp" line="744"/>
+        <location filename="../../mscore/musescore.cpp" line="630"/>
+        <location filename="../../mscore/musescore.cpp" line="635"/>
+        <location filename="../../mscore/musescore.cpp" line="665"/>
+        <location filename="../../mscore/musescore.cpp" line="670"/>
+        <location filename="../../mscore/musescore.cpp" line="675"/>
+        <location filename="../../mscore/musescore.cpp" line="690"/>
+        <location filename="../../mscore/musescore.cpp" line="709"/>
+        <location filename="../../mscore/musescore.cpp" line="720"/>
+        <location filename="../../mscore/musescore.cpp" line="753"/>
         <source>Import Extension File</source>
-        <translation type="unfinished"/>
+        <translation>Ընդլայնման նիշքի ներմուծում</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="621"/>
+        <location filename="../../mscore/musescore.cpp" line="630"/>
         <source>Cannot import extension on read-only storage: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="626"/>
+        <location filename="../../mscore/musescore.cpp" line="635"/>
         <source>Cannot import extension: storage %1 is full</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="656"/>
+        <location filename="../../mscore/musescore.cpp" line="665"/>
         <source>Corrupted extension: no metadata.json</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="661"/>
+        <location filename="../../mscore/musescore.cpp" line="670"/>
         <source>Corrupted extension: unsupported directories in root directory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="666"/>
+        <location filename="../../mscore/musescore.cpp" line="675"/>
         <source>Corrupted extension: unsupported files in root directory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="681"/>
+        <location filename="../../mscore/musescore.cpp" line="690"/>
         <source>Corrupted extension: corrupted metadata.json</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="700"/>
+        <location filename="../../mscore/musescore.cpp" line="709"/>
         <source>A newer version is already installed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="711"/>
+        <location filename="../../mscore/musescore.cpp" line="720"/>
         <source>Error while deleting previous version of the extension: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="744"/>
+        <location filename="../../mscore/musescore.cpp" line="753"/>
         <source>Unable to extract files from the extension</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3803"/>
+        <location filename="../../mscore/musescore.cpp" line="3814"/>
         <source>Load Languages Failed:</source>
         <translation>Լեզուների բեռնումը ձախողվեց՝</translation>
     </message>
@@ -17499,7 +17718,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/palette.cpp" line="267"/>
         <source>Delete palette cell</source>
-        <translation type="unfinished"/>
+        <translation>Ջնջել բջիջը պալիտրայից</translation>
     </message>
     <message>
         <location filename="../../mscore/palette.cpp" line="268"/>
@@ -17510,7 +17729,7 @@ Do you want to overwrite it?</source>
         <location filename="../../omr/omr.cpp" line="57"/>
         <location filename="../../omr/omr.cpp" line="66"/>
         <source>Loading PDF</source>
-        <translation type="unfinished"/>
+        <translation>PDF-ի բեռնում</translation>
     </message>
     <message>
         <location filename="../../omr/omr.cpp" line="57"/>
@@ -17527,12 +17746,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../omr/omr.cpp" line="66"/>
         <source>Load Parameters</source>
-        <translation type="unfinished"/>
+        <translation>Հարաչափերի բեռնում</translation>
     </message>
     <message>
         <location filename="../../omr/omr.cpp" line="144"/>
         <source>Reading PDF…</source>
-        <translation type="unfinished"/>
+        <translation>PDF-ի ընթերցում…</translation>
     </message>
     <message>
         <location filename="../../omr/omr.cpp" line="144"/>
@@ -17543,13 +17762,13 @@ Do you want to overwrite it?</source>
         <location filename="../../omr/omr.cpp" line="160"/>
         <location filename="../../omr/omr.cpp" line="164"/>
         <source>%1 at Page %2</source>
-        <translation type="unfinished"/>
+        <translation>%1-ը էջ %2-ում</translation>
     </message>
 </context>
 <context>
     <name>RecordButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5435"/>
+        <location filename="../../mscore/musescore.cpp" line="5448"/>
         <source>Record</source>
         <translation>Ձայնագրել</translation>
     </message>
@@ -17564,22 +17783,22 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="24"/>
         <source>Extensions</source>
-        <translation type="unfinished"/>
+        <translation>Ընդլայնումներ</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="60"/>
         <source>Extension</source>
-        <translation type="unfinished"/>
+        <translation>Ընդլայնում</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="65"/>
         <source>Version</source>
-        <translation type="unfinished"/>
+        <translation>Տարբերակ</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="80"/>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation>Ապատեղադրել</translation>
     </message>
     <message>
         <location filename="../../mscore/resourceManager.ui" line="101"/>
@@ -17614,24 +17833,24 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/inspector/scale_select.ui" line="21"/>
         <source>Horizontal scale</source>
-        <translation type="unfinished"/>
+        <translation>Հորիզոնական սանդղակ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/scale_select.ui" line="24"/>
         <source>X:</source>
         <extracomment>horizontal</extracomment>
-        <translation>X:</translation>
+        <translation>X՝</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/scale_select.ui" line="43"/>
         <source>Vertical scale</source>
-        <translation type="unfinished"/>
+        <translation>Ուղղահայաց սանդղակ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/scale_select.ui" line="46"/>
         <source>Y:</source>
         <extracomment>vertical</extracomment>
-        <translation>Y:</translation>
+        <translation>Y՝</translation>
     </message>
 </context>
 <context>
@@ -17640,107 +17859,109 @@ Do you want to overwrite it?</source>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="14"/>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="20"/>
         <source>Score Comparison Tool</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուրների համեմատություն</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="17"/>
         <source>A tool to examine differences between the chosen scores</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրված պարտիտուրների տարբերությունների ուսումնասիրման գործիք</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="27"/>
         <source>Choose scores to compare:</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել համեմատվելիք պարտիտուրները՝</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="33"/>
         <source>Score 1:</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուր 1՝</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="43"/>
         <source>Score 1</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուր 1</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="46"/>
         <source>Choose the first score to compare</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել առաջին պարտիտուրը</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="56"/>
         <source>Score 2:</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուր 2՝</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="66"/>
         <source>Score 2</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուր 2</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="69"/>
         <source>Choose the second score to compare</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել երկրորդ պարտիտուրը</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="79"/>
         <source>Score version 1</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուրի տարբերակ 1</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="82"/>
         <source>Choose a version of the first score to compare</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել առաջին պարտիտուրի համեմատվելիք տարբերակը</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="89"/>
         <source>Score version 2</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուրի տարբերակ 2</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="92"/>
         <source>Choose a version of the second score to compare</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել երկրորդ պարտիտուրի համեմատվելիք տարբերակը</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="99"/>
         <source>Browse files for comparison</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել համեմատվելիք նիշքերը</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="102"/>
         <source>Browse</source>
-        <translation type="unfinished"/>
+        <translation>Զննել</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="109"/>
         <source>Perform comparison of chosen scores</source>
-        <translation type="unfinished"/>
+        <translation>Կատարել ընտրված պարտիտուրների համեմատությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="112"/>
         <source>Compare</source>
-        <translation type="unfinished"/>
+        <translation>Համեմատել</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="122"/>
         <source>Diff mode</source>
-        <translation type="unfinished"/>
+        <translation>Համեմատության գործելաձև</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="128"/>
         <source>Raw</source>
-        <translation type="unfinished"/>
+        <translation>Նախնական 
+գրվածքի տեսք</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="138"/>
         <source>Intelligent</source>
-        <translation type="unfinished"/>
+        <translation>Ընթեռնելի
+գրվածքի տեսք</translation>
     </message>
     <message>
         <location filename="../../mscore/scorecmp/scorecmp_tool.ui" line="151"/>
         <source>Comparison</source>
-        <translation type="unfinished"/>
+        <translation>Համեմատություն</translation>
     </message>
 </context>
 <context>
@@ -17771,12 +17992,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/script/script_recorder.ui" line="21"/>
         <source>Change folder</source>
-        <translation type="unfinished"/>
+        <translation>Փոխել պանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/script/script_recorder.ui" line="41"/>
         <source>Folder:</source>
-        <translation type="unfinished"/>
+        <translation>Պանակ՝</translation>
     </message>
     <message>
         <location filename="../../mscore/script/script_recorder.ui" line="51"/>
@@ -17804,7 +18025,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="38"/>
         <source>s</source>
-        <translation type="unfinished"/>
+        <translation>վ</translation>
     </message>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="57"/>
@@ -17819,7 +18040,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="77"/>
         <source>Start new section with long instrument names</source>
-        <translation>Նոր հատվածը սկսել գործիքների երկար անուններից</translation>
+        <translation>Նոր հատվածը սկսել նվագարանների երկար անուններից</translation>
     </message>
 </context>
 <context>
@@ -17833,7 +18054,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="40"/>
         <source>Element type:</source>
-        <translation>Տարրի տեսակ՝</translation>
+        <translation>Տարրի տեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="47"/>
@@ -17848,7 +18069,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="61"/>
         <source>Same duration</source>
-        <translation type="unfinished"/>
+        <translation>Միևնույն երկարությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="68"/>
@@ -17896,12 +18117,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="14"/>
         <source>Select Instrument</source>
-        <translation>Ընտրել գործիք</translation>
+        <translation>Ընտրել նվագարանը</translation>
     </message>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="28"/>
         <source>Current instrument:</source>
-        <translation>Ընթացիկ գործիք՝</translation>
+        <translation>Ընթացիկ նվագարան՝</translation>
     </message>
     <message>
         <location filename="../../mscore/selectinstr.ui" line="60"/>
@@ -17919,7 +18140,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="14"/>
         <source>Select Notes</source>
-        <translation>Ընտրեք նոտաները</translation>
+        <translation>Ընտրել նոտաները</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="34"/>
@@ -17944,12 +18165,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="75"/>
         <source>Same duration:</source>
-        <translation>Միևնույն երկարություն՝</translation>
+        <translation>Միևնույն երկարությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="82"/>
         <source>Same pitch:</source>
-        <translation>Միևնույն բարձրություն՝</translation>
+        <translation>Միևնույն բարձրությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="89"/>
@@ -17969,12 +18190,12 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="124"/>
         <source>Same note name:</source>
-        <translation>Նոտայի միևնույն անվանում՝</translation>
+        <translation>Միևնույն նոտայի անվանումը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="138"/>
         <source>Same string:</source>
-        <translation>Նույն լարը՝</translation>
+        <translation>Միևնույն լարը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="155"/>
@@ -18099,7 +18320,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="128"/>
         <source>Clear new shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Հեռացնել նոր կարճատները</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="151"/>
@@ -18141,7 +18362,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <location filename="../../mscore/inspector/size_select.ui" line="24"/>
         <source>W:</source>
         <extracomment>width</extracomment>
-        <translation type="unfinished"/>
+        <translation>Լ՝ </translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/size_select.ui" line="43"/>
@@ -18152,7 +18373,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <location filename="../../mscore/inspector/size_select.ui" line="46"/>
         <source>H:</source>
         <extracomment>height</extracomment>
-        <translation type="unfinished"/>
+        <translation>Բ՝ </translation>
     </message>
 </context>
 <context>
@@ -18276,13 +18497,13 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/stafftext.ui" line="413"/>
         <source>Change Stops:</source>
-        <translation type="unfinished"/>
+        <translation>Փոխել ձայնասահմանները՝</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4048"/>
         <location filename="../../mscore/stafftext.ui" line="4054"/>
         <source>Swing Settings</source>
-        <translation>Սվինգի կարգավորումներ</translation>
+        <translation>Սվինգի կարգավորումները</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4075"/>
@@ -18307,7 +18528,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4130"/>
         <source>Select swing ratio:</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրեք սվինգի հարաբերությունը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4140"/>
@@ -18328,7 +18549,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4193"/>
         <source>No capo</source>
-        <translation type="unfinished"/>
+        <translation>Առանց կրկնության</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4218"/>
@@ -18358,12 +18579,12 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4243"/>
         <source>10</source>
-        <translation type="unfinished"/>
+        <translation>10</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4248"/>
         <source>11</source>
-        <translation type="unfinished"/>
+        <translation>11</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="4253"/>
@@ -18394,7 +18615,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/startcenter.ui" line="20"/>
         <source>Start Center</source>
-        <translation>Մեկնարկային կենտրոն</translation>
+        <translation>Արագ մեկնարկ</translation>
     </message>
     <message>
         <location filename="../../mscore/startcenter.ui" line="71"/>
@@ -18487,7 +18708,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <location filename="../../mscore/synthcontrol.ui" line="122"/>
         <source>Vol.</source>
         <extracomment>volume</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ուժգնություն</translation>
     </message>
     <message>
         <location filename="../../mscore/synthcontrol.ui" line="144"/>
@@ -18566,7 +18787,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/templateBrowser.ui" line="35"/>
         <source>Template list</source>
-        <translation type="unfinished"/>
+        <translation>Ձևանմուշների ցանկ</translation>
     </message>
     <message>
         <location filename="../../mscore/templateBrowser.ui" line="38"/>
@@ -18579,17 +18800,17 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/debugger/text.ui" line="29"/>
         <source>Align:</source>
-        <translation type="unfinished"/>
+        <translation>Հավասարեցում՝</translation>
     </message>
     <message>
         <location filename="../../mscore/debugger/text.ui" line="108"/>
         <source>H:</source>
-        <translation type="unfinished"/>
+        <translation>H՝</translation>
     </message>
     <message>
         <location filename="../../mscore/debugger/text.ui" line="122"/>
         <source>V:</source>
-        <translation type="unfinished"/>
+        <translation>V՝</translation>
     </message>
 </context>
 <context>
@@ -18603,239 +18824,239 @@ Note: Ctrl+Shift+1 is one key combination</source>
 <context>
     <name>TextStyle</name>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1792"/>
+        <location filename="../../libmscore/style.cpp" line="1887"/>
         <source>Title</source>
         <translation>Վերնագիր</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1793"/>
+        <location filename="../../libmscore/style.cpp" line="1888"/>
         <source>Subtitle</source>
         <translation>Ենթավերնագիր</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1794"/>
+        <location filename="../../libmscore/style.cpp" line="1889"/>
         <source>Composer</source>
-        <translation>Կոմպոզիտոր</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/style.cpp" line="1795"/>
-        <source>Lyricist</source>
         <translation>Երգահան</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1797"/>
+        <location filename="../../libmscore/style.cpp" line="1890"/>
+        <source>Lyricist</source>
+        <translation>Խոսքերի հեղինակ</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/style.cpp" line="1892"/>
         <source>Lyrics Odd Lines</source>
         <translation>Երգի խոսքերի կենտ տողերը</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1798"/>
+        <location filename="../../libmscore/style.cpp" line="1893"/>
         <source>Lyrics Even Lines</source>
         <translation>Երգի խոսքերի զույգ տողերը</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1799"/>
+        <location filename="../../libmscore/style.cpp" line="1894"/>
         <source>Fingering</source>
         <translation>Մատադրում</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1800"/>
+        <location filename="../../libmscore/style.cpp" line="1895"/>
         <source>LH Guitar Fingering</source>
         <translation>Կիթառի մատադրում Ձձ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1801"/>
+        <location filename="../../libmscore/style.cpp" line="1896"/>
         <source>RH Guitar Fingering</source>
         <translation>Կիթառի մատադրում Աձ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1802"/>
+        <location filename="../../libmscore/style.cpp" line="1897"/>
         <source>String Number</source>
         <translation>Լարի համարը</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1804"/>
+        <location filename="../../libmscore/style.cpp" line="1899"/>
         <source>Instrument Name (Long)</source>
-        <translation>Գործիքի անվանումը (Լրիվ)</translation>
+        <translation>Նվագարանի անվանումը (ամբողջական)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1805"/>
+        <location filename="../../libmscore/style.cpp" line="1900"/>
         <source>Instrument Name (Short)</source>
-        <translation>Գործիքի անվանումը (Կարճ)</translation>
+        <translation>Նվագարանի անվանումը (կրճատ)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1806"/>
+        <location filename="../../libmscore/style.cpp" line="1901"/>
         <source>Instrument Name (Part)</source>
-        <translation>Գործիքի անվանումը (Մաս)</translation>
+        <translation>Նվագարանի անվանումը (մաս)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1807"/>
+        <location filename="../../libmscore/style.cpp" line="1902"/>
         <source>Dynamics</source>
-        <translation>Ուժաբանություն</translation>
+        <translation>Դինամիկա</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1810"/>
+        <location filename="../../libmscore/style.cpp" line="1905"/>
         <source>Tempo</source>
         <translation>Տեմպ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1811"/>
+        <location filename="../../libmscore/style.cpp" line="1906"/>
         <source>Metronome</source>
         <translation>Չափահար</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1812"/>
+        <location filename="../../libmscore/style.cpp" line="1907"/>
         <source>Measure Number</source>
         <translation>Տակրի համարը</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1813"/>
+        <location filename="../../libmscore/style.cpp" line="1908"/>
         <source>Translator</source>
         <translation>Թարգմանիչ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1814"/>
+        <location filename="../../libmscore/style.cpp" line="1909"/>
         <source>Tuplet</source>
         <translation>Մուլտիօլ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1816"/>
+        <location filename="../../libmscore/style.cpp" line="1911"/>
         <source>System</source>
         <translation>Համակարգ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1817"/>
+        <location filename="../../libmscore/style.cpp" line="1912"/>
         <source>Staff</source>
         <translation>Նոտակիր</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1818"/>
+        <location filename="../../libmscore/style.cpp" line="1913"/>
         <source>Chord Symbol</source>
         <translation>Ակորդի նշան</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1820"/>
+        <location filename="../../libmscore/style.cpp" line="1915"/>
         <source>Rehearsal Mark</source>
-        <translation>Պարտիրուրի կողմնորոշիչ / թիվ</translation>
+        <translation>Պարտիտուրի նշում</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1822"/>
+        <location filename="../../libmscore/style.cpp" line="1917"/>
         <source>Repeat Text Left</source>
         <translation>Ձախից կրկնվող գրվածք</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1823"/>
+        <location filename="../../libmscore/style.cpp" line="1918"/>
         <source>Repeat Text Right</source>
         <translation>Աջից կրկնվող գրվածք</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1829"/>
+        <location filename="../../libmscore/style.cpp" line="1924"/>
         <source>Volta</source>
         <translation>Վոլտա</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1824"/>
+        <location filename="../../libmscore/style.cpp" line="1919"/>
         <source>Frame</source>
         <translation>Շրջանակ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1791"/>
+        <location filename="../../libmscore/style.cpp" line="1886"/>
         <source>Default</source>
         <translation>Սկզբնադիր</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1808"/>
+        <location filename="../../libmscore/style.cpp" line="1903"/>
         <source>Expression</source>
-        <translation type="unfinished"/>
+        <translation>Արտահայտություն</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1819"/>
+        <location filename="../../libmscore/style.cpp" line="1914"/>
         <source>Chord Symbol (Alternate)</source>
-        <translation type="unfinished"/>
+        <translation>Ակորդի նշան (այլընտրանքային)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1825"/>
+        <location filename="../../libmscore/style.cpp" line="1920"/>
         <source>Text Line</source>
         <translation>Գրվածքի տող</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1826"/>
+        <location filename="../../libmscore/style.cpp" line="1921"/>
         <source>Glissando</source>
         <translation>Գլիսանդո</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1828"/>
+        <location filename="../../libmscore/style.cpp" line="1923"/>
         <source>Ottava</source>
         <translation>Օկտավա</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1830"/>
+        <location filename="../../libmscore/style.cpp" line="1925"/>
         <source>Pedal</source>
         <translation>Ոտնակ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1831"/>
+        <location filename="../../libmscore/style.cpp" line="1926"/>
         <source>Let Ring</source>
-        <translation type="unfinished"/>
+        <translation>Թող զրնգա</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1832"/>
+        <location filename="../../libmscore/style.cpp" line="1927"/>
         <source>Palm Mute</source>
-        <translation type="unfinished"/>
+        <translation>Համրեցնել ափով</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1834"/>
+        <location filename="../../libmscore/style.cpp" line="1929"/>
         <source>Hairpin</source>
         <translation>Ծամկալ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1835"/>
+        <location filename="../../libmscore/style.cpp" line="1930"/>
         <source>Bend</source>
         <translation>Բենդ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1836"/>
+        <location filename="../../libmscore/style.cpp" line="1931"/>
         <source>Header</source>
-        <translation>Վերևի էջախորագիր</translation>
+        <translation>Էջագլուխ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1837"/>
+        <location filename="../../libmscore/style.cpp" line="1932"/>
         <source>Footer</source>
-        <translation>Ներքևի էջախորագիր</translation>
+        <translation>Էջատակ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1838"/>
+        <location filename="../../libmscore/style.cpp" line="1933"/>
         <source>Instrument Change</source>
-        <translation>Գործիքի փոխում</translation>
+        <translation>Նվագարանի փոխարինում</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1840"/>
+        <location filename="../../libmscore/style.cpp" line="1935"/>
         <source>User-1</source>
-        <translation type="unfinished"/>
+        <translation>Օգտատեր-1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1841"/>
+        <location filename="../../libmscore/style.cpp" line="1936"/>
         <source>User-2</source>
-        <translation type="unfinished"/>
+        <translation>Օգտատեր-2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1842"/>
+        <location filename="../../libmscore/style.cpp" line="1937"/>
         <source>User-3</source>
-        <translation type="unfinished"/>
+        <translation>Օգտատեր-3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1843"/>
+        <location filename="../../libmscore/style.cpp" line="1938"/>
         <source>User-4</source>
-        <translation type="unfinished"/>
+        <translation>Օգտատեր-4</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1844"/>
+        <location filename="../../libmscore/style.cpp" line="1939"/>
         <source>User-5</source>
-        <translation type="unfinished"/>
+        <translation>Օգտատեր-5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1846"/>
+        <location filename="../../libmscore/style.cpp" line="1941"/>
         <source>User-6</source>
-        <translation type="unfinished"/>
+        <translation>Օգտատեր-6</translation>
     </message>
 </context>
 <context>
@@ -18983,7 +19204,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="32"/>
         <source>Enter Time Signature:</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրեք տակտի չափը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="43"/>
@@ -18992,7 +19213,6 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/timesigwizard.ui" line="49"/>
         <source>Enter a numerical time signature such as four-four or six-eight</source>
         <translation type="unfinished"/>
     </message>
@@ -19000,7 +19220,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <location filename="../../mscore/timesigwizard.ui" line="62"/>
         <location filename="../../mscore/timesigwizard.ui" line="65"/>
         <source>Beats in a measure</source>
-        <translation>Բիտ տակտի մեջ</translation>
+        <translation>Մաս տակտի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="68"/>
@@ -19017,7 +19237,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <location filename="../../mscore/timesigwizard.ui" line="100"/>
         <location filename="../../mscore/timesigwizard.ui" line="103"/>
         <source>Beat unit</source>
-        <translation>Բիտի միավոր</translation>
+        <translation>Մասի միավոր</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="106"/>
@@ -19068,6 +19288,10 @@ Note: Ctrl+Shift+1 is one key combination</source>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="172"/>
+        <source>Use the common time symbol, the letter C, and a 4/4 meter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Use the common time symbol, the letter C, and a four-four meter</source>
         <translation type="unfinished"/>
     </message>
@@ -19082,6 +19306,11 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <translation>Ալլա բրեվե</translation>
     </message>
     <message>
+        <location filename="../../mscore/timesigwizard.ui" line="192"/>
+        <source>Use the cut time symbol, the letter C with a vertical line through it, and a 2/2 meter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/timesigwizard.ui" line="373"/>
         <source>The number of measures initially present in the score</source>
         <translation type="unfinished"/>
@@ -19092,12 +19321,16 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <translation>Ստանդարտ չափ</translation>
     </message>
     <message>
+        <location filename="../../mscore/timesigwizard.ui" line="49"/>
+        <source>Enter a numerical time signature such as 4/4 or 6/8</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/timesigwizard.ui" line="169"/>
         <source>Common Time</source>
         <translation>Ստանդարտ չափ</translation>
     </message>
     <message>
-        <location filename="../../mscore/timesigwizard.ui" line="192"/>
         <source>Use the cut time symbol, the letter C with a vertical line through it, and a two-two meter</source>
         <translation type="unfinished"/>
     </message>
@@ -19105,7 +19338,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <location filename="../../mscore/timesigwizard.ui" line="209"/>
         <location filename="../../mscore/timesigwizard.ui" line="215"/>
         <source>Pickup Measure</source>
-        <translation type="unfinished"/>
+        <translation>Նախատակտի չափը</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="212"/>
@@ -19142,12 +19375,12 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="339"/>
         <source>Enter Number of Measures</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրեք տակտերի քանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="345"/>
         <source>Enter Number of Measures:</source>
-        <translation type="unfinished"/>
+        <translation>Մուտքագրեք տակտերի քանակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="360"/>
@@ -19168,7 +19401,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <location filename="../../mscore/timesigwizard.ui" line="342"/>
         <location filename="../../mscore/timesigwizard.ui" line="408"/>
         <source>Hint: You can also add or remove measures after creation of the score.</source>
-        <translation type="unfinished"/>
+        <translation>Ակնարկ՝ Ավելացնել կամ պակասեցնել տակտերի քանակը կարելի է նաև պարտիտուրը ստեղծելուց հետո:</translation>
     </message>
 </context>
 <context>
@@ -19209,42 +19442,42 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="23"/>
         <source>Transpose Chromatically</source>
-        <translation type="unfinished"/>
+        <translation>Վերադասավորել խրոմատիկորեն</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="32"/>
         <source>By Key</source>
-        <translation type="unfinished"/>
+        <translation>Ըստ տոնայնության</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="54"/>
         <source>C♭ major / A♭ minor</source>
-        <translation>Դո-բեմոլ մաժոր / Լա-բեմոլ մինոր</translation>
+        <translation>Դո♭ մաժոր / Լա♭ մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="59"/>
         <source>G♭ major / E♭ minor</source>
-        <translation>Սոլ-բեմոլ մաժոր / Մի-բեմոլ մինոր</translation>
+        <translation>Սոլ♭ մաժոր / Մի♭ մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="64"/>
         <source>D♭ major / B♭ minor</source>
-        <translation>Ռե-բեմոլ մաժոր / Սի-բեմոլ մինոր</translation>
+        <translation>Ռե♭ մաժոր / Սի♭ մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="69"/>
         <source>A♭ major / F minor</source>
-        <translation>Լա-բեմոլ մաժոր / Ֆա մինոր</translation>
+        <translation>Լա♭ մաժոր / Ֆա մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="74"/>
         <source>E♭ major / C minor</source>
-        <translation>Մի-բեմոլ մաժոր / Դո մինոր</translation>
+        <translation>Մի♭ մաժոր / Դո մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="79"/>
         <source>B♭ major / G minor</source>
-        <translation>Սի-բեմոլ մաժոր / Սոլ մինոր</translation>
+        <translation>Սի♭ մաժոր / Սոլ մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="84"/>
@@ -19269,27 +19502,27 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="104"/>
         <source>A major / F♯ minor</source>
-        <translation>Լա մաժոր / Ֆա-դիեզ մինոր</translation>
+        <translation>Լա մաժոր / Ֆա♯ մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="109"/>
         <source>E major / C♯ minor</source>
-        <translation>Մի մաժոր / Դո-դիեզ մինոր</translation>
+        <translation>Մի մաժոր / Դո♯ մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="114"/>
         <source>B major / G♯ minor</source>
-        <translation>Սի մաժոր / Սոլ-դիեզ մինոր</translation>
+        <translation>Սի մաժոր / Սոլ♯ մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="119"/>
         <source>F♯ major / D♯ minor</source>
-        <translation>Ֆա-դիեզ մաժոր / Ռե-դիեզ մինոր</translation>
+        <translation>Ֆա♯ մաժոր / Ռե♯ մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="124"/>
         <source>C♯ major / A♯ minor</source>
-        <translation>Դո-դիեզ մաժոր / Լա-դիեզ մինոր</translation>
+        <translation>Դո♯ մաժոր / Լա♯ մինոր</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="132"/>
@@ -19313,202 +19546,202 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="159"/>
         <source>By Interval</source>
-        <translation type="unfinished"/>
+        <translation>Ըստ ինտերվալի</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="191"/>
         <source>Perfect Unison</source>
-        <translation type="unfinished"/>
+        <translation>Մաքուր ունիսոն</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="196"/>
         <source>Augmented Unison</source>
-        <translation type="unfinished"/>
+        <translation>Մեծացրած ունիսոն</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="201"/>
         <source>Diminished Second</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացրած սեկունդա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="206"/>
         <source>Minor Second</source>
-        <translation type="unfinished"/>
+        <translation>Փոքր սեկունդա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="211"/>
         <source>Major Second</source>
-        <translation type="unfinished"/>
+        <translation>Մեծ սեկունդա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="216"/>
         <source>Augmented Second</source>
-        <translation type="unfinished"/>
+        <translation>Մեծացրած սեկունդա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="221"/>
         <source>Diminished Third</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացրած տերցիա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="226"/>
         <source>Minor Third</source>
-        <translation type="unfinished"/>
+        <translation>Փոքր տերցիա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="231"/>
         <source>Major Third</source>
-        <translation type="unfinished"/>
+        <translation>Մեծ տերցիա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="236"/>
         <source>Augmented Third</source>
-        <translation type="unfinished"/>
+        <translation>Մեծացրած տերցիա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="241"/>
         <source>Diminished Fourth</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացրած կվարտա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="246"/>
         <source>Perfect Fourth</source>
-        <translation type="unfinished"/>
+        <translation>Մաքուր կվարտա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="251"/>
         <source>Augmented Fourth</source>
-        <translation type="unfinished"/>
+        <translation>Մեծացրած կվարտա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="256"/>
         <source>Diminished Fifth</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացրած կվինտա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="261"/>
         <source>Perfect Fifth</source>
-        <translation type="unfinished"/>
+        <translation>Մաքուր կվինտա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="266"/>
         <source>Augmented Fifth</source>
-        <translation type="unfinished"/>
+        <translation>Մեծացրած կվինտա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="271"/>
         <source>Diminished Sixth</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացրած սեքստա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="276"/>
         <source>Minor Sixth</source>
-        <translation type="unfinished"/>
+        <translation>Փոքր սեքստա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="281"/>
         <source>Major Sixth</source>
-        <translation type="unfinished"/>
+        <translation>Մեծ սեքստա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="286"/>
         <source>Augmented Sixth</source>
-        <translation type="unfinished"/>
+        <translation>Մեծացրած սեքստա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="291"/>
         <source>Diminished Seventh</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացրած սեպտիմա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="296"/>
         <source>Minor Seventh</source>
-        <translation type="unfinished"/>
+        <translation>Փոքր սեպտիմա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="301"/>
         <source>Major Seventh</source>
-        <translation type="unfinished"/>
+        <translation>Մեծ սեպտիմա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="306"/>
         <source>Augmented Seventh</source>
-        <translation type="unfinished"/>
+        <translation>Մեծացրած սեպտիմա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="311"/>
         <source>Diminished Octave</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացրած օկտավա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="316"/>
         <source>Perfect Octave</source>
-        <translation type="unfinished"/>
+        <translation>Մաքուր օկտավա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="334"/>
         <source>Transpose key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Վերադասավորել տոնայնությունները</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="347"/>
         <source>Transpose Diatonically</source>
-        <translation type="unfinished"/>
+        <translation>Վերադասավորել դիատոնիկորեն</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="379"/>
         <source>Second</source>
-        <translation type="unfinished"/>
+        <translation>Սեկունդա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="384"/>
         <source>Third</source>
-        <translation type="unfinished"/>
+        <translation>Տերցիա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="389"/>
         <source>Fourth</source>
-        <translation type="unfinished"/>
+        <translation>Կվարտա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="394"/>
         <source>Fifth</source>
-        <translation type="unfinished"/>
+        <translation>Կվինտա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="399"/>
         <source>Sixth</source>
-        <translation type="unfinished"/>
+        <translation>Սեքստա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="404"/>
         <source>Seventh</source>
-        <translation type="unfinished"/>
+        <translation>Սեպտիմա</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="419"/>
         <source>Keep degree alterations</source>
-        <translation type="unfinished"/>
+        <translation>Պահել ալտերացիան</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="432"/>
         <source>Options</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրանքներ</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="444"/>
         <source>Transpose chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Վերադասավորել ակորդների նշանները</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="458"/>
         <source>Single ♯ and ♭ Only</source>
-        <translation type="unfinished"/>
+        <translation>Միայն մեկական ♯ և ♭</translation>
     </message>
     <message>
         <location filename="../../mscore/transposedialog.ui" line="463"/>
         <source>Use Double ♯ and ♭</source>
-        <translation type="unfinished"/>
+        <translation>Օգտագործել երկուական ♯ և ♭</translation>
     </message>
 </context>
 <context>
@@ -19569,7 +19802,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="23"/>
         <source>Bend type:</source>
-        <translation>Բենդի տեսակ՝</translation>
+        <translation>Բենդի տեսակը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="30"/>
@@ -19752,7 +19985,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/workspacedialog.ui" line="35"/>
         <source>Workspace Name:</source>
-        <translation type="unfinished"/>
+        <translation>Աշխատատարածքի անվանումը՝</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.ui" line="45"/>
@@ -19772,12 +20005,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/workspacedialog.ui" line="68"/>
         <source>Toolbars</source>
-        <translation type="unfinished"/>
+        <translation>Գործիքագոտիներ</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.ui" line="75"/>
         <source>GUI Preferences</source>
-        <translation type="unfinished"/>
+        <translation>Միջերեսի նախընտրություններ</translation>
     </message>
 </context>
 <context>
@@ -19821,7 +20054,7 @@ failed: </source>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="237"/>
         <source>SoundFont %1 already loaded</source>
-        <translation>SoundFont %1 արդեն բեռնված է</translation>
+        <translation>SoundFont %1-ը արդեն բեռնված է</translation>
     </message>
     <message>
         <location filename="../../zerberus/zerberusgui.cpp" line="323"/>
@@ -19852,10 +20085,6 @@ failed: </source>
         <translation>Բացել…</translation>
     </message>
     <message>
-        <source>File: Open</source>
-        <translation type="vanished">Նիշք՝ Բացել</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="48"/>
         <source>Load score from file</source>
         <translation>Բացել պարտիտուրը նիշքից</translation>
@@ -19864,10 +20093,6 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="56"/>
         <source>Save</source>
         <translation>Պահել</translation>
-    </message>
-    <message>
-        <source>File: Save</source>
-        <translation type="vanished">Նիշք՝ Պահել</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="58"/>
@@ -19880,10 +20105,6 @@ failed: </source>
         <translation>Պահել առցանց…</translation>
     </message>
     <message>
-        <source>File: Save online</source>
-        <translation type="vanished">Նիշք՝ Պահել առցանց…</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="67"/>
         <source>Save score on MuseScore.com</source>
         <translation>Պահել պարտիտուրը MuseScore.com-ում</translation>
@@ -19892,10 +20113,6 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="77"/>
         <source>Save As…</source>
         <translation>Պահել իբրև…</translation>
-    </message>
-    <message>
-        <source>File: Save as</source>
-        <translation type="vanished">Նիշք՝ Պահել իբրև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="79"/>
@@ -19921,10 +20138,6 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="99"/>
         <source>Save a Copy…</source>
         <translation>Պահել կրկնօրինակը…</translation>
-    </message>
-    <message>
-        <source>File: Save a copy</source>
-        <translation type="vanished">Նիշք՝ Պահել կրկնօրինակը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="101"/>
@@ -19982,10 +20195,6 @@ failed: </source>
         <translation>Փակել</translation>
     </message>
     <message>
-        <source>File: Close</source>
-        <translation type="vanished">Նիշք՝ Փակել</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="142"/>
         <source>Close current score</source>
         <translation>Փակել ընթացիկ պարտիտուրը</translation>
@@ -19994,10 +20203,6 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="148"/>
         <source>New…</source>
         <translation>Նոր…</translation>
-    </message>
-    <message>
-        <source>File: New</source>
-        <translation type="vanished">Նիշք՝ Նոր</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="150"/>
@@ -20059,7 +20264,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="221"/>
         <source>Swap with Clipboard</source>
-        <translation>Փոխարինել սեղմատախտակի հետ</translation>
+        <translation>Փոխարինել պատճենվածով</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="222"/>
@@ -20069,12 +20274,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="231"/>
         <source>Instruments…</source>
-        <translation>Գործիքներ…</translation>
+        <translation>Նվագարաններ…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="232"/>
         <source>Show instruments dialog</source>
-        <translation>Ցուցադրել գործիքների կառավարման վահամակը</translation>
+        <translation>Ցուցադրել նվագարանների կառավարման վահամակը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="238"/>
@@ -20090,7 +20295,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="250"/>
         <source>Enter notes with a mouse or keyboard</source>
-        <translation>Մուտքագրել նոտաները մկնիկով կամ ստեղնաշարից</translation>
+        <translation>Մուտքագրել նոտաները մկնիկի կամ ստեղնաշարի միջոցով</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="260"/>
@@ -20125,12 +20330,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="304"/>
         <source>Timewise</source>
-        <translation type="unfinished"/>
+        <translation>Տակտի չափը փոխելով</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="305"/>
         <source>Insert notes increasing measure duration</source>
-        <translation type="unfinished"/>
+        <translation>Ներդնել տակտի չափը մեծացնող նոտաներ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="315"/>
@@ -20145,172 +20350,172 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="325"/>
         <source>Unison Above</source>
-        <translation type="unfinished"/>
+        <translation>Ունիսոն</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="326"/>
         <source>Enter unison above</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Ունիսոն</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="332"/>
         <source>Second Above</source>
-        <translation type="unfinished"/>
+        <translation>Սեկունդա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="333"/>
         <source>Enter second above</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Սեկունդա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="339"/>
         <source>Third Above</source>
-        <translation type="unfinished"/>
+        <translation>Տերցիա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="340"/>
         <source>Enter third above</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Տերցիա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="346"/>
         <source>Fourth Above</source>
-        <translation type="unfinished"/>
+        <translation>Կվարտա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="347"/>
         <source>Enter fourth above</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Կվարտա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="353"/>
         <source>Fifth Above</source>
-        <translation type="unfinished"/>
+        <translation>Կվինտա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="354"/>
         <source>Enter fifth above</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Կվինտա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="360"/>
         <source>Sixth Above</source>
-        <translation type="unfinished"/>
+        <translation>Սեքստա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="361"/>
         <source>Enter sixth above</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Սեքստա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="367"/>
         <source>Seventh Above</source>
-        <translation type="unfinished"/>
+        <translation>Սեպտիմա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="368"/>
         <source>Enter seventh above</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Սեպտիմա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="374"/>
         <source>Octave Above</source>
-        <translation type="unfinished"/>
+        <translation>Օկտավա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="375"/>
         <source>Enter octave above</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Օկտավա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="381"/>
         <source>Ninth Above</source>
-        <translation type="unfinished"/>
+        <translation>Նոնա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="382"/>
         <source>Enter ninth above</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Նոնա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="388"/>
         <source>Second Below</source>
-        <translation type="unfinished"/>
+        <translation>Սեկունդա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="389"/>
         <source>Enter second below</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Սեկունդա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="395"/>
         <source>Third Below</source>
-        <translation type="unfinished"/>
+        <translation>Տերցիա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="396"/>
         <source>Enter third below</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Տերցիա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="402"/>
         <source>Fourth Below</source>
-        <translation type="unfinished"/>
+        <translation>Կվարտա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="403"/>
         <source>Enter fourth below</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Կվարտա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="409"/>
         <source>Fifth Below</source>
-        <translation type="unfinished"/>
+        <translation>Կվինտա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="410"/>
         <source>Enter fifth below</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Կվինտա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="416"/>
         <source>Sixth Below</source>
-        <translation type="unfinished"/>
+        <translation>Սեքստա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="417"/>
         <source>Enter sixth below</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Սեքստա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="423"/>
         <source>Seventh Below</source>
-        <translation type="unfinished"/>
+        <translation>Սեպտիմա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="424"/>
         <source>Enter seventh below</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Սեպտիմա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="430"/>
         <source>Octave Below</source>
-        <translation type="unfinished"/>
+        <translation>Օկտավա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="431"/>
         <source>Enter octave below</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Օկտավա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="437"/>
         <source>Ninth Below</source>
-        <translation type="unfinished"/>
+        <translation>Նոնա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="438"/>
         <source>Enter ninth below</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Նոնա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="444"/>
@@ -20577,32 +20782,32 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="685"/>
         <source>Increase Layout Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Մեծացնել տակտի լայնությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="686"/>
         <source>Increase layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացնել տակտի լայնությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="687"/>
         <source>Increase layout stretch factor of selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Մեծացնել ընտրված տակտերի լայնությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="695"/>
         <source>Decrease Layout Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացնել տակտի լայնությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="696"/>
         <source>Decrease layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացնել տակտի լայնությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="697"/>
         <source>Decrease layout stretch factor of selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Փոքրացնել ընտրված տակտերի լայնությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="725"/>
@@ -20934,7 +21139,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1024"/>
         <source>Select section</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել հատվածը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1030"/>
@@ -21110,17 +21315,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1193"/>
         <source>Timewise Delete</source>
-        <translation type="unfinished"/>
+        <translation>Ջնջել ու փոխել տակտի չափը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1194"/>
         <source>Timewise delete</source>
-        <translation type="unfinished"/>
+        <translation>Ջնջել ու փոխել տակտի չափը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1195"/>
         <source>Delete element and duration</source>
-        <translation type="unfinished"/>
+        <translation>Ջնջել տարրն ու երկարությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1203"/>
@@ -21225,7 +21430,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1283"/>
         <source>Append Vertical Frame</source>
-        <translation>Ավելացնել հորիզոնական շրջանակ</translation>
+        <translation>Ավելացնել ուղղահայաց շրջանակ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1284"/>
@@ -21333,7 +21538,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1379"/>
         <source>Note duration: Half</source>
-        <translation>Երկարություն՝ Կես</translation>
+        <translation>Երկարություն՝ Կես նոտա</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1380"/>
@@ -21344,18 +21549,18 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1389"/>
         <source>Quarter Note</source>
-        <translation>Քարորդ նոտա</translation>
+        <translation>Քառորդ նոտա</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1390"/>
         <source>Note duration: Quarter</source>
-        <translation>Երկարություն՝ Քարորդ</translation>
+        <translation>Երկարություն՝ Քառորդ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1391"/>
         <location filename="../../mscore/shortcut.cpp" line="3083"/>
         <source>Quarter note</source>
-        <translation>Քարորդ նոտա</translation>
+        <translation>Քառորդ նոտա</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1400"/>
@@ -21534,54 +21739,6 @@ failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Double Sharp</source>
-        <translation type="vanished">Դուբլ-դիեզ</translation>
-    </message>
-    <message>
-        <source>Note input: Double sharp</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double sharp</source>
-        <translation type="vanished">Դուբլ-դիեզ</translation>
-    </message>
-    <message>
-        <source>Sharp</source>
-        <translation type="vanished">Դիեզ</translation>
-    </message>
-    <message>
-        <source>Note input: Sharp</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Natural</source>
-        <translation type="vanished">Բեկար</translation>
-    </message>
-    <message>
-        <source>Note input: Natural</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Flat</source>
-        <translation type="vanished">Բեմոլ</translation>
-    </message>
-    <message>
-        <source>Note input: Flat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double Flat</source>
-        <translation type="vanished">Դուբլ-բեմոլ</translation>
-    </message>
-    <message>
-        <source>Note input: Double flat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Double flat</source>
-        <translation type="vanished">Դուբլ-բեմոլ</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="1583"/>
         <location filename="../../mscore/shortcut.cpp" line="1585"/>
         <source>Acciaccatura</source>
@@ -21718,12 +21875,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1710"/>
         <source>Toggle &apos;MIDI Input&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. MIDI մուտքագրումը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1815"/>
         <source>Toggle &apos;Play Panel&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. Նվագարկման վահանակը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1855"/>
@@ -21758,7 +21915,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2112"/>
         <source>Seek to Begin</source>
-        <translation type="unfinished"/>
+        <translation>Անցնել սկիզբ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2113"/>
@@ -21773,7 +21930,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2131"/>
         <source>Seek to End</source>
-        <translation type="unfinished"/>
+        <translation>Անցնել վերջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2132"/>
@@ -21788,7 +21945,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2149"/>
         <source>Pan Score</source>
-        <translation type="unfinished"/>
+        <translation>Դիրքավորել պարտիտուրը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2150"/>
@@ -21798,12 +21955,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2151"/>
         <source>Pan score automatically</source>
-        <translation type="unfinished"/>
+        <translation>Ինքնաշխատորեն դիրքավորել պարտիտուրը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2314"/>
         <source>Toggle &apos;System Break&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ.&apos;Տողադարձումը&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2324"/>
@@ -21818,27 +21975,27 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2350"/>
         <source>Reset Shapes and Positions</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել ձևերն ու դիրքերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2351"/>
         <source>Reset shapes and positions</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել ձևերն ու դիրքերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2352"/>
         <source>Reset shapes and positions of selected elements to their defaults</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել ընտրված տարրերի ձևերն ու դիրքերը սկզբնադիրներին</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2364"/>
         <source>Reset Layout Stretch</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել տակտի լայնությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2365"/>
         <source>Reset layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել տակտի լայնությունը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2366"/>
@@ -21848,12 +22005,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2418"/>
         <source>Mark Irregular Measures</source>
-        <translation type="unfinished"/>
+        <translation>Նշել անկանոն տակտերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2419"/>
         <source>Mark irregular measures</source>
-        <translation type="unfinished"/>
+        <translation>Նշել անկանոն տակտերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2515"/>
@@ -21863,12 +22020,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2516"/>
         <source>Edit style</source>
-        <translation type="unfinished"/>
+        <translation>Խմբագրել ոճը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2553"/>
         <source>All Similar Elements with More Options</source>
-        <translation type="unfinished"/>
+        <translation>Լրացուցիչ ընտրանքներ ունեցող բոլոր նմանատիպ տարրերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2651"/>
@@ -21918,42 +22075,42 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2737"/>
         <source>Score Comparison Tool</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուրների համեմատություն</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2738"/>
         <source>Score comparison tool</source>
-        <translation type="unfinished"/>
+        <translation>Պարտիտուրների համեմատություն</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2751"/>
         <source>Split Measure Before Selected Note/Rest</source>
-        <translation type="unfinished"/>
+        <translation>Տրոհել տակտը ընտրված նոտայից/պաուզայից առաջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2752"/>
         <source>Split measure before selected note/rest</source>
-        <translation type="unfinished"/>
+        <translation>Տրոհել տակտը ընտրված նոտայից/պաուզայից առաջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2851"/>
         <source>PDF Transcribing Assistant</source>
-        <translation type="unfinished"/>
+        <translation>PDF-ի արտագրության օգնական</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2852"/>
         <source>Show PDF transcribing assistant</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել PDF-ի արտագրության օգնականը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2859"/>
         <source>Loop Playback</source>
-        <translation type="unfinished"/>
+        <translation>Օղակել նվագարկումը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2860"/>
         <source>Toggle &apos;Loop Playback&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. &apos;Օղակել նվագարկումը&apos;</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2904"/>
@@ -21995,22 +22152,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3496"/>
         <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Փոխարկել ռիթմային նշագրումը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3505"/>
         <source>Add/Remove System Breaks…</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել/Հեռացնել տողադարձեր…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3506"/>
         <source>Add/remove system breaks</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել/Հեռացնել տողադարձեր</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1720"/>
         <source>Beam Start</source>
-        <translation type="unfinished"/>
+        <translation>Խմբագծի սկիզբ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="47"/>
@@ -22050,52 +22207,52 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="249"/>
         <source>Step-Time (Default)</source>
-        <translation type="unfinished"/>
+        <translation>Քայլ առ քայլ (սկզբնադիր)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="282"/>
         <source>Real-Time (Automatic)</source>
-        <translation type="unfinished"/>
+        <translation>Իրական ժամանակում (ինքնաշխատ)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="293"/>
         <source>Real-Time (Manual)</source>
-        <translation type="unfinished"/>
+        <translation>Իրական ժամանակում (ձեռքով)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="493"/>
         <source>Add A to Chord</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Լա նոտան ակորդի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="500"/>
         <source>Add B to Chord</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Սի նոտան ակորդի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="507"/>
         <source>Add C to Chord</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Դո նոտան ակորդի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="514"/>
         <source>Add D to Chord</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Ռե նոտան ակորդի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="521"/>
         <source>Add E to Chord</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Մի նոտան ակորդի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="528"/>
         <source>Add F to Chord</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Ֆա նոտան ակորդի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="535"/>
         <source>Add G to Chord</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Սոլ նոտան ակորդի մեջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="542"/>
@@ -22110,57 +22267,58 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="607"/>
         <source>Real-Time Advance</source>
-        <translation type="unfinished"/>
+        <translation>Իրական ժամանակի
+առաջխաղացում</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="705"/>
         <source>Reset Beams</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել խմբագծերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="706"/>
         <source>Reset beams</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել խմբերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="707"/>
         <source>Reset beams of selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել ընտրված տակտերի խմբերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="715"/>
         <source>Reset Style</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել ոճը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="716"/>
         <source>Reset style</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել ոճը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="717"/>
         <source>Reset all style values to default</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել ոճի բոլոր արժեքները սկզբնադիրներին</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1146"/>
         <source>Ottava 8va alta</source>
-        <translation type="unfinished"/>
+        <translation>Մեկ օկտավա վերև (8va alta)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1147"/>
         <source>Add ottava 8va alta</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Մեկ օկտավա վերև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1156"/>
         <source>Ottava 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>Մեկ օկտավա ներքև (8va bassa)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1157"/>
         <source>Add ottava 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել Մեկ օկտավա ներքև</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1533"/>
@@ -22235,27 +22393,27 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1721"/>
         <source>Beam start</source>
-        <translation type="unfinished"/>
+        <translation>Խմբագծի սկիզբ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1731"/>
         <source>Beam Middle</source>
-        <translation type="unfinished"/>
+        <translation>Խմբագծի միջնամաս</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1732"/>
         <source>Beam middle</source>
-        <translation type="unfinished"/>
+        <translation>Խմբագծի միջնամաս</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1742"/>
         <source>No Beam</source>
-        <translation type="unfinished"/>
+        <translation>Առանց խմբագծի</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1743"/>
         <source>No beam</source>
-        <translation type="unfinished"/>
+        <translation>Առանց խմբագծի</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1753"/>
@@ -22280,12 +22438,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1775"/>
         <source>Auto Beam</source>
-        <translation type="unfinished"/>
+        <translation>Ինքնախմբավորում</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1776"/>
         <source>Auto beam</source>
-        <translation type="unfinished"/>
+        <translation>Ինքնախմբավորում</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1786"/>
@@ -22330,7 +22488,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1825"/>
         <source>Toggle &apos;Selection Filter&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. Ընտրվածքի զտիչը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1834"/>
@@ -22340,17 +22498,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1835"/>
         <source>Toggle &apos;Navigator&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. Կողմնորոշիչը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1844"/>
         <source>Timeline</source>
-        <translation type="unfinished"/>
+        <translation>Ժամանակագիծ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1845"/>
         <source>Toggle &apos;Timeline&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. Ժամանակագիծը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1854"/>
@@ -22360,12 +22518,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1869"/>
         <source>Mixer</source>
-        <translation>Խառնիչ</translation>
+        <translation>Զուգակցիչ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1870"/>
         <source>Toggle &apos;Mixer&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. Զուգակցիչը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1879"/>
@@ -22375,7 +22533,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1880"/>
         <source>Toggle &apos;File Operations&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. &apos;Գործողություններ նիշքերի հետ&apos; գործիքագոտին</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1886"/>
@@ -22397,17 +22555,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1908"/>
         <source>Toggle &apos;Note Input&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. &apos;Նոտաների մուտքագրում&apos; գործիքագոտին</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1914"/>
         <source>Feedback</source>
-        <translation type="unfinished"/>
+        <translation>Կարծիք</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1915"/>
         <source>Toggle &apos;Feedback&apos; toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. &apos;Կարծիք&apos; գործիքագոտին</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1921"/>
@@ -22422,32 +22580,32 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1934"/>
         <source>Zoom Canvas</source>
-        <translation type="unfinished"/>
+        <translation>Խոշորացնել կտավի տեսքը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1935"/>
         <source>Zoom canvas</source>
-        <translation type="unfinished"/>
+        <translation>Խոշորացնել կտավի տեսքը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1941"/>
         <source>Lyrics</source>
-        <translation>Երգի բառերը</translation>
+        <translation>Երգի խոսքեր</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1942"/>
         <source>Add lyrics</source>
-        <translation>Avelacnel երգի բառերը</translation>
+        <translation>Ավելացնել երգի խոսքեր</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1952"/>
         <source>Tempo Marking</source>
-        <translation>Տեմպի նշան</translation>
+        <translation>Տեմպի նշում</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1953"/>
         <source>Add tempo marking</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել տեմպի նշումը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1963"/>
@@ -22457,12 +22615,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1964"/>
         <source>Add system text</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել համակարգի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1970"/>
         <source>Staff Text</source>
-        <translation>Նոտակիրի գրվածքը</translation>
+        <translation>Նոտակիրի գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1971"/>
@@ -22472,12 +22630,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1977"/>
         <source>Expression Text</source>
-        <translation type="unfinished"/>
+        <translation>Արտահայտության գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1978"/>
         <source>Expression text</source>
-        <translation type="unfinished"/>
+        <translation>Արտահայտության գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1984"/>
@@ -22487,12 +22645,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1985"/>
         <source>Add frame text</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել գրվածք</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1991"/>
         <source>Title</source>
-        <translation>Անվանում</translation>
+        <translation>Վերնագիր</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1992"/>
@@ -22512,27 +22670,27 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2005"/>
         <source>Composer</source>
-        <translation>Կոմպոզիտոր</translation>
+        <translation>Երգահան</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2006"/>
         <source>Add composer text</source>
-        <translation>Ավելացնել կոմպոզիտորին</translation>
+        <translation>Ավելացնել երգահանին</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2012"/>
         <source>Lyricist</source>
-        <translation>Երգահան</translation>
+        <translation>Խոսքերի հեղինակ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2013"/>
         <source>Add lyricist text</source>
-        <translation>Ավելացնել երգահանին</translation>
+        <translation>Ավելացնել խոսքերի հեղինակին</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2019"/>
         <source>Part Name</source>
-        <translation>Դերանվագի անվանումը</translation>
+        <translation>Դերանվագի անվանում</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2020"/>
@@ -22552,22 +22710,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2033"/>
         <source>Rehearsal Mark</source>
-        <translation>Պարտիրուրի կողմնորոշիչ / թիվ</translation>
+        <translation>Պարտիտուրի նշում</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2034"/>
         <source>Add rehearsal mark</source>
-        <translation>Ավելացնել պարտիրուրի կողմնորոշիչ / թիվ</translation>
+        <translation>Ավելացնել պարտիտուրի նշում</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2040"/>
         <source>Instrument Change</source>
-        <translation>Գործիքի փոխում</translation>
+        <translation>Նվագարանի փոխարինում</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2041"/>
         <source>Add instrument change</source>
-        <translation>Ավելացնել գործիքի փոխում</translation>
+        <translation>Ավելացնել նվագարանի փոխարինում</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2047"/>
@@ -22702,22 +22860,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2203"/>
         <source>Treble Clef</source>
-        <translation type="unfinished"/>
+        <translation>Ջութակի բանալի</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2204"/>
         <source>Add treble clef</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել ջութակի բանալի</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2213"/>
         <source>Bass Clef</source>
-        <translation type="unfinished"/>
+        <translation>Բասի բանալի</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2214"/>
         <source>Add bass clef</source>
-        <translation type="unfinished"/>
+        <translation>Ավելացնել բասի բանալի</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2223"/>
@@ -22807,7 +22965,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2313"/>
         <source>Toggle System Break</source>
-        <translation>Միաց./Անջ. համակարգի ընդհատումը</translation>
+        <translation>Միաց./Անջ.տողադարձումը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2323"/>
@@ -22988,32 +23146,32 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2533"/>
         <source>Select all similar elements</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել բոլոր նմանատիպ տարրերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2539"/>
         <source>All Similar Elements in Same Staff</source>
-        <translation type="unfinished"/>
+        <translation>Միևնույն նոտակիրի բոլոր նմանատիպ տարրերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2540"/>
         <source>Select all similar elements in same staff</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել միևնույն նոտակիրի բոլոր նմանատիպ տարրերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2546"/>
         <source>All Similar Elements in Range Selection</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրվածքի մեջի բոլոր նմանատիպ տարրերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2547"/>
         <source>Select all similar elements in the range selection</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել ընտրվածքի մեջի բոլոր նմանատիպ տարրերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2554"/>
         <source>Select all similar elements with more options</source>
-        <translation type="unfinished"/>
+        <translation>Ընտրել լրացուցիչ ընտրանքներ ունեցող բոլոր նմանատիպ տարրերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2560"/>
@@ -23063,12 +23221,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2610"/>
         <source>Repeat Selection</source>
-        <translation type="unfinished"/>
+        <translation>Կրկնել ընտրվածքը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2611"/>
         <source>Repeat selection</source>
-        <translation type="unfinished"/>
+        <translation>Կրկնել ընտրվածքը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2619"/>
@@ -23178,7 +23336,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2744"/>
         <source>Additional Media…</source>
-        <translation type="unfinished"/>
+        <translation>Լրացուցիչ մեդիա…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2745"/>
@@ -23188,12 +23346,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2758"/>
         <source>Join Selected Measures</source>
-        <translation type="unfinished"/>
+        <translation>Միավորել ընտրված տակտերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2759"/>
         <source>Join selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Միավորել ընտրված տակտերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2765"/>
@@ -23288,22 +23446,22 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2870"/>
         <source>Loop In</source>
-        <translation type="unfinished"/>
+        <translation>Օղարկման սկիզբ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2871"/>
         <source>Set loop in position</source>
-        <translation type="unfinished"/>
+        <translation>Կայել օղարկման սկիզբը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2881"/>
         <source>Loop Out</source>
-        <translation type="unfinished"/>
+        <translation>Օղարկման վերջ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2882"/>
         <source>Set loop out position</source>
-        <translation type="unfinished"/>
+        <translation>Կայել օղարկման վերջը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2892"/>
@@ -23313,12 +23471,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2893"/>
         <source>Toggle metronome playback</source>
-        <translation type="unfinished"/>
+        <translation>Միաց./Անջ. չափահարը նվագարկելու ժամանակ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2894"/>
         <source>Play metronome during playback</source>
-        <translation type="unfinished"/>
+        <translation>Կիրառել չափահարը նվագարկելու ժամանակ</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2903"/>
@@ -23388,7 +23546,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2960"/>
         <source>Show time signature palette</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել տակտերի չափերի պալիտրան</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2969"/>
@@ -23398,7 +23556,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2970"/>
         <source>Show symbol palette</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել նշանների պալիտրան</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2979"/>
@@ -23473,107 +23631,107 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3041"/>
         <source>Longa (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Լոնգա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3042"/>
         <source>Note duration: Longa (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Երկարություն՝ Լոնգա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3043"/>
         <source>Longa note</source>
-        <translation type="unfinished"/>
+        <translation>Լոնգա նոտա</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3051"/>
         <source>Double Whole Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Կրկնակի ամբողջ նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3052"/>
         <source>Note duration: Double whole (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Երկարություն՝ Կրկնակի ամբողջ (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3061"/>
         <source>Whole Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Ամբողջ նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3062"/>
         <source>Note duration: Whole (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Երկարություն՝ Ամբողջ նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3071"/>
         <source>Half Note (TAB)</source>
-        <translation>Կես նոտա (տաբուլատուրա)</translation>
+        <translation>Կես նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3072"/>
         <source>Note duration: Half (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Երկարություն՝ Կես նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3081"/>
         <source>Quarter Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Քառորդ նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3082"/>
         <source>Note duration: Quarter (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Երկարություն՝ Քառորդ նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3091"/>
         <source>Eighth Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>8-երորդական նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3092"/>
         <source>Note duration: Eighth (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Երկարություն՝ 8-երորդական նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3101"/>
         <source>16th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>16-երորդական նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3102"/>
         <source>Note duration: 16th (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Երկարություն՝ 16-երորդական նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3111"/>
         <source>32nd Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>32-երորդական նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3112"/>
         <source>Note duration: 32nd (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Երկարություն՝ 32-երորդական նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3121"/>
         <source>64th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>64-երորդական նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3122"/>
         <source>Note duration: 64th (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Երկարություն՝ 64-երորդական նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3131"/>
         <source>128th Note (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>128-երորդական նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3132"/>
         <source>Note duration: 128th (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Երկարություն՝ 128-երորդական նոտա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3141"/>
@@ -23599,7 +23757,7 @@ failed: </source>
         <location filename="../../mscore/shortcut.cpp" line="3155"/>
         <location filename="../../mscore/shortcut.cpp" line="3164"/>
         <source>Rest (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Պաուզա (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3156"/>
@@ -23634,7 +23792,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3185"/>
         <source>Fret 0 (TAB)</source>
-        <translation>Լադ 0 (տաբուլատուրա)</translation>
+        <translation>Լադ 0 (TAB)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3186"/>
@@ -23924,27 +24082,27 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3537"/>
         <source>Start Center…</source>
-        <translation type="unfinished"/>
+        <translation>Արագ մեկնարկ...</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3547"/>
         <source>Customize Toolbars…</source>
-        <translation type="unfinished"/>
+        <translation>Հարմարեցնել գործիքագոտիները…</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3548"/>
         <source>Customize toolbars</source>
-        <translation type="unfinished"/>
+        <translation>Հարմարեցնել գործիքագոտիները</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3557"/>
         <source>Remove Empty Trailing Measures</source>
-        <translation type="unfinished"/>
+        <translation>Հեռացնել վերջի դատարկ տակտերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3558"/>
         <source>Remove empty trailing measures</source>
-        <translation type="unfinished"/>
+        <translation>Հեռացնել վերջի դատարկ տակտերը</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3567"/>
@@ -23959,12 +24117,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3577"/>
         <source>Show Tours</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել բացատրությունները</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3578"/>
         <source>Show tours</source>
-        <translation type="unfinished"/>
+        <translation>Ցուցադրել բացատրությունները</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3579"/>
@@ -23974,12 +24132,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3588"/>
         <source>Reset Tours</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել բացատրությունները</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3589"/>
         <source>Reset tours</source>
-        <translation type="unfinished"/>
+        <translation>Վերակայել բացատրությունները</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3598"/>
@@ -23989,17 +24147,17 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3599"/>
         <source>Report a bug</source>
-        <translation type="unfinished"/>
+        <translation>Տեղեկացնել վրեպի մասին</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3608"/>
         <source>Leave Feedback</source>
-        <translation type="unfinished"/>
+        <translation>Կարծիք թողնել</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3609"/>
         <source>Leave feedback</source>
-        <translation type="unfinished"/>
+        <translation>Կարծիք թողնել</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3424"/>
@@ -24081,12 +24239,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3516"/>
         <source>Resequence Rehearsal Marks</source>
-        <translation>Վերակարգել պարտիտուրի կողմնորոշիչները / թվերը</translation>
+        <translation>Վերակարգել պարտիտուրի նշումները</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3517"/>
         <source>Resequence rehearsal marks</source>
-        <translation>Վերակարգել պարտիտուրի կողմնորոշիչները / թվերը</translation>
+        <translation>Վերակարգել պարտիտուրի նշումները</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3526"/>
@@ -24101,7 +24259,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3538"/>
         <source>Start center</source>
-        <translation>Մեկնարկային կենտրոն</translation>
+        <translation>Արագ մեկնարկ</translation>
     </message>
 </context>
 <context>
@@ -24145,19 +24303,9 @@ failed: </source>
         <translation>դո</translation>
     </message>
     <message>
-        <location filename="../../awl/utils.cpp" line="24"/>
-        <source>c#</source>
-        <translation>դո♯</translation>
-    </message>
-    <message>
         <location filename="../../awl/utils.cpp" line="25"/>
         <source>d</source>
         <translation>ռե</translation>
-    </message>
-    <message>
-        <location filename="../../awl/utils.cpp" line="26"/>
-        <source>d#</source>
-        <translation>ռե♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="27"/>
@@ -24170,19 +24318,29 @@ failed: </source>
         <translation>ֆա</translation>
     </message>
     <message>
-        <location filename="../../awl/utils.cpp" line="29"/>
-        <source>f#</source>
-        <translation>ֆա♯</translation>
-    </message>
-    <message>
         <location filename="../../awl/utils.cpp" line="30"/>
         <source>g</source>
         <translation>սոլ</translation>
     </message>
     <message>
+        <location filename="../../awl/utils.cpp" line="24"/>
+        <source>c♯</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="26"/>
+        <source>d♯</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="29"/>
+        <source>f♯</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../awl/utils.cpp" line="31"/>
-        <source>g#</source>
-        <translation>սոլ♯</translation>
+        <source>g♯</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="32"/>
@@ -24206,18 +24364,33 @@ failed: </source>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="38"/>
-        <source>C#</source>
+        <source>C♯</source>
         <translation>Դո♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="40"/>
+        <source>D♯</source>
+        <translation>Ռե♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="43"/>
+        <source>F♯</source>
+        <translation>Ֆա♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="45"/>
+        <source>G♯</source>
+        <translation>Սոլ♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="47"/>
+        <source>A♯</source>
+        <translation>Լա♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="39"/>
         <source>D</source>
         <translation>Ռե</translation>
-    </message>
-    <message>
-        <location filename="../../awl/utils.cpp" line="40"/>
-        <source>D#</source>
-        <translation>Ռե♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="41"/>
@@ -24230,29 +24403,14 @@ failed: </source>
         <translation>Ֆա</translation>
     </message>
     <message>
-        <location filename="../../awl/utils.cpp" line="43"/>
-        <source>F#</source>
-        <translation>Ֆա♯</translation>
-    </message>
-    <message>
         <location filename="../../awl/utils.cpp" line="44"/>
         <source>G</source>
         <translation>Սոլ</translation>
     </message>
     <message>
-        <location filename="../../awl/utils.cpp" line="45"/>
-        <source>G#</source>
-        <translation>Սոլ♯</translation>
-    </message>
-    <message>
         <location filename="../../awl/utils.cpp" line="46"/>
         <source>A</source>
         <translation>Լա</translation>
-    </message>
-    <message>
-        <location filename="../../awl/utils.cpp" line="47"/>
-        <source>A#</source>
-        <translation>Լա♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="48"/>
@@ -25219,7 +25377,7 @@ failed: </source>
         <location filename="../../libmscore/drumset.cpp" line="266"/>
         <location filename="../../mscore/importgtp.cpp" line="319"/>
         <source>Chinese Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Չինական Ծնծղա</translation>
     </message>
     <message>
         <location filename="../../libmscore/drumset.cpp" line="267"/>
@@ -25231,18 +25389,18 @@ failed: </source>
         <location filename="../../libmscore/drumset.cpp" line="268"/>
         <location filename="../../mscore/importgtp.cpp" line="321"/>
         <source>Tambourine</source>
-        <translation type="unfinished"/>
+        <translation>Դափ</translation>
     </message>
     <message>
         <location filename="../../libmscore/drumset.cpp" line="269"/>
         <location filename="../../mscore/importgtp.cpp" line="322"/>
         <source>Splash Cymbal</source>
-        <translation type="unfinished"/>
+        <translation>Սպլեշ</translation>
     </message>
     <message>
         <location filename="../../libmscore/drumset.cpp" line="270"/>
         <source>Cowbell</source>
-        <translation type="unfinished"/>
+        <translation>Կաուբել</translation>
     </message>
     <message>
         <location filename="../../libmscore/drumset.cpp" line="271"/>
@@ -25276,7 +25434,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="295"/>
         <source>Slap</source>
-        <translation type="unfinished"/>
+        <translation>Ապտակ</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="296"/>
@@ -25311,7 +25469,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="306"/>
         <source>Hand Clap</source>
-        <translation type="unfinished"/>
+        <translation>Ծափ</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="323"/>
@@ -25321,7 +25479,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="325"/>
         <source>Vibraslap</source>
-        <translation type="unfinished"/>
+        <translation>Վիբրասլեպ</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="327"/>
@@ -25361,12 +25519,12 @@ failed: </source>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="336"/>
         <source>Cabasa</source>
-        <translation type="unfinished"/>
+        <translation>Կաբացա</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="337"/>
         <source>Maracas</source>
-        <translation type="unfinished"/>
+        <translation>Մառակաս</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="338"/>
@@ -25391,7 +25549,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="342"/>
         <source>Claves</source>
-        <translation type="unfinished"/>
+        <translation>Կլավեսներ</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="343"/>
@@ -25441,7 +25599,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="352"/>
         <source>Castanets</source>
-        <translation type="unfinished"/>
+        <translation>Կաստանյետներ</translation>
     </message>
     <message>
         <location filename="../../mscore/importgtp.cpp" line="353"/>
@@ -25482,19 +25640,19 @@ failed: </source>
         <translation>Դո</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="536"/>
-        <source>C#</source>
-        <translation>Դո♯</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstaff.cpp" line="537"/>
         <source>D</source>
         <translation>Ռե</translation>
     </message>
     <message>
+        <location filename="../../mscore/editstaff.cpp" line="536"/>
+        <source>C♯</source>
+        <translation>Դո♯</translation>
+    </message>
+    <message>
         <location filename="../../mscore/editstaff.cpp" line="538"/>
-        <source>Eb</source>
-        <translation>Մի ♭</translation>
+        <source>E♭</source>
+        <translation>Մի♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="539"/>
@@ -25508,8 +25666,18 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="541"/>
-        <source>F#</source>
+        <source>F♯</source>
         <translation>Ֆա♯</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.cpp" line="543"/>
+        <source>A♭</source>
+        <translation>Լա♭</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.cpp" line="545"/>
+        <source>B♭</source>
+        <translation>Սի♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="542"/>
@@ -25517,19 +25685,9 @@ failed: </source>
         <translation>Սոլ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="543"/>
-        <source>Ab</source>
-        <translation>Լա♭</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstaff.cpp" line="544"/>
         <source>A</source>
         <translation>Լա</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.cpp" line="545"/>
-        <source>Bb</source>
-        <translation>Սի♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.cpp" line="546"/>
@@ -25545,19 +25703,19 @@ failed: </source>
         <translation>Դո</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="214"/>
-        <source>C#</source>
-        <translation>Դո♯</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstringdata.cpp" line="215"/>
         <source>D</source>
         <translation>Ռե</translation>
     </message>
     <message>
+        <location filename="../../mscore/editstringdata.cpp" line="214"/>
+        <source>C♯</source>
+        <translation>Դո♯</translation>
+    </message>
+    <message>
         <location filename="../../mscore/editstringdata.cpp" line="216"/>
-        <source>Eb</source>
-        <translation>Մի ♭</translation>
+        <source>E♭</source>
+        <translation>Մի♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="217"/>
@@ -25571,8 +25729,18 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="219"/>
-        <source>F#</source>
+        <source>F♯</source>
         <translation>Ֆա♯</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstringdata.cpp" line="221"/>
+        <source>A♭</source>
+        <translation>Լա♭</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstringdata.cpp" line="223"/>
+        <source>B♭</source>
+        <translation>Սի♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="220"/>
@@ -25580,19 +25748,9 @@ failed: </source>
         <translation>Սոլ</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="221"/>
-        <source>Ab</source>
-        <translation>Լա♭</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstringdata.cpp" line="222"/>
         <source>A</source>
         <translation>Լա</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstringdata.cpp" line="223"/>
-        <source>Bb</source>
-        <translation>Սի♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="224"/>
@@ -25615,7 +25773,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="38"/>
         <source>Instrument Name</source>
-        <translation>Գործիքի անվանում</translation>
+        <translation>Նվագարանի անվանում</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="39"/>
@@ -25730,12 +25888,12 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="40"/>
         <source>Tie Segment</source>
-        <translation type="unfinished"/>
+        <translation>Կապակցող լիգայի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="43"/>
         <source>System Divider</source>
-        <translation type="unfinished"/>
+        <translation>Համակարգի բաժանիչ</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="58"/>
@@ -25755,22 +25913,22 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="61"/>
         <source>Dynamic</source>
-        <translation>Ուժաբանություն</translation>
+        <translation>Դինամիկա</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="62"/>
         <source>Beam</source>
-        <translation>Խումբ</translation>
+        <translation>Խմբագիծ</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="63"/>
         <source>Hook</source>
-        <translation>Ծալվածք</translation>
+        <translation>Պոչ</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="64"/>
         <source>Lyrics</source>
-        <translation>Երգի բառերը</translation>
+        <translation>Երգի խոսքեր</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="65"/>
@@ -25805,7 +25963,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="71"/>
         <source>Staff Text</source>
-        <translation>Նոտակիրի գրվածքը</translation>
+        <translation>Նոտակիրի գրվածք</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="72"/>
@@ -25815,12 +25973,12 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="73"/>
         <source>Rehearsal Mark</source>
-        <translation>Պարտիրուրի կողմնորոշիչ / թիվ</translation>
+        <translation>Պարտիտուրի նշում</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="74"/>
         <source>Instrument Change</source>
-        <translation>Գործիքի փոխում</translation>
+        <translation>Նվագարանի փոխարինում</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="75"/>
@@ -25855,57 +26013,57 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="81"/>
         <source>Hairpin Segment</source>
-        <translation type="unfinished"/>
+        <translation>Ծամկալի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="82"/>
         <source>Ottava Segment</source>
-        <translation type="unfinished"/>
+        <translation>Օկտավայի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="83"/>
         <source>Trill Segment</source>
-        <translation type="unfinished"/>
+        <translation>Տրելի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="84"/>
         <source>Let Ring Segment</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Թող զրնգա&apos;-ի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="85"/>
         <source>Vibrato Segment</source>
-        <translation type="unfinished"/>
+        <translation>Վիբրատոյի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="86"/>
         <source>Palm Mute Segment</source>
-        <translation type="unfinished"/>
+        <translation>&apos;Համրեցնել ափով&apos;-ի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="87"/>
         <source>Text Line Segment</source>
-        <translation type="unfinished"/>
+        <translation>Գրվածքային տողի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="88"/>
         <source>Volta Segment</source>
-        <translation type="unfinished"/>
+        <translation>Վօլտայի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="89"/>
         <source>Pedal Segment</source>
-        <translation type="unfinished"/>
+        <translation>Ոտնակի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="90"/>
         <source>Melisma Line Segment</source>
-        <translation type="unfinished"/>
+        <translation>Մելիզմի տողի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="91"/>
         <source>Glissando Segment</source>
-        <translation type="unfinished"/>
+        <translation>Գլիսանդոյի հատված</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="92"/>
@@ -25970,7 +26128,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="104"/>
         <source>Font Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Տառատեսակի նշան</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="105"/>
@@ -26000,17 +26158,17 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="110"/>
         <source>Let Ring</source>
-        <translation type="unfinished"/>
+        <translation>Թող զրնգա</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="111"/>
         <source>Vibrato</source>
-        <translation type="unfinished"/>
+        <translation>Վիբրատո</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="112"/>
         <source>Palm Mute</source>
-        <translation type="unfinished"/>
+        <translation>Համրեցնել ափով</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="113"/>
@@ -26025,12 +26183,12 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="115"/>
         <source>Note Line</source>
-        <translation type="unfinished"/>
+        <translation>Նոտային տող</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="116"/>
         <source>Melisma Line</source>
-        <translation type="unfinished"/>
+        <translation>Մելիզմի տող</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="117"/>
@@ -26051,12 +26209,12 @@ failed: </source>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="120"/>
         <source>System</source>
-        <translation>Գործավար համակարգ</translation>
+        <translation>Համակարգ</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="121"/>
         <source>Compound</source>
-        <translation type="unfinished"/>
+        <translation>Կոմպաունդ</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="122"/>
@@ -26129,7 +26287,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/preferences.cpp" line="86"/>
         <source>Extensions</source>
-        <translation type="unfinished"/>
+        <translation>Ընդլայնումներ</translation>
     </message>
 </context>
 <context>
@@ -26188,7 +26346,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/jump.cpp" line="33"/>
         <source>Da Capo</source>
-        <translation>Սկզբից</translation>
+        <translation>Կրկնել կզբից</translation>
     </message>
     <message>
         <location filename="../../libmscore/jump.cpp" line="34"/>
@@ -26221,117 +26379,117 @@ failed: </source>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="28"/>
         <source>US-QWERTY</source>
-        <translation type="unfinished"/>
+        <translation>US-QWERTY</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="29"/>
         <source>UK-QWERTY</source>
-        <translation type="unfinished"/>
+        <translation>UK-QWERTY</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="30"/>
         <source>QWERTZ</source>
-        <translation type="unfinished"/>
+        <translation>QWERTZ</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="31"/>
         <source>AZERTY</source>
-        <translation type="unfinished"/>
+        <translation>AZERTY</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="32"/>
         <source>BEPO</source>
-        <translation type="unfinished"/>
+        <translation>BEPO</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="33"/>
         <source>DVORAK</source>
-        <translation type="unfinished"/>
+        <translation>DVORAK</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="34"/>
         <source>JIS - Standard Japanese</source>
-        <translation type="unfinished"/>
+        <translation>JIS Ստանդարտ ճապոներեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="35"/>
         <source>OYAYUBI SHIFUTO</source>
-        <translation type="unfinished"/>
+        <translation>OYAYUBI SHIFUTO</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="36"/>
         <source>T1 - Standard German</source>
-        <translation type="unfinished"/>
+        <translation>T1 - Ստանդարտ Գերմաներեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="37"/>
         <source>T2 - German</source>
-        <translation type="unfinished"/>
+        <translation>T2 - Գերմաներեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="38"/>
         <source>Swiss German</source>
-        <translation type="unfinished"/>
+        <translation>Շվեյցարիայի գերմաներեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="39"/>
         <source>Belgian French</source>
-        <translation type="unfinished"/>
+        <translation>Բելգիայի ֆրանսերեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="40"/>
         <source>Canadian French</source>
-        <translation type="unfinished"/>
+        <translation>Կանադայի ֆրանսերեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="41"/>
         <source>French French</source>
-        <translation type="unfinished"/>
+        <translation>Ֆրանսիայի ֆրանսերեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="42"/>
         <source>Swiss French</source>
-        <translation type="unfinished"/>
+        <translation>Շվեյցարիայի ֆրանսերեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="43"/>
         <source>Spanish</source>
-        <translation type="unfinished"/>
+        <translation>Իսպաներեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="44"/>
         <source>Italian</source>
-        <translation type="unfinished"/>
+        <translation>Իտալերեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="45"/>
         <source>Brazilian Portuguese ABNT</source>
-        <translation type="unfinished"/>
+        <translation>Բրազիլիայի պորտուգալերեն ABNT</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="46"/>
         <source>Portuguese</source>
-        <translation type="unfinished"/>
+        <translation>Պորտուգալերեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="47"/>
         <source>US - International</source>
-        <translation type="unfinished"/>
+        <translation>US - Միջազգային</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="48"/>
         <source>Dutch</source>
-        <translation type="unfinished"/>
+        <translation>Հոլանդերեն</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="49"/>
         <source>Korean - Dubeolsik</source>
-        <translation type="unfinished"/>
+        <translation>Կորեերեն - Dubeolsik</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="50"/>
         <source>Korean - Sebeolsik</source>
-        <translation type="unfinished"/>
+        <translation>Կորեերեն - Sebeolsik</translation>
     </message>
     <message>
         <location filename="../../mscore/startupWizard.cpp" line="51"/>
@@ -26359,7 +26517,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/menus.cpp" line="1006"/>
         <source>Dynamic + hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Դինամիկա + ծամկալ</translation>
     </message>
 </context>
 <context>
@@ -26390,7 +26548,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/marker.cpp" line="32"/>
         <source>Segno variation</source>
-        <translation>Սենյո</translation>
+        <translation>Սենյոյի վարիացիա</translation>
     </message>
     <message>
         <location filename="../../libmscore/marker.cpp" line="33"/>
@@ -26415,7 +26573,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/marker.cpp" line="37"/>
         <source>To Coda</source>
-        <translation>Մինչ կոդա</translation>
+        <translation>Մինչև կոդա</translation>
     </message>
     <message>
         <location filename="../../libmscore/marker.cpp" line="38"/>
@@ -26548,157 +26706,157 @@ failed: </source>
     <message>
         <location filename="../../libmscore/note.cpp" line="251"/>
         <source>Do (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Դո (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="252"/>
         <source>Re (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Ռե (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="253"/>
         <source>Mi (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Մի (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="254"/>
         <source>Fa (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="255"/>
         <source>Sol (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="256"/>
         <source>La (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Լա (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="257"/>
         <source>Ti (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Տի/Սի (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="258"/>
         <source>Si (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Սի (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="261"/>
         <source>A♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Լա♯ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="262"/>
         <source>A (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Լա (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="263"/>
         <source>A♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Լա♭ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="264"/>
         <source>B♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Սի♯ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="265"/>
         <source>B (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Սի (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="266"/>
         <source>B♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Սի♭ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="267"/>
         <source>C♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Դո♯ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="268"/>
         <source>C (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Դո (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="269"/>
         <source>C♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Դո♭ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="270"/>
         <source>D♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Ռե♯ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="271"/>
         <source>D (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Ռե (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="272"/>
         <source>D♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Ռե♭ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="273"/>
         <source>E♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Մի♯ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="274"/>
         <source>E (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Մի (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="275"/>
         <source>E♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Մի♭ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="276"/>
         <source>F♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♯ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="277"/>
         <source>F (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="278"/>
         <source>F♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Ֆա♭ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="279"/>
         <source>G♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ♯ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="280"/>
         <source>G (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="281"/>
         <source>G♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Սոլ♭ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="282"/>
         <source>H (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Սի (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="283"/>
         <source>H♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Սի♯ (Անուն)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="284"/>
@@ -26723,7 +26881,7 @@ failed: </source>
     <message>
         <location filename="../../libmscore/note.cpp" line="292"/>
         <source>Quarter</source>
-        <translation>Քարորդ</translation>
+        <translation>Քառորդ</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="293"/>
@@ -26850,7 +27008,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="35"/>
         <source>Dynamics</source>
-        <translation>Ուժաբանություն</translation>
+        <translation>Դինամիկա</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="36"/>
@@ -26860,7 +27018,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="37"/>
         <source>Lyrics</source>
-        <translation>Երգի բառերը</translation>
+        <translation>Երգի խոսքեր</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="38"/>
@@ -26895,7 +27053,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="44"/>
         <source>Pedal Lines</source>
-        <translation type="unfinished"/>
+        <translation>Ոտնակի գծեր</translation>
     </message>
     <message>
         <location filename="../../mscore/selectionwindow.cpp" line="45"/>
@@ -27629,12 +27787,12 @@ failed: </source>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3596"/>
         <source>Fermata above</source>
-        <translation type="unfinished"/>
+        <translation>Ֆերմատա վերև</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3597"/>
         <source>Fermata below</source>
-        <translation type="unfinished"/>
+        <translation>Ֆերմատա ներքև</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3598"/>
@@ -27910,7 +28068,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="295"/>
         <source>Cyrillic</source>
-        <translation>Կիրիլյան</translation>
+        <translation>Կյուրեղյան</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="296"/>
@@ -29104,19 +29262,9 @@ failed: </source>
         <translation>դո</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="468"/>
-        <source>c#</source>
-        <translation>դո♯</translation>
-    </message>
-    <message>
         <location filename="../../libmscore/utils.cpp" line="469"/>
         <source>d</source>
         <translation>ռե</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="470"/>
-        <source>d#</source>
-        <translation>ռե♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="471"/>
@@ -29129,29 +29277,14 @@ failed: </source>
         <translation>ֆա</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="473"/>
-        <source>f#</source>
-        <translation>ֆա♯</translation>
-    </message>
-    <message>
         <location filename="../../libmscore/utils.cpp" line="474"/>
         <source>g</source>
         <translation>սոլ</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="475"/>
-        <source>g#</source>
-        <translation>սոլ♯</translation>
-    </message>
-    <message>
         <location filename="../../libmscore/utils.cpp" line="476"/>
         <source>a</source>
         <translation>լա</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="477"/>
-        <source>a#</source>
-        <translation>լա♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="478"/>
@@ -29164,19 +29297,9 @@ failed: </source>
         <translation>Դո</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="482"/>
-        <source>C#</source>
-        <translation>Դո♯</translation>
-    </message>
-    <message>
         <location filename="../../libmscore/utils.cpp" line="483"/>
         <source>D</source>
         <translation>Ռե</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="484"/>
-        <source>D#</source>
-        <translation>Ռե♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="485"/>
@@ -29189,8 +29312,43 @@ failed: </source>
         <translation>Ֆա</translation>
     </message>
     <message>
+        <location filename="../../libmscore/utils.cpp" line="468"/>
+        <source>c♯</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="470"/>
+        <source>d♯</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="473"/>
+        <source>f♯</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="475"/>
+        <source>g♯</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="477"/>
+        <source>a♯</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="482"/>
+        <source>C♯</source>
+        <translation>Դո♯</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="484"/>
+        <source>D♯</source>
+        <translation>Ռե♯</translation>
+    </message>
+    <message>
         <location filename="../../libmscore/utils.cpp" line="487"/>
-        <source>F#</source>
+        <source>F♯</source>
         <translation>Ֆա♯</translation>
     </message>
     <message>
@@ -29210,7 +29368,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="491"/>
-        <source>A#</source>
+        <source>A♯</source>
         <translation>Լա♯</translation>
     </message>
     <message>

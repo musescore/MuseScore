@@ -4,49 +4,51 @@
     <message>
         <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>為一個和弦增加一個音符時，請在輸入音符名稱時按著 Shift 鍵或在五線譜上按一下。</translation>
     </message>
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>歡迎來到 MuseScore！這個簡短的導覽將會帶您看看 MuseScore 的用戶介面。</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>播放工具列讓您播放或暫停播放您的樂譜和控制不同播放的設定。</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>音符輸入工具列讓您在五線譜上輸入音符和休止符。</translation>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>記號面板讓您為五線譜加入大部分其他的記譜符號。</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>每一個面板都含有可以加入到樂譜的項目。</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>歡迎來到記號面板！您將會從這裡為您的樂譜加入各式各樣的元件。請按一下「下一頁」以了解更多。</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>當輸入已選取時值的音符時，請輸入它的字母名稱或在五線譜上按一下。
+請按下 Ctrl＋Up／Down（MacOS：Cmd＋Up／Down）以調整八度。</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>要為音符加入臨時記號時，請按下快捷鍵 Up 或 Down 鍵以升高／下降它的音高，
+或按下這裡其中一個按鍵。</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -67,13 +69,15 @@
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>這些是工具列。
+最主要的三個是檔案操作、播放控制和音符輸入。</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>主菜單包含大部分其他的指令。
+還有，很多指令都可以通過快捷鍵或在樂譜內按右鍵（MacOS：Cmd ＋按一下滑鼠鍵）來執行。</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
@@ -98,34 +102,37 @@
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>歡迎來到音符輸入！在這裡您可以為樂譜輸入音符和休止符。
+請按一下「下一頁」以了解更多。 </translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>要啟動音符輸入模式時，請按下「音符輸入」的圖標或按下快捷鍵 N。</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>請按下這裡其中一個圖標或使用快捷鍵 1 至 9 以選取時值。
+要包含附點的話，請按下相應的圖標或輸入快捷鍵「 . 」。</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>要輸入已選取時值的休止符時，請按下快捷鍵 0，或選取此圖標後在五線譜上按一下。</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>要使用連接線來增加音符的時值時，請先選取要延伸的時值，然後按下這個按鈕或快捷鍵「＋」。</translation>
     </message>
     <message>
         <source>MuseScore provides many ways to navigate through your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>MuseScore 提供多種方式讓您瀏覽您的樂譜。
+請按一下「下一頁」以了解更多。</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -149,13 +156,14 @@
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>其他的瀏覽工具包括時間線和導覽器，它們都可以在「檢視」菜單中找到。</translation>
     </message>
     <message>
         <source>Welcome to the Inspector, where you can change individual properties for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>歡迎來到檢視器！您將會在這裡為被選取的元件更改它們的每一個屬性。
+請按一下「下一頁」以了解更多。</translation>
     </message>
     <message>
         <source>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
@@ -172,7 +180,7 @@
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>檢視器讓您控制樂譜內每一個元件的不同屬性。</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -205,13 +213,15 @@
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
     Click &quot;Next&quot; to learn more.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>歡迎來到時間線！您可以在這裡看到一個能夠更容易瀏覽的高度精簡化樂譜。
+請按一下「下一頁」以了解更多。</translation>
     </message>
     <message>
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
     You can click anywhere to jump to the corresponding location in your score.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>時間線會顯示演奏記號、速度變化、調號、拍號，以及其他的重點。
+您可以在範圍內的任何地方按一下以跳到樂譜內相應的地方。</translation>
     </message>
     <message>
         <source>The section below contains a row for each instrument.
@@ -225,7 +235,8 @@
         <source>MuseScore supports different types of selections: single, list, and range.
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>MuseScore 支持多種選取方式：單一元件模式、列表模式和範圍模式。
+請按一下「下一頁」以了解更多。</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.
@@ -262,12 +273,12 @@
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>最後，篩選選取區（可以在「檢視」菜單中找到）讓您從一個選取範圍內排除一些同類的元件。</translation>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation type="unfinished"/>
     </message>
