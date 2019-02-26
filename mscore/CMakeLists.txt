@@ -840,21 +840,21 @@ else (MINGW)
       endforeach()
 
       # Windows: Add /SUBSYSTEM:WINDOWS to LINK_FLAGS to avoid a console window in release
-      if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+      if(CMAKE_BUILD_TYPE MATCHES "REL*")
         set_target_properties( mscore
            PROPERTIES
               COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
               LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
               LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup"
            )
-      else(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+      else(CMAKE_BUILD_TYPE MATCHES "REL*")
         set_target_properties( mscore
            PROPERTIES
               COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} /DQT_SVG_LIB /DQT_GUI_LIB /DQT_XML_LIB /DQT_CORE_LIB"
               LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
               LINK_FLAGS "/SUBSYSTEM:CONSOLE"
            )
-      endif(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+      endif(CMAKE_BUILD_TYPE MATCHES "REL*")
 
       include(FindStaticLibrary)
       target_link_libraries(mscore
