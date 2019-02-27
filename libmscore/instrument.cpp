@@ -666,6 +666,9 @@ void Channel::read(XmlReader& e, Part* part)
       if (_name == "")
             _name = DEFAULT_NAME;
 
+      int midiPort = -1;
+      int midiChannel = -1;
+
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "program") {
@@ -731,14 +734,10 @@ void Channel::read(XmlReader& e, Part* part)
             else if (tag == "solo")
                   _solo = e.readInt();
             else if (tag == "midiPort") {
-                  int midiPort = e.readInt();
-                  if (part && part->score()->isMaster())
-                        part->masterScore()->addMidiMapping(this, part, midiPort, -1);
+                  midiPort = e.readInt();
                   }
             else if (tag == "midiChannel") {
-                  int midiChannel = e.readInt();
-                  if (part && part->score()->isMaster())
-                        part->masterScore()->updateMidiMapping(this, part, -1, midiChannel);
+                  midiChannel = e.readInt();
                   }
             else
                   e.unknown();
@@ -746,6 +745,9 @@ void Channel::read(XmlReader& e, Part* part)
       if (128 == _bank && "zerberus" == _synti.toLower())
             _bank = 0;
       updateInitList();
+
+      if ((midiPort != -1 || midiChannel != -1) && part && part->score()->isMaster())
+            part->masterScore()->addMidiMapping(this, part, midiPort, midiChannel);
       }
 
 //---------------------------------------------------------
