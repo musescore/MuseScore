@@ -520,7 +520,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
       // find out if the chordrest was only partially contained in the copied range
       bool partialCopy = false;
       if (cr->isRepeatMeasure())
-            partialCopy = toRepeatMeasure(cr)->actualDuration() != measure->len();
+            partialCopy = toRepeatMeasure(cr)->actualTicks() != measure->ticks();
       else if (!isGrace && !cr->tuplet())
             partialCopy = cr->durationTypeTicks() != cr->actualTicks();
 
