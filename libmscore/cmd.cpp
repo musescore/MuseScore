@@ -2743,9 +2743,7 @@ void Score::cmdSlashFill()
             int voice = -1;
             // loop through segments adding slashes on each beat
             for (Segment* s = startSegment; s && s->tick() < endTick; s = s->next1()) {
-                  if (s->segmentType() != SegmentType::ChordRest)
-                        continue;
-                  if (s->measure()->isMMRest())
+                  if (s->segmentType() != SegmentType::ChordRest || s->measure()->isMMRest())
                         continue;
                   // determine beat type based on time signature
                   int d = s->measure()->timesig().denominator();
