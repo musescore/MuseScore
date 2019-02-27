@@ -151,8 +151,12 @@ void MasterScore::rebuildExcerptsMidiMapping()
                         const Instrument* iMaster = item.second;
                         const int tick = item.first;
                         Instrument* iLocal = p->instrument(Fraction::fromTicks(tick));
-                        Q_ASSERT(iLocal->channel().size() == iMaster->channel().size());
-                        const int nchannels = iLocal->channel().size();
+                        const int nchannels = iMaster->channel().size();
+                        if (iLocal->channel().size() != nchannels) {
+                              // may happen, e.g., if user changes an instrument
+                              (*iLocal) = (*iMaster);
+                              continue;
+                              }
                         for (int c = 0; c < nchannels; ++c) {
                               Channel* cLocal = iLocal->channel(c);
                               const Channel* cMaster = iMaster->channel(c);
