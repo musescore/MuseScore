@@ -3234,7 +3234,7 @@ System* Score::collectSystem(LayoutContext& lc)
                         }
                   else {
                         if (createHeader) {
-                              m->addSystemHeader(false);
+                              m->addSystemHeader(true);
                               createHeader = false;
                               }
                         else if (m->header())
@@ -3444,7 +3444,7 @@ System* Score::collectSystem(LayoutContext& lc)
                   ww  += rest * m->ticks().ticks() * stretch;
                   m->stretchMeasure(ww);
                   m->layoutStaffLines();
-                  }
+            }
             else if (mb->isHBox()) {
                   mb->setPos(pos + QPointF(toHBox(mb)->topGap(), 0.0));
                   mb->layout();
@@ -3452,7 +3452,7 @@ System* Score::collectSystem(LayoutContext& lc)
             else if (mb->isVBox())
                   mb->setPos(pos);
             pos.rx() += ww;
-            }
+      }
       system->setWidth(pos.x());
 
       layoutSystemElements(system, lc);

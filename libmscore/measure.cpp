@@ -3527,6 +3527,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
       int staffIdx = 0;
       Segment* kSegment = findFirstR(SegmentType::KeySig, Fraction(0,1));
       Segment* cSegment = findFirstR(SegmentType::HeaderClef, Fraction(0,1));
+      Segment* tSegment = findFirstR(SegmentType::TimeSig, Fraction(0,1));
 
       for (const Staff* staff : score()->staves()) {
             const int track = staffIdx * VOICES;
@@ -3662,6 +3663,33 @@ void Measure::addSystemHeader(bool isFirstSystem)
             else {
                   if (cSegment)
                         cSegment->setEnabled(false);
+                  }
+
+            bool needTimeSig = isFirstSystem;
+            if (needTimeSig) {
+                  TimeSig* timesig;
+                  if (!tSegment) {
+                        tSegment = new Segment(this, SegmentType::TimeSig, Fraction(0, 1));
+                        tSegment->setHeader(true);
+                        add(tSegment);
+                        timesig = 0;
+                        }
+                  else
+                        timesig = toTimeSig(tSegment->element(track));
+                  if (!timesig) {
+                        //
+                        // create missing time signature
+                        //
+                        timesig = new TimeSig(score());
+                        timesig->setTrack(track);
+                        timesig->setGenerated(true);
+                        timesig->setParent(tSegment);
+                        tSegment->add(timesig);
+                        }
+                  timesig->setSig(this->timesig());
+                  timesig->layout();
+                  tSegment->createShape(staffIdx);
+                  tSegment->setEnabled(true);
                   }
             ++staffIdx;
             }
