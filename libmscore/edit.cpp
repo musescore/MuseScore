@@ -3552,7 +3552,7 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct)
 
       Clef* gclef = 0;
       int tick = e->tick();
-      int rtick = e->rtick();
+      int rtick = e->isMeasure() ? 0 : e->rtick();
       bool small = (st == SegmentType::Clef);
       for (Staff* staff : ostaff->staffList()) {
             if (staff->staffType(tick)->group() != ClefInfo::staffGroup(ct))
