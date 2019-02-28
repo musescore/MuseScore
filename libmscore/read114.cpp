@@ -3229,12 +3229,13 @@ Score::FileError MasterScore::read114(XmlReader& e)
 
       // create excerpts
 
-      for (Excerpt* excerpt : _excerpts) {
-            if (excerpt->parts().isEmpty()) {         // ignore empty parts
-                  _excerpts.removeOne(excerpt);
+      QList<Excerpt*> readExcerpts;
+      readExcerpts.swap(_excerpts);
+      for (Excerpt* excerpt : readExcerpts) {
+            if (excerpt->parts().isEmpty())           // ignore empty parts
                   continue;
-                  }
             if (!excerpt->parts().isEmpty()) {
+                  _excerpts.push_back(excerpt);
                   Score* nscore = new Score(this);
                   excerpt->setPartScore(nscore);
                   nscore->style().set(Sid::createMultiMeasureRests, true);
