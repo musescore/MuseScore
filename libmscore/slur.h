@@ -25,6 +25,7 @@ namespace Ms {
 class SlurSegment final : public SlurTieSegment {
 
    protected:
+      qreal _extraHeight = 0.0;
       virtual void changeAnchor(EditData&, Element*) override;
 
    public:
