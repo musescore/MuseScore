@@ -6565,7 +6565,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="23"/>
         <source>Grand Staff</source>
-        <translation type="unfinished"/>
+        <translation>Akoláda</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="24"/>

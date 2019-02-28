@@ -3768,7 +3768,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3611"/>
         <source>System header distance:</source>
-        <translation>Distance de l&apos;en-tête du système :</translation>
+        <translation>Marge gauche en-tête système (portée 1) :</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3621"/>
@@ -3828,7 +3828,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4220"/>
         <source>System header with time signature distance:</source>
-        <translation>Distance de l&apos;entête de système avec l&apos;indication de mesure :</translation>
+        <translation>Marge gauches en-tête système (autres portées) :</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="4249"/>

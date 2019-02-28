@@ -119,7 +119,7 @@
     <message>
         <location filename="../../mscore/albummanager.ui" line="111"/>
         <source>Add new Score…</source>
-        <translation type="unfinished"/>
+        <translation>Nauja partitūra...</translation>
     </message>
 </context>
 <context>
@@ -471,27 +471,27 @@
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="20"/>
         <source>Unfortunately MuseScore has crashed. Would you like to send a report to make it possible for us to fix the problem?</source>
-        <translation type="unfinished"/>
+        <translation>Deja programos „MuseScore“ darbas sutriko. Ar pageidausite pranešti programos autoriams apie problemą?</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="30"/>
         <source>Describe your actions when the crash occurred (optional)</source>
-        <translation type="unfinished"/>
+        <translation>Aprašykite ką darėte kai programa sutriko. (nebūtina)</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="33"/>
         <source>Detailed crash info</source>
-        <translation type="unfinished"/>
+        <translation>Išsami informacija apie sutrikimą.</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="40"/>
         <source>Send report</source>
-        <translation type="unfinished"/>
+        <translation>Siųsti pranešimą.</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="47"/>
         <source>Please describe your actions when the crash occurred (optional):</source>
-        <translation type="unfinished"/>
+        <translation>Aprašykite savo veiksmus kai programa sutriko.</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="60"/>
@@ -501,12 +501,12 @@
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="67"/>
         <source>Restart MuseScore after this report is sent</source>
-        <translation type="unfinished"/>
+        <translation>Paleisti programą iš naujo tuoj po pranešimo išsiuntimo.</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="70"/>
         <source>Restart MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Paleisti programą iš naujo</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="29"/>
@@ -526,12 +526,12 @@
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="257"/>
         <source>Send this report</source>
-        <translation type="unfinished"/>
+        <translation>Siųsti pranešimą</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="264"/>
         <source>Don&apos;t send</source>
-        <translation type="unfinished"/>
+        <translation>Nesiųsti</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="284"/>

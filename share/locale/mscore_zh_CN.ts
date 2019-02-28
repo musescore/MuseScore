@@ -466,32 +466,32 @@
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="14"/>
         <source>MuseScore Crash Reporter</source>
-        <translation type="unfinished"/>
+        <translation>Muse崩溃反馈</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="20"/>
         <source>Unfortunately MuseScore has crashed. Would you like to send a report to make it possible for us to fix the problem?</source>
-        <translation type="unfinished"/>
+        <translation>啊呀！MuseScore奔溃了！您想把错误报告发送给开发者以便让他们修复这个问题吗？</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="30"/>
         <source>Describe your actions when the crash occurred (optional)</source>
-        <translation type="unfinished"/>
+        <translation>当程序崩溃时您正在用MuseScore做什么？（选填）</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="33"/>
         <source>Detailed crash info</source>
-        <translation type="unfinished"/>
+        <translation>详细崩溃报告</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="40"/>
         <source>Send report</source>
-        <translation type="unfinished"/>
+        <translation>发送报告</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="47"/>
         <source>Please describe your actions when the crash occurred (optional):</source>
-        <translation type="unfinished"/>
+        <translation>当程序崩溃时您正在用MuseScore做什么？（选填）：</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="60"/>
@@ -501,49 +501,49 @@
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="67"/>
         <source>Restart MuseScore after this report is sent</source>
-        <translation type="unfinished"/>
+        <translation>发送报告后重启MuseScore</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="70"/>
         <source>Restart MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>重启MuseScore</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="29"/>
         <source>Tomahawk Crash Reporter</source>
-        <translation type="unfinished"/>
+        <translation>战斧式崩溃反馈机</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="104"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="213"/>
         <source>Abort</source>
-        <translation type="unfinished"/>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="257"/>
         <source>Send this report</source>
-        <translation type="unfinished"/>
+        <translation>发送报告</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="264"/>
         <source>Don&apos;t send</source>
-        <translation type="unfinished"/>
+        <translation>请勿发送</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="284"/>
         <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation type="unfinished"/>
+        <translation>您可以在“配置”对话框中停用崩溃报告发送功能。</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="109"/>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="116"/>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="152"/>
         <source>We cannot gather useful debug information on your system.</source>
-        <translation type="unfinished"/>
+        <translation>我们无法在您的系统中收集问题信息。</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="110"/>
@@ -557,27 +557,27 @@
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="145"/>
         <source>Ready to send debug information (&lt;a href=&quot;%1&quot;&gt;view backtrace&lt;/a&gt;).</source>
-        <translation type="unfinished"/>
+        <translation>准备发送问题信息 (&lt;a href=&quot;%1&quot;&gt;view backtrace&lt;/a&gt;).</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="161"/>
         <source>Gathering debug information...</source>
-        <translation type="unfinished"/>
+        <translation>正在收集问题信息…</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="260"/>
         <source>Uploaded %L1 of %L2 KB.</source>
-        <translation type="unfinished"/>
+        <translation>已上传%L1 KB，共%L2 KB.</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="287"/>
         <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;. Please refer to crash &lt;b&gt;%1&lt;/b&gt; in bug reports.</source>
-        <translation type="unfinished"/>
+        <translation>已发送！&lt;b&gt;非常感谢&lt;/b&gt;。请参考错误日志&lt;b&gt;%1&lt;/b&gt;。</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="296"/>
         <source>Failed to send crash info.</source>
-        <translation type="unfinished"/>
+        <translation>发送崩溃信息失败。</translation>
     </message>
 </context>
 <context>
@@ -9625,7 +9625,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixer.ui" line="33"/>
         <source>Play part only</source>
-        <translation type="unfinished"/>
+        <translation>部分演奏</translation>
     </message>
     <message>
         <location filename="../../mscore/mixer.ui" line="50"/>
@@ -9940,12 +9940,12 @@ Group under the W3C Community Contributor License Agreement
     <message>
         <location filename="../../crashreporter/crashreporter.cpp" line="108"/>
         <source>Success!</source>
-        <translation type="unfinished"/>
+        <translation>成功！</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.cpp" line="108"/>
         <source>Crash report uploaded successfully!</source>
-        <translation type="unfinished"/>
+        <translation>崩溃报告上传成功！</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.cpp" line="119"/>
@@ -9956,7 +9956,8 @@ Group under the W3C Community Contributor License Agreement
         <location filename="../../crashreporter/crashreporter.cpp" line="119"/>
         <source>Error while uploading crash report:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>当上传崩溃报告时发生错误：
+%1</translation>
     </message>
 </context>
 <context>
@@ -13128,7 +13129,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="142"/>
         <source>Tremolo Bar Properties…</source>
-        <translation type="unfinished"/>
+        <translation>颤音条属性…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="145"/>
@@ -14217,7 +14218,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/omrpanel.ui" line="59"/>
         <source>Process</source>
-        <translation type="unfinished"/>
+        <translation>进度</translation>
     </message>
     <message>
         <location filename="../../mscore/omrpanel.ui" line="66"/>
@@ -24320,22 +24321,22 @@ failed: </source>
     <message>
         <location filename="../../awl/utils.cpp" line="24"/>
         <source>c♯</source>
-        <translation type="unfinished"/>
+        <translation>c♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="26"/>
         <source>d♯</source>
-        <translation type="unfinished"/>
+        <translation>d♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="29"/>
         <source>f♯</source>
-        <translation type="unfinished"/>
+        <translation>f♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="31"/>
         <source>g♯</source>
-        <translation type="unfinished"/>
+        <translation>g♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="32"/>
@@ -29309,22 +29310,22 @@ failed: </source>
     <message>
         <location filename="../../libmscore/utils.cpp" line="468"/>
         <source>c♯</source>
-        <translation type="unfinished"/>
+        <translation>c♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="470"/>
         <source>d♯</source>
-        <translation type="unfinished"/>
+        <translation>d♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="473"/>
         <source>f♯</source>
-        <translation type="unfinished"/>
+        <translation>f♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="475"/>
         <source>g♯</source>
-        <translation type="unfinished"/>
+        <translation>g♯</translation>
     </message>
     <message>
         <location filename="../../libmscore/utils.cpp" line="477"/>

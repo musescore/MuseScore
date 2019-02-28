@@ -104,7 +104,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="110"/>
         <source>English Flageolet</source>
-        <translation>Iinglise flageolet</translation>
+        <translation>Inglise flageolet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="112"/>

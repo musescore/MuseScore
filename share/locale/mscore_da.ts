@@ -466,32 +466,32 @@
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="14"/>
         <source>MuseScore Crash Reporter</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Crash Reporter</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="20"/>
         <source>Unfortunately MuseScore has crashed. Would you like to send a report to make it possible for us to fix the problem?</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore har desværre haft et nedbrud. Ønsker du at sende en rapport, så vi får mulighed for at afhjælpe problemet?</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="30"/>
         <source>Describe your actions when the crash occurred (optional)</source>
-        <translation type="unfinished"/>
+        <translation>Beskriv hvad du foretog dig da nedbruddet skete (valgfrit)</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="33"/>
         <source>Detailed crash info</source>
-        <translation type="unfinished"/>
+        <translation>Detaljeret information om nedbruddet</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="40"/>
         <source>Send report</source>
-        <translation type="unfinished"/>
+        <translation>Sean rapport</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="47"/>
         <source>Please describe your actions when the crash occurred (optional):</source>
-        <translation type="unfinished"/>
+        <translation>Beskriv hvad du foretog dig da nedbruddet skete (valgfrit)</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="60"/>
@@ -501,49 +501,49 @@
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="67"/>
         <source>Restart MuseScore after this report is sent</source>
-        <translation type="unfinished"/>
+        <translation>Genstart MuseScore, når rapporten er sendt</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.ui" line="70"/>
         <source>Restart MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Genstart MuseScore på</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="29"/>
         <source>Tomahawk Crash Reporter</source>
-        <translation type="unfinished"/>
+        <translation>Tomahawk Crash Reporter</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="104"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="213"/>
         <source>Abort</source>
-        <translation type="unfinished"/>
+        <translation>Afbryd</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="257"/>
         <source>Send this report</source>
-        <translation type="unfinished"/>
+        <translation>Send rapporten</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="264"/>
         <source>Don&apos;t send</source>
-        <translation type="unfinished"/>
+        <translation>Undlad at sende</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="284"/>
         <source>You can disable sending crash reports in the configuration dialog.</source>
-        <translation type="unfinished"/>
+        <translation>Man kan slå afsendelse, af rapporter om nedbrud, fra i konfigurationsdialogen</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="109"/>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="116"/>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="152"/>
         <source>We cannot gather useful debug information on your system.</source>
-        <translation type="unfinished"/>
+        <translation>Vi kan ikke opsamle anvendelig information om m nedbruddet fra dit system</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="110"/>
@@ -557,27 +557,27 @@
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="145"/>
         <source>Ready to send debug information (&lt;a href=&quot;%1&quot;&gt;view backtrace&lt;/a&gt;).</source>
-        <translation type="unfinished"/>
+        <translation>Klar til afsendelse af debug information (&lt;a href=&quot;%1&quot;&gt; se sporing &lt;/a&gt;)</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="161"/>
         <source>Gathering debug information...</source>
-        <translation type="unfinished"/>
+        <translation>Indsamler debug information</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="260"/>
         <source>Uploaded %L1 of %L2 KB.</source>
-        <translation type="unfinished"/>
+        <translation>Uploaded %L1 af %L2 KB.</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="287"/>
         <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;. Please refer to crash &lt;b&gt;%1&lt;/b&gt; in bug reports.</source>
-        <translation type="unfinished"/>
+        <translation>Afsendt,! &lt;b&gt; Mange tak &lt;/b&gt;. Henvis til nedbrud &lt;b&gt;%1&lt;/b&gt; in fejlrapporter.</translation>
     </message>
     <message>
         <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="296"/>
         <source>Failed to send crash info.</source>
-        <translation type="unfinished"/>
+        <translation>Kunne ikke sende information om nedbruddet.</translation>
     </message>
 </context>
 <context>
@@ -9936,12 +9936,12 @@ under W3C Community Contributor License Agreement
     <message>
         <location filename="../../crashreporter/crashreporter.cpp" line="108"/>
         <source>Success!</source>
-        <translation type="unfinished"/>
+        <translation>Succesfuld!</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.cpp" line="108"/>
         <source>Crash report uploaded successfully!</source>
-        <translation type="unfinished"/>
+        <translation>Rapport om nedbrud succesfuldt uploaded.</translation>
     </message>
     <message>
         <location filename="../../crashreporter/crashreporter.cpp" line="119"/>
@@ -9952,7 +9952,8 @@ under W3C Community Contributor License Agreement
         <location filename="../../crashreporter/crashreporter.cpp" line="119"/>
         <source>Error while uploading crash report:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Fejl under upload af rapport:
+%1</translation>
     </message>
 </context>
 <context>

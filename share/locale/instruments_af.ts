@@ -6530,7 +6530,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="16"/>
         <source>Popular</source>
-        <translation type="unfinished"/>
+        <translation>Gewild</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="17"/>

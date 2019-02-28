@@ -2928,7 +2928,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1498"/>
         <source>Small clef size:</source>
-        <translation>Kis kulcs mérete:</translation>
+        <translation>Váltókulcs mérete:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="130"/>
@@ -4003,7 +4003,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="1567"/>
         <source>Reset &apos;Small clef size&apos; value</source>
-        <translation>„Kis kulcs mérete” alaphelyzetbe</translation>
+        <translation>„Váltókulcs mérete” alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6313"/>
