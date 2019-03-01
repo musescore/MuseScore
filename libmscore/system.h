@@ -163,6 +163,7 @@ class System final : public Element {
       qreal bottomDistance(int staffIdx, const SkylineLine&) const;
       qreal minTop() const;
       qreal minBottom() const;
+      qreal spacerDistance(bool up) const;
 
       void moveBracket(int staffIdx, int srcCol, int dstCol);
       bool hasFixedDownDistance() const { return fixedDownDistance; }
