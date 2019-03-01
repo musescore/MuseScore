@@ -3508,6 +3508,9 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   if (!mb->isMeasure())
                         continue;
                   Measure* m = toMeasure(mb);
+                  if (MeasureNumber* mno = m->noText(staffIdx))
+                        ss->skyline().add(mno->bbox().translated(m->pos() + mno->pos()));
+                  ss->skyline().add(m->staffLines(staffIdx)->bbox().translated(m->pos()));
                   for (Segment& s : m->segments()) {
                         if (!s.enabled() || s.isTimeSigType())       // hack: ignore time signatures
                               continue;
@@ -3535,7 +3538,6 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                                 }
                                           for (auto n : c->notes())
                                                 notes.push_back(n);
-                                          std::list<Fingering*> fingerings;
                                           for (Note* note : notes) {
                                                 for (Element* e : note->el()) {
                                                       if (e->isFingering()) {
@@ -3562,10 +3564,6 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                     }
                               }
                         }
-                  ss->skyline().add(m->staffLines(staffIdx)->bbox().translated(m->pos()));
-                  MeasureNumber* mno = m->noText(staffIdx);
-                  if (mno)
-                        ss->skyline().add(mno->bbox().translated(m->pos() + mno->pos()));
                   }
             }
 
