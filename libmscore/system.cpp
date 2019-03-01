@@ -496,7 +496,7 @@ void System::layout2()
                         }
                   sp = m->vspacerUp(si2);
                   if (sp)
-                        dist = qMax(dist, sp->gap());
+                        dist = qMax(dist, sp->gap() + h);
                   }
             if (!fixedSpace) {
                   qreal d = score()->lineMode() ? 0.0 : ss->skyline().minDistance(System::staff(si2)->skyline());
@@ -1219,11 +1219,40 @@ qreal System::minTop() const
 qreal System::minBottom() const
       {
       if (vbox())
-            return vbox()->height() + vbox()->bottomGap();
+            return vbox()->bottomGap();
       SysStaff* s = lastVisibleSysStaff();
       if (s)
-            return s->skyline().south().max();
+            return s->skyline().south().max() - s->bbox().height();
       return 0.0;
+      }
+
+//---------------------------------------------------------
+//   spacerDistance
+//    Return the distance needed due to spacers
+//---------------------------------------------------------
+
+qreal System::spacerDistance(bool up) const
+      {
+      SysStaff* ss = up ? firstVisibleSysStaff() : lastVisibleSysStaff();
+      if (!ss)
+            return 0.0;
+      qreal dist = 0.0;
+      int staff = ss->idx;
+      for (MeasureBase* mb : measures()) {
+            if (mb->isMeasure()) {
+                  Measure* m = toMeasure(mb);
+                  Spacer* sp = up ? m->vspacerUp(staff) : m->vspacerDown(staff);
+                  if (sp) {
+                        if (sp->spacerType() == SpacerType::FIXED) {
+                              dist = sp->gap();
+                              break;
+                              }
+                        else
+                              dist = qMax(dist, sp->gap());
+                        }
+                  }
+            }
+      return dist;
       }
 
 //---------------------------------------------------------
