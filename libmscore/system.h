@@ -114,6 +114,14 @@ class System final : public Element {
 
       void layoutSystem(qreal);
 
+      int getBracketsColumnsCount();
+
+      void setBracketsXPosition(const qreal &xOffset);
+
+      Bracket* createBracket(Ms::BracketItem * bi, int column, int staffIdx, QList<Ms::Bracket *> &bl, Measure* measure);
+
+      void addBrackets(Measure* measure);
+
       void layout2();                     ///< Called after Measure layout.
       void clear();                       ///< Clear measure list.
 
