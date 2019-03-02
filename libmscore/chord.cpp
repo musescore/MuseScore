@@ -431,7 +431,7 @@ QPointF Chord::stemPosBeam() const
 
 void Chord::setTremolo(Tremolo* tr)
       {
-      if (tr == _tremolo)
+      if (_tremolo && tr && tr == _tremolo)
             return;
 
       if (_tremolo) {
@@ -476,6 +476,9 @@ void Chord::setTremolo(Tremolo* tr)
                   }
             else
                   _tremolo = tr;
+            }
+      else {
+            _tremolo = nullptr;
             }
       }
 
@@ -2918,7 +2921,7 @@ TremoloChordType Chord::tremoloChordType() const
             else if (_tremolo->chord2() == this)
                   return TremoloChordType::TremoloSecondNote;
             else
-                  qFatal("Chord::tremoloChordType(): inconsistency %p - %p", _tremolo->chord1(), _tremolo->chord2());
+                  qFatal("Chord::tremoloChordType(): inconsistency %p - %p, this is %p", _tremolo->chord1(), _tremolo->chord2(), this);
             }
       return TremoloChordType::TremoloSingle;
       }

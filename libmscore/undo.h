@@ -1333,5 +1333,27 @@ class FretMarker : public UndoCommand {
       UNDO_NAME("FretMarker")
       };
 
+//---------------------------------------------------------
+//   MoveTremolo
+//---------------------------------------------------------
+
+class MoveTremolo : public UndoCommand {
+      Score* score;
+      Fraction chord1Tick;
+      Fraction chord2Tick;
+      Tremolo* trem;
+      int track;
+
+      Chord* oldC1;
+      Chord* oldC2;
+
+      void undo(EditData*) override;
+      void redo(EditData*) override;
+
+   public:
+      MoveTremolo(Score* s, Fraction c1, Fraction c2, Tremolo* tr, int t) : score(s), chord1Tick(c1), chord2Tick(c2), trem(tr), track(t) {}
+      UNDO_NAME("MoveTremolo")
+      };
+
 }     // namespace Ms
 #endif
