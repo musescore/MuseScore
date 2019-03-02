@@ -56,6 +56,7 @@ class TestMeasure : public QObject, public MTest
       void deleteLast();
 //      void minWidth();
       void undoDelInitialVBox_269919();
+      void mmrest();
 
       void gap();
       void checkMeasure();
@@ -502,6 +503,22 @@ void TestMeasure::undoDelInitialVBox_269919()
       score->undoRedo(true, 0);
 
       QVERIFY(saveCompareScore(score, "undoDelInitialVBox_269919.mscx", DIR + "undoDelInitialVBox_269919-ref.mscx"));
+      delete score;
+      }
+
+//---------------------------------------------------------
+///   mmrest
+///    mmrest creation
+//---------------------------------------------------------
+
+void TestMeasure::mmrest()
+      {
+      MasterScore* score = readScore(DIR + "mmrest.mscx");
+      score->startCmd();
+      score->undo(new ChangeStyleVal(score, Sid::createMultiMeasureRests, true));
+      score->setLayoutAll();
+      score->endCmd();
+      QVERIFY(saveCompareScore(score, "mmrest.mscx", DIR + "mmrest-ref.mscx"));
       delete score;
       }
 
