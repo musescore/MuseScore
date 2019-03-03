@@ -1308,15 +1308,15 @@ void GuitarPro::readChord(Segment* seg, int track, int numStrings, QString name,
                   if (i > numStrings - 1) {
                         }
                   else if (currentFret > 0) {
-                        fret->setDot(numStrings - 1 - i, currentFret-firstFret+1);
+                        fret->setDot(numStrings - 1 - i, currentFret - firstFret + 1, true);
                         }
                   else if (currentFret == 0) {
-                        fret->setDot(numStrings - 1 - i, 0);
-                        fret->setMarker(numStrings - 1 - i, '0');
+                        fret->setDot(numStrings - 1 - i, 0, true);
+                        fret->setMarker(numStrings - 1 - i, FretMarkerType::CIRCLE);
                         }
                   else if (currentFret == -1) {
-                        fret->setDot(numStrings - 1 - i, 0);
-                        fret->setMarker(numStrings - 1 - i, 'X');
+                        fret->setDot(numStrings - 1 - i, 0, true);
+                        fret->setMarker(numStrings - 1 - i, FretMarkerType::CROSS);
                         }
                   }
             seg->add(fret);

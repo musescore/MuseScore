@@ -282,8 +282,7 @@ enum class Sid {
       fretPlacement,
       fretStrings,
       fretFrets,
-      fretOffset,
-      fretBarre,
+      fretNut,
 
       showPageNumber,
       showPageNumberOne,

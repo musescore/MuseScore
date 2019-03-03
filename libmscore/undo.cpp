@@ -406,7 +406,7 @@ Element* UndoMacro::selectedElement(const Selection& sel)
       if (sel.isSingle()) {
             Element* e = sel.element();
             Q_ASSERT(e); // otherwise it shouldn't be "single" selection
-            if (e->isNote() || e->isChordRest() || (e->isTextBase() && !e->isInstrumentName()))
+            if (e->isNote() || e->isChordRest() || (e->isTextBase() && !e->isInstrumentName()) || e->isFretDiagram())
                   return e;
             }
       return nullptr;
@@ -2365,24 +2365,73 @@ void ChangeGap::flip(EditData*)
 //   FretDot
 //---------------------------------------------------------
 
-void FretDot::flip(EditData*)
+void FretDot::redo(EditData*)
       {
-      int ov = fret->dot(string);
-      fret->setDot(string, dot);
-      dot = ov;
-      fret->triggerLayout();
+      undoData = FretUndoData(diagram);
+
+      diagram->setDot(string, fret, add, dtype);
+      diagram->triggerLayout();
+      }
+
+
+void FretDot::undo(EditData*)
+      {
+      undoData.updateDiagram();
+      diagram->triggerLayout();
       }
 
 //---------------------------------------------------------
 //   FretMarker
 //---------------------------------------------------------
 
-void FretMarker::flip(EditData*)
+void FretMarker::redo(EditData*)
       {
-      int om = fret->marker(string);
-      fret->setMarker(string, marker);
-      marker = om;
-      fret->triggerLayout();
+      undoData = FretUndoData(diagram);
+
+      diagram->setMarker(string, mtype);
+      diagram->triggerLayout();
+      }
+
+void FretMarker::undo(EditData*)
+      {
+      undoData.updateDiagram();
+      diagram->triggerLayout();
+      }
+
+//---------------------------------------------------------
+//   FretBarre
+//---------------------------------------------------------
+
+void FretBarre::redo(EditData*)
+      {
+      undoData = FretUndoData(diagram);
+
+      diagram->setBarre(string, fret, add);
+      diagram->triggerLayout();
+      }
+
+void FretBarre::undo(EditData*)
+      {
+      undoData.updateDiagram();
+      diagram->triggerLayout();
+      }
+
+//---------------------------------------------------------
+//   FretClear
+//---------------------------------------------------------
+
+void FretClear::redo(EditData*)
+      {
+      undoData = FretUndoData(diagram);
+
+      diagram->clear();
+      diagram->triggerLayout();
+      }
+
+void FretClear::undo(EditData*)
+      {
+      undoData.updateDiagram();
+      diagram->triggerLayout();
       }
 
 //---------------------------------------------------------

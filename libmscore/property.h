@@ -232,7 +232,7 @@ enum class Pid {
       GLISSANDO_STYLE,
       FRET_STRINGS,
       FRET_FRETS,
-      FRET_BARRE,
+      FRET_NUT,
       FRET_OFFSET,
 
       FRET_NUM_POS,
