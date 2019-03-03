@@ -202,7 +202,8 @@ void Box::writeProperties(XmlWriter& xml) const
       {
       for (Pid id : {
          Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
-         Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN }) {
+         Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, 
+         Pid::CREATE_SYSTEM_HEADER }) {
             writeProperty(xml, id);
             }
       Element::writeProperties(xml);
@@ -271,6 +272,11 @@ bool Box::readProperties(XmlReader& e)
             _topMargin = e.readDouble();
       else if (tag == "bottomMargin")
             _bottomMargin = e.readDouble();
+      else if (tag == "createSystemHeader") {
+            if (isHBox()) {
+                  toHBox(this)->setCreateSystemHeader(e.readBool());
+                  }
+            }
       else if (tag == "Text") {
             Text* t;
             if (isTBox()) {
