@@ -3685,12 +3685,13 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         timesig->setGenerated(true);
                         timesig->setParent(tSegment);
                         tSegment->add(timesig);
+                        timesig->setSig(this->timesig());
+                        timesig->layout();
+                        tSegment->createShape(staffIdx);
+                        tSegment->setEnabled(true);
                         }
-                  timesig->setSig(this->timesig());
-                  timesig->layout();
-                  tSegment->createShape(staffIdx);
-                  tSegment->setEnabled(true);
                   }
+
             ++staffIdx;
             }
       //
