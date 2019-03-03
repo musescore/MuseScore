@@ -5,6 +5,26 @@
       <voice id="0">0</voice>
       </voiceOffset>
     <FretDiagram>
+      <fretDiagram>
+        <string no="0">
+          <marker>cross</marker>
+          </string>
+        <string no="1">
+          <dot fret="3">normal</dot>
+          </string>
+        <string no="2">
+          <dot fret="2">normal</dot>
+          </string>
+        <string no="3">
+          <marker>circle</marker>
+          </string>
+        <string no="4">
+          <marker>circle</marker>
+          </string>
+        <string no="5">
+          <dot fret="1">normal</dot>
+          </string>
+        </fretDiagram>
       <string no="0">
         <marker>88</marker>
         </string>
