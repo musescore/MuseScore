@@ -3665,7 +3665,8 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         cSegment->setEnabled(false);
                   }
 
-            bool needTimeSig = isFirstSystem;
+            bool firstMeasureHasTimeSig = system()->firstMeasure()->findFirstR(SegmentType::TimeSig, Fraction(0, 1));
+            bool needTimeSig = isFirstSystem && firstMeasureHasTimeSig;
             if (needTimeSig) {
                   TimeSig* timesig;
                   if (!tSegment) {
