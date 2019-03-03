@@ -230,6 +230,8 @@ enum class Sid {
       trillPlacement,
       trillPosAbove,
       trillPosBelow,
+      trillTerminationLineHeight,
+      trillTerminationLineWidth,
 
       vibratoPlacement,
       vibratoPosAbove,

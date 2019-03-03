@@ -241,7 +241,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>33</number>
+       <number>19</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -7396,7 +7396,7 @@
            <string>Trill Line</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_14">
-           <item row="3" column="0">
+           <item row="5" column="0">
             <spacer name="verticalSpacer_18">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -7516,6 +7516,86 @@
            </item>
            <item row="2" column="1">
             <widget class="Ms::OffsetSelect" name="trillLinePosBelow" native="true"/>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="trillTerminationLineHeightLabel">
+             <property name="text">
+              <string>Termination line height:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="trillTerminationLineWidthLabel">
+             <property name="text">
+              <string>Termination line width:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="trillTerminationLineHeight">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="minimum">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QDoubleSpinBox" name="trillTerminationLineWidth">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="minimum">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.200000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetTrillTerminationLineHeight">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Termination line height' value</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QToolButton" name="resetTrillTerminationLineWidth">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Termination line width' value</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

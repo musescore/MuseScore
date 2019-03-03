@@ -158,6 +158,7 @@ enum class Pid {
       TRILL_TYPE,
       VIBRATO_TYPE,
       HAIRPIN_CIRCLEDTIP,
+      SHOW_TERMINATION_LINE,
 
       HAIRPIN_TYPE,
       HAIRPIN_HEIGHT,

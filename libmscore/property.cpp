@@ -140,6 +140,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::TRILL_TYPE,              false, "",                      P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "trill type")       },
       { Pid::VIBRATO_TYPE,            false, "",                      P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "vibrato type")     },
       { Pid::HAIRPIN_CIRCLEDTIP,      false, "hairpinCircledTip",     P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin with circled tip") },
+      { Pid::SHOW_TERMINATION_LINE,   false, "showTerminationLine",   P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "show termination line") },
 
       { Pid::HAIRPIN_TYPE,            true,  "",                      P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin type")     },
       { Pid::HAIRPIN_HEIGHT,          false, "hairpinHeight",         P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin height")   },

@@ -239,6 +239,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::trillPlacement,          false, trillLinePlacement,      resetTrillLinePlacement  },
       { Sid::trillPosAbove,           false, trillLinePosAbove,       resetTrillLinePosAbove   },
       { Sid::trillPosBelow,           false, trillLinePosBelow,       resetTrillLinePosBelow   },
+      { Sid::trillTerminationLineHeight, false, trillTerminationLineHeight, resetTrillTerminationLineHeight },
+      { Sid::trillTerminationLineWidth,  false, trillTerminationLineWidth,  resetTrillTerminationLineWidth  },
 
       { Sid::vibratoPlacement,        false, vibratoLinePlacement,      resetVibratoLinePlacement  },
       { Sid::vibratoPosAbove,         false, vibratoLinePosAbove,       resetVibratoLinePosAbove   },

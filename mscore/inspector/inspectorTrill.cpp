@@ -27,10 +27,11 @@ InspectorTrill::InspectorTrill(QWidget* parent)
       t.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::TRILL_TYPE,     0, t.trillType,        t.resetTrillType        },
-            { Pid::PLACEMENT,      0, t.placement,        t.resetPlacement        },
-            { Pid::ORNAMENT_STYLE, 0, t.ornamentStyle,    t.resetOrnamentStyle    },
-            { Pid::PLAY,           0, t.playArticulation, t.resetPlayArticulation }
+            { Pid::TRILL_TYPE,            0, t.trillType,           t.resetTrillType           },
+            { Pid::PLACEMENT,             0, t.placement,           t.resetPlacement           },
+            { Pid::ORNAMENT_STYLE,        0, t.ornamentStyle,       t.resetOrnamentStyle       },
+            { Pid::SHOW_TERMINATION_LINE, 0, t.showTerminationLine, t.resetShowTerminationLine },
+            { Pid::PLAY,                  0, t.playArticulation,    t.resetPlayArticulation    }
             };
       const std::vector<InspectorPanel> ppList = {
             { t.title, t.panel }

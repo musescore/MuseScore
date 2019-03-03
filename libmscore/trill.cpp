@@ -57,6 +57,37 @@ void TrillSegment::draw(QPainter* painter) const
       {
       painter->setPen(spanner()->curColor());
       drawSymbols(_symbols, painter);
+      if (trill()->showTerminationLine() && isSingleEndType()) {
+            drawTerminationLine(painter);
+            }
+      }
+
+//---------------------------------------------------------
+//   drawTerminationLine
+//---------------------------------------------------------
+
+void TrillSegment::drawTerminationLine(QPainter* painter) const
+      {
+      ScoreFont* f = score()->scoreFont();
+      qreal mag = magS();
+      qreal symHeight = f->bbox(_symbols.back(), mag).height();
+      qreal lineHeight = spatium() * score()->styleS(Sid::trillTerminationLineHeight).val();
+      qreal diff = lineHeight - symHeight;
+      qreal bottom = f->bbox(_symbols.back(), mag).bottom() + diff / 2; // Center line vertically on symbol
+      qreal lineWidth = spatium() * score()->styleS(Sid::trillTerminationLineWidth).val();
+
+      qreal x = 0;
+      for (size_t i = 0; i < _symbols.size(); ++i) {
+            x += f->advance(_symbols.at(i), mag);
+            }
+      // Line must be nudged to the right in order to avoid the final trill symbol extending
+      // beyond the line. Attempted to use width() instead of advance() for final symbol, but
+      // this leads to a gap between trill symbol and line. The following appears to be working
+      // quite well across musical symbols fonts. Is there a better way of doing this?
+      x += (f->width(_symbols.back(), mag) - f->advance(_symbols.back(), mag)) / 2;
+
+      painter->setPen(QPen(spanner()->curColor(), lineWidth, Qt::SolidLine, Qt::FlatCap));
+      painter->drawLine(x, bottom, x, bottom - lineHeight);
       }
 
 //---------------------------------------------------------
@@ -215,7 +246,7 @@ Element* TrillSegment::drop(EditData& data)
 
 Element* TrillSegment::propertyDelegate(Pid pid)
       {
-      if (pid == Pid::TRILL_TYPE || pid == Pid::ORNAMENT_STYLE || pid == Pid::PLACEMENT || pid == Pid::PLAY)
+      if (pid == Pid::TRILL_TYPE || pid == Pid::ORNAMENT_STYLE || pid == Pid::PLACEMENT || pid == Pid::SHOW_TERMINATION_LINE || pid == Pid::PLAY)
             return spanner();
       return LineSegment::propertyDelegate(pid);
       }
@@ -262,6 +293,7 @@ Trill::Trill(Score* s)
       _trillType     = Type::TRILL_LINE;
       _accidental    = 0;
       _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
+      setShowTerminationLine(false);
       setPlayArticulation(true);
       initElementStyle(&trillStyle);
       resetProperty(Pid::OFFSET);
@@ -341,6 +373,7 @@ void Trill::write(XmlWriter& xml) const
             return;
       xml.stag(this);
       xml.tag("subtype", trillTypeName());
+      writeProperty(xml, Pid::SHOW_TERMINATION_LINE);
       writeProperty(xml, Pid::PLAY);
       writeProperty(xml, Pid::ORNAMENT_STYLE);
       writeProperty(xml, Pid::PLACEMENT);
@@ -369,6 +402,8 @@ void Trill::read(XmlReader& e)
                   }
             else if ( tag == "ornamentStyle")
                   readProperty(e, Pid::ORNAMENT_STYLE);
+            else if ( tag == "showTerminationLine")
+                  setShowTerminationLine(e.readBool());
             else if ( tag == "play")
                   setPlayArticulation(e.readBool());
             else if (!SLine::readProperties(e))
@@ -445,6 +480,8 @@ QVariant Trill::getProperty(Pid propertyId) const
                   return int(trillType());
             case Pid::ORNAMENT_STYLE:
                   return int(ornamentStyle());
+            case Pid::SHOW_TERMINATION_LINE:
+                  return bool(showTerminationLine());
             case Pid::PLAY:
                   return bool(playArticulation());
             default:
@@ -462,6 +499,9 @@ bool Trill::setProperty(Pid propertyId, const QVariant& val)
       switch(propertyId) {
             case Pid::TRILL_TYPE:
                   setTrillType(Type(val.toInt()));
+                  break;
+            case Pid::SHOW_TERMINATION_LINE:
+                  setShowTerminationLine(val.toBool());
                   break;
             case Pid::PLAY:
                   setPlayArticulation(val.toBool());
@@ -490,6 +530,8 @@ QVariant Trill::propertyDefault(Pid propertyId) const
             case Pid::ORNAMENT_STYLE:
                   //return int(score()->style()->ornamentStyle(_ornamentStyle));
                   return int(MScore::OrnamentStyle::DEFAULT);
+            case Pid::SHOW_TERMINATION_LINE:
+                  return false;
             case Pid::PLAY:
                   return true;
             case Pid::PLACEMENT:

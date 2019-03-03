@@ -76,6 +76,9 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
+      <item row="4" column="3">
+       <widget class="Ms::ResetButton" name="resetPlayArticulation" native="true"/>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -194,7 +197,7 @@
         </item>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
+      <item row="4" column="0" colspan="2">
        <widget class="QCheckBox" name="playArticulation">
         <property name="text">
          <string>Play</string>
@@ -202,16 +205,23 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="Ms::ResetButton" name="resetTrillType"/>
+       <widget class="Ms::ResetButton" name="resetTrillType" native="true"/>
       </item>
       <item row="1" column="3">
-       <widget class="Ms::ResetButton" name="resetPlacement"/>
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true"/>
       </item>
       <item row="2" column="3">
-       <widget class="Ms::ResetButton" name="resetOrnamentStyle"/>
+       <widget class="Ms::ResetButton" name="resetOrnamentStyle" native="true"/>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QCheckBox" name="showTerminationLine">
+        <property name="text">
+         <string>Show termination line</string>
+        </property>
+       </widget>
       </item>
       <item row="3" column="3">
-       <widget class="Ms::ResetButton" name="resetPlayArticulation"/>
+       <widget class="Ms::ResetButton" name="resetShowTerminationLine" native="true"/>
       </item>
      </layout>
     </widget>
@@ -231,6 +241,7 @@
   <tabstop>trillType</tabstop>
   <tabstop>placement</tabstop>
   <tabstop>ornamentStyle</tabstop>
+  <tabstop>showTerminationLine</tabstop>
   <tabstop>playArticulation</tabstop>
  </tabstops>
  <resources>

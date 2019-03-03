@@ -39,6 +39,7 @@ class TrillSegment final : public LineSegment {
       virtual ElementType type() const override  { return ElementType::TRILL_SEGMENT; }
       virtual TrillSegment* clone() const override { return new TrillSegment(*this); }
       virtual void draw(QPainter*) const override;
+      virtual void drawTerminationLine(QPainter*) const;
       virtual bool acceptDrop(EditData&) const override;
       virtual Element* drop(EditData&) override;
       virtual void layout() override;
@@ -71,6 +72,7 @@ class Trill final : public SLine {
       Type _trillType;
       Accidental* _accidental;
       MScore::OrnamentStyle _ornamentStyle; // for use in ornaments such as trill
+      bool _showTerminationLine;
       bool _playArticulation;
 
    public:
@@ -91,6 +93,8 @@ class Trill final : public SLine {
       Type trillType() const              { return _trillType; }
       void setOrnamentStyle(MScore::OrnamentStyle val) { _ornamentStyle = val;}
       MScore::OrnamentStyle ornamentStyle() const { return _ornamentStyle;}
+      void setShowTerminationLine(bool val)  { _showTerminationLine = val;}
+      bool showTerminationLine() const       { return _showTerminationLine; }
       void setPlayArticulation(bool val)  { _playArticulation = val;}
       bool playArticulation() const       { return _playArticulation; }
       QString trillTypeName() const;

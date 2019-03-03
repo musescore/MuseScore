@@ -257,6 +257,8 @@ static const StyleType styleTypes[] {
       { Sid::trillPlacement,          "trillPlacement",          int(Placement::ABOVE)  },
       { Sid::trillPosAbove,           "trillPosAbove",           QPointF(.0, -1) },
       { Sid::trillPosBelow,           "trillPosBelow",           QPointF(.0, 1) },
+      { Sid::trillTerminationLineHeight, "trillTerminationLineHeight", Spatium(1.0) },
+      { Sid::trillTerminationLineWidth,  "trillTerminationLineWidth",  Spatium(0.2) },
 
       { Sid::vibratoPlacement,        "vibratoPlacement",        int(Placement::ABOVE)  },
       { Sid::vibratoPosAbove,         "vibratoPosAbove",         QPointF(.0, -1) },
