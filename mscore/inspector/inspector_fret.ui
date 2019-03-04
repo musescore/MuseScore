@@ -207,17 +207,20 @@
       <item row="6" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Offset:</string>
+         <string>Fret number:</string>
         </property>
         <property name="buddy">
-         <cstring>offset</cstring>
+         <cstring>fretNumber</cstring>
         </property>
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QSpinBox" name="offset">
+       <widget class="QSpinBox" name="fretNumber">
         <property name="accessibleName">
-         <string>Offset</string>
+         <string>Fret number</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
         </property>
        </widget>
       </item>
@@ -256,7 +259,7 @@
        <widget class="Ms::ResetButton" name="resetBarre" native="true"/>
       </item>
       <item row="6" column="2">
-       <widget class="Ms::ResetButton" name="resetOffset" native="true"/>
+       <widget class="Ms::ResetButton" name="resetFretNumber" native="true"/>
       </item>
      </layout>
     </widget>
@@ -284,7 +287,7 @@
   <tabstop>strings</tabstop>
   <tabstop>frets</tabstop>
   <tabstop>barre</tabstop>
-  <tabstop>offset</tabstop>
+  <tabstop>fretNumber</tabstop>
  </tabstops>
  <resources/>
  <connections/>
