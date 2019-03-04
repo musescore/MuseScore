@@ -3551,11 +3551,13 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                     if (!e->visible())
                                           continue;
                                     int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
-                                    if (effectiveTrack >= strack && effectiveTrack < etrack)
+                                    if (effectiveTrack >= strack && effectiveTrack < etrack) {
                                           skyline.add(e->shape().translated(e->pos() + p));
-                                    if (e->isChord() && toChord(e)->tremolo()) {
-                                          Tremolo* t = toChord(e)->tremolo();
-                                          skyline.add(t->shape().translated(t->pos() + p));
+                                          if (e->isChord() && toChord(e)->tremolo()) {
+                                                Tremolo* t = toChord(e)->tremolo();
+                                                if (t->chord() == e && t->autoplace())
+                                                      skyline.add(t->shape().translated(t->pos() + e->pos() + p));
+                                                }
                                           }
                                     }
                               }
