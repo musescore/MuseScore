@@ -14,6 +14,8 @@
 #define __PLUGIN_API_SCORE_H__
 
 #include "scoreelement.h"
+#include "part.h"
+#include "excerpt.h"
 #include "libmscore/score.h"
 
 namespace Ms {
@@ -31,7 +33,7 @@ class Score : public Ms::PluginAPI::ScoreElement {
       Q_OBJECT
 //       Q_PROPERTY(QString                        composer          READ composer)
 //       Q_PROPERTY(int                            duration          READ duration)
-//       Q_PROPERTY(QQmlListProperty<Ms::Excerpt>  excerpts          READ qmlExcerpts)
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Excerpt>  excerpts   READ excerpts)
       Q_PROPERTY(Ms::PluginAPI::Measure*       firstMeasure      READ firstMeasure)
 //       Q_PROPERTY(Ms::Measure*                   firstMeasureMM    READ firstMeasureMM)
 //       Q_PROPERTY(int                            harmonyCount      READ harmonyCount)
@@ -49,6 +51,7 @@ class Score : public Ms::PluginAPI::ScoreElement {
       Q_PROPERTY(int                            ntracks           READ ntracks)
 //       Q_PROPERTY(Ms::PageFormat*                pageFormat        READ pageFormat     WRITE undoChangePageFormat)
 //       Q_PROPERTY(QQmlListProperty<Ms::Part>     parts             READ qmlParts)
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Part>     parts      READ parts)
 //       Q_PROPERTY(QString                        poet              READ poet)
 //       Q_PROPERTY(QString                        subtitle          READ subtitle)
 //       Q_PROPERTY(QString                        title             READ title)
@@ -100,6 +103,9 @@ class Score : public Ms::PluginAPI::ScoreElement {
 
       QString mscoreVersion() { return score()->mscoreVersion(); }
       QString mscoreRevision() { return QString::number(score()->mscoreRevision(), /* base */ 16); }
+
+      QQmlListProperty<Part> parts() { return wrapContainerProperty<Part>(this, score()->parts());   }
+      QQmlListProperty<Excerpt> excerpts() { return wrapExcerptsContainerProperty<Excerpt>(this, score()->excerpts());   }
       };
 } // namespace PluginAPI
 } // namespace Ms

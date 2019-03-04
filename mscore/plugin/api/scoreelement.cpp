@@ -102,6 +102,8 @@ ScoreElement* wrap(Ms::ScoreElement* se, Ownership own)
       switch(se->type()) {
             case ElementType::SCORE:
                   return wrap<Score>(toScore(se), own);
+            case ElementType::PART:
+                  return wrap<Part>(toPart(se), own);
             default:
                   break;
             }
