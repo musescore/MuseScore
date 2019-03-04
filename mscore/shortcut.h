@@ -19,7 +19,7 @@ NOTE ON ARCHITECTURE
 The Shortcut class describes the basic configurable shortcut element.
 'Real' data are contained in 2 static member variables:
 
-1) sc[], an array of Shortcut: contains the default, built-in data for each shortcut
+1) _sc[], an array of Shortcut: contains the default, built-in data for each shortcut
       except the key sequences; it is initialized at startup (code at the beginning of
       mscore/actions.cpp)
 2) _shortcuts, a QMap using the shortcut xml tag name as hash value: is initialized from
