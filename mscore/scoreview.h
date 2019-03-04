@@ -397,6 +397,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void onElementDestruction(Element*) override;
 
       virtual Element* elementNear(QPointF);
+      QList<Element*> elementsNear(QPointF);
 //      void editFretDiagram(FretDiagram*);
       void editBendProperties(Bend*);
       void editTremoloBarProperties(TremoloBar*);
