@@ -116,6 +116,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::lyricsPosBelow,          false, lyricsPosBelow,          resetLyricsPosBelow          },
       { Sid::lyricsMinTopDistance,    false, lyricsMinTopDistance,    resetLyricsMinTopDistance    },
       { Sid::lyricsMinBottomDistance, false, lyricsMinBottomDistance, resetLyricsMinBottomDistance },
+      { Sid::lyricsMinDistance,       false, lyricsMinDistance,       resetLyricsMinDistance       },
       { Sid::lyricsLineHeight,        true,  lyricsLineHeight,        resetLyricsLineHeight        },
       { Sid::lyricsDashMinLength,     false, lyricsDashMinLength,     resetLyricsDashMinLength     },
       { Sid::lyricsDashMaxLength,     false, lyricsDashMaxLength,     resetLyricsDashMaxLength     },

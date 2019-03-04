@@ -10,7 +10,7 @@
       <staffDistance>6</staffDistance>
       <akkoladeDistance>6.4</akkoladeDistance>
       <minSystemDistance>8.2</minSystemDistance>
-      <lyricsMinBottomDistance>5.5</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <systemFrameDistance>6</systemFrameDistance>
       <frameSystemDistance>6</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>

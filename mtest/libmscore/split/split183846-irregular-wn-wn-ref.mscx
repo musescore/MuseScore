@@ -14,7 +14,7 @@
       <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
-      <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <doubleBarDistance>0.46</doubleBarDistance>
       <endBarDistance>0.65</endBarDistance>
       <clefLeftMargin>0.64</clefLeftMargin>

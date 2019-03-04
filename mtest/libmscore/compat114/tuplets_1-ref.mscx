@@ -5,7 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
       <bracketWidth>0.35</bracketWidth>
