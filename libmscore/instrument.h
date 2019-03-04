@@ -17,7 +17,6 @@
 #include "mscore.h"
 #include "notifier.hpp"
 #include "synthesizer/event.h"
-#include "synthesizer/msynthesizer.h"
 #include "interval.h"
 #include "clef.h"
 #include <QtGlobal>
@@ -32,6 +31,7 @@ class XmlReader;
 class Drumset;
 class StringData;
 class ChannelListener;
+class MasterSynthesizer;
 
 //---------------------------------------------------------
 //   StaffName

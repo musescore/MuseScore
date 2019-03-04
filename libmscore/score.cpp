@@ -69,7 +69,7 @@
 #include "rehearsalmark.h"
 #include "breath.h"
 #include "instrchange.h"
-#include "synthesizer/msynthesizer.h"
+#include "synthesizerstate.h"
 
 namespace Ms {
 
