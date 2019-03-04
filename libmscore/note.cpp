@@ -3159,11 +3159,6 @@ void Note::setAccidentalType(AccidentalType type)
 Shape Note::shape() const
       {
       QRectF r(bbox());
-      qreal extraTieDistance = score()->styleP(Sid::MinTieLength) * .5;       // make room for ties
-      if (_tieFor)
-            r.adjust(0.0, 0.0, extraTieDistance, 0.0);
-      if (_tieBack)
-            r.adjust(-extraTieDistance, 0.0, 0.0, 0.0);
 
 #ifndef NDEBUG
       Shape shape(r, name());
