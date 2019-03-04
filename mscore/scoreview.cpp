@@ -4317,47 +4317,54 @@ static bool elementLower(const Element* e1, const Element* e2)
             return false;
       if (!e2->selectable())
             return true;
+      if (e1->isNote() && e2->isStem())
+            return true;
+      if (e2->isNote() && e1->isStem())
+            return false;
       if (e1->z() == e2->z()) {
+            // same stacking order, prefer non-hidden elements
             if (e1->type() == e2->type()) {
                   if (e1->type() == ElementType::NOTEDOT) {
                         const NoteDot* n1 = static_cast<const NoteDot*>(e1);
                         const NoteDot* n2 = static_cast<const NoteDot*>(e2);
                         if (n1->note() && n1->note()->hidden())
-                              return n2;
-                        else
-                              return n1;
+                              return false;
+                        else if (n2->note() && n2->note()->hidden())
+                              return true;
                         }
                   else if (e1->type() == ElementType::NOTE) {
                         const Note* n1 = static_cast<const Note*>(e1);
                         const Note* n2 = static_cast<const Note*>(e2);
                         if (n1->hidden())
-                              return n2;
-                        else
-                              return n1;
+                              return false;
+                        else if (n2->hidden())
+                              return true;
                         }
                   }
+            // different types, or same type but nothing hidden - use track
+            return e1->track() <= e2->track();
             }
-      return e1->z() < e2->z();
+
+      // default case, use stacking order
+      return e1->z() <= e2->z();
       }
 
-
-
 //---------------------------------------------------------
-//   elementNear
+//   elementsNear
 //---------------------------------------------------------
 
-Element* ScoreView::elementNear(QPointF p)
+QList<Element*> ScoreView::elementsNear(QPointF p)
       {
+      QList<Element*> ll;
       Page* page = point2page(p);
       if (!page)
-            return 0;
+            return ll;
 
       p       -= page->pos();
       double w = (preferences.getInt(PREF_UI_CANVAS_MISC_SELECTIONPROXIMITY) * .5) / matrix().m11();
       QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
       QList<Element*> el = page->items(r);
-      QList<Element*> ll;
       for (Element* e : el) {
             e->itemDiscovered = 0;
             if (!e->selectable() || e->isPage())
@@ -4377,12 +4384,22 @@ Element* ScoreView::elementNear(QPointF p)
                         ll.append(e);
                   }
             }
+      if (!ll.empty())
+            qSort(ll.begin(), ll.end(), elementLower);
+      return ll;
+      }
+
+//---------------------------------------------------------
+//   elementNear
+//---------------------------------------------------------
+
+Element* ScoreView::elementNear(QPointF p)
+      {
+      QList<Element*> ll = elementsNear(p);
       if (ll.empty()) {
             // qDebug("  nothing found");
             return 0;
             }
-      qSort(ll.begin(), ll.end(), elementLower);
-
 #if 0
       qDebug("==");
       for (const Element* e : ll)
