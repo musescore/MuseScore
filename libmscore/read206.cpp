@@ -1024,6 +1024,10 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
             else
                  e.unknown();
             }
+
+      // Read single-note dynamics from template
+      i->setSingleNoteDynamicsFromTemplate();
+
       if (i->channel().empty()) {      // for backward compatibility
             Channel* a = new Channel;
             a->setName(Channel::DEFAULT_NAME);
@@ -1038,7 +1042,6 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
       if (i->useDrumset()) {
             if (i->channel()[0]->bank() == 0)
                   i->channel()[0]->setBank(128);
-            i->channel()[0]->updateInitList();
             }
       }
 

@@ -8,8 +8,9 @@ capxfiles=`cat tst_capella_io.cpp | grep "{ capxReadTest" | awk -F\" '{print $2}
 
 echo "updating Capella files ..."
 for f in $capfiles; do
-      echo "${f}.cap -> ${f}.cap-ref.mscx"
-      $MSCORE -t ${f}.cap -o ${f}.cap-ref.mscx &> /dev/null
+      echo "${f}.cap.mscx -> ${f}.cap-ref.mscx"
+      $MSCORE -t ${f}.cap.mscx -o ${f}.cap-ref.mscx &> /dev/null
+      cp ../../../build.debug/mtest/capella/io/${f}.cap.mscx ${f}.cap-ref.mscx
 done
 
 echo "updating CapellaXML files ..."

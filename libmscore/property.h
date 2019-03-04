@@ -163,7 +163,10 @@ enum class Pid {
       HAIRPIN_HEIGHT,
       HAIRPIN_CONT_HEIGHT,
       VELO_CHANGE,
+      VELO_CHANGE_METHOD,
+      VELO_CHANGE_SPEED,
       DYNAMIC_RANGE,
+      SINGLE_NOTE_DYNAMICS,
       PLACEMENT,
       VELOCITY,
       JUMP_TO,
@@ -362,6 +365,8 @@ enum class P_TYPE : char {
       FONT,
       SUB_STYLE,
       ALIGN,
+      CHANGE_METHOD,    // enum class VeloChangeMethod (for single notedynamics)
+      CHANGE_SPEED      // enum class Dynamic::Speed
       };
 
 extern QVariant readProperty(Pid type, XmlReader& e);

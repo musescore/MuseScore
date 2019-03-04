@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>229</width>
-    <height>155</height>
+    <height>221</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -76,29 +76,26 @@
       <property name="verticalSpacing">
        <number>0</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Dynamic range:</string>
+         <string>Style:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>dynRange</cstring>
+         <cstring>style</cstring>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Velocity:</string>
+         <string>Velocity change:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>velocity</cstring>
         </property>
        </widget>
       </item>
@@ -110,6 +107,41 @@
         <property name="maximum">
          <number>127</number>
         </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Placement:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>placement</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QComboBox" name="velChangeSpeed">
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>Slow</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Normal</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Fast</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="0" column="1">
@@ -134,18 +166,56 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_4">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Style:</string>
+         <string>Velocity:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>style</cstring>
+         <cstring>velocity</cstring>
         </property>
        </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QSpinBox" name="changeInVelocity">
+        <property name="accessibleName">
+         <string>Velocity change</string>
+        </property>
+        <property name="minimum">
+         <number>-127</number>
+        </property>
+        <property name="maximum">
+         <number>127</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetDynRange" native="true"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetStyle" native="true"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetVelChangeSpeed" native="true"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Dynamic range:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>dynRange</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true"/>
       </item>
       <item row="2" column="1">
        <widget class="QComboBox" name="style">
@@ -171,27 +241,18 @@
         </item>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label">
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="accessibleName">
+         <string>Velocity change speed</string>
+        </property>
         <property name="text">
-         <string>Placement:</string>
+         <string>Change speed:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="buddy">
-         <cstring>placement</cstring>
-        </property>
        </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetDynRange"/>
-      </item>
-      <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetStyle"/>
-      </item>
-      <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetPlacement"/>
       </item>
      </layout>
     </widget>
@@ -203,6 +264,7 @@
    <class>Ms::ResetButton</class>
    <extends>QWidget</extends>
    <header>inspector/resetButton.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -211,8 +273,6 @@
   <tabstop>style</tabstop>
   <tabstop>placement</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

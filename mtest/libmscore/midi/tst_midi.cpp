@@ -69,6 +69,7 @@ class TestMidi : public QObject, public MTest
           midiExportTestRef("testVoltaStaffText"); // test changing StaffText in prima and seconda volta
           }
       void midiTimeStretchFermata();
+      void midiSingleNoteDynamics();
       };
 
 //---------------------------------------------------------
@@ -393,6 +394,24 @@ void TestMidi::midiTimeStretchFermata()
       }
 
 //---------------------------------------------------------
+//   midiTimeStretchFermata
+//---------------------------------------------------------
+
+void TestMidi::midiSingleNoteDynamics()
+      {
+      const QString file("testSingleNoteDynamics");
+      QString readFile(DIR   + file + ".mscx");
+      QString writeFile(file + "-test.mid");
+      QString reference(DIR + file + "-ref.mid");
+
+      MasterScore* score = readScore(readFile);
+      score->doLayout();
+      testMidiExport(score, writeFile, reference);
+
+      delete score;
+      }
+
+//---------------------------------------------------------
 //   events
 //---------------------------------------------------------
 
@@ -406,7 +425,9 @@ void TestMidi::events()
 
       MasterScore* score = readScore(readFile);
       EventMap events;
-      score->renderMidi(&events);
+      // a temporary, unitialized synth state so we can render the midi - should fall back correctly
+      SynthesizerState ss;
+      score->renderMidi(&events, ss);
       qDebug() << "Opened score " << readFile;
       QFile filehandler(writeFile);
       filehandler.open(QIODevice::WriteOnly | QIODevice::Text);

@@ -33,6 +33,7 @@
       <Instrument>
         <longName>Steel Guitar</longName>
         <trackName></trackName>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>32</frets>
           <string>40</string>
@@ -175,6 +176,7 @@
         <Instrument>
           <longName>Steel Guitar</longName>
           <trackName></trackName>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>32</frets>
             <string>40</string>

@@ -53,6 +53,18 @@ static const ElementStyle hairpinStyle {
       };
 
 //---------------------------------------------------------
+//   changeMethodTable
+//---------------------------------------------------------
+
+const std::vector<Hairpin::VeloMethodItem> Hairpin::veloChangeMethodTable {
+      { VeloChangeMethod::NORMAL,           "normal"      },
+      { VeloChangeMethod::EASE_IN,          "ease-in"     },
+      { VeloChangeMethod::EASE_OUT,         "ease-out"    },
+      { VeloChangeMethod::EASE_IN_OUT,      "ease-in-out" },
+      { VeloChangeMethod::EXPONENTIAL,      "exponential" },
+      };
+
+//---------------------------------------------------------
 //   HairpinSegment
 //---------------------------------------------------------
 
@@ -430,6 +442,8 @@ Element* HairpinSegment::propertyDelegate(Pid pid)
       {
       if (pid == Pid::HAIRPIN_TYPE
          || pid == Pid::VELO_CHANGE
+         || pid == Pid::VELO_CHANGE_METHOD
+         || pid == Pid::SINGLE_NOTE_DYNAMICS
          || pid == Pid::HAIRPIN_CIRCLEDTIP
          || pid == Pid::HAIRPIN_HEIGHT
          || pid == Pid::HAIRPIN_CONT_HEIGHT
@@ -531,6 +545,8 @@ Hairpin::Hairpin(Score* s)
       _hairpinCircledTip     = false;
       _veloChange            = 0;
       _dynRange              = Dynamic::Range::PART;
+      _singleNoteDynamics    = true;
+      _veloChangeMethod      = VeloChangeMethod::NORMAL;
       }
 
 //---------------------------------------------------------
@@ -595,6 +611,32 @@ LineSegment* Hairpin::createLineSegment()
       }
 
 //---------------------------------------------------------
+//   veloChangeMethodToName
+//---------------------------------------------------------
+
+QString Hairpin::veloChangeMethodToName(VeloChangeMethod method)
+      {
+      for (auto i : Hairpin::veloChangeMethodTable) {
+            if (i.method == method)
+                  return i.name;
+            }
+      qFatal("Unrecognised velo change method!");
+      }
+
+//---------------------------------------------------------
+//   nameToVeloChangeMethod
+//---------------------------------------------------------
+
+VeloChangeMethod Hairpin::nameToVeloChangeMethod(QString name)
+      {
+      for (auto i : Hairpin::veloChangeMethodTable) {
+            if (i.name == name)
+                  return i.method;
+            }
+      return VeloChangeMethod::NORMAL;   // default
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -611,6 +653,8 @@ void Hairpin::write(XmlWriter& xml) const
       writeProperty(xml, Pid::END_TEXT);
 //      writeProperty(xml, Pid::CONTINUE_TEXT);
       writeProperty(xml, Pid::LINE_VISIBLE);
+      writeProperty(xml, Pid::SINGLE_NOTE_DYNAMICS);
+      writeProperty(xml, Pid::VELO_CHANGE_METHOD);
 
       for (const StyledProperty& spp : *styledProperties()) {
             if (!isStyled(spp.pid))
@@ -647,6 +691,10 @@ void Hairpin::read(XmlReader& e)
                   else if (hairpinType() == HairpinType::DECRESC_HAIRPIN)
                         setHairpinType(HairpinType::DECRESC_LINE);
                   }
+            else if (tag == "singleNoteDynamics")
+                  _singleNoteDynamics = e.readBool();
+            else if (tag == "veloChangeMethod")
+                  _veloChangeMethod = nameToVeloChangeMethod(e.readElementText());
             else if (!TextLineBase::readProperties(e))
                   e.unknown();
             }
@@ -672,6 +720,10 @@ QVariant Hairpin::getProperty(Pid id) const
                   return _hairpinHeight;
             case Pid::HAIRPIN_CONT_HEIGHT:
                   return _hairpinContHeight;
+            case Pid::SINGLE_NOTE_DYNAMICS:
+                  return _singleNoteDynamics;
+            case Pid::VELO_CHANGE_METHOD:
+                  return int(_veloChangeMethod);
             default:
                   return TextLineBase::getProperty(id);
             }
@@ -701,6 +753,12 @@ bool Hairpin::setProperty(Pid id, const QVariant& v)
                   break;
             case Pid::HAIRPIN_CONT_HEIGHT:
                   _hairpinContHeight = v.value<Spatium>();
+                  break;
+            case Pid::SINGLE_NOTE_DYNAMICS:
+                  _singleNoteDynamics = v.toBool();
+                  break;
+            case Pid::VELO_CHANGE_METHOD:
+                  _veloChangeMethod = VeloChangeMethod(v.toInt());
                   break;
             default:
                   return TextLineBase::setProperty(id, v);
@@ -767,6 +825,12 @@ QVariant Hairpin::propertyDefault(Pid id) const
 
             case Pid::HAIRPIN_TYPE:
                   return int(HairpinType::CRESC_HAIRPIN);
+
+            case Pid::SINGLE_NOTE_DYNAMICS:
+                  return true;
+
+            case Pid::VELO_CHANGE_METHOD:
+                  return int(VeloChangeMethod::NORMAL);
 
             default:
                   return TextLineBase::propertyDefault(id);

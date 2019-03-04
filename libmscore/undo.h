@@ -570,6 +570,22 @@ class ChangePatch : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   SetUserBankController
+//---------------------------------------------------------
+
+class SetUserBankController : public UndoCommand {
+      Channel* channel;
+      bool val;
+
+      void flip(EditData*) override;
+
+   public:
+      SetUserBankController(Channel* c, bool v)
+         : channel(c), val(v) {}
+      UNDO_NAME("SetUserBankController")
+      };
+
+//---------------------------------------------------------
 //   ChangeStaff
 //---------------------------------------------------------
 
