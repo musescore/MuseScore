@@ -38,9 +38,15 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QListWidget" name="pageList">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
-        <width>180</width>
+        <width>60</width>
         <height>0</height>
        </size>
       </property>
@@ -223,7 +229,7 @@
      </widget>
      <widget class="QStackedWidget" name="pageStack">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+       <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -236,7 +242,7 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>710</width>
+        <width>900</width>
         <height>16777215</height>
        </size>
       </property>
