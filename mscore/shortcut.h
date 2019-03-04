@@ -13,7 +13,7 @@
 #ifndef __SHORTCUT_H__
 #define __SHORTCUT_H__
 
-/*---------------------------------------------------------
+/*----------------------------------------------------------
 NOTE ON ARCHITECTURE
 
 The Shortcut class describes the basic configurable shortcut element.
