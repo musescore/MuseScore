@@ -107,9 +107,13 @@ qreal Shape::minVerticalDistance(const Shape& a) const
       {
       qreal dist = -1000000.0;      // min real
       for (const QRectF& r2 : a) {
+            if (r2.height() <= 0.0)
+                  continue;
             qreal bx1 = r2.left();
             qreal bx2 = r2.right();
             for (const QRectF& r1 : *this) {
+                  if (r1.height() <= 0.0)
+                        continue;
                   qreal ax1 = r1.left();
                   qreal ax2 = r1.right();
                   if (Ms::intersects(ax1, ax2, bx1, bx2))

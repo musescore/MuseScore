@@ -237,7 +237,7 @@ void SlurSegment::computeBezier(QPointF p6o)
             qreal dd = log10(1.0 + (d - 2.0) * .5) * 2.0;
             if (dd > 3.0)
                   dd = 3.0;
-            shoulderH = (dd + smallH) * _spatium;
+            shoulderH = (dd + smallH) * _spatium + _extraHeight;
             if (d > 18.0)
                   shoulderW = 0.7; // 0.8;
             else if (d > 10)
@@ -358,51 +358,62 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       setPos(QPointF());
       ups(Grip::START).p = p1;
       ups(Grip::END).p   = p2;
+      _extraHeight = 0.0;
       computeBezier();
 
       if (MScore::autoplaceSlurs && autoplace() && system()) {
             bool up = slur()->up();
-
-            qreal gdist = 0.0;
             Segment* ls = system()->lastMeasure()->last();
             Segment* fs = system()->firstMeasure()->first();
             Segment* ss = slur()->startSegment();
             Segment* es = slur()->endSegment();
             QPointF pp1 = ups(Grip::START).p;
             QPointF pp2 = ups(Grip::END).p;
+            qreal slurMaxMove = spatium();
             bool intersection = false;
-            for (Segment* s = fs; s && s != ls; s = s->next1()) {
-                  if (!s->enabled())
-                        continue;
-                  // skip start and end segments on assumption start and end points were placed well already
-                  // this avoids overcorrection on collision with own ledger lines and accidentals
-                  // it also avoids issues where slur appears to be attached to a note in a different voice
-                  if (s == ss || s == es)
-                        continue;
-                  // allow slurs to cross barlines
-                  if (s->segmentType() & SegmentType::BarLineType)
-                        continue;
-                  qreal x1 = s->x() + s->measure()->x();
-                  qreal x2 = x1 + s->width();
-                  if (pp1.x() > x2)
-                        continue;
-                  if (pp2.x() < x1)
+            qreal gdist = 0.0;
+            for (int tries = 1; true; ++tries) {
+                  for (Segment* s = fs; s && s != ls; s = s->next1()) {
+                        if (!s->enabled())
+                              continue;
+                        // skip start and end segments on assumption start and end points were placed well already
+                        // this avoids overcorrection on collision with own ledger lines and accidentals
+                        // it also avoids issues where slur appears to be attached to a note in a different voice
+                        if (s == ss || s == es)
+                              continue;
+                        // allow slurs to cross barlines
+                        if (s->segmentType() & SegmentType::BarLineType)
+                              continue;
+                        qreal x1 = s->x() + s->measure()->x();
+                        qreal x2 = x1 + s->width();
+                        if (pp1.x() > x2)
+                              continue;
+                        if (pp2.x() < x1)
+                              break;
+                        const Shape& segShape = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos());
+                        if (!intersection)
+                              intersection = segShape.intersects(_shape);
+                        if (up) {
+                              //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
+                              qreal dist = _shape.minVerticalDistance(segShape);
+                              if (dist > 0.0)
+                                    gdist = qMax(gdist, dist);
+                              }
+                        else {
+                              //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
+                              qreal dist = segShape.minVerticalDistance(_shape);
+                              if (dist > 0.0)
+                                    gdist = qMax(gdist, dist);
+                              }
+                        }
+                  if (gdist <= slurMaxMove || tries >= 2)
                         break;
-                  const Shape& segShape = s->staffShape(staffIdx()).translated(s->pos() + s->measure()->pos());
-                  if (!intersection)
-                        intersection = segShape.intersects(_shape);
-                  if (up) {
-                        //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
-                        qreal dist = _shape.minVerticalDistance(segShape);
-                        if (dist > 0.0)
-                              gdist = qMax(gdist, dist);
-                        }
-                  else {
-                        //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
-                        qreal dist = segShape.minVerticalDistance(_shape);
-                        if (dist > 0.0)
-                              gdist = qMax(gdist, dist);
-                        }
+                  // slur would be moved too far
+                  // try again with a steeper curve
+                  _extraHeight += gdist;
+                  computeBezier();
+                  intersection = false;
+                  gdist = 0.0;
                   }
             if (intersection && gdist > 0.0) {
                   qreal min = score()->styleP(Sid::SlurMinDistance) + gdist;
