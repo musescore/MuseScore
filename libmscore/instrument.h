@@ -17,6 +17,7 @@
 #include "mscore.h"
 #include "notifier.hpp"
 #include "synthesizer/event.h"
+#include "synthesizer/msynthesizer.h"
 #include "interval.h"
 #include "clef.h"
 #include <QtGlobal>
@@ -121,6 +122,11 @@ class Channel {
       bool _mute;
       bool _solo;
 
+      bool _userBankController = false;
+
+      mutable std::vector<MidiCoreEvent> _init;
+      mutable bool _mustUpdateInit = true;
+
 public:
       static const char* DEFAULT_NAME;
 
@@ -139,8 +145,7 @@ private:
       void firePropertyChanged(Channel::Prop prop) { _notifier.notify(prop); }
 
 public:
-
-      mutable std::vector<MidiCoreEvent> init;
+      std::vector<MidiCoreEvent>& initList() const;
 
       QString name() const { return _name; }
       void setName(const QString& value);
@@ -174,6 +179,10 @@ public:
       bool solo() const { return _solo; }
       void setSolo(bool value);
 
+      // If the bank controller is set by the user or not
+      bool userBankController() const           { return _userBankController; }
+      void setUserBankController(bool val)      { _userBankController = val; }
+
       QList<NamedEventList> midiActions;
       QList<MidiArticulation> articulation;
 
@@ -185,6 +194,8 @@ public:
 
       void addListener(ChannelListener* l);
       void removeListener(ChannelListener* l);
+
+      void switchExpressive(MasterSynthesizer* m, bool expressive, bool force = false);
       };
 
 //---------------------------------------------------------
@@ -250,6 +261,8 @@ class Instrument {
       QList<MidiArticulation> _articulation;
       QList<Channel*> _channel;      // at least one entry
       QList<ClefTypeList> _clefType;
+
+      bool _singleNoteDynamics;
 
    public:
       Instrument();
@@ -322,6 +335,12 @@ class Instrument {
       QString trackName() const;
       void setTrackName(const QString& s);
       static Instrument fromTemplate(const InstrumentTemplate* t);
+
+      bool singleNoteDynamics() const           { return _singleNoteDynamics; }
+      void setSingleNoteDynamics(bool val)      { _singleNoteDynamics = val; }
+      void setSingleNoteDynamicsFromTemplate();
+      bool getSingleNoteDynamicsFromTemplate() const;
+      void switchExpressive(MasterSynthesizer* m, bool expressive, bool force = false);
       };
 
 //---------------------------------------------------------

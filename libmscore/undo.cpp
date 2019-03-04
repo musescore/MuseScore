@@ -1347,7 +1347,17 @@ void ChangePatch::flip(EditData*)
       score->setInstrumentsChanged(true);
 
       MScore::seq->sendEvent(event);
-      channel->updateInitList();
+      }
+
+//---------------------------------------------------------
+//   SetUserBankController
+//---------------------------------------------------------
+
+void SetUserBankController::flip(EditData*)
+      {
+      bool oldVal = channel->userBankController();
+      channel->setUserBankController(val);
+      val = oldVal;
       }
 
 //---------------------------------------------------------

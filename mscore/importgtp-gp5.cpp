@@ -543,6 +543,7 @@ bool GuitarPro5::readTracks()
 			createTuningString(strings, &tuning2[0]);
             Instrument* instr = part->instrument();
             instr->setStringData(stringData);
+            instr->setSingleNoteDynamics(false);
             part->setPartName(name);
             part->setPlainLongName(name);
 
@@ -591,7 +592,6 @@ bool GuitarPro5::readTracks()
 
             //qDebug("default2: %d", channelDefaults[i].reverb);
             // missing: phase, tremolo
-            ch->updateInitList();
             }
       skip(version == 500 ? 2 : 1);
 

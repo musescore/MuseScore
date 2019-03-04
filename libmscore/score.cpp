@@ -69,6 +69,7 @@
 #include "rehearsalmark.h"
 #include "breath.h"
 #include "instrchange.h"
+#include "synthesizer/msynthesizer.h"
 
 namespace Ms {
 
@@ -4483,6 +4484,60 @@ void MasterScore::setLayout(const Fraction& t)
       {
       if (t >= Fraction(0,1))
             _cmdState.setTick(t);
+      }
+
+//---------------------------------------------------------
+//   updateExpressive
+//    change patches to their expressive equivalent or vica versa, if possible
+//    This works only with MuseScore general soundfont
+//
+//    The first version of the function decides whether to make patches expressive
+//    or not, based on the synth settings. The second will switch patches based on
+//    the value of the expressive parameter.
+//---------------------------------------------------------
+
+void MasterScore::updateExpressive(MasterSynthesizer* m)
+      {
+      SynthesizerState s = synthesizerState();
+      SynthesizerGroup g = s.group("master");
+
+      int method;
+      for (IdValue idVal : g) {
+            if (idVal.id == 4) {
+                  method = idVal.data.toInt();
+                  break;
+                  }
+            }
+
+      updateExpressive(m, (method != 0));
+      }
+
+
+void MasterScore::updateExpressive(MasterSynthesizer* m, bool expressive, bool force /* = false */)
+      {
+      if (!m)
+            return;
+
+      if (!force) {
+            SynthesizerState s = synthesizerState();
+            SynthesizerGroup g = s.group("master");
+
+            for (IdValue idVal : g) {
+                  if (idVal.id == 4) {
+                        int method = idVal.data.toInt();
+                        if (expressive == (method == 0))
+                              return; // method and expression change don't match, so don't switch
+                        }
+                  }
+            }
+
+      for (Part* p : parts()) {
+            const InstrumentList* il = p->instruments();
+            for (auto it = il->begin(); it != il->end(); it++) {
+                  Instrument* i = it->second;
+                  i->switchExpressive(m, expressive, force);
+                  }
+            }
       }
 
 //---------------------------------------------------------

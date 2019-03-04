@@ -232,7 +232,6 @@ void Part::setMidiProgram(int program, int bank)
       Channel* c = instrument()->channel(0);
       c->setProgram(program);
       c->setBank(bank);
-      c->updateInitList();
 //      instrument()->setChannel(0, c);
       }
 

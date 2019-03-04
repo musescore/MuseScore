@@ -33,6 +33,7 @@
       <Instrument>
         <longName>Track 3</longName>
         <trackName></trackName>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
           <string>8</string>
@@ -303,6 +304,7 @@ Puki Kuki</text>
         <Instrument>
           <longName>Track 3</longName>
           <trackName></trackName>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>24</frets>
             <string>8</string>

@@ -18,6 +18,8 @@
 #include "sym.h"
 #include "note.h"
 #include "barline.h"
+#include "dynamic.h"
+#include "hairpin.h"
 
 namespace Ms {
 
@@ -306,6 +308,12 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
                   break;
             case P_TYPE::SUB_STYLE:
                   tag(name, textStyleName(Tid(data.toInt())));
+                  break;
+            case P_TYPE::CHANGE_SPEED:
+                  tag(name, Dynamic::speedToName(Dynamic::Speed(data.toInt())));
+                  break;
+            case P_TYPE::CHANGE_METHOD:
+                  tag(name, Hairpin::veloChangeMethodToName(VeloChangeMethod(data.toInt())));
                   break;
             case P_TYPE::POINT_MM:
                   qFatal("unknown: POINT_MM");

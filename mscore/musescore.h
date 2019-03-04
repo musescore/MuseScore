@@ -747,7 +747,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void addTempo();
       void addMetronome();
 
-      SynthesizerState synthesizerState();
+      SynthesizerState synthesizerState() const;
 
       Q_INVOKABLE QString getLocaleISOCode() const;
       Navigator* navigator() const;
