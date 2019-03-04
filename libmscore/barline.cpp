@@ -33,7 +33,7 @@ namespace Ms {
 //   undoChangeBarLineType
 //---------------------------------------------------------
 
-static void undoChangeBarLineType(BarLine* bl, BarLineType barType)
+static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves)
       {
       Measure* m = bl->measure();
 
@@ -64,7 +64,8 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType)
                   SegmentType segmentType = segment->segmentType();
                   if (segmentType == SegmentType::EndBarLine) {
                         m->undoChangeProperty(Pid::REPEAT_END, false);
-                        for (Element* e : segment->elist()) {
+                        const std::vector<Element*>& elist = allStaves ? segment->elist() : std::vector<Element*> { bl };
+                        for (Element* e : elist) {
                               if (e) {
                                     for (ScoreElement* ee : e->linkList()) {
                                           ee->score()->undo(new ChangeProperty(ee, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
@@ -634,10 +635,10 @@ Element* BarLine::drop(EditData& data)
                         }
                   // if drop refers to subtype, update this bar line subtype
                   else
-                        undoChangeBarLineType(this, st);
+                        undoChangeBarLineType(this, st, false);
                   }
             else
-                  undoChangeBarLineType(this, st);
+                  undoChangeBarLineType(this, st, true);
             delete e;
             }
       else if (e->isArticulation()) {
@@ -1221,7 +1222,7 @@ void BarLine::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
                         bl = 0;
                   }
             if (bl)
-                  undoChangeBarLineType(const_cast<BarLine*>(bl), v.value<BarLineType>());
+                  undoChangeBarLineType(const_cast<BarLine*>(bl), v.value<BarLineType>(), true);
             }
       else
             ScoreElement::undoChangeProperty(id, v, ps);
