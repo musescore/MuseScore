@@ -31,6 +31,8 @@ class InspectorFretDiagram : public InspectorElementBase {
 
    private slots:
       virtual void valueChanged(int idx) override;
+      void fretNumberChanged(int fretNumber);
+      void resetFretNumber();
 
    public:
       InspectorFretDiagram(QWidget* parent);
