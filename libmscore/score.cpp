@@ -1469,7 +1469,7 @@ void Score::removeElement(Element* element)
             measures()->remove(mb);
             System* system = mb->system();
             Page* page = system->page();
-            if (element->isVBox() && system->measures().size() == 1) {
+            if (element->isVBoxBase() && system->measures().size() == 1) {
                   auto i = std::find(page->systems().begin(), page->systems().end(), system);
                   page->systems().erase(i);
                   mb->setSystem(0);
