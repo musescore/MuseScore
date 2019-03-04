@@ -6,7 +6,7 @@
     <Division>480</Division>
     <Style>
       <minSystemDistance>9.2</minSystemDistance>
-      <lyricsMinBottomDistance>6</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
       <bracketWidth>0.35</bracketWidth>

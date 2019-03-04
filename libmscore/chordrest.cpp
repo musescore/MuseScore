@@ -1182,10 +1182,14 @@ Shape ChordRest::shape() const
       for (Lyrics* l : _lyrics) {
             if (!l || !l->visible() || !l->autoplace())
                   continue;
-            static const qreal margin = spatium() * .5;
+            qreal lmargin = styleP(Sid::lyricsMinDistance) * .5;
+            qreal rmargin = lmargin;
+            Lyrics::Syllabic syl = l->syllabic();
+            if ((syl == Lyrics::Syllabic::BEGIN || syl == Lyrics::Syllabic::MIDDLE) && score()->styleB(Sid::lyricsDashForce))
+                  rmargin = qMax(rmargin, styleP(Sid::lyricsDashMinLength));
             // for horizontal spacing we only need the lyrics width:
-            x1 = qMin(x1, l->bbox().x() - margin + l->pos().x());
-            x2 = qMax(x2, l->bbox().x() + l->bbox().width() + margin + l->pos().x());
+            x1 = qMin(x1, l->bbox().x() - lmargin + l->pos().x());
+            x2 = qMax(x2, l->bbox().x() + l->bbox().width() + rmargin + l->pos().x());
             if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS))
                   x2 += spatium();
             adjustWidth = true;

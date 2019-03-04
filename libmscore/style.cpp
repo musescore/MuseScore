@@ -81,6 +81,7 @@ static const StyleType styleTypes[] {
       { Sid::lyricsPosBelow,          "lyricsPosBelow",          QPointF(.0, 3.0) },
       { Sid::lyricsMinTopDistance,    "lyricsMinTopDistance",    Spatium(1.0)  },
       { Sid::lyricsMinBottomDistance, "lyricsMinBottomDistance", Spatium(2.0)  },
+      { Sid::lyricsMinDistance,       "lyricsMinDistance",       Spatium(0.0)  },
       { Sid::lyricsLineHeight,        "lyricsLineHeight",        1.0 },
       { Sid::lyricsDashMinLength,     "lyricsDashMinLength",     Spatium(0.4) },
       { Sid::lyricsDashMaxLength,     "lyricsDashMaxLegth",      Spatium(0.8) },
