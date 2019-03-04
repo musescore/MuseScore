@@ -15,6 +15,7 @@
 #include "elements.h"
 #include "fraction.h"
 #include "score.h"
+#include "part.h"
 #ifndef TESTROOT
 #include "shortcut.h"
 #endif
@@ -125,7 +126,7 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 
 Score* PluginAPI::readScore(const QString& name, bool noninteractive)
       {
-      Ms::Score* score = msc()->openScore(name, true);
+      Ms::Score* score = msc()->openScore(name, !noninteractive);
       if (score) {
             if (noninteractive)
                   score->setCreated(false);
@@ -306,12 +307,13 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Note>();
       qmlRegisterType<Segment>();
       qmlRegisterType<Measure>();
+      qmlRegisterType<Part>();
+      qmlRegisterType<Excerpt>();
 #if 0
       qmlRegisterType<NoteHead>   ("MuseScore", 1, 0, "NoteHead");
       qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
       qmlRegisterType<Rest>       ("MuseScore", 1, 0, "Rest");
       qmlRegisterType<StaffText>  ("MuseScore", 1, 0, "StaffText");
-      qmlRegisterType<Part>       ("MuseScore", 1, 0, "Part");
       qmlRegisterType<Staff>      ("MuseScore", 1, 0, "Staff");
       qmlRegisterType<Harmony>    ("MuseScore", 1, 0, "Harmony");
       qmlRegisterType<TimeSig>    ("MuseScore", 1, 0, "TimeSig");
@@ -328,7 +330,6 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Stem>       ("MuseScore", 1, 0, "Stem");
       qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
       qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
-      qmlRegisterType<Excerpt>    ("MuseScore", 1, 0, "Excerpt");
       qmlRegisterType<BarLine>    ("MuseScore", 1, 0, "BarLine");
 
 
