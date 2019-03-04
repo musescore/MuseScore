@@ -1155,7 +1155,7 @@ Element* Segment::getElement(int staff)
 
 Element* Segment::nextAnnotation(Element* e)
       {
-      if (e == _annotations.back())
+      if (_annotations.empty() || e == _annotations.back())
             return nullptr;
       auto i = std::find(_annotations.begin(), _annotations.end(), e);
       Element* next = *(i+1);
