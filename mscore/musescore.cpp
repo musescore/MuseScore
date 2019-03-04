@@ -101,6 +101,7 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/synthesizerstate.h"
 #include "libmscore/utils.h"
+#include "libmscore/icon.h"
 
 #include "driver.h"
 
@@ -2159,6 +2160,66 @@ void MuseScore::selectionChanged(SelState selectionState)
             }
       if (_inspector)
             updateInspector();
+      }
+
+//---------------------------------------------------------
+//   updatePaletteBeamMode
+//
+//   Updates the selected index of the Beam Properties
+//   palette to reflect the beam mode of the selected
+//   chord rest
+//---------------------------------------------------------
+
+void MuseScore::updatePaletteBeamMode(bool unselect)
+      {
+      for (Palette* p : paletteBox->palettes()) {
+            if (p->name() == "Beam Properties") {
+                  if (unselect) {
+                        p->setSelected(-1);
+                        return;
+                        }
+                  const Selection sel = cs->selection();
+                  const ChordRest* cr = sel.cr();
+                  if (sel.isSingle() && cr) {
+                        Beam::Mode bm = cr->beamMode();
+                        IconType type;
+                        switch (bm) {
+                        case Beam::Mode::BEGIN:
+                              type = IconType::SBEAM;
+                              break;
+                        case Beam::Mode::MID:
+                              type = IconType::MBEAM;
+                              break;
+                        case Beam::Mode::NONE:
+                              type = IconType::NBEAM;
+                              break;
+                        case Beam::Mode::BEGIN32:
+                              type = IconType::BEAM32;
+                              break;
+                        case Beam::Mode::BEGIN64:
+                              type = IconType::BEAM64;
+                              break;
+                        case Beam::Mode::AUTO:
+                              type = IconType::AUTOBEAM;
+                              break;
+                        default:
+                              p->setSelected(-1);
+                              return;
+                        }
+                        for (int i = 0; i < p->size(); ++i) {
+                              if (toIcon(p->element(i))->iconType() == type) {
+                                    p->setSelected(i);
+                                    p->update();
+                                    return;
+                                    }
+                              }
+                  }
+                  else {
+                        p->setSelected(-1);
+                        }
+                  p->update();
+                  }
+            }
       }
 
 //---------------------------------------------------------

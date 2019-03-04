@@ -619,6 +619,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showPluginManager();
 
 //      void updateTabNames();
+      void updatePaletteBeamMode(bool unselect = false);
       QProgressBar* showProgressBar();
       void hideProgressBar();
       void addRecentScore(Score*);
