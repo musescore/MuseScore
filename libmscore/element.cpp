@@ -127,8 +127,13 @@ void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
 
 qreal Element::spatium() const
       {
-      Staff* s = staff();
-      return s ? s->spatium(tick()) : score()->spatium();
+      if (systemFlag()) {
+            return score()->spatium();
+            }
+      else {
+            Staff* s = staff();
+            return s ? s->spatium(tick()) : score()->spatium();
+            }
       }
 
 //---------------------------------------------------------
