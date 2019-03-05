@@ -3089,7 +3089,7 @@ void Measure::stretchMeasure(qreal targetWidth)
             seg = seg->next();
       qreal minimumWidth = seg ? seg->x() : 0.0;
       for (Segment& s : _segments) {
-            if (!s.enabled())
+            if (!s.enabled() || !s.visible())
                   continue;
             Fraction t = s.ticks();
             if (t.isNotZero()) {
@@ -3229,7 +3229,7 @@ Fraction Measure::computeTicks()
             ns = ns->next();
       while (ns) {
             Segment* s = ns;
-            ns         = s->nextEnabled();
+            ns         = s->nextActive();
             Fraction nticks = (ns ? ns->rtick() : ticks()) - s->rtick();
             if (nticks.isNotZero()) {
                   if (nticks < minTick)
@@ -3463,7 +3463,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             }
 
       // fix segment layout
-      Segment* s = seg->prevEnabled();
+      Segment* s = seg->prevActive();
       if (s) {
             qreal x    = s->rxpos();
             computeMinWidth(s, x, false);
@@ -3911,6 +3911,8 @@ static bool hasAccidental(Segment* s)
 void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
       {
       Segment* fs = firstEnabled();
+      if (!fs->visible())           // first enabled could be a clef change on invisible staff
+            fs = fs->nextActive();
       bool first  = system()->firstMeasure() == this;
       const Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
 
@@ -3930,12 +3932,12 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
 
       while (s) {
             s->rxpos() = x;
-            if (!s->enabled()) {
+            if (!s->enabled() || !s->visible()) {
                   s->setWidth(0);
                   s = s->next();
                   continue;
                   }
-            Segment* ns = s->nextEnabled();
+            Segment* ns = s->nextActive();
             qreal w;
 
             if (ns) {
@@ -3957,7 +3959,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
                   int n = 1;
                   for (Segment* ps = s; ps != fs;) {
                         qreal ww;
-                        ps = ps->prevEnabled();
+                        ps = ps->prevActive();
 
                         Q_ASSERT(ps); // ps should never be nullptr but better be safe.
                         if (!ps)
@@ -3979,7 +3981,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
                               qreal d = (ww - w) / n;
                               qreal xx = ps->x();
                               for (Segment* ss = ps; ss != s;) {
-                                    Segment* ns1 = ss->nextEnabled();
+                                    Segment* ns1 = ss->nextActive();
                                     qreal ww1    = ss->width();
                                     if (ss->isChordRestType()) {
                                           ww1 += d;

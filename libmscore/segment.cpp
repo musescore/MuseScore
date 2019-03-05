@@ -1844,6 +1844,7 @@ QString Segment::accessibleExtraInfo() const
 
 void Segment::createShapes()
       {
+      setVisible(false);
       for (int staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx)
             createShape(staffIdx);
       }
@@ -1858,6 +1859,7 @@ void Segment::createShape(int staffIdx)
       s.clear();
 
       if (segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
+            setVisible(true);
             BarLine* bl = toBarLine(element(0));
             if (bl) {
                   qreal w = BarLine::layoutWidth(score(), bl->barLineType());
@@ -1878,18 +1880,31 @@ void Segment::createShape(int staffIdx)
                   s.add(e->shape().translated(e->pos()));
             }
 #endif
+
+      if (!score()->staff(staffIdx)->show())
+            return;
+
       int strack = staffIdx * VOICES;
       int etrack = strack + VOICES;
       for (Element* e : _elist) {
             if (!e)
                   continue;
             int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
-            if (effectiveTrack >= strack && effectiveTrack < etrack)
-                  s.add(e->shape().translated(e->pos()));
+            if (effectiveTrack >= strack && effectiveTrack < etrack) {
+                  setVisible(true);
+                  if (e->autoplace())
+                        s.add(e->shape().translated(e->pos()));
+                  }
             }
 
       for (Element* e : _annotations) {
-            if (e->staffIdx() == staffIdx             // whats left?
+            if (!e || e->staffIdx() != staffIdx)
+                  continue;
+            setVisible(true);
+            if (!e->autoplace())
+                  continue;
+
+            if (!e->isRehearsalMark()
                && !e->isRehearsalMark()
                && !e->isFretDiagram()
                && !e->isHarmony()
@@ -1902,8 +1917,11 @@ void Segment::createShape(int staffIdx)
                && !e->isInstrumentChange()
                && !e->isArticulation()
                && !e->isFermata()
-               && !e->isStaffText())
+               && !e->isStaffText()) {
+                  // annotations added here are candidates for collision detection
+                  // lyrics, ...
                   s.add(e->shape().translated(e->pos()));
+                  }
             }
       }
 
