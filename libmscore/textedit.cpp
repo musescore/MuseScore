@@ -118,6 +118,7 @@ void TextBase::endEdit(EditData& ed)
       undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
                                                       // this also changes text of linked elements
       layout1();
+      triggerLayout();                                // force relayout even if text did not change
       score()->endCmd();
 
       static const qreal w = 2.0;

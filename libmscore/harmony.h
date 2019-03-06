@@ -123,6 +123,7 @@ class Harmony final : public TextBase {
 
       void textChanged();
       virtual void layout() override;
+      virtual void layout1() override;
 
       virtual bool isEditable() const override { return true; }
       virtual void startEdit(EditData&) override;
