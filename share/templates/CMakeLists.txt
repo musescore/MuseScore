@@ -17,20 +17,50 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
+# Usage: install_templates(install_dir [mscx_templates...])
+# MSCX templates paths should be relative to CMAKE_CURRENT_SOURCE_DIR.
+function(install_templates DESTINATION_DIR)
+      # Create a directory for the converted templates
+      get_filename_component(MSCZ_BUILD_DIR "${ARGV1}" DIRECTORY)
+      file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${MSCZ_BUILD_DIR}")
+
+      foreach(MSCX_FILE IN LISTS ARGN)
+            set(IN_MSCX "${CMAKE_CURRENT_SOURCE_DIR}/${MSCX_FILE}")
+            string(REPLACE ".mscx" ".mscz" OUT_MSCZ "${MSCX_FILE}")
+            set(OUT_MSCZ "${CMAKE_CURRENT_BINARY_DIR}/${OUT_MSCZ}")
+            add_custom_command(
+                  OUTPUT "${OUT_MSCZ}"
+                  DEPENDS "${IN_MSCX}"
+                  COMMAND $<TARGET_FILE:mscore> --template-mode "${IN_MSCX}" -o "${OUT_MSCZ}"
+                  )
+            list(APPEND MSCZ_TEMPLATES "${OUT_MSCZ}")
+            install(FILES
+                  "${OUT_MSCZ}"
+                  DESTINATION "${DESTINATION_DIR}"
+                  )
+      endforeach(MSCX_FILE)
+
+      set(MSCZ_TEMPLATES ${MSCZ_TEMPLATES} PARENT_SCOPE)
+endfunction(install_templates)
+
+set(MSCZ_TEMPLATES "") # create empty list
+
 install(FILES
       drumset_fr.drm
       orchestral.drm
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
       )
-install(FILES
+
+install_templates(
+      ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/01-General
       01-General/00-Blank.mscx
       01-General/01-Treble_Clef.mscx
       01-General/02-Bass_Clef.mscx
       01-General/03-Grand_Staff.mscx
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/01-General
       )
 
-install(FILES
+install_templates(
+      ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/02-Choral
       02-Choral/01-SATB.mscx
       02-Choral/02-SATB_+_Organ.mscx
       02-Choral/03-SATB_+_Piano.mscx
@@ -41,41 +71,41 @@ install(FILES
       02-Choral/08-Barbershop_Quartet.mscx
       02-Choral/09-Liturgical_Unmetrical.mscx
       02-Choral/10-Liturgical_Unmetrical_+_Organ.mscx
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/02-Choral
       )
 
-install(FILES
+install_templates(
+      ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/03-Chamber_Music
       03-Chamber_Music/01-String_Quartet.mscx
       03-Chamber_Music/02-Wind_Quartet.mscx
       03-Chamber_Music/03-Wind_Quintet.mscx
       03-Chamber_Music/04-Saxophone_Quartet.mscx
       03-Chamber_Music/05-Brass_Quartet.mscx
       03-Chamber_Music/06-Brass_Quintet.mscx
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/03-Chamber_Music
       )
 
-install(FILES
+install_templates(
+      ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/04-Solo
       04-Solo/01-Guitar.mscx
       04-Solo/02-Guitar_+_Tablature.mscx
       04-Solo/03-Guitar_Tablature.mscx
       04-Solo/04-Piano.mscx
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/04-Solo
       )
 
-install(FILES
+install_templates(
+      ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/05-Jazz
       05-Jazz/01-Jazz_Lead_Sheet.mscx
       05-Jazz/02-Big_Band.mscx
       05-Jazz/03-Jazz_Combo.mscx
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/05-Jazz
       )
 
-install(FILES
+install_templates(
+      ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/06-Popular
       06-Popular/01-Rock_Band.mscx
       06-Popular/02-Bluegrass_Band.mscx
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/06-Popular
       )
 
-install(FILES
+install_templates(
+      ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/07-Band_and_Percussion
       07-Band_and_Percussion/01-Concert_Band.mscx
       07-Band_and_Percussion/02-Small_Concert_Band.mscx
       07-Band_and_Percussion/03-Brass_Band.mscx
@@ -85,13 +115,16 @@ install(FILES
       07-Band_and_Percussion/07-Large_Pit_Percussion.mscx
       07-Band_and_Percussion/08-Small_Pit_Percussion.mscx
       07-Band_and_Percussion/09-European_Concert_Band.mscx
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/07-Band_and_Percussion
       )
 
-install(FILES
+install_templates(
+      ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/08-Orchestral
       08-Orchestral/01-Classical_Orchestra.mscx
       08-Orchestral/02-Symphony_Orchestra.mscx
       08-Orchestral/03-String_Orchestra.mscx
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/08-Orchestral
       )
 
+add_custom_target(mscz_templates ALL
+      DEPENDS mscore ${MSCZ_TEMPLATES}
+      COMMENT "Converting templates to .mscz..."
+      )
