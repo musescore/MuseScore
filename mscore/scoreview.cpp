@@ -1919,6 +1919,7 @@ void ScoreView::cmd(const char* s)
             Element* el = _score->selectMove(cmd);
             if (el)
                   adjustCanvasPosition(el, false);
+            score()->setPlayChord(true);
             updateAll();
             }
       else if (cmd == "next-chord"
@@ -1945,6 +1946,7 @@ void ScoreView::cmd(const char* s)
                   Element* ele = _score->move(cmd);
                   if (ele)
                         adjustCanvasPosition(ele, false);
+                  score()->setPlayChord(true);
                   updateAll();
                   }
             }

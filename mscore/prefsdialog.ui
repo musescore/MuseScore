@@ -1299,7 +1299,7 @@
           <item row="1" column="0">
            <widget class="QCheckBox" name="playChordOnAddNote">
             <property name="text">
-             <string>Play whole chord when adding note</string>
+             <string>Play whole chord when editing</string>
             </property>
            </widget>
           </item>
