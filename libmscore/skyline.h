@@ -27,30 +27,45 @@ class Shape;
 //---------------------------------------------------------
 
 struct SkylineSegment {
+      qreal x;
       qreal y;
       qreal w;
 
-      SkylineSegment(qreal _y, qreal _w) : y(_y), w(_w) {}
+      SkylineSegment(qreal _x, qreal _y, qreal _w) : x(_x), y(_y), w(_w) {}
       };
 
 //---------------------------------------------------------
 //   SkylineLine
 //---------------------------------------------------------
 
-struct SkylineLine : public std::vector<SkylineSegment> {
+class SkylineLine {
       const bool north;
+      std::vector<SkylineSegment> seg;
+      typedef std::vector<SkylineSegment>::iterator SegIter;
+      typedef std::vector<SkylineSegment>::const_iterator SegConstIter;
+
+      SegIter insert(SegIter i, qreal x, qreal y, qreal w);
+      void append(qreal x, qreal y, qreal w);
+      SegIter find(qreal x);
+      SegConstIter find(qreal x) const;
 
    public:
       SkylineLine(bool n) : north(n) {}
-      void add(qreal x, qreal y, qreal w);
       void add(const Shape& s);
       void add(const QRectF& r);
+      void add(qreal x, qreal y, qreal w);
+      void clear() { seg.clear(); }
       void paint(QPainter&) const;
       void dump() const;
       qreal minDistance(const SkylineLine&) const;
       qreal max() const;
       bool valid(const SkylineSegment& s) const;
       bool isNorth() const { return north; }
+
+      SegIter begin() { return seg.begin(); }
+      SegConstIter begin() const { return seg.begin(); }
+      SegIter end() { return seg.end(); }
+      SegConstIter end() const { return seg.end(); }
       };
 
 //---------------------------------------------------------
