@@ -109,6 +109,8 @@ void Fermata::write(XmlWriter& xml) const
       xml.tag("subtype", Sym::id2name(_symId));
       writeProperty(xml, Pid::TIME_STRETCH);
       writeProperty(xml, Pid::PLAY);
+      if (!isStyled(Pid::OFFSET))
+            writeProperty(xml, Pid::OFFSET);
       Element::writeProperties(xml);
       xml.etag();
       }
