@@ -60,26 +60,15 @@ build_script:
 after_build:
   - cmd: C:\MuseScore\build\appveyor\after_build.bat
 
-artifacts:
-  - path: $(ARTIFACT_NAME)
-    name: musescore-binary
-  - path: $(DEBUG_SYMS_FILE)
-    name: musescore-dbg-info.sym
-  - path: update_win_nightly.xml
-    name: update_win_nightly.xml
-  - path: appcast.xml
-    name: appcast.xml
-
-deploy:
-  - provider: S3
-    access_key_id:
-      secure: k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
-    secret_access_key:
-      secure: IbpdpiHzGfMasaSA6uGrskE4xu9wE+HzElW7tIDOUww+ivHj+gN+mPgUHKCcV9Cn
-    bucket: update.musescore.org
-    region: us-east-1
-    set_public: true
-    artifact: update_win_nightly.xml
+on_success:
+  - ps: |
+        if ($env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null -or ($env:APPVEYOR_PULL_REQUEST_NUMBER -ne $null -and $env:APPVEYOR_REPO_COMMIT_MESSAGE -like "*collect_artifacts*"))
+        {
+            Push-AppveyorArtifact $env:ARTIFACT_NAME -deploymentname musescore-binary
+            Push-AppveyorArtifact $env:DEBUG_SYMS_FILE -deploymentname musescore-dbg-info.sym
+            Push-AppveyorArtifact update_win_nightly.xml
+            Push-AppveyorArtifact appcast.xml
+        }
 
 # uncomment in stable release
   - provider: S3
