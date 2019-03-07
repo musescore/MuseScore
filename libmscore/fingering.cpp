@@ -29,6 +29,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle fingeringStyle {
+      { Sid::fingeringPlacement, Pid::PLACEMENT  },
       };
 
 //---------------------------------------------------------
@@ -68,18 +69,18 @@ ElementType Fingering::layoutType()
 //   calculatePlacement
 //---------------------------------------------------------
 
-void Fingering::calculatePlacement()
+Placement Fingering::calculatePlacement() const
       {
       Note* n = note();
       if (!n)
-            return;
+            return Placement::ABOVE;
       Chord* chord = n->chord();
       Staff* staff = chord->staff();
       Part* part   = staff->part();
       int nstaves  = part->nstaves();
       bool voices  = chord->measure()->hasVoices(staff->idx());
       bool below   = voices ? !chord->up() : (nstaves > 1) && (staff->rstaff() == nstaves - 1);
-      setPlacement(below ? Placement::BELOW : Placement::ABOVE);
+      return below ? Placement::BELOW : Placement::ABOVE;
       }
 
 //---------------------------------------------------------
@@ -222,7 +223,7 @@ QVariant Fingering::propertyDefault(Pid id) const
       {
       switch (id) {
             case Pid::PLACEMENT:
-                  return int(Placement::ABOVE);
+                  return int(calculatePlacement());
             case Pid::SUB_STYLE:
                   return int(Tid::FINGERING);
             default:

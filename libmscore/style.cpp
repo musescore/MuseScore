@@ -1111,6 +1111,8 @@ static const StyleType styleTypes[] {
       { Sid::fermataPosAbove,               "fermataPosAbove",               QPointF(.0, -1.0) },
       { Sid::fermataPosBelow,               "fermataPosBelow",               QPointF(.0, 1.0)  },
       { Sid::fermataMinDistance,            "fermataMinDistance",            Spatium(0.4)  },
+
+      { Sid::fingeringPlacement,            "fingeringPlacement",            int(Placement::ABOVE) },
       };
 
 MStyle  MScore::_baseStyle;

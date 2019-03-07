@@ -1425,6 +1425,7 @@ void Score::cmdFlip()
                   }
             else if (e->isTempoText()
                || e->isStaffText()
+               || e->isFingering()
                || e->isDynamic()
                || e->isHairpin()
                || e->isHairpinSegment()
