@@ -2172,6 +2172,7 @@ void MuseScore::updatePaletteBeamMode(bool unselect)
             if (p->name() == "Beam Properties") {
                   if (unselect) {
                         p->setSelected(-1);
+                        p->update();
                         return;
                         }
                   const Selection sel = cs->selection();
@@ -2200,6 +2201,7 @@ void MuseScore::updatePaletteBeamMode(bool unselect)
                               break;
                         default:
                               p->setSelected(-1);
+                              p->update();
                               return;
                         }
                         for (int i = 0; i < p->size(); ++i) {
@@ -5781,6 +5783,8 @@ void MuseScore::endCmd()
             selectionChanged(SelState::NONE);
             }
       updateInspector();
+      if (cv && paletteBox)
+            updatePaletteBeamMode(cv->clickOffElement);
       }
 
 //---------------------------------------------------------

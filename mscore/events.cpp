@@ -344,7 +344,6 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
             }
       _score->update();
       mscore->endCmd();
-      mscore->updatePaletteBeamMode(clickOffElement);
       }
 
 //---------------------------------------------------------
