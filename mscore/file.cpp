@@ -499,7 +499,7 @@ MasterScore* MuseScore::getNewFile()
       {
       if (!newWizard)
             newWizard = new NewWizard(this);
-	  else {
+      else {
             newWizard->updateValues();
             newWizard->restart();
             }
@@ -2127,7 +2127,6 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       QPageSize ps(QPageSize::id(size, QPageSize::Inch));
       pdfWriter.setPageSize(ps);
       pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
-
       pdfWriter.setCreator("MuseScore Version: " VERSION);
       if (!pdfWriter.setPageMargins(QMarginsF()))
             qDebug("unable to clear printer margins");
@@ -2145,13 +2144,7 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
 
-      p.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
-         size.height() * pdfWriter.logicalDpiY()));
-      p.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
-
       double pr = MScore::pixelRatio;
-      MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
-      MScore::pdfPrinting = true;
 
       bool firstPage = true;
       for (Score* s : cs_) {
@@ -2161,8 +2154,20 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
             //      s->doLayout();
                   }
             s->doLayout();
-            s->setPrinting(true);
 
+            // done in Score::print() also, but do it here as well to be safe
+            s->setPrinting(true);
+            MScore::pdfPrinting = true;
+
+            QSizeF size(s->styleD(Sid::pageWidth), s->styleD(Sid::pageHeight));
+            QPageSize ps(QPageSize::id(size, QPageSize::Inch));
+            pdfWriter.setPageSize(ps);
+            pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
+            p.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
+               size.height() * pdfWriter.logicalDpiY()));
+            p.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
+
+            MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
             const QList<Page*> pl = s->pages();
             int pages    = pl.size();
             for (int n = 0; n < pages; ++n) {
@@ -2171,8 +2176,11 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
                   firstPage = false;
                   s->print(&p, n);
                   }
+            MScore::pixelRatio = pr;
+
             //reset score
             s->setPrinting(false);
+            MScore::pdfPrinting = false;
 
             if (layoutMode != s->layoutMode()) {
                   s->setLayoutMode(layoutMode);
@@ -2180,8 +2188,6 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
                   }
             }
       p.end();
-      MScore::pdfPrinting = false;
-      MScore::pixelRatio = pr;
       return true;
       }
 
@@ -3028,7 +3034,7 @@ static void findTextByType(void* data, Element* element)
             titleStrings->append(text->plainText());
             }
       }
-      
+
 QJsonObject MuseScore::saveMetadataJSON(Score* score)
       {
       auto boolToString = [](bool b) { return b ? "true" : "false"; };
@@ -3146,7 +3152,7 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
       jsonPageformat.insert("width", round(score->styleD(Sid::pageWidth) * INCH));
       jsonPageformat.insert("twosided", boolToString(score->styleB(Sid::pageTwosided)));
       json.insert("pageFormat", jsonPageformat);
-      
+
       //text frames metadata
       QJsonObject jsonTypeData;
       static std::vector<std::pair<QString, Tid>> namesTypesList {
@@ -3165,7 +3171,7 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
             jsonTypeData.insert(nameType.first, typeData);
             }
       json.insert("textFramesData", jsonTypeData);
-      
+
       return json;
       }
 
@@ -3178,20 +3184,20 @@ public:
       jsonFormatFile.open(QIODevice::WriteOnly);
       jsonFormatFile.write("{\n");
       }
-      
+
       ~CustomJsonWriter()
       {
       jsonFormatFile.write("\n}\n");
       jsonFormatFile.close();
       }
-      
+
       void addKey(const char* arrayName)
       {
       jsonFormatFile.write("\"");
       jsonFormatFile.write(arrayName);
       jsonFormatFile.write("\": ");
       }
-      
+
       void addValue(const QByteArray& data, bool lastJsonElement = false, bool isJson = false)
       {
       if (!isJson)
@@ -3202,12 +3208,12 @@ public:
       if (!lastJsonElement)
             jsonFormatFile.write(",\n");
       }
-      
+
       void openArray()
       {
       jsonFormatFile.write(" [");
       }
-      
+
       void closeArray(bool lastJsonElement = false)
       {
       jsonFormatFile.write("]");
@@ -3215,11 +3221,11 @@ public:
             jsonFormatFile.write(",");
       jsonFormatFile.write("\n");
       }
-      
+
 private:
       QFile jsonFormatFile;
 };
-      
+
 //---------------------------------------------------------
 //   exportMp3AsJSON
 //---------------------------------------------------------
@@ -3296,7 +3302,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
             jsonWriter.addValue(pngData.toBase64(), lastArrayValue);
             }
       jsonWriter.closeArray();
-      
+
       jsonWriter.addKey("svgs");
       jsonWriter.openArray();
       for (int i = 0; i < score->pages().size(); ++i) {
@@ -3319,14 +3325,14 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       jsonWriter.addValue(partDataPos.toBase64());
       partPosDevice.close();
       partDataPos.clear();
-      
+
       //export score .mpos
       partPosDevice.open(QIODevice::ReadWrite);
       savePositions(score.get(), &partPosDevice, false);
       jsonWriter.addKey("mposXML");
       jsonWriter.addValue(partDataPos.toBase64());
       }
-      
+
       //export score pdf
       jsonWriter.addKey("pdf");
       jsonWriter.addValue(exportPdfAsJSON(score.get()));
@@ -3340,7 +3346,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       jsonWriter.addKey("midi");
       jsonWriter.addValue(midiData.toBase64());
       }
-      
+
       {
       //export musicxml
       QByteArray mxmlData;
@@ -3350,7 +3356,7 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& ou
       jsonWriter.addKey("mxml");
       jsonWriter.addValue(mxmlData.toBase64());
       }
-      
+
       //export metadata
       QJsonDocument doc(mscore->saveMetadataJSON(score.get()));
       jsonWriter.addKey("metadata");
