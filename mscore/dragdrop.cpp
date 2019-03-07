@@ -28,6 +28,7 @@
 #include "musescore.h"
 #include "scoreview.h"
 #include "continuouspanel.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -412,6 +413,7 @@ void ScoreView::dropEvent(QDropEvent* event)
 
       if (editData.dropElement) {
             bool applyUserOffset = false;
+            bool triggerSpannerDropApplyTour = editData.dropElement->isSpanner();
             editData.dropElement->styleChanged();
             _score->startCmd();
             Q_ASSERT(editData.dropElement->score() == score());
@@ -554,6 +556,8 @@ void ScoreView::dropEvent(QDropEvent* event)
             // update input cursor position (must be done after layout)
             if (noteEntryMode())
                   moveCursor();
+            if (triggerSpannerDropApplyTour)
+                  TourHandler::startTour("spanner-drop-apply");
             return;
             }
 

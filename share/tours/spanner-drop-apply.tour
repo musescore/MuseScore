@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="spanner-drop-apply">
+  <Message>
+    <Text>Most elements on the lines palette span a range from a start element to an end element.\n
+    To edit its range, double-click the line (which automatically selects its end handle) and:\n
+    - Press Shift-Right to move that handle forward.\n
+    - Press Shift-Left to move that handle backward.</Text>
+    </Message>
+  <Message>    
+    <Text>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</Text>
+    </Message>
+  </Tour>

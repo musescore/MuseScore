@@ -45,6 +45,7 @@
 #include "paletteBoxButton.h"
 #include "palettebox.h"
 #include "shortcut.h"
+#include "tourhandler.h"
 
 namespace Ms {
 
@@ -466,6 +467,9 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
             element = cell->element;
       if (element == 0)
             return;
+      
+      if (element->isSpanner())
+            TourHandler::startTour("spanner-drop-apply");
 
       ScoreView* viewer = mscore->currentScoreView();
       if (viewer->mscoreState() != STATE_EDIT
