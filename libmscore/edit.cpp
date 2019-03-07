@@ -4775,6 +4775,7 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
 
 void Score::undoRemoveMeasures(Measure* m1, Measure* m2)
       {
+      Q_ASSERT(m1 && m2);
       //
       //  handle ties which start before m1 and end in (m1-m2)
       //
