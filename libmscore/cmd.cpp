@@ -3407,7 +3407,7 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
                                                 }
                                           }
                                     }
-                              seg = seg->prev1MM(SegmentType::ChordRest | SegmentType::Clef);
+                              seg = seg->prev1MM(SegmentType::ChordRest | SegmentType::Clef | SegmentType::HeaderClef);
                               }
                         octave = curPitch / 12;
                         }
