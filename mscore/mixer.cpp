@@ -113,6 +113,7 @@ Mixer::Mixer(QWidget* parent)
       iconSliderHead.addFile(QStringLiteral(":/data/icons/mixer-slider-handle-vertical.svg"), QSize(), QIcon::Normal, QIcon::Off);
       masterSlider->setSliderHeadIcon(iconSliderHead);
 
+      connect(muteToggle, &QPushButton::clicked, this, &Mixer::toggleMuteTracks);
       connect(toggleDetailsButton, &QPushButton::toggled, this, &Mixer::showDetailsToggled);
       connect(masterSlider, SIGNAL(valueChanged(double)), SLOT(masterVolumeChanged(double)));
       connect(masterSpin, SIGNAL(valueChanged(double)), SLOT(masterVolumeChanged(double)));
@@ -123,6 +124,32 @@ Mixer::Mixer(QWidget* parent)
       enablePlay = new EnablePlayForWidget(this);
       readSettings();
       retranslate(true);
+      }
+
+//---------------------------------------------------------
+//   toggleMuteTracks
+//---------------------------------------------------------
+
+void Mixer::toggleMuteTracks()
+      {
+      for (int i =0; i < trackList.length(); i++)
+            {
+            trackList.at(i)->mti()->toggleMute();
+            }
+      //make sure expanded tracks are toggled as well
+      QSetIterator<Part *> pi(expandedParts);
+
+      while (pi.hasNext())
+            {
+            Part *p = pi.next();
+            for (Channel *chan: p->instrument()->channel()) {
+                  if(chan->mute()){
+                        chan->setMute(false);
+                        }else{
+                        chan->setMute((true));
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------

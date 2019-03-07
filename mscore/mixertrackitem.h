@@ -61,12 +61,13 @@ public:
       MidiMapping *midiMap();
       int color();
 
+      void toggleMute();
       void setColor(int valueRgb);
       void setVolume(char value);
       void setPan(char value);
       void setChorus(char value);
       void setReverb(char value);
-
+      bool isMute();
       void setMute(bool value);
       void setSolo(bool value);
       };

@@ -86,6 +86,7 @@ class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
       void keepScrollPosition();
 
    public slots:
+      void toggleMuteTracks();
       void updateTracks();
       void midiPrefsChanged(bool showMidiControls);
       void masterVolumeChanged(double val);

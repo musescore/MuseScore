@@ -5,22 +5,22 @@
   <property name="enabled">
    <bool>true</bool>
   </property>
-  <property name="floating">
-   <bool>false</bool>
-  </property>
-  <property name="features">
-   <set>QDockWidget::AllDockWidgetFeatures</set>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>648</width>
-    <height>431</height>
+    <height>447</height>
    </rect>
   </property>
   <property name="focusPolicy">
    <enum>Qt::ClickFocus</enum>
+  </property>
+  <property name="floating">
+   <bool>false</bool>
+  </property>
+  <property name="features">
+   <set>QDockWidget::AllDockWidgetFeatures</set>
   </property>
   <property name="windowTitle">
    <string/>
@@ -95,6 +95,26 @@
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="mutelabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Mute Tracks</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="muteToggle">
+           <property name="text">
+            <string>Toggle Mute</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -135,8 +155,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>554</width>
-           <height>371</height>
+           <width>517</width>
+           <height>368</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">

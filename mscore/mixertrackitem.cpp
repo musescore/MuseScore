@@ -205,6 +205,44 @@ void MixerTrackItem::setColor(int valueRgb)
       }
 
 //---------------------------------------------------------
+//   isMute
+//---------------------------------------------------------
+
+bool MixerTrackItem::isMute()
+      {
+      if (_trackType == TrackType::CHANNEL)
+            {
+            return _chan->mute();
+            }
+      const InstrumentList* il = _part->instruments();
+      bool muteFound = false;
+
+      for (auto it = il->begin(); it != il->end(); ++it)
+            {
+            Instrument* instr = it->second;
+            for (Channel *chan: instr->channel())
+                  {
+                  muteFound =  chan->mute();
+                  break;
+                  }
+            }
+      return muteFound;
+      }
+
+//---------------------------------------------------------
+//   toggleMute
+//---------------------------------------------------------
+
+void MixerTrackItem::toggleMute()
+      {
+      if(isMute()){
+            setMute(false);
+            }else {
+            setMute(true);
+            }
+      }
+
+//---------------------------------------------------------
 //   setMute
 //---------------------------------------------------------
 
