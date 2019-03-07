@@ -406,7 +406,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                                     gdist = qMax(gdist, dist);
                               }
                         }
-                  if (gdist <= slurMaxMove || tries >= 2)
+                  if (!intersection || gdist <= slurMaxMove || tries >= 2)
                         break;
                   // slur would be moved too far
                   // try again with a steeper curve
