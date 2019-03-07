@@ -32,7 +32,7 @@ class Fingering final : public TextBase {
 
       Note* note() const { return toNote(parent()); }
       ElementType layoutType();
-      void calculatePlacement();
+      Placement calculatePlacement() const;
 
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
