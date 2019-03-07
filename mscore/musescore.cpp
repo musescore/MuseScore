@@ -157,10 +157,6 @@ extern Ms::Synthesizer* createZerberus();
 
 namespace Ms {
 
-#ifdef BUILD_CRASH_REPORTER
-static std::unique_ptr<CrashReporter::Handler> crashHandler;
-#endif
-
 MuseScore* mscore;
 MasterSynthesizer* synti;
 
@@ -7018,6 +7014,13 @@ int main(int argc, char* av[])
       QCoreApplication::setOrganizationDomain("musescore.org");
       QCoreApplication::setApplicationVersion(VERSION);
 
+#ifdef BUILD_CRASH_REPORTER
+      static_assert(sizeof(CRASHREPORTER_EXECUTABLE) > 1,
+         "CRASHREPORTER_EXECUTABLE should be defined to build with crash reporter"
+         );
+      std::unique_ptr<CrashReporter::Handler> crashHandler(new CrashReporter::Handler(QDir::tempPath(), true, CRASHREPORTER_EXECUTABLE));
+#endif
+
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
       QAccessible::installFactory(AccessibleSearchBox::SearchBoxFactory);
       QAccessible::installFactory(Awl::AccessibleAbstractSlider::AbstractSliderFactory);
@@ -7589,13 +7592,6 @@ int main(int argc, char* av[])
             mscore->showSynthControl(true);
       if (settings.value("mixerVisible", false).toBool())
             mscore->showMixer(true);
-
-#ifdef BUILD_CRASH_REPORTER
-      static_assert(sizeof(CRASHREPORTER_EXECUTABLE) > 1,
-         "CRASHREPORTER_EXECUTABLE should be defined to build with crash reporter"
-         );
-      crashHandler.reset(new CrashReporter::Handler(QDir::tempPath(), true, CRASHREPORTER_EXECUTABLE));
-#endif
 
       return qApp->exec();
       }
