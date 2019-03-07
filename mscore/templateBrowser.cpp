@@ -101,16 +101,9 @@ TemplateItem* TemplateBrowser::genTemplateItem(QTreeWidgetItem* p, const QFileIn
                   const qreal cornerRadius = 12.0;
                   painter.drawRoundedRect(QRect(QPoint(0, 0), thumbnailSize), cornerRadius, cornerRadius);
                   painter.end();
+
+                  QPixmapCache::insert(fi.filePath(), pm);
                   }
-            else {
-                  // load or generate an actual thumbnail for the score
-                  pm = mscore->extractThumbnail(fi.filePath());
-                  if (pm.isNull()) {
-                        // couldn't load/generate thumbnail so display generic icon
-                        pm = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
-                        }
-                  }
-            QPixmapCache::insert(fi.filePath(), pm);
             }
 
       si.setPixmap(pm);
