@@ -1089,6 +1089,8 @@ enum class Sid {
       fermataPosBelow,
       fermataMinDistance,
 
+      fingeringPlacement,
+
       STYLES
       };
 
