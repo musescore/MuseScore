@@ -2385,4 +2385,44 @@ void FretMarker::flip(EditData*)
       fret->triggerLayout();
       }
 
+//---------------------------------------------------------
+//   MoveTremolo
+//---------------------------------------------------------
+
+void MoveTremolo::redo(EditData*)
+      {
+      // Find new tremolo chords
+      Measure* m1 = score->tick2measure(chord1Tick);
+      Measure* m2 = score->tick2measure(chord2Tick);
+      Chord* c1 = m1->findChord(chord1Tick, track);
+      Chord* c2 = m2->findChord(chord2Tick, track);
+
+      // Remember the old tremolo chords
+      oldC1 = trem->chord1();
+      oldC2 = trem->chord2();
+
+      // Move tremolo
+      trem->chord1()->setTremolo(nullptr);
+      trem->chord2()->setTremolo(nullptr);
+      c1->setTremolo(trem);
+      c2->setTremolo(trem);
+      trem->setChords(c1, c2);
+      trem->setParent(c1);
+
+      // Tremolo would cross barline, so remove it
+      if (m1 != m2)
+            score->undoRemoveElement(trem);
+      }
+
+void MoveTremolo::undo(EditData*)
+      {
+      // Move tremolo to old position
+      trem->chord1()->setTremolo(nullptr);
+      trem->chord2()->setTremolo(nullptr);
+      oldC1->setTremolo(trem);
+      oldC2->setTremolo(trem);
+      trem->setChords(oldC1, oldC2);
+      trem->setParent(oldC1);
+      }
+
 }
