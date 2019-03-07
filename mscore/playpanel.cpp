@@ -25,6 +25,8 @@
 #include "musescore.h"
 #include "libmscore/measure.h"
 
+qreal vol;
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -56,10 +58,11 @@ PlayPanel::PlayPanel(QWidget* parent)
       loopOutButton->setDefaultAction(getAction("loop-out"));
       enablePlay = new EnablePlayForWidget(this);
 
+      volLabel();
+
       tempoSlider->setDclickValue1(100.0);
       tempoSlider->setDclickValue2(100.0);
       tempoSlider->setUseActualValue(true);
-
       mgainSlider->setValue(seq->metronomeGain());
       mgainSlider->setDclickValue1(seq->metronomeGain() - 10.75f);
       mgainSlider->setDclickValue2(seq->metronomeGain() - 10.75f);
@@ -71,7 +74,7 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(tempoSlider,  SIGNAL(sliderPressed(int)),       SLOT(tempoSliderPressed(int)));
       connect(tempoSlider,  SIGNAL(sliderReleased(int)),      SLOT(tempoSliderReleased(int)));
       connect(relTempoBox,  SIGNAL(valueChanged(double)),     SLOT(relTempoChanged()));
-      connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));
+      connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));                
       }
 
 PlayPanel::~PlayPanel()
@@ -239,6 +242,7 @@ void PlayPanel::setGain(float val)
       volumeSlider->setValue(val);
       }
 
+
 //---------------------------------------------------------
 //   volumeChanged
 //---------------------------------------------------------
@@ -246,6 +250,8 @@ void PlayPanel::setGain(float val)
 void PlayPanel::volumeChanged(double val, int)
       {
       emit gainChange(val);
+      vol=val;
+      volLabel();
       }
 
 //---------------------------------------------------------
@@ -332,6 +338,19 @@ void PlayPanel::updatePosLabel(int utick)
 void PlayPanel::tempoSliderPressed(int)
       {
       tempoSliderIsPressed = true;
+      }
+//---------------------------------------------------------
+//   setVolume
+//---------------------------------------------------------
+      
+void PlayPanel::volLabel()
+      {
+      qDebug()<<"Volume value ="<<vol;
+      if (vol < 0.001)
+            vol=qreal(-200);
+      else
+            vol=qreal(20.0) * std::log10(vol);
+      label->setText(QString::number(vol));
       }
 
 //---------------------------------------------------------

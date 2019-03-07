@@ -22,6 +22,8 @@
 
 #include "ui_playpanel.h"
 #include "enableplayforwidget.h"
+
+
 namespace Ms {
 
 class Score;
@@ -53,6 +55,7 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase {
       void relTempoChanged();
       void tempoSliderReleased(int);
       void tempoSliderPressed(int);
+      void volLabel();
 
    protected:
       virtual void changeEvent(QEvent *event);
