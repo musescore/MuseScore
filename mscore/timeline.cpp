@@ -1466,9 +1466,14 @@ bool Timeline::addMetaValue(int x, int pos, QString meta_text, int row, ElementT
             graphics_text_item->setY(grid_height * row + verticalScrollBar()->value() - 2);
             item_to_add = graphics_text_item;
             }
+      else if (row == 0 ) {
+            graphics_text_item->setX(x);
+            graphics_text_item->setY(grid_height * row + verticalScrollBar()->value() - 6);
+            item_to_add = graphics_text_item;
+            }
       else {
             graphics_text_item->setX(x);
-            graphics_text_item->setY(grid_height * row + verticalScrollBar()->value());
+            graphics_text_item->setY(grid_height * row + verticalScrollBar()->value() - 1);
             item_to_add = graphics_text_item;
             }
 
