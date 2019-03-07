@@ -27,7 +27,6 @@
 #include "spannermap.h"
 #include "layoutbreak.h"
 #include "property.h"
-#include "synthesizer/msynthesizer.h"
 
 namespace Ms {
 
@@ -54,6 +53,7 @@ class KeySig;
 class KeySigEvent;
 class LinkedElements;
 class Lyrics;
+class MasterSynthesizer;
 class Measure;
 class MeasureBase;
 class MuseScoreView;
