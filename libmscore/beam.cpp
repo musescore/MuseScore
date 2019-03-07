@@ -334,8 +334,10 @@ void Beam::layout1()
                               }
                         }
                   }
-            for (ChordRest* cr : _elements)
+            for (ChordRest* cr : _elements) {
                   cr->setUp(_up);
+                  cr->layoutStem1();
+                  }
             }
       else {
             //PITCHED STAVES (and TAB's with stems through staves)
