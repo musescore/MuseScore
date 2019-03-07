@@ -38,6 +38,9 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinAndMaxSize</enum>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_19">
         <property name="text">
