@@ -111,6 +111,7 @@ void System::clear()
 
 void System::appendMeasure(MeasureBase* mb)
       {
+      Q_ASSERT(!mb->isMeasure() || !toMeasure(mb)->hasMMRest());
       mb->setSystem(this);
       ml.push_back(mb);
       }
@@ -920,17 +921,6 @@ Measure* System::lastMeasure() const
       }
 
 //---------------------------------------------------------
-//   prevMeasure
-//---------------------------------------------------------
-
-MeasureBase* System::prevMeasure(const MeasureBase* m) const
-      {
-      if (m == ml.front())
-            return 0;
-      return m->prev();
-      }
-
-//---------------------------------------------------------
 //   nextMeasure
 //---------------------------------------------------------
 
@@ -938,7 +928,10 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
       {
       if (m == ml.back())
             return 0;
-      return m->next();
+      MeasureBase* nm = m->next();
+      if (nm->isMeasure() && toMeasure(nm)->hasMMRest())
+            nm = toMeasure(nm)->mmRest();
+      return nm;
       }
 
 //---------------------------------------------------------
