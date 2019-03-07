@@ -1063,6 +1063,7 @@ enum class Sid {
       letRingFrameRound,
       letRingFrameFgColor,
       letRingFrameBgColor,
+      letRingEndHookType,
 
       palmMuteFontFace,
       palmMuteFontSize,
@@ -1084,6 +1085,7 @@ enum class Sid {
       palmMuteFrameRound,
       palmMuteFrameFgColor,
       palmMuteFrameBgColor,
+      palmMuteEndHookType,
 
       fermataPosAbove,
       fermataPosBelow,
