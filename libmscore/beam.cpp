@@ -1589,12 +1589,12 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                   qreal y1   = -200000;
                   qreal y2   = 200000;
                   for (size_t i = 0; i < n; ++i) {
-                        Chord* c = toChord(crl.at(i));
+                        const ChordRest* c = crl.at(i);
                         qreal y;
                         if (c->isRest())
                               continue;   //y = c->pagePos().y();
                         else
-                              y  = c->upNote()->pagePos().y();
+                              y  = toChord(c)->upNote()->pagePos().y();
                         y1 = qMax(y1, y);
                         y2 = qMin(y2, y);
                         }
