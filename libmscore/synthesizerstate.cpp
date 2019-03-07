@@ -12,7 +12,6 @@
 
 #include "synthesizerstate.h"
 #include "xml.h"
-#include "synthesizer/event.h"
 
 namespace Ms {
 
