@@ -42,6 +42,16 @@ SelectInstrument::SelectInstrument(const Instrument* instrument, QWidget* parent
       buildTemplateList();
       buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
       instrumentSearch->setFilterableView(instrumentList);
+
+      // get last saved, user-selected instrument genre and set filter to it
+      QSettings settings;
+      settings.beginGroup("selectInstrument");
+      if (!settings.value("selectedGenre").isNull()){
+            QString selectedGenre = settings.value("selectedGenre").value<QString>();
+            instrumentGenreFilter->setCurrentText(selectedGenre);
+            }
+      settings.endGroup();
+
       MuseScore::restoreGeometry(this);
       }
 
@@ -128,7 +138,13 @@ void SelectInstrument::on_search_textChanged(const QString&)
 
 void SelectInstrument::on_instrumentGenreFilter_currentIndexChanged(int index)
       {
+      QSettings settings;
+      settings.beginGroup("selectInstrument");  // hard coded, since this is also used in instrwidget
+      settings.setValue("selectedGenre", instrumentGenreFilter->currentText());
+      settings.endGroup();
+
       QString id = instrumentGenreFilter->itemData(index).toString();
+
       // Redisplay tree, only showing items from the selected genre
       filterInstrumentsByGenre(instrumentList, id);
       }
