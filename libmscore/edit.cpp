@@ -775,8 +775,8 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             // try to rewrite the measures first
             // we will only add time signatures if this succeeds
             // this means, however, that the rewrite cannot depend on the time signatures being in place
-            if (fm) {
-                  if (!mScore->rewriteMeasures(fm, ns, local ? staffIdx : -1)) {
+            if (mf) {
+                  if (!mScore->rewriteMeasures(mf, ns, local ? staffIdx : -1)) {
                         undoStack()->current()->unwind();
                         return;
                         }
