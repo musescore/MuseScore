@@ -418,6 +418,13 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
                   }
             return true;
             }
+      // transform fm and lm to measures in masterScore,
+      // if they are originlly in parts
+      if (!fm->score()->isMaster()) {
+            MasterScore* mScore = fm->score()->masterScore();
+            fm = mScore->tick2measure(fm->tick());
+            lm = mScore->tick2measure(lm->tick());
+            }
       int measures = 1;
       bool fmr     = true;
 
