@@ -1794,8 +1794,10 @@ void Chord::layoutPitched()
             _ledgerLines = l;
             }
 
-      qreal lll    = 0.0;         // space to leave at left of chord
-      qreal rrr    = 0.0;         // space to leave at right of chord
+      qreal lll    = 0.0;         // accumulate distance to left of chord
+      qreal rrr    = 0.0;         // accumulate distance to right of chord
+      _spaceLw = 0.0;             // allocate space to left for elements whose shape cannot be known
+      _spaceRw = 0.0;             // allocate space to right for elements whose shape cannot be known
       qreal lhead  = 0.0;         // amount of notehead to left of chord origin
       Note* upnote = upNote();
 
@@ -1835,6 +1837,7 @@ void Chord::layoutPitched()
             qreal x2 = x1 + note->headWidth();
             lll      = qMax(lll, -x1);
             rrr      = qMax(rrr, x2);
+            _spaceRw = qMax(_spaceRw, rrr);
             // track amount of space due to notehead only
             lhead    = qMax(lhead, -x1);
 
@@ -1895,6 +1898,7 @@ void Chord::layoutPitched()
                               }
                         qreal d = qMax(minTieLength - overlap, 0.0);
                         lll = qMax(lll, d);
+                        _spaceLw = qMax(_spaceLw, d);
                         }
                   }
 
@@ -1934,8 +1938,11 @@ void Chord::layoutPitched()
       // allocate enough room for glissandi
       if (_endsGlissando) {
             if (!rtick().isZero()                           // if not at beginning of measure
-                        || graceNotesBefore.size() > 0)     // or there are graces before
-                  lll += _spatium * 0.5 + minTieLength;
+                || graceNotesBefore.size() > 0) {           // or there are graces before
+                  qreal w = _spatium * 0.5 + minTieLength;
+                  lll += w;
+                  _spaceLw = qMax(lll, w);
+                  }
             // special case of system-initial glissando final note is handled in Glissando::layout() itself
             }
 
@@ -1959,29 +1966,36 @@ void Chord::layoutPitched()
                   }
             }
 
-      _spaceLw = lll;
-      _spaceRw = rrr;
+      // formerly, all space was allocated here
+      // but now, most space allocation is done via shape()
+      // the only space that needs to allocated via spaceLw/spaceRw
+      // are elements for which shape is not yet known
+      // ties, glissandi, chordlines
+      //_spaceLw = lll;
+      //_spaceRw = rrr;
+
+      // HACK: if stem is up on previous chord and it is beamed,
+      // shape won't be reliable, and accidentals in this chord may intersect it
+      // this check catches "some" of those cases
+      if (_beam && _beam->up())
+            _spaceLw = lll;
 
       if (gnb) {
-              qreal xl = -(_spaceLw + minNoteDistance) - chordX;
+              qreal xl = -(lll + minNoteDistance) - chordX;
               for (int i = gnb-1; i >= 0; --i) {
                     Chord* g = graceNotesBefore.value(i);
-                    xl -= g->_spaceRw/* * 1.2*/;
+                    xl -= g->shape().right();/* * 1.2*/;
                     g->setPos(xl, 0);
-                    xl -= g->_spaceLw + minNoteDistance * graceMag;
+                    xl -= g->shape().left() + minNoteDistance * graceMag;
                     }
-              if (-xl > _spaceLw)
-                    _spaceLw = -xl;
               }
        if (!gna.empty()) {
-            qreal xr = _spaceRw;
+            qreal xr = rrr;
             int n = gna.size();
             for (int i = 0; i <= n - 1; i++) {
                   Chord* g = gna.value(i);
-                  xr += g->_spaceLw + g->_spaceRw + minNoteDistance * graceMag;
+                  xr += g->shape().left() + g->shape().right() + minNoteDistance * graceMag;
                   }
-           if (xr > _spaceRw)
-                 _spaceRw = xr;
            }
 
       for (Element* e : el()) {
@@ -3148,7 +3162,6 @@ QString Chord::accessibleExtraInfo() const
 
 //---------------------------------------------------------
 //   shape
-//    does not contain ledger lines and articulations
 //---------------------------------------------------------
 
 Shape Chord::shape() const
@@ -3158,8 +3171,10 @@ Shape Chord::shape() const
             shape.add(_hook->shape().translated(_hook->pos()));
       if (_stem && _stem->autoplace() && _stem->visible())
             shape.add(_stem->shape().translated(_stem->pos()));
-      if (_stemSlash && _stemSlash->autoplace() && _stemSlash->visible())
-            shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
+      // TODO: fix grace note position calculation to use full shape, not just left & right edge
+      // then we can re-include _stemSlash
+      //if (_stemSlash && _stemSlash->autoplace() && _stemSlash->visible())
+      //      shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
       if (_arpeggio && _arpeggio->autoplace() && _arpeggio->visible())
             shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
 //      if (_tremolo)
@@ -3175,6 +3190,8 @@ Shape Chord::shape() const
       shape.add(ChordRest::shape());      // add lyrics
       for (LedgerLine* l = _ledgerLines; l; l = l->next())
             shape.add(l->shape().translated(l->pos()));
+      // reserve space for elements that do not have valid shapes yet:
+      // glissandos, ties, chordlines
       if (_spaceLw || _spaceRw)
             shape.addHorizontalSpacing(Shape::SPACING_GENERAL, -_spaceLw, _spaceRw);
       return shape;
