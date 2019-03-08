@@ -141,7 +141,6 @@ class System final : public Element {
       Measure* lastMeasure() const;
       Fraction endTick() const;
 
-      MeasureBase* prevMeasure(const MeasureBase*) const;
       MeasureBase* nextMeasure(const MeasureBase*) const;
 
       qreal leftMargin() const    { return _leftMargin; }
