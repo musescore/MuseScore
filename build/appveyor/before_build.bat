@@ -3,13 +3,13 @@
 IF "%PLATFORM%" == "x64" (
   :: SET "QTURL=https://utils.musescore.org.s3.amazonaws.com/qt5120_msvc2017_64.7z"
   :: SET "QTDIR=%cd%\qt\msvc2017_64" & :: uncomment to use our Qt
-  SET "QTDIR=C:\Qt\5.12\msvc2017_64" & :: uncomment to use AppVeyor's Qt
+  SET "QTDIR=C:\Qt\5.9\msvc2017_64" & :: uncomment to use AppVeyor's Qt
   SET "TARGET_PROCESSOR_BITS=64"
   SET "TARGET_PROCESSOR_ARCH=x86_64"
 ) ELSE (
   :: SET "QTURL=https://utils.musescore.org.s3.amazonaws.com/qt5120_msvc2017_32.7z"
   :: SET "QTDIR=%cd%\qt\msvc2017" & :: uncomment to use our Qt
-  SET "QTDIR=C:\Qt\5.12\msvc2017" & :: uncomment to use AppVeyor's Qt
+  SET "QTDIR=C:\Qt\5.9\msvc2015" & :: uncomment to use AppVeyor's Qt
   SET "TARGET_PROCESSOR_BITS=32"
   SET "TARGET_PROCESSOR_ARCH=x86"
 )
