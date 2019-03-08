@@ -34,7 +34,7 @@ public:
     void selectLanguagesTab();
     void selectExtensionsTab();
 
-    static inline QString baseAddr() { return "http://extensions.musescore.org/3.0.4/"; }
+    static inline QString baseAddr() { return "http://extensions.musescore.org/3.0.5/"; }
 
 private:
     QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
