@@ -1977,8 +1977,8 @@ void Chord::layoutPitched()
       // HACK: if stem is up on previous chord and it is beamed,
       // shape won't be reliable, and accidentals in this chord may intersect it
       // this check catches "some" of those cases
-      if (_beam && _beam->up())
-            _spaceLw = lll;
+      //if (_beam && _beam->up())
+      //      _spaceLw = lll;
 
       if (gnb) {
               qreal xl = -(lll + minNoteDistance) - chordX;
