@@ -2239,7 +2239,9 @@ void Score::createBeams(Measure* measure)
                               if (prevCR) {
                                     const Measure* pm = prevCR->measure();
                                     if (!beamNoContinue(prevCR->beamMode())
-                                        && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()) {
+                                        && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()
+                                        && prevCR->durationType().type() >= TDuration::DurationType::V_EIGHTH
+                                        && prevCR->durationType().type() <= TDuration::DurationType::V_1024TH) {
                                           beam = prevCR->beam();
                                           //a1 = beam ? beam->elements().front() : prevCR;
                                           a1 = beam ? nullptr : prevCR; // when beam is found, a1 is no longer required.
