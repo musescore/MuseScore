@@ -1849,6 +1849,8 @@ void Chord::layoutPitched()
                   // but here perhaps we create more padding in *front* of accidental?
                   x -= score()->styleP(Sid::accidentalDistance) * mag_;
                   lll = qMax(lll, -x);
+                  if (accidental->autoplace())
+                        _spaceLw = qMax(_spaceLw, lll);
                   }
 
             // allow extra space for shortened ties
@@ -1926,6 +1928,8 @@ void Chord::layoutPitched()
             _arpeggio->layout();    // only for width() !
             _arpeggio->setHeight(0.0);
             lll        += _arpeggio->width() + arpeggioDistance + chordX;
+            if (_arpeggio->autoplace())
+                  _spaceLw = lll;
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
             _arpeggio->setPos(-lll, y1);
             // _arpeggio->layout() called in layoutArpeggio2()
@@ -2002,7 +2006,7 @@ void Chord::layoutPitched()
             if (e->type() == ElementType::SLUR)     // we cannot at this time as chordpositions are not fixed
                   continue;
             e->layout();
-            if (e->type() == ElementType::CHORDLINE) {
+            if (e->type() == ElementType::CHORDLINE && e->autoplace()) {
                   QRectF tbbox = e->bbox().translated(e->pos());
                   qreal lx = tbbox.left() + chordX;
                   qreal rx = tbbox.right() + chordX;
