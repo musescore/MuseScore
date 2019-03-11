@@ -155,8 +155,6 @@ if (BUILD_CRASH_REPORTER)
       message("Crash reporter enabled")
 endif(BUILD_CRASH_REPORTER))
 
-message ("Cras")
-
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
       set (CMAKE_CXX_COMPILER_ID "Clang")
