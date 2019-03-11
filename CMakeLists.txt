@@ -153,7 +153,7 @@ set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to sen
 
 if (BUILD_CRASH_REPORTER)
       message("Crash reporter enabled")
-endif(BUILD_CRASH_REPORTER))
+endif(BUILD_CRASH_REPORTER)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
