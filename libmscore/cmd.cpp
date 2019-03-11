@@ -842,7 +842,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   // even if there was a tuplet, we didn't remove it
                   ltuplet = 0;
                   }
-            nextTick += td;
+            nextTick += (tuplet ? td / tuplet->ratio() : td);
             if (sd < td) {
                   //
                   // we removed too much
