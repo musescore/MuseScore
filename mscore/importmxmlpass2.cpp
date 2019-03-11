@@ -4587,7 +4587,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       auto scoreRelStaff = _score->staffIdx(part);       // zero-based number of parts first staff in the score
       auto partRelTrack = msTrack + msVoice - scoreRelStaff * VOICES;
       // handle notations
-      notations.addToScore(cr, note, noteStartTime.ticks(), partRelTrack, _slurs, _glissandi, _spanners, _trills, _tie);
+      notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _tie);
 
       // handle grace after state: remember current grace list size
       if (grace && notations.mustStopGraceAFter()) {
@@ -6058,7 +6058,7 @@ void MusicXMLParserNotations::parse()
  as in that case note is a nullptr.
  */
 
-void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, const int track, SlurStack& slurs,
+void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
                                          TrillStack& trills, Tie*& tie)
       {
@@ -6100,7 +6100,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
       if (note) {
             addChordLine(note, _chordLineType, _logger, &_e);
             addTechnical(note);
-            addTie(_score, note, track, _tiedType, _tiedOrientation, _tiedLineType, tie, _logger, &_e);
+            addTie(_score, note, cr->track(), _tiedType, _tiedOrientation, _tiedLineType, tie, _logger, &_e);
             }
       }
 

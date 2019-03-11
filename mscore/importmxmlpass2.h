@@ -156,7 +156,7 @@ class MusicXMLParserNotations {
 public:
       MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger);
       void parse();
-      void addToScore(ChordRest* const cr, Note* const note, const int tick, const int track, SlurStack& slurs,
+      void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                       Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners, TrillStack& trills,
                       Tie*& tie);
       MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
