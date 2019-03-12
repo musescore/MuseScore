@@ -269,10 +269,10 @@ static const StyleType styleTypes[] {
       { Sid::harmonyPlacement,         "harmonyPlacement",       int(Placement::ABOVE) },
 
       { Sid::chordSymbolAPosAbove,      "chordSymbolPosAbove",       QPointF(.0, -2.5) },
-      { Sid::chordSymbolAPosBelow,      "chordSymbolPosBelow",       QPointF(.0, 3.5) },
+      { Sid::chordSymbolAPosBelow,      "chordSymbolPosBelow",       QPointF(.0, 7.0) },
 
       { Sid::chordSymbolBPosAbove,      "chordSymbolBPosAbove",      QPointF(.0, -5.0) },
-      { Sid::chordSymbolBPosBelow,      "chordSymbolBPosBelow",      QPointF(.0, 3.5) },
+      { Sid::chordSymbolBPosBelow,      "chordSymbolBPosBelow",      QPointF(.0, 7.0) },
 
       { Sid::chordSymbolAFontFace,      "chordSymbolAFontFace",      "FreeSerif" },
       { Sid::chordSymbolAFontSize,      "chordSymbolAFontSize",      12.0 },

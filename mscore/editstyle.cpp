@@ -245,9 +245,13 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::vibratoPosAbove,         false, vibratoLinePosAbove,       resetVibratoLinePosAbove   },
       { Sid::vibratoPosBelow,         false, vibratoLinePosBelow,       resetVibratoLinePosBelow   },
 
-      { Sid::harmonyFretDist,         false, harmonyFretDist,         0 },
-      { Sid::minHarmonyDistance,      false, minHarmonyDistance,      0 },
-      { Sid::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
+      { Sid::harmonyFretDist,         false, harmonyFretDist,         resetHarmonyFretDist          },
+      { Sid::minHarmonyDistance,      false, minHarmonyDistance,      resetMinHarmonyDistance       },
+      { Sid::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   resetMaxHarmonyBarDistance    },
+      { Sid::chordSymbolAPosAbove,    false, chordSymbolPosAbove,     resetChordSymbolPosAbove      },
+      { Sid::chordSymbolAPosBelow,    false, chordSymbolPosBelow,     resetChordSymbolPosBelow      },
+      { Sid::chordSymbolBPosAbove,    false, chordSymbolBPosAbove,    resetChordSymbolBPosAbove      },
+      { Sid::chordSymbolBPosBelow,    false, chordSymbolBPosBelow,    resetChordSymbolBPosBelow      },
 
       { Sid::tupletVHeadDistance,     false, tupletVHeadDistance,     resetTupletVHeadDistance      },
       { Sid::tupletVStemDistance,     false, tupletVStemDistance,     resetTupletVStemDistance      },

@@ -10338,32 +10338,30 @@
               <property name="verticalSpacing">
                <number>3</number>
               </property>
-              <item row="1" column="1">
-               <widget class="QDoubleSpinBox" name="minHarmonyDistance">
-                <property name="suffix">
-                 <string>sp</string>
+              <item row="2" column="2">
+               <widget class="QToolButton" name="resetMaxHarmonyBarDistance">
+                <property name="toolTip">
+                 <string>Reset to default</string>
                 </property>
-                <property name="minimum">
-                 <double>-50.000000000000000</double>
+                <property name="accessibleName">
+                 <string>Reset 'Maximum Barline Distance' value</string>
                 </property>
-                <property name="maximum">
-                 <double>10.000000000000000</double>
+                <property name="text">
+                 <string/>
                 </property>
-                <property name="singleStep">
-                 <double>0.100000000000000</double>
-                </property>
-                <property name="value">
-                 <double>0.500000000000000</double>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                 </property>
                </widget>
               </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_79">
+              <item row="0" column="5">
+               <widget class="Ms::OffsetSelect" name="chordSymbolPosAbove" native="true"/>
+              </item>
+              <item row="2" column="4">
+               <widget class="QLabel" name="label_92">
                 <property name="text">
-                 <string>Distance to fretboard diagram:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>harmonyFretDist</cstring>
+                 <string>Position above (b):</string>
                 </property>
                </widget>
               </item>
@@ -10389,6 +10387,57 @@
                 </property>
                </widget>
               </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_79">
+                <property name="text">
+                 <string>Distance to fretboard diagram:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>harmonyFretDist</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="6">
+               <widget class="QToolButton" name="resetChordSymbolPosAbove">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Position Above' value</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="QLabel" name="label_17">
+                <property name="text">
+                 <string>Position above:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetHarmonyFretDist">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Distance to Fretboard Diagram' value</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
               <item row="1" column="0">
                <widget class="QLabel" name="label_1001">
                 <property name="text">
@@ -10399,18 +10448,29 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="5">
-               <spacer name="horizontalSpacer_11">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+              <item row="1" column="4">
+               <widget class="QLabel" name="label_90">
+                <property name="text">
+                 <string>Position below:</string>
                 </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
+               </widget>
+              </item>
+              <item row="1" column="6">
+               <widget class="QToolButton" name="resetChordSymbolPosBelow">
+                <property name="toolTip">
+                 <string>Reset to default</string>
                 </property>
-               </spacer>
+                <property name="accessibleName">
+                 <string>Reset 'Position Below' value</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
               </item>
               <item row="2" column="0">
                <widget class="QLabel" name="label_1002">
@@ -10421,6 +10481,9 @@
                  <cstring>maxHarmonyBarDistance</cstring>
                 </property>
                </widget>
+              </item>
+              <item row="1" column="5">
+               <widget class="Ms::OffsetSelect" name="chordSymbolPosBelow" native="true"/>
               </item>
               <item row="2" column="1">
                <widget class="QDoubleSpinBox" name="maxHarmonyBarDistance">
@@ -10438,6 +10501,89 @@
                 </property>
                 <property name="value">
                  <double>3.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="resetMinHarmonyDistance">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Minimum Chord Spacing' value</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="minHarmonyDistance">
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="minimum">
+                 <double>-50.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>10.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="value">
+                 <double>0.500000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="4">
+               <widget class="QLabel" name="label_93">
+                <property name="text">
+                 <string>Position below (b):</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="5">
+               <widget class="Ms::OffsetSelect" name="chordSymbolBPosAbove" native="true"/>
+              </item>
+              <item row="3" column="5">
+               <widget class="Ms::OffsetSelect" name="chordSymbolBPosBelow" native="true"/>
+              </item>
+              <item row="2" column="6">
+               <widget class="QToolButton" name="resetChordSymbolBPosAbove">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Position Above' value</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="6">
+               <widget class="QToolButton" name="resetChordSymbolBPosBelow">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Position Below' value</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                 </property>
                </widget>
               </item>
