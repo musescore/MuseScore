@@ -3310,6 +3310,7 @@ static void loadScores(const QStringList& argv)
 
                               MasterScore* score = mscore->readScore(startScore);
                               if (startScore.startsWith(":/") && score) {
+                                    score->setStyle(MScore::defaultStyle());
                                     score->setName(mscore->createDefaultName());
                                     // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                                     score->doLayout();
@@ -3318,6 +3319,7 @@ static void loadScores(const QStringList& argv)
                               if (score == 0) {
                                     score = mscore->readScore(":/data/My_First_Score.mscx");
                                     if (score) {
+                                          score->setStyle(MScore::defaultStyle());
                                           score->setName(mscore->createDefaultName());
                                           // TODO score->setPageFormat(*MScore::defaultStyle().pageFormat());
                                           score->doLayout();
