@@ -6555,12 +6555,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="21"/>
         <source>Treble Clef</source>
-        <translation type="unfinished"/>
+        <translation>Clave de Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="22"/>
         <source>Bass Clef</source>
-        <translation type="unfinished"/>
+        <translation>Clave de Fá</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="23"/>

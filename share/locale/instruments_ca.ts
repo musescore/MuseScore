@@ -3335,7 +3335,7 @@
         <location filename="../instruments/instrumentsxml.h" line="609"/>
         <location filename="../instruments/instrumentsxml.h" line="613"/>
         <source>open</source>
-        <translation type="unfinished"/>
+        <translation>obert</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="467"/>
@@ -5232,7 +5232,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1227"/>
         <source>Mandolin (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Mandolina (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1229"/>
@@ -5273,7 +5273,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1244"/>
         <source>Ukulele (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Ukelele (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1245"/>
@@ -5329,7 +5329,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1255"/>
         <source>Bass Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Baix electroacústic (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1264"/>
@@ -5340,7 +5340,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1267"/>
         <source>Electric Bass (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Baix elèctric (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1269"/>
@@ -5358,7 +5358,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1276"/>
         <source>5-str. Electric Bass (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Baix elèctric 5 cordes (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1279"/>
@@ -5368,7 +5368,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1282"/>
         <source>5-str. Electric Bass (High C/Tenor) (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Baix elèctric 5 cordes (Do agut/Tenor)(Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1283"/>
@@ -5384,7 +5384,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1287"/>
         <source>6-str. Electric Bass (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Baix elèctric 6 cordes (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1288"/>
@@ -5876,7 +5876,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1101"/>
         <source>Banjo (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Banjo (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1103"/>
@@ -5898,7 +5898,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1106"/>
         <source>Irish Tenor Banjo (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Banjo Tenor Irlandès (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1108"/>
@@ -5988,7 +5988,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1147"/>
         <source>Classical Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra clàssica (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1148"/>
@@ -6004,7 +6004,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1150"/>
         <source>7-string Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra 7 cordes (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1151"/>
@@ -6020,7 +6020,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1153"/>
         <source>Cavaquinho (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Cavaquinho (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1154"/>
@@ -6056,7 +6056,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1177"/>
         <location filename="../instruments/instrumentsxml.h" line="1184"/>
         <source>jazz</source>
-        <translation type="unfinished"/>
+        <translation>jazz</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1165"/>
@@ -6066,7 +6066,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1166"/>
         <source>Acoustic Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra acústica (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1168"/>
@@ -6096,17 +6096,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1180"/>
         <source>harmonics</source>
-        <translation type="unfinished"/>
+        <translation>harmònics</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1181"/>
         <source>distortion</source>
-        <translation type="unfinished"/>
+        <translation>distorsió</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1182"/>
         <source>overdriven</source>
-        <translation type="unfinished"/>
+        <translation>overdriven</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1187"/>
@@ -6116,7 +6116,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1188"/>
         <source>Electric Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra elèctrica (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1190"/>
@@ -6167,7 +6167,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1199"/>
         <source>Lute (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>Llaüt (Tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1222"/>
@@ -6460,87 +6460,87 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2"/>
         <source>Voice + Piano</source>
-        <translation type="unfinished"/>
+        <translation>Veu + Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3"/>
         <source>Liturgical Unmetrical + Organ</source>
-        <translation type="unfinished"/>
+        <translation>Litúrgics sense mètrica + Orgue</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4"/>
         <source>SATB Closed Score + Piano</source>
-        <translation type="unfinished"/>
+        <translation>SATB partitura reduïda + Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
         <source>Liturgical Unmetrical</source>
-        <translation type="unfinished"/>
+        <translation>Litúrgics sense mètrica</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6"/>
         <source>Barbershop Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Quartet Barbershop</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="7"/>
         <source>SATB</source>
-        <translation type="unfinished"/>
+        <translation>SATB</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="8"/>
         <source>SATB + Piano</source>
-        <translation type="unfinished"/>
+        <translation>SATB + Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>
         <source>SATB Closed Score</source>
-        <translation type="unfinished"/>
+        <translation>SATB partitura reduïda</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="10"/>
         <source>SATB Closed Score + Organ</source>
-        <translation type="unfinished"/>
+        <translation>SATB partitura reduïda + Orgue</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="11"/>
         <source>SATB + Organ</source>
-        <translation type="unfinished"/>
+        <translation>SATB + Orgue</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="12"/>
         <source>Orchestral</source>
-        <translation type="unfinished"/>
+        <translation>Orquestra</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="13"/>
         <source>Symphony Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Orquestra simfònica</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="14"/>
         <source>String Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Orquestra de cordes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="15"/>
         <source>Classical Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Orquestra clàssica</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="16"/>
         <source>Popular</source>
-        <translation type="unfinished"/>
+        <translation>Popular</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="17"/>
         <source>Rock Band</source>
-        <translation type="unfinished"/>
+        <translation>Rock</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="18"/>
         <source>Bluegrass Band</source>
-        <translation type="unfinished"/>
+        <translation>Bluegrass</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="19"/>
@@ -6550,7 +6550,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="20"/>
         <source>Blank</source>
-        <translation type="unfinished"/>
+        <translation>Blank</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="21"/>
@@ -6565,7 +6565,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="23"/>
         <source>Grand Staff</source>
-        <translation type="unfinished"/>
+        <translation>Doble pentagrama</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="24"/>
@@ -6575,7 +6575,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="25"/>
         <source>Guitar + Tablature</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra + Tabulatura</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="26"/>
@@ -6590,7 +6590,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="28"/>
         <source>Guitar Tablature</source>
-        <translation type="unfinished"/>
+        <translation>Guitarra Tabulatura</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="29"/>
@@ -6600,57 +6600,57 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="30"/>
         <source>Big Band</source>
-        <translation type="unfinished"/>
+        <translation>Big Band</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="31"/>
         <source>Jazz Lead Sheet</source>
-        <translation type="unfinished"/>
+        <translation>Partitura de Jazz</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="32"/>
         <source>Jazz Combo</source>
-        <translation type="unfinished"/>
+        <translation>Orquestra de jazz</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="33"/>
         <source>Chamber Music</source>
-        <translation type="unfinished"/>
+        <translation>Música de cambra</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="34"/>
         <source>Brass Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Quartet de vent-metall</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="35"/>
         <source>Wind Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Quartet de vent-fusta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="36"/>
         <source>Saxophone Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Quartet de saxòfons</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="37"/>
         <source>Brass Quintet</source>
-        <translation type="unfinished"/>
+        <translation>Quintet de vent-metall</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="38"/>
         <source>String Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Quartet de cordes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="39"/>
         <source>Wind Quintet</source>
-        <translation type="unfinished"/>
+        <translation>Quintet de vent-fusta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="40"/>
         <source>Band and Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Banda i percussió</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="41"/>
@@ -6660,7 +6660,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="42"/>
         <source>Small Concert Band</source>
-        <translation type="unfinished"/>
+        <translation>Petita banda simfònica</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="43"/>
@@ -6670,22 +6670,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="44"/>
         <source>Large Pit Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Large Pit Percussion</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="45"/>
         <source>Brass Band</source>
-        <translation type="unfinished"/>
+        <translation>Brass Band</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="46"/>
         <source>Small Pit Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Small Pit Percussion</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="47"/>
         <source>Small Marching Band</source>
-        <translation type="unfinished"/>
+        <translation>Petita banda de marxa </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="48"/>
@@ -6695,7 +6695,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="49"/>
         <source>European Concert Band</source>
-        <translation type="unfinished"/>
+        <translation>Banda simfònica europea</translation>
     </message>
 </context>
 </TS>

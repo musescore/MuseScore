@@ -6102,12 +6102,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1181"/>
         <source>distortion</source>
-        <translation type="unfinished"/>
+        <translation>ディストーション</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1182"/>
         <source>overdriven</source>
-        <translation type="unfinished"/>
+        <translation>オーバードライブ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1187"/>
@@ -6461,7 +6461,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2"/>
         <source>Voice + Piano</source>
-        <translation type="unfinished"/>
+        <translation>Voice + Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3"/>
@@ -6481,17 +6481,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6"/>
         <source>Barbershop Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Barbershop Quartet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="7"/>
         <source>SATB</source>
-        <translation type="unfinished"/>
+        <translation>SATB</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="8"/>
         <source>SATB + Piano</source>
-        <translation type="unfinished"/>
+        <translation>SATB + Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>
@@ -6506,7 +6506,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="11"/>
         <source>SATB + Organ</source>
-        <translation type="unfinished"/>
+        <translation>SATB + Organ</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="12"/>
@@ -6536,12 +6536,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="17"/>
         <source>Rock Band</source>
-        <translation type="unfinished"/>
+        <translation>ロックバンド</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="18"/>
         <source>Bluegrass Band</source>
-        <translation type="unfinished"/>
+        <translation>ブルーグラスバンド</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="19"/>
@@ -6561,12 +6561,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="22"/>
         <source>Bass Clef</source>
-        <translation>バス譜表</translation>
+        <translation>ヘ音記号</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="23"/>
         <source>Grand Staff</source>
-        <translation type="unfinished"/>
+        <translation>大譜表</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="24"/>
@@ -6576,7 +6576,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="25"/>
         <source>Guitar + Tablature</source>
-        <translation type="unfinished"/>
+        <translation>ギター + TAB譜</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="26"/>
@@ -6591,7 +6591,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="28"/>
         <source>Guitar Tablature</source>
-        <translation type="unfinished"/>
+        <translation>ギター TAB譜</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="29"/>
@@ -6601,7 +6601,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="30"/>
         <source>Big Band</source>
-        <translation type="unfinished"/>
+        <translation>ビッグバンド</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="31"/>
@@ -6676,7 +6676,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="45"/>
         <source>Brass Band</source>
-        <translation type="unfinished"/>
+        <translation>ブラスバンド</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="46"/>

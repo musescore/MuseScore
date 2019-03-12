@@ -6101,7 +6101,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1181"/>
         <source>distortion</source>
-        <translation type="unfinished"/>
+        <translation>säröinen </translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1182"/>
@@ -6460,7 +6460,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2"/>
         <source>Voice + Piano</source>
-        <translation type="unfinished"/>
+        <translation>Ääni ja Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3"/>
@@ -6480,17 +6480,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6"/>
         <source>Barbershop Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Barbershop kvartetti</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="7"/>
         <source>SATB</source>
-        <translation type="unfinished"/>
+        <translation>SATB</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="8"/>
         <source>SATB + Piano</source>
-        <translation type="unfinished"/>
+        <translation>SATB + Piano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>
@@ -6505,42 +6505,42 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="11"/>
         <source>SATB + Organ</source>
-        <translation type="unfinished"/>
+        <translation>SATB + Urut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="12"/>
         <source>Orchestral</source>
-        <translation type="unfinished"/>
+        <translation>Orkesteri</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="13"/>
         <source>Symphony Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Sinfoniaorkesteri</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="14"/>
         <source>String Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Jousiorkesteri</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="15"/>
         <source>Classical Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Klassinen orkesteri</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="16"/>
         <source>Popular</source>
-        <translation type="unfinished"/>
+        <translation>Suosittu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="17"/>
         <source>Rock Band</source>
-        <translation type="unfinished"/>
+        <translation>Rokkibändi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="18"/>
         <source>Bluegrass Band</source>
-        <translation type="unfinished"/>
+        <translation>Bluegrass bändi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="19"/>
@@ -6550,7 +6550,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="20"/>
         <source>Blank</source>
-        <translation type="unfinished"/>
+        <translation>Tyhjä</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="21"/>
@@ -6565,7 +6565,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="23"/>
         <source>Grand Staff</source>
-        <translation type="unfinished"/>
+        <translation>Hakaviivasto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="24"/>
@@ -6575,7 +6575,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="25"/>
         <source>Guitar + Tablature</source>
-        <translation type="unfinished"/>
+        <translation>Kitara + Tabulatuuri</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="26"/>
@@ -6590,7 +6590,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="28"/>
         <source>Guitar Tablature</source>
-        <translation type="unfinished"/>
+        <translation>Kitara tabulatuuri</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="29"/>
@@ -6600,7 +6600,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="30"/>
         <source>Big Band</source>
-        <translation type="unfinished"/>
+        <translation>Big Band</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="31"/>
@@ -6615,12 +6615,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="33"/>
         <source>Chamber Music</source>
-        <translation type="unfinished"/>
+        <translation>Kamarimusiikki</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="34"/>
         <source>Brass Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Vaskikvartetti</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="35"/>
@@ -6630,17 +6630,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="36"/>
         <source>Saxophone Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Saksofonikvartetti</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="37"/>
         <source>Brass Quintet</source>
-        <translation type="unfinished"/>
+        <translation>Vaskikvintetti</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="38"/>
         <source>String Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Jousikvartetti</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="39"/>
@@ -6650,7 +6650,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="40"/>
         <source>Band and Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Bändi ja lyömäsoittimet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="41"/>
@@ -6660,7 +6660,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="42"/>
         <source>Small Concert Band</source>
-        <translation type="unfinished"/>
+        <translation>Pieni konserttiyhtye</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="43"/>
@@ -6675,7 +6675,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="45"/>
         <source>Brass Band</source>
-        <translation type="unfinished"/>
+        <translation>Vaskiyhtye</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="46"/>
@@ -6685,7 +6685,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="47"/>
         <source>Small Marching Band</source>
-        <translation type="unfinished"/>
+        <translation>Pieni soittokunta</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="48"/>
@@ -6695,7 +6695,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="49"/>
         <source>European Concert Band</source>
-        <translation type="unfinished"/>
+        <translation>Eurooppalainen konserttiyhtye</translation>
     </message>
 </context>
 </TS>

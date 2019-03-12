@@ -265,7 +265,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="176"/>
         <source>Tin Whistle</source>
-        <translation>Penny Whistle</translation>
+        <translation>Tin Whistle</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="178"/>
@@ -746,7 +746,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="384"/>
         <source>Free Reed</source>
-        <translation>Free Reed</translation>
+        <translation>Tungeinstrument</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="385"/>
@@ -1317,7 +1317,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="695"/>
         <source>Sub-Contrabass Tuba</source>
-        <translation>Subkontrabas tuba</translation>
+        <translation>Subkontrabas Tuba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="697"/>
@@ -1427,7 +1427,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="744"/>
         <source>Orff Bass Metallophone</source>
-        <translation>Orff basmetalofon</translation>
+        <translation>Orff Basmetalofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="748"/>
@@ -1447,7 +1447,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="754"/>
         <source>Guitar Steel Drums</source>
-        <translation>Guitar oljetønder</translation>
+        <translation>Guitar Olietønder</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="756"/>
@@ -1462,7 +1462,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="760"/>
         <source>Bass Steel Drums</source>
-        <translation>Basoljetønder</translation>
+        <translation>Basolietønder</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="762"/>
@@ -1512,7 +1512,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="780"/>
         <source>Orff Bass Xylophone</source>
-        <translation>Orff basxylofon</translation>
+        <translation>Orff Basxylofon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="782"/>
@@ -1912,17 +1912,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="986"/>
         <source>Upright Piano</source>
-        <translation>Opretstående klaver</translation>
+        <translation>Pianette</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="988"/>
         <source>Honky Tonk Piano</source>
-        <translation>Honky Tonk klaver</translation>
+        <translation>Honky Tonk Klaver</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="990"/>
         <source>Toy Piano</source>
-        <translation>Legtøjsklaver</translation>
+        <translation>Legetøjsklaver</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="992"/>
@@ -1947,7 +1947,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1000"/>
         <source>Electric Piano</source>
-        <translation>Elektrisk klaver</translation>
+        <translation>Elklaver</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1002"/>
@@ -1962,23 +1962,23 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1006"/>
         <source>Percussive Organ</source>
-        <translation>Percusivt orgel</translation>
+        <translation>Percussion Orgel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1008"/>
         <source>Hammond Organ</source>
-        <translation>Hammondorgel</translation>
+        <translation>Hammond Orgel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1010"/>
         <source>Rotary Organ</source>
-        <translation>Leslieorgel</translation>
+        <translation>Leslie Orgel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1012"/>
         <location filename="../instruments/instrumentsxml.h" line="1014"/>
         <source>Pipe Organ</source>
-        <translation>Pibeorgel</translation>
+        <translation>Pibe Orgel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1015"/>
@@ -1988,7 +1988,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1017"/>
         <source>Reed Organ</source>
-        <translation>Reed Organ</translation>
+        <translation>Harmonium</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1020"/>
@@ -4251,7 +4251,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="809"/>
         <source>Concert Bass Drum</source>
-        <translation>Orkester stortromme</translation>
+        <translation>Orkester Stortromme</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="810"/>
@@ -5358,22 +5358,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1276"/>
         <source>5-str. Electric Bass (Tablature)</source>
-        <translation>5-str. El bas (Tabulatur)</translation>
+        <translation>5-str. El Bas (Tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1279"/>
         <source>5-str. Electric Bass (High C/Tenor)</source>
-        <translation>5.str. elektrisk bas (højt C/tenor)</translation>
+        <translation>5.str. El Bas (højt C/tenor)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1282"/>
         <source>5-str. Electric Bass (High C/Tenor) (Tablature)</source>
-        <translation>5-str. El bas (Højt C/Tenor) (Tabulatur)</translation>
+        <translation>5-str. El Bas (Højt C/Tenor) (Tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1283"/>
         <source>6-str. Electric Bass</source>
-        <translation>6-str. elektrisk bas</translation>
+        <translation>6-str. El Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1284"/>
@@ -5384,7 +5384,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1287"/>
         <source>6-str. Electric Bass (Tablature)</source>
-        <translation>6-str. El bas (Tabulature)</translation>
+        <translation>6-str. El Bas (Tabulature)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1288"/>
@@ -5592,12 +5592,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1084"/>
         <source>synth-bass-1</source>
-        <translation>synth-bass-1</translation>
+        <translation>synth-bas-1</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1085"/>
         <source>synth-bass-2</source>
-        <translation>synth-bass-2</translation>
+        <translation>synth-bas-2</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1086"/>
@@ -5695,13 +5695,13 @@
         <location filename="../instruments/instrumentsxml.h" line="1122"/>
         <location filename="../instruments/instrumentsxml.h" line="1124"/>
         <source>Bass Balalaika</source>
-        <translation>Bas balalaika</translation>
+        <translation>Bas Balalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1125"/>
         <location filename="../instruments/instrumentsxml.h" line="1127"/>
         <source>Contrabass Balalaika</source>
-        <translation>Kontrabas balalaika</translation>
+        <translation>Kontrabas Balalaika</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1128"/>
@@ -5722,7 +5722,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1134"/>
         <source>Soprano Guitar</source>
-        <translation>Sopran guitar</translation>
+        <translation>Sopranguitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1137"/>
@@ -5732,22 +5732,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1140"/>
         <source>Classical Guitar</source>
-        <translation>Klassisk guitar</translation>
+        <translation>Klassisk Guitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1159"/>
         <source>Acoustic Guitar</source>
-        <translation>Akustisk guitar</translation>
+        <translation>Akustisk Guitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1167"/>
         <source>11-string Alto Guitar</source>
-        <translation>11-strengs alt guitar</translation>
+        <translation>11-strengs Altguitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1170"/>
         <source>12-string Guitar</source>
-        <translation>12-strengs guitar</translation>
+        <translation>12-strengs Guitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1174"/>
@@ -5758,7 +5758,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1178"/>
         <location filename="../instruments/instrumentsxml.h" line="1185"/>
         <source>Electric Guitar</source>
-        <translation>Elektrisk guitar</translation>
+        <translation>Elektrisk Guitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1189"/>
@@ -5821,7 +5821,7 @@
         <location filename="../instruments/instrumentsxml.h" line="1272"/>
         <location filename="../instruments/instrumentsxml.h" line="1277"/>
         <source>5-str. Electric Bass</source>
-        <translation>5-str. elektrisk bas</translation>
+        <translation>5-str. El Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1383"/>
@@ -5831,7 +5831,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1221"/>
         <source>Archlute</source>
-        <translation>Archlute</translation>
+        <translation>Ærkelut</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="104"/>
@@ -5993,7 +5993,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1148"/>
         <source>7-string Guitar</source>
-        <translation>7-strenget guitar</translation>
+        <translation>7-strenget Guitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1149"/>
@@ -6004,7 +6004,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1150"/>
         <source>7-string Guitar (Tablature)</source>
-        <translation>7-strenget guitar (Tabulatur)</translation>
+        <translation>7-strenget Guitar (Tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1151"/>
@@ -6025,7 +6025,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1154"/>
         <source>Baritone Guitar</source>
-        <translation>Bariton guitar</translation>
+        <translation>Baritonguitar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1155"/>
@@ -6061,12 +6061,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1165"/>
         <source>Acoustic Guitar (Treble Clef)</source>
-        <translation>Akustisk guitar (G-nøgle)</translation>
+        <translation>Akustisk Guitar (G-nøgle)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1166"/>
         <source>Acoustic Guitar (Tablature)</source>
-        <translation>Akustisk guitar (Tabulatur)</translation>
+        <translation>Akustisk Guitar (Tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1168"/>
@@ -6111,12 +6111,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1187"/>
         <source>Electric Guitar (Treble Clef)</source>
-        <translation>Elektrisk guitar (G-nøgle)</translation>
+        <translation>Elektrisk Guitar (G-nøgle)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1188"/>
         <source>Electric Guitar (Tablature)</source>
-        <translation>Elektrisk guitar (Tablatur)</translation>
+        <translation>Elektrisk Guitar (Tablatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1190"/>
@@ -6255,7 +6255,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1256"/>
         <source>Acoustic Bass</source>
-        <translation>Akustisk bas</translation>
+        <translation>Akustisk Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1257"/>
@@ -6338,12 +6338,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1263"/>
         <source>Electric Bass</source>
-        <translation>El-bas</translation>
+        <translation>El Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1268"/>
         <source>Fretless Electric Bass</source>
-        <translation>Båndløs elektrisk bas</translation>
+        <translation>Båndløs El Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1299"/>
@@ -6460,17 +6460,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2"/>
         <source>Voice + Piano</source>
-        <translation>Stemme med klaver</translation>
+        <translation>Stemme + Klaver</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3"/>
         <source>Liturgical Unmetrical + Organ</source>
-        <translation>Ametrisk liturgisk med orgel</translation>
+        <translation>Ametrisk liturgisk + Orgel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4"/>
         <source>SATB Closed Score + Piano</source>
-        <translation>SATB (SA-TB) med klaver</translation>
+        <translation>SATB lukket nodeark + Klaver</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
@@ -6490,7 +6490,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="8"/>
         <source>SATB + Piano</source>
-        <translation>SATB med klaver</translation>
+        <translation>SATB + Klaver</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="9"/>
@@ -6500,12 +6500,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="10"/>
         <source>SATB Closed Score + Organ</source>
-        <translation>SATB (SA-TB) med orgel</translation>
+        <translation>SATB lukket nodeark  + Orgel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="11"/>
         <source>SATB + Organ</source>
-        <translation>SATB med orgel</translation>
+        <translation>SATB + Orgel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="12"/>
@@ -6565,7 +6565,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="23"/>
         <source>Grand Staff</source>
-        <translation>Grand staff</translation>
+        <translation>Grand Staff</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="24"/>
@@ -6575,7 +6575,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="25"/>
         <source>Guitar + Tablature</source>
-        <translation>Guitar med Tabulatur</translation>
+        <translation>Guitar + Tabulatur</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="26"/>

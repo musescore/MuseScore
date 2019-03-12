@@ -6106,7 +6106,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1182"/>
         <source>overdriven</source>
-        <translation type="unfinished"/>
+        <translation>oordryf</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1187"/>
@@ -6465,7 +6465,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3"/>
         <source>Liturgical Unmetrical + Organ</source>
-        <translation type="unfinished"/>
+        <translation>Liturgies onmetries + orrel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4"/>
@@ -6475,12 +6475,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5"/>
         <source>Liturgical Unmetrical</source>
-        <translation type="unfinished"/>
+        <translation>Liturgies onmetries</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6"/>
         <source>Barbershop Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Barbershop-kwartet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="7"/>
@@ -6535,12 +6535,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="17"/>
         <source>Rock Band</source>
-        <translation type="unfinished"/>
+        <translation>Rock-orkes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="18"/>
         <source>Bluegrass Band</source>
-        <translation type="unfinished"/>
+        <translation>Bluegrass-orkes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="19"/>
@@ -6600,17 +6600,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="30"/>
         <source>Big Band</source>
-        <translation type="unfinished"/>
+        <translation>Big band</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="31"/>
         <source>Jazz Lead Sheet</source>
-        <translation type="unfinished"/>
+        <translation>Jazz lead sheet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="32"/>
         <source>Jazz Combo</source>
-        <translation type="unfinished"/>
+        <translation>Jazz-combo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="33"/>
@@ -6650,7 +6650,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="40"/>
         <source>Band and Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Orkes en perkussie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="41"/>
@@ -6660,7 +6660,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="42"/>
         <source>Small Concert Band</source>
-        <translation type="unfinished"/>
+        <translation>Klein konsertorkes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="43"/>
@@ -6670,7 +6670,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="44"/>
         <source>Large Pit Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Groot putperkussie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="45"/>
@@ -6680,12 +6680,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="46"/>
         <source>Small Pit Percussion</source>
-        <translation type="unfinished"/>
+        <translation>Klein putperkussie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="47"/>
         <source>Small Marching Band</source>
-        <translation type="unfinished"/>
+        <translation>Klein parade-orkes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="48"/>
@@ -6695,7 +6695,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="49"/>
         <source>European Concert Band</source>
-        <translation type="unfinished"/>
+        <translation>Europese konsertorkes</translation>
     </message>
 </context>
 </TS>

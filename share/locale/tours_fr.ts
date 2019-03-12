@@ -48,7 +48,7 @@ Appuyez sur Ctrl + Haut / Bas (macOS : Cmd + Haut / Bas) pour changer d&apos;oct
     or click one of these icons.</source>
         <comment>note-input</comment>
         <translation>Pour ajouter une altération accidentelle à une note, appuyez sur les flèches Haut ou Bas pour monter ou descendre la note d&apos;un demi-ton, 
-ou cliquez sur l&apos;un de icônes appropriés.</translation>
+ou cliquez sur l&apos;une des icônes appropriées.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -59,14 +59,14 @@ ou cliquez sur l&apos;un de icônes appropriés.</translation>
         <translation>Pour saisir des notes avec des rythmes différents dans la même mesure, utilisez différentes voix.
 Chaque portée peut contenir jusqu&apos;à quatre voix.
 La voix par défaut est la voix 1 et devrait être utilisée pour chaque portée.
-Pour saisir des notes dans une voix différente, cliquez sur l&apos;un des icônes du sélecteur de voix.</translation>
+Pour saisir des notes dans une voix différente, cliquez sur l&apos;une des icônes du sélecteur de voix.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation>Voici la vue de la partition dans laquelle vous pouvez y voir et modifier votre partition.
+        <translation>Voici la vue de la partition dans laquelle vous pouvez voir et modifier votre partition.
 Utilisez la molette de la souris ou le pavé tactile pour faire défiler verticalement (avec Maj appuyé pour faire défiler horizontalement).
 Si vous avez plusieurs partitions d&apos;ouvertes, vous pouvez passer de l&apos;une à l&apos;autre en utilisant les onglets en haut de votre partition.</translation>
     </message>
@@ -268,7 +268,7 @@ simple, liste et plage.</translation>
 Il est mis en surbrillance pour indiquer qu&apos;il est sélectionné.
  Vous pouvez utiliser les touches de curseur gauche et droite pour déplacer la sélection dans les notes et les silences de votre partition.
  Conseil : si vous appuyez sur la touche Alt (Option sur macOS) en même temps que les touches de curseur, vous pouvez également vous déplacer parmi d&apos;autres éléments, 
-ainsi que de haut en bas d&apos;un personnel à l&apos;autre.</translation>
+ainsi que de haut en bas d&apos;un portée à l&apos;autre.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.

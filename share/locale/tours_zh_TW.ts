@@ -56,14 +56,19 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>要在同一小節中輸入不同節奏的音符，請使用多聲部功能。
+每個譜表至多可以擁有四個聲部。
+預設的聲部是第 1 聲部，任何譜表都應該優先使用這個聲部。
+要在其他的分部輸入音符，請點擊這些圖標中的其中一個。</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>這是樂譜檢視畫面，您可以在這裡檢視及編輯您的樂譜。
+要捲動畫面，請使用滑鼠滾輪或觸控板（按 Shift 以水平捲動）。
+如果您開啟多個樂譜，你可以用樂譜檢視畫面上方的分頁來切換樂譜。</translation>
     </message>
     <message>
         <source>These are the toolbars.
@@ -83,7 +88,8 @@
         <source>There are different workspaces available with different sets of palettes.
     The &quot;Advanced&quot; workspace contains more items than the &quot;Basic&quot; workspace.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>不同的工作區有不同的面板可使用。
+「進階」面板比「基礎」面板含有更多項目。</translation>
     </message>
     <message>
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.

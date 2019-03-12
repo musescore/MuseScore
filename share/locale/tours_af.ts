@@ -95,7 +95,7 @@
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation>Om &apos;n paletitem by jou partituur te voeg, selekteer eers &apos;n element of reeks in jou partituur, dubbelklik dan op die paletitem om dit by die geselekteerde elemente te voeg.
+        <translation>Om &apos;n paletitem by jou partituur te voeg, selekteer eers &apos;n element of reeks in jou partituur, dubbelklik dan op die paletitem om dit by die gekose elemente te voeg.
     Jy kan ook &apos;n item sleep van die palet en dit los op &apos;n spesifieke element in jou partituur.</translation>
     </message>
     <message>

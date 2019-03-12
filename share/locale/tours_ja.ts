@@ -318,7 +318,7 @@ Ctrlキー（macOS：Cmd）を押しながら、未選択部分をクリック�
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
     You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>値を変更したのであれば、&quot;リセット&quot; ボタンをクリックすればデフォルトに戻せます。値がスタイル設定に依るのであれば、&quot;スタイルに設定&quot;ボタンをクリックすればその値を新たなデフォルトとしてスタイルに設定できます。フォーマット＞スタイル...を使ってもスタイルのデフォルトを設定できます。</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>

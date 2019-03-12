@@ -163,7 +163,8 @@
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding Shift while dragging.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Voit siirtää pisteet lyhyillä matkoilla klikkaamalla tyhjää kohtaa sivulla ja raahaamalla.
+ Muuten, voit myös valita alueet pitämällä Shift-painiketta raahatessa..</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -188,7 +189,8 @@
         <source>If you have selected elements of different types, only a few settings common to all elements will be available.
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Jos olet valinnut eri tyyppisiä elementtejä, vain muutamat asetukset, jotka ovat yhteisiä kaikille elementeille, ovat käytettävissä
+ Voit klikata &quot;nuotit&quot; ja muista painikkeita lopussa rajataksesi valinnan vain määrättyihin elementteihin.</translation>
     </message>
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
@@ -249,7 +251,11 @@
     If the box is highlighted, then there are notes in that measure.
     Boxes with a thin blue outline represent measures that are currently in view.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>
+Alla oleva osa sisältää rivin kullekin instrumentille
+ Jokainen rivin ruutu edustaa arvoa kyseiselle instrumentille
+ Jos ruutu on korostettu, siinä on muistiinpanoja tälle arvolle
+ Laatikot, joissa on ohuet siniset ääriviivat, näyttävätt parhaillaan näkyviä toimenpiteitä.</translation>
     </message>
     <message>
         <source>MuseScore supports different types of selections: single, list, and range.
@@ -265,7 +271,12 @@
     Tip: if you press the Alt key (Option on macOS) along with the cursor keys you can move through other elements too,
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Yksittäiseen valintaan, klikkaa elementtiä, jonka haluat valita.
+Se näkyy korostettuna osoittamaan, että se on valittu
+Voit käyttää vasenta ja oikeaa kohdistinpainiketta siirtääksesi valinnan 
+nuottien ja taukojen läpi.
+ Vinkki: jos painat Alt-näppäintä (Option macOS:llä) ja kohdistinpainikkeita, voit siirtyä myös muiden elementtien läpi, 
+ ja myös siirtyä ylös ja alas viivastosta toiseen.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -273,7 +284,10 @@
     You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Luettelovalinta on yksittäisten valintojen yhdistelmä
+ Paina Ctrl (macOS: Cmd), kun haluat lisätä tai poistaa elementtejä luettelon valintaan
+ Voit myös valita nopeasti samanlaisia ​​elementtejä napsauttamalla hiiren kakkospainikkeella (macOS: Ctrl + klikkaus)
+ ja valitse sitten jokin &quot;Valitse&quot; -vaihtoehdoista tuloksena olevasta ponnahdusvalikosta.</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
