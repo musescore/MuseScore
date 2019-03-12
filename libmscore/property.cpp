@@ -372,6 +372,178 @@ QString propertyUserName(Pid id)
       }
 
 //---------------------------------------------------------
+//    propertyFromString
+//---------------------------------------------------------
+
+QVariant propertyFromString(Pid id, QString value)
+      {
+      switch (propertyType(id)) {
+            case P_TYPE::BOOL:
+                  return QVariant(bool(value.toInt()));
+            case P_TYPE::ZERO_INT:
+            case P_TYPE::INT:
+                  return QVariant(value.toInt());
+            case P_TYPE::REAL:
+            case P_TYPE::SPATIUM:
+            case P_TYPE::SP_REAL:
+            case P_TYPE::TEMPO:
+                  return QVariant(value.toDouble());
+            case P_TYPE::FRACTION:
+                  return Fraction::fromString(value);
+            case P_TYPE::COLOR:
+                  // not used by MSCX
+                  return QColor(value);
+            case P_TYPE::POINT:
+            case P_TYPE::POINT_SP:
+            case P_TYPE::POINT_SP_MM: {
+                  // not used by MSCX
+                  const int i = value.indexOf(';');
+                  return QPointF(value.leftRef(i).toDouble(), value.midRef(i+1).toDouble());
+                  }
+            case P_TYPE::SCALE:
+            case P_TYPE::SIZE: {
+                  // not used by MSCX
+                  const int i = value.indexOf('x');
+                  return QSizeF(value.leftRef(i).toDouble(), value.midRef(i+1).toDouble());
+                  }
+            case P_TYPE::FONT:
+            case P_TYPE::STRING:
+                  return value;
+            case P_TYPE::GLISSANDO_STYLE: {
+                  if ( value == "whitekeys")
+                        return QVariant(int(GlissandoStyle::WHITE_KEYS));
+                  else if ( value == "blackkeys")
+                        return QVariant(int(GlissandoStyle::BLACK_KEYS));
+                  else if ( value == "diatonic")
+                        return QVariant(int(GlissandoStyle::DIATONIC));
+                  else // e.g., normally "Chromatic"
+                        return QVariant(int(GlissandoStyle::CHROMATIC));
+                  }
+                  break;
+            case P_TYPE::ORNAMENT_STYLE: {
+                  if ( value == "baroque")
+                        return QVariant(int(MScore::OrnamentStyle::BAROQUE));
+                  return QVariant(int(MScore::OrnamentStyle::DEFAULT));
+                  }
+
+            case P_TYPE::DIRECTION:
+                  return QVariant::fromValue<Direction>(toDirection(value));
+
+            case P_TYPE::DIRECTION_H:
+                  {
+                  if (value == "left" || value == "1")
+                        return QVariant(int(MScore::DirectionH::LEFT));
+                  else if (value == "right" || value == "2")
+                        return QVariant(int(MScore::DirectionH::RIGHT));
+                  else if (value == "auto")
+                        return QVariant(int(MScore::DirectionH::AUTO));
+                  }
+                  break;
+            case P_TYPE::LAYOUT_BREAK: {
+                  if (value == "line")
+                        return QVariant(int(LayoutBreak::LINE));
+                  if (value == "page")
+                        return QVariant(int(LayoutBreak::PAGE));
+                  if (value == "section")
+                        return QVariant(int(LayoutBreak::SECTION));
+                  if (value == "nobreak")
+                        return QVariant(int(LayoutBreak::NOBREAK));
+                  qDebug("getProperty: invalid P_TYPE::LAYOUT_BREAK: <%s>", qPrintable(value));
+                  }
+                  break;
+            case P_TYPE::VALUE_TYPE: {
+                  if (value == "offset")
+                        return QVariant(int(Note::ValueType::OFFSET_VAL));
+                  else if (value == "user")
+                        return QVariant(int(Note::ValueType::USER_VAL));
+                  }
+                  break;
+            case P_TYPE::PLACEMENT: {
+                  if (value == "above")
+                        return QVariant(int(Placement::ABOVE));
+                  else if (value == "below")
+                        return QVariant(int(Placement::BELOW));
+                  }
+                  break;
+            case P_TYPE::TEXT_PLACE: {
+                  if (value == "auto")
+                        return QVariant(int(PlaceText::AUTO));
+                  else if (value == "above")
+                        return QVariant(int(PlaceText::ABOVE));
+                  else if (value == "below")
+                        return QVariant(int(PlaceText::BELOW));
+                  else if (value == "left")
+                        return QVariant(int(PlaceText::LEFT));
+                  }
+                  break;
+            case P_TYPE::BARLINE_TYPE: {
+                  bool ok;
+                  const int ct = value.toInt(&ok);
+                  if (ok)
+                        return QVariant(ct);
+                  else {
+                        BarLineType t = BarLine::barLineType(value);
+                        return QVariant::fromValue(t);
+                        }
+                  }
+                  break;
+            case P_TYPE::BEAM_MODE:             // TODO
+                  return QVariant(int(0));
+
+            case P_TYPE::GROUPS:
+                  // unsupported
+                  return QVariant();
+            case P_TYPE::SYMID:
+                  return QVariant::fromValue(Sym::name2id(value));
+            case P_TYPE::HEAD_GROUP:
+                  return QVariant::fromValue(NoteHead::name2group(value));
+            case P_TYPE::HEAD_TYPE:
+                  return QVariant::fromValue(NoteHead::name2type(value));
+            case P_TYPE::POINT_MM:              // not supported
+            case P_TYPE::TDURATION:
+            case P_TYPE::SIZE_MM:
+            case P_TYPE::INT_LIST:
+                  return QVariant();
+            case P_TYPE::SUB_STYLE:
+                  return int(textStyleFromName(value));
+            case P_TYPE::ALIGN: {
+                  QStringList sl = value.split(',');
+                  if (sl.size() != 2) {
+                        qDebug("bad align text <%s>", qPrintable(value));
+                        return QVariant();
+                        }
+                  Align align = Align::LEFT;
+                  if (sl[0] == "center")
+                        align = align | Align::HCENTER;
+                  else if (sl[0] == "right")
+                        align = align | Align::RIGHT;
+                  else if (sl[0] == "left")
+                        ;
+                  else {
+                        qDebug("bad align text <%s>", qPrintable(sl[0]));
+                        return QVariant();
+                        }
+                  if (sl[1] == "center")
+                        align = align | Align::VCENTER;
+                  else if (sl[1] == "bottom")
+                        align = align | Align::BOTTOM;
+                  else if (sl[1] == "baseline")
+                        align = align | Align::BASELINE;
+                  else if (sl[1] == "top")
+                        ;
+                  else {
+                        qDebug("bad align text <%s>", qPrintable(sl[1]));
+                        return QVariant();
+                        }
+                  return  int(align);
+                  }
+            default:
+                  break;
+            }
+      return QVariant();
+      }
+
+//---------------------------------------------------------
 //    readProperty
 //---------------------------------------------------------
 
@@ -402,92 +574,22 @@ QVariant readProperty(Pid id, XmlReader& e)
             case P_TYPE::FONT:
             case P_TYPE::STRING:
                   return QVariant(e.readElementText());
-            case P_TYPE::GLISSANDO_STYLE: {
-                  QString value(e.readElementText());
-                  if ( value == "whitekeys")
-                        return QVariant(int(GlissandoStyle::WHITE_KEYS));
-                  else if ( value == "blackkeys")
-                        return QVariant(int(GlissandoStyle::BLACK_KEYS));
-                  else if ( value == "diatonic")
-                        return QVariant(int(GlissandoStyle::DIATONIC));
-                  else // e.g., normally "Chromatic"
-                        return QVariant(int(GlissandoStyle::CHROMATIC));
-                  }
-                  break;
-            case P_TYPE::ORNAMENT_STYLE: {
-                  QString value(e.readElementText());
-                  if ( value == "baroque")
-                        return QVariant(int(MScore::OrnamentStyle::BAROQUE));
-                  return QVariant(int(MScore::OrnamentStyle::DEFAULT));
-                  }
-
+            case P_TYPE::GLISSANDO_STYLE:
+            case P_TYPE::ORNAMENT_STYLE:
             case P_TYPE::DIRECTION:
-                  return QVariant::fromValue<Direction>(toDirection(e.readElementText()));
-
             case P_TYPE::DIRECTION_H:
-                  {
-                  QString value(e.readElementText());
-                  if (value == "left" || value == "1")
-                        return QVariant(int(MScore::DirectionH::LEFT));
-                  else if (value == "right" || value == "2")
-                        return QVariant(int(MScore::DirectionH::RIGHT));
-                  else if (value == "auto")
-                        return QVariant(int(MScore::DirectionH::AUTO));
-                  }
-                  break;
-            case P_TYPE::LAYOUT_BREAK: {
-                  QString value(e.readElementText());
-                  if (value == "line")
-                        return QVariant(int(LayoutBreak::LINE));
-                  if (value == "page")
-                        return QVariant(int(LayoutBreak::PAGE));
-                  if (value == "section")
-                        return QVariant(int(LayoutBreak::SECTION));
-                  if (value == "nobreak")
-                        return QVariant(int(LayoutBreak::NOBREAK));
-                  qDebug("getProperty: invalid P_TYPE::LAYOUT_BREAK: <%s>", qPrintable(value));
-                  }
-                  break;
-            case P_TYPE::VALUE_TYPE: {
-                  QString value(e.readElementText());
-                  if (value == "offset")
-                        return QVariant(int(Note::ValueType::OFFSET_VAL));
-                  else if (value == "user")
-                        return QVariant(int(Note::ValueType::USER_VAL));
-                  }
-                  break;
-            case P_TYPE::PLACEMENT: {
-                  QString value(e.readElementText());
-                  if (value == "above")
-                        return QVariant(int(Placement::ABOVE));
-                  else if (value == "below")
-                        return QVariant(int(Placement::BELOW));
-                  }
-                  break;
-            case P_TYPE::TEXT_PLACE: {
-                  QString value(e.readElementText());
-                  if (value == "auto")
-                        return QVariant(int(PlaceText::AUTO));
-                  else if (value == "above")
-                        return QVariant(int(PlaceText::ABOVE));
-                  else if (value == "below")
-                        return QVariant(int(PlaceText::BELOW));
-                  else if (value == "left")
-                        return QVariant(int(PlaceText::LEFT));
-                  }
-                  break;
-            case P_TYPE::BARLINE_TYPE: {
-                  bool ok;
-                  const QString& val(e.readElementText());
-                  int ct = val.toInt(&ok);
-                  if (ok)
-                        return QVariant(ct);
-                  else {
-                        BarLineType t = BarLine::barLineType(val);
-                        return QVariant::fromValue(t);
-                        }
-                  }
-                  break;
+            case P_TYPE::LAYOUT_BREAK:
+            case P_TYPE::VALUE_TYPE:
+            case P_TYPE::PLACEMENT:
+            case P_TYPE::TEXT_PLACE:
+            case P_TYPE::BARLINE_TYPE:
+            case P_TYPE::SYMID:
+            case P_TYPE::HEAD_GROUP:
+            case P_TYPE::HEAD_TYPE:
+            case P_TYPE::SUB_STYLE:
+            case P_TYPE::ALIGN:
+                  return propertyFromString(id, e.readElementText());
+
             case P_TYPE::BEAM_MODE:             // TODO
                   return QVariant(int(0));
 
@@ -497,54 +599,11 @@ QVariant readProperty(Pid id, XmlReader& e)
                   g.read(e);
                   return QVariant::fromValue(g);
                   }
-            case P_TYPE::SYMID:
-                  return QVariant::fromValue(Sym::name2id(e.readElementText()));
-                  break;
-            case P_TYPE::HEAD_GROUP: {
-                  QString s = e.readElementText();
-                  return QVariant::fromValue(NoteHead::name2group(s));
-                  }
-            case P_TYPE::HEAD_TYPE:
-                  return QVariant::fromValue(NoteHead::name2type(e.readElementText()));
             case P_TYPE::POINT_MM:              // not supported
             case P_TYPE::TDURATION:
             case P_TYPE::SIZE_MM:
             case P_TYPE::INT_LIST:
                   return QVariant();
-            case P_TYPE::SUB_STYLE:
-                  return int(textStyleFromName(e.readElementText()));
-            case P_TYPE::ALIGN: {
-                  QString s = e.readElementText();
-                  QStringList sl = s.split(',');
-                  if (sl.size() != 2) {
-                        qDebug("bad align text <%s>", qPrintable(s));
-                        return QVariant();
-                        }
-                  Align align = Align::LEFT;
-                  if (sl[0] == "center")
-                        align = align | Align::HCENTER;
-                  else if (sl[0] == "right")
-                        align = align | Align::RIGHT;
-                  else if (sl[0] == "left")
-                        ;
-                  else {
-                        qDebug("bad align text <%s>", qPrintable(sl[0]));
-                        return QVariant();
-                        }
-                  if (sl[1] == "center")
-                        align = align | Align::VCENTER;
-                  else if (sl[1] == "bottom")
-                        align = align | Align::BOTTOM;
-                  else if (sl[1] == "baseline")
-                        align = align | Align::BASELINE;
-                  else if (sl[1] == "top")
-                        ;
-                  else {
-                        qDebug("bad align text <%s>", qPrintable(sl[1]));
-                        return QVariant();
-                        }
-                  return  int(align);
-                  }
             default:
                   qFatal("unhandled PID type");
                   break;
@@ -552,5 +611,189 @@ QVariant readProperty(Pid id, XmlReader& e)
       return QVariant();
       }
 
+//---------------------------------------------------------
+//   propertyToString
+//    Originally extracted from XmlWriter
+//---------------------------------------------------------
+
+QString propertyToString(Pid id, QVariant value, bool mscx)
+      {
+      if (value == QVariant())
+            return QString();
+      switch (propertyType(id)) {
+            case P_TYPE::BOOL:
+            case P_TYPE::INT:
+            case P_TYPE::ZERO_INT:
+                  return QString::number(value.toInt());
+            case P_TYPE::REAL:
+                  return QString::number(value.value<double>());
+            case P_TYPE::SPATIUM:
+                  return QString::number(value.value<Spatium>().val());
+            case P_TYPE::DIRECTION:
+                  return toString(value.value<Direction>());
+            case P_TYPE::STRING:
+            case P_TYPE::FRACTION:
+                  return value.toString();
+            case P_TYPE::ORNAMENT_STYLE:
+                  switch (MScore::OrnamentStyle(value.toInt())) {
+                        case MScore::OrnamentStyle::BAROQUE:
+                              return "baroque";
+                        case MScore::OrnamentStyle::DEFAULT:
+                              return "default";
+                        }
+                  break;
+            case P_TYPE::GLISSANDO_STYLE:
+                  switch (GlissandoStyle(value.toInt())) {
+                        case GlissandoStyle::BLACK_KEYS:
+                              return "blackkeys";
+                        case GlissandoStyle::WHITE_KEYS:
+                              return "whitekeys";
+                        case GlissandoStyle::DIATONIC:
+                              return "diatonic";
+                        case GlissandoStyle::CHROMATIC:
+                              return "Chromatic";
+                        }
+                  break;
+            case P_TYPE::DIRECTION_H:
+                  switch (MScore::DirectionH(value.toInt())) {
+                        case MScore::DirectionH::LEFT:
+                              return "left";
+                        case MScore::DirectionH::RIGHT:
+                              return "right";
+                        case MScore::DirectionH::AUTO:
+                              return "auto";
+                        }
+                  break;
+            case P_TYPE::LAYOUT_BREAK:
+                  switch (LayoutBreak::Type(value.toInt())) {
+                        case LayoutBreak::LINE:
+                              return "line";
+                        case LayoutBreak::PAGE:
+                              return "page";
+                        case LayoutBreak::SECTION:
+                              return "section";
+                        case LayoutBreak::NOBREAK:
+                              return "nobreak";
+                        }
+                  break;
+            case P_TYPE::VALUE_TYPE:
+                  switch (Note::ValueType(value.toInt())) {
+                        case Note::ValueType::OFFSET_VAL:
+                              return "offset";
+                        case Note::ValueType::USER_VAL:
+                              return "user";
+                        }
+                  break;
+            case P_TYPE::PLACEMENT:
+                  switch (Placement(value.toInt())) {
+                        case Placement::ABOVE:
+                              return "above";
+                        case Placement::BELOW:
+                              return "below";
+                        }
+                  break;
+            case P_TYPE::TEXT_PLACE:
+                  switch (PlaceText(value.toInt())) {
+                        case PlaceText::AUTO:
+                              return "auto";
+                        case PlaceText::ABOVE:
+                              return "above";
+                        case PlaceText::BELOW:
+                              return "below";
+                        case PlaceText::LEFT:
+                              return "left";
+                        }
+                  break;
+            case P_TYPE::SYMID:
+                  return Sym::id2name(SymId(value.toInt()));
+            case P_TYPE::BARLINE_TYPE:
+                  return BarLine::barLineTypeName(BarLineType(value.toInt()));
+            case P_TYPE::HEAD_GROUP:
+                  return NoteHead::group2name(NoteHead::Group(value.toInt()));
+            case P_TYPE::HEAD_TYPE:
+                  return NoteHead::type2name(NoteHead::Type(value.toInt()));
+            case P_TYPE::SUB_STYLE:
+                  return textStyleName(Tid(value.toInt()));
+            case P_TYPE::CHANGE_SPEED:
+                  return Dynamic::speedToName(Dynamic::Speed(value.toInt()));
+            case P_TYPE::CHANGE_METHOD:
+                  return Hairpin::veloChangeMethodToName(VeloChangeMethod(value.toInt()));
+            case P_TYPE::CLEF_TYPE:
+                  return ClefInfo::tag(ClefType(value.toInt()));
+            case P_TYPE::DYNAMIC_TYPE:
+                  return Dynamic::dynamicTypeName(value.value<Dynamic::Type>());
+            case P_TYPE::ALIGN: {
+                  const Align a = Align(value.toInt());
+                  const char* h;
+                  if (a & Align::HCENTER)
+                        h = "center";
+                  else if (a & Align::RIGHT)
+                        h = "right";
+                  else
+                        h = "left";
+                  const char* v;
+                  if (a & Align::BOTTOM)
+                        v = "bottom";
+                  else if (a & Align::VCENTER)
+                        v = "center";
+                  else if (a & Align::BASELINE)
+                        v = "baseline";
+                  else
+                        v = "top";
+                  return QString("%1,%2").arg(h, v);
+                  }
+            case P_TYPE::POINT_MM:
+                  qFatal("unknown: POINT_MM");
+            case P_TYPE::SIZE_MM:
+                  qFatal("unknown: SIZE_MM");
+            case P_TYPE::TDURATION:
+                  qFatal("unknown: TDURATION");
+            case P_TYPE::BEAM_MODE:
+                  qFatal("unknown: BEAM_MODE");
+            case P_TYPE::TEMPO:
+                  qFatal("unknown: TEMPO");
+            case P_TYPE::GROUPS:
+                  qFatal("unknown: GROUPS");
+            case P_TYPE::INT_LIST:
+                  qFatal("unknown: INT_LIST");
+
+            default: {
+                  switch(value.type()) {
+                        case QVariant::Bool:
+                        case QVariant::Char:
+                        case QVariant::Int:
+                        case QVariant::UInt:
+                              return QString::number(value.toInt());
+                        case QVariant::Double:
+                              return QString::number(value.value<double>());
+                        default:
+                              break;
+                        }
+                  }
+            }
+
+      if (!mscx) {
+            // String representation for properties that are written
+            // to MSCX in other way (e.g. as XML tag properties).
+            switch(value.type()) {
+                  case QVariant::PointF: {
+                        const QPointF p(value.value<QPointF>());
+                        return QString("%1;%2").arg(QString::number(p.x()), QString::number(p.y()));
+                        }
+                  case QVariant::SizeF: {
+                        const QSizeF s(value.value<QSizeF>());
+                        return QString("%1x%2").arg(QString::number(s.width()), QString::number(s.height()));
+                        }
+                  // TODO: support QVariant::Rect and QVariant::QRectF?
+                  default:
+                        break;
+                  }
+
+            if (value.canConvert<QString>())
+                  return value.toString();
+            }
+
+      return QString();
+      }
 }
 
