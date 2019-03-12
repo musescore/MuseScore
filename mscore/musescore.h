@@ -98,6 +98,7 @@ class Driver;
 class Seq;
 class ImportMidiPanel;
 class ScoreComparisonTool;
+class ScriptRecorder;
 class ScriptRecorderWidget;
 class Startcenter;
 class HelpBrowser;
@@ -866,8 +867,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool uninstallExtension(QString extensionId);
       Q_INVOKABLE bool isInstalledExtension(QString extensionId);
 
+#ifdef MSCORE_UNSTABLE
+      ScriptRecorder* getScriptRecorder();
+#endif
       bool runTestScripts(const QStringList& scripts);
-      friend class Script;
       };
 
 extern MuseScore* mscore;

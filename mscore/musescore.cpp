@@ -5872,8 +5872,8 @@ ScoreTab* MuseScore::createScoreTab()
 
 void MuseScore::cmd(QAction* a, const QString& cmd)
       {
-      if (scriptRecorder)
-            scriptRecorder->recordCommand(cmd);
+      if (ScriptRecorder* rec = getScriptRecorder())
+            rec->recordCommand(cmd);
 
       if (cmd == "instruments") {
             editInstrList();
@@ -6288,6 +6288,19 @@ Timeline* MuseScore::timeline() const
             }
       return 0;
       }
+
+//---------------------------------------------------------
+//   getScriptRecorder
+//---------------------------------------------------------
+
+#ifdef MSCORE_UNSTABLE
+ScriptRecorder* MuseScore::getScriptRecorder()
+      {
+      if (scriptRecorder)
+            return &scriptRecorder->scriptRecorder();
+      return nullptr;
+      }
+#endif
 
 //---------------------------------------------------------
 //   getSearchDialog
