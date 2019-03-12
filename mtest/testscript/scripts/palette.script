@@ -1,0 +1,117 @@
+# This script is created primarily to test the script
+# recorder capabilities regarding adding palette elements.
+# It may be useful though to track changes in editing
+# process and palette elements properties.
+init init/Treble.mscx
+cmd note-input
+cmd escape
+cmd select-next-chord
+cmd select-prev-chord
+palette Clef concertClefType F8va
+palette KeySig accidental 2
+palette TimeSig timesig 3/4
+cmd note-input
+cmd escape
+cmd select-next-chord
+cmd select-prev-chord
+palette Bracket type Brace
+
+cmd note-input
+cmd note-a
+palette Accidental subtype accidentalNaturalFlat
+palette Articulation symbol articMarcatoStaccatoAbove
+cmd escape
+cmd note-input
+cmd next-measure
+cmd note-b
+palette Articulation symbol ornamentTrill
+cmd next-measure
+palette Breath symbol caesuraCurved
+cmd next-measure
+cmd note-d
+palette Icon action grace16
+cmd pitch-up
+cmd pitch-up
+cmd next-measure
+cmd note-e
+palette NoteHead symbol noteheadXHalf
+cmd next-measure
+
+cmd note-f
+palette HairPin subtype 3
+cmd next-measure
+cmd note-g
+palette Ottava subtype 15ma
+palette LayoutBreak subtype line
+cmd next-measure
+cmd note-g
+palette Slur
+cmd note-f
+cmd escape
+cmd note-input
+cmd next-measure
+
+cmd note-f
+cmd note-a
+cmd escape
+cmd prev-chord
+palette Glissando subtype 1
+cmd note-input
+cmd next-measure
+
+palette StaffText style Expression text Expression
+cmd escape
+cmd note-input
+palette RehearsalMark
+cmd escape
+cmd note-input
+cmd next-measure
+palette Tempo style Tempo text <sym>metNote8thUp</sym>&#032=&#03280
+cmd escape
+cmd note-input
+cmd next-measure
+palette Dynamic subtype ff
+cmd escape
+cmd note-input
+cmd next-measure
+cmd note-f
+palette Fingering style String&#032Number text 3
+cmd escape
+cmd note-input
+cmd next-measure
+cmd note-a
+
+cmd escape
+cmd select-next-chord
+palette Marker label segno
+cmd note-input
+cmd next-measure
+cmd note-b
+cmd escape
+cmd select-next-chord
+palette Jump jumpTo segno playUntil coda
+
+cmd note-input
+cmd next-measure
+
+cmd pad-note-8
+cmd note-a
+cmd note-b
+cmd note-c
+cmd note-a
+cmd escape
+cmd prev-chord
+palette Icon action beam-mid
+
+cmd note-input
+cmd next-measure
+cmd note-f
+
+cmd escape
+cmd select-next-chord
+cmd select-prev-chord
+palette Icon action insert-hbox
+
+cmd del-empty-measures
+
+test score palette.mscx
