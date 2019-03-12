@@ -439,6 +439,7 @@ class Mops : public QObject {
 
 extern Direction toDirection(const QString&);
 extern const char* toString(Direction);
+extern QString toUserString(Direction);
 extern void fillComboBoxDirection(QComboBox*);
 
 

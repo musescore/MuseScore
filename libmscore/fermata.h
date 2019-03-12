@@ -66,6 +66,8 @@ class Fermata final : public Element {
       virtual QVariant propertyDefault(Pid) const override;
       virtual void resetProperty(Pid id) override;
 
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
+
       ChordRest* chordRest() const;
       Segment* segment() const              { return toSegment(parent()); }
       Measure* measure() const;

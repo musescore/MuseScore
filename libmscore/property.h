@@ -141,6 +141,7 @@ enum class Pid {
       TEMPO,
       TEMPO_FOLLOW_TEXT,
       ACCIDENTAL_BRACKET,
+      ACCIDENTAL_TYPE,
       NUMERATOR_STRING,
       DENOMINATOR_STRING,
       FBPREFIX,             // used for FiguredBassItem
@@ -165,14 +166,15 @@ enum class Pid {
       VELO_CHANGE,
       VELO_CHANGE_METHOD,
       VELO_CHANGE_SPEED,
+      DYNAMIC_TYPE,
       DYNAMIC_RANGE,
       SINGLE_NOTE_DYNAMICS,
+//100
       PLACEMENT,
       VELOCITY,
       JUMP_TO,
       PLAY_UNTIL,
       CONTINUE_AT,
-//100
       LABEL,
       MARKER_TYPE,
       ARP_USER_LEN1,
@@ -276,10 +278,10 @@ enum class Pid {
 
       FRAME_TYPE,
       FRAME_WIDTH,
-//200
       FRAME_PADDING,
       FRAME_ROUND,
       FRAME_FG_COLOR,
+//200
       FRAME_BG_COLOR,
       SIZE_SPATIUM_DEPENDENT,
       ALIGN,
@@ -325,6 +327,11 @@ enum class Pid {
       VOICE,
       POSITION,
 
+      CLEF_TYPE_CONCERT,
+      CLEF_TYPE_TRANSPOSING,
+      KEY,
+      ACTION, // for Icon
+
       END
       };
 
@@ -366,7 +373,9 @@ enum class P_TYPE : char {
       SUB_STYLE,
       ALIGN,
       CHANGE_METHOD,    // enum class VeloChangeMethod (for single notedynamics)
-      CHANGE_SPEED      // enum class Dynamic::Speed
+      CHANGE_SPEED,     // enum class Dynamic::Speed
+      CLEF_TYPE,        // enum class ClefType
+      DYNAMIC_TYPE      // enum class Dynamic::Type
       };
 
 extern QVariant readProperty(Pid type, XmlReader& e);

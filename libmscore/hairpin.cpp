@@ -838,6 +838,17 @@ QVariant Hairpin::propertyDefault(Pid id) const
       }
 
 //---------------------------------------------------------
+//   Hairpin::propertyId
+//---------------------------------------------------------
+
+Pid Hairpin::propertyId(const QStringRef& name) const
+      {
+      if (name == "subtype")
+            return Pid::HAIRPIN_TYPE;
+      return TextLineBase::propertyId(name);
+      }
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

@@ -11,7 +11,13 @@
 //=============================================================================
 
 #include "property.h"
+#include "accidental.h"
+#include "bracket.h"
+#include "clef.h"
+#include "dynamic.h"
+#include "hairpin.h"
 #include "mscore.h"
+#include "ottava.h"
 #include "layoutbreak.h"
 #include "groups.h"
 #include "xml.h"
@@ -111,7 +117,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::SCALE,                   false, "scale",                 P_TYPE::SCALE,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "scale")            },
       { Pid::LOCK_ASPECT_RATIO,       false, "lockAspectRatio",       P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "aspect ratio locked") },
       { Pid::SIZE_IS_SPATIUM,         false, "sizeIsSpatium",         P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "size is spatium")  },
-      { Pid::TEXT,                    true,  0,                       P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "text")             },
+      { Pid::TEXT,                    true,  "text",                  P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "text")             },
       { Pid::HTML_TEXT,               false, 0,                       P_TYPE::STRING,              ""                                                    },
       { Pid::USER_MODIFIED,           false, 0,                       P_TYPE::BOOL,                ""                                                    },
       { Pid::BEAM_POS,                false, 0,                       P_TYPE::POINT,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "beam position")    },
@@ -123,6 +129,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::TEMPO,                   true,  "tempo",                 P_TYPE::TEMPO,               DUMMY_QT_TRANSLATE_NOOP("propertyName", "tempo")            },
       { Pid::TEMPO_FOLLOW_TEXT,       true,  "followText",            P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "following text")   },
       { Pid::ACCIDENTAL_BRACKET,      false, "bracket",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "bracket")          },
+      { Pid::ACCIDENTAL_TYPE,         true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "type")             },
       { Pid::NUMERATOR_STRING,        false, "textN",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "numerator string") },
       { Pid::DENOMINATOR_STRING,      false, "textD",                 P_TYPE::STRING,              DUMMY_QT_TRANSLATE_NOOP("propertyName", "denominator string") },
       { Pid::FBPREFIX,                false, "prefix",                P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "prefix")           },
@@ -135,18 +142,19 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FBPARENTHESIS3,          false, "",                      P_TYPE::INT,                 ""                                                    },
       { Pid::FBPARENTHESIS4,          false, "",                      P_TYPE::INT,                 ""                                                    },
       { Pid::FBPARENTHESIS5,          false, "",                      P_TYPE::INT,                 ""                                                    },
-      { Pid::OTTAVA_TYPE,             true,  "",                      P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "ottava type")      },
+      { Pid::OTTAVA_TYPE,             true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "ottava type")      },
       { Pid::NUMBERS_ONLY,            false, "numbersOnly",           P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "numbers only")     },
       { Pid::TRILL_TYPE,              false, "",                      P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "trill type")       },
       { Pid::VIBRATO_TYPE,            false, "",                      P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "vibrato type")     },
       { Pid::HAIRPIN_CIRCLEDTIP,      false, "hairpinCircledTip",     P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin with circled tip") },
 
-      { Pid::HAIRPIN_TYPE,            true,  "",                      P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin type")     },
+      { Pid::HAIRPIN_TYPE,            true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin type")     },
       { Pid::HAIRPIN_HEIGHT,          false, "hairpinHeight",         P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin height")   },
       { Pid::HAIRPIN_CONT_HEIGHT,     false, "hairpinContHeight",     P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin cont height") },
       { Pid::VELO_CHANGE,             true,  "veloChange",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity change")  },
       { Pid::VELO_CHANGE_METHOD,      true,  "veloChangeMethod",      P_TYPE::CHANGE_METHOD,       DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity change method")   },
       { Pid::VELO_CHANGE_SPEED,       true,  "veloChangeSpeed",       P_TYPE::CHANGE_SPEED,        DUMMY_QT_TRANSLATE_NOOP("propertyName", "velocity change speed")  },
+      { Pid::DYNAMIC_TYPE,            true,  "subtype",               P_TYPE::DYNAMIC_TYPE,        DUMMY_QT_TRANSLATE_NOOP("propertyName", "dynamic type")     },
       { Pid::DYNAMIC_RANGE,           true,  "dynType",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "dynamic range")    },
       { Pid::SINGLE_NOTE_DYNAMICS,    true,  "singleNoteDynamics",    P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "single note dynamics")   },
       { Pid::PLACEMENT,               false, "placement",             P_TYPE::PLACEMENT,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "placement")        },
@@ -176,7 +184,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::TIME_STRETCH,            true,  "timeStretch",           P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "time stretch")     },
       { Pid::ORNAMENT_STYLE,          true,  "ornamentStyle",         P_TYPE::ORNAMENT_STYLE,      DUMMY_QT_TRANSLATE_NOOP("propertyName", "ornament style")   },
 
-      { Pid::TIMESIG,                 false, 0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "time signature")   },
+      { Pid::TIMESIG,                 false, "timesig",               P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "time signature")   },
       { Pid::TIMESIG_GLOBAL,          false, 0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "global time signature") },
       { Pid::TIMESIG_STRETCH,         false, 0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "time signature stretch") },
       { Pid::TIMESIG_TYPE,            true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "subtype")          },
@@ -305,6 +313,11 @@ static constexpr PropertyMetaData propertyList[] = {
 
       { Pid::VOICE,                   false, "voice",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "voice")            },
       { Pid::POSITION,                false, "position",              P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "position")         },
+
+      { Pid::CLEF_TYPE_CONCERT,       true,  "concertClefType",       P_TYPE::CLEF_TYPE,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "concert clef type") },
+      { Pid::CLEF_TYPE_TRANSPOSING,   true,  "transposingClefType",   P_TYPE::CLEF_TYPE,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "transposing clef type") },
+      { Pid::KEY,                     true,  "accidental",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "key")              },
+      { Pid::ACTION,                  false, "action",                P_TYPE::STRING,              0                                                           },
 
       { Pid::END, false, "++end++", P_TYPE::INT, DUMMY_QT_TRANSLATE_NOOP("propertyName", "<invalid property>") }
       };
@@ -620,6 +633,18 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
       {
       if (value == QVariant())
             return QString();
+
+      switch(id) {
+            case Pid::SYSTEM_BRACKET: // system bracket type
+                  return Bracket::bracketTypeName(BracketType(value.toInt()));
+            case Pid::ACCIDENTAL_TYPE:
+                  return Accidental::subtype2name(AccidentalType(value.toInt()));
+            case Pid::OTTAVA_TYPE:
+                  return Ottava::ottavaTypeName(OttavaType(value.toInt()));
+            default:
+                  break;
+            }
+
       switch (propertyType(id)) {
             case P_TYPE::BOOL:
             case P_TYPE::INT:

@@ -311,10 +311,8 @@ void Clef::read(XmlReader& e)
 void Clef::write(XmlWriter& xml) const
       {
       xml.stag(this);
-      if (_clefTypes._concertClef != ClefType::INVALID)
-            xml.tag("concertClefType", ClefInfo::tag(_clefTypes._concertClef));
-      if (_clefTypes._transposingClef != ClefType::INVALID)
-            xml.tag("transposingClefType", ClefInfo::tag(_clefTypes._transposingClef));
+      writeProperty(xml, Pid::CLEF_TYPE_CONCERT);
+      writeProperty(xml, Pid::CLEF_TYPE_TRANSPOSING);
       if (!_showCourtesy)
             xml.tag("showCourtesyClef", _showCourtesy);
       Element::writeProperties(xml);
@@ -459,6 +457,8 @@ Clef* Clef::otherClef()
 QVariant Clef::getProperty(Pid propertyId) const
       {
       switch(propertyId) {
+            case Pid::CLEF_TYPE_CONCERT:     return int(_clefTypes._concertClef);
+            case Pid::CLEF_TYPE_TRANSPOSING: return int(_clefTypes._transposingClef);
             case Pid::SHOW_COURTESY: return showCourtesy();
             case Pid::SMALL:         return small();
             default:
@@ -473,6 +473,12 @@ QVariant Clef::getProperty(Pid propertyId) const
 bool Clef::setProperty(Pid propertyId, const QVariant& v)
       {
       switch(propertyId) {
+            case Pid::CLEF_TYPE_CONCERT:
+                  setConcertClef(ClefType(v.toInt()));
+                  break;
+            case Pid::CLEF_TYPE_TRANSPOSING:
+                  setTransposingClef(ClefType(v.toInt()));
+                  break;
             case Pid::SHOW_COURTESY: _showCourtesy = v.toBool(); break;
             case Pid::SMALL:         setSmall(v.toBool()); break;
             default:
@@ -489,6 +495,8 @@ bool Clef::setProperty(Pid propertyId, const QVariant& v)
 QVariant Clef::propertyDefault(Pid id) const
       {
       switch(id) {
+            case Pid::CLEF_TYPE_CONCERT:     return int(ClefType::INVALID);
+            case Pid::CLEF_TYPE_TRANSPOSING: return int(ClefType::INVALID);
             case Pid::SHOW_COURTESY: return true;
             case Pid::SMALL:         return false;
             default:              return Element::propertyDefault(id);

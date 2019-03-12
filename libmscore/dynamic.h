@@ -75,6 +75,8 @@ class Dynamic final : public TextBase {
             const char* name;
             };
 
+      Q_ENUM(Type);
+
    private:
       Type _dynamicType;
 
@@ -98,7 +100,8 @@ class Dynamic final : public TextBase {
 
       void setDynamicType(Type val)               { _dynamicType = val;   }
       void setDynamicType(const QString&);
-      QString dynamicTypeName() const;
+      static QString dynamicTypeName(Dynamic::Type type);
+      QString dynamicTypeName() const { return dynamicTypeName(_dynamicType); }
       Type dynamicType() const                     { return _dynamicType; }
       virtual int subtype() const override         { return (int) _dynamicType; }
       virtual QString subtypeName() const override { return dynamicTypeName(); }
@@ -130,6 +133,8 @@ class Dynamic final : public TextBase {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool     setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      virtual QString propertyUserValue(Pid) const override;
 
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
