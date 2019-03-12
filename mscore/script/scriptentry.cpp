@@ -96,8 +96,7 @@ std::unique_ptr<ScriptEntry> InitScriptEntry::deserialize(const QStringList& tok
 
 bool CommandScriptEntry::execute(ScriptContext& ctx) const
       {
-//       ctx.mscore()->cmd(getAction(_command.constData()), _command);
-      Script::execCmd(ctx.mscore(), getAction(_command.constData()), _command);
+      ctx.mscore()->cmd(getAction(_command.constData()));
       return true;
       }
 
