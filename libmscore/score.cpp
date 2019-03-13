@@ -306,7 +306,7 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
 Score::Score(MasterScore* parent, const MStyle& s)
    : Score{parent}
       {
-      Score::validScores.erase(this);
+      Score::validScores.insert(this);
       _style  = s;
       }
 
@@ -328,6 +328,7 @@ Score::~Score()
             }
       qDeleteAll(_parts);
       qDeleteAll(_staves);
+      Score::validScores.erase(this);
 //      qDeleteAll(_pages);         // TODO: check
       _masterScore = 0;
       }
