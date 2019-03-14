@@ -321,7 +321,10 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             const QList<PitchValue>& points = bend->points();
             int pitchSize = points.size();
 
-            double noteLen = note->playTicks();
+            double noteLen = 0;
+            for (auto const& tiedNote : note->tiedNotes()) {
+                  noteLen += tiedNote->playTicks();
+            }
             int lastPointTick = tick1;
             for (int pitchIndex = 0; pitchIndex < pitchSize-1; pitchIndex++) {
                   PitchValue pitchValue = points[pitchIndex];
