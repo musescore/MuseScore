@@ -48,7 +48,7 @@ void MasterScore::checkMidiMapping()
       rebuildMidiMapping();
 
       QList<bool> drum;
-      drum.reserve(_midiMapping.size());
+      drum.reserve(int(_midiMapping.size()));
       for (Part* part : parts()) {
             const InstrumentList* il = part->instruments();
             for (auto i = il->begin(); i != il->end(); ++i) {
@@ -203,7 +203,7 @@ void MasterScore::reorderMidiMapping()
 void MasterScore::removeDeletedMidiMapping()
       {
       int removeOffset = 0;
-      int mappingSize = _midiMapping.size();
+      int mappingSize = int(_midiMapping.size());
       for (int index = 0; index < mappingSize; index++) {
             Part* p = midiMapping(index)->part();
             if (!parts().contains(p)) {
@@ -248,7 +248,7 @@ int MasterScore::updateMidiMapping()
       int maxport = 0;
       occupiedMidiChannels.clear();
       searchMidiMappingFrom = 0;
-      occupiedMidiChannels.reserve(_midiMapping.size()); // Bringing down the complexity of insertion to amortized O(1)
+      occupiedMidiChannels.reserve(int(_midiMapping.size())); // Bringing down the complexity of insertion to amortized O(1)
 
       for (const MidiMapping& mm :_midiMapping) {
             if (mm.port() == -1 || mm.channel() == -1)
@@ -330,7 +330,7 @@ void MasterScore::addMidiMapping(Channel* channel, Part* part, int midiPort, int
       mm._port = midiPort;
       mm._channel = midiChannel;
 
-      const int mscoreChannel = _midiMapping.size();
+      const int mscoreChannel = int(_midiMapping.size());
       mm._articulation->setChannel(mscoreChannel);
       mm.masterChannel->setChannel(mscoreChannel);
 

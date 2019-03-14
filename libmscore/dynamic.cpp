@@ -388,6 +388,7 @@ QString Dynamic::speedToName(Speed speed)
                   return i.name;
             }
       qFatal("Unrecognised change speed!");
+      return "none"; // silence a compiler warning
       }
 
 

@@ -4501,7 +4501,7 @@ void MasterScore::updateExpressive(MasterSynthesizer* m)
       SynthesizerState s = synthesizerState();
       SynthesizerGroup g = s.group("master");
 
-      int method;
+      int method = 1;
       for (IdValue idVal : g) {
             if (idVal.id == 4) {
                   method = idVal.data.toInt();
