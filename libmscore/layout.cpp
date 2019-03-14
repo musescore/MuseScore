@@ -3540,9 +3540,9 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                           for (auto n : c->notes())
                                                 notes.push_back(n);
                                           for (Note* note : notes) {
-                                                for (Element* e : note->el()) {
-                                                      if (e->isFingering()) {
-                                                            Fingering* f = toFingering(e);
+                                                for (Element* en : note->el()) {
+                                                      if (en->isFingering()) {
+                                                            Fingering* f = toFingering(en);
                                                             if (f->layoutType() == ElementType::CHORD) {
                                                                   f->setPos(QPointF());
                                                                   f->setbbox(QRectF());

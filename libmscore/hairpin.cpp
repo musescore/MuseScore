@@ -621,6 +621,7 @@ QString Hairpin::veloChangeMethodToName(VeloChangeMethod method)
                   return i.name;
             }
       qFatal("Unrecognised velo change method!");
+      return "none"; // silence a compiler warning
       }
 
 //---------------------------------------------------------

@@ -14,8 +14,6 @@ branches:
 cache:
   - dependencies.7z
   # - qt-5.12.1-msvc.7z # if not using AppVeyor's built-in Qt in before_build.bat
-  - C:\Qt\Tools\mingw530_32\lib
-  - C:\Qt\Tools\mingw530_32\i686-w64-mingw32
   - C:\Program Files (x86)\Jack
   - C:\MuseScore\build.release\thirdparty
   - C:\ccache
