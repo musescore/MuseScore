@@ -172,6 +172,17 @@ void ScriptRecorder::recordPaletteElement(Element* e)
       }
 
 //---------------------------------------------------------
+//   ScriptRecorder::recordInspectorValueChange
+//---------------------------------------------------------
+
+void ScriptRecorder::recordInspectorValueChange(const Element* e, const InspectorItem& ii, const QVariant& value)
+      {
+      if (_recording)
+            _script.addEntry(InspectorScriptEntry::fromContext(e, ii, value));
+      syncRecord();
+      }
+
+//---------------------------------------------------------
 //   ScriptRecorder::recordScoreTest
 //---------------------------------------------------------
 

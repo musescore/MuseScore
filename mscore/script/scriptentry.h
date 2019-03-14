@@ -17,6 +17,7 @@
 
 namespace Ms {
 
+struct InspectorItem;
 class ScriptContext;
 
 //---------------------------------------------------------
@@ -28,6 +29,7 @@ class ScriptEntry {
       static constexpr const char* SCRIPT_INIT = "init";
       static constexpr const char* SCRIPT_CMD = "cmd";
       static constexpr const char* SCRIPT_PALETTE = "palette";
+      static constexpr const char* SCRIPT_INSPECTOR = "inspector";
       static constexpr const char* SCRIPT_TEST = "test";
 
       static QString entryTemplate(const char* entryType) { return QString("%1 %2").arg(entryType); }
@@ -83,6 +85,25 @@ class PaletteElementScriptEntry : public ScriptEntry {
       bool execute(ScriptContext& ctx) const override;
       static std::unique_ptr<ScriptEntry> fromContext(const Element* e, ScriptContext& ctx);
       QString serialize() const override;
+      static std::unique_ptr<ScriptEntry> deserialize(const QStringList& tokens);
+      };
+
+//---------------------------------------------------------
+//   InspectorScriptEntry
+//---------------------------------------------------------
+
+class InspectorScriptEntry : public ScriptEntry {
+      ElementType _type;
+      int _parentLevel;
+      Pid _pid;
+      QVariant _val;
+
+   public:
+      InspectorScriptEntry(ElementType type, int parentLevel, Pid pid, QVariant value)
+         : _type(type), _parentLevel(parentLevel), _pid(pid), _val(std::move(value)) {}
+      bool execute(ScriptContext& ctx) const override;
+      QString serialize() const override;
+      static std::unique_ptr<ScriptEntry> fromContext(const Element*, const InspectorItem&, const QVariant&);
       static std::unique_ptr<ScriptEntry> deserialize(const QStringList& tokens);
       };
 
