@@ -356,9 +356,10 @@ QString midiMetaName(int meta)
       return QString(s);
       }
 
+// We don't support negative pitch, but Midi does. Let's center by adding/adjusting by a pitch radius, above and below
 int midiBendPitch(int pitch) {
-      return (pitch * 8192) / (PITCH_BEND_SENSITIVITY * 100) + 8192;
-      }
+      return (pitch * PITCH_RADIUS * 2) / (PITCH_BEND_SENSITIVITY * 100) + PITCH_RADIUS;
+}
 
 //---------------------------------------------------------
 // insert

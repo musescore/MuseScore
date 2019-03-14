@@ -352,11 +352,10 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                           /  .                   midi pitch is 12/16384 semitones
                          A....
                        tickDelta   */
-                  for (int i = lastPointTick; i <= nextPointTick; i += 16) {
+                  for (int i = lastPointTick; i <= nextPointTick; i++) {
                         double dx = ((i-lastPointTick) * 60) / noteLen;
                         int p = pitch + dx * pitchDelta / tickDelta;
 
-                        // We don't support negative pitch, but Midi does. Let's center by adding 8192.
                         int midiPitch = midiBendPitch(p);
                         // Representing pitch as two bytes
                         int msb = midiPitch / 128;

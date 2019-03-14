@@ -22,8 +22,11 @@ class XmlWriter;
 
 enum class BeatType : char;
 
-// 4 is the default for the majority of synthesisers, aka VSTis
-const int PITCH_BEND_SENSITIVITY = 4;
+// 2 is the default for the majority of synthesisers, aka VSTis
+constexpr int PITCH_BEND_SENSITIVITY = 2;
+
+// Used for centering pitch bends by adding/adjusting by 8192
+constexpr int PITCH_RADIUS = 8192;
 
 //---------------------------------------------------------
 //   Event types
