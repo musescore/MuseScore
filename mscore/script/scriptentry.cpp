@@ -13,6 +13,7 @@
 #include "scriptentry.h"
 
 #include "musescore.h"
+#include "inspector/inspector.h"
 #include "palette.h"
 #include "palettebox.h"
 #include "script.h"
@@ -51,6 +52,8 @@ std::unique_ptr<ScriptEntry> ScriptEntry::deserialize(const QString& line)
             return TestScriptEntry::deserialize(tokens);
       if (type == SCRIPT_PALETTE)
             return PaletteElementScriptEntry::deserialize(tokens);
+      if (type == SCRIPT_INSPECTOR)
+            return InspectorScriptEntry::deserialize(tokens);
       qWarning() << "Unsupported action type:" << type;
       return nullptr;
       }
@@ -313,5 +316,83 @@ std::unique_ptr<ScriptEntry> PaletteElementScriptEntry::deserialize(const QStrin
                   }
             }
       return std::unique_ptr<ScriptEntry>(new PaletteElementScriptEntry(type, std::move(props)));
+      }
+
+
+//---------------------------------------------------------
+//   InspectorScriptEntry::execute
+//---------------------------------------------------------
+
+bool InspectorScriptEntry::execute(ScriptContext& ctx) const
+      {
+      Inspector* i = ctx.mscore()->inspector();
+      if (!i)
+            return false;
+      InspectorBase* ib = i->ie;
+      if (!ib)
+            return false;
+
+      const auto iiList = ib->iList;
+      for (int idx = 0; idx < int(iiList.size()); ++idx) {
+            const InspectorItem& ii = iiList[idx];
+            if (ii.t == _pid && ii.parent == _parentLevel) {
+                  const Score* score = ctx.mscore()->currentScore();
+                  if (!score) {
+                        qWarning() << "InspectorScriptEntry: no score!";
+                        return false;
+                        }
+                  const auto scoreState = score->state();
+                  ib->setValue(ii, _val);
+                  if (scoreState == score->state()) // probably valueChanged wasn't triggered
+                        ib->valueChanged(idx);
+                  return true;
+                  }
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   InspectorScriptEntry::serialize
+//---------------------------------------------------------
+
+QString InspectorScriptEntry::serialize() const
+      {
+      QStringList tokens;
+      tokens << ScoreElement::name(_type) << propertyName(_pid) << serializePropertyValue(_pid, _val);
+      if (_parentLevel)
+            tokens << "parent" << QString::number(_parentLevel);
+      return entryTemplate(SCRIPT_INSPECTOR).arg(tokens.join(' '));
+      }
+
+//---------------------------------------------------------
+//   InspectorScriptEntry::deserialize
+//---------------------------------------------------------
+
+std::unique_ptr<ScriptEntry> InspectorScriptEntry::deserialize(const QStringList& tokens)
+      {
+      if (tokens.size() < 4) {
+            qWarning("palette: unexpected number of tokens: %d", tokens.size());
+            return nullptr;
+            }
+
+      const ElementType type = ScoreElement::name2type(tokens[1]);
+      const Pid pid = deserializePropertyId(type, tokens[2]);
+      const QVariant val = deserializePropertyValue(pid, tokens[3]);
+      int parentLevel = 0;
+      if (tokens.size() > 5 && tokens[4] == "parent")
+            parentLevel = tokens[5].toInt();
+
+      return std::unique_ptr<ScriptEntry>(new InspectorScriptEntry(type, parentLevel, pid, val));
+      }
+
+//---------------------------------------------------------
+//   InspectorScriptEntry::fromContext
+//---------------------------------------------------------
+
+std::unique_ptr<ScriptEntry> InspectorScriptEntry::fromContext(const Element* e, const InspectorItem& ii, const QVariant& value)
+      {
+      for (int i = 0; i < ii.parent; ++i)
+            e = e->parent();
+      return std::unique_ptr<ScriptEntry>(new InspectorScriptEntry(e->type(), ii.parent, ii.t, value));
       }
 }
