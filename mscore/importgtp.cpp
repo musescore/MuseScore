@@ -1149,7 +1149,7 @@ bool GuitarPro1::read(QFile* fp)
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                   Fraction measureLen = {0,1};
                   int track = staffIdx * VOICES;
-                  Fraction tick  = measure->tick();
+                  Fraction fraction  = measure->tick();
                   int beats = readInt();
                   for (int beat = 0; beat < beats; ++beat) {
                         //                        int pause = 0;
@@ -1161,7 +1161,7 @@ bool GuitarPro1::read(QFile* fp)
                         int tuple = 0;
                         if (beatBits & BEAT_TUPLET)
                               tuple = readInt();
-                        Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
+                        Segment* segment = measure->getSegment(SegmentType::ChordRest, fraction);
                         if (beatBits & BEAT_CHORD) {
                               int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
                               int header = readUChar();
@@ -1212,7 +1212,7 @@ bool GuitarPro1::read(QFile* fp)
                               Tuplet* tuplet = tuplets[staffIdx];
                               if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                                     tuplet = new Tuplet(score);
-                                    tuplet->setTick(tick);
+                                    tuplet->setTick(fraction);
                                     tuplet->setTrack(cr->track());
                                     tuplets[staffIdx] = tuplet;
                                     setTuplet(tuplet, tuple);
@@ -1238,12 +1238,12 @@ bool GuitarPro1::read(QFile* fp)
                                     note->setTpcFromPitch();
                                     }
                               }
-                        restsForEmptyBeats(segment, measure, cr, l, track, tick);
-                        tick += cr->actualTicks();
+                        restsForEmptyBeats(segment, measure, cr, l, track, fraction);
+                        fraction += cr->actualTicks();
                         measureLen += cr->actualTicks();
                         }
                   if (measureLen < measure->ticks()) {
-                        score->setRest(tick, track, measure->ticks() - measureLen, false, nullptr, false);
+                        score->setRest(fraction, track, measure->ticks() - measureLen, false, nullptr, false);
                         }
                   }
             if (bar == 1 && !mixChange)
@@ -1639,7 +1639,7 @@ bool GuitarPro2::read(QFile* fp)
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                   Fraction measureLen = {0,1};
                   int track = staffIdx * VOICES;
-                  Fraction tick  = measure->tick();
+                  Fraction fraction = measure->tick();
                   int beats = readInt();
                   for (int beat = 0; beat < beats; ++beat) {
                         //                        int pause = 0;
@@ -1651,7 +1651,7 @@ bool GuitarPro2::read(QFile* fp)
                         int tuple = 0;
                         if (beatBits & BEAT_TUPLET)
                               tuple = readInt();
-                        Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
+                        Segment* segment = measure->getSegment(SegmentType::ChordRest, fraction);
                         if (beatBits & BEAT_CHORD) {
                               int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
                               int header = readUChar();
@@ -1703,7 +1703,7 @@ bool GuitarPro2::read(QFile* fp)
                               Tuplet* tuplet = tuplets[staffIdx];
                               if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                                     tuplet = new Tuplet(score);
-                                    tuplet->setTick(tick);
+                                    tuplet->setTick(fraction);
                                     tuplet->setTrack(cr->track());
                                     tuplets[staffIdx] = tuplet;
                                     setTuplet(tuplet, tuple);
@@ -1729,12 +1729,12 @@ bool GuitarPro2::read(QFile* fp)
                                     note->setTpcFromPitch();
                                     }
                               }
-                        restsForEmptyBeats(segment, measure, cr, l, track, tick);
-                        tick += cr->actualTicks();
+                        restsForEmptyBeats(segment, measure, cr, l, track, fraction);
+                        fraction += cr->actualTicks();
                         measureLen += cr->actualTicks();
                         }
                   if (measureLen < measure->ticks()) {
-                        score->setRest(tick, track, measure->ticks() - measureLen, false, nullptr, false);
+                        score->setRest(fraction, track, measure->ticks() - measureLen, false, nullptr, false);
                         }
                   }
             if (bar == 1 && !mixChange)
@@ -2331,7 +2331,7 @@ bool GuitarPro3::read(QFile* fp)
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                   Fraction measureLen = {0,1};
                   int track = staffIdx * VOICES;
-                  Fraction tick  = measure->tick();
+                  Fraction fraction = measure->tick();
                   int beats = readInt();
                   if (beats > 200)
                         return false;
@@ -2351,7 +2351,7 @@ bool GuitarPro3::read(QFile* fp)
                         if (beatBits & BEAT_TUPLET)
                               tuple = readInt();
 
-                        Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
+                        Segment* segment = measure->getSegment(SegmentType::ChordRest, fraction);
                         if (beatBits & BEAT_CHORD) {
                               int numStrings = score->staff(staffIdx)->part()->instrument()->stringData()->strings();
                               int header = readUChar();
@@ -2420,7 +2420,7 @@ bool GuitarPro3::read(QFile* fp)
                               Tuplet* tuplet = tuplets[staffIdx];
                               if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                                     tuplet = new Tuplet(score);
-                                    tuplet->setTick(tick);
+                                    tuplet->setTick(fraction);
                                     tuplet->setTrack(cr->track());
                                     tuplets[staffIdx] = tuplet;
                                     setTuplet(tuplet, tuple);
@@ -2493,12 +2493,12 @@ bool GuitarPro3::read(QFile* fp)
                                     createSlide(slide, cr, staffIdx);
                               }
 
-                        restsForEmptyBeats(segment, measure, cr, l, track, tick);
-                        tick += cr->actualTicks();
+                        restsForEmptyBeats(segment, measure, cr, l, track, fraction);
+                        fraction += cr->actualTicks();
                         measureLen += cr->actualTicks();
                         }
                   if (measureLen < measure->ticks()) {
-                        score->setRest(tick, track, measure->ticks() - measureLen, false, nullptr, false);
+                        score->setRest(fraction, track, measure->ticks() - measureLen, false, nullptr, false);
                         }
                   bool removeRests = true;
                   int counter = 0;
