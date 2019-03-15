@@ -548,7 +548,7 @@ void ScoreView::moveCursor(const Fraction& tick)
             qreal x2;
             Fraction t2;
             Segment* ns = s->next(SegmentType::ChordRest);
-            if (ns) {
+            if (ns && ns->visible()) {
                   t2 = ns->tick();
                   x2 = ns->canvasPos().x();
                   }
@@ -556,7 +556,7 @@ void ScoreView::moveCursor(const Fraction& tick)
                   t2 = measure->endTick();
                   // measure->width is not good enough because of courtesy keysig, timesig
                   Segment* seg = measure->findSegment(SegmentType::EndBarLine, measure->tick() + measure->ticks());
-                  if(seg)
+                  if (seg)
                         x2 = seg->canvasPos().x();
                   else
                         x2 = measure->canvasPos().x() + measure->width(); //safety, should not happen
