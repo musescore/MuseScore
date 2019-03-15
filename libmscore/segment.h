@@ -84,11 +84,13 @@ class Segment final : public Element {
 
       Segment* next() const               { return _next;   }
       Segment* next(SegmentType) const;
+      Segment* nextActive() const;
       Segment* nextEnabled() const;
       void setNext(Segment* e)            { _next = e;      }
 
       Segment* prev() const               { return _prev;   }
       Segment* prev(SegmentType) const;
+      Segment* prevActive() const;
       Segment* prevEnabled() const;
       void setPrev(Segment* e)            { _prev = e;      }
 
@@ -241,14 +243,38 @@ class Segment final : public Element {
       };
 
 //---------------------------------------------------------
+//   nextActive
+//---------------------------------------------------------
+
+inline Segment* Segment::nextActive() const
+      {
+      Segment* ns = next();
+      while (ns && !(ns->enabled() && ns->visible()))
+            ns = ns->next();
+      return ns;
+      }
+
+//---------------------------------------------------------
 //   nextEnabled
 //---------------------------------------------------------
 
 inline Segment* Segment::nextEnabled() const
       {
-      Segment* ps = next();
-      while (ps && !ps->enabled())
-            ps = ps->next();
+      Segment* ns = next();
+      while (ns && !ns->enabled())
+            ns = ns->next();
+      return ns;
+      }
+
+//---------------------------------------------------------
+//   prevActive
+//---------------------------------------------------------
+
+inline Segment* Segment::prevActive() const
+      {
+      Segment* ps = prev();
+      while (ps && !(ps->enabled() && ps->visible()))
+            ps = ps->prev();
       return ps;
       }
 
