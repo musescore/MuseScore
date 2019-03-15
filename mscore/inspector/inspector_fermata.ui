@@ -194,6 +194,7 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>placement</tabstop>
+  <tabstop>playArticulation</tabstop>
   <tabstop>timeStretch</tabstop>
  </tabstops>
  <resources>

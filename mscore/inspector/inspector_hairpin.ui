@@ -463,9 +463,14 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>hairpinType</tabstop>
+  <tabstop>hairpinCircledTip</tabstop>
+  <tabstop>hairpinHeight</tabstop>
+  <tabstop>hairpinContHeight</tabstop>
   <tabstop>placement</tabstop>
   <tabstop>dynRange</tabstop>
   <tabstop>veloChange</tabstop>
+  <tabstop>singleNoteDynamics</tabstop>
+  <tabstop>veloChangeMethod</tabstop>
  </tabstops>
  <resources/>
  <connections>

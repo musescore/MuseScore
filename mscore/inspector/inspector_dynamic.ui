@@ -326,8 +326,13 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>title</tabstop>
   <tabstop>dynRange</tabstop>
   <tabstop>velocity</tabstop>
+  <tabstop>changeInVelocity</tabstop>
+  <tabstop>velChangeSpeed</tabstop>
+  <tabstop>style</tabstop>
+  <tabstop>placement</tabstop>
  </tabstops>
  <resources/>
  <connections/>

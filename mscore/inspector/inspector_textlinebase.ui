@@ -1270,6 +1270,12 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>Ms::OffsetSelect</class>
+   <extends>QWidget</extends>
+   <header>inspector/offsetSelect.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>Ms::FontStyleSelect</class>
    <extends>QWidget</extends>
    <header>inspector/fontStyleSelect.h</header>
@@ -1281,17 +1287,13 @@
    <header>inspector/alignSelect.h</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>Ms::OffsetSelect</class>
-   <extends>QWidget</extends>
-   <header>inspector/offsetSelect.h</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>beginHookType</tabstop>
+  <tabstop>beginHookHeight</tabstop>
   <tabstop>endHookType</tabstop>
+  <tabstop>endHookHeight</tabstop>
   <tabstop>hasBeginText</tabstop>
   <tabstop>beginText</tabstop>
   <tabstop>beginFontFace</tabstop>

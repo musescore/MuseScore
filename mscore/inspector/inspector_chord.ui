@@ -260,6 +260,8 @@
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
+  <tabstop>small</tabstop>
+  <tabstop>stemless</tabstop>
   <tabstop>stemDirection</tabstop>
  </tabstops>
  <resources>
