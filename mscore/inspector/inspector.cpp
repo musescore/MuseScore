@@ -616,31 +616,35 @@ InspectorRest::InspectorRest(QWidget* parent)
       l->setFont(font);
       l->setAlignment(Qt::AlignHCenter);
       _layout->addWidget(l);
-      QFrame* f = new QFrame;
-      f->setFrameStyle(QFrame::HLine | QFrame::Raised);
-      f->setLineWidth(2);
-      _layout->addWidget(f);
+
+      QVBoxLayout* vbox = new QVBoxLayout;
+      vbox->setSpacing(3);
+      vbox->setContentsMargins(3,3,3,3);
+      _layout->addLayout(vbox);
 
       QHBoxLayout* hbox = new QHBoxLayout;
-      dot1 = new QToolButton(this);
+      hbox->setSpacing(3);
+      dot1 = new QPushButton(this);
       dot1->setText(tr("Dot 1"));
       hbox->addWidget(dot1);
-      dot2 = new QToolButton(this);
+      dot2 = new QPushButton(this);
       dot2->setText(tr("Dot 2"));
       hbox->addWidget(dot2);
-      dot3 = new QToolButton(this);
+      dot3 = new QPushButton(this);
       dot3->setText(tr("Dot 3"));
       hbox->addWidget(dot3);
-      dot4 = new QToolButton(this);
+      vbox->addLayout(hbox);
+
+      hbox = new QHBoxLayout;
+      hbox->setSpacing(3);
+      dot4 = new QPushButton(this);
       dot4->setText(tr("Dot 4"));
       hbox->addWidget(dot4);
-      _layout->addLayout(hbox);
-      hbox = new QHBoxLayout;
-      tuplet = new QToolButton(this);
+      tuplet = new QPushButton(this);
       tuplet->setText(tr("Tuplet"));
       tuplet->setEnabled(false);
       hbox->addWidget(tuplet);
-      _layout->addLayout(hbox);
+      vbox->addLayout(hbox);
 
 //TODO      e.offset->setSingleStep(1.0);        // step in spatium units
 

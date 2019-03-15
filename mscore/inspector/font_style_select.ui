@@ -23,18 +23,30 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <property name="spacing">
-        <number>2</number>
+        <number>0</number>
        </property>
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
         </spacer>
        </item>
        <item>
-        <widget class="QToolButton" name="bold">
+        <widget class="QPushButton" name="bold">
          <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+         <property name="maximumSize">
           <size>
            <width>28</width>
            <height>28</height>
@@ -50,11 +62,20 @@
          <property name="checkable">
           <bool>true</bool>
          </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="italic">
+        <widget class="QPushButton" name="italic">
          <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+         <property name="maximumSize">
           <size>
            <width>28</width>
            <height>28</height>
@@ -70,11 +91,20 @@
          <property name="checkable">
           <bool>true</bool>
          </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="underline">
+        <widget class="QPushButton" name="underline">
          <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>28</height>
+          </size>
+         </property>
+         <property name="maximumSize">
           <size>
            <width>28</width>
            <height>28</height>
@@ -88,6 +118,9 @@
            <normaloff>:/data/icons/format-text-underline.svg</normaloff>:/data/icons/format-text-underline.svg</iconset>
          </property>
          <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="flat">
           <bool>true</bool>
          </property>
         </widget>
