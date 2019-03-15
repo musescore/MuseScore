@@ -111,7 +111,7 @@ void System::clear()
 
 void System::appendMeasure(MeasureBase* mb)
       {
-      Q_ASSERT(!mb->isMeasure() || !toMeasure(mb)->hasMMRest());
+      Q_ASSERT(!mb->isMeasure() || !(score()->styleB(Sid::createMultiMeasureRests) && toMeasure(mb)->hasMMRest()));
       mb->setSystem(this);
       ml.push_back(mb);
       }
@@ -929,7 +929,7 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
       if (m == ml.back())
             return 0;
       MeasureBase* nm = m->next();
-      if (nm->isMeasure() && toMeasure(nm)->hasMMRest())
+      if (nm->isMeasure() && score()->styleB(Sid::createMultiMeasureRests) && toMeasure(nm)->hasMMRest())
             nm = toMeasure(nm)->mmRest();
       return nm;
       }
