@@ -76,124 +76,26 @@
       <property name="spacing">
        <number>3</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_6">
+      <item row="4" column="2">
+       <widget class="Ms::ResetButton" name="resetLineWidth" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
         <property name="text">
-         <string>Head group:</string>
+         <string>Direction:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>noteHeadGroup</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="noteHeadGroup">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Head group</string>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
-        <item>
-         <property name="text">
-          <string>Normal</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Cross</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Diamond</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Triangle</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Slash</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>XCircle</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Do</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Re</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Mi</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Fa</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Sol</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>La</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Ti</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Alt. Brevis</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QDoubleSpinBox" name="lineWidth">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Line thickness</string>
-        </property>
-        <property name="suffix">
-         <string>sp</string>
-        </property>
-        <property name="maximum">
-         <double>10.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
+         <cstring>direction</cstring>
         </property>
        </widget>
       </item>
@@ -207,6 +109,127 @@
         </property>
         <property name="buddy">
          <cstring>bottomTpc</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Head type:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>noteHeadType</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="direction">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Direction</string>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Upright</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Leaning Left</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Leaning Right</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="noteHeadType">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Head type</string>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Auto</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Whole</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Half</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Quarter</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Breve</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Top note:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>topTpc</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetHasLine" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Line thickness:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>lineWidth</cstring>
         </property>
        </widget>
       </item>
@@ -426,29 +449,164 @@
         </item>
        </layout>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_10">
-        <property name="text">
-         <string>Line thickness:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>lineWidth</cstring>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetNoteHeadType" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_8">
+      <item row="0" column="1">
+       <widget class="QComboBox" name="noteHeadGroup">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Head group</string>
+        </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>Normal</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Cross</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Diamond</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Triangle</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Slash</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>XCircle</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Do</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Re</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Mi</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Fa</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Sol</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>La</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ti</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Alt. Brevis</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QCheckBox" name="hasLine">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
         <property name="text">
-         <string>Top note:</string>
+         <string>Has line</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetNoteHeadGroup" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetDirection" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Head group:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>topTpc</cstring>
+         <cstring>noteHeadGroup</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QDoubleSpinBox" name="lineWidth">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Line thickness</string>
+        </property>
+        <property name="suffix">
+         <string>sp</string>
+        </property>
+        <property name="maximum">
+         <double>10.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
        </widget>
       </item>
@@ -668,178 +826,13 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="noteHeadType">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Head type</string>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
-        <item>
-         <property name="text">
-          <string>Auto</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Whole</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Half</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Quarter</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Breve</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Head type:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>noteHeadType</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="7" column="0" colspan="3">
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <property name="spacing">
-         <number>3</number>
-        </property>
-        <item>
-         <widget class="QPushButton" name="updateRange">
-          <property name="focusPolicy">
-           <enum>Qt::TabFocus</enum>
-          </property>
-          <property name="text">
-           <string>Update Range</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Direction:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>direction</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="direction">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Direction</string>
-        </property>
-        <property name="frame">
-         <bool>true</bool>
-        </property>
-        <item>
-         <property name="text">
-          <string>Upright</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Leaning Left</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Leaning Right</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QCheckBox" name="hasLine">
+       <widget class="QPushButton" name="updateRange">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
         <property name="text">
-         <string>Has line</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetNoteHeadGroup" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetNoteHeadType" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetDirection" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetHasLine" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="Ms::ResetButton" name="resetLineWidth" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+         <string>Update Range</string>
         </property>
        </widget>
       </item>
@@ -867,7 +860,6 @@
   <tabstop>topOctave</tabstop>
   <tabstop>bottomTpc</tabstop>
   <tabstop>bottomOctave</tabstop>
-  <tabstop>updateRange</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

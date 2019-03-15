@@ -633,6 +633,20 @@
   <tabstop>noteHeadGroup</tabstop>
   <tabstop>noteHeadType</tabstop>
   <tabstop>mirrorHead</tabstop>
+  <tabstop>fixed</tabstop>
+  <tabstop>fixedLine</tabstop>
+  <tabstop>play</tabstop>
+  <tabstop>tuning</tabstop>
+  <tabstop>velocityType</tabstop>
+  <tabstop>velocity</tabstop>
+  <tabstop>dot1</tabstop>
+  <tabstop>dot2</tabstop>
+  <tabstop>dot3</tabstop>
+  <tabstop>dot4</tabstop>
+  <tabstop>stem</tabstop>
+  <tabstop>hook</tabstop>
+  <tabstop>beam</tabstop>
+  <tabstop>tuplet</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

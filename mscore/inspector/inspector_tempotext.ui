@@ -243,6 +243,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>title</tabstop>
   <tabstop>followText</tabstop>
   <tabstop>tempo</tabstop>
   <tabstop>style</tabstop>

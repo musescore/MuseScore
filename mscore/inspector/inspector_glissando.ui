@@ -380,6 +380,11 @@
  <tabstops>
   <tabstop>title</tabstop>
   <tabstop>type</tabstop>
+  <tabstop>showText</tabstop>
+  <tabstop>text</tabstop>
+  <tabstop>fontFace</tabstop>
+  <tabstop>fontSize</tabstop>
+  <tabstop>playGlissando</tabstop>
   <tabstop>glissandoStyle</tabstop>
  </tabstops>
  <resources>

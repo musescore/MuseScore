@@ -561,11 +561,15 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>frameColor</tabstop>
-  <tabstop>bgColor</tabstop>
+  <tabstop>title</tabstop>
+  <tabstop>fontFace</tabstop>
+  <tabstop>fontSize</tabstop>
+  <tabstop>spatiumDependent</tabstop>
+  <tabstop>frameType</tabstop>
   <tabstop>frameWidth</tabstop>
   <tabstop>paddingWidth</tabstop>
   <tabstop>frameRound</tabstop>
+  <tabstop>resetToStyle</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>

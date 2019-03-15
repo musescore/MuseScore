@@ -258,6 +258,7 @@
   <tabstop>title</tabstop>
   <tabstop>trillType</tabstop>
   <tabstop>placement</tabstop>
+  <tabstop>playArticulation</tabstop>
   <tabstop>ornamentStyle</tabstop>
  </tabstops>
  <resources>

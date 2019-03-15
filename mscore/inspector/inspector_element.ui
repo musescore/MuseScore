@@ -284,20 +284,23 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Awl::ColorLabel</class>
-   <extends>QFrame</extends>
-   <header>awl/colorlabel.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
    <header>inspector/offsetSelect.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>Awl::ColorLabel</class>
+   <extends>QFrame</extends>
+   <header>awl/colorlabel.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
+  <tabstop>visible</tabstop>
+  <tabstop>autoplace</tabstop>
+  <tabstop>z</tabstop>
  </tabstops>
  <resources>
   <include location="../musescore.qrc"/>
