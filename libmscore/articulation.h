@@ -99,6 +99,8 @@ class Articulation final : public Element {
       virtual void resetProperty(Pid id) override;
       Sid getPropertyStyle(Pid id) const override;
 
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
+
       bool up() const                       { return _up; }
       void setUp(bool val);
       void setDirection(Direction d)        { _direction = d;    }

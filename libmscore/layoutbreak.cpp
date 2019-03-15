@@ -280,5 +280,16 @@ QVariant LayoutBreak::propertyDefault(Pid id) const
                   return Element::propertyDefault(id);
             }
       }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid LayoutBreak::propertyId(const QStringRef& name) const
+      {
+      if (name == propertyName(Pid::LAYOUT_BREAK))
+            return Pid::LAYOUT_BREAK;
+      return Element::propertyId(name);
+      }
 }
 

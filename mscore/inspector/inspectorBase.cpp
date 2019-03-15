@@ -24,6 +24,7 @@
 #include "sizeSelect.h"
 #include "fontStyleSelect.h"
 #include "scoreview.h"
+#include "script/script.h"
 #include "resetButton.h"
 #include "tourhandler.h"
 
@@ -388,6 +389,11 @@ void InspectorBase::valueChanged(int idx, bool reset)
       QVariant val2 = getValue(ii);                   // get new value from UI
       Element* iElement = inspector->element();
       Score* score  = iElement->score();
+
+#ifdef MSCORE_UNSTABLE
+      if (ScriptRecorder* rec = mscore->getScriptRecorder())
+            rec->recordInspectorValueChange(iElement, ii, val2);
+#endif
 
       if (ii.t == Pid::AUTOPLACE)
             TourHandler::startTour("autoplace-tour");
