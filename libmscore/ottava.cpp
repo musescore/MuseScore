@@ -256,7 +256,7 @@ void Ottava::write(XmlWriter& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag(this);
-      xml.tag("subtype", ottavaDefault[int(ottavaType())].name);
+      writeProperty(xml, Pid::OTTAVA_TYPE);
       writeProperty(xml, Pid::PLACEMENT);
       writeProperty(xml, Pid::NUMBERS_ONLY);
 //      for (const StyledProperty& spp : *styledProperties())
@@ -412,12 +412,32 @@ QVariant Ottava::propertyDefault(Pid pid) const
       }
 
 //---------------------------------------------------------
+//   Ottava::propertyId
+//---------------------------------------------------------
+
+Pid Ottava::propertyId(const QStringRef& name) const
+      {
+      if (name == propertyName(Pid::OTTAVA_TYPE))
+            return Pid::OTTAVA_TYPE;
+      return TextLineBase::propertyId(name);
+      }
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
 QString Ottava::accessibleInfo() const
       {
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(ottavaDefault[static_cast<int>(ottavaType())].name);
+      }
+
+//---------------------------------------------------------
+//   ottavaTypeName
+//---------------------------------------------------------
+
+const char* Ottava::ottavaTypeName(OttavaType type)
+      {
+      return ottavaDefault[int(type)].name;
       }
 
 }

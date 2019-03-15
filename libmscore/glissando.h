@@ -76,6 +76,7 @@ class Glissando final : public SLine {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool     setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
       };
 
 

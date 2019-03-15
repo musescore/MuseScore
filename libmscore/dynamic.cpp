@@ -187,7 +187,7 @@ void Dynamic::write(XmlWriter& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag(this);
-      xml.tag("subtype", dynamicTypeName());
+      writeProperty(xml, Pid::DYNAMIC_TYPE);
       writeProperty(xml, Pid::VELOCITY);
       writeProperty(xml, Pid::DYNAMIC_RANGE);
       writeProperty(xml, Pid::VELO_CHANGE);
@@ -305,9 +305,9 @@ void Dynamic::setDynamicType(const QString& tag)
 //   dynamicTypeName
 //---------------------------------------------------------
 
-QString Dynamic::dynamicTypeName() const
+QString Dynamic::dynamicTypeName(Dynamic::Type type)
       {
-      return dynList[int(dynamicType())].tag;
+      return dynList[int(type)].tag;
       }
 
 //---------------------------------------------------------
@@ -412,6 +412,8 @@ Dynamic::Speed Dynamic::nameToSpeed(QString name)
 QVariant Dynamic::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::DYNAMIC_TYPE:
+                  return QVariant::fromValue(_dynamicType);
             case Pid::DYNAMIC_RANGE:
                   return int(_dynRange);
             case Pid::VELOCITY:
@@ -434,6 +436,9 @@ QVariant Dynamic::getProperty(Pid propertyId) const
 bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case Pid::DYNAMIC_TYPE:
+                  _dynamicType = v.value<Dynamic::Type>();
+                  break;
             case Pid::DYNAMIC_RANGE:
                   _dynRange = Range(v.toInt());
                   break;
@@ -478,6 +483,32 @@ QVariant Dynamic::propertyDefault(Pid id) const
             default:
                   return TextBase::propertyDefault(id);
             }
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Dynamic::propertyId(const QStringRef& name) const
+      {
+      if (name == propertyName(Pid::DYNAMIC_TYPE))
+            return Pid::DYNAMIC_TYPE;
+      return TextBase::propertyId(name);
+      }
+
+//---------------------------------------------------------
+//   propertyUserValue
+//---------------------------------------------------------
+
+QString Dynamic::propertyUserValue(Pid pid) const
+      {
+      switch(pid) {
+            case Pid::DYNAMIC_TYPE:
+                  return dynamicTypeName();
+            default:
+                  break;
+            }
+      return TextBase::propertyUserValue(pid);
       }
 
 //---------------------------------------------------------

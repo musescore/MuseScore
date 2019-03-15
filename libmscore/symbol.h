@@ -51,6 +51,9 @@ class Symbol : public BSymbol {
       virtual void read(XmlReader&) override;
       virtual void layout() override;
 
+      virtual QVariant getProperty(Pid) const override;
+      virtual bool setProperty(Pid, const QVariant&) override;
+
       virtual qreal baseLine() const     { return 0.0; }
       virtual Segment* segment() const   { return (Segment*)parent(); }
       };

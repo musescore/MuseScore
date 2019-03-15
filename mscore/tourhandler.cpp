@@ -299,7 +299,7 @@ void TourHandler::clearWidgetsFromTour(QString tourName)
 
 void TourHandler::startTour(QString lookupString)
       {
-      if (!preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS))
+      if (!preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS) || MScore::noGui)
             return;
 
       Tour* tour = nullptr;

@@ -46,6 +46,7 @@
 #include "palettebox.h"
 #include "shortcut.h"
 #include "tourhandler.h"
+#include "script/recorderwidget.h"
 
 namespace Ms {
 
@@ -470,6 +471,13 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
       
       if (element->isSpanner())
             TourHandler::startTour("spanner-drop-apply");
+
+#ifdef MSCORE_UNSTABLE
+      if (ScriptRecorder* rec = mscore->getScriptRecorder()) {
+            if (modifiers == 0)
+                  rec->recordPaletteElement(element);
+            }
+#endif
 
       ScoreView* viewer = mscore->currentScoreView();
       if (viewer->mscoreState() != STATE_EDIT
