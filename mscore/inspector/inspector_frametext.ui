@@ -22,6 +22,16 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QToolButton" name="title">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -41,25 +51,18 @@
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::HLine</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <property name="lineWidth">
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="panel" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <property name="leftMargin">
        <number>3</number>
       </property>
+      <property name="topMargin">
+       <number>3</number>
+      </property>
       <property name="rightMargin">
+       <number>3</number>
+      </property>
+      <property name="bottomMargin">
        <number>3</number>
       </property>
       <property name="horizontalSpacing">
@@ -74,7 +77,7 @@
          <string>Style:</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
          <cstring>style</cstring>
@@ -83,6 +86,12 @@
       </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="style">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="accessibleName">
          <string>Style</string>
         </property>

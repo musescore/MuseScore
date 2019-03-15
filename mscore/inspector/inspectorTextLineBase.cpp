@@ -163,9 +163,8 @@ void InspectorTextLineBase::updateBeginHookType()
       TextLineBase* t = ts->textLineBase();
       bool hook = t->beginHookType() != HookType::NONE;
 
-      tl.beginHookHeight->setVisible(hook);
+      tl.beginHookHeightWidget->setVisible(hook);
       tl.resetBeginHookHeight->setVisible(hook);
-      tl.beginHookHeightLabel->setVisible(hook);
       }
 
 //---------------------------------------------------------
@@ -178,9 +177,8 @@ void InspectorTextLineBase::updateEndHookType()
       TextLineBase* t = ts->textLineBase();
       bool hook = t->endHookType() != HookType::NONE;
 
-      tl.endHookHeight->setVisible(hook);
+      tl.endHookHeightWidget->setVisible(hook);
       tl.resetEndHookHeight->setVisible(hook);
-      tl.endHookHeightLabel->setVisible(hook);
       }
 
 //---------------------------------------------------------

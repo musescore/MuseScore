@@ -26,9 +26,9 @@ class InspectorGroupElement : public InspectorBase {
       Q_OBJECT
 
       Ui::InspectorGroupElement ge;
-      QToolButton* notes;
-      QToolButton* graceNotes;
-      QToolButton* rests;
+      QPushButton* notes;
+      QPushButton* graceNotes;
+      QPushButton* rests;
 
    private slots:
       void setColor();
