@@ -2799,7 +2799,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                   }
             else {
                   // a frame, not a measure
-                  if (isMaster())
+                  if (score->isMaster())
                         rmb = mb;
                   else if (rmb && mb != rmb) {
                         mb->linkTo(rmb);
