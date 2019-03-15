@@ -1322,7 +1322,7 @@ void Score::addElement(Element* element)
 
       ElementType et = element->type();
       if (et == ElementType::MEASURE
-         || (et == ElementType::HBOX && element->parent()->type() != ElementType::VBOX)
+         || (et == ElementType::HBOX && !(parent && parent->isVBox()))
          || et == ElementType::VBOX
          || et == ElementType::TBOX
          || et == ElementType::FBOX
