@@ -66,7 +66,7 @@ static void addHeader(QString& out)
              "<html>\n"
              "<head>\n"
              "   <meta charset=\"utf-8\">\n"
-             "</head>\n"
+             "   </head>\n"
              "<body>\n";
       }
 
@@ -77,7 +77,7 @@ static void addHeader(QString& out)
 static void addFooter(QString& out)
       {
       out += /* "<div class=\"footer\"><a href=\"https://musescore.org/\">MuseScore</a> - Free music notation software<br>\n"
-             "&copy; 2002-2016 Werner Schweer &amp; others</div>\n" */
+             "&copy; 2002-2019 Werner Schweer &amp; others</div>\n" */
              "</body>\n"
              "</html>\n";
       }
