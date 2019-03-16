@@ -546,7 +546,6 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
             else {
                   for (Element* e : sel.elements())
                         applyDrop(score, viewer, e, element, modifiers);
-                  selectedIdx = currentIdx;
                   }
             }
       else if (sel.isRange()) {
@@ -573,7 +572,6 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
                         applyDrop(score, viewer, m, element, modifiers, pt);
                         if (m == last)
                               break;
-                        selectedIdx = currentIdx;
                         }
                   }
             else if (element->type() == ElementType::LAYOUT_BREAK) {
