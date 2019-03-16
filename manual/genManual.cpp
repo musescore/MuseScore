@@ -66,7 +66,7 @@ static void addHeader(QString& out)
              "<html>\n"
              "<head>\n"
              "   <meta charset=\"utf-8\">\n"
-             "   </head>\n"
+             "</head>\n"
              "<body>\n";
       }
 
@@ -76,7 +76,7 @@ static void addHeader(QString& out)
 
 static void addFooter(QString& out)
       {
-      out += /* "<div class=\"footer\"><a href=\"https://musescore.org/\">MuseScore</a> - Free music notation software<br/>\n"
+      out += /* "<div class=\"footer\"><a href=\"https://musescore.org/\">MuseScore</a> - Free music notation software<br>\n"
              "&copy; 2002-2016 Werner Schweer &amp; others</div>\n" */
              "</body>\n"
              "</html>\n";
@@ -271,7 +271,7 @@ static void writeOutput()
                   out += "</div>\n";
                   }
             else
-                  out += "<br/>";
+                  out += "<br>";
 
             if (!cl.procs.isEmpty()) {
                   out += "<h4>Methods</h4>\n";
@@ -292,7 +292,7 @@ static void writeOutput()
                               out += "<div class=\"method-description\">\n";
                               for(const QString& s : p.description) {
                                     out += s.simplified();
-                                    out += "<br/>\n";
+                                    out += "<br>\n";
                                     }
                               out += "</div>\n";
                               }
