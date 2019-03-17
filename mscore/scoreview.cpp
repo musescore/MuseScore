@@ -1899,6 +1899,10 @@ void ScoreView::cmd(const char* s)
             }
 //      else if (cmd == "find")
 //            ; // TODO:state         sm->postEvent(new CommandEvent(cmd));
+      else if (cmd == "scr-prev")
+            screenPrev();
+      else if (cmd == "scr-next")
+            screenNext();
       else if (cmd == "page-prev")
             pagePrev();
       else if (cmd == "page-next")
@@ -2804,6 +2808,10 @@ QSizeF ScoreView::fsize() const
       return QSizeF(s.width() * imatrix.m11(), s.height() * imatrix.m22());
       }
 
+//---------------------------------------------------------
+//   keyboard nav constants
+//---------------------------------------------------------
+
 constexpr qreal scrollStep   {   .8 };
 constexpr qreal thinPadding  { 10.0 };
 constexpr qreal thickPadding { 25.0 };
@@ -2816,8 +2824,46 @@ void ScoreView::pageNext()
       {
       if (score()->pages().empty())
             return;
+      if (score()->layoutMode() != LayoutMode::PAGE) {
+            screenNext();
+            return;
+            }
+      Page* page = score()->pages().back();
+      qreal x, y;
+      if (MScore::verticalOrientation()) {
+            x        = thinPadding;
+            y        = yoffset() - (page->height() + thickPadding) * mag();
+            qreal ly = thinPadding - page->pos().y() * mag();
+            if (y <= ly - height() * scrollStep) {
+                  pageEnd();
+                  return;
+                  }
+            }
+      else {
+            y        = thinPadding;
+            x        = xoffset() - (page->width() + thickPadding) * mag();
+            qreal lx = thinPadding - page->pos().x() * mag();
+            if (x <= lx - width() * scrollStep) {
+                  pageEnd();
+                  return;
+                  }
+            }
+      setOffset(x, y);
+      update();
+      }
+
+//---------------------------------------------------------
+//   screenNext
+//---------------------------------------------------------
+
+void ScoreView::screenNext()
+      {
+      if (score()->pages().empty())
+            return;
+      qreal x { xoffset() };
+      qreal y { yoffset() };
       if (score()->layoutMode() == LayoutMode::LINE) {
-            qreal x = xoffset() - width() * scrollStep;
+            x -= width() * scrollStep;
             MeasureBase* lm = score()->last();
             // Vertical frames aren't laid out in continuous view
             while (lm->isVBoxBase())
@@ -2825,35 +2871,21 @@ void ScoreView::pageNext()
             qreal lx = (lm->pos().x() + lm->width()) * mag() - width() * scrollStep;
             if (x < -lx)
                   x = -lx;
-            setOffset(x, yoffset());
-            }
-      else if (score()->layoutMode() == LayoutMode::SYSTEM) {
-            qreal y { yoffset() - height() * scrollStep };
-            MeasureBase* lm { score()->last() };
-            qreal ly { (lm->canvasPos().y() + lm->height()) * mag() - height() * scrollStep };
-            if (y < -ly)
-                  y = -ly;
-            setOffset(xoffset(), y);
             }
       else {
-            Page* page = score()->pages().back();
-            qreal x, y;
-            if (MScore::verticalOrientation()) {
-                  x        = thinPadding;
-                  y        = yoffset() - (page->height() + thickPadding) * mag();
-                  qreal ly = thinPadding - page->pos().y() * mag();
-                  if (y < ly)
-                        y = ly;
+            y -= height() * scrollStep;
+            MeasureBase* lm { score()->last() };
+            qreal ly { (lm->canvasPos().y() + lm->height()) * mag() - height() * scrollStep };
+            // Special case to jump to top of next page in horizontal view.
+            if (score()->layoutMode() == LayoutMode::PAGE && !MScore::verticalOrientation()
+               && y <= -ly - height() * scrollStep) {
+                  pageNext();
+                  return;
                   }
-            else {
-                  y        = thinPadding;
-                  x        = xoffset() - (page->width() + thickPadding) * mag();
-                  qreal lx = thinPadding - page->pos().x() * mag();
-                  if (x < lx)
-                        x = lx;
-                  }
-            setOffset(x, y);
+            if (y < -ly)
+                  y = -ly;
             }
+      setOffset(x, y);
       update();
       }
 
@@ -2865,35 +2897,63 @@ void ScoreView::pagePrev()
       {
       if (score()->pages().empty())
             return;
-      if (score()->layoutMode() == LayoutMode::LINE) {
-            qreal x = xoffset() + width() * scrollStep;
-            if (x > thinPadding)
-                  x = thinPadding;
-            setOffset(x, yoffset());
+      if (score()->layoutMode() != LayoutMode::PAGE) {
+            screenPrev();
+            return;
             }
-      else if (score()->layoutMode() == LayoutMode::SYSTEM) {
-            qreal y { yoffset() + height() * scrollStep };
+      Page* page = score()->pages().front();
+      qreal x, y;
+      if (MScore::verticalOrientation()) {
+            x  = thinPadding;
+            y  = yoffset() + (page->height() + thickPadding) * mag();
             if (y > thinPadding)
                   y = thinPadding;
-            setOffset(xoffset(), y);
             }
       else {
-            Page* page = score()->pages().front();
-            qreal x, y;
-            if (MScore::verticalOrientation()) {
-                  x  = thinPadding;
-                  y  = yoffset() + (page->height() + thickPadding) * mag();
-                  if (y > thinPadding)
-                        y = thinPadding;
-                  }
-            else {
-                  y  = thinPadding;
-                  x    = xoffset() + (page->width() + thickPadding) * mag();
+            y  = thinPadding;
+            x  = xoffset() + (page->width() + thickPadding) * mag();
+            if (x > thinPadding)
+                  x = thinPadding;
+            }
+      setOffset(x, y);
+      update();
+      }
+
+//---------------------------------------------------------
+//   screenPrev
+//---------------------------------------------------------
+
+void ScoreView::screenPrev()
+      {
+      if (score()->pages().empty())
+            return;
+      qreal x { xoffset() };
+      qreal y { yoffset() };
+      if (score()->layoutMode() == LayoutMode::LINE) {
+            x += width() * scrollStep;
+            if (x > thinPadding)
+                  x = thinPadding;
+            }
+      else {
+            y += height() * scrollStep;
+            // Special casing for jumping to bottom of prev page in horizontal view
+            if (score()->layoutMode() == LayoutMode::PAGE && !MScore::verticalOrientation()
+               && y >= thinPadding + height() * scrollStep) {
+                  Page* page { score()->pages().front() };
+                  x += (page->width() + thickPadding) * mag();
+                  // The condition prevents jumping to the bottom of the
+                  // first page after reaching the top
+                  if (x < thinPadding + (page->width() + thickPadding) * mag()) {
+                        MeasureBase* lm { score()->last() };
+                        y = -(lm->canvasPos().y() + lm->height()) * mag() + height() * scrollStep;
+                        }
                   if (x > thinPadding)
                         x = thinPadding;
                   }
-            setOffset(x, y);
+            if (y > thinPadding)
+                y = thinPadding;
             }
+      setOffset(x, y);
       update();
       }
 
@@ -2918,28 +2978,25 @@ void ScoreView::pageEnd()
       {
       if (score()->pages().empty())
             return;
+      MeasureBase* lm = score()->last();
       if (score()->layoutMode() == LayoutMode::LINE) {
-            MeasureBase* lm = score()->last();
             // Vertical frames aren't laid out in continuous view
             while (lm->isVBoxBase())
                   lm = lm->prev();
-            qreal lx = (lm->pos().x() + lm->width()) * mag() - width() * scrollStep;
+            qreal lx = (lm->pos().x() + lm->width()) * mag() - scrollStep * width();
             setOffset(-lx, yoffset());
             }
-      else if (score()->layoutMode() == LayoutMode::SYSTEM) {
-            MeasureBase* lm { score()->last() };
-            qreal ly { (lm->canvasPos().y() + lm->height()) * mag() - height() * scrollStep };
-            setOffset(xoffset(), -ly);
-            }
       else {
-            Page* lastPage = score()->pages().back();
-            QPointF p(lastPage->pos());
-            if (MScore::verticalOrientation()) {
-                  setOffset(thickPadding, thickPadding - p.y() * mag());
+            qreal lx { -thinPadding };
+            if (score()->layoutMode() == LayoutMode::PAGE && !MScore::verticalOrientation()) {
+                  for (int i { 0 }; i < score()->npages() - 1; ++i)
+                        lx += score()->pages().at(i)->width() * mag();
                   }
-            else {
-                  setOffset(thickPadding - p.x() * mag(), thickPadding);
-                  }
+            if (lm->system()->page()->width() * mag() > width())
+                  lx = (lm->canvasPos().x() + lm->width()) * mag() - width() * scrollStep;
+
+            qreal ly { (lm->canvasPos().y() + lm->height()) * mag() - height() * scrollStep };
+            setOffset(-lx, -ly);
             }
       update();
       }
