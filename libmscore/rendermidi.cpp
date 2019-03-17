@@ -257,14 +257,20 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
                         time = (time >> 8);
                         int msb = (time & 0x00FF);
 
-                        //All portamento related events
-                        NPlayEvent portamentoOn(ME_CONTROLLER, channel, CTRL_PORTAMENTO_CONTROL, pitch);
+                        NPlayEvent portamentoOn(ME_CONTROLLER, channel, CTRL_PORTAMENTO, MIDI_ON_SIGNAL);
+                        portamentoOn.setOriginatingStaff(staffIdx);
+                        NPlayEvent portamentoControl(ME_CONTROLLER, channel, CTRL_PORTAMENTO_CONTROL, pitch);
+                        portamentoControl.setOriginatingStaff(staffIdx);
                         NPlayEvent portamentoTimeMSB(ME_CONTROLLER, channel, CTRL_PORTAMENTO_TIME_MSB, msb);
+                        portamentoTimeMSB.setOriginatingStaff(staffIdx);
                         NPlayEvent portamentoTimeLSB(ME_CONTROLLER, channel, CTRL_PORTAMENTO_TIME_LSB, lsb);
-                        //Do not set events before 0
+                        portamentoTimeLSB.setOriginatingStaff(staffIdx);
+                        
+                        ev.setPortamento(true);
                         if (onTime == 0)
                               onTime++;
                         events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoOn));
+                        events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoControl));
                         events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoTimeMSB));
                         events->insert(std::pair<int, NPlayEvent>(onTime-1, portamentoTimeLSB));
                   }
@@ -274,6 +280,11 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
       events->insert(std::pair<int, NPlayEvent>(onTime, ev));
       ev.setVelo(0);
       events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+      if (ev.portamento()) {
+            NPlayEvent portamentoOff(ME_CONTROLLER, channel, CTRL_PORTAMENTO, 0);
+            portamentoOff.setOriginatingStaff(staffIdx);
+            events->insert(std::pair<int, NPlayEvent>(offTime, portamentoOff));
+            }
       }
 
 //---------------------------------------------------------

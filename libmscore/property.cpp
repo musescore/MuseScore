@@ -677,6 +677,8 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
                               return "whitekeys";
                         case GlissandoStyle::DIATONIC:
                               return "diatonic";
+                        case GlissandoStyle::CONTINUOUS:
+                              return "continuous";
                         case GlissandoStyle::CHROMATIC:
                               return "Chromatic";
                         }

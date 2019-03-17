@@ -25,6 +25,8 @@ enum class BeatType : char;
 // 4 is the default for the majority of synthesisers, aka VSTis
 const int PITCH_BEND_SENSITIVITY = 4;
 
+const int MIDI_ON_SIGNAL = 127;
+
 //---------------------------------------------------------
 //   Event types
 //---------------------------------------------------------
@@ -243,6 +245,7 @@ class NPlayEvent : public PlayEvent {
       const Note* _note = 0;
       int _origin = -1;
       int _discard = 0;
+      bool _portamento = false;
 
    public:
       NPlayEvent() : PlayEvent() {}
@@ -258,6 +261,11 @@ class NPlayEvent : public PlayEvent {
       void setOriginatingStaff(int i) { _origin = i; }
       void setDiscard(int d) { _discard = d; }
       int discard() const { return _discard; }
+      void setPortamento(bool p) { _portamento = p; }
+      bool portamento() const { 
+            return _portamento || this->controller() == CTRL_PORTAMENTO || 
+                  this->controller() == CTRL_PORTAMENTO_CONTROL || this->controller() == CTRL_PORTAMENTO_TIME_MSB ||
+                  this->controller() == CTRL_PORTAMENTO_TIME_LSB; }
       };
 
 //---------------------------------------------------------
