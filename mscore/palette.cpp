@@ -444,7 +444,7 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
             dropData.dropElement->styleChanged();   // update to local style
 
             Element* el = target->drop(dropData);
-            if (el)
+            if (el && !viewer->noteEntryMode())
                   score->select(el, SelectType::SINGLE, 0);
             dropData.dropElement = 0;
             }
