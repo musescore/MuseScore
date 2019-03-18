@@ -92,7 +92,11 @@ class System final : public Element {
       SysStaff* firstVisibleSysStaff() const;
       SysStaff* lastVisibleSysStaff() const;
 
-   public:
+      int getBracketsColumnsCount();
+      void setBracketsXPosition(const qreal xOffset);
+      Bracket* createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket *>& bl, Measure* measure);
+
+public:
       System(Score*);
       ~System();
       virtual System* clone() const override      { return new System(*this); }
@@ -113,12 +117,6 @@ class System final : public Element {
       Page* page() const                    { return (Page*)parent(); }
 
       void layoutSystem(qreal);
-
-      int getBracketsColumnsCount();
-
-      void setBracketsXPosition(const qreal &xOffset);
-
-      Bracket* createBracket(Ms::BracketItem * bi, int column, int staffIdx, QList<Ms::Bracket *> &bl, Measure* measure);
 
       void addBrackets(Measure* measure);
 

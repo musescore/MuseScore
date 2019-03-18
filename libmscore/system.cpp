@@ -220,7 +220,7 @@ void System::layoutSystem(qreal xo1)
                   for (auto bi : s->brackets()) {
                         if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET)
                               continue;
-                        Bracket* b = createBracket(bi, i, staffIdx, bl, nullptr);
+                        Bracket* b = createBracket(bi, i, staffIdx, bl, this->firstMeasure());
                         if (b != nullptr) bracketWidth[i] = qMax(bracketWidth[i], b->width());
                         }
                   }
@@ -356,7 +356,7 @@ void System::addBrackets(Measure* measure)
 //   Returns the bracket if it got created, else NULL
 //---------------------------------------------------------
 
-Bracket* System::createBracket(Ms::BracketItem * bi, int column, int staffIdx, QList<Ms::Bracket *> &bl, Measure* measure)
+Bracket* System::createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket *>& bl, Measure* measure)
       {
       int nstaves = _staves.size();
       int firstStaff = staffIdx;
@@ -415,7 +415,7 @@ int System::getBracketsColumnsCount()
       return columns;
       }
 
-void System::setBracketsXPosition(const qreal &xPosition)
+void System::setBracketsXPosition(const qreal xPosition)
       {
       qreal bracketDistance = score()->styleP(Sid::bracketDistance);
       for (Bracket* b1 : _brackets) {
