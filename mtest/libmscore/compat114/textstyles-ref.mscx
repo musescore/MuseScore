@@ -5,6 +5,19 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <pagePrintableWidth>7.48032</pagePrintableWidth>
+      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
+      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
+      <pageOddTopMargin>0.393701</pageOddTopMargin>
+      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
+      <marginOddLeft>283464</marginOddLeft>
+      <marginOddTop>283464</marginOddTop>
+      <marginOddBottom>566930</marginOddBottom>
+      <marginEvenTop>283464</marginEvenTop>
+      <marginEvenBottom>566930</marginEvenBottom>
       <staffUpperBorder>6</staffUpperBorder>
       <staffLowerBorder>2</staffLowerBorder>
       <minSystemDistance>9.5</minSystemDistance>
@@ -1618,6 +1631,7 @@
           </chord>
         </ChordList>
       <Spatium>2</Spatium>
+      <spatium>56693</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

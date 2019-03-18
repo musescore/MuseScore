@@ -5,7 +5,14 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <marginOddLeft>280800</marginOddLeft>
+      <marginOddRight>280800</marginOddRight>
+      <marginOddTop>280800</marginOddTop>
+      <marginOddBottom>568800</marginOddBottom>
+      <marginEvenTop>280800</marginEvenTop>
+      <marginEvenBottom>568800</marginEvenBottom>
       <Spatium>1.76389</Spatium>
+      <spatium>50000</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

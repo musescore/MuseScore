@@ -10,6 +10,7 @@
       <measureSpacing>1</measureSpacing>
       <smallStaffMag>0.681818</smallStaffMag>
       <Spatium>1.76</Spatium>
+      <spatium>49890</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

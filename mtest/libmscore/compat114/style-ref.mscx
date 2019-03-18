@@ -5,6 +5,19 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <pagePrintableWidth>7.48032</pagePrintableWidth>
+      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
+      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
+      <pageOddTopMargin>0.393701</pageOddTopMargin>
+      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <marginOddLeft>283464</marginOddLeft>
+      <marginOddRight>283464</marginOddRight>
+      <marginOddTop>283464</marginOddTop>
+      <marginOddBottom>566930</marginOddBottom>
+      <marginEvenTop>283464</marginEvenTop>
+      <marginEvenBottom>566930</marginEvenBottom>
       <staffUpperBorder>6</staffUpperBorder>
       <staffLowerBorder>6</staffLowerBorder>
       <staffDistance>6</staffDistance>
@@ -83,7 +96,8 @@
       <voltaPosAbove x="0" y="-2"/>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
-      <Spatium>1.764</Spatium>
+      <Spatium>1.76389</Spatium>
+      <spatium>50000</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

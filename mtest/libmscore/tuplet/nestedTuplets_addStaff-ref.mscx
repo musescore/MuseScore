@@ -14,9 +14,12 @@
       <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <marginOddBottom>566930</marginOddBottom>
+      <marginEvenBottom>566930</marginEvenBottom>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <tupletOufOfStaff>0</tupletOufOfStaff>
       <Spatium>1.76389</Spatium>
+      <spatium>50000</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

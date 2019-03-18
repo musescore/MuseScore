@@ -14,6 +14,8 @@
       <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+      <marginOddBottom>566930</marginOddBottom>
+      <marginEvenBottom>566930</marginEvenBottom>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
@@ -23,6 +25,7 @@
       <minMMRestWidth>0</minMMRestWidth>
       <dynamicsFontStyle>0</dynamicsFontStyle>
       <Spatium>1.76389</Spatium>
+      <spatium>50000</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

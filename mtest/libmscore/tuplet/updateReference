@@ -12,5 +12,6 @@ for a in 1; do
       cp $S/split2.mscx split2-ref.mscx
       cp $S/split3.mscx split3-ref.mscx
       cp $S/split4.mscx split4-ref.mscx
+      cp $S/nestedTuplets_addStaff.mscx nestedTuplets_addStaff-ref.mscx
       done
 

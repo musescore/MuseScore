@@ -5,7 +5,21 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <Spatium>1.76389</Spatium>
+      <pagePrintableWidth>8.27</pagePrintableWidth>
+      <pageEvenLeftMargin>0</pageEvenLeftMargin>
+      <pageOddLeftMargin>0</pageOddLeftMargin>
+      <pageEvenTopMargin>0</pageEvenTopMargin>
+      <pageEvenBottomMargin>0</pageEvenBottomMargin>
+      <pageOddTopMargin>0</pageOddTopMargin>
+      <pageOddBottomMargin>0</pageOddBottomMargin>
+      <marginOddLeft>28</marginOddLeft>
+      <marginOddRight>28</marginOddRight>
+      <marginOddTop>28</marginOddTop>
+      <marginOddBottom>57</marginOddBottom>
+      <marginEvenTop>28</marginEvenTop>
+      <marginEvenBottom>57</marginEvenBottom>
+      <Spatium>0.000176389</Spatium>
+      <spatium>5</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

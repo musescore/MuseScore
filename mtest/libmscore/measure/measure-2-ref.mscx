@@ -6,6 +6,7 @@
     <Division>480</Division>
     <Style>
       <Spatium>1.76389</Spatium>
+      <spatium>50000</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -325,6 +326,7 @@
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.76389</Spatium>
+        <spatium>50000</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -577,6 +579,7 @@
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.76389</Spatium>
+        <spatium>50000</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

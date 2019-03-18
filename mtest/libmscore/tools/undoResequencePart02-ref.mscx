@@ -8,6 +8,7 @@
       <lastSystemFillLimit>0.03</lastSystemFillLimit>
       <showMeasureNumber>0</showMeasureNumber>
       <Spatium>1.76389</Spatium>
+      <spatium>50000</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -310,6 +311,7 @@
         <showMeasureNumber>0</showMeasureNumber>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.76389</Spatium>
+        <spatium>50000</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

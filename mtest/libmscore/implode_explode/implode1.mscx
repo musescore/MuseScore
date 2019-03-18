@@ -5,6 +5,12 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <marginOddLeft>280800</marginOddLeft>
+      <marginOddRight>280800</marginOddRight>
+      <marginOddTop>280800</marginOddTop>
+      <marginOddBottom>568800</marginOddBottom>
+      <marginEvenTop>280800</marginEvenTop>
+      <marginEvenBottom>568800</marginEvenBottom>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
@@ -12,6 +18,7 @@
       <concertPitch>1</concertPitch>
       <minMMRestWidth>0</minMMRestWidth>
       <Spatium>1.76389</Spatium>
+      <spatium>50000</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

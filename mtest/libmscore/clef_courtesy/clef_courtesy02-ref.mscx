@@ -25,6 +25,7 @@
       <evenFooterC>$:plate:</evenFooterC>
       <evenFooterR>Version $:version:</evenFooterR>
       <Spatium>1.76389</Spatium>
+      <spatium>50000</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

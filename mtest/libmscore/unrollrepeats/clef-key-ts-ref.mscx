@@ -9,6 +9,7 @@
       <pageHeight>11.69</pageHeight>
       <pagePrintableWidth>7.4826</pagePrintableWidth>
       <Spatium>1.76389</Spatium>
+      <spatium>50000</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -1649,8 +1650,12 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
+        <pageWidth>8.27</pageWidth>
+        <pageHeight>11.69</pageHeight>
+        <pagePrintableWidth>7.4826</pagePrintableWidth>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <Spatium>1.76389</Spatium>
+        <spatium>50000</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
