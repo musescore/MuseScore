@@ -231,6 +231,11 @@ enum class Sid {
       trillPlacement,
       trillPosAbove,
       trillPosBelow,
+      trillContinue,
+      trillSpaceAfterSymbol,
+      trillSpaceAfterContinue,
+      trillSpaceAfterOpen,
+      trillSpaceBeforeClose,
 
       vibratoPlacement,
       vibratoPosAbove,

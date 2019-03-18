@@ -258,6 +258,11 @@ static const StyleType styleTypes[] {
       { Sid::trillPlacement,          "trillPlacement",          int(Placement::ABOVE)  },
       { Sid::trillPosAbove,           "trillPosAbove",           QPointF(.0, -1) },
       { Sid::trillPosBelow,           "trillPosBelow",           QPointF(.0, 1) },
+      { Sid::trillContinue,           "trillContinue",           int(TrillContinue::PARENTHESES) },
+      { Sid::trillSpaceAfterSymbol,   "trillSpaceAfterSymbol",   Spatium(0.0) },
+      { Sid::trillSpaceAfterContinue, "trillSpaceAfterContinue", Spatium(0.0) },
+      { Sid::trillSpaceAfterOpen,     "trillSpaceAfterOpen",     Spatium(0.0) },
+      { Sid::trillSpaceBeforeClose,   "trillSpaceBeforeClose",   Spatium(0.0) },
 
       { Sid::vibratoPlacement,        "vibratoPlacement",        int(Placement::ABOVE)  },
       { Sid::vibratoPosAbove,         "vibratoPosAbove",         QPointF(.0, -1) },

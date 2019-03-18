@@ -1404,6 +1404,16 @@ void Element::drawSymbols(const std::vector<SymId>& s, QPainter* p, const QPoint
       score()->scoreFont()->draw(s, p, magS() * scale, o);
       }
 
+void Element::drawSymbols(const std::vector<std::pair<SymId, QPointF>>& s, QPainter* p, const QPointF& o, qreal scale) const
+      {
+      score()->scoreFont()->draw(s, p, magS() * scale, o);
+      }
+
+void Element::drawSymbols(const std::vector<std::pair<SymId, QPointF>>& s, QPainter* p, const QPointF& o, const QSizeF& scale) const
+      {
+      score()->scoreFont()->draw(s, p, magS() * scale, o);
+      }
+
 //---------------------------------------------------------
 //   symHeight
 //---------------------------------------------------------

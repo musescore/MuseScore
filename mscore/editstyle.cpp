@@ -237,9 +237,14 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::pedalPosBelow,           false, pedalLinePosBelow,       resetPedalLinePosBelow   },
       { Sid::pedalLineWidth,          false, pedalLineWidth,          resetPedalLineWidth  },
 
-      { Sid::trillPlacement,          false, trillLinePlacement,      resetTrillLinePlacement  },
-      { Sid::trillPosAbove,           false, trillLinePosAbove,       resetTrillLinePosAbove   },
-      { Sid::trillPosBelow,           false, trillLinePosBelow,       resetTrillLinePosBelow   },
+      { Sid::trillPlacement,          false, trillLinePlacement,      resetTrillLinePlacement      },
+      { Sid::trillPosAbove,           false, trillLinePosAbove,       resetTrillLinePosAbove       },
+      { Sid::trillPosBelow,           false, trillLinePosBelow,       resetTrillLinePosBelow       },
+      { Sid::trillContinue,           false, trillContinue,           resetTrillContinue           },
+      { Sid::trillSpaceAfterSymbol,   false, trillSpaceAfterSymbol,   resetTrillSpaceAfterSymbol   },
+      { Sid::trillSpaceAfterContinue, false, trillSpaceAfterContinue, resetTrillSpaceAfterContinue },
+      { Sid::trillSpaceAfterOpen,     false, trillSpaceAfterOpen,     resetTrillSpaceAfterOpen     },
+      { Sid::trillSpaceBeforeClose,   false, trillSpaceBeforeClose,   resetTrillSpaceBeforeClose   },
 
       { Sid::vibratoPlacement,        false, vibratoLinePlacement,      resetVibratoLinePlacement  },
       { Sid::vibratoPosAbove,         false, vibratoLinePosAbove,       resetVibratoLinePosAbove   },
@@ -408,6 +413,12 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       tupletBracketType->addItem(tr("Automatic"), int(TupletBracketType::AUTO_BRACKET));
       tupletBracketType->addItem(tr("Bracket"), int(TupletBracketType::SHOW_BRACKET));
       tupletBracketType->addItem(tr("None"), int(TupletBracketType::SHOW_NO_BRACKET));
+
+      trillContinue->clear();
+      trillContinue->addItem(tr("None"),          int(TrillContinue::NONE));
+      trillContinue->addItem(tr("Symbol"),        int(TrillContinue::SYMBOL));
+      trillContinue->addItem(tr("Parentheses"),   int(TrillContinue::PARENTHESES));
+      trillContinue->addItem(tr("Brackets"),      int(TrillContinue::BRACKETS));
 
       pageList->setCurrentRow(0);
       accidentalsGroup->setVisible(false); // disable, not yet implemented

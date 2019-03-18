@@ -421,6 +421,8 @@ class Element : public ScoreElement {
       void drawSymbol(SymId id, QPainter* p, const QPointF& o, int n) const;
       void drawSymbols(const std::vector<SymId>&, QPainter* p, const QPointF& o = QPointF(), qreal scale = 1.0) const;
       void drawSymbols(const std::vector<SymId>&, QPainter* p, const QPointF& o, const QSizeF& scale) const;
+      void drawSymbols(const std::vector<std::pair<SymId, QPointF>>&, QPainter* p, const QPointF& o = QPointF(), qreal scale = 1.0) const;
+      void drawSymbols(const std::vector<std::pair<SymId, QPointF>>&, QPainter* p, const QPointF& o, const QSizeF& scale) const;
       qreal symHeight(SymId id) const;
       qreal symWidth(SymId id) const;
       qreal symWidth(const std::vector<SymId>&) const;

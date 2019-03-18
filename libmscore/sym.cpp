@@ -5767,6 +5767,41 @@ void ScoreFont::draw(const std::vector<SymId>& ids, QPainter* p, qreal mag, cons
       draw(ids, p, mag, _pos, scale);
       }
 
+void ScoreFont::draw(const std::vector<std::pair<SymId, QPointF>>& symbols, QPainter* p, qreal mag, const QPointF& _pos, qreal scale) const
+      {
+      QPointF pos(_pos);
+      for (auto symbol : symbols) {
+            pos.rx() += symbol.second.x(); // Offset/shift for this symbol
+            auto thisPos = pos;
+            thisPos.ry() += symbol.second.y();
+            draw(symbol.first, p, mag, thisPos, scale);
+            pos.rx() += advance(symbol.first, mag);
+            }
+      }
+
+void ScoreFont::draw(const std::vector<std::pair<SymId, QPointF>>& symbols, QPainter* p, const QSizeF& mag, const QPointF& _pos) const
+      {
+      qreal scale = p->worldTransform().m11();
+      draw(symbols, p, mag, _pos, scale);
+      }
+
+void ScoreFont::draw(const std::vector<std::pair<SymId, QPointF>>& symbols, QPainter* p, const QSizeF& mag, const QPointF& _pos, qreal scale) const
+      {
+      QPointF pos(_pos);
+      for (auto symbol : symbols) {
+            auto thisPos = pos;
+            thisPos.ry() += symbol.second.y();
+            draw(symbol.first, p, mag, thisPos, scale);
+            pos.rx() += (sym(symbol.first).advance() * mag.width() + symbol.second.x());
+            }
+      }
+
+void ScoreFont::draw(const std::vector<std::pair<SymId, QPointF>>& symbols, QPainter* p, qreal mag, const QPointF& _pos) const
+      {
+      qreal scale = p->worldTransform().m11();
+      draw(symbols, p, mag, _pos, scale);
+      }
+
 
 //---------------------------------------------------------
 //   id2name
@@ -6268,6 +6303,19 @@ const QRectF ScoreFont::bbox(SymId id, const QSizeF& mag) const
       return QRectF(r.x() * mag.width(), r.y() * mag.height(), r.width() * mag.width(), r.height() * mag.height());
       }
 
+const QRectF ScoreFont::bbox(SymId id, const QPointF& offset, qreal mag) const
+      {
+      return bbox(id, offset, QSizeF(mag, mag));
+      }
+
+const QRectF ScoreFont::bbox(SymId id, const QPointF& offset, const QSizeF& mag) const
+      {
+      if (useFallbackFont(id))
+            return fallbackFont()->bbox(id, offset, mag.width());
+      QRectF r = sym(id).bbox();
+      return QRectF(r.x() * mag.width() + offset.x(), r.y() * mag.height() + offset.y(), r.width() * mag.width(), r.height() * mag.height());
+      }
+
 const QRectF ScoreFont::bbox(const std::vector<SymId>& s, qreal mag) const
       {
       return bbox(s, QSizeF(mag, mag));
@@ -6284,6 +6332,25 @@ const QRectF ScoreFont::bbox(const std::vector<SymId>& s, const QSizeF& mag) con
       return r;
       }
 
+const QRectF ScoreFont::bbox(const std::vector<std::pair<SymId, QPointF>>& s, qreal mag) const
+      {
+      return bbox(s, QSizeF(mag, mag));
+      }
+
+const QRectF ScoreFont::bbox(const std::vector<std::pair<SymId, QPointF>>& s, const QSizeF& mag) const
+      {
+      QRectF r;
+      QPointF pos;
+      for (auto symPair : s) {
+            SymId id = symPair.first;
+            QPointF offset = symPair.second;
+            r |= bbox(id, offset, mag).translated(pos);
+            pos.rx() += advance(id, mag.width());
+            pos.rx() += offset.x();
+            }
+      return r;
+      }
+
 //---------------------------------------------------------
 //   advance
 //---------------------------------------------------------
@@ -6295,7 +6362,21 @@ qreal ScoreFont::advance(SymId id, qreal mag) const
       return sym(id).advance() * mag;
       }
 
+qreal ScoreFont::advance(const std::pair<SymId, QPointF> symbol, qreal mag) const
+      {
+      SymId id = symbol.first;
+      QPointF offset = symbol.second;
+      if (useFallbackFont(id))
+            return fallbackFont()->advance(symbol, mag);
+      return sym(id).advance() * mag + offset.x();
+      }
+
 qreal ScoreFont::width(const std::vector<SymId>& s, qreal mag) const
+      {
+      return bbox(s, mag).width();
+      }
+
+qreal ScoreFont::width(const std::vector<std::pair<SymId, QPointF>>& s, qreal mag) const
       {
       return bbox(s, mag).width();
       }

@@ -7402,7 +7402,61 @@
            <string>Trill Line</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_14">
-           <item row="3" column="0">
+           <item row="4" column="1">
+            <widget class="QComboBox" name="trillContinue">
+             <property name="currentIndex">
+              <number>2</number>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Symbol</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Parentheses</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Brackets</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetTrillLinePosBelow">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Position below' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_140">
+             <property name="text">
+              <string>Position below:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="Ms::OffsetSelect" name="trillLinePosAbove" native="true"/>
+           </item>
+           <item row="7" column="0">
             <spacer name="verticalSpacer_18">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -7421,19 +7475,6 @@
               <string>Position above:</string>
              </property>
             </widget>
-           </item>
-           <item row="1" column="3">
-            <spacer name="horizontalSpacer_10">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
            </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetTrillLinePosAbove">
@@ -7493,23 +7534,147 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_140">
-             <property name="text">
-              <string>Position below:</string>
+           <item row="2" column="1">
+            <widget class="Ms::OffsetSelect" name="trillLinePosBelow" native="true"/>
+           </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="trillSpaceAfterSymbol">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="minimum">
+              <double>-99.989999999999995</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetTrillLinePosBelow">
+           <item row="4" column="0">
+            <widget class="QLabel" name="trillContinueLabel">
+             <property name="text">
+              <string>Continue symbol:</string>
+             </property>
+             <property name="buddy">
+              <cstring>trillContinue</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0" colspan="3">
+            <widget class="QGroupBox" name="continueEncloseGroup">
+             <property name="title">
+              <string>Continue enclosure</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_47">
+              <property name="bottomMargin">
+               <number>9</number>
+              </property>
+              <item row="0" column="1">
+               <widget class="QDoubleSpinBox" name="trillSpaceAfterOpen">
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="minimum">
+                 <double>-99.989999999999995</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetTrillSpaceAfterOpen">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Extra space after enclosure open' value</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="trillSpaceAfterOpenLabel">
+                <property name="text">
+                 <string>Extra space after open:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>trillSpaceAfterOpen</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="trillSpaceBeforeCloseLabel">
+                <property name="text">
+                 <string>Extra space before close:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>trillSpaceBeforeClose</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="trillSpaceBeforeClose">
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="minimum">
+                 <double>-99.989999999999995</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="resetTrillSpaceBeforeClose">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Extra space before enclosure close' value</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QToolButton" name="resetTrillContinue">
              <property name="toolTip">
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
+              <string>Reset 'Continue symbol' value</string>
              </property>
              <property name="text">
-              <string notr="true"/>
+              <string/>
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
@@ -7517,11 +7682,72 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="Ms::OffsetSelect" name="trillLinePosAbove" native="true"/>
+           <item row="3" column="0">
+            <widget class="QLabel" name="trillSpaceAfterSymbolLabel">
+             <property name="text">
+              <string>Extra space after symbol:</string>
+             </property>
+             <property name="buddy">
+              <cstring>trillSpaceAfterSymbol</cstring>
+             </property>
+            </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="Ms::OffsetSelect" name="trillLinePosBelow" native="true"/>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetTrillSpaceAfterSymbol">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Extra space after symbol' value</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="trillSpaceAfterContinueLabel">
+             <property name="text">
+              <string>Extra space after continue:</string>
+             </property>
+             <property name="buddy">
+              <cstring>trillSpaceAfterContinue</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QDoubleSpinBox" name="trillSpaceAfterContinue">
+             <property name="suffix">
+              <string>sp</string>
+             </property>
+             <property name="minimum">
+              <double>-99.989999999999995</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QToolButton" name="resetTrillSpaceAfterContinue">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Extra space after continue' value</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="musescore.qrc">
+               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

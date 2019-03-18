@@ -85,46 +85,112 @@ void TrillSegment::remove(Element* e)
       }
 
 //---------------------------------------------------------
+//   computeVOffset
+//---------------------------------------------------------
+
+qreal TrillSegment::computeVOffset(SymId reference, SymId symbol, qreal mag)
+      {
+      // Compute vertical offset for centering symbol on reference
+      ScoreFont* f = score()->scoreFont();
+      qreal diff   = f->bbox(reference, mag).height() - f->bbox(symbol, mag).height();
+      qreal offset = f->bbox(reference, mag).bottom() - f->bbox(symbol, mag).bottom() - diff / 2;
+      return offset;
+      }
+
+//---------------------------------------------------------
+//   symbolOffsetPair
+//---------------------------------------------------------
+
+std::pair<SymId, QPointF> TrillSegment::symbolOffsetPair(SymId id, qreal xOffset, qreal yOffset)
+      {
+      return std::pair<SymId, QPointF>(id, QPointF(xOffset, yOffset));
+      }
+
+//---------------------------------------------------------
+//   appendSymbol
+//---------------------------------------------------------
+
+void TrillSegment::appendSymbol(SymId id, qreal xOffset, qreal yOffset)
+      {
+      _symbols.push_back(symbolOffsetPair(id, xOffset, yOffset));
+      }
+
+//---------------------------------------------------------
+//   fillSymbols
+//---------------------------------------------------------
+
+void TrillSegment::fillSymbols(SymId fill, qreal x1, qreal x2, qreal mag, qreal startXOffset)
+      {
+      qreal w = x2 - x1;
+      ScoreFont* f = score()->scoreFont();
+
+      int n = lrint((w - startXOffset) / f->advance(fill, mag));
+
+      // Shift first fill symbol
+      if (n > 0)
+            appendSymbol(fill, startXOffset);
+
+      for (int i = 1; i < n; ++i)
+            appendSymbol(fill);
+      }
+
+//---------------------------------------------------------
 //   symbolLine
 //---------------------------------------------------------
 
-void TrillSegment::symbolLine(SymId start, SymId fill)
+void TrillSegment::symbolLine(SymId fill)
       {
-      qreal x1 = 0;
-      qreal x2 = pos2().x();
-      qreal w   = x2 - x1;
       qreal mag = magS();
       ScoreFont* f = score()->scoreFont();
 
       _symbols.clear();
-      _symbols.push_back(start);
-      qreal w1 = f->advance(start, mag);
-      qreal w2 = f->advance(fill, mag);
-      int n    = lrint((w - w1) / w2);
-      for (int i = 0; i < n; ++i)
-           _symbols.push_back(fill);
-      QRectF r(f->bbox(_symbols, mag));
+      fillSymbols(fill, 0, pos2().x(), mag);
+      QRectF r(f->bbox(symbols(), mag));
+      setbbox(r);
+      }
+
+void TrillSegment::symbolLine(SymId start, SymId fill, std::unique_ptr<std::pair<SymId, SymId>> enclosure)
+      {
+      qreal mag = magS();
+      ScoreFont* f = score()->scoreFont();
+      qreal SPACE_AFTER_SYMBOL   = spatium() * (0.0 + score()->styleS(Sid::trillSpaceAfterSymbol).val());
+      qreal SPACE_AFTER_CONTINUE = spatium() * (0.4 + score()->styleS(Sid::trillSpaceAfterContinue).val());
+
+      _symbols.clear();
+      if (enclosure != nullptr) {
+            appendSymbol(enclosure.get()->first, 0, computeVOffset(start, enclosure.get()->first, mag));
+            appendSymbol(start, spatium() * score()->styleS(Sid::trillSpaceAfterOpen).val());
+            appendSymbol(enclosure.get()->second, spatium() * score()->styleS(Sid::trillSpaceBeforeClose).val(), computeVOffset(start, enclosure.get()->second, mag));
+            }
+      else {
+            appendSymbol(start);
+            }
+      fillSymbols(fill,
+                  f->width(symbols(), mag),
+                  pos2().x(),
+                  mag,
+                  // SPACE_AFTER_SYMBOL/SPACE_AFTER_CONTINUE only applies to regular trill lines, not e.g. pralls
+                  (trill()->trillType() != Trill::Type::TRILL_LINE? 0 : (enclosure != nullptr ? SPACE_AFTER_CONTINUE : SPACE_AFTER_SYMBOL)));
+      QRectF r(f->bbox(symbols(), mag));
       setbbox(r);
       }
 
 void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
       {
-      qreal x1 = 0;
-      qreal x2 = pos2().x();
-      qreal w   = x2 - x1;
       qreal mag = magS();
       ScoreFont* f = score()->scoreFont();
+      qreal SPACE_AFTER_SYMBOL = spatium() * (0.0 + score()->styleS(Sid::trillSpaceAfterSymbol).val());
 
       _symbols.clear();
-      _symbols.push_back(start);
-      qreal w1 = f->advance(start, mag);
-      qreal w2 = f->advance(fill, mag);
-      qreal w3 = f->advance(end, mag);
-      int n    = lrint((w - w1 - w3) / w2);
-      for (int i = 0; i < n; ++i)
-           _symbols.push_back(fill);
-      _symbols.push_back(end);
-      QRectF r(f->bbox(_symbols, mag));
+      appendSymbol(start);
+      fillSymbols(fill,
+                  f->width(symbols(), mag),
+                  pos2().x() - f->advance(end, mag),
+                  mag,
+                  // SPACE_AFTER_SYMBOL/SPACE_AFTER_CONTINUE only applies to regular trill lines, not e.g. pralls
+                  (trill()->trillType() != Trill::Type::TRILL_LINE? 0 : SPACE_AFTER_SYMBOL));
+      appendSymbol(end);
+      QRectF r(f->bbox(symbols(), mag));
       setbbox(r);
       }
 
@@ -150,7 +216,7 @@ void TrillSegment::layout()
                         symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
                         break;
                   case Trill::Type::PRALLPRALL_LINE:
-                        symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+                        symbolLine(SymId::wiggleTrill);
                         break;
                   case Trill::Type::UPPRALL_LINE:
                               symbolLine(SymId::ornamentBottomLeftConcaveStroke,
@@ -162,8 +228,45 @@ void TrillSegment::layout()
                         break;
                   }
             }
+      else if (isMiddleType() || isEndType()) {
+            switch (trill()->trillType()) {
+                  case Trill::Type::TRILL_LINE: {
+                        int continueSymbol = score()->styleI(Sid::trillContinue);
+                        if (continueSymbol == int(TrillContinue::PARENTHESES)) {
+                              symbolLine(SymId::ornamentTrill,
+                                         SymId::wiggleTrill,
+                                         std::unique_ptr<std::pair<SymId, SymId>>(new std::pair<SymId, SymId>(SymId::accidentalParensLeft,
+                                                                                                              SymId::accidentalParensRight)));
+                        }
+                        else if (continueSymbol == int(TrillContinue::BRACKETS)) {
+                              symbolLine(SymId::ornamentTrill,
+                                         SymId::wiggleTrill,
+                                         std::unique_ptr<std::pair<SymId, SymId>>(new std::pair<SymId, SymId>(SymId::accidentalBracketLeft,
+                                                                                                              SymId::accidentalBracketRight)));
+                        }
+                        else if (continueSymbol == int(TrillContinue::SYMBOL)) {
+                              symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
+                              }
+                        else {
+                              symbolLine(SymId::wiggleTrill);
+                              }
+                        break;
+                        }
+                  case Trill::Type::PRALLPRALL_LINE:
+                        symbolLine(SymId::wiggleTrill);
+                        break;
+                  case Trill::Type::UPPRALL_LINE:
+                              symbolLine(SymId::ornamentZigZagLineNoRightEnd,
+                                 SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                        break;
+                  case Trill::Type::DOWNPRALL_LINE:
+                              symbolLine(SymId::ornamentZigZagLineNoRightEnd,
+                                 SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                        break;
+                  }
+      }
       else
-            symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+            symbolLine(SymId::wiggleTrill);
 
       autoplaceSpannerSegment(spatium() * 1.0);
       }

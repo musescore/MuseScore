@@ -2816,16 +2816,29 @@ class ScoreFont {
       void draw(const std::vector<SymId>&, QPainter*, const QSizeF& mag, const QPointF& pos) const;
       void draw(const std::vector<SymId>&, QPainter*, qreal mag,         const QPointF& pos, qreal scale) const;
       void draw(const std::vector<SymId>&, QPainter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
+      void draw(const std::vector<std::pair<SymId, QPointF>>&, QPainter*, qreal mag,         const QPointF& pos) const;
+      void draw(const std::vector<std::pair<SymId, QPointF>>&, QPainter*, const QSizeF& mag, const QPointF& pos) const;
+      void draw(const std::vector<std::pair<SymId, QPointF>>&, QPainter*, qreal mag,         const QPointF& pos, qreal scale) const;
+      void draw(const std::vector<std::pair<SymId, QPointF>>&, QPainter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
 
       qreal height(SymId id, qreal mag) const         { return bbox(id, mag).height(); }
       qreal width(SymId id, qreal mag) const          { return bbox(id, mag).width();  }
+      qreal width(const std::pair<SymId, QPointF> symbol, qreal mag) const          { return bbox(symbol, mag).width();  }
       qreal advance(SymId id, qreal mag) const;
+      qreal advance(const std::pair<SymId, QPointF> symbol, qreal mag) const;
       qreal width(const std::vector<SymId>&, qreal mag) const;
+      qreal width(const std::vector<std::pair<SymId, QPointF>>&, qreal mag) const;
 
       const QRectF bbox(SymId id, const QSizeF&) const;
       const QRectF bbox(SymId id, qreal mag) const;
+      const QRectF bbox(SymId id, const QPointF& offset, const QSizeF&) const;
+      const QRectF bbox(SymId id, const QPointF& offset, qreal mag) const;
+      const QRectF bbox(const std::pair<SymId, QPointF> sym, const QSizeF&) const;
+      const QRectF bbox(const std::pair<SymId, QPointF> sym, qreal mag) const;
       const QRectF bbox(const std::vector<SymId>& s, const QSizeF& mag) const;
       const QRectF bbox(const std::vector<SymId>& s, qreal mag) const;
+      const QRectF bbox(const std::vector<std::pair<SymId, QPointF>>& s, const QSizeF& mag) const;
+      const QRectF bbox(const std::vector<std::pair<SymId, QPointF>>& s, qreal mag) const;
       QPointF stemDownNW(SymId id, qreal mag) const;
       QPointF stemUpSE(SymId id, qreal mag) const;
       QPointF cutOutNE(SymId id, qreal mag) const;

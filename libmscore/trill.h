@@ -25,10 +25,16 @@ class Accidental;
 //---------------------------------------------------------
 
 class TrillSegment final : public LineSegment {
-      std::vector<SymId> _symbols;
+      std::vector<std::pair<SymId, QPointF>> _symbols;
 
-      void symbolLine(SymId start, SymId fill);
+      qreal computeVOffset(SymId reference, SymId symbol, qreal mag);
+      std::pair<SymId, QPointF> symbolOffsetPair(SymId id, qreal xOffset = 0, qreal yOffset = 0);
+      void appendSymbol(SymId id, qreal xOffset = 0, qreal yOffset = 0);
+      void fillSymbols(SymId fill, qreal x1, qreal x2, qreal mag, qreal startXOffset = 0);
+      void symbolLine(SymId fill);
+      void symbolLine(SymId start, SymId fill, std::unique_ptr<std::pair<SymId, SymId>> enclosure = nullptr);
       void symbolLine(SymId start, SymId fill, SymId end);
+      std::vector<std::pair<SymId, QPointF>> collectSymbols(SymId fill, qreal x1, qreal x2);
       virtual Sid getPropertyStyle(Pid) const override;
 
    protected:
@@ -50,8 +56,8 @@ class TrillSegment final : public LineSegment {
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all) override;
       Shape shape() const override;
 
-      std::vector<SymId> symbols() const           { return _symbols; }
-      void setSymbols(const std::vector<SymId>& s) { _symbols = s; }
+      std::vector<std::pair<SymId, QPointF>> symbols() const           { return _symbols; }
+      void setSymbols(const std::vector<std::pair<SymId, QPointF>>& s) { _symbols = s; }
       };
 
 //---------------------------------------------------------
