@@ -3414,7 +3414,11 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                   }
 
             bool force = false;
-            if (repeatEnd()) {
+            if (!isLastMeasureInSystem && repeatEnd() && nextMeasure()->repeatStart()) {
+                  t = BarLineType::END_START_REPEAT;
+                  force = true;
+                  }
+            else if (repeatEnd()) {
                   t = BarLineType::END_REPEAT;
                   force = true;
                   }

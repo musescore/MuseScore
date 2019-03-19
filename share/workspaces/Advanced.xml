@@ -1276,6 +1276,12 @@
             <subtype>end-repeat</subtype>
             </BarLine>
           </Cell>
+        <Cell name="End-start repeat">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>end-start-repeat</subtype>
+            </BarLine>
+          </Cell>
         <Cell name="Dashed barline">
           <staff>1</staff>
           <BarLine>
@@ -2173,6 +2179,11 @@
         <Cell name="End repeat">
           <BarLine>
             <subtype>end-repeat</subtype>
+            </BarLine>
+          </Cell>
+        <Cell name="End-start repeat">
+          <BarLine>
+            <subtype>end-start-repeat</subtype>
             </BarLine>
           </Cell>
         </Palette>

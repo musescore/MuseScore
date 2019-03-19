@@ -1728,6 +1728,10 @@ void Score::deleteItem(Element* el)
                               m->undoChangeProperty(Pid::REPEAT_START, false);
                         else if (bl->barLineType() == BarLineType::END_REPEAT)
                               m->undoChangeProperty(Pid::REPEAT_END, false);
+                        else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
+                              m->undoChangeProperty(Pid::REPEAT_START, false);
+                              m->undoChangeProperty(Pid::REPEAT_END, false);
+                              }
                         else
                               bl->undoChangeProperty(Pid::BARLINE_TYPE, QVariant::fromValue(BarLineType::NORMAL));
                         }

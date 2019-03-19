@@ -100,6 +100,11 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             case BarLineType::END_REPEAT:
                   m->undoChangeProperty(Pid::REPEAT_END, true);
                   break;
+            case BarLineType::END_START_REPEAT:
+                  m->undoChangeProperty(Pid::REPEAT_END, true);
+                  if (m->nextMeasure())
+                        m->nextMeasure()->undoChangeProperty(Pid::REPEAT_START, true);
+                  break;
             }
       }
 
@@ -124,6 +129,7 @@ const std::vector<BarLineTableItem> BarLine::barLineTable {
       { BarLineType::END_REPEAT,       QT_TRANSLATE_NOOP("Palette", "End repeat"),       "end-repeat" },
       { BarLineType::BROKEN,           QT_TRANSLATE_NOOP("Palette", "Dashed barline"),   "dashed" },
       { BarLineType::END,              QT_TRANSLATE_NOOP("Palette", "Final barline"),    "end" },
+      { BarLineType::END_START_REPEAT, QT_TRANSLATE_NOOP("Palette", "End-start repeat"), "end-start-repeat" },
       { BarLineType::DOTTED,           QT_TRANSLATE_NOOP("Palette", "Dotted barline"),   "dotted" },
       };
 
@@ -490,6 +496,40 @@ void BarLine::draw(QPainter* painter) const
                         drawTips(painter, true, x + lw2 * .5);
                   }
                   break;
+            case BarLineType::END_START_REPEAT:
+                  {
+                  qreal lw   = score()->styleP(Sid::barWidth) * mag() * .5;
+                  qreal lw2  = score()->styleP(Sid::endBarWidth) * mag();
+                  qreal d1   = score()->styleP(Sid::endBarDistance) * mag();
+                  qreal d2   = score()->styleP(Sid::repeatBarlineDotSeparation) * mag();
+                  qreal dotw = symWidth(SymId::repeatDot);
+
+                  qreal x1   =  dotw + d2 + lw;                                // thin bar
+
+                  drawDots(painter, .0);
+                  painter->drawLine(QLineF(x1, y1, x1, y2));
+
+                  qreal x2   =  dotw + d1 + lw*2 + d1 + lw2 * .5;              // thick bar
+
+                  painter->setPen(QPen(curColor(), lw2, Qt::SolidLine, Qt::FlatCap));
+                  painter->drawLine(QLineF(x2, y1, x2, y2));
+
+                  qreal x3   =  dotw + d1 + lw*2 + d1 + lw2 + d1 + lw;         // thin bar
+
+                  painter->setPen(QPen(curColor(), lw*2, Qt::SolidLine, Qt::FlatCap));
+                  painter->drawLine(QLineF(x3, y1, x3, y2));
+
+                  qreal x4   =  dotw + d2 + lw*2 + d1 + lw2 + d1 + lw*2 + d1;  // dot position
+                  drawDots(painter, x4);
+
+                  if (score()->styleB(Sid::repeatBarTips)) {
+                        qreal x  = x2;
+                        qreal w1 = symBbox(SymId::reversedBracketTop).width();
+                        drawTips(painter, false, x);
+                        drawTips(painter, true, x - w1);
+                        }
+                  }
+                  break;
             }
       Segment* s = segment();
       if (s && s->isEndBarLineType() && !score()->printing() && score()->showUnprintable()) {
@@ -612,7 +652,7 @@ Element* BarLine::drop(EditData& data)
                   }
 
             // check if the new property can apply to this single bar line
-            BarLineType bt = BarLineType::START_REPEAT | BarLineType::END_REPEAT;
+            BarLineType bt = BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT;
             bool oldRepeat = barLineType()     & bt;
             bool newRepeat = bl->barLineType() & bt;
 
@@ -636,8 +676,21 @@ Element* BarLine::drop(EditData& data)
                   else
                         undoChangeBarLineType(this, st, false);
                   }
-            else
+            else {
+                  //---------------------------------------------
+                  //    Update repeat flags
+                  //---------------------------------------------
+
+                  Measure* m  = segment()->measure();
+                  // drop on a end-start-repeat barline remove also the start repeat on next measure
+                  if (segment()->isEndBarLineType()
+                     && barLineType() == BarLineType::END_START_REPEAT
+                     && (st & (BarLineType::END|BarLineType::NORMAL|BarLineType::DOUBLE|BarLineType::BROKEN|BarLineType::DOTTED))
+                     && m->nextMeasure()) {
+                        m->nextMeasure()->undoChangeProperty(Pid::REPEAT_START, false);
+                        }
                   undoChangeBarLineType(this, st, true);
+                  }
             delete e;
             }
       else if (e->isArticulation()) {
@@ -991,14 +1044,21 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
                   break;
             case BarLineType::START_REPEAT:
             case BarLineType::END_REPEAT:
-                  w = score->styleP(Sid::endBarWidth) * .5
+                  w = (score->styleP(Sid::endBarWidth) * .5
                      + score->styleP(Sid::endBarDistance)
                      + score->styleP(Sid::repeatBarlineDotSeparation)
-                     + dotwidth * .5;
+                     + dotwidth * .5);
                   break;
             case BarLineType::END:
                   w = (score->styleP(Sid::endBarWidth) + score->styleP(Sid::barWidth)) * .5
                      + score->styleP(Sid::endBarDistance);
+                  break;
+            case BarLineType::END_START_REPEAT:
+                  w = (score->styleP(Sid::barWidth)
+                     + score->styleP(Sid::endBarWidth)
+                     + score->styleP(Sid::endBarDistance)
+                     + score->styleP(Sid::repeatBarlineDotSeparation)
+                     + dotwidth);
                   break;
             case BarLineType::BROKEN:
             case BarLineType::NORMAL:
@@ -1035,6 +1095,20 @@ void BarLine::layout()
                         qreal w1 = symBbox(SymId::reversedBracketTop).width();
                         r |= symBbox(SymId::reversedBracketTop).translated(-w1, y1);
                         // r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
+                        }
+                        break;
+                  case BarLineType::END_START_REPEAT:
+                        {
+                        qreal lw   = score()->styleP(Sid::barWidth);
+                        qreal lw2  = score()->styleP(Sid::endBarWidth);
+                        qreal d1   = score()->styleP(Sid::endBarDistance);
+                        qreal dotw = symWidth(SymId::repeatDot);
+                        qreal x    = dotw + 2 * d1 + lw + lw2 * .5;                     // thick bar
+                        qreal w1   = symBbox(SymId::reversedBracketTop).width();
+                        r |= symBbox(SymId::bracketTop).translated(x, y1);
+                        // r |= symBbox(SymId::bracketBottom).translated(x, y2);
+                        r |= symBbox(SymId::reversedBracketTop).translated(x - w1 , y1);
+                        // r |= symBbox(SymId::reversedBracketBottom).translated(x - w1, y2);
                         }
                         break;
                   default:
@@ -1086,6 +1160,20 @@ void BarLine::layout2()
                         bbox() |= symBbox(SymId::reversedBracketBottom).translated(-w1, y2);
                         break;
                         }
+                  case BarLineType::END_START_REPEAT:
+                        {
+                        qreal lw   = score()->styleP(Sid::barWidth);
+                        qreal lw2  = score()->styleP(Sid::endBarWidth);
+                        qreal d1   = score()->styleP(Sid::endBarDistance);
+                        qreal dotw = symWidth(SymId::repeatDot);
+                        qreal x   =  dotw + 2 * d1 + lw + lw2 * .5;                     // thick bar
+                        qreal w1 = symBbox(SymId::reversedBracketTop).width();
+                        bbox() |= symBbox(SymId::bracketTop).translated(x, y1);
+                        bbox() |= symBbox(SymId::bracketBottom).translated(x, y2);
+                        bbox() |= symBbox(SymId::reversedBracketTop).translated(x - w1 , y1);
+                        bbox() |= symBbox(SymId::reversedBracketBottom).translated(x - w1, y2);
+                        }
+                        break;
                   default:
                         break;
                   }
