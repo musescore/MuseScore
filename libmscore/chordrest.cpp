@@ -109,6 +109,8 @@ ChordRest::~ChordRest()
       qDeleteAll(_lyrics);
       qDeleteAll(_el);
       delete _tabDur;
+      if (_beam && _beam->contains(this))
+            delete _beam; // Beam destructor removes references to the deleted object
       }
 
 //---------------------------------------------------------

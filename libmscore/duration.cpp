@@ -43,6 +43,18 @@ DurationElement::DurationElement(const DurationElement& e)
       }
 
 //---------------------------------------------------------
+//   ~DurationElement
+//---------------------------------------------------------
+
+DurationElement::~DurationElement()
+      {
+      if (_tuplet && _tuplet->contains(this)) {
+            while (Tuplet* t = topTuplet()) // delete tuplets from top to bottom
+                  delete t; // Tuplet destructor removes references to the deleted object
+            }
+      }
+
+//---------------------------------------------------------
 //   topTuplet
 //---------------------------------------------------------
 
