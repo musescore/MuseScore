@@ -327,6 +327,11 @@ Score::~Score()
             delete m;
             m = nm;
             }
+
+      for (auto it = _spanner.cbegin(); it != _spanner.cend(); ++it)
+            delete it->second;
+      _spanner.clear();
+
       qDeleteAll(_parts);
       qDeleteAll(_staves);
 //      qDeleteAll(_pages);         // TODO: check
