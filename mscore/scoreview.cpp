@@ -2317,6 +2317,22 @@ void ScoreView::cmd(const char* s)
                   _score->endCmd();
                   }
             }
+      else if (cmd == "pad-note-1" || cmd == "pad-note-1-TAB" ||
+            cmd == "pad-note-2" || cmd == "pad-note-2-TAB" ||
+            cmd == "pad-note-4" || cmd == "pad-note-4-TAB" ||
+            cmd == "pad-note-8" || cmd == "pad-note-8-TAB" ||
+            cmd == "pad-note-16" || cmd == "pad-note-16-TAB" ||
+            cmd == "pad-note-32" || cmd == "pad-note-32-TAB" ||
+            cmd == "pad-note-64" || cmd == "pad-note-64-TAB" ||
+            cmd == "pad-note-128" || cmd == "pad-note-128-TAB") {
+            ChordRest* cr = _score->selection().cr();
+            if (!cr)
+                  changeState(ViewState::NOTE_ENTRY);
+
+            editData.view = this;
+            QAction* a = getAction(cmd);
+            _score->cmd(a, editData);
+            }
       else {
             editData.view = this;
             QAction* a = getAction(cmd);
