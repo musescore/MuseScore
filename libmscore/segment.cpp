@@ -191,6 +191,7 @@ Segment::~Segment()
                   e->staff()->removeTimeSig(toTimeSig(e));
             delete e;
             }
+      qDeleteAll(_annotations);
       }
 
 //---------------------------------------------------------
