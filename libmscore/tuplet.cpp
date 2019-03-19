@@ -84,6 +84,8 @@ Tuplet::Tuplet(const Tuplet& t)
 
 Tuplet::~Tuplet()
       {
+      for (DurationElement* de : _elements)
+            de->setTuplet(nullptr);
       delete _number;
       }
 

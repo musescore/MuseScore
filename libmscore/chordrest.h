@@ -89,7 +89,7 @@ class ChordRest : public DurationElement {
       Beam::Mode beamMode() const               { return _beamMode; }
 
       void setBeam(Beam* b);
-      virtual Beam* beam() const                { return _beam; }
+      virtual Beam* beam() const final          { return _beam; }
       int beams() const                         { return _durationType.hooks(); }
       virtual qreal upPos()   const = 0;
       virtual qreal downPos() const = 0;

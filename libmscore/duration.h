@@ -44,6 +44,7 @@ class DurationElement : public Element {
    public:
       DurationElement(Score* = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
       DurationElement(const DurationElement& e);
+      ~DurationElement();
 
       virtual Measure* measure() const    { return (Measure*)(parent()); }
 
