@@ -17,6 +17,7 @@
 
 #include <assert.h>
 #include "score.h"
+#include "imageStore.h"
 #include "key.h"
 #include "sig.h"
 #include "clef.h"
@@ -330,6 +331,8 @@ Score::~Score()
       qDeleteAll(_staves);
 //      qDeleteAll(_pages);         // TODO: check
       _masterScore = 0;
+
+      imageStore.clearUnused();
       }
 
 //---------------------------------------------------------
