@@ -582,7 +582,7 @@ bool Score::saveCompressedFile(QFileDevice* f, QFileInfo& info, bool onlySelecti
 
       // save images
       //uz.addDirectory("Pictures");
-      foreach (ImageStoreItem* ip, imageStore) {
+      for (ImageStoreItem* ip : imageStore) {
             if (!ip->isUsed(this))
                   continue;
             QString path = QString("Pictures/") + ip->hashName();
