@@ -324,6 +324,8 @@ Score::~Score()
                             // them prior to measures.
       for (MeasureBase* m = _measures.first(); m;) {
             MeasureBase* nm = m->next();
+            if (m->isMeasure() && toMeasure(m)->mmRest())
+                  delete toMeasure(m)->mmRest();
             delete m;
             m = nm;
             }
