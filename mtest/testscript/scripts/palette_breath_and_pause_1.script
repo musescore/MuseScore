@@ -1,0 +1,34 @@
+init init/Voice-Piano-3-4.mscx
+cmd note-input
+cmd escape
+palette Breath symbol breathMarkComma
+cmd next-chord
+palette Breath symbol breathMarkTick
+palette Breath symbol breathMarkComma
+palette Breath symbol breathMarkComma
+cmd prev-chord
+palette Breath symbol breathMarkComma
+cmd next-chord
+palette Breath symbol breathMarkTick
+cmd next-chord
+palette Breath symbol breathMarkSalzedo
+cmd next-chord
+palette Breath symbol breathMarkUpbow
+cmd next-chord
+palette Breath symbol caesuraCurved
+cmd prev-chord
+palette Breath symbol caesura
+cmd prev-chord
+palette Breath symbol breathMarkTick
+cmd next-chord
+palette Breath symbol caesuraCurved
+cmd next-chord
+palette Breath symbol caesura
+cmd next-chord
+cmd select-staff-below
+palette Breath symbol caesuraShort
+cmd next-chord
+cmd select-staff-below
+cmd select-staff-above
+palette Breath symbol caesuraThick
+test score palette_breath_and_pause_1.mscx
