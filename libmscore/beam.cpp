@@ -416,7 +416,7 @@ void Beam::layout1()
 
             for (ChordRest* cr : _elements) {
                   const bool staffMove = cr->isChord() ? toChord(cr)->staffMove() : false;
-                  if (!(_cross || staffMove)) {
+                  if (!_cross || !staffMove) {
                         if (cr->up() != _up) {
                               cr->setUp(_up);
                               cr->layoutStem1();
