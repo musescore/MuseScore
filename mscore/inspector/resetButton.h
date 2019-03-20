@@ -21,8 +21,8 @@ namespace Ms {
 
 class ResetButton : public QWidget {
       Q_OBJECT
-      QToolButton* reset;
-      QToolButton* setStyle;
+      QPushButton* reset;
+      QPushButton* setStyle;
 
    private slots:
 
