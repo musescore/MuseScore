@@ -641,6 +641,7 @@ void Measure::layout2()
       //    layout ties
       //---------------------------------------------------
 
+      Fraction stick = system()->measures().front()->tick();
       int tracks = score()->ntracks();
       static const SegmentType st { SegmentType::ChordRest };
       for (int track = 0; track < tracks; ++track) {
@@ -656,9 +657,18 @@ void Measure::layout2()
                   if (cr->isChord()) {
                         Chord* c = toChord(cr);
                         for (const Note* note : c->notes()) {
-                              Tie* tie = note->tieFor();
-                              if (tie)
-                                    tie->layout();
+                              Tie* t = note->tieFor();
+                              if (t) {
+                                    TieSegment* ts = t->layoutFor(system());
+                                    //system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->pos()));
+                                    }
+                              t = note->tieBack();
+                              if (t) {
+                                    if (t->startNote()->tick() < stick) {
+                                          TieSegment* ts = t->layoutBack(system());
+                                          //system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->pos()));
+                                          }
+                                    }
                               for (Spanner* sp : note->spannerFor())
                                     sp->layout();
                               }

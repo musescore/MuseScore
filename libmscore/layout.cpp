@@ -3665,8 +3665,15 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             sp->computeEndElement();
             lc.processedSpanners.insert(sp);
             if (sp->tick() < etick && sp->tick2() >= stick) {
-                  if (sp->isSlur())
+                  if (sp->isSlur()) {
+                        // skip cross-staff slurs
+                        ChordRest* scr = sp->startCR();
+                        ChordRest* ecr = sp->endCR();
+                        int idx = sp->vStaffIdx();
+                        if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx))
+                              continue;
                         spanner.push_back(sp);
+                        }
                   }
             }
       processLines(system, spanner, false);

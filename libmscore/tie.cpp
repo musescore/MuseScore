@@ -491,13 +491,29 @@ void Tie::slurPos(SlurPos* sp)
             sp->system2 = ec->measure()->system();
 
       hw = endNote()->tabHeadWidth(stt);
-      if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up))
+      if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up)) {
             xo = endNote()->x() - hw * 0.12;
-      else if (shortStart)
+            yo = endNote()->pos().y() + yOffInside;
+            }
+      else if (shortStart) {
             xo = endNote()->x() + hw * 0.15;
-      else
+            yo = endNote()->pos().y() + yOffOutside;
+            }
+      else {
             xo = endNote()->x() + hw * 0.35;
+            yo = endNote()->pos().y() + yOffOutside;
+            }
       sp->p2 += QPointF(xo, yo);
+
+      // adjust for cross-staff
+      if (sc->vStaffIdx() != vStaffIdx() && sp->system1) {
+            qreal diff = sp->system1->staff(sc->vStaffIdx())->y() - sp->system1->staff(vStaffIdx())->y();
+            sp->p1.ry() += diff;
+            }
+      if (ec->vStaffIdx() != vStaffIdx() && sp->system2) {
+            qreal diff = sp->system2->staff(ec->vStaffIdx())->y() - sp->system2->staff(vStaffIdx())->y();
+            sp->p2.ry() += diff;
+            }
       }
 
 //---------------------------------------------------------
