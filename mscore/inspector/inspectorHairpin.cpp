@@ -108,9 +108,7 @@ void InspectorHairpin::postInit()
       bool useTextLine = h.hairpinType->currentIndex() == int(HairpinType::CRESC_LINE)
          || h.hairpinType->currentIndex() == int(HairpinType::DECRESC_LINE);
       l.lineVisible->setEnabled(useTextLine);
-      h.hairpinCircledTip->setDisabled(useTextLine);
-      h.hairpinHeight->setDisabled(useTextLine);
-      h.hairpinContHeight->setDisabled(useTextLine);
+      h.gridWidget->setHidden(useTextLine);
       }
 
 }
