@@ -2814,38 +2814,59 @@ void Score::getNextMeasure(LayoutContext& lc)
 
 //---------------------------------------------------------
 //   isTopBeam
+//    returns true for the first CR of a beam that is not cross-staff
 //---------------------------------------------------------
 
 bool isTopBeam(ChordRest* cr)
       {
       Beam* b = cr->beam();
-      if (b && !b->cross() && b->elements().front() == cr) {
+      if (b && b->elements().front() == cr) {
+            // beam already considered cross?
+            if (b->cross())
+                  return false;
+
+            // for beams not already considered cross,
+            // consider them so here if any elements were moved up
             for (ChordRest* cr1 : b->elements()) {
-                  if (cr1->staffMove() >= 0)
-                        return true;
+                  // some element moved up?
+                  if (cr1->staffMove() < 0)
+                        return false;
                   }
+
+            // not cross
+            return true;
             }
 
+      // no beam or not first element
       return false;
       }
 
 //---------------------------------------------------------
 //   notTopBeam
+//    returns true for the first CR of a beam that is cross-staff
 //---------------------------------------------------------
 
 bool notTopBeam(ChordRest* cr)
       {
       Beam* b = cr->beam();
       if (b && b->elements().front() == cr) {
+            // beam already considered cross?
             if (b->cross())
                   return true;
 
+            // for beams not already considered cross,
+            // consider them so here if any elements were moved up
             for (ChordRest* cr1 : b->elements()) {
-                  if (cr1->staffMove() >= 0)
-                        return false;
-            }
-      }
+                  // some element moved up?
+                  if (cr1->staffMove() < 0)
+                        return true;
+                  }
 
+            // not cross
+            return false;
+            }
+
+      // no beam or not first element
       return false;
       }
 
