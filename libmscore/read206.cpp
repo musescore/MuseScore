@@ -3771,7 +3771,7 @@ static bool readScore(Score* score, XmlReader& e)
                   else {
                         e.tracks().clear();
                         MasterScore* m = score->masterScore();
-                        Score* s = new Score(m, MScore::defaultStyle());
+                        Score* s = new Score(m, MScore::baseStyle());
                         Excerpt* ex = new Excerpt(m);
 
                         ex->setPartScore(s);
