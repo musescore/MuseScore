@@ -819,6 +819,16 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                               else if (h->isDecrescendo() && hairpinStartVel < velocityEnd)
                                     singleNoteDynamics = false;
                               }
+                        else {
+                              if (velocityMiddle != -1 && velocityEnd > velocityMiddle) {
+                                    // HACK
+                                    // On the fly, update the staff velocity so that we have the
+                                    // correct start velocity for the next segment
+                                    // We reach this point when a changing dynamic lasts longer than this chord's segment
+                                    staff->velocities().setVelo(etick.ticks(), velocityMiddle);
+                                    velocityEnd = velocityMiddle;
+                                    }
+                              }
 
                         // Check for articulations
                         bool hasArticulations = false;
@@ -1175,7 +1185,7 @@ void Score::updateVelo()
                                           for (int i = partStaff; i < partStaff+partStaves; ++i) {
                                                 staff(i)->velocities().setVelo(tick.ticks(), v);
                                                 if (v2 > 0)
-                                                      velo.setVelo(tick2.ticks(), v2);
+                                                      staff(i)->velocities().setVelo(tick2.ticks(), v2);
                                                 }
                                           }
                                     break;
@@ -1183,7 +1193,7 @@ void Score::updateVelo()
                                     for (int i = 0; i < nstaves(); ++i) {
                                           staff(i)->velocities().setVelo(tick.ticks(), v);
                                           if (v2 > 0)
-                                                velo.setVelo(tick2.ticks(), v2);
+                                                staff(i)->velocities().setVelo(tick2.ticks(), v2);
                                           }
                                     break;
                               }
