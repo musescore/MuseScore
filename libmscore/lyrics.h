@@ -27,7 +27,11 @@ class LyricsLine;
 class Lyrics final : public TextBase {
       Q_GADGET
    public:
-      enum class Syllabic : char { SINGLE, BEGIN, END, MIDDLE };
+      enum class Syllabic : char {
+            ///.\{
+            SINGLE, BEGIN, END, MIDDLE
+            ///\}
+            };
       Q_ENUM(Syllabic)
 
       // MELISMA FIRST UNDERSCORE:
@@ -101,6 +105,7 @@ class Lyrics final : public TextBase {
 
 //---------------------------------------------------------
 //   LyricsLine
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 class LyricsLine final : public SLine {
@@ -126,6 +131,7 @@ class LyricsLine final : public SLine {
 
 //---------------------------------------------------------
 //   LyricsLineSegment
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 class LyricsLineSegment final : public LineSegment {

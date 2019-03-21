@@ -53,6 +53,7 @@ class NoteHead final : public Symbol {
       Q_GADGET
    public:
       enum class Group : signed char {
+            ///.\{
             HEAD_NORMAL = 0,
             HEAD_CROSS,
             HEAD_PLUS,
@@ -122,14 +123,17 @@ class NoteHead final : public Symbol {
             HEAD_CUSTOM,
             HEAD_GROUPS,
             HEAD_INVALID = -1
+            ///\}
             };
       enum class Type : signed char {
+            ///.\{
             HEAD_AUTO    = -1,
             HEAD_WHOLE   = 0,
             HEAD_HALF    = 1,
             HEAD_QUARTER = 2,
             HEAD_BREVIS  = 3,
             HEAD_TYPES
+            ///\}
             };
 
       Q_ENUM(Group)
@@ -152,7 +156,8 @@ class NoteHead final : public Symbol {
 
 //---------------------------------------------------------
 //   NoteVal
-//    helper structure
+///    helper structure
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 struct NoteVal {

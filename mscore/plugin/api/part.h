@@ -29,6 +29,7 @@ class Part : public Ms::PluginAPI::ScoreElement {
       Q_PROPERTY(int                            endTrack            READ endTrack)
 
    public:
+      /// \cond MS_INTERNAL
       Part(Ms::Part* p = nullptr, Ownership o = Ownership::SCORE)
          : ScoreElement(p, o) {}
 
@@ -37,6 +38,7 @@ class Part : public Ms::PluginAPI::ScoreElement {
 
       int startTrack() const { return part()->startTrack(); }
       int endTrack()   const { return part()->endTrack(); }
+      /// \endcond
       };
 } // namespace PluginAPI
 } // namespace Ms

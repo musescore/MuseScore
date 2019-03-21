@@ -20,17 +20,32 @@ namespace PluginAPI {
 
 //---------------------------------------------------------
 //   FractionWrapper
+///   Fraction object available to QML plugins.
+///   Use PluginAPI::PluginAPI::fraction to create a
+///   fraction for usage within your plugin:
+///   \code
+///   var ts = newElement(Element.TIMESIG);
+///   ts.timesig = fraction(3, 4);
+///   \endcode
 //---------------------------------------------------------
 
 class FractionWrapper : public QObject {
       Q_OBJECT
+      /** Fraction numerator */
       Q_PROPERTY(int numerator READ numerator)
+      /** Fraction denominator */
       Q_PROPERTY(int denominator READ denominator)
-      Q_PROPERTY(int ticks READ ticks)
+      /**
+       * MIDI ticks number equal to the number of the whole
+       * notes represented by this fraction.
+       */
+      Q_PROPERTY(int ticks READ ticks) // FIXME: fraction transition
+      /** String representation of this fraction */
       Q_PROPERTY(QString str READ toString)
 
       Ms::Fraction f;
 
+      /// \cond MS_INTERNAL
    public slots:
       void setFraction(Fraction _f) { f = _f; }
 
@@ -43,10 +58,13 @@ class FractionWrapper : public QObject {
       int denominator() const { return f.denominator(); }
       int ticks() const       { return f.ticks(); }
       QString toString() const { return f.toString(); }
+      /// \endcond
       };
 
 //---------------------------------------------------------
 //   wrap
+///   \cond PLUGIN_API \private \endcond
+///   \relates FractionWrapper
 //---------------------------------------------------------
 
 inline FractionWrapper* wrap(Ms::Fraction f)
