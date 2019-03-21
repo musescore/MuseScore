@@ -15,18 +15,24 @@
 
 #include "config.h"
 
+/**
+ * \namespace Ms .
+ */
+
 namespace Ms {
 #ifdef SCRIPT_INTERFACE
 Q_NAMESPACE
 #endif
 
 //-------------------------------------------------------------------
-//    The value of this enum determines the "stacking order"
-//    of elements on the canvas.
-//   Note: keep in sync with array elementNames[] in scoreElement.cpp
+///   \internal
+///   The value of this enum determines the "stacking order"
+///   of elements on the canvas.
+///   Note: keep in sync with array elementNames[] in scoreElement.cpp
 //-------------------------------------------------------------------
 
 enum class ElementType {
+      ///.\{
       INVALID = 0,
       BRACKET_ITEM,
       PART,
@@ -134,6 +140,7 @@ enum class ElementType {
       BAGPIPE_EMBELLISHMENT,
 
       MAXTYPE
+      ///\}
       };
 
 //---------------------------------------------------------
@@ -141,6 +148,7 @@ enum class ElementType {
 //---------------------------------------------------------
 // NOTE: keep this in sync with with accList array
 enum class AccidentalType : char {
+      ///.\{
       NONE,
       FLAT,
       NATURAL,
@@ -235,6 +243,7 @@ enum class AccidentalType : char {
       SORI,
       KORON,
       END
+      ///\}
       };
 
 //---------------------------------------------------------
@@ -242,7 +251,9 @@ enum class AccidentalType : char {
 //---------------------------------------------------------
 
 enum class Direction {
+      ///.\{
       AUTO, UP, DOWN
+      ///\}
       };
 
 //---------------------------------------------------------
@@ -250,7 +261,9 @@ enum class Direction {
 //---------------------------------------------------------
 
 enum class GlissandoType {
+      ///.\{
       STRAIGHT, WAVY
+      ///\}
       };
 
 //---------------------------------------------------------
@@ -258,7 +271,9 @@ enum class GlissandoType {
 //---------------------------------------------------------
 
 enum class GlissandoStyle {
+      ///.\{
       CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC
+      ///\}
       };
 
 //---------------------------------------------------------
@@ -266,7 +281,9 @@ enum class GlissandoStyle {
 //---------------------------------------------------------
 
 enum class Placement {
+      ///.\{
       ABOVE, BELOW
+      ///\}
       };
 
 //---------------------------------------------------------
@@ -285,6 +302,7 @@ enum class OffsetType : char {
 //-------------------------------------------------------------------
 
 enum class SegmentType {
+      ///.\{
       Invalid            = 0x0,
       BeginBarLine       = 0x1,
       HeaderClef         = 0x2,
@@ -301,8 +319,10 @@ enum class SegmentType {
       EndBarLine         = 0x400,
       KeySigAnnounce     = 0x800,
       TimeSigAnnounce    = 0x1000,
-      All                = -1,
+      All                = -1, ///< Includes all barline types
+      /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
       BarLineType        = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine
+      ///\}
       };
 
 constexpr SegmentType operator| (const SegmentType t1, const SegmentType t2) {
@@ -314,11 +334,13 @@ constexpr bool operator& (const SegmentType t1, const SegmentType t2) {
 
 //-------------------------------------------------------------------
 //   Tid
-//    Enumerate the list of built-in text substyles
-//    must be in sync with textStyles array (in style.cpp)
+///   Enumerates the list of built-in text substyles
+///   \internal
+///   Must be in sync with textStyles array (in style.cpp)
 //-------------------------------------------------------------------
 
 enum class Tid {
+      ///.\{
       DEFAULT,
       TITLE,
       SUBTITLE,
@@ -367,6 +389,7 @@ enum class Tid {
       USER5,
       USER6,
       TEXT_STYLES
+      ///.\}
       };
 
 //---------------------------------------------------------
@@ -433,6 +456,7 @@ Q_ENUM_NS(Tid)
 #endif
 
 //hack: to force the build system to run moc on this file
+/// \private
 class Mops : public QObject {
       Q_GADGET
       };

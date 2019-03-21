@@ -25,12 +25,25 @@
 namespace Ms {
 namespace PluginAPI {
 
+//---------------------------------------------------------
+///   \class Enum
+///   Wrapper for enumerations
+//---------------------------------------------------------
+
 class Enum : public QQmlPropertyMap {
       Q_OBJECT
 
    public:
+      /// \cond MS_INTERNAL
       Enum(const QMetaEnum& _enum, QObject* parent = nullptr);
+      /// \endcond
       };
+
+//---------------------------------------------------------
+//    wrapEnum
+///   \cond PLUGIN_API \private \endcond
+///   \relates Enum
+//---------------------------------------------------------
 
 template <class T>
 Enum* wrapEnum(QObject* parent = nullptr)

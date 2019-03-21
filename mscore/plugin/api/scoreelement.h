@@ -23,8 +23,10 @@ namespace PluginAPI {
 
 //---------------------------------------------------------
 //   Ownership
-//    Represents ownership policy regarding the underlying
-//    libmscore objects.
+///   \cond PLUGIN_API \private \endcond
+///   \internal
+///   Represents ownership policy regarding the underlying
+///   libmscore objects.
 //---------------------------------------------------------
 
 enum class Ownership {
@@ -34,16 +36,26 @@ enum class Ownership {
 
 //---------------------------------------------------------
 //   ScoreElement
-//    Wrapper class for ScoreElement
+///   Base class for most of object wrappers exposed to QML
 //---------------------------------------------------------
 
 class ScoreElement : public QObject {
       Q_OBJECT
+      /**
+       * Type of this element. See PluginAPI::PluginAPI::Element
+       * for the list of possible values.
+       */
       Q_PROPERTY(int       type READ type)
+      /**
+       * Name of this element's type, not localized.
+       * Use ScoreElement::userName() to obtain a localized
+       * element name suitable for usage in a user interface.
+       */
       Q_PROPERTY(QString   name READ name)
 
       Ownership _ownership;
 
+      /// \cond MS_INTERNAL
    protected:
       Ms::ScoreElement* const e;
 
@@ -62,15 +74,19 @@ class ScoreElement : public QObject {
 
       QString name() const;
       int type() const;
-      //@ Returns the human-readable name of the element type
-      Q_INVOKABLE QString userName() const;
 
       QVariant get(Ms::Pid pid) const;
       void set(Ms::Pid pid, QVariant val);
+      /// \endcond
+
+      Q_INVOKABLE QString userName() const;
       };
 
 //---------------------------------------------------------
 //   wrap
+///   \cond PLUGIN_API \private \endcond
+///   \internal
+///   \relates ScoreElement
 //---------------------------------------------------------
 
 template <class Wrapper, class T>
@@ -85,23 +101,24 @@ Wrapper* wrap(T* t, Ownership own = Ownership::SCORE)
 extern ScoreElement* wrap(Ms::ScoreElement* se, Ownership own = Ownership::SCORE);
 
 //---------------------------------------------------------
-//   qml access to containers
-//
-//   QmlListAccess provides a convenience interface for
-//   QQmlListProperty providing read-only access to plugins
-//   for various items containers.
+///   QML access to containers.
+///   A wrapper which provides read-only access for various
+///   items containers.
 //---------------------------------------------------------
 
 template <typename T, class Container>
 class QmlListAccess : public QQmlListProperty<T> {
 public:
+      /// \cond MS_INTERNAL
       QmlListAccess(QObject* obj, Container& container)
             : QQmlListProperty<T>(obj, const_cast<void*>(static_cast<const void*>(&container)), &count, &at) {};
 
       static int count(QQmlListProperty<T>* l)     { return int(static_cast<Container*>(l->data)->size()); }
       static T* at(QQmlListProperty<T>* l, int i)  { return wrap<T>(static_cast<Container*>(l->data)->at(i), Ownership::SCORE); }
+      /// \endcond
       };
 
+/** \cond PLUGIN_API \private \endcond */
 template<typename T, class Container>
 QmlListAccess<T, Container> wrapContainerProperty(QObject* obj, Container& c)
       {

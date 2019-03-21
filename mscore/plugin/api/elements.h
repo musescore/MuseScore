@@ -52,29 +52,34 @@ extern Element* wrap(Ms::Element* se, Ownership own = Ownership::SCORE);
 class Element : public Ms::PluginAPI::ScoreElement {
       Q_OBJECT
 
+      /**
+       * X-axis offset from a reference position in spatium units.
+       * \see Element::offset
+       */
       Q_PROPERTY(qreal offsetX READ offsetX WRITE setOffsetX)
+      /**
+       * Y-axis offset from a reference position in spatium units.
+       * \see Element::offset
+       */
       Q_PROPERTY(qreal offsetY READ offsetY WRITE setOffsetY)
 
-      // TODO: move some of them to ScoreElement
       API_PROPERTY( subtype,                 SUBTYPE                   )
       API_PROPERTY_READ_ONLY( selected,      SELECTED                  )
       API_PROPERTY_READ_ONLY( generated,     GENERATED                 )
       API_PROPERTY( color,                   COLOR                     )
       API_PROPERTY( visible,                 VISIBLE                   )
+      /** Stacking order of this element */
       API_PROPERTY( z,                       Z                         )
       API_PROPERTY( small,                   SMALL                     )
       API_PROPERTY( showCourtesy,            SHOW_COURTESY             )
       API_PROPERTY( lineType,                LINE_TYPE                 )
-      API_PROPERTY( pitch,                   PITCH                     )
-      API_PROPERTY( tpc1,                    TPC1                      )
-      API_PROPERTY( tpc2,                    TPC2                      )
       API_PROPERTY( line,                    LINE                      )
       API_PROPERTY( fixed,                   FIXED                     )
       API_PROPERTY( fixedLine,               FIXED_LINE                )
+      /** Notehead type, one of PluginAPI::PluginAPI::NoteHeadType values */
       API_PROPERTY( headType,                HEAD_TYPE                 )
+      /** Notehead group, one of PluginAPI::PluginAPI::NoteHeadGroup values */
       API_PROPERTY( headGroup,               HEAD_GROUP                )
-      API_PROPERTY( veloType,                VELO_TYPE                 )
-      API_PROPERTY( veloOffset,              VELO_OFFSET               )
       API_PROPERTY( articulationAnchor,      ARTICULATION_ANCHOR       )
       API_PROPERTY( direction,               DIRECTION                 )
       API_PROPERTY( stemDirection,           STEM_DIRECTION            )
@@ -207,6 +212,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( fretNumPos,              FRET_NUM_POS              )
       API_PROPERTY( systemBracket,           SYSTEM_BRACKET            )
       API_PROPERTY( gap,                     GAP                       )
+      /** Whether this element participates in autoplacement */
       API_PROPERTY( autoplace,               AUTOPLACE                 )
       API_PROPERTY( dashLineLen,             DASH_LINE_LEN             )
       API_PROPERTY( dashGapLen,              DASH_GAP_LEN              )
@@ -278,24 +284,29 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( voice,                   VOICE                     )
       API_PROPERTY_READ_ONLY( position,      POSITION                  ) // TODO: needed?
 
-   public:
-      Element(Ms::Element* e = nullptr, Ownership own = Ownership::PLUGIN)
-         : Ms::PluginAPI::ScoreElement(e, own) {}
-
-      Ms::Element* element() { return toElement(e); }
-      const Ms::Element* element() const { return toElement(e); }
-
-      //@ create a copy of the element
-      Q_INVOKABLE Ms::PluginAPI::Element* clone() const { return wrap(element()->clone(), Ownership::PLUGIN); }
-
-      Q_INVOKABLE QString subtypeName() const { return element()->subtypeName(); }
-      //@ Deprecated: same as ScoreElement::name property. Left for compatibility purposes.
-      Q_INVOKABLE QString _name() const { return name(); }
-
       qreal offsetX() const { return element()->offset().x() / element()->spatium(); }
       qreal offsetY() const { return element()->offset().y() / element()->spatium(); }
       void setOffsetX(qreal offX);
       void setOffsetY(qreal offY);
+
+   public:
+      /// \cond MS_INTERNAL
+      Element(Ms::Element* e = nullptr, Ownership own = Ownership::PLUGIN)
+         : Ms::PluginAPI::ScoreElement(e, own) {}
+
+      /// \brief Returns the underlying Ms::Element
+      /// \{
+      Ms::Element* element() { return toElement(e); }
+      const Ms::Element* element() const { return toElement(e); }
+      /// \}
+      /// \endcond
+
+      /// Create a copy of the element
+      Q_INVOKABLE Ms::PluginAPI::Element* clone() const { return wrap(element()->clone(), Ownership::PLUGIN); }
+
+      Q_INVOKABLE QString subtypeName() const { return element()->subtypeName(); }
+      /// Deprecated: same as ScoreElement::name. Left for compatibility purposes.
+      Q_INVOKABLE QString _name() const { return name(); }
       };
 
 //---------------------------------------------------------
@@ -325,16 +336,33 @@ class Note : public Element {
 //       Q_PROPERTY(int                            subchannel        READ subchannel)
 //       Q_PROPERTY(Ms::Tie*                       tieBack           READ tieBack)
 //       Q_PROPERTY(Ms::Tie*                       tieFor            READ tieFor)
+      /** MIDI pitch of this note */
+      API_PROPERTY( pitch,                   PITCH                     )
+      /**
+       * Concert pitch of the note
+       * \see https://musescore.org/plugin-development/tonal-pitch-class-enum
+       */
+      API_PROPERTY( tpc1,                    TPC1                      )
+      /**
+       * Transposing pitch of the note
+       * \see https://musescore.org/plugin-development/tonal-pitch-class-enum
+       */
+      API_PROPERTY( tpc2,                    TPC2                      )
+      /**
+       * Concert or transposing pitch of this note,
+       * as per current "Concert Pitch" setting value.
+       * \see https://musescore.org/plugin-development/tonal-pitch-class-enum
+       */
       Q_PROPERTY(int                            tpc               READ tpc                WRITE setTpc)
-//       Q_PROPERTY(int                            tpc1              READ tpc1               WRITE undoSetTpc1)
-//       Q_PROPERTY(int                            tpc2              READ tpc2               WRITE undoSetTpc2)
 //       Q_PROPERTY(qreal                          tuning            READ tuning             WRITE undoSetTuning)
 //       Q_PROPERTY(Ms::MScore::Direction          userDotPosition   READ userDotPosition    WRITE undoSetUserDotPosition)
 //       Q_PROPERTY(Ms::MScore::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
-//       Q_PROPERTY(int                            veloOffset        READ veloOffset         WRITE undoSetVeloOffset)
-//       Q_PROPERTY(Ms::Note::ValueType            veloType          READ veloType           WRITE undoSetVeloType)
+      /** See PluginAPI::PluginAPI::NoteValueType */
+      API_PROPERTY( veloType,                VELO_TYPE                 )
+      API_PROPERTY( veloOffset,              VELO_OFFSET               )
 
    public:
+      /// \cond MS_INTERNAL
       Note(Ms::Note* c = nullptr, Ownership own = Ownership::PLUGIN)
          : Element(c, own) {}
 
@@ -351,6 +379,7 @@ class Note : public Element {
 
       Ms::AccidentalType accidentalType() { return note()->accidentalType(); }
       void setAccidentalType(Ms::AccidentalType t) { note()->setAccidentalType(t); }
+      /// \endcond
       };
 
 //---------------------------------------------------------
@@ -365,6 +394,7 @@ class Chord : public Element {
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> lyrics     READ lyrics    ) // TODO: move to ChordRest
 
    public:
+      /// \cond MS_INTERNAL
       Chord(Ms::Chord* c = nullptr, Ownership own = Ownership::PLUGIN)
          : Element(c, own) {}
 
@@ -374,6 +404,7 @@ class Chord : public Element {
       QQmlListProperty<Chord> graceNotes()     { return wrapContainerProperty<Chord>(this, chord()->graceNotes()); }
       QQmlListProperty<Note> notes()           { return wrapContainerProperty<Note>(this, chord()->notes());       }
       QQmlListProperty<Element> lyrics()      { return wrapContainerProperty<Element>(this, chord()->lyrics());  } // TODO: move to ChordRest // TODO: special type for Lyrics?
+      /// \endcond
       };
 
 //---------------------------------------------------------
@@ -383,34 +414,57 @@ class Chord : public Element {
 
 class Segment : public Element {
       Q_OBJECT
-      // TODO
+      /**
+       * The list of annotations. Articulations, staff/system/expression
+       * text are examples of what is considered to be segment annotations.
+       */
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> annotations READ annotations)
-      Q_PROPERTY(Ms::PluginAPI::Segment*       next              READ nextInScore)
+      /// \brief Next segment in this measure
+      /// \returns The next segment in this segment's measure.
+      /// Null if there is no such segment.
       Q_PROPERTY(Ms::PluginAPI::Segment*       nextInMeasure     READ nextInMeasure)
-      Q_PROPERTY(Ms::PluginAPI::Segment*       prev              READ prevInScore)
+      /// \brief Next segment in this score.\ Doesn't stop at measure border.
+      /// \returns The next segment in this score. Null if there is
+      /// no such segment (i.e. this is the last segment in the score).
+      Q_PROPERTY(Ms::PluginAPI::Segment*       next              READ nextInScore)
+      /// \brief Previous segment in this measure
+      /// \returns The previous segment in this segment's measure.
+      /// Null if there is no such segment.
       Q_PROPERTY(Ms::PluginAPI::Segment*       prevInMeasure     READ prevInMeasure)
-//       Q_PROPERTY(Ms::Segment::Type  segmentType       READ segmentType WRITE setSegmentType)
+      /// \brief Previous segment in this score.\ Doesn't stop at measure border.
+      /// \returns The previous segment in this score. Null if there is
+      /// no such segment (i.e. this is the first segment in the score).
+      Q_PROPERTY(Ms::PluginAPI::Segment*       prev              READ prevInScore)
+      // segmentType was read&write in MuseScore 2.X plugin API.
+      // Allowing plugins to change random segments types doesn't seem to be a
+      // good idea though.
+      /// Type of this segment, one of PluginAPI::PluginAPI::Segment values.
+      Q_PROPERTY(Ms::SegmentType               segmentType       READ segmentType)
       Q_PROPERTY(int                tick              READ tick) // TODO: revise libmscore (or this API):
                                                                  // Pid::TICK is relative or absolute in different contexts
-//       Q_ENUMS(Type)
 
    public:
+      /// \cond MS_INTERNAL
       Segment(Ms::Segment* s = nullptr, Ownership own = Ownership::SCORE)
          : Element(s, own) {}
 
       Ms::Segment* segment() { return toSegment(e); }
       const Ms::Segment* segment() const { return toSegment(e); }
 
-      //@ returns the element at track 'track' (null if none)
-      Q_INVOKABLE Ms::PluginAPI::Element* elementAt(int track);
-
       int tick() const { return segment()->tick().ticks(); }
+
+      Ms::SegmentType segmentType() const { return segment()->segmentType(); }
 
       Segment* nextInScore() { return wrap<Segment>(segment()->next1()); }
       Segment* nextInMeasure() { return wrap<Segment>(segment()->next()); }
       Segment* prevInScore() { return wrap<Segment>(segment()->prev1()); }
       Segment* prevInMeasure() { return wrap<Segment>(segment()->prev()); }
       QQmlListProperty<Element> annotations() { return wrapContainerProperty<Element>(this, segment()->annotations()); }
+      /// \endcond
+
+      /// \return Element at the given \p track (null if there is no such an element)
+      /// \param track track number
+      Q_INVOKABLE Ms::PluginAPI::Element* elementAt(int track);
       };
 
 //---------------------------------------------------------
@@ -420,7 +474,9 @@ class Segment : public Element {
 
 class Measure : public Element {
       Q_OBJECT
+      /// The first segment of this measure
       Q_PROPERTY(Ms::PluginAPI::Segment* firstSegment READ firstSegment)
+      /// The last segment of this measure
       Q_PROPERTY(Ms::PluginAPI::Segment* lastSegment  READ lastSegment)
 
       // TODO: to MeasureBase?
@@ -432,6 +488,7 @@ class Measure : public Element {
 //       Q_PROPERTY(Ms::Measure* prevMeasureMM     READ prevMeasureMM)
 
    public:
+      /// \cond MS_INTERNAL
       Measure(Ms::Measure* m = nullptr, Ownership own = Ownership::SCORE)
          : Element(m, own) {}
 
@@ -443,6 +500,7 @@ class Measure : public Element {
 
       Measure* prevMeasure() { return wrap<Measure>(measure()->prevMeasure(), Ownership::SCORE); }
       Measure* nextMeasure() { return wrap<Measure>(measure()->nextMeasure(), Ownership::SCORE); }
+      /// \endcond
       };
 
 #undef API_PROPERTY

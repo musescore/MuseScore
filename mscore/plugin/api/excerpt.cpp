@@ -28,6 +28,7 @@ Score* Excerpt::partScore()
 
 //---------------------------------------------------------
 //   wrap
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 Excerpt* excerptWrap(Ms::Excerpt* e)
