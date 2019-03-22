@@ -40,9 +40,25 @@ extern Element* wrap(Ms::Element* se, Ownership own = Ownership::SCORE);
       QVariant get_##name() const { return get(Ms::Pid::pid); }  \
       void set_##name(QVariant val) { set(Ms::Pid::pid, val); }
 
+/**
+ * API_PROPERTY flavor which allows to define the property type.
+ * Can be used if it is known that this property is always valid
+ * for this type, otherwise this macro won't allow an `undefined`
+ * value to be exposed to QML in case of invalid property.
+ */
+#define API_PROPERTY_T(type, name, pid) \
+      Q_PROPERTY(type name READ get_##name WRITE set_##name) \
+      type get_##name() const { return get(Ms::Pid::pid).value<type>(); }  \
+      void set_##name(type val) { set(Ms::Pid::pid, QVariant::fromValue(val)); }
+
 #define API_PROPERTY_READ_ONLY(name, pid) \
       Q_PROPERTY(QVariant name READ get_##name) \
       QVariant get_##name() const { return get(Ms::Pid::pid); }
+
+
+#define API_PROPERTY_READ_ONLY_T(type, name, pid) \
+      Q_PROPERTY(type name READ get_##name) \
+      type get_##name() const { return get(Ms::Pid::pid).value<type>(); }  \
 
 //---------------------------------------------------------
 //   Element
@@ -64,12 +80,16 @@ class Element : public Ms::PluginAPI::ScoreElement {
       Q_PROPERTY(qreal offsetY READ offsetY WRITE setOffsetY)
 
       API_PROPERTY( subtype,                 SUBTYPE                   )
-      API_PROPERTY_READ_ONLY( selected,      SELECTED                  )
-      API_PROPERTY_READ_ONLY( generated,     GENERATED                 )
-      API_PROPERTY( color,                   COLOR                     )
-      API_PROPERTY( visible,                 VISIBLE                   )
+      API_PROPERTY_READ_ONLY_T( bool, selected, SELECTED               )
+      API_PROPERTY_READ_ONLY_T( bool, generated, GENERATED             )
+      /**
+       * Element color. See https://doc.qt.io/qt-5/qml-color.html
+       * for the reference on color type in QML.
+       */
+      API_PROPERTY_T( QColor, color,         COLOR                     )
+      API_PROPERTY_T( bool,   visible,       VISIBLE                   )
       /** Stacking order of this element */
-      API_PROPERTY( z,                       Z                         )
+      API_PROPERTY_T( int,    z,             Z                         )
       API_PROPERTY( small,                   SMALL                     )
       API_PROPERTY( showCourtesy,            SHOW_COURTESY             )
       API_PROPERTY( lineType,                LINE_TYPE                 )
@@ -95,7 +115,14 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( barlineSpan,             BARLINE_SPAN              )
       API_PROPERTY( barlineSpanFrom,         BARLINE_SPAN_FROM         )
       API_PROPERTY( barlineSpanTo,           BARLINE_SPAN_TO           )
-      API_PROPERTY( offset,                  OFFSET                    )
+      /**
+       * Offset from a reference position in spatium units.
+       * Use `Qt.point(x, y)` to create a point value which can be
+       * assigned to this property.
+       * \see Element::offsetX
+       * \see Element::offsetY
+       */
+      API_PROPERTY_T( QPointF, offset,       OFFSET                    )
       API_PROPERTY( fret,                    FRET                      )
       API_PROPERTY( string,                  STRING                    )
       API_PROPERTY( ghost,                   GHOST                     )
@@ -203,7 +230,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( duration,                DURATION                  )
       API_PROPERTY( durationType,            DURATION_TYPE             )
       API_PROPERTY( role,                    ROLE                      )
-      API_PROPERTY( track,                   TRACK                     )
+      API_PROPERTY_T( int, track,            TRACK                     )
       API_PROPERTY( glissandoStyle,          GLISSANDO_STYLE           )
       API_PROPERTY( fretStrings,             FRET_STRINGS              )
       API_PROPERTY( fretFrets,               FRET_FRETS                )
@@ -213,7 +240,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( systemBracket,           SYSTEM_BRACKET            )
       API_PROPERTY( gap,                     GAP                       )
       /** Whether this element participates in autoplacement */
-      API_PROPERTY( autoplace,               AUTOPLACE                 )
+      API_PROPERTY_T( bool, autoplace,       AUTOPLACE                 )
       API_PROPERTY( dashLineLen,             DASH_LINE_LEN             )
       API_PROPERTY( dashGapLen,              DASH_GAP_LEN              )
       API_PROPERTY_READ_ONLY( tick,          TICK                      )
@@ -281,7 +308,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( endFontStyle,            END_FONT_STYLE            )
       API_PROPERTY( endTextOffset,           END_TEXT_OFFSET           )
       API_PROPERTY( posAbove,                POS_ABOVE                 )
-      API_PROPERTY( voice,                   VOICE                     )
+      API_PROPERTY_T( int, voice,            VOICE                     )
       API_PROPERTY_READ_ONLY( position,      POSITION                  ) // TODO: needed?
 
       qreal offsetX() const { return element()->offset().x() / element()->spatium(); }
@@ -337,17 +364,17 @@ class Note : public Element {
 //       Q_PROPERTY(Ms::Tie*                       tieBack           READ tieBack)
 //       Q_PROPERTY(Ms::Tie*                       tieFor            READ tieFor)
       /** MIDI pitch of this note */
-      API_PROPERTY( pitch,                   PITCH                     )
+      API_PROPERTY_T( int, pitch,                   PITCH                     )
       /**
        * Concert pitch of the note
        * \see https://musescore.org/plugin-development/tonal-pitch-class-enum
        */
-      API_PROPERTY( tpc1,                    TPC1                      )
+      API_PROPERTY_T( int, tpc1,             TPC1                      )
       /**
        * Transposing pitch of the note
        * \see https://musescore.org/plugin-development/tonal-pitch-class-enum
        */
-      API_PROPERTY( tpc2,                    TPC2                      )
+      API_PROPERTY_T( int, tpc2,             TPC2                      )
       /**
        * Concert or transposing pitch of this note,
        * as per current "Concert Pitch" setting value.
@@ -359,7 +386,7 @@ class Note : public Element {
 //       Q_PROPERTY(Ms::MScore::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
       /** See PluginAPI::PluginAPI::NoteValueType */
       API_PROPERTY( veloType,                VELO_TYPE                 )
-      API_PROPERTY( veloOffset,              VELO_OFFSET               )
+      API_PROPERTY_T( int, veloOffset,       VELO_OFFSET               )
 
    public:
       /// \cond MS_INTERNAL
@@ -504,7 +531,9 @@ class Measure : public Element {
       };
 
 #undef API_PROPERTY
+#undef API_PROPERTY_T
 #undef API_PROPERTY_READ_ONLY
+#undef API_PROPERTY_READ_ONLY_T
 
 }     // namespace PluginAPI
 }     // namespace Ms
