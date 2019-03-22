@@ -18,36 +18,18 @@
 //=============================================================================
 
 #include "config.h"
-#include "plugins.h"
+#include "util.h"
 
-#ifdef SCRIPT_INTERFACE
+#include "score.h"
+
 #include "libmscore/score.h"
-#include "libmscore/undo.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/utils.h"
-#include "libmscore/mscore.h"
 #include "libmscore/measurebase.h"
-#include "libmscore/measure.h"
-#include "libmscore/segment.h"
-#include "libmscore/rest.h"
-#include "libmscore/stafftext.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
-#include "libmscore/part.h"
-#include "libmscore/timesig.h"
-#include "libmscore/keysig.h"
-#include "libmscore/harmony.h"
-#include "libmscore/slur.h"
-#include "libmscore/tie.h"
-#include "libmscore/notedot.h"
-#include "libmscore/figuredbass.h"
-#include "libmscore/accidental.h"
-#include "libmscore/lyrics.h"
-#include "libmscore/layoutbreak.h"
 
 namespace Ms {
+namespace PluginAPI {
 
 //---------------------------------------------------------
 //   MsScoreView
@@ -151,10 +133,10 @@ int FileIO::modifiedTime()
 //   setScore
 //---------------------------------------------------------
 
-void MsScoreView::setScore(Score* s)
+void MsScoreView::setScore(Ms::PluginAPI::Score* s)
       {
       _currentPage = 0;
-      score = s;
+      score = s ? s->score() : nullptr;
 
       if (score) {
             score->doLayout();
@@ -238,12 +220,5 @@ void MsScoreView::prevPage()
       {
       setCurrentPage(_currentPage - 1);
       }
-
-const QTransform& MsScoreView::matrix() const
-      {
-      static const QTransform t;
-      return t; // _matrix;
-      }
-
 }
-#endif
+}
