@@ -1595,6 +1595,46 @@
             <text>open</text>
             </StaffText>
           </Cell>
+        <Cell name="Soprano/Alto" trElement="1">
+          <StaffText>
+            <channelSwitch voice="0" name="Soprano"/>
+            <channelSwitch voice="1" name="Alto"/>
+            <channelSwitch voice="2" name="Soprano"/>
+            <channelSwitch voice="3" name="Alto"/>
+            <track>0</track>
+            <text>S/A</text>
+            </StaffText>
+          </Cell>
+        <Cell name="Tenor/Bass" trElement="1">
+          <StaffText>
+            <channelSwitch voice="0" name="Tenor"/>
+            <channelSwitch voice="1" name="Bass"/>
+            <channelSwitch voice="2" name="Tenor"/>
+            <channelSwitch voice="3" name="Bass"/>
+            <track>0</track>
+            <text>T/B</text>
+            </StaffText>
+          </Cell>
+        <Cell name="Tenor/Lead" trElement="1">
+          <StaffText>
+            <channelSwitch voice="0" name="TENOR"/>
+            <channelSwitch voice="1" name="LEAD"/>
+            <channelSwitch voice="2" name="TENOR"/>
+            <channelSwitch voice="3" name="LEAD"/>
+            <track>0</track>
+            <text>T/L</text>
+            </StaffText>
+          </Cell>
+        <Cell name="Bari/Bass" trElement="1">
+          <StaffText>
+            <channelSwitch voice="0" name="BARI"/>
+            <channelSwitch voice="1" name="BASS"/>
+            <channelSwitch voice="2" name="BARI"/>
+            <channelSwitch voice="3" name="BASS"/>
+            <track>0</track>
+            <text>B/B</text>
+            </StaffText>
+          </Cell>
         </Palette>
       <Palette name="Tempo">
         <type>Tempo</type>
