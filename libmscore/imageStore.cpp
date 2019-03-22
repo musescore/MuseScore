@@ -140,6 +140,15 @@ static void dumpHash(const QByteArray& _hash)
 #endif
 
 //---------------------------------------------------------
+//   ~ImageStore
+//---------------------------------------------------------
+
+ImageStore::~ImageStore()
+      {
+      qDeleteAll(_items);
+      }
+
+//---------------------------------------------------------
 //   getImage
 //---------------------------------------------------------
 
@@ -150,13 +159,13 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
             //
             // some limited support for backward compatibility
             //
-            foreach(ImageStoreItem* item, *this) {
+            for (ImageStoreItem* item: _items) {
                   if (item->path() == path)
                         return item;
                   }
             qDebug("ImageStore::getImage(%s): bad base name <%s>",
                qPrintable(path), qPrintable(s));
-            for (ImageStoreItem* item : *this)
+            for (ImageStoreItem* item : _items)
                   qDebug("    in store: <%s>", qPrintable(item->path()));
 
             return 0;
@@ -165,7 +174,7 @@ ImageStoreItem* ImageStore::getImage(const QString& path) const
       for (int i = 0; i < 16; ++i) {
             hash[i] = toInt(s[i * 2].toLatin1()) * 16 + toInt(s[i * 2 + 1].toLatin1());
             }
-      foreach(ImageStoreItem* item, *this) {
+      for (ImageStoreItem* item : _items) {
             if (item->hash() == hash)
                   return item;
             }
@@ -182,15 +191,31 @@ ImageStoreItem* ImageStore::add(const QString& path, const QByteArray& ba)
       QCryptographicHash h(QCryptographicHash::Md4);
       h.addData(ba);
       QByteArray hash = h.result();
-      foreach(ImageStoreItem* item, *this) {
+      for (ImageStoreItem* item : _items) {
             if (item->hash() == hash)
                   return item;
             }
       ImageStoreItem* item = new ImageStoreItem(path);
       item->set(ba, hash);
-      append(item);
+      _items.push_back(item);
       return item;
       }
 
+//---------------------------------------------------------
+//   clearUnused
+//---------------------------------------------------------
+
+void ImageStore::clearUnused()
+      {
+      _items.erase(
+         std::remove_if(_items.begin(), _items.end(), [](ImageStoreItem* i) {
+            const bool remove = !i->isUsed();
+            if (remove)
+                  delete i;
+            return remove;
+            }),
+         _items.end()
+         );
+      }
 }
 
