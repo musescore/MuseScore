@@ -948,16 +948,6 @@ PartChannelSettingsLink& PartChannelSettingsLink::operator=(PartChannelSettingsL
       }
 
 //---------------------------------------------------------
-//   ~PartChannelSettingsLink
-//---------------------------------------------------------
-
-PartChannelSettingsLink::~PartChannelSettingsLink()
-      {
-      if (_main)
-            _main->removeListener(this);
-      }
-
-//---------------------------------------------------------
 //   swap
 //---------------------------------------------------------
 

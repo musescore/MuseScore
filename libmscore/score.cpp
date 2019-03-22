@@ -17,6 +17,7 @@
 
 #include <assert.h>
 #include "score.h"
+#include "imageStore.h"
 #include "key.h"
 #include "sig.h"
 #include "clef.h"
@@ -323,14 +324,23 @@ Score::~Score()
                             // them prior to measures.
       for (MeasureBase* m = _measures.first(); m;) {
             MeasureBase* nm = m->next();
+            if (m->isMeasure() && toMeasure(m)->mmRest())
+                  delete toMeasure(m)->mmRest();
             delete m;
             m = nm;
             }
+
+      for (auto it = _spanner.cbegin(); it != _spanner.cend(); ++it)
+            delete it->second;
+      _spanner.clear();
+
       qDeleteAll(_parts);
       qDeleteAll(_staves);
       Score::validScores.erase(this);
 //      qDeleteAll(_pages);         // TODO: check
       _masterScore = 0;
+
+      imageStore.clearUnused();
       }
 
 //---------------------------------------------------------
