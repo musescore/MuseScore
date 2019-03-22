@@ -1601,6 +1601,7 @@
             <channelSwitch voice="1" name="Alto"/>
             <channelSwitch voice="2" name="Soprano"/>
             <channelSwitch voice="3" name="Alto"/>
+            <visible>0</visible>
             <track>0</track>
             <text>S/A</text>
             </StaffText>
@@ -1611,6 +1612,7 @@
             <channelSwitch voice="1" name="Bass"/>
             <channelSwitch voice="2" name="Tenor"/>
             <channelSwitch voice="3" name="Bass"/>
+            <visible>0</visible>
             <track>0</track>
             <text>T/B</text>
             </StaffText>
@@ -1621,6 +1623,7 @@
             <channelSwitch voice="1" name="LEAD"/>
             <channelSwitch voice="2" name="TENOR"/>
             <channelSwitch voice="3" name="LEAD"/>
+            <visible>0</visible>
             <track>0</track>
             <text>T/L</text>
             </StaffText>
@@ -1631,6 +1634,7 @@
             <channelSwitch voice="1" name="BASS"/>
             <channelSwitch voice="2" name="BARI"/>
             <channelSwitch voice="3" name="BASS"/>
+            <visible>0</visible>
             <track>0</track>
             <text>B/B</text>
             </StaffText>
