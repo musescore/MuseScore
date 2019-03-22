@@ -16,12 +16,12 @@
 #include "fraction.h"
 #include "score.h"
 #include "part.h"
+#include "util.h"
 #ifndef TESTROOT
 #include "shortcut.h"
 #endif
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
-#include "libmscore/plugins.h" // TODO: remove
 
 #include <QQmlEngine>
 

@@ -10,17 +10,20 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __PLUGINS_H__
-#define __PLUGINS_H__
+#ifndef __PLUGIN_API_UTIL_H__
+#define __PLUGIN_API_UTIL_H__
 
 #include "config.h"
 
-#ifdef SCRIPT_INTERFACE
 #include "libmscore/element.h"
+#include "libmscore/mscoreview.h"
 #include "libmscore/score.h"
 #include "libmscore/utils.h"
 
 namespace Ms {
+namespace PluginAPI {
+
+class Score;
 
 //---------------------------------------------------------
 //   @@ FileIO
@@ -71,7 +74,7 @@ class FileIO : public QObject {
 //---------------------------------------------------------
 
 class MsProcess : public QProcess {
-      Q_GADGET
+      Q_OBJECT
 
    public:
       MsProcess(QObject* parent = 0) : QProcess(parent) {}
@@ -88,17 +91,16 @@ class MsProcess : public QProcess {
 //---------------------------------------------------------
 //   @@ ScoreView
 ///    This is an GUI element to show a score.
-//
-//   @P color  color    background color
-//   @P scale  float    scaling factor
 //---------------------------------------------------------
 
 class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
-      Q_GADGET
+      Q_OBJECT
+      /** Background color */
       Q_PROPERTY(QColor color READ color WRITE setColor)
+      /** Scaling factor */
       Q_PROPERTY(qreal  scale READ scale WRITE setScale)
 
-      Score* score;
+      Ms::Score* score;
       int _currentPage;
       QColor _color;
       qreal mag;
@@ -107,28 +109,17 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
 
       QNetworkAccessManager* networkManager;
 
-      virtual void dataChanged(const QRectF&)   { update(); }
-      virtual void updateAll()                  { update(); }
-      virtual void adjustCanvasPosition(const Element*, bool, int) override {}
-      virtual void removeScore()                {}
-      virtual void changeEditElement(Element*)  {}
-      virtual int gripCount() const             { return 0; }
-      virtual const QTransform& matrix() const;
-      virtual void setDropRectangle(const QRectF&) {}
-      virtual void startEdit()                  {}
-      virtual void startEdit(Element*, Grip)    {}
-      virtual Element* elementNear(QPointF)     { return 0; }
+      virtual void dataChanged(const QRectF&) override { update(); }
+      virtual void updateAll() override                { update(); }
 
-      virtual void paint(QPainter*);
+      virtual void paint(QPainter*) override;
 
-      virtual void setCursor(const QCursor&)    {}
-      virtual QCursor cursor() const            { return QCursor(); }
-      virtual QRectF boundingRect() const       { return _boundingRect; }
-      virtual void drawBackground(QPainter*, const QRectF&) const {}
+      virtual QRectF boundingRect() const override { return _boundingRect; }
+      virtual void drawBackground(QPainter*, const QRectF&) const override {}
 
    public slots:
       //@ --
-      Q_INVOKABLE void setScore(Score*);
+      Q_INVOKABLE void setScore(Ms::PluginAPI::Score*);
       //@ --
       Q_INVOKABLE void setCurrentPage(int n);
       //@ --
@@ -145,9 +136,6 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       void setScale(qreal v)          { mag = v;           }
       virtual const QRect geometry() const override { return QRect(QQuickPaintedItem::x(), y(), width(), height()); }
       };
+} // namespace PluginAPI
 } // namespace Ms
 #endif
-
-#endif
-
-

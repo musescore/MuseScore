@@ -22,7 +22,6 @@
 
 namespace Ms {
 
-class MsProcess;
 class Element;
 class MScore;
 
@@ -30,6 +29,7 @@ namespace PluginAPI {
 
 class Element;
 class FractionWrapper;
+class MsProcess;
 class Score;
 
 #define DECLARE_API_ENUM(qmlName, cppName) \
@@ -115,7 +115,7 @@ class PluginAPI : public Ms::QmlPlugin {
       Q_INVOKABLE Ms::PluginAPI::Score* newScore(const QString& name, const QString& part, int measures);
       Q_INVOKABLE Ms::PluginAPI::Element* newElement(int);
       Q_INVOKABLE void cmd(const QString&);
-      Q_INVOKABLE Ms::MsProcess* newQProcess();
+      Q_INVOKABLE Ms::PluginAPI::MsProcess* newQProcess();
       Q_INVOKABLE bool writeScore(Ms::PluginAPI::Score*, const QString& name, const QString& ext);
       Q_INVOKABLE Ms::PluginAPI::Score* readScore(const QString& name, bool noninteractive = false);
       Q_INVOKABLE void closeScore(Ms::PluginAPI::Score*);
