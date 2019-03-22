@@ -236,6 +236,7 @@ if (APPLE)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -stdlib=libc++ -Wno-inconsistent-missing-override")
    # This is necessary for genManual to be executed during the build phase,
    # it needs to be able to get the Qt libs.
+   # TODO: is it still needed? genManual is removed.
    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
    SET(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
 else (APPLE)
@@ -899,14 +900,7 @@ add_custom_target(lrelease
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
 )
 
-##
-##  Create and install the plugin framework manual
-##
-
-add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/plugins
-   COMMAND genManual ${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}
-   DEPENDS genManual
-   )
+add_dependencies(mscore pluginDocumentation)
 
 
 ##
