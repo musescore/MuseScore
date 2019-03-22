@@ -71,6 +71,8 @@ enum class VerticalAlignRange {
 
 extern bool isTopBeam(ChordRest* cr);
 extern bool notTopBeam(ChordRest* cr);
+extern bool isTopTuplet(ChordRest* cr);
+extern bool notTopTuplet(ChordRest* cr);
 
 }     // namespace Ms
 #endif

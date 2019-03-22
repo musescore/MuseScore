@@ -405,8 +405,10 @@ void Beam::layout1()
                   }
 
             _cross = minMove < maxMove;
-            if ((minMove == 0 && maxMove == 0) || (minMove == 1 && maxMove == 1))
+            if (minMove == 1 && maxMove == 1)
                   setTrack(staffIdx * VOICES + voice());
+            else if (c1)
+                  setTrack(c1->staffIdx() * VOICES + voice());
 
             // int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
             slope = 0.0;

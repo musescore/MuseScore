@@ -2871,6 +2871,53 @@ bool notTopBeam(ChordRest* cr)
       }
 
 //---------------------------------------------------------
+//   isTopTuplet
+//    returns true for the first CR of a tuplet that is not cross-staff
+//---------------------------------------------------------
+
+bool isTopTuplet(ChordRest* cr)
+      {
+      Tuplet* t = cr->tuplet();
+      if (t && t->elements().front() == cr) {
+            // find top level tuplet
+            while (t->tuplet())
+                  t = t->tuplet();
+            // consider tuplet cross if anything moved within it
+            if (t->cross())
+                  return false;
+            else
+                  return true;
+            }
+
+      // no tuplet or not first element
+      return false;
+      }
+
+//---------------------------------------------------------
+//   notTopTuplet
+//    returns true for the first CR of a tuplet that is cross-staff
+//---------------------------------------------------------
+
+bool notTopTuplet(ChordRest* cr)
+      {
+      Tuplet* t = cr->tuplet();
+      if (t && t->elements().front() == cr) {
+            // find top level tuplet
+            while (t->tuplet())
+                  t = t->tuplet();
+            // consider tuplet cross if anything moved within it
+            if (t->cross())
+                  return true;
+            else
+                  return false;
+            }
+
+      // no tuplet or not first element
+      return false;
+      }
+
+
+//---------------------------------------------------------
 //   findLyricsMaxY
 //---------------------------------------------------------
 
@@ -3657,8 +3704,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         c->layoutArticulations2();
                         }
                   // tuplets
-                  // sanity check
-                  if (notTopBeam(cr))
+                  if (!isTopTuplet(cr))
                         continue;
                   DurationElement* de = cr;
                   while (de->tuplet() && de->tuplet()->elements().front() == de) {
@@ -4104,16 +4150,15 @@ void LayoutContext::collectPage()
                                     if (!currentScore->staff(track2staff(track))->show())
                                           continue;
                                     ChordRest* cr = toChordRest(e);
-                                    if (notTopBeam(cr)) {                   // layout cross staff beams
+                                    if (notTopBeam(cr))                 // layout cross staff beams
                                           cr->beam()->layout();
-
+                                    if (notTopTuplet(cr)) {
                                           // fix layout of tuplets
                                           DurationElement* de = cr;
                                           while (de->tuplet() && de->tuplet()->elements().front() == de) {
                                                 Tuplet* t = de->tuplet();
                                                 t->layout();
-                                                m->system()->staff(t->staffIdx())->skyline().add(t->shape().translated(t->measure()->pos()));
-                                                de = de->tuplet();
+                                                de = t;
                                                 }
                                           }
 

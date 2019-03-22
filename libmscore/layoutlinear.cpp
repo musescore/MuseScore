@@ -452,6 +452,15 @@ void LayoutContext::layoutLinear()
                               ChordRest* cr = toChordRest(e);
                               if (notTopBeam(cr))                   // layout cross staff beams
                                     cr->beam()->layout();
+                              if (notTopTuplet(cr)) {
+                                    // fix layout of tuplets
+                                    DurationElement* de = cr;
+                                    while (de->tuplet() && de->tuplet()->elements().front() == de) {
+                                          Tuplet* t = de->tuplet();
+                                          t->layout();
+                                          de = de->tuplet();
+                                          }
+                                    }
 
                               if (cr->isChord()) {
                                     Chord* c = toChord(cr);
