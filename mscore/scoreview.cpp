@@ -4590,8 +4590,11 @@ Element* ScoreView::getEditElement()
 
 void ScoreView::onElementDestruction(Element* e)
       {
-      if (editData.element == e)
+      if (editData.element == e) {
             editData.element = nullptr;
+            if (editMode())
+                  changeState(ViewState::NORMAL);
+            }
       }
 
 //---------------------------------------------------------
