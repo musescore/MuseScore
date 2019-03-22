@@ -1639,6 +1639,7 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
             sa->setChannelName(1, "Alto");
             sa->setChannelName(2, "Soprano");
             sa->setChannelName(3, "Alto");
+            sa->setVisible(false);
             sp->append(sa, QT_TRANSLATE_NOOP("Palette", "Soprano/Alto"))->setElementTranslated(true);
 
             StaffText* tb = new StaffText(gscore);
@@ -1646,6 +1647,7 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
             tb->setChannelName(0, "Tenor");
             tb->setChannelName(1, "Bass");
             tb->setChannelName(2, "Tenor");
+            tb->setVisible(false);
             tb->setChannelName(3, "Bass");
             sp->append(tb, QT_TRANSLATE_NOOP("Palette", "Tenor/Bass"))->setElementTranslated(true);
 
@@ -1655,6 +1657,7 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
             tl->setChannelName(1, "LEAD");
             tl->setChannelName(2, "TENOR");
             tl->setChannelName(3, "LEAD");
+            tl->setVisible(false);
             sp->append(tl, QT_TRANSLATE_NOOP("Palette", "Tenor/Lead"))->setElementTranslated(true);
 
             StaffText* bb = new StaffText(gscore);
@@ -1663,6 +1666,7 @@ PalettePanel* MuseScore::newTextPalettePanel(bool defaultPalettePanel)
             bb->setChannelName(1, "BASS");
             bb->setChannelName(2, "BARI");
             bb->setChannelName(3, "BASS");
+            bb->setVisible(false);
             sp->append(bb, QT_TRANSLATE_NOOP("Palette", "Bari/Bass"))->setElementTranslated(true);
             }
 
