@@ -4050,7 +4050,7 @@ void Shortcut::write(XmlWriter& xml) const
       if (_standardKey != QKeySequence::UnknownKey)
             xml.tag("std", QString("%1").arg(_standardKey));
       for (QKeySequence ks : _keys)
-            xml.tag("seq", Shortcut::keySeqToString(ks, QKeySequence::PortableText));
+            xml.tag("seq", Shortcut::keySeqToString(ks, QKeySequence::PortableText, true));
       xml.etag();
       }
 
@@ -4280,7 +4280,7 @@ void Shortcut::reset()
 static const QString numPadPrefix("NumPad+");
 static const int NUMPADPREFIX_SIZE = 7;         // the length in chars of the above string
 
-QString Shortcut::keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt)
+QString Shortcut::keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt, bool escapeKeyStr /* = false */)
       {
       QString s;
       for (int i = 0; i < KEYSEQ_SIZE; ++i) {
@@ -4293,8 +4293,12 @@ QString Shortcut::keySeqToString(const QKeySequence& keySeq, QKeySequence::Seque
                   s += numPadPrefix;
                   code &= ~Qt::KeypadModifier;
                   }
-            QKeySequence kSeq(code);
-            s += kSeq.toString(fmt);
+            QString kStr = QKeySequence(code).toString(fmt);
+            if (escapeKeyStr) {
+                  kStr.replace("\\", "\\\\");
+                  kStr.replace(",", "\\,");
+                  }
+            s += kStr;
             }
       return s;
       }
@@ -4305,12 +4309,16 @@ QKeySequence Shortcut::keySeqFromString(const QString& str, QKeySequence::Sequen
       for (i = 0; i < KEYSEQ_SIZE; ++i)
             code[i] = 0;
 
-      QStringList strList = str.split(",", QString::SkipEmptyParts, Qt::CaseSensitive);
+      QStringList strList = str.split(QRegularExpression("(?<!\\\\),|(?<=\\\\\\\\),"), QString::SkipEmptyParts);
+      //split based on commas that are not preceded by a single slash; two is okay
+      //original regex: (?<!\\),|(?<=\\\\),
 
       i = 0;
       for (const QString& s : strList) {
             QString keyStr = s.trimmed();
-            if( keyStr.startsWith(numPadPrefix, Qt::CaseInsensitive) ) {
+            if (keyStr.contains("\\"))
+                  keyStr.remove(keyStr.length() - 2, 1); //remove escaped characters which will always be second to last
+            if (keyStr.startsWith(numPadPrefix, Qt::CaseInsensitive) ) {
                   code[i] += Qt::KeypadModifier;
                   keyStr.remove(0, NUMPADPREFIX_SIZE);
                   }
