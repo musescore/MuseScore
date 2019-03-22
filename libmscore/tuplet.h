@@ -125,6 +125,7 @@ class Tuplet final : public DurationElement {
       void setTick(const Fraction& v)         { _tick = v; }
       Fraction elementsDuration();
       void sortElements();
+      bool cross() const;
 
       virtual void setVisible(bool f) override;
 

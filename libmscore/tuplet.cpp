@@ -23,6 +23,7 @@
 #include "stem.h"
 #include "beam.h"
 #include "measure.h"
+#include "system.h"
 
 namespace Ms {
 
@@ -219,11 +220,13 @@ void Tuplet::layout()
       // find first and last chord of tuplet
       // (tuplets can be nested)
       //
+      bool nested = false;
       const DurationElement* cr1 = _elements.front();
       while (cr1->isTuplet()) {
             const Tuplet* t = toTuplet(cr1);
             if (t->elements().empty())
                   break;
+            nested = true;
             cr1 = t->elements().front();
             }
       const DurationElement* cr2 = _elements.back();
@@ -231,6 +234,7 @@ void Tuplet::layout()
             const Tuplet* t = toTuplet(cr2);
             if (t->elements().empty())
                   break;
+            nested = true;
             cr2 = t->elements().back();
             }
 
@@ -273,12 +277,15 @@ void Tuplet::layout()
       qreal noteRight     = score()->styleP(Sid::tupletNoteRightDistance);
 
       int move = 0;
+      setTrack(cr1->staffIdx() * VOICES + voice());
       if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
             // account for staff move when adjusting bracket to avoid staff
             // but don't attempt adjustment unless both endpoints are in same staff
-            if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove()) {
+            // and not a nested tuplet
+            if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove() && !tuplet() && !nested) {
                   move = toChordRest(cr1)->staffMove();
-                  setTrack(cr1->vStaffIdx() * VOICES + voice());
+                  if (move == 1)
+                        setTrack(cr1->vStaffIdx() * VOICES + voice());
                   }
             else
                   outOfStaff = false;
@@ -342,7 +349,7 @@ void Tuplet::layout()
                   if (stem && chord2->up()) {
                         if (followBeam)
                               p2.ry() = stem->abbox().top() - beamAdjust;
-                        else if (chord2->beam())
+                        else if (chord2->beam() && !chord2->staffMove() && !chord2->beam()->cross())
                               p2.ry() = chord2->beam()->abbox().top();
                         else
                               p2.ry() = stem->abbox().top();
@@ -453,7 +460,7 @@ void Tuplet::layout()
                         //      p2.setX(stem->abbox().x());
                         if (followBeam)                                          //??
                               p2.ry() = stem->abbox().bottom() + beamAdjust;     //??
-                        if (chord2->beam())
+                        if (chord2->beam() && !chord2->staffMove() && !chord2->beam()->cross())
                               p2.ry() = chord2->beam()->abbox().bottom();
                         else
                               p2.ry() = stem->abbox().bottom();
@@ -532,6 +539,11 @@ void Tuplet::layout()
 
       setPos(0.0, 0.0);
       QPointF mp(parent()->pagePos());
+      if (parent()->isMeasure()) {
+            System* s = toMeasure(parent())->system();
+            if (s)
+                  mp.ry() += s->staff(staffIdx())->y();
+            }
       p1 -= mp;
       p2 -= mp;
 
@@ -982,6 +994,28 @@ static bool tickGreater(const DurationElement* a, const DurationElement* b)
 void Tuplet::sortElements()
       {
       qSort(_elements.begin(), _elements.end(), tickGreater);
+      }
+
+//---------------------------------------------------------
+//   cross
+//---------------------------------------------------------
+
+bool Tuplet::cross() const
+      {
+      for (DurationElement* de : _elements) {
+            if (!de) {
+                  continue;
+                  }
+            else if (de->isChordRest()) {
+                  if (toChordRest(de)->staffMove())
+                        return true;
+                  }
+            else if (de->isTuplet()) {
+                  if (toTuplet(de)->cross())
+                        return true;
+                  }
+            }
+      return false;
       }
 
 //---------------------------------------------------------
