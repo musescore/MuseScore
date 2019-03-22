@@ -2119,6 +2119,8 @@ PREDEFINED             = Q_ENUM(...)= \
 
 EXPAND_AS_DEFINED      = API_PROPERTY \
                          API_PROPERTY_READ_ONLY \
+                         API_PROPERTY_T \
+                         API_PROPERTY_READ_ONLY_T \
                          DECLARE_API_ENUM
 
 # If the SKIP_FUNCTION_MACROS tag is set to YES then doxygen's preprocessor will
