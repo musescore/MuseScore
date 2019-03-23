@@ -602,6 +602,7 @@ class Score : public QObject, public ScoreElement {
       bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,
       bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
+      bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
       void write(XmlWriter&, bool onlySelection);
@@ -1326,6 +1327,8 @@ class MasterScore : public Score {
       const Score* playbackScore() const { return _playbackScore; }
       Channel* playbackChannel(const Channel* c)             { return _midiMapping[c->channel()].articulation(); }
       const Channel* playbackChannel(const Channel* c) const { return _midiMapping[c->channel()].articulation(); }
+
+      MasterScore * unrollRepeats();
 
       QFileInfo* fileInfo()               { return &info; }
       const QFileInfo* fileInfo() const   { return &info; }

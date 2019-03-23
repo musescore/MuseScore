@@ -2735,15 +2735,14 @@ Fraction Measure::stretchedLen(Staff* staff) const
 //   cloneMeasure
 //---------------------------------------------------------
 
-Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
+Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
       {
       Measure* m      = new Measure(sc);
       m->_timesig     = _timesig;
       m->_len         = _len;
       m->_repeatCount = _repeatCount;
 
-      for (MStaff* ms : _mstaves)
-            m->_mstaves.push_back(new MStaff(*ms));
+      Q_ASSERT(sc->staves().size() >= int(_mstaves.size())); // destination score we're cloning into must have at least as many staves as measure being cloned
 
       m->setNo(no());
       m->setNoOffset(noOffset());
@@ -2752,16 +2751,21 @@ Measure* Measure::cloneMeasure(Score* sc, TieMap* tieMap)
       m->_breakMultiMeasureRest = _breakMultiMeasureRest;
       m->_playbackCount         = _playbackCount;
 
-      m->setTick(tick());
+      m->setTick(tick);
       m->setLineBreak(lineBreak());
       m->setPageBreak(pageBreak());
       m->setSectionBreak(sectionBreak() ? new LayoutBreak(*sectionBreakElement()) : 0);
+
+      m->setHeader(header()); m->setTrailer(trailer());
 
       int tracks = sc->nstaves() * VOICES;
       TupletMap tupletMap;
 
       for (Segment* oseg = first(); oseg; oseg = oseg->next()) {
             Segment* s = new Segment(m, oseg->segmentType(), oseg->rtick());
+            s->setEnabled(oseg->enabled()); s->setVisible(oseg->visible());
+            s->setHeader(oseg->header()); s->setTrailer(oseg->trailer());
+
             m->_segments.push_back(s);
             for (int track = 0; track < tracks; ++track) {
                   Element* oe = oseg->element(track);

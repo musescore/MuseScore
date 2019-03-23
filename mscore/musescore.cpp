@@ -1656,6 +1656,7 @@ MuseScore::MuseScore()
       menuTools->addAction(getAction("pitch-spell"));
       menuTools->addAction(getAction("reset-groupings"));
       menuTools->addAction(getAction("resequence-rehearsal-marks"));
+      menuTools->addAction(getAction("unroll-repeats"));
       menuTools->addSeparator();
 
       menuTools->addAction(getAction("copy-lyrics-to-clipboard"));
@@ -5934,6 +5935,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             saveAs(cs, true);
       else if (cmd == "file-new")
             newFile();
+      else if (cmd == "unroll-repeats")
+            scoreUnrolled(cs->masterScore());
       else if (cmd == "quit")
             close();
       else if (cmd == "masterpalette")
@@ -7736,3 +7739,14 @@ QmlPluginEngine* MuseScore::getPluginEngine()
       return _qmlEngine;
       }
 #endif
+
+//---------------------------------------------------------
+//   scoreUnrolled
+//    create a version of the given score with repeats unrolled
+//---------------------------------------------------------
+
+void MuseScore::scoreUnrolled(MasterScore * original)
+      {
+      MasterScore * score = original->unrollRepeats();
+      setCurrentScoreView(appendScore(score));
+      }

@@ -98,7 +98,7 @@ class Measure final : public MeasureBase {
       virtual Measure* clone() const override     { return new Measure(*this); }
       virtual ElementType type() const override { return ElementType::MEASURE; }
       virtual void setScore(Score* s) override;
-      Measure* cloneMeasure(Score*, TieMap*);
+      Measure* cloneMeasure(Score*, const Fraction& tick, TieMap*);
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) { read(d, 0); }
