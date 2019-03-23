@@ -3626,8 +3626,12 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                           skyline.add(e->shape().translated(e->pos() + p));
                                           if (e->isChord() && toChord(e)->tremolo()) {
                                                 Tremolo* t = toChord(e)->tremolo();
-                                                if (t->chord() == e && t->autoplace())
-                                                      skyline.add(t->shape().translated(t->pos() + e->pos() + p));
+                                                Chord* c1 = t->chord1();
+                                                Chord* c2 = t->chord2();
+                                                if (!t->twoNotes() || (!c1->staffMove() && !c2->staffMove())) {
+                                                      if (t->chord() == e && t->autoplace())
+                                                            skyline.add(t->shape().translated(t->pos() + e->pos() + p));
+                                                      }
                                                 }
                                           }
                                     }
@@ -4186,6 +4190,13 @@ void LayoutContext::collectPage()
                                                       tie->layout();
                                                 for (Spanner* sp : n->spannerFor())
                                                       sp->layout();
+                                                }
+                                          if (c->tremolo()) {
+                                                Tremolo* t = c->tremolo();
+                                                Chord* c1 = t->chord1();
+                                                Chord* c2 = t->chord2();
+                                                if (t->twoNotes() && (c1->staffMove() || c2->staffMove()))
+                                                      t->layout();
                                                 }
                                           }
                                     }

@@ -487,6 +487,13 @@ void LayoutContext::layoutLinear()
                                           for (Spanner* sp : n->spannerFor())
                                                 sp->layout();
                                           }
+                                    if (c->tremolo()) {
+                                          Tremolo* t = c->tremolo();
+                                          Chord* c1 = t->chord1();
+                                          Chord* c2 = t->chord2();
+                                          if (t->twoNotes() && (c1->staffMove() || c2->staffMove()))
+                                                t->layout();
+                                          }
                                     }
                               }
                         else if (e->isBarLine())
