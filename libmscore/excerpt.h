@@ -43,6 +43,8 @@ class Excerpt : public QObject {
 
    public:
       Excerpt(MasterScore* s = 0)          { _oscore = s;       }
+      Excerpt(const Excerpt& ex, bool copyPartScore = true);
+
       ~Excerpt();
 
       QList<Part*>& parts()                { return _parts;     }

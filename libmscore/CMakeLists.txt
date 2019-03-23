@@ -103,6 +103,7 @@ add_library (
       layoutlinear.cpp
       connector.cpp location.cpp skyline.cpp
       scorediff.cpp
+      unrollrepeats.cpp
       )
 
 ##

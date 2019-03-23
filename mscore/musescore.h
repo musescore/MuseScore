@@ -744,6 +744,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       /////////////////////////////////////////////////
 
+      void scoreUnrolled(MasterScore* original);
+      
       virtual void closeScore(Score* score);
 
       void addTempo();

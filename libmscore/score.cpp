@@ -2005,9 +2005,6 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
             return false;
             }
 
-      TieMap tieMap;
-      Fraction tickOfAppend = last()->endTick();
-
       // apply Page/Section Breaks if desired
       if (addPageBreak) {
             if (!last()->pageBreak()) {
@@ -2015,8 +2012,10 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
                   last()->undoSetBreak(true, LayoutBreak::Type::PAGE);  // apply page break
                   }
             }
-      else if (!last()->lineBreak() && !last()->pageBreak())
+      else if (!last()->lineBreak() && !last()->pageBreak()) {
             last()->undoSetBreak(true, LayoutBreak::Type::LINE);
+            }
+      
       if (addSectionBreak && !last()->sectionBreak())
             last()->undoSetBreak(true, LayoutBreak::Type::SECTION);
 
@@ -2024,115 +2023,150 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
       if (styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch))
             score->cmdConcertPitchChanged(styleB(Sid::concertPitch), true);
 
-      // convert any "generated" initial clefs into real "non-generated" clefs if clef type changes
-      Measure* fm = score->firstMeasure();
-      if (fm) {
-            Segment* seg = fm->findSegmentR(SegmentType::HeaderClef, Fraction(0,1));
-            if (seg) {
-                  for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-                        int track    = staffIdx * VOICES;
-                        Staff* staff = score->staff(staffIdx);
-                        Clef* clef   = toClef(seg->element(track));
-
-                        // if the first clef of score to append is generated and
-                        // if the first clef of score to append is of different type than clef at final tick of first score
-                        if (clef && clef->generated() && clef->clefType() != this->staff(staffIdx)->clef(tickOfAppend)) {
-                              // then convert that generated clef into a real non-generated clef
-                              // so that its different type will be copied to joined score
-                              score->undoChangeClef(staff, clef, clef->clefType());
-                              }
-                        }
-                  }
-            }
-
       // clone the measures
-      MeasureBaseList* ml = &score->_measures;
-      for (MeasureBase* mb = ml->first(); mb; mb = mb->next()) {
+      appendMeasuresFromScore(score, Fraction(0, 1), score->last()->endTick());
+
+      setLayoutAll();
+      return true;
+      }
+
+//---------------------------------------------------------
+//   appendMeasuresFromScore
+//     clone measures from another score to the end of this
+//---------------------------------------------------------
+
+bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick)
+      {
+      Fraction tickOfAppend = last()->endTick();
+      MeasureBase* pmb = last();
+      TieMap tieMap;
+
+      MeasureBase* fmb = score->tick2measureBase(startTick);
+      MeasureBase* emb = score->tick2measureBase(endTick);
+      Fraction curTick = tickOfAppend;
+      for (MeasureBase* cmb = fmb; cmb != emb; cmb = cmb->next()) {
             MeasureBase* nmb;
-            if (mb->type() == ElementType::MEASURE)
-                  nmb = toMeasure(mb)->cloneMeasure(this, &tieMap);
-            else
-                  nmb = mb->clone();
+            if (cmb->isMeasure()) {
+                  Measure* nm = toMeasure(cmb)->cloneMeasure(this, curTick, &tieMap);
+                  curTick += nm->ticks();
+                  nmb = toMeasureBase(nm);
+                  }
+            else {
+                  nmb = cmb->clone();
+                  }
+
+            addMeasure(nmb, 0);
             nmb->setNext(0);
-            nmb->setPrev(0);
+            nmb->setPrev(pmb);
             nmb->setScore(this);
-            _measures.add(nmb);
+
+            pmb->setNext(nmb);
+            pmb = nmb;
             }
-      fixTicks();
+      
       Measure* firstAppendedMeasure = tick2measure(tickOfAppend);
 
       // if the appended score has less staves,
       // make sure the measures have full measure rest
-      for (Measure* m = firstAppendedMeasure; m; m = m->nextMeasure()) {
+      for (Measure* m = firstAppendedMeasure; m; m = m->nextMeasure())
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                   Fraction f;
-                  for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                  for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest))
                         for (int v = 0; v < VOICES; ++v) {
                               ChordRest* cr = toChordRest(s->element(staffIdx * VOICES + v));
-                              if (cr == 0)
-                                    continue;
+                              if (cr == 0) continue;
                               f += cr->actualTicks();
                               }
-                        }
                   if (f.isZero())
                         addRest(m->tick(), staffIdx*VOICES, TDuration(TDuration::DurationType::V_MEASURE), 0);
                   }
-            }
 
-      // adjust key signatures
-      if (firstAppendedMeasure) {
-            Segment* seg = firstAppendedMeasure->getSegment(SegmentType::KeySig, tickOfAppend);
-            for (Staff* st : score->staves()) {
-                  int staffIdx = st->idx();
-                  Staff* joinedStaff = staff(staffIdx);
-                  // special case for initial "C" key signature - these have no explicit element
-                  if (!seg->element(staffIdx * VOICES)) {
-                        // no need to create new initial "C" key sig
-                        // if staff already ends in that key
-                        if (joinedStaff->key(tickOfAppend - Fraction::fromTicks(1)) == Key::C)
-                              continue;
-                        Key key = Key::C;
-                        KeySig* ks = new KeySig(this);
-                        ks->setTrack(staffIdx * VOICES);
-                        ks->setKey(key);
-                        ks->setParent(seg);
-                        addElement(ks);
-                        }
-                  // other key signatures (initial other than "C", non-initial)
-                  for (auto k : *(st->keyList())) {
-                        Fraction tick = Fraction::fromTicks(k.first);
-                        KeySigEvent key = k.second;
-                        joinedStaff->setKey(tick + tickOfAppend, key);
-                        }
+      // at first added measure, check if we need to add Clef/Key/TimeSig
+      //  this is needed if it was changed and needs to be changed back
+      int n = nstaves();
+      Fraction otick = fmb->tick(), ctick = tickOfAppend;
+      for (int staffIdx = 0; staffIdx < n; ++staffIdx) { // iterate over all staves
+            int trackIdx = staff2track(staffIdx); // idx of irst track on the staff
+            Staff* staff = this->staff(staffIdx);
+            Staff* ostaff = score->staff(staffIdx);
+            
+            // check if key signature needs to be changed
+            if (ostaff->key(otick) != staff->key(ctick)) {
+                  Segment* ns = firstAppendedMeasure->undoGetSegment(SegmentType::KeySig, ctick);
+                  KeySigEvent nkse = KeySigEvent(ostaff->keySigEvent(otick));
+                  KeySig* nks = new KeySig(this);
+                  nks->setScore(this);
+                  nks->setTrack(trackIdx);
+
+                  nks->setKeySigEvent(nkse);
+                  staff->setKey(ctick, nkse);
+                  ns->add(nks);
+                  }
+            // check if a key signature is present but is spurious (i.e. no actual change)
+            else if (staff->currentKeyTick(ctick) == ctick &&
+                     staff->key(ctick - Fraction::fromTicks(1)) == ostaff->key(otick)) {
+                        Segment* ns = firstAppendedMeasure->first(SegmentType::KeySig);
+                        if (ns)
+                              ns->remove(ns->element(trackIdx));
+                  }
+            
+            // check if time signature needs to be changed
+            TimeSig* ots = ostaff->timeSig(otick), * cts = staff->timeSig(ctick);
+            TimeSig* pts = staff->timeSig(ctick - Fraction::fromTicks(1));
+            if (ots && cts && *ots != *cts) {
+                  Segment* ns = firstAppendedMeasure->undoGetSegment(SegmentType::TimeSig, ctick);
+                  TimeSig* nsig = new TimeSig(*ots);
+
+                  nsig->setScore(this);
+                  nsig->setTrack(trackIdx);
+                  ns->add(nsig);
+                  }
+            // check if a time signature is present but is spurious (i.e. no actual change)
+            else if (staff->currentTimeSigTick(ctick) == ctick &&
+                     ots && pts && *pts == *ots) {
+                        Segment* ns = firstAppendedMeasure->first(SegmentType::TimeSig);
+                        if (ns)
+                              ns->remove(ns->element(trackIdx));
+                  }
+
+            // check if clef signature needs to be changed
+            if (ostaff->clef(otick) != staff->clef(ctick)) {
+                  undoChangeClef(staff, firstAppendedMeasure, ostaff->clef(otick));
+                  }
+            // check if a clef change is present but is spurious (i.e. no actual change)
+            else if (staff->currentClefTick(ctick) == ctick &&
+                     staff->clef(ctick - Fraction::fromTicks(1)) == ostaff->clef(otick)) {
+                        Segment* ns = firstAppendedMeasure->first(SegmentType::Clef);
+                        if (!ns)
+                              ns = firstAppendedMeasure->first(SegmentType::HeaderClef);
+                        if (ns)
+                              ns->remove(ns->element(trackIdx));
                   }
             }
 
-      // clone the spanners
-      for (auto sp : score->spanner()) {
-            Spanner* spanner = sp.second;
+      // check if section starts with a pick-up measure to be merged with end of previous section
+      Measure* cm = firstAppendedMeasure, * pm = cm->prevMeasure();
+      if (pm->timesig() == cm->timesig() && pm->ticks() + cm->ticks() == cm->timesig())
+            cmdJoinMeasure(pm, cm);
+
+      // clone the spanners (only in the range currently copied)
+      auto ospans = score->spanner();
+      auto lb = ospans.lower_bound(startTick.ticks()), ub = ospans.upper_bound(endTick.ticks());
+      for (auto sp = lb; sp != ub; sp++) {
+            Spanner* spanner = sp->second;
+            
+            if (spanner->tick2() > endTick) continue; // map is by tick() so this can still happen in theory...
+
             Spanner* ns = toSpanner(spanner->clone());
             ns->setScore(this);
             ns->setParent(0);
-            ns->setTick(spanner->tick() + tickOfAppend);
-            ns->setTick2(spanner->tick2() + tickOfAppend);
-            if (ns->type() == ElementType::SLUR) {
-                  // set start/end element for slur
-                  ns->setStartElement(0);
-                  ns->setEndElement(0);
-                  Measure* sm = tick2measure(ns->tick());
-                  if (sm)
-                        ns->setStartElement(sm->findChordRest(ns->tick(), ns->track()));
-                  Measure * em = tick2measure(ns->tick2());
-                  if (em)
-                        ns->setEndElement(em->findChordRest(ns->tick2(), ns->track2()));
-                  if (!ns->startElement())
-                        qDebug("clone Slur: no start element");
-                  if (!ns->endElement())
-                        qDebug("clone Slur: no end element");
-                  }
+            ns->setTick(spanner->tick() - startTick + tickOfAppend);
+            ns->setTick2(spanner->tick2() - startTick + tickOfAppend);
+            ns->computeStartElement();
+            ns->computeEndElement();
             addElement(ns);
             }
-      setLayoutAll();
+
       return true;
       }
 
@@ -2159,12 +2193,12 @@ void Score::splitStaff(int staffIdx, int splitPoint)
       Clef* clef = new Clef(this);
       clef->setClefType(ClefType::F);
       clef->setTrack((staffIdx+1) * VOICES);
-      Segment* seg = firstMeasure()->getSegment(SegmentType::HeaderClef, Fraction(0,1));
+      Segment* seg = firstMeasure()->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
       clef->setParent(seg);
       undoAddElement(clef);
       clef->layout();
 
-      undoChangeKeySig(ns, Fraction(0,1), st->keySigEvent(Fraction(0,1)));
+      undoChangeKeySig(ns, Fraction(0, 1), st->keySigEvent(Fraction(0, 1)));
 
       masterScore()->rebuildMidiMapping();
       cmdState()._instrumentsChanged = true;
