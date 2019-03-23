@@ -14,7 +14,7 @@
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation>La barre d&apos;outils des commandes de Lecture vous permet de Lire / Mettre en pause votre partition et contrôle différents aspects de la lecture.</translation>
+        <translation>La barre d&apos;outils des commandes de Lecture vous permet de Lire / Mettre en pause votre partition et contrôler différents aspects de la lecture.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
@@ -48,7 +48,7 @@ Appuyez sur Ctrl + Haut / Bas (macOS : Cmd + Haut / Bas) pour changer d&apos;oct
     or click one of these icons.</source>
         <comment>note-input</comment>
         <translation>Pour ajouter une altération accidentelle à une note, appuyez sur les flèches Haut ou Bas pour monter ou descendre la note d&apos;un demi-ton, 
-ou cliquez sur l&apos;un de icônes appropriés.</translation>
+ou cliquez sur l&apos;icône appropriée.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -59,16 +59,16 @@ ou cliquez sur l&apos;un de icônes appropriés.</translation>
         <translation>Pour saisir des notes avec des rythmes différents dans la même mesure, utilisez différentes voix.
 Chaque portée peut contenir jusqu&apos;à quatre voix.
 La voix par défaut est la voix 1 et devrait être utilisée pour chaque portée.
-Pour saisir des notes dans une voix différente, cliquez sur l&apos;un des icônes du sélecteur de voix.</translation>
+Pour saisir des notes dans une voix différente, cliquez sur l&apos;une des icônes du sélecteur de voix.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation>Voici la vue de la partition dans laquelle vous pouvez y voir et modifier votre partition.
+        <translation>Voici la vue de la partition dans laquelle vous pouvez voir et modifier votre partition.
 Utilisez la molette de la souris ou le pavé tactile pour faire défiler verticalement (avec Maj appuyé pour faire défiler horizontalement).
-Si vous avez plusieurs partitions d&apos;ouvertes, vous pouvez passer de l&apos;une à l&apos;autre en utilisant les onglets en haut de votre partition.</translation>
+Si vous avez plusieurs partitions ouvertes, vous pouvez passer de l&apos;une à l&apos;autre en utilisant les onglets en haut de votre partition.</translation>
     </message>
     <message>
         <source>These are the toolbars.
@@ -184,7 +184,7 @@ Et vous pouvez aussi sélectionner des régions en maintenant la touche Shift en
         <source>If you have selected elements of different types, only a few settings common to all elements will be available.
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
-        <translation>Si vous avez sélectionnez des élements de différents types, seulement quelques propriétés communes à tous ces éléments seront disponibles.
+        <translation>Si vous avez sélectionné des élements de différents types, seulement quelques propriétés communes à tous ces éléments seront disponibles.
 Vous pouvez cliquer sur les boutons &quot;Notes&quot; et d&apos;autres en bas de l&apos;Inspecteur pour restreindre la sélection aux éléments du type spécifié.</translation>
     </message>
     <message>
