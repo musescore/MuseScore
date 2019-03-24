@@ -112,7 +112,7 @@ void HairpinSegment::layout()
                   if (sd && sd->visible() && sd->autoplace() && sd->placement() == hairpin()->placement()) {
                         const qreal sdRight = sd->bbox().right() + sd->pos().x()
                                               + sd->segment()->pos().x() + sd->measure()->pos().x();
-                        const qreal dist    = sdRight - pos().x() + score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
+                        const qreal dist    = sdRight - pos().x() + point(score()->styleS(Sid::autoplaceHairpinDynamicsDistance));
                         rxpos()  += dist;
                         rxpos2() -= dist;
                         // prepare to align vertically
@@ -129,7 +129,7 @@ void HairpinSegment::layout()
                   if (ed && ed->visible() && ed->autoplace() && ed->placement() == hairpin()->placement()) {
                         const qreal edLeft  = ed->bbox().left() + ed->pos().x()
                                               + ed->segment()->pos().x() + ed->measure()->pos().x();
-                        const qreal dist    = edLeft - pos2().x() - pos().x() - score()->styleP(Sid::autoplaceHairpinDynamicsDistance);
+                        const qreal dist    = edLeft - pos2().x() - pos().x() - point(score()->styleS(Sid::autoplaceHairpinDynamicsDistance));
                         if (dist < 0.0 || dist >= 3.0 * _spatium)
                               rxpos2() += dist;
                         // prepare to align vertically
@@ -237,7 +237,7 @@ void HairpinSegment::layout()
                   r |= _text->bbox();
             if (!_endText->empty())
                   r |= _endText->bbox().translated(x + _endText->bbox().width(), 0.0);
-            qreal w  = score()->styleP(Sid::hairpinLineWidth);
+            qreal w  = point(score()->styleS(Sid::hairpinLineWidth));
             setbbox(r.adjusted(-w*.5, -w*.5, w, w));
             }
       if (!parent()) {
@@ -425,7 +425,10 @@ void HairpinSegment::draw(QPainter* painter) const
             color = hairpin()->lineColor();
 #endif
       QColor color = curColor(hairpin()->visible(), hairpin()->lineColor());
-      QPen pen(color, hairpin()->lineWidth(), hairpin()->lineStyle());
+      qreal w = hairpin()->lineWidth();
+      if (staff())
+            w *= staff()->mag(hairpin()->tick());
+      QPen pen(color, w, hairpin()->lineStyle());
       painter->setPen(pen);
 
       if (drawCircledTip) {

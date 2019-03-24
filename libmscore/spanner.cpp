@@ -66,6 +66,17 @@ SpannerSegment::SpannerSegment(const SpannerSegment& s)
       }
 
 //---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal SpannerSegment::mag() const
+      {
+      if (spanner()->systemFlag())
+            return 1.0;
+      return staff() ? staff()->mag(spanner()->tick()) : 1.0;
+      }
+
+//---------------------------------------------------------
 //   setSystem
 //---------------------------------------------------------
 
@@ -324,6 +335,17 @@ Spanner::~Spanner()
       {
       qDeleteAll(segments);
       qDeleteAll(unusedSegments);
+      }
+
+//---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal Spanner::mag() const
+      {
+      if (systemFlag())
+            return 1.0;
+      return staff() ? staff()->mag(tick()) : 1.0;
       }
 
 //---------------------------------------------------------
