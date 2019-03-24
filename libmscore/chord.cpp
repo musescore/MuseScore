@@ -1447,7 +1447,7 @@ void Chord::layoutStem1()
             else if (_stemSlash)
                   remove(_stemSlash);
 
-            qreal stemWidth5 = _stem->lineWidth() * .5;
+            qreal stemWidth5 = _stem->lineWidth() * .5 * mag();
             _stem->rxpos()   = stemPosX() + (up() ? -stemWidth5 : +stemWidth5);
             _stem->setLen(defaultStemLength());
             }
