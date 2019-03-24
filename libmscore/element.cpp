@@ -127,7 +127,7 @@ void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
 
 qreal Element::spatium() const
       {
-      if (systemFlag()) {
+      if (systemFlag() || (parent() && parent()->systemFlag())) {
             return score()->spatium();
             }
       else {
