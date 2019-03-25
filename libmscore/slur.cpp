@@ -596,6 +596,16 @@ void Slur::slurPos(SlurPos* sp)
       sp->p1 = scr->pos() + scr->segment()->pos() + scr->measure()->pos();
       sp->p2 = ecr->pos() + ecr->segment()->pos() + ecr->measure()->pos();
 
+      // adjust for cross-staff
+      if (scr->vStaffIdx() != vStaffIdx() && sp->system1) {
+            qreal diff = sp->system1->staff(scr->vStaffIdx())->y() - sp->system1->staff(vStaffIdx())->y();
+            sp->p1.ry() += diff;
+            }
+      if (ecr->vStaffIdx() != vStaffIdx() && sp->system2) {
+            qreal diff = sp->system2->staff(ecr->vStaffIdx())->y() - sp->system2->staff(vStaffIdx())->y();
+            sp->p2.ry() += diff;
+            }
+
       // account for centering or other adjustments (other than mirroring)
       if (note1 && !note1->mirror())
             sp->p1.rx() += note1->x();
