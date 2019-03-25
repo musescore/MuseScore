@@ -633,6 +633,29 @@ void System::layout2()
                   }
             staffIdx += nstaves;
             }
+
+      //---------------------------------------------------
+      //  layout cross-staff slurs and ties
+      //---------------------------------------------------
+
+      Fraction stick = measures().front()->tick();
+      Fraction etick = measures().back()->endTick();
+      auto spanners = score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
+
+      std::vector<Spanner*> spanner;
+      for (auto interval : spanners) {
+            Spanner* sp = interval.value;
+            if (sp->tick() < etick && sp->tick2() >= stick) {
+                  if (sp->isSlur()) {
+                        ChordRest* scr = sp->startCR();
+                        ChordRest* ecr = sp->endCR();
+                        int idx = sp->vStaffIdx();
+                        if (scr && ecr && (scr->vStaffIdx() != idx || ecr->vStaffIdx() != idx))
+                              sp->layoutSystem(this);
+                        }
+                  }
+            }
+
       }
 
 //---------------------------------------------------------
