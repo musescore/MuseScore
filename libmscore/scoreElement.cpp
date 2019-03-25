@@ -802,14 +802,28 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
       switch (propertyType(pid)) {
             case P_TYPE::SP_REAL:
                   return score()->styleP(sid);
-            case P_TYPE::POINT_SP:
-                  return score()->styleV(sid).toPointF() * score()->spatium();
+            case P_TYPE::POINT_SP: {
+                  QPointF val = score()->styleV(sid).toPointF() * score()->spatium();
+                  if (isElement()) {
+                        const Element* e = toElement(this);
+                        if (e->staff() && !e->systemFlag())
+                              val *= e->staff()->mag(e->tick());
+                        }
+                  return val;
+                  }
             case P_TYPE::POINT_SP_MM: {
                   QPointF val = score()->styleV(sid).toPointF();
-                  if (sizeIsSpatiumDependent())
+                  if (sizeIsSpatiumDependent()) {
                         val *= score()->spatium();
-                  else
+                        if (isElement()) {
+                              const Element* e = toElement(this);
+                              if (e->staff() && !e->systemFlag())
+                                    val *= e->staff()->mag(e->tick());
+                              }
+                        }
+                  else {
                         val *= DPMM;
+                        }
                   return val;
                   }
             default:

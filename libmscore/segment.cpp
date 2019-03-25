@@ -482,6 +482,9 @@ void Segment::add(Element* el)
       Q_ASSERT(track != -1);
       Q_ASSERT(el->score() == score());
       Q_ASSERT(score()->nstaves() * VOICES == int(_elist.size()));
+      // make sure offset is correct for staff
+      if (el->isStyled(Pid::OFFSET))
+            el->setOffset(el->propertyDefault(Pid::OFFSET).toPointF());
 
       switch (el->type()) {
             case ElementType::REPEAT_MEASURE:
