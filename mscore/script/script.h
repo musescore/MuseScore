@@ -112,6 +112,7 @@ class ScriptRecorder {
       void recordCommand(const QString& name);
       void recordPaletteElement(Element* e);
       void recordInspectorValueChange(const Element*, const InspectorItem&, const QVariant& value);
+      void recordCurrentScoreChange();
       void recordScoreTest(QString scoreName = QString());
       };
 

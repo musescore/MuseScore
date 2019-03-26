@@ -30,6 +30,7 @@ class ScriptEntry {
       static constexpr const char* SCRIPT_CMD = "cmd";
       static constexpr const char* SCRIPT_PALETTE = "palette";
       static constexpr const char* SCRIPT_INSPECTOR = "inspector";
+      static constexpr const char* SCRIPT_EXCERPT_CHANGE = "excerpt";
       static constexpr const char* SCRIPT_TEST = "test";
 
       static QString entryTemplate(const char* entryType) { return QString("%1 %2").arg(entryType); }
@@ -107,5 +108,20 @@ class InspectorScriptEntry : public ScriptEntry {
       static std::unique_ptr<ScriptEntry> deserialize(const QStringList& tokens);
       };
 
+//---------------------------------------------------------
+//   ExcerptChangeEntry
+///   Represents switching between excerpt tabs
+//---------------------------------------------------------
+
+class ExcerptChangeScriptEntry : public ScriptEntry {
+      int _index;
+
+   public:
+      ExcerptChangeScriptEntry(int idx) : _index(idx) {}
+      bool execute(ScriptContext& ctx) const override;
+      QString serialize() const override;
+      static std::unique_ptr<ScriptEntry> fromContext(const ScriptContext&);
+      static std::unique_ptr<ScriptEntry> deserialize(const QStringList& tokens);
+      };
 }     // namespace Ms
 #endif
