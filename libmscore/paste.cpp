@@ -633,6 +633,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
 
 void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
       {
+      e.setPasteMode(true); // ensure the reader is in paste mode
       Segment* currSegm = dst->segment();
       Fraction destTick = Fraction(0,1);              // the tick and track to place the pasted element at
       int   destTrack   = 0;
@@ -718,6 +719,28 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                     el->setParent(harmSegm);
                                     undoAddElement(el);
                                     }
+                              }
+                        else if (tag == "Dynamic") {
+                              ChordRest* destCR = findCR(destTick, destTrack);
+                              if (!destCR) {
+                                    e.skipCurrentElement();
+                                    continue;
+                                    }
+                              Dynamic* d = new Dynamic(this);
+                              d->setTrack(destTrack);
+                              d->read(e);
+                              d->setTrack(destTrack);
+                              d->setParent(destCR->segment());
+                              undoAddElement(d);
+                              }
+                        else if (tag == "HairPin") {
+                              Hairpin h(this);
+                              h.setTrack(destTrack);
+                              h.read(e);
+                              h.setTrack(destTrack);
+                              ChordRest* destCR1 = findCR(destTick, destTrack);
+                              ChordRest* destCR2 = findCR(destTick + h.ticks() - Fraction::eps(), destTrack);
+                              addHairpin(h.hairpinType(), destCR1, destCR2);
                               }
                         else {
                               //

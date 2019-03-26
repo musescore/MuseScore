@@ -82,6 +82,17 @@ void SpannerSegment::setSystem(System* s)
       }
 
 //---------------------------------------------------------
+//   mimeData
+//---------------------------------------------------------
+
+QByteArray SpannerSegment::mimeData(const QPointF& dragOffset) const
+      {
+      if (dragOffset.isNull()) // where is dragOffset used?
+            return spanner()->mimeData(dragOffset);
+      return Element::mimeData(dragOffset);
+      }
+
+//---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 
@@ -1135,6 +1146,33 @@ static Fraction fraction(const XmlWriter& xml, const Element* current, const Fra
                   tick -= m->tick();
             }
       return tick;
+      }
+
+//---------------------------------------------------------
+//   Spanner::readProperties
+//---------------------------------------------------------
+
+bool Spanner::readProperties(XmlReader& e)
+      {
+      const QStringRef tag(e.name());
+      if (e.pasteMode()) {
+            if (tag == "ticks_f") {
+                  setTicks(e.readFraction());
+                  return true;
+                  }
+            }
+      return Element::readProperties(e);
+      }
+
+//---------------------------------------------------------
+//   Spanner::writeProperties
+//---------------------------------------------------------
+
+void Spanner::writeProperties(XmlWriter& xml) const
+      {
+      if (xml.clipboardmode())
+            xml.tag("ticks_f", ticks());
+      Element::writeProperties(xml);
       }
 
 //--------------------------------------------------

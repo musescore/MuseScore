@@ -322,7 +322,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool fotoEditElementDragTransition(QMouseEvent* ev);
       void addSlur();
       virtual void cmdAddSlur(ChordRest*, ChordRest*) override;
-      virtual void cmdAddHairpin(HairpinType) override;
+      virtual void cmdAddHairpin(HairpinType);
       void cmdAddNoteLine();
 
       bool noteEntryMode() const { return state == ViewState::NOTE_ENTRY; }

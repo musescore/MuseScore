@@ -1042,7 +1042,7 @@ bool SLine::readProperties(XmlReader& e)
             _lineColor = e.readColor();
       else if (tag == "color")
             _lineColor = e.readColor();
-      else if (!Element::readProperties(e))
+      else if (!Spanner::readProperties(e))
             return false;
       return true;
       }
