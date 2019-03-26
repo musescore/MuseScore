@@ -2610,7 +2610,7 @@ bool Measure::isMeasureRest(int staffIdx) const
                         return false;
                   }
             for (Element* a : s->annotations()) {
-                  if (!a || a->systemFlag() || !a->visible())
+                  if (!a || a->systemFlag() || !a->visible() || a->isFermata())
                         continue;
                   int atrack = a->track();
                   if (atrack >= strack && atrack < etrack)
