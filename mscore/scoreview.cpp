@@ -3399,11 +3399,7 @@ void ScoreView::cmdAddHairpin(HairpinType type)
             for (int staffIdx = selection.staffStart() ; staffIdx < selection.staffEnd(); ++staffIdx) {
                   ChordRest* cr1 = selection.firstChordRest(staffIdx * VOICES);
                   ChordRest* cr2 = selection.lastChordRest(staffIdx * VOICES);
-                  if (!cr1)
-                       continue;
-                  if (cr2 == 0)
-                       cr2 = cr1;
-                  _score->addHairpin(type, cr1->tick(), cr2->tick() + cr2->actualTicks(), cr1->track());
+                  _score->addHairpin(type, cr1, cr2, /* toCr2End */ true);
                   }
             _score->endCmd();
             }
@@ -3413,16 +3409,11 @@ void ScoreView::cmdAddHairpin(HairpinType type)
             ChordRest* cr1;
             ChordRest* cr2;
             _score->getSelectedChordRest2(&cr1, &cr2);
-            if (!cr1)
-                  return;
-            if (cr2 == 0)
-                  cr2 = cr1;
-
             _score->startCmd();
-            Fraction tick2 = twoNotesSameStaff ? cr2->tick() : cr2->tick() + cr2->actualTicks();
-            Hairpin* pin = _score->addHairpin(type, cr1->tick(), tick2, cr1->track());
-//          pin->layout();
+            Hairpin* pin = _score->addHairpin(type, cr1, cr2, /* toCr2End */ !twoNotesSameStaff);
             _score->endCmd();
+            if (!pin)
+                  return;
 
             const std::vector<SpannerSegment*>& el = pin->spannerSegments();
             if (!noteEntryMode()) {

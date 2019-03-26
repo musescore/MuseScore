@@ -1684,12 +1684,8 @@ Element* Note::drop(EditData& data)
                   return 0;
 
             case ElementType::HAIRPIN:
-                  {
-                  Hairpin* hairpin = toHairpin(e);
-                  data.view->cmdAddHairpin(hairpin->hairpinType());
-                  delete e;
-                  }
-                  return 0;
+                  // forward this event to a chord
+                  return chord()->drop(data);
 
             case ElementType::LYRICS:
                   e->setParent(ch);

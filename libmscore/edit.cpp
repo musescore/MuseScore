@@ -2425,6 +2425,21 @@ Hairpin* Score::addHairpin(HairpinType t, const Fraction& tickStart, const Fract
       }
 
 //---------------------------------------------------------
+//   Score::addHairpin
+//---------------------------------------------------------
+
+Hairpin* Score::addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2, bool toCr2End)
+      {
+      if (!cr1)
+            return nullptr;
+      if (!cr2)
+            cr2 = cr1;
+      Q_ASSERT(cr1->staffIdx() == cr2->staffIdx());
+      const Fraction end = toCr2End ? cr2->tick() + cr2->actualTicks() : cr2->tick();
+      return addHairpin(type, cr1->tick(), end, cr1->track());
+      }
+
+//---------------------------------------------------------
 //   cmdCreateTuplet
 //    replace cr with tuplet
 //---------------------------------------------------------
