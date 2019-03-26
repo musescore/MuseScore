@@ -2460,6 +2460,9 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       else
             cs = 0;
 
+      if (ScriptRecorder* rec = getScriptRecorder())
+            rec->recordCurrentScoreChange();
+
       if (cs)
             cs->masterScore()->setPlaybackScore(_playPartOnly ? cs : cs->masterScore());
 
