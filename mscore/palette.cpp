@@ -682,6 +682,7 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
                   for (int i = sel.staffStart(); i < endStaff; ++i) {
                         Spanner* spanner = static_cast<Spanner*>(element->clone());
                         spanner->setScore(score);
+                        spanner->styleChanged();
                         score->cmdAddSpanner(spanner, i, startSegment, endSegment);
                         }
                   }
