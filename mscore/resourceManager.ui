@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>595</width>
-    <height>480</height>
+    <width>655</width>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MuseScore Resources</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <widget class="QTabWidget" name="tabs">
      <property name="currentIndex">
       <number>0</number>
@@ -152,6 +152,307 @@
            <string>Install/Update</string>
           </property>
          </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="plugins">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>545</width>
+        <height>407</height>
+       </size>
+      </property>
+      <attribute name="title">
+       <string>Plugins</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="plugin_store">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <attribute name="title">
+           <string>Plugin Store</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QTableWidget" name="pluginsTable">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>200</height>
+              </size>
+             </property>
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::NoSelection</enum>
+             </property>
+             <property name="sortingEnabled">
+              <bool>true</bool>
+             </property>
+             <property name="rowCount">
+              <number>5</number>
+             </property>
+             <property name="columnCount">
+              <number>4</number>
+             </property>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <column>
+              <property name="text">
+               <string>Plugin Name</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Compatibility</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Category</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Action</string>
+              </property>
+             </column>
+             <item row="0" column="0">
+              <property name="text">
+               <string>Batch Convert</string>
+              </property>
+             </item>
+             <item row="0" column="1">
+              <property name="text">
+               <string>1.x, 2.x, 3.x</string>
+              </property>
+             </item>
+             <item row="0" column="2">
+              <property name="text">
+               <string>Batch processing, Export, Convertor, Import</string>
+              </property>
+             </item>
+             <item row="1" column="0">
+              <property name="text">
+               <string>Check for parallel fifths and octaves</string>
+              </property>
+             </item>
+             <item row="1" column="1">
+              <property name="text">
+               <string>2.x, 3.x</string>
+              </property>
+             </item>
+             <item row="1" column="2">
+              <property name="text">
+               <string>Proof reading</string>
+              </property>
+             </item>
+             <item row="2" column="0">
+              <property name="text">
+               <string>Check Harmony Rules</string>
+              </property>
+             </item>
+             <item row="2" column="1">
+              <property name="text">
+               <string>1.x, 2.x, 3.x</string>
+              </property>
+             </item>
+             <item row="2" column="2">
+              <property name="text">
+               <string>Analysis, Proof reading</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QLineEdit" name="lineEdit">
+               <property name="placeholderText">
+                <string>Search</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Category:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="comboBox">
+               <item>
+                <property name="text">
+                 <string>Any</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Accidentals</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Analysis</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="plugin_installed">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <attribute name="title">
+           <string>Installed Plugins</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="8" column="2" colspan="9">
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QPushButton" name="pushButton_3">
+               <property name="text">
+                <string>Open Path...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_4">
+               <property name="text">
+                <string>Reload</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton">
+               <property name="text">
+                <string>Define Shortcut</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_2">
+               <property name="text">
+                <string>Clear Shortcut</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="7" column="2" colspan="9">
+            <widget class="QTextBrowser" name="pluginDescription">
+             <property name="placeholderText">
+              <string>Description</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="9">
+            <widget class="QLabel" name="label_shortcut">
+             <property name="text">
+              <string>Shortcut:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="10">
+            <widget class="QLineEdit" name="pluginShortcut"/>
+           </item>
+           <item row="1" column="0" rowspan="9" colspan="2">
+            <widget class="QListWidget" name="listWidget"/>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="label_compat">
+             <property name="text">
+              <string>Name:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLabel" name="label_path">
+             <property name="text">
+              <string>Path:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Version:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="6">
+            <widget class="QLineEdit" name="lineEdit_2"/>
+           </item>
+           <item row="3" column="6" colspan="5">
+            <widget class="QLineEdit" name="pluginPath">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="6" colspan="5">
+            <widget class="QLineEdit" name="pluginCompat">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>

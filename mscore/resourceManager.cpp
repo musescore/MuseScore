@@ -34,6 +34,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       dir.mkpath(dataPath + "/locale");
       displayExtensions();
       displayLanguages();
+      displayPlugins();
       languagesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
       languagesTable->verticalHeader()->hide();
       extensionsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -42,6 +43,8 @@ ResourceManager::ResourceManager(QWidget *parent) :
       extensionsTable->verticalHeader()->hide();
       extensionsTable->setColumnWidth(1, 50);
       extensionsTable->setColumnWidth(1, 100);
+      pluginsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+      pluginsTable->verticalHeader()->hide();
       MuseScore::restoreGeometry(this);
       }
 
@@ -287,6 +290,71 @@ void ResourceManager::displayLanguages()
             }
       }
 
+static inline std::tuple<bool, bool, bool> compatFromString(const QString& raw) {
+      return std::make_tuple(raw.contains("1.x"), raw.contains("2.x"), raw.contains("3.x"));
+      }
+
+//---------------------------------------------------------
+//   displayPlugins
+//---------------------------------------------------------
+void ResourceManager::displayPlugins() {
+      // fills pluginDescriptionMap from xml
+      readPluginPackages();
+      // fetch plugin list from web
+      DownloadUtils html(this);
+      html.setTarget(pluginAddr());
+      html.download();
+      QByteArray html_raw = html.returnData();
+      QByteArray table_start("<table");
+      QByteArray table_end("table>");
+      int table_start_idx = html_raw.indexOf(table_start);
+      int table_end_idx = html_raw.indexOf(table_end) + 6;
+      QByteArray table_raw = html_raw.mid(table_start_idx, table_end_idx - table_start_idx);
+      QDomDocument table_xml;
+      table_xml.setContent(table_raw); // TODO: if returns false?
+      QDomElement body = table_xml.elementsByTagName("tbody").item(0).toElement();
+      QDomNodeList tr_list = body.elementsByTagName("tr");
+      pluginsTable->setRowCount(tr_list.length());
+
+      for (int row=0; row<tr_list.length();row++) {
+            int col = 0;
+            QDomElement tr_node = tr_list.item(row).toElement();
+            QDomNodeList td_list = tr_node.elementsByTagName("td");
+            Q_ASSERT(td_list.length() == 4);
+            QString page_url = td_list.item(0).toElement().firstChildElement("a").attribute("href");
+            QString name = td_list.item(0).toElement().text();
+            std::tuple<bool,bool,bool> compat = compatFromString(td_list.item(1).toElement().text());
+            
+            for (; col < 3; col++)
+                  pluginsTable->setItem(row, col, new QTableWidgetItem(td_list.item(col).toElement().text()));
+            if (page_url.isNull()) {
+                  pluginsTable->setItem(row,col,new QTableWidgetItem("No page URL found."));
+                  continue;
+                  }
+
+            QWidget* button_group = new QWidget();
+            QPushButton* install_button = new QPushButton(button_group);
+            QHBoxLayout* button_layout = new QHBoxLayout();
+            button_group->setLayout(button_layout);
+            button_layout->addWidget(install_button);
+            if (pluginDescriptionMap.contains(page_url)) {
+                  install_button->setText(tr("Uninstall"));
+                  connect(install_button, SIGNAL(clicked()), this, SLOT(uninstallPluginPackage()));
+                  QPushButton* update_button = new QPushButton(button_group);
+                  update_button->setText("Updated");
+                  update_button->setEnabled(false);
+                  // TODO: check update in another thread
+                  button_layout->addWidget(update_button);
+                  }
+            else {
+                  install_button->setText(tr("Install"));
+                  connect(install_button, SIGNAL(clicked()), this, SLOT(downloadPluginPackage()));
+                  }
+            pluginButtonURLMap[install_button] = { name, compat, page_url };
+            pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col), button_group);
+            }
+      }
+
 //---------------------------------------------------------
 //   verifyLanguageFile
 //---------------------------------------------------------
@@ -303,6 +371,133 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
       return verifyFile(local, hash);
       }
 
+//---------------------------------------------------------
+//   GitHub utility functions
+//---------------------------------------------------------
+static inline QString githubLatestReleaseAPI(const QString &user, const QString &repo) { return "https://api.github.com/repos/" + user + "/" + repo + "/releases/latest"; }
+static inline QString githubCommitAPI(const QString &user, const QString &repo, const QString &ref = "")
+      {
+      return "https://api.github.com/repos/" + user + "/" + repo + "/commits" + (ref.isEmpty() ? "" : ('/' + ref));
+      }
+static inline QString githubLatestArchiveURL(const QString &user, const QString &repo, const QString &branch = "master")
+      {
+      return "https://github.com/" + user + '/' + repo + "/archive/" + branch + ".zip";
+      }
+static QString getLatestCommitSha(const QString& user, const QString &repo, const QString &branch = "master")
+      {
+      QString api_url = githubCommitAPI(user, repo, branch);
+      DownloadUtils json;
+      json.setTarget(api_url);
+      json.download();
+      QJsonDocument json_doc = QJsonDocument::fromJson(json.returnData());
+      QJsonObject latest_commit;
+      if (json_doc.isArray())
+            // there are  multiple commits, fetch the latest
+            latest_commit = json_doc.array().first().toObject();
+      else
+            latest_commit = json_doc.object();
+      if(latest_commit.contains("sha"))
+            return latest_commit["sha"].toString();
+      else return {};
+      }
+static inline bool isNotFoundMessage(const QJsonObject& json_obj) {
+      return json_obj["message"].toString() == "Not Found";
+      }
+//---------------------------------------------------------
+//   analyzePluginPage
+//---------------------------------------------------------
+bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& desc)
+      {
+      QString direct_link;
+      DownloadUtils page(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
+      page.setTarget(url);
+      page.download();
+      QByteArray html_raw = page.returnData();
+      // first of all, check if GitHub repo links exist
+      QRegularExpression github_repo_patt("https?://github.com/([\\w\\-]+)/([\\w\\-]+)");
+      QRegularExpressionMatch github_match = github_repo_patt.match(html_raw);
+      if (github_match.hasMatch()) {
+            QString user = github_match.captured(1);
+            QString repo = github_match.captured(2);
+            // check if there's a GitHub release
+            DownloadUtils release_json(this);
+            release_json.setTarget(githubLatestReleaseAPI(user, repo));
+            release_json.download();
+            QJsonDocument result = QJsonDocument::fromJson(release_json.returnData());
+            if (!result.object().isEmpty() && !isNotFoundMessage(result.object())) {
+                  // there is a GitHub release
+                  // TODO: further compare release ID with previous stored ID. If the same, don't update!
+                  desc.source = GITHUB_RELEASE;
+                  // TODO: fetch direct link here
+                  // return true;
+                  }
+            // else, fetch latest commit sha on master(usually for 3.x), as info for update
+            desc.source = GITHUB;
+            QString sha = getLatestCommitSha(user, repo, "master");
+            // TODO: compare the sha with previous stored sha. If the same, don't update.
+            desc.latest_commit = sha;
+            desc.direct_link = githubLatestArchiveURL(user, repo, "master");
+
+            return true;
+      }
+      else {
+            // no github repo links exist
+            // TODO: fetch direct links in page
+            return false;
+            }
+
+
+      }
+
+//---------------------------------------------------------
+//   installPluginPackage
+//---------------------------------------------------------
+
+bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageDescription& desc)
+      {
+      QFileInfo f_pkg(download_pkg);
+      MQZipReader zipFile(download_pkg);
+      QVector<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
+      // If zip contains multiple files in root, or a single qml, create a
+      // root folder in plugin dir for them.
+      // If zip contanis a single directory, copies that into plugin dir.
+      bool create_dir = true;
+      std::set<QString> dirs;
+      foreach(MQZipReader::FileInfo fi, allFiles) {
+            QString dir_root = fi.filePath.split('/').first();
+            dirs.insert(dir_root);
+            }
+      if (dirs.size() == 1) {
+            if (allFiles.size() > 1) // the element in dirs must be a dir then
+                  create_dir = false;
+            }
+      QString destination_prefix = dataPath + "/plugins";
+      if (create_dir) {
+            destination_prefix += "/" + f_pkg.completeBaseName();
+            QDir().mkdir(destination_prefix);
+            }
+      QString subdir = create_dir ? destination_prefix : destination_prefix + "/" + allFiles.first().filePath;
+      desc.dir = subdir;
+      // extract and copy
+      foreach(MQZipReader::FileInfo fi, allFiles) {
+            if (fi.isDir)
+                  QDir().mkdir(destination_prefix + "/" + fi.filePath);
+            else if (fi.isFile) {
+                  if (QFileInfo(fi.filePath).suffix().toLower() == "qml")
+                        desc.qml_paths.push_back(destination_prefix + "/" + fi.filePath);
+                  QFile new_f(destination_prefix + "/" + fi.filePath);
+                  if (!new_f.open(QIODevice::WriteOnly)) {
+                        // TODO: report errors
+                        return false;
+                        }
+                  new_f.write(zipFile.fileData(fi.filePath));
+                  new_f.setPermissions(fi.permissions);
+                  new_f.close();
+                  }
+            }
+      QFile::remove(download_pkg);
+      return true;
+      }
 
 //---------------------------------------------------------
 //   downloadLanguage
@@ -410,6 +605,200 @@ void ResourceManager::downloadExtension()
                   button->setEnabled(1);
                   }
             }
+      }
+
+static inline QString filenameBaseFromPageURL(QString page_url) {
+      Q_ASSERT(page_url.contains("/project/"));
+      return page_url.remove("/project/");
+      }
+static inline QString getExtFromURL(QString& direct_link) {
+      QString possible_ext = direct_link.split(".").last();
+      // We can assume that most extensions contain only 
+      // alphanumeric and plus "_", and other connector punctuation chars
+      if (possible_ext.contains(QRegularExpression("\\W")))
+            return {};
+      return possible_ext;
+      }
+
+//---------------------------------------------------------
+//   downloadPluginPackage
+//---------------------------------------------------------
+
+void ResourceManager::downloadPluginPackage()
+      {
+      // TODO: find corresponding PluginPackageDescription or create a new one
+      QPushButton* button = static_cast<QPushButton*>(sender());
+      button->setEnabled(false);
+      button->setText(tr("Analyzing..."));
+      QString page_url = pluginButtonURLMap[button].page_url;
+      PluginPackageDescription new_package;
+      new_package.package_name = pluginButtonURLMap[button].name;
+      QObject* p = button->parent();
+      analyzePluginPage("https://musescore.org" + page_url, new_package);
+      if (new_package.source == UNKNOWN) {
+            // TODO: report errors: cannot get download links for this plugin
+            button->setText("Failed Try again.");
+            button->setEnabled(true);
+            return;
+            }
+      button->setText(tr("Downloading..."));
+      DownloadUtils package(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
+      package.setTarget(new_package.direct_link);
+      // TODO: try to get extension name from direct_link, and add it to localPath
+      QString localPath = dataPath + "/plugins/" + filenameBaseFromPageURL(page_url);
+      QDir().mkpath(dataPath + "/plugins");
+      package.setLocalFile(localPath);
+      package.download();
+      // TODO: if extension hasn't been known yet, get file type from http response
+      // for now, use zip for GITHUB; and get ext name from direct_link for musescore.org
+      package.saveFile();
+      if (new_package.source == GITHUB || new_package.source == GITHUB_RELEASE) {
+            // the extension is always zip for github
+            if (installPluginPackage(localPath, new_package) == true) {
+                  // add the new description item to the map
+                  pluginDescriptionMap[page_url] = new_package;
+                  refreshPluginButton((QWidget*)button->parent());
+                  writePluginPackages();
+                  // TODO: reload plugins
+                  }
+            }
+
+      }
+
+void ResourceManager::uninstallPluginPackage() {
+      ;
+}
+
+void ResourceManager::refreshPluginButton(QWidget* button_group) {
+      const QList<QPushButton*>& buttons = button_group->findChildren<QPushButton*>();
+      int n = buttons.size();
+      QPushButton* install = (QPushButton*)buttons.first();
+      QString& page_url = pluginButtonURLMap[install].page_url;
+      if (pluginDescriptionMap.contains(page_url)) {
+            // installed
+            install->setText("Uninstall");
+            install->setEnabled(true);
+            install->disconnect();
+            connect(install, SIGNAL(clicked()), this, SLOT(uninstallPluginPackage()));
+            QPushButton* update;
+            if (buttons.size() > 1) {
+                  update = (QPushButton*)buttons.at(1);
+                  }
+            else {
+                  update = new QPushButton(button_group);
+                  button_group->layout()->addWidget(update);
+                  }
+            update->setText("Updated");
+            update->setHidden(false);
+            update->setEnabled(false);
+            // TODO: check update sometime
+            }
+      else {
+            // removed
+            install->setText("Install");
+            connect(install, SIGNAL(clicked()), this, SLOT(downloadPluginPackage()));
+            if (buttons.size() > 1)
+                  for (int i = 1; i <= buttons.size() - 1; i++)
+                        ((QPushButton*)buttons.at(i))->setHidden(true);
+            }
+      }
+
+//---------------------------------------------------------
+//   writePluginPackages
+//---------------------------------------------------------
+void ResourceManager::writePluginPackages()
+      {
+      QDir dir;
+      dir.mkpath(dataPath);
+      QFile f(dataPath + "/pluginpackages.xml");
+      if (!f.open(QIODevice::WriteOnly)) {
+            qDebug("cannot create plugin package file <%s>", qPrintable(f.fileName()));
+            return;
+            }
+      XmlWriter xml(0, &f);
+      xml.header();
+      xml.stag("museScore version=\"" MSC_VERSION "\"");
+      foreach(const QString &pkg, pluginDescriptionMap.keys()) {
+            auto& v = pluginDescriptionMap.value(pkg);
+            xml.stag("PluginPackage");
+            xml.tag("pageURL", pkg);
+            xml.tag("pkgName", v.package_name);
+            xml.tag("source", v.source);
+            xml.tag("directLink", v.direct_link);
+            xml.tag("path", v.dir);
+            xml.stag("qmlPath");
+            for (const QString& path : v.qml_paths) {
+                  xml.tag("qml", path);
+                  }
+            xml.etag();
+            if (v.source == GITHUB_RELEASE)
+                  xml.tag("GitHubReleaseID", v.release_id);
+            if (v.source == GITHUB)
+                  xml.tag("GitHubLatestSha", v.latest_commit);
+            xml.etag();
+            }
+      xml.etag();
+      }
+
+//---------------------------------------------------------
+//   readPluginPackages
+//---------------------------------------------------------
+bool ResourceManager::readPluginPackages() {
+      QFile f(dataPath + "/pluginpackages.xml");
+      if (!f.exists())
+            return false;
+      if (!f.open(QIODevice::ReadOnly)) {
+            qDebug("Cannot open plugin package file <%s>", qPrintable(f.fileName()));
+            return false;
+            }
+      XmlReader e(&f);
+      while (e.readNextStartElement()) {
+            if (e.name() == "museScore") {
+                  while (e.readNextStartElement()) {
+                        const QStringRef& tag(e.name());
+                        if (tag == "PluginPackage") {
+                              QString page_url;
+                              PluginPackageDescription desc;
+                              while (e.readNextStartElement()) {
+                                    const QStringRef t(e.name());
+                                    if (t == "pageURL")
+                                          page_url = e.readElementText();
+                                    else if (t == "pkgName")
+                                          desc.package_name = e.readElementText();
+                                    else if (t == "source")
+                                          desc.source = (PluginPackageSource)e.readInt();
+                                    else if (t == "directLink")
+                                          desc.direct_link = e.readElementText();
+                                    else if (t == "path")
+                                          desc.dir = e.readElementText();
+                                    else if (t == "qmlPath") {
+                                          while (e.readNextStartElement()) {
+                                                const QStringRef t_(e.name());
+                                                if (t_ == "qml")
+                                                      desc.qml_paths.push_back(e.readElementText());
+                                                else e.unknown();
+                                                }
+                                          }
+                                    else if (t == "GitHubReleaseID")
+                                          desc.release_id = e.readInt();
+                                    else if (t == "GitHubLatestSha")
+                                          desc.latest_commit = e.readElementText();
+                                    else
+                                          e.unknown();
+                                    }
+                              if (!page_url.isEmpty())
+                                    pluginDescriptionMap.insert(page_url, desc);
+                              else
+                                    qDebug("Missing plugin page url.");
+                              }
+                        else
+                              e.unknown();
+                        }
+                  }
+            else
+                  e.unknown();
+            }
+      return true;
       }
 
 //---------------------------------------------------------

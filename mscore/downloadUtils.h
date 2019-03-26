@@ -28,6 +28,7 @@ class DownloadUtils : public QObject
 
    public:
       explicit DownloadUtils(QWidget *parent=0);
+      explicit DownloadUtils(QNetworkRequest::RedirectPolicy policy, QWidget* parent = 0);
 
       void setTarget(const QString& t)      { _target = t; }
       void setLocalFile(const QString& t)   { _localFile = t; }

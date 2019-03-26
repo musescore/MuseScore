@@ -17,8 +17,6 @@
 #include "shortcut.h"
 
 namespace Ms {
-
-
 //---------------------------------------------------------
 //   PluginDescription
 //---------------------------------------------------------
@@ -30,6 +28,39 @@ struct PluginDescription {
       bool load;
       Shortcut shortcut;
       QString menuPath;
+      };
+
+struct PluginPackageMeta {
+      QString name;
+      std::tuple<bool, bool, bool> compatibility;
+      QString page_url;
+      };
+
+//---------------------------------------------------------
+//   PluginPackageSource
+//---------------------------------------------------------
+enum PluginPackageSource {
+      UNKNOWN,
+      GITHUB,           // from a Github branch(usually master)
+      GITHUB_RELEASE,   // from a Github release
+      ATTACHMENT        // from an attachment in corresponding plugin page
+      };
+
+
+//---------------------------------------------------------
+//   PluginPackageDescription
+//   Info about how the package was fetched
+//---------------------------------------------------------
+struct PluginPackageDescription {
+      QString package_name;
+      PluginPackageSource source = UNKNOWN;
+      QString direct_link;
+      QString dir; // path of directory of this package
+      std::vector<QString> qml_paths;
+      QString latest_commit; // valid when source set to GITHUB
+      int release_id; // valid when source set to GITHUB_RELEASE
+      // TODO: add last modified field for source set to ATTACHMENT
+
       };
 
 //---------------------------------------------------------

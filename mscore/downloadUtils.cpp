@@ -19,6 +19,12 @@ DownloadUtils::DownloadUtils(QWidget *parent)
       {
       }
 
+DownloadUtils::DownloadUtils(QNetworkRequest::RedirectPolicy policy, QWidget* parent)
+   : DownloadUtils(parent)
+      {
+      manager.setRedirectPolicy(policy);
+      }
+
 bool DownloadUtils::saveFile()
       {
       QFile localFile(_localFile);
