@@ -2372,7 +2372,7 @@ bool Measure::visible(int staffIdx) const
             }
       if (system() && (system()->staves()->empty() || !system()->staff(staffIdx)->show()))
             return false;
-      if (score()->staff(staffIdx)->cutaway() && isMeasureRest(staffIdx))
+      if (score()->staff(staffIdx)->cutaway() && isEmpty(staffIdx))
             return false;
       return score()->staff(staffIdx)->show() && _mstaves[staffIdx]->visible();
       }
@@ -2585,13 +2585,13 @@ bool Measure::hasVoice(int track) const
       }
 
 //-------------------------------------------------------------------
-//   isMeasureRest
-///   Check if the measure is filled by a full-measure rest or full
-///   of rests on this staff. If staff is -1, then check for
-///   all staves.
+//   isEmpty
+///   Check if the measure is filled by a full-measure rest, or is
+///   full of rests on this staff, that may have fermatas on them.
+///   If staff is -1, then check for all staves.
 //-------------------------------------------------------------------
 
-bool Measure::isMeasureRest(int staffIdx) const
+bool Measure::isEmpty(int staffIdx) const
       {
       int strack;
       int etrack;

@@ -1250,7 +1250,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                         if (!m->isMeasure())
                               continue;
                         Measure* measure = toMeasure(m);
-                        if (!measure->isMeasureRest(staffIdx)) {
+                        if (!measure->isEmpty(staffIdx)) {
                               hideStaff = false;
                               break;
                               }
@@ -1267,7 +1267,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                                     if (!mb->isMeasure())
                                           continue;
                                     Measure* m = toMeasure(mb);
-                                    if (staff->hideWhenEmpty() == Staff::HideMode::INSTRUMENT && !m->isMeasureRest(st)) {
+                                    if (staff->hideWhenEmpty() == Staff::HideMode::INSTRUMENT && !m->isEmpty(st)) {
                                           hideStaff = false;
                                           break;
                                           }
