@@ -2814,40 +2814,108 @@ void Score::getNextMeasure(LayoutContext& lc)
 
 //---------------------------------------------------------
 //   isTopBeam
+//    returns true for the first CR of a beam that is not cross-staff
 //---------------------------------------------------------
 
 bool isTopBeam(ChordRest* cr)
       {
       Beam* b = cr->beam();
-      if (b && !b->cross() && b->elements().front() == cr) {
+      if (b && b->elements().front() == cr) {
+            // beam already considered cross?
+            if (b->cross())
+                  return false;
+
+            // for beams not already considered cross,
+            // consider them so here if any elements were moved up
             for (ChordRest* cr1 : b->elements()) {
-                  if (cr1->staffMove() >= 0)
-                        return true;
+                  // some element moved up?
+                  if (cr1->staffMove() < 0)
+                        return false;
                   }
+
+            // not cross
+            return true;
             }
 
+      // no beam or not first element
       return false;
       }
 
 //---------------------------------------------------------
 //   notTopBeam
+//    returns true for the first CR of a beam that is cross-staff
 //---------------------------------------------------------
 
 bool notTopBeam(ChordRest* cr)
       {
       Beam* b = cr->beam();
       if (b && b->elements().front() == cr) {
+            // beam already considered cross?
             if (b->cross())
                   return true;
 
+            // for beams not already considered cross,
+            // consider them so here if any elements were moved up
             for (ChordRest* cr1 : b->elements()) {
-                  if (cr1->staffMove() >= 0)
-                        return false;
-            }
-      }
+                  // some element moved up?
+                  if (cr1->staffMove() < 0)
+                        return true;
+                  }
 
+            // not cross
+            return false;
+            }
+
+      // no beam or not first element
       return false;
       }
+
+//---------------------------------------------------------
+//   isTopTuplet
+//    returns true for the first CR of a tuplet that is not cross-staff
+//---------------------------------------------------------
+
+bool isTopTuplet(ChordRest* cr)
+      {
+      Tuplet* t = cr->tuplet();
+      if (t && t->elements().front() == cr) {
+            // find top level tuplet
+            while (t->tuplet())
+                  t = t->tuplet();
+            // consider tuplet cross if anything moved within it
+            if (t->cross())
+                  return false;
+            else
+                  return true;
+            }
+
+      // no tuplet or not first element
+      return false;
+      }
+
+//---------------------------------------------------------
+//   notTopTuplet
+//    returns true for the first CR of a tuplet that is cross-staff
+//---------------------------------------------------------
+
+bool notTopTuplet(ChordRest* cr)
+      {
+      Tuplet* t = cr->tuplet();
+      if (t && t->elements().front() == cr) {
+            // find top level tuplet
+            while (t->tuplet())
+                  t = t->tuplet();
+            // consider tuplet cross if anything moved within it
+            if (t->cross())
+                  return true;
+            else
+                  return false;
+            }
+
+      // no tuplet or not first element
+      return false;
+      }
+
 
 //---------------------------------------------------------
 //   findLyricsMaxY
@@ -3558,8 +3626,12 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                           skyline.add(e->shape().translated(e->pos() + p));
                                           if (e->isChord() && toChord(e)->tremolo()) {
                                                 Tremolo* t = toChord(e)->tremolo();
-                                                if (t->chord() == e && t->autoplace())
-                                                      skyline.add(t->shape().translated(t->pos() + e->pos() + p));
+                                                Chord* c1 = t->chord1();
+                                                Chord* c2 = t->chord2();
+                                                if (!t->twoNotes() || (!c1->staffMove() && !c2->staffMove())) {
+                                                      if (t->chord() == e && t->autoplace())
+                                                            skyline.add(t->shape().translated(t->pos() + e->pos() + p));
+                                                      }
                                                 }
                                           }
                                     }
@@ -3636,8 +3708,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         c->layoutArticulations2();
                         }
                   // tuplets
-                  // sanity check
-                  if (notTopBeam(cr))
+                  if (!isTopTuplet(cr))
                         continue;
                   DurationElement* de = cr;
                   while (de->tuplet() && de->tuplet()->elements().front() == de) {
@@ -4083,16 +4154,15 @@ void LayoutContext::collectPage()
                                     if (!currentScore->staff(track2staff(track))->show())
                                           continue;
                                     ChordRest* cr = toChordRest(e);
-                                    if (notTopBeam(cr)) {                   // layout cross staff beams
+                                    if (notTopBeam(cr))                 // layout cross staff beams
                                           cr->beam()->layout();
-
+                                    if (notTopTuplet(cr)) {
                                           // fix layout of tuplets
                                           DurationElement* de = cr;
                                           while (de->tuplet() && de->tuplet()->elements().front() == de) {
                                                 Tuplet* t = de->tuplet();
                                                 t->layout();
-                                                m->system()->staff(t->staffIdx())->skyline().add(t->shape().translated(t->measure()->pos()));
-                                                de = de->tuplet();
+                                                de = t;
                                                 }
                                           }
 
@@ -4120,6 +4190,13 @@ void LayoutContext::collectPage()
                                                       tie->layout();
                                                 for (Spanner* sp : n->spannerFor())
                                                       sp->layout();
+                                                }
+                                          if (c->tremolo()) {
+                                                Tremolo* t = c->tremolo();
+                                                Chord* c1 = t->chord1();
+                                                Chord* c2 = t->chord2();
+                                                if (t->twoNotes() && (c1->staffMove() || c2->staffMove()))
+                                                      t->layout();
                                                 }
                                           }
                                     }

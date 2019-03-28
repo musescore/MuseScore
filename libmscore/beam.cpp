@@ -407,6 +407,8 @@ void Beam::layout1()
             _cross = minMove < maxMove;
             if (minMove == 1 && maxMove == 1)
                   setTrack(staffIdx * VOICES + voice());
+            else if (c1)
+                  setTrack(c1->staffIdx() * VOICES + voice());
 
             // int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
             slope = 0.0;
@@ -416,7 +418,7 @@ void Beam::layout1()
 
             for (ChordRest* cr : _elements) {
                   const bool staffMove = cr->isChord() ? toChord(cr)->staffMove() : false;
-                  if (!(_cross || staffMove)) {
+                  if (!_cross || !staffMove) {
                         if (cr->up() != _up) {
                               cr->setUp(_up);
                               cr->layoutStem1();
