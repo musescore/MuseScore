@@ -452,6 +452,15 @@ void LayoutContext::layoutLinear()
                               ChordRest* cr = toChordRest(e);
                               if (notTopBeam(cr))                   // layout cross staff beams
                                     cr->beam()->layout();
+                              if (notTopTuplet(cr)) {
+                                    // fix layout of tuplets
+                                    DurationElement* de = cr;
+                                    while (de->tuplet() && de->tuplet()->elements().front() == de) {
+                                          Tuplet* t = de->tuplet();
+                                          t->layout();
+                                          de = de->tuplet();
+                                          }
+                                    }
 
                               if (cr->isChord()) {
                                     Chord* c = toChord(cr);
@@ -477,6 +486,13 @@ void LayoutContext::layoutLinear()
                                                 tie->layout();
                                           for (Spanner* sp : n->spannerFor())
                                                 sp->layout();
+                                          }
+                                    if (c->tremolo()) {
+                                          Tremolo* t = c->tremolo();
+                                          Chord* c1 = t->chord1();
+                                          Chord* c2 = t->chord2();
+                                          if (t->twoNotes() && (c1->staffMove() || c2->staffMove()))
+                                                t->layout();
                                           }
                                     }
                               }
