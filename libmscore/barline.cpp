@@ -81,15 +81,6 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                                     e->score()->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
                                     e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
                                     }
-                              else {
-                                    auto score = bl->score();
-                                    BarLine* newBl = new BarLine(score);
-                                    newBl->setBarLineType(barType);
-                                    newBl->setParent(segment1);
-                                    newBl->setTrack(0);
-                                    newBl->setSpanStaff(score->nstaves());
-                                    newBl->score()->undo(new AddElement(newBl));
-                                    }
                               }
                         }
                   }
