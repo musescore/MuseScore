@@ -381,6 +381,7 @@ static inline QString githubCommitAPI(const QString &user, const QString &repo, 
       }
 static inline QString githubLatestArchiveURL(const QString &user, const QString &repo, const QString &branch = "master")
       {
+      //return "https://api.github.com/repos/" + user + "/" + repo + "/zip/" + branch;
       return "https://github.com/" + user + '/' + repo + "/archive/" + branch + ".zip";
       }
 static QString getLatestCommitSha(const QString& user, const QString &repo, const QString &branch = "master")
@@ -458,6 +459,9 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
       QFileInfo f_pkg(download_pkg);
       MQZipReader zipFile(download_pkg);
       QVector<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
+      if (allFiles.size() == 0) {
+            return false;
+            }
       // If zip contains multiple files in root, or a single qml, create a
       // root folder in plugin dir for them.
       // If zip contanis a single directory, copies that into plugin dir.
@@ -495,6 +499,7 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
                   new_f.close();
                   }
             }
+      zipFile.close();
       QFile::remove(download_pkg);
       return true;
       }
@@ -609,6 +614,8 @@ void ResourceManager::downloadExtension()
 
 static inline QString filenameBaseFromPageURL(QString page_url) {
       Q_ASSERT(page_url.contains("/project/"));
+      if (page_url.contains("/en/project/"))
+            return page_url.remove("/en/project/");
       return page_url.remove("/project/");
       }
 static inline QString getExtFromURL(QString& direct_link) {
@@ -660,6 +667,11 @@ void ResourceManager::downloadPluginPackage()
                   refreshPluginButton((QWidget*)button->parent());
                   writePluginPackages();
                   // TODO: reload plugins
+                  }
+            else {
+                  button->setText("Bad archive. Try again");
+                  button->setEnabled(true);
+                  return;
                   }
             }
 
