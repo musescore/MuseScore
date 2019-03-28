@@ -172,6 +172,17 @@ void ScriptRecorder::recordPaletteElement(Element* e)
       }
 
 //---------------------------------------------------------
+//   ScriptRecorder::recordCurrentScoreChange
+//---------------------------------------------------------
+
+void ScriptRecorder::recordCurrentScoreChange()
+      {
+      if (_recording)
+            _script.addEntry(ExcerptChangeScriptEntry::fromContext(_ctx));
+      syncRecord();
+      }
+
+//---------------------------------------------------------
 //   ScriptRecorder::recordInspectorValueChange
 //---------------------------------------------------------
 
