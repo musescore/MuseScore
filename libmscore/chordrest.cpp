@@ -39,6 +39,7 @@
 #include "undo.h"
 #include "stem.h"
 #include "harmony.h"
+#include "hairpin.h"
 #include "figuredbass.h"
 #include "icon.h"
 #include "utils.h"
@@ -609,6 +610,19 @@ Element* ChordRest::drop(EditData& data)
                   score()->undoChangeKeySig(staff(), tick(), k);
                   }
                   break;
+
+            case ElementType::HAIRPIN:
+                  {
+                  const Hairpin* hairpin = toHairpin(e);
+                  ChordRest* endCR = this;
+                  if (hairpin->ticks().isNotZero()) {
+                        const Fraction tick2 = tick() + hairpin->ticks() - Fraction::eps();
+                        endCR = score()->findCR(tick2, track());
+                        }
+                  score()->addHairpin(hairpin->hairpinType(), this, endCR);
+                  delete e;
+                  }
+                  return nullptr;
 
             default:
                   qDebug("cannot drop %s", e->name());

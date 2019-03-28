@@ -1092,6 +1092,7 @@ class Score : public QObject, public ScoreElement {
       void removeUnmanagedSpanner(Spanner*);
 
       Hairpin* addHairpin(HairpinType, const Fraction& tickStart, const Fraction& tickEnd, int track);
+      Hairpin* addHairpin(HairpinType, ChordRest* cr1, ChordRest* cr2 = nullptr, bool toCr2End = true);
 
       ChordRest* findCR(Fraction tick, int track) const;
       ChordRest* findCRinStaff(const Fraction& tick, int staffIdx) const;
