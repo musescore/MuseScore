@@ -16,6 +16,7 @@
 #include "inspector/inspector.h"
 #include "palette.h"
 #include "palettebox.h"
+#include "scoretab.h"
 #include "script.h"
 #include "testscript.h"
 
@@ -54,6 +55,8 @@ std::unique_ptr<ScriptEntry> ScriptEntry::deserialize(const QString& line)
             return PaletteElementScriptEntry::deserialize(tokens);
       if (type == SCRIPT_INSPECTOR)
             return InspectorScriptEntry::deserialize(tokens);
+      if (type == SCRIPT_EXCERPT_CHANGE)
+            return ExcerptChangeScriptEntry::deserialize(tokens);
       qWarning() << "Unsupported action type:" << type;
       return nullptr;
       }
@@ -394,5 +397,60 @@ std::unique_ptr<ScriptEntry> InspectorScriptEntry::fromContext(const Element* e,
       for (int i = 0; i < ii.parent; ++i)
             e = e->parent();
       return std::unique_ptr<ScriptEntry>(new InspectorScriptEntry(e->type(), ii.parent, ii.t, value));
+      }
+
+//---------------------------------------------------------
+//   ExcerptChangeScriptEntry::execute
+//---------------------------------------------------------
+
+bool ExcerptChangeScriptEntry::execute(ScriptContext& ctx) const
+      {
+      ctx.mscore()->currentScoreTab()->setExcerpt(_index);
+      return true;
+      }
+
+//---------------------------------------------------------
+//   ExcerptChangeScriptEntry::serialize
+//---------------------------------------------------------
+
+QString ExcerptChangeScriptEntry::serialize() const
+      {
+      return entryTemplate(SCRIPT_EXCERPT_CHANGE).arg(QString::number(_index));
+      }
+
+//---------------------------------------------------------
+//   ExcerptChangeScriptEntry::deserialize
+//---------------------------------------------------------
+
+std::unique_ptr<ScriptEntry> ExcerptChangeScriptEntry::deserialize(const QStringList& tokens)
+      {
+      if (tokens.size() < 2) {
+            qWarning("excerpt change: unexpected number of tokens: %d", tokens.size());
+            return nullptr;
+            }
+
+      bool ok = false;
+      const int index = tokens[1].toInt(&ok);
+      if (!ok) {
+            qWarning("excerpt change: argument is not a number");
+            return nullptr;
+            }
+
+      return std::unique_ptr<ScriptEntry>(new ExcerptChangeScriptEntry(index));
+      }
+
+//---------------------------------------------------------
+//   ExcerptChangeScriptEntry::fromContext
+//---------------------------------------------------------
+
+std::unique_ptr<ScriptEntry> ExcerptChangeScriptEntry::fromContext(const ScriptContext& ctx)
+      {
+      const Score* s = ctx.mscore()->currentScore();
+      int index = 0;
+      if (!s->isMaster()) {
+            const auto& scores = s->masterScore()->scoreList();
+            index = std::find(scores.begin(), scores.end(), s) - scores.begin();
+            }
+      return std::unique_ptr<ScriptEntry>(new ExcerptChangeScriptEntry(index));
       }
 }
