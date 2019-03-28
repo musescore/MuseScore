@@ -327,7 +327,7 @@ class Element : public ScoreElement {
 
       static ElementType readType(XmlReader& node, QPointF*, Fraction*);
 
-      QByteArray mimeData(const QPointF&) const;
+      virtual QByteArray mimeData(const QPointF&) const;
 /**
  Return true if this element accepts a drop at canvas relative \a pos
  of given element \a type and \a subtype.

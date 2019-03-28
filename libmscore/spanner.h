@@ -93,6 +93,8 @@ class SpannerSegment : public Element {
 
       virtual bool isEditable() const override { return true; }
 
+      QByteArray mimeData(const QPointF& dragOffset) const override;
+
       virtual QVariant getProperty(Pid id) const override;
       virtual bool setProperty(Pid id, const QVariant& v) override;
       virtual QVariant propertyDefault(Pid id) const override;
@@ -169,6 +171,9 @@ class Spanner : public Element {
 
       virtual ElementType type() const = 0;
       virtual void setScore(Score* s) override;
+
+      bool readProperties(XmlReader&) override;
+      void writeProperties(XmlWriter&) const override;
 
       void writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac = { -1, 1 }) const;
       void writeSpannerEnd(XmlWriter& xml,   const Element* current, int track, Fraction frac = { -1, 1 }) const;

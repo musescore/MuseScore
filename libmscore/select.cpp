@@ -20,9 +20,11 @@
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
+#include "dynamic.h"
 #include "element.h"
 #include "figuredbass.h"
 #include "glissando.h"
+#include "hairpin.h"
 #include "harmony.h"
 #include "fret.h"
 #include "hook.h"
@@ -832,7 +834,6 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case ElementType::IMAGE:
                   case ElementType::TIE:
                   case ElementType::CHORDLINE:
-                  case ElementType::DYNAMIC:
                   case ElementType::BEAM:
                   case ElementType::HOOK:
                   case ElementType::MARKER:
@@ -847,7 +848,6 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case ElementType::BEND:
                   case ElementType::TREMOLOBAR:
                   case ElementType::VOLTA:
-                  case ElementType::HAIRPIN_SEGMENT:
                   case ElementType::OTTAVA_SEGMENT:
                   case ElementType::TRILL_SEGMENT:
                   case ElementType::VIBRATO_SEGMENT:
@@ -869,7 +869,6 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                   case ElementType::TAB_DURATION_SYMBOL:
                   case ElementType::FSYMBOL:
                   case ElementType::PAGE:
-                  case ElementType::HAIRPIN:
                   case ElementType::OTTAVA:
                   case ElementType::PEDAL:
                   case ElementType::TRILL:
@@ -920,6 +919,15 @@ Enabling copying of more element types requires enabling pasting in Score::paste
                         continue;
                   case ElementType::LYRICS:
                         seg = toLyrics(e)->segment();
+                        break;
+                  case ElementType::DYNAMIC:
+                        seg = toDynamic(e)->segment();
+                        break;
+                  case ElementType::HAIRPIN_SEGMENT:
+                        e = toHairpinSegment(e)->hairpin();
+                        // fall through
+                  case ElementType::HAIRPIN:
+                        seg = toHairpin(e)->startSegment();
                         break;
                   default:
                         continue;
