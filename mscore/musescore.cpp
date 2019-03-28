@@ -4479,7 +4479,6 @@ void MuseScore::play(Element* e) const
             Chord* c   = toChord(e);
             Part* part = c->staff()->part();
             Fraction tick   = c->segment() ? c->segment()->tick() : Fraction(0,1);
-            seq->seek(tick.ticks());
             Instrument* instr = part->instrument(tick);
             for (Note* n : c->notes()) {
                   const int channel = instr->channel(n->subchannel())->channel();
