@@ -1269,7 +1269,9 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
 
 static void updateStyle(void*, Element* e)
       {
+      bool v = e->generated();
       e->styleChanged();
+      e->setGenerated(v);
       }
 
 //---------------------------------------------------------
