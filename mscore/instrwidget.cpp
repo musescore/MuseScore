@@ -406,8 +406,8 @@ void populateGenreCombo(QComboBox* combo)
                   defaultIndex = i;
             ++i;
             }
-      combo->setCurrentIndex(defaultIndex);
       combo->blockSignals(false);
+      combo->setCurrentIndex(defaultIndex);
       }
 
 //---------------------------------------------------------
