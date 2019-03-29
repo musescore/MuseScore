@@ -41,7 +41,7 @@ double findBasicTempo(const std::multimap<int, MTrack> &tracks, bool isHumanPerf
 
 void setTempoToScore(Score *score, int tick, double beatsPerSecond)
       {
-      if (score->tempomap()->find(Fraction::fromTicks(tick)) != score->tempomap()->end())
+      if (score->tempomap()->hasEventAt(Fraction::fromTicks(tick)))
             return;
                   // don't repeat tempo, always set only tempo for tick 0
       if (tick > 0 && score->tempo(Fraction::fromTicks(tick)) == beatsPerSecond)

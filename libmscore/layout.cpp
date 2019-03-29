@@ -2752,8 +2752,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                         qreal ntempo = otempo / stretch;
                         setTempo(segment.tick(), ntempo);
                         Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480*4);
-                        auto e = tempomap()->find(etick);
-                        if (e == tempomap()->end())
+                        if (!tempomap()->hasEventAt(etick))
                               setTempo(etick, otempo);
                         }
                   }

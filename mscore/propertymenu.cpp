@@ -505,12 +505,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                         // transpose for current score only
                         // this automatically propagates to linked scores
                         if (part->instrument(tickStart)->transpose() != oldV) {
-                              auto i = part->instruments()->upper_bound(tickStart.ticks());    // find(), ++i
-                              Fraction tickEnd;
-                              if (i == part->instruments()->end())
-                                    tickEnd = Fraction(-1,0);
-                              else
-                                    tickEnd = Fraction::fromTicks(i->first);
+                              const Fraction tickEnd = part->instruments()->nextValueTime(tickStart);
                               ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
                               }
                         }

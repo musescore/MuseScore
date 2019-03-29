@@ -24,6 +24,15 @@ namespace Ms {
 //   KeySigEvent
 //---------------------------------------------------------
 
+KeySigEvent::KeySigEvent(Key key)
+      {
+      setKey(key);
+      }
+
+//---------------------------------------------------------
+//   KeySigEvent
+//---------------------------------------------------------
+
 KeySigEvent::KeySigEvent(const KeySigEvent& k)
       {
       _key        = k._key;

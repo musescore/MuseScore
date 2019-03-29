@@ -581,9 +581,7 @@ void MTrack::createKeys(Key defaultKey, const KeyList &allKeyList)
 
       if (!hasKey && !mtrack->drumTrack()) {
             if (allKeyList.empty()) {
-                  KeySigEvent ke;
-                  ke.setKey(defaultKey);
-                  staffKeyList[TimePosition(Fraction(0,1))] = ke;
+                  staffKeyList.insert(0_Fr, KeySigEvent(defaultKey));
                   MidiKey::assignKeyListToStaff(staffKeyList, staff);
                   }
             else {

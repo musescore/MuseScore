@@ -375,8 +375,8 @@ void ExportMidi::PauseMap::calculate(const Score* s)
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
 
-            auto se = tempomap->lower_bound(TimePosition(Fraction::fromTicks(startTick)));
-            auto ee = tempomap->lower_bound(TimePosition(Fraction::fromTicks(endTick+1))); // +1 to include first tick of next RepeatSegment
+            auto se = tempomap->lower_bound(Fraction::fromTicks(startTick));
+            auto ee = tempomap->upper_bound(Fraction::fromTicks(endTick)); // upper to include first tick of next RepeatSegment
 
             for (auto it = se; it != ee; ++it) {
                   int tick = it->first.tick().ticks();
@@ -385,10 +385,10 @@ void ExportMidi::PauseMap::calculate(const Score* s)
                   if (it->second.pause == 0.0) {
                         // We have a regular tempo change. Don't include tempo change from first tick of next RepeatSegment (it will be included later).
                         if (tick != endTick)
-                              tempomapWithPauses->insert(std::pair<const TimePosition, TEvent> (
-                                 TimePosition(Fraction::fromTicks(this->addPauseTicks(utick))),
+                              tempomapWithPauses->setEvent(
+                                 Fraction::fromTicks(this->addPauseTicks(utick)),
                                  it->second
-                                 ));
+                                 );
                         }
                   else {
                         // We have a pause event. Don't include pauses from first tick of current RepeatSegment (it was included in the previous one).

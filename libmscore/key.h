@@ -95,6 +95,7 @@ class KeySigEvent {
 
    public:
       KeySigEvent() {}
+      explicit KeySigEvent(Key key);
       KeySigEvent(const KeySigEvent&);
 
       bool operator==(const KeySigEvent& e) const;

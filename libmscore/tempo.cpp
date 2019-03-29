@@ -101,7 +101,7 @@ void TempoMap::normalize()
       qreal time  = 0;
       Fraction tick { 0, 1 };
       qreal tempo = 2.0;
-      for (auto e = begin(); e != end(); ++e) {
+      for (auto e = M::begin(); e != M::end(); ++e) {
             // entries that represent a pause *only* (not tempo change also)
             // need to be corrected to continue previous tempo
             if (!(e->second.type & (TempoType::FIX|TempoType::RAMP)))
@@ -134,7 +134,7 @@ void TempoMap::dump() const
 
 void TempoMap::clear()
       {
-      std::map<TimePosition,TEvent>::clear();
+      M::clear();
       ++_tempoSN;
       }
 
@@ -146,11 +146,7 @@ void TempoMap::clear()
 
 void TempoMap::clearRange(const Fraction& tick1, const Fraction& tick2)
       {
-      iterator first = lower_bound(TimePosition(tick1));
-      iterator last  = lower_bound(TimePosition(tick2));
-      if (first == last)
-            return;
-      erase(first, last);
+      M::clearRange(tick1, tick2);
       ++_tempoSN;
       }
 
@@ -160,19 +156,8 @@ void TempoMap::clearRange(const Fraction& tick1, const Fraction& tick2)
 
 qreal TempoMap::tempo(const Fraction& tick) const
       {
-      if (empty())
-            return 2.0;
-      auto i = lower_bound(TimePosition(tick));
-      if (i == end()) {
-            --i;
-            return i->second.tempo;
-            }
-      if (i->first.tick() == tick)
-            return i->second.tempo;
-      if (i == begin())
-            return 2.0;
-      --i;
-      return i->second.tempo;
+      static const TEvent defaultTempo(2.0, 0, TempoType::FIX);
+      return M::value(tick, defaultTempo).tempo;
       }
 
 //---------------------------------------------------------
@@ -246,7 +231,7 @@ qreal TempoMap::tick2time(const Fraction& tick, int* sn) const
 
       if (!empty()) {
             int ptick  = 0;
-            auto e = lower_bound(TimePosition(tick));
+            auto e = lower_bound(tick);
             if (e == end()) {
                   auto pe = e;
                   --pe;

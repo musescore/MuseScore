@@ -36,7 +36,7 @@ Part::Part(Score* s)
       {
       _color = DEFAULT_COLOR;
       _show  = true;
-      _instruments.setInstrument(new Instrument, -1);   // default instrument
+      _instruments.setInstrument(new Instrument, -1_Fr);   // default instrument
       }
 
 //---------------------------------------------------------
@@ -287,17 +287,17 @@ void Part::setMidiChannel(int ch, int port, const Fraction& tick)
 
 void Part::setInstrument(Instrument* i, Fraction tick)
       {
-      _instruments.setInstrument(i, tick.ticks());
+      _instruments.setInstrument(i, tick);
       }
 
 void Part::setInstrument(const Instrument&& i, Fraction tick)
       {
-      _instruments.setInstrument(new Instrument(i), tick.ticks());
+      _instruments.setInstrument(new Instrument(i), tick);
       }
 
 void Part::setInstrument(const Instrument& i, Fraction tick)
       {
-      _instruments.setInstrument(new Instrument(i), tick.ticks());
+      _instruments.setInstrument(new Instrument(i), tick);
       }
 
 //---------------------------------------------------------
@@ -306,12 +306,11 @@ void Part::setInstrument(const Instrument& i, Fraction tick)
 
 void Part::removeInstrument(const Fraction& tick)
       {
-      auto i = _instruments.find(tick.ticks());
-      if (i == _instruments.end()) {
+      if (!_instruments.hasChangeAt(tick)) {
             qDebug("Part::removeInstrument: not found at tick %d", tick.ticks());
             return;
             }
-      _instruments.erase(i);
+      _instruments.erase(tick);
       }
 
 //---------------------------------------------------------
@@ -320,7 +319,7 @@ void Part::removeInstrument(const Fraction& tick)
 
 Instrument* Part::instrument(Fraction tick)
       {
-      return _instruments.instrument(tick.ticks());
+      return _instruments.instrument(tick);
       }
 
 //---------------------------------------------------------
@@ -329,7 +328,7 @@ Instrument* Part::instrument(Fraction tick)
 
 const Instrument* Part::instrument(Fraction tick) const
       {
-      return _instruments.instrument(tick.ticks());
+      return _instruments.instrument(tick);
       }
 
 //---------------------------------------------------------
@@ -476,28 +475,7 @@ int Part::endTrack() const
 
 void Part::insertTime(const Fraction& tick, const Fraction& len)
       {
-      if (len.isZero())
-            return;
-
-      // move all instruments
-
-      if (len < Fraction(0,1)) {
-            // remove instruments between tickpos >= tick and tickpos < (tick+len)
-            // ownership goes back to class InstrumentChange()
-
-            auto si = _instruments.lower_bound(tick.ticks());
-            auto ei = _instruments.lower_bound((tick-len).ticks());
-            _instruments.erase(si, ei);
-            }
-
-      InstrumentList il;
-      for (auto i = _instruments.lower_bound(tick.ticks()); i != _instruments.end();) {
-            Instrument* instrument = i->second;
-            int t = i->first;
-            _instruments.erase(i++);
-            _instruments[t + len.ticks()] = instrument;
-            }
-      _instruments.insert(il.begin(), il.end());
+      _instruments.insertTime(tick, len);
       }
 
 //---------------------------------------------------------

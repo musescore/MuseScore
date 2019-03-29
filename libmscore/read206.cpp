@@ -1085,7 +1085,7 @@ void readPart206(Part* part, XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "Instrument") {
-                  Instrument* i = part->_instruments.instrument(/* tick */ -1);
+                  Instrument* i = part->_instruments.instrument(/* tick */ -1_Fr);
                   readInstrument(i, part, e);
                   Drumset* ds = i->drumset();
                   Staff*   s = part->staff(0);

@@ -679,8 +679,7 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
                         qreal ntempo = otempo / stretch;
                         score->setTempo(segment.tick(), ntempo);
                         Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480*4);
-                        auto e = score->tempomap()->find(etick);
-                        if (e == score->tempomap()->end())
+                        if (score->tempomap()->hasEventAt(etick))
                               score->setTempo(etick, otempo);
                         }
                   }

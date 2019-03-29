@@ -13,45 +13,25 @@
 #ifndef __CLEFLIST_H__
 #define __CLEFLIST_H__
 
-#include "types.h"
 #include "clef.h"
-#include "timeposition.h"
+#include "fraction.h"
+#include "timemap.h"
 
 namespace Ms {
 
-class Score;
-
 //---------------------------------------------------------
 //   ClefList
-//    hide std::map interface
 //---------------------------------------------------------
 
-typedef std::map<TimePosition, ClefTypeList> ClefMap;
-
-class ClefList : ClefMap {
+class ClefList : public TimeMap<ClefTypeList> {
+      typedef TimeMap<ClefTypeList> ClefMap;
+      static const ClefTypeList defaultClef;
 
    public:
-      ClefList() {}
-      ClefTypeList clef(const Fraction&) const;
-      void setClef(const Fraction&, ClefTypeList);
-      Fraction nextClefTick(const Fraction&) const;
-      Fraction currentClefTick(const Fraction&) const;
-
-      void erase(const Fraction& t)                    { ClefMap::erase(TimePosition(t));}
-      void erase(const Fraction& b, const Fraction& e) { ClefMap::erase(lower_bound(b), lower_bound(e)); }
-      void erase(iterator i)                           { ClefMap::erase(i); }
-      void clear()                                     { ClefMap::clear(); }
-
-      iterator lower_bound(const Fraction& t)          { return ClefMap::lower_bound(TimePosition(t)); }
-      iterator begin()                                 { return ClefMap::begin(); }
-      const_iterator begin() const                     { return ClefMap::begin(); }
-      iterator end()                                   { return ClefMap::end(); }
-      const_iterator end() const                       { return ClefMap::end(); }
-
-      void insert(iterator a, iterator b)              { ClefMap::insert(a, b); }
-      void insert(const Fraction& f, ClefTypeList c)   { ClefMap::insert(std::pair<TimePosition, ClefTypeList>(TimePosition(f), c)); }
-
-      bool empty() const                               { return ClefMap::empty(); }
+      ClefTypeList clef(const Fraction& f) const { return ClefMap::value(f, defaultClef); }
+      void setClef(const Fraction& f, ClefTypeList l) { ClefMap::insert(f, l); }
+      Fraction nextClefTick(const Fraction& f) const { return ClefMap::nextValueTime(f); }
+      Fraction currentClefTick(const Fraction& f) const { return ClefMap::currentValueTime(f); }
       };
 
 }     // namespace Ms

@@ -440,50 +440,13 @@ Fraction Staff::timeStretch(const Fraction& tick) const
       }
 
 //---------------------------------------------------------
-//   timeSig
-//    lookup time signature before or at tick
-//---------------------------------------------------------
-
-TimeSig* Staff::timeSig(const Fraction& tick) const
-      {
-      auto i = timesigs.upper_bound(TimePosition(tick));
-      if (i != timesigs.begin())
-            --i;
-      if (i == timesigs.end())
-            return 0;
-      else if (tick < i->first.tick())
-            return 0;
-      return i->second;
-      }
-
-//---------------------------------------------------------
 //   nextTimeSig
 //    lookup time signature at tick or after
 //---------------------------------------------------------
 
 TimeSig* Staff::nextTimeSig(const Fraction& tick) const
       {
-      auto i = timesigs.lower_bound(TimePosition(tick));
-      return (i == timesigs.end()) ? 0 : i->second;
-      }
-
-
-//---------------------------------------------------------
-//   currentTimeSigTick
-//
-//    return the tick position of the time sig currently
-//    in effect at tick
-//---------------------------------------------------------
-
-Fraction Staff::currentTimeSigTick(const Fraction& tick) const
-      {
-      if (timesigs.empty())
-            return Fraction(0, 1);
-      auto i = timesigs.upper_bound(tick);
-      if (i == timesigs.begin())
-            return Fraction(0, 1);
-      --i;
-      return i->first.tick();
+      return timesigs.nextValue(tick, nullptr, /* nextOrEqual */ true);
       }
 
 //---------------------------------------------------------
@@ -509,7 +472,7 @@ const Groups& Staff::group(const Fraction& tick) const
 void Staff::addTimeSig(TimeSig* timesig)
       {
       if (timesig->segment()->segmentType() == SegmentType::TimeSig)
-            timesigs[TimePosition(timesig->segment()->tick())] = timesig;
+            timesigs.insert(timesig->segment()->tick(), timesig);
 //      dumpTimeSigs("after addTimeSig");
       }
 
@@ -549,15 +512,6 @@ void Staff::setKey(const Fraction& tick, KeySigEvent k)
 void Staff::removeKey(const Fraction& tick)
       {
       _keys.erase(tick);
-      }
-
-//---------------------------------------------------------
-//   prevkey
-//---------------------------------------------------------
-
-KeySigEvent Staff::prevKey(const Fraction& tick) const
-      {
-      return _keys.prevKey(tick);
       }
 
 //---------------------------------------------------------
@@ -1135,22 +1089,7 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
       if (len.isZero())
             return;
 
-      // move all keys and clefs >= tick
-
-      if (len < Fraction(0,1)) {
-            // remove entries between tickpos >= tick and tickpos < (tick+len)
-            _keys.erase(_keys.lower_bound(tick), _keys.lower_bound(tick - len));
-            clefs.erase(tick, tick - len);
-            }
-
-      KeyList kl2;
-      for (auto i = _keys.lower_bound(tick); i != _keys.end();) {
-            KeySigEvent kse = i->second;
-            Fraction t = i->first.tick();
-            _keys.erase(i++);
-            kl2[TimePosition(t + len)] = kse;
-            }
-      _keys.insert(kl2.begin(), kl2.end());
+      _keys.insertTime(tick, len);
 
       // check if there is a clef at the end of measure
       // before tick
@@ -1165,18 +1104,8 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
                   }
             }
 
-      ClefList cl2;
-      for (auto i = clefs.lower_bound(tick); i != clefs.end();) {
-            ClefTypeList ctl = i->second;
-            Fraction t = i->first.tick();
-            if (clef && tick == t) {
-                  ++i;
-                  continue;
-                  }
-            clefs.erase(i++);
-            cl2.setClef((t + len), ctl);
-            }
-      clefs.insert(cl2.begin(), cl2.end());
+      const bool includeStartTick = (clef == nullptr);
+      clefs.insertTime(tick, len, includeStartTick);
 
       // check if there is a clef at the end of measure
       // before tick: do not remove from clefs list

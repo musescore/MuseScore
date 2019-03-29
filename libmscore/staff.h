@@ -69,7 +69,7 @@ class Staff final : public ScoreElement {
 
       ClefList clefs;
       KeyList _keys;
-      std::map<TimePosition, TimeSig*> timesigs;
+      TimeMap<TimeSig*> timesigs;
       StaffTypeList _staffTypeList;
 
       ClefTypeList _defaultClefType;
@@ -145,9 +145,11 @@ class Staff final : public ScoreElement {
       void removeTimeSig(TimeSig*);
       void clearTimeSig();
       Fraction timeStretch(const Fraction&) const;
-      TimeSig* timeSig(const Fraction&) const;
+      /** lookup time signature before or at tick */
+      TimeSig* timeSig(const Fraction& f) const { return timesigs.value(f, nullptr); }
       TimeSig* nextTimeSig(const Fraction&) const;
-      Fraction currentTimeSigTick(const Fraction&) const;
+      /** return the tick position of the time sig currently in effect at tick */
+      Fraction currentTimeSigTick(const Fraction& f) const { return timesigs.currentValueTime(f); }
 
       bool isLocalTimeSignature(const Fraction& tick) { return timeStretch(tick) != Fraction(1, 1); }
 
@@ -158,7 +160,6 @@ class Staff final : public ScoreElement {
       KeySigEvent keySigEvent(const Fraction& t) const { return _keys.key(t); }
       Fraction nextKeyTick(const Fraction&) const;
       Fraction currentKeyTick(const Fraction&) const;
-      KeySigEvent prevKey(const Fraction&) const;
       void setKey(const Fraction&, KeySigEvent);
       void removeKey(const Fraction&);
 

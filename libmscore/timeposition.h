@@ -27,7 +27,7 @@ class TimePosition {
       qreal t;                // cached float value of fraction
 
    public:
-      TimePosition(const Fraction& t) : f(t), t(qreal(t.numerator())/qreal(t.denominator())) {}
+      constexpr TimePosition(const Fraction& t) : f(t), t(qreal(t.numerator())/qreal(t.denominator())) {}
       const Fraction& tick() const                 { return f; }
       bool operator<(const TimePosition& tp) const { return t < tp.t; }
       };

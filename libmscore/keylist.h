@@ -13,9 +13,8 @@
 #ifndef __KEYLIST_H__
 #define __KEYLIST_H__
 
-#include "types.h"
 #include "key.h"
-#include "timeposition.h"
+#include "timemap.h"
 
 namespace Ms {
 
@@ -27,24 +26,20 @@ class XmlReader;
 //    to keep track of key signature changes
 //---------------------------------------------------------
 
-typedef std::map<TimePosition, KeySigEvent> KeyMap;
-
-class KeyList : public KeyMap {
+class KeyList : public TimeMap<KeySigEvent> {
+      typedef TimeMap<KeySigEvent> KeyMap;
+      static const KeySigEvent defaultKeySig;
 
    public:
-      KeySigEvent key(const Fraction& tick) const;
-      KeySigEvent prevKey(const Fraction& tick) const;
-      void setKey(const Fraction& tick, KeySigEvent);
-      Fraction nextKeyTick(const Fraction& tick) const;
-      Fraction currentKeyTick(const Fraction& tick) const;
+      KeySigEvent key(const Fraction& tick) const { return KeyMap::value(tick, defaultKeySig); }
+      void setKey(const Fraction& tick, KeySigEvent key) { KeyMap::insert(tick, key); }
+      Fraction nextKeyTick(const Fraction& tick) const { return KeyMap::nextValueTime(tick); }
+      Fraction currentKeyTick(const Fraction& tick) const { return KeyMap::currentValueTime(tick); }
+
+      KeyMap::const_iterator lower_bound(const Fraction& tick) const { return KeyMap::lower_bound(tick); }
+      KeyMap::const_iterator upper_bound(const Fraction& tick) const { return KeyMap::upper_bound(tick); }
 
       void read(XmlReader&, Score*);
-
-      iterator lower_bound(const Fraction& t)          { return KeyMap::lower_bound(TimePosition(t)); }
-      iterator begin()                                 { return KeyMap::begin(); }
-      const_iterator begin() const                     { return KeyMap::begin(); }
-      iterator end()                                   { return KeyMap::end(); }
-      const_iterator end() const                       { return KeyMap::end(); }
       };
 
 }

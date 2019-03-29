@@ -2858,10 +2858,10 @@ Score::FileError MasterScore::read114(XmlReader& e)
                               int tick   = e.attribute("tick").toInt();
                               double tmp = e.readElementText().toDouble();
                               tick       = (tick * MScore::division + _fileDivision/2) / _fileDivision;
-                              auto pos   = tm.find(Fraction::fromTicks(tick));
-                              if (pos != tm.end())
-                                    tm.erase(pos);
-                              tm.setTempo(Fraction::fromTicks(tick), tmp);
+                              const Fraction f = Fraction::fromTicks(tick);
+                              if (tm.hasEventAt(f))
+                                    tm.delTempo(f);
+                              tm.setTempo(f, tmp);
                         }
                         else if (e.name() == "relTempo")
                               e.readElementText();

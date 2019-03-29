@@ -140,11 +140,8 @@ void recognizeMainKeySig(QList<MTrack> &tracks)
                   continue;
 
             if (!track.hasKey || isHuman) {
-                  KeySigEvent ke;
-                  ke.setKey(key);
-
                   KeyList &staffKeyList = *track.staff->keyList();
-                  staffKeyList[TimePosition(Fraction(0,1))] = ke;
+                  staffKeyList.insert(0_Fr, KeySigEvent(key));
                   assignKeyListToStaff(staffKeyList, track.staff);
                   }
             }

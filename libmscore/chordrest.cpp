@@ -532,7 +532,7 @@ Element* ChordRest::drop(EditData& data)
             case ElementType::SYSTEM_TEXT:
             case ElementType::STAFF_STATE:
             case ElementType::INSTRUMENT_CHANGE:
-                  if (e->isInstrumentChange() && part()->instruments()->find(tick().ticks()) != part()->instruments()->end()) {
+                  if (e->isInstrumentChange() && part()->instruments()->hasChangeAt(tick())) {
                         qDebug()<<"InstrumentChange already exists at tick = "<<tick().ticks();
                         delete e;
                         return 0;

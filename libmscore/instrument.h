@@ -17,6 +17,7 @@
 #include "mscore.h"
 #include "notifier.hpp"
 #include "synthesizer/event.h"
+#include "timemap.h"
 #include "interval.h"
 #include "clef.h"
 #include <QtGlobal>
@@ -347,14 +348,15 @@ class Instrument {
 //   InstrumentList
 //---------------------------------------------------------
 
-class InstrumentList : public std::map<const int, Instrument*> {
+class InstrumentList : public TimeMap<Instrument*> {
+      typedef TimeMap<Instrument*> M;
       static Instrument defaultInstrument;
 
    public:
       InstrumentList() {}
-      const Instrument* instrument(int tick) const;
-      Instrument* instrument(int tick);
-      void setInstrument(Instrument*, int tick);
+      const Instrument* instrument(Fraction tick) const { return M::value(tick, &defaultInstrument); }
+      Instrument* instrument(Fraction tick) { return M::value(tick, &defaultInstrument); }
+      void setInstrument(Instrument* i, Fraction tick) { M::insert(tick, i); }
       };
 
 }     // namespace Ms

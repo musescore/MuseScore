@@ -14,7 +14,7 @@
 #define __AL_TEMPO_H__
 
 #include "types.h"
-#include "timeposition.h"
+#include "timemap.h"
 
 namespace Ms {
 
@@ -45,7 +45,8 @@ struct TEvent {
 //   Tempomap
 //---------------------------------------------------------
 
-class TempoMap : public std::map<TimePosition, TEvent> {
+class TempoMap : private TimeMap<TEvent> {
+      typedef TimeMap<TEvent> M;
       int _tempoSN;           // serial no to track tempo changes
       qreal _tempo;           // tempo if not using tempo list (beats per second)
       qreal _relTempo;        // rel. tempo
@@ -58,9 +59,20 @@ class TempoMap : public std::map<TimePosition, TEvent> {
       void clear();
       void clearRange(const Fraction& tick1, const Fraction& tick2);
 
+      // expose some part of TimeMap interface directly
+      using M::cbegin;
+      using M::cend;
+      using M::empty;
+
+      M::const_iterator begin() const { return M::begin(); }
+      M::const_iterator end() const { return M::cend(); }
+      M::const_iterator lower_bound(const Fraction& tick) const { return M::lower_bound(tick); }
+      M::const_iterator upper_bound(const Fraction& tick) const { return M::upper_bound(tick); }
+
       void dump() const;
 
       qreal tempo(const Fraction& tick) const;
+      bool hasEventAt(const Fraction& tick) const { return M::hasChangeAt(tick); }
 
       qreal tick2time(const Fraction& tick, int* sn = 0) const;
       qreal tick2timeLC(const Fraction& tick, int* sn) const;
@@ -71,7 +83,9 @@ class TempoMap : public std::map<TimePosition, TEvent> {
 
       void setTempo(const Fraction& t, qreal);
       void setPause(const Fraction& t, qreal);
+      void setEvent(const Fraction& t, const TEvent& evt) { M::insert(t, evt); normalize(); }
       void delTempo(const Fraction& tick);
+
 
       void setRelTempo(qreal val);
       qreal relTempo() const { return _relTempo; }

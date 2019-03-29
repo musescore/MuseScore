@@ -103,11 +103,7 @@ void EditStaff::setStaff(Staff* s)
       staff->setHideSystemBarLine(orgStaff->hideSystemBarLine());
 
       // get tick range for instrument
-      auto i = part->instruments()->upper_bound(0);   // tick
-      if (i == part->instruments()->end())
-            _tickEnd = Fraction(-1,1);
-      else
-            _tickEnd = Fraction::fromTicks(i->first);
+      _tickEnd = part->instruments()->nextValueTime(0_Fr);
 #if 1
       _tickStart = Fraction(-1,1);
 #else

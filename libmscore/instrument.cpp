@@ -1321,46 +1321,6 @@ QString Instrument::instrumentId() const
       }
 
 //---------------------------------------------------------
-//   instrument
-//---------------------------------------------------------
-
-const Instrument* InstrumentList::instrument(int tick) const
-      {
-      if (empty())
-            return &defaultInstrument;
-      auto i = upper_bound(tick);
-      if (i == begin())
-            return &defaultInstrument;
-      --i;
-      return i->second;
-      }
-
-//---------------------------------------------------------
-//   instrument
-//---------------------------------------------------------
-
-Instrument* InstrumentList::instrument(int tick)
-      {
-      if (empty())
-            return &defaultInstrument;
-      auto i = upper_bound(tick);
-      if (i == begin())
-            return &defaultInstrument;
-      --i;
-      return i->second;
-      }
-
-//---------------------------------------------------------
-//   setInstrument
-//---------------------------------------------------------
-
-void InstrumentList::setInstrument(Instrument* instr, int tick)
-      {
-      if (!insert({tick, instr}).second)
-            (*this)[tick] = instr;
-      }
-
-//---------------------------------------------------------
 //   longName
 //---------------------------------------------------------
 

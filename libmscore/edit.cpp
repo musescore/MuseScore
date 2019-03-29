@@ -1857,12 +1857,7 @@ void Score::deleteItem(Element* el)
                   Interval oldV = part->instrument(tickStart)->transpose();
                   undoRemoveElement(el);
                   if (part->instrument(tickStart)->transpose() != oldV) {
-                        auto i = part->instruments()->upper_bound(tickStart.ticks());
-                        Fraction tickEnd;
-                        if (i == part->instruments()->end())
-                              tickEnd = Fraction(-1, 1);
-                        else
-                              tickEnd = Fraction::fromTicks(i->first);
+                        const Fraction tickEnd = part->instruments()->nextValueTime(tickStart);
                         transpositionChanged(part, oldV, tickStart, tickEnd);
                         }
                   }
@@ -4458,8 +4453,7 @@ void Score::undoAddElement(Element* element)
                         undo(new AddElement(nis));
                         // transpose root score; parts will follow
                         if (score->isMaster() && part->instrument(tickStart)->transpose() != oldV) {
-                              auto i = part->instruments()->upper_bound(tickStart.ticks());
-                              Fraction tickEnd = i == part->instruments()->end() ? Fraction(-1, 1) : Fraction::fromTicks(i->first);
+                              const Fraction tickEnd = part->instruments()->nextValueTime(tickStart);
                               transpositionChanged(part, oldV, tickStart, tickEnd);
                               }
                         }
