@@ -6707,7 +6707,8 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
       {
 #ifndef USE_LAME
       Q_UNUSED(score);
-      Q_UNUSED(name);
+      Q_UNUSED(device);
+      Q_UNUSED(wasCanceled);
       return false;
 #else
       EventMap events;
