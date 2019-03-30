@@ -320,7 +320,7 @@ void ZInstrument::addRegion(SfzRegion& r)
 static void readLongLong(const QString& data, long long& val)
       {
       bool ok;
-      float d = data.toLongLong(&ok);
+      long long d = data.toLongLong(&ok);
       if (ok)
             val = d;
       }
