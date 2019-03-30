@@ -490,18 +490,24 @@ void Tie::slurPos(SlurPos* sp)
       else
             sp->system2 = ec->measure()->system();
 
+      // force tie to be horizontal except for cross-staff or if there is a difference of enharmonic spelling
+      bool horizontal = startNote()->tpc() == endNote()->tpc() && sc->vStaffIdx() == ec->vStaffIdx();
+
       hw = endNote()->tabHeadWidth(stt);
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up)) {
             xo = endNote()->x() - hw * 0.12;
-            yo = endNote()->pos().y() + yOffInside;
+            if (!horizontal)
+                  yo = endNote()->pos().y() + yOffInside;
             }
       else if (shortStart) {
             xo = endNote()->x() + hw * 0.15;
-            yo = endNote()->pos().y() + yOffOutside;
+            if (!horizontal)
+                  yo = endNote()->pos().y() + yOffOutside;
             }
       else {
             xo = endNote()->x() + hw * 0.35;
-            yo = endNote()->pos().y() + yOffOutside;
+            if (!horizontal)
+                  yo = endNote()->pos().y() + yOffOutside;
             }
       sp->p2 += QPointF(xo, yo);
 
