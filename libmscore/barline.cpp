@@ -1051,12 +1051,20 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
 void BarLine::layout()
       {
       setPos(QPointF());
+      // barlines hidden on this staff
+      if (staff() && segment()) {
+            if ((!staff()->staffType(tick())->showBarlines() && segment()->segmentType() == SegmentType::EndBarLine)
+                || (staff()->hideSystemBarLine() && segment()->segmentType() == SegmentType::BeginBarLine)) {
+                  setbbox(QRectF());
+                  return;
+                  }
+            }
+
       setMag(score()->styleB(Sid::scaleBarlines) && staff() ? staff()->mag(tick()) : 1.0);
       qreal _spatium = spatium();
       y1 = _spatium * .5 * _spanFrom;
       y2 = _spatium * .5 * (8.0 + _spanTo);
 
-      // bar lines not hidden
       qreal w = layoutWidth(score(), barLineType()) * mag();
       QRectF r(0.0, y1, w, y2 - y1);
 
@@ -1104,6 +1112,15 @@ void BarLine::layout()
 
 void BarLine::layout2()
       {
+      // barlines hidden on this staff
+      if (staff() && segment()) {
+            if ((!staff()->staffType(tick())->showBarlines() && segment()->segmentType() == SegmentType::EndBarLine)
+                || (staff()->hideSystemBarLine() && segment()->segmentType() == SegmentType::BeginBarLine)) {
+                  setbbox(QRectF());
+                  return;
+                  }
+            }
+
       getY();
       bbox().setTop(y1);
       bbox().setBottom(y2);
