@@ -895,8 +895,10 @@ bool Segment::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::LEADING_SPACE:
                   setExtraLeadingSpace(v.value<Spatium>());
-                  for (Element* e : _elist)
-                        if(e) e->setGenerated(false);
+                  for (Element* e : _elist) {
+                        if(e) 
+                              e->setGenerated(false);
+                        }
                   break;
             default:
                   return Element::setProperty(propertyId, v);

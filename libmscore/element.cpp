@@ -1727,7 +1727,11 @@ bool Element::isUserModified() const
                         return true;
                   }
             }
-      return !visible() || !offset().isNull() || (color() != MScore::defaultColor);
+      for (Pid p : {Pid::VISIBLE, Pid::OFFSET, Pid::COLOR, Pid::Z, Pid::AUTOPLACE}) {
+            if (getProperty(p) != propertyDefault(p))
+                  return true;
+            }
+      return false;
       }
 
 //---------------------------------------------------------
