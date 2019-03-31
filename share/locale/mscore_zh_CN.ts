@@ -16022,12 +16022,12 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2679"/>
         <source>PulseAudio</source>
-        <translation>脉冲音频</translation>
+        <translation>PulseAudio</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2698"/>
         <source>PortAudio</source>
-        <translation>端口音频</translation>
+        <translation>PortAudio</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2720"/>
