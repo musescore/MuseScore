@@ -555,7 +555,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                         const int track = staff * VOICES;
                         const Fraction tick = f;
                         //qDebug("instrument change: tick %s (%d) track %d instr '%s'",
-                        //       qPrintable(f.print()), tick, track, qPrintable(instrId));
+                        //       qPrintable(f.print()), f.ticks(), track, qPrintable(instrId));
                         auto segment = score->tick2segment(tick, true, SegmentType::ChordRest, true);
                         if (!segment)
                               logger->logError(QString("segment for instrument change at tick %1 not found")
@@ -573,6 +573,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
 
                               // if there is already a staff text at this tick / track,
                               // delete it and use its text here instead of "Instrument change"
+                              // TODO: else use instrument name (if known)
                               QString text = findDeleteStaffText(segment, track);
                               ic->setXmlText(text.isEmpty() ? "Instrument change" : text);
                               segment->add(ic); // note: includes part::setInstrument(instr);
@@ -2844,13 +2845,13 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track)
       if (repeat != "") {
             if (Jump* jp = findJump(repeat, _score)) {
                   jp->setTrack(track);
-                  qDebug("jumpsMarkers adding jm %p meas %p",jp, measure);
+                  //qDebug("jumpsMarkers adding jm %p meas %p",jp, measure);
                   // TODO jumpsMarkers.append(JumpMarkerDesc(jp, measure));
                   measure->add(jp);
                   }
             if (Marker* m = findMarker(repeat, _score)) {
                   m->setTrack(track);
-                  qDebug("jumpsMarkers adding jm %p meas %p",m, measure);
+                  //qDebug("jumpsMarkers adding jm %p meas %p",m, measure);
                   // TODO jumpsMarkers.append(JumpMarkerDesc(m, measure));
                   measure->add(m);
                   }
@@ -5807,7 +5808,10 @@ static void addTie(Score* score, Note* note, const int track,
       {
       Q_ASSERT(note);
 
-      if (type == "start") {
+      if (type == "") {
+            // ignore, nothing to do
+            }
+      else if (type == "start") {
             if (tie) {
                   logger->logError(QString("Tie already active"), xmlreader);
                   }
@@ -6039,9 +6043,11 @@ void MusicXMLParserNotations::parse()
                   }
             }
 
+      /*
       for (const auto& notation : _notations) {
             qDebug("%s", qPrintable(notation.print()));
             }
+       */
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "notations");
       }
