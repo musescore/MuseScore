@@ -2014,25 +2014,84 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie)
       }
 
 //---------------------------------------------------------
-//   cmdDeleteSelection
+//   deleteSpannersFromRange
+///   Deletes spanners in the given range that match the
+///   given selection filter.
 //---------------------------------------------------------
 
-void Score::cmdDeleteSelection()
+void Score::deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int track1, int track2, const SelectionFilter& filter)
       {
-      ChordRest* cr = 0;            // select something after deleting notes
+      auto spanners = _spanner.findOverlapping(t1.ticks(), t2.ticks() - 1);
+      for (auto i : spanners) {
+            Spanner* sp = i.value;
+            if (sp->isVolta())
+                  continue;
+            if (!filter.canSelectVoice(sp->track()))
+                  continue;
+            if (sp->track() >= track1 && sp->track() < track2) {
+                  if (sp->tick() >= t1 && sp->tick() < t2
+                     && sp->tick2() >= t1 && sp->tick2() <= t2) {
+                        undoRemoveElement(sp);
+                        }
+                  else if (sp->isSlur() && ((sp->tick() >= t1 && sp->tick() < t2)
+                     || (sp->tick2() >= t1 && sp->tick2() < t2))) {
+                        undoRemoveElement(sp);
+                        }
+                  }
+            }
+      }
 
-      if (selection().isRange()) {
-            Segment* s1 = selection().startSegment();
-            Segment* s2 = selection().endSegment();
+//---------------------------------------------------------
+//   deleteAnnotationsFromRange
+///   Deletes annotations in the given range that match the
+///   given selection filter.
+//---------------------------------------------------------
 
+void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, int track1, int track2, const SelectionFilter& filter)
+      {
+      if (!s1)
+            return;
+      if (s2 && (*s2) < (*s1))
+            return;
+
+      for (int track = track1; track < track2; ++track) {
+            if (!filter.canSelectVoice(track))
+                  continue;
+            for (Segment* s = s1; s != s2; s = s->next1()) {
+                  const auto annotations = s->annotations(); // make a copy since we alter the list
+                  for (Element* annotation : annotations) {
+                        // skip if not included in selection (eg, filter)
+                        if (!filter.canSelect(annotation))
+                              continue;
+                        if (!annotation->systemFlag() && annotation->track() == track)
+                              undoRemoveElement(annotation);
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   deleteRange
+///   Deletes elements in the given range that match the
+///   given selection filter.
+///   \return A chord/rest inside the selected range
+///   that can be used to establish a selection after this
+///   deletion operation.
+//---------------------------------------------------------
+
+ChordRest* Score::deleteRange(Segment* s1, Segment* s2, int track1, int track2, const SelectionFilter& filter)
+      {
+      ChordRest* cr = nullptr;
+
+      if (s1) {
             // delete content from measures underlying mmrests
             if (s1 && s1->measure() && s1->measure()->isMMRest())
                   s1 = s1->measure()->mmRestFirst()->first();
             if (s2 && s2->measure() && s2->measure()->isMMRest())
                   s2 = s2->measure()->mmRestLast()->last();
 
-            Fraction stick1 = selection().tickStart();
-            Fraction stick2 = selection().tickEnd();
+            const Fraction stick1 = s1->tick();
+            const Fraction stick2 = s2 ? s2->tick() : lastMeasure()->endTick();
 
             Segment* ss1 = s1;
             if (!ss1->isChordRestType())
@@ -2041,28 +2100,11 @@ void Score::cmdDeleteSelection()
                   && (s2 == 0 || s2->isEndBarLineType());
 
             Fraction tick2 = s2 ? s2->tick() : Fraction(INT_MAX, 1);
-            int track1     = selection().staffStart() * VOICES;
-            int track2     = selection().staffEnd() * VOICES;
-            auto spanners  = _spanner.findOverlapping(stick1.ticks(), stick2.ticks() - 1);
-            for (auto i : spanners) {
-                  Spanner* sp = i.value;
-                  if (sp->isVolta())
-                        continue;
-                  if (!selectionFilter().canSelectVoice(sp->track()))
-                        continue;
-                  if (sp->track() >= track1 && sp->track() < track2) {
-                        if (sp->tick() >= stick1 && sp->tick() < stick2
-                            && sp->tick2() >= stick1 && sp->tick2() < stick2) {
-                              undoRemoveElement(sp);
-                              }
-                        else if (sp->isSlur() && ((sp->tick() >= stick1 && sp->tick() < stick2)
-                           || (sp->tick2() >= stick1 && sp->tick2() < stick2))) {
-                              undoRemoveElement(sp);
-                              }
-                        }
-                  }
+
+            deleteSpannersFromRange(stick1, stick2, track1, track2, filter);
+
             for (int track = track1; track < track2; ++track) {
-                  if (!selectionFilter().canSelectVoice(track))
+                  if (!filter.canSelectVoice(track))
                         continue;
                   Fraction f;
                   Fraction tick  = Fraction(-1, 1);
@@ -2072,13 +2114,8 @@ void Score::cmdDeleteSelection()
                               deleteItem(s->element(track));
                               continue;
                               }
-                        foreach (Element* annotation, s->annotations()) {
-                              // skip if not included in selection (eg, filter)
-                              if (!selectionFilter().canSelect(annotation))
-                                    continue;
-                              if (!annotation->systemFlag() && annotation->track() == track)
-                                    undoRemoveElement(annotation);
-                              }
+                        // delete annotations just from this segment and track
+                        deleteAnnotationsFromRange(s, s->next1(), track, track + 1, filter);
 
                         Element* e = s->element(track);
                         if (!e)
@@ -2163,6 +2200,24 @@ void Score::cmdDeleteSelection()
                               }
                         }
                   }
+            }
+      return cr;
+      }
+
+//---------------------------------------------------------
+//   cmdDeleteSelection
+//---------------------------------------------------------
+
+void Score::cmdDeleteSelection()
+      {
+      ChordRest* cr = 0;            // select something after deleting notes
+
+      if (selection().isRange()) {
+            Segment* s1 = selection().startSegment();
+            Segment* s2 = selection().endSegment();
+            const Fraction stick1 = selection().tickStart();
+            const Fraction stick2 = selection().tickEnd();
+            cr = deleteRange(s1, s2, staff2track(selection().staffStart()), staff2track(selection().staffEnd()), selectionFilter());
             s1 = tick2segment(stick1);
             s2 = tick2segment(stick2, true);
             if (s1 == 0 || s2 == 0)
