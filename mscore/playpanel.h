@@ -38,6 +38,11 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase {
       int cachedTimePosition;
       bool tempoSliderIsPressed;
       EnablePlayForWidget* enablePlay;
+      static constexpr double MUTE = 0.00 ;
+      static constexpr double n = 20.0 ;
+      double vol;
+      double svol;
+
 
       Score* cs;
       virtual void closeEvent(QCloseEvent*);
@@ -56,6 +61,7 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase {
       void tempoSliderReleased(int);
       void tempoSliderPressed(int);
       void volLabel();
+      void volSpinBoxEdited();
 
    protected:
       virtual void changeEvent(QEvent *event);
