@@ -274,7 +274,7 @@ struct StyleVal2 {
       { Sid::scaleBarlines,               QVariant(true) },
       { Sid::barGraceDistance,            QVariant(.6) },
       { Sid::rehearsalMarkFrameRound,     QVariant(20)    },
-      { Sid::dynamicsFontStyle,           int(FontStyle::Normal) },
+      { Sid::dynamicsFontStyle,           int(FontStyle::Italic) },
 
 //      { Sid::staffTextFontFace,           "FreeSerif" },
 //      { Sid::staffTextFontSize,           10.0 },
