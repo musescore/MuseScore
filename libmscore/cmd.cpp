@@ -927,10 +927,17 @@ bool Score::makeGap1(const Fraction& baseTick, int staffIdx, const Fraction& len
             Measure* m   = tick2measure(tick);
             if ((track % VOICES) && !m->hasVoices(staffIdx))
                   continue;
-            seg = m->undoGetSegment(SegmentType::ChordRest, tick);
 
             Fraction newLen = len - Fraction::fromTicks(voiceOffset[track-strack]);
             Q_ASSERT(newLen.numerator() != 0);
+
+            if (newLen > Fraction(0,1)) {
+                  const Fraction endTick = tick + newLen;
+                  deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, selectionFilter());
+                  deleteSpannersFromRange(tick, endTick, track, track + 1, selectionFilter());
+                  }
+
+            seg = m->undoGetSegment(SegmentType::ChordRest, tick);
             bool result = makeGapVoice(seg, track, newLen, tick);
             if (track == strack && !result) // makeGap failed for first voice
                   return false;
