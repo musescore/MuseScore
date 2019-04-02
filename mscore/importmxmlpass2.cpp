@@ -4587,7 +4587,9 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       auto scoreRelStaff = _score->staffIdx(part);       // zero-based number of parts first staff in the score
       auto partRelTrack = msTrack + msVoice - scoreRelStaff * VOICES;
       // handle notations
-      notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _tie);
+      if (cr) {
+            notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _tie);
+            }
 
       // handle grace after state: remember current grace list size
       if (grace && notations.mustStopGraceAFter()) {
@@ -4620,7 +4622,9 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // add figured bass element
       addFiguredBassElemens(fbl, noteStartTime, msTrack, dura, measure);
-      addTremolo(cr, notations.tremoloNr(), notations.tremoloType(), _tremStart, _logger, &_e);
+      if (cr) {
+            addTremolo(cr, notations.tremoloNr(), notations.tremoloType(), _tremStart, _logger, &_e);
+            }
 
       // don't count chord or grace note duration
       // note that this does not check the MusicXML requirement that notes in a chord
