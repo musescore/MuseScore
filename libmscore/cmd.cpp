@@ -1691,6 +1691,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
             changeAccidental2(ln, pitch, tpc);
             }
       setPlayNote(true);
+      setSelectionChanged(true);
       }
 
 //---------------------------------------------------------
