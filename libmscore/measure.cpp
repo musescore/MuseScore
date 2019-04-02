@@ -3567,6 +3567,29 @@ qreal Measure::basicWidth() const
       return w;
       }
 
+//---------------------------------------------------------
+//   layoutWeight
+//---------------------------------------------------------
+
+int Measure::layoutWeight(int maxMMRestLength) const
+      {
+      int w = ticks().ticks();
+      // reduce weight of mmrests
+      // so the nominal width is not directly proportional to duration (still linear, just not 1:1)
+      // and they are not so "greedy" in taking up available space on a system
+      if (isMMRest()) {
+            int timesigTicks = timesig().ticks();
+            // TODO: style setting
+            if (maxMMRestLength) {
+                  int maxW = timesigTicks * maxMMRestLength;
+                  w = qMin(w, maxW);
+                  }
+            w -= timesigTicks;
+            w = timesigTicks + w / 32;
+            }
+      return w;
+      }
+
 //-------------------------------------------------------------------
 //   addSystemHeader
 ///   Add elements to make this measure suitable as the first measure
@@ -3925,22 +3948,20 @@ void Measure::checkTrailer()
 
 void Measure::setStretchedWidth(qreal w)
       {
-      qreal minWidth = score()->styleP(Sid::minMeasureWidth);
+      qreal minWidth = isMMRest() ? score()->styleP(Sid::minMMRestWidth) : score()->styleP(Sid::minMeasureWidth);
       if (w < minWidth)
             w = minWidth;
 
-      // multi measure rests are not stretched depending on their
-      // tick length
-
-      if (!isMMRest()) {
-            qreal stretchableWidth = 0.0;
-            for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-                  if (!s->enabled())
-                        continue;
-                  stretchableWidth += s->width();
-                  }
-            w += stretchableWidth * (basicStretch()-1.0) * ticks().ticks() / 1920.0;
+      qreal stretchableWidth = 0.0;
+      for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            if (!s->enabled())
+                  continue;
+            stretchableWidth += s->width();
             }
+      const int maxMMRestLength = 32;     // TODO: style
+      int weight = layoutWeight(maxMMRestLength);
+      w += stretchableWidth * (basicStretch() - 1.0) * weight / 1920.0;
+
       setWidth(w);
       }
 
