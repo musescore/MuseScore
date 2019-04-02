@@ -755,6 +755,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
       // not be deleted (it may contain other elements we want to preserve)
       //
       Segment* firstSegment = segment;
+      const Fraction firstSegmentEnd = firstSegment->tick() + firstSegment->ticks();
       Fraction nextTick = segment->tick();
 
       for (Segment* seg = firstSegment; seg; seg = seg->next(SegmentType::ChordRest)) {
@@ -774,7 +775,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   akkumulated += td;
                   sd -= td;
                   if (sd.isZero())
-                        return akkumulated;
+                        break;
                   nextTick = tick2;
                   continue;
                   }
@@ -786,7 +787,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   akkumulated += td;
                   sd -= td;
                   if (sd.isZero())
-                        return akkumulated;
+                        break;
                   }
             //
             // limit to tuplet level
@@ -802,7 +803,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                         t = t->tuplet();
                         }
                   if (tupletEnd)
-                        return akkumulated;
+                        break;
                   }
             Fraction td(cr->ticks());
 
@@ -852,7 +853,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
                   std::vector<TDuration> dList = toDurationList(rd, false);
                   if (dList.empty())
-                        return akkumulated;
+                        break;
 
                   Fraction f = sd / cr->staff()->timeStretch(cr->tick());
                   for (Tuplet* t = tuplet; t; t = t->tuplet())
@@ -883,12 +884,12 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                                     }
                               }
                         }
-                  return akkumulated;
+                  break;
                   }
             akkumulated += td;
             sd          -= td;
             if (sd.isZero())
-                  return akkumulated;
+                  break;
             }
 //      Fraction ticks = measure->tick() + measure->ticks() - segment->tick();
 //      Fraction td = Fraction::fromTicks(ticks);
@@ -900,6 +901,19 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 //      this line creates a qreal-sized gap if the needed gap crosses a measure boundary
 //      by adding again the duration already added in line 838
 //      akkumulated += td;
+
+      const Fraction t1 = firstSegmentEnd;
+      const Fraction t2 = firstSegment->tick() + akkumulated;
+      if (t1 < t2) {
+            Segment* s1 = tick2rightSegment(t1);
+            Segment* s2 = tick2rightSegment(t2);
+            typedef SelectionFilterType Sel;
+            // chord symbols can exist without chord/rest so they should not be removed
+            constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
+            deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
+            deleteSpannersFromRange(t1, t2, track, track + 1, filter);
+            }
+
       return akkumulated;
       }
 
