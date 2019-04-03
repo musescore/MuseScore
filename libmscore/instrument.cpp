@@ -931,7 +931,8 @@ PartChannelSettingsLink::PartChannelSettingsLink(Channel* main, Channel* bound, 
 //---------------------------------------------------------
 
 PartChannelSettingsLink::PartChannelSettingsLink(PartChannelSettingsLink&& other)
-   : _main(nullptr), _bound(nullptr), _excerpt(false)
+   : ChannelListener(), // swap() will set the notifier instead
+   _main(nullptr), _bound(nullptr), _excerpt(false)
       {
       swap(*this, other);
       }
@@ -953,18 +954,11 @@ PartChannelSettingsLink& PartChannelSettingsLink::operator=(PartChannelSettingsL
 
 void swap(PartChannelSettingsLink& l1, PartChannelSettingsLink& l2)
       {
+      Ms::swap(static_cast<ChannelListener&>(l1), static_cast<ChannelListener&>(l2));
       using std::swap;
-      if (l1._main)
-            l1._main->removeListener(&l1);
-      if (l2._main)
-            l2._main->removeListener(&l2);
       swap(l1._main, l2._main);
       swap(l1._bound, l2._bound);
       swap(l1._excerpt, l2._excerpt);
-      if (l1._main)
-            l1._main->addListener(&l1);
-      if (l2._main)
-            l2._main->addListener(&l2);
       }
 
 //---------------------------------------------------------
