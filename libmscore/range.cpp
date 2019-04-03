@@ -34,7 +34,9 @@ namespace Ms {
 
 static void cleanupTuplet(Tuplet* t)
       {
-      for (DurationElement* e : t->elements()) {
+      const auto elements(t->elements());
+      t->clear();
+      for (DurationElement* e : elements) {
             e->setTuplet(nullptr); // prevent deleting the top tuplet by its children
             if (e->isTuplet())
                   cleanupTuplet(toTuplet(e));

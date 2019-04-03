@@ -144,6 +144,7 @@ void SwingDetector::applySwing()
             if (el->tuplet()) {
                   if (!tuplet)
                         tuplet = el->tuplet();
+                  tuplet->remove(el);
                   el->setTuplet(nullptr);
                   }
             }
