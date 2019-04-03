@@ -3298,6 +3298,11 @@ System* Score::collectSystem(LayoutContext& lc)
       qreal systemWidth = styleD(Sid::pagePrintableWidth) * DPI;
       system->setWidth(systemWidth);
 
+      // save state of measure
+      qreal curWidth = lc.curMeasure->width();
+      bool curHeader = lc.curMeasure->header();
+      bool curTrailer = lc.curMeasure->trailer();
+
       while (lc.curMeasure) {    // collect measure for system
             System* oldSystem = lc.curMeasure->system();
             system->appendMeasure(lc.curMeasure);
@@ -3413,26 +3418,53 @@ System* Score::collectSystem(LayoutContext& lc)
                         break;
                   }
 
+            // preserve state of next measure (which is about to become current measure)
+            if (lc.nextMeasure) {
+                  curWidth = lc.nextMeasure->width();
+                  curHeader = lc.nextMeasure->header();
+                  curTrailer = lc.nextMeasure->trailer();
+                  }
+
             getNextMeasure(lc);
 
             minWidth += ww;
-            if (lc.endTick < lc.prevMeasure->tick()) {
-                  // TODO: we may check if another measure fits in this system
-                  if (lc.prevMeasure == lc.systemOldMeasure) {
-                        lc.rangeDone = true;
-                        if (lc.curMeasure && lc.curMeasure->isMeasure()) {
-                              Measure* m = toMeasure(lc.curMeasure);
-                              restoreBeams(m);
-                              m->stretchMeasure(lc.curMeasure->width());
-                              }
-                        break;
-                        }
-                  }
+
             // ElementType nt = lc.curMeasure ? lc.curMeasure->type() : ElementType::INVALID;
             mb = lc.curMeasure;
             bool tooWide = false; // minWidth + minMeasureWidth > systemWidth;  // TODO: noBreak
             if (lineBreak || !mb || mb->isVBox() || mb->isTBox() || mb->isFBox() || tooWide)
                   break;
+            }
+
+      if (lc.endTick < lc.prevMeasure->tick()) {
+            // we've processed the entire range
+            // but we need to continue layout until we reach a system whose last measure is the same as previous layout
+            if (lc.prevMeasure == lc.systemOldMeasure) {
+                  // this system ends in the same place as the previous layout
+                  // ok to stop
+                  if (lc.curMeasure && lc.curMeasure->isMeasure()) {
+                        // we may have previously processed first measure of next system
+                        // so now we must restore it to its original state
+                        Measure* m = toMeasure(lc.curMeasure);
+                        if (m->repeatStart()) {
+                              Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
+                              if (!s->enabled())
+                                    s->setEnabled(true);
+                              }
+                        if (curHeader)
+                              m->addSystemHeader(lc.firstSystem);
+                        else
+                              m->removeSystemHeader();
+                        if (curTrailer)
+                              m->addSystemTrailer(m->nextMeasure());
+                        else
+                              m->removeSystemTrailer();
+                        m->computeMinWidth();
+                        m->stretchMeasure(curWidth);
+                        restoreBeams(m);
+                        }
+                  lc.rangeDone = true;
+                  }
             }
 
       //
