@@ -2199,6 +2199,11 @@ void Score::cmdDeleteSelection()
                               tick = toNote(e)->chord()->tick();
                         else if (e->isRest())
                               tick = toRest(e)->tick();
+                        else if (e->isSpannerSegment())
+                              tick = toSpannerSegment(e)->spanner()->tick();
+                        else if (e->parent()
+                           && (e->parent()->isSegment() || e->parent()->isChord()))
+                              tick = e->parent()->tick();
                         //else tick < 0
                         track = e->track();
                         }
