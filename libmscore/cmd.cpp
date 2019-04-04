@@ -755,6 +755,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
       // not be deleted (it may contain other elements we want to preserve)
       //
       Segment* firstSegment = segment;
+      const Fraction firstSegmentEnd = firstSegment->tick() + firstSegment->ticks();
       Fraction nextTick = segment->tick();
 
       for (Segment* seg = firstSegment; seg; seg = seg->next(SegmentType::ChordRest)) {
@@ -774,7 +775,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   akkumulated += td;
                   sd -= td;
                   if (sd.isZero())
-                        return akkumulated;
+                        break;
                   nextTick = tick2;
                   continue;
                   }
@@ -786,7 +787,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                   akkumulated += td;
                   sd -= td;
                   if (sd.isZero())
-                        return akkumulated;
+                        break;
                   }
             //
             // limit to tuplet level
@@ -802,7 +803,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                         t = t->tuplet();
                         }
                   if (tupletEnd)
-                        return akkumulated;
+                        break;
                   }
             Fraction td(cr->ticks());
 
@@ -852,7 +853,7 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 
                   std::vector<TDuration> dList = toDurationList(rd, false);
                   if (dList.empty())
-                        return akkumulated;
+                        break;
 
                   Fraction f = sd / cr->staff()->timeStretch(cr->tick());
                   for (Tuplet* t = tuplet; t; t = t->tuplet())
@@ -883,12 +884,12 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
                                     }
                               }
                         }
-                  return akkumulated;
+                  break;
                   }
             akkumulated += td;
             sd          -= td;
             if (sd.isZero())
-                  return akkumulated;
+                  break;
             }
 //      Fraction ticks = measure->tick() + measure->ticks() - segment->tick();
 //      Fraction td = Fraction::fromTicks(ticks);
@@ -900,6 +901,19 @@ Fraction Score::makeGap(Segment* segment, int track, const Fraction& _sd, Tuplet
 //      this line creates a qreal-sized gap if the needed gap crosses a measure boundary
 //      by adding again the duration already added in line 838
 //      akkumulated += td;
+
+      const Fraction t1 = firstSegmentEnd;
+      const Fraction t2 = firstSegment->tick() + akkumulated;
+      if (t1 < t2) {
+            Segment* s1 = tick2rightSegment(t1);
+            Segment* s2 = tick2rightSegment(t2);
+            typedef SelectionFilterType Sel;
+            // chord symbols can exist without chord/rest so they should not be removed
+            constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
+            deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
+            deleteSpannersFromRange(t1, t2, track, track + 1, filter);
+            }
+
       return akkumulated;
       }
 
@@ -927,10 +941,17 @@ bool Score::makeGap1(const Fraction& baseTick, int staffIdx, const Fraction& len
             Measure* m   = tick2measure(tick);
             if ((track % VOICES) && !m->hasVoices(staffIdx))
                   continue;
-            seg = m->undoGetSegment(SegmentType::ChordRest, tick);
 
             Fraction newLen = len - Fraction::fromTicks(voiceOffset[track-strack]);
             Q_ASSERT(newLen.numerator() != 0);
+
+            if (newLen > Fraction(0,1)) {
+                  const Fraction endTick = tick + newLen;
+                  deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, selectionFilter());
+                  deleteSpannersFromRange(tick, endTick, track, track + 1, selectionFilter());
+                  }
+
+            seg = m->undoGetSegment(SegmentType::ChordRest, tick);
             bool result = makeGapVoice(seg, track, newLen, tick);
             if (track == strack && !result) // makeGap failed for first voice
                   return false;
