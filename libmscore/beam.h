@@ -70,7 +70,9 @@ class Beam final : public Element {
 
    public:
       enum class Mode : signed char {
+            ///.\{
             AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
+            ///\}
             };
       Q_ENUM(Mode)
 

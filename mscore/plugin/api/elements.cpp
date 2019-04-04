@@ -71,6 +71,9 @@ void Note::setTpc(int val)
 
 //---------------------------------------------------------
 //   wrap
+///   \cond PLUGIN_API \private \endcond
+///   Wraps Ms::Element choosing the correct wrapper type
+///   at runtime based on the actual element type.
 //---------------------------------------------------------
 
 Element* wrap(Ms::Element* e, Ownership own)

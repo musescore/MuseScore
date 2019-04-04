@@ -32,6 +32,14 @@ Cursor* Score::newCursor()
 
 //---------------------------------------------------------
 //   Score::addText
+///   \brief Adds a header text to the score.
+///   \param type One of the following values:
+///   - "title"
+///   - "subtitle"
+///   - "composer"
+///   - "lyricist"
+///   - Any other value corresponds to default text style.
+///   \param txt Text to be added.
 //---------------------------------------------------------
 
 void Score::addText(const QString& type, const QString& txt)

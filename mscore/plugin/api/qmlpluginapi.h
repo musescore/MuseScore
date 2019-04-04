@@ -22,76 +22,119 @@
 
 namespace Ms {
 
-class MsProcess;
 class Element;
 class MScore;
+
+/**
+ * \namespace Ms::PluginAPI
+ * Contains items exposed to the QML plugins framework.
+ */
 
 namespace PluginAPI {
 
 class Element;
 class FractionWrapper;
+class MsProcess;
 class Score;
 
 #define DECLARE_API_ENUM(qmlName, cppName) \
+      Q_PROPERTY(Ms::PluginAPI::Enum* qmlName READ get_##cppName CONSTANT) \
       static Enum* cppName; \
-      static Enum* get_##cppName() { return cppName; } \
-      Q_PROPERTY(Ms::PluginAPI::Enum* qmlName READ get_##cppName CONSTANT)
+      static Enum* get_##cppName() { return cppName; }
 
 //---------------------------------------------------------
-//   QmlPlugin
-//   @@ MuseScore
-//   @P menuPath             QString           where the plugin is placed in menu
-//   @P filePath             QString           source file path, without the file name (read only)
-//   @P version              QString           version of this plugin
-//   @P description          QString           human readable description, displayed in Plugin Manager
-//   @P pluginType           QString           type may be dialog, dock, or not defined.
-//   @P dockArea             QString           where to dock on main screen. left,top,bottom, right(default)
-//   @P requiresScore        bool              whether the plugin requires an existing score to run
-//   @P division             int               number of MIDI ticks for 1/4 note (read only)
-//   @P mscoreVersion        int               complete version number of MuseScore in the form: MMmmuu (read only)
-//   @P mscoreMajorVersion   int               1st part of the MuseScore version (read only)
-//   @P mscoreMinorVersion   int               2nd part of the MuseScore version (read only)
-//   @P mscoreUpdateVersion  int               3rd part of the MuseScore version (read only)
-//   @P mscoreDPI            qreal             (read only)
-//   @P curScore             Ms::PluginAPI::Score*        current score, if any (read only)
+///   \class PluginAPI
+///   \brief Main class of the plugins framework.\ Named
+///   as \p MuseScore in QML.
+///   \details This class is exposed to QML plugins
+///   framework under \p MuseScore name and is the root
+///   component of each MuseScore plugin.
 //   @P scores               array[Ms::Score]  all currently open scores (read only)
 //---------------------------------------------------------
 
 class PluginAPI : public Ms::QmlPlugin {
       Q_OBJECT
+      /** Path where the plugin is placed in menu */
       Q_PROPERTY(QString menuPath        READ menuPath WRITE setMenuPath)
+      /** Source file path, without the file name (read only) */
       Q_PROPERTY(QString filePath        READ filePath)
+      /** Version of this plugin */
       Q_PROPERTY(QString version         READ version WRITE setVersion)
+      /** Human-readable plugin description, displayed in Plugin Manager */
       Q_PROPERTY(QString description     READ description WRITE setDescription)
+      /** type may be dialog, dock, or not defined */
       Q_PROPERTY(QString pluginType      READ pluginType WRITE setPluginType)
-
+      /** Where to dock on main screen. Possible values: left, top, bottom, right */
       Q_PROPERTY(QString dockArea        READ dockArea WRITE setDockArea)
+      /** Whether the plugin requires an existing score to run */
       Q_PROPERTY(bool requiresScore      READ requiresScore WRITE setRequiresScore)
+      /** Number of MIDI ticks for 1/4 note (read only) */
       Q_PROPERTY(int division            READ division)
+      /** Complete version number of MuseScore in the form: MMmmuu (read only) */
       Q_PROPERTY(int mscoreVersion       READ mscoreVersion       CONSTANT)
+      /** 1st part of the MuseScore version (read only) */
       Q_PROPERTY(int mscoreMajorVersion  READ mscoreMajorVersion  CONSTANT)
+      /** 2nd part of the MuseScore version (read only)*/
       Q_PROPERTY(int mscoreMinorVersion  READ mscoreMinorVersion  CONSTANT)
+      /** 3rd part of the MuseScore version (read only) */
       Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion CONSTANT)
+      /** (read-only) */
       Q_PROPERTY(qreal mscoreDPI         READ mscoreDPI)
+      /** current score, if any (read only) */
       Q_PROPERTY(Ms::PluginAPI::Score* curScore     READ curScore)
 //TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
 
       // Should be initialized in qmlpluginapi.cpp
+      /// Contains Ms::ElementType enumeration values
       DECLARE_API_ENUM( Element,          elementTypeEnum         )
+      /// Contains Ms::AccidentalType enumeration values
       DECLARE_API_ENUM( Accidental,       accidentalTypeEnum      )
+      /// Contains Ms::Beam::Mode enumeration values
       DECLARE_API_ENUM( Beam,             beamModeEnum            )
-      DECLARE_API_ENUM( Placement,        placementEnum           ) // was Element.ABOVE and Element.BELOW in 2.X
+      /// Contains Ms::Placement enumeration values
+      /// \note In MuseScore 2.X this enumeration was available as
+      /// Element.ABOVE and Element.BELOW.
+      DECLARE_API_ENUM( Placement,        placementEnum           )
+      /// Contains Ms::GlissandoType enumeration values
       DECLARE_API_ENUM( Glissando,        glissandoTypeEnum       ) // was probably absent in 2.X
+      /// Contains Ms::LayoutBreak::Type enumeration values
       DECLARE_API_ENUM( LayoutBreak,      layoutBreakTypeEnum     )
+      /// Contains Ms::Lyrics::Syllabic enumeration values
       DECLARE_API_ENUM( Lyrics,           lyricsSyllabicEnum      )
-      DECLARE_API_ENUM( Direction,        directionEnum           ) // was in MScore class in 2.X
-      DECLARE_API_ENUM( DirectionH,       directionHEnum          ) // was in MScore class in 2.X
-      DECLARE_API_ENUM( OrnamentStyle,    ornamentStyleEnum       ) // was in MScore class in 2.X
-      DECLARE_API_ENUM( GlissandoStyle,   glissandoStyleEnum      ) // was in MScore class in 2.X
-      DECLARE_API_ENUM( Tid,              tidEnum                 ) // was TextStyleType in 2.X
-      DECLARE_API_ENUM( NoteHeadType,     noteHeadTypeEnum        ) // was in NoteHead class in 2.X
-      DECLARE_API_ENUM( NoteHeadGroup,    noteHeadGroupEnum       ) // was in NoteHead class in 2.X
-      DECLARE_API_ENUM( NoteValueType,    noteValueTypeEnum       ) // was in Note class in 2.X
+      /// Contains Ms::Direction enumeration values
+      /// \note In MuseScore 2.X this enumeration was available as
+      /// MScore.UP, MScore.DOWN, MScore.AUTO.
+      DECLARE_API_ENUM( Direction,        directionEnum           )
+      /// Contains Ms::MScore::DirectionH enumeration values
+      /// \note In MuseScore 2.X this enumeration was available as
+      /// MScore.LEFT, MScore.RIGHT, MScore.AUTO.
+      DECLARE_API_ENUM( DirectionH,       directionHEnum          )
+      /// Contains Ms::MScore::OrnamentStyle enumeration values
+      /// \note In MuseScore 2.X this enumeration was available as
+      /// MScore.DEFAULT, MScore.BAROQUE.
+      DECLARE_API_ENUM( OrnamentStyle,    ornamentStyleEnum       )
+      /// Contains Ms::GlissandoStyle enumeration values
+      /// \note In MuseScore 2.X this enumeration was available as
+      /// MScoreCHROMATIC, MScore.WHITE_KEYS, MScore.BLACK_KEYS,
+      /// MScore.DIATONIC.
+      DECLARE_API_ENUM( GlissandoStyle,   glissandoStyleEnum      )
+      /// Contains Ms::Tid enumeration values
+      /// \note In MuseScore 2.X this enumeration was available as
+      /// TextStyleType (TextStyleType.TITLE etc.)
+      DECLARE_API_ENUM( Tid,              tidEnum                 )
+      /// Contains Ms::NoteHead::Type enumeration values
+      /// \note In MuseScore 2.X this enumeration was available in
+      /// NoteHead class (e.g. NoteHead.HEAD_QUARTER).
+      DECLARE_API_ENUM( NoteHeadType,     noteHeadTypeEnum        )
+      /// Contains Ms::NoteHead::Group enumeration values
+      /// \note In MuseScore 2.X this enumeration was available in
+      /// NoteHead class (e.g. NoteHead.HEAD_TRIANGLE).
+      DECLARE_API_ENUM( NoteHeadGroup,    noteHeadGroupEnum       )
+      /// Contains Ms::Note::ValueType enumeration values
+      /// \note In MuseScore 2.X this enumeration was available as
+      /// Note.OFFSET_VAL, Note.USER_VAL
+      DECLARE_API_ENUM( NoteValueType,    noteValueTypeEnum       )
+      /// Contains Ms::SegmentType enumeration values
       DECLARE_API_ENUM( Segment,          segmentTypeEnum         )
       DECLARE_API_ENUM( Spanner,          spannerAnchorEnum       ) // probably unavailable in 2.X
 
@@ -100,9 +143,12 @@ class PluginAPI : public Ms::QmlPlugin {
       static void initEnums();
 
    signals:
+      /// Indicates that the plugin was launched.
+      /// Implement \p onRun() function in your plugin to handle this signal.
       void run();
 
    public:
+      /// \cond MS_INTERNAL
       PluginAPI(QQuickItem* parent = 0);
 
       static void registerQmlTypes();
@@ -111,11 +157,13 @@ class PluginAPI : public Ms::QmlPlugin {
 
       Score* curScore() const;
       QQmlListProperty<Score> scores();
+      /// \endcond
 
       Q_INVOKABLE Ms::PluginAPI::Score* newScore(const QString& name, const QString& part, int measures);
       Q_INVOKABLE Ms::PluginAPI::Element* newElement(int);
       Q_INVOKABLE void cmd(const QString&);
-      Q_INVOKABLE Ms::MsProcess* newQProcess();
+      /** \cond PLUGIN_API \private \endcond */
+      Q_INVOKABLE Ms::PluginAPI::MsProcess* newQProcess();
       Q_INVOKABLE bool writeScore(Ms::PluginAPI::Score*, const QString& name, const QString& ext);
       Q_INVOKABLE Ms::PluginAPI::Score* readScore(const QString& name, bool noninteractive = false);
       Q_INVOKABLE void closeScore(Ms::PluginAPI::Score*);
@@ -126,7 +174,6 @@ class PluginAPI : public Ms::QmlPlugin {
       Q_INVOKABLE void openLog(const QString&);
       Q_INVOKABLE void closeLog();
 
-      //@ creates a new fraction with the given numerator and denominator
       Q_INVOKABLE Ms::PluginAPI::FractionWrapper* fraction(int numerator, int denominator) const;
       };
 

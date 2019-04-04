@@ -37,44 +37,52 @@ class Score;
 
 //---------------------------------------------------------
 //   @@ Cursor
-//   @P track     int           current track
-//   @P staffIdx  int           current staff (track / 4)
-//   @P voice     int           current voice (track % 4)
-//   @P filter    enum          segment type filter
-//   @P element   Ms::Element*  current element at track, read only
-//   @P segment   Ms::Segment*  current segment, read only
-//   @P measure   Ms::Measure*  current measure, read only
-//   @P tick      int           midi tick position, read only
-//   @P time      double        time at tick position, read only
-//   @P keySignature int        key signature of current staff at tick pos. (read only)
-//   @P score     Ms::Score*    associated score
+///   Cursor can be used by plugins to manipulate the score
 //---------------------------------------------------------
 
 class Cursor : public QObject {
       Q_OBJECT
+      /** Current track */
       Q_PROPERTY(int track      READ track     WRITE setTrack)
+      /** Current staff (track / 4) */
       Q_PROPERTY(int staffIdx   READ staffIdx  WRITE setStaffIdx)
+      /** Current voice (track % 4) */
       Q_PROPERTY(int voice      READ voice     WRITE setVoice)
+      /**
+       * Segment type filter, a bitmask from
+       * PluginAPI::PluginAPI::Segment values.
+       * Determines which segments this cursor will move to
+       * on next() and nextMeasure() operations. The default
+       * value is Ms::SegmentType::ChordRest so only segments
+       * containing chords and rests are handled by default.
+       */
       Q_PROPERTY(int filter     READ filter    WRITE setFilter)
 
-      Q_PROPERTY(int tick         READ tick)
+      /** MIDI tick position, read only */
+      Q_PROPERTY(int tick         READ tick) // FIXME: fraction transition
+      /** Time at tick position, read only */
       Q_PROPERTY(double time      READ time)
 
-      //@ get tempo at current tick
+      /** Tempo at current tick, read only */
       Q_PROPERTY(qreal tempo      READ tempo)
 
+      /** Key signature of current staff at tick pos. (read only) */
       Q_PROPERTY(int keySignature READ qmlKeySignature)
+      /** Associated score */
       Q_PROPERTY(Ms::PluginAPI::Score* score READ score    WRITE setScore)
 
+      /** Current element at track, read only */
       Q_PROPERTY(Ms::PluginAPI::Element* element READ element)
+      /** Current segment, read only */
       Q_PROPERTY(Ms::PluginAPI::Segment*  segment READ segment)
+      /** Current measure, read only */
       Q_PROPERTY(Ms::PluginAPI::Measure*  measure READ measure)
 
    public:
       enum RewindMode {
-            SCORE_START = 0,
-            SELECTION_START = 1,
-            SELECTION_END = 2
+            SCORE_START = 0, ///< Rewind to the start of a score
+            SELECTION_START = 1, ///< Rewind to the start of a selection
+            SELECTION_END = 2 ///< Rewind to the end of a selection
             };
       Q_ENUM(RewindMode)
 
@@ -92,6 +100,7 @@ class Cursor : public QObject {
       void setScore(Ms::Score* s);
 
    public:
+      /// \cond MS_INTERNAL
       Cursor(Ms::Score* s = nullptr);
 //       Cursor(Score*, bool); // not implemented? what is bool?
 
@@ -119,11 +128,8 @@ class Cursor : public QObject {
       qreal tempo();
 
       int qmlKeySignature();
+      /// \endcond
 
-      //@ rewind cursor
-      //@   mode=SCORE_START      rewind to start of score
-      //@   mode=SELECTION_START  rewind to start of selection
-      //@   mode=SELECTION_END    rewind to end of selection
       Q_INVOKABLE void rewind(RewindMode mode);
 
       Q_INVOKABLE bool next();

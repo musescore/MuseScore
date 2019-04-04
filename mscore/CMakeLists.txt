@@ -57,6 +57,7 @@ if (SCRIPT_INTERFACE)
             plugin/api/score.h
             plugin/api/fraction.h
             plugin/api/excerpt.h
+            plugin/api/util.h
 
             plugin/api/enums.cpp
             plugin/mscorePlugins.cpp plugin/pluginCreator.cpp plugin/pluginManager.cpp plugin/qmledit.cpp
@@ -64,6 +65,7 @@ if (SCRIPT_INTERFACE)
             plugin/api/qmlpluginapi.cpp plugin/api/cursor.cpp plugin/api/scoreelement.cpp plugin/api/elements.cpp
             plugin/api/score.cpp
             plugin/api/excerpt.cpp
+            plugin/api/util.cpp
             )
 
       set (SCRIPT_UI
