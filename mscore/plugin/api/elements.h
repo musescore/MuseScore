@@ -243,7 +243,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY_T( bool, autoplace,       AUTOPLACE                 )
       API_PROPERTY( dashLineLen,             DASH_LINE_LEN             )
       API_PROPERTY( dashGapLen,              DASH_GAP_LEN              )
-      API_PROPERTY_READ_ONLY( tick,          TICK                      )
+//       API_PROPERTY_READ_ONLY( tick,          TICK                      ) // wasn't available in 2.X, disabled due to fractions transition
       API_PROPERTY( playbackVoice1,          PLAYBACK_VOICE1           )
       API_PROPERTY( playbackVoice2,          PLAYBACK_VOICE2           )
       API_PROPERTY( playbackVoice3,          PLAYBACK_VOICE3           )
