@@ -34,9 +34,12 @@ class Score;
 
 class Excerpt : public QObject {
     Q_OBJECT
+    /** The score object for this part */
     Q_PROPERTY(Ms::PluginAPI::Score* partScore READ partScore)
+    /** The title of this part */
     Q_PROPERTY(QString               title     READ title)
 
+    /// \cond MS_INTERNAL
  protected:
     Ms::Excerpt* const e;
 
@@ -49,11 +52,15 @@ class Excerpt : public QObject {
 
     Score* partScore();
     QString title() { return e->title(); }
+    /// \endcond
 };
 
 //---------------------------------------------------------
 //   wrap
+///   \cond PLUGIN_API \private \endcond
+///   \relates Excerpt
 //---------------------------------------------------------
+
 template <class Wrapper, class T>
 Wrapper* excerptWrap(T* t)
       {
@@ -85,6 +92,7 @@ public:
       static T* at(QQmlListProperty<T>* l, int i)  { return excerptWrap<T>(static_cast<Container*>(l->data)->at(i)); }
       };
 
+/** \cond PLUGIN_API \private \endcond */
 template<typename T, class Container>
 QmlExcerptsListAccess<T, Container> wrapExcerptsContainerProperty(QObject* obj, Container& c)
       {

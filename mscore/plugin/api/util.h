@@ -10,68 +10,110 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#ifndef __PLUGINS_H__
-#define __PLUGINS_H__
+#ifndef __PLUGIN_API_UTIL_H__
+#define __PLUGIN_API_UTIL_H__
 
 #include "config.h"
 
-#ifdef SCRIPT_INTERFACE
 #include "libmscore/element.h"
+#include "libmscore/mscoreview.h"
 #include "libmscore/score.h"
 #include "libmscore/utils.h"
 
 namespace Ms {
+namespace PluginAPI {
+
+class Score;
 
 //---------------------------------------------------------
-//   @@ FileIO
-//   @P source string
+///   \class FileIO
+///   Provides a simple API to perform file reading and
+///   writing operations. To use this class in a plugin put
+///   \code import FileIO 3.0 \endcode
+///   to the top part of the .qml plugin file.
+///   After that FileIO object can be declared and used
+///   in QML code:
+///   \code
+///   import MuseScore 3.0
+///   import FileIO 3.0
+///   MuseScore {
+///       FileIO {
+///           id: exampleFile
+///           source: "/tmp/example.txt"
+///       }
+///       onRun: {
+///           var test = exampleFile.read();
+///           console.log(test); // will print the file content
+///       }
+///   }
+///   \endcode
 //---------------------------------------------------------
 
 class FileIO : public QObject {
       Q_OBJECT
 
    public:
+      /** Path to the file which is operated on */
       Q_PROPERTY(QString source
                READ source
                WRITE setSource
-               NOTIFY sourceChanged)
+               )
+      /// \cond PLUGIN_API \private \endcond
       explicit FileIO(QObject *parent = 0);
 
-      //@ reads file contents and returns a string
+      /**
+       * Reads file contents and returns a string.
+       * In case error occurs, error() signal is emitted
+       * and an empty string is returned.
+       */
       Q_INVOKABLE QString read();
-      //@ return true if the file exists
+      /** Returns true if the file exists */
       Q_INVOKABLE bool exists();
-      //@ write a string to the file
+      /**
+       * Writes a string to the file.
+       * \warning This function overwrites all the contents of
+       * the file pointed by FileIO::source so it becomes lost.
+       * \returns `true` if an operation finished successfully.
+       */
       Q_INVOKABLE bool write(const QString& data);
-      //@ removes the file
+      /** Removes the file */
       Q_INVOKABLE bool remove();
-      //@ returns user's home directory
+      /** Returns user's home directory */
       Q_INVOKABLE QString homePath() {QDir dir; return dir.homePath();}
-      //@ returns a path suitable for a temporary file
+      /** Returns a path suitable for a temporary file */
       Q_INVOKABLE QString tempPath() {QDir dir; return dir.tempPath();}
-      //@ returns the file modification time
+      /** Returns the file modification time */
       Q_INVOKABLE int modifiedTime();
 
+      /// \cond MS_INTERNAL
       QString source() { return mSource; };
 
    public slots:
-      void setSource(const QString& source) { mSource = source; };
+      void setSource(const QString& source) { mSource = source; }
+      /// \endcond
 
    signals:
-      void sourceChanged(const QString& source);
+      /**
+       * Emitted on file operations errors.
+       * Implement onError() in your FileIO object to handle this signal.
+       * \param msg A short textual description of the error occurred.
+       */
       void error(const QString& msg);
 
    private:
       QString mSource;
       };
 
+// These classes usage in plugins is anyway disabled
+// so exclude them from documentation too
+///   \cond MS_INTERNAL
 //---------------------------------------------------------
 //   MsProcess
 //   @@ QProcess
 //---------------------------------------------------------
 
 class MsProcess : public QProcess {
-      Q_GADGET
+      Q_OBJECT
 
    public:
       MsProcess(QObject* parent = 0) : QProcess(parent) {}
@@ -88,17 +130,16 @@ class MsProcess : public QProcess {
 //---------------------------------------------------------
 //   @@ ScoreView
 ///    This is an GUI element to show a score.
-//
-//   @P color  color    background color
-//   @P scale  float    scaling factor
 //---------------------------------------------------------
 
 class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
-      Q_GADGET
+      Q_OBJECT
+      /** Background color */
       Q_PROPERTY(QColor color READ color WRITE setColor)
+      /** Scaling factor */
       Q_PROPERTY(qreal  scale READ scale WRITE setScale)
 
-      Score* score;
+      Ms::Score* score;
       int _currentPage;
       QColor _color;
       qreal mag;
@@ -107,28 +148,17 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
 
       QNetworkAccessManager* networkManager;
 
-      virtual void dataChanged(const QRectF&)   { update(); }
-      virtual void updateAll()                  { update(); }
-      virtual void adjustCanvasPosition(const Element*, bool, int) override {}
-      virtual void removeScore()                {}
-      virtual void changeEditElement(Element*)  {}
-      virtual int gripCount() const             { return 0; }
-      virtual const QTransform& matrix() const;
-      virtual void setDropRectangle(const QRectF&) {}
-      virtual void startEdit()                  {}
-      virtual void startEdit(Element*, Grip)    {}
-      virtual Element* elementNear(QPointF)     { return 0; }
+      virtual void dataChanged(const QRectF&) override { update(); }
+      virtual void updateAll() override                { update(); }
 
-      virtual void paint(QPainter*);
+      virtual void paint(QPainter*) override;
 
-      virtual void setCursor(const QCursor&)    {}
-      virtual QCursor cursor() const            { return QCursor(); }
-      virtual QRectF boundingRect() const       { return _boundingRect; }
-      virtual void drawBackground(QPainter*, const QRectF&) const {}
+      virtual QRectF boundingRect() const override { return _boundingRect; }
+      virtual void drawBackground(QPainter*, const QRectF&) const override {}
 
    public slots:
       //@ --
-      Q_INVOKABLE void setScore(Score*);
+      Q_INVOKABLE void setScore(Ms::PluginAPI::Score*);
       //@ --
       Q_INVOKABLE void setCurrentPage(int n);
       //@ --
@@ -137,6 +167,7 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       Q_INVOKABLE void prevPage();
 
    public:
+      /// \cond MS_INTERNAL
       MsScoreView(QQuickItem* parent = 0);
       virtual ~MsScoreView() {}
       QColor color() const            { return _color;        }
@@ -144,10 +175,9 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       qreal scale() const             { return mag;        }
       void setScale(qreal v)          { mag = v;           }
       virtual const QRect geometry() const override { return QRect(QQuickPaintedItem::x(), y(), width(), height()); }
+      /// \endcond
       };
+/// \endcond //MS_INTERNAL
+} // namespace PluginAPI
 } // namespace Ms
 #endif
-
-#endif
-
-

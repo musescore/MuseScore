@@ -47,7 +47,6 @@
 #include "harmony.h"
 #include "stafftext.h"
 #include "mscoreview.h"
-#include "plugins.h"
 #include "chord.h"
 #include "hook.h"
 #include "stem.h"

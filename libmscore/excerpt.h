@@ -27,8 +27,6 @@ class XmlReader;
 
 //---------------------------------------------------------
 //   @@ Excerpt
-//   @P partScore  Score      the score object for this part
-//   @P title      string     the title of this part
 //---------------------------------------------------------
 
 #include <QMultiMap>
