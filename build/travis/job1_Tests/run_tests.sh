@@ -6,6 +6,7 @@ cd build.debug/mtest
 # vnc is the only tested platform plugin that allows to run
 # mscore executable in the used Travis environment.
 export QT_QPA_PLATFORM=vnc
+export ASAN_OPTIONS=detect_leaks=0
 
 xvfb-run -a ctest -j2 --output-on-failure
 
