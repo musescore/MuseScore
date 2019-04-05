@@ -34,6 +34,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       dir.mkpath(dataPath + "/locale");
       displayExtensions();
       displayLanguages();
+      displayPluginRepo();
       displayPlugins();
       languagesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
       languagesTable->verticalHeader()->hide();
@@ -295,9 +296,9 @@ static inline std::tuple<bool, bool, bool> compatFromString(const QString& raw) 
       }
 
 //---------------------------------------------------------
-//   displayPlugins
+//   displayPluginRepo
 //---------------------------------------------------------
-void ResourceManager::displayPlugins() {
+void ResourceManager::displayPluginRepo() {
       // fills pluginDescriptionMap from xml
       readPluginPackages();
       // fetch plugin list from web
@@ -353,6 +354,46 @@ void ResourceManager::displayPlugins() {
             pluginButtonURLMap[install_button] = { name, compat, page_url };
             pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col), button_group);
             }
+      }
+
+void ResourceManager::displayPlugins()
+      {
+      pluginTreeWidget->clear();
+      foreach(const QString &pkg, pluginDescriptionMap.keys()) {
+            auto& desc = pluginDescriptionMap[pkg];
+            auto* package_item = new QTreeWidgetItem(pluginTreeWidget);
+            package_item->setData(0, Qt::DisplayRole, desc.package_name);
+            package_item->setFlags(package_item->flags() | Qt::ItemIsEnabled);
+            package_item->setCheckState(0, Qt::Unchecked);
+            // add qmls
+            for (const auto &qml : desc.qml_paths) {
+                  QFileInfo f(qml);
+                  auto* qml_item = new QTreeWidgetItem(package_item);
+                  qml_item->setData(0, Qt::DisplayRole, f.fileName());
+                  qml_item->setFlags(qml_item->flags() | Qt::ItemIsEnabled);
+                  qml_item->setCheckState(0, Qt::Unchecked);
+                  }
+            }
+      for (int i = 0; i < mscore->getPluginManager()->pluginCount(); i++) {
+            auto* desc = mscore->getPluginManager()->getPluginDescription(i);
+            if (isPluginLocal(*desc)) {
+                  QTreeWidgetItem* item = new QTreeWidgetItem(pluginTreeWidget);
+                  item->setFlags(item->flags() | Qt::ItemIsEnabled);
+                  item->setCheckState(0, desc->load ? Qt::Checked : Qt::Unchecked);
+                  item->setData(0, Qt::DisplayRole, QFileInfo(desc->path).completeBaseName());
+                  }
+
+            }
+      }
+
+bool ResourceManager::isPluginLocal(PluginDescription& desc)
+      {
+      desc.path;
+      foreach(const auto& item, pluginDescriptionMap.values())
+            for (auto& p : item.qml_paths)
+                  if (p == desc.path)
+                        return false;
+      return true;
       }
 
 //---------------------------------------------------------
@@ -666,7 +707,7 @@ void ResourceManager::downloadPluginPackage()
                   pluginDescriptionMap[page_url] = new_package;
                   refreshPluginButton((QWidget*)button->parent());
                   writePluginPackages();
-                  // TODO: reload plugins
+                  displayPlugins();
                   }
             else {
                   button->setText("Bad archive. Try again");

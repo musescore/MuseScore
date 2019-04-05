@@ -29,6 +29,7 @@ class ResourceManager : public QDialog, public Ui::Resource
     QByteArray txt;
     void displayLanguages();
     void displayExtensions();
+    void displayPluginRepo();
     void displayPlugins();
     bool verifyFile(QString path, QString hash);
     bool verifyLanguageFile(QString filename, QString hash);
@@ -44,6 +45,7 @@ class ResourceManager : public QDialog, public Ui::Resource
     void refreshPluginButton(QWidget* button_group);
     void writePluginPackages();
     bool readPluginPackages();
+    bool isPluginLocal(PluginDescription& desc);
 
 public:
     explicit ResourceManager(QWidget *parent = 0);

@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabs">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="extensions">
       <attribute name="title">
@@ -191,7 +191,7 @@
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="plugin_store">
           <property name="sizePolicy">
@@ -410,9 +410,6 @@
            <item row="4" column="10">
             <widget class="QLineEdit" name="pluginShortcut"/>
            </item>
-           <item row="1" column="0" rowspan="9" colspan="2">
-            <widget class="QListWidget" name="listWidget"/>
-           </item>
            <item row="2" column="2">
             <widget class="QLabel" name="label_compat">
              <property name="text">
@@ -428,14 +425,14 @@
             </widget>
            </item>
            <item row="4" column="2">
-            <widget class="QLabel" name="label_2">
+            <widget class="QLabel" name="label_version">
              <property name="text">
               <string>Version:</string>
              </property>
             </widget>
            </item>
            <item row="4" column="6">
-            <widget class="QLineEdit" name="lineEdit_2"/>
+            <widget class="QLineEdit" name="pluginVersion"/>
            </item>
            <item row="3" column="6" colspan="5">
             <widget class="QLineEdit" name="pluginPath">
@@ -445,11 +442,14 @@
             </widget>
            </item>
            <item row="2" column="6" colspan="5">
-            <widget class="QLineEdit" name="pluginCompat">
+            <widget class="QLineEdit" name="pluginName">
              <property name="enabled">
               <bool>false</bool>
              </property>
             </widget>
+           </item>
+           <item row="1" column="0" rowspan="9" colspan="2">
+            <widget class="QTreeWidget" name="pluginTreeWidget"/>
            </item>
           </layout>
          </widget>
