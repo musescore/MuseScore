@@ -572,7 +572,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
             ChordRest* ncr = toChordRest(cr->clone());
             ncr->setDurationType(d);
             ncr->setTicks(d.fraction());
-
+            undoAddCR(ncr, measure, measure->tick() + tick);
             if (cr->isChord() && ocr) {
                   Chord* nc = toChord(ncr);
                   Chord* oc = toChord(ocr);
@@ -588,7 +588,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
                         undoAddElement(tie);
                         }
                   }
-            undoAddCR(ncr, measure, tick);
+            
             tick += ncr->actualTicks();
             ocr = ncr;
             }
