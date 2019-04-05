@@ -176,9 +176,11 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               tuplet = new Tuplet(this);
                               tuplet->setTrack(e.track());
                               tuplet->read(e);
-                              tuplet->setTicks(tuplet->ticks() * scale);
-                              Fraction baseLen = tuplet->baseLen().fraction();
-                              tuplet->setBaseLen(baseLen * scale);
+                              if (scale != Fraction(1, 1)) {
+                                    tuplet->setTicks(tuplet->ticks() * scale);
+                                    Fraction baseLen = tuplet->baseLen().fraction();
+                                    tuplet->setBaseLen(baseLen * scale);
+                                    }
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
                               tuplet->setTick(tick);
@@ -232,8 +234,10 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                                     if (tuplet)
                                           cr->readAddTuplet(tuplet);
                                     e.incTick(cr->actualTicks());
-                                    cr->setTicks(cr->ticks() * scale);
-                                    cr->setDurationType(cr->ticks());
+                                    if (scale != Fraction(1, 1)) {
+                                          cr->setTicks(cr->ticks() * scale);
+                                          cr->setDurationType(cr->ticks());
+                                          }
                                     if (cr->isChord()) {
                                           Chord* chord = toChord(cr);
                                           // disallow tie across barline within two-note tremolo
