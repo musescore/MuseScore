@@ -978,6 +978,13 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                   XmlReader e(data);
                   e.setPasteMode(true);
                   Fraction scale = Fraction(1, 1);
+                  if (_is.noteEntryMethod() == NoteEntryMethod::TIMEWISE) {
+                        Fraction f = _is.duration().fraction();
+                        if (f.isValid() && !f.isZero()) {
+                              scale = f * 4;
+                              scale.reduce();
+                              }
+                        }
                   if (!pasteStaff(e, cr->segment(), cr->staffIdx(), scale))
                         return;
                   }
