@@ -5,7 +5,7 @@
 //  Note Names Plugin
 //
 //  Copyright (C) 2012 Werner Schweer
-//  Copyright (C) 2013 - 2017 Joachim Schmitz
+//  Copyright (C) 2013 - 2019 Joachim Schmitz
 //  Copyright (C) 2014 Jörn Eichler
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -174,7 +174,7 @@ MuseScore {
 
                      cursor.add(text);
                      // new text for next element
-                     text = newElement("StaffText");
+                     text = newElement(Element.STAFF_TEXT);
                   }
 
                   var notes = cursor.element.notes;
