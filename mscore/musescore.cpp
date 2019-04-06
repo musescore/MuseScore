@@ -783,7 +783,7 @@ bool MuseScore::importExtension(QString path)
                   // get all soundfont files
                   QStringList filters("*.sf2");
                   filters.append("*.sf3");
-                  QDirIterator it(sfzDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
+                  QDirIterator it(sfDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
                   Synthesizer* s = synti->synthesizer("Fluid");
                   QStringList sfs;
                   while (it.hasNext()) {
