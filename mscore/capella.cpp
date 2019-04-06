@@ -893,8 +893,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
 //TODO                        if (pm && (st == BarLineType::DOUBLE || st == BarLineType::END || st == BarLineType::BROKEN))
 //                              pm->setEndBarLineType(st, false, true);
 
-//TODO                        if (st == BarLineType::START_REPEAT || st == BarLineType::END_START_REPEAT) {
-                        if (st == BarLineType::START_REPEAT) {
+                        if (st == BarLineType::START_REPEAT || st == BarLineType::END_START_REPEAT) {
                               Measure* nm = 0; // the next measure (the one started by this barline)
                               nm = score->getCreateMeasure(tick);
                               // qDebug("nm %p", nm);
@@ -902,8 +901,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                                     nm->setRepeatStart(true);
                               }
 
-//                        if (st == BarLineType::END_REPEAT || st == BarLineType::END_START_REPEAT) {
-                        if (st == BarLineType::END_REPEAT) {
+                        if (st == BarLineType::END_REPEAT || st == BarLineType::END_START_REPEAT) {
                               if (pm)
                                     pm->setRepeatEnd(true);
                               }
@@ -2411,7 +2409,7 @@ void CapExplicitBarline::read()
       else if (type == 2) _type = BarLineType::END;
       else if (type == 3) _type = BarLineType::END_REPEAT;
       else if (type == 4) _type = BarLineType::START_REPEAT;
-//TODO      else if (type == 5) _type = BarLineType::END_START_REPEAT;
+      else if (type == 5) _type = BarLineType::END_START_REPEAT;
       else if (type == 6) _type = BarLineType::BROKEN;
       else _type = BarLineType::NORMAL; // default
       _barMode = b >> 4;         // 0 = auto, 1 = nur Zeilen, 2 = durchgezogen

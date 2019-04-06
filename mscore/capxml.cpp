@@ -165,7 +165,7 @@ void CapExplicitBarline::readCapx(XmlReader& e)
       else if (type == "end") _type = BarLineType::END;
       else if (type == "repEnd") _type = BarLineType::END_REPEAT;
       else if (type == "repBegin") _type = BarLineType::START_REPEAT;
-//TODO      else if (type == "repEndBegin") _type = BarLineType::END_START_REPEAT;
+      else if (type == "repEndBegin") _type = BarLineType::END_START_REPEAT;
       else if (type == "dashed") _type = BarLineType::BROKEN;
       else _type = BarLineType::NORMAL; // default
       _barMode = 0;

@@ -91,16 +91,16 @@ void InspectorBarLine::setElement()
       // enable / disable individual type combo items according to score and selected bar line status
       bool bMultiStaff  = bl->score()->nstaves() > 1;
       BarLineType blt   = bl->barLineType();
-//      bool isRepeat     = blt & (BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT);
-      bool isRepeat     = blt & (BarLineType::START_REPEAT | BarLineType::END_REPEAT);
+      bool isRepeat     = blt & (BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT);
+//      bool isRepeat     = blt & (BarLineType::START_REPEAT | BarLineType::END_REPEAT);
 
       const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(b.type->model());
       int i = 0;
       for (auto& k : BarLine::barLineTable) {
             QStandardItem* item = model->item(i);
             // if combo item is repeat type, should be disabled for multi-staff scores
-//            if (k.type & (BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT)) {
-            if (k.type & (BarLineType::START_REPEAT | BarLineType::END_REPEAT)) {
+            if (k.type & (BarLineType::START_REPEAT | BarLineType::END_REPEAT | BarLineType::END_START_REPEAT)) {
+//            if (k.type & (BarLineType::START_REPEAT | BarLineType::END_REPEAT)) {
                   // disable / enable
                   item->setFlags(bMultiStaff ?
                         item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled) :

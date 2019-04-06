@@ -3600,6 +3600,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                               BarLine* bl = toBarLine(s.element(0));
                               if (bl) {
                                     qreal w = BarLine::layoutWidth(score(), bl->barLineType());
+                                    // TODO: actual vertical position and height for staff?
                                     skyline.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos() + p));
                                     }
                               }
