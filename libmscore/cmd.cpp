@@ -3254,8 +3254,8 @@ void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
                         default: {
                               // find measure
                               Measure* measure = toMeasure(el->findMeasure());
-                              // for start repeat, attach brek to previous measure
-                              if (el->isBarLine()) {
+                              // for start repeat, attach break to previous measure
+                              if (measure && el->isBarLine()) {
                                     BarLine* bl = toBarLine(el);
                                     if (bl->barLineType() == BarLineType::START_REPEAT)
                                           measure = measure->prevMeasure();

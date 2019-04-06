@@ -1314,13 +1314,13 @@ bool Staff::setProperty(Pid id, const QVariant& v)
                         if (s && s->element(track))
                               blList.push_back(s->element(track));
                         if (Measure* mm = m->mmRest()) {
-                              Segment* s = mm->getSegmentR(SegmentType::EndBarLine, mm->ticks());
-                              if (s && s->element(track))
-                                    blList.push_back(s->element(track));
+                              Segment* ss = mm->getSegmentR(SegmentType::EndBarLine, mm->ticks());
+                              if (ss && ss->element(track))
+                                    blList.push_back(ss->element(track));
                               }
                         }
                   for (Element* e : blList) {
-                        if (e->isBarLine() && !e->generated())
+                        if (e && e->isBarLine() && !e->generated())
                               toBarLine(e)->setSpanStaff(v.toInt());
                         }
                   }
