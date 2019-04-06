@@ -1728,14 +1728,16 @@ void Score::deleteItem(Element* el)
                               Measure* m2 = m->isMMRest() ? m->mmRestFirst() : m;
                               for (Score* lscore : score()->scoreList()) {
                                     Measure* lmeasure = lscore->tick2measure(m2->tick());
-                                    lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
+                                    if (lmeasure)
+                                          lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
                                     }
                               }
                         else if (bl->barLineType() == BarLineType::END_REPEAT) {
                               Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
                               for (Score* lscore : score()->scoreList()) {
                                     Measure* lmeasure = lscore->tick2measure(m2->tick());
-                                    lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
+                                    if (lmeasure)
+                                          lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
                                     }
                               }
                         else {

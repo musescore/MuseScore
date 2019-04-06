@@ -1759,7 +1759,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
 
       Measure* mmr = m->mmRest();
       if (mmr) {
-            // resuse existing mmrest
+            // reuse existing mmrest
             if (mmr->ticks() != len) {
                   Segment* s = mmr->findSegmentR(SegmentType::EndBarLine, mmr->ticks());
                   // adjust length
@@ -1788,7 +1788,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                   if (e) {
                         bool generated = e->generated();
                         if (!ds->element(staffIdx * VOICES)) {
-                              Element* ee = e->clone();
+                              Element* ee = generated ? e->clone() : e->linkedClone();
                               ee->setGenerated(generated);
                               ee->setParent(ds);
                               undoAddElement(ee);
@@ -1796,6 +1796,8 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                         else {
                               BarLine* bd = toBarLine(ds->element(staffIdx * VOICES));
                               BarLine* bs = toBarLine(e);
+                              if (!generated && !bd->links())
+                                    undo(new Link(bd, bs));
                               if (bd->barLineType() != bs->barLineType()) {
                                     // change directly when generating mmrests, do not change underlying measures or follow links
                                     undo(new ChangeProperty(bd, Pid::BARLINE_TYPE, QVariant::fromValue(bs->barLineType()), PropertyFlags::NOSTYLE));

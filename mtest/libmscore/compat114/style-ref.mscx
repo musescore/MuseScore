@@ -167,6 +167,8 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <linked>
+              </linked>
             </BarLine>
           </voice>
         </Measure>
@@ -418,6 +420,7 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <linkedMain/>
             </BarLine>
           </voice>
         </Measure>

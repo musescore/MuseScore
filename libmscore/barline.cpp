@@ -36,6 +36,8 @@ namespace Ms {
 static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves)
       {
       Measure* m = bl->measure();
+      if (!m)
+            return;
 
       if (barType == BarLineType::START_REPEAT) {
             m = m->nextMeasure();
@@ -60,7 +62,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                   SegmentType segmentType = segment->segmentType();
                   if (segmentType == SegmentType::EndBarLine) {
                         // when setting barline type on mmrest, set for underlying measure (and linked staves)
-                        // createMMRest will then set for the the mmrest directly
+                        // createMMRest will then set for the mmrest directly
                         Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
 
                         bool generated;
@@ -73,12 +75,14 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
 
                         const std::vector<Element*>& elist = allStaves ? segment->elist() : std::vector<Element*> { bl };
                         for (Element* e : elist) {
-                              if (!e)
+                              if (!e || !e->staff() || !e->isBarLine())
                                     continue;
+
                               // handle linked staves/parts:
-                              // barlines themselves are not linked,
+                              // barlines themselves are not necessarily linked,
                               // so use staffList to find linked staves
-                              for (Staff* lstaff : e->staff()->staffList()) {
+                              BarLine* sbl = toBarLine(e);
+                              for (Staff* lstaff : sbl->staff()->staffList()) {
                                     Score* lscore = lstaff->score();
                                     int ltrack = lstaff->idx() * VOICES;
 
@@ -86,6 +90,8 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                                     // set the barline on the underlying measure
                                     // this will copied to the mmrest during layout, in createMMRest
                                     Measure* lmeasure = lscore->tick2measure(m2->tick());
+                                    if (!lmeasure)
+                                          continue;
 
                                     lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
                                     Segment* lsegment = lmeasure->undoGetSegmentR(SegmentType::EndBarLine, lmeasure->ticks());
@@ -100,10 +106,18 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                                           lbl->setBarLineType(barType);
                                           lbl->setGenerated(generated);
                                           lscore->addElement(lbl);
+                                          if (!generated)
+                                                lbl->linkTo(sbl);
                                           }
                                     else {
-                                          lscore->undo(new ChangeProperty(lbl, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
                                           lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
+                                          lscore->undo(new ChangeProperty(lbl, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
+                                          // set generated flag before and after so it sticks on type change and also works on undo/redo
+                                          lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
+                                          if (lbl != sbl && !generated && !lbl->links())
+                                                lscore->undo(new Link(lbl, sbl));
+                                          else if (lbl != sbl && generated && lbl->isLinked(sbl))
+                                                lscore->undo(new Unlink(lbl));
                                           }
                                     }
                               }
@@ -112,7 +126,9 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                         Segment* segment1 = m->undoGetSegmentR(SegmentType::BeginBarLine, Fraction(0, 1));
                         for (Element* e : segment1->elist()) {
                               if (e) {
+                                    e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
                                     e->score()->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
+                                    // set generated flag before and after so it sticks on type change and also works on undo/redo
                                     e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
                                     }
                               }
@@ -123,7 +139,8 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                   Measure* m2 = m->isMMRest() ? m->mmRestFirst() : m;
                   for (Score* lscore : m2->score()->scoreList()) {
                         Measure* lmeasure = lscore->tick2measure(m2->tick());
-                        lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                        if (lmeasure)
+                              lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
                         }
                   }
                   break;
@@ -131,7 +148,8 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                   Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
                   for (Score* lscore : m2->score()->scoreList()) {
                         Measure* lmeasure = lscore->tick2measure(m2->tick());
-                        lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                        if (lmeasure)
+                              lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
                         }
                   }
                   break;
@@ -139,10 +157,12 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                   Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
                   for (Score* lscore : m2->score()->scoreList()) {
                         Measure* lmeasure = lscore->tick2measure(m2->tick());
-                        lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
-                        lmeasure = lmeasure->nextMeasure();
-                        if (lmeasure)
-                              lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                        if (lmeasure) {
+                              lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                              lmeasure = lmeasure->nextMeasure();
+                              if (lmeasure)
+                                    lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                              }
                         }
                   }
                   break;

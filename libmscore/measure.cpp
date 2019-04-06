@@ -1541,24 +1541,28 @@ Element* Measure::drop(EditData& data)
                         Measure* m2 = isMMRest() ? mmRestFirst() : this;
                         for (Score* lscore : score()->scoreList()) {
                               Measure* lmeasure = lscore->tick2measure(m2->tick());
-                              lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                              if (lmeasure)
+                                    lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
                               }
                         }
                   else if (bl->barLineType() == BarLineType::END_REPEAT) {
                         Measure* m2 = isMMRest() ? mmRestLast() : this;
                         for (Score* lscore : score()->scoreList()) {
                               Measure* lmeasure = lscore->tick2measure(m2->tick());
-                              lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                              if (lmeasure)
+                                    lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
                               }
                         }
                   else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
                         Measure* m2 = isMMRest() ? mmRestLast() : this;
                         for (Score* lscore : score()->scoreList()) {
                               Measure* lmeasure = lscore->tick2measure(m2->tick());
-                              lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
-                              lmeasure = lmeasure->nextMeasure();
-                              if (lmeasure)
-                                    lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                              if (lmeasure) {
+                                    lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                                    lmeasure = lmeasure->nextMeasure();
+                                    if (lmeasure)
+                                          lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                                    }
                               }
                         }
                   else {
