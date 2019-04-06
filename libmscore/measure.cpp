@@ -1551,6 +1551,16 @@ Element* Measure::drop(EditData& data)
                               lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
                               }
                         }
+                  else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
+                        Measure* m2 = isMMRest() ? mmRestLast() : this;
+                        for (Score* lscore : score()->scoreList()) {
+                              Measure* lmeasure = lscore->tick2measure(m2->tick());
+                              lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                              lmeasure = lmeasure->nextMeasure();
+                              if (lmeasure)
+                                    lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                              }
+                        }
                   else {
                         // drop to first end barline
                         seg = findSegmentR(SegmentType::EndBarLine, ticks());

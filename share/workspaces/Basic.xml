@@ -48,7 +48,7 @@
           <KeySig>
             <accidental>1</accidental>
             </KeySig>
-          </Cell>voiceActions
+          </Cell>
         <Cell name="D major, B minor">
           <staff>1</staff>
           <KeySig>
@@ -204,7 +204,7 @@
           </Cell>
         <Cell name="4/4 common time">
           <staff>1</staff>
-          <TimeSig>voiceActions
+          <TimeSig>
             <subtype>1</subtype>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -357,7 +357,7 @@
           <HairPin id="5">
             <subtype>2</subtype>
             <beginText>cresc.</beginText>
-            <continueText>(cresc.)</continueText>voiceActions
+            <continueText>(cresc.)</continueText>
             <track>0</track>
             </HairPin>
           </Cell>
@@ -387,7 +387,7 @@
             <track>0</track>
             <length>200</length>
             <endings>2</endings>
-            </Volta>voiceActions
+            </Volta>
           </Cell>
         <Cell name="Seconda volta, open">
           <Volta id="9">
@@ -465,7 +465,13 @@
           <staff>1</staff>
           <BarLine>
             <subtype>end-repeat</subtype>
-            </BarLine>voiceActions
+            </BarLine>
+          </Cell>
+        <Cell name="End-start repeat">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>end-start-repeat</subtype>
+            </BarLine>
           </Cell>
         <Cell name="Dashed barline">
           <staff>1</staff>
@@ -774,6 +780,12 @@
         <Cell name="End repeat">
           <BarLine>
             <subtype>end-repeat</subtype>
+            </BarLine>
+          </Cell>
+        <Cell name="End-start repeat">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>end-start-repeat</subtype>
             </BarLine>
           </Cell>
         </Palette>

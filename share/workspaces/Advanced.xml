@@ -1276,6 +1276,12 @@
             <subtype>end-repeat</subtype>
             </BarLine>
           </Cell>
+        <Cell name="End-start repeat">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>end-start-repeat</subtype>
+            </BarLine>
+          </Cell>
         <Cell name="Dashed barline">
           <staff>1</staff>
           <BarLine>
@@ -2175,7 +2181,13 @@
             <subtype>end-repeat</subtype>
             </BarLine>
           </Cell>
-        </Palette>
+        <Cell name="End-start repeat">
+          <staff>1</staff>
+          <BarLine>
+            <subtype>end-start-repeat</subtype>
+            </BarLine>
+          </Cell>
+      </Palette>
       <Palette name="Fretboard Diagrams">
         <gridWidth>42</gridWidth>
         <gridHeight>45</gridHeight>
