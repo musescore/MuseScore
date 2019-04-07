@@ -86,6 +86,8 @@ class BarLine final : public Element {
       virtual void layout() override;
       void layout2();
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;
+      virtual void setTrack(int t) override;
+      virtual void setScore(Score* s) override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual bool acceptDrop(EditData&) const override;
