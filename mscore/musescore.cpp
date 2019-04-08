@@ -7498,11 +7498,6 @@ int main(int argc, char* av[])
       gscore->setScoreFont(scoreFont);
       gscore->setNoteHeadWidth(scoreFont->width(SymId::noteheadBlack, gscore->spatium()) / SPATIUM20);
 
-      if (!noSeq) {
-            if (!seq->init())
-                  qDebug("sequencer init failed");
-            }
-
       //read languages list
       mscore->readLanguages(mscoreGlobalShare + "locale/languages.xml");
 
@@ -7543,6 +7538,11 @@ int main(int argc, char* av[])
                   QString keyboardLayout = preferences.getString(PREF_APP_KEYBOARDLAYOUT);
                   StartupWizard::autoSelectShortcuts(keyboardLayout);
                   }
+            }
+
+      if (!noSeq) {
+            if (!seq->init())
+                  qDebug("sequencer init failed");
             }
 
       QApplication::instance()->installEventFilter(mscore);
