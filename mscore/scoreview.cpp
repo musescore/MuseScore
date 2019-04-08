@@ -1713,11 +1713,11 @@ void ScoreView::normalSwap()
 //   normalPaste
 //---------------------------------------------------------
 
-bool ScoreView::normalPaste()
+bool ScoreView::normalPaste(Fraction scale)
       {
       _score->startCmd();
       const QMimeData* ms = QApplication::clipboard()->mimeData();
-      _score->cmdPaste(ms, this);
+      _score->cmdPaste(ms, this, scale);
       bool rv = MScore::_error == MS_NO_ERROR;
       _score->endCmd();
       return rv;
@@ -1796,6 +1796,21 @@ void ScoreView::cmd(const char* s)
                   normalPaste();
             else if (state == ViewState::EDIT)
                   editPaste();
+            }
+      else if (cmd == "paste-half") {
+            normalPaste(Fraction(1, 2));
+            }
+      else if (cmd == "paste-double") {
+            normalPaste(Fraction(2, 1));
+            }
+      else if (cmd == "paste-special") {
+            Fraction scale = Fraction(1, 1);
+            Fraction duration = _score->inputState().duration().fraction();
+            if (duration.isValid() && !duration.isZero()) {
+                  scale = duration * 4;
+                  scale.reduce();
+                  }
+            normalPaste(scale);
             }
       else if (cmd == "swap") {
             if (state == ViewState::NORMAL)

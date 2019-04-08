@@ -903,7 +903,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
 //   cmdPaste
 //---------------------------------------------------------
 
-void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
+void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
       {
       if (ms == 0) {
             qDebug("no application mime data");
@@ -981,14 +981,6 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view)
                         qDebug("paste <%s>", data.data());
                   XmlReader e(data);
                   e.setPasteMode(true);
-                  Fraction scale = Fraction(1, 1);
-                  if (_is.noteEntryMethod() == NoteEntryMethod::TIMEWISE) {
-                        Fraction f = _is.duration().fraction();
-                        if (f.isValid() && !f.isZero()) {
-                              scale = f * 4;
-                              scale.reduce();
-                              }
-                        }
                   if (!pasteStaff(e, cr->segment(), cr->staffIdx(), scale))
                         return;
                   }
