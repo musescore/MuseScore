@@ -128,10 +128,6 @@ class SlurTieSegment : public SpannerSegment {
 class SlurTie : public Spanner {
       int _lineType;    // 0 = solid, 1 = dotted, 2 = dashed, 3 = wide dashed
 
-      static Element* editStartElement;
-      static Element* editEndElement;
-      static QList<SlurOffsets> editUps;
-
    protected:
       bool _up;               // actual direction
 
