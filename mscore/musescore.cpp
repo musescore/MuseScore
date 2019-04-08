@@ -7071,10 +7071,13 @@ int main(int argc, char* av[])
       QCoreApplication::setApplicationVersion(VERSION);
 
 #ifdef BUILD_CRASH_REPORTER
+      {
       static_assert(sizeof(CRASHREPORTER_EXECUTABLE) > 1,
          "CRASHREPORTER_EXECUTABLE should be defined to build with crash reporter"
          );
-      std::unique_ptr<CrashReporter::Handler> crashHandler(new CrashReporter::Handler(QDir::tempPath(), true, CRASHREPORTER_EXECUTABLE));
+      CrashReporter::Handler* crashHandler = new CrashReporter::Handler(QDir::tempPath(), true, CRASHREPORTER_EXECUTABLE);
+      QObject::connect(app, &QCoreApplication::aboutToQuit, [crashHandler]() { delete crashHandler; });
+      }
 #endif
 
       QAccessible::installFactory(AccessibleScoreView::ScoreViewFactory);
