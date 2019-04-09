@@ -123,6 +123,12 @@ FluidGui::FluidGui(Synthesizer* s)
       _progressTimer = new QTimer(this);
       connect(_progressTimer, SIGNAL(timeout()), this, SLOT(updateProgress()));
       connect(soundFonts, SIGNAL(itemSelectionChanged()), this, SLOT(updateUpDownButtons()));
+      
+      //update sfs
+      QStringList sfonts = fluid()->soundFonts();
+      soundFonts->clear();
+      soundFonts->addItems(sfonts);
+      
       updateUpDownButtons();
       }
 
