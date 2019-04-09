@@ -97,6 +97,7 @@
             <transposingClefType>G</transposingClefType>
             </Clef>
           <TimeSig>
+            <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -110,6 +111,9 @@
         <multiMeasureRest>4</multiMeasureRest>
         <voice>
           <TimeSig>
+            <linked>
+              <indexDiff>-1</indexDiff>
+              </linked>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>

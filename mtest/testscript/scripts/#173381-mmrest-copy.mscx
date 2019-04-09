@@ -94,6 +94,7 @@
       <Measure>
         <voice>
           <TimeSig>
+            <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
@@ -107,6 +108,9 @@
         <multiMeasureRest>3</multiMeasureRest>
         <voice>
           <TimeSig>
+            <linked>
+              <indexDiff>-1</indexDiff>
+              </linked>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
