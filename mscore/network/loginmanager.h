@@ -17,6 +17,8 @@
 
 namespace Ms {
 
+class ApiRequest;
+
 //---------------------------------------------------------
 //   LoginManager
 //---------------------------------------------------------
@@ -28,6 +30,7 @@ class LoginManager : public QObject
       enum class RequestType
             {
             LOGIN,
+            LOGIN_REFRESH,
             GET_USER_INFO,
             GET_SCORE_INFO,
             UPLOAD_SCORE,
@@ -35,6 +38,7 @@ class LoginManager : public QObject
             };
 
       static constexpr int MAX_UPLOAD_TRY_COUNT = 5;
+      static constexpr int MAX_REFRESH_LOGIN_RETRY_COUNT = 2;
 
       QNetworkAccessManager* _networkManager;
 
@@ -50,14 +54,18 @@ class LoginManager : public QObject
 
       QProgressDialog* _progressDialog;
 
-      void onReplyFinished(QNetworkReply*, RequestType);
+      void onReplyFinished(ApiRequest*, RequestType);
+      void handleReply(QNetworkReply*, RequestType);
       static QString getErrorString(QNetworkReply*, const QJsonObject&);
 
       void onGetUserReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
       void onLoginReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
+      void onLoginRefreshReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
       void onUploadReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
       void onGetScoreInfoReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
       void onGetMediaUrlReply(QNetworkReply* reply, int code, const QJsonObject& replyContent);
+
+      ApiRequest* buildLoginRefreshRequest() const;
 
    signals:
       void loginError(const QString& error);

@@ -146,7 +146,7 @@ LoginManager::LoginManager(QAction* uploadAudioMenuAction, QObject* parent)
 
 bool LoginManager::save()
       {
-      if (_accessToken.isEmpty() || _refreshToken.isEmpty())
+      if (_accessToken.isEmpty() && _refreshToken.isEmpty())
             return true;
       QFile saveFile(dataPath + "/cred.dat");
       if (!saveFile.open(QIODevice::WriteOnly))
@@ -182,12 +182,54 @@ bool LoginManager::load()
 //   onReplyFinished
 //---------------------------------------------------------
 
-void LoginManager::onReplyFinished(QNetworkReply* reply, RequestType requestType)
+void LoginManager::onReplyFinished(ApiRequest* request, RequestType requestType)
+      {
+      if (!request)
+            return;
+      QNetworkReply* reply = request->reply();
+      if (!reply)
+            return;
+
+      const int code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+      if (code == HTTP_UNAUTHORIZED && requestType != RequestType::LOGIN && requestType != RequestType::LOGIN_REFRESH) {
+            if (request->retryCount() < MAX_REFRESH_LOGIN_RETRY_COUNT) {
+                  ApiRequest* refreshRequest = buildLoginRefreshRequest();
+                  refreshRequest->setParent(this);
+                  connect(refreshRequest, &ApiRequest::replyFinished, this, [this, request, requestType](ApiRequest* refreshRequest) {
+                        _accessToken.clear();
+                        onReplyFinished(refreshRequest, RequestType::LOGIN_REFRESH);
+                        if (!_accessToken.isEmpty()) {
+                              // try to execute the request once more with the new token
+                              request->setToken(_accessToken);
+                              request->executeRequest(_networkManager);
+                              }
+                        else {
+                              handleReply(request->reply(), requestType);
+                              request->deleteLater();
+                              }
+                        });
+                  refreshRequest->executeRequest(_networkManager);
+                  return;
+                  }
+            }
+
+      handleReply(reply, requestType);
+
+      request->deleteLater();
+      }
+
+//---------------------------------------------------------
+//   handleReply
+//---------------------------------------------------------
+
+void LoginManager::handleReply(QNetworkReply* reply, RequestType requestType)
       {
       if (!reply)
             return;
 
       const int code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
       QByteArray ba(reply->readAll());
       QJsonObject obj;
       if (!ba.isEmpty()) {
@@ -199,6 +241,9 @@ void LoginManager::onReplyFinished(QNetworkReply* reply, RequestType requestType
       switch (requestType) {
             case RequestType::LOGIN:
                   onLoginReply(reply, code, obj);
+                  break;
+            case RequestType::LOGIN_REFRESH:
+                  onLoginRefreshReply(reply, code, obj);
                   break;
             case RequestType::GET_USER_INFO:
                   onGetUserReply(reply, code, obj);
@@ -213,8 +258,6 @@ void LoginManager::onReplyFinished(QNetworkReply* reply, RequestType requestType
                   onGetMediaUrlReply(reply, code, obj);
                   break;
             }
-
-      reply->deleteLater();
       }
 
 //---------------------------------------------------------
@@ -351,20 +394,36 @@ void LoginManager::login(QString login, QString password)
       if(login.isEmpty() || password.isEmpty())
            return;
 
-      ApiRequest r = ApiRequestBuilder()
-         .setPath("/auth/login")
+      ApiRequest* r = new ApiRequest(this);
+      r->setPath("/auth/login")
+         .setMethod(ApiRequest::HTTP_PUT)
          .addPostParameter("field", login)
-         .addPostParameter("password", password)
-         .build();
+         .addPostParameter("password", password);
 
-      QNetworkReply* reply = _networkManager->put(r.request, r.data);
-      connect(reply, &QNetworkReply::finished, this, [this, reply] {
-            onReplyFinished(reply, RequestType::LOGIN);
+      connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
+            onReplyFinished(r, RequestType::LOGIN);
             });
+
+      r->executeRequest(_networkManager);
       }
 
 //---------------------------------------------------------
-//   onLoginSuccessReply
+//   buildLoginRefreshRequest
+//---------------------------------------------------------
+
+ApiRequest* LoginManager::buildLoginRefreshRequest() const
+      {
+      ApiRequest* r = new ApiRequest();
+      r->setPath("/auth/refresh")
+         .setMethod(ApiRequest::HTTP_POST)
+         .addGetParameter("device_id", ApiInfo::instance().clientId)
+         .addPostParameter("refresh_token", _refreshToken);
+
+      return r;
+      }
+
+//---------------------------------------------------------
+//   onLoginReply
 //---------------------------------------------------------
 
 void LoginManager::onLoginReply(QNetworkReply* reply, int code, const QJsonObject& obj)
@@ -379,6 +438,23 @@ void LoginManager::onLoginReply(QNetworkReply* reply, int code, const QJsonObjec
             }
       else
             emit loginError(getErrorString(reply, obj));
+      }
+
+//---------------------------------------------------------
+//   onLoginRefreshReply
+//---------------------------------------------------------
+
+void LoginManager::onLoginRefreshReply(QNetworkReply* reply, int code, const QJsonObject& obj)
+      {
+      Q_UNUSED(reply);
+      if (code == HTTP_OK) {
+            _accessToken = obj["token"].toString();
+            _refreshToken = obj["refresh_token"].toString();
+            }
+      else {
+            _accessToken.clear();
+            _refreshToken.clear();
+            }
       }
 
 //---------------------------------------------------------
@@ -452,20 +528,21 @@ void LoginManager::onAccessTokenRequestReady(QByteArray ba)
 
 void LoginManager::getUser()
       {
-      if (_accessToken.isEmpty() || _refreshToken.isEmpty()) {
+      if (_accessToken.isEmpty() && _refreshToken.isEmpty()) {
             emit getUserError("getUser - No token");
             return;
             }
 
-      ApiRequest r = ApiRequestBuilder()
-         .setPath("/user/me")
-         .setToken(_accessToken)
-         .build();
+      ApiRequest* r = new ApiRequest(this);
+      r->setPath("/user/me")
+         .setMethod(ApiRequest::HTTP_GET)
+         .setToken(_accessToken);
 
-      QNetworkReply* reply = _networkManager->get(r.request);
-      connect(reply, &QNetworkReply::finished, this, [this, reply] {
-            onReplyFinished(reply, RequestType::GET_USER_INFO);
+      connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
+            onReplyFinished(r, RequestType::GET_USER_INFO);
             });
+
+      r->executeRequest(_networkManager);
       }
 
 //---------------------------------------------------------
@@ -499,16 +576,17 @@ void LoginManager::getScoreInfo(int nid)
             return;
             }
 
-      ApiRequest r = ApiRequestBuilder()
-         .setPath("/score/full-info")
+      ApiRequest* r = new ApiRequest(this);
+      r->setPath("/score/full-info")
+         .setMethod(ApiRequest::HTTP_GET)
          .setToken(_accessToken)
-         .addGetParameter("score_id", QString::number(nid))
-         .build();
+         .addGetParameter("score_id", QString::number(nid));
 
-      QNetworkReply* reply = _networkManager->get(r.request);
-      connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-            onReplyFinished(reply, RequestType::GET_SCORE_INFO);
+      connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
+            onReplyFinished(r, RequestType::GET_SCORE_INFO);
             });
+
+      r->executeRequest(_networkManager);
       }
 
 //---------------------------------------------------------
@@ -552,17 +630,18 @@ void LoginManager::onGetScoreInfoReply(QNetworkReply* reply, int code, const QJs
 void LoginManager::getMediaUrl(const QString& nid, const QString& vid, const QString& encoding)
       {
       Q_UNUSED(encoding);
-      ApiRequest r = ApiRequestBuilder()
-         .setPath("/score/audio")
+      ApiRequest* r = new ApiRequest(this);
+      r->setPath("/score/audio")
+         .setMethod(ApiRequest::HTTP_GET)
          .setToken(_accessToken)
          .addGetParameter("score_id", nid)
-         .addGetParameter("revision_id", vid)
-         .build();
+         .addGetParameter("revision_id", vid);
 
-      QNetworkReply* reply = _networkManager->get(r.request);
-      connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-            onReplyFinished(reply, RequestType::GET_MEDIA_URL);
+      connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
+            onReplyFinished(r, RequestType::GET_MEDIA_URL);
             });
+
+      r->executeRequest(_networkManager);
       }
 
 //---------------------------------------------------------
@@ -742,12 +821,11 @@ void LoginManager::upload(const QString &path, int nid, const QString &title, co
 //       if (nid > 0)
 //             url = QUrl(QString("https://%1/services/rest/score/%2/update.json").arg(MUSESCORE_HOST).arg(nid));
 
-      ApiRequest r = ApiRequestBuilder()
-         .setPath("/score/upload")
-         .setToken(_accessToken)
-         .build();
+      ApiRequest* r = new ApiRequest(this);
+      r->setPath("/score/upload")
+         .setToken(_accessToken);
 
-      QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+      QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType, /* parent */ r);
 
       QHttpPart filePart;
       filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
@@ -801,17 +879,20 @@ void LoginManager::upload(const QString &path, int nid, const QString &title, co
       }
 #endif
 
-      // TODO: "uri" parameter?
-      QNetworkReply* reply;
-      if (nid > 0) // score exists, update
-            reply = _networkManager->put(r.request, multiPart);
-      else // score doesn't exist, post a new score
-            reply = _networkManager->post(r.request, multiPart);
+      r->setMultiPartData(multiPart);
 
-      connect(reply, &QNetworkReply::finished, this, [this, reply] {
-            onReplyFinished(reply, RequestType::UPLOAD_SCORE);
+      // TODO: "uri" parameter?
+      if (nid > 0) // score exists, update
+            r->setMethod(ApiRequest::HTTP_PUT);
+      else // score doesn't exist, post a new score
+            r->setMethod(ApiRequest::HTTP_POST);
+
+      connect(r, &ApiRequest::replyFinished, this, [this](ApiRequest* r) {
+            onReplyFinished(r, RequestType::UPLOAD_SCORE);
             });
-     }
+
+      r->executeRequest(_networkManager);
+      }
 
 //---------------------------------------------------------
 //   onUploadReply
@@ -848,13 +929,13 @@ bool LoginManager::hasAccessToken()
 bool LoginManager::logout()
       {
       if (!_accessToken.isEmpty()) {
-            ApiRequest r = ApiRequestBuilder()
-               .setPath("/auth/login")
-               .setToken(_accessToken)
-               .build();
+            ApiRequest* r = new ApiRequest(this);
+            r->setPath("/auth/login")
+               .setMethod(ApiRequest::HTTP_DELETE)
+               .setToken(_accessToken);
 
-            QNetworkReply* reply = _networkManager->deleteResource(r.request);
-            connect(reply, &QNetworkReply::finished, reply, &QNetworkReply::deleteLater); // we don't need the reply info here
+            connect(r, &ApiRequest::replyFinished, r, &ApiRequest::deleteLater); // we don't need the reply info here
+            r->executeRequest(_networkManager);
             }
 
       _accessToken.clear();
@@ -866,25 +947,71 @@ bool LoginManager::logout()
       }
 
 //---------------------------------------------------------
-//   ApiRequestBuilder::build
+//   ApiRequest::setToken
 //---------------------------------------------------------
 
-ApiRequest ApiRequestBuilder::build() const
+ApiRequest& ApiRequest::setToken(const QString& token)
       {
-      ApiRequest r;
+      const QString tokenKey("token");
+      _urlQuery.removeQueryItem(tokenKey);
+      if (!token.isEmpty())
+            _urlQuery.addQueryItem(tokenKey, token);
+      return *this;
+      }
+
+//---------------------------------------------------------
+//   ApiRequest::buildRequest
+//---------------------------------------------------------
+
+QNetworkRequest ApiRequest::buildRequest() const
+      {
+      QNetworkRequest r;
 
       QUrl url(_url);
       url.setQuery(_urlQuery);
-      r.request.setUrl(url);
-      r.request.setRawHeader("Accept", "application/json");
+      r.setUrl(url);
+      r.setRawHeader("Accept", "application/json");
       const ApiInfo& apiInfo = ApiInfo::instance();
-      r.request.setHeader(QNetworkRequest::UserAgentHeader, apiInfo.userAgent);
-      r.request.setRawHeader(apiInfo.clientIdHeader, apiInfo.clientId);
-      r.request.setRawHeader(apiInfo.apiKeyHeader, apiInfo.apiKey);
-
-      r.data = _bodyQuery.toString().toLatin1();
+      r.setHeader(QNetworkRequest::UserAgentHeader, apiInfo.userAgent);
+      r.setRawHeader(apiInfo.clientIdHeader, apiInfo.clientId);
+      r.setRawHeader(apiInfo.apiKeyHeader, apiInfo.apiKey);
 
       return r;
+      }
+
+//---------------------------------------------------------
+//   ApiRequest::executeRequest
+//---------------------------------------------------------
+
+void ApiRequest::executeRequest(QNetworkAccessManager* networkManager)
+      {
+      ++_retryCount;
+      QNetworkRequest request(buildRequest());
+      const QByteArray data(_bodyQuery.toString().toLatin1());
+
+      switch (_method) {
+            case HTTP_GET:
+                  _reply = networkManager->get(request);
+                  break;
+            case HTTP_POST:
+                  if (_multipart)
+                        _reply = networkManager->post(request, _multipart);
+                  else
+                        _reply = networkManager->post(request, data);
+                  break;
+            case HTTP_PUT:
+                  if (_multipart)
+                        _reply = networkManager->put(request, _multipart);
+                  else
+                        _reply = networkManager->put(request, data);
+                  break;
+            case HTTP_DELETE:
+                  _reply = networkManager->deleteResource(request);
+                  break;
+            };
+
+      _reply->setParent(this);
+      connect(_reply, &QNetworkReply::finished, this, [this]() { emit replyFinished(this); });
       }
 
 //---------------------------------------------------------
