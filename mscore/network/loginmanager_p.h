@@ -69,35 +69,51 @@ class ApiInfo
 
 //---------------------------------------------------------
 //   ApiRequest
-//    Contains information necessary for making a request:
-//    request - the request object itself
-//    data    - data of the request's body (for POST, PUT)
 //---------------------------------------------------------
 
-struct ApiRequest
+class ApiRequest : public QObject
       {
-      QNetworkRequest request;
-      QByteArray data;
-      };
+      Q_OBJECT
+   public:
+      enum Method {
+            HTTP_GET,
+            HTTP_POST,
+            HTTP_PUT,
+            HTTP_DELETE
+            };
 
-//---------------------------------------------------------
-//   ApiRequestBuilder
-//---------------------------------------------------------
-
-class ApiRequestBuilder
-      {
+   private:
       QUrl _url;
       QUrlQuery _urlQuery;
       QUrlQuery _bodyQuery;
+      QHttpMultiPart* _multipart = nullptr;
+
+      QNetworkReply* _reply = nullptr;
+
+      Method _method = HTTP_GET;
+
+      int _retryCount = 0;
+
+      QNetworkRequest buildRequest() const;
+
+   signals:
+      void replyFinished(ApiRequest*);
 
    public:
-      ApiRequestBuilder() : _url(ApiInfo::apiHost) {}
-      ApiRequestBuilder& setPath(const QString& path) { _url.setPath(ApiInfo::apiRoot + path); return *this; }
-      ApiRequestBuilder& addGetParameter(const QString& key, const QString& val)  { _urlQuery.addQueryItem(key, val); return *this; }
-      ApiRequestBuilder& addPostParameter(const QString& key, const QString& val) { _bodyQuery.addQueryItem(key, val); return *this; }
-      ApiRequestBuilder& setToken(const QString& token) { addGetParameter("token", token); return *this; }
+      ApiRequest(QObject* parent = nullptr)
+         : QObject(parent), _url(ApiInfo::apiHost) {}
+      ApiRequest& setMethod(Method m) { _method = m; return *this; }
+      ApiRequest& setPath(const QString& path) { _url.setPath(ApiInfo::apiRoot + path); return *this; }
+      ApiRequest& addGetParameter(const QString& key, const QString& val)  { _urlQuery.addQueryItem(key, val); return *this; }
+      ApiRequest& addPostParameter(const QString& key, const QString& val) { _bodyQuery.addQueryItem(key, val); return *this; }
+      ApiRequest& setMultiPartData(QHttpMultiPart* m) { _multipart = m; m->setParent(this); return *this; }
+      ApiRequest& setToken(const QString& token);
 
-      ApiRequest build() const;
+      void executeRequest(QNetworkAccessManager* mgr);
+      QNetworkReply* reply() { return _reply; }
+      const QNetworkReply* reply() const { return _reply; }
+
+      int retryCount() const { return _retryCount; }
       };
 
 //---------------------------------------------------------
