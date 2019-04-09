@@ -775,6 +775,8 @@ bool MuseScore::importExtension(QString path)
 
                   if (!sfzs.isEmpty())
                         synti->storeState();
+                  
+                  s->gui()->synthesizerChanged();
                   }
 
             // After install: add soundfont to fluid
@@ -784,17 +786,20 @@ bool MuseScore::importExtension(QString path)
                   QStringList filters("*.sf2");
                   filters.append("*.sf3");
                   QDirIterator it(sfDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
-                  Synthesizer* s = synti->synthesizer("Fluid");
                   QStringList sfs;
                   while (it.hasNext()) {
                         it.next();
-                        sfs.append(it.fileName());
+                        sfs.append(it.fileInfo().absoluteFilePath());
                         }
                   sfs.sort();
-                  for (auto sf : sfs)
+                  Synthesizer* s = synti->synthesizer("Fluid");
+                  for (auto sf : sfs) {
                         s->addSoundFont(sf);
+                        }
                   if (!sfs.isEmpty())
                         synti->storeState();
+                  
+                  s->gui()->synthesizerChanged();
                   }
             };
       if (!enableExperimental) {
@@ -843,6 +848,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
                   }
             if (found)
                   synti->storeState();
+            s->gui()->synthesizerChanged();
             }
       // Before install: remove soundfont from fluid
       QDir sfDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::soundfontsDir));
@@ -850,15 +856,17 @@ bool MuseScore::uninstallExtension(QString extensionId)
             // get all soundfont files
             QStringList filters("*.sf2");
             filters.append("*.sf3");
-            QDirIterator it(sfzDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
+            QDirIterator it(sfDir.absolutePath(), filters, QDir::Files, QDirIterator::Subdirectories);
             Synthesizer* s = synti->synthesizer("Fluid");
             bool found = it.hasNext();
             while (it.hasNext()) {
                   it.next();
-                  s->removeSoundFont(it.fileInfo().absoluteFilePath());
+                  s->removeSoundFont(it.fileName());
                   }
             if (found)
                   synti->storeState();
+            
+            s->gui()->synthesizerChanged();
             }
       bool refreshWorkspaces = false;
       QDir workspacesDir(QString("%1/%2/%3/%4").arg(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS)).arg(extensionId).arg(version).arg(Extension::workspacesDir));
