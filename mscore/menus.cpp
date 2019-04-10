@@ -365,6 +365,7 @@ Palette* MuseScore::newRepeatsPalette()
 
             Marker* mk = new Marker(gscore);
             mk->setMarkerType(markerTypeTable[i].type);
+            mk->styleChanged();
             sp->append(mk, qApp->translate("markerType", markerTypeTable[i].name.toUtf8().constData()));
             }
 
