@@ -211,7 +211,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
       if (!partLabel.isEmpty()) {
             Text* txt = new Text(score, Tid::INSTRUMENT_EXCERPT);
             txt->setPlainText(partLabel);
-            txt->setTrack(0);
             measure->add(txt);
             score->setMetaTag("partName", partLabel);
             }
