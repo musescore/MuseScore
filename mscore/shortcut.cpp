@@ -215,6 +215,36 @@ Shortcut Shortcut::_sc[] = {
          },
       {
          MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "paste-half",
+         QT_TRANSLATE_NOOP("action","Paste Half Duration"),
+         QT_TRANSLATE_NOOP("action","Paste half duration"),
+         0,
+         Icons::paste_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "paste-double",
+         QT_TRANSLATE_NOOP("action","Paste Double Duration"),
+         QT_TRANSLATE_NOOP("action","Paste double duration"),
+         0,
+         Icons::paste_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
+         "paste-special",
+         QT_TRANSLATE_NOOP("action","Paste Special"),
+         QT_TRANSLATE_NOOP("action","Paste special"),
+         0,
+         Icons::paste_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT | STATE_TEXT_EDIT | STATE_LYRICS_EDIT
             | STATE_HARMONY_FIGBASS_EDIT,
          "swap",

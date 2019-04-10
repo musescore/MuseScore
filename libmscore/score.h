@@ -880,8 +880,8 @@ class Score : public QObject, public ScoreElement {
       void spatiumChanged(qreal oldValue, qreal newValue);
       void styleChanged();
 
-      void cmdPaste(const QMimeData* ms, MuseScoreView* view);
-      bool pasteStaff(XmlReader&, Segment* dst, int staffIdx);
+      void cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
+      bool pasteStaff(XmlReader&, Segment* dst, int staffIdx, Fraction scale = Fraction(1, 1));
       void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
       void pasteSymbols(XmlReader& e, ChordRest* dst);
       void renderMidi(EventMap* events, const SynthesizerState& synthState);

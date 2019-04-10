@@ -1332,6 +1332,8 @@ MuseScore::MuseScore()
       menuEdit->addAction(getAction("cut"));
       menuEdit->addAction(getAction("copy"));
       menuEdit->addAction(getAction("paste"));
+      menuEdit->addAction(getAction("paste-half"));
+      menuEdit->addAction(getAction("paste-double"));
       menuEdit->addAction(getAction("swap"));
       menuEdit->addAction(getAction("delete"));
 

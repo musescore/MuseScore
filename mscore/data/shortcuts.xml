@@ -53,6 +53,14 @@
     <seq>Ctrl+V</seq>
     </SC>
   <SC>
+    <key>paste-half</key>
+    <seq>Ctrl+Shift+Q</seq>
+    </SC>
+  <SC>
+    <key>paste-double</key>
+    <seq>Ctrl+Shift+W</seq>
+    </SC>
+  <SC>
     <key>swap</key>
     <seq>Ctrl+Shift+X</seq>
     </SC>
