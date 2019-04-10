@@ -1,0 +1,77 @@
+init init/Treble.mscx
+cmd note-input
+cmd note-a
+cmd note-b
+cmd note-c
+cmd note-d
+cmd escape
+cmd prev-measure
+cmd select-next-measure
+palette Slur
+cmd prev-chord
+cmd next-measure
+cmd note-input
+cmd note-a
+cmd note-b
+cmd note-c
+cmd note-d
+cmd note-a
+cmd note-b
+cmd note-c
+cmd note-d
+cmd note-a
+cmd note-b
+cmd note-c
+cmd note-d
+cmd note-a
+cmd note-b
+cmd note-c
+cmd note-d
+cmd note-a
+cmd note-b
+cmd note-c
+cmd note-d
+cmd note-a
+cmd note-b
+cmd note-c
+cmd note-d
+cmd escape
+cmd prev-measure
+cmd prev-measure
+cmd prev-measure
+cmd prev-measure
+cmd prev-measure
+cmd prev-measure
+palette HairPin subtype 0 beginHookType 0 endHookType 0 beginText 
+cmd next-measure
+palette HairPin subtype 3
+cmd next-measure
+palette Volta beginHookType 1 endHookType 1 beginText 2.
+cmd next-measure
+palette Ottava subtype 15ma
+cmd next-measure
+palette Ottava subtype 8vb
+palette Pedal beginHookType 0 endHookType 0
+cmd next-measure
+palette Pedal beginHookType 1 endHookType 2
+palette Trill subtype trill
+cmd next-measure
+palette Trill subtype upprall
+cmd next-measure
+cmd note-input
+cmd note-a
+cmd escape
+palette Vibrato subtype guitarVibrato
+cmd next-measure
+cmd note-input
+cmd note-b
+cmd escape
+palette Vibrato subtype vibratoSawtoothWide
+cmd next-measure
+cmd note-input
+cmd pad-note-1
+cmd note-c
+cmd escape
+palette PalmMute
+cmd del-empty-measures
+test score palette_lines_1.mscx
