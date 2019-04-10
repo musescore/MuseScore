@@ -2815,7 +2815,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                                     if (!s->enabled())
                                           continue;
                                     Element* e = s->element(staffIdx * VOICES);
-                                    if (!e)
+                                    if (!e || e->generated())
                                           continue;
                                     Element* ee = 0;
                                     if (e->isKeySig()) {
