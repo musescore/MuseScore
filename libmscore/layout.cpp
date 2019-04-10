@@ -3507,6 +3507,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       QPointF pos;
       firstMeasure = true;
+      bool createBrackets = false;
       for (MeasureBase* mb : system->measures()) {
             qreal ww = mb->width();
             if (mb->isMeasure()) {
@@ -3520,10 +3521,15 @@ System* Score::collectSystem(LayoutContext& lc)
                   ww  += rest * m->ticks().ticks() * stretch;
                   m->stretchMeasure(ww);
                   m->layoutStaffLines();
+                  if (createBrackets) {
+                        system->addBrackets(toMeasure(mb));
+                        createBrackets = false;
+                        }
                   }
             else if (mb->isHBox()) {
                   mb->setPos(pos + QPointF(toHBox(mb)->topGap(), 0.0));
                   mb->layout();
+                  createBrackets = toHBox(mb)->createSystemHeader();
                   }
             else if (mb->isVBox())
                   mb->setPos(pos);

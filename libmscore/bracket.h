@@ -41,6 +41,7 @@ class Bracket final : public Element {
       // horizontal scaling factor for brace symbol. Cannot be equal to magY or depend on h
       // because layout needs width of brace before knowing height of system...
       qreal _magx;
+      Measure* _measure = nullptr;
 
    public:
       Bracket(Score*);
@@ -64,6 +65,9 @@ class Bracket final : public Element {
       qreal magx() const                        { return _magx;                 }
 
       System* system() const                    { return (System*)parent(); }
+
+      Measure* measure() const                  { return _measure; }
+      void setMeasure(Measure* measure)         { _measure = measure; }
 
       virtual void setHeight(qreal) override;
       virtual qreal width() const override;
