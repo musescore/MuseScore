@@ -114,7 +114,16 @@ void TextLineBaseSegment::draw(QPainter* painter) const
             painter->drawLines(&points[2], 1);
             }
       else {
-            for (int i = 0; i < npoints; ++i)
+            int start = 0;
+            //if there is an end hook, draw it with a solid line
+            if (npoints > 1) {
+                  painter->drawLines(&points[0], 1);
+                  painter->drawLines(&points[1], 1);
+                  pen.setStyle(Qt::SolidLine);
+                  painter->setPen(pen);
+                  start = 2;
+                  }
+            for (int i = start; i < npoints; ++i)
                   painter->drawLines(&points[i], 1);
             }
       }
@@ -432,8 +441,10 @@ void TextLineBase::spatiumChanged(qreal /*ov*/, qreal /*nv*/)
 
 void TextLineBase::writeProperties(XmlWriter& xml) const
       {
-      for (Pid pid : pids)
-            writeProperty(xml, pid);
+      for (Pid pid : pids) {
+            if (!isStyled(pid)) 
+                  writeProperty(xml, pid);
+            }
       SLine::writeProperties(xml);
       }
 
