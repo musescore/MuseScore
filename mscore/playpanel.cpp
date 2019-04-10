@@ -350,7 +350,7 @@ void PlayPanel::volLabel()
       if (vol == MUTE)
             vol = -80.0;
       else
-            vol = ((n * std::log10(vol)) - n);
+            vol = ((N * std::log10(vol)) - N);
       volSpinBox->setValue(vol);
       volSpinBox->setSuffix(" dB");
       }
@@ -362,7 +362,7 @@ void PlayPanel::volSpinBoxEdited()
       if (svol == -80 )
             svol = MUTE;
       else
-            svol = pow(10, ((svol + n) / n ));
+            svol = pow(10, ((svol + N) / N ));
       volumeChanged(svol, 1);
       }
 
