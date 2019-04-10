@@ -956,6 +956,8 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
                   setOffset(v.toPointF());
                   layout();
                   score()->addRefresh(canvasBoundingRect());
+                  if (measure() && durationType().type() == TDuration::DurationType::V_MEASURE)
+                         measure()->triggerLayout();
                   score()->setLayout(tick());
                   break;
             default:
