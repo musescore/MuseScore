@@ -888,7 +888,7 @@ bool MuseScore::uninstallExtension(QString extensionId)
       if (refreshWorkspaces) {
             Workspace::refreshWorkspaces();
             paletteBox->updateWorkspaces();
-            paletteBox->selectWorkspace(0); //Basic
+            paletteBox->selectWorkspace(-1);
             }
       return true;
       }

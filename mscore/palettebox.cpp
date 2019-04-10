@@ -185,14 +185,20 @@ void PaletteBox::selectWorkspace(QString path)
 ///---------------------------------------------------------
 ///   selectWorkspace
 ///       Selects the workspace in the workspaceList dropdown widget using specified @idx
+///       If @idx value is out of valid range:
+///           If currentIndex is valid, keep the index
+///           1st element of the list is selected othrwise
 ///---------------------------------------------------------
 
 void PaletteBox::selectWorkspace(int idx)
       {
-      Q_ASSERT(idx < workspaceList->count());
-      Q_ASSERT(idx >= 0);
-      if (idx < 0 || idx >= workspaceList->count())
-            idx = 0;
+      if (idx < 0 || idx >= workspaceList->count()) {
+            //if selected index is valid, keep the index selection
+            if (workspaceList->currentIndex() < workspaceList->count())
+                  idx = workspaceList->currentIndex();
+            else
+                  idx = 0;
+            }
       
       workspaceList->setCurrentIndex(idx);
       workspaceSelected(idx);
