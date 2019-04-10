@@ -189,6 +189,7 @@
           <Fermata>
             <subtype>fermataAbove</subtype>
             <timeStretch>3</timeStretch>
+            <offset x="-2.05234" y="-4.89487"/>
             </Fermata>
           <Chord>
             <durationType>eighth</durationType>
