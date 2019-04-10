@@ -407,17 +407,18 @@ Element* ChordRest::drop(EditData& data)
                   {
                   Breath* b = toBreath(e);
                   b->setPos(QPointF());
-                  int track = staffIdx() * VOICES;
-                  b->setTrack(track);
-
-                  // find start tick of next note in staff
-#if 0
-                  int bt = tick() + actualTicks();    // this could make sense if we allowed breath marks in voice > 1
+#if 1
+                  // allow breath marks in voice > 1
+                  int track = this->track();
+                  Fraction bt = tick() + actualTicks();    
 #else
+                  // find start tick of next note in staff
                   Segment* next = segment()->nextCR(track);
                   Fraction bt = next ? next->tick() : score()->lastSegment()->tick();
+                  int track = staffIdx() * VOICES;
 #endif
-
+                  b->setTrack(track);
+                  bt = tick() + actualTicks();
                   // TODO: insert automatically in all staves?
 
                   Segment* seg = m->undoGetSegment(SegmentType::Breath, bt);

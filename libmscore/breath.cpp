@@ -64,12 +64,13 @@ void Breath::layout()
       {
       bool palette = (track() == -1);
       if (!palette) {
+            int voiceOffset = track() % 2 * 4 * spatium();
             if (isCaesura())
-                  setPos(rxpos(), spatium());
+                  setPos(rxpos(), spatium() + voiceOffset);
             else if ((score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (symId() == SymId::breathMarkComma))
-                  setPos(rxpos(), 0.5 * spatium());
+                  setPos(rxpos(), 0.5 * spatium() + voiceOffset);
             else
-                  setPos(rxpos(), -0.5 * spatium());
+                  setPos(rxpos(), -0.5 * spatium() + voiceOffset);
             }
       setbbox(symBbox(_symId));
       }
