@@ -345,7 +345,9 @@ void Seq::start()
 
 void Seq::stop()
       {
-      if (state == Transport::STOP)
+      const bool seqStopped = (state == Transport::STOP);
+      const bool driverStopped = !_driver || _driver->getState() == Transport::STOP;
+      if (seqStopped && driverStopped)
             return;
 
       if (oggInit) {
