@@ -200,13 +200,7 @@ void System::layoutSystem(qreal xo1)
 
       qreal xoff2 = 0.0;         // x offset for instrument name
 
-      int columns = 0;
-      for (int idx = 0; idx < nstaves; ++idx) {
-            int c = 0;
-            for (auto bi : score()->staff(idx)->brackets())
-                  c = qMax(c, bi->column()+1);
-            columns = qMax(columns, c);
-            }
+      int columns = getBracketsColumnsCount();
 
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
       qreal bracketWidth[columns];
@@ -227,49 +221,8 @@ void System::layoutSystem(qreal xo1)
                   for (auto bi : s->brackets()) {
                         if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET)
                               continue;
-                        int firstStaff = staffIdx;
-                        int lastStaff  = staffIdx + bi->bracketSpan() - 1;
-                        if (lastStaff >= nstaves)
-                              lastStaff = nstaves - 1;
-
-                        for (; firstStaff <= lastStaff; ++firstStaff) {
-                              if (score()->staff(firstStaff)->show())
-                                    break;
-                              }
-                        for (; lastStaff >= firstStaff; --lastStaff) {
-                              if (score()->staff(lastStaff)->show())
-                                    break;
-                              }
-                        int span = lastStaff - firstStaff + 1;
-                        //
-                        // do not show bracket if it only spans one
-                        // system due to some invisible staves
-                        //
-                        if ((span > 1) || (bi->bracketSpan() == span)) {
-                              //
-                              // this bracket is visible
-                              //
-                              Bracket* b = 0;
-                              int track = staffIdx * VOICES;
-                              for (int k = 0; k < bl.size(); ++k) {
-                                    if (bl[k]->track() == track && bl[k]->column() == i && bl[k]->bracketType() == bi->bracketType()) {
-                                          b = bl.takeAt(k);
-                                          break;
-                                          }
-                                    }
-                              if (b == 0) {
-                                    b = new Bracket(score());
-                                    b->setBracketItem(bi);
-                                    b->setGenerated(true);
-                                    b->setTrack(track);
-                                    }
-                              add(b);
-//                              if (bi->selected() != b->selected()) {
-//                                    bi->selected() ? score()->select(b) : score()->deselect(b);
-//                                    }
-                              b->setStaffSpan(firstStaff, lastStaff);
-                              bracketWidth[i] = qMax(bracketWidth[i], b->width());
-                              }
+                        Bracket* b = createBracket(bi, i, staffIdx, bl, this->firstMeasure());
+                        if (b != nullptr) bracketWidth[i] = qMax(bracketWidth[i], b->width());
                         }
                   }
             if (!staff(staffIdx)->show())
@@ -323,16 +276,7 @@ void System::layoutSystem(qreal xo1)
       //  layout brackets
       //---------------------------------------------------
 
-      for (Bracket* b : _brackets) {
-            qreal xo = -xo1;
-            for (const Bracket* b2 : _brackets) {
-                   if (b->column() > b2->column() &&
-                      ((b->firstStaff() >= b2->firstStaff() && b->firstStaff() <= b2->lastStaff()) ||
-                      (b->lastStaff() >= b2->firstStaff() && b->lastStaff() <= b2->lastStaff())))
-                        xo += b2->width() + bd;
-                   }
-            b->rxpos() = _leftMargin - xo - b->width();
-            }
+      setBracketsXPosition(xo1 + _leftMargin);
 
       //---------------------------------------------------
       //  layout instrument names x position
@@ -359,6 +303,132 @@ void System::layoutSystem(qreal xo1)
                         }
                   }
             idx += p->nstaves();
+            }
+      }
+
+//---------------------------------------------------------
+//   addBrackets
+//   Add brackets in front of this measure, typically behind a HBox
+//---------------------------------------------------------
+
+void System::addBrackets(Measure* measure)
+      {
+      if (_staves.empty())                 // ignore vbox
+            return;
+
+      int nstaves = _staves.size();
+
+      //---------------------------------------------------
+      //  find x position of staves
+      //    create brackets
+      //---------------------------------------------------
+
+      int columns = getBracketsColumnsCount();
+
+      QList<Bracket*> bl;
+      bl.swap(_brackets);
+
+      for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+            Staff* s = score()->staff(staffIdx);
+            for (int i = 0; i < columns; ++i) {
+                  for (auto bi : s->brackets()) {
+                        if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET)
+                              continue;
+                        createBracket(bi, i, staffIdx, bl, measure);
+                        }
+                  }
+            if (!staff(staffIdx)->show())
+                  continue;
+            }
+
+      //---------------------------------------------------
+      //  layout brackets
+      //---------------------------------------------------
+
+      setBracketsXPosition(measure->x());
+
+      _brackets.append(bl);
+      }
+
+//---------------------------------------------------------
+//   createBracket
+//   Create a bracket if it spans more then one visible system
+//   If measure is NULL adds the bracket in front of the system, else in front of the measure.
+//   Returns the bracket if it got created, else NULL
+//---------------------------------------------------------
+
+Bracket* System::createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket *>& bl, Measure* measure)
+      {
+      int nstaves = _staves.size();
+      int firstStaff = staffIdx;
+      int lastStaff = staffIdx + bi->bracketSpan() - 1;
+      if (lastStaff >= nstaves)
+            lastStaff = nstaves - 1;
+
+      for (; firstStaff <= lastStaff; ++firstStaff) {
+            if (score()->staff(firstStaff)->show())
+                  break;
+            }
+      for (; lastStaff >= firstStaff; --lastStaff) {
+            if (score()->staff(lastStaff)->show())
+                  break;
+            }
+      int span = lastStaff - firstStaff + 1;
+      //
+      // do not show bracket if it only spans one
+      // system due to some invisible staves
+      //
+      if ((span > 1) || (bi->bracketSpan() == span)) {
+            //
+            // this bracket is visible
+            //
+            Bracket* b = 0;
+            int track = staffIdx * VOICES;
+            for (int k = 0; k < bl.size(); ++k) {
+                  if (bl[k]->track() == track && bl[k]->column() == column && bl[k]->bracketType() == bi->bracketType() && bl[k]->measure() == measure) {
+                        b = bl.takeAt(k);
+                        break;
+                        }
+                  }
+            if (b == 0) {
+                  b = new Bracket(score());
+                  b->setBracketItem(bi);
+                  b->setGenerated(true);
+                  b->setTrack(track);
+                  b->setMeasure(measure);
+                  }
+            add(b);
+            b->setStaffSpan(firstStaff, lastStaff);
+            return b;
+            }
+
+      return nullptr;
+      }
+
+int System::getBracketsColumnsCount()
+      {
+      int columns = 0;
+      int nstaves = _staves.size();
+      for (int idx = 0; idx < nstaves; ++idx) {
+            for (auto bi : score()->staff(idx)->brackets())
+                  columns = qMax(columns, bi->column() + 1);
+            }
+      return columns;
+      }
+
+void System::setBracketsXPosition(const qreal xPosition)
+      {
+      qreal bracketDistance = score()->styleP(Sid::bracketDistance);
+      for (Bracket* b1 : _brackets) {
+            qreal xOffset = 0;
+            for (const Bracket* b2 : _brackets) {
+                  bool b1FirstStaffInB2 = (b1->firstStaff() >= b2->firstStaff() && b1->firstStaff() <= b2->lastStaff());
+                  bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
+                  if (b1->column() > b2->column() && 
+                        (b1FirstStaffInB2 || b1LastStaffInB2))
+                        xOffset += b2->width() + bracketDistance;
+                  }
+            b1->rxpos() = xPosition - xOffset - b1->width();
             }
       }
 
