@@ -25,6 +25,8 @@
 #include "musescore.h"
 #include "libmscore/measure.h"
 
+
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -42,7 +44,6 @@ PlayPanel::PlayPanel(QWidget* parent)
       setWindowFlags(Qt::Tool);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
-
       MuseScore::restoreGeometry(this);
 
       setScore(0);
@@ -56,10 +57,13 @@ PlayPanel::PlayPanel(QWidget* parent)
       loopOutButton->setDefaultAction(getAction("loop-out"));
       enablePlay = new EnablePlayForWidget(this);
 
+      volLabel();
+      volSpinBox->setRange(-80,0);
+      volSpinBox->setValue(-40.0);
+
       tempoSlider->setDclickValue1(100.0);
       tempoSlider->setDclickValue2(100.0);
       tempoSlider->setUseActualValue(true);
-
       mgainSlider->setValue(seq->metronomeGain());
       mgainSlider->setDclickValue1(seq->metronomeGain() - 10.75f);
       mgainSlider->setDclickValue2(seq->metronomeGain() - 10.75f);
@@ -71,7 +75,8 @@ PlayPanel::PlayPanel(QWidget* parent)
       connect(tempoSlider,  SIGNAL(sliderPressed(int)),       SLOT(tempoSliderPressed(int)));
       connect(tempoSlider,  SIGNAL(sliderReleased(int)),      SLOT(tempoSliderReleased(int)));
       connect(relTempoBox,  SIGNAL(valueChanged(double)),     SLOT(relTempoChanged()));
-      connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));
+      connect(volSpinBox,  SIGNAL(valueChanged(double)),     SLOT(volSpinBoxEdited()));
+      connect(seq,          SIGNAL(heartBeat(int,int,int)),   SLOT(heartBeat(int,int,int)));                
       }
 
 PlayPanel::~PlayPanel()
@@ -239,6 +244,7 @@ void PlayPanel::setGain(float val)
       volumeSlider->setValue(val);
       }
 
+
 //---------------------------------------------------------
 //   volumeChanged
 //---------------------------------------------------------
@@ -246,6 +252,8 @@ void PlayPanel::setGain(float val)
 void PlayPanel::volumeChanged(double val, int)
       {
       emit gainChange(val);
+      vol = val;
+      volLabel();
       }
 
 //---------------------------------------------------------
@@ -333,6 +341,31 @@ void PlayPanel::tempoSliderPressed(int)
       {
       tempoSliderIsPressed = true;
       }
+//---------------------------------------------------------
+//   setVolume
+//---------------------------------------------------------
+      
+void PlayPanel::volLabel()
+      {
+      if (vol == MUTE)
+            vol = -80.0;
+      else
+            vol = ((n * std::log10(vol)) - n);
+      volSpinBox->setValue(vol);
+      volSpinBox->setSuffix(" dB");
+      }
+
+
+void PlayPanel::volSpinBoxEdited()
+      {
+     svol = volSpinBox->value();
+      if (svol == -80 )
+            svol = MUTE;
+      else
+            svol = pow(10, ((svol + n) / n ));
+      volumeChanged(svol, 1);
+      }
+
 
 //---------------------------------------------------------
 //   tempoSliderReleased
