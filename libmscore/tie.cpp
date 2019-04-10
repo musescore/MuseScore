@@ -681,7 +681,7 @@ TieSegment* Tie::layoutBack(System* system)
       segment->setSystem(system);
 
       qreal x;
-      Segment* seg = endNote()->chord()->segment()->prev();
+      Segment* seg = endNote()->chord()->segment()->prevEnabled();
       if (seg) {
             // find maximum width
             qreal width = 0.0;
