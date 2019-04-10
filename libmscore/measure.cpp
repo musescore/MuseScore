@@ -658,16 +658,12 @@ void Measure::layout2()
                         Chord* c = toChord(cr);
                         for (const Note* note : c->notes()) {
                               Tie* t = note->tieFor();
-                              if (t) {
-                                    TieSegment* ts = t->layoutFor(system());
-                                    //system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->pos()));
-                                    }
+                              if (t)
+                                    t->layoutFor(system());
                               t = note->tieBack();
                               if (t) {
-                                    if (t->startNote()->tick() < stick) {
-                                          TieSegment* ts = t->layoutBack(system());
-                                          //system->staff(ch->staffIdx())->skyline().add(ts->shape().translated(ts->pos()));
-                                          }
+                                    if (t->startNote()->tick() < stick)
+                                          t->layoutBack(system());
                                     }
                               for (Spanner* sp : note->spannerFor())
                                     sp->layout();
