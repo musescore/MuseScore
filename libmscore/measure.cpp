@@ -3209,11 +3209,11 @@ void Measure::stretchMeasure(qreal targetWidth)
                         Chord* c = toChord(e);
                         c->layout2();
                         if (c->tremolo()) {
-                              Tremolo* t = c->tremolo();
-                              Chord* c1 = t->chord1();
-                              Chord* c2 = t->chord2();
-                              if (!t->twoNotes() || (!c1->staffMove() && !c2->staffMove()))
-                                    t->layout();
+                              Tremolo* tr = c->tremolo();
+                              Chord* c1 = tr->chord1();
+                              Chord* c2 = tr->chord2();
+                              if (!tr->twoNotes() || (!c1->staffMove() && !c2->staffMove()))
+                                    tr->layout();
                               }
                         }
                   else if (t == ElementType::BAR_LINE) {

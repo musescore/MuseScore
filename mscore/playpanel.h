@@ -39,7 +39,7 @@ class PlayPanel : public QDockWidget, private Ui::PlayPanelBase {
       bool tempoSliderIsPressed;
       EnablePlayForWidget* enablePlay;
       static constexpr double MUTE = 0.00 ;
-      static constexpr double n = 20.0 ;
+      static constexpr double N = 20.0 ;
       double vol;
       double svol;
 
