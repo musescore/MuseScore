@@ -978,7 +978,8 @@ void SLine::writeProperties(XmlWriter& xml) const
       //
       bool modified = false;
       for (const SpannerSegment* seg : spannerSegments()) {
-            if (!seg->autoplace() || !seg->visible() || (!seg->isStyled(Pid::OFFSET) && !seg->offset().isNull())) {
+            if (!seg->autoplace() || !seg->visible() || 
+               (!seg->isStyled(Pid::OFFSET) && (!seg->offset().isNull() || !seg->userOff2().isNull()))) {
                   modified = true;
                   break;
                   }

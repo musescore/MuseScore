@@ -20,6 +20,7 @@
 #include "page.h"
 #include "mscore.h"
 #include "clef.h"
+#include "textlinebase.h"
 #include "tuplet.h"
 #include "layout.h"
 #include "property.h"
@@ -1081,12 +1082,13 @@ static const StyleType styleTypes[] {
       { Sid::letRingLineStyle,              "letRingLineStyle",             QVariant(int(Qt::DashLine)) },
       { Sid::letRingBeginTextOffset,        "letRingBeginTextOffset",       QPointF(0.0, 0.15) },
       { Sid::letRingText,                   "letRingText",                  "let ring" },
-      { Sid::letRingFrameType,              "letRingFrameType",          int(FrameType::NO_FRAME) },
-      { Sid::letRingFramePadding,           "letRingFramePadding",       0.2 },
-      { Sid::letRingFrameWidth,             "letRingFrameWidth",         0.1 },
-      { Sid::letRingFrameRound,             "letRingFrameRound",         0 },
-      { Sid::letRingFrameFgColor,           "letRingFrameFgColor",       QColor(0, 0, 0, 255) },
-      { Sid::letRingFrameBgColor,           "letRingFrameBgColor",       QColor(255, 255, 255, 0) },
+      { Sid::letRingFrameType,              "letRingFrameType",             int(FrameType::NO_FRAME) },
+      { Sid::letRingFramePadding,           "letRingFramePadding",          0.2 },
+      { Sid::letRingFrameWidth,             "letRingFrameWidth",            0.1 },
+      { Sid::letRingFrameRound,             "letRingFrameRound",            0 },
+      { Sid::letRingFrameFgColor,           "letRingFrameFgColor",          QColor(0, 0, 0, 255) },
+      { Sid::letRingFrameBgColor,           "letRingFrameBgColor",          QColor(255, 255, 255, 0) },
+      { Sid::letRingEndHookType,            "letRingEndHookType",           int(HookType::HOOK_90T) },
 
       { Sid::palmMuteFontFace,              "palmMuteFontFace",              "FreeSerif" },
       { Sid::palmMuteFontSize,              "palmMuteFontSize",              10.0 },
@@ -1108,6 +1110,7 @@ static const StyleType styleTypes[] {
       { Sid::palmMuteFrameRound,            "palmMuteFrameRound",            0 },
       { Sid::palmMuteFrameFgColor,          "palmMuteFrameFgColor",          QColor(0, 0, 0, 255) },
       { Sid::palmMuteFrameBgColor,          "palmMuteFrameBgColor",          QColor(255, 255, 255, 0) },
+      { Sid::palmMuteEndHookType,           "palmMuteEndHookType",           int(HookType::HOOK_90T) },
 
       { Sid::fermataPosAbove,               "fermataPosAbove",               QPointF(.0, -1.0) },
       { Sid::fermataPosBelow,               "fermataPosBelow",               QPointF(.0, 1.0)  },

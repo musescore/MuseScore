@@ -47,7 +47,7 @@ class LetRing final : public TextLineBase {
       virtual LetRing* clone() const override   { return new LetRing(*this);   }
       virtual ElementType type() const override { return ElementType::LET_RING; }
       virtual void read(XmlReader&) override;
-      virtual void write(XmlWriter& xml) const override;
+//      virtual void write(XmlWriter& xml) const override;
       LineSegment* createLineSegment();
       virtual QVariant propertyDefault(Pid propertyId) const override;
       virtual Sid getPropertyStyle(Pid) const override;
