@@ -98,6 +98,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       //   idx                --- showPercent      --- widget          --- resetButton
       { Sid::figuredBassAlignment,    false, fbAlign,                 0                    },
       { Sid::figuredBassStyle,        false, fbStyle,                 0                    },
+      { Sid::figuredBassFontSize,     false, doubleSpinFBSize,        0                    },
+      { Sid::figuredBassYOffset,      false, doubleSpinFBVertPos,     0                    },
+      { Sid::figuredBassLineHeight,   true,  spinFBLineHeight,        0                    },
       { Sid::tabClef,                 false, ctg,                     0                    },
       { Sid::keySigNaturals,          false, ksng,                    0                    },
       { Sid::voltaLineStyle,          false, voltaLineStyle,          resetVoltaLineStyle  },
