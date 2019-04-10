@@ -64,6 +64,10 @@ LetRing::LetRing(Score* s)
 
       resetProperty(Pid::BEGIN_TEXT_PLACE);
       resetProperty(Pid::BEGIN_TEXT);
+      resetProperty(Pid::CONTINUE_TEXT_PLACE);
+      resetProperty(Pid::CONTINUE_TEXT);
+      resetProperty(Pid::END_TEXT_PLACE);
+      resetProperty(Pid::END_TEXT);
       }
 
 //---------------------------------------------------------
