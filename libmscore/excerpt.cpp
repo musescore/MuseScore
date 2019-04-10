@@ -215,7 +215,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             score->setMetaTag("partName", partLabel);
             }
 
-      // layout score
+      // initial layout of score
       score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
       score->doLayout();
 
@@ -272,7 +272,13 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                   }
             }
 
-      // layout score
+      // update style values if spatium different for part
+      if (oscore->spatium() != score->spatium()) {
+            //score->spatiumChanged(oscore->spatium(), score->spatium());
+            score->styleChanged();
+            }
+
+      // second layout of score
       score->setPlaylistDirty();
       oscore->rebuildMidiMapping();
       oscore->updateChannel();

@@ -300,6 +300,8 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
                   style().set(Sid::dividerRight, false);
                   }
             }
+      // update style values
+      _style.precomputeValues();
       _synthesizerState = parent->_synthesizerState;
       _mscVersion = parent->_mscVersion;
       }
