@@ -210,7 +210,7 @@ class Measure final : public MeasureBase {
       void exchangeVoice(int voice1, int voice2, int staffIdx);
       void checkMultiVoices(int staffIdx);
       bool hasVoice(int track) const;
-      bool isMeasureRest(int staffIdx) const;
+      bool isEmpty(int staffIdx) const;
       bool isFullMeasureRest() const;
       bool isRepeatMeasure(Staff* staff) const;
       bool visible(int staffIdx) const;
