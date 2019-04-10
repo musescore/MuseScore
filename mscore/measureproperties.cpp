@@ -244,11 +244,14 @@ void MeasureProperties::apply()
       {
       Score* score = m->score();
 
+      bool propertiesChanged = false;
       for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             bool v = visible(staffIdx);
             bool s = slashStyle(staffIdx);
-            if (m->visible(staffIdx) != v || m->slashStyle(staffIdx) != s)
+            if (m->visible(staffIdx) != v || m->slashStyle(staffIdx) != s) {
                   score->undo(new ChangeMStaffProperties(m, staffIdx, v, s));
+                  propertiesChanged = true;
+                  }
             }
 
       m->undoChangeProperty(Pid::REPEAT_COUNT, repeatCount());
@@ -273,6 +276,11 @@ void MeasureProperties::apply()
                   }
 #endif
             }
+
+      if (propertiesChanged) {
+            score->setLayout(m->tick());
+            }
+
       score->select(m, SelectType::SINGLE, 0);
       score->update();
       mscore->timeline()->updateGrid();
