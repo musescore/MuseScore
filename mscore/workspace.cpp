@@ -932,6 +932,10 @@ void Workspace::readGlobalGUIState()
 
 void Workspace::save()
       {
+      QFile workspace(_path);
+      if (!workspace.exists())
+            return;
+      
       if (!saveComponents)
             writeGlobalGUIState();
       if (!saveToolbars)
