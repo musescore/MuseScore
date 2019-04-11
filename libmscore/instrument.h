@@ -340,7 +340,7 @@ class Instrument {
       void setSingleNoteDynamics(bool val)      { _singleNoteDynamics = val; }
       void setSingleNoteDynamicsFromTemplate();
       bool getSingleNoteDynamicsFromTemplate() const;
-      void switchExpressive(MasterSynthesizer* m, bool expressive, bool force = false);
+      void switchExpressive(MasterScore* score, MasterSynthesizer* m, bool expressive, bool force = false);
       };
 
 //---------------------------------------------------------
