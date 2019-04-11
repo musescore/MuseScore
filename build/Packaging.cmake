@@ -50,21 +50,21 @@ IF(MINGW OR MSVC)
     SET(CPACK_STRIP_FILES "${MSCORE_EXECUTABLE_NAME}.exe")
 
     # File types association:
-    SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
+    # SET(CPACK_NSIS_DEFINES "!include ${PROJECT_SOURCE_DIR}/build/packaging\\\\FileAssociation.nsh")
 
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-        \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
-        \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
-    ")
-    SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
-        \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
-        \\\${unregisterExtension} \\\".mscz\\\" \\\"Compressed MuseScore File\\\"
-    ")
+    # SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+    #     \\\${registerExtension} \\\"MuseScore File\\\" \\\".mscx\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+    #     \\\${registerExtension} \\\"Compressed MuseScore File\\\" \\\".mscz\\\" \\\"\\\$INSTDIR\\\\bin\\\\${MSCORE_EXECUTABLE_NAME}.exe\\\"
+    # ")
+    # SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+    #     \\\${unregisterExtension} \\\".mscx\\\" \\\"MuseScore File\\\"
+    #     \\\${unregisterExtension} \\\".mscz\\\" \\\"Compressed MuseScore File\\\"
+    # ")
 
     file(TO_CMAKE_PATH $ENV{PROGRAMFILES} PROGRAMFILES)
     SET(CPACK_WIX_ROOT "${PROGRAMFILES}/WiX Toolset v3.11")
     SET(CPACK_WIX_PRODUCT_GUID "00000000-0000-0000-0000-000000000000")
-    SET(CPACK_WIX_UPGRADE_GUID "4975850F-912F-47AE-AF2C-65C592188FCE")
+    SET(CPACK_WIX_UPGRADE_GUID "301B470A-5AC4-43B3-A71F-F8C68796096A")
     SET(CPACK_WIX_LICENSE_RTF   "${PROJECT_SOURCE_DIR}/LICENSE.rtf")
     SET(CPACK_WIX_PRODUCT_ICON "${PROJECT_SOURCE_DIR}/mscore/data/mscore.ico")
     SET(CPACK_WIX_UI_BANNER "${PROJECT_SOURCE_DIR}/build/packaging/installer_banner_wix.png")

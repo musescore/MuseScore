@@ -94,9 +94,9 @@ include (CreatePrecompiledHeader)
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(CMAKE_AUTOMOC     TRUE)
-set(MSCORE_UNSTABLE   TRUE)          # Mark as unstable
-set(MSCORE_RELEASE_CHANNEL "devel")
-#set(MSCORE_RELEASE_CHANNEL "testing")
+set(MSCORE_UNSTABLE   FALSE)          # Mark as unstable
+#set(MSCORE_RELEASE_CHANNEL "devel")
+set(MSCORE_RELEASE_CHANNEL "testing")
 #set(MSCORE_RELEASE_CHANNEL "stable")
 set(USE_SSE           TRUE)
 
@@ -151,6 +151,10 @@ option(BUILD_64 "Build 64 bit version of editor" ON)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
 option(BUILD_CRASH_REPORTER "Build with crash reporter" OFF)
 set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to send crash reports (valid if BUILD_CRASH_REPORTER is set to ON)")
+
+if (BUILD_CRASH_REPORTER)
+      message("Crash reporter enabled")
+endif(BUILD_CRASH_REPORTER)
 
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
