@@ -2676,7 +2676,7 @@
           </size>
          </property>
          <property name="title">
-          <string>PulseAudio</string>
+          <string notr="true">PulseAudio</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -2695,7 +2695,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>PortAudio</string>
+          <string notr="true">PortAudio</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -3343,10 +3343,10 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </sizepolicy>
          </property>
          <property name="accessibleName">
-          <string>MusicXML</string>
+          <string notr="true">MusicXML</string>
          </property>
          <property name="title">
-          <string>MusicXML</string>
+          <string notr="true">MusicXML</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
@@ -3375,10 +3375,10 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </size>
          </property>
          <property name="accessibleName">
-          <string>MIDI</string>
+          <string notr="true">MIDI</string>
          </property>
          <property name="title">
-          <string>MIDI</string>
+          <string notr="true">MIDI</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_10">
           <item>
@@ -3481,7 +3481,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_9">
          <property name="title">
-          <string>PNG</string>
+          <string notr="true">PNG</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="0">
@@ -3548,10 +3548,10 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </sizepolicy>
          </property>
          <property name="accessibleName">
-          <string>MIDI</string>
+          <string notr="true">MIDI</string>
          </property>
          <property name="title">
-          <string>MIDI</string>
+          <string notr="true">MIDI</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -3580,10 +3580,10 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </sizepolicy>
          </property>
          <property name="accessibleName">
-          <string>MusicXML</string>
+          <string notr="true">MusicXML</string>
          </property>
          <property name="title">
-          <string>MusicXML</string>
+          <string notr="true">MusicXML</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
@@ -3628,7 +3628,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
        <item row="0" column="1">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>PDF</string>
+          <string notr="true">PDF</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>

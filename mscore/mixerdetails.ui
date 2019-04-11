@@ -42,7 +42,7 @@
           <string>MIDI OUT controllers</string>
          </property>
          <property name="title">
-          <string>MIDI</string>
+          <string notr="true">MIDI</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
