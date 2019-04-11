@@ -471,6 +471,8 @@ bool BarLine::isBottom() const
 
 void BarLine::draw(QPainter* painter) const
       {
+      if (staff() && !staff()->staffType(tick())->showBarlines())
+            return;
       switch (barLineType()) {
             case BarLineType::NORMAL: {
                   qreal lw = score()->styleP(Sid::barWidth) * mag();

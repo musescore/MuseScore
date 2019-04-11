@@ -3622,18 +3622,20 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         }
                   else
                         keysig  = toKeySig(kSegment->element(track));
-                  if (!keysig) {
-                        //
-                        // create missing key signature
-                        //
-                        keysig = new KeySig(score());
-                        keysig->setTrack(track);
-                        keysig->setGenerated(true);
-                        keysig->setParent(kSegment);
-                        kSegment->add(keysig);
+                  if (staff->staffType(tick())->genKeysig()) {
+                        if (!keysig) {
+                              //
+                              // create missing key signature
+                              //
+                              keysig = new KeySig(score());
+                              keysig->setTrack(track);
+                              keysig->setGenerated(true);
+                              keysig->setParent(kSegment);
+                              kSegment->add(keysig);
+                              }
+                        keysig->setKeySigEvent(keyIdx);
+                        keysig->layout();
                         }
-                  keysig->setKeySigEvent(keyIdx);
-                  keysig->layout();
                   kSegment->createShape(staffIdx);
                   kSegment->setEnabled(true);
                   }

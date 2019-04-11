@@ -101,7 +101,8 @@ void KeySig::layout()
             }
 
       _sig.keySymbols().clear();
-      if (staff() && !staff()->genKeySig())     // no key sigs on TAB staves
+      // no key sigs on TAB staves or if the staff type says no key sigs
+      if (staff() && !staff()->staffType(tick())->genKeysig())
             return;
 
       // determine current clef for this staff
@@ -300,6 +301,8 @@ Shape KeySig::shape() const
 
 void KeySig::draw(QPainter* p) const
       {
+      if (staff() && !staff()->staffType(tick())->genKeysig())
+            return;
       p->setPen(curColor());
       for (const KeySym& ks: _sig.keySymbols())
             drawSymbol(ks.sym, p, QPointF(ks.pos.x(), ks.pos.y()));

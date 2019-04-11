@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>760</width>
-    <height>600</height>
+    <height>631</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -46,6 +46,20 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QGridLayout" name="grid_StaffProps">
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="showClef">
+          <property name="text">
+           <string>Show clef</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="showTimesig">
+          <property name="text">
+           <string>Show time signature</string>
+          </property>
+         </widget>
+        </item>
         <item row="4" column="2">
          <widget class="QCheckBox" name="cutaway">
           <property name="text">
@@ -53,12 +67,40 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
-         <widget class="QCheckBox" name="hideSystemBarLine">
-          <property name="text">
-           <string>Hide system barline</string>
-          </property>
-         </widget>
+        <item row="0" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Hide when empty:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="hideMode">
+            <item>
+             <property name="text">
+              <string>Auto</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Always</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Never</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Instrument</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item row="1" column="2">
          <widget class="QCheckBox" name="small">
@@ -73,48 +115,10 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="showClef">
+        <item row="6" column="2">
+         <widget class="QPushButton" name="changeStaffType">
           <property name="text">
-           <string>Show clef</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <layout class="QHBoxLayout" name="hLayout_LineColor">
-          <item>
-           <widget class="QLabel" name="labelColor">
-            <property name="text">
-             <string>Staff line color:</string>
-            </property>
-            <property name="buddy">
-             <cstring>color</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="Awl::ColorLabel" name="color">
-            <property name="focusPolicy">
-             <enum>Qt::TabFocus</enum>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="3" column="1">
-         <widget class="QCheckBox" name="showBarlines">
-          <property name="text">
-           <string>Show barlines</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="showTimesig">
-          <property name="text">
-           <string>Show time signature</string>
+           <string>Advanced Style Properties…</string>
           </property>
          </widget>
         </item>
@@ -129,13 +133,6 @@
          <widget class="QCheckBox" name="invisible">
           <property name="text">
            <string>Invisible staff lines</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="2">
-         <widget class="QPushButton" name="changeStaffType">
-          <property name="text">
-           <string>Advanced Style Properties…</string>
           </property>
          </widget>
         </item>
@@ -266,40 +263,50 @@
           </item>
          </layout>
         </item>
-        <item row="0" column="1">
-         <layout class="QHBoxLayout" name="horizontalLayout">
+        <item row="3" column="2">
+         <layout class="QHBoxLayout" name="hLayout_LineColor">
           <item>
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="labelColor">
             <property name="text">
-             <string>Hide when empty:</string>
+             <string>Staff line color:</string>
+            </property>
+            <property name="buddy">
+             <cstring>color</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="hideMode">
-            <item>
-             <property name="text">
-              <string>Auto</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Always</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Never</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Instrument</string>
-             </property>
-            </item>
+           <widget class="Awl::ColorLabel" name="color">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
            </widget>
           </item>
          </layout>
+        </item>
+        <item row="6" column="1">
+         <widget class="QCheckBox" name="hideSystemBarLine">
+          <property name="text">
+           <string>Hide system barline</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QCheckBox" name="showKeysig">
+          <property name="text">
+           <string>Show key signature</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QCheckBox" name="showBarlines">
+          <property name="text">
+           <string>Show barlines</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -921,8 +928,6 @@
   <tabstop>hideMode</tabstop>
   <tabstop>showClef</tabstop>
   <tabstop>showTimesig</tabstop>
-  <tabstop>showBarlines</tabstop>
-  <tabstop>hideSystemBarLine</tabstop>
   <tabstop>showIfEmpty</tabstop>
   <tabstop>small</tabstop>
   <tabstop>invisible</tabstop>

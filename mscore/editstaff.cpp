@@ -68,6 +68,7 @@ EditStaff::EditStaff(Staff* s, const Fraction& /*tick*/, QWidget* parent)
       connect(lineDistance,         SIGNAL(valueChanged(double)), SLOT(lineDistanceChanged()));
       connect(showClef,             SIGNAL(clicked()),            SLOT(showClefChanged()));
       connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
+      connect(showKeysig,           SIGNAL(clicked()),            SLOT(showKeySigChanged()));
       connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
 
       connect(nextButton,           SIGNAL(clicked()),            SLOT(gotoNextStaff()));
@@ -155,6 +156,7 @@ void EditStaff::updateStaffType()
       lineDistance->setValue(staffType->lineDistance().val());
       showClef->setChecked(staffType->genClef());
       showTimesig->setChecked(staffType->genTimesig());
+      showKeysig->setChecked(staffType->genKeysig());
       showBarlines->setChecked(staffType->showBarlines());
       staffGroupName->setText(qApp->translate("Staff type group name", staffType->groupName()));
       }
@@ -461,6 +463,11 @@ void EditStaff::showClefChanged()
 void EditStaff::showTimeSigChanged()
       {
       staff->staffType(Fraction(0,1))->setGenTimesig(showTimesig->checkState() == Qt::Checked);
+      }
+
+void EditStaff::showKeySigChanged()
+      {
+      staff->staffType(Fraction(0,1))->setGenKeysig(showKeysig->checkState() == Qt::Checked);
       }
 
 void EditStaff::showBarlinesChanged()
