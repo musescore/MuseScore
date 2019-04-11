@@ -1128,7 +1128,8 @@ void Instrument::switchExpressive(MasterScore* score, MasterSynthesizer* m, bool
 
       for (Channel* c : channel()) {
             c->switchExpressive(m, expressive, force);
-            score->playbackChannel(c)->switchExpressive(m, expressive, force);
+            if (score->playbackChannel(c))
+                  score->playbackChannel(c)->switchExpressive(m, expressive, force);
             }
       }
 
