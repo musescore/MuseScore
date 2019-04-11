@@ -108,6 +108,7 @@ Tick  =   2489   Type  =   144   Pitch  =    65   Velocity  =     0   Channel  =
 Tick  =   2490   Type  =   144   Pitch  =    63   Velocity  =    80   Channel  =     1    
 Tick  =   2519   Type  =   144   Pitch  =    63   Velocity  =     0   Channel  =     1    
 Tick  =   2520   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     1    
+Tick  =   2520   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     1    
 Tick  =   2520   Type  =   144   Pitch  =    62   Velocity  =    80   Channel  =     1    
 Tick  =   2520   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     1    
 Tick  =   2520   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     1    
