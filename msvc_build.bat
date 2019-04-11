@@ -87,7 +87,7 @@ IF /I "%1"=="installrelwithdebinfo" (
 
 IF /I "%1"=="package" (
    cd %BUILD_FOLDER%_%ARCH%
-   cmake --build . --config release --target package
+   cmake --build . --config RelWithDebInfo --target package
    GOTO :END
    )
 
