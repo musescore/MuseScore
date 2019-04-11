@@ -343,8 +343,9 @@ if (DOWNLOAD_SOUNDFONT)
       # delete soundfont and download new version
       ## TODO check STATUS of downloads
       file (REMOVE ${SOUND_DIRECTORY}/MuseScore_General.sf3
-                   ${SOUND_DIRECTORY}/MuseScore_General-License.md
-                   ${SOUND_DIRECTORY}/MuseScore_General-changelog.txt)
+                   ${SOUND_DIRECTORY}/MuseScore_General_License.md
+                   ${SOUND_DIRECTORY}/MuseScore_General_Changelog.md
+                   ${SOUND_DIRECTORY}/MuseScore_General_Readme.md)
       file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General.sf3 ${SOUND_DIRECTORY}/MuseScore_General.sf3 SHOW_PROGRESS STATUS SF_DL_STATUS)
       list(GET SF_DL_STATUS 0 HTTP_STATUS)
       if (NOT HTTP_STATUS EQUAL 0)
@@ -352,7 +353,7 @@ if (DOWNLOAD_SOUNDFONT)
         message(FATAL_ERROR "Cannot download new soundfont. Error: ${HTTP_STATUS_TEXT}")
       endif()
       file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General_License.md ${SOUND_DIRECTORY}/MuseScore_General_License.md)
-      file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General_Changelog.txt ${SOUND_DIRECTORY}/MuseScore_General_Changelog.txt)
+      file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General_Changelog.md ${SOUND_DIRECTORY}/MuseScore_General_Changelog.txt)
       file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/MuseScore_General_Readme.md ${SOUND_DIRECTORY}/MuseScore_General_Readme.md)
       # replace VERSION file (in any case, delete VERSION file)
       file (COPY ${SF_VERSION_REMOTE_FILE} DESTINATION ${SOUND_DIRECTORY})
