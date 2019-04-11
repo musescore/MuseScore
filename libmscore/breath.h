@@ -43,6 +43,8 @@ class Breath final : public Element {
       virtual ElementType type() const override { return ElementType::BREATH; }
       virtual Breath* clone() const override    { return new Breath(*this); }
 
+      virtual qreal mag() const override;
+
       void setSymId(SymId id)          { _symId = id; }
       SymId symId() const              { return _symId; }
       qreal pause() const              { return _pause; }

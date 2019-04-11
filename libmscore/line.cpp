@@ -59,7 +59,7 @@ bool LineSegment::readProperties(XmlReader& e)
       if (tag == "subtype")
             setSpannerSegmentType(SpannerSegmentType(e.readInt()));
       else if (tag == "off2") {
-            setUserOff2(e.readPoint() * spatium());
+            setUserOff2(e.readPoint() * score()->spatium());
             }
 /*      else if (tag == "pos") {
             setOffset(QPointF());
@@ -990,7 +990,7 @@ void SLine::writeProperties(XmlWriter& xml) const
       //
       // write user modified layout
       //
-      qreal _spatium = spatium();
+      qreal _spatium = score()->spatium();
       for (const SpannerSegment* seg : spannerSegments()) {
             xml.stag("Segment", seg);
             xml.tag("subtype", int(seg->spannerSegmentType()));

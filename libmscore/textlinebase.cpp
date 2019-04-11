@@ -102,6 +102,8 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       QColor color = curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
       qreal textlineLineWidth = tl->lineWidth();
+      if (staff())
+            textlineLineWidth *= mag();
       QPen pen(color, textlineLineWidth, tl->lineStyle());
       if (tl->lineStyle() == Qt::CustomDashLine) {
             QVector<qreal> dashes { tl->dashLineLen(), tl->dashGapLen() };
@@ -164,7 +166,7 @@ void TextLineBaseSegment::layout()
       {
       npoints      = 0;
       TextLineBase* tl = textLineBase();
-      qreal _spatium = spatium();
+      qreal _spatium = tl->spatium();
 
       if (spanner()->placeBelow())
             rypos() = staff() ? staff()->height() : 0.0;
@@ -178,7 +180,7 @@ void TextLineBaseSegment::layout()
                   _text->setXmlText(tl->beginText());
                   _text->setFamily(tl->beginFontFamily());
                   _text->setSize(tl->beginFontSize());
-                  _text->setOffset(tl->beginTextOffset());
+                  _text->setOffset(tl->beginTextOffset() * mag());
                   _text->setAlign(tl->beginTextAlign());
                   _text->setBold(tl->beginFontStyle() & FontStyle::Bold);
                   _text->setItalic(tl->beginFontStyle() & FontStyle::Italic);
@@ -189,7 +191,7 @@ void TextLineBaseSegment::layout()
                   _text->setXmlText(tl->continueText());
                   _text->setFamily(tl->continueFontFamily());
                   _text->setSize(tl->continueFontSize());
-                  _text->setOffset(tl->continueTextOffset());
+                  _text->setOffset(tl->continueTextOffset() * mag());
                   _text->setAlign(tl->continueTextAlign());
                   _text->setBold(tl->continueFontStyle() & FontStyle::Bold);
                   _text->setItalic(tl->continueFontStyle() & FontStyle::Italic);
@@ -259,7 +261,7 @@ void TextLineBaseSegment::layout()
             }
 
       if (textLineBase()->endHookType() != HookType::NONE) {
-            qreal h = pp2.y() + point(textLineBase()->endHookHeight());
+            qreal h = pp2.y() + textLineBase()->endHookHeight().val() * _spatium;
             if (h > y2)
                   y2 = h;
             else if (h < y1)
@@ -267,7 +269,7 @@ void TextLineBaseSegment::layout()
             }
 
       if (textLineBase()->beginHookType() != HookType::NONE) {
-            qreal h = point(textLineBase()->beginHookHeight());
+            qreal h = textLineBase()->beginHookHeight().val() * _spatium;
             if (h > y2)
                   y2 = h;
             else if (h < y1)

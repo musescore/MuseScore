@@ -372,7 +372,7 @@ Sid Fermata::getPropertyStyle(Pid pid) const
 
 qreal Fermata::mag() const
       {
-      return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag): 1.0;
+      return staff() ? staff()->mag(tick()) * score()->styleD(Sid::articulationMag) : 1.0;
       }
 
 //---------------------------------------------------------

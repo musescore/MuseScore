@@ -44,6 +44,8 @@ class Ambitus final : public Element {
       Ambitus(Score* s);
       virtual Ambitus* clone() const override         { return new Ambitus(*this); }
 
+      virtual qreal mag() const override;
+
       void initFrom(Ambitus* a);
 
       // getters and setters
