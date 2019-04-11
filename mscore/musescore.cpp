@@ -6313,14 +6313,14 @@ Timeline* MuseScore::timeline() const
 //   getScriptRecorder
 //---------------------------------------------------------
 
-#ifdef MSCORE_UNSTABLE
 ScriptRecorder* MuseScore::getScriptRecorder()
       {
+#ifdef MSCORE_UNSTABLE
       if (scriptRecorder)
             return &scriptRecorder->scriptRecorder();
+#endif
       return nullptr;
       }
-#endif
 
 //---------------------------------------------------------
 //   getSearchDialog
