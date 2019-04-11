@@ -932,6 +932,10 @@ void Workspace::readGlobalGUIState()
 
 void Workspace::save()
       {
+      QFile workspace(_path);
+      if (!workspace.exists())
+            return;
+      
       if (!saveComponents)
             writeGlobalGUIState();
       if (!saveToolbars)
@@ -962,6 +966,7 @@ QList<Workspace*>& Workspace::workspaces()
                         }
                   index++;
                   }
+            
             QStringList path;
             path << mscoreGlobalShare + "workspaces";
             path << dataPath + "/workspaces";
@@ -974,27 +979,31 @@ QList<Workspace*>& Workspace::workspaces()
 
             for (const QString& s : path) {
                   QDir dir(s);
-                  bool translate = (s == mscoreGlobalShare + "workspaces");
+                  bool translate = (s == (mscoreGlobalShare + "workspaces"));
                   QStringList pl = dir.entryList(nameFilters, QDir::Files, QDir::Name);
-
                   foreach (const QString& entry, pl) {
                         Workspace* p = 0;
                         QFileInfo fi(s + "/" + entry);
                         QString name(fi.completeBaseName());
+                        
                         for (Workspace* w : _workspaces) {
                               if (w->name() == name) {
                                     p = w;
                                     break;
                                     }
                               }
-                        if (!p)
+                        
+                        if (!p) {
                               p = new Workspace;
-                        p->setPath(s + "/" + entry);
-                        p->setName(name);
-                        if (translate)
-                              p->setTranslatableName(name);
-                        p->setReadOnly(!fi.isWritable());
-                        _workspaces.append(p);
+                              p->setPath(s + "/" + entry);
+                              p->setName(name);
+                              
+                              if (translate)
+                                    p->setTranslatableName(name);
+                              
+                              p->setReadOnly(!fi.isWritable());
+                              _workspaces.append(p);
+                              }
                         }
                   }
             // hack

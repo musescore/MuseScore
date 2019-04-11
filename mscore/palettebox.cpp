@@ -163,8 +163,13 @@ void PaletteBox::updateWorkspaces()
                   curIdx = idx;
             ++idx;
             }
-      if (curIdx != -1)
-            workspaceList->setCurrentIndex(curIdx);
+      
+      //select first workspace in the list if the stored workspace vanished
+      Q_ASSERT(!pl.isEmpty());
+      if (curIdx == -1)
+            curIdx = 0;
+      
+      workspaceList->setCurrentIndex(curIdx);
       }
 
 //---------------------------------------------------------
@@ -174,6 +179,27 @@ void PaletteBox::updateWorkspaces()
 void PaletteBox::selectWorkspace(QString path)
       {
       int idx = workspaceList->findData(path);
+      selectWorkspace(idx);
+      }
+
+///---------------------------------------------------------
+///   selectWorkspace
+///       Selects the workspace in the workspaceList dropdown widget using specified @idx
+///       If @idx value is out of valid range:
+///           If currentIndex is valid, keep the index
+///           1st element of the list is selected othrwise
+///---------------------------------------------------------
+
+void PaletteBox::selectWorkspace(int idx)
+      {
+      if (idx < 0 || idx >= workspaceList->count()) {
+            //if selected index is valid, keep the index selection
+            if (workspaceList->currentIndex() < workspaceList->count())
+                  idx = workspaceList->currentIndex();
+            else
+                  idx = 0;
+            }
+      
       workspaceList->setCurrentIndex(idx);
       workspaceSelected(idx);
       }
