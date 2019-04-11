@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
-  <programVersion>3.0.2</programVersion>
+  <programVersion>3.1.0</programVersion>
   <programRevision>3543170</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
@@ -48,7 +48,6 @@
         <minPitchA>55</minPitchA>
         <maxPitchA>88</maxPitchA>
         <instrumentId>strings.violin</instrumentId>
-        <singleNoteDynamics>1</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -78,7 +77,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="3"/>
+          <controller ctrl="32" value="17"/>
+          <program value="48"/>
           <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
@@ -86,6 +86,7 @@
           <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
           </Channel>
@@ -107,7 +108,6 @@
         <minPitchA>55</minPitchA>
         <maxPitchA>88</maxPitchA>
         <instrumentId>strings.violin</instrumentId>
-        <singleNoteDynamics>1</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -137,7 +137,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="3"/>
+          <controller ctrl="32" value="17"/>
+          <program value="48"/>
           <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
@@ -145,6 +146,7 @@
           <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
           </Channel>
@@ -168,7 +170,6 @@
         <maxPitchA>79</maxPitchA>
         <instrumentId>strings.viola</instrumentId>
         <clef>C3</clef>
-        <singleNoteDynamics>1</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -198,7 +199,8 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="3"/>
+          <controller ctrl="32" value="17"/>
+          <program value="48"/>
           <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
@@ -206,6 +208,7 @@
           <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="32" value="17"/>
           <program value="44"/>
           <synti>Fluid</synti>
           </Channel>
@@ -229,7 +232,6 @@
         <maxPitchA>67</maxPitchA>
         <instrumentId>strings.cello</instrumentId>
         <clef>F</clef>
-        <singleNoteDynamics>1</singleNoteDynamics>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -259,15 +261,20 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="3"/>
+          <controller ctrl="32" value="17"/>
+          <program value="48"/>
+          <controller ctrl="10" value="52"/>
           <synti>Fluid</synti>
           </Channel>
         <Channel name="pizzicato">
           <program value="45"/>
+          <controller ctrl="10" value="52"/>
           <synti>Fluid</synti>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="32" value="17"/>
           <program value="44"/>
+          <controller ctrl="10" value="52"/>
           <synti>Fluid</synti>
           </Channel>
         </Instrument>
@@ -387,7 +394,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
-              <veloChangeMethod>exponential</veloChangeMethod>
+              <veloChangeMethod>ease-in-out</veloChangeMethod>
               </HairPin>
             <next>
               <location>
@@ -1716,18 +1723,6 @@
             <visible>0</visible>
             <text><b></b><font face="ScoreText"></font><b><font face="FreeSerif"></font> = 56</b></text>
             </Tempo>
-          <Spanner type="HairPin">
-            <HairPin>
-              <subtype>1</subtype>
-              <veloChangeMethod>ease-in-out</veloChangeMethod>
-              </HairPin>
-            <next>
-              <location>
-                <measures>1</measures>
-                <fractions>3/4</fractions>
-                </location>
-              </next>
-            </Spanner>
           <Beam>
             </Beam>
           <Chord>
@@ -1766,6 +1761,18 @@
             <visible>0</visible>
             <text><b></b><font face="ScoreText"></font><b><font face="FreeSerif"></font> = 50</b></text>
             </Tempo>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>1</subtype>
+              <veloChangeMethod>ease-out</veloChangeMethod>
+              </HairPin>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>half</durationType>
             <Note>
@@ -1782,6 +1789,14 @@
             <subtype>ppp</subtype>
             <velocity>16</velocity>
             </Dynamic>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -1792,14 +1807,6 @@
               <tpc>12</tpc>
               </Note>
             </Chord>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>
@@ -1936,7 +1943,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
-              <veloChangeMethod>exponential</veloChangeMethod>
+              <veloChangeMethod>ease-in-out</veloChangeMethod>
               </HairPin>
             <next>
               <location>
@@ -2862,9 +2869,6 @@
             </Dynamic>
           <Chord>
             <durationType>eighth</durationType>
-            <Articulation>
-              <subtype>articAccentAbove</subtype>
-              </Articulation>
             <acciaccatura/>
             <Note>
               <pitch>59</pitch>
@@ -2974,7 +2978,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
-              <veloChangeMethod>exponential</veloChangeMethod>
+              <veloChangeMethod>ease-in-out</veloChangeMethod>
               </HairPin>
             <next>
               <location>
@@ -3818,7 +3822,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
-              <veloChangeMethod>exponential</veloChangeMethod>
+              <veloChangeMethod>ease-in-out</veloChangeMethod>
               </HairPin>
             <next>
               <location>
