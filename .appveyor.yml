@@ -22,7 +22,7 @@ cache:
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
 platform:
 #use for releases only
-#  - x86
+  - x86
   - x64
 
 #environment:
