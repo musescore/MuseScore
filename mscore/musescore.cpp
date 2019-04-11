@@ -404,8 +404,6 @@ void MuseScore::closeEvent(QCloseEvent* ev)
 
       writeSettings();
 
-      _loginManager->save();
-
       ev->accept();
 
       if (Shortcut::dirty)
