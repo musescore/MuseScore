@@ -832,6 +832,8 @@ void Channel::switchExpressive(MasterSynthesizer* m, bool expressive, bool force
       // Floor bank num to multiple of 129 and add new num to get bank num of new patch
       searchBankNum = (bank() / 129) * 129 + newBankNum;
 
+      // Now find the string that has to be contained in the patch name for it to be
+      // selected as the new patch.
       const auto& pl = m->getPatchInfo();
       QString containString;
       if (expressive)
@@ -1118,7 +1120,7 @@ void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const QString
 //   updateGateTime
 //---------------------------------------------------------
 
-void Instrument::switchExpressive(MasterSynthesizer* m, bool expressive, bool force /* = false */)
+void Instrument::switchExpressive(MasterScore* score, MasterSynthesizer* m, bool expressive, bool force /* = false */)
       {
       // Only switch to expressive where necessary
       if (!m || (expressive && !singleNoteDynamics()))
@@ -1126,6 +1128,8 @@ void Instrument::switchExpressive(MasterSynthesizer* m, bool expressive, bool fo
 
       for (Channel* c : channel()) {
             c->switchExpressive(m, expressive, force);
+            if (score->playbackChannel(c))
+                  score->playbackChannel(c)->switchExpressive(m, expressive, force);
             }
       }
 

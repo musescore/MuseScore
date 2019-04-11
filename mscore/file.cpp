@@ -584,7 +584,6 @@ MasterScore* MuseScore::getNewFile()
             }
       score->setCreated(true);
       score->fileInfo()->setFile(createDefaultName());
-      score->updateExpressive(synti);
 
       if (!score->style().chordList()->loaded()) {
             if (score->styleB(Sid::chordsXmlFile))
@@ -765,6 +764,10 @@ MasterScore* MuseScore::getNewFile()
       if (!copyright.isEmpty())
             score->setMetaTag("copyright", copyright);
 
+      score->rebuildMidiMapping();
+
+      // We need a midi mapping to be able to update the expressive
+      score->updateExpressive(synti);
       score->rebuildMidiMapping();
 
       {
