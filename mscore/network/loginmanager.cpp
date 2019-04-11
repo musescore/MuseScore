@@ -438,6 +438,8 @@ void LoginManager::onLoginReply(QNetworkReply* reply, int code, const QJsonObjec
             }
       else
             emit loginError(getErrorString(reply, obj));
+
+      save();
       }
 
 //---------------------------------------------------------
@@ -455,6 +457,8 @@ void LoginManager::onLoginRefreshReply(QNetworkReply* reply, int code, const QJs
             _accessToken.clear();
             _refreshToken.clear();
             }
+
+      save();
       }
 
 //---------------------------------------------------------
