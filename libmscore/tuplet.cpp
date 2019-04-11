@@ -313,7 +313,7 @@ void Tuplet::layout()
       qreal beamAdjust = 0.0;
       if (cr1->beam() && cr1->beam() == cr2->beam()) {
             followBeam = true;
-            beamAdjust = score()->styleP(Sid::beamWidth) * 0.5 * mag();
+            beamAdjust = point(score()->styleS(Sid::beamWidth)) * 0.5 * mag();
             }
 
       if (_isUp) {
