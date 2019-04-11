@@ -45,6 +45,7 @@
 #define INSTALL_NAME            "${Mscore_INSTALL_NAME}"
 #define INSTPREFIX              "${CMAKE_INSTALL_PREFIX}"
 #define VERSION                 "${MUSESCORE_VERSION_FULL}"
+#define VERSION_LABEL           "${MUSESCORE_VERSION_LABEL}"
 #define BUILD_NUMBER            "${CMAKE_BUILD_NUMBER}"
 #define WIN_SPARKLE_APPCAST_URL "${WIN_SPARKLE_APPCAST_URL}"
 
