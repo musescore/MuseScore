@@ -33,6 +33,21 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   version
+//---------------------------------------------------------
+
+static QString version()
+      {
+      QString ver(VERSION);
+
+      const QString versionLabel(VERSION_LABEL);
+      if (!versionLabel.isEmpty())
+            ver.append("-").append(versionLabel);
+
+      return ver;
+      }
+
+//---------------------------------------------------------
 //   CrashReporter
 //---------------------------------------------------------
 
@@ -74,19 +89,22 @@ void CrashReporter::uploadReport()
       miniDumpPart.setBodyDevice(file);
       multiPart->append(miniDumpPart);
 
-      QHttpPart prodPart;
-      prodPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"prod\""));
-      prodPart.setBody("MS_EDITOR");
-      multiPart->append(prodPart);
+      QHttpPart releasePart;
+      releasePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"sentry[release]\""));
+      releasePart.setBody(version().toLatin1());
+      multiPart->append(releasePart);
 
-      QHttpPart verPart;
-      verPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"ver\""));
-      verPart.setBody(QString("%1.%2").arg(VERSION).arg(BUILD_NUMBER).toLatin1());
-      multiPart->append(verPart);
+      const QString comment(_ui->commentText->toPlainText());
+      const bool hasComment = !comment.isEmpty();
+
+      QHttpPart hasCommentPart;
+      hasCommentPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"sentry[tags][hasComment]\""));
+      hasCommentPart.setBody(QString::number(hasComment).toLatin1());
+      multiPart->append(hasCommentPart);
 
       QHttpPart commentPart;
       commentPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"comments\""));
-      commentPart.setBody(_ui->commentText->toPlainText().toUtf8());
+      commentPart.setBody(comment.toUtf8());
       multiPart->append(commentPart);
 
       QNetworkRequest request(_uploadUrl);
