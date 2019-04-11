@@ -22,6 +22,7 @@ install(FILES
       Reunion.mscz
       Unclaimed_Gift.mscx
       Dynamic_Strings.mscx
+      Brassed_Up.mscx
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}demos
       )
 

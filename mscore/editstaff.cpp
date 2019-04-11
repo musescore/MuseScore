@@ -190,7 +190,7 @@ void EditStaff::updateInstrument()
       minPitchP->setText(midiCodeToStr(_minPitchP));
       maxPitchP->setText(midiCodeToStr(_maxPitchP));
       singleNoteDynamics->setChecked(instrument.singleNoteDynamics());
-      instrument.switchExpressive(synti, instrument.singleNoteDynamics());
+      staff->score()->masterScore()->updateExpressive(synti);
 
       // only show string data controls if instrument has strings
       int numStr = instrument.stringData() ? instrument.stringData()->strings() : 0;

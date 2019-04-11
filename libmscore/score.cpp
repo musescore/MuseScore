@@ -4547,6 +4547,7 @@ void MasterScore::setLayout(const Fraction& t)
 
 void MasterScore::updateExpressive(MasterSynthesizer* m)
       {
+      qDebug("update expressive!");
       SynthesizerState s = synthesizerState();
       SynthesizerGroup g = s.group("master");
 
@@ -4575,7 +4576,7 @@ void MasterScore::updateExpressive(MasterSynthesizer* m, bool expressive, bool f
                   if (idVal.id == 4) {
                         int method = idVal.data.toInt();
                         if (expressive == (method == 0))
-                              return; // method and expression change don't match, so don't switch
+                              return; // method and expression change don't match, so don't switch}
                         }
                   }
             }
@@ -4584,9 +4585,12 @@ void MasterScore::updateExpressive(MasterSynthesizer* m, bool expressive, bool f
             const InstrumentList* il = p->instruments();
             for (auto it = il->begin(); it != il->end(); it++) {
                   Instrument* i = it->second;
-                  i->switchExpressive(m, expressive, force);
+                  i->switchExpressive(this, m, expressive, force);
                   }
             }
+
+      // Rebuild midi mappings to be safe
+      rebuildMidiMapping();
       }
 
 //---------------------------------------------------------
