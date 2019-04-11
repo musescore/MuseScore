@@ -3623,16 +3623,19 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                           continue;
                                     int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
                                     if (effectiveTrack >= strack && effectiveTrack < etrack) {
-                                          skyline.add(e->shape().translated(e->pos() + p));
-                                          if (e->isChord() && toChord(e)->tremolo()) {
-                                                Tremolo* t = toChord(e)->tremolo();
-                                                Chord* c1 = t->chord1();
-                                                Chord* c2 = t->chord2();
-                                                if (!t->twoNotes() || (!c1->staffMove() && !c2->staffMove())) {
-                                                      if (t->chord() == e && t->autoplace())
-                                                            skyline.add(t->shape().translated(t->pos() + e->pos() + p));
+                                          if (e->autoplace()) {
+                                                skyline.add(e->shape().translated(e->pos() + p));
+                                                if (e->isChord() && toChord(e)->tremolo()) {
+                                                      Tremolo* t = toChord(e)->tremolo();
+                                                      Chord* c1 = t->chord1();
+                                                      Chord* c2 = t->chord2();
+                                                      if (!t->twoNotes() || (!c1->staffMove() && !c2->staffMove())) {
+                                                            if (t->chord() == e && t->autoplace())
+                                                                  skyline.add(t->shape().translated(t->pos() + e->pos() + p));
+                                                            }
                                                       }
                                                 }
+                                                
                                           }
                                     }
                               }
