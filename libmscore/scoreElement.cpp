@@ -295,8 +295,16 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
             // first set property, then set offset for above/below if styled
             changeProperties(this, id, v, ps);
 
-            if (isStyled(Pid::OFFSET))
-                  ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * score()->spatium());
+            if (isStyled(Pid::OFFSET)) {
+                  // TODO: maybe it just makes more sense to do this in Element::undoChangeProperty,
+                  // but some of the overrides call ScoreElement explicitly
+                  qreal sp;
+                  if (isElement())
+                        sp = toElement(this)->spatium();
+                  else
+                        sp = score()->spatium();
+                  ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * sp);
+                  }
             doUpdateInspector = true;
             }
       else if (id == Pid::SUB_STYLE) {
@@ -802,14 +810,28 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
       switch (propertyType(pid)) {
             case P_TYPE::SP_REAL:
                   return score()->styleP(sid);
-            case P_TYPE::POINT_SP:
-                  return score()->styleV(sid).toPointF() * score()->spatium();
+            case P_TYPE::POINT_SP: {
+                  QPointF val = score()->styleV(sid).toPointF() * score()->spatium();
+                  if (isElement()) {
+                        const Element* e = toElement(this);
+                        if (e->staff() && !e->systemFlag())
+                              val *= e->staff()->mag(e->tick());
+                        }
+                  return val;
+                  }
             case P_TYPE::POINT_SP_MM: {
                   QPointF val = score()->styleV(sid).toPointF();
-                  if (sizeIsSpatiumDependent())
+                  if (sizeIsSpatiumDependent()) {
                         val *= score()->spatium();
-                  else
+                        if (isElement()) {
+                              const Element* e = toElement(this);
+                              if (e->staff() && !e->systemFlag())
+                                    val *= e->staff()->mag(e->tick());
+                              }
+                        }
+                  else {
                         val *= DPMM;
+                        }
                   return val;
                   }
             default:

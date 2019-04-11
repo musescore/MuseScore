@@ -528,7 +528,7 @@ void Articulation::resetProperty(Pid id)
 
 qreal Articulation::mag() const
       {
-      return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag): 1.0;
+      return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
       }
 
 bool Articulation::isTenuto() const

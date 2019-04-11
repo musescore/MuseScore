@@ -207,7 +207,7 @@ void Beam::draw(QPainter* painter) const
             return;
       painter->setBrush(QBrush(curColor()));
       painter->setPen(Qt::NoPen);
-      qreal lw2 = score()->styleP(Sid::beamWidth) * .5 * mag();
+      qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 
       // make beam thickness independent of slant
       // (expression can be simplified?)
@@ -535,7 +535,7 @@ void Beam::layout()
                   fragments.append(new BeamFragment);
             layout2(crl, st, n);
 
-            qreal lw2      = score()->styleP(Sid::beamWidth) * .5 * mag();
+            qreal lw2      = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 //            ChordRest* cr  = crl.front();
 //            Shape& s       = cr->segment()->shape(staffIdx());
 //            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
@@ -2418,7 +2418,7 @@ void Beam::addSkyline(Skyline& sk)
       {
       if (beamSegments.empty() || !autoplace() || !visible())
             return;
-      qreal lw2 = score()->styleP(Sid::beamWidth) * .5 * mag();
+      qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
       const QLineF* bs = beamSegments.front();
       double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
       if (beamSegments.size() > 1 && d > M_PI/6.0)
