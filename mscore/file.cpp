@@ -760,11 +760,7 @@ MasterScore* MuseScore::getNewFile()
       if (!copyright.isEmpty())
             score->setMetaTag("copyright", copyright);
 
-      score->rebuildMidiMapping();
-
-      // We need a midi mapping to be able to update the expressive
-      score->updateExpressive(synti);
-      score->rebuildMidiMapping();
+      score->rebuildAndUpdateExpressive(synti);
 
       {
             ScoreLoad sl;
