@@ -81,7 +81,7 @@ static const StyleVal2 style114[] = {
       { Sid::lyricsDashForce,              QVariant(false) },
       { Sid::frameSystemDistance,          Spatium(1.0) },
       { Sid::minMeasureWidth,              Spatium(4.0) },
-      { Sid::endBarDistance,               Spatium(0.30) },
+//      { Sid::endBarDistance,               Spatium(0.30) },
 
       { Sid::repeatBarTips,                QVariant(false) },
       { Sid::startBarlineSingle,           QVariant(false) },
@@ -1586,7 +1586,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                                           t = BarLineType::END;
                                           break;
                                     case 6:
-                                          // TODO t = BarLineType::END_START_REPEAT;
+                                          t = BarLineType::END_START_REPEAT;
                                           break;
                                     }
                               barLine->setBarLineType(t);

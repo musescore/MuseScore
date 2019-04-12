@@ -1124,6 +1124,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
       score()->undo(new InsertStaves(this, sStaff, eStaff));
 
       Segment* ts = findSegment(SegmentType::TimeSig, tick());
+      Segment* bs = findSegmentR(SegmentType::EndBarLine, ticks());
 
       for (int i = sStaff; i < eStaff; ++i) {
             Staff* staff = score()->staff(i);
@@ -1187,6 +1188,25 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                         score()->undoAddElement(timesig);
                         if (constructed)
                               delete ots;
+                        }
+                  }
+
+            // replicate barline
+            if (bs) {
+                  BarLine* obl = nullptr;
+                  for (unsigned track = 0; track < _mstaves.size() * VOICES; ++track) {
+                        Element* e = bs->element(track);
+                        if (e && !e->generated()) {
+                              obl = toBarLine(e);
+                              break;
+                              }
+                        }
+                  if (obl) {
+                        BarLine* barline = new BarLine(*obl);
+                        barline->setTrack(staffIdx * VOICES);
+                        barline->setParent(bs);
+                        barline->setGenerated(false);
+                        score()->undoAddElement(barline);
                         }
                   }
             }
@@ -1517,8 +1537,34 @@ Element* Measure::drop(EditData& data)
                         if (cbl)
                               cbl->drop(data);
                         }
-                  else if (bl->barLineType() == BarLineType::START_REPEAT)
-                        undoChangeProperty(Pid::REPEAT_START, true);
+                  else if (bl->barLineType() == BarLineType::START_REPEAT) {
+                        Measure* m2 = isMMRest() ? mmRestFirst() : this;
+                        for (Score* lscore : score()->scoreList()) {
+                              Measure* lmeasure = lscore->tick2measure(m2->tick());
+                              if (lmeasure)
+                                    lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                              }
+                        }
+                  else if (bl->barLineType() == BarLineType::END_REPEAT) {
+                        Measure* m2 = isMMRest() ? mmRestLast() : this;
+                        for (Score* lscore : score()->scoreList()) {
+                              Measure* lmeasure = lscore->tick2measure(m2->tick());
+                              if (lmeasure)
+                                    lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                              }
+                        }
+                  else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
+                        Measure* m2 = isMMRest() ? mmRestLast() : this;
+                        for (Score* lscore : score()->scoreList()) {
+                              Measure* lmeasure = lscore->tick2measure(m2->tick());
+                              if (lmeasure) {
+                                    lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                                    lmeasure = lmeasure->nextMeasure();
+                                    if (lmeasure)
+                                          lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                                    }
+                              }
+                        }
                   else {
                         // drop to first end barline
                         seg = findSegmentR(SegmentType::EndBarLine, ticks());
