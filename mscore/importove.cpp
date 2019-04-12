@@ -1254,8 +1254,7 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
                   break;
             }
 
-//TODO      if (bartype != BarLineType::NORMAL && bartype != BarLineType::END_REPEAT && bartype != BarLineType::START_REPEAT && bartype != BarLineType::END_START_REPEAT && bartype != BarLineType::END)
-      if (bartype != BarLineType::NORMAL && bartype != BarLineType::END_REPEAT && bartype != BarLineType::START_REPEAT && bartype != BarLineType::END)
+      if (bartype != BarLineType::NORMAL && bartype != BarLineType::END_REPEAT && bartype != BarLineType::START_REPEAT && bartype != BarLineType::END_START_REPEAT && bartype != BarLineType::END)
             measure->setEndBarLineType(bartype, 0);
 
       if (bartype == BarLineType::END_REPEAT)

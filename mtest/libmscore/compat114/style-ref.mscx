@@ -14,7 +14,6 @@
       <systemFrameDistance>6</systemFrameDistance>
       <frameSystemDistance>6</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
-      <endBarDistance>0.3</endBarDistance>
       <repeatBarTips>1</repeatBarTips>
       <startBarlineSingle>1</startBarlineSingle>
       <startBarlineMultiple>0</startBarlineMultiple>
@@ -168,6 +167,8 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <linked>
+              </linked>
             </BarLine>
           </voice>
         </Measure>
@@ -419,6 +420,7 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <linkedMain/>
             </BarLine>
           </voice>
         </Measure>

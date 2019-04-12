@@ -1304,8 +1304,26 @@ bool Staff::setProperty(Pid id, const QVariant& v)
             case Pid::PLAYBACK_VOICE4:
                   setPlaybackVoice(3, v.toBool());
                   break;
-            case Pid::STAFF_BARLINE_SPAN:
+            case Pid::STAFF_BARLINE_SPAN: {
                   setBarLineSpan(v.toInt());
+                  // update non-generated barlines
+                  int track = idx() * VOICES;
+                  std::vector<Element*> blList;
+                  for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
+                        Segment* s = m->getSegmentR(SegmentType::EndBarLine, m->ticks());
+                        if (s && s->element(track))
+                              blList.push_back(s->element(track));
+                        if (Measure* mm = m->mmRest()) {
+                              Segment* ss = mm->getSegmentR(SegmentType::EndBarLine, mm->ticks());
+                              if (ss && ss->element(track))
+                                    blList.push_back(ss->element(track));
+                              }
+                        }
+                  for (Element* e : blList) {
+                        if (e && e->isBarLine() && !e->generated())
+                              toBarLine(e)->setSpanStaff(v.toInt());
+                        }
+                  }
                   break;
             case Pid::STAFF_BARLINE_SPAN_FROM:
                   setBarLineFrom(v.toInt());

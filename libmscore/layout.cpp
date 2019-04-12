@@ -1759,11 +1759,14 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
 
       Measure* mmr = m->mmRest();
       if (mmr) {
+            // reuse existing mmrest
             if (mmr->ticks() != len) {
                   Segment* s = mmr->findSegmentR(SegmentType::EndBarLine, mmr->ticks());
+                  // adjust length
                   mmr->setTicks(len);
+                  // move existing end barline
                   if (s)
-                        s->setRtick(mmr->ticks());
+                        s->setRtick(len);
                   }
             }
       else {
@@ -1779,21 +1782,26 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
 
       Segment* ss = lm->findSegmentR(SegmentType::EndBarLine, lm->ticks());
       if (ss) {
-            Segment* ds = mmr->undoGetSegment(SegmentType::EndBarLine, lm->endTick());
+            Segment* ds = mmr->undoGetSegmentR(SegmentType::EndBarLine, mmr->ticks());
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                   Element* e = ss->element(staffIdx * VOICES);
                   if (e) {
+                        bool generated = e->generated();
                         if (!ds->element(staffIdx * VOICES)) {
-                              Element* ee = e->clone();
+                              Element* ee = generated ? e->clone() : e->linkedClone();
+                              ee->setGenerated(generated);
                               ee->setParent(ds);
                               undoAddElement(ee);
                               }
                         else {
                               BarLine* bd = toBarLine(ds->element(staffIdx * VOICES));
                               BarLine* bs = toBarLine(e);
+                              if (!generated && !bd->links())
+                                    undo(new Link(bd, bs));
                               if (bd->barLineType() != bs->barLineType()) {
-                                    bd->undoChangeProperty(Pid::BARLINE_TYPE, QVariant::fromValue(bs->barLineType()));
-                                    bd->undoChangeProperty(Pid::GENERATED, true);
+                                    // change directly when generating mmrests, do not change underlying measures or follow links
+                                    undo(new ChangeProperty(bd, Pid::BARLINE_TYPE, QVariant::fromValue(bs->barLineType()), PropertyFlags::NOSTYLE));
+                                    undo(new ChangeProperty(bd, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
                                     }
                               }
                         }
@@ -3594,6 +3602,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                               BarLine* bl = toBarLine(s.element(0));
                               if (bl) {
                                     qreal w = BarLine::layoutWidth(score(), bl->barLineType());
+                                    // TODO: actual vertical position and height for staff?
                                     skyline.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos() + p));
                                     }
                               }
