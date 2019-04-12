@@ -459,7 +459,7 @@ void SynthControl::updateGui()
 
 void SynthControl::updateExpressivePatches()
       {
-      _score->masterScore()->updateExpressive(synti);
+      _score->masterScore()->rebuildAndUpdateExpressive(synti);
       updateMixer();
       }
 

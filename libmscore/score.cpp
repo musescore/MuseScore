@@ -4545,9 +4545,9 @@ void MasterScore::setLayout(const Fraction& t)
 //    the value of the expressive parameter.
 //---------------------------------------------------------
 
+
 void MasterScore::updateExpressive(MasterSynthesizer* m)
       {
-      qDebug("update expressive!");
       SynthesizerState s = synthesizerState();
       SynthesizerGroup g = s.group("master");
 
@@ -4589,7 +4589,22 @@ void MasterScore::updateExpressive(MasterSynthesizer* m, bool expressive, bool f
                   }
             }
 
-      // Rebuild midi mappings to be safe
+      }
+
+//---------------------------------------------------------
+//   rebuildAndUpdateExpressive
+//    implicitly rebuild midi mappings as well. Should be preferred over
+//    just updateExpressive, in most cases.
+//---------------------------------------------------------
+
+void MasterScore::rebuildAndUpdateExpressive(MasterSynthesizer* m)
+      {
+      // Rebuild midi mappings to make sure we have playback channels
+      rebuildMidiMapping();
+
+      updateExpressive(m);
+
+      // Rebuild midi mappings again to be safe
       rebuildMidiMapping();
       }
 
