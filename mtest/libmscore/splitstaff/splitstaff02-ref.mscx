@@ -127,6 +127,9 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <BarLine>
+            <span>1</span>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>

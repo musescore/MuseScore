@@ -1572,7 +1572,7 @@ void ExportMusicXml::barlineRight(Measure* m)
                               _xml.tag("bar-style", QString("dotted"));
                               break;
                         case BarLineType::END:
-//                        case BarLineType::END_START_REPEAT:
+                        case BarLineType::END_START_REPEAT:
                               _xml.tag("bar-style", QString("light-heavy"));
                               break;
                         default:
@@ -1586,8 +1586,7 @@ void ExportMusicXml::barlineRight(Measure* m)
             }
       if (volta)
             ending(_xml, volta, false);
-//      if (bst == BarLineType::END_REPEAT || bst == BarLineType::END_START_REPEAT)
-      if (bst == BarLineType::END_REPEAT)
+      if (bst == BarLineType::END_REPEAT || bst == BarLineType::END_START_REPEAT)
             {
             if (m->repeatCount() > 2) {
                   _xml.tagE(QString("repeat direction=\"backward\" times=\"%1\"").arg(m->repeatCount()));

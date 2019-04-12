@@ -1724,12 +1724,25 @@ void Score::deleteItem(Element* el)
                         undoRemoveElement(el);
                         }
                   else {
-                        if (bl->barLineType() == BarLineType::START_REPEAT)
-                              m->undoChangeProperty(Pid::REPEAT_START, false);
-                        else if (bl->barLineType() == BarLineType::END_REPEAT)
-                              m->undoChangeProperty(Pid::REPEAT_END, false);
-                        else
+                        if (bl->barLineType() == BarLineType::START_REPEAT) {
+                              Measure* m2 = m->isMMRest() ? m->mmRestFirst() : m;
+                              for (Score* lscore : score()->scoreList()) {
+                                    Measure* lmeasure = lscore->tick2measure(m2->tick());
+                                    if (lmeasure)
+                                          lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
+                                    }
+                              }
+                        else if (bl->barLineType() == BarLineType::END_REPEAT) {
+                              Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
+                              for (Score* lscore : score()->scoreList()) {
+                                    Measure* lmeasure = lscore->tick2measure(m2->tick());
+                                    if (lmeasure)
+                                          lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
+                                    }
+                              }
+                        else {
                               bl->undoChangeProperty(Pid::BARLINE_TYPE, QVariant::fromValue(BarLineType::NORMAL));
+                              }
                         }
                   }
                   break;

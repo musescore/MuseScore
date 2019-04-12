@@ -1065,6 +1065,8 @@
               </Rest>
             <BarLine>
               <subtype>end</subtype>
+              <linked>
+                </linked>
               </BarLine>
             </voice>
           </Measure>
