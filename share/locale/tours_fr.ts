@@ -2,11 +2,6 @@
 <context>
     <name>TourXML</name>
     <message>
-        <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
-        <comment>note-input</comment>
-        <translation>Pour ajouter une note à un accord, appuyez sur Maj en tapant la lettre correspondant à la note ou cliquez dans la portée.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Bienvenue dans MuseScore ! Cette brève visite vous guidera à travers l&apos;interface graphique de MuseScore.</translation>
@@ -14,7 +9,7 @@
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation>La barre d&apos;outils des commandes de Lecture vous permet de Lire / Mettre en pause votre partition et contrôle différents aspects de la lecture.</translation>
+        <translation>La barre d&apos;outils des commandes de Lecture vous permet de Jouer / Mettre en pause votre partition et contrôler différents aspects de la lecture.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
@@ -37,38 +32,24 @@
         <translation>Voici les Palettes, où vous pouvez ajouter différents éléments à votre partition. Appuyez sur &quot;Suivant&quot; pour en apprendre plus.</translation>
     </message>
     <message>
-        <source>To enter a note of the selected duration, type its letter name or click on the staff.
-    Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
-        <comment>note-input</comment>
-        <translation>Pour ajouter une note de la durée sélectionnée, appuyez sur sa lettre ou cliquez sur la portée.
-Appuyez sur Ctrl + Haut / Bas (macOS : Cmd + Haut / Bas) pour changer d&apos;octave.</translation>
-    </message>
-    <message>
-        <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
-    or click one of these icons.</source>
-        <comment>note-input</comment>
-        <translation>Pour ajouter une altération accidentelle à une note, appuyez sur les flèches Haut ou Bas pour monter ou descendre la note d&apos;un demi-ton, 
-ou cliquez sur l&apos;un de icônes appropriés.</translation>
-    </message>
-    <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
     Each staff can have up to four voices.
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
         <translation>Pour saisir des notes avec des rythmes différents dans la même mesure, utilisez différentes voix.
-Chaque portée peut contenir jusqu&apos;à quatre voix.
-La voix par défaut est la voix 1 et devrait être utilisée pour chaque portée.
-Pour saisir des notes dans une voix différente, cliquez sur l&apos;un des icônes du sélecteur de voix.</translation>
+    Chaque portée peut contenir jusqu&apos;à quatre voix.
+    La voix par défaut est la voix 1 et devrait être utilisée pour chaque portée.
+    Pour saisir des notes dans une voix différente, cliquez sur l&apos;une des icônes du sélecteur de voix.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation>Voici la vue de la partition dans laquelle vous pouvez y voir et modifier votre partition.
-Utilisez la molette de la souris ou le pavé tactile pour faire défiler verticalement (avec Maj appuyé pour faire défiler horizontalement).
-Si vous avez plusieurs partitions d&apos;ouvertes, vous pouvez passer de l&apos;une à l&apos;autre en utilisant les onglets en haut de votre partition.</translation>
+        <translation>Voici la vue de la partition dans laquelle vous pouvez y voir votre partition et la modifier.
+ Utilisez la molette de la souris ou le pavé tactile pour faire défiler verticalement (avec Maj appuyé pour faire défiler horizontalement).
+ Si vous avez plusieurs partitions ouvertes, vous pouvez passer de l&apos;une à l&apos;autre en utilisant les onglets en haut de votre partition.</translation>
     </message>
     <message>
         <source>These are the toolbars.
@@ -76,12 +57,6 @@ Si vous avez plusieurs partitions d&apos;ouvertes, vous pouvez passer de l&apos;
         <comment>welcome</comment>
         <translation>Voici les barres d&apos;outils.
 Les principales sont les Opérations sur les Fichiers, les Commandes de Lecture et la saisie des Notes.</translation>
-    </message>
-    <message>
-        <source>The main menu contains most other commands.
-    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
-        <comment>welcome</comment>
-        <translation>Le menu principal contient la plupart des autres commandes. De plus, bien des commandes sont accessibles via les raccourcis clavier, ou par un clic droit ( macOS : Ctrl - clic) dans la vue d&apos;ensemble de la partition.</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
@@ -142,26 +117,13 @@ Pour ajouter un point de prolongation, cliquez sur l&apos;icône correspondante 
 Cliquez sur suivant pour en savoir plus.</translation>
     </message>
     <message>
-        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
-    To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</source>
-        <comment>navigate-tour</comment>
-        <translation>Le plus rapide pour faire défiler vers le haut ou vers le bas est d&apos;utiliser la souris ou votre touchpad (par exemple, en faisant glisser avec deux doigts)
-Pour défiler horizontalement, maintenez la touche Shift pendant que vous utilisez la molette de la souris ou votre touchpad.</translation>
-    </message>
-    <message>
         <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
         <comment>navigate-tour</comment>
-        <translation>Les touches de navigations de votre clavier, comme PgUp, PgDn, Début, et Fin fonctionnent comme dans les autres applications pour vous déplacer entre les pages.
-Les claviers ne disposant pas de ces touches offrent souvent des équivalents comme Fn+Haut/Bas/Gauche/Droite</translation>
-    </message>
-    <message>
-        <source>You can move the score short distances by clicking an empty area of the page and dragging.
-    By the way, you can also select regions by holding Shift while dragging.</source>
-        <comment>navigate-tour</comment>
-        <translation>Vous pouvez déplacer la partition sur des petites distances en cliquant sur un endroit vide dans la partition et en la faisant glisser.
-Et vous pouvez aussi sélectionner des régions en maintenant la touche Shift enfoncée pendant que vous faites glisser.</translation>
+        <translation>Les touches de navigations de votre clavier, comme PgUp, PgDn, Début, et Fin fonctionnent comme dans les autres applications
+ pour vous déplacer entre les pages.
+ Les claviers ne disposant pas de ces touches offrent souvent des équivalents comme Fn + Haut / Bas / Gauche / Droite.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -184,7 +146,7 @@ Et vous pouvez aussi sélectionner des régions en maintenant la touche Shift en
         <source>If you have selected elements of different types, only a few settings common to all elements will be available.
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
-        <translation>Si vous avez sélectionnez des élements de différents types, seulement quelques propriétés communes à tous ces éléments seront disponibles.
+        <translation>Si vous avez sélectionné des élements de différents types, seules quelques propriétés communes à tous ces éléments seront disponibles.
 Vous pouvez cliquer sur les boutons &quot;Notes&quot; et d&apos;autres en bas de l&apos;Inspecteur pour restreindre la sélection aux éléments du type spécifié.</translation>
     </message>
     <message>
@@ -236,8 +198,8 @@ Cliquez sur &quot;Suivant&quot; pour en savoir plus.</translation>
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
     You can click anywhere to jump to the corresponding location in your score.</source>
         <comment>timeline-tour</comment>
-        <translation>La Timeline vous montre les repères, les changements de tempo, les indications de mesure et autres points intéressants.
-Vous pouvez cliquer n&apos;importe où pour aller à l&apos;endroit correspondant dans votre partition.</translation>
+        <translation>La Timeline vous montre les repères, les changements de tempo, de Clef, d&apos;indication de mesure et autres points intéressants.
+ Vous pouvez cliquer n&apos;importe où pour aller à l&apos;endroit correspondant dans votre partition.</translation>
     </message>
     <message>
         <source>The section below contains a row for each instrument.
@@ -246,16 +208,17 @@ Vous pouvez cliquer n&apos;importe où pour aller à l&apos;endroit correspondan
     Boxes with a thin blue outline represent measures that are currently in view.</source>
         <comment>timeline-tour</comment>
         <translation>La section ci-dessous contient une ligne pour chaque instrument.
-Chaque case de la ligne représente une mesure pour cet instrument.
-Si la case est surlignée, c&apos;est qu&apos;il y a des notes dans cette mesure.
-Les cases avec une fine ligne autour représentent les mesures actuellement affichées.</translation>
+ Chaque case de la ligne représente une mesure pour cet instrument.
+ Si la case est surlignée, c&apos;est qu&apos;il y a des notes dans cette mesure.
+ Les cases avec une ligne autour représentent les mesures actuellement affichées.</translation>
     </message>
     <message>
         <source>MuseScore supports different types of selections: single, list, and range.
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
         <translation>MuseScore supporte différents types de sélections : 
-simple, liste et plage.</translation>
+simple, liste et plage.
+ Cliquez sur &quot;Suivant&quot; pour en apprendre plus.</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.
@@ -268,18 +231,7 @@ simple, liste et plage.</translation>
 Il est mis en surbrillance pour indiquer qu&apos;il est sélectionné.
  Vous pouvez utiliser les touches de curseur gauche et droite pour déplacer la sélection dans les notes et les silences de votre partition.
  Conseil : si vous appuyez sur la touche Alt (Option sur macOS) en même temps que les touches de curseur, vous pouvez également vous déplacer parmi d&apos;autres éléments, 
-ainsi que de haut en bas d&apos;un personnel à l&apos;autre.</translation>
-    </message>
-    <message>
-        <source>A list selection is a combination of single selections.
-    Press Ctrl (macOS: Cmd) while clicking to add or remove elements to the list selection.
-    You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
-    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
-        <comment>select-tour</comment>
-        <translation>Une sélection de liste est une combinaison de sélections uniques. 
-Appuyez sur Ctrl (macOS : Cmd) tout en cliquant pour ajouter ou supprimer des éléments à la sélection de liste.
- Vous pouvez également sélectionner rapidement des éléments similaires en cliquant avec le bouton droit de la souris (macOS : Ctrl + clic). 
-puis en choisissant l&apos;une des options &quot;Sélectionner&quot; dans le menu contextuel résultant.</translation>
+ainsi que de haut en bas d&apos;un portée à l&apos;autre.</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -289,8 +241,8 @@ puis en choisissant l&apos;une des options &quot;Sélectionner&quot; dans le men
         <comment>select-tour</comment>
         <translation>Une sélection de plage inclut tout d&apos;un point dans le temps à une ou plusieurs portées.
  Elle est indiquée par un rectangle bleu englobant toute la plage. 
-Pour effectuer une sélection de plage, cliquez sur la première note ou silence ou sur la mesure souhaitée, puis maintenez Maj appuyé et cliquez sur le dernier élément.
-Vous pouvez également élargir les sélections de plage en maintenant la touche Maj appuyée tout en déplaçant le curseur.</translation>
+ Pour effectuer une sélection de plage, cliquez sur la première note ou silence ou sur la mesure souhaitée, puis maintenez Maj appuyé et cliquez sur le dernier élément.
+ Vous pouvez également élargir les sélections de plage en maintenant la touche Maj appuyée tout en déplaçant le curseur.</translation>
     </message>
     <message>
         <source>Another way to make selections is to hold Shift while dragging.
@@ -298,8 +250,8 @@ Vous pouvez également élargir les sélections de plage en maintenant la touche
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
         <translation>Une autre façon de faire une sélection consiste à maintenir la touche Maj appuyée tout en faisant glisser le curseur. 
-Si votre sélection comprend des notes, elle sera automatiquement effectuée en tant que sélection de plage ; 
-sinon, elle sera effectuée en tant que sélection de liste.</translation>
+ Si votre sélection comprend des notes, elle sera automatiquement effectuée en tant que sélection de plage ; 
+ sinon, elle sera effectuée en tant que sélection de liste.</translation>
     </message>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
@@ -307,18 +259,51 @@ sinon, elle sera effectuée en tant que sélection de liste.</translation>
         <translation>Enfin, le filtre de sélection (situé dans le menu Affichage) vous permet d’exclure des éléments d’un type donné de la sélection d’une plage.</translation>
     </message>
     <message>
+        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
+    To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation>Le moyen le plus rapide de faire défiler la partition de haut en bas est d&apos;utiliser la molette de la souris ou un geste tactile équivalent (par exemple, un balayage à deux doigts).
+ Pour faire défiler horizontalement, maintenez &quot;Maj&quot; tout en utilisant la molette de la souris ou un geste tactile.</translation>
+    </message>
+    <message>
+        <source>You can move the score short distances by clicking an empty area of the page and dragging.
+    By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
+        <comment>navigate-tour</comment>
+        <translation>Vous pouvez déplacer la partition sur de courtes distances en cliquant sur une zone vide de la page et en la faisant glisser.
+ Par ailleurs, vous pouvez également sélectionner des régions en maintenant &quot;Maj&quot; enfoncé tout en faisant glisser.</translation>
+    </message>
+    <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
     You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation>Si vous avez modifié une valeur, vous pouvez cliquer sur le bouton &quot;Réinitialiser&quot; pour revenir au réglage par défaut.
-Si une valeur est dépendante d&apos;un réglage de style, vous pouvez cliquer sur le bouton &quot;Définir en tant que style&quot; pour définir celle-ci comme valeur par défaut pour le style.
-Vous pouvez également définir le style par défaut via le menu Format &gt; Style...</translation>
+ Si une valeur est dépendante d&apos;un réglage de style, vous pouvez cliquer sur le bouton &quot;Définir en tant que style&quot; pour définir celle-ci comme valeur par défaut pour le style.
+ Vous pouvez également définir le style par défaut via le menu Format &gt; Style….</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <source>To enter a note of the selected duration, type its letter name or click on the staff.
+    Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation>Pour créer un triolet ou une autre division irrégulière, sélectionnez la durée totale de cette division puis appuyez sur Ctrl+nombre ou utilisez le menu Ajouter &gt; Divisions irrégulières.</translation>
+        <translation>Pour ajouter une note de la durée sélectionnée, tapez sa lettre ou cliquez sur la portée.
+ Appuyez sur Ctrl + Haut / Bas (macOS : Cmd + Haut / Bas) pour changer d&apos;octave.</translation>
+    </message>
+    <message>
+        <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
+    or click one of these icons.</source>
+        <comment>note-input</comment>
+        <translation>Pour ajouter une altération à une note, utilisez les flèches Haut ou Bas pour monter ou descendre la note d&apos;un demi-ton,
+ ou cliquez sur l&apos;une des icônes appropriées.</translation>
+    </message>
+    <message>
+        <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
+        <comment>note-input</comment>
+        <translation>Pour ajouter une note à un accord, appuyez sur &quot;Maj&quot; en tapant la lettre correspondant à la note, ou cliquez dans la portée.</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation>Pour créer un triolet ou une autre division irrégulière, sélectionnez la durée totale de cette division irrégulière puis appuyez sur Ctrl + nombre ou utilisez le menu Ajouter &gt; Divisions irrégulières.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
@@ -326,8 +311,15 @@ Vous pouvez également définir le style par défaut via le menu Format &gt; Sty
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
         <translation>La barre d&apos;outils d&apos;opérations sur les fichiers vous permet de créer / enregistrer / ouvrir / imprimer les fichiers et annuler / refaire les modifications.
-Vous pouvez également enregistrer dans votre compte musescore.com en utilisant l&apos;option Fichier &gt; Enregistrer en ligne.
-Les contrôles sur la droite de la barre d&apos;outils gèrent l&apos;affichage de votre partition.</translation>
+ Vous pouvez également enregistrer dans votre compte musescore.com en utilisant l&apos;option Fichier &gt; Enregistrer en ligne.
+ Les contrôles sur la droite de la barre d&apos;outils gèrent l&apos;affichage de votre partition.</translation>
+    </message>
+    <message>
+        <source>The main menu contains most other commands.
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
+        <comment>welcome</comment>
+        <translation>Le menu principal contient la plupart des autres commandes.
+ De plus, bien des commandes sont accessibles via les raccourcis clavier, ou par un clic droit (macOS : Ctrl - clic) dans la vue d&apos;ensemble de la partition.</translation>
     </message>
     <message>
         <source>That's the end of this tour!
@@ -336,9 +328,20 @@ Les contrôles sur la droite de la barre d&apos;outils gèrent l&apos;affichage 
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
         <translation>C&apos;est la fin de cette visite guidée !
-Au fur et à mesure de votre utilisation de MuseScore, d&apos;autres visites guidées d&apos;explications de fonctionnalités s&apos;afficheront.
-Pour les désactiver, décochez &quot;Continuer d&apos;afficher les visites guidées&quot; avant de fermer cette fenêtre.
-Vous pouvez également les activer / désactiver et les réinitialiser via le menu Aide &gt; Visites guidées.</translation>
+ Au fur et à mesure de votre utilisation de MuseScore, d&apos;autres visites guidées d&apos;explications de fonctionnalités s&apos;afficheront.
+ Pour les désactiver, décochez &quot;Continuer d&apos;afficher les visites guidées&quot; avant de fermer cette fenêtre.
+ Vous pouvez également les activer / désactiver et les réinitialiser via le menu Aide &gt; Visites guidées.</translation>
+    </message>
+    <message>
+        <source>A list selection is a combination of single selections.
+    Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
+    You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
+    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
+        <comment>select-tour</comment>
+        <translation>Une sélection de liste est une combinaison de sélections uniques.
+ Appuyez sur Ctrl (macOS : Cmd) tout en cliquant pour ajouter ou supprimer des éléments à la sélection de liste.
+ Vous pouvez également sélectionner rapidement des éléments similaires en cliquant avec le bouton droit de la souris (macOS : Ctrl + clic).
+ puis en choisissant l&apos;une des options &quot;Sélectionner&quot; dans le menu contextuel résultant.</translation>
     </message>
 </context>
 </TS>

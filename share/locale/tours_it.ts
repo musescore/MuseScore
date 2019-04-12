@@ -2,11 +2,6 @@
 <context>
     <name>TourXML</name>
     <message>
-        <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
-        <comment>note-input</comment>
-        <translation>Per aggiungere una nota a un accordo, premere Maiusc mentre si digita la lettera corrispondente al nome, oppure fare clic sul pentagramma.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Benvenuti su MuseScore! Questo breve tour vi guiderà attraverso l&apos;interfaccia utente di MuseScore.</translation>
@@ -37,20 +32,6 @@
         <translation>Benvenuto nella sezione Tavolozze, dove si potranno aggiungere vari elementi alla partitura. Clic su &quot;Avanti&quot; per saperne di più.</translation>
     </message>
     <message>
-        <source>To enter a note of the selected duration, type its letter name or click on the staff.
-    Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
-        <comment>note-input</comment>
-        <translation>Per inserire una nota della durata selezionata, digitare la lettera corrispondente o cliccare sul pentagramma.
-Premere Ctrl+Su/Giù (macOS: Cmd+Su/Giù) per cambiare ottava.</translation>
-    </message>
-    <message>
-        <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
-    or click one of these icons.</source>
-        <comment>note-input</comment>
-        <translation>Per aggiungere un&apos;alterazione ad una nota, premere il tasto di scelta rapida Su o Giù per alzare o abbassare l&apos;intonazione,
-oppure fare clic su una di queste icone.</translation>
-    </message>
-    <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
     Each staff can have up to four voices.
     The default is voice 1, and it should be used first for each staff.
@@ -76,13 +57,6 @@ Se ci sono più partiture aperte, si può passare da una scheda all&apos;altra n
         <comment>welcome</comment>
         <translation>Queste sono le barre degli strumenti.
 Le tre principali sono Operazioni sui File , Controlli di riproduzione e Inserimento Note.</translation>
-    </message>
-    <message>
-        <source>The main menu contains most other commands.
-    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
-        <comment>welcome</comment>
-        <translation>Il menu principale contiene la maggior parte degli altri comandi.
-Inoltre, molti comandi sono accessibili tramite scorciatoie da tastiera o facendo clic con il tasto destro del mouse (macOS: Ctrl+clic) all&apos;interno della partitura visualizzata.</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
@@ -144,13 +118,6 @@ Per includere un punto, fare clic sull&apos;icona appropriata o premere la scorc
 Clicca su &quot;Avanti&quot; per saperne di più.</translation>
     </message>
     <message>
-        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
-    To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</source>
-        <comment>navigate-tour</comment>
-        <translation>Il modo più semplice per scorrere su e giù è usare la rotellina del mouse o il gesto equivalente sul touch (ad esempio trascinare con due dita).
-  Per scorrere orizzontalmente, mantieni premuto Maiusc. mentre usi la rotellina del mouse o il touch.</translation>
-    </message>
-    <message>
         <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
@@ -158,13 +125,6 @@ Clicca su &quot;Avanti&quot; per saperne di più.</translation>
         <translation>I tasti di navigazione sulla tastiera come PgUp, PgDn, Home, e Fine funzionano come nelle altre applicazioni
   spostarsi tra le pagine.
   Le tastiere senza questi tasti spesso hanno i loro equivalenti con Fn+Su/Giù/Sinistra/Destra.</translation>
-    </message>
-    <message>
-        <source>You can move the score short distances by clicking an empty area of the page and dragging.
-    By the way, you can also select regions by holding Shift while dragging.</source>
-        <comment>navigate-tour</comment>
-        <translation>Si può spostare la partitura cliccando in un&apos;area vuota e trascinando.
-È possibile anche selezionare una regione tenendo premuto Maiusc. e trascinare.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -277,17 +237,6 @@ Suggerimento: se premete il tasto Alt (Opzione su macOS) insieme ai tasti cursor
 e anche spostarsi da pentagramma a pentagramma.</translation>
     </message>
     <message>
-        <source>A list selection is a combination of single selections.
-    Press Ctrl (macOS: Cmd) while clicking to add or remove elements to the list selection.
-    You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
-    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
-        <comment>select-tour</comment>
-        <translation>La selezione di un elenco è una combinazione di singole selezioni.
-Premere Ctrl (macOS: Cmd) mentre si clicca per aggiungere o rimuovere elementi alla selezione dell&apos;elenco
-È inoltre possibile selezionare rapidamente elementi simili facendo clic con il tasto destro del mouse (macOS: Ctrl+clic).
-e poi scegliendo una delle opzioni &quot;Seleziona&quot; dal menu contestuale.</translation>
-    </message>
-    <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
     It is indicated by a blue rectangle encompassing the entire range.
     To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
@@ -313,18 +262,52 @@ altrimenti verrà effettuata come selezione di un elenco.</translation>
         <translation>Infine, il filtro Selezione (che si trova nel menu Visualizza) consente di escludere elementi di un dato tipo dalla selezione di un intervallo.</translation>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
-        <comment>inspector-tour</comment>
-        <translation>Se hai modificato un valore, puoi cliccare sul pulsante &apos;Ripristina&apos; per ripristinare il valore predefinito.
-Se il valore è controllato da un&apos;impostazione di stile, è possibile fare clic sul pulsante &quot;Imposta come stile&quot; per impostare il valore corrente come nuovo valore predefinito per lo stile.
-È inoltre possibile impostare i valori predefiniti dello stile utilizzando Formato &gt; Stile.</translation>
+        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
+    To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation>Il modo più veloce per scorrere verso l&apos;alto e verso il basso è quello di utilizzare la rotellina del mouse o gesti tattili equivalenti (ad esempio, lo scorrimento con due dita).
+Per scorrere orizzontalmente, tenere premuto &quot;Shift&quot; mentre si usa la rotellina del mouse o il gesto tattile.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <source>You can move the score short distances by clicking an empty area of the page and dragging.
+    By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
+        <comment>navigate-tour</comment>
+        <translation>È possibile spostare la partitura di brevi distanze facendo clic su un&apos;area vuota della pagina e trascinando.
+A proposito, è anche possibile selezionare le regioni tenendo premuto il tasto &quot;Shift&quot; durante il trascinamento.</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style….</source>
+        <comment>inspector-tour</comment>
+        <translation>Se si è modificato un valore, è possibile fare clic sul pulsante &quot;Ripristina&quot; per ripristinare il valore predefinito.
+Se il valore è controllato da un&apos;impostazione di stile, è possibile fare clic sul pulsante &quot;Imposta come stile&quot; per impostare il valore corrente come nuovo valore predefinito per lo stile.
+È inoltre possibile impostare i valori predefiniti dello stile utilizzando Formato &gt; Stile...</translation>
+    </message>
+    <message>
+        <source>To enter a note of the selected duration, type its letter name or click on the staff.
+    Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation>Per creare una terzina o un altro gruppo irregolare, selezionare la durata che rappresenta la lunghezza totale del gruppo irregolare, quindi premere Ctrl+numero o usare Aggiungi &gt; Gruppo irregolare.</translation>
+        <translation>Per inserire una nota della durata selezionata, digitare il nome della lettera o fare clic sul pentagramma.
+Premere &quot;Ctrl+Su/Giù&quot; (macOS: &quot;Cmd+Su/Giù&quot;) per cambiare ottava.</translation>
+    </message>
+    <message>
+        <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
+    or click one of these icons.</source>
+        <comment>note-input</comment>
+        <translation>
+Per aggiungere un&apos;alterazione ad una nota, premere la scorciatoia &quot;Su&quot; o &quot;Giù&quot; per alzare o abbassare la tonalità,
+oppure fare clic su una di queste icone.</translation>
+    </message>
+    <message>
+        <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
+        <comment>note-input</comment>
+        <translation>Per aggiungere una nota a un accordo, premere &quot;Maiusc&quot; mentre si digita il nome della lettera, oppure fare clic sul pentagramma.</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation>Per creare una terzina o un altro gruppo irregolare, selezionare la durata che rappresenta la lunghezza totale del gruppo irregolare, quindi premere &quot;Ctrl+numero&quot; o usare Aggiungi &gt; Gruppo irregolare.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
@@ -336,6 +319,13 @@ Si può anche salvare sul proprio account musescore.com scegliendo File &gt; Sal
 I comandi alla destra di questa barra degli strumenti controllano la visualizzazione della partitura.</translation>
     </message>
     <message>
+        <source>The main menu contains most other commands.
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
+        <comment>welcome</comment>
+        <translation>Il menù principale contiene la maggior parte degli altri comandi.
+Inoltre, molti comandi sono accessibili tramite scorciatoie da tastiera o facendo clic con il tasto destro del mouse (macOS: &quot;Ctrl&quot;+clic) all&apos;interno della vista partitura.</translation>
+    </message>
+    <message>
         <source>That's the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
@@ -345,6 +335,17 @@ I comandi alla destra di questa barra degli strumenti controllano la visualizzaz
 Con l&apos;utilizzo di MuseScore, compariranno altri tour per spiegarne ulteriormente le funzionalità.
 Per disabilitarli, deseleziona &quot;Continua a mostrare i tour&quot; prima di chiudere questa finestra.
 Puoi anche abilitare/disabilitare e resettare i tour in Aiuto &gt; Tour.</translation>
+    </message>
+    <message>
+        <source>A list selection is a combination of single selections.
+    Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
+    You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
+    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
+        <comment>select-tour</comment>
+        <translation>Un elenco di selezioni è una combinazione di singole selezioni.
+Premere &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) mentre si clicca per aggiungere o rimuovere elementi alla lista di selezioni.
+È inoltre possibile selezionare rapidamente elementi simili facendo clic su uno di essi con il tasto destro del mouse (macOS: &quot;Ctrl&quot;+clic)
+e poi scegliendo una delle opzioni &quot;Seleziona&quot; dal menù a comparsa visualizzato.</translation>
     </message>
 </context>
 </TS>

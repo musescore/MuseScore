@@ -2,11 +2,6 @@
 <context>
     <name>TourXML</name>
     <message>
-        <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
-        <comment>note-input</comment>
-        <translation>Hou de shift toets ingedrukt om een noot aan een akkoord toe te voegen terwijl u de letter van de noot in toets of op de notenbalk klikt.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Welkom bij MuseScore! Deze korte rondleiding laat u mee de MuseScore gebruikersinterface zien.</translation>
@@ -37,20 +32,6 @@
         <translation>Welkom bij de paletten. Hiermee kunt u verschillende elementen aan uw partituur toevoegen. Klik op &quot;Volgende&quot; om hier meer over te weten te komen.</translation>
     </message>
     <message>
-        <source>To enter a note of the selected duration, type its letter name or click on the staff.
-    Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
-        <comment>note-input</comment>
-        <translation>Om een noot in te voeren met de geselecteerde duur, type de letter van de nootnaam of klik op de notenbalk.
- Druk op Ctrl+pijl-omhoog/pijl-omlaag (macOS: Cmd+pijl-omhoog/pijl-omlaag) om het octaaf te wijzigen.</translation>
-    </message>
-    <message>
-        <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
-    or click one of these icons.</source>
-        <comment>note-input</comment>
-        <translation>Om een toevallig voorteken aan een noot toe te voegen gebruikt u de sneltoets pijl-omhoog of pijl-omlaag om de toon te verhogen of te verlagen
- of klikt u op één van deze iconen.</translation>
-    </message>
-    <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
     Each staff can have up to four voices.
     The default is voice 1, and it should be used first for each staff.
@@ -76,13 +57,6 @@
         <comment>welcome</comment>
         <translation>Dit zijn de werkbalken.
  De drie hoofd werkbalken zijn: bestandsbewerkingen, afspeelknoppen en noteninvoer.</translation>
-    </message>
-    <message>
-        <source>The main menu contains most other commands.
-    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
-        <comment>welcome</comment>
-        <translation>Het hoofdmenu bevat de meeste overige opdrachten.
- Daarnaast zijn veel opdrachten toegankelijk middels sneltoetscombinaties of door te klikken met rechts (macOS: Ctrl+klik) in de weergegeven partituur.</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
@@ -144,13 +118,6 @@
  Klik op &quot;Volgende&quot; om hier meer over te weten te komen.</translation>
     </message>
     <message>
-        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
-    To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</source>
-        <comment>navigate-tour</comment>
-        <translation>De snelste manier om naar boven en beneden te scrollen is door gebruik te maken van het muiswiel of de equivalente beweging op het touchpad (bijvoorbeeld met twee vingers schuiven).
- Om horizontaal te scrollen houdt u de shift ingedrukt terwijl u het muiswiel of het touchpad gebruikt.</translation>
-    </message>
-    <message>
         <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
@@ -158,13 +125,6 @@
         <translation>De navigatie toetsen op uw toetsenbord zoals pagina-omhoog, pagina-omlaag, home en einde functioneren zoals deze doen in andere applicaties
  om te wisselen tussen pagina&apos;s.
  Toetsenborden waarbij deze toetsen ontbreken hebben vaak equivalente toetsen zoals Fn+pijl-omhoog/pijl-omlaag/pijl-links/pijl-rechts.</translation>
-    </message>
-    <message>
-        <source>You can move the score short distances by clicking an empty area of the page and dragging.
-    By the way, you can also select regions by holding Shift while dragging.</source>
-        <comment>navigate-tour</comment>
-        <translation>U kunt de partituur verschuiven door te klikken op een leeg gebied in de pagina en vervolgens te slepen.
- Trouwens, u kunt ook gebieden selecteren door het ingedrukt houden van de shift-toets tijdens het slepen.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -274,17 +234,6 @@ zoals het verplaatsen van tempo aanduidingen boven andere tekst of het inkorten 
  U kunt de cursor naar links en rechts gebruiken om de selectie te verplaatsen tussen de noten en rusten in de partituur.</translation>
     </message>
     <message>
-        <source>A list selection is a combination of single selections.
-    Press Ctrl (macOS: Cmd) while clicking to add or remove elements to the list selection.
-    You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
-    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
-        <comment>select-tour</comment>
-        <translation>Een lijst selectie is een combinatie van enkele selecties.
- Druk op Ctrl (macOS: Cmd) terwijl u klikt om de elementen toe te voegen of te verwijderen uit de lijst selectie.
- U kunt ook snel soortgelijke elementen selecteren door op één van deze met rechts te klikken (macOS: Ctrl+klikken)
- en vervolgens te kiezen voor één van de mogelijkheden in de &quot;Selecteer&quot; optie in het weergegeven menu.</translation>
-    </message>
-    <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
     It is indicated by a blue rectangle encompassing the entire range.
     To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
@@ -309,18 +258,51 @@ zoals het verplaatsen van tempo aanduidingen boven andere tekst of het inkorten 
         <translation>Als laatste is er het selectiefilter (te vinden in het Weergave menu) waarmee u elementen van een bepaald type kunt uitsluiten van een bereik selectie.</translation>
     </message>
     <message>
+        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
+    To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation>De snelste manier om naar boven en beneden te scrollen is door gebruik te maken van het muiswiel of de equivalente beweging op het touchpad (bijvoorbeeld met twee vingers schuiven).
+Om horizontaal te scrollen houdt u de &quot;shift&quot; ingedrukt terwijl u het muiswiel of het touchpad gebruikt.</translation>
+    </message>
+    <message>
+        <source>You can move the score short distances by clicking an empty area of the page and dragging.
+    By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
+        <comment>navigate-tour</comment>
+        <translation>U kunt de partituur verschuiven door te klikken op een leeg gebied in de pagina en vervolgens te slepen.
+ Trouwens, u kunt ook gebieden selecteren door het ingedrukt houden van de shift-toets tijdens het slepen.</translation>
+    </message>
+    <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation>Indien u een waarde heeft aangepast dan kunt u de &quot;Herstel&quot; knop gebruiken om de waarde terug te zetten naar de standaard waarde.
  Indien de waarde beïnvloed wordt door een stijl instelling dan kunt u klikken op de &quot;Stel in als stijl&quot; knop om de huidige waarde in te stellen als de nieuwe standaard voor de stijl.
- U kunt de standaard waarden voor de stijl ook instellen middels Opmaak / Stijl.</translation>
+ U kunt de standaard waarden voor de stijl ook instellen middels Opmaak -&gt; Stijl....</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <source>To enter a note of the selected duration, type its letter name or click on the staff.
+    Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation>Om een triool of ander antimetrisch figuur te maken selecteert u de duur die overeenkomt met de totale lengte van het figuur en drukt u Ctrl+getal of gebruik Voeg toe / Antimetrische figuren. </translation>
+        <translation>Om een noot in te voeren met de geselecteerde duur, type de letter van de nootnaam of klik op de notenbalk.
+ Druk op &quot;Ctrl+pijl-omhoog/pijl-omlaag&quot; (macOS: &quot;Cmd+pijl-omhoog/pijl-omlaag&quot;) om het octaaf te wijzigen.</translation>
+    </message>
+    <message>
+        <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
+    or click one of these icons.</source>
+        <comment>note-input</comment>
+        <translation>Om een toevallig voorteken aan een noot toe te voegen gebruikt u de sneltoets &quot;pijl-omhoog&quot; of &quot;pijl-omlaag&quot; om de toon te verhogen of te verlagen
+ of klikt u op één van deze iconen.</translation>
+    </message>
+    <message>
+        <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
+        <comment>note-input</comment>
+        <translation>Hou de &quot;shift&quot; toets ingedrukt om een noot aan een akkoord toe te voegen terwijl u de letter van de noot in toets of op de notenbalk klikt.</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation>Om een triool of ander antimetrisch figuur te maken selecteert u de duur die overeenkomt met de totale lengte van het figuur en drukt u &quot;Ctrl+getal&quot; of gebruik Voeg toe / Antimetrische figuren. </translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
@@ -332,6 +314,13 @@ zoals het verplaatsen van tempo aanduidingen boven andere tekst of het inkorten 
  De instellingen rechts van deze werkbalk bepalen de weergave van de partituur. </translation>
     </message>
     <message>
+        <source>The main menu contains most other commands.
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
+        <comment>welcome</comment>
+        <translation>Het hoofdmenu bevat de meeste overige opdrachten.
+ Daarnaast zijn veel opdrachten toegankelijk middels sneltoetscombinaties of door te klikken met rechts (macOS: &quot;Ctrl&quot;+klik) in de weergegeven partituur.</translation>
+    </message>
+    <message>
         <source>That's the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
@@ -341,6 +330,17 @@ zoals het verplaatsen van tempo aanduidingen boven andere tekst of het inkorten 
  Tijdens het gebruik van MuseScore zullen er meer rondleidingen verschijnen om de functionaliteit verder uit te leggen.
  Om deze uit te schakelen, de-selecteert u &quot;Doorgaan met rondleiding laten zien&quot; voordat u dit venster sluit.
  U kunt de rondleiding ook aan-/uitzetten en herstellen in Help / Rondleidingen. </translation>
+    </message>
+    <message>
+        <source>A list selection is a combination of single selections.
+    Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
+    You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
+    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
+        <comment>select-tour</comment>
+        <translation>Een lijst selectie is een combinatie van enkele selecties.
+ Druk op &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) terwijl u klikt om de elementen toe te voegen of te verwijderen uit de lijst selectie.
+ U kunt ook snel soortgelijke elementen selecteren door op één van deze met rechts te klikken (macOS: &quot;Ctrl&quot;+klikken)
+ en vervolgens te kiezen voor één van de mogelijkheden in de &quot;Selecteer&quot; optie in het weergegeven menu.</translation>
     </message>
 </context>
 </TS>

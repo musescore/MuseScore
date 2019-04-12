@@ -2,29 +2,24 @@
 <context>
     <name>TourXML</name>
     <message>
-        <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
-        <comment>note-input</comment>
-        <translation>要往和弦中添加音符，按住Shift并键入音名，或者在谱表中单击。</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation>欢迎使用MuseScore！这个简洁的教程会带你导览MuseScore的用户界面。</translation>
+        <translation>欢迎使用 MuseScore！本导览将引导您快速熟悉 MuseScore 的用户界面。</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation>您可以通过播放控制栏开始或暂停播放您的乐谱，并调整播放参数。</translation>
+        <translation>播放控制工具栏帮助您播放或暂停您的乐谱，并调整播放参数。</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
         <comment>welcome</comment>
-        <translation>您可以通过音符输入栏输入音符或休止符。</translation>
+        <translation>音符输入栏帮助您在乐谱中输入音符与休止符。</translation>
     </message>
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation>通过符号面板您可以向乐谱中输入其他绝大多数记号。</translation>
+        <translation>符号面板帮助您在乐谱中插入大多数没有展示在主面板中的符号。</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
@@ -34,21 +29,7 @@
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation>欢迎使用符号面板，在这里你可以将各种音乐记号输入到谱表中。点击“下一步”了解更多。</translation>
-    </message>
-    <message>
-        <source>To enter a note of the selected duration, type its letter name or click on the staff.
-    Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
-        <comment>note-input</comment>
-        <translation>要输入指定时值的音符，请键入音名字母（C、D、E……）或在直接在音符输入模式下的谱表中单击即可。
-        按 Ctrl+上/下（macOS: Cmd+上/下）以升/降八度。</translation>
-    </message>
-    <message>
-        <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
-    or click one of these icons.</source>
-        <comment>note-input</comment>
-        <translation>要向一个音符添加临时升降号，按下键盘的上/下箭头以升高/降低音高，
-        也可点击工具栏中的按钮来添加临时升降号。</translation>
+        <translation>欢迎来到工作面板，在这里您可以在乐谱中加入各种元素。点击“下一步”以详细了解。</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -56,54 +37,47 @@
     The default is voice 1, and it should be used first for each staff.
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
-        <translation>使用多个声部以向同一小节中加入不同的旋律。
-        每个谱表最多容纳四个声部。
-        默认声部为第 1 声部，其应被首先在各个谱表使用。
-        要往不同声部添加音符，请点击表示四个声部的按钮。</translation>
+        <translation>使用多个声部以在同一小节中输入不同的节奏和旋律。
+   每行谱表可以容纳最多四个声部。
+   默认采用第 1 声部。在任何谱表中输入音符时都应当优先使用第 1 声部。
+   若要在其他的声部中输入音符，点击这四个按钮中与声部相对应的按钮。</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation>这就是乐谱界面。您可以在此查看并编辑您的乐谱。
-        使用鼠标滚轮或者触控板来滚动乐谱（按下shift再滚动滚轮可进行水平滚动）。
+        <translation>这是乐谱界面。您可以在此查看并编辑您的乐谱。
+        使用鼠标滚轮或者触控板来滚动乐谱（按下 Shift 再滚动滚轮可进行水平滚动）。
         若您已打开多个乐谱，您可以单击界面上方的标签页来在各个乐谱之间进行切换。</translation>
     </message>
     <message>
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
-        <translation>工具栏这些是工具栏。
-        其中最主要的三个是：文件操作栏、播放控制栏以及音符输入栏。</translation>
-    </message>
-    <message>
-        <source>The main menu contains most other commands.
-    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
-        <comment>welcome</comment>
-        <translation>主菜单包含大多数其他操作。
-      除此之外，许多操作都可以通过在乐谱界面中键入快捷键或使用右键菜单（MacOS: Control+单击）来完成。</translation>
+        <translation>这是工具栏。
+   最基本的三种工具是文件工具组，播放工具组与音符输入工具组。</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
     The &quot;Advanced&quot; workspace contains more items than the &quot;Basic&quot; workspace.</source>
         <comment>show-palette</comment>
-        <translation>不同的工作区搭配有不同套件的符号面板。
-        “高级”工作区比“基础”工作区包含更多项目。</translation>
+        <translation>不同的工作区有不同的面板组合。
+   “高级”工作区比“基础”工作区包含更多内容。</translation>
     </message>
     <message>
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation>要往乐谱中添加符号，请先选中乐谱中的一个元素或一个区域，然后双击符号面板来添加。
-        您亦可从符号面板中拖拽一个项目，再将它放到您乐谱中的指定元素上。</translation>
+        <translation>要往乐谱中添加符号，请先选中乐谱中的一个元素或一个区域，然后双击面板上的符号来添加。
+        您亦可从符号面板中拖拽一个项目，将它拖放到您乐谱中的指定元素上。</translation>
     </message>
     <message>
         <source>You have toggled multimeasure rests in this score.
     This combines multiple measures of rests into a single multimeasure rest.
     To toggle this setting again, press the shortcut &quot;M&quot;.</source>
         <comment>mmrest</comment>
-        <translation>您刚才开启了多小节休止符功能。
+        <translation>您刚刚在此乐谱开启了多小节休止符功能。
         该功能将多个小节的休止符化零为整。
         要想开启/关闭这个功能，请按快捷键“M”。</translation>
     </message>
@@ -111,99 +85,85 @@
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation>欢迎来到音符输入栏，在此您可以将音符和休止符输入到您的乐谱中。
+        <translation>欢迎来到音符输入栏，您可以在这里将音符和休止符输入到您的乐谱中。
         单击“下一个”来了解更多内容。</translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation>点击这个“音符输入”图标（或按下快捷键“N”）来开启音符输入模式。</translation>
+        <translation>点击这一“音符输入”图标（或按下快捷键“N”）来开启音符输入模式。</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
         <translation>通过点击这些音符图标（或按下快捷键“1”～“9”）来选定音符的时值。
-        要添加附点，请点击附点图标（或按下快捷键“.”）。</translation>
+        若要添加附点，请点击附点图标（或按下快捷键“.”）。</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation>要想输入一个选定时值的休止符，按下快捷键“0”（或者点击“休止符”图标,然后点击谱表来输入）。</translation>
+        <translation>要想输入一个选定时值的休止符，请按快捷键“0”（或点击“休止符”图标，然后点击谱表来输入）。</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
         <comment>note-input</comment>
-        <translation>要使用延音线来延长一个音符，请先选择要延长的时值，接着按下“+”键（或按下延音线图标）。</translation>
+        <translation>要使用延音线来延长一个音符，请先选择要延长的时值，接着按下“+”键（或点击延音线图标）。</translation>
     </message>
     <message>
         <source>MuseScore provides many ways to navigate through your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
-        <translation>MuseScore提供很多种方法来在您的乐谱中进行指引。
+        <translation>MuseScore 提供了多种方式来导航您的谱面。
         单击“下一个”来了解更多。</translation>
-    </message>
-    <message>
-        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
-    To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</source>
-        <comment>navigate-tour</comment>
-        <translation>滚动乐谱最快速的方式是使用鼠标滚轮或触控板手势（例如：双指滑动）。
-        要横向地滚动，请在鼠标滚轮滚动时（或使用触控手势时）按住Shift。</translation>
     </message>
     <message>
         <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
         <comment>navigate-tour</comment>
-        <translation>键盘上的导航键，例如：PgUp, PgDn, Home和End在其他应用中
-    起到在页面之间移动的作用。
-    缺少这些键位的键盘通常使用Fn+上/下/左/右键来获得同等功能。</translation>
-    </message>
-    <message>
-        <source>You can move the score short distances by clicking an empty area of the page and dragging.
-    By the way, you can also select regions by holding Shift while dragging.</source>
-        <comment>navigate-tour</comment>
-        <translation>您可以点击页面空白区域并拖拽来短距离移动谱面。
-        顺带一提，您还可以在拖拽时按住Shift来选中一个区域的元素。</translation>
+        <translation>键盘上的导航键，如 PgUp、PgDn、Home 和 End 可起到移动页面的作用
+    （正如在其他应用程序中的作用一样）。
+    缺少这些键位的键盘通常可用 Fn + 上/下/左/右键来实现同等功能。</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
         <comment>navigate-tour</comment>
-        <translation>额外的导航工具（包括时间轴及导航器）都能在顶部菜单栏的“视图”中找到。</translation>
+        <translation>额外的导航工具（包括时间轴及导航器）可以在顶部“视图”菜单中找到。</translation>
     </message>
     <message>
         <source>Welcome to the Inspector, where you can change individual properties for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>inspector-tour</comment>
-        <translation>欢迎来到“查看器”，在此您可以调整选定元素的单独属性。
+        <translation>欢迎来到元素查看器，您可以在此处更改所选元素的各项属性。
         单击“下一个”以了解详情。</translation>
     </message>
     <message>
         <source>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
     The set of properties available will differ according to the type of selected elements or elements.</source>
         <comment>inspector-tour</comment>
-        <translation>首先要选中您乐谱上一个或多个元素，接着使用复选框、转盘框、下拉菜单以及其他控制器来调整不同属性的值。
-        显示出来的属性会因选中的元素而异。</translation>
+        <translation>首先，选中您乐谱上的一个或多个元素，然后使用复选框、转盘框、下拉菜单等来调整不同属性的值。
+        此处的可用属性会因所选元素的类型而有区别。</translation>
     </message>
     <message>
         <source>If you have selected elements of different types, only a few settings common to all elements will be available.
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
-        <translation>若您同时选择了不同元素，查看器只会显示所有选中元素共有的设置。
+        <translation>若您同时选择了不同类型的元素，查看器只会显示所有选中元素共有的那几项设置。
         您可点击查看器下部的“音符”或其他按钮来筛选特定类型的元素。</translation>
     </message>
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
-        <translation>通过查看器来调整您乐谱中各种元素的不同属性  </translation>
+        <translation>通过查看器，您能够管理乐谱中各种元素的不同属性。</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
     You can also manually adjust the position of autoplaced elements, or disable autoplace for selected elements.
     Click &quot;Next&quot; to learn more.</source>
         <comment>autoplace-tour</comment>
-        <translation>自动布局是一个新特色。它会自动检测元素以避免元素之间的布局冲突。
-        您亦可手动调整自动布局元素的位置，还可以为选定的元素关闭该功能。
+        <translation>自动布局是一项新功能，可自动检测元素以避免元素之间的布局冲突。
+        您也可以对已自动布局元素的位置进行手动调整，或者为选定的元素关闭自动布局功能。
         单击“下一个”来了解详情。</translation>
     </message>
     <message>
@@ -211,9 +171,9 @@
     such as by moving tempo markings above other text or by shortening hairpins to avoid dynamics.
     In many cases, this means that no further adjustments will be required at all.</source>
         <comment>autoplace-tour</comment>
-        <translation>自动布局根据标准化的乐谱版面来摆放大多数元素。
-    例如通过把速度文字移到其他文字上方或者缩短渐变符号来 避免多余的音量变化。
-    在很多情况下，这意味着无需任何进一步操作。</translation>
+        <translation>自动布局功能依据标准的音乐排版做法来摆放大多数元素，
+   例如，将速度标记移到其他文字上方，或者缩短渐变符号以避让力度标记。
+   在很多情况下，这意味着无需任何进一步操作。</translation>
     </message>
     <message>
         <source>If necessary, you can fine-tune the position of elements by dragging, by using the cursor keys while in Edit mode (double-click),
@@ -235,7 +195,8 @@
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
     Click &quot;Next&quot; to learn more.</source>
         <comment>timeline-tour</comment>
-        <translation>欢迎来到“时间轴”，在这里你可以浏览高度精简的曲谱，轻松导航</translation>
+        <translation>欢迎来到“时间轴”，在这里您可以浏览高度精简的曲谱，轻松导览。
+   单击“下一步”以了解详情。</translation>
     </message>
     <message>
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
@@ -259,7 +220,7 @@
         <source>MuseScore supports different types of selections: single, list, and range.
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
-        <translation>MuseScore支持多种形式的选择：单选、列选和框选。
+        <translation>MuseScore 支持多种形式的选取：单选、列选和框选。
     单击“下一个”来了解更多。</translation>
     </message>
     <message>
@@ -271,19 +232,8 @@
         <comment>select-tour</comment>
         <translation>要单选，单击您要选择的元素即可。
         选中的元素会高亮显示以表明其被选中。
-        你可以使用左/右箭头以搬动音符或休止符。
-        提升：如果您按下Alt键（macOS上的Option键），光标会单独在元素/谱表之间移动而不会搬动任何元素。</translation>
-    </message>
-    <message>
-        <source>A list selection is a combination of single selections.
-    Press Ctrl (macOS: Cmd) while clicking to add or remove elements to the list selection.
-    You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
-    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
-        <comment>select-tour</comment>
-        <translation>列选是单选的复合形式。
-    单击或移除元素时按下Ctrl（macOS：Cmd）即可多选。
-    要快速选择类似元素，请右键单击 （macOS：Ctrl+clicking）一个元素
-    接着选择弹出菜单中的“选择”选项即可。</translation>
+        你可以使用左/右箭头来（在音符及休止符间）移动所选元素。
+        小技巧：如果在按箭头时一并按下 Alt 键（macOS 对应 Option 键），则所选元素也可在其他元素之中移动，还能够在谱表与谱表间上下移动。</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -293,15 +243,15 @@
         <comment>select-tour</comment>
         <translation>框选囊括了同一时间点到点选中的一切。
     框选由一个蓝色矩形框来提示，框内即为选距。
-    要进行框选，单击您想要选中部分的第一个音符、休止符或小节，然后在最后一个要选中的元素上单击并按下Shift。
-    您也可在按下Shift的同时使用键盘上的箭头来进行框选。</translation>
+    要进行框选，单击您想要选中部分的第一个音符、休止符或小节，然后在最后一个要选中的元素上单击并按下 Shift。
+    您也可在按下 Shift 的同时使用键盘上的箭头来进行框选。</translation>
     </message>
     <message>
         <source>Another way to make selections is to hold Shift while dragging.
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation>另一种框选方法是：按住Shift键的同时进行拖拽。
+        <translation>另一种框选方法是：按住 Shift 键的同时进行拖拽。
         若您的选择囊括了音符，系统就会自动将其生成一个选区。
         否则，它将被视为列选。</translation>
     </message>
@@ -311,18 +261,51 @@
         <translation>最后，滤选器（可以在顶部菜单栏的“视图”中找到）让您可以通过给定的类型排除选区中的元素。</translation>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
-        <comment>inspector-tour</comment>
-        <translation>如果您一修改过一个值，您可以单击“重置”按钮来恢复默认值。
-        若这个值是由样式文件控制的，您可点击“设为样式”按钮来将当前值设定为样式文件的新的默认值。
-        您亦可通过顶部菜单栏的“格式 &gt; 样式”将所有的样式恢复系统默认样式。</translation>
+        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
+    To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation>要快捷地滚动乐谱，请使用鼠标滚轮或对应的触控手势（例如：双指滑动）。
+        要横向地滚动，请在鼠标滚轮滚动或使用触控手势的同时按住 Shift。</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <source>You can move the score short distances by clicking an empty area of the page and dragging.
+    By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
+        <comment>navigate-tour</comment>
+        <translation>您可以点击页面空白区域并拖拽来短距离移动谱面。
+        此外，您还可以在拖拽时按住 Shift 来选中一个区域的元素。</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style….</source>
+        <comment>inspector-tour</comment>
+        <translation>如果您已修改过一个值，您可以单击“重置”按钮来将其恢复默认。
+        若这个值是由样式文件控制的，您可点击“设为样式”按钮来将当前值设定为样式文件的新的默认值。
+        您亦可通过顶部菜单栏的“格式”&gt;“样式”将所有的样式恢复为默认。</translation>
+    </message>
+    <message>
+        <source>To enter a note of the selected duration, type its letter name or click on the staff.
+    Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation>要创建一个三连音或者其他连音，请选取一段长度来作为连音的总时值，然后按下Ctrl+数字（Mac: Command+数字）。也可使用顶部菜单栏里的添加 &gt; 连音符。</translation>
+        <translation>要输入指定时值的音符，请键入音名字母（C、D、E……）或直接在音符输入模式下的谱表中单击即可。
+        按 Ctrl + 上/下（macOS：Cmd + 上/下）以升/降八度。</translation>
+    </message>
+    <message>
+        <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
+    or click one of these icons.</source>
+        <comment>note-input</comment>
+        <translation>要向一个音符添加临时升降号，按下键盘的上/下以使音高升/降。
+        也可点击工具栏中的按钮来添加临时升降号。</translation>
+    </message>
+    <message>
+        <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
+        <comment>note-input</comment>
+        <translation>要向一个和弦中添加音符，请按住 Shift 并键入音名，或直接在谱表中单击。</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation>要创建一个三连音或其他连音，请先选取连音的总时值，然后按下 Ctrl + 数字。也可使用顶部菜单栏里的“添加”&gt;“连音符”。</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
@@ -330,8 +313,15 @@
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
         <translation>文件操作栏使您可以新建、保存、打开/打印文件以及撤销、恢复更改。
-        您亦可前往顶部菜单栏的“文件 &gt; 保存至在线空间”来将乐谱保存至您的musescore.com账户。
+        您亦可前往顶部菜单栏的“文件”&gt;“保存至在线空间”来将乐谱保存至您的 musescore.com 账户。
         这栏的右侧是可控制您的乐谱的显示方式。</translation>
+    </message>
+    <message>
+        <source>The main menu contains most other commands.
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
+        <comment>welcome</comment>
+        <translation>主菜单包含大多数其他操作。
+      除此之外，许多操作都可以通过在乐谱界面中键入快捷键或使用右键菜单（macOS：Ctrl + 单击）来完成。</translation>
     </message>
     <message>
         <source>That's the end of this tour!
@@ -340,9 +330,20 @@
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
         <translation>教程导览结束了！
-    当您使用MuseScore时，更多的教程导览会弹出来详解更深入的功能。
-    不想再看导览了吗？请在关闭本窗口前取消选中“继续显示导览”。
-    您还可以在顶部菜单栏的“帮助 &gt; 教程导览”中再次启用/关闭导览的显示。</translation>
+    当您使用 MuseScore 时，更多的教程导览会弹出来详解更深入的功能。
+    若您不希望再看到导览，请在关闭本窗口前取消选中“继续显示导览”。
+    您还可以在顶部菜单栏的“帮助”&gt;“教程导览”中启用/关闭或者重置导览的显示。</translation>
+    </message>
+    <message>
+        <source>A list selection is a combination of single selections.
+    Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
+    You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
+    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
+        <comment>select-tour</comment>
+        <translation>列选是单选的复合形式。
+    单击或移除元素时按下 Ctrl（macOS：Cmd）即可多选。
+    要快速选择类似元素，请右键单击 （macOS：Ctrl + 单击）一个元素，
+    接着选择弹出菜单中的“选择”选项即可。</translation>
     </message>
 </context>
 </TS>

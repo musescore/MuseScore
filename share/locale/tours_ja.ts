@@ -2,11 +2,6 @@
 <context>
     <name>TourXML</name>
     <message>
-        <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
-        <comment>note-input</comment>
-        <translation>音符を入力したあと、さらに音を追加するには、Shiftキーを押しながらキーボードで追加する音を入力するか、譜表に直接クリックしてください。</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>MuseScoreへようこそ！
@@ -38,19 +33,6 @@
         <translation>パレットへようこそ。パレットを使って様々な要素を加えることができます。詳細は &quot; 次へ &quot; をクリックしてください。</translation>
     </message>
     <message>
-        <source>To enter a note of the selected duration, type its letter name or click on the staff.
-    Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
-        <comment>note-input</comment>
-        <translation>選択した長さの音符を入力するには、キーボードで音名を押すか、譜表に直接クリックすることで入力します。
- オクターブを変更するには、Ctrl +上/下（macOS：Cmd +上/下）を押します。</translation>
-    </message>
-    <message>
-        <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
-    or click one of these icons.</source>
-        <comment>note-input</comment>
-        <translation>臨時記号は入力した音符に対して、アイコンを押すか 上/下キーを押すことで半音ずつ変化させることができます。</translation>
-    </message>
-    <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
     Each staff can have up to four voices.
     The default is voice 1, and it should be used first for each staff.
@@ -76,13 +58,6 @@
         <comment>welcome</comment>
         <translation>これらはツールバーです。
 基本は3種類。これによってファイル操作、再生、音符入力などができます。</translation>
-    </message>
-    <message>
-        <source>The main menu contains most other commands.
-    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
-        <comment>welcome</comment>
-        <translation>画面上のメインメニューには、ほとんどのショートカットキーを含んでいます。
-さらに、ショートカットキーやスコアビュー内での右クリック（macOS：Ctrl +クリック）することで、多くのコマンドを選択できます。</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
@@ -144,13 +119,6 @@
 詳細は &quot; 次へ &quot; をクリックしてください。</translation>
     </message>
     <message>
-        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
-    To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</source>
-        <comment>navigate-tour</comment>
-        <translation>上下にスクロールする最も簡単な方法は、マウスホイールまたは同等のタッチジェスチャ（2本指のスワイプなど）を使用することです。
- 水平スクロールは、Shiftキーを押しながらマウスホイールを使うか、タッチジェスチャでできます。</translation>
-    </message>
-    <message>
         <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
@@ -159,13 +127,6 @@
 ページ間の移動などで使えます。
 キーボードの種類によってはFnキーを押しながら上/下/左/右キーを押すことで同様の機能を持つものがあります。
 </translation>
-    </message>
-    <message>
-        <source>You can move the score short distances by clicking an empty area of the page and dragging.
-    By the way, you can also select regions by holding Shift while dragging.</source>
-        <comment>navigate-tour</comment>
-        <translation>スコアを直感的に動かしたい場合は、ページ内の何もない部分をドラッグすることで移動できます。
-このとき、Shiftキーを押しながらドラッグすると範囲選択モード利用できます。</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -278,17 +239,6 @@
 このモードでは上下にある音符であっても順番に選択状態が移動します。</translation>
     </message>
     <message>
-        <source>A list selection is a combination of single selections.
-    Press Ctrl (macOS: Cmd) while clicking to add or remove elements to the list selection.
-    You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
-    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
-        <comment>select-tour</comment>
-        <translation>リスト選択は、単一選択の組み合わせです。
-Ctrlキー（macOS：Cmd）を押しながら、未選択部分をクリックすると追加で選択になり、すでに選択されている部分をクリックすると選択解除にできます。
-また、右クリック（macOS：Ctrl +クリック）のメニューからも同様の要素を素早く選択できます。
-右クリックメニューから &quot; 選択 &quot;を選び、用途に合ったものを選びます。</translation>
-    </message>
-    <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
     It is indicated by a blue rectangle encompassing the entire range.
     To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
@@ -314,23 +264,65 @@ Ctrlキー（macOS：Cmd）を押しながら、未選択部分をクリック�
         <translation>最後に、選択フィルタ（&quot; 表示 &quot;メニューにある）を使用すると、範囲選択から特定の種類の要素を除外できます。</translation>
     </message>
     <message>
-        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
-    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
-        <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
+    To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation>一番手早い上下スクロールの方法は、マウス・ホイールやそれと同等の例えば2本指スワイプなどタッチ・ジェスチャーです。左右スクロールには、&quot;Shift&quot;キーを押しながらマウス・ホイールやタッチ・ジェスチャーを使います。</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <source>You can move the score short distances by clicking an empty area of the page and dragging.
+    By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
+        <comment>navigate-tour</comment>
+        <translation>スコアをちょっとだけ動かすには、ページの空白部分をクリックしてドラグします。
+また、&quot;Shift&quot; を押したままドラグすると範囲の選択ができます。</translation>
+    </message>
+    <message>
+        <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
+    If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
+    You can also set style defaults using Format &gt; Style….</source>
+        <comment>inspector-tour</comment>
+        <translation>値を変更したのであれば、&quot;リセット&quot; ボタンをクリックすればデフォルトに戻せます。値がスタイル設定に依るのであれば、&quot;スタイルに設定&quot;ボタンをクリックすればその値を新たなデフォルトとしてスタイルに設定できます。フォーマット＞スタイル...を使ってもスタイルのデフォルトを設定できます。</translation>
+    </message>
+    <message>
+        <source>To enter a note of the selected duration, type its letter name or click on the staff.
+    Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>選んだ長さの音符を入力するには、その音名のキーをタイプするか、譜表の上をクリックします。
+オクターブを変えるには &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;)&quot; を押します。</translation>
+    </message>
+    <message>
+        <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
+    or click one of these icons.</source>
+        <comment>note-input</comment>
+        <translation>音符に臨時記号を加えるには、キーボードショートカットの &quot;Up&quot; か &quot;Down&quot; を押して音高を変えるか、
+これらアイコンをクリックします。</translation>
+    </message>
+    <message>
+        <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
+        <comment>note-input</comment>
+        <translation>コードに音符を加えるには、 &quot;Shift&quot; を押したまま、音名をタイプするか譜表の上をクリックします。</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation>3連符など連符を作るには、その連符全体の長さを選択してから、&quot;Ctrl+（連符の）数字&quot; キーを押すか、メニューの 追加 &gt; 連符 を利用します。</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>ファイル操作ツールバーは、/ 作成 / 開く / 保存 / 印刷 / 元に戻す / やり直し / を行います。
+musescore.com のアカウントを持っている場合、 &quot; ファイル(F) &quot; → &quot; オンライン上にアップロード &quot; からオンライン上に保存することもできます。
+このツールバーの右隣にあるプルダウンメニューは、スコアの拡大率や表示方法を操作することができます。
+</translation>
+    </message>
+    <message>
+        <source>The main menu contains most other commands.
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
+        <comment>welcome</comment>
+        <translation>メインメニューには他にもたくさんのコマンドがあります。
+さらに、キーボードショートカットや、スコアの中を右クリックすることで多くのコマンドにアクセスすることができます。</translation>
     </message>
     <message>
         <source>That's the end of this tour!
@@ -338,7 +330,21 @@ Ctrlキー（macOS：Cmd）を押しながら、未選択部分をクリック�
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>以上でツアーを終わります。
+MuseScoreで初めて機能を使う際、さらに機能を説明するためのツアーが表示されます。
+これらを無効にするには、このウィンドウを閉じる前に「今後もツアーを表示する」の選択を解除してください。
+ &quot; ヘルプ &quot;→ &quot; ツアー &quot; でツアーを有効/無効にしたりリセットしたりすることもできます。</translation>
+    </message>
+    <message>
+        <source>A list selection is a combination of single selections.
+    Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
+    You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
+    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
+        <comment>select-tour</comment>
+        <translation>リスト選択とは一つづつの選択を組み合わせたものです。
+リスト選択に加えたり削除したりするには、&quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) を押しながらクリックします。
+類似の要素を素早く選択するには、最初の一つを右クリック (macOS: &quot;Ctrl&quot;+クリック) し、
+表示されるポップアップ・メニューの &quot;選択&quot; オプションの中で選んでゆきます。</translation>
     </message>
 </context>
 </TS>

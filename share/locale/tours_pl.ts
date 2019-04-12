@@ -2,11 +2,6 @@
 <context>
     <name>TourXML</name>
     <message>
-        <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
-        <comment>note-input</comment>
-        <translation>Aby dodać nutę do akordu, podczas wprowadzania jej nazwy klawiszem litery, wciśnij klawisz Shift lub kliknij na pięciolinię.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Witaj w MuseScorze! Te krótkie wskazówki pomogą Ci poznać interfejs programu.</translation>
@@ -37,19 +32,6 @@
         <translation>Witaj w Palecie, za pomocą której dodasz różne elementy do partytury. Kliknij &quot;Dalej&quot;, aby dowiedzieć się więcej.</translation>
     </message>
     <message>
-        <source>To enter a note of the selected duration, type its letter name or click on the staff.
-    Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
-        <comment>note-input</comment>
-        <translation>Aby wprowadzić nutę, wybierz jej długość, wprowadź jej nazwę klawiszem litery lub kliknij na pięciolinię.
-    Wciśnij Ctrl+Góra/Dół (macOS: Cmd+Góra/Dół), aby zmienić oktawę.</translation>
-    </message>
-    <message>
-        <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
-    or click one of these icons.</source>
-        <comment>note-input</comment>
-        <translation>Aby dodać znak chromatyczny do nuty, wciśnij klawisz Góra lub Dół, aby podnieść lub obniżyć jej wysokość lub kliknij jedną z tych ikon.</translation>
-    </message>
-    <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
     Each staff can have up to four voices.
     The default is voice 1, and it should be used first for each staff.
@@ -75,13 +57,6 @@
         <comment>welcome</comment>
         <translation>To są paski narzędziowe.
     Trzy główne to: Operacje na plikach, Kontrola odtwarzania i Wprowadzanie nut.</translation>
-    </message>
-    <message>
-        <source>The main menu contains most other commands.
-    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
-        <comment>welcome</comment>
-        <translation>Menu główne zawiera większość poleceń.
-    Ponadto do wielu z nich można uzyskać dostęp za pomocą skrótów klawiszowych lub klikając prawym przyciskiem myszki (macOS: Ctrl+kliknięcie) w widoku partytury.</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
@@ -143,26 +118,12 @@
     Kliknij &quot;Dalej&quot;, aby dowiedzieć się więcej.</translation>
     </message>
     <message>
-        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
-    To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</source>
-        <comment>navigate-tour</comment>
-        <translation>Najszybszym sposobem przewijania w górę lub w dół jest użycie rolki myszki lub podobnego gestu dotykowego (na przykład przesunięcia dwoma palcami).
-    Aby przewijać w poziomie, przytrzymaj Shift podczas używania rolki myszki lub gestu dotykowego.</translation>
-    </message>
-    <message>
         <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
         <comment>navigate-tour</comment>
         <translation>Klawisze takie jak PgUp, PgDn, Home i End działają tak, jak w innych aplikacjach, umożliwiając przechodzenie między stronami.
     Klawiatury, które nie mają tych klawiszy, często posiadają klawisz funkcyjny Fn+Góra/Dół/Lewo/Prawo.</translation>
-    </message>
-    <message>
-        <source>You can move the score short distances by clicking an empty area of the page and dragging.
-    By the way, you can also select regions by holding Shift while dragging.</source>
-        <comment>navigate-tour</comment>
-        <translation>Możesz przesuwać na krótkich odległościach, klikając pusty obszar strony i przeciągając.
-    Przy okazji możesz również wybrać obszary, przytrzymując klawisz Shift podczas przeciągania.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -272,16 +233,6 @@
     Wskazówka: Jeśli wciśniesz klawisz Alt (Option na macOS) wraz z klawiszami kursora, możesz poruszać się również po innych elementach, a także przechodzić w górę i w dół od pięciolinii do pięciolinii.</translation>
     </message>
     <message>
-        <source>A list selection is a combination of single selections.
-    Press Ctrl (macOS: Cmd) while clicking to add or remove elements to the list selection.
-    You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
-    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
-        <comment>select-tour</comment>
-        <translation>Lista zaznaczenia jest kombinacją pojedynczych zaznaczeń.
-    Wciśnij Ctrl (macOS: Cmd) podczas klikania, aby dodać lub usunąć elementy do listy zaznaczenia.
-    Możesz również szybko zaznaczyć podobne elementy, klikając je prawym przyciskiem myszki (macOS: Ctrl+kliknięcie), a następnie wybierając jedną z opcji &quot;Zaznacz&quot; z rozwijanego menu podręcznego.</translation>
-    </message>
-    <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
     It is indicated by a blue rectangle encompassing the entire range.
     To make a range selection, click the first note, rest, or measure you want to select, then Shift+click the last.
@@ -306,16 +257,48 @@
         <translation>Na koniec &quot;Filtr zaznaczenia&quot; (znajdziesz go w menu Widok) - pozwala wykluczyć elementy danego typu z zakresu zaznaczenia.</translation>
     </message>
     <message>
+        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
+    To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation>Najszybszym sposobem przewijania w górę lub w dół jest użycie rolki myszki lub podobnego gestu dotykowego (na przykład przesunięcia dwoma palcami).
+    Aby przewijać w poziomie, przytrzymaj Shift podczas używania rolki myszki lub gestu dotykowego.</translation>
+    </message>
+    <message>
+        <source>You can move the score short distances by clicking an empty area of the page and dragging.
+    By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
+        <comment>navigate-tour</comment>
+        <translation>Możesz przesuwać na krótkich odległościach, klikając pusty obszar strony i przeciągając.
+    Przy okazji możesz również wybrać obszary, przytrzymując klawisz Shift podczas przeciągania.</translation>
+    </message>
+    <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation>Jeśli zmieniłeś/aś wartość, możesz kliknąć przycisk &quot;Resetuj&quot;, aby przywrócić wartość domyślną.
     Jeśli wartość jest kontrolowana przez ustawienie stylu, możesz kliknąć przycisk &quot;Ustaw jako styl&quot;, aby ustawić bieżącą wartość jako nową domyślną dla stylu.
     Możesz również ustawić domyślne ustawienia stylu za pomocą: Format &gt; Style.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <source>To enter a note of the selected duration, type its letter name or click on the staff.
+    Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
+        <comment>note-input</comment>
+        <translation>Aby wprowadzić nutę, wybierz jej długość, wprowadź jej nazwę klawiszem litery lub kliknij na pięciolinię.
+    Wciśnij Ctrl+Góra/Dół (macOS: Cmd+Góra/Dół), aby zmienić oktawę.</translation>
+    </message>
+    <message>
+        <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
+    or click one of these icons.</source>
+        <comment>note-input</comment>
+        <translation>Aby dodać znak chromatyczny do nuty, wciśnij klawisz Góra lub Dół, aby podnieść lub obniżyć jej wysokość lub kliknij jedną z tych ikon.</translation>
+    </message>
+    <message>
+        <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
+        <comment>note-input</comment>
+        <translation>Aby dodać nutę do akordu, podczas wprowadzania jej nazwy klawiszem litery, wciśnij klawisz Shift lub kliknij na pięciolinię.</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
         <translation>Aby utworzyć triolę lub inną grupę niemiarową, wybierz jej długość, a następnie wciśnij Ctrl+numer lub użyj: Dodaj &gt; Grupy niemiarowe.</translation>
     </message>
@@ -325,8 +308,15 @@
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
         <translation>Pasek narzędziowy &quot;Operacje na plikach&quot; umożliwia tworzenie/zapisywanie/otwieranie/drukowanie plików oraz cofanie/ponawianie zmian.
-    Możesz również zapisywać na swoim koncie na musescore.com, jeśli przejdziesz do: Plik &gt; Zapisz online.
+    Możesz również zapisywać na swoim koncie na MuseScore.com, jeśli przejdziesz do: Plik &gt; Zapisz na MuseScore.com.
     Przyciski po prawej stronie tego paska narzędziowego kontrolują wyświetlanie Twojej partytury.</translation>
+    </message>
+    <message>
+        <source>The main menu contains most other commands.
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
+        <comment>welcome</comment>
+        <translation>Menu główne zawiera większość poleceń.
+    Ponadto do wielu z nich można uzyskać dostęp za pomocą skrótów klawiszowych lub klikając prawym przyciskiem myszki (macOS: Ctrl+kliknięcie) w widoku partytury.</translation>
     </message>
     <message>
         <source>That's the end of this tour!
@@ -338,6 +328,16 @@
     Podczas pracy z MuseScore&apos;em pojawi się ich więcej, aby wyjaśnić funkcje programu.
     Aby je wyłączyć, odznacz opcję &quot;Kontynuuj pokazywanie wskazówek&quot; przed zamknięciem tego okna.
     Możesz również włączyć/wyłączyć i zresetować wskazówki w: Pomoc &gt; Wskazówki.</translation>
+    </message>
+    <message>
+        <source>A list selection is a combination of single selections.
+    Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
+    You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
+    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
+        <comment>select-tour</comment>
+        <translation>Lista zaznaczenia jest kombinacją pojedynczych zaznaczeń.
+    Wciśnij Ctrl (macOS: Cmd) podczas klikania, aby dodać lub usunąć elementy do listy zaznaczenia.
+    Możesz również szybko zaznaczyć podobne elementy, klikając je prawym przyciskiem myszki (macOS: Ctrl+kliknięcie), a następnie wybierając jedną z opcji &quot;Zaznacz&quot; z rozwijanego menu podręcznego.</translation>
     </message>
 </context>
 </TS>
