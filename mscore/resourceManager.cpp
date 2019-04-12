@@ -719,7 +719,21 @@ void ResourceManager::downloadPluginPackage()
       }
 
 void ResourceManager::uninstallPluginPackage() {
-      ;
+      // TODO: some qml files may be outside the folder of this plugin, 
+      //       so remove all qml files in qml_paths in description.
+      // Only remove the entire folder for now
+      QPushButton* button = static_cast<QPushButton*>(sender());
+      QString url = pluginButtonURLMap[button].page_url;
+      if (!pluginDescriptionMap.contains(url))
+            return;
+      PluginPackageDescription& desc = pluginDescriptionMap[url];
+      QDir d(desc.dir);
+      d.removeRecursively();
+      // TODO: check errors, and if OK, execute the following
+      pluginDescriptionMap.remove(url);
+      refreshPluginButton((QWidget*)button->parent());
+      writePluginPackages();
+      displayPlugins();
 }
 
 void ResourceManager::refreshPluginButton(QWidget* button_group) {
