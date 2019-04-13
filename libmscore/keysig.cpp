@@ -551,6 +551,8 @@ bool KeySig::isChange() const
       {
       if (!staff())
             return false;
+      if (!segment() || segment()->segmentType() != SegmentType::KeySig)
+            return false;
       Fraction keyTick = tick();
       return staff()->currentKeyTick(keyTick) == keyTick;
       }
