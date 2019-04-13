@@ -415,7 +415,7 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
 //---------------------------------------------------------
 //   GitHub utility functions
 //---------------------------------------------------------
-static inline QString githubLatestReleaseAPI(const QString &user, const QString &repo) { return "https://api.github.com/repos/" + user + "/" + repo + "/releases/latest"; }
+static inline QString githubLatestReleaseAPI(const QString &user, const QString &repo) { return "https://api.github.com/repos/" + user + "/" + repo + "/releases"; }
 static inline QString githubCommitAPI(const QString &user, const QString &repo, const QString &ref = "")
       {
       return "https://api.github.com/repos/" + user + "/" + repo + "/commits" + (ref.isEmpty() ? "" : ('/' + ref));
@@ -442,6 +442,30 @@ static QString getLatestCommitSha(const QString& user, const QString &repo, cons
             return latest_commit["sha"].toString();
       else return {};
       }
+static inline bool isCompatibleRelease(const QString& branch) {
+      if (branch == "master" || branch=="3.x") return true;
+      if (branch.contains("2.x") || branch.contains("version2")) return false;
+      if (branch.contains("3.x")) return true;
+      if (branch.contains("2")) return false;
+      return true;
+}
+static bool getLatestRelease(QJsonDocument& releases, int& release_id, QString& link) {
+      // By default, releases returned from GitHub are sorted from the latest commit to the oldest
+      foreach(const auto&release, releases.array()) {
+            if (release.isObject()) {
+                  const auto& release_obj = release.toObject();
+                  if (isCompatibleRelease(release_obj.value("target_commitish").toString())) {
+                        // get "id" and "zipball_url"
+                        release_id = release_obj.value("id").toInt();
+                        link = release_obj.value("zipball_url").toString();
+                        return true;
+                        }
+                  else return false;
+                  }
+            else return false;
+            }
+      }
+
 static inline bool isNotFoundMessage(const QJsonObject& json_obj) {
       return json_obj["message"].toString() == "Not Found";
       }
@@ -466,12 +490,20 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
             release_json.setTarget(githubLatestReleaseAPI(user, repo));
             release_json.download();
             QJsonDocument result = QJsonDocument::fromJson(release_json.returnData());
-            if (!result.object().isEmpty() && !isNotFoundMessage(result.object())) {
+            if (!result.array().isEmpty()) {
                   // there is a GitHub release
-                  // TODO: further compare release ID with previous stored ID. If the same, don't update!
                   desc.source = GITHUB_RELEASE;
-                  // TODO: fetch direct link here
-                  // return true;
+                  int release_id;
+                  QString direct_link;
+                  if (getLatestRelease(result, release_id, direct_link)) {
+                        if (desc.release_id != release_id && release_id > 0) {
+                              desc.release_id = release_id;
+                              desc.direct_link = direct_link;
+                              return true;
+                              }
+                        if (desc.release_id == release_id && release_id > 0)
+                              return false; //analyzing is successful and the plugin is up-to-date
+                        }
                   }
             // else, fetch latest commit sha on master(usually for 3.x), as info for update
             desc.source = GITHUB;
