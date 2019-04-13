@@ -81,7 +81,8 @@ class BarLine final : public Element {
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
       virtual void draw(QPainter*) const override;
-      virtual QPointF pagePos() const override;      ///< position in canvas coordinates
+      virtual QPointF canvasPos() const override;    ///< position in canvas coordinates
+      virtual QPointF pagePos() const override;      ///< position in page coordinates
       virtual void layout() override;
       void layout2();
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;

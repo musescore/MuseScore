@@ -294,6 +294,17 @@ BarLine::~BarLine()
       }
 
 //---------------------------------------------------------
+//   canvasPos
+//---------------------------------------------------------
+
+QPointF BarLine::canvasPos() const
+      {
+      QPointF pos = Element::canvasPos();
+      pos.ry() += measure()->system()->staff(staffIdx())->y();
+      return pos;
+      }
+
+//---------------------------------------------------------
 //   pagePos
 //---------------------------------------------------------
 
@@ -616,7 +627,7 @@ void BarLine::drawEditMode(QPainter* p, EditData& ed)
       BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
       y1 += bed->yoff1;
       y2 += bed->yoff2;
-      QPointF pos(pagePos());
+      QPointF pos(canvasPos());
       p->translate(pos);
       BarLine::draw(p);
       p->translate(-pos);
