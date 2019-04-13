@@ -73,6 +73,13 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                         else
                               generated = false;            // otherwise assume non-generated
 
+                        if (allStaves) {
+                              // use all staves of master score; we will take care of parts in loop through linked staves below
+                              m2 = bl->masterScore()->tick2measure(m2->tick());
+                              if (!m2)
+                                    return;     // should never happen
+                              segment = m2->undoGetSegmentR(segment->segmentType(), segment->rtick());
+                              }
                         const std::vector<Element*>& elist = allStaves ? segment->elist() : std::vector<Element*> { bl };
                         for (Element* e : elist) {
                               if (!e || !e->staff() || !e->isBarLine())
