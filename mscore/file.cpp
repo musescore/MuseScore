@@ -759,7 +759,7 @@ MasterScore* MuseScore::getNewFile()
             tt->setTrack(0);
             Segment* seg = score->firstMeasure()->first(SegmentType::ChordRest);
             seg->add(tt);
-            score->setTempo(0, tempo);
+            score->setTempo(seg, tempo);
             }
       if (!copyright.isEmpty())
             score->setMetaTag("copyright", copyright);
