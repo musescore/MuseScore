@@ -4545,7 +4545,6 @@ void MasterScore::setLayout(const Fraction& t)
 //    the value of the expressive parameter.
 //---------------------------------------------------------
 
-
 void MasterScore::updateExpressive(MasterSynthesizer* m)
       {
       SynthesizerState s = synthesizerState();
