@@ -908,6 +908,9 @@ void SFont::process_info(int size)
                   /* force terminate info item (don't forget uint8 info ID) */
                   *(item + chunk.size) = '\0';
                   infos.append(item);
+
+                  if (id == INAM_ID)
+                        _fontName = QString(reinterpret_cast<char*>(item + 1));
                   }
             else
                   throw(QString("Invalid chunk id in INFO chunk"));

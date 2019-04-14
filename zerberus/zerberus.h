@@ -130,7 +130,8 @@ class Zerberus : public Ms::Synthesizer {
       virtual bool removeSoundFont(const QString&);
       virtual bool loadSoundFonts(const QStringList&);
       virtual bool removeSoundFonts(const QStringList& fileNames);
-      virtual QStringList soundFonts() const;
+      QStringList soundFonts() const;
+      std::vector<Ms::SoundFontInfo> soundFontsInfo() const override;
 
       virtual const QList<Ms::MidiPatch*>& getPatchInfo() const override { return patches; }
       

@@ -21,9 +21,9 @@
 #include "part.h"
 #include "score.h"
 #include "synthesizer/msynthesizer.h"
+#include "synthesizer/synthesizer.h"
 #include "synthesizer/midipatch.h"
 
-#include <QList>
 namespace Ms {
 
 Instrument InstrumentList::defaultInstrument;
@@ -804,6 +804,13 @@ void Channel::switchExpressive(MasterSynthesizer* m, bool expressive, bool force
       if ((_userBankController && !force) || !m)
             return;
 
+      // Check that we're actually changing the MuseScore General soundfont
+      const auto& info = m->synthesizer("Fluid")->soundFontsInfo().front();
+      if (!info.fontName.contains("MuseScore_General")) {
+            qDebug().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
+            return;
+            }
+
       // Work out where the new expressive patch will be
       // All expressive instruments are +1 bank higher than the
       // normal counterparts, except on bank 0, where they are placed on bank 17
@@ -831,25 +838,10 @@ void Channel::switchExpressive(MasterSynthesizer* m, bool expressive, bool force
 
       // Floor bank num to multiple of 129 and add new num to get bank num of new patch
       searchBankNum = (bank() / 129) * 129 + newBankNum;
-
-      // Now find the string that has to be contained in the patch name for it to be
-      // selected as the new patch.
       const auto& pl = m->getPatchInfo();
-      QString containString;
-      if (expressive)
-            containString = QString("Expr.");
-      else {
-            for (const MidiPatch* p : pl) {
-                  if (p->bank == bank() && p->prog == program() && p->synti == synti()) {
-                        containString = QString(p->name).replace("Expr.", "").trimmed();
-                        break;
-                        }
-                  }
-            }
-
       for (const MidiPatch* p : pl) {
             if (p->synti == "Fluid") {
-                  if (searchBankNum == p->bank && program() == p->prog && p->name.contains(containString)) {
+                  if (searchBankNum == p->bank && program() == p->prog) {
                         setBank(p->bank);
                         return;
                         }

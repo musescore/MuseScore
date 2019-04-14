@@ -64,6 +64,7 @@ class SFont {
 
       SFVersion _version;		// sound font version
       SFVersion romver;		      // ROM version
+      QString _fontName;
       QList<unsigned char*> infos;	// list of info strings (1st byte is ID)
 
       void read_listchunk(SFChunk* chunk);
@@ -119,6 +120,7 @@ class SFont {
       SFVersion version() const                 { return _version; }
       int bankOffset() const                    { return _bankOffset; }
       void setBankOffset(int val)               { _bankOffset = val; }
+      QString fontName() const                  { return _fontName; }
 
       friend class Preset;
       };
