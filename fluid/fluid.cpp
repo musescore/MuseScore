@@ -611,6 +611,19 @@ QStringList Fluid::soundFonts() const
       }
 
 //---------------------------------------------------------
+//   soundFontsInfo
+//---------------------------------------------------------
+
+std::vector<SoundFontInfo> Fluid::soundFontsInfo() const
+      {
+      std::vector<SoundFontInfo> sl;
+      sl.reserve(sfonts.size());
+      for (SFont* f : sfonts)
+            sl.emplace_back(QFileInfo(f->get_name()).fileName(), f->fontName());
+      return sl;
+      }
+
+//---------------------------------------------------------
 //   loadSoundFont
 //    return false on error
 //---------------------------------------------------------

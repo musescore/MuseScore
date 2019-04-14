@@ -327,6 +327,19 @@ QStringList Zerberus::soundFonts() const
       }
 
 //---------------------------------------------------------
+//   soundFontsInfo
+//---------------------------------------------------------
+
+std::vector<Ms::SoundFontInfo> Zerberus::soundFontsInfo() const
+      {
+      std::vector<Ms::SoundFontInfo> sl;
+      sl.reserve(instruments.size());
+      for (ZInstrument* i : instruments)
+            sl.emplace_back(i->path());
+      return sl;
+      }
+
+//---------------------------------------------------------
 //   addSoundFont
 //---------------------------------------------------------
 
