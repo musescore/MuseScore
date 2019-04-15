@@ -1206,6 +1206,13 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             if (!ss)
                   return;
 
+            if (!ss->enabled())
+                  ss = ss->next1MMenabled();
+            if (es && !es->enabled())
+                  es = es->prev1MMenabled();
+            if (es && ss->tick() > es->tick())  // start after end?
+                  return;
+
             if (!ss->measure()->system()) {
                   // segment is in a measure that has not been laid out yet
                   // this can happen in mmrests
@@ -1258,7 +1265,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             double x1;
 
             for (Segment* s = ss; s && (s != es); ) {
-                  Segment* ns = s->next1MM();
+                  Segment* ns = s->next1MMenabled();
                   system1  = system2;
                   system2  = s->measure()->system();
                   if (!system2) {
