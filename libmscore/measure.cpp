@@ -3523,6 +3523,28 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             seg->createShapes();
             }
 
+      // set relative position of end barline and clef
+      // if end repeat, clef goes after, otherwise clef goes before
+      Segment* clefSeg = findSegmentR(SegmentType::Clef, ticks());
+      if (clefSeg) {
+            if (clefSeg) {
+                  Segment* s1;
+                  Segment* s2;
+                  if (repeatEnd()) {
+                        s1 = seg;
+                        s2 = clefSeg;
+                        }
+                  else {
+                        s1 = clefSeg;
+                        s2 = seg;
+                        }
+                  if (s1->next() != s2) {
+                        _segments.remove(s1);
+                        _segments.insert(s1, s2);
+                        }
+                  }
+            }
+
       // fix segment layout
       Segment* s = seg->prevActive();
       if (s) {
@@ -3803,7 +3825,7 @@ void Measure::addSystemTrailer(Measure* nm)
             s->setEnabled(false);
             }
 
-      // courtesy key signatures
+      // courtesy key signatures, clefs
 
       int n      = score()->nstaves();
       bool show  = hasCourtesyKeySig();
@@ -3848,11 +3870,12 @@ void Measure::addSystemTrailer(Measure* nm)
                   Clef* clef = toClef(clefSegment->element(track));
                   if (clef) {
                         clef->setSmall(true);
-                        if (!score()->genCourtesyClef() || repeatEnd() || isFinalMeasure || !clef->showCourtesy())
+                        if (!score()->genCourtesyClef() || isFinalMeasure || !clef->showCourtesy())
                               clef->clear();          // make invisible
                         }
                   }
             }
+
       checkTrailer();
       }
 
