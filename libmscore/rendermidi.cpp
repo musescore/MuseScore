@@ -1007,8 +1007,7 @@ void Score::updateHairpin(Hairpin* h)
       {
       Staff* st = h->staff();
       Fraction tick  = h->tick();
-
-      Segment* seg = st->score()->tick2segment(tick);
+      Segment* seg   = h->startSegment();
 
       // Find any changing dynamics
       // If there are any, then start the hairpin from after them
