@@ -3612,33 +3612,35 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                               for (Element* e : s.elist()) {
                                     if (!e)
                                           continue;
-                                    // clear layout for chord-based fingerings
-                                    if (e->isChord()) {
-                                          Chord* c = toChord(e);
-                                          std::list<Note*> notes;
-                                          for (auto gc : c->graceNotes()) {
-                                                for (auto n : gc->notes())
+                                    int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
+                                    if (effectiveTrack >= strack && effectiveTrack < etrack) {
+                                          // clear layout for chord-based fingerings
+                                          if (e->isChord()) {
+                                                Chord* c = toChord(e);
+                                                std::list<Note*> notes;
+                                                for (auto gc : c->graceNotes()) {
+                                                      for (auto n : gc->notes())
+                                                            notes.push_back(n);
+                                                      }
+                                                for (auto n : c->notes())
                                                       notes.push_back(n);
-                                                }
-                                          for (auto n : c->notes())
-                                                notes.push_back(n);
-                                          for (Note* note : notes) {
-                                                for (Element* en : note->el()) {
-                                                      if (en->isFingering()) {
-                                                            Fingering* f = toFingering(en);
-                                                            if (f->layoutType() == ElementType::CHORD) {
-                                                                  f->setPos(QPointF());
-                                                                  f->setbbox(QRectF());
+                                                for (Note* note : notes) {
+                                                      for (Element* en : note->el()) {
+                                                            if (en->isFingering()) {
+                                                                  Fingering* f = toFingering(en);
+                                                                  if (f->layoutType() == ElementType::CHORD) {
+                                                                        f->setPos(QPointF());
+                                                                        f->setbbox(QRectF());
+                                                                        }
                                                                   }
                                                             }
                                                       }
                                                 }
-                                          }
-                                    if (!e->visible())
-                                          continue;
-                                    int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
-                                    if (effectiveTrack >= strack && effectiveTrack < etrack) {
+                                          if (!e->visible())
+                                                continue;
+                                          // add element to skyline
                                           skyline.add(e->shape().translated(e->pos() + p));
+                                          // add tremolo to skyline
                                           if (e->isChord() && toChord(e)->tremolo()) {
                                                 Tremolo* t = toChord(e)->tremolo();
                                                 Chord* c1 = t->chord1();
