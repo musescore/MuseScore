@@ -235,7 +235,7 @@ void ScoreTab::setCurrent(int n)
             QList<Excerpt*>& excerpts = score->excerpts();
             if (!excerpts.isEmpty()) {
                   tab2->blockSignals(true);
-                  tab2->addTab(score->fileInfo()->completeBaseName().replace("&","&&"));
+                  tab2->addTab(score->fileInfo()->completeBaseName().replace("&","&&") + (score->dirty() ? "*" : ""));
                   for (const Excerpt* excerpt : excerpts)
                         tab2->addTab(excerpt->title().replace("&","&&"));
                   tab2->setCurrentIndex(tsv->part);
@@ -283,7 +283,7 @@ void ScoreTab::updateExcerpts()
       QList<Excerpt*>& excerpts = score->excerpts();
       if (!excerpts.isEmpty()) {
             tab2->blockSignals(true);
-            tab2->addTab(score->fileInfo()->completeBaseName().replace("&","&&"));
+            tab2->addTab(score->fileInfo()->completeBaseName().replace("&","&&") + (score->dirty() ? "*" : ""));
             for (const Excerpt* excerpt : excerpts)
                   tab2->addTab(excerpt->title().replace("&","&&"));
             tab2->blockSignals(false);
@@ -344,7 +344,7 @@ void ScoreTab::insertTab(MasterScore* s)
       {
       int idx = scoreList->indexOf(s);
       tab->blockSignals(true);
-      tab->insertTab(idx, s->fileInfo()->completeBaseName().replace("&","&&"));
+      tab->insertTab(idx, s->fileInfo()->completeBaseName().replace("&","&&") + (s->dirty() ? "*" : ""));
       tab->setTabData(idx, QVariant::fromValue<void*>(new TabScoreView(s)));
       tab->blockSignals(false);
       emit tabInserted(idx);
@@ -359,7 +359,7 @@ void ScoreTab::setTabText(int idx, const QString& s)
       QString text(s);
       text.replace("&","&&");
       tab->setTabText(idx, text);
-      if (tab2)
+      if (tab2 && currentIndex() == idx)
             tab2->setTabText(0, text);
       emit tabRenamed(idx);
       }
