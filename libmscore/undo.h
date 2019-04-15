@@ -147,6 +147,8 @@ class UndoStack {
       int cleanState;
       int curIdx;
 
+      void remove(int idx);
+
    public:
       UndoStack();
       ~UndoStack();
@@ -163,7 +165,6 @@ class UndoStack {
       int state() const             { return stateList[curIdx];    }
       bool isClean() const          { return cleanState == state();     }
       int getCurIdx() const         { return curIdx; }
-      void remove(int idx);
       bool empty() const            { return !canUndo() && !canRedo();  }
       UndoMacro* current() const    { return curCmd;               }
       UndoMacro* last() const       { return curIdx > 0 ? list[curIdx-1] : 0; }
