@@ -1591,11 +1591,7 @@ void MuseScore::printFile()
             }
 
       QPrinter printerDev(QPrinter::HighResolution);
-      QSizeF size(cs->styleD(Sid::pageWidth), cs->styleD(Sid::pageHeight));
-      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
-      printerDev.setPageSize(ps);
-      printerDev.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
-
+      printerDev.setPageLayout(cs->style().pageOdd());
       printerDev.setCreator("MuseScore Version: " VERSION);
       printerDev.setFullPage(true);
       if (!printerDev.setPageMargins(QMarginsF()))
@@ -2057,9 +2053,10 @@ bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
       cs_->setPrinting(true);
       MScore::pdfPrinting = true;
 
+      MPageLayout& odd = cs_->style().pageOdd();
+
       printer.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
-      QSizeF size(cs_->styleD(Sid::pageWidth), cs_->styleD(Sid::pageHeight));
-      printer.setPaperSize(size, QPrinter::Inch);
+      printer.setPageLayout(odd);
       printer.setFullPage(true);
       printer.setColorMode(QPrinter::Color);
 #if defined(Q_OS_MAC)
@@ -2089,9 +2086,11 @@ bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
       p.setRenderHint(QPainter::Antialiasing, true);
       p.setRenderHint(QPainter::TextAntialiasing, true);
 
-      p.setViewport(QRect(0.0, 0.0, size.width() * printer.logicalDpiX(),
-         size.height() * printer.logicalDpiY()));
-      p.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
+      QRectF rect = odd.fullRect(QPageLayout::Inch);
+      p.setViewport(QRect(0, 0, rect.width()  * printer.logicalDpiX(),
+                                rect.height() * printer.logicalDpiY()));
+      p.setWindow(  QRect(0, 0, rect.width()  * DPI,
+                                rect.height() * DPI));
 
       double pr = MScore::pixelRatio;
       MScore::pixelRatio = DPI / printer.logicalDpiX();
@@ -2117,18 +2116,15 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       {
       if (cs_.empty())
             return false;
+
       Score* firstScore = cs_[0];
+      QPageLayout& odd  = (QPageLayout&)(firstScore->style().pageOdd());
 
       QPdfWriter pdfWriter(saveName);
       pdfWriter.setResolution(preferences.getInt(PREF_EXPORT_PDF_DPI));
-
-      QSizeF size(firstScore->styleD(Sid::pageWidth), firstScore->styleD(Sid::pageHeight));
-      QPageSize ps(QPageSize::id(size, QPageSize::Inch));
-      pdfWriter.setPageSize(ps);
-      pdfWriter.setPageOrientation(size.width() > size.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
+      pdfWriter.setPageLayout(odd);          // is this necessary for p.begin() below?
+      pdfWriter.setPageMargins(QMarginsF()); // this should also be unnecessary
       pdfWriter.setCreator("MuseScore Version: " VERSION);
-      if (!pdfWriter.setPageMargins(QMarginsF()))
-            qDebug("unable to clear printer margins");
 
       QString title = firstScore->metaTag("workTitle");
       if (title.isEmpty()) // workTitle unset?
@@ -2144,7 +2140,7 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       p.setRenderHint(QPainter::TextAntialiasing, true);
 
       double pr = MScore::pixelRatio;
-
+      QRectF rect;
       bool firstPage = true;
       for (Score* s : cs_) {
             LayoutMode layoutMode = s->layoutMode();
@@ -2157,14 +2153,15 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
             // done in Score::print() also, but do it here as well to be safe
             s->setPrinting(true);
             MScore::pdfPrinting = true;
+            odd = (QPageLayout&)(s->style().pageOdd());
+            pdfWriter.setPageLayout(odd);          // page size & orientation
+            pdfWriter.setPageMargins(QMarginsF()); // zero margins
 
-            QSizeF size1(s->styleD(Sid::pageWidth), s->styleD(Sid::pageHeight));
-            QPageSize ps1(QPageSize::id(size1, QPageSize::Inch));
-            pdfWriter.setPageSize(ps1);
-            pdfWriter.setPageOrientation(size1.width() > size1.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
-            p.setViewport(QRect(0.0, 0.0, size1.width() * pdfWriter.logicalDpiX(),
-               size1.height() * pdfWriter.logicalDpiY()));
-            p.setWindow(QRect(0.0, 0.0, size1.width() * DPI, size1.height() * DPI));
+            rect = odd.fullRect(QPageLayout::Inch);
+            p.setViewport(QRect(0, 0, rect.width()  * pdfWriter.logicalDpiX(),
+                                      rect.height() * pdfWriter.logicalDpiY()));
+            p.setWindow  (QRect(0, 0, rect.width()  * DPI,
+                                      rect.height() * DPI));
 
             MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
             const QList<Page*> pl = s->pages();
@@ -3150,8 +3147,9 @@ QJsonObject MuseScore::saveMetadataJSON(Score* score)
 
       // pageFormat
       QJsonObject jsonPageformat;
-      jsonPageformat.insert("height",round(score->styleD(Sid::pageHeight) * INCH));
-      jsonPageformat.insert("width", round(score->styleD(Sid::pageWidth) * INCH));
+      QRectF rect = score->style().pageOdd().fullRect(QPageLayout::Millimeter);
+      jsonPageformat.insert("height",   round(rect.width() ));
+      jsonPageformat.insert("width",    round(rect.height()));
       jsonPageformat.insert("twosided", boolToString(score->styleB(Sid::pageTwosided)));
       json.insert("pageFormat", jsonPageformat);
 

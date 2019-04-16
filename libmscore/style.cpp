@@ -11,7 +11,6 @@
 //=============================================================================
 
 #include "mscore.h"
-#include "style.h"
 #include "xml.h"
 #include "score.h"
 #include "articulation.h"
@@ -28,11 +27,14 @@
 #include "undo.h"
 
 namespace Ms {
-
-//  20 points        font design size
-//  72 points/inch   point size
-// 120 dpi           screen resolution
-//  spatium = 20/4 points
+////////////////////////////////////////////////////////////////////////////////
+// PostScript points and QPageSize::Point are at 72dpi
+// MuseScore multiplies that by the constant factor DPI_F
+// Currently DPI_F = 5, so internal resolution is 360dpi
+// At  72dpi MuseScore uses a  20pt music symbol font
+// At 360dpi that scales to a 100pt font
+// The spatium = 5pt at 72dpi, which scales to 25pt at 360dpi
+////////////////////////////////////////////////////////////////////////////////
 
 //---------------------------------------------------------
 //   StyleType
@@ -2393,6 +2395,7 @@ bool MStyle::load(QFile* qf)
                         }
                   }
             }
+      toPageLayout301();
       return true;
       }
 
@@ -2414,7 +2417,7 @@ void MStyle::load(XmlReader& e)
                   set(Sid::ottavaHookBelow, -y);
                   }
             else if (tag == "Spatium")
-                  set(Sid::spatium, e.readDouble() * DPMM);
+                  spatium301(e);
             else if (tag == "page-layout") {    // obsolete
                   readPageFormat(this, e);      // from read206.cpp
                   }
@@ -2460,6 +2463,7 @@ void MStyle::load(XmlReader& e)
 
 void MStyle::save(XmlWriter& xml, bool optimize)
       {
+      fromPageLayout301();
       xml.stag("Style");
 
       for (const StyleType& st : styleTypes) {
@@ -2504,6 +2508,30 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             }
       xml.tag("Spatium", value(Sid::spatium).toDouble() / DPMM);
       xml.etag();
+      }
+
+//--------------------------------------------------------------------------
+//   initPageLayout - only applied to MScore::_baseStyle and _defaultStyle
+//                    must wait until setMscoreLocale() is called in main()
+//--------------------------------------------------------------------------
+
+void MStyle::initPageLayout()
+      { // by default, units are millimeters or inches, depending on locale
+        // default preferences are initialized prior to default styles in main()
+      QPageLayout::Unit unit;
+      QPageSize::PageSizeId psid;
+      unit = QPageLayout::Unit(MScore::unitsValue());
+      psid = pageUnits[int(unit)].isMetric() ? QPageSize::A4 : QPageSize::Letter;
+      _pageSize = QPageSize(psid);
+      _pageOdd  = MPageLayout();
+      _pageOdd.setPageSize(_pageSize);
+      _pageOdd.setUnits(QPageLayout::Millimeter);
+      _pageOdd.setMargins(QMarginsF(10, 10, 10, 20)); // default margins in millimeters
+      _pageOdd.setUnits(unit);                        // set to user locale units
+      _pageOdd.setOrientation(QPageLayout::Portrait);
+      _pageEven = MPageLayout(_pageOdd);
+
+      fromPageLayout301(); // sync the styles
       }
 
 //---------------------------------------------------------

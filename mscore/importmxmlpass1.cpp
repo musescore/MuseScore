@@ -542,13 +542,13 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
              pf->width(), pf->height(), pf->oddTopMargin(), score->spatium(), DPMM, DPI);
       */
       // page width, height and odd top margin in tenths
-      const double ph  = score->styleD(Sid::pageHeight) * 10 * DPI / score->spatium();
+      const double ph = score->style().pageOdd().heightPoints() * SPATIUM_XML / score->spatium();
       const int pw1 = pageWidth / 3;
       const int pw2 = pageWidth * 2 / 3;
       const int ph2 = pageHeight / 2;
       /*
-      const double pw  = pf->width() * 10 * DPI / score->spatium();
-      const double tm  = pf->oddTopMargin() * 10 * DPI / score->spatium();
+      const double pw  = pf->width() * SPATIUM_XML * DPI / score->spatium();
+      const double tm  = pf->oddTopMargin() * SPATIUM_XML * DPI / score->spatium();
       const double tov = ph - tm;
       qDebug("page format set (tenths) w=%g h=%g tm=%g tov=%g", pw, ph, tm, tov);
       qDebug("page format (xml, tenths) w=%d h=%d", pageWidth, pageHeight);
@@ -567,7 +567,6 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                    qPrintable(w->words));
             }
       */
-
       int nWordsHeader = 0;               // number of credit-words in the header
       int nWordsFooter = 0;               // number of credit-words in the footer
       for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
@@ -588,7 +587,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
       //       nWordsHeader, nWordsFooter, useHeader, useFooter);
 
       // determine credits height and create vbox to contain them
-      qreal vboxHeight = 10;            // default height in spatium
+      qreal vboxHeight = SPATIUM_XML; // default height in spatium
       double miny = pageHeight;
       double maxy = 0;
       if (pageWidth > 1 && pageHeight > 1) {
@@ -605,8 +604,8 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                   double diff = maxy - miny;    // calculate height in tenths
                   if (diff > 1 && diff < ph2) { // and size is reasonable
                         vboxHeight = diff;
-                        vboxHeight /= 10;       // height in spatium
-                        vboxHeight += 2.5;      // guesstimated correction for last line
+                        vboxHeight /= SPATIUM_XML; // height in spatium
+                        vboxHeight += 2.5;         // guesstimated correction for last line
                         }
                   }
             }
@@ -617,6 +616,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
       QMap<int, CreditWords*> creditMap;  // store credit-words sorted on y pos
       bool creditWordsUsed = false;
 
+      double scale = score->spatium() / (SPATIUM_XML * DPI_F);
       for (ciCreditWords ci = credits.begin(); ci != credits.end(); ++ci) {
             CreditWords* w = *ci;
             double defx = w->defaultX;
@@ -629,14 +629,14 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
                         // found composer
                         addText2(vbox, score, w->words,
                                  Tid::COMPOSER, Align::RIGHT | Align::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
+                                 (miny - w->defaultY) * scale);
                         }
                   // poet is in the left column
                   else if (defx < pw1) {
                         // found poet/lyricist
                         addText2(vbox, score, w->words,
                                  Tid::POET, Align::LEFT | Align::BOTTOM,
-                                 (miny - w->defaultY) * score->spatium() / (10 * DPI));
+                                 (miny - w->defaultY) * scale);
                         }
                   // save others (in the middle column) to be handled later
                   else {
@@ -679,7 +679,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("title='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      Tid::TITLE, Align::HCENTER | Align::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
+                     (maxy - w->defaultY) * scale);
             }
 
       // add remaining credit-words as subtitles
@@ -688,7 +688,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             //qDebug("subtitle='%s'", qPrintable(w->words));
             addText2(vbox, score, w->words,
                      Tid::SUBTITLE, Align::HCENTER | Align::TOP,
-                     (maxy - w->defaultY) * score->spatium() / (10 * DPI));
+                     (maxy - w->defaultY) * scale);
             }
 
       // use metadata if no workable credit-words found
@@ -1289,7 +1289,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
       Q_ASSERT(_e.isStartElement() && _e.name() == "defaults");
       //_logger->logDebugTrace("MusicXMLParserPass1::defaults", &_e);
 
-      double millimeter = _score->spatium()/10.0;
+      double millimeter = _score->spatium()/SPATIUM_XML;
       double tenths = 1.0;
       QString lyricFontFamily;
       QString lyricFontSize;
@@ -1308,13 +1308,14 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                         else
                               skipLogCurrElem();
                         }
-                  double _spatium = DPMM * (millimeter * 10.0 / tenths);
+                  double _spatium = DPMM * (millimeter * SPATIUM_XML / tenths);
                   if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT))
                         _score->setSpatium(_spatium);
                   }
             else if (_e.name() == "page-layout") {
                   PageFormat pf;
                   pageLayout(pf, millimeter / (tenths * INCH), pageWidth, pageHeight);
+// Is this TODO obsolete? pageFormat is for old file formats only, AFAIK.
 //TODO:ws                  if (preferences.musicxmlImportLayout)
 //                        _score->setPageFormat(pf);
                   }
@@ -1325,7 +1326,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
                         else if (_e.name() == "system-margins")
                               _e.skipCurrentElement();  // skip but don't log
                         else if (_e.name() == "system-distance") {
-                              Spatium val(_e.readElementText().toDouble() / 10.0);
+                              Spatium val(_e.readElementText().toDouble() / SPATIUM_XML);
                               if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
                                     _score->style().set(Sid::minSystemDistance, val);
                                     //qDebug("system distance %f", val.val());
@@ -1340,7 +1341,7 @@ void MusicXMLParserPass1::defaults(int& pageWidth, int& pageHeight)
             else if (_e.name() == "staff-layout") {
                   while (_e.readNextStartElement()) {
                         if (_e.name() == "staff-distance") {
-                              Spatium val(_e.readElementText().toDouble() / 10.0);
+                              Spatium val(_e.readElementText().toDouble() / SPATIUM_XML);
                               if (preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT))
                                     _score->style().set(Sid::staffDistance, val);
                               }

@@ -671,6 +671,24 @@ class ChangeStyleVal : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   ChangePageSettings
+//---------------------------------------------------------
+
+class ChangePageSettings : public UndoCommand {
+      Score* score;
+      QPageSize ps;
+      MPageLayout odd;
+      MPageLayout even;
+
+      void flip(EditData*) override;
+
+   public:
+      ChangePageSettings(Score* s, QPageSize& ps, MPageLayout& odd, MPageLayout& even)
+                     : score(s), ps(ps), odd(odd), even(even) {}
+      UNDO_NAME("ChangePageSettings")
+      };
+
+//---------------------------------------------------------
 //   ChangePageNumberOffset
 //---------------------------------------------------------
 

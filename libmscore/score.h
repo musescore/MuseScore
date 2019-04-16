@@ -647,6 +647,7 @@ class Score : public QObject, public ScoreElement {
       void undoRemoveBracket(Bracket*);
       void undoInsertTime(const Fraction& tick, const Fraction& len);
       void undoChangeStyleVal(Sid idx, const QVariant& v);
+      void undoChangePageSettings(QPageSize& ps, MPageLayout& odd, MPageLayout& even);
       void undoChangePageNumberOffset(int po);
 
       Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);

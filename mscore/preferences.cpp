@@ -69,11 +69,17 @@ void Preferences::init(bool storeInMemoryOnly)
 
       QString wd = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
 
+      int units = int(QPageLayout::Millimeter);
+      if (!MScore::testMode && QLocale().measurementSystem() != QLocale::MetricSystem)
+            units = int(QPageLayout::Inch); // testMode forces Millimeters
+
       _allPreferences = prefs_map_t(
       {
             {PREF_APP_AUTOSAVE_AUTOSAVETIME,                       new IntPreference(2 /* minutes */, false)},
             {PREF_APP_AUTOSAVE_USEAUTOSAVE,                        new BoolPreference(true, false)},
             {PREF_APP_KEYBOARDLAYOUT,                              new StringPreference("US - International")},
+            {PREF_APP_PAGE_UNITS_GLOBAL,                           new BoolPreference(true, false)},
+            {PREF_APP_PAGE_UNITS_VALUE,                            new IntPreference(units, false)},
             {PREF_APP_PATHS_INSTRUMENTLIST1,                       new StringPreference(":/data/instruments.xml", false)},
             {PREF_APP_PATHS_INSTRUMENTLIST2,                       new StringPreference("", false)},
             {PREF_APP_PATHS_MYIMAGES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd).arg(QCoreApplication::translate("images_directory", "Images"))).absoluteFilePath(), false)},
@@ -435,7 +441,8 @@ QMap<QString, QVariant> Preferences::getDefaultLocalPreferences() {
       bool tmp = useLocalPrefs;
       useLocalPrefs = false;
       QMap<QString, QVariant> defaultLocalPreferences;
-      for (QString s : {PREF_UI_CANVAS_BG_USECOLOR,
+      for (QString s : {PREF_APP_PAGE_UNITS_VALUE,
+                        PREF_UI_CANVAS_BG_USECOLOR,
                         PREF_UI_CANVAS_FG_USECOLOR,
                         PREF_UI_CANVAS_BG_COLOR,
                         PREF_UI_CANVAS_FG_COLOR,
@@ -463,6 +470,8 @@ QMap<QString, QVariant> Preferences::getDefaultLocalPreferences() {
             QVariant value = get(s);
             if (!value.isValid())
                   value = _allPreferences.value(s)->defaultValue();
+            if (s == PREF_APP_PAGE_UNITS_VALUE)
+                  MScore::setUnitsValue(value.toInt());
             defaultLocalPreferences.insert(s, value);
             }
       useLocalPrefs = tmp;

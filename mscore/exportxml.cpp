@@ -278,11 +278,12 @@ class ExportMusicXml {
       Ottava const* ottavas[MAX_NUMBER_LEVEL];
       Trill const* trills[MAX_NUMBER_LEVEL];
       int div;
-      double millimeters;
-      int tenths;
+      double scale; // a multiplier, used in the getTenths functions
       TrillHash _trillStart;
       TrillHash _trillStop;
       MxmlInstrumentMap instrMap;
+
+      static constexpr int TENTHS = 40; // as defined in the MusicXML spec
 
       int findBracket(const TextLine* tl) const;
       int findDashes(const TextLineBase* tl) const;
@@ -314,10 +315,21 @@ public:
       ExportMusicXml(Score* s)
             : _xml(s)
             {
-            _score = s; _tick = { 0,1 }; div = 1; tenths = 40;
-            millimeters = _score->spatium() * tenths / (10 * DPMM);
+            _score = s;
+            _tick  = Fraction();
+            div    = 1;
+
+            // At the default value of SPATIUM20 = 5pt = 25dots @360dpi, the
+            // getTenths functions return values in units @144dpi.
+            // PPI = 72 = 144 / 2;  There is no existing constant = 144, so this
+            // is the formula to derive the 2 without using literal values:
+            double factor = (SPATIUM_XML * DPI_F) / SPATIUM20; // (10 * 5) / 25 = 2
+
+            // If the spatium != the default, values are scaled proportionally
+            scale = (s->spatium() / SPATIUM20) * factor;
             }
       void write(QIODevice* dev);
+      void defaults();
       void credits(XmlWriter& xml);
       void moveToTick(const Fraction& t);
       void words(Text const* const text, int staff);
@@ -331,7 +343,7 @@ public:
       void tempoText(TempoText const* const text, int staff);
       void harmony(Harmony const* const, FretDiagram const* const fd, int offset = 0);
       Score* score() const { return _score; };
-      double getTenthsFromInches(double) const;
+      double getTenthsFromPoints(double) const;
       double getTenthsFromDots(double) const;
       };
 
@@ -398,10 +410,11 @@ static QString addPositioningAttributes(Element const* const el, bool isSpanStar
             }
 
       // convert into spatium tenths for MusicXML
-      defaultX *=  10 / spatium;
-      defaultY *=  -10 / spatium;
-      relativeX *=  10 / spatium;
-      relativeY *=  -10 / spatium;
+      double factor = SPATIUM_XML / spatium;
+      defaultX  *=  factor;
+      defaultY  *= -factor;
+      relativeX *=  factor;
+      relativeY *= -factor;
 
       QString res;
       if (fabsf(defaultX) > positionElipson)
@@ -1131,52 +1144,42 @@ void ExportMusicXml::calcDivisions()
       }
 
 //---------------------------------------------------------
-//   writePageFormat
-//---------------------------------------------------------
-
-static void writePageFormat(const Score* const s, XmlWriter& xml, double conversion)
-      {
-      xml.stag("page-layout");
-
-      xml.tag("page-height", s->styleD(Sid::pageHeight) * conversion);
-      xml.tag("page-width", s->styleD(Sid::pageWidth) * conversion);
-
-      QString type("both");
-      if (s->styleB(Sid::pageTwosided)) {
-            type = "even";
-            xml.stag(QString("page-margins type=\"%1\"").arg(type));
-            xml.tag("left-margin",   s->styleD(Sid::pageEvenLeftMargin) * conversion);
-            xml.tag("right-margin",  s->styleD(Sid::pageOddLeftMargin) * conversion);
-            xml.tag("top-margin",    s->styleD(Sid::pageEvenTopMargin)  * conversion);
-            xml.tag("bottom-margin", s->styleD(Sid::pageEvenBottomMargin) * conversion);
-            xml.etag();
-            type = "odd";
-            }
-      xml.stag(QString("page-margins type=\"%1\"").arg(type));
-      xml.tag("left-margin",   s->styleD(Sid::pageOddLeftMargin) * conversion);
-      xml.tag("right-margin",  s->styleD(Sid::pageEvenLeftMargin) * conversion);
-      xml.tag("top-margin",    s->styleD(Sid::pageOddTopMargin) * conversion);
-      xml.tag("bottom-margin", s->styleD(Sid::pageOddBottomMargin) * conversion);
-      xml.etag();
-
-      xml.etag();
-      }
-
-//---------------------------------------------------------
 //   defaults
 //---------------------------------------------------------
 
-// _spatium = DPMM * (millimeter * 10.0 / tenths);
-
-static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, const int& tenths)
+void ExportMusicXml::defaults()
       {
-      xml.stag("defaults");
-      xml.stag("scaling");
-      xml.tag("millimeters", millimeters);
-      xml.tag("tenths", tenths);
-      xml.etag();
+      _xml.stag("defaults");
+      _xml.stag("scaling");
+      _xml.tag("millimeters", _score->spatium() * TENTHS / (SPATIUM_XML * DPMM));
+      _xml.tag("tenths",      TENTHS);
+      _xml.etag();
 
-      writePageFormat(s, xml, INCH / millimeters * tenths);
+      MStyle& style = _score->style();
+      MPageLayout& odd = style.pageOdd();
+      _xml.stag("page-layout");
+      _xml.tag("page-height", getTenthsFromPoints(odd.heightPoints()));
+      _xml.tag("page-width",  getTenthsFromPoints(odd.widthPoints()));
+
+      QString type("both");
+      if (_score->styleB(Sid::pageTwosided)) {
+            type = "even";
+            MPageLayout& even = style.pageEven();
+            _xml.stag(QString("page-margins type=\"%1\"").arg(type));
+            _xml.tag("left-margin",   getTenthsFromPoints(even.leftMarginPoints()));
+            _xml.tag("right-margin",  getTenthsFromPoints(even.rightMarginPoints()));
+            _xml.tag("top-margin",    getTenthsFromPoints(even.topMarginPoints()));
+            _xml.tag("bottom-margin", getTenthsFromPoints(even.bottomMarginPoints()));
+            _xml.etag();
+            type = "odd";
+            }
+      _xml.stag(QString("page-margins type=\"%1\"").arg(type));
+      _xml.tag("left-margin",   getTenthsFromPoints(odd.leftMarginPoints()));
+      _xml.tag("right-margin",  getTenthsFromPoints(odd.rightMarginPoints()));
+      _xml.tag("top-margin",    getTenthsFromPoints(odd.topMarginPoints()));
+      _xml.tag("bottom-margin", getTenthsFromPoints(odd.bottomMarginPoints()));
+      _xml.etag();
+      _xml.etag();
 
       // TODO: also write default system layout here
       // when exporting only manual or no breaks, system-distance is not written at all
@@ -1186,10 +1189,10 @@ static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, 
       // for music (TODO), words and lyrics, use Tid STAFF (typically used for words)
       // and LYRIC1 to get MusicXML defaults
 
-      // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
-      xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::staffTextFontFace)).arg(s->styleD(Sid::staffTextFontSize)));
-      xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::lyricsOddFontFace)).arg(s->styleD(Sid::lyricsOddFontSize)));
-      xml.etag();
+      // TODO _xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
+      _xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(_score->styleSt(Sid::staffTextFontFace)).arg(_score->styleD(Sid::staffTextFontSize)));
+      _xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(_score->styleSt(Sid::lyricsOddFontFace)).arg(_score->styleD(Sid::lyricsOddFontSize)));
+      _xml.etag();
       }
 
 
@@ -1243,12 +1246,13 @@ void ExportMusicXml::credits(XmlWriter& xml)
       QString rights = _score->metaTag("copyright");
 
       // determine page formatting
-      const double h  = getTenthsFromInches(_score->styleD(Sid::pageHeight));
-      const double w  = getTenthsFromInches(_score->styleD(Sid::pageWidth));
-      const double lm = getTenthsFromInches(_score->styleD(Sid::pageOddLeftMargin));
-      const double rm = getTenthsFromInches(_score->styleD(Sid::pageEvenLeftMargin));
-      //const double tm = getTenthsFromInches(_score->styleD(Sid::pageOddTopMargin));
-      const double bm = getTenthsFromInches(_score->styleD(Sid::pageOddBottomMargin));
+      MPageLayout& odd = _score->style().pageOdd();
+      const double h  = getTenthsFromPoints(odd.heightPoints());
+      const double w  = getTenthsFromPoints(odd.widthPoints());
+      const double lm = getTenthsFromPoints(odd.leftMarginPoints());
+      const double rm = getTenthsFromPoints(odd.rightMarginPoints());
+      const double bm = getTenthsFromPoints(odd.bottomMarginPoints());
+      //const double tm = getTenthsFromPoints(odd.topMarginPoints());
       //qDebug("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
 
       // write the credits
@@ -2675,7 +2679,7 @@ static QString notePosition(const ExportMusicXml* const expMxml, const Note* con
       QString res;
 
       if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
-            const double pageHeight  = expMxml->getTenthsFromInches(expMxml->score()->styleD(Sid::pageHeight));
+            const double pageHeight = expMxml->getTenthsFromPoints(expMxml->score()->style().pageOdd().heightPoints());
 
             const auto chord = note->chord();
 
@@ -3757,7 +3761,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, const Fractio
                   }
             else
                   lineEnd = "down";
-            rest += QString(" end-length=\"%1\"").arg(hookHeight * 10);
+            rest += QString(" end-length=\"%1\"").arg(hookHeight * SPATIUM_XML);
             }
 
       rest += addPositioningAttributes(tl, tl->tick() == tick);
@@ -4758,12 +4762,12 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                   }
 
             if (doLayout) {
+                  MPageLayout& odd = score()->style().pageOdd();
                   _xml.stag(QString("print%1").arg(newThing));
-                  const double pageWidth  = getTenthsFromInches(score()->styleD(Sid::pageWidth));
-                  const double lm = getTenthsFromInches(score()->styleD(Sid::pageOddLeftMargin));
-                  const double rm = getTenthsFromInches(score()->styleD(Sid::pageWidth)
-                                                        - score()->styleD(Sid::pagePrintableWidth) - score()->styleD(Sid::pageOddLeftMargin));
-                  const double tm = getTenthsFromInches(score()->styleD(Sid::pageOddTopMargin));
+                  const double pw = getTenthsFromPoints(odd.widthPoints());
+                  const double lm = getTenthsFromPoints(odd.leftMarginPoints());
+                  const double rm = getTenthsFromPoints(odd.rightMarginPoints());
+                  const double tm = getTenthsFromPoints(odd.topMarginPoints());
 
                   // System Layout
 
@@ -4779,7 +4783,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
                         // Find the right margin of the system.
                         double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
-                        double systemRM = pageWidth - rm - (getTenthsFromDots(system->bbox().width()) + lm);
+                        double systemRM = pw - rm - lm - getTenthsFromDots(system->bbox().width());
 
                         _xml.stag("system-layout");
                         _xml.stag("system-margins");
@@ -5333,7 +5337,7 @@ void ExportMusicXml::write(QIODevice* dev)
       identification(_xml, _score);
 
       if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
-            defaults(_xml, _score, millimeters, tenths);
+            defaults();
             credits(_xml);
             }
 
@@ -5380,7 +5384,7 @@ void ExportMusicXml::write(QIODevice* dev)
                   const bool isFirstActualMeasure = (irregularMeasureNo + measureNo + pickupMeasureNo) == 4;
 
                   if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT))
-                        measureTag += QString(" width=\"%1\"").arg(QString::number(m->bbox().width() / DPMM / millimeters * tenths,'f',2));
+                        measureTag += QString(" width=\"%1\"").arg(QString::number(getTenthsFromDots(m->bbox().width()),'f',2));
 
                   _xml.stag(measureTag);
 
@@ -5612,14 +5616,14 @@ bool saveMxl(Score* score, const QString& name)
       return true;
       }
 
-double ExportMusicXml::getTenthsFromInches(double inches) const
+double ExportMusicXml::getTenthsFromPoints(double val) const
       {
-      return inches * INCH / millimeters * tenths;
+      return val * scale;
       }
 
 double ExportMusicXml::getTenthsFromDots(double dots) const
       {
-      return dots / DPMM / millimeters * tenths;
+      return dots * scale / DPI_F;
       }
 
 //---------------------------------------------------------
@@ -5634,7 +5638,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       // since we now support placement of chord symbols over "empty" beats directly,
       // and wedon't generally export position info for other elements
       // it's just as well to not bother doing so here
-      //double rx = h->offset().x()*10;
+      //double rx = h->offset().x()*SPATIUM_XML;
       //QString relative;
       //if (rx > 0) {
       //      relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
@@ -5781,4 +5785,3 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       }
 
 }
-

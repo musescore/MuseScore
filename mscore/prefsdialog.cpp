@@ -67,6 +67,9 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       setModal(true);
       shortcutsChanged        = false;
 
+      for (int i = 0; i <= QPageSize::Cicero; ++i) // populate unitsList
+            unitsList->addItem(QString("%1 (%2)").arg(Ms::pageUnits[i].name())
+                                                 .arg(Ms::pageUnits[i].suffix()));
 #ifndef USE_JACK
       jackDriver->setVisible(false);
 #endif
@@ -413,6 +416,12 @@ void PreferenceDialog::updateValues(bool useDefaultValues)
                   }
             }
       language->blockSignals(false);
+
+      unitsList->setCurrentIndex(preferences.getInt(PREF_APP_PAGE_UNITS_VALUE));
+      if (preferences.getBool(PREF_APP_PAGE_UNITS_GLOBAL))
+            unitsGlobal->setChecked(true);
+      else
+            unitsByScore->setChecked(true);
 
       //
       // initialize local shortcut table
@@ -909,6 +918,32 @@ void PreferenceDialog::apply()
       else if (emptySession->isChecked())
             preferences.setCustomPreference<SessionStart>(PREF_APP_STARTUP_SESSIONSTART, SessionStart::EMPTY);
 
+      // Changing units requires updating default style and MScore::_unitsValue
+      int i = unitsList->currentIndex();
+      if (i != MScore::unitsValue()) {
+            preferences.setPreference(PREF_APP_PAGE_UNITS_VALUE, i);
+
+            MStyle& st = MScore::defaultStyle();
+            st.pageOdd().setUnits(QPageLayout::Unit(i));
+            st.pageEven().setUnits(QPageLayout::Unit(i));
+
+            // If the default style uses the default page size, and the user
+            // switched to/from metric to imperial units, change the default
+            // page size to match the new units.
+            QPageSize::PageSizeId psid = st.pageSize().id();
+            bool isMetric  = pageUnits[MScore::unitsValue()].isMetric();
+            bool isDefSize = (isMetric && psid == QPageSize::A4) ||
+                            (!isMetric && psid == QPageSize::Letter);
+
+            if (isDefSize && isMetric != pageUnits[i].isMetric()) {
+                  QPageSize ps = QPageSize(isMetric ? QPageSize::Letter
+                                                    : QPageSize::A4);
+                  st.setPageSize(ps);
+                  }
+            MScore::setUnitsValue(i);
+            }
+
+      preferences.setPreference(PREF_APP_PAGE_UNITS_GLOBAL, unitsGlobal->isChecked());
       preferences.setPreference(PREF_APP_AUTOSAVE_AUTOSAVETIME, autoSaveTime->value());
       preferences.setPreference(PREF_APP_AUTOSAVE_USEAUTOSAVE, autoSave->isChecked());
       preferences.setPreference(PREF_APP_PATHS_INSTRUMENTLIST1, instrumentList1->text());
@@ -1100,14 +1135,26 @@ void PreferenceDialog::apply()
             mscore->update();
             }
 
+      QString partText = partStyle->text();
+      QString partPref = preferences.getString(PREF_SCORE_STYLE_PARTSTYLEFILE);
       if (defaultStyle->text() != preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE)) {
-            preferences.setPreference(PREF_SCORE_STYLE_DEFAULTSTYLEFILE, defaultStyle->text());
-            MScore::readDefaultStyle(preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE));
+            QString qs = defaultStyle->text();
+            preferences.setPreference(PREF_SCORE_STYLE_DEFAULTSTYLEFILE, qs);
+            if (qs.isEmpty()) {
+                  MScore::setDefaultStyle(MScore::baseStyle());
+                  if (partText.isEmpty() && partPref.isEmpty())
+                        MScore::setDefaultStyleForParts(new MStyle(MScore::defaultStyle()));
+                  }
+            else 
+                  MScore::readDefaultStyle(qs);
             }
 
-      if (partStyle->text() != preferences.getString(PREF_SCORE_STYLE_PARTSTYLEFILE)) {
-            preferences.setPreference(PREF_SCORE_STYLE_PARTSTYLEFILE, partStyle->text());
-            MScore::defaultStyleForPartsHasChanged();
+      if (partText != partPref) {
+            preferences.setPreference(PREF_SCORE_STYLE_PARTSTYLEFILE, partText);
+            if (partText.isEmpty())
+                  MScore::setDefaultStyleForParts(new MStyle(MScore::defaultStyle()));
+            else
+                  MScore::readDefaultStyle(partText);
             }
       
       Workspace::retranslate();
@@ -1374,10 +1421,7 @@ void PreferenceDialog::printShortcutsClicked()
       {
 #ifndef QT_NO_PRINTER
       QPrinter printer(QPrinter::HighResolution);
-      const MStyle& s = MScore::defaultStyle();
-      qreal pageW = s.value(Sid::pageWidth).toReal();
-      qreal pageH = s.value(Sid::pageHeight).toReal();
-      printer.setPaperSize(QSizeF(pageW, pageH), QPrinter::Inch);
+      printer.setPageLayout(MScore::defaultStyle().pageOdd());
 
       printer.setCreator("MuseScore Version: " VERSION);
       printer.setFullPage(true);

@@ -366,23 +366,27 @@ struct StyleVal2 {
 
 static std::map<QString, std::map<Sid, QVariant>> excessTextStyles206;
 
-//---------------------------------------------------------
-//   setPageFormat
-//    set Style from PageFormat
-//---------------------------------------------------------
-
+//------------------------------------------------------------------------------
+//   setPageFormat - converts from PageFormat to MStyle
+//      These values might vary very slightly from the default due to rounding,
+//      and also due tothe unit conversions for v114, which stored the values in
+//      demi-points at 144ppi.
+//      MStyle::fuzzySet() does not replace the current value if it is within
+//      the specified tolerance, currently +/- 0.0001
+//------------------------------------------------------------------------------
 void setPageFormat(MStyle* style, const PageFormat& pf)
       {
-      style->set(Sid::pageWidth,            pf.size().width());
-      style->set(Sid::pageHeight,           pf.size().height());
-      style->set(Sid::pagePrintableWidth,   pf.printableWidth());
-      style->set(Sid::pageEvenLeftMargin,   pf.evenLeftMargin());
-      style->set(Sid::pageOddLeftMargin,    pf.oddLeftMargin());
-      style->set(Sid::pageEvenTopMargin,    pf.evenTopMargin());
-      style->set(Sid::pageEvenBottomMargin, pf.evenBottomMargin());
-      style->set(Sid::pageOddTopMargin,     pf.oddTopMargin());
-      style->set(Sid::pageOddBottomMargin,  pf.oddBottomMargin());
-      style->set(Sid::pageTwosided,         pf.twosided());
+      style->fuzzySet(Sid::pageWidth,            pf.size().width());
+      style->fuzzySet(Sid::pageHeight,           pf.size().height());
+      style->fuzzySet(Sid::pagePrintableWidth,   pf.printableWidth());
+      style->fuzzySet(Sid::pageEvenLeftMargin,   pf.evenLeftMargin());
+      style->fuzzySet(Sid::pageOddLeftMargin,    pf.oddLeftMargin());
+      style->fuzzySet(Sid::pageEvenTopMargin,    pf.evenTopMargin());
+      style->fuzzySet(Sid::pageEvenBottomMargin, pf.evenBottomMargin());
+      style->fuzzySet(Sid::pageOddTopMargin,     pf.oddTopMargin());
+      style->fuzzySet(Sid::pageOddBottomMargin,  pf.oddBottomMargin());
+      style->fuzzySet(Sid::pageTwosided,         pf.twosided());
+      style->toPageLayout301();
       }
 
 //---------------------------------------------------------
@@ -3540,7 +3544,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             if (tag == "TextStyle")
                   readTextStyle206(style, e, excessTextStyles206);
             else if (tag == "Spatium")
-                  style->set(Sid::spatium, e.readDouble() * DPMM);
+                  style->spatium301(e);
             else if (tag == "page-layout")
                   readPageFormat(style, e);
             else if (tag == "displayInConcertPitch")

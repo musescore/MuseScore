@@ -276,22 +276,14 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
             // inherit most style settings from parent
             _style = parent->style();
 
-            static const Sid styles[] = {
-                  Sid::pageWidth,
-                  Sid::pageHeight,
-                  Sid::pagePrintableWidth,
-                  Sid::pageEvenLeftMargin,
-                  Sid::pageOddLeftMargin,
-                  Sid::pageEvenTopMargin,
-                  Sid::pageEvenBottomMargin,
-                  Sid::pageOddTopMargin,
-                  Sid::pageOddBottomMargin,
-                  Sid::pageTwosided,
-                  Sid::spatium
-                  };
-            // but borrow defaultStyle page layout settings
-            for (auto i : styles)
-                  _style.set(i, MScore::defaultStyle().value(i));
+            // but use default page layout settings
+            MStyle s = MScore::defaultStyle();
+            style().setPageSize(s.pageSize());
+            style().setPageOdd (s.pageOdd());
+            style().setPageEven(s.pageEven());
+            style().set(Sid::pageTwosided, s.value(Sid::pageTwosided));
+            style().set(Sid::spatium,      s.value(Sid::spatium));
+
             // and force some style settings that just make sense for parts
             if (forcePartStyle) {
                   style().set(Sid::concertPitch, false);
@@ -347,6 +339,7 @@ Score::~Score()
 
 //---------------------------------------------------------
 //   Score::clone
+//         Clones a score by cloning its text XML, not its binary objects.
 //         To create excerpt clone to show when changing PageSettings
 //         Use MasterScore::clone() instead
 //---------------------------------------------------------
@@ -3489,7 +3482,7 @@ qreal Score::tempo(const Fraction& tick) const
 
 qreal Score::loWidth() const
       {
-      return styleD(Sid::pageWidth) * DPI;
+      return style().pageOdd().width();
       }
 
 //---------------------------------------------------------
@@ -3498,7 +3491,7 @@ qreal Score::loWidth() const
 
 qreal Score::loHeight() const
       {
-      return styleD(Sid::pageHeight) * DPI;
+      return style().pageOdd().height();
       }
 
 //---------------------------------------------------------

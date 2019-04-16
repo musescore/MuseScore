@@ -79,6 +79,8 @@ bool  MScore::noGui = false;
 
 MStyle* MScore::_defaultStyleForParts;
 
+QPageLayout::Unit MScore::_unitsValue;
+
 QString MScore::_globalShare;
 int     MScore::_vRaster;
 int     MScore::_hRaster;
@@ -115,6 +117,11 @@ bool    MScore::svgPrinting = false;
 double  MScore::pixelRatio  = 0.8;        // DPI / logicalDPI
 
 MPaintDevice* MScore::_paintDevice;
+
+std::vector<int> MScore::sizesCommon;
+std::set<int> MScore::sizesMetric;
+std::set<int> MScore::sizesImperial;
+std::set<int> MScore::sizesOther;
 
 Sequencer* MScore::seq = 0;
 MuseScoreCore* MuseScoreCore::mscoreCore;
@@ -229,6 +236,50 @@ static Spatium doubleToSpatium(double d)
       }
 
 //---------------------------------------------------------
+//   initPageSizes
+//---------------------------------------------------------
+
+void MScore::initPageSizes()
+      {
+      // 4 types of paper sizes: Common, Metric, Imperial, Other
+      // Common overlaps with Metric/Imperial/Other and is sorted manually here
+      // Envelope sizes excluded
+      sizesCommon = {
+            QPageSize::A3,
+            QPageSize::A4,
+            QPageSize::A5,
+            QPageSize::B5,
+            QPageSize::JisB4,
+            QPageSize::Letter,
+            QPageSize::Legal,
+            QPageSize::Ledger,
+            QPageSize::Tabloid,
+            QPageSize::Imperial9x12,
+            QPageSize::Imperial10x13
+            };
+
+      unsigned i;
+      sizesMetric.insert(QPageSize::A4);
+      sizesMetric.insert(QPageSize::B5);
+      for (i = QPageSize::A0; i <= QPageSize::B9; ++i)
+            sizesMetric.insert(i);
+      for (i = QPageSize::A10; i <= QPageSize::B5Extra; ++i)
+            sizesMetric.insert(i);
+
+      for (i = QPageSize::Letter; i <= QPageSize::Executive; ++i)
+            sizesImperial.insert(i);
+      for (i = QPageSize::Folio; i <= QPageSize::Tabloid; ++i)
+            sizesImperial.insert(i);
+      for (i = QPageSize::AnsiC; i <= QPageSize::Imperial15x11; ++i)
+            sizesImperial.insert(i);
+
+      for (i = QPageSize::JisB0; i <= QPageSize::JisB10; ++i)
+            sizesOther.insert(i);
+      for (i = QPageSize::ExecutiveStandard; i <= QPageSize::FanFoldGermanLegal; ++i)
+            sizesOther.insert(i);
+      }
+
+//---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
@@ -314,7 +365,9 @@ void MScore::init()
       //
       //  initialize styles
       //
+      _baseStyle.initPageLayout();
       _baseStyle.precomputeValues();
+      _defaultStyle.initPageLayout();
       QSettings s;
       QString defStyle = s.value("score/style/defaultStyleFile").toString();
       if (!(MScore::testMode || defStyle.isEmpty())) {
@@ -336,6 +389,8 @@ void MScore::init()
                   _defaultStyleForParts->precomputeValues();
                   }
             }
+
+      initPageSizes();
 
       //
       //  load internal fonts

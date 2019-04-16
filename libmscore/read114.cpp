@@ -2686,7 +2686,7 @@ static void readStyle(MStyle* style, XmlReader& e)
                   e.skipCurrentElement();
                   }
             else if (tag == "Spatium")
-                  style->set(Sid::spatium, e.readDouble() * DPMM);
+                  style->spatium301(e);
             else if (tag == "page-layout") {
                   PageFormat pf;
                   initPageFormat(style, &pf);
@@ -2871,7 +2871,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             else if (tag == "SyntiSettings")
                   _synthesizerState.read(e);
             else if (tag == "Spatium")
-                  setSpatium (e.readDouble() * DPMM);
+                  style().spatium301(e);
             else if (tag == "Division")
                   _fileDivision = e.readInt();
             else if (tag == "showInvisible")
@@ -2920,6 +2920,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             else if (tag == "page-layout") {
                   PageFormat pf;
                   readPageFormat(&pf, e);
+                  setPageFormat(&style(), pf);
                   }
             else if (tag == "copyright" || tag == "rights") {
                   Text* text = new Text(this);

@@ -1519,6 +1519,28 @@ void ChangeStyleVal::flip(EditData*)
       }
 
 //---------------------------------------------------------
+//   ChangePageSettings::flip
+//---------------------------------------------------------
+
+void ChangePageSettings::flip(EditData*)
+      {
+      MStyle& style = score->style();
+      QPageSize ps1 = style.pageSize();
+      MPageLayout odd1 = style.pageOdd();
+      MPageLayout even1 = style.pageEven();
+
+      style.setPageSize(ps);
+      style.setPageOdd(odd);
+      style.setPageEven(even);
+
+      ps = ps1;
+      odd = odd1;
+      even = even1;
+
+      score->styleChanged();
+      }
+
+//---------------------------------------------------------
 //   ChangePageNumberOffset::flip
 //---------------------------------------------------------
 

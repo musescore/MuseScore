@@ -79,13 +79,6 @@ inline int trackZeroVoice(int track) { return track & ~3;    }
 
 static const int MAX_TAGS = 32;
 
-static constexpr qreal INCH      = 25.4;
-static constexpr qreal PPI       = 72.0;           // printer points per inch
-static constexpr qreal DPI_F     = 5;
-static constexpr qreal DPI       = 72.0 * DPI_F;
-static constexpr qreal SPATIUM20 = 5.0 * (DPI / 72.0);
-static constexpr qreal DPMM      = DPI / INCH;
-
 static constexpr int MAX_STAVES  = 4;
 
 static const int  SHADOW_NOTE_LIGHT       = 135;
@@ -311,6 +304,7 @@ class MScore {
       static MStyle _baseStyle;          // buildin initial style
       static MStyle _defaultStyle;       // buildin modified by preferences
       static MStyle* _defaultStyleForParts;
+      static QPageLayout::Unit _unitsValue; // copy of preferences[PREF_APP_PAGE_UNITS_VALUE]
 
       static QString _globalShare;
       static int _hRaster, _vRaster;
@@ -328,6 +322,7 @@ class MScore {
       static std::vector<MScoreError> errorList;
 
       static void init();
+      static void initPageSizes();
 
       static const MStyle& baseStyle()             { return _baseStyle;            }
       static MStyle& defaultStyle()                { return _defaultStyle;         }
@@ -335,7 +330,10 @@ class MScore {
 
       static bool readDefaultStyle(QString file);
       static void setDefaultStyle(const MStyle& s) { _defaultStyle = s; }
+      static void setDefaultStyleForParts(MStyle* s) { _defaultStyleForParts = s; }
       static void defaultStyleForPartsHasChanged();
+      static void setUnitsValue(int val)    { _unitsValue = QPageLayout::Unit(val);   }
+      static int  unitsValue()              { return int(_unitsValue);  }
 
       static const QString& globalShare()   { return _globalShare; }
       static qreal hRaster()                { return _hRaster;     }
@@ -403,6 +401,12 @@ class MScore {
       static void setError(MsError e) { _error = e; }
       static const char* errorMessage();
       static const char* errorGroup();
+
+      // used by pagesettings.cpp to group paper sizes by type
+      static std::vector<int> sizesCommon; // requires alternate sort order
+      static std::set<int> sizesMetric;
+      static std::set<int> sizesImperial;
+      static std::set<int> sizesOther;
       };
 
 //---------------------------------------------------------

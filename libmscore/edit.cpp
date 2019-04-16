@@ -3520,6 +3520,15 @@ void Score::undoChangeStyleVal(Sid idx, const QVariant& v)
       }
 
 //---------------------------------------------------------
+//   undoChangePageSettings
+//---------------------------------------------------------
+
+void Score::undoChangePageSettings(QPageSize& ps, MPageLayout& odd, MPageLayout& even)
+{
+      undo(new ChangePageSettings(this, ps, odd, even));
+}
+
+//---------------------------------------------------------
 //   undoChangePageNumberOffset
 //---------------------------------------------------------
 
