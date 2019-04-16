@@ -149,17 +149,8 @@
         <property name="suffix">
          <string>sp</string>
         </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>2.000000000000000</double>
-        </property>
         <property name="singleStep">
-         <double>0.500000000000000</double>
+         <double>0.250000000000000</double>
         </property>
        </widget>
       </item>
@@ -256,7 +247,7 @@
          <number>1</number>
         </property>
         <property name="maximum">
-         <number>8</number>
+         <number>14</number>
         </property>
        </widget>
       </item>
@@ -496,8 +487,6 @@
   <tabstop>genTimesig</tabstop>
   <tabstop>genKeysig</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
