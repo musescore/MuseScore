@@ -1,0 +1,4 @@
+#!/bin/sh
+cp ../../../build.debug/mtest/libmscore/unrollrepeats/clef-key-ts-test.mscx    clef-key-ts-ref.mscx
+cp ../../../build.debug/mtest/libmscore/unrollrepeats/pickup-measure-test.mscx pickup-measure-ref.mscx
+

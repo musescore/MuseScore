@@ -5,15 +5,6 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.27</pageWidth>
-      <pageHeight>11.69</pageHeight>
-      <pagePrintableWidth>7.4826</pagePrintableWidth>
-      <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.393701</pageOddLeftMargin>
-      <pageEvenTopMargin>0.393701</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
-      <pageOddTopMargin>0.393701</pageOddTopMargin>
-      <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>

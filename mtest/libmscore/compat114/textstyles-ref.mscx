@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <pageTwosided>0</pageTwosided>
       <staffUpperBorder>6</staffUpperBorder>
       <staffLowerBorder>2</staffLowerBorder>
       <minSystemDistance>9.5</minSystemDistance>

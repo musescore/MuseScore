@@ -5,6 +5,9 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <pageWidth>8.5</pageWidth>
+      <pageHeight>11</pageHeight>
+      <pagePrintableWidth>7.7126</pagePrintableWidth>
       <lyricsDashForce>0</lyricsDashForce>
       <minMeasureWidth>4</minMeasureWidth>
       <bracketWidth>0.35</bracketWidth>
@@ -26,7 +29,7 @@
       <voltaPosAbove x="0" y="-2"/>
       <keySigNaturals>1</keySigNaturals>
       <tupletOufOfStaff>0</tupletOufOfStaff>
-      <Spatium>1.764</Spatium>
+      <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
