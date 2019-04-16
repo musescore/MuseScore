@@ -43,6 +43,15 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setObjectName("EditStyle");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+      QRect scr = QGuiApplication::primaryScreen()->availableGeometry();
+      QRect dlg = this->frameGeometry();
+      isTooWide = dlg.width() > scr.width();
+      isTooHigh = dlg.height() > scr.height();
+      if (isTooWide || isTooHigh)
+            this->setMinimumSize(scr.width() / 2, scr.height() / 2);
+      hasShown = false;
+
       cs = s;
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
       buttonApplyToAllParts->setEnabled(!cs->isMaster());
@@ -666,6 +675,22 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       }
 
 //---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void EditStyle::showEvent(QShowEvent* ev)
+      {
+      if (!hasShown && (isTooWide || isTooHigh)) {
+            // Add scroll bars to pageStack - this cannot be in the constructor
+            // or the Header, Footer text input boxes size themselves too large.
+            QScrollArea* scrollArea = new QScrollArea(splitter);
+            scrollArea->setWidget(pageStack);
+            }
+      hasShown = true; // so it only happens once
+      QWidget::showEvent(ev);
+      }
+
+//---------------------------------------------------------
 //   hideEvent
 //---------------------------------------------------------
 
@@ -718,18 +743,21 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
 
 void EditStyle::on_buttonTogglePagelist_clicked()
       {
-
       if (pageList->isVisible()) {
             pageList->setVisible(false);
-            setMaximumWidth(pageStack->minimumWidth() + 15);
-            setMinimumWidth(pageStack->minimumWidth() + 15);
-            move(pos().x() + (pageList->minimumWidth() + 5), pos().y());
+            if (!isTooWide) {
+                  setMaximumWidth(pageStack->minimumWidth() + 15);
+                  setMinimumWidth(pageStack->minimumWidth() + 15);
+                  move(pos().x() + (pageList->minimumWidth() + 5), pos().y());
+                  }
             buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goPrevious_ICON)]));
             }
       else {
-            setMaximumWidth((pageList->minimumWidth() + 5) + pageStack->minimumWidth() + 15);
-            setMinimumWidth((pageList->minimumWidth() + 5) + pageStack->minimumWidth() + 15);
-            move(pos().x() - (pageList->minimumWidth() + 5), pos().y());
+            if (!isTooWide) {
+                  setMaximumWidth((pageList->minimumWidth() + 5) + pageStack->minimumWidth() + 15);
+                  setMinimumWidth((pageList->minimumWidth() + 5) + pageStack->minimumWidth() + 15);
+                  move(pos().x() - (pageList->minimumWidth() + 5), pos().y());
+                  }
             pageList->setVisible(true);
             buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
             }
