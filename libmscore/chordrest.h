@@ -176,7 +176,7 @@ class ChordRest : public DurationElement {
       bool isFullMeasureRest() const { return _durationType == TDuration::DurationType::V_MEASURE; }
       virtual void removeMarkings(bool keepTremolo = false);
 
-      bool isBefore(ChordRest*);
+      bool isBefore(const ChordRest*) const;
 
       void undoAddAnnotation(Element*);
       };
