@@ -47,6 +47,7 @@ class ExportMidi {
 
       PauseMap pauseMap;
 
+      void copyStringToEvent(const QString& string, MidiEvent& event);
       void writeHeader();
 
    public:

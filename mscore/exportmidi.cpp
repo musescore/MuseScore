@@ -27,6 +27,16 @@
 
 namespace Ms {
 
+void ExportMidi::copyStringToEvent(const QString& string, MidiEvent& event)
+      {
+      QByteArray stringAscii = string.toLatin1();
+      int len = stringAscii.length();
+      unsigned char* copy = new unsigned char[len];
+      memcpy(copy, stringAscii.data(), len);
+      event.setEData(copy);
+      event.setLen(len);
+      }
+
 //---------------------------------------------------------
 //   writeHeader
 //---------------------------------------------------------
@@ -125,53 +135,76 @@ void ExportMidi::writeHeader()
             }
 
       //---------------------------------------------------
-      //    write key signatures
+      //    write per-track information
       //    assume every staff corresponds to a midi track
       //---------------------------------------------------
 
       int staffIdx = 0;
       for (auto& track1: mf.tracks()) {
             Staff* staff  = cs->staff(staffIdx);
-            KeyList* keys = staff->keyList();
+            Part* part = staff->part();
 
-            bool initialKeySigFound = false;
-            for (const RepeatSegment* rs : *cs->repeatList()) {
-                  int startTick  = rs->tick;
-                  int endTick    = startTick + rs->len();
-                  int tickOffset = rs->utick - rs->tick;
+                  // write track name
+                  {
+                  MidiEvent ev;
+                  ev.setType(ME_META);
+                  ev.setMetaType(META_TRACK_NAME);
+                  copyStringToEvent(part->longName(), ev);
+                  track1.insert(0, ev);
+                  }
+                  
+                  // write instrument name
+                  {
+                  MidiEvent ev;
+                  ev.setType(ME_META);
+                  ev.setMetaType(META_INSTRUMENT_NAME);
+                  copyStringToEvent(part->instrumentName(), ev);
+                  track1.insert(0, ev);
+                  }
 
-                  auto sk = keys->lower_bound(startTick);
-                  auto ek = keys->lower_bound(endTick);
+                  // write key signatures
+                  {
+                  KeyList* keys = staff->keyList();
 
-                  for (auto ik = sk; ik != ek; ++ik) {
+                  bool initialKeySigFound = false;
+                  for (const RepeatSegment* rs : *cs->repeatList()) {
+                        int startTick  = rs->tick;
+                        int endTick    = startTick + rs->len();
+                        int tickOffset = rs->utick - rs->tick;
+
+                        auto sk = keys->lower_bound(startTick);
+                        auto ek = keys->lower_bound(endTick);
+
+                        for (auto ik = sk; ik != ek; ++ik) {
+                              MidiEvent ev;
+                              ev.setType(ME_META);
+                              Key key       = ik->second.key();   // -7 -- +7
+                              ev.setMetaType(META_KEY_SIGNATURE);
+                              ev.setLen(2);
+                              unsigned char* data = new unsigned char[2];
+                              data[0]   = int(key);
+                              data[1]   = 0;  // major
+                              ev.setEData(data);
+                              int tick = ik->first + tickOffset;
+                              track1.insert(pauseMap.addPauseTicks(tick), ev);
+                              if (tick == 0)
+                                    initialKeySigFound = true;
+                              }
+                        }
+
+                  // fall back write a default C keysig if no initial keysig found
+                  if (!initialKeySigFound) {
                         MidiEvent ev;
                         ev.setType(ME_META);
-                        Key key       = ik->second.key();   // -7 -- +7
+                        int key = 0;
                         ev.setMetaType(META_KEY_SIGNATURE);
                         ev.setLen(2);
                         unsigned char* data = new unsigned char[2];
-                        data[0]   = int(key);
+                        data[0]   = key;
                         data[1]   = 0;  // major
                         ev.setEData(data);
-                        int tick = ik->first + tickOffset;
-                        track1.insert(pauseMap.addPauseTicks(tick), ev);
-                        if (tick == 0)
-                              initialKeySigFound = true;
+                        track1.insert(0, ev);
                         }
-                  }
-
-            // fall back write a default C keysig if no initial keysig found
-            if (!initialKeySigFound) {
-                  MidiEvent ev;
-                  ev.setType(ME_META);
-                  int key = 0;
-                  ev.setMetaType(META_KEY_SIGNATURE);
-                  ev.setLen(2);
-                  unsigned char* data = new unsigned char[2];
-                  data[0]   = key;
-                  data[1]   = 0;  // major
-                  ev.setEData(data);
-                  track1.insert(0, ev);
                   }
 
             ++staffIdx;
