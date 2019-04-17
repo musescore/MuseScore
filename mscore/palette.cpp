@@ -558,6 +558,7 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
                 || element->type() == ElementType::TBOX
                 || element->type() == ElementType::MEASURE
                 || element->type() == ElementType::BRACKET
+                || element->type() == ElementType::STAFFTYPE_CHANGE
                 || (element->type() == ElementType::ICON
                     && (toIcon(element)->iconType() == IconType::VFRAME
                         || toIcon(element)->iconType() == IconType::HFRAME
