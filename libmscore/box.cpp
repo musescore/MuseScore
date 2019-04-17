@@ -222,22 +222,7 @@ void Box::read(XmlReader& e)
       _bottomMargin    = 0.0;
       _boxHeight       = Spatium(0);     // override default set in constructor
       _boxWidth        = Spatium(0);
-
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "HBox") {
-                  HBox* hb = new HBox(score());
-                  hb->read(e);
-                  add(hb);
-                  }
-            else if (tag == "VBox") {
-                  VBox* vb = new VBox(score());
-                  vb->read(e);
-                  add(vb);
-                  }
-            else if (!Box::readProperties(e))
-                  e.unknown();
-            }
+      MeasureBase::read(e);
       }
 
 //---------------------------------------------------------
@@ -646,6 +631,32 @@ void HBox::endEditDrag(EditData&)
 bool HBox::isMovable() const
       {
       return parent() && (parent()->isHBox() || parent()->isVBox());
+      }
+
+//---------------------------------------------------------
+//   writeProperties
+//---------------------------------------------------------
+
+void HBox::writeProperties(XmlWriter& xml) const
+      {
+      writeProperty(xml, Pid::CREATE_SYSTEM_HEADER);
+      Box::writeProperties(xml);
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool HBox::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (readProperty(tag, e, Pid::CREATE_SYSTEM_HEADER))
+            ;
+      else if (Box::readProperties(e))
+            ;
+      else
+            return false;
+      return true;
       }
 
 //---------------------------------------------------------

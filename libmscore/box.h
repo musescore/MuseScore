@@ -104,6 +104,8 @@ class HBox final : public Box {
       virtual ElementType type() const override { return ElementType::HBOX;       }
 
       virtual void layout() override;
+      virtual void writeProperties(XmlWriter&) const override;
+      virtual bool readProperties(XmlReader&) override;
 
       virtual QRectF drag(EditData&) override;
       virtual void endEditDrag(EditData&) override;
