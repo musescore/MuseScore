@@ -58,12 +58,10 @@ void StaffTypeChange::read(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
             if (tag == "StaffType") {
-                  StaffType st;
-                  st.read(e);
-                  if (staff())
-                        _staffType = staff()->setStaffType(measure()->tick(), st);
-                  else
-                        _staffType = new StaffType(st);     // drag&drop operation
+                  StaffType* st = new StaffType();
+                  st->read(e);
+                  // Measure::add() will replace this with a pointer to a copy in the staff
+                  _staffType = st;
                   }
             else if (!Element::readProperties(e))
                   e.unknown();
@@ -85,7 +83,7 @@ void StaffTypeChange::spatiumChanged(qreal, qreal)
 
 void StaffTypeChange::layout()
       {
-      qreal _spatium = spatium();
+      qreal _spatium = score()->spatium();
       setbbox(QRectF(-lw*.5, -lw*.5, _spatium * 2.5 + lw, _spatium*2.5 + lw));
       if (measure()) {
             qreal y = -1.5 * _spatium - height() + measure()->system()->staff(staffIdx())->y();
@@ -190,11 +188,21 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
             case Pid::STAFF_GEN_KEYSIG:
                   _staffType->setGenKeysig(v.toBool());
                   break;
-            case Pid::MAG:
+            case Pid::MAG: {
+                  qreal _spatium = spatium();
                   _staffType->setUserMag(v.toDouble());
+                  Staff* _staff = staff();
+                  if (_staff)
+                        _staff->localSpatiumChanged(_spatium, spatium(), tick());
+                  }
                   break;
-            case Pid::SMALL:
+            case Pid::SMALL: {
+                  qreal _spatium = spatium();
                   _staffType->setSmall(v.toBool());
+                  Staff* _staff = staff();
+                  if (_staff)
+                        _staff->localSpatiumChanged(_spatium, spatium(), tick());
+                  }
                   break;
             case Pid::STAFF_YOFFSET:
                   _staffType->setYoffset(v.value<Spatium>());
