@@ -2541,6 +2541,55 @@ int Note::ppitch() const
 }
 
 //---------------------------------------------------------
+//   mutePlayback
+//---------------------------------------------------------
+
+bool Note::mutePlayback() const
+{
+    const MasterScore* ms = masterScore();
+    const Score* playbackScore = ms->playbackScore();
+    if (score() != playbackScore && links()) {
+        for (const ScoreElement* se : *links()) {
+            if (se->score() == playbackScore) {
+                return toNote(se)->mutePlayback();
+            }
+        }
+    }
+
+    const Staff* st = staff();
+    const Instrument* instr = st->part()->instrument(chord()->tick());
+    const Channel* ch = instr->playbackChannel(subchannel(), ms);
+    if (ch->mute() || ch->soloMute() || !st->playbackVoice(voice())) {
+        return true;
+    }
+
+    const Selection& sel = score()->selection();
+    if (sel.isRange()) {
+        const int stIdx = staffIdx();
+        if (stIdx < sel.staffStart() || sel.staffEnd() <= stIdx) {
+            // it may happen that at least some linked staff is selected
+            bool linkedSelected = false;
+            if (links()) {
+                for (const ScoreElement* se : *links()) {
+                    if (se->score() == playbackScore) {
+                        const int seStaffIdx = toNote(se)->staffIdx();
+                        if (sel.staffStart() <= seStaffIdx && seStaffIdx < sel.staffEnd()) {
+                            linkedSelected = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!linkedSelected) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+//---------------------------------------------------------
 //   epitch
 //    effective pitch, i.e. a pitch which is visible in the
 //    currently used written notation.
