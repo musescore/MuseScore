@@ -3626,8 +3626,8 @@ void ScoreView::cmdTuplet(int n, ChordRest* cr)
       f.reduce();       //measure duration might not be reduced
       Fraction ratio(n, f.numerator());
       Fraction fr(1, f.denominator());
-      while (ratio.numerator() >= ratio.denominator()*2) {
-            ratio *= Fraction(1,2);
+      while (ratio.numerator() >= ratio.denominator() * 2) {
+            ratio.setDenominator(ratio.denominator() * 2);  // operator*= reduces, we don't want that here
             fr    *= Fraction(1,2);
             }
 
