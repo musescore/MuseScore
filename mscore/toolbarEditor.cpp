@@ -17,9 +17,9 @@
 namespace Ms {
 
 static const char* toolbars[] = {
-      "Note Input",
-      "File Operations",
-      "Playback Controls"
+      QT_TRANSLATE_NOOP("toolbar", "Note Input"),
+      QT_TRANSLATE_NOOP("toolbar", "File Operations"),
+      QT_TRANSLATE_NOOP("toolbar", "Playback Controls")
       };
 
 //---------------------------------------------------------
@@ -46,7 +46,7 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
       setupUi(this);
 
       for (auto i : toolbars)
-            toolbarList->addItem(QString(i));
+            toolbarList->addItem(qApp->translate("toolbar", i));
       toolbarList->setCurrentRow(0);
 
       new_toolbars = new std::vector<std::list<const char*>*>();
@@ -73,7 +73,7 @@ void ToolbarEditor::init()
       QString name = Workspace::currentWorkspace->name();
       bool writable = !Workspace::currentWorkspace->readOnly();
       if (!writable) {
-            name += tr(" (not changeable)");
+            name += " " + tr("(not changeable)");
             }
       add->setEnabled(writable);
       remove->setEnabled(writable);
@@ -121,7 +121,7 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
             if (a)
                   item = new QListWidgetItem(a->icon(), actionName);
             else if (actionName.isEmpty())
-                  item = new QListWidgetItem(tr("Spacer"));
+                  item = new QListWidgetItem(tr("Separator"));
             else
                   item = new QListWidgetItem(actionName);
             item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
@@ -149,7 +149,7 @@ void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<c
                         }
                   }
             }
-      QListWidgetItem* item = new QListWidgetItem(tr("Spacer"));
+      QListWidgetItem* item = new QListWidgetItem(tr("Separator"));
       item->setData(Qt::UserRole, QVariant::fromValue((void*)""));
       availableList->addItem(item);
       }
