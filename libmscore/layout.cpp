@@ -3492,7 +3492,8 @@ System* Score::collectSystem(LayoutContext& lc)
                   else if (mb->isMeasure()) {
                         Measure* m  = toMeasure(mb);
                         mw          += m->width();               // measures are stretched already with basicStretch()
-                        totalWeight += m->ticks().ticks() * m->basicStretch();
+                        int weight   = m->layoutWeight();
+                        totalWeight += weight * m->basicStretch();
                         }
                   }
 
@@ -3526,7 +3527,8 @@ System* Score::collectSystem(LayoutContext& lc)
                   mb->setPos(pos);
                   Measure* m = toMeasure(mb);
                   qreal stretch = m->basicStretch();
-                  ww  += rest * m->ticks().ticks() * stretch;
+                  int weight = m->layoutWeight();
+                  ww  += rest * weight * stretch;
                   m->stretchMeasure(ww);
                   m->layoutStaffLines();
                   if (createBrackets) {
