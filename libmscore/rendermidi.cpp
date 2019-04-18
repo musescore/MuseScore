@@ -534,12 +534,19 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
 //    since we're adding events, pass ticks as ints rather than fractions
 //---------------------------------------------------------
 
-static void changeCCBetween(EventMap* events, int stick, int etick, int startExpr, int endExpr, int channel, int controller, VeloChangeMethod changeMethod, int tickOffset)
+static void changeCCBetween(std::map<int, NPlayEvent>& tempEvents, int stick, int etick, int startExpr, int endExpr, int channel, int controller, VeloChangeMethod changeMethod, int tickOffset)
       {
       // Prevent zero-division error, but add single event
       if (startExpr == endExpr || stick == etick) {
-            NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, controller, abs(startExpr));
-            events->insert(std::pair<int, NPlayEvent>(stick + tickOffset, cc11event));
+            int tickToUse = stick + tickOffset;
+            if (tempEvents.find(tickToUse) != tempEvents.end()) {
+                  // Don't add a play event if it would be quieter than the current one at
+                  // this tick
+                  if (tempEvents[tickToUse].velo() >= abs(startExpr))
+                        return;
+                  }
+
+            tempEvents[tickToUse] = NPlayEvent(ME_CONTROLLER, channel, controller, abs(startExpr));
             return;
             }
 
@@ -645,10 +652,16 @@ static void changeCCBetween(EventMap* events, int stick, int etick, int startExp
             int valueToAdd = valueFunction(preCalculated, i - stick);
             if (lastVal == valueToAdd)
                   continue;
-            lastVal = valueToAdd;
+            
             int exprVal = startExpr + valueToAdd;
-            NPlayEvent cc11event = NPlayEvent(ME_CONTROLLER, channel, controller, abs(exprVal));
-            events->insert(std::pair<int, NPlayEvent>(i + tickOffset, cc11event));
+            if (tempEvents.find(i + tickOffset) != tempEvents.end()) {
+                  // Don't add a play event if it would be quieter than the current one at this tick
+                  if (tempEvents[i + tickOffset].velo() >= abs(exprVal))
+                        continue;
+                  }
+
+            lastVal = valueToAdd;
+            tempEvents[i + tickOffset] = NPlayEvent(ME_CONTROLLER, channel, controller, abs(exprVal));
             }
       }
 
@@ -662,7 +675,7 @@ static void changeCCBetween(EventMap* events, int stick, int etick, int startExp
 //          SEG_START - note-on velocity is the same as the start velocity of the seg
 //---------------------------------------------------------
 
-static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* staff, int tickOffset, DynamicsRenderMethod method, int cc, Fraction& lastHairpinStart)
+static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* staff, int tickOffset, DynamicsRenderMethod method, int cc, Fraction& lastHairpinStart, std::map<int, NPlayEvent>& tempVel)
       {
       int controller = getControllerFromCC(cc);
       
@@ -868,12 +881,12 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
 
                                           // First, add an initial accent velocity
                                           // stick is the seg start tick, stickToUse is where we should dim to the rest velocity
-                                          changeCCBetween(events, stick.ticks(), stickToUse, startExpr, startExpr, channel, controller, defaultChangeMethod, tickOffset);
+                                          changeCCBetween(tempVel, stick.ticks(), stickToUse, startExpr, startExpr, channel, controller, defaultChangeMethod, tickOffset);
 
                                           // Then dimenuendo back down to normal
                                           // eticktouse is the end of the dim back to normal for an accent,
                                           // but etick is the segment end tick.
-                                          changeCCBetween(events, stickToUse, etickToUse, startExpr, endExpr, channel, controller, defaultChangeMethod, tickOffset);
+                                          changeCCBetween(tempVel, stickToUse, etickToUse, startExpr, endExpr, channel, controller, defaultChangeMethod, tickOffset);
 
                                           // if there's a cresc or dim after the dynamic, apply it
                                           startExpr = velocityMiddle;
@@ -881,12 +894,12 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
 
                                           stickToUse = qMin(stick.ticks() + accentTicks.ticks() + 1, etick.ticks());
 
-                                          changeCCBetween(events, stickToUse, etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset);
+                                          changeCCBetween(tempVel, stickToUse, etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset);
                                           }
                                     else {
                                           int startExpr = velocityStart;
                                           int endExpr = velocityEnd;
-                                          changeCCBetween(events, stick.ticks(), etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset);
+                                          changeCCBetween(tempVel, stick.ticks(), etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset);
                                           }
 
                                     highestVelocity = velocityStart;
@@ -896,7 +909,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                               // Add a single expression value to match the velocity, since there is no hairpin
                               int exprVal = velocityStart;
                               int staticTick = seg->tick().ticks();
-                              changeCCBetween(events, staticTick, staticTick, exprVal, exprVal, channel, controller, defaultChangeMethod, tickOffset);
+                              changeCCBetween(tempVel, staticTick, staticTick, exprVal, exprVal, channel, controller, defaultChangeMethod, tickOffset);
                               }
 
                         } // if instr->singleNoteDynamics()
@@ -908,7 +921,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                         // Add a single expression value to match the velocity, since this instrument should
                         // not use single note dynamics.
                         int staticTick = seg->tick().ticks();
-                        changeCCBetween(events, staticTick, staticTick, velocity, velocity, channel, controller, defaultChangeMethod, tickOffset);
+                        changeCCBetween(tempVel, staticTick, staticTick, velocity, velocity, channel, controller, defaultChangeMethod, tickOffset);
                         }
 
                   //
@@ -949,7 +962,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
 //    redirects to the correct function based on the passed method
 //---------------------------------------------------------
 
-static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int tickOffset, DynamicsRenderMethod method, int cc, Fraction& lastHairpinStart)
+static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int tickOffset, DynamicsRenderMethod method, int cc, Fraction& lastHairpinStart, std::map<int, NPlayEvent>& tempEvents)
       {
       switch (method) {
             case DynamicsRenderMethod::SIMPLE:
@@ -957,7 +970,7 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, int
                   break;
             case DynamicsRenderMethod::SEG_START:
             case DynamicsRenderMethod::FIXED_MAX:
-                  collectMeasureEventsDefault(events, m, staff, tickOffset, method, cc, lastHairpinStart);
+                  collectMeasureEventsDefault(events, m, staff, tickOffset, method, cc, lastHairpinStart, tempEvents);
                   break;
             default:
                   qWarning("Unrecognized dynamics method: %d", int(method));
@@ -1219,6 +1232,7 @@ void Score::renderStaff(EventMap* events, Staff* staff, DynamicsRenderMethod met
       {
       Measure* lastMeasure = 0;
       Fraction lastHairpinStart = Fraction(-1, 1);
+      std::map<int, NPlayEvent> staffTempVelEvents;
 
       for (const RepeatSegment* rs : *repeatList()) {
             Fraction startTick  = Fraction::fromTicks(rs->tick);
@@ -1227,15 +1241,19 @@ void Score::renderStaff(EventMap* events, Staff* staff, DynamicsRenderMethod met
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                   if (lastMeasure && m->isRepeatMeasure(staff)) {
                         int offset = (m->tick() - lastMeasure->tick()).ticks();
-                        collectMeasureEvents(events, lastMeasure, staff, tickOffset + offset, method, cc, lastHairpinStart);
+                        collectMeasureEvents(events, lastMeasure, staff, tickOffset + offset, method, cc, lastHairpinStart, staffTempVelEvents);
                         }
                   else {
                         lastMeasure = m;
-                        collectMeasureEvents(events, lastMeasure, staff, tickOffset, method, cc, lastHairpinStart);
+                        collectMeasureEvents(events, lastMeasure, staff, tickOffset, method, cc, lastHairpinStart, staffTempVelEvents);
                         }
                   if (m->tick() + m->ticks() >= endTick)
                         break;
                   }
+            }
+
+      for (std::pair<int, NPlayEvent> event : staffTempVelEvents) {
+            events->insert(std::pair<int, NPlayEvent>(event.first, event.second));
             }
       }
 
