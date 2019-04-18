@@ -1123,6 +1123,7 @@ class MStyle {
       ChordList* chordList()  { return &_chordList; }
       void setChordList(ChordList*, bool custom = true);    // Style gets ownership of ChordList
       void setCustomChordList(bool t) { _customChordList = t; }
+      void checkChordList();
 
       bool load(QFile* qf);
       void load(XmlReader& e);

@@ -585,11 +585,7 @@ MasterScore* MuseScore::getNewFile()
       score->setCreated(true);
       score->fileInfo()->setFile(createDefaultName());
 
-      if (!score->style().chordList()->loaded()) {
-            if (score->styleB(Sid::chordsXmlFile))
-                  score->style().chordList()->read("chords.xml");
-            score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
-            }
+      score->style().checkChordList();
       if (!newWizard->title().isEmpty())
             score->fileInfo()->setFile(newWizard->title());
 
@@ -2311,9 +2307,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
                         score->style().load(&f);
                   }
             else {
-                  if (score->styleB(Sid::chordsXmlFile))
-                        score->style().chordList()->read("chords.xml");
-                  score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
+                  score->style().checkChordList();
                   }
             bool found = false;
             for (auto i : imports) {

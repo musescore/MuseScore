@@ -2777,11 +2777,8 @@ static void readStyle(MStyle* style, XmlReader& e)
             }
 
       // make sure we have a chordlist
-      if (!style->chordList()->loaded() && !chordListTag) {
-            if (style->value(Sid::chordsXmlFile).toBool())
-                  style->chordList()->read("chords.xml");
-            style->chordList()->read(newChordDescriptionFile);
-            }
+      if (!chordListTag)
+            style->checkChordList();
 #if 0 // TODO
       //
       //  Compatibility with old scores/styles:
