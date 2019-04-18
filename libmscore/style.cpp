@@ -2158,6 +2158,20 @@ const ChordDescription* MStyle::chordDescription(int id) const
       }
 
 //---------------------------------------------------------
+//   checkChordList
+//---------------------------------------------------------
+
+void MStyle::checkChordList()
+      {
+      // make sure we have a chordlist
+      if (!_chordList.loaded()) {
+            if (value(Sid::chordsXmlFile).toBool())
+                  _chordList.read("chords.xml");
+            _chordList.read(value(Sid::chordDescriptionFile).toString());
+            }
+      }
+
+//---------------------------------------------------------
 //   setChordList
 //---------------------------------------------------------
 
@@ -2421,12 +2435,8 @@ void MStyle::load(XmlReader& e)
             _chordList.unload();
             }
 
-      // make sure we have a chordlist
-      if (!_chordList.loaded() && !chordListTag) {
-            if (value(Sid::chordsXmlFile).toBool())
-                  _chordList.read("chords.xml");
-            _chordList.read(newChordDescriptionFile);
-            }
+      if (!chordListTag)
+            checkChordList();
       }
 
 //---------------------------------------------------------
