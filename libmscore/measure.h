@@ -258,6 +258,7 @@ class Measure final : public MeasureBase {
       virtual void triggerLayout() const override;
       qreal basicStretch() const;
       qreal basicWidth() const;
+      int layoutWeight(int maxMMRestLength = 0) const;
       virtual void computeMinWidth();
       void checkHeader();
       void checkTrailer();
