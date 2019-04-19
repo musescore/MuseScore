@@ -321,11 +321,11 @@ void JackAudio::timebase(jack_transport_state_t state, jack_nframes_t /*nframes*
                   audio->stopTransport();
             }
       else if (audio->seq->isRunning()) {
-            if (!audio->seq->score()->repeatList() || !audio->seq->score()->sigmap())
+            if (!audio->seq->score()->masterScore())
                   return;
 
             pos->valid = JackPositionBBT;
-            int curTick = audio->seq->score()->repeatList()->utick2tick(audio->seq->getCurTick());
+            int curTick = audio->seq->score()->repeatList().utick2tick(audio->seq->getCurTick());
             int bar,beat,tick;
             audio->seq->score()->sigmap()->tickValues(curTick, &bar, &beat, &tick);
             // Providing the final tempo

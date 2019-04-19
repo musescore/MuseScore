@@ -191,7 +191,7 @@ void PlayPanel::setScore(Score* s)
       if (cs && seq && seq->canStart()) {
             setTempo(cs->tempomap()->tempo(0));
             setRelTempo(cs->tempomap()->relTempo());
-            setEndpos(cs->repeatList()->ticks());
+            setEndpos(cs->repeatList().ticks());
             Fraction tick = cs->pos(POS::CURRENT);
             heartBeat(tick.ticks(), tick.ticks(), 0);
             }
@@ -323,7 +323,7 @@ void PlayPanel::updatePosLabel(int utick)
       int t = 0;
       int tick = 0;
       if (cs) {
-            tick = cs->repeatList()->utick2tick(utick);
+            tick = cs->repeatList().utick2tick(utick);
             cs->sigmap()->tickValues(tick, &bar, &beat, &t);
             double tpo = cs->tempomap()->tempo(tick) * cs->tempomap()->relTempo();
             setTempo(tpo);

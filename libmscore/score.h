@@ -826,7 +826,7 @@ class Score : public QObject, public ScoreElement {
       void setAutosaveDirty(bool v)  { _autosaveDirty = v;    }
       bool autosaveDirty() const     { return _autosaveDirty; }
       bool playlistDirty()           { return _playlistDirty; }
-      void setPlaylistDirty()        { _playlistDirty = true; }
+      virtual void setPlaylistDirty();
 
       void spell();
       void spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment);
@@ -939,10 +939,9 @@ class Score : public QObject, public ScoreElement {
 
       Measure* searchLabel(const QString& s, Measure* startMeasure = nullptr, Measure* endMeasure = nullptr);
       Measure* searchLabelWithinSectionFirst(const QString& s, Measure* sectionStartMeasure, Measure* sectionEndMeasure);
-      virtual inline RepeatList* repeatList() const;
+      virtual inline const RepeatList& repeatList() const;
       qreal utick2utime(int tick) const;
       int utime2utick(qreal utime) const;
-      void updateRepeatList(bool expandRepeats);
 
       void nextInputPos(ChordRest* cr, bool);
       void cmdMirrorNoteHead();
@@ -1210,6 +1209,7 @@ class MasterScore : public Score {
       TimeSigMap* _sigmap;
       TempoMap* _tempomap;
       RepeatList* _repeatList;
+      bool _expandRepeats = true;
       QList<Excerpt*> _excerpts;
       std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
       Score* _playbackScore = nullptr;
@@ -1259,7 +1259,12 @@ class MasterScore : public Score {
       virtual UndoStack* undoStack() const override                   { return _movements->undo(); }
       virtual TimeSigMap* sigmap() const override                     { return _sigmap;     }
       virtual TempoMap* tempomap() const override                     { return _tempomap;   }
-      virtual RepeatList* repeatList()  const override                { return _repeatList; }
+
+      void setExpandRepeats(bool expandRepeats);
+      void updateRepeatListTempo();
+      virtual const RepeatList& repeatList() const override;
+      void setPlaylistDirty() override;
+
       virtual QList<Excerpt*>& excerpts() override                    { return _excerpts;   }
       virtual const QList<Excerpt*>& excerpts() const override        { return _excerpts;   }
       virtual QQueue<MidiInputEvent>* midiInputQueue() override       { return &_midiInputQueue;    }
@@ -1369,7 +1374,7 @@ class ScoreLoad {
       };
 
 inline UndoStack* Score::undoStack() const             { return _masterScore->undoStack();      }
-inline RepeatList* Score::repeatList()  const          { return _masterScore->repeatList();     }
+inline const RepeatList& Score::repeatList()  const    { return _masterScore->repeatList();     }
 inline TempoMap* Score::tempomap() const               { return _masterScore->tempomap();       }
 inline TimeSigMap* Score::sigmap() const               { return _masterScore->sigmap();         }
 inline QList<Excerpt*>& Score::excerpts()              { return _masterScore->excerpts();       }

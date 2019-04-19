@@ -154,13 +154,22 @@ RepeatList::RepeatList(Score* s)
       }
 
 //---------------------------------------------------------
+//   ~RepeatList
+//---------------------------------------------------------
+
+RepeatList::~RepeatList()
+      {
+      qDeleteAll(*this);
+      }
+
+//---------------------------------------------------------
 //   ticks
 //---------------------------------------------------------
 
-int RepeatList::ticks()
+int RepeatList::ticks() const
       {
       if (length() > 0) {
-            RepeatSegment* s = last();
+            const RepeatSegment* s = last();
             return s->utick + s->len();
             }
       return 0;
@@ -170,7 +179,24 @@ int RepeatList::ticks()
 //   update
 //---------------------------------------------------------
 
-void RepeatList::update()
+void RepeatList::update(bool expand)
+      {
+      if (!_scoreChanged && expand == _expanded)
+            return;
+
+      if (expand)
+            unwind();
+      else
+            flatten();
+
+      _scoreChanged = false;
+      }
+
+//---------------------------------------------------------
+//   updateTempo
+//---------------------------------------------------------
+
+void RepeatList::updateTempo()
       {
       const TempoMap* tl = _score->tempomap();
 
@@ -284,6 +310,35 @@ void RepeatList::dump() const
       }
 
 //---------------------------------------------------------
+//   flatten
+///   Make this repeat list flat (don't expand repeats)
+//---------------------------------------------------------
+
+void RepeatList::flatten()
+      {
+      qDeleteAll(*this);
+      clear();
+
+      Measure* m = _score->firstMeasure();
+      if (!m)
+            return;
+
+      RepeatSegment* s = new RepeatSegment;
+      s->tick  = 0;
+      s->utick = 0;
+      s->utime = 0.0;
+      s->timeOffset = 0.0;
+      do {
+            s->addMeasure(m);
+            m = m->nextMeasure();
+            }
+      while (m);
+      push_back(s);
+
+      _expanded = false;
+      }
+
+//---------------------------------------------------------
 //   unwind
 //    implements:
 //          - repeats
@@ -342,7 +397,8 @@ void RepeatList::unwind()
                   }
             }
 
-      update();
+      updateTempo();
+      _expanded = true;
       dump();
       }
 
@@ -413,7 +469,6 @@ std::map<Volta*, Measure*>::const_iterator RepeatList::searchVolta(Measure * con
 //---------------------------------------------------------
 //   unwindSection
 //    unwinds from sectionStartMeasure through sectionEndMeasure
-//    appends repeat segments using rs
 //---------------------------------------------------------
 
 void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* const sectionEndMeasure)
@@ -425,7 +480,7 @@ void RepeatList::unwindSection(Measure* const sectionStartMeasure, Measure* cons
             return;
             }
 
-      rs = nullptr; // no measures to be played yet
+      RepeatSegment* rs = nullptr; // no measures to be played yet
 
       Measure* prevMeasure = nullptr; // the last processed measure that is part of this RepeatSegment
       Measure* currentMeasure = sectionStartMeasure; // the measure to be processed/evaluated

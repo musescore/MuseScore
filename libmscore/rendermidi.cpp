@@ -997,38 +997,6 @@ static void collectMeasureEvents(EventMap* events, Measure* m, Staff* staff, Sta
       }
 
 //---------------------------------------------------------
-//   updateRepeatList
-//---------------------------------------------------------
-
-void Score::updateRepeatList(bool expandRepeats)
-      {
-      if (!expandRepeats) {
-            for (RepeatSegment* s : *repeatList())
-                  delete s;
-            repeatList()->clear();
-            Measure* m = firstMeasure();
-            if (m == 0)
-                  return;
-            RepeatSegment* s = new RepeatSegment;
-            s->tick  = 0;
-            s->utick = 0;
-            s->utime = 0.0;
-            s->timeOffset = 0.0;
-            do {
-                  s->addMeasure(m);
-                  m = m->nextMeasure();
-                  }
-            while (m);
-            repeatList()->append(s);
-            }
-      else
-            repeatList()->unwind();
-      if (MScore::debugMode)
-            repeatList()->dump();
-      setPlaylistDirty();
-      }
-
-//---------------------------------------------------------
 //   updateHairpin
 //---------------------------------------------------------
 
@@ -1251,7 +1219,7 @@ void Score::renderStaff(EventMap* events, Staff* staff, DynamicsRenderMethod met
       Measure* lastMeasure = 0;
       StaffRenderData renderData;
 
-      for (const RepeatSegment* rs : *repeatList()) {
+      for (const RepeatSegment* rs : repeatList()) {
             Fraction startTick  = Fraction::fromTicks(rs->tick);
             Fraction endTick    = startTick + Fraction::fromTicks(rs->len());
             int tickOffset = rs->utick - rs->tick;
@@ -1280,10 +1248,10 @@ void Score::renderStaff(EventMap* events, Staff* staff, DynamicsRenderMethod met
 
 void Score::renderSpanners(EventMap* events)
       {
-      for (const RepeatSegment* rs : *repeatList()) {
+      for (const RepeatSegment* rs : repeatList()) {
             int tickOffset = rs->utick - rs->tick;
             int utick1 = rs->utick;
-            int tick1 = repeatList()->utick2tick(utick1);
+            int tick1 = repeatList().utick2tick(utick1);
             int tick2 = tick1 + rs->len();
             std::map<int, std::vector<std::pair<int, std::pair<bool, int>>>> channelPedalEvents;
             for (const auto& sp : _spanner.map()) {
@@ -1315,8 +1283,8 @@ void Score::renderSpanners(EventMap* events)
                               }
                         if (s->tick2().ticks() >= tick1 && s->tick2().ticks() <= tick2) {
                               int t = s->tick2().ticks() + tickOffset + 1;
-                              if (t > repeatList()->last()->utick + repeatList()->last()->len())
-                                    t = repeatList()->last()->utick + repeatList()->last()->len();
+                              if (t > repeatList().last()->utick + repeatList().last()->len())
+                                    t = repeatList().last()->utick + repeatList().last()->len();
                               channelPedalEvents.at(channel).push_back(std::pair<int, std::pair<bool, int>>(t, std::pair<bool, int>(false, staff)));
                               }
                         }
@@ -2472,7 +2440,7 @@ void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, con
       updateCapo();
       createPlayEvents();
 
-      updateRepeatList(expandRepeats);
+      masterScore()->setExpandRepeats(expandRepeats);
       masterScore()->updateChannel();
       updateVelo();
 
@@ -2522,7 +2490,7 @@ void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, con
       if (!metronome)
             return;
       // add metronome ticks
-      for (const RepeatSegment* rs : *repeatList()) {
+      for (const RepeatSegment* rs : repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
