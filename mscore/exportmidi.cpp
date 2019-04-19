@@ -84,7 +84,7 @@ void ExportMidi::writeHeader()
       //--------------------------------------------
 
       TimeSigMap* sigmap = cs->sigmap();
-      foreach(const RepeatSegment* rs, *cs->repeatList()) {
+      for (const RepeatSegment* rs : cs->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
@@ -135,7 +135,7 @@ void ExportMidi::writeHeader()
             KeyList* keys = staff->keyList();
 
             bool initialKeySigFound = false;
-            for (const RepeatSegment* rs : *cs->repeatList()) {
+            for (const RepeatSegment* rs : cs->repeatList()) {
                   int startTick  = rs->tick;
                   int endTick    = startTick + rs->len();
                   int tickOffset = rs->utick - rs->tick;
@@ -370,7 +370,7 @@ void ExportMidi::PauseMap::calculate(const Score* s)
       tempomapWithPauses = new TempoMap();
       tempomapWithPauses->setRelTempo(tempomap->relTempo());
 
-      foreach(const RepeatSegment* rs, *s->repeatList()) {
+      for (const RepeatSegment* rs : s->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;

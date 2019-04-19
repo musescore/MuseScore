@@ -5852,7 +5852,7 @@ void MuseScore::setPlayRepeats(bool repeat)
       preferences.setPreference(PREF_APP_PLAYBACK_PLAYREPEATS, repeat);
       MScore::playRepeats = repeat;
       if (cs) {
-            cs->updateRepeatList(repeat);
+            cs->masterScore()->setExpandRepeats(repeat);
             emit cs->playlistChanged();
             }
       }

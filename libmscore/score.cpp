@@ -803,6 +803,25 @@ ScoreContentState Score::state() const
       }
 
 //---------------------------------------------------------
+//   setPlaylistDirty
+//---------------------------------------------------------
+
+void Score::setPlaylistDirty()
+      {
+      _playlistDirty = true;
+      }
+
+//---------------------------------------------------------
+//   setPlaylistDirty
+//---------------------------------------------------------
+
+void MasterScore::setPlaylistDirty()
+      {
+      Score::setPlaylistDirty();
+      _repeatList->setScoreChanged();
+      }
+
+//---------------------------------------------------------
 //   spell
 //---------------------------------------------------------
 
@@ -1779,7 +1798,7 @@ Segment* Score::lastSegment() const
 
 qreal Score::utick2utime(int tick) const
       {
-      return repeatList()->utick2utime(tick);
+      return repeatList().utick2utime(tick);
       }
 
 //---------------------------------------------------------
@@ -1788,7 +1807,39 @@ qreal Score::utick2utime(int tick) const
 
 int Score::utime2utick(qreal utime) const
       {
-      return repeatList()->utime2utick(utime);
+      return repeatList().utime2utick(utime);
+      }
+
+//---------------------------------------------------------
+//   setExpandRepeats
+//---------------------------------------------------------
+
+void MasterScore::setExpandRepeats(bool expand)
+      {
+      if (_expandRepeats == expand)
+            return;
+      _expandRepeats = expand;
+      setPlaylistDirty();
+      }
+
+//---------------------------------------------------------
+//   updateRepeatListTempo
+///   needed for usage in Seq::processMessages
+//---------------------------------------------------------
+
+void MasterScore::updateRepeatListTempo()
+      {
+      _repeatList->updateTempo();
+      }
+
+//---------------------------------------------------------
+//   repeatList
+//---------------------------------------------------------
+
+const RepeatList& MasterScore::repeatList() const
+      {
+      _repeatList->update(_expandRepeats);
+      return *_repeatList;
       }
 
 //---------------------------------------------------------
@@ -3914,8 +3965,7 @@ int Score::harmonyCount()
 QString Score::extractLyrics()
       {
       QString result;
-      updateRepeatList(true);
-      setPlaylistDirty();
+      masterScore()->setExpandRepeats(true);
       SegmentType st = SegmentType::ChordRest;
       for (int track = 0; track < ntracks(); track += VOICES) {
             bool found = false;
@@ -3924,7 +3974,7 @@ QString Score::extractLyrics()
                   m->setPlaybackCount(0);
                   }
             // follow the repeat segments
-            for (const RepeatSegment* rs : *repeatList()) {
+            for (const RepeatSegment* rs : repeatList()) {
                   Fraction startTick  = Fraction::fromTicks(rs->tick);
                   Fraction endTick    = startTick + Fraction::fromTicks(rs->len());
                   for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
@@ -4014,11 +4064,11 @@ int Score::keysig()
 
 int Score::duration()
       {
-      updateRepeatList(true);
-      RepeatList* rl = repeatList();
-      if (rl->isEmpty())
+      masterScore()->setExpandRepeats(true);
+      const RepeatList& rl = repeatList();
+      if (rl.empty())
             return 0;
-      RepeatSegment* rs = rl->last();
+      const RepeatSegment* rs = rl.last();
       return lrint(utick2utime(rs->utick + rs->len()));
       }
 
