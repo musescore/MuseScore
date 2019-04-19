@@ -317,8 +317,11 @@ Score* MuseScore::openScore(const QString& fn, bool switchTab)
       QFileInfo fi(fn);
       QString path = fi.canonicalFilePath();
       for (Score* s : scoreList) {
-            if (s->masterScore()->fileInfo()->canonicalFilePath() == path)
+            if (s->masterScore()->fileInfo()->canonicalFilePath() == path) {
+                  if (switchTab)
+                        setCurrentScoreView(scoreList.indexOf(s->masterScore()));
                   return 0;
+                  }
             }
 
       MasterScore* score = readScore(fn);
