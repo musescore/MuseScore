@@ -49,9 +49,12 @@ void InspectorDynamic::valueChanged(int idx, bool b)
       {
       InspectorTextBase::valueChanged(idx, b);
 
+      Pid pid = iList[idx].t;
       // Update min and max for velocity change input
-      int velocity = d.velocity->value();
-      d.changeInVelocity->setMinimum(1 - velocity);
-      d.changeInVelocity->setMaximum(127 - velocity);
+      if (pid == Pid::VELOCITY) {
+            int velocity = d.velocity->value();
+            d.changeInVelocity->setMinimum(1 - velocity);
+            d.changeInVelocity->setMaximum(127 - velocity);
+            }
       }
 } // namespace Ms
