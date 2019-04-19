@@ -102,6 +102,7 @@ set (SOURCE_LIB
       ${PROJECT_SOURCE_DIR}/mscore/plugin/api/score.cpp
       ${PROJECT_SOURCE_DIR}/mscore/plugin/api/part.h
       ${PROJECT_SOURCE_DIR}/mscore/plugin/api/excerpt.cpp
+      ${PROJECT_SOURCE_DIR}/mscore/plugin/api/util.cpp
       ${PROJECT_SOURCE_DIR}/mscore/preferences.cpp
       ${PROJECT_SOURCE_DIR}/mscore/shortcut.cpp
       ${PROJECT_SOURCE_DIR}/mscore/stringutils.cpp

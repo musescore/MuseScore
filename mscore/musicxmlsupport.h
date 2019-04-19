@@ -183,6 +183,8 @@ public:
 
 class ValidatorMessageHandler : public QAbstractMessageHandler
       {
+      Q_OBJECT
+
 public:
       ValidatorMessageHandler() : QAbstractMessageHandler(0) {}
       QString getErrors() const { return errors; }
