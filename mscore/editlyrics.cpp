@@ -407,7 +407,7 @@ void ScoreView::lyricsUnderscore()
       // there will be no melisma anyway), set a temporary melisma duration
       if (fromLyrics == lyrics && nextSegment) {
             _score->startCmd();
-            lyrics->undoChangeProperty(Pid::LYRIC_TICKS, Lyrics::TEMP_MELISMA_TICKS);
+            lyrics->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
             _score->setLayoutAll();
             _score->endCmd();
             }
