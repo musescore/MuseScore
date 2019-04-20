@@ -40,6 +40,9 @@ class RepeatSegment {
       int len() const;
       int playbackCount(Measure * const) const;
 
+      Measure* firstMeasure() const { return measureList.empty() ? nullptr : measureList.front().first; }
+      Measure* lastMeasure() const  { return measureList.empty() ? nullptr : measureList.back().first;  }
+
       friend class RepeatList;
       };
 
