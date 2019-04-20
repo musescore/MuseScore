@@ -183,7 +183,7 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
       if (tick() >= stick) {
             layout();
             if (ticks().isZero())                 // only do layout if some time span
-                  return 0;
+                  return nullptr;
             SLine::layout();
             //
             // this is the first call to layoutSystem,
@@ -261,6 +261,9 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
       const bool tempMelismaTicks = (lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
       if (tempMelismaTicks && spannerSegments().size() > 0 && spannerSegments().front() == lineSegm)
             lineSegm->rxpos2() += lyrics()->width();
+      // avoid backwards melisma
+      if (lineSegm->pos2().x() < 0)
+            lineSegm->rxpos2() = 0;
       return lineSegm;
       }
 
