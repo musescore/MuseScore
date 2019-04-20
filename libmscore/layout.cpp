@@ -3661,8 +3661,13 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
 
       for (Segment* s : sl) {
             for (Element* e : s->elist()) {
-                  if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show())
+                  if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show()) {
+                        // the beam and its system may still be referenced when selecting all,
+                        // even if the staff is invisible. The old system is invalid and does cause problems in #284012
+                        if (e && e->isChordRest() && !score()->staff(e->staffIdx())->show() && toChordRest(e)->beam())
+                              toChordRest(e)->beam()->setParent(nullptr);
                         continue;
+                        }
                   ChordRest* cr = toChordRest(e);
 
                   // layout beam
