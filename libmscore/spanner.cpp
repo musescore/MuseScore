@@ -20,6 +20,7 @@
 #include "measure.h"
 #include "undo.h"
 #include "staff.h"
+#include "lyrics.h"
 #include "musescoreCore.h"
 
 namespace Ms {
@@ -596,13 +597,35 @@ void Spanner::computeEndElement()
                         setTrack2(track());
                   if (ticks().isZero() && isTextLine() && parent())   // special case palette
                         setTicks(score()->lastSegment()->tick() - _tick);
-                  // find last cr on this staff that ends before tick2
 
-                  _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
+                  if (isLyricsLine()) {
+                        // lyrics endTick should already indicate the segment we want
+                        // except for TEMP_MELISMA_TICKS case
+                        Lyrics* l = toLyricsLine(this)->lyrics();
+                        Fraction tick = (l->ticks().ticks() == Lyrics::TEMP_MELISMA_TICKS) ? l->tick() : l->endTick();
+                        Segment* s = score()->tick2segment(tick, true, SegmentType::ChordRest);
+                        if (!s) {
+                              qDebug("%s no end segment for tick %d", name(), tick);
+                              return;
+                              }
+                        int t = trackZeroVoice(track2());
+                        // take the first chordrest we can find;
+                        // linePos will substitute one in current voice if available
+                        for (int v = 0; v < VOICES; ++v) {
+                              _endElement = s->element(t + v);
+                              if (_endElement)
+                                    break;
+                              }
+                        }
+                  else {
+                        // find last cr on this staff that ends before tick2
+                        _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
+                        }
                   if (!_endElement) {
                         qDebug("%s no end element for tick %d", name(), tick2().ticks());
                         return;
                         }
+
                   if (!endCR()->measure()->isMMRest()) {
                         ChordRest* cr = endCR();
                         Fraction nticks = cr->tick() + cr->actualTicks() - _tick;

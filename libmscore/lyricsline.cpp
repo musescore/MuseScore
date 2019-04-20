@@ -155,6 +155,8 @@ void LyricsLine::layout()
                         }
                   lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, ps->tick() - lyricsStartTick);
                   }
+            // Spanner::computeEndElement() will actually ignore this value and use the (earlier) lyrics()->endTick() instead
+            // still, for consistency with other lines, we should set the ticks for this to the computed (later) value
             setTicks(s->tick() - lyricsStartTick);
             }
       else {                                    // dash(es)
