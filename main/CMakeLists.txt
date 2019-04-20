@@ -371,7 +371,7 @@ else (MINGW)
       endif (Qt5Widgets_VERSION VERSION_LESS "5.12.4")
 
       list(APPEND dlls_to_copy ${dll_lame} ${dll_ogg} ${dll_sndfile} ${dll_vorbis} ${dll_vorbisfile} ${dll_portaudio} ${dll_ssl1} ${dll_ssl2} "$<TARGET_FILE_DIR:mscore>/${MSCORE_OUTPUT_NAME}.exe")
-      set( output_dir_for_dlls "${PROJECT_BINARY_DIR}/../msvc.install${ARCH_TYPE}/bin")
+      set( output_dir_for_dlls "${CMAKE_INSTALL_PREFIX}/bin")
 
       COPY_FILES_INTO_DIRECTORY_IF_CHANGED( "${dlls_to_copy}" ${output_dir_for_dlls}  mscore)
 
@@ -465,6 +465,27 @@ else (MINGW)
          REGEX ".*QtWebkit.*" EXCLUDE
          )
 
+      if (WIN_PORTABLE)
+        # deploy the files and directory structure needed for the PortableApps.com format
+        install(DIRECTORY ../build/PortableApps/App DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
+        install(DIRECTORY ../build/PortableApps/Other DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
+        install(FILES ../build/PortableApps/help.html DESTINATION ${CMAKE_INSTALL_PREFIX}/../..)
+        set(MSCORE_ICON_BASE ../assets/musescore-icon-round)
+        configure_file(../build/PortableApps/appinfo.ini.in     ${CMAKE_INSTALL_PREFIX}/../../App/AppInfo/appinfo.ini   @ONLY)
+        install(FILES ../mscore/data/mscore.ico RENAME appicon.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
+        install(FILES ${MSCORE_ICON_BASE}-16.png RENAME appicon_16.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
+        install(FILES ${MSCORE_ICON_BASE}-32.png RENAME appicon_32.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
+        install(FILES ${MSCORE_ICON_BASE}-128.png RENAME appicon_128.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo)
+        install( FILES   ../assets/mscz-icon.ico RENAME mscz.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # icon for .MSCZ files
+        install( FILES   ../assets/mscz-icon-48.png RENAME mscz_48.png DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MSCZ files
+        install( FILES   ../assets/mscx-icon.ico RENAME mscx.ico DESTINATION ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # icon for .MSCX files
+        install( FILES   ../assets/mscx-icon-48.png RENAME mscx_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MSCX files
+        # use a custom icon for MusicXML files (there isn't a standard icon for MusicXML files)
+        # install( FILES   ../assets/mxl-icon.svg RENAME mxl.svg DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # SVG icon for .MXL (compressed MusicXML) files
+        # install( FILES   ../assets/mxl-icon-48.png RENAME mxl_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .MXL (compressed MusicXML) files
+        # install( FILES   ../assets/xml-icon.svg RENAME xml.svg DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # SVG icon for .XML (MusicXML) files
+        # install( FILES   ../assets/xml-icon-48.png RENAME xml_48.png DESTINATION  ${CMAKE_INSTALL_PREFIX}/../AppInfo/FileTypeIcons) # PNG icon for .XML (MusicXML) files
+      endif (WIN_PORTABLE)
 
    endif ( NOT MSVC )
 endif (MINGW)

@@ -47,10 +47,16 @@ PathListDialog::PathListDialog(QWidget* parent)
 
 void PathListDialog::addClicked()
       {
+#if defined(WIN_PORTABLE)
+      QString dir = QDir::cleanPath(QString("%1/../../../Data/%2").arg(QCoreApplication::applicationDirPath()).arg(QCoreApplication::applicationName()));
+#else
+      QString dir = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
+#endif
+
       QString newPath = QFileDialog::getExistingDirectory(
          this,
          tr("Choose a directory"),
-         QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName()),
+         dir,
          QFileDialog::ShowDirsOnly | (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
          );
       if (!newPath.isEmpty()) {

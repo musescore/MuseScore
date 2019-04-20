@@ -61,6 +61,7 @@
 #cmakedefine OSC
 #cmakedefine OPENGL
 #cmakedefine SOUNDFONT3
+#cmakedefine WIN_PORTABLE
 
 #cmakedefine Q_WS_UIKIT
 

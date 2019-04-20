@@ -1455,7 +1455,11 @@ QString MuseScore::getPaletteFilename(bool open, const QString& name)
       {
       QString title;
       QString filter;
+#if defined(WIN_PORTABLE)
+      QString wd      = QDir::cleanPath(QString("%1/../../../Data/settings").arg(QCoreApplication::applicationDirPath()).arg(QCoreApplication::applicationName()));
+#else
       QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)).arg(QCoreApplication::applicationName());
+#endif
       if (open) {
             title  = tr("Load Palette");
             filter = tr("MuseScore Palette") + " (*.mpal)";
