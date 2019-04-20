@@ -760,11 +760,11 @@ MasterScore* MuseScore::getNewFile()
       if (!copyright.isEmpty())
             score->setMetaTag("copyright", copyright);
 
-      score->rebuildMidiMapping();
+      if (synti)
+            score->setSynthesizerState(synti->state());
 
-      // We need a midi mapping to be able to update the expressive
-      score->updateExpressive(synti);
-      score->rebuildMidiMapping();
+      // Call this even if synti doesn't exist - we need to rebuild either way
+      score->rebuildAndUpdateExpressive(synti);
 
       {
             ScoreLoad sl;
@@ -2250,6 +2250,10 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
       QString suffix  = info.suffix().toLower();
       score->setName(info.completeBaseName());
       score->setImportedFilePath(name);
+
+      // Set the default synthesizer state before we read
+      if (synti)
+            score->setSynthesizerState(synti->state());
 
       if (suffix == "mscz" || suffix == "mscx") {
             Score::FileError rv = score->loadMsc(name, ignoreVersionError);

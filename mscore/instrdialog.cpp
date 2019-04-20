@@ -532,8 +532,7 @@ void MuseScore::editInstrList()
 
       masterScore->setLayoutAll();
       masterScore->endCmd();
-      masterScore->rebuildMidiMapping();
-      masterScore->updateExpressive(synti);
+      masterScore->rebuildAndUpdateExpressive(synti);
       seq->initInstruments();
       }
 
