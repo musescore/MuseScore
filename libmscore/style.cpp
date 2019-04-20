@@ -940,7 +940,7 @@ static const StyleType styleTypes[] {
       { Sid::footerFontStyle,               "footerFontStyle",              int(FontStyle::Normal) },
       { Sid::footerColor,                   "footerColor",                  QColor(0, 0, 0, 255) },
       { Sid::footerAlign,                   "footerAlign",                  QVariant::fromValue(Align::LEFT) },
-      { Sid::footerOffset,                  "footerOffset",                 QPointF() },
+      { Sid::footerOffset,                  "footerOffset",                 QPointF(0.0, 5.0) },
       { Sid::footerFrameType,               "footerFrameType",              int(FrameType::NO_FRAME) },
       { Sid::footerFramePadding,            "footerFramePadding",           0.2 },
       { Sid::footerFrameWidth,              "footerFrameWidth",             0.1 },
