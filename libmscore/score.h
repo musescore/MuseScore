@@ -1319,6 +1319,7 @@ class MasterScore : public Score {
       int getNextFreeDrumMidiMapping();
       void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
       void updateChannel();
+      void rebuildAndUpdateExpressive(MasterSynthesizer* m);
       void updateExpressive(MasterSynthesizer* m);
       void updateExpressive(MasterSynthesizer* m, bool expressive, bool force = false);
       void setSoloMute();

@@ -382,7 +382,8 @@ class Fluid : public Synthesizer {
       virtual bool loadSoundFonts(const QStringList& s);
       virtual bool addSoundFont(const QString& s);
       virtual bool removeSoundFont(const QString& s);
-      virtual QStringList soundFonts() const;
+      QStringList soundFonts() const;
+      std::vector<SoundFontInfo> soundFontsInfo() const override;
 
       void start_voice(Voice* voice);
       Voice* alloc_voice(unsigned id, Sample* sample, int chan, int key, int vel, double vt);
