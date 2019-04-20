@@ -29,6 +29,9 @@ REM    "msvc_build.bat package 32" pack the installer for already built and inst
 REM
 REM CLEAN:
 REM    "msvc_build.bat clean" remove all files in msvc.* folders and the folders itself
+REM
+REM Windows Portable build is triggered by defining BUILD_WIN_PORTABLE environment variable to "ON" before launching this script, e.g.
+REM SET BUILD_WIN_PORTABLE=ON
 
 SETLOCAL ENABLEEXTENSIONS
 
@@ -63,12 +66,18 @@ IF "%2"=="32" (
         SET "ARCH=x64"
         SET BUILD_64=ON
     )
-)    
+)
 
 IF NOT "%3"=="" (
    SET BUILD_NUMBER="%3"
    SET BUILD_AUTOUPDATE="ON"
    )
+
+IF "%BUILD_WIN_PORTABLE%"=="ON" (
+    SET "INSTALL_FOLDER=MuseScorePortable\App\MuseScore"
+    SET "BUILD_AUTOUPDATE=OFF"
+    SET "WIN_PORTABLE_OPT=-DBUILD_PORTABLEAPPS=ON"
+    )
 
 IF /I "%1"=="release" (
    SET CONFIGURATION_STR="release"
@@ -117,6 +126,7 @@ IF /I "%1"=="revision" (
 
 IF /I "%1"=="clean" (
    for /d %%G in ("msvc.*") do rd /s /q "%%~G"
+   for /d %%G in ("MuseScorePortable") do rd /s /q "%%~G"
    GOTO :END
    ) ELSE (
    echo No valid parameters are set
@@ -156,7 +166,9 @@ IF /I "%1"=="clean" (
    echo Platform is: %PLATFORM_NAME%
    SET "BUILD_FOLDER=%BUILD_FOLDER%_%ARCH%"
    echo Build folder is: %BUILD_FOLDER%
-   SET "INSTALL_FOLDER=%INSTALL_FOLDER%_%ARCH%"
+   IF NOT "%BUILD_WIN_PORTABLE%"=="ON" (
+      SET "INSTALL_FOLDER=%INSTALL_FOLDER%_%ARCH%"
+      )
    echo Install folder is: %INSTALL_FOLDER%
    if not exist "%BUILD_FOLDER%\nul" mkdir "%BUILD_FOLDER%"
    if not exist "%INSTALL_FOLDER%\nul" mkdir "%INSTALL_FOLDER%"
@@ -174,9 +186,9 @@ IF NOT "%MSCORE_STABLE_BUILD%" == "" (
         )
     )
 
+SET "INSTALL_FOLDER=%INSTALL_FOLDER:\=/%"
 REM -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DCMAKE_BUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% %CRASH_REPORT_URL_OPT% are used for CI only
-   cd "%BUILD_FOLDER%" & cmake -G "%GENERATOR_NAME%" -A "%PLATFORM_NAME%" -DCMAKE_INSTALL_PREFIX=../%INSTALL_FOLDER% -DCMAKE_BUILD_TYPE=%CONFIGURATION_STR% -DBUILD_FOR_WINSTORE=%BUILD_FOR_WINSTORE% -DBUILD_64=%BUILD_64% -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DBUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% %CRASH_REPORT_URL_OPT% %TELEMETRY_TRACK_ID_OPT% ..
-
+   cd "%BUILD_FOLDER%" & cmake -G "%GENERATOR_NAME%" -A "%PLATFORM_NAME%" -DCMAKE_INSTALL_PREFIX=../%INSTALL_FOLDER% -DCMAKE_BUILD_TYPE=%CONFIGURATION_STR% -DBUILD_FOR_WINSTORE=%BUILD_FOR_WINSTORE% -DBUILD_64=%BUILD_64% -DCMAKE_BUILD_NUMBER=%BUILD_NUMBER% -DBUILD_AUTOUPDATE=%BUILD_AUTOUPDATE% %CRASH_REPORT_URL_OPT% %TELEMETRY_TRACK_ID_OPT% %WIN_PORTABLE_OPT% ..
    echo Building MuseScore...
    cd "%BUILD_FOLDER%" & cmake --build . --config %CONFIGURATION_STR% --target mscore
    GOTO :END

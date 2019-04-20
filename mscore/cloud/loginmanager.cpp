@@ -365,6 +365,11 @@ static void clearHttpCacheOnRenderFinish(QWebEngineView* webView)
 #ifdef USE_WEBENGINE
 void LoginManager::loginInteractive()
       {
+#if defined(WIN_PORTABLE)
+      QWebEngineProfile* defaultProfile = QWebEngineProfile::defaultProfile();
+      defaultProfile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+      defaultProfile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+#endif
       QWebEngineView* webView = new QWebEngineView;
       webView->setWindowModality(Qt::ApplicationModal);
       webView->setAttribute(Qt::WA_DeleteOnClose);
@@ -373,10 +378,14 @@ void LoginManager::loginInteractive()
       QWebEngineProfile* profile = page->profile();
       // TODO: logout in editor does not log out in web view
       profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
+#if defined(WIN_PORTABLE)
+      profile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+      profile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+#endif
       profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));
 
       clearHttpCacheOnRenderFinish(webView);
-      
+
       connect(page, &QWebEnginePage::loadFinished, this, [this, page, webView](bool ok) {
             if (!ok)
                   return;
@@ -777,6 +786,11 @@ void LoginManager::updateScoreData(const QString& nid, bool newScore)
       {
       const QUrl url(ApiInfo::getUpdateScoreInfoUrl(nid, _accessToken, newScore, _updateScoreDataPath));
 #ifdef USE_WEBENGINE
+#if defined(WIN_PORTABLE)
+      QWebEngineProfile* defaultProfile = QWebEngineProfile::defaultProfile();
+      defaultProfile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+      defaultProfile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+#endif
       QWebEngineView* webView = new QWebEngineView;
       webView->setWindowModality(Qt::ApplicationModal);
       webView->setAttribute(Qt::WA_DeleteOnClose);
@@ -785,6 +799,10 @@ void LoginManager::updateScoreData(const QString& nid, bool newScore)
       QWebEngineProfile* profile = page->profile();
 
       profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
+#if defined(WIN_PORTABLE)
+      profile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+      profile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
+#endif
       profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));
 
       connect(page, &QWebEnginePage::windowCloseRequested, webView, &QWebEngineView::close);

@@ -1858,7 +1858,7 @@ MuseScore::MuseScore()
       Workspace::addActionAndString(aboutMusicXMLAction, "about-musicxml");
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-#if !defined(FOR_WINSTORE)
+#if (!defined(FOR_WINSTORE)) && (!defined(WIN_PORTABLE))
       checkForUpdateAction = new QAction("", 0);
       connect(checkForUpdateAction, SIGNAL(triggered()), this, SLOT(checkForUpdatesUI()));
       checkForUpdateAction->setMenuRole(QAction::NoRole);
@@ -7342,7 +7342,12 @@ void MuseScore::updateUiStyleAndTheme()
       // set UI Theme
       QApplication::setStyle(QStyleFactory::create("Fusion"));
 
+#if defined(WIN_PORTABLE)
+      QString wd = QDir::cleanPath(QString("%1/../../../Data/%2").arg(QCoreApplication::applicationDirPath()).arg(QCoreApplication::applicationName()));
+#else
       QString wd = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
+#endif
+
       // set UI Color Palette
       QPalette p(QApplication::palette());
       QString jsonPaletteFilename = preferences.isThemeDark() ? "palette_dark_fusion.json" : "palette_light_fusion.json";;
@@ -7441,6 +7446,9 @@ MuseScoreApplication* MuseScoreApplication::initApplication(int& argc, char** ar
             appName  = "MuseScore3";
             }
 
+#if defined(WIN_PORTABLE)
+      qputenv("QML_DISABLE_DISK_CACHE", "true");
+#endif
       MuseScoreApplication* app = new MuseScoreApplication(appName2, argc, argv);
       QCoreApplication::setApplicationName(appName);
 
@@ -7846,8 +7854,16 @@ void MuseScore::init(QStringList& argv)
       mscoreGlobalShare = getSharePath();
       iconPath = externalIcons ? mscoreGlobalShare + QString("icons/") :  QString(":/data/icons/");
 
+#if defined(WIN_PORTABLE)
+      if (dataPath.isEmpty()) {
+            dataPath = QDir::cleanPath(QString("%1/../../../Data/settings").arg(QCoreApplication::applicationDirPath()).arg(QCoreApplication::applicationName()));
+            QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, dataPath);
+            QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, dataPath);
+            }
+#else
       if (dataPath.isEmpty())
             dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#endif
 
       if (useFactorySettings) {
             if (deletePreferences)

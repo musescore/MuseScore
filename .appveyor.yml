@@ -27,6 +27,10 @@ platform:
   - x64
 
 #environment:
+environment:
+  matrix:
+    - BUILD_WIN_PORTABLE: OFF
+    - BUILD_WIN_PORTABLE: ON
 
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
@@ -37,6 +41,9 @@ test: off
 matrix:
   fast_finish: true # stop all jobs if any job fails
   #allow_failures: # list jobs allowed to fail without stopping the rest
+  exclude:
+    - platform: x64 # do not build Win64 portable
+      BUILD_WIN_PORTABLE: ON
 
 install:
   - cd %APPVEYOR_BUILD_FOLDER%
