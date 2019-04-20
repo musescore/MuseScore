@@ -96,7 +96,6 @@ enum class Key;
 enum class HairpinType : signed char;
 enum class SegmentType;
 enum class OttavaType : char;
-enum class DynamicsRenderMethod : signed char;
 
 extern bool showRubberBand;
 
@@ -518,11 +517,6 @@ class Score : public QObject, public ScoreElement {
       void resetTempo();
       void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
 
-      void renderStaff(EventMap* events, Staff*, DynamicsRenderMethod method, int cc);
-      void renderSpanners(EventMap* events);
-      void renderMetronome(EventMap* events, Measure* m, const Fraction& tickOffset);
-      void updateVelo();
-
       void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int trackStart, int trackEnd, const SelectionFilter& filter);
       void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
       ChordRest* deleteRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
@@ -897,9 +891,10 @@ class Score : public QObject, public ScoreElement {
       void addLyrics(const Fraction& tick, int staffIdx, const QString&);
 
       void updateSwing();
-      void createPlayEvents();
+      void createPlayEvents(Measure* start = nullptr, Measure* end = nullptr);
 
       void updateCapo();
+      void updateVelo();
 
       void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
 

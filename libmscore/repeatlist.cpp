@@ -105,6 +105,7 @@ RepeatSegment::RepeatSegment(RepeatSegment * const rs, Measure * const fromMeasu
 
 void RepeatSegment::addMeasure(Measure * const m)
       {
+      Q_ASSERT(measureList.empty() || measureList.back().first->nextMeasure() == m);
       if (measureList.empty()) {
             tick = m->tick().ticks();
             }
@@ -296,14 +297,14 @@ void RepeatList::dump() const
       {
 #if 0
       qDebug("==Dump Repeat List:==");
-      foreach(const RepeatSegment* s, *this) {
+      for (const RepeatSegment* s : *this) {
             qDebug("%p  tick: %3d(%d) %3d(%d) len %d(%d) beats  %f + %f", s,
                s->utick / MScore::division,
                s->utick / MScore::division / 4,
                s->tick / MScore::division,
                s->tick / MScore::division / 4,
-               s->len / MScore::division,
-               s->len / MScore::division / 4,
+               s->len() / MScore::division,
+               s->len() / MScore::division / 4,
                s->utime, s->timeOffset);
             }
 #endif
