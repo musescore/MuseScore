@@ -235,6 +235,14 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
                                           break;
                                     }
                               else if (seg->segmentType() == SegmentType::EndBarLine) {
+                                    if (!seg->enabled()) {
+                                          // disabled barline layout is not reliable
+                                          // use width of measure instead
+                                          Measure* m = seg->measure();
+                                          s = seg->system();
+                                          x = m->width() + m->pos().x() - nhw * 2;
+                                          seg = nullptr;
+                                          }
                                     break;
                                     }
                               }
