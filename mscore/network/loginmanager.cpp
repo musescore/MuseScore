@@ -352,6 +352,10 @@ void LoginManager::loginInteractive()
 
       QWebEnginePage* page = webView->page();
       QWebEngineProfile* profile = page->profile();
+#if defined(WIN_PORTABLE)
+      profile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/QWebEngine").arg(QCoreApplication::applicationDirPath()).arg(QCoreApplication::applicationName())));
+      profile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/QWebEngine").arg(QCoreApplication::applicationDirPath()).arg(QCoreApplication::applicationName())));
+#endif
       // TODO: logout in editor does not log out in web view
       profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
       profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));

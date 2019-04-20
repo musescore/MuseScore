@@ -67,6 +67,10 @@ Startcenter::Startcenter(QWidget* parent)
             MyWebUrlRequestInterceptor* wuri = new MyWebUrlRequestInterceptor(page);
             QWebEngineProfile* profile = page->profile();
             profile->setRequestInterceptor(wuri);
+#if defined(WIN_PORTABLE)
+            profile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath()).arg(QCoreApplication::applicationName())));
+            profile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath()).arg(QCoreApplication::applicationName())));
+#endif
             _webView->setPage(page);
 
             auto extendedVer = QString(VERSION) + "." + QString(BUILD_NUMBER);

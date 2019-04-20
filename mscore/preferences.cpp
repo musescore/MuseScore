@@ -48,6 +48,10 @@ void Preferences::init(bool storeInMemoryOnly)
       bool checkExtensionsUpdateStartup = false;
 #endif
 
+#if defined(WIN_PORTABLE)
+      checkUpdateStartup = false;
+#endif
+
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
       // use system native file dialogs
       // Qt file dialog is very slow on Windows and Mac
@@ -77,7 +81,13 @@ void Preferences::init(bool storeInMemoryOnly)
       const MuseScoreStyleType defaultAppGlobalStyle = MuseScoreStyleType::LIGHT_FUSION;
 #endif
 
+#if defined(WIN_PORTABLE)
+      QString wd = QString(QDir::cleanPath(QString("%1/../../../Data/%2").arg(QCoreApplication::applicationDirPath()).arg(QCoreApplication::applicationName())));
+      bool showSplashScreenStartup = false;
+#else
       QString wd = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
+      bool showSplashScreenStartup = true;
+#endif
 
       _allPreferences = prefs_map_t(
       {
@@ -166,7 +176,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_APP_STARTUP_CHECK_EXTENSIONS_UPDATE,          new BoolPreference(checkExtensionsUpdateStartup, false)},
             {PREF_UI_APP_STARTUP_SHOWNAVIGATOR,                    new BoolPreference(false, false)},
             {PREF_UI_APP_STARTUP_SHOWPLAYPANEL,                    new BoolPreference(false, false)},
-            {PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN,                 new BoolPreference(true, false)},
+            {PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN,                 new BoolPreference(showSplashScreenStartup, false)},
             {PREF_UI_APP_STARTUP_SHOWSTARTCENTER,                  new BoolPreference(true, false)},
             {PREF_UI_APP_GLOBALSTYLE,                              new EnumPreference(QVariant::fromValue(defaultAppGlobalStyle), false)},
             {PREF_UI_APP_LANGUAGE,                                 new StringPreference("system", false)},

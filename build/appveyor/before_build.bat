@@ -62,3 +62,22 @@ SET /p MSREVISION=<mscore\revision.h
 
 :: set ccache dir
 SET CCACHE_DIR=C:\ccache\cache
+
+IF "%BUILD_WIN_PORTABLE%" == "ON" (
+CD C:\MuseScore
+
+IF NOT EXIST portableappslauncher.zip (START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "https://docs.google.com/uc?export=download&id=1hRaZTXY0ffm-TRLzu3a0_o77r3BEQcPf" -O portableappslauncher.zip )
+:: portableappslauncher is a vanilla installation of PortableApps.com Launcher https://portableapps.com/apps/development/portableapps.com_launcher
+START " " /wait "7z" x -y portableappslauncher.zip > nul
+:: test
+CD Launcher\App
+CD C:\MuseScore
+
+IF NOT EXIST portableappsinstaller.zip (START " " /wait "C:\cygwin64\bin\wget.exe" --no-check-certificate "https://docs.google.com/uc?export=download&id=1bWHoVig0EjZXQ5jJnUdnSDoEA_HyeDzH" -O portableappsinstaller.zip )
+:: portableappsinstaller is a vanilla installation of PortableApps.com Installer https://portableapps.com/apps/development/portableapps.com_installer
+START " " /wait "7z" x -y portableappsinstaller.zip > nul
+:: test
+CD Installer\App
+CD C:\MuseScore
+
+)

@@ -39,6 +39,7 @@ vtest/Pictures
 .vs
 .vscode
 dependencies
+MuseScorePortable
 
 # Downloaded files during build process
 MuseScore_General.sf3
