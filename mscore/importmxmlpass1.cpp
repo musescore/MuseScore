@@ -2054,11 +2054,15 @@ void MusicXMLParserPass1::measure(const QString& partId,
       // measure duration fixups
       mDura.reduce();
 
-      // fix for PDFtoMusic Pro v1.3.0d Build BF4E (which sometimes generates empty measures)
+      // fix for PDFtoMusic Pro v1.3.0d Build BF4E and PlayScore / ReadScoreLib Version 3.11
+      // which sometimes generate empty measures
       // if no valid length found and length according to time signature is known,
       // use length according to time signature
       if (mDura.isZero() && _timeSigDura.isValid() && _timeSigDura > Fraction(0, 1))
             mDura = _timeSigDura;
+      // if no valid length found and time signature is unknown, use default
+      if (mDura.isZero() && !_timeSigDura.isValid())
+            mDura = Fraction(4, 4);
 
       // if necessary, round up to an integral number of 1/64s,
       // to comply with MuseScores actual measure length constraints
@@ -2615,6 +2619,8 @@ void MusicXMLParserPass1::note(const QString& partId,
             vod.addNote(sTime.ticks(), (sTime + dura).ticks(), voice, staff);
             }
 
+      if (!(_e.isEndElement() && _e.name() == "note"))
+            qDebug("name %s line %lld", qPrintable(_e.name().toString()), _e.lineNumber());
       Q_ASSERT(_e.isEndElement() && _e.name() == "note");
       }
 
