@@ -53,9 +53,11 @@ if (MSVC)
   )
 else (MSVC)
   if (MINGW)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-incompatible-pointer-types")
     if (BUILD_64)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-pointer-to-int-cast")
       set_target_properties( portmidi PROPERTIES
-        COMPILE_FLAGS "-Wno-int-to-pointer-cast -Wno-pointer-to-int-cast -Wno-incompatible-pointer-types"
+        COMPILE_FLAGS "-Wno-int-to-pointer-cast"
       )
     endif (BUILD_64)
   endif (MINGW)
