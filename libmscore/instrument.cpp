@@ -805,7 +805,10 @@ void Channel::switchExpressive(MasterSynthesizer* m, bool expressive, bool force
             return;
 
       // Check that we're actually changing the MuseScore General soundfont
-      const auto& info = m->synthesizer("Fluid")->soundFontsInfo().front();
+      const auto fontsInfo = m->synthesizer("Fluid")->soundFontsInfo();
+      if (fontsInfo.empty())
+            return;
+      const auto& info = fontsInfo.front();
       if (!info.fontName.contains("MuseScore_General")) {
             qDebug().nospace() << "Soundfont '" << info.fontName << "' is not MuseScore General, cannot update expressive";
             return;
