@@ -1876,6 +1876,9 @@ void TextBase::layoutEdit()
 
 bool TextBase::acceptDrop(EditData& data) const
       {
+      // do not accept the drop if this text element is not being edited
+      if (!data.getData(this))
+            return false;
       ElementType type = data.dropElement->type();
       return type == ElementType::SYMBOL || type == ElementType::FSYMBOL;
       }
