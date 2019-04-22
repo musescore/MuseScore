@@ -3607,6 +3607,55 @@ void Measure::addSystemHeader(bool isFirstSystem)
       for (const Staff* staff : score()->staves()) {
             const int track = staffIdx * VOICES;
 
+            if (isFirstSystem || score()->styleB(Sid::genClef)) {
+                  // find the clef type at the previous tick
+                  ClefTypeList cl = staff->clefType(tick() - Fraction::fromTicks(1));
+                  // look for a clef change at the end of the previous measure
+                  if (prevMeasure()) {
+                        Segment* s = prevMeasure()->findSegment(SegmentType::Clef, tick());
+                        if (s) {
+                              Clef* c = toClef(s->element(track));
+                              if (c)
+                                    cl = c->clefTypeList();
+                              }
+                        }
+                  Clef* clef;
+                  if (!cSegment) {
+                        cSegment = new Segment(this, SegmentType::HeaderClef, Fraction(0,1));
+                        cSegment->setHeader(true);
+                        add(cSegment);
+                        clef = 0;
+                        }
+                  else
+                        clef = toClef(cSegment->element(track));
+                  if (staff->staffType(tick())->genClef()) {
+                        if (!clef) {
+                              //
+                              // create missing clef
+                              //
+                              clef = new Clef(score());
+                              clef->setTrack(track);
+                              clef->setGenerated(true);
+                              clef->setParent(cSegment);
+                              cSegment->add(clef);
+                              }
+                        if (clef->generated())
+                              clef->setClefType(cl);
+                        clef->setSmall(false);
+                        clef->layout();
+                        }
+                  else if (clef) {
+                        clef->parent()->remove(clef);
+                        delete clef;
+                        }
+                  cSegment->createShape(staffIdx);
+                  cSegment->setEnabled(true);
+                  }
+            else {
+                  if (cSegment)
+                        cSegment->setEnabled(false);
+                  }
+
             // keep key sigs in TABs: TABs themselves should hide them
             bool needKeysig = isFirstSystem || score()->styleB(Sid::genKeysig);
 
@@ -3691,54 +3740,6 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         }
                   }
 
-            if (isFirstSystem || score()->styleB(Sid::genClef)) {
-                  // find the clef type at the previous tick
-                  ClefTypeList cl = staff->clefType(tick() - Fraction::fromTicks(1));
-                  // look for a clef change at the end of the previous measure
-                  if (prevMeasure()) {
-                        Segment* s = prevMeasure()->findSegment(SegmentType::Clef, tick());
-                        if (s) {
-                              Clef* c = toClef(s->element(track));
-                              if (c)
-                                    cl = c->clefTypeList();
-                              }
-                        }
-                  Clef* clef;
-                  if (!cSegment) {
-                        cSegment = new Segment(this, SegmentType::HeaderClef, Fraction(0,1));
-                        cSegment->setHeader(true);
-                        add(cSegment);
-                        clef = 0;
-                        }
-                  else
-                        clef = toClef(cSegment->element(track));
-                  if (staff->staffType(tick())->genClef()) {
-                        if (!clef) {
-                              //
-                              // create missing clef
-                              //
-                              clef = new Clef(score());
-                              clef->setTrack(track);
-                              clef->setGenerated(true);
-                              clef->setParent(cSegment);
-                              cSegment->add(clef);
-                              }
-                        if (clef->generated())
-                              clef->setClefType(cl);
-                        clef->setSmall(false);
-                        clef->layout();
-                        }
-                  else if (clef) {
-                        clef->parent()->remove(clef);
-                        delete clef;
-                        }
-                  cSegment->createShape(staffIdx);
-                  cSegment->setEnabled(true);
-                  }
-            else {
-                  if (cSegment)
-                        cSegment->setEnabled(false);
-                  }
             ++staffIdx;
             }
       //
