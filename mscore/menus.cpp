@@ -1534,6 +1534,17 @@ void MuseScore::addTempo()
       cs->undoAddElement(tt);
       cs->select(tt, SelectType::SINGLE, 0);
       cs->endCmd();
+      Measure* m = tt->findMeasure();
+      if (m && m->hasMMRest() && tt->links()) {
+            Measure* mmRest = m->mmRest();
+            for (ScoreElement* se : *tt->links()) {
+                  TempoText* tt1 = toTempoText(se);
+                  if (tt != tt1 && tt1->findMeasure() == mmRest) {
+                        tt = tt1;
+                        break;
+                        }
+                  }
+            }
       cv->startEditMode(tt);
       }
 
