@@ -3085,10 +3085,10 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
       else {
             // attempt to find measure
             Element* e = el->parent();
-            while (e && e->type() != ElementType::MEASURE)
+            while (e && !e->isMeasureBase())
                   e = e->parent();
             if (e)
-                  m = static_cast<Measure*>(e);
+                  m = toMeasureBase(e);
             else
                   return;
             }
@@ -3137,8 +3137,9 @@ void ScoreView::adjustCanvasPosition(const Element* el, bool playBack, int staff
 */
       // canvas is not as wide as measure, track note instead
       if (r.width() < showRect.width()) {
-            showRect.setX(p.x());
-            showRect.setWidth(el->width());
+            QRectF eRect(el->canvasBoundingRect());
+            showRect.setX(eRect.x());
+            showRect.setWidth(eRect.width());
             }
 
       // canvas is not as tall as system
@@ -3934,7 +3935,6 @@ void ScoreView::cmdAddText(Tid tid)
                         }
                   s = new Text(_score, tid);
                   s->setParent(measure);
-                  adjustCanvasPosition(measure, false);
                   _score->undoAddElement(s);
                   }
                   break;
@@ -4022,6 +4022,7 @@ void ScoreView::cmdAddText(Tid tid)
                               }
                         }
                   }
+            adjustCanvasPosition(s, false);
             startEditMode(s);
             }
       else
