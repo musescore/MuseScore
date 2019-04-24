@@ -820,12 +820,12 @@ SpannerSegment* SLine::layoutSystem(System* system)
 //---------------------------------------------------------
 //   layout
 //    compute segments from tick1 tick2
-//    (obsolete)
+//    (used for palette, edit mode, and layout of note lines and glissandi)
 //---------------------------------------------------------
 
 void SLine::layout()
       {
-      if (score() == gscore || (tick() == Fraction(-1,1)) || (ticks() == Fraction(0,1))) {
+      if (score() == gscore || (tick() == Fraction(-1,1)) || (tick2() == Fraction::fromTicks(1))) {
             //
             // when used in a palette or while dragging from palette,
             // SLine has no parent and
