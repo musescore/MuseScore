@@ -3773,9 +3773,9 @@ static bool readScore(Score* score, XmlReader& e)
                         Excerpt* ex = new Excerpt(m);
 
                         ex->setPartScore(s);
-                        ex->setTracks(e.tracks());
                         e.setLastMeasure(nullptr);
                         readScore(s, e);
+                        ex->setTracks(e.tracks());
                         m->addExcerpt(ex);
                         }
                   }
