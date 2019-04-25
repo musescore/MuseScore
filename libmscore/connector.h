@@ -36,6 +36,7 @@ class XmlWriter;
 class ConnectorInfo {
       const Element* _current    { 0      };
       bool _currentUpdated       { false  };
+      const Score* _score;
 
       bool finishedLeft() const;
       bool finishedRight() const;
@@ -63,7 +64,7 @@ class ConnectorInfo {
 
    public:
       ConnectorInfo(const Element* current, int track = -1, Fraction = { -1, 1});
-      ConnectorInfo(const Location& currentLocation);
+      ConnectorInfo(const Score* score, const Location& currentLocation);
 
       ConnectorInfo* prev() const   { return _prev; }
       ConnectorInfo* next() const   { return _next; }
