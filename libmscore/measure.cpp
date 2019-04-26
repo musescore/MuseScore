@@ -3972,7 +3972,11 @@ void Measure::setStretchedWidth(qreal w)
 
 static bool hasAccidental(Segment* s)
       {
+      Score* score = s->score();
       for (int track = 0; track < s->score()->ntracks(); ++track) {
+            Staff* staff = score->staff(track2staff(track));
+            if (!staff->show())
+                  continue;
             Element* e = s->element(track);
             if (!e || !e->isChord())
                   continue;
