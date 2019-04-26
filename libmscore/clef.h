@@ -129,15 +129,13 @@ class ClefInfo {
 
 class Clef final : public Element {
       SymId symId;
-      bool _showCourtesy;
-      bool _small;
+      bool _showCourtesy = true;
+      bool _small = false;
 
-      ClefTypeList _clefTypes;
+      ClefTypeList _clefTypes { ClefType::INVALID };
 
    public:
       Clef(Score*);
-      Clef(const Clef&);
-      ~Clef() {}
       virtual Clef* clone() const        { return new Clef(*this); }
       virtual ElementType type() const { return ElementType::CLEF; }
       virtual qreal mag() const;
