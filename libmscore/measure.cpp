@@ -4025,6 +4025,10 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
                   continue;
                   }
             Segment* ns = s->nextActive();
+            // end barline might be disabled
+            // but still consider it for spacing of previous segment
+            if (!ns)
+                  ns = s->next(SegmentType::BarLineType);
             qreal w;
 
             if (ns) {
