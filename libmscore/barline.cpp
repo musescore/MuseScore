@@ -307,7 +307,11 @@ BarLine::~BarLine()
 QPointF BarLine::canvasPos() const
       {
       QPointF pos = Element::canvasPos();
-      pos.ry() += measure()->system()->staff(staffIdx())->y();
+      if (parent()) {
+            System* system = measure()->system();
+            qreal yoff = system ? system->staff(staffIdx())->y() : 0.0;
+            pos.ry() += yoff;
+            }
       return pos;
       }
 
