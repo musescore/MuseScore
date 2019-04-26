@@ -508,7 +508,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
                               auto i = part->instruments()->upper_bound(tickStart.ticks());    // find(), ++i
                               Fraction tickEnd;
                               if (i == part->instruments()->end())
-                                    tickEnd = Fraction(-1,0);
+                                    tickEnd = Fraction(-1, 1);
                               else
                                     tickEnd = Fraction::fromTicks(i->first);
                               ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
