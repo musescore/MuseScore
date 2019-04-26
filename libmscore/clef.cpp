@@ -87,21 +87,8 @@ ClefType ClefInfo::tag2type(const QString& s)
 //---------------------------------------------------------
 
 Clef::Clef(Score* s)
-  : Element(s, ElementFlag::ON_STAFF)
-      {
-      _showCourtesy               = true;
-      _small                      = false;
-      _clefTypes._concertClef     = ClefType::INVALID;
-      _clefTypes._transposingClef = ClefType::INVALID;
-      }
-
-Clef::Clef(const Clef& c)
-   : Element(c)
-      {
-      _showCourtesy = c._showCourtesy;
-      _small        = c._small;
-      _clefTypes    = c._clefTypes;
-      }
+  : Element(s, ElementFlag::ON_STAFF), symId(SymId::noSym)
+      {}
 
 //---------------------------------------------------------
 //   mag
@@ -154,6 +141,7 @@ void Clef::layout()
             // if clef not to show or not compatible with staff group
             if (!show) {
                   setbbox(QRectF());
+                  symId = SymId::noSym;
                   qDebug("Clef::layout(): invisible clef at tick %d(%d) staff %d",
                      segment()->tick().ticks(), segment()->tick().ticks()/1920, staffIdx());
                   return;
@@ -174,6 +162,8 @@ void Clef::layout()
             symId = ClefInfo::symId(clefType());
             yoff = lineDist * (lines - ClefInfo::line(clefType()));
             }
+      else
+            symId = SymId::noSym;
 
       switch (clefType()) {
             case ClefType::C_19C:                            // 19th C clef is like a G clef
