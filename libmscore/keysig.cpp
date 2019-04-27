@@ -106,7 +106,7 @@ void KeySig::layout()
 
       // determine current clef for this staff
       ClefType clef = ClefType::G;
-      if (staff()) {
+      if (staff() && parent()) {
             // Look for a clef before the key signature at the same tick
             Clef* c = nullptr;
             for (Segment* seg = segment()->prev1(); !c && seg && seg->tick() == tick(); seg = seg->prev1())
