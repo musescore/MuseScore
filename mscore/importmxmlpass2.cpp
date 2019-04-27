@@ -1048,7 +1048,7 @@ static void handleTupletStart(const ChordRest* const cr, Tuplet*& tuplet,
       tuplet = new Tuplet(cr->score());
       tuplet->setTrack(cr->track());
       tuplet->setRatio(Fraction(actualNotes, normalNotes));
-//      tuplet->setTick(cr->tick());
+      // tuplet->setTick(cr->tick());
       tuplet->setBracketType(tupletDesc.bracket);
       tuplet->setNumberType(tupletDesc.shownumber);
       // TODO type, placement, bracket
@@ -2280,7 +2280,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
 
       int staffIdx = _score->staffIdx(part) + n;
 
-      StringData* t = 0;
+      StringData* t = nullptr;
       if (_score->staff(staffIdx)->isTabStaff(Fraction(0,1))) {
             t = new StringData;
             t->setFrets(25);  // sensible default
@@ -2311,7 +2311,13 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
 
       if (t) {
             Instrument* i = part->instrument();
-            i->setStringData(*t);
+            if (i->stringData()->strings() == 0) {
+                  // string data not set yet
+                  if (t->strings() > 0)
+                        i->setStringData(*t);
+                  else
+                        _logger->logError("trying to change string data (not supported)", &_e);
+                  }
             }
       }
 //---------------------------------------------------------
