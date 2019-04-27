@@ -1537,8 +1537,8 @@ void MuseScore::addTempo()
       Measure* m = tt->findMeasure();
       if (m && m->hasMMRest() && tt->links()) {
             Measure* mmRest = m->mmRest();
-            for (ScoreElement* se : *tt->links()) {
-                  TempoText* tt1 = toTempoText(se);
+            for (ScoreElement* se1 : *tt->links()) {
+                  TempoText* tt1 = toTempoText(se1);
                   if (tt != tt1 && tt1->findMeasure() == mmRest) {
                         tt = tt1;
                         break;

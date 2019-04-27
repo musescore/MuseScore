@@ -605,7 +605,7 @@ void Spanner::computeEndElement()
                         Fraction tick = (l->ticks().ticks() == Lyrics::TEMP_MELISMA_TICKS) ? l->tick() : l->endTick();
                         Segment* s = score()->tick2segment(tick, true, SegmentType::ChordRest);
                         if (!s) {
-                              qDebug("%s no end segment for tick %d", name(), tick);
+                              qDebug("%s no end segment for tick %d", name(), tick.ticks());
                               return;
                               }
                         int t = trackZeroVoice(track2());
