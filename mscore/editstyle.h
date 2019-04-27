@@ -56,6 +56,8 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       bool isTooWide;
       bool isTooHigh;
       bool hasShown;
+      int listWidth;
+      int minWidth;
 
       virtual void showEvent(QShowEvent*);
       virtual void hideEvent(QHideEvent*);

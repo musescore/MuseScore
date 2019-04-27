@@ -43,15 +43,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setObjectName("EditStyle");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-      QRect scr = QGuiApplication::primaryScreen()->availableGeometry();
-      QRect dlg = this->frameGeometry();
-      isTooWide = dlg.width() > scr.width();
-      isTooHigh = dlg.height() > scr.height();
-      if (isTooWide || isTooHigh)
-            this->setMinimumSize(scr.width() / 2, scr.height() / 2);
-      hasShown = false;
-
       cs = s;
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
       buttonApplyToAllParts->setEnabled(!cs->isMaster());
@@ -670,7 +661,17 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       connect(textStyles, SIGNAL(currentRowChanged(int)), SLOT(textStyleChanged(int)));
       textStyles->setCurrentRow(0);
+
+      QRect scr = QGuiApplication::primaryScreen()->availableGeometry();
+      QRect dlg = this->frameGeometry();
+      isTooWide = dlg.width() > scr.width();
+      isTooHigh = dlg.height() > scr.height();
+      if (isTooWide || isTooHigh)
+            this->setMinimumSize(scr.width() / 2, scr.height() / 2);
+      hasShown = false;
+      minWidth = minimumWidth(); // so it can be restored when showing pageList
       MuseScore::restoreGeometry(this);
+
       cs->startCmd();
       }
 
@@ -743,24 +744,36 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
 
 void EditStyle::on_buttonTogglePagelist_clicked()
       {
-      if (pageList->isVisible()) {
-            pageList->setVisible(false);
-            if (!isTooWide) {
-                  setMaximumWidth(pageStack->minimumWidth() + 15);
-                  setMinimumWidth(pageStack->minimumWidth() + 15);
-                  move(pos().x() + (pageList->minimumWidth() + 5), pos().y());
+      bool hideIt = pageList->isVisible();
+      QIcon icon = QIcon(*icons[int(hideIt ? Icons::goPrevious_ICON : Icons::goNext_ICON)]);
+
+      if (!isTooWide) { // resize the dialog only if the screen is wide enough
+            QRect inner = geometry();
+            int w = inner.width();
+            int x = pos().x();
+
+            if (hideIt) {
+                  listWidth = pageList->geometry().width(); // must precede setVisible
+                  minWidth -= listWidth;
+                  w -= listWidth;
+                  x += listWidth;
+                  buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goPrevious_ICON)]));
                   }
-            buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goPrevious_ICON)]));
-            }
-      else {
-            if (!isTooWide) {
-                  setMaximumWidth((pageList->minimumWidth() + 5) + pageStack->minimumWidth() + 15);
-                  setMinimumWidth((pageList->minimumWidth() + 5) + pageStack->minimumWidth() + 15);
-                  move(pos().x() - (pageList->minimumWidth() + 5), pos().y());
+            else {
+                  minWidth += listWidth;
+                  w += listWidth;
+                  x -= listWidth;
+                  buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
                   }
-            pageList->setVisible(true);
-            buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
+
+            setMinimumWidth(minWidth); // must precede setGeometry
+            inner.setWidth(w);
+            setGeometry(inner);
+            move(x, pos().y());
             }
+
+      buttonTogglePagelist->setIcon(icon); // toggle the icon
+      pageList->setVisible(!hideIt);       // show or hide the list
       }
 //---------------------------------------------------------
 //   applyToAllParts
