@@ -3755,8 +3755,15 @@ static Element* findLinkedVoiceElement(Element* e, Staff* nstaff)
 
       if (de) {
             QList<int> l = de->tracks().values(strack);
-            if (l.isEmpty())
+            if (l.isEmpty()) {
+                  // simply return the first linked element whose staff is equal to nstaff
+                  for (ScoreElement* ee : e->linkList()) {
+                        Element* el = toElement(ee);
+                        if (el->staff() == nstaff)
+                              return el;
+                        }
                   return 0;
+                  }
             for (int i : l) {
                   if (nstaff->idx() * VOICES <= i && (nstaff->idx() + 1) * VOICES > i) {
                         dtrack = i;
@@ -3789,8 +3796,15 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
 
       if (de) {
             QList<int> l = de->tracks().values(strack);
-            if (l.isEmpty())
+            if (l.isEmpty()) {
+                  // simply return the first linked chord whose staff is equal to nstaff
+                  for (ScoreElement* ee : c->linkList()) {
+                        Chord* ch = toChord(ee);
+                        if (ch->staff() == nstaff)
+                              return ch;
+                        }
                   return 0;
+                  }
             for (int i : l) {
                   if (nstaff->idx() * VOICES <= i && (nstaff->idx() + 1) * VOICES > i) {
                         dtrack = i;
