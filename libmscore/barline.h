@@ -132,6 +132,7 @@ class BarLine final : public Element {
       using ScoreElement::undoChangeProperty;
 
       static qreal layoutWidth(Score*, BarLineType);
+      QRectF layoutRect() const;
 
       virtual Element* nextSegmentElement() override;
       virtual Element* prevSegmentElement() override;
