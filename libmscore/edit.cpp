@@ -4137,11 +4137,9 @@ void Score::undoAddElement(Element* element)
             const LinkedElements* links = parent->links();
             // don't link part name
             if (et == ElementType::TEXT) {
-#if 0 // TODO-ws
                   Text* t = toText(element);
-                  if (t->subStyle() == ElementStyle::INSTRUMENT_EXCERPT)
+                  if (t->tid() == Tid::INSTRUMENT_EXCERPT)
                         links = 0;
-#endif
                   }
             if (links == 0) {
                   undo(new AddElement(element));
