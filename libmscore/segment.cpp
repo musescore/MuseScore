@@ -1865,13 +1865,13 @@ void Segment::createShape(int staffIdx)
 
       if (segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
             setVisible(true);
-            BarLine* bl = toBarLine(element(0));
+            BarLine* bl = toBarLine(element(staffIdx * VOICES));
             if (bl) {
-                  qreal w = BarLine::layoutWidth(score(), bl->barLineType());
+                  QRectF r = bl->layoutRect();
 #ifndef NDEBUG
-                  s.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos()), bl->name());
+                  s.add(r.translated(bl->pos()), bl->name());
 #else
-                  s.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos()));
+                  s.add(r.translated(bl->pos()));
 #endif
                   }
             s.addHorizontalSpacing(Shape::SPACING_GENERAL, 0, 0);

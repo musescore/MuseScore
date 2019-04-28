@@ -3294,8 +3294,9 @@ void Measure::stretchMeasure(qreal targetWidth)
                         }
                   else if (t == ElementType::BAR_LINE) {
                         e->rypos() = 0.0;
-                        e->rxpos() = 0.0;
-//                        e->rxpos() = s.isEndBarLineType() ? s.width() * .5 : 0.0;
+                        // for end barlines, x position was set in createEndBarLines
+                        if (s.segmentType() != SegmentType::EndBarLine)
+                              e->rxpos() = 0.0;
                         }
                   }
             }
@@ -3453,6 +3454,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
       int nstaves  = score()->nstaves();
       Segment* seg = findSegmentR(SegmentType::EndBarLine, ticks());
       Measure* nm  = nextMeasure();
+      qreal blw    = 0.0;
 
 #if 0
 #ifndef NDEBUG
@@ -3549,6 +3551,14 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                               }
                         }
                   bl->layout();
+                  blw = qMax(blw, bl->width());
+                  }
+            // right align within segment
+            for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+                  int track   = staffIdx * VOICES;
+                  BarLine* bl = toBarLine(seg->element(track));
+                  if (bl)
+                        bl->rxpos() += blw - bl->width();
                   }
             seg->createShapes();
             }
