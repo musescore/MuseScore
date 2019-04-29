@@ -1208,7 +1208,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
 
             if (!ss->enabled())
                   ss = ss->next1MMenabled();
-            if (es && !es->enabled())
+            if (es && !es->enabled() && !es->isEndBarLineType())
                   es = es->prev1MMenabled();
             if (es && ss->tick() > es->tick())  // start after end?
                   return;
@@ -1265,7 +1265,9 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             double x1;
 
             for (Segment* s = ss; s && (s != es); ) {
-                  Segment* ns = s->next1MMenabled();
+                  Segment* ns = s->next1MM();
+                  if (ns && !ns->enabled() && !ns->isEndBarLineType())
+                        ns = ns->next1MMenabled();
                   system1  = system2;
                   system2  = s->measure()->system();
                   if (!system2) {
