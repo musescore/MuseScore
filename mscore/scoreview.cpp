@@ -1209,7 +1209,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             if (!ss->enabled())
                   ss = ss->next1MMenabled();
             if (es && !es->enabled())
-                  es = es->prev1MMenabled();
+                  es = es->next1MMenabled();
             if (es && ss->tick() > es->tick())  // start after end?
                   return;
 
