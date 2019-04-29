@@ -991,6 +991,10 @@
     <seq>;</seq>
     </SC>
   <SC>
+    <key>add-parentheses</key>
+    <seq>(</seq>
+    </SC>
+  <SC>
     <key>toggle-mmrest</key>
     <seq>M</seq>
     </SC>
