@@ -2434,6 +2434,10 @@ void Score::cmdAddParentheses()
                   h->setRightParen(true);
                   h->render();
                   }
+            else if (el->type() == ElementType::TIMESIG) {
+                  TimeSig* ts = toTimeSig(el);
+                  ts->setLargeParentheses(true);
+                  }
             }
       }
 
