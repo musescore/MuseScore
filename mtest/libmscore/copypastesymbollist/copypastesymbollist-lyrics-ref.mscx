@@ -143,7 +143,8 @@
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
-              <ticks>1/4</ticks>
+              <ticks>480</ticks>
+              <ticks_f>1/4</ticks_f>
               <text>min</text>
               </Lyrics>
             <Note>
@@ -310,7 +311,8 @@
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
-              <ticks>1/4</ticks>
+              <ticks>480</ticks>
+              <ticks_f>1/4</ticks_f>
               <text>min</text>
               </Lyrics>
             <Note>
