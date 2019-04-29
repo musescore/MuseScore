@@ -2405,7 +2405,21 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 
 void Score::cmdAddBracket()
       {
-      for(Element* el : selection().elements()) {
+      for (Element* el : selection().elements()) {
+            if (el->type() == ElementType::ACCIDENTAL) {
+                  Accidental* acc = toAccidental(el);
+                  acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET));
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   cmdAddParentheses
+//---------------------------------------------------------
+
+void Score::cmdAddParentheses()
+      {
+      for (Element* el : selection().elements()) {
             if (el->type() == ElementType::NOTE) {
                   Note* n = toNote(el);
                   n->addParentheses();
@@ -3659,6 +3673,7 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "select-all",                 [this]{ cmdSelectAll();                                             }},
             { "select-section",             [this]{ cmdSelectSection();                                         }},
             { "add-brackets",               [this]{ cmdAddBracket();                                            }},
+            { "add-parentheses",            [this]{ cmdAddParentheses();                                        }},
             { "acciaccatura",               [this]{ cmdAddGrace(NoteType::ACCIACCATURA, MScore::division / 2);  }},
             { "appoggiatura",               [this]{ cmdAddGrace(NoteType::APPOGGIATURA, MScore::division / 2);  }},
             { "grace4",                     [this]{ cmdAddGrace(NoteType::GRACE4, MScore::division);            }},
