@@ -550,7 +550,7 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
                   break;
 
             case ViewState::PLAY:
-                  if (drag && !editData.element)
+                  if (drag)
                         dragScoreView(me);
                   break;
 
