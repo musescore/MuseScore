@@ -43,15 +43,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       setObjectName("EditStyle");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-      QRect scr = QGuiApplication::primaryScreen()->availableGeometry();
-      QRect dlg = this->frameGeometry();
-      isTooWide = dlg.width() > scr.width();
-      isTooHigh = dlg.height() > scr.height();
-      if (isTooWide || isTooHigh)
-            this->setMinimumSize(scr.width() / 2, scr.height() / 2);
-      hasShown = false;
-
       cs = s;
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
       buttonApplyToAllParts->setEnabled(!cs->isMaster());
@@ -670,7 +661,15 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
       connect(textStyles, SIGNAL(currentRowChanged(int)), SLOT(textStyleChanged(int)));
       textStyles->setCurrentRow(0);
+
+      QRect scr = QGuiApplication::primaryScreen()->availableGeometry();
+      QRect dlg = this->frameGeometry();
+      isTooBig  = dlg.width() > scr.width() || dlg.height() > scr.height();
+      if (isTooBig)
+            this->setMinimumSize(scr.width() / 2, scr.height() / 2);
+      hasShown = false;
       MuseScore::restoreGeometry(this);
+
       cs->startCmd();
       }
 
@@ -680,13 +679,13 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
 
 void EditStyle::showEvent(QShowEvent* ev)
       {
-      if (!hasShown && (isTooWide || isTooHigh)) {
+      if (!hasShown && isTooBig) {
             // Add scroll bars to pageStack - this cannot be in the constructor
             // or the Header, Footer text input boxes size themselves too large.
             QScrollArea* scrollArea = new QScrollArea(splitter);
             scrollArea->setWidget(pageStack);
+            hasShown = true; // so that it only happens once
             }
-      hasShown = true; // so it only happens once
       QWidget::showEvent(ev);
       }
 
@@ -743,24 +742,11 @@ void EditStyle::on_comboFBFont_currentIndexChanged(int index)
 
 void EditStyle::on_buttonTogglePagelist_clicked()
       {
-      if (pageList->isVisible()) {
-            pageList->setVisible(false);
-            if (!isTooWide) {
-                  setMaximumWidth(pageStack->minimumWidth() + 15);
-                  setMinimumWidth(pageStack->minimumWidth() + 15);
-                  move(pos().x() + (pageList->minimumWidth() + 5), pos().y());
-                  }
-            buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goPrevious_ICON)]));
-            }
-      else {
-            if (!isTooWide) {
-                  setMaximumWidth((pageList->minimumWidth() + 5) + pageStack->minimumWidth() + 15);
-                  setMinimumWidth((pageList->minimumWidth() + 5) + pageStack->minimumWidth() + 15);
-                  move(pos().x() - (pageList->minimumWidth() + 5), pos().y());
-                  }
-            pageList->setVisible(true);
-            buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
-            }
+      bool isVis = !pageList->isVisible(); // toggle it
+
+      pageList->setVisible(isVis);
+      buttonTogglePagelist->setIcon(QIcon(*icons[int(isVis ? Icons::goNext_ICON
+                                                           : Icons::goPrevious_ICON)]));
       }
 //---------------------------------------------------------
 //   applyToAllParts
