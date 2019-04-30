@@ -480,6 +480,7 @@ class Score : public QObject, public ScoreElement {
       void cmdMoveLyrics(Lyrics*, Direction);
       void cmdIncDecDuration(int nSteps, bool stepDotted = false);
       void cmdAddBracket();
+      void cmdAddParentheses();
       void resetUserStretch();
 
       bool layoutSystem(qreal& minWidth, qreal w, bool, bool);

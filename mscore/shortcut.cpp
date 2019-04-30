@@ -3409,8 +3409,8 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::SCORE_TAB,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "add-brackets",
-         QT_TRANSLATE_NOOP("action","Add Brackets to Element"),
-         QT_TRANSLATE_NOOP("action","Add brackets to element"),
+         QT_TRANSLATE_NOOP("action","Add Brackets to Accidental"),
+         QT_TRANSLATE_NOOP("action","Add brackets to accidental"),
          0,
          Icons::brackets_ICON,
          Qt::WindowShortcut
