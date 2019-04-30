@@ -3648,7 +3648,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                                 Tremolo* t = toChord(e)->tremolo();
                                                 Chord* c1 = t->chord1();
                                                 Chord* c2 = t->chord2();
-                                                if (!t->twoNotes() || (!c1->staffMove() && !c2->staffMove())) {
+                                                if (!t->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
                                                       if (t->chord() == e && t->autoplace())
                                                             skyline.add(t->shape().translated(t->pos() + e->pos() + p));
                                                       }
@@ -4220,7 +4220,7 @@ void LayoutContext::collectPage()
                                                 Tremolo* t = c->tremolo();
                                                 Chord* c1 = t->chord1();
                                                 Chord* c2 = t->chord2();
-                                                if (t->twoNotes() && (c1->staffMove() || c2->staffMove()))
+                                                if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove()))
                                                       t->layout();
                                                 }
                                           }
