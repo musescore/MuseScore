@@ -2374,11 +2374,33 @@ void Score::createPlayEvents(Measure* start, Measure* end)
 
       int etrack = nstaves() * VOICES;
       for (int track = 0; track < etrack; ++track) {
-            for (Measure* m = start; m != end; m = m->nextMeasure()) {
+            bool rangeEnded = false;
+            for (Measure* m = start; m; m = m->nextMeasure()) {
+                  constexpr SegmentType st = SegmentType::ChordRest;
+
+                  if (m == end)
+                        rangeEnded = true;
+                  if (rangeEnded) {
+                        // The range has ended, but we should collect events
+                        // for tied notes. So we'll check if this is the case.
+                        const Segment* seg = m->first(st);
+                        const Element* e = seg->element(track);
+                        bool tie = false;
+                        if (e && e->isChord()) {
+                              for (const Note* n : toChord(e)->notes()) {
+                                    if (n->tieBack()) {
+                                          tie = true;
+                                          break;
+                                          }
+                                    }
+                              }
+                        if (!tie)
+                              break;
+                        }
+
                   // skip linked staves, except primary
                   if (!m->score()->staff(track / VOICES)->primaryStaff())
                         continue;
-                  const SegmentType st = SegmentType::ChordRest;
                   for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                         Element* e = seg->element(track);
                         if (e == 0 || !e->isChord())
