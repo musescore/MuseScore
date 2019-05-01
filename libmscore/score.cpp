@@ -1483,6 +1483,12 @@ void Score::removeElement(Element* element)
             MeasureBase* mb = toMeasureBase(element);
             measures()->remove(mb);
             System* system = mb->system();
+
+            if (!system) { // vertical boxes are not shown in continuous view so no system
+                  Q_ASSERT(lineMode() && (element->isVBox() || element->isTBox()));
+                  return;
+                  }
+
             Page* page = system->page();
             if (element->isBox() && system->measures().size() == 1) {
                   auto i = std::find(page->systems().begin(), page->systems().end(), system);
