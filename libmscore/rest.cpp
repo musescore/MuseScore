@@ -947,8 +947,6 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::VISIBLE:
                   setVisible(v.toBool());
-                  for (NoteDot* dot : _dots)
-                        dot->setVisible(visible());
                   score()->setLayout(tick());
                   break;
             case Pid::OFFSET:
@@ -964,6 +962,16 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
                   return ChordRest::setProperty(propertyId, v);
             }
       return true;
+      }
+
+//---------------------------------------------------------
+//   undoChangeDotsVisible
+//---------------------------------------------------------
+
+void Rest::undoChangeDotsVisible(bool v)
+      {
+      for (NoteDot* dot : _dots)
+            dot->undoChangeProperty(Pid::VISIBLE, QVariant(v));
       }
 
 //---------------------------------------------------------

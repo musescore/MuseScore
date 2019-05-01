@@ -458,6 +458,7 @@ class Note final : public Element {
 
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      void undoChangeDotsVisible(bool v);
       virtual QVariant propertyDefault(Pid) const override;
       virtual QString propertyUserValue(Pid) const override;
 
