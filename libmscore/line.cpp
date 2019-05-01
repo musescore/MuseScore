@@ -147,6 +147,7 @@ void LineSegment::startEditDrag(EditData& ed)
       ElementEditData* eed = ed.getData(this);
       eed->pushProperty(Pid::OFFSET);
       eed->pushProperty(Pid::OFFSET2);
+      eed->pushProperty(Pid::ABS_OFFSET);
       }
 
 //---------------------------------------------------------
@@ -342,9 +343,11 @@ void LineSegment::editDrag(EditData& ed)
                   _offset2 += deltaResize;
                   break;
             case Grip::MIDDLE: { // Move the element (middle grip)
-                  // Only for moving, no y limitaion
+                  // Only for moving, no y limitation
                   QPointF deltaMove(ed.delta.x(), ed.delta.y());
                   setOffset(offset() + deltaMove);
+                  if (deltaMove.y())
+                        setAbsolute(true);
                   }
                   break;
             default:
