@@ -2442,7 +2442,12 @@ int Note::customizeVelocity(int velo) const
 void Note::editDrag(EditData& ed)
       {
       Chord* ch = chord();
-      if (ch->notes().size() == 1) {
+      Segment* seg = ch->segment();
+      if (seg) {
+            const Spatium deltaSp = Spatium(ed.delta.x() / spatium());
+            seg->undoChangeProperty(Pid::LEADING_SPACE, seg->extraLeadingSpace() + deltaSp);
+            }
+      else if (ch->notes().size() == 1) {
             // if the chord contains only this note, then move the whole chord
             // including stem, flag etc.
             ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + ed.delta);
