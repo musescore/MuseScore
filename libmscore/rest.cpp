@@ -1016,7 +1016,7 @@ Shape Rest::shape() const
                   shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
             }
       for (Element* e : el()) {
-            if (e->autoplace() && e->visible())
+            if (e->addToSkyline())
                   shape.add(e->shape().translated(e->pos()));
             }
       return shape;

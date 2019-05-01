@@ -12,6 +12,7 @@
 
 #include "inspector.h"
 #include "libmscore/element.h"
+#include "libmscore/score.h"
 #include "inspectorElementBase.h"
 
 namespace Ms {
@@ -46,6 +47,13 @@ void InspectorElementBase::setElement()
             e.offset->setSuffix("sp");
       else
             e.offset->setSuffix("mm");
+      if (inspector->element()->score()->styleB(Sid::autoplaceEnabled)) {
+            e.autoplace->setEnabled(true);
+            }
+      else {
+            e.autoplace->setEnabled(false);
+            e.resetAutoplace->setEnabled(false);
+            }
       }
 
 } // namespace Ms

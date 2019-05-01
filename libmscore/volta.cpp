@@ -62,7 +62,7 @@ VoltaSegment::VoltaSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, E
 void VoltaSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * 1.0);
+      autoplaceSpannerSegment(styleP(Sid::voltaMinDistance));
       }
 
 //---------------------------------------------------------

@@ -3288,7 +3288,7 @@ void Measure::stretchMeasure(qreal targetWidth)
                               Tremolo* tr = c->tremolo();
                               Chord* c1 = tr->chord1();
                               Chord* c2 = tr->chord2();
-                              if (!tr->twoNotes() || (!c1->staffMove() && !c2->staffMove()))
+                              if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove()))
                                     tr->layout();
                               }
                         }

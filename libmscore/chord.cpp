@@ -3155,20 +3155,20 @@ QString Chord::accessibleExtraInfo() const
 Shape Chord::shape() const
       {
       Shape shape;
-      if (_hook && _hook->autoplace() && _hook->visible())
+      if (_hook && _hook->addToSkyline())
             shape.add(_hook->shape().translated(_hook->pos()));
-      if (_stem && _stem->autoplace() && _stem->visible())
+      if (_stem && _stem->addToSkyline())
             shape.add(_stem->shape().translated(_stem->pos()));
-      if (_stemSlash && _stemSlash->autoplace() && _stemSlash->visible())
+      if (_stemSlash && _stemSlash->addToSkyline())
             shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
-      if (_arpeggio && _arpeggio->autoplace() && _arpeggio->visible())
+      if (_arpeggio && _arpeggio->addToSkyline())
             shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
 //      if (_tremolo)
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
       for (Note* note : _notes)
             shape.add(note->shape().translated(note->pos()));
       for (Element* e : el()) {
-            if (e->autoplace() && e->visible())
+            if (e->addToSkyline())
                   shape.add(e->shape().translated(e->pos()));
             }
       for (Chord* chord : _graceNotes)    // process grace notes last, needed for correct shape calculation
@@ -3385,7 +3385,7 @@ void Chord::layoutArticulations2()
                   }
             }
       for (Articulation* a : _articulations) {
-            if (a->autoplace() && a->visible()) {
+            if (a->addToSkyline()) {
                   Segment* s = segment();
                   Measure* m = s->measure();
                   QRectF r = a->bbox().translated(a->pos() + pos());
@@ -3415,12 +3415,12 @@ void Chord::layoutArticulations3(Slur* slur)
       Measure* m = measure();
       SysStaff* sstaff = m->system() ? m->system()->staff(staffIdx()) : nullptr;
       for (Articulation* a : _articulations) {
-            if (a->layoutCloseToNote() || !a->autoplace() || !slur->autoplace() || !slur->visible())
+            if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline())
                   continue;
             Shape aShape = a->shape().translated(a->pos() + pos() + s->pos() + m->pos());
             Shape sShape = ss->shape().translated(ss->pos());
             if (aShape.intersects(sShape)) {
-                  qreal d = score()->styleP(Sid::dynamicsMinDistance);
+                  qreal d = score()->styleS(Sid::articulationMinDistance).val() * spatium();
                   if (slur->up()) {
                         d += qMax(aShape.minVerticalDistance(sShape), 0.0);
                         a->rypos() -= d;
@@ -3431,7 +3431,7 @@ void Chord::layoutArticulations3(Slur* slur)
                         a->rypos() += d;
                         aShape.translateY(d);
                         }
-                  if (sstaff)
+                  if (sstaff && a->addToSkyline())
                         sstaff->skyline().add(aShape);
                   }
             }

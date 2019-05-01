@@ -652,7 +652,7 @@ static const StyleType styleTypes[] {
       { Sid::stringNumberFrameRound,        "stringNumberFrameRound",        0 },
       { Sid::stringNumberFrameFgColor,      "stringNumberFrameFgColor",      QColor(0, 0, 0, 255) },
       { Sid::stringNumberFrameBgColor,      "stringNumberFrameBgColor",      QColor(255, 255, 255, 0) },
-      { Sid::stringNumberOffset,            "stringNumberOffset",            QPointF(0.0, -2.0) },
+      { Sid::stringNumberOffset,            "stringNumberOffset",            QPointF(0.0, 0.0) },
 
       { Sid::longInstrumentFontFace,        "longInstrumentFontFace",       "FreeSerif" },
       { Sid::longInstrumentFontSize,        "longInstrumentFontSize",       12.0 },
@@ -1117,6 +1117,22 @@ static const StyleType styleTypes[] {
       { Sid::fermataMinDistance,            "fermataMinDistance",            Spatium(0.4)  },
 
       { Sid::fingeringPlacement,            "fingeringPlacement",            int(Placement::ABOVE) },
+
+      { Sid::articulationMinDistance,       "articulationMinDistance",       Spatium(0.5)  },
+      { Sid::fingeringMinDistance,          "fingeringMinDistance",          Spatium(0.5)  },
+      { Sid::hairpinMinDistance,            "hairpinMinDistance",            Spatium(0.7)  },
+      { Sid::letRingMinDistance,            "letRingMinDistance",            Spatium(0.7)  },
+      { Sid::ottavaMinDistance,             "ottavaMinDistance",             Spatium(0.7)  },
+      { Sid::palmMuteMinDistance,           "palmMuteMinDistance",           Spatium(0.7)  },
+      { Sid::pedalMinDistance,              "pedalMinDistance",              Spatium(0.7)  },
+      { Sid::repeatMinDistance,             "repeatMinDistance",             Spatium(0.5)  },
+      { Sid::textLineMinDistance,           "textLineMinDistance",           Spatium(0.7)  },
+      { Sid::trillMinDistance,              "trillMinDistance",              Spatium(1.0)  },
+      { Sid::vibratoMinDistance,            "vibratoMinDistance",            Spatium(1.0)  },
+      { Sid::voltaMinDistance,              "voltaMinDistance",              Spatium(1.0)  },
+
+      { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
+
       };
 
 MStyle  MScore::_baseStyle;

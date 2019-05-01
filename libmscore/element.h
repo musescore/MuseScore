@@ -402,8 +402,9 @@ class Element : public ScoreElement {
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
 
-      bool autoplace() const           { return !flag(ElementFlag::NO_AUTOPLACE); }
-      void setAutoplace(bool v)        { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
+      bool autoplace() const;
+      virtual void setAutoplace(bool v)   { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
+      bool addToSkyline() const           { return !(_flags & (ElementFlag::INVISIBLE|ElementFlag::NO_AUTOPLACE)); }
 
       virtual QVariant getProperty(Pid) const override;
       virtual bool setProperty(Pid, const QVariant&) override;
