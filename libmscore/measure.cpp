@@ -884,6 +884,34 @@ void Measure::add(Element* e)
                   _mmRest = toMeasure(e);
                   break;
 
+            case ElementType::STAFFTYPE_CHANGE:
+                  {
+                  StaffTypeChange* stc = toStaffTypeChange(e);
+                  Staff* staff = stc->staff();
+                  const StaffType* st = stc->staffType();
+                  StaffType* nst;
+                  // st needs to point to the stafftype element within the stafftypelist for the staff
+                  if (st) {
+                        // executed on read, undo/redo, clone
+                        // setStaffType adds a copy to list and returns a pointer to that element within list
+                        // we won't need the original after that
+                        // this requires that st was allocated via new to begin with!
+                        nst = staff->setStaffType(tick(), *st);
+                        delete st;
+                        }
+                  else {
+                        // executed on add from palette
+                        // staffType returns a pointer to the current stafftype element in the list
+                        // setStaffType will make a copy and return a pointer to that element within list
+                        st  = staff->staffType(tick());
+                        nst = staff->setStaffType(tick(), *st);
+                        }
+                  staff->staffTypeListChanged(tick());
+                  stc->setStaffType(nst);
+                  MeasureBase::add(e);
+                  }
+                  break;
+
             default:
                   MeasureBase::add(e);
                   break;
@@ -962,6 +990,21 @@ void Measure::remove(Element* e)
 
             case ElementType::MEASURE:
                   _mmRest = 0;
+                  break;
+
+            case ElementType::STAFFTYPE_CHANGE:
+                  {
+                  StaffTypeChange* stc = toStaffTypeChange(e);
+                  Staff* staff = stc->staff();
+                  if (staff) {
+                        // st currently points to an list element that is about to be removed
+                        // make a copy now to use on undo/redo
+                        StaffType* st = new StaffType(*stc->staffType());
+                        staff->removeStaffType(tick());
+                        stc->setStaffType(st);
+                        }
+                  MeasureBase::remove(e);
+                  }
                   break;
 
             default:
@@ -1611,21 +1654,8 @@ Element* Measure::drop(EditData& data)
 
             case ElementType::STAFFTYPE_CHANGE:
                   {
-                  StaffTypeChange* stc = toStaffTypeChange(e);
                   e->setParent(this);
                   e->setTrack(staffIdx * VOICES);
-                  const StaffType* st = stc->staffType();
-                  StaffType* nst;
-                  if (st) {
-                        nst = staff->setStaffType(tick(), *st);
-                        delete st;
-                        }
-                  else {
-                        // dragged from palette
-                        st  = staff->staffType(tick());
-                        nst = staff->setStaffType(tick(), *st);
-                        }
-                  stc->setStaffType(nst);
                   score()->undoAddElement(e);
                   }
                   break;
