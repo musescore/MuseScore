@@ -792,7 +792,8 @@ ChordRest* Spanner::endCR()
       Q_ASSERT(_anchor == Anchor::SEGMENT || _anchor == Anchor::CHORD);
       if ((!_endElement || _endElement->score() != score())) {
             Segment* s  = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
-            _endElement = s ? toChordRest(s->element(track2())) : 0;
+            const int tr2 = (track2() == -1) ? track() : track2();
+            _endElement = s ? toChordRest(s->element(tr2)) : nullptr;
             }
       return toChordRest(_endElement);
       }
