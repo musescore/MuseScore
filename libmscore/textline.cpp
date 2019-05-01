@@ -53,7 +53,7 @@ TextLineSegment::TextLineSegment(Spanner* sp, Score* s)
 void TextLineSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7);
+      autoplaceSpannerSegment(styleP(Sid::textLineMinDistance));
       }
 
 //---------------------------------------------------------

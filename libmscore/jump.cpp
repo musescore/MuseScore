@@ -101,7 +101,7 @@ QString Jump::jumpTypeUserName() const
 void Jump::layout()
       {
       TextBase::layout();
-      autoplaceMeasureElement(0.5 * spatium());
+      autoplaceMeasureElement(styleP(Sid::repeatMinDistance));
       }
 
 //---------------------------------------------------------

@@ -108,6 +108,26 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="enableAutoplace">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="text">
+         <string>Enable Autoplace</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="disableAutoplace">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
+        <property name="text">
+         <string>Disable Autoplace</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -126,6 +146,8 @@
   <tabstop>setColor</tabstop>
   <tabstop>setVisible</tabstop>
   <tabstop>setInvisible</tabstop>
+  <tabstop>enableAutoplace</tabstop>
+  <tabstop>disableAutoplace</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -282,7 +282,7 @@ Shape KeySig::shape() const
       {
       QRectF box(bbox());
       const Staff* st = staff();
-      if (st && autoplace() && visible()) {
+      if (st && addToSkyline()) {
             // Extend key signature shape up and down to
             // the first ledger line height to ensure that
             // no notes will be too close to the keysig.

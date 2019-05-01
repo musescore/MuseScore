@@ -1093,6 +1093,21 @@ enum class Sid {
 
       fingeringPlacement,
 
+      articulationMinDistance,
+      fingeringMinDistance,
+      hairpinMinDistance,
+      letRingMinDistance,
+      ottavaMinDistance,
+      palmMuteMinDistance,
+      pedalMinDistance,
+      repeatMinDistance,
+      textLineMinDistance,
+      trillMinDistance,
+      vibratoMinDistance,
+      voltaMinDistance,
+
+      autoplaceEnabled,
+
       STYLES
       };
 

@@ -365,7 +365,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       _extraHeight = 0.0;
       computeBezier();
 
-      if (MScore::autoplaceSlurs && autoplace() && system()) {
+      if (autoplace() && system()) {
             bool up = slur()->up();
             Segment* ls = system()->lastMeasure()->last();
             Segment* fs = system()->firstMeasure()->first();
@@ -376,6 +376,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
             qreal slurMaxMove = spatium();
             bool intersection = false;
             qreal gdist = 0.0;
+            qreal minDistance = score()->styleS(Sid::SlurMinDistance).val() * spatium();
             for (int tries = 1; true; ++tries) {
                   for (Segment* s = fs; s && s != ls; s = s->next1()) {
                         if (!s->enabled())
@@ -420,7 +421,7 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                   gdist = 0.0;
                   }
             if (intersection && gdist > 0.0) {
-                  qreal min = score()->styleP(Sid::SlurMinDistance) + gdist;
+                  qreal min = minDistance + gdist;
                   rypos() += up ? -min : min;
                   }
             }
@@ -453,7 +454,7 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up, bool stemSide = fal
       //
 #if 1
       for (Articulation* a : c->articulations()) {
-            if (!a->layoutCloseToNote() || !a->autoplace() || !a->visible())
+            if (!a->layoutCloseToNote() || !a->addToSkyline())
                   continue;
             // skip if articulation on stem side but slur is not or vice versa
             if ((a->up() == c->up()) != stemSide)

@@ -254,6 +254,7 @@ class Spanner : public Element {
 
       virtual void setSelected(bool f) override;
       virtual void setVisible(bool f) override;
+      virtual void setAutoplace(bool f) override;
       virtual void setColor(const QColor& col) override;
       Spanner* nextSpanner(Element* e, int activeStaff);
       Spanner* prevSpanner(Element* e, int activeStaff);

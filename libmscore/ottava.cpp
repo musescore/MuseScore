@@ -59,7 +59,7 @@ static const ElementStyle ottavaStyle {
 void OttavaSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7);
+      autoplaceSpannerSegment(styleP(Sid::ottavaMinDistance));
       }
 
 //---------------------------------------------------------

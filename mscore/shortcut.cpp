@@ -3630,6 +3630,23 @@ Shortcut Shortcut::_sc[] = {
          Qt::WindowShortcut
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "toggle-autoplace",
+         QT_TRANSLATE_NOOP("action","Toggle Automatic Placement"),
+         QT_TRANSLATE_NOOP("action","Toggle 'Automatic Placement' for selected elements")
+         },
+      {
+         MsWidget::MAIN_WINDOW,
+         STATE_ALL,
+         "autoplace-enabled",
+         QT_TRANSLATE_NOOP("action","Toggle Automatic Placement Globally"),
+         QT_TRANSLATE_NOOP("action","Toggle 'Automatic Placement' globally"),
+         0,
+         Icons::Invalid_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "report-bug",
@@ -3742,16 +3759,6 @@ Shortcut Shortcut::_sc[] = {
          Icons::Invalid_ICON,
          Qt::ApplicationShortcut
          },
-      {
-         MsWidget::MAIN_WINDOW,
-         STATE_ALL,
-         "autoplace-slurs",
-         "Autoplace Slurs",
-         "Autoplace slurs",
-         0,
-         Icons::Invalid_ICON,
-         Qt::ApplicationShortcut
-         }
 #endif
       };
 

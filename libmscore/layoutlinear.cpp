@@ -491,7 +491,7 @@ void LayoutContext::layoutLinear()
                                           Tremolo* t = c->tremolo();
                                           Chord* c1 = t->chord1();
                                           Chord* c2 = t->chord2();
-                                          if (t->twoNotes() && (c1->staffMove() || c2->staffMove()))
+                                          if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove()))
                                                 t->layout();
                                           }
                                     }
