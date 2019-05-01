@@ -992,11 +992,16 @@ void Staff::staffTypeListChanged(const Fraction& tick)
       {
       score()->setLayout(tick);
       auto i = _staffTypeList.find(tick.ticks());
-      ++i;
-      if (i != _staffTypeList.end())
-            score()->setLayout(Fraction::fromTicks(i->first));
-      else
-            score()->setLayout(score()->lastMeasure()->endTick());
+      if (i == _staffTypeList.end()) {
+            score()->setLayoutAll();
+            }
+      else {
+            ++i;
+            if (i != _staffTypeList.end())
+                  score()->setLayout(Fraction::fromTicks(i->first));
+            else
+                  score()->setLayout(score()->lastMeasure()->endTick());
+            }
       }
 
 //---------------------------------------------------------
@@ -1006,6 +1011,21 @@ void Staff::staffTypeListChanged(const Fraction& tick)
 StaffType* Staff::setStaffType(const Fraction& tick, const StaffType& nst)
       {
       return _staffTypeList.setStaffType(tick, nst);
+      }
+
+//---------------------------------------------------------
+//   setStaffType
+//---------------------------------------------------------
+
+void Staff::removeStaffType(const Fraction& tick)
+      {
+      auto i = _staffTypeList.find(tick.ticks());
+      if (i == _staffTypeList.end())
+            return;
+      qreal old = spatium(tick);
+      _staffTypeList.erase(i);
+      localSpatiumChanged(old, spatium(tick), tick);
+      staffTypeListChanged(tick);
       }
 
 //---------------------------------------------------------
@@ -1280,13 +1300,16 @@ QVariant Staff::getProperty(Pid id) const
 bool Staff::setProperty(Pid id, const QVariant& v)
       {
       switch (id) {
-            case Pid::SMALL:
+            case Pid::SMALL: {
+                  qreal _spatium = spatium(Fraction(0,1));
                   setSmall(Fraction(0,1), v.toBool());
+                  localSpatiumChanged(_spatium, spatium(Fraction(0,1)), Fraction(0, 1));
                   break;
+                  }
             case Pid::MAG: {
                   qreal _spatium = spatium(Fraction(0,1));
                   setUserMag(Fraction(0,1), v.toReal());
-                  score()->spatiumChanged(_spatium, spatium(Fraction(0,1)));
+                  localSpatiumChanged(_spatium, spatium(Fraction(0,1)), Fraction(0, 1));
                   }
                   break;
             case Pid::COLOR:
@@ -1374,15 +1397,22 @@ QVariant Staff::propertyDefault(Pid id) const
       }
 
 //---------------------------------------------------------
-//   scaleChanged
+//   localSpatiumChanged
 //---------------------------------------------------------
 
-void Staff::scaleChanged(double oldVal, double newVal)
+void Staff::localSpatiumChanged(double oldVal, double newVal, Fraction tick)
       {
+      Fraction etick;
+      auto i = _staffTypeList.find(tick.ticks());
+      ++i;
+      if (i == _staffTypeList.end())
+            etick = score()->lastSegment()->tick();
+      else
+            etick = Fraction::fromTicks(i->first);
       int staffIdx = idx();
       int startTrack = staffIdx * VOICES;
       int endTrack = startTrack + VOICES;
-      for (Segment* s = score()->firstSegment(SegmentType::All); s; s = s->next1()) {
+      for (Segment* s = score()->tick2rightSegment(tick); s && s->tick() < etick; s = s->next1()) {
             for (Element* e : s->annotations())
                   e->localSpatiumChanged(oldVal, newVal);
             for (int track = startTrack; track < endTrack; ++track) {
@@ -1390,8 +1420,9 @@ void Staff::scaleChanged(double oldVal, double newVal)
                         s->element(track)->localSpatiumChanged(oldVal, newVal);
                   }
             }
-      for (auto i : score()->spanner()) {
-            Spanner* spanner = i.second;
+      auto spanners = score()->spannerMap().findContained(tick.ticks(), etick.ticks());
+      for (auto interval : spanners) {
+            Spanner* spanner = interval.value;
             if (spanner->staffIdx() == staffIdx) {
                   for (auto k : spanner->spannerSegments())
                         k->localSpatiumChanged(oldVal, newVal);
