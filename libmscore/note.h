@@ -326,7 +326,6 @@ class Note final : public Element {
       int pitch() const                   { return _pitch;    }
       int ppitch() const;           ///< playback pitch
       int epitch() const;           ///< effective pitch
-      bool mutePlayback() const;    ///< whether the note should be muted during the playback
       qreal tuning() const                { return _tuning;   }
       void setTuning(qreal v)             { _tuning = v;      }
       void undoSetTpc(int v);
