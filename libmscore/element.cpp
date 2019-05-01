@@ -226,6 +226,7 @@ void Element::reset()
       undoResetProperty(Pid::AUTOPLACE);
       undoResetProperty(Pid::PLACEMENT);
       undoResetProperty(Pid::OFFSET);
+      undoResetProperty(Pid::ABS_OFFSET);
       ScoreElement::reset();
       }
 
@@ -571,6 +572,7 @@ void Element::writeProperties(XmlWriter& xml) const
             if (propertyFlags(pid) == PropertyFlags::NOSTYLE)
                   writeProperty(xml, pid);
             }
+      writeProperty(xml, Pid::ABS_OFFSET);
       }
 
 //---------------------------------------------------------
@@ -1149,6 +1151,8 @@ QVariant Element::getProperty(Pid propertyId) const
                   return selected();
             case Pid::OFFSET:
                   return _offset;
+            case Pid::ABS_OFFSET:
+                  return absolute();
             case Pid::PLACEMENT:
                   return int(placement());
             case Pid::AUTOPLACE:
@@ -1191,6 +1195,9 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::OFFSET:
                   _offset = v.toPointF();
+                  break;
+            case Pid::ABS_OFFSET:
+                  setAbsolute(v.toBool());
                   break;
             case Pid::PLACEMENT:
                   setPlacement(Placement(v.toInt()));
@@ -1253,6 +1260,8 @@ QVariant Element::propertyDefault(Pid pid) const
                         return v;
                   return QPointF();
                   }
+            case Pid::ABS_OFFSET:
+                  return false;
             case Pid::AUTOPLACE:
                   return true;
             case Pid::Z:
@@ -1848,6 +1857,7 @@ void Element::startDrag(EditData& ed)
       eed->e = this;
       eed->pushProperty(Pid::OFFSET);
       eed->pushProperty(Pid::AUTOPLACE);
+      eed->pushProperty(Pid::ABS_OFFSET);
       ed.addData(eed);
       if (ed.modifiers & Qt::AltModifier)
             setAutoplace(false);
@@ -1881,6 +1891,8 @@ QRectF Element::drag(EditData& ed)
             }
 
       setOffset(QPointF(x, y));
+      if (y)
+            setAbsolute(true);
 //      setGenerated(false);
 
       if (isTextBase()) {         // TODO: check for other types
@@ -1978,6 +1990,7 @@ void Element::startEditDrag(EditData& ed)
             ed.addData(eed);
             }
       eed->pushProperty(Pid::OFFSET);
+      eed->pushProperty(Pid::ABS_OFFSET);
       }
 
 //---------------------------------------------------------
@@ -1988,6 +2001,8 @@ void Element::editDrag(EditData& ed)
       {
       score()->addRefresh(canvasBoundingRect());
       setOffset(offset() + ed.delta);
+      if (ed.delta.y())
+            setAbsolute(true);
       score()->addRefresh(canvasBoundingRect());
       }
 
@@ -2171,6 +2186,11 @@ void Element::autoplaceSegmentElement(qreal minDistance)
 
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + s->pos() + pos());
+            qreal yOff = 0.0;
+            if (absolute()) {
+                  yOff = offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+                  r.translate(0.0, -yOff);
+                  }
 
             SkylineLine sk(!placeAbove());
             qreal d;
@@ -2190,6 +2210,8 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                   rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
+            if (absolute())
+                  r.translate(0.0, yOff);
             if (addToSkyline() && minDistance >= 0.0)
                   ss->skyline().add(r);
             }
@@ -2207,6 +2229,11 @@ void Element::autoplaceMeasureElement(qreal minDistance)
 
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + pos());
+            qreal yOff = 0.0;
+            if (absolute()) {
+                  yOff = offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+                  r.translate(0.0, -yOff);
+                  }
 
             SkylineLine sk(!placeAbove());
             qreal d;
@@ -2225,6 +2252,8 @@ void Element::autoplaceMeasureElement(qreal minDistance)
                   rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
+            if (absolute())
+                  r.translate(0.0, yOff);
             if (addToSkyline() && minDistance >= 0.0)
                   ss->skyline().add(r);
             }

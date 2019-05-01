@@ -266,6 +266,12 @@ void Dynamic::doAutoplace()
 
       qreal minDistance = score()->styleS(Sid::dynamicsMinDistance).val() * spatium();
       QRectF r          = bbox().translated(pos() + s->pos() + s->measure()->pos());
+      qreal yOff = 0.0;
+      if (absolute()) {
+            yOff = offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+            r.translate(0.0, -yOff);
+            }
+
       Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
       SkylineLine sk(!placeAbove());
       sk.add(r);
