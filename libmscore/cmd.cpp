@@ -3519,6 +3519,9 @@ void Score::cmdToggleVisible()
       for (Element* e : selection().elements()) {
             if (e->isBracket())     // ignore
                   continue;
+            if (e->isNoteDot() && selection().elements().contains(e->parent()))
+                  // already handled in Note::setProperty() and Rest::setProperty(); don't toggle twice
+                  continue;
             bool spannerSegment = e->isSpannerSegment();
             if (!spannerSegment || !spanners.contains(toSpannerSegment(e)->spanner()))
                   e->undoChangeProperty(Pid::VISIBLE, !e->getProperty(Pid::VISIBLE).toBool());
