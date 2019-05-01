@@ -89,6 +89,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
       Fraction tickLen = Fraction(0,1);
       int staves  = 0;
       bool done   = false;
+      bool doScale = (scale != Fraction(1, 1));
 
       while (e.readNextStartElement()) {
             if (done)
@@ -106,9 +107,14 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                   }
             Fraction tickStart = Fraction::fromTicks(e.intAttribute("tick", 0));
                 tickLen       =  Fraction::fromTicks(e.intAttribute("len", 0));
+            Fraction oTickLen =  tickLen;
                 tickLen       *= scale;
             int staffStart    = e.intAttribute("staff", 0);
                 staves        = e.intAttribute("staves", 0);
+
+            Fraction oEndTick = dstTick + oTickLen;
+            auto oSpanner = spannerMap().findContained(dstTick.ticks(), oEndTick.ticks());
+            bool spannerFound = false;
 
             e.setTickOffset(dstTick - tickStart);
             e.setTick(Fraction(0,1));
@@ -165,7 +171,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               }
                         else if (tag == "Tuplet") {
                               Tuplet* oldTuplet = tuplet;
-                              Fraction tick = (e.tick() - dstTick) * scale + dstTick;
+                              Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                               // no paste into local time signature
                               if (staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
                                     MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
@@ -176,10 +182,9 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               tuplet = new Tuplet(this);
                               tuplet->setTrack(e.track());
                               tuplet->read(e);
-                              if (scale != Fraction(1, 1)) {
+                              if (doScale) {
                                     tuplet->setTicks(tuplet->ticks() * scale);
-                                    Fraction baseLen = tuplet->baseLen().fraction();
-                                    tuplet->setBaseLen(baseLen * scale);
+                                    tuplet->setBaseLen(tuplet->baseLen().fraction() * scale);
                                     }
                               Measure* measure = tick2measure(tick);
                               tuplet->setParent(measure);
@@ -218,7 +223,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               cr->setTrack(e.track());
                               cr->read(e);
                               cr->setSelected(false);
-                              Fraction tick = (e.tick() - dstTick) * scale + dstTick;
+                              Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                               // no paste into local time signature
                               if (staff(dstStaffIdx)->isLocalTimeSignature(tick)) {
                                     MScore::setError(DEST_LOCAL_TIME_SIGNATURE);
@@ -234,16 +239,24 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                                     if (tuplet)
                                           cr->readAddTuplet(tuplet);
                                     e.incTick(cr->actualTicks());
-                                    if (scale != Fraction(1, 1)) {
+                                    if (doScale) {
+                                          Fraction d = cr->durationTypeTicks();
                                           cr->setTicks(cr->ticks() * scale);
-                                          cr->setDurationType(cr->ticks());
+                                          cr->setDurationType(d * scale);
+                                          for (Lyrics* l : cr->lyrics())
+                                                l->setTicks(l->ticks() * scale);
                                           }
                                     if (cr->isChord()) {
                                           Chord* chord = toChord(cr);
                                           // disallow tie across barline within two-note tremolo
                                           // tremolos can potentially still straddle the barline if no tie is required
                                           // but these will be removed later
-                                          if (chord->tremolo() && chord->tremolo()->twoNotes()) {
+                                          Tremolo* t = chord->tremolo();
+                                          if (t && t->twoNotes()) {
+                                                if (doScale) {
+                                                      Fraction d = t->durationType().ticks();
+                                                      t->setDurationType(d * scale);
+                                                      }
                                                 Measure* m = tick2measure(tick);
                                                 Fraction ticks = cr->actualTicks();
                                                 Fraction rticks = m->endTick() - tick;
@@ -306,15 +319,17 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                                     pasteChordRest(cr, tick, e.transpose());
                                     }
                               }
-                        else if (tag == "Spanner")
+                        else if (tag == "Spanner") {
                               Spanner::readSpanner(e, this, e.track());
+                              spannerFound = true;
+                              }
                         else if (tag == "Harmony") {
                               Harmony* harmony = new Harmony(this);
                               harmony->setTrack(e.track());
                               harmony->read(e);
                               harmony->setTrack(e.track());
                               // transpose
-                              Fraction tick = (e.tick() - dstTick) * scale + dstTick;
+                              Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                               Part* partDest = staff(e.track() / VOICES)->part();
                               Interval interval = partDest->instrument(tick)->transpose();
                               if (!styleB(Sid::concertPitch) && !interval.isZero()) {
@@ -350,7 +365,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                                     el->setPlacement(el->track() & 1 ? Placement::BELOW : Placement::ABOVE);
                               el->read(e);
 
-                              Fraction tick = (e.tick() - dstTick) * scale + dstTick;
+                              Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* seg = m->undoGetSegment(SegmentType::ChordRest, tick);
                               el->setParent(seg);
@@ -366,7 +381,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               Clef* clef = new Clef(this);
                               clef->read(e);
                               clef->setTrack(e.track());
-                              Fraction tick = (e.tick() - dstTick) * scale + dstTick;
+                              Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                               Measure* m = tick2measure(tick);
                               if (m->tick().isNotZero() && m->tick() == tick)
                                     m = m->prevMeasure();
@@ -378,7 +393,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               Breath* breath = new Breath(this);
                               breath->read(e);
                               breath->setTrack(e.track());
-                              Fraction tick = (e.tick() - dstTick) * scale + dstTick;
+                              Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                               Measure* m = tick2measure(tick);
                               Segment* segment = m->undoGetSegment(SegmentType::Breath, tick);
                               breath->setParent(segment);
@@ -418,7 +433,34 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                               }
                         }
                   }
+            // fix up spanners
+            if (doScale && spannerFound) {
+                  // build list of original spanners
+                  std::vector<Spanner*> oSpannerList;
+                  for (auto interval : oSpanner) {
+                        Spanner* sp = interval.value;
+                        oSpannerList.push_back(sp);
+                        }
+                  auto nSpanner = spannerMap().findContained(dstTick.ticks(), oEndTick.ticks());
+                  for (auto interval : nSpanner) {
+                        Spanner* sp = interval.value;
+                        // skip if not in this staff list
+                        if (sp->staffIdx() < dstStaff || sp->staffIdx() >= dstStaff + staves)
+                              continue;
+                        // CHORD and NOTE spanners are normally handled already
+                        if (sp->anchor() == Spanner::Anchor::CHORD || sp->anchor() == Spanner::Anchor::NOTE)
+                              continue;
+                        // skip if present oiginally
+                        auto i = std::find(oSpannerList.begin(), oSpannerList.end(), sp);
+                        if (i != oSpannerList.end())
+                              continue;
+                        Fraction tick = (sp->tick() - dstTick) * scale + dstTick;
+                        sp->undoChangeProperty(Pid::SPANNER_TICK, tick);
+                        sp->undoChangeProperty(Pid::SPANNER_TICKS, sp->ticks() * scale);
+                        }
+                  }
             }
+
       for (Score* s : scoreList())     // for all parts
             s->connectTies();
 
