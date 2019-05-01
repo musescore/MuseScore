@@ -719,7 +719,11 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& map, QM
                   // layout breaks other than section were skipped above,
                   // but section breaks do need to be cloned & linked
                   // other measure-attached elements (?) are cloned but not linked
-                  if (e->isTextBase() || e->isLayoutBreak()) {
+                  if (e->isText() && toText(e)->tid() == Tid::INSTRUMENT_EXCERPT) {
+                        // skip part name in score
+                        continue;
+                        }
+                  else if (e->isTextBase() || e->isLayoutBreak()) {
                         ne = e->clone();
                         ne->setAutoplace(true);
                         ne->linkTo(e);
