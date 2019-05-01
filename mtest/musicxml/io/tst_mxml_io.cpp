@@ -156,6 +156,7 @@ private slots:
       void tablature2() { mxmlIoTest("testTablature2"); }
       void tablature3() { mxmlIoTest("testTablature3"); }
       void tablature4() { mxmlIoTest("testTablature4"); }
+      void tablature5() { mxmlIoTestRef("testTablature5"); }
       void tempo1() { mxmlIoTest("testTempo1"); }
       void tempo2() { mxmlIoTestRef("testTempo2"); }
       void tempo3() { mxmlIoTestRef("testTempo3"); }

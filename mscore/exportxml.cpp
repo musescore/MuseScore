@@ -236,7 +236,7 @@ class SlurHandler {
 
 public:
       SlurHandler();
-      void doSlurs(Chord* chord, Notations& notations, XmlWriter& xml);
+      void doSlurs(const ChordRest* chordRest, Notations& notations, XmlWriter& xml);
 
 private:
       void doSlurStart(const Slur* s, Notations& notations, XmlWriter& xml);
@@ -273,6 +273,7 @@ class ExportMusicXml {
       Fraction _tick;
       Attributes _attr;
       TextLine const* brackets[MAX_NUMBER_LEVEL];
+      TextLineBase const* dashes[MAX_NUMBER_LEVEL];
       Hairpin const* hairpins[MAX_NUMBER_LEVEL];
       Ottava const* ottavas[MAX_NUMBER_LEVEL];
       Trill const* trills[MAX_NUMBER_LEVEL];
@@ -283,8 +284,9 @@ class ExportMusicXml {
       TrillHash _trillStop;
       MxmlInstrumentMap instrMap;
 
-      int findHairpin(const Hairpin* tl) const;
       int findBracket(const TextLine* tl) const;
+      int findDashes(const TextLineBase* tl) const;
+      int findHairpin(const Hairpin* tl) const;
       int findOttava(const Ottava* tl) const;
       int findTrill(const Trill* tl) const;
       void chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset);
@@ -312,7 +314,7 @@ public:
       ExportMusicXml(Score* s)
             : _xml(s)
             {
-            _score = s; _tick = {0,1}; div = 1; tenths = 40;
+            _score = s; _tick = { 0,1 }; div = 1; tenths = 40;
             millimeters = _score->spatium() * tenths / (10 * DPMM);
             }
       void write(QIODevice* dev);
@@ -562,56 +564,59 @@ int SlurHandler::findSlur(const Slur* s) const
       }
 
 //---------------------------------------------------------
-//   findFirstChord -- find first chord (in musical order) for slur s
+//   findFirstChordRest -- find first chord or rest (in musical order) for slur s
 //   note that this is not necessarily the same as s->startElement()
 //---------------------------------------------------------
 
-static const Chord* findFirstChord(const Slur* s)
+static const ChordRest* findFirstChordRest(const Slur* s)
       {
       const Element* e1 = s->startElement();
-      if (e1 == 0 || e1->type() != ElementType::CHORD) {
-            qDebug("no valid start chord for slur %p", s);
-            return 0;
+      if (!e1 || !(e1->isChordRest())) {
+            qDebug("no valid start element for slur %p", s);
+            return nullptr;
             }
 
       const Element* e2 = s->endElement();
-      if (e2 == 0 || e2->type() != ElementType::CHORD) {
-            qDebug("no valid stop chord for slur %p", s);
-            return 0;
+      if (!e2 || !(e2->isChordRest())) {
+            qDebug("no valid end element for slur %p", s);
+            return nullptr;
             }
 
-      const Chord* c1 = static_cast<const Chord*>(e1);
-      const Chord* c2 = static_cast<const Chord*>(e2);
+      if (e1->tick() < e2->tick())
+            return static_cast<const ChordRest*>(e1);
+      else if (e1->tick() > e2->tick())
+            return static_cast<const ChordRest*>(e2);
 
-      if (c1->tick() < c2->tick())
-            return c1;
-      else if (c1->tick() > c2->tick())
-            return c2;
+      if (e1->isRest() || e2->isRest()) {
+            return nullptr;
+            }
+
+      const auto c1 = static_cast<const Chord*>(e1);
+      const auto c2 = static_cast<const Chord*>(e2);
+
+      // c1->tick() == c2->tick()
+      if (!c1->isGrace() && !c2->isGrace()) {
+            // slur between two regular notes at the same tick
+            // probably shouldn't happen but handle just in case
+            qDebug("invalid slur between chords %p and %p at tick %d", c1, c2, c1->tick());
+            return 0;
+            }
+      else if (c1->isGraceBefore() && !c2->isGraceBefore())
+            return c1;        // easy case: c1 first
+      else if (c1->isGraceAfter() && !c2->isGraceAfter())
+            return c2;        // easy case: c2 first
+      else if (c2->isGraceBefore() && !c1->isGraceBefore())
+            return c2;        // easy case: c2 first
+      else if (c2->isGraceAfter() && !c1->isGraceAfter())
+            return c1;        // easy case: c1 first
       else {
-            // c1->tick() == c2->tick()
-            if (!c1->isGrace() && !c2->isGrace()) {
-                  // slur between two regular notes at the same tick
-                  // probably shouldn't happen but handle just in case
-                  qDebug("invalid slur between chords %p and %p at tick %d", c1, c2, c1->tick().ticks());
-                  return 0;
-                  }
-            else if (c1->isGraceBefore() && !c2->isGraceBefore())
-                  return c1;  // easy case: c1 first
-            else if (c1->isGraceAfter() && !c2->isGraceAfter())
-                  return c2;  // easy case: c2 first
-            else if (c2->isGraceBefore() && !c1->isGraceBefore())
-                  return c2;  // easy case: c2 first
-            else if (c2->isGraceAfter() && !c1->isGraceAfter())
-                  return c1;  // easy case: c1 first
-            else {
-                  // both are grace before or both are grace after -> compare grace indexes
-                  // (note: higher means closer to the non-grace chord it is attached to)
-                  if ((c1->isGraceBefore() && c1->graceIndex() < c2->graceIndex())
-                      || (c1->isGraceAfter() && c1->graceIndex() > c2->graceIndex()))
-                        return c1;
-                  else
-                        return c2;
-                  }
+            // both are grace before or both are grace after -> compare grace indexes
+            // (note: higher means closer to the non-grace chord it is attached to)
+            if ((c1->isGraceBefore() && c1->graceIndex() < c2->graceIndex())
+                || (c1->isGraceAfter() && c1->graceIndex() > c2->graceIndex()))
+                  return c1;
+            else
+                  return c2;
             }
       }
 
@@ -619,27 +624,27 @@ static const Chord* findFirstChord(const Slur* s)
 //   doSlurs
 //---------------------------------------------------------
 
-void SlurHandler::doSlurs(Chord* chord, Notations& notations, XmlWriter& xml)
+void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlWriter& xml)
       {
       // loop over all slurs twice, first to handle the stops, then the starts
       for (int i = 0; i < 2; ++i) {
             // search for slur(s) starting or stopping at this chord
-            for (auto it : chord->score()->spanner()) {
-                  Spanner* sp = it.second;
+            for (const auto it : chordRest->score()->spanner()) {
+                  auto sp = it.second;
                   if (sp->generated() || sp->type() != ElementType::SLUR)
                         continue;
-                  if (chord == sp->startElement() || chord == sp->endElement()) {
-                        const Slur* s = static_cast<const Slur*>(sp);
-                        const Chord* firstChord = findFirstChord(s);
-                        if (firstChord) {
+                  if (chordRest == sp->startElement() || chordRest == sp->endElement()) {
+                        const auto s = static_cast<const Slur*>(sp);
+                        const auto firstChordRest = findFirstChordRest(s);
+                        if (firstChordRest) {
                               if (i == 0) {
                                     // first time: do slur stops
-                                    if (firstChord != chord)
+                                    if (firstChordRest != chordRest)
                                           doSlurStop(s, notations, xml);
                                     }
                               else {
                                     // second time: do slur starts
-                                    if (firstChord == chord)
+                                    if (firstChordRest == chordRest)
                                           doSlurStart(s, notations, xml);
                                     }
                               }
@@ -1061,7 +1066,7 @@ void ExportMusicXml::calcDivisions()
       for (int idx = 0; idx < il.size(); ++idx) {
 
             Part* part = il.at(idx);
-            _tick = {0,1};
+            _tick = { 0,1 };
 
             int staves = part->nstaves();
             int strack = _score->staffIdx(part) * VOICES;
@@ -1255,7 +1260,6 @@ void ExportMusicXml::credits(XmlWriter& xml)
 
                         double tx = w / 2;
                         double ty = h - getTenthsFromDots(text->pagePos().y());
-//                        QString styleName = text->textStyle().name();
 
                         Align al = text->align();
                         QString just;
@@ -1552,6 +1556,7 @@ void ExportMusicXml::barlineRight(Measure* m)
             }
       if (!needBarStyle && !volta && special.isEmpty())
             return;
+
       _xml.stag(QString("barline location=\"right\""));
       if (needBarStyle) {
             if (!visible) {
@@ -1584,16 +1589,19 @@ void ExportMusicXml::barlineRight(Measure* m)
       else if (!special.isEmpty()) {
             _xml.tag("bar-style", special);
             }
-      if (volta)
+
+      if (volta) {
             ending(_xml, volta, false);
-      if (bst == BarLineType::END_REPEAT || bst == BarLineType::END_START_REPEAT)
-            {
+            }
+
+      if (bst == BarLineType::END_REPEAT || bst == BarLineType::END_START_REPEAT) {
             if (m->repeatCount() > 2) {
                   _xml.tagE(QString("repeat direction=\"backward\" times=\"%1\"").arg(m->repeatCount()));
                   } else {
                   _xml.tagE("repeat direction=\"backward\"");
                   }
             }
+
       _xml.etag();
       }
 
@@ -2970,13 +2978,14 @@ void ExportMusicXml::rest(Rest* rest, int staff)
             _xml.tag("staff", staff);
 
       Notations notations;
-//      fermatas(rest->articulations(), xml, notations);
       QVector<Element*> fl;
       for (Element* e : rest->segment()->annotations()) {
             if (e->isFermata() && e->track() == rest->track())
                   fl.push_back(e);
             }
       fermatas(fl, _xml, notations);
+
+      sh.doSlurs(rest, notations, _xml);
 
       tupletStartStop(rest, notations, _xml);
       notations.etag(_xml);
@@ -3423,6 +3432,18 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       }
 
 //---------------------------------------------------------
+//   findDashes -- get index of hairpin in dashes table
+//   return -1 if not found
+//---------------------------------------------------------
+
+int ExportMusicXml::findDashes(const TextLineBase* hp) const
+      {
+      for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
+            if (dashes[i] == hp) return i;
+      return -1;
+      }
+
+//---------------------------------------------------------
 //   findHairpin -- get index of hairpin in hairpin table
 //   return -1 if not found
 //---------------------------------------------------------
@@ -3435,48 +3456,108 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
       }
 
 //---------------------------------------------------------
+//   fontSyleToXML
+//---------------------------------------------------------
+
+static QString fontSyleToXML(const FontStyle style)
+      {
+      QString res;
+      if (style & FontStyle::Bold)
+            res += " font-weight=\"bold\"";
+      else if (style & FontStyle::Italic)
+            res += " font-style=\"italic\"";
+      else if (style & FontStyle::Underline)
+            res += " underline=\"1\"";
+      return res;
+      }
+
+//---------------------------------------------------------
 //   hairpin
 //---------------------------------------------------------
 
 void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction& tick)
       {
-      int n = findHairpin(hp);
-      if (n >= 0)
-            hairpins[n] = 0;
-      else {
-            n = findHairpin(0);
+      const auto isLineType = hp->isLineType();
+      int n;
+      if (isLineType) {
+            n = findDashes(hp);
             if (n >= 0)
-                  hairpins[n] = hp;
+                  dashes[n] = nullptr;
             else {
-                  qDebug("too many overlapping hairpins (hp %p staff %d tick %d)", hp, staff, tick.ticks());
-                  return;
+                  n = findDashes(nullptr);
+                  if (n >= 0)
+                        dashes[n] = hp;
+                  else {
+                        qDebug("too many overlapping dashes (hp %p staff %d tick %d)", hp, staff, tick.ticks());
+                        return;
+                        }
+                  }
+            }
+      else {
+            n = findHairpin(hp);
+            if (n >= 0)
+                  hairpins[n] = nullptr;
+            else {
+                  n = findHairpin(nullptr);
+                  if (n >= 0)
+                        hairpins[n] = hp;
+                  else {
+                        qDebug("too many overlapping hairpins (hp %p staff %d tick %d)", hp, staff, tick.ticks());
+                        return;
+                        }
                   }
             }
 
       directionTag(_xml, _attr, hp);
-      _xml.stag("direction-type");
+      if (isLineType) {
+            if (hp->tick() == tick) {
+                  _xml.stag("direction-type");
+                  QString tag = "words";
+                  tag += QString(" font-family=\"%1\"").arg(hp->getProperty(Pid::BEGIN_FONT_FACE).toString());
+                  tag += QString(" font-size=\"%1\"").arg(hp->getProperty(Pid::BEGIN_FONT_SIZE).toReal());
+                  tag += fontSyleToXML(static_cast<FontStyle>(hp->getProperty(Pid::BEGIN_FONT_STYLE).toInt()));
+                  tag += addPositioningAttributes(hp, hp->tick() == tick);
+                  _xml.tag(tag, hp->getProperty(Pid::BEGIN_TEXT));
+                  _xml.etag();
 
-      QString hairpinXml;
-      if (hp->tick() == tick) {
-            if (hp->hairpinType() == HairpinType::CRESC_HAIRPIN) {
-                  if (hp->hairpinCircledTip())
-                        hairpinXml = QString("wedge type=\"crescendo\" niente=\"yes\" number=\"%1\"").arg(n + 1);
-                  else
-                        hairpinXml = QString("wedge type=\"crescendo\" number=\"%1\"").arg(n + 1);
+                  _xml.stag("direction-type");
+                  tag = "dashes type=\"start\"";
+                  tag += QString(" number=\"%1\"").arg(n + 1);
+                  tag += addPositioningAttributes(hp, hp->tick() == tick);
+                  _xml.tagE(tag);
+                  _xml.etag();
                   }
-            else
-                  hairpinXml = QString("wedge type=\"diminuendo\" number=\"%1\"").arg(n + 1);
+            else {
+                  _xml.stag("direction-type");
+                  _xml.tagE(QString("dashes type=\"stop\" number=\"%1\"").arg(n + 1));
+                  _xml.etag();
+                  }
             }
       else {
-            if (hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DECRESC_HAIRPIN)
-                  hairpinXml = QString("wedge type=\"stop\" niente=\"yes\" number=\"%1\"").arg(n + 1);
-            else
-                  hairpinXml = QString("wedge type=\"stop\" number=\"%1\"").arg(n + 1);
-
+            _xml.stag("direction-type");
+            QString tag = "wedge type=";
+            if (hp->tick() == tick) {
+                  if (hp->hairpinType() == HairpinType::CRESC_HAIRPIN) {
+                        tag += "\"crescendo\"";
+                        if (hp->hairpinCircledTip()) {
+                              tag += " niente=\"yes\"";
+                              }
+                        }
+                  else {
+                        tag += "\"diminuendo\"";
+                        }
+                  }
+            else {
+                  tag += "\"stop\"";
+                  if (hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
+                        tag += " niente=\"yes\"";
+                        }
+                  }
+            tag += QString(" number=\"%1\"").arg(n + 1);
+            tag += addPositioningAttributes(hp, hp->tick() == tick);
+            _xml.tagE(tag);
+            _xml.etag();
             }
-      hairpinXml += addPositioningAttributes(hp, hp->tick() == tick);
-      _xml.tagE(hairpinXml);
-      _xml.etag();
       directionETag(_xml, staff);
       }
 
@@ -3595,31 +3676,48 @@ int ExportMusicXml::findBracket(const TextLine* tl) const
 
 void ExportMusicXml::textLine(TextLine const* const tl, int staff, const Fraction& tick)
       {
-      int n = findBracket(tl);
-      if (n >= 0)
-            brackets[n] = 0;
-      else {
-            n = findBracket(0);
+      int n;
+      // special case: a dashed line w/o hooks is written as dashes
+      const auto isDashes = tl->lineStyle() == Qt::DashLine && (tl->beginHookType() == HookType::NONE) && (tl->endHookType() == HookType::NONE);
+
+      if (isDashes) {
+            n = findDashes(tl);
             if (n >= 0)
-                  brackets[n] = tl;
+                  dashes[n] = nullptr;
             else {
-                  qDebug("too many overlapping textlines (tl %p staff %d tick %d)", tl, staff, tick.ticks());
-                  return;
+                  n = findBracket(nullptr);
+                  if (n >= 0)
+                        dashes[n] = tl;
+                  else {
+                        qDebug("too many overlapping dashes (tl %p staff %d tick %d)", tl, staff, tick.ticks());
+                        return;
+                        }
+                  }
+            }
+      else {
+            n = findBracket(tl);
+            if (n >= 0)
+                  brackets[n] = nullptr;
+            else {
+                  n = findBracket(nullptr);
+                  if (n >= 0)
+                        brackets[n] = tl;
+                  else {
+                        qDebug("too many overlapping textlines (tl %p staff %d tick %d)", tl, staff, tick.ticks());
+                        return;
+                        }
                   }
             }
 
       QString rest;
       QPointF p;
 
-      // special case: a dashed line w/o hooks is written as dashes
-      bool dashes = tl->lineStyle() == Qt::DashLine && (tl->beginHookType() == HookType::NONE) && (tl->endHookType() == HookType::NONE);
-
       QString lineEnd = "none";
       QString type;
       bool hook = false;
       double hookHeight = 0.0;
       if (tl->tick() == tick) {
-            if (!dashes) {
+            if (!isDashes) {
                   QString lineType;
                   switch (tl->lineStyle()) {
                         case Qt::SolidLine:
@@ -3671,7 +3769,7 @@ void ExportMusicXml::textLine(TextLine const* const tl, int staff, const Fractio
             _xml.etag();
             }
       _xml.stag("direction-type");
-      if (dashes)
+      if (isDashes)
             _xml.tagE(QString("dashes type=\"%1\" number=\"%2\"").arg(type, QString::number(n + 1)));
       else
             _xml.tagE(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
@@ -3874,10 +3972,10 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
                   sound = "dalsegno=\"" + jp->jumpTo() + "\"";
             }
       else
-            qDebug("jump type=%d not implemented", int(jtp));
+            qDebug("jump type=%d not implemented", static_cast<int>(jtp));
+
       if (sound != "") {
-//            xml.stag("direction placement=\"above\"");
-            xml.stag(QString("direction placement=\"%1\"").arg((jp->placement() ==Placement::BELOW ) ? "below" : "above"));
+            xml.stag(QString("direction placement=\"%1\"").arg((jp->placement() == Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
             QString positioning = "";
             positioning += addPositioningAttributes(jp);
@@ -3931,9 +4029,9 @@ static void directionMarker(XmlWriter& xml, const Marker* const m)
             }
       else
             qDebug("marker type=%d not implemented", int(mtp));
+
       if (sound != "") {
-//            xml.stag("direction placement=\"above\"");
-            xml.stag(QString("direction placement=\"%1\"").arg((m->placement() ==Placement::BELOW ) ? "below" : "above"));
+            xml.stag(QString("direction placement=\"%1\"").arg((m->placement() == Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
             QString positioning = "";
             positioning += addPositioningAttributes(m);
@@ -4225,7 +4323,7 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
                               const Fraction fbEndTick = fb->segment()->tick() + fb->ticks();
                               const bool writeDuration = fb->ticks() < cr->actualTicks();
                               fb->writeMusicXML(xml, true, crEndTick.ticks(), fbEndTick.ticks(),
-                                writeDuration, divisions);
+                                                writeDuration, divisions);
 
                               // Check for changing figures under a single note (each figure stored in a separate segment)
                               for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
@@ -4701,7 +4799,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                                                                        + 2 * score()->spatium()
                                                                        );
                               _xml.tag("system-distance",
-                                      QString("%1").arg(QString::number(sysDist,'f',2)));
+                                       QString("%1").arg(QString::number(sysDist,'f',2)));
                               }
 
                         _xml.etag();
@@ -5216,10 +5314,11 @@ void ExportMusicXml::write(QIODevice* dev)
       calcDivisions();
 
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
-            brackets[i] = 0;
-            hairpins[i] = 0;
-            ottavas[i] = 0;
-            trills[i] = 0;
+            brackets[i] = nullptr;
+            dashes[i] = nullptr;
+            hairpins[i] = nullptr;
+            ottavas[i] = nullptr;
+            trills[i] = nullptr;
             }
 
       _xml.setDevice(dev);
@@ -5245,7 +5344,7 @@ void ExportMusicXml::write(QIODevice* dev)
 
       for (int idx = 0; idx < il.size(); ++idx) {
             Part* part = il.at(idx);
-            _tick = {0,1};
+            _tick = { 0,1 };
             _xml.stag(QString("part id=\"P%1\"").arg(idx+1));
 
             int staves = part->nstaves();
@@ -5437,12 +5536,12 @@ bool saveXml(Score* score, const QString& name)
       QFile f(name);
       if (!f.open(QIODevice::WriteOnly))
             return false;
-      
+
       bool res = saveXml(score, &f) && (f.error() == QFile::NoError);
       f.close();
       return res;
       }
-      
+
 //---------------------------------------------------------
 //   saveMxl
 //    return false on error
@@ -5466,7 +5565,7 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
       {
       QBuffer cbuf;
       cbuf.open(QIODevice::ReadWrite);
-      
+
       XmlWriter xml(score);
       xml.setDevice(&cbuf);
       xml.setCodec("UTF-8");
@@ -5478,10 +5577,10 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
       xml.etag();
       xml.etag();
       cbuf.seek(0);
-      
+
       //uz.addDirectory("META-INF");
       zipwriter.addFile("META-INF/container.xml", cbuf.data());
-      
+
       QBuffer dbuf;
       dbuf.open(QIODevice::ReadWrite);
       ExportMusicXml em(score);
@@ -5489,19 +5588,19 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
       dbuf.seek(0);
       zipwriter.addFile(filename, dbuf.data());
       }
-      
+
 bool saveMxl(Score* score, QIODevice* device)
       {
       MQZipWriter uz(device);
-      
+
       //anonymized filename since we don't know the actual one here
       QString fn = "score.xml";
       writeMxlArchive(score, uz, fn);
       uz.close();
-      
+
       return true;
       }
-      
+
 bool saveMxl(Score* score, const QString& name)
       {
       MQZipWriter uz(name);
