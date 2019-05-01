@@ -1289,7 +1289,7 @@ void ChordRest::removeMarkings(bool /* keepTremolo */)
 //   isBefore
 //---------------------------------------------------------
 
-bool ChordRest::isBefore(ChordRest* o)
+bool ChordRest::isBefore(const ChordRest* o) const
       {
       if (!o || this == o)
             return true;

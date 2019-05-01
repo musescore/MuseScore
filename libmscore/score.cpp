@@ -2783,36 +2783,65 @@ void Score::padToggle(Pad n)
                   }
             }
 
-      if (noteEntryMode() || !selection().isSingle())
+      if (noteEntryMode())
             return;
 
-      //do not allow to add a dot on a full measure rest
-      Element* e = selection().element();
-      if (e && e->isRest()) {
-            Rest* r = toRest(e);
-            if (r->isFullMeasureRest())
-                  _is.setDots(0);
+      std::vector<ChordRest*> crs;
+
+      if (selection().isSingle()) {
+            // do not allow to add a dot on a full measure rest
+            Element* e = selection().element();
+            if (e && e->isRest()) {
+                  Rest* r = toRest(e);
+                  if (r->isFullMeasureRest())
+                        _is.setDots(0);
+                  }
+
+            // on measure rest, select the first actual rest
+            ChordRest* cr = selection().cr();
+            if (cr && cr->isRest() && cr->measure()->isMMRest()) {
+                  Measure* m = cr->measure()->mmRestFirst();
+                  if (m)
+                        cr = m->findChordRest(Fraction(0,1), 0);
+                  }
+
+            crs.push_back(cr);
+            }
+      else {
+            const auto elements = selection().uniqueElements();
+            bool canAdjustLength = true;
+            for (Element* e : elements) {
+                  if (!e)
+                        continue;
+                  if (e->isNote())
+                        e = e->parent();
+                  if (!e->isChordRest() || e->isRepeatMeasure() || (e->isRest() && toRest(e)->measure() && toRest(e)->measure()->isMMRest())) {
+                        canAdjustLength = false;
+                        break;
+                        }
+                  crs.push_back(toChordRest(e));
+                  }
+
+            if (canAdjustLength) {
+                  // Change length from last to first chord/rest
+                  std::sort(crs.begin(), crs.end(), [](const ChordRest* cr1, const ChordRest* cr2) {
+                        return cr2->track() < cr1->track() || cr2->isBefore(cr1);
+                        });
+                  }
+            else
+                  crs.clear();
             }
 
-      // on measure rest, select the first actual rest
-      ChordRest* cr = selection().cr();
-      if (cr && cr->isRest() && cr->measure()->isMMRest()) {
-            Measure* m = cr->measure()->mmRestFirst();
-            if (m)
-                  cr = m->findChordRest(Fraction(0,1), 0);
+      for (ChordRest* cr : crs) {
+            if (cr->isChord() && (toChord(cr)->isGrace())) {
+                  //
+                  // handle appoggiatura and acciaccatura
+                  //
+                  undoChangeChordRestLen(cr, _is.duration());
+                  }
+            else
+                  changeCRlen(cr, _is.duration());
             }
-
-      if (!cr)
-            return;
-
-      if (cr->isChord() && (toChord(cr)->isGrace())) {
-            //
-            // handle appoggiatura and acciaccatura
-            //
-            undoChangeChordRestLen(cr, _is.duration());
-            }
-      else
-            changeCRlen(cr, _is.duration());
       }
 
 //---------------------------------------------------------
