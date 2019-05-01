@@ -207,7 +207,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::VERSE,                   true,  "no",                    P_TYPE::ZERO_INT,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "verse")            },
 
       { Pid::SYLLABIC,                true,  "syllabic",              P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "syllabic")         },
-      { Pid::LYRIC_TICKS,             true,  "ticks",                 P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "ticks")            },
+      { Pid::LYRIC_TICKS,             true,  "ticks_f",               P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "ticks")            },
       { Pid::VOLTA_ENDING,            true,  "endings",               P_TYPE::INT_LIST,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "endings")          },
       { Pid::LINE_VISIBLE,            true,  "lineVisible",           P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "visible line")     },
       { Pid::MAG,                     false, "mag",                   P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "mag")              },

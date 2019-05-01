@@ -93,6 +93,7 @@ void Lyrics::write(XmlWriter& xml) const
                   };
             xml.tag("syllabic", sl[int(_syllabic)]);
             }
+      xml.tag("ticks", _ticks.ticks(), 0); // pre-3.1 compatibility: write integer ticks under <ticks> tag
       writeProperty(xml, Pid::LYRIC_TICKS);
 
       TextBase::writeProperties(xml);
@@ -135,6 +136,8 @@ bool Lyrics::readProperties(XmlReader& e)
                   qDebug("bad syllabic property");
             }
       else if (tag == "ticks")            // obsolete
+            _ticks = e.readFraction(); // will fall back to reading integer ticks on older scores
+      else if (tag == "ticks_f")
             _ticks = e.readFraction();
       else if (readProperty(tag, e, Pid::PLACEMENT))
             ;
