@@ -1357,8 +1357,7 @@ void SpannerSegment::autoplaceSpannerSegment(qreal minDistance)
                   minDistance *= staff()->mag(spanner()->tick());
             SkylineLine sl(!spanner()->placeAbove());
             QPointF p = pos();
-            if (absolute())
-                  p.ry() -= offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+            p.ry() -= offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
             sl.add(shape().translated(p));
             if (spanner()->placeAbove()) {
                   qreal d  = system()->topDistance(staffIdx(), sl);

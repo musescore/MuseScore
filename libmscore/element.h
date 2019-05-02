@@ -155,7 +155,6 @@ class Element : public ScoreElement {
       qreal _mag;                 ///< standard magnification (derived value)
       QPointF _pos;               ///< Reference position, relative to _parent.
       QPointF _offset;            ///< offset from reference position, set by autoplace or user
-      bool _absolute { false };   ///< offset is absolute, allows intrusion into skyline even with autoplace enabled
       int _track;                 ///< staffIdx * VOICES + voice
       mutable ElementFlags _flags;
                                   ///< valid after call to layout()
@@ -229,9 +228,6 @@ class Element : public ScoreElement {
       QPointF& roffset()                          { return _offset; }
       qreal& rxoffset()                           { return _offset.rx(); }
       qreal& ryoffset()                           { return _offset.ry(); }
-
-      bool absolute() const                       { return _absolute; }
-      void setAbsolute(bool v)                    { _absolute = v;    }
 
       virtual Fraction tick() const;
       virtual Fraction rtick() const;

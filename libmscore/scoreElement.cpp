@@ -319,12 +319,6 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
                   changeProperties(this, p.pid, score()->styleV(p.sid), PropertyFlags::STYLED);
                   }
             }
-      else if (id == Pid::OFFSET) {
-            qreal newY = v.toPointF().y();
-            qreal oldY = getProperty(Pid::OFFSET).toPointF().y();
-            if (newY != oldY)
-                  undoChangeProperty(Pid::ABS_OFFSET, true);
-            }
       changeProperties(this, id, v, ps);
       if (id != Pid::GENERATED)
             changeProperties(this, Pid::GENERATED, QVariant(false), PropertyFlags::NOSTYLE);

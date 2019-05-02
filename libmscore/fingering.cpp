@@ -129,11 +129,8 @@ void Fingering::layout()
                               }
                         else {
                               QRectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
-                              qreal yOff = 0.0;
-                              if (absolute()) {
-                                    yOff = offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
-                                    r.translate(0.0, -yOff);
-                                    }
+                              qreal yOff = offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+                              r.translate(0.0, -yOff);
                               SkylineLine sk(false);
                               sk.add(r.x(), r.bottom(), r.width());
                               qreal d = sk.minDistance(ss->skyline().north());
@@ -163,11 +160,8 @@ void Fingering::layout()
                               }
                         else {
                               QRectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
-                              qreal yOff = 0.0;
-                              if (absolute()) {
-                                    yOff = offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
-                                    r.translate(0.0, -yOff);
-                                    }
+                              qreal yOff = offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+                              r.translate(0.0, -yOff);
                               SkylineLine sk(true);
                               sk.add(r.x(), r.top(), r.width());
                               qreal d = ss->skyline().south().minDistance(sk);

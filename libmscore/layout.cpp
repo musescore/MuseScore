@@ -2947,6 +2947,9 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
                               l->ryoffset() = 0.0;
                               QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
                               QRectF r = l->bbox().translated(offset);
+                              // TODO - mjs
+                              //qreal yOff = l->offset().y() - l->propertyDefault(Pid::OFFSET).toPointF().y();
+                              //r.translate(0.0, -yOff);
                               sk.add(r.x(), r.top(), r.width());
                               }
                         }
@@ -2982,6 +2985,9 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
                         if (l->autoplace() && l->placeAbove()) {
                               l->ryoffset() = 0.0;
                               QRectF r = l->bbox().translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
+                              // TODO - mjs
+                              //qreal yOff = l->offset().y() - l->propertyDefault(Pid::OFFSET).toPointF().y();
+                              //r.translate(0.0, -yOff);
                               sk.add(r.x(), r.bottom(), r.width());
                               }
                         }
