@@ -1482,7 +1482,7 @@ void Score::cmdFlip()
                || e->isLyrics()
                || e->isTrillSegment()) {
                   e->undoChangeProperty(Pid::AUTOPLACE, true);
-                  // getProperty() delegates call from spannerSegment to Spanner:
+                  // getProperty() delegates call from spannerSegment to Spanner
                   Placement p = Placement(e->getProperty(Pid::PLACEMENT).toInt());
                   p = (p == Placement::ABOVE) ? Placement::BELOW : Placement::ABOVE;
                   // TODO: undoChangeProperty() should probably do this directly
@@ -1493,7 +1493,27 @@ void Score::cmdFlip()
                   PropertyFlags pf = ee->propertyFlags(Pid::PLACEMENT);
                   if (pf == PropertyFlags::STYLED)
                         pf = PropertyFlags::UNSTYLED;
+                  qreal oldDefaultY = ee->propertyDefault(Pid::OFFSET).toPointF().y();
                   ee->undoChangeProperty(Pid::PLACEMENT, int(p), pf);
+                  // flip and rebase user offset to new default now that placement has changed
+                  qreal newDefaultY = ee->propertyDefault(Pid::OFFSET).toPointF().y();
+                  if (ee->isSpanner()) {
+                        Spanner* spanner = toSpanner(ee);
+                        for (SpannerSegment* ss : spanner->spannerSegments()) {
+                              if (!ss->isStyled(Pid::OFFSET)) {
+                                    QPointF off = ss->getProperty(Pid::OFFSET).toPointF();
+                                    qreal oldY = off.y() - oldDefaultY;
+                                    off.ry() = newDefaultY - oldY;
+                                    ss->undoChangeProperty(Pid::OFFSET, off);
+                                    }
+                              }
+                        }
+                  else if (!ee->isStyled(Pid::OFFSET)) {
+                        QPointF off = ee->getProperty(Pid::OFFSET).toPointF();
+                        qreal oldY = off.y() - oldDefaultY;
+                        off.ry() = newDefaultY - oldY;
+                        ee->undoChangeProperty(Pid::OFFSET, off);
+                        }
                   }
             }
       }
