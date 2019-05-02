@@ -256,7 +256,9 @@ void HairpinSegment::layout()
             qreal ddiff = hairpin()->isLineType() ? 0.0 : _spatium * 0.5;
 
             SkylineLine sl(!hairpin()->placeAbove());
-            sl.add(shape().translated(pos()));
+            QPointF p = pos();
+            p.ry() -= offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+            sl.add(shape().translated(p));
             if (hairpin()->placeAbove()) {
                   d  = system()->topDistance(staffIdx(), sl);
                   if (d > -minDistance)
