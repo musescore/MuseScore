@@ -2944,12 +2944,10 @@ static qreal findLyricsMaxY(Segment& s, int staffIdx)
 
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeBelow()) {
-                              l->ryoffset() = 0.0;
+                              qreal yOff = l->offset().y();
                               QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
                               QRectF r = l->bbox().translated(offset);
-                              // TODO - mjs
-                              //qreal yOff = l->offset().y() - l->propertyDefault(Pid::OFFSET).toPointF().y();
-                              //r.translate(0.0, -yOff);
+                              r.translate(0.0, -yOff);
                               sk.add(r.x(), r.top(), r.width());
                               }
                         }
@@ -2983,11 +2981,9 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
 
                   for (Lyrics* l : cr->lyrics()) {
                         if (l->autoplace() && l->placeAbove()) {
-                              l->ryoffset() = 0.0;
+                              qreal yOff = l->offset().y();
                               QRectF r = l->bbox().translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
-                              // TODO - mjs
-                              //qreal yOff = l->offset().y() - l->propertyDefault(Pid::OFFSET).toPointF().y();
-                              //r.translate(0.0, -yOff);
+                              r.translate(0.0, -yOff);
                               sk.add(r.x(), r.bottom(), r.width());
                               }
                         }
@@ -2996,7 +2992,7 @@ static qreal findLyricsMinY(Segment& s, int staffIdx)
                         if (l->autoplace() && l->placeAbove()) {
                               qreal y = sk.minDistance(ss->skyline().north());
                               if (y > -lyricsMinTopDistance)
-                                    yMin = qMin(yMin, -y -lyricsMinTopDistance);
+                                    yMin = qMin(yMin, -y - lyricsMinTopDistance);
                               }
                         }
                   }
@@ -3034,10 +3030,12 @@ static void applyLyricsMax(Segment& s, int staffIdx, qreal yMax)
             if (cr && !cr->lyrics().empty()) {
                   qreal lyricsMinBottomDistance = s.score()->styleP(Sid::lyricsMinBottomDistance);
                   for (Lyrics* l : cr->lyrics()) {
-                        if (l->addToSkyline() && l->placeBelow()) {
-                              l->ryoffset() = yMax;
-                              QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
-                              sk.add(l->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
+                        if (l->autoplace() && l->placeBelow()) {
+                              l->rypos() += yMax - l->propertyDefault(Pid::OFFSET).toPointF().y();
+                              if (l->addToSkyline()) {
+                                    QPointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
+                                    sk.add(l->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
+                                    }
                               }
                         }
                   }
@@ -3058,10 +3056,12 @@ static void applyLyricsMin(ChordRest* cr, int staffIdx, qreal yMin)
       {
       Skyline& sk = cr->measure()->system()->staff(staffIdx)->skyline();
       for (Lyrics* l : cr->lyrics()) {
-            if (l->addToSkyline() && l->placeAbove()) {
-                  l->ryoffset() = yMin;
-                  QPointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
-                  sk.add(l->bbox().translated(offset));
+            if (l->autoplace() && l->placeAbove()) {
+                  l->rypos() += yMin - l->propertyDefault(Pid::OFFSET).toPointF().y();
+                  if (l->addToSkyline()) {
+                        QPointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
+                        sk.add(l->bbox().translated(offset));
+                        }
                   }
             }
       }
