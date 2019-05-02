@@ -331,7 +331,6 @@ enum class Pid {
       CLEF_TYPE_TRANSPOSING,
       KEY,
       ACTION, // for Icon
-      ABS_OFFSET,
 
       END
       };
