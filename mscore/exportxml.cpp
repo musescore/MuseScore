@@ -598,7 +598,7 @@ static const ChordRest* findFirstChordRest(const Slur* s)
       if (!c1->isGrace() && !c2->isGrace()) {
             // slur between two regular notes at the same tick
             // probably shouldn't happen but handle just in case
-            qDebug("invalid slur between chords %p and %p at tick %d", c1, c2, c1->tick());
+            qDebug("invalid slur between chords %p and %p at tick %d", c1, c2, c1->tick().ticks());
             return 0;
             }
       else if (c1->isGraceBefore() && !c2->isGraceBefore())
