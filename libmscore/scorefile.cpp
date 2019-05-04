@@ -245,10 +245,8 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
             xml.tag("name", excerpt()->title());
       xml.etag();
 
-      if (unhide) {
-            endCmd();
-            undoRedo(true, 0);   // undo
-            }
+      if (unhide)
+            endCmd(true);
       }
 
 //---------------------------------------------------------
