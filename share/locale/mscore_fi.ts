@@ -125,37 +125,37 @@
 <context>
     <name>AlignSelect</name>
     <message>
-        <location filename="../../mscore/inspector/align_select.ui" line="44"/>
+        <location filename="../../mscore/inspector/align_select.ui" line="43"/>
         <source>Align left edge of text to reference point</source>
         <translation>Tasaa tekstin vasen reuna viitekohtaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/align_select.ui" line="64"/>
+        <location filename="../../mscore/inspector/align_select.ui" line="72"/>
         <source>Center text on reference point</source>
         <translation>Keskitä teksti viitekohtaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/align_select.ui" line="84"/>
+        <location filename="../../mscore/inspector/align_select.ui" line="101"/>
         <source>Align right edge of text to reference point</source>
         <translation>Tasaa tekstin oikea reuna viitekohtaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/align_select.ui" line="118"/>
+        <location filename="../../mscore/inspector/align_select.ui" line="143"/>
         <source>Align top edge of text to reference point</source>
         <translation>Tasaa tekstin yläreuna viitekohtaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/align_select.ui" line="138"/>
+        <location filename="../../mscore/inspector/align_select.ui" line="172"/>
         <source>Center text vertical to reference point</source>
         <translation>Keskitä teksti vertikaalisesti viitekohtaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/align_select.ui" line="158"/>
+        <location filename="../../mscore/inspector/align_select.ui" line="230"/>
         <source>Align baseline of text to reference point</source>
         <translation>Tasaa tekstin peruslinja viitekohtaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/align_select.ui" line="178"/>
+        <location filename="../../mscore/inspector/align_select.ui" line="201"/>
         <source>Align bottom edge of text to reference point</source>
         <translation>Tasaa tekstin alareuna viitekohtaan</translation>
     </message>
@@ -426,10 +426,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>The balance between the RMS and peak envelope followers. RMS is generally better for subtle musical compression and  peak is better for heavier, fast compression and percussion.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="432"/>
         <source>Makeup gain (dB)</source>
         <translation>Kokonaisarvo (dB)</translation>
@@ -450,35 +446,154 @@
         <translation>Taso, jossa kompressori aloittaa toimintansa</translation>
     </message>
     <message>
-        <location filename="../../effects/compressor/compressor_gui.ui" line="530"/>
-        <location filename="../../effects/compressor/compressor_gui.ui" line="552"/>
+        <location filename="../../effects/compressor/compressor_gui.ui" line="533"/>
+        <location filename="../../effects/compressor/compressor_gui.ui" line="555"/>
         <source>ms</source>
         <extracomment>milliseconds</extracomment>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../effects/compressor/compressor_gui.ui" line="574"/>
-        <location filename="../../effects/compressor/compressor_gui.ui" line="612"/>
-        <location filename="../../effects/compressor/compressor_gui.ui" line="637"/>
+        <location filename="../../effects/compressor/compressor_gui.ui" line="577"/>
+        <location filename="../../effects/compressor/compressor_gui.ui" line="615"/>
+        <location filename="../../effects/compressor/compressor_gui.ui" line="640"/>
         <source>dB</source>
         <extracomment>decibel</extracomment>
         <translation>tietokanta</translation>
     </message>
 </context>
 <context>
+    <name>CrashReporter</name>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="14"/>
+        <source>MuseScore Crash Reporter</source>
+        <translation>MuseScoren kaatumisraportti</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="20"/>
+        <source>Unfortunately MuseScore has crashed. Would you like to send a report to make it possible for us to fix the problem?</source>
+        <translation>Valitettavasti MuseScore on kaatunut.  Haluaisitko lähettää raportin meille, jotta voisimme korjata ongelman?</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="30"/>
+        <source>Describe your actions when the crash occurred (optional)</source>
+        <translation>Kuvaile toimenpiteesi kaatumisen tapahtuessa (valinnainen)</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="33"/>
+        <source>Detailed crash info</source>
+        <translation>Tarkempi kaatumisinfo</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="40"/>
+        <source>Send report</source>
+        <translation>Lähetä raportti</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="47"/>
+        <source>Please describe your actions when the crash occurred (optional):</source>
+        <translation>Ole hyvä ja kuvaile toimenpiteesi ennen ohjelman kaatumista.</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="60"/>
+        <source>Cancel</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="67"/>
+        <source>Restart MuseScore after this report is sent</source>
+        <translation>Käynnistä MuseScore uudelleen, kun tämä raportti on lähetetty.</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.ui" line="70"/>
+        <source>Restart MuseScore</source>
+        <translation>Käynnistä MuseScore uudelleen</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="29"/>
+        <source>Tomahawk Crash Reporter</source>
+        <translation>Tomahawk kaatumisen raportti</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="104"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="213"/>
+        <source>Abort</source>
+        <translation>Keskeytetty</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="257"/>
+        <source>Send this report</source>
+        <translation>Lähetä tämä raportti</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="264"/>
+        <source>Don&apos;t send</source>
+        <translation>Älä lähetä</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.ui" line="284"/>
+        <source>You can disable sending crash reports in the configuration dialog.</source>
+        <translation>Voit poistaa kaatumisraporttien lähettämisen käytöstä määritysikkunassa.</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="109"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="116"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="152"/>
+        <source>We cannot gather useful debug information on your system.</source>
+        <translation>Emme voi kerätä hyödyllisiä virheenkorjaustietoja järjestelmästäsi.</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="110"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="117"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="153"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="274"/>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="295"/>
+        <source>Close</source>
+        <translation>Sulje</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="145"/>
+        <source>Ready to send debug information (&lt;a href=&quot;%1&quot;&gt;view backtrace&lt;/a&gt;).</source>
+        <translation>Valmiina lähettämään virheenkorjaustiedot (&lt;a href=&quot;%1&quot;&gt;näytä backtrace&lt;/a&gt;)</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="161"/>
+        <source>Gathering debug information...</source>
+        <translation>Virheenkorjaus -tietojen kerääminen ...</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="260"/>
+        <source>Uploaded %L1 of %L2 KB.</source>
+        <translation>Ladattu %L1 of %L2 KB.</translation>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="287"/>
+        <source>Sent! &lt;b&gt;Many thanks&lt;/b&gt;. Please refer to crash &lt;b&gt;%1&lt;/b&gt; in bug reports.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../thirdparty/libcrashreporter-qt/src/libcrashreporter-gui/CrashReporter.cpp" line="296"/>
+        <source>Failed to send crash info.</source>
+        <translation>Kaatumisinformaation lähetys epäonnistui</translation>
+    </message>
+</context>
+<context>
     <name>Direction</name>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="207"/>
+        <location filename="../../libmscore/mscore.cpp" line="198"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="208"/>
+        <location filename="../../libmscore/mscore.cpp" line="199"/>
         <source>Up</source>
         <translation>Ylös</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="209"/>
+        <location filename="../../libmscore/mscore.cpp" line="200"/>
         <source>Down</source>
         <translation>Alas</translation>
     </message>
@@ -1462,10 +1577,6 @@
         <translation>Pystysuora ruudukko</translation>
     </message>
     <message>
-        <source>Vertical  grid:</source>
-        <translation type="vanished">Pystysuora ruudukko</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editraster.ui" line="44"/>
         <location filename="../../mscore/editraster.ui" line="67"/>
         <source>1 / </source>
@@ -1721,12 +1832,18 @@
         <translation>Muokkaa kielidataa…</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="840"/>
+        <location filename="../../mscore/editstaff.ui" line="829"/>
+        <location filename="../../mscore/editstaff.ui" line="832"/>
+        <source>Use single note dynamics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.ui" line="850"/>
         <source>Go to previous staff</source>
         <translation>Siirry edelliseen viivastoon</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.ui" line="860"/>
+        <location filename="../../mscore/editstaff.ui" line="870"/>
         <source>Go to next staff</source>
         <translation>Siirry seuraavaan viivastoon</translation>
     </message>
@@ -2147,144 +2264,145 @@
 <context>
     <name>EditStyleBase</name>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="55"/>
-        <location filename="../../mscore/editstyle.ui" line="254"/>
+        <location filename="../../mscore/editstyle.ui" line="61"/>
+        <location filename="../../mscore/editstyle.ui" line="260"/>
         <source>Score</source>
         <translation>Partituuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="275"/>
+        <location filename="../../mscore/editstyle.ui" line="281"/>
         <source>Musical symbols font:</source>
         <translation>Musiikkisymbolien fontti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="285"/>
+        <location filename="../../mscore/editstyle.ui" line="291"/>
         <source>Musical text font:</source>
         <translation>Musiikkitekstin fontti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="369"/>
+        <location filename="../../mscore/editstyle.ui" line="375"/>
         <source>Display in concert pitch</source>
         <translation>Näytä soiva sävelkorkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="376"/>
+        <location filename="../../mscore/editstyle.ui" line="382"/>
         <source>Create multimeasure rests</source>
         <translation>Luo monitahtisia taukoja</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="423"/>
+        <location filename="../../mscore/editstyle.ui" line="429"/>
         <source>Minimum number of empty measures:</source>
         <translation>Tyhjien tahtien vähimmäismäärä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="452"/>
+        <location filename="../../mscore/editstyle.ui" line="458"/>
         <source>Minimum width of measure:</source>
         <translation>Tahdin vähimmäisleveys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="439"/>
-        <location filename="../../mscore/editstyle.ui" line="750"/>
-        <location filename="../../mscore/editstyle.ui" line="792"/>
-        <location filename="../../mscore/editstyle.ui" line="958"/>
-        <location filename="../../mscore/editstyle.ui" line="1094"/>
-        <location filename="../../mscore/editstyle.ui" line="1116"/>
-        <location filename="../../mscore/editstyle.ui" line="1160"/>
-        <location filename="../../mscore/editstyle.ui" line="1202"/>
-        <location filename="../../mscore/editstyle.ui" line="1243"/>
-        <location filename="../../mscore/editstyle.ui" line="2561"/>
-        <location filename="../../mscore/editstyle.ui" line="2596"/>
-        <location filename="../../mscore/editstyle.ui" line="2651"/>
-        <location filename="../../mscore/editstyle.ui" line="2677"/>
-        <location filename="../../mscore/editstyle.ui" line="2752"/>
-        <location filename="../../mscore/editstyle.ui" line="2778"/>
-        <location filename="../../mscore/editstyle.ui" line="2845"/>
+        <location filename="../../mscore/editstyle.ui" line="445"/>
+        <location filename="../../mscore/editstyle.ui" line="723"/>
+        <location filename="../../mscore/editstyle.ui" line="761"/>
+        <location filename="../../mscore/editstyle.ui" line="886"/>
+        <location filename="../../mscore/editstyle.ui" line="978"/>
+        <location filename="../../mscore/editstyle.ui" line="1037"/>
+        <location filename="../../mscore/editstyle.ui" line="1078"/>
+        <location filename="../../mscore/editstyle.ui" line="1103"/>
+        <location filename="../../mscore/editstyle.ui" line="1128"/>
+        <location filename="../../mscore/editstyle.ui" line="2099"/>
+        <location filename="../../mscore/editstyle.ui" line="2118"/>
+        <location filename="../../mscore/editstyle.ui" line="2159"/>
+        <location filename="../../mscore/editstyle.ui" line="2185"/>
+        <location filename="../../mscore/editstyle.ui" line="2252"/>
+        <location filename="../../mscore/editstyle.ui" line="2278"/>
+        <location filename="../../mscore/editstyle.ui" line="2332"/>
+        <location filename="../../mscore/editstyle.ui" line="2358"/>
+        <location filename="../../mscore/editstyle.ui" line="2542"/>
+        <location filename="../../mscore/editstyle.ui" line="2552"/>
+        <location filename="../../mscore/editstyle.ui" line="2562"/>
+        <location filename="../../mscore/editstyle.ui" line="2745"/>
+        <location filename="../../mscore/editstyle.ui" line="2826"/>
         <location filename="../../mscore/editstyle.ui" line="2871"/>
-        <location filename="../../mscore/editstyle.ui" line="3370"/>
-        <location filename="../../mscore/editstyle.ui" line="3380"/>
-        <location filename="../../mscore/editstyle.ui" line="3390"/>
-        <location filename="../../mscore/editstyle.ui" line="3573"/>
-        <location filename="../../mscore/editstyle.ui" line="3654"/>
-        <location filename="../../mscore/editstyle.ui" line="3699"/>
-        <location filename="../../mscore/editstyle.ui" line="3832"/>
-        <location filename="../../mscore/editstyle.ui" line="3848"/>
-        <location filename="../../mscore/editstyle.ui" line="3891"/>
-        <location filename="../../mscore/editstyle.ui" line="3901"/>
-        <location filename="../../mscore/editstyle.ui" line="3946"/>
-        <location filename="../../mscore/editstyle.ui" line="3997"/>
-        <location filename="../../mscore/editstyle.ui" line="4013"/>
-        <location filename="../../mscore/editstyle.ui" line="4029"/>
-        <location filename="../../mscore/editstyle.ui" line="4109"/>
-        <location filename="../../mscore/editstyle.ui" line="4125"/>
-        <location filename="../../mscore/editstyle.ui" line="4141"/>
-        <location filename="../../mscore/editstyle.ui" line="4167"/>
-        <location filename="../../mscore/editstyle.ui" line="4285"/>
-        <location filename="../../mscore/editstyle.ui" line="4318"/>
-        <location filename="../../mscore/editstyle.ui" line="4411"/>
-        <location filename="../../mscore/editstyle.ui" line="4421"/>
-        <location filename="../../mscore/editstyle.ui" line="4601"/>
-        <location filename="../../mscore/editstyle.ui" line="4618"/>
-        <location filename="../../mscore/editstyle.ui" line="4686"/>
-        <location filename="../../mscore/editstyle.ui" line="4713"/>
-        <location filename="../../mscore/editstyle.ui" line="4748"/>
+        <location filename="../../mscore/editstyle.ui" line="3004"/>
+        <location filename="../../mscore/editstyle.ui" line="3020"/>
+        <location filename="../../mscore/editstyle.ui" line="3063"/>
+        <location filename="../../mscore/editstyle.ui" line="3073"/>
+        <location filename="../../mscore/editstyle.ui" line="3118"/>
+        <location filename="../../mscore/editstyle.ui" line="3169"/>
+        <location filename="../../mscore/editstyle.ui" line="3185"/>
+        <location filename="../../mscore/editstyle.ui" line="3201"/>
+        <location filename="../../mscore/editstyle.ui" line="3281"/>
+        <location filename="../../mscore/editstyle.ui" line="3297"/>
+        <location filename="../../mscore/editstyle.ui" line="3313"/>
+        <location filename="../../mscore/editstyle.ui" line="3339"/>
+        <location filename="../../mscore/editstyle.ui" line="3457"/>
+        <location filename="../../mscore/editstyle.ui" line="3490"/>
+        <location filename="../../mscore/editstyle.ui" line="3538"/>
+        <location filename="../../mscore/editstyle.ui" line="3616"/>
+        <location filename="../../mscore/editstyle.ui" line="3626"/>
+        <location filename="../../mscore/editstyle.ui" line="3649"/>
+        <location filename="../../mscore/editstyle.ui" line="3700"/>
+        <location filename="../../mscore/editstyle.ui" line="3775"/>
+        <location filename="../../mscore/editstyle.ui" line="3885"/>
+        <location filename="../../mscore/editstyle.ui" line="3904"/>
+        <location filename="../../mscore/editstyle.ui" line="3927"/>
+        <location filename="../../mscore/editstyle.ui" line="3966"/>
+        <location filename="../../mscore/editstyle.ui" line="4044"/>
+        <location filename="../../mscore/editstyle.ui" line="4060"/>
+        <location filename="../../mscore/editstyle.ui" line="4076"/>
+        <location filename="../../mscore/editstyle.ui" line="4132"/>
+        <location filename="../../mscore/editstyle.ui" line="4148"/>
+        <location filename="../../mscore/editstyle.ui" line="4200"/>
+        <location filename="../../mscore/editstyle.ui" line="4217"/>
+        <location filename="../../mscore/editstyle.ui" line="4341"/>
+        <location filename="../../mscore/editstyle.ui" line="4390"/>
+        <location filename="../../mscore/editstyle.ui" line="4442"/>
+        <location filename="../../mscore/editstyle.ui" line="4490"/>
+        <location filename="../../mscore/editstyle.ui" line="4516"/>
+        <location filename="../../mscore/editstyle.ui" line="4535"/>
+        <location filename="../../mscore/editstyle.ui" line="4643"/>
         <location filename="../../mscore/editstyle.ui" line="4767"/>
-        <location filename="../../mscore/editstyle.ui" line="4790"/>
-        <location filename="../../mscore/editstyle.ui" line="4829"/>
-        <location filename="../../mscore/editstyle.ui" line="4907"/>
-        <location filename="../../mscore/editstyle.ui" line="4923"/>
-        <location filename="../../mscore/editstyle.ui" line="4939"/>
-        <location filename="../../mscore/editstyle.ui" line="5008"/>
-        <location filename="../../mscore/editstyle.ui" line="5024"/>
-        <location filename="../../mscore/editstyle.ui" line="5063"/>
+        <location filename="../../mscore/editstyle.ui" line="4786"/>
+        <location filename="../../mscore/editstyle.ui" line="5054"/>
+        <location filename="../../mscore/editstyle.ui" line="5067"/>
         <location filename="../../mscore/editstyle.ui" line="5080"/>
-        <location filename="../../mscore/editstyle.ui" line="5178"/>
+        <location filename="../../mscore/editstyle.ui" line="5171"/>
         <location filename="../../mscore/editstyle.ui" line="5197"/>
-        <location filename="../../mscore/editstyle.ui" line="5233"/>
-        <location filename="../../mscore/editstyle.ui" line="5363"/>
-        <location filename="../../mscore/editstyle.ui" line="5392"/>
-        <location filename="../../mscore/editstyle.ui" line="5418"/>
-        <location filename="../../mscore/editstyle.ui" line="5447"/>
-        <location filename="../../mscore/editstyle.ui" line="5630"/>
-        <location filename="../../mscore/editstyle.ui" line="5649"/>
-        <location filename="../../mscore/editstyle.ui" line="5919"/>
-        <location filename="../../mscore/editstyle.ui" line="5942"/>
-        <location filename="../../mscore/editstyle.ui" line="5965"/>
-        <location filename="../../mscore/editstyle.ui" line="6025"/>
-        <location filename="../../mscore/editstyle.ui" line="6051"/>
-        <location filename="../../mscore/editstyle.ui" line="6078"/>
-        <location filename="../../mscore/editstyle.ui" line="6107"/>
-        <location filename="../../mscore/editstyle.ui" line="6143"/>
-        <location filename="../../mscore/editstyle.ui" line="6286"/>
-        <location filename="../../mscore/editstyle.ui" line="6405"/>
-        <location filename="../../mscore/editstyle.ui" line="6415"/>
-        <location filename="../../mscore/editstyle.ui" line="6561"/>
-        <location filename="../../mscore/editstyle.ui" line="6675"/>
-        <location filename="../../mscore/editstyle.ui" line="6695"/>
+        <location filename="../../mscore/editstyle.ui" line="5224"/>
+        <location filename="../../mscore/editstyle.ui" line="5253"/>
+        <location filename="../../mscore/editstyle.ui" line="5289"/>
+        <location filename="../../mscore/editstyle.ui" line="5429"/>
+        <location filename="../../mscore/editstyle.ui" line="5535"/>
+        <location filename="../../mscore/editstyle.ui" line="5545"/>
+        <location filename="../../mscore/editstyle.ui" line="5684"/>
+        <location filename="../../mscore/editstyle.ui" line="5815"/>
+        <location filename="../../mscore/editstyle.ui" line="5822"/>
+        <location filename="../../mscore/editstyle.ui" line="6010"/>
+        <location filename="../../mscore/editstyle.ui" line="6017"/>
+        <location filename="../../mscore/editstyle.ui" line="6087"/>
+        <location filename="../../mscore/editstyle.ui" line="6472"/>
+        <location filename="../../mscore/editstyle.ui" line="6854"/>
         <location filename="../../mscore/editstyle.ui" line="6873"/>
-        <location filename="../../mscore/editstyle.ui" line="6995"/>
-        <location filename="../../mscore/editstyle.ui" line="7114"/>
-        <location filename="../../mscore/editstyle.ui" line="7361"/>
-        <location filename="../../mscore/editstyle.ui" line="7689"/>
-        <location filename="../../mscore/editstyle.ui" line="7735"/>
-        <location filename="../../mscore/editstyle.ui" line="8306"/>
-        <location filename="../../mscore/editstyle.ui" line="8516"/>
-        <location filename="../../mscore/editstyle.ui" line="8708"/>
-        <location filename="../../mscore/editstyle.ui" line="8780"/>
-        <location filename="../../mscore/editstyle.ui" line="8806"/>
-        <location filename="../../mscore/editstyle.ui" line="8835"/>
-        <location filename="../../mscore/editstyle.ui" line="8946"/>
-        <location filename="../../mscore/editstyle.ui" line="8969"/>
-        <location filename="../../mscore/editstyle.ui" line="9089"/>
-        <location filename="../../mscore/editstyle.ui" line="9122"/>
-        <location filename="../../mscore/editstyle.ui" line="9264"/>
-        <location filename="../../mscore/editstyle.ui" line="9357"/>
-        <location filename="../../mscore/editstyle.ui" line="9472"/>
-        <location filename="../../mscore/editstyle.ui" line="9785"/>
-        <location filename="../../mscore/editstyle.ui" line="9873"/>
-        <location filename="../../mscore/editstyle.ui" line="10301"/>
-        <location filename="../../mscore/editstyle.ui" line="10333"/>
-        <location filename="../../mscore/editstyle.ui" line="10385"/>
-        <location filename="../../mscore/editstyle.ui" line="10485"/>
+        <location filename="../../mscore/editstyle.ui" line="7263"/>
+        <location filename="../../mscore/editstyle.ui" line="7445"/>
+        <location filename="../../mscore/editstyle.ui" line="7711"/>
+        <location filename="../../mscore/editstyle.ui" line="7793"/>
+        <location filename="../../mscore/editstyle.ui" line="7819"/>
+        <location filename="../../mscore/editstyle.ui" line="7848"/>
+        <location filename="../../mscore/editstyle.ui" line="7959"/>
+        <location filename="../../mscore/editstyle.ui" line="7982"/>
+        <location filename="../../mscore/editstyle.ui" line="8102"/>
+        <location filename="../../mscore/editstyle.ui" line="8135"/>
+        <location filename="../../mscore/editstyle.ui" line="8176"/>
+        <location filename="../../mscore/editstyle.ui" line="8219"/>
+        <location filename="../../mscore/editstyle.ui" line="8262"/>
+        <location filename="../../mscore/editstyle.ui" line="8525"/>
+        <location filename="../../mscore/editstyle.ui" line="8825"/>
+        <location filename="../../mscore/editstyle.ui" line="8926"/>
+        <location filename="../../mscore/editstyle.ui" line="9316"/>
+        <location filename="../../mscore/editstyle.ui" line="9348"/>
+        <location filename="../../mscore/editstyle.ui" line="9400"/>
+        <location filename="../../mscore/editstyle.ui" line="9554"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2292,2308 +2410,2228 @@ space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="487"/>
+        <location filename="../../mscore/editstyle.ui" line="493"/>
         <source>Don&apos;t hide empty staves in first system</source>
         <translation>Älä piilota tyhjiä tahteja ensimmäisessä systeemissä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="501"/>
+        <location filename="../../mscore/editstyle.ui" line="507"/>
         <source>Hide instrument name if there is only 1 instrument</source>
         <translation>Piilota soittimen nimi, jos on vain 1 soitin</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="524"/>
+        <location filename="../../mscore/editstyle.ui" line="530"/>
         <source>Swing Settings</source>
         <translation>Swing-asetukset</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="532"/>
+        <location filename="../../mscore/editstyle.ui" line="538"/>
         <source>Swing:</source>
         <translation>Swing:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="539"/>
+        <location filename="../../mscore/editstyle.ui" line="545"/>
         <source>Off</source>
         <translation>Pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="549"/>
+        <location filename="../../mscore/editstyle.ui" line="555"/>
         <source>Eighth Note</source>
         <translation>Kahdeksasosanuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="556"/>
+        <location filename="../../mscore/editstyle.ui" line="562"/>
         <source>Sixteenth Note</source>
         <translation>Kuudestoistaosanuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="580"/>
+        <location filename="../../mscore/editstyle.ui" line="586"/>
         <source>Select swing ratio:</source>
         <translation>Valitse swing-suhde:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="596"/>
-        <location filename="../../mscore/editstyle.ui" line="5133"/>
-        <location filename="../../mscore/editstyle.ui" line="9191"/>
+        <location filename="../../mscore/editstyle.ui" line="602"/>
+        <location filename="../../mscore/editstyle.ui" line="4250"/>
+        <location filename="../../mscore/editstyle.ui" line="8278"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="60"/>
-        <location filename="../../mscore/editstyle.ui" line="702"/>
-        <location filename="../../mscore/editstyle.ui" line="1782"/>
-        <location filename="../../mscore/editstyle.ui" line="2135"/>
+        <location filename="../../mscore/editstyle.ui" line="66"/>
+        <location filename="../../mscore/editstyle.ui" line="708"/>
+        <location filename="../../mscore/editstyle.ui" line="1733"/>
+        <location filename="../../mscore/editstyle.ui" line="1949"/>
         <source>Page</source>
         <translation>Sivu</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="983"/>
+        <location filename="../../mscore/editstyle.ui" line="1153"/>
         <source>Music top margin:</source>
         <translation>Musiikin ylämarginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="720"/>
+        <location filename="../../mscore/editstyle.ui" line="1253"/>
         <source>Create clef for all systems</source>
         <translation>Luo nuottiavain kaikille systeemeille</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1022"/>
+        <location filename="../../mscore/editstyle.ui" line="928"/>
         <source>Music bottom margin:</source>
         <translation>Musiikin alamarginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="999"/>
+        <location filename="../../mscore/editstyle.ui" line="1169"/>
         <source>Staff distance:</source>
         <translation>Viivastojen väli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1302"/>
+        <location filename="../../mscore/editstyle.ui" line="870"/>
         <source>Grand staff distance:</source>
         <translation>Diskantti- ja bassoviivaston väli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1065"/>
+        <location filename="../../mscore/editstyle.ui" line="1185"/>
         <source>Min. system distance:</source>
         <translation>Systeemien vähimmäisetäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1141"/>
-        <source>Vertical frame upper margin</source>
-        <translation>Pystykehyksen ylämarginaali</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1144"/>
+        <location filename="../../mscore/editstyle.ui" line="1201"/>
         <source>Vertical frame top margin:</source>
         <translation>Pystykehyksen ylämarginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1224"/>
-        <source>Vertical frame lower margin</source>
-        <translation>Pystykehyksen alamarginaali</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1227"/>
+        <location filename="../../mscore/editstyle.ui" line="745"/>
         <source>Vertical frame bottom margin:</source>
         <translation>Pystykehyksen alamarginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="833"/>
+        <location filename="../../mscore/editstyle.ui" line="837"/>
         <source>Max. system distance:</source>
         <translation>Systeemien enimmäisetäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1325"/>
+        <location filename="../../mscore/editstyle.ui" line="1217"/>
         <source>Last system fill threshold:</source>
         <translation>Viimeisen systeemin täyttöraja:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="926"/>
+        <location filename="../../mscore/editstyle.ui" line="1260"/>
         <source>Create key signature for all systems</source>
         <translation>Luo sävellajimerkintä kaikille systeemeille</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1009"/>
+        <location filename="../../mscore/editstyle.ui" line="1267"/>
         <source>Create courtesy clefs</source>
         <translation>Luo nuottiavaimen ennakkovaroitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1081"/>
+        <location filename="../../mscore/editstyle.ui" line="1274"/>
         <source>Create courtesy time signatures</source>
         <translation>Luo tahtilajimerkinnän ennakkovaroitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1312"/>
+        <location filename="../../mscore/editstyle.ui" line="1281"/>
         <source>Create courtesy key signatures</source>
         <translation>Luo sävellajimerkinnän ennakkovaroitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1923"/>
+        <location filename="../../mscore/editstyle.ui" line="1755"/>
         <source>Header Text</source>
         <translation>Otsikon teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1937"/>
+        <location filename="../../mscore/editstyle.ui" line="1766"/>
         <source>Show header also on first page</source>
         <translation>Näytä otsikot myös ensimmäisellä sivulla</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1645"/>
-        <location filename="../../mscore/editstyle.ui" line="1940"/>
-        <location filename="../../mscore/editstyle.ui" line="2363"/>
+        <location filename="../../mscore/editstyle.ui" line="2034"/>
         <source>Show first</source>
         <translation>Näytä ensimmäisellä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1947"/>
+        <location filename="../../mscore/editstyle.ui" line="1776"/>
         <source>Use odd/even page header</source>
         <translation>Käytä parittoman/parillisen sivun otsikkoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1655"/>
-        <location filename="../../mscore/editstyle.ui" line="1950"/>
-        <source>Odd/Even</source>
-        <translation>Pariton/Parillinen</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1742"/>
-        <location filename="../../mscore/editstyle.ui" line="1977"/>
-        <location filename="../../mscore/editstyle.ui" line="2708"/>
-        <location filename="../../mscore/editstyle.ui" line="10534"/>
+        <location filename="../../mscore/editstyle.ui" line="1693"/>
+        <location filename="../../mscore/editstyle.ui" line="1803"/>
+        <location filename="../../mscore/editstyle.ui" line="2208"/>
+        <location filename="../../mscore/editstyle.ui" line="9487"/>
         <source>Left</source>
         <translation>Vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1699"/>
-        <location filename="../../mscore/editstyle.ui" line="1987"/>
+        <location filename="../../mscore/editstyle.ui" line="1650"/>
+        <location filename="../../mscore/editstyle.ui" line="1813"/>
         <source>Middle</source>
         <translation>Keskelle</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1789"/>
-        <location filename="../../mscore/editstyle.ui" line="1997"/>
-        <location filename="../../mscore/editstyle.ui" line="2804"/>
-        <location filename="../../mscore/editstyle.ui" line="10520"/>
+        <location filename="../../mscore/editstyle.ui" line="1740"/>
+        <location filename="../../mscore/editstyle.ui" line="1823"/>
+        <location filename="../../mscore/editstyle.ui" line="2291"/>
+        <location filename="../../mscore/editstyle.ui" line="9494"/>
         <source>Right</source>
         <translation>Oikealle</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1682"/>
-        <location filename="../../mscore/editstyle.ui" line="2007"/>
+        <location filename="../../mscore/editstyle.ui" line="1633"/>
+        <location filename="../../mscore/editstyle.ui" line="1833"/>
         <source>Odd</source>
         <translation>Pariton</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1729"/>
-        <location filename="../../mscore/editstyle.ui" line="2096"/>
+        <location filename="../../mscore/editstyle.ui" line="1680"/>
+        <location filename="../../mscore/editstyle.ui" line="1910"/>
         <source>Even</source>
         <translation>Parillinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1628"/>
+        <location filename="../../mscore/editstyle.ui" line="1585"/>
         <source>Footer Text</source>
         <translation>Alatunnisteen teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1642"/>
+        <location filename="../../mscore/editstyle.ui" line="1596"/>
         <source>Show footer also on first page</source>
         <translation>Näytä alatunnisteet myös ensimmäisellä sivulla</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1652"/>
+        <location filename="../../mscore/editstyle.ui" line="1606"/>
         <source>Use odd/even page footer</source>
         <translation>Käytä parittoman/parillisen sivun alatunnistetta</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="75"/>
-        <location filename="../../mscore/editstyle.ui" line="2264"/>
+        <location filename="../../mscore/editstyle.ui" line="81"/>
+        <location filename="../../mscore/editstyle.ui" line="1978"/>
         <source>Measure Numbers</source>
         <translation>Tahtinumerot</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2326"/>
+        <location filename="../../mscore/editstyle.ui" line="2041"/>
         <source>All staves</source>
         <translation>Kaikki viivastot</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2295"/>
+        <location filename="../../mscore/editstyle.ui" line="2003"/>
         <source>Every system</source>
         <translation>Jokaisessa systeemissä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2304"/>
+        <location filename="../../mscore/editstyle.ui" line="2012"/>
         <source>Interval:</source>
         <translation>Tahdeittain, joka</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="80"/>
-        <location filename="../../mscore/editstyle.ui" line="2531"/>
+        <location filename="../../mscore/editstyle.ui" line="86"/>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
         <translation>Systeemi</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2551"/>
-        <source>System bracket thickness:</source>
-        <translation>Systeemin hakasulkeen paksuus:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="2580"/>
-        <source>System bracket distance:</source>
-        <translation>Systeemin hakasulkeen etäisyys:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="2632"/>
+        <location filename="../../mscore/editstyle.ui" line="2166"/>
         <source>Brace thickness:</source>
         <translation>Aaltosulkeen paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2658"/>
+        <location filename="../../mscore/editstyle.ui" line="2192"/>
         <source>Brace distance:</source>
         <translation>Aaltosulkeen etäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="95"/>
-        <location filename="../../mscore/editstyle.ui" line="3362"/>
+        <location filename="../../mscore/editstyle.ui" line="101"/>
+        <location filename="../../mscore/editstyle.ui" line="2518"/>
         <source>Measure</source>
         <translation>Tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4199"/>
+        <location filename="../../mscore/editstyle.ui" line="3371"/>
         <source>Spacing (1=tight):</source>
         <translation>Välistys (1=tiivis):</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3715"/>
+        <location filename="../../mscore/editstyle.ui" line="2887"/>
         <source>Minimum measure width:</source>
         <translation>Tahdin vähimmäisleveys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4093"/>
+        <location filename="../../mscore/editstyle.ui" line="3265"/>
         <source>Note to barline distance:</source>
         <translation>Etäisyys nuotista tahtiviivaan:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4183"/>
+        <location filename="../../mscore/editstyle.ui" line="3355"/>
         <source>Clef left margin:</source>
         <translation>Nuottiavaimen vasen marginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4157"/>
+        <location filename="../../mscore/editstyle.ui" line="3329"/>
         <source>Minimum note distance:</source>
         <translation>Nuottien vähimmäisetäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4061"/>
+        <location filename="../../mscore/editstyle.ui" line="3233"/>
         <source>Key signature left margin:</source>
         <translation>Sävellajimerkinnän vasen marginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4045"/>
+        <location filename="../../mscore/editstyle.ui" line="3217"/>
         <source>Time signature left margin:</source>
         <translation>Tahtiosoituksen vasen marginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3978"/>
+        <location filename="../../mscore/editstyle.ui" line="3150"/>
         <source>Clef/Key right margin:</source>
         <translation>Nuottiavaimen/etumerkinnän oikea marginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3962"/>
+        <location filename="../../mscore/editstyle.ui" line="3134"/>
         <source>Clef to barline distance:</source>
         <translation>Etäisyys nuottiavaimesta tahtiviivaan:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3933"/>
+        <location filename="../../mscore/editstyle.ui" line="3105"/>
         <source>Staff line thickness:</source>
         <translation>Nuottiviivan paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3917"/>
+        <location filename="../../mscore/editstyle.ui" line="3089"/>
         <source>Barline to accidental distance:</source>
         <translation>Etäisyys tahtiviivasta tilapäiseen etumerkkiin:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3858"/>
+        <location filename="../../mscore/editstyle.ui" line="3030"/>
         <source>Multimeasure rest margin:</source>
         <translation>Monitahtisen tauon marginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3782"/>
+        <location filename="../../mscore/editstyle.ui" line="2954"/>
         <source>Barline to grace note distance:</source>
         <translation>Etäisyys tahtiviivasta korusäveleen:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="100"/>
-        <location filename="../../mscore/editstyle.ui" line="4369"/>
+        <location filename="../../mscore/editstyle.ui" line="106"/>
+        <location filename="../../mscore/editstyle.ui" line="3525"/>
         <source>Barlines</source>
         <translation>Tahtiviivat</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="494"/>
+        <location filename="../../mscore/editstyle.ui" line="500"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
         <translation>Näytä seuraavan tahdin nuotin aika-arvo nykyisessä tahdissa (KOKEELLINEN, vain varhaisille parituureille!)</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4587"/>
+        <location filename="../../mscore/editstyle.ui" line="3676"/>
         <source>Show repeat barline tips (&quot;winged&quot; repeats)</source>
         <translation>Näytä kertausmerkkien kärjet (&quot;siivet&quot;)</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4496"/>
+        <location filename="../../mscore/editstyle.ui" line="3840"/>
         <source>Barline at start of single staff</source>
         <translation>Tahtiviiva yksittäisen viivaston alussa</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4577"/>
+        <location filename="../../mscore/editstyle.ui" line="3606"/>
         <source>Barline at start of multiple staves</source>
         <translation>Tahtiviiva monen viivaston alussa</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4570"/>
+        <location filename="../../mscore/editstyle.ui" line="3717"/>
         <source>Scale barlines to staff size</source>
         <translation>Skaalaa tahtiviivat viivaston kokoon</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4489"/>
+        <location filename="../../mscore/editstyle.ui" line="3531"/>
         <source>Double barline thickness:</source>
         <translation>Kaksoistahtiviivan paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4611"/>
+        <location filename="../../mscore/editstyle.ui" line="3816"/>
         <source>Double barline distance:</source>
         <translation>Kaksoistahtiviivan väli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="105"/>
-        <location filename="../../mscore/editstyle.ui" line="4733"/>
+        <location filename="../../mscore/editstyle.ui" line="111"/>
+        <location filename="../../mscore/editstyle.ui" line="3870"/>
         <source>Notes</source>
         <translation>Nuotit</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4758"/>
+        <location filename="../../mscore/editstyle.ui" line="3895"/>
         <source>Shorten stems</source>
         <translation>Lyhennä varret</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4780"/>
+        <location filename="../../mscore/editstyle.ui" line="3917"/>
         <source>Progression:</source>
         <translation>Eteneminen:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4800"/>
+        <location filename="../../mscore/editstyle.ui" line="3937"/>
         <source>Shortest stem:</source>
         <translation>Lyhyin varsi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4839"/>
+        <location filename="../../mscore/editstyle.ui" line="3976"/>
         <source>Accidental distance:</source>
         <translation>Tilapäisten etumerkkien etäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4813"/>
+        <location filename="../../mscore/editstyle.ui" line="3950"/>
         <source>Ledger line thickness:</source>
         <translation>Apuviivan paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4972"/>
+        <location filename="../../mscore/editstyle.ui" line="4096"/>
         <source>Ledger line length:</source>
         <translation>Apuviivan pituus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4962"/>
+        <location filename="../../mscore/editstyle.ui" line="4086"/>
         <source>Stem thickness:</source>
         <translation>Varren paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4872"/>
+        <location filename="../../mscore/editstyle.ui" line="4009"/>
         <source>Dot size:</source>
         <translation>Pisteen koko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="85"/>
-        <location filename="../../mscore/editstyle.ui" line="3229"/>
+        <location filename="../../mscore/editstyle.ui" line="91"/>
         <source>Clefs</source>
         <translation>Nuottiavaimet</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3235"/>
+        <location filename="../../mscore/editstyle.ui" line="2394"/>
         <source>Default TAB Clef</source>
         <translation>Oletustabulatuuriavain</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3241"/>
+        <location filename="../../mscore/editstyle.ui" line="2400"/>
         <source>Standard TAB clef</source>
         <translation>Standardi tabulatuuriavain</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3248"/>
+        <location filename="../../mscore/editstyle.ui" line="2407"/>
         <source>Serif TAB clef</source>
         <translation>Pääteviivallinen tabulatuuriavain</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="120"/>
-        <location filename="../../mscore/editstyle.ui" line="5895"/>
+        <location filename="../../mscore/editstyle.ui" line="126"/>
+        <location filename="../../mscore/editstyle.ui" line="5032"/>
         <source>Arpeggios</source>
         <translation>Murtosoinnut</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5909"/>
+        <location filename="../../mscore/editstyle.ui" line="5103"/>
         <source>Distance to note:</source>
         <translation>Etäisyys nuottiin:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5932"/>
-        <location filename="../../mscore/editstyle.ui" line="6571"/>
-        <location filename="../../mscore/editstyle.ui" line="6702"/>
-        <location filename="../../mscore/editstyle.ui" line="6978"/>
-        <location filename="../../mscore/editstyle.ui" line="7230"/>
-        <location filename="../../mscore/editstyle.ui" line="7754"/>
+        <location filename="../../mscore/editstyle.ui" line="5093"/>
+        <location filename="../../mscore/editstyle.ui" line="5694"/>
+        <location filename="../../mscore/editstyle.ui" line="5829"/>
+        <location filename="../../mscore/editstyle.ui" line="6000"/>
+        <location filename="../../mscore/editstyle.ui" line="6354"/>
+        <location filename="../../mscore/editstyle.ui" line="6817"/>
         <source>Line thickness:</source>
         <translation>Viivan paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5955"/>
+        <location filename="../../mscore/editstyle.ui" line="5041"/>
         <source>Hook length:</source>
         <translation>Väkäsen pituus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="110"/>
-        <location filename="../../mscore/editstyle.ui" line="5044"/>
+        <location filename="../../mscore/editstyle.ui" line="116"/>
+        <location filename="../../mscore/editstyle.ui" line="4181"/>
         <source>Beams</source>
         <translation>Palkit</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5053"/>
+        <location filename="../../mscore/editstyle.ui" line="4190"/>
         <source>Beam thickness:</source>
         <translation>Palkin paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5073"/>
-        <source>Beam distance (in beam thickness units):</source>
-        <translation>Palkkien etäisyys (palkin paksuuden yksikköinä):</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="5090"/>
+        <location filename="../../mscore/editstyle.ui" line="4227"/>
         <source>Broken beam minimum length:</source>
         <translation>Osittaisen palkin vähimmäispituus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5126"/>
+        <location filename="../../mscore/editstyle.ui" line="4266"/>
         <source>Flatten all beams</source>
         <translation>Aseta palkit vaakasuoraan</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="125"/>
-        <location filename="../../mscore/editstyle.ui" line="6010"/>
+        <location filename="../../mscore/editstyle.ui" line="131"/>
+        <location filename="../../mscore/editstyle.ui" line="5156"/>
         <source>Slurs/Ties</source>
         <translation>Kaaret</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6068"/>
+        <location filename="../../mscore/editstyle.ui" line="5214"/>
         <source>Line thickness at end:</source>
         <translation>Kaaren paksuus päässä:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6117"/>
+        <location filename="../../mscore/editstyle.ui" line="5263"/>
         <source>Line thickness middle:</source>
         <translation>Kaaren paksuus keskellä:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6035"/>
+        <location filename="../../mscore/editstyle.ui" line="5181"/>
         <source>Dotted line thickness:</source>
         <translation>Pistekaaren paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6127"/>
+        <location filename="../../mscore/editstyle.ui" line="5273"/>
         <source>Minimum tie length:</source>
         <translation>Sidoskaaren vähimmäispituus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="65"/>
-        <location filename="../../mscore/editstyle.ui" line="1345"/>
+        <location filename="../../mscore/editstyle.ui" line="71"/>
+        <location filename="../../mscore/editstyle.ui" line="1311"/>
         <source>Sizes</source>
         <translation>Pienet koot</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1360"/>
+        <location filename="../../mscore/editstyle.ui" line="1323"/>
         <source>Small staff size:</source>
         <translation>Pienen viivaston koko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1428"/>
+        <location filename="../../mscore/editstyle.ui" line="1391"/>
         <source>Small note size:</source>
         <translation>Pienen nuotin koko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1466"/>
+        <location filename="../../mscore/editstyle.ui" line="1429"/>
         <source>Grace note size:</source>
         <translation>Korusävelen koko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1504"/>
+        <location filename="../../mscore/editstyle.ui" line="1467"/>
         <source>Small clef size:</source>
         <translation>Pienen nuottiavaimen koko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="130"/>
-        <location filename="../../mscore/editstyle.ui" line="6267"/>
+        <location filename="../../mscore/editstyle.ui" line="136"/>
+        <location filename="../../mscore/editstyle.ui" line="5413"/>
         <source>Hairpins</source>
         <translation>Dynamiikkaviivat</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6276"/>
+        <location filename="../../mscore/editstyle.ui" line="5419"/>
         <source>Height:</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6296"/>
+        <location filename="../../mscore/editstyle.ui" line="5439"/>
         <source>Continue height:</source>
         <translation>Jatka korkeutta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10541"/>
+        <location filename="../../mscore/editstyle.ui" line="9605"/>
         <source>Default vertical position:</source>
         <translation>Pystysuora oletussijainti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="135"/>
-        <location filename="../../mscore/editstyle.ui" line="6601"/>
+        <location filename="../../mscore/editstyle.ui" line="141"/>
+        <location filename="../../mscore/editstyle.ui" line="5744"/>
         <source>Volta</source>
         <translation>Maali</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6636"/>
+        <location filename="../../mscore/editstyle.ui" line="5776"/>
         <source>Hook height:</source>
         <translation>Väkäsen korkeus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6647"/>
-        <location filename="../../mscore/editstyle.ui" line="7003"/>
-        <location filename="../../mscore/editstyle.ui" line="7172"/>
-        <location filename="../../mscore/editstyle.cpp" line="79"/>
+        <location filename="../../mscore/editstyle.ui" line="5787"/>
+        <location filename="../../mscore/editstyle.ui" line="6102"/>
+        <location filename="../../mscore/editstyle.ui" line="6296"/>
+        <location filename="../../mscore/editstyle.cpp" line="88"/>
         <source>Continuous</source>
         <translation>Jatkuva</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6652"/>
-        <location filename="../../mscore/editstyle.ui" line="7008"/>
-        <location filename="../../mscore/editstyle.ui" line="7177"/>
-        <location filename="../../mscore/editstyle.cpp" line="80"/>
+        <location filename="../../mscore/editstyle.ui" line="5792"/>
+        <location filename="../../mscore/editstyle.ui" line="6107"/>
+        <location filename="../../mscore/editstyle.ui" line="6301"/>
+        <location filename="../../mscore/editstyle.cpp" line="89"/>
         <source>Dashed</source>
         <translation>Katkoviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6657"/>
-        <location filename="../../mscore/editstyle.ui" line="7013"/>
-        <location filename="../../mscore/editstyle.ui" line="7182"/>
-        <location filename="../../mscore/editstyle.cpp" line="81"/>
+        <location filename="../../mscore/editstyle.ui" line="5797"/>
+        <location filename="../../mscore/editstyle.ui" line="6112"/>
+        <location filename="../../mscore/editstyle.ui" line="6306"/>
+        <location filename="../../mscore/editstyle.cpp" line="90"/>
         <source>Dotted</source>
         <translation>Pisteviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6662"/>
-        <location filename="../../mscore/editstyle.ui" line="7018"/>
-        <location filename="../../mscore/editstyle.ui" line="7187"/>
-        <location filename="../../mscore/editstyle.cpp" line="82"/>
+        <location filename="../../mscore/editstyle.ui" line="5802"/>
+        <location filename="../../mscore/editstyle.ui" line="6117"/>
+        <location filename="../../mscore/editstyle.ui" line="6311"/>
+        <location filename="../../mscore/editstyle.cpp" line="91"/>
         <source>Dash-dotted</source>
         <translation>Katkopisteviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6667"/>
-        <location filename="../../mscore/editstyle.ui" line="7023"/>
-        <location filename="../../mscore/editstyle.ui" line="7192"/>
-        <location filename="../../mscore/editstyle.cpp" line="83"/>
+        <location filename="../../mscore/editstyle.ui" line="5807"/>
+        <location filename="../../mscore/editstyle.ui" line="6122"/>
+        <location filename="../../mscore/editstyle.ui" line="6316"/>
+        <location filename="../../mscore/editstyle.cpp" line="92"/>
         <source>Dash-dot-dotted</source>
         <translation>Katko-piste-piste</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6801"/>
-        <location filename="../../mscore/editstyle.ui" line="6968"/>
-        <location filename="../../mscore/editstyle.ui" line="7220"/>
+        <location filename="../../mscore/editstyle.ui" line="5928"/>
+        <location filename="../../mscore/editstyle.ui" line="6193"/>
+        <location filename="../../mscore/editstyle.ui" line="6344"/>
         <source>Line style:</source>
         <translation>Viivatyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="140"/>
-        <location filename="../../mscore/editstyle.ui" line="6831"/>
+        <location filename="../../mscore/editstyle.ui" line="146"/>
+        <location filename="../../mscore/editstyle.ui" line="5971"/>
         <source>Ottava</source>
         <translation>Ottava</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7084"/>
+        <location filename="../../mscore/editstyle.ui" line="6186"/>
         <source>Numbers only</source>
         <translation>Vain numeroita</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7165"/>
+        <location filename="../../mscore/editstyle.ui" line="6289"/>
         <source>Pedal Line</source>
         <translation>Pedaaliviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7402"/>
+        <location filename="../../mscore/editstyle.ui" line="6526"/>
         <source>Trill Line</source>
         <translation>Trilliviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="210"/>
-        <location filename="../../mscore/editstyle.ui" line="10054"/>
+        <location filename="../../mscore/editstyle.ui" line="216"/>
+        <location filename="../../mscore/editstyle.ui" line="9107"/>
         <source>Chord Symbols</source>
         <translation>Sointumerkit</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5165"/>
+        <location filename="../../mscore/editstyle.ui" line="4302"/>
         <source>Vertical Distance from Notes</source>
         <translation>Pystysuora etäisyys nuoteista</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5171"/>
+        <location filename="../../mscore/editstyle.ui" line="4474"/>
         <source>Avoid staves</source>
         <translation>Vältä viivastoja</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5347"/>
+        <location filename="../../mscore/editstyle.ui" line="4484"/>
         <source>Horizontal Distance from Notes</source>
         <translation>Vaakasuora etäisyys nuoteista</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5353"/>
+        <location filename="../../mscore/editstyle.ui" line="4633"/>
         <source>Distance before stem of first note:</source>
         <translation>Etäisyys ennen ensimmäisen nuotin vartta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5382"/>
+        <location filename="../../mscore/editstyle.ui" line="4659"/>
         <source>Distance before head of first note:</source>
         <translation>Etäisyys ennen ensimmäisen nuotin päätä:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5408"/>
+        <location filename="../../mscore/editstyle.ui" line="4506"/>
         <source>Distance after stem of last note:</source>
         <translation>Etäisyys viimeisen nuotin varren jälkeen:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5437"/>
+        <location filename="../../mscore/editstyle.ui" line="4554"/>
         <source>Distance after head of last note:</source>
         <translation>Etäisyys edellisen nuotinpään jälkeen:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5485"/>
+        <location filename="../../mscore/editstyle.ui" line="4573"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
         <translation>Palauta &apos;etäisyys edellisen nuotinpään jälkeen&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5508"/>
+        <location filename="../../mscore/editstyle.ui" line="4678"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
         <translation>Palauta &apos;etäisyys viimeisen nuotin varren jälkeen&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5531"/>
+        <location filename="../../mscore/editstyle.ui" line="4596"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
         <translation>Palauta &apos;etäisyys ennen ensimmäisen nuotin päätä&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5554"/>
+        <location filename="../../mscore/editstyle.ui" line="4619"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
         <translation>Palauta &apos;etäisyys ennen ensimmäisen nuotin vartta&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5763"/>
-        <location filename="../../mscore/editstyle.ui" line="5815"/>
+        <location filename="../../mscore/editstyle.ui" line="4900"/>
+        <location filename="../../mscore/editstyle.ui" line="4952"/>
         <source>None</source>
         <translation>Ei mitään</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10060"/>
+        <location filename="../../mscore/editstyle.ui" line="9113"/>
         <source>Appearance</source>
         <translation>Ulkonäkö</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10069"/>
-        <location filename="../../mscore/editstyle.ui" line="10181"/>
+        <location filename="../../mscore/editstyle.ui" line="9119"/>
+        <location filename="../../mscore/editstyle.ui" line="9199"/>
         <source>Standard</source>
         <translation>Normaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10076"/>
+        <location filename="../../mscore/editstyle.ui" line="9126"/>
         <source>Jazz</source>
         <translation>Jazz</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10083"/>
+        <location filename="../../mscore/editstyle.ui" line="9133"/>
         <source>Custom</source>
         <translation>Muokattu</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10150"/>
-        <source>Chord symbols style file:</source>
-        <translation>Sointujen tyylitiedosto:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="10160"/>
+        <location filename="../../mscore/editstyle.ui" line="9172"/>
         <source>Load chords.xml</source>
         <translation>Lataa chords.xml</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10170"/>
+        <location filename="../../mscore/editstyle.ui" line="9188"/>
         <source>Note Spelling</source>
         <translation>Nuottien merkintätapa</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10191"/>
+        <location filename="../../mscore/editstyle.ui" line="9209"/>
         <source>German</source>
         <translation>Saksalainen</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10201"/>
+        <location filename="../../mscore/editstyle.ui" line="9219"/>
         <source>Full German</source>
         <translation>Kokonaan saksaksi</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10211"/>
+        <location filename="../../mscore/editstyle.ui" line="9229"/>
         <source>Solfeggio</source>
         <translation>Solfeesi</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10221"/>
+        <location filename="../../mscore/editstyle.ui" line="9239"/>
         <source>French</source>
         <translation>ranska</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10243"/>
+        <location filename="../../mscore/editstyle.ui" line="9261"/>
         <source>Automatic Capitalization</source>
         <translation>Automaattisesti isot kirjaimet</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10252"/>
+        <location filename="../../mscore/editstyle.ui" line="9270"/>
         <source>Lower case minor chords</source>
         <translation>Mollisoinnut pienin kirjaimin</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10259"/>
+        <location filename="../../mscore/editstyle.ui" line="9277"/>
         <source>Lower case bass notes</source>
         <translation>Bassonuotit pienin kirjaimin</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10266"/>
+        <location filename="../../mscore/editstyle.ui" line="9284"/>
         <source>All caps note names</source>
         <translation>Kaikki nuottien nimet versaaleja</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10292"/>
+        <location filename="../../mscore/editstyle.ui" line="9310"/>
         <source>Positioning</source>
         <translation>Asettelu</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10320"/>
+        <location filename="../../mscore/editstyle.ui" line="9335"/>
         <source>Distance to fretboard diagram:</source>
         <translation>Etäisyys otelautakuvaan:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10352"/>
+        <location filename="../../mscore/editstyle.ui" line="9367"/>
         <source>Minimum chord spacing:</source>
         <translation>Sointumerkkien vähimmäisetäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10375"/>
+        <location filename="../../mscore/editstyle.ui" line="9390"/>
         <source>Maximum barline distance:</source>
         <translation>Tahtiviivan enimmäisväli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10407"/>
+        <location filename="../../mscore/editstyle.ui" line="9422"/>
         <source>Capo</source>
         <extracomment>Capodastro</extracomment>
         <translation>Kapo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10433"/>
+        <location filename="../../mscore/editstyle.ui" line="9448"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
         <translation>Kapon sijainti otenauhalla:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="215"/>
-        <location filename="../../mscore/editstyle.ui" line="10466"/>
+        <location filename="../../mscore/editstyle.ui" line="221"/>
+        <location filename="../../mscore/editstyle.ui" line="9481"/>
         <source>Fretboard Diagrams</source>
         <translation>Otelautakuvat</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10527"/>
+        <location filename="../../mscore/editstyle.ui" line="5875"/>
         <source>Position:</source>
         <translation>Sijainti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10551"/>
+        <location filename="../../mscore/editstyle.ui" line="9544"/>
         <source>Barré line thickness:</source>
         <translation>Barréviivan paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10593"/>
+        <location filename="../../mscore/editstyle.ui" line="9518"/>
         <source>Scale:</source>
         <translation>Skaala:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="205"/>
-        <location filename="../../mscore/editstyle.ui" line="9831"/>
+        <location filename="../../mscore/editstyle.ui" line="211"/>
+        <location filename="../../mscore/editstyle.ui" line="8884"/>
         <source>Figured Bass</source>
         <translation>Kenraalibasso</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9860"/>
+        <location filename="../../mscore/editstyle.ui" line="8913"/>
+        <location filename="../../mscore/editstyle.ui" line="10048"/>
         <source>Font:</source>
         <translation>Fontti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1824"/>
-        <location filename="../../mscore/editstyle.ui" line="2150"/>
-        <location filename="../../mscore/editstyle.ui" line="9892"/>
+        <location filename="../../mscore/editstyle.ui" line="8945"/>
+        <location filename="../../mscore/editstyle.ui" line="10055"/>
         <source>Size:</source>
         <translation>Koko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="70"/>
+        <location filename="../../mscore/editstyle.ui" line="76"/>
         <source>Header, Footer</source>
         <translation>Otsikko, alatunniste</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="145"/>
+        <location filename="../../mscore/editstyle.ui" line="151"/>
         <source>Pedal</source>
         <translation>Pedaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="150"/>
+        <location filename="../../mscore/editstyle.ui" line="156"/>
         <source>Trill</source>
         <translation>Trilli</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="155"/>
+        <location filename="../../mscore/editstyle.ui" line="161"/>
         <source>Vibrato</source>
         <translation>Vibrato</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="195"/>
-        <location filename="../../mscore/editstyle.ui" line="9456"/>
+        <location filename="../../mscore/editstyle.ui" line="201"/>
+        <location filename="../../mscore/editstyle.ui" line="8509"/>
         <source>Dynamics</source>
         <translation>Dynamiikka</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="175"/>
-        <location filename="../../mscore/editstyle.ui" line="8227"/>
+        <location filename="../../mscore/editstyle.ui" line="181"/>
+        <location filename="../../mscore/editstyle.ui" line="7247"/>
         <source>Fermatas</source>
         <translation>Fermaatit</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="165"/>
-        <location filename="../../mscore/editstyle.ui" line="7899"/>
+        <location filename="../../mscore/editstyle.ui" line="171"/>
+        <location filename="../../mscore/editstyle.ui" line="6925"/>
         <source>Text Line</source>
         <translation>Tekstiviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="180"/>
-        <location filename="../../mscore/editstyle.ui" line="8370"/>
+        <location filename="../../mscore/editstyle.ui" line="186"/>
+        <location filename="../../mscore/editstyle.ui" line="7386"/>
         <source>Staff Text</source>
         <translation>Viivaston teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="185"/>
-        <location filename="../../mscore/editstyle.ui" line="8562"/>
+        <location filename="../../mscore/editstyle.ui" line="191"/>
+        <location filename="../../mscore/editstyle.ui" line="7578"/>
         <source>Tempo Text</source>
         <translation>Tempoteksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="200"/>
-        <location filename="../../mscore/editstyle.ui" line="9639"/>
+        <location filename="../../mscore/editstyle.ui" line="206"/>
+        <location filename="../../mscore/editstyle.ui" line="8692"/>
         <source>Rehearsal Marks</source>
         <translation>Harjoitusmerkit</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="160"/>
-        <location filename="../../mscore/editstyle.ui" line="7670"/>
+        <location filename="../../mscore/editstyle.ui" line="166"/>
+        <location filename="../../mscore/editstyle.ui" line="6794"/>
         <source>Bend</source>
         <translation>Venytys</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="190"/>
+        <location filename="../../mscore/editstyle.ui" line="196"/>
         <source>Lyrics</source>
         <translation>Sanoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="220"/>
+        <location filename="../../mscore/editstyle.ui" line="226"/>
         <source>Text Styles</source>
         <translation>Tekstityylit</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="262"/>
+        <location filename="../../mscore/editstyle.ui" line="268"/>
         <source>MuseScore will change the style to suit the font better</source>
         <translation>MuseScore muuttaa tyylin paremmin fonttiin sopivaksi</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="265"/>
+        <location filename="../../mscore/editstyle.ui" line="271"/>
         <source>Automatically load style settings based on font</source>
         <translation>Lataa tyyliasetukset automaattisesti fontin perusteella</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="390"/>
-        <location filename="../../mscore/editstyle.ui" line="659"/>
-        <location filename="../../mscore/editstyle.ui" line="727"/>
-        <location filename="../../mscore/editstyle.ui" line="769"/>
-        <location filename="../../mscore/editstyle.ui" line="843"/>
-        <location filename="../../mscore/editstyle.ui" line="886"/>
-        <location filename="../../mscore/editstyle.ui" line="903"/>
-        <location filename="../../mscore/editstyle.ui" line="1032"/>
-        <location filename="../../mscore/editstyle.ui" line="1179"/>
-        <location filename="../../mscore/editstyle.ui" line="1262"/>
-        <location filename="../../mscore/editstyle.ui" line="1279"/>
-        <location filename="../../mscore/editstyle.ui" line="1392"/>
-        <location filename="../../mscore/editstyle.ui" line="1536"/>
-        <location filename="../../mscore/editstyle.ui" line="1553"/>
-        <location filename="../../mscore/editstyle.ui" line="1570"/>
-        <location filename="../../mscore/editstyle.ui" line="1847"/>
-        <location filename="../../mscore/editstyle.ui" line="1874"/>
-        <location filename="../../mscore/editstyle.ui" line="1894"/>
-        <location filename="../../mscore/editstyle.ui" line="2180"/>
-        <location filename="../../mscore/editstyle.ui" line="2197"/>
-        <location filename="../../mscore/editstyle.ui" line="2237"/>
-        <location filename="../../mscore/editstyle.ui" line="2333"/>
-        <location filename="../../mscore/editstyle.ui" line="2370"/>
-        <location filename="../../mscore/editstyle.ui" line="2394"/>
-        <location filename="../../mscore/editstyle.ui" line="2455"/>
-        <location filename="../../mscore/editstyle.ui" line="2482"/>
-        <location filename="../../mscore/editstyle.ui" line="2912"/>
-        <location filename="../../mscore/editstyle.ui" line="2952"/>
-        <location filename="../../mscore/editstyle.ui" line="3003"/>
-        <location filename="../../mscore/editstyle.ui" line="3020"/>
-        <location filename="../../mscore/editstyle.ui" line="3071"/>
-        <location filename="../../mscore/editstyle.ui" line="3129"/>
-        <location filename="../../mscore/editstyle.ui" line="3146"/>
-        <location filename="../../mscore/editstyle.ui" line="3163"/>
-        <location filename="../../mscore/editstyle.ui" line="3410"/>
-        <location filename="../../mscore/editstyle.ui" line="3427"/>
-        <location filename="../../mscore/editstyle.ui" line="3444"/>
-        <location filename="../../mscore/editstyle.ui" line="3471"/>
-        <location filename="../../mscore/editstyle.ui" line="3488"/>
-        <location filename="../../mscore/editstyle.ui" line="3505"/>
-        <location filename="../../mscore/editstyle.ui" line="3522"/>
-        <location filename="../../mscore/editstyle.ui" line="3539"/>
-        <location filename="../../mscore/editstyle.ui" line="3556"/>
-        <location filename="../../mscore/editstyle.ui" line="3583"/>
-        <location filename="../../mscore/editstyle.ui" line="3600"/>
-        <location filename="../../mscore/editstyle.ui" line="3637"/>
-        <location filename="../../mscore/editstyle.ui" line="3725"/>
-        <location filename="../../mscore/editstyle.ui" line="3742"/>
-        <location filename="../../mscore/editstyle.ui" line="3759"/>
-        <location filename="../../mscore/editstyle.ui" line="3792"/>
-        <location filename="../../mscore/editstyle.ui" line="3809"/>
-        <location filename="../../mscore/editstyle.ui" line="3868"/>
-        <location filename="../../mscore/editstyle.ui" line="4209"/>
-        <location filename="../../mscore/editstyle.ui" line="4252"/>
-        <location filename="../../mscore/editstyle.ui" line="4295"/>
-        <location filename="../../mscore/editstyle.ui" line="4375"/>
-        <location filename="../../mscore/editstyle.ui" line="4438"/>
-        <location filename="../../mscore/editstyle.ui" line="4455"/>
-        <location filename="../../mscore/editstyle.ui" line="4472"/>
-        <location filename="../../mscore/editstyle.ui" line="4503"/>
-        <location filename="../../mscore/editstyle.ui" line="4546"/>
-        <location filename="../../mscore/editstyle.ui" line="4628"/>
-        <location filename="../../mscore/editstyle.ui" line="4645"/>
-        <location filename="../../mscore/editstyle.ui" line="4669"/>
-        <location filename="../../mscore/editstyle.ui" line="4696"/>
-        <location filename="../../mscore/editstyle.ui" line="5281"/>
-        <location filename="../../mscore/editstyle.ui" line="5304"/>
-        <location filename="../../mscore/editstyle.ui" line="5327"/>
-        <location filename="../../mscore/editstyle.ui" line="5482"/>
-        <location filename="../../mscore/editstyle.ui" line="5505"/>
-        <location filename="../../mscore/editstyle.ui" line="5528"/>
-        <location filename="../../mscore/editstyle.ui" line="5551"/>
-        <location filename="../../mscore/editstyle.ui" line="5606"/>
-        <location filename="../../mscore/editstyle.ui" line="5674"/>
-        <location filename="../../mscore/editstyle.ui" line="5735"/>
-        <location filename="../../mscore/editstyle.ui" line="5787"/>
-        <location filename="../../mscore/editstyle.ui" line="5839"/>
-        <location filename="../../mscore/editstyle.ui" line="6159"/>
-        <location filename="../../mscore/editstyle.ui" line="6189"/>
-        <location filename="../../mscore/editstyle.ui" line="6206"/>
-        <location filename="../../mscore/editstyle.ui" line="6223"/>
-        <location filename="../../mscore/editstyle.ui" line="6240"/>
-        <location filename="../../mscore/editstyle.ui" line="6332"/>
-        <location filename="../../mscore/editstyle.ui" line="6355"/>
-        <location filename="../../mscore/editstyle.ui" line="6378"/>
-        <location filename="../../mscore/editstyle.ui" line="6431"/>
-        <location filename="../../mscore/editstyle.ui" line="6478"/>
-        <location filename="../../mscore/editstyle.ui" line="6508"/>
-        <location filename="../../mscore/editstyle.ui" line="6544"/>
-        <location filename="../../mscore/editstyle.ui" line="6616"/>
-        <location filename="../../mscore/editstyle.ui" line="6731"/>
-        <location filename="../../mscore/editstyle.ui" line="6761"/>
-        <location filename="../../mscore/editstyle.ui" line="6784"/>
-        <location filename="../../mscore/editstyle.ui" line="6846"/>
-        <location filename="../../mscore/editstyle.ui" line="6928"/>
-        <location filename="../../mscore/editstyle.ui" line="6951"/>
-        <location filename="../../mscore/editstyle.ui" line="7037"/>
-        <location filename="../../mscore/editstyle.ui" line="7060"/>
-        <location filename="../../mscore/editstyle.ui" line="7097"/>
-        <location filename="../../mscore/editstyle.ui" line="7127"/>
-        <location filename="../../mscore/editstyle.ui" line="7253"/>
-        <location filename="../../mscore/editstyle.ui" line="7270"/>
-        <location filename="../../mscore/editstyle.ui" line="7287"/>
-        <location filename="../../mscore/editstyle.ui" line="7314"/>
-        <location filename="../../mscore/editstyle.ui" line="7331"/>
-        <location filename="../../mscore/editstyle.ui" line="7441"/>
-        <location filename="../../mscore/editstyle.ui" line="7482"/>
-        <location filename="../../mscore/editstyle.ui" line="7506"/>
-        <location filename="../../mscore/editstyle.ui" line="7575"/>
-        <location filename="../../mscore/editstyle.ui" line="7616"/>
-        <location filename="../../mscore/editstyle.ui" line="7640"/>
-        <location filename="../../mscore/editstyle.ui" line="7708"/>
-        <location filename="../../mscore/editstyle.ui" line="7784"/>
-        <location filename="../../mscore/editstyle.ui" line="7801"/>
-        <location filename="../../mscore/editstyle.ui" line="7848"/>
-        <location filename="../../mscore/editstyle.ui" line="7875"/>
-        <location filename="../../mscore/editstyle.ui" line="7945"/>
-        <location filename="../../mscore/editstyle.ui" line="7962"/>
-        <location filename="../../mscore/editstyle.ui" line="7992"/>
-        <location filename="../../mscore/editstyle.ui" line="8255"/>
-        <location filename="../../mscore/editstyle.ui" line="8279"/>
-        <location filename="../../mscore/editstyle.ui" line="8325"/>
-        <location filename="../../mscore/editstyle.ui" line="8416"/>
-        <location filename="../../mscore/editstyle.ui" line="8433"/>
-        <location filename="../../mscore/editstyle.ui" line="8486"/>
-        <location filename="../../mscore/editstyle.ui" line="8532"/>
-        <location filename="../../mscore/editstyle.ui" line="8615"/>
-        <location filename="../../mscore/editstyle.ui" line="8632"/>
-        <location filename="../../mscore/editstyle.ui" line="8662"/>
-        <location filename="../../mscore/editstyle.ui" line="8724"/>
-        <location filename="../../mscore/editstyle.ui" line="8861"/>
-        <location filename="../../mscore/editstyle.ui" line="8878"/>
-        <location filename="../../mscore/editstyle.ui" line="8895"/>
-        <location filename="../../mscore/editstyle.ui" line="8912"/>
-        <location filename="../../mscore/editstyle.ui" line="8929"/>
-        <location filename="../../mscore/editstyle.ui" line="8985"/>
-        <location filename="../../mscore/editstyle.ui" line="9012"/>
-        <location filename="../../mscore/editstyle.ui" line="9041"/>
-        <location filename="../../mscore/editstyle.ui" line="9072"/>
-        <location filename="../../mscore/editstyle.ui" line="9105"/>
-        <location filename="../../mscore/editstyle.ui" line="9167"/>
-        <location filename="../../mscore/editstyle.ui" line="9204"/>
-        <location filename="../../mscore/editstyle.ui" line="9237"/>
-        <location filename="../../mscore/editstyle.ui" line="9280"/>
-        <location filename="../../mscore/editstyle.ui" line="9304"/>
-        <location filename="../../mscore/editstyle.ui" line="9321"/>
-        <location filename="../../mscore/editstyle.ui" line="9387"/>
-        <location filename="../../mscore/editstyle.ui" line="9520"/>
-        <location filename="../../mscore/editstyle.ui" line="9537"/>
-        <location filename="../../mscore/editstyle.ui" line="9578"/>
-        <location filename="../../mscore/editstyle.ui" line="9609"/>
-        <location filename="../../mscore/editstyle.ui" line="9692"/>
-        <location filename="../../mscore/editstyle.ui" line="9709"/>
-        <location filename="../../mscore/editstyle.ui" line="9739"/>
-        <location filename="../../mscore/editstyle.ui" line="9801"/>
-        <location filename="../../mscore/editstyle.ui" line="10698"/>
-        <location filename="../../mscore/editstyle.ui" line="10732"/>
-        <location filename="../../mscore/editstyle.ui" line="10749"/>
-        <location filename="../../mscore/editstyle.ui" line="10780"/>
-        <location filename="../../mscore/editstyle.ui" line="10804"/>
-        <location filename="../../mscore/editstyle.ui" line="10821"/>
-        <location filename="../../mscore/editstyle.ui" line="10838"/>
-        <location filename="../../mscore/editstyle.ui" line="10880"/>
-        <location filename="../../mscore/editstyle.ui" line="10935"/>
-        <location filename="../../mscore/editstyle.ui" line="10952"/>
-        <location filename="../../mscore/editstyle.ui" line="10969"/>
-        <location filename="../../mscore/editstyle.ui" line="10986"/>
-        <location filename="../../mscore/editstyle.ui" line="11033"/>
+        <location filename="../../mscore/editstyle.ui" line="396"/>
+        <location filename="../../mscore/editstyle.ui" line="665"/>
+        <location filename="../../mscore/editstyle.ui" line="780"/>
+        <location filename="../../mscore/editstyle.ui" line="797"/>
+        <location filename="../../mscore/editstyle.ui" line="814"/>
+        <location filename="../../mscore/editstyle.ui" line="847"/>
+        <location filename="../../mscore/editstyle.ui" line="905"/>
+        <location filename="../../mscore/editstyle.ui" line="938"/>
+        <location filename="../../mscore/editstyle.ui" line="955"/>
+        <location filename="../../mscore/editstyle.ui" line="997"/>
+        <location filename="../../mscore/editstyle.ui" line="1014"/>
+        <location filename="../../mscore/editstyle.ui" line="1355"/>
+        <location filename="../../mscore/editstyle.ui" line="1499"/>
+        <location filename="../../mscore/editstyle.ui" line="1516"/>
+        <location filename="../../mscore/editstyle.ui" line="1533"/>
+        <location filename="../../mscore/editstyle.ui" line="2582"/>
+        <location filename="../../mscore/editstyle.ui" line="2599"/>
+        <location filename="../../mscore/editstyle.ui" line="2616"/>
+        <location filename="../../mscore/editstyle.ui" line="2643"/>
+        <location filename="../../mscore/editstyle.ui" line="2660"/>
+        <location filename="../../mscore/editstyle.ui" line="2677"/>
+        <location filename="../../mscore/editstyle.ui" line="2694"/>
+        <location filename="../../mscore/editstyle.ui" line="2711"/>
+        <location filename="../../mscore/editstyle.ui" line="2728"/>
+        <location filename="../../mscore/editstyle.ui" line="2755"/>
+        <location filename="../../mscore/editstyle.ui" line="2772"/>
+        <location filename="../../mscore/editstyle.ui" line="2809"/>
+        <location filename="../../mscore/editstyle.ui" line="2897"/>
+        <location filename="../../mscore/editstyle.ui" line="2914"/>
+        <location filename="../../mscore/editstyle.ui" line="2931"/>
+        <location filename="../../mscore/editstyle.ui" line="2964"/>
+        <location filename="../../mscore/editstyle.ui" line="2981"/>
+        <location filename="../../mscore/editstyle.ui" line="3040"/>
+        <location filename="../../mscore/editstyle.ui" line="3381"/>
+        <location filename="../../mscore/editstyle.ui" line="3424"/>
+        <location filename="../../mscore/editstyle.ui" line="3467"/>
+        <location filename="../../mscore/editstyle.ui" line="3548"/>
+        <location filename="../../mscore/editstyle.ui" line="3565"/>
+        <location filename="../../mscore/editstyle.ui" line="3589"/>
+        <location filename="../../mscore/editstyle.ui" line="3659"/>
+        <location filename="../../mscore/editstyle.ui" line="3683"/>
+        <location filename="../../mscore/editstyle.ui" line="3724"/>
+        <location filename="../../mscore/editstyle.ui" line="3741"/>
+        <location filename="../../mscore/editstyle.ui" line="3758"/>
+        <location filename="../../mscore/editstyle.ui" line="3785"/>
+        <location filename="../../mscore/editstyle.ui" line="3823"/>
+        <location filename="../../mscore/editstyle.ui" line="4314"/>
+        <location filename="../../mscore/editstyle.ui" line="4373"/>
+        <location filename="../../mscore/editstyle.ui" line="4415"/>
+        <location filename="../../mscore/editstyle.ui" line="4570"/>
+        <location filename="../../mscore/editstyle.ui" line="4593"/>
+        <location filename="../../mscore/editstyle.ui" line="4616"/>
+        <location filename="../../mscore/editstyle.ui" line="4675"/>
+        <location filename="../../mscore/editstyle.ui" line="4743"/>
+        <location filename="../../mscore/editstyle.ui" line="4811"/>
+        <location filename="../../mscore/editstyle.ui" line="4872"/>
+        <location filename="../../mscore/editstyle.ui" line="4924"/>
+        <location filename="../../mscore/editstyle.ui" line="4976"/>
+        <location filename="../../mscore/editstyle.ui" line="5305"/>
+        <location filename="../../mscore/editstyle.ui" line="5322"/>
+        <location filename="../../mscore/editstyle.ui" line="5339"/>
+        <location filename="../../mscore/editstyle.ui" line="5356"/>
+        <location filename="../../mscore/editstyle.ui" line="5373"/>
+        <location filename="../../mscore/editstyle.ui" line="5462"/>
+        <location filename="../../mscore/editstyle.ui" line="5485"/>
+        <location filename="../../mscore/editstyle.ui" line="5508"/>
+        <location filename="../../mscore/editstyle.ui" line="5561"/>
+        <location filename="../../mscore/editstyle.ui" line="5608"/>
+        <location filename="../../mscore/editstyle.ui" line="5638"/>
+        <location filename="../../mscore/editstyle.ui" line="5667"/>
+        <location filename="../../mscore/editstyle.ui" line="5756"/>
+        <location filename="../../mscore/editstyle.ui" line="5858"/>
+        <location filename="../../mscore/editstyle.ui" line="5888"/>
+        <location filename="../../mscore/editstyle.ui" line="5911"/>
+        <location filename="../../mscore/editstyle.ui" line="5983"/>
+        <location filename="../../mscore/editstyle.ui" line="6040"/>
+        <location filename="../../mscore/editstyle.ui" line="6070"/>
+        <location filename="../../mscore/editstyle.ui" line="6143"/>
+        <location filename="../../mscore/editstyle.ui" line="6166"/>
+        <location filename="../../mscore/editstyle.ui" line="6229"/>
+        <location filename="../../mscore/editstyle.ui" line="6252"/>
+        <location filename="../../mscore/editstyle.ui" line="6364"/>
+        <location filename="../../mscore/editstyle.ui" line="6381"/>
+        <location filename="../../mscore/editstyle.ui" line="6398"/>
+        <location filename="../../mscore/editstyle.ui" line="6425"/>
+        <location filename="../../mscore/editstyle.ui" line="6442"/>
+        <location filename="../../mscore/editstyle.ui" line="6552"/>
+        <location filename="../../mscore/editstyle.ui" line="6593"/>
+        <location filename="../../mscore/editstyle.ui" line="6617"/>
+        <location filename="../../mscore/editstyle.ui" line="6686"/>
+        <location filename="../../mscore/editstyle.ui" line="6727"/>
+        <location filename="../../mscore/editstyle.ui" line="6751"/>
+        <location filename="../../mscore/editstyle.ui" line="6800"/>
+        <location filename="../../mscore/editstyle.ui" line="6827"/>
+        <location filename="../../mscore/editstyle.ui" line="6958"/>
+        <location filename="../../mscore/editstyle.ui" line="6975"/>
+        <location filename="../../mscore/editstyle.ui" line="7005"/>
+        <location filename="../../mscore/editstyle.ui" line="7292"/>
+        <location filename="../../mscore/editstyle.ui" line="7312"/>
+        <location filename="../../mscore/editstyle.ui" line="7336"/>
+        <location filename="../../mscore/editstyle.ui" line="7405"/>
+        <location filename="../../mscore/editstyle.ui" line="7461"/>
+        <location filename="../../mscore/editstyle.ui" line="7481"/>
+        <location filename="../../mscore/editstyle.ui" line="7541"/>
+        <location filename="../../mscore/editstyle.ui" line="7618"/>
+        <location filename="../../mscore/editstyle.ui" line="7635"/>
+        <location filename="../../mscore/editstyle.ui" line="7665"/>
+        <location filename="../../mscore/editstyle.ui" line="7727"/>
+        <location filename="../../mscore/editstyle.ui" line="7874"/>
+        <location filename="../../mscore/editstyle.ui" line="7891"/>
+        <location filename="../../mscore/editstyle.ui" line="7908"/>
+        <location filename="../../mscore/editstyle.ui" line="7925"/>
+        <location filename="../../mscore/editstyle.ui" line="7942"/>
+        <location filename="../../mscore/editstyle.ui" line="7998"/>
+        <location filename="../../mscore/editstyle.ui" line="8025"/>
+        <location filename="../../mscore/editstyle.ui" line="8054"/>
+        <location filename="../../mscore/editstyle.ui" line="8085"/>
+        <location filename="../../mscore/editstyle.ui" line="8118"/>
+        <location filename="../../mscore/editstyle.ui" line="8192"/>
+        <location filename="../../mscore/editstyle.ui" line="8245"/>
+        <location filename="../../mscore/editstyle.ui" line="8294"/>
+        <location filename="../../mscore/editstyle.ui" line="8327"/>
+        <location filename="../../mscore/editstyle.ui" line="8387"/>
+        <location filename="../../mscore/editstyle.ui" line="8425"/>
+        <location filename="../../mscore/editstyle.ui" line="8442"/>
+        <location filename="../../mscore/editstyle.ui" line="8459"/>
+        <location filename="../../mscore/editstyle.ui" line="8560"/>
+        <location filename="../../mscore/editstyle.ui" line="8577"/>
+        <location filename="../../mscore/editstyle.ui" line="8618"/>
+        <location filename="../../mscore/editstyle.ui" line="8649"/>
+        <location filename="../../mscore/editstyle.ui" line="8732"/>
+        <location filename="../../mscore/editstyle.ui" line="8749"/>
+        <location filename="../../mscore/editstyle.ui" line="8779"/>
+        <location filename="../../mscore/editstyle.ui" line="8841"/>
+        <location filename="../../mscore/editstyle.ui" line="9667"/>
+        <location filename="../../mscore/editstyle.ui" line="9684"/>
+        <location filename="../../mscore/editstyle.ui" line="9701"/>
+        <location filename="../../mscore/editstyle.ui" line="9718"/>
+        <location filename="../../mscore/editstyle.ui" line="9745"/>
+        <location filename="../../mscore/editstyle.ui" line="9762"/>
+        <location filename="../../mscore/editstyle.ui" line="9786"/>
+        <location filename="../../mscore/editstyle.ui" line="9819"/>
+        <location filename="../../mscore/editstyle.ui" line="9872"/>
+        <location filename="../../mscore/editstyle.ui" line="9889"/>
+        <location filename="../../mscore/editstyle.ui" line="9920"/>
+        <location filename="../../mscore/editstyle.ui" line="9947"/>
+        <location filename="../../mscore/editstyle.ui" line="9981"/>
+        <location filename="../../mscore/editstyle.ui" line="10014"/>
         <source>Reset to default</source>
         <translation>Palauta oletukset</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="393"/>
+        <location filename="../../mscore/editstyle.ui" line="399"/>
         <source>Reset &apos;Minimum width of measure&apos; value</source>
         <translation>Palauta &apos;tahdin vähimmäisleveys&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="480"/>
+        <location filename="../../mscore/editstyle.ui" line="486"/>
         <source>Hide empty staves within systems</source>
         <translation>Piilota tyhjät tahdit systeemeissä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="627"/>
+        <location filename="../../mscore/editstyle.ui" line="633"/>
         <source>Autoplace</source>
         <translation>Automaattisijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="636"/>
+        <location filename="../../mscore/editstyle.ui" line="642"/>
         <source>Vertical align range:</source>
         <translation>pystysuuntainen kohdistusalue:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="662"/>
+        <location filename="../../mscore/editstyle.ui" line="668"/>
         <source>Reset &apos;Vertical align range&apos; value</source>
         <translation>Palauta &apos;pystysuuntainen kohdistusalue&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1182"/>
+        <location filename="../../mscore/editstyle.ui" line="1000"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
         <translation>Palauta &apos;systeemien enimmäisetäisyys&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1035"/>
+        <location filename="../../mscore/editstyle.ui" line="958"/>
         <source>Reset &apos;Last system fill threshold&apos; value</source>
         <translation>Palauta &apos;viimeisen viivaston täyttökynnys&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="846"/>
+        <location filename="../../mscore/editstyle.ui" line="941"/>
         <source>Reset &apos;Min. system distance&apos; value</source>
         <translation>Palauta &apos;systeemien vähimmäisetäisyys&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="772"/>
+        <location filename="../../mscore/editstyle.ui" line="1017"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
         <translation>Palauta &apos;pystykehyksen alamarginaali&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1265"/>
+        <location filename="../../mscore/editstyle.ui" line="817"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
         <translation>Palauta &apos;diskantti- ja bassoviivaston väli&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1282"/>
+        <location filename="../../mscore/editstyle.ui" line="800"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
         <translation>Palauta &apos;musiikin alamarginaali&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="730"/>
+        <location filename="../../mscore/editstyle.ui" line="783"/>
         <source>Reset &apos;Staff distance&apos; value</source>
         <translation>Palauta &apos;viivaston väli&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="906"/>
+        <location filename="../../mscore/editstyle.ui" line="850"/>
         <source>Reset &apos;Music top margin&apos; value</source>
         <translation>Reset &apos;Music top margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="889"/>
+        <location filename="../../mscore/editstyle.ui" line="908"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
         <translation>Reset &apos;Vertical frame top margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1807"/>
-        <location filename="../../mscore/editstyle.ui" line="2214"/>
-        <location filename="../../mscore/editstyle.ui" line="2438"/>
-        <location filename="../../mscore/editstyle.ui" line="2929"/>
-        <location filename="../../mscore/editstyle.ui" line="3180"/>
-        <location filename="../../mscore/editstyle.ui" line="7725"/>
-        <location filename="../../mscore/editstyle.ui" line="9905"/>
-        <location filename="../../mscore/editstyle.ui" line="10675"/>
+        <location filename="../../mscore/editstyle.ui" line="8958"/>
+        <location filename="../../mscore/editstyle.ui" line="10082"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1817"/>
-        <location filename="../../mscore/editstyle.ui" line="2173"/>
-        <location filename="../../mscore/editstyle.ui" line="2285"/>
-        <location filename="../../mscore/editstyle.ui" line="2996"/>
-        <location filename="../../mscore/editstyle.ui" line="3122"/>
-        <location filename="../../mscore/editstyle.ui" line="7764"/>
-        <location filename="../../mscore/editstyle.ui" line="10715"/>
-        <source>Font face:</source>
-        <translation>Kirjasin:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="1850"/>
-        <location filename="../../mscore/editstyle.ui" line="2183"/>
-        <location filename="../../mscore/editstyle.ui" line="2397"/>
-        <location filename="../../mscore/editstyle.ui" line="2915"/>
-        <location filename="../../mscore/editstyle.ui" line="3149"/>
-        <location filename="../../mscore/editstyle.ui" line="7851"/>
-        <location filename="../../mscore/editstyle.ui" line="10752"/>
+        <location filename="../../mscore/editstyle.ui" line="9748"/>
         <source>Reset &apos;Font face&apos; value</source>
         <translation>Palauta &apos;Kirjasin&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1864"/>
-        <location filename="../../mscore/editstyle.ui" line="2224"/>
+        <location filename="../../mscore/editstyle.ui" line="9660"/>
         <source>Style:</source>
         <translation>Tyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1877"/>
-        <location filename="../../mscore/editstyle.ui" line="1897"/>
-        <location filename="../../mscore/editstyle.ui" line="2200"/>
-        <location filename="../../mscore/editstyle.ui" line="2240"/>
-        <location filename="../../mscore/editstyle.ui" line="2458"/>
-        <location filename="../../mscore/editstyle.ui" line="3023"/>
-        <location filename="../../mscore/editstyle.ui" line="3132"/>
-        <location filename="../../mscore/editstyle.ui" line="7711"/>
-        <location filename="../../mscore/editstyle.ui" line="10783"/>
+        <location filename="../../mscore/editstyle.ui" line="9704"/>
         <source>Reset &apos;Font size&apos; value</source>
         <translation>Palauta &apos;fonttikoko&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2540"/>
-        <location filename="../../mscore/editstyle.ui" line="5571"/>
+        <location filename="../../mscore/editstyle.ui" line="4708"/>
         <source>Brackets</source>
         <translation>Hakasulkeet</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2702"/>
-        <source>Dividers</source>
-        <translation>Jakajat</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="2723"/>
-        <location filename="../../mscore/editstyle.ui" line="2816"/>
+        <location filename="../../mscore/editstyle.ui" line="2223"/>
+        <location filename="../../mscore/editstyle.ui" line="2303"/>
         <source>Symbol:</source>
         <translation>Symboli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2736"/>
-        <location filename="../../mscore/editstyle.ui" line="2829"/>
+        <location filename="../../mscore/editstyle.ui" line="2236"/>
+        <location filename="../../mscore/editstyle.ui" line="2316"/>
         <source>Horizontal offset:</source>
         <translation>Vaakapoikkeama:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2762"/>
-        <location filename="../../mscore/editstyle.ui" line="2855"/>
+        <location filename="../../mscore/editstyle.ui" line="2262"/>
+        <location filename="../../mscore/editstyle.ui" line="2342"/>
         <source>Vertical offset:</source>
         <translation>Pystypoikkeama:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2900"/>
-        <source>Long Instrument Names</source>
-        <translation>Instrumenttien koko nimitykset</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="2448"/>
-        <location filename="../../mscore/editstyle.ui" line="2939"/>
-        <location filename="../../mscore/editstyle.ui" line="3115"/>
-        <location filename="../../mscore/editstyle.ui" line="7818"/>
-        <location filename="../../mscore/editstyle.ui" line="10725"/>
-        <source>Font size:</source>
-        <translation>Fonttikoko:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="2424"/>
-        <location filename="../../mscore/editstyle.ui" line="2982"/>
-        <location filename="../../mscore/editstyle.ui" line="3108"/>
-        <location filename="../../mscore/editstyle.ui" line="7865"/>
-        <location filename="../../mscore/editstyle.ui" line="10773"/>
-        <source>Font style:</source>
-        <translation>Fonttityyli:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="2485"/>
-        <location filename="../../mscore/editstyle.ui" line="2955"/>
-        <location filename="../../mscore/editstyle.ui" line="3166"/>
-        <location filename="../../mscore/editstyle.ui" line="10735"/>
+        <location filename="../../mscore/editstyle.ui" line="10017"/>
         <source>Reset &apos;Align&apos; values</source>
         <translation>Reset &apos;Align&apos; values</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2472"/>
-        <location filename="../../mscore/editstyle.ui" line="2989"/>
-        <location filename="../../mscore/editstyle.ui" line="3088"/>
-        <location filename="../../mscore/editstyle.ui" line="9138"/>
-        <location filename="../../mscore/editstyle.ui" line="10766"/>
+        <location filename="../../mscore/editstyle.ui" line="8151"/>
+        <location filename="../../mscore/editstyle.ui" line="9779"/>
         <source>Align:</source>
         <translation>Tasaa:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2336"/>
-        <location filename="../../mscore/editstyle.ui" line="3006"/>
-        <location filename="../../mscore/editstyle.ui" line="3074"/>
-        <location filename="../../mscore/editstyle.ui" line="7878"/>
-        <location filename="../../mscore/editstyle.ui" line="10841"/>
+        <location filename="../../mscore/editstyle.ui" line="9687"/>
         <source>Reset &apos;Font style&apos; values</source>
         <translation>Palauta &apos;Fonttityyli&apos; arvot</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3053"/>
-        <source>Short Instrument Names</source>
-        <translation>Näytä instrumenttien nimet</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3400"/>
+        <location filename="../../mscore/editstyle.ui" line="2572"/>
         <source>Clef to key distance:</source>
         <translation>Etäisyys nuottiavaimesta ja sävellajiin:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3413"/>
+        <location filename="../../mscore/editstyle.ui" line="2585"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
         <translation>Reset &apos;Staff line thickness&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3430"/>
+        <location filename="../../mscore/editstyle.ui" line="2602"/>
         <source>Reset &apos;Multimeasure rest margin&apos; value</source>
         <translation>Reset &apos;Multimeasure rest margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3447"/>
-        <source>Reset &apos;Clef/Key right margin&apos; valua</source>
-        <translation>Reset &apos;Clef/Key right margin&apos; valua</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="3461"/>
+        <location filename="../../mscore/editstyle.ui" line="2633"/>
         <source>Key to time signature distance:</source>
         <translation>Avaimen ja tahtiosoituksen etäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3474"/>
+        <location filename="../../mscore/editstyle.ui" line="2646"/>
         <source>Reset &apos;Time signature left margin&apos; value</source>
         <translation>Reset &apos;Time signature left margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3491"/>
+        <location filename="../../mscore/editstyle.ui" line="2663"/>
         <source>Reset &apos;Clef left margin&apos; value</source>
         <translation>Reset &apos;Clef left margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3508"/>
+        <location filename="../../mscore/editstyle.ui" line="2680"/>
         <source>Reset &apos;Minimum note distance&apos; value</source>
         <translation>Reset &apos;Minimum note distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3525"/>
+        <location filename="../../mscore/editstyle.ui" line="2697"/>
         <source>Reset &apos;Note to barline distance&apos; value</source>
         <translation>Reset &apos;Note to barline distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3542"/>
+        <location filename="../../mscore/editstyle.ui" line="2714"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
         <translation>Reset &apos;Key to barline distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3559"/>
+        <location filename="../../mscore/editstyle.ui" line="2731"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
         <translation>Reset &apos;Clef to time signature distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3586"/>
+        <location filename="../../mscore/editstyle.ui" line="2758"/>
         <source>Reset &apos;Clef to key distance&apos; value</source>
         <translation>Reset &apos;Clef to key distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3603"/>
+        <location filename="../../mscore/editstyle.ui" line="2775"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
         <translation>Reset &apos;Key to time signature distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3617"/>
+        <location filename="../../mscore/editstyle.ui" line="2789"/>
         <source>System header distance:</source>
         <translation>Ylätunnisteen etäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3627"/>
+        <location filename="../../mscore/editstyle.ui" line="2799"/>
         <source>Key to barline distance:</source>
         <translation>Etäisyys sävellajista tahtiviivaan:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3640"/>
+        <location filename="../../mscore/editstyle.ui" line="2812"/>
         <source>Reset &apos;System header distance&apos; value</source>
         <translation>Reset &apos;System header distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3683"/>
+        <location filename="../../mscore/editstyle.ui" line="2855"/>
         <source>Clef to time signature distance:</source>
         <translation>Etäisyys sävellajista tahtiosoitukseen:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3728"/>
+        <location filename="../../mscore/editstyle.ui" line="2900"/>
         <source>Reset &apos;Barline to accidental distance&apos; value</source>
         <translation>Reset &apos;Barline to accidental distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3745"/>
+        <location filename="../../mscore/editstyle.ui" line="2917"/>
         <source>Reset &apos;Clef to barline distance&apos; value</source>
         <translation>Reset &apos;Clef to barline distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3762"/>
+        <location filename="../../mscore/editstyle.ui" line="2934"/>
         <source>Reset &apos;Key signature left margin&apos; value</source>
         <translation>Reset &apos;Key signature left margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3795"/>
+        <location filename="../../mscore/editstyle.ui" line="2967"/>
         <source>Reset &apos;Minimum measure width&apos; value</source>
         <translation>Reset &apos;Minimum measure width&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3812"/>
+        <location filename="../../mscore/editstyle.ui" line="2984"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
         <translation>Reset &apos;Barline to grace note distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3871"/>
+        <location filename="../../mscore/editstyle.ui" line="3043"/>
         <source>Reset &apos;Note left margin&apos; value</source>
         <translation>Palauta &apos;nuotin vasen marginaali&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4077"/>
+        <location filename="../../mscore/editstyle.ui" line="3249"/>
         <source>Note left margin:</source>
         <translation>Nuotin vasen marginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4212"/>
+        <location filename="../../mscore/editstyle.ui" line="3384"/>
         <source>Reset &apos;Spacing&apos; value</source>
         <translation>Palauta &apos;lisätila&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4226"/>
+        <location filename="../../mscore/editstyle.ui" line="3398"/>
         <source>System header with time signature distance:</source>
         <translation>System header with time signature distance:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4255"/>
+        <location filename="../../mscore/editstyle.ui" line="3427"/>
         <source>Reset &apos;System header to time signature distance&apos; value</source>
         <translation>Reset &apos;System header to time signature distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4275"/>
+        <location filename="../../mscore/editstyle.ui" line="3447"/>
         <source>Time signature to barline distance:</source>
         <translation>Etäisyys tahtiosoituksesta tahtiviivaan:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4298"/>
+        <location filename="../../mscore/editstyle.ui" line="3470"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
         <translation>Reset &apos;Time signature to barline distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2373"/>
-        <location filename="../../mscore/editstyle.ui" line="10807"/>
+        <location filename="../../mscore/editstyle.ui" line="9765"/>
         <source>Reset &apos;Offset&apos; values</source>
         <translation>Palauta &quot;Poikkeama&quot; arvot</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="2387"/>
-        <location filename="../../mscore/editstyle.ui" line="10797"/>
+        <location filename="../../mscore/editstyle.ui" line="9789"/>
+        <source>Reset &apos;Color&apos; value</source>
+        <translation>Palauta värin arvo</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="9858"/>
+        <source>Thickness:</source>
+        <translation>Paksuus:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="9906"/>
+        <source>Margin:</source>
+        <translation>Marginaali:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="9913"/>
+        <source>Corner radius:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="9974"/>
+        <source>Highlight:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="10031"/>
         <source>Offset:</source>
         <translation>Poikkeama:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4458"/>
+        <location filename="../../mscore/editstyle.ui" line="3662"/>
         <source>Reset &apos;Repeat barline to dots distance&apos; value</source>
         <translation>Reset &apos;Repeat barline to dots distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4378"/>
+        <location filename="../../mscore/editstyle.ui" line="3727"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
         <translation>Reset &apos;Double barline distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4441"/>
+        <location filename="../../mscore/editstyle.ui" line="3788"/>
         <source>Reset &apos;Double barline thickness&apos; value</source>
         <translation>Reset &apos;Double barline thickness&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4475"/>
+        <location filename="../../mscore/editstyle.ui" line="3686"/>
         <source>Reset &apos;Thick barline distance&apos; value</source>
         <translation>Reset &apos;Thick barline distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4662"/>
+        <location filename="../../mscore/editstyle.ui" line="3710"/>
         <source>Thick barline distance:</source>
         <translation>Paksun tahtiviivan etäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4431"/>
+        <location filename="../../mscore/editstyle.ui" line="3802"/>
         <source>Thick barline thickness:</source>
         <translation>Paksun tahtiviivan paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4594"/>
+        <location filename="../../mscore/editstyle.ui" line="3582"/>
         <source>Thin barline thickness:</source>
         <translation>Ohuen tahtiviivan paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4631"/>
+        <location filename="../../mscore/editstyle.ui" line="3826"/>
         <source>Reset &apos;Thick barline thickness&apos; value</source>
         <translation>Reset &apos;Thick barline thickness&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4563"/>
+        <location filename="../../mscore/editstyle.ui" line="3809"/>
         <source>Repeat barline to dots distance:</source>
         <translation>Etäisyys kertausviivasta pisteisiin:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4549"/>
+        <location filename="../../mscore/editstyle.ui" line="3551"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
         <translation>Reset &apos;Thin barline thickness&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4506"/>
+        <location filename="../../mscore/editstyle.ui" line="3761"/>
         <source>Reset &apos;Scale barlines to staff size&apos; value</source>
         <translation>Reset &apos;Scale barlines to staff size&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4648"/>
+        <location filename="../../mscore/editstyle.ui" line="3592"/>
         <source>Reset &apos;Barline at start of multiple staves&apos; value</source>
         <translation>Reset &apos;Barline at start of multiple staves&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4672"/>
+        <location filename="../../mscore/editstyle.ui" line="3744"/>
         <source>Reset &apos;Barline at start of single staff&apos; value</source>
         <translation>Reset &apos;Barline at start of single staff&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4699"/>
+        <location filename="../../mscore/editstyle.ui" line="3568"/>
         <source>Reset &apos;Show repeat barline tips (&quot;winged&quot; repeats)&apos; value</source>
         <translation>Reset &apos;Show repeat barline tips (&quot;winged&quot; repeats)&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4982"/>
+        <location filename="../../mscore/editstyle.ui" line="4106"/>
         <source>Accidental to note distance:</source>
         <translation>Etäisyys tilapäisestä etumerkistä nuottiin:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4849"/>
+        <location filename="../../mscore/editstyle.ui" line="3986"/>
         <source>Note to dot distance:</source>
         <translation>Etäisyys nuotista pisteeseen:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="4992"/>
+        <location filename="../../mscore/editstyle.ui" line="4116"/>
         <source>Dot to dot distance:</source>
         <translation>Etäisyys pisteestä pisteeseen:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5978"/>
+        <location filename="../../mscore/editstyle.ui" line="5113"/>
         <source>Do not show arpeggio in standard notation when displayed in tablature</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6061"/>
-        <location filename="../../mscore/editstyle.ui" line="8296"/>
-        <location filename="../../mscore/editstyle.ui" line="8503"/>
-        <location filename="../../mscore/editstyle.ui" line="8568"/>
-        <location filename="../../mscore/editstyle.ui" line="9462"/>
-        <location filename="../../mscore/editstyle.ui" line="9645"/>
+        <location filename="../../mscore/editstyle.ui" line="5207"/>
+        <location filename="../../mscore/editstyle.ui" line="7253"/>
+        <location filename="../../mscore/editstyle.ui" line="7432"/>
+        <location filename="../../mscore/editstyle.ui" line="7584"/>
+        <location filename="../../mscore/editstyle.ui" line="8515"/>
+        <location filename="../../mscore/editstyle.ui" line="8698"/>
         <source>Autoplace min. distance:</source>
         <translation>Automaattisijoituksen minimietäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6162"/>
-        <location filename="../../mscore/editstyle.ui" line="8328"/>
-        <location filename="../../mscore/editstyle.ui" line="9523"/>
-        <location filename="../../mscore/editstyle.ui" line="9804"/>
+        <location filename="../../mscore/editstyle.ui" line="5308"/>
+        <location filename="../../mscore/editstyle.ui" line="7295"/>
+        <location filename="../../mscore/editstyle.ui" line="8563"/>
+        <location filename="../../mscore/editstyle.ui" line="8844"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
         <translation>Palauta &apos;Automaattisijoituksen minimietäisyys&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6192"/>
+        <location filename="../../mscore/editstyle.ui" line="5325"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
         <translation>Reset &apos;Line thickness at end&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6209"/>
+        <location filename="../../mscore/editstyle.ui" line="5342"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
         <translation>Reset &apos;Line thickness middle&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6226"/>
+        <location filename="../../mscore/editstyle.ui" line="5359"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
         <translation>Reset &apos;Dotted line thickness&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6243"/>
+        <location filename="../../mscore/editstyle.ui" line="5376"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
         <translation>Reset &apos;Minimum tie length&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1395"/>
+        <location filename="../../mscore/editstyle.ui" line="1358"/>
         <source>Reset &apos;Small staff size&apos; value</source>
         <translation>Reset &apos;Small staff size&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1539"/>
+        <location filename="../../mscore/editstyle.ui" line="1502"/>
         <source>Reset &apos;Small note size&apos; value</source>
         <translation>Reset &apos;Small note size&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1556"/>
+        <location filename="../../mscore/editstyle.ui" line="1519"/>
         <source>Reset &apos;Grace note size&apos; value</source>
         <translation>Reset &apos;Grace note size&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="1573"/>
+        <location filename="../../mscore/editstyle.ui" line="1536"/>
         <source>Reset &apos;Small clef size&apos; value</source>
         <translation>Reset &apos;Small clef size&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6319"/>
-        <location filename="../../mscore/editstyle.ui" line="6988"/>
-        <location filename="../../mscore/editstyle.ui" line="7200"/>
-        <location filename="../../mscore/editstyle.ui" line="7421"/>
-        <location filename="../../mscore/editstyle.ui" line="7555"/>
-        <location filename="../../mscore/editstyle.ui" line="7985"/>
-        <location filename="../../mscore/editstyle.ui" line="8248"/>
-        <location filename="../../mscore/editstyle.ui" line="8479"/>
-        <location filename="../../mscore/editstyle.ui" line="8655"/>
-        <location filename="../../mscore/editstyle.ui" line="9410"/>
-        <location filename="../../mscore/editstyle.ui" line="9595"/>
-        <location filename="../../mscore/editstyle.ui" line="9732"/>
+        <location filename="../../mscore/editstyle.ui" line="5449"/>
+        <location filename="../../mscore/editstyle.ui" line="6130"/>
+        <location filename="../../mscore/editstyle.ui" line="6324"/>
+        <location filename="../../mscore/editstyle.ui" line="6532"/>
+        <location filename="../../mscore/editstyle.ui" line="6666"/>
+        <location filename="../../mscore/editstyle.ui" line="6998"/>
+        <location filename="../../mscore/editstyle.ui" line="7285"/>
+        <location filename="../../mscore/editstyle.ui" line="7534"/>
+        <location filename="../../mscore/editstyle.ui" line="7658"/>
+        <location filename="../../mscore/editstyle.ui" line="8363"/>
+        <location filename="../../mscore/editstyle.ui" line="8635"/>
+        <location filename="../../mscore/editstyle.ui" line="8772"/>
         <source>Position above:</source>
         <translation>Sijainti yläpuolella:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6335"/>
-        <location filename="../../mscore/editstyle.ui" line="7273"/>
-        <location filename="../../mscore/editstyle.ui" line="7444"/>
-        <location filename="../../mscore/editstyle.ui" line="7578"/>
-        <location filename="../../mscore/editstyle.ui" line="7995"/>
-        <location filename="../../mscore/editstyle.ui" line="8258"/>
-        <location filename="../../mscore/editstyle.ui" line="8436"/>
-        <location filename="../../mscore/editstyle.ui" line="8665"/>
-        <location filename="../../mscore/editstyle.ui" line="9324"/>
-        <location filename="../../mscore/editstyle.ui" line="9540"/>
+        <location filename="../../mscore/editstyle.ui" line="5465"/>
+        <location filename="../../mscore/editstyle.ui" line="6384"/>
+        <location filename="../../mscore/editstyle.ui" line="6555"/>
+        <location filename="../../mscore/editstyle.ui" line="6689"/>
+        <location filename="../../mscore/editstyle.ui" line="7008"/>
+        <location filename="../../mscore/editstyle.ui" line="7315"/>
+        <location filename="../../mscore/editstyle.ui" line="7408"/>
+        <location filename="../../mscore/editstyle.ui" line="7668"/>
+        <location filename="../../mscore/editstyle.ui" line="8195"/>
+        <location filename="../../mscore/editstyle.ui" line="8580"/>
         <source>Reset &apos;Position above&apos; value</source>
         <translation>Reset &apos;Position above&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6547"/>
-        <location filename="../../mscore/editstyle.ui" line="6619"/>
-        <location filename="../../mscore/editstyle.ui" line="7063"/>
-        <location filename="../../mscore/editstyle.ui" line="7290"/>
-        <location filename="../../mscore/editstyle.ui" line="7804"/>
+        <location filename="../../mscore/editstyle.ui" line="5670"/>
+        <location filename="../../mscore/editstyle.ui" line="5759"/>
+        <location filename="../../mscore/editstyle.ui" line="6073"/>
+        <location filename="../../mscore/editstyle.ui" line="6401"/>
+        <location filename="../../mscore/editstyle.ui" line="6803"/>
         <source>Reset &apos;Line thickness&apos; value</source>
         <translation>Palauta viivan paksuuden arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6358"/>
+        <location filename="../../mscore/editstyle.ui" line="5488"/>
         <source>Reset &apos;Height&apos; value</source>
         <translation>Palauta korkeuden arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6381"/>
+        <location filename="../../mscore/editstyle.ui" line="5511"/>
         <source>Reset &apos;Continue height&apos; value</source>
         <translation>Reset &apos;Continue height&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6395"/>
+        <location filename="../../mscore/editstyle.ui" line="5525"/>
         <source>Autoplace, distance to dynamics:</source>
         <translation>Automaattisijoitus, etäisyys dynamiikkaan:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6434"/>
+        <location filename="../../mscore/editstyle.ui" line="5564"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
         <translation>Palauta &apos;Automaattisijoitus, etäisyys dynamiikkaan&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6448"/>
-        <location filename="../../mscore/editstyle.ui" line="7304"/>
-        <location filename="../../mscore/editstyle.ui" line="7472"/>
-        <location filename="../../mscore/editstyle.ui" line="7606"/>
-        <location filename="../../mscore/editstyle.ui" line="8009"/>
-        <location filename="../../mscore/editstyle.ui" line="8450"/>
-        <location filename="../../mscore/editstyle.ui" line="8679"/>
-        <location filename="../../mscore/editstyle.ui" line="9157"/>
-        <location filename="../../mscore/editstyle.ui" line="9568"/>
-        <location filename="../../mscore/editstyle.ui" line="9756"/>
+        <location filename="../../mscore/editstyle.ui" line="5578"/>
+        <location filename="../../mscore/editstyle.ui" line="6415"/>
+        <location filename="../../mscore/editstyle.ui" line="6583"/>
+        <location filename="../../mscore/editstyle.ui" line="6717"/>
+        <location filename="../../mscore/editstyle.ui" line="7022"/>
+        <location filename="../../mscore/editstyle.ui" line="7422"/>
+        <location filename="../../mscore/editstyle.ui" line="7682"/>
+        <location filename="../../mscore/editstyle.ui" line="8235"/>
+        <location filename="../../mscore/editstyle.ui" line="8608"/>
+        <location filename="../../mscore/editstyle.ui" line="8796"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6481"/>
-        <location filename="../../mscore/editstyle.ui" line="7317"/>
-        <location filename="../../mscore/editstyle.ui" line="7485"/>
-        <location filename="../../mscore/editstyle.ui" line="7619"/>
-        <location filename="../../mscore/editstyle.ui" line="7948"/>
-        <location filename="../../mscore/editstyle.ui" line="8419"/>
-        <location filename="../../mscore/editstyle.ui" line="8618"/>
-        <location filename="../../mscore/editstyle.ui" line="9390"/>
-        <location filename="../../mscore/editstyle.ui" line="9581"/>
-        <location filename="../../mscore/editstyle.ui" line="9695"/>
+        <location filename="../../mscore/editstyle.ui" line="5611"/>
+        <location filename="../../mscore/editstyle.ui" line="6428"/>
+        <location filename="../../mscore/editstyle.ui" line="6596"/>
+        <location filename="../../mscore/editstyle.ui" line="6730"/>
+        <location filename="../../mscore/editstyle.ui" line="6961"/>
+        <location filename="../../mscore/editstyle.ui" line="7484"/>
+        <location filename="../../mscore/editstyle.ui" line="7621"/>
+        <location filename="../../mscore/editstyle.ui" line="8428"/>
+        <location filename="../../mscore/editstyle.ui" line="8621"/>
+        <location filename="../../mscore/editstyle.ui" line="8735"/>
         <source>Reset &apos;Placement&apos; value</source>
         <translation>Palauta sijoituksen arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6495"/>
-        <location filename="../../mscore/editstyle.ui" line="7077"/>
-        <location filename="../../mscore/editstyle.ui" line="7348"/>
-        <location filename="../../mscore/editstyle.ui" line="7499"/>
-        <location filename="../../mscore/editstyle.ui" line="7633"/>
-        <location filename="../../mscore/editstyle.ui" line="7911"/>
-        <location filename="../../mscore/editstyle.ui" line="8272"/>
-        <location filename="../../mscore/editstyle.ui" line="8409"/>
-        <location filename="../../mscore/editstyle.ui" line="8581"/>
-        <location filename="../../mscore/editstyle.ui" line="9344"/>
-        <location filename="../../mscore/editstyle.ui" line="9602"/>
-        <location filename="../../mscore/editstyle.ui" line="9658"/>
+        <location filename="../../mscore/editstyle.ui" line="5625"/>
+        <location filename="../../mscore/editstyle.ui" line="6057"/>
+        <location filename="../../mscore/editstyle.ui" line="6459"/>
+        <location filename="../../mscore/editstyle.ui" line="6610"/>
+        <location filename="../../mscore/editstyle.ui" line="6744"/>
+        <location filename="../../mscore/editstyle.ui" line="6937"/>
+        <location filename="../../mscore/editstyle.ui" line="7329"/>
+        <location filename="../../mscore/editstyle.ui" line="7507"/>
+        <location filename="../../mscore/editstyle.ui" line="7597"/>
+        <location filename="../../mscore/editstyle.ui" line="8350"/>
+        <location filename="../../mscore/editstyle.ui" line="8642"/>
+        <location filename="../../mscore/editstyle.ui" line="8711"/>
         <source>Position below:</source>
         <translation>Sijainti alapuolella:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6511"/>
-        <location filename="../../mscore/editstyle.ui" line="7334"/>
-        <location filename="../../mscore/editstyle.ui" line="7509"/>
-        <location filename="../../mscore/editstyle.ui" line="7643"/>
-        <location filename="../../mscore/editstyle.ui" line="7965"/>
-        <location filename="../../mscore/editstyle.ui" line="8282"/>
-        <location filename="../../mscore/editstyle.ui" line="8489"/>
-        <location filename="../../mscore/editstyle.ui" line="8535"/>
-        <location filename="../../mscore/editstyle.ui" line="8635"/>
-        <location filename="../../mscore/editstyle.ui" line="9170"/>
-        <location filename="../../mscore/editstyle.ui" line="9612"/>
+        <location filename="../../mscore/editstyle.ui" line="5641"/>
+        <location filename="../../mscore/editstyle.ui" line="6445"/>
+        <location filename="../../mscore/editstyle.ui" line="6620"/>
+        <location filename="../../mscore/editstyle.ui" line="6754"/>
+        <location filename="../../mscore/editstyle.ui" line="6978"/>
+        <location filename="../../mscore/editstyle.ui" line="7339"/>
+        <location filename="../../mscore/editstyle.ui" line="7464"/>
+        <location filename="../../mscore/editstyle.ui" line="7544"/>
+        <location filename="../../mscore/editstyle.ui" line="7638"/>
+        <location filename="../../mscore/editstyle.ui" line="8445"/>
+        <location filename="../../mscore/editstyle.ui" line="8652"/>
         <source>Reset &apos;Position below&apos; value</source>
         <translation>Reset &apos;Position below&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6748"/>
-        <source>Default position:</source>
-        <translation>Oletussijainti:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="6787"/>
+        <location filename="../../mscore/editstyle.ui" line="5914"/>
         <source>Reset &apos;Default position&apos; value</source>
         <translation>Reset &apos;Default position&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6764"/>
-        <location filename="../../mscore/editstyle.ui" line="7100"/>
-        <location filename="../../mscore/editstyle.ui" line="7130"/>
+        <location filename="../../mscore/editstyle.ui" line="5891"/>
+        <location filename="../../mscore/editstyle.ui" line="6146"/>
+        <location filename="../../mscore/editstyle.ui" line="6169"/>
         <source>Reset &apos;Hook height&apos; value</source>
         <translation>Reset &apos;Hook height&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6734"/>
-        <location filename="../../mscore/editstyle.ui" line="7040"/>
-        <location filename="../../mscore/editstyle.ui" line="7256"/>
+        <location filename="../../mscore/editstyle.ui" line="5861"/>
+        <location filename="../../mscore/editstyle.ui" line="6043"/>
+        <location filename="../../mscore/editstyle.ui" line="6367"/>
         <source>Reset &apos;Line style&apos; value</source>
         <translation>Aseta uudelleen &apos;viivan tyyli&apos; -arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6931"/>
-        <location filename="../../mscore/editstyle.ui" line="9742"/>
+        <location filename="../../mscore/editstyle.ui" line="6255"/>
+        <location filename="../../mscore/editstyle.ui" line="8782"/>
         <source>Reset &apos;Position Above&apos; value</source>
         <translation>Reset &apos;Position Above&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6863"/>
+        <location filename="../../mscore/editstyle.ui" line="6024"/>
         <source>Hook height above:</source>
         <translation>Väkäsen korkeus ylhäällä:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6954"/>
+        <location filename="../../mscore/editstyle.ui" line="6232"/>
         <source>Reset &apos;Numbers only&apos; value</source>
         <translation>Aseta uudelleen &apos;vain numeroita&apos; -arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6849"/>
-        <location filename="../../mscore/editstyle.ui" line="8727"/>
-        <location filename="../../mscore/editstyle.ui" line="9712"/>
+        <location filename="../../mscore/editstyle.ui" line="5986"/>
+        <location filename="../../mscore/editstyle.ui" line="7730"/>
+        <location filename="../../mscore/editstyle.ui" line="8752"/>
         <source>Reset &apos;Position Below&apos; value</source>
         <translation>Reset &apos;Position Below&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="6880"/>
+        <location filename="../../mscore/editstyle.ui" line="6213"/>
         <source>Hook height below:</source>
         <translation>Väkäsen korkeus alhaalla:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7536"/>
+        <location filename="../../mscore/editstyle.ui" line="6660"/>
         <source>Vibrato Line</source>
         <translation>Vibrato-viiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10475"/>
+        <location filename="../../mscore/editstyle.ui" line="9501"/>
         <source>Fret number font size:</source>
         <translation>Nauhan numeron fontin koko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7787"/>
+        <location filename="../../mscore/editstyle.ui" line="6830"/>
         <source>Reset &apos;Arrow width&apos; value</source>
         <translation>Reset &apos;Arrow width&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="7825"/>
+        <location filename="../../mscore/editstyle.ui" line="6844"/>
         <source>Arrow width:</source>
         <translation>Nuolen paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9184"/>
-        <location filename="../../mscore/editstyle.ui" line="9921"/>
+        <location filename="../../mscore/editstyle.ui" line="8370"/>
+        <location filename="../../mscore/editstyle.ui" line="8974"/>
         <source>Line height:</source>
         <translation>Rivin korkeus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9934"/>
+        <location filename="../../mscore/editstyle.ui" line="8987"/>
         <source>Vertical position:</source>
         <translation>Pystysuora sijainti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9954"/>
+        <location filename="../../mscore/editstyle.ui" line="9007"/>
         <source>from top of staff</source>
         <translation>viivaston yläreunasta</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9961"/>
+        <location filename="../../mscore/editstyle.ui" line="9014"/>
         <source>of font height</source>
         <translation>fontin korkeudesta</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9985"/>
+        <location filename="../../mscore/editstyle.ui" line="9038"/>
         <source>Alignment</source>
         <translation>Tasaus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9991"/>
+        <location filename="../../mscore/editstyle.ui" line="9044"/>
         <source>Top</source>
         <translation>Ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9998"/>
+        <location filename="../../mscore/editstyle.ui" line="9051"/>
         <source>Bottom</source>
         <translation>Alas</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="32"/>
-        <location filename="../../mscore/editstyle.ui" line="10008"/>
+        <location filename="../../mscore/editstyle.ui" line="9061"/>
         <source>Style</source>
         <translation>Tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10014"/>
+        <location filename="../../mscore/editstyle.ui" line="9067"/>
         <source>Modern</source>
         <translation>Moderni</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10021"/>
+        <location filename="../../mscore/editstyle.ui" line="9074"/>
         <source>Historic</source>
         <translation>Historiallinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="170"/>
-        <location filename="../../mscore/editstyle.ui" line="8048"/>
+        <location filename="../../mscore/editstyle.ui" line="176"/>
+        <location filename="../../mscore/editstyle.ui" line="7074"/>
         <source>Articulations, Ornaments</source>
         <translation>Artikulaatio, korukuviot</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8079"/>
+        <location filename="../../mscore/editstyle.ui" line="7161"/>
         <source>Stem distance:</source>
         <translation>Varren etäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8069"/>
-        <location filename="../../mscore/editstyle.ui" line="8125"/>
-        <location filename="../../mscore/editstyle.ui" line="8145"/>
+        <location filename="../../mscore/editstyle.ui" line="7151"/>
+        <location filename="../../mscore/editstyle.ui" line="7171"/>
+        <location filename="../../mscore/editstyle.ui" line="7202"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8135"/>
+        <location filename="../../mscore/editstyle.ui" line="7109"/>
         <source>Articulation distance:</source>
         <translation>Artikulaatiomerkkien etäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8115"/>
+        <location filename="../../mscore/editstyle.ui" line="7192"/>
         <source>Notehead distance:</source>
         <translation>Nuotinpään etäisyys</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3312"/>
+        <location filename="../../mscore/editstyle.ui" line="2468"/>
         <source>♮ in Key Signatures</source>
         <translation>♮ Sävellajimerkinnöissä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3325"/>
+        <location filename="../../mscore/editstyle.ui" line="2481"/>
         <source>Before key signature if changing to fewer ♯ or ♭</source>
-        <translation type="unfinished"/>
+        <translation>Ennen avainta, jos muutetaan vähemmän ♯ tai ♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3332"/>
+        <location filename="../../mscore/editstyle.ui" line="2488"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
-        <translation type="unfinished"/>
+        <translation>Avaimen jälkeen, jos muutetaan vähemmän ♯ tai ♭. Ennen, jos muutetaan välillä ♯ ja ♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5223"/>
+        <location filename="../../mscore/editstyle.ui" line="4432"/>
         <source>Vertical distance from notehead:</source>
         <translation>Pystysuora etäisyys nuotinpäästä:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5577"/>
+        <location filename="../../mscore/editstyle.ui" line="2083"/>
+        <location filename="../../mscore/editstyle.ui" line="4714"/>
         <source>Bracket thickness:</source>
         <translation>Hakasulkeen paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5609"/>
+        <location filename="../../mscore/editstyle.ui" line="4746"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
         <translation>Reset &apos;Bracket hook height&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5623"/>
+        <location filename="../../mscore/editstyle.ui" line="4760"/>
         <source>Bracket hook height:</source>
         <translation>Sulkeen hakasen korkeus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5677"/>
+        <location filename="../../mscore/editstyle.ui" line="4814"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <translation>Reset &apos;Bracket thickness&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5694"/>
+        <location filename="../../mscore/editstyle.ui" line="4831"/>
         <source>Properties</source>
         <translation>Ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5700"/>
+        <location filename="../../mscore/editstyle.ui" line="4837"/>
         <source>Direction:</source>
         <translation>Suunta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5711"/>
-        <location filename="../../mscore/editstyle.ui" line="5805"/>
+        <location filename="../../mscore/editstyle.ui" line="4848"/>
+        <location filename="../../mscore/editstyle.ui" line="4942"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5716"/>
+        <location filename="../../mscore/editstyle.ui" line="4853"/>
         <source>Up</source>
         <translation>Ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5721"/>
+        <location filename="../../mscore/editstyle.ui" line="4858"/>
         <source>Down</source>
         <translation>Alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5738"/>
+        <location filename="../../mscore/editstyle.ui" line="4875"/>
         <source>Reset &apos;Direction&apos; value</source>
         <translation>Palauta suunnan arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5753"/>
+        <location filename="../../mscore/editstyle.ui" line="4890"/>
         <source>Number</source>
         <translation>Numero</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5758"/>
+        <location filename="../../mscore/editstyle.ui" line="4895"/>
         <source>Ratio</source>
         <translation>Suhde</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5771"/>
+        <location filename="../../mscore/editstyle.ui" line="4908"/>
         <source>Number type:</source>
         <translation>Numeron tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5790"/>
+        <location filename="../../mscore/editstyle.ui" line="4927"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <translation>Palauta hakasulkeen tyypin arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5810"/>
+        <location filename="../../mscore/editstyle.ui" line="4947"/>
         <source>Bracket</source>
         <translation>Hakasulje</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5823"/>
+        <location filename="../../mscore/editstyle.ui" line="4960"/>
         <source>Bracket type:</source>
         <translation>Hakasulkeen tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5842"/>
+        <location filename="../../mscore/editstyle.ui" line="4979"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>Palauta numeron tyypin arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8155"/>
+        <location filename="../../mscore/editstyle.ui" line="7098"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Palauta &quot;Nuotinpään väli&quot; -arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8166"/>
+        <location filename="../../mscore/editstyle.ui" line="7181"/>
         <source>Reset &apos;Stem distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Palauta &quot;varsien väli&quot; -arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8177"/>
+        <location filename="../../mscore/editstyle.ui" line="7119"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
+        <translation>Palauta &quot;artikulaation väli&quot; -arvo</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="1599"/>
+        <location filename="../../mscore/editstyle.ui" line="1769"/>
+        <source>Show on first page</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8188"/>
+        <location filename="../../mscore/editstyle.ui" line="1609"/>
+        <location filename="../../mscore/editstyle.ui" line="1779"/>
+        <source>Different odd/even pages</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="2077"/>
+        <source>System Brackets</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="2137"/>
+        <source>Bracket distance:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="2202"/>
+        <source>System Dividers</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="2619"/>
+        <source>Reset &apos;Clef/Key right margin&apos; value</source>
+        <translation>Palauta &apos;Avaimen/etumerkinnän oikean marginaalin arvo</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="4210"/>
+        <source>Beam distance (relative to beam thickness):</source>
+        <translation>Palkin etäisyys (suhteessa palkinn paksuuteen):</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="7130"/>
         <source>Reset &apos;Articulation size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Palauta &apos;artikulaation koko&apos; arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8754"/>
+        <location filename="../../mscore/editstyle.ui" line="7770"/>
         <source>Lyrics Dash</source>
         <translation>Sanoituksen tavuviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8763"/>
+        <location filename="../../mscore/editstyle.ui" line="7776"/>
         <source>Dash thickness:</source>
         <translation>Tavuviivan paksuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8770"/>
+        <location filename="../../mscore/editstyle.ui" line="7783"/>
         <source>Min. dash length:</source>
         <translation>Tavuviivan min. pituus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8796"/>
+        <location filename="../../mscore/editstyle.ui" line="7809"/>
         <source>Max. dash length:</source>
         <translation>Tavuviivan max. pituus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8825"/>
+        <location filename="../../mscore/editstyle.ui" line="7838"/>
         <source>Max. dash distance:</source>
         <translation>Tavuviivan max. etäisyys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8854"/>
+        <location filename="../../mscore/editstyle.ui" line="7867"/>
         <source>Always force dash</source>
         <translation>Pakota aina tavuviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8864"/>
+        <location filename="../../mscore/editstyle.ui" line="7877"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
         <translation>Reset &apos;Min. dash length&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8881"/>
+        <location filename="../../mscore/editstyle.ui" line="7894"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
         <translation>Reset &apos;Max. dash length&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8898"/>
+        <location filename="../../mscore/editstyle.ui" line="7911"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
         <translation>Reset &apos;Max. dash distance&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8915"/>
+        <location filename="../../mscore/editstyle.ui" line="7928"/>
         <source>Reset &apos;Always force dash&apos; value</source>
         <translation>Reset &apos;Always force dash&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8932"/>
+        <location filename="../../mscore/editstyle.ui" line="7945"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
         <translation>Reset &apos;Dash thickness&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8962"/>
+        <location filename="../../mscore/editstyle.ui" line="7975"/>
         <source>Dash pad:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8988"/>
+        <location filename="../../mscore/editstyle.ui" line="8001"/>
         <source>Reset &apos;Dash pad&apos; value</source>
         <translation>Reset &apos;Dash pad&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9002"/>
+        <location filename="../../mscore/editstyle.ui" line="8015"/>
         <source>Dash Y position ratio:</source>
         <translation>Tavuviivan Y-akseliarvo:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9015"/>
+        <location filename="../../mscore/editstyle.ui" line="8028"/>
         <source>Reset &apos;Dash Y position ratio&apos; value</source>
         <translation>Reset &apos;Dash Y position ratio&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9032"/>
+        <location filename="../../mscore/editstyle.ui" line="8045"/>
         <source>Lyrics Melisma</source>
         <translation>Melisma-sävelkulku</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9044"/>
+        <location filename="../../mscore/editstyle.ui" line="8057"/>
         <source>Reset &apos;Melisma pad&apos; value</source>
         <translation>Reset &apos;Melisma pad&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9058"/>
+        <location filename="../../mscore/editstyle.ui" line="8071"/>
         <source>Melisma pad:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9065"/>
+        <location filename="../../mscore/editstyle.ui" line="8078"/>
         <source>Melisma thickness:</source>
         <translation>Melismaviivan paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9075"/>
+        <location filename="../../mscore/editstyle.ui" line="8088"/>
         <source>Reset &apos;Melisma thickness&apos; value</source>
         <translation>Reset &apos;Melisma thickness&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9108"/>
+        <location filename="../../mscore/editstyle.ui" line="8121"/>
         <source>Reset &apos;Align&apos; value</source>
         <translation>Reset &apos;Align&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10658"/>
+        <location filename="../../mscore/editstyle.ui" line="8209"/>
+        <source>Min. distance:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="8462"/>
+        <source>Reset &apos;Min. distance&apos; value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="9511"/>
+        <source>Fret number position:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="9654"/>
+        <source>Edit Text Style</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="9735"/>
         <source>Name:</source>
         <translation>Nimi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10665"/>
-        <source>Size changes with staff space setting</source>
-        <translation>Koko muuttuu nuottiviivojen välin mukaan</translation>
+        <location filename="../../mscore/editstyle.ui" line="10062"/>
+        <source>Color:</source>
+        <translation>Väri:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9148"/>
+        <location filename="../../mscore/editstyle.ui" line="10069"/>
+        <source>Follow staff size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/editstyle.ui" line="8161"/>
         <source>Lyrics Text</source>
         <translation>Sanoitusteksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9207"/>
+        <location filename="../../mscore/editstyle.ui" line="8390"/>
         <source>Reset &apos;Line height&apos; value</source>
         <translation>Reset &apos;Line height&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9227"/>
+        <location filename="../../mscore/editstyle.ui" line="8317"/>
         <source>Min. top margin:</source>
         <translation>Min. ylämarginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9240"/>
+        <location filename="../../mscore/editstyle.ui" line="8248"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
         <translation>Reset &apos;Min. top margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9254"/>
+        <location filename="../../mscore/editstyle.ui" line="8377"/>
         <source>Min. bottom margin:</source>
         <translation>Min. alamarginaali:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9283"/>
+        <location filename="../../mscore/editstyle.ui" line="8330"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
         <translation>Reset &apos;Min. bottom margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9297"/>
+        <location filename="../../mscore/editstyle.ui" line="8404"/>
         <source>Align verse number</source>
         <translation>Kohdista säkeistön numero</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="9307"/>
+        <location filename="../../mscore/editstyle.ui" line="8297"/>
         <source>Reset &apos;Align verse number&apos; value</source>
         <translation>Reset &apos;Align verse number&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10701"/>
+        <location filename="../../mscore/editstyle.ui" line="9721"/>
         <source>Reset &apos;Name&apos; value</source>
         <translation>Reset &apos;Name&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10897"/>
-        <source>Background:</source>
-        <translation>Tausta:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="11003"/>
+        <location filename="../../mscore/editstyle.ui" line="9809"/>
         <source>Frame:</source>
         <translation>Kehys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10914"/>
-        <source>Text margin:</source>
-        <translation>Tekstin marginaali:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="10907"/>
+        <location filename="../../mscore/editstyle.ui" line="9967"/>
         <source>Border:</source>
         <translation>Raja:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="11023"/>
-        <source>Border radius:</source>
-        <translation>Säde:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="10928"/>
-        <source>Foreground:</source>
-        <translation>Edusta:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.ui" line="10989"/>
+        <location filename="../../mscore/editstyle.ui" line="9892"/>
         <source>Reset &apos;Foreground&apos; value</source>
         <translation>Reset &apos;Foreground&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10972"/>
+        <location filename="../../mscore/editstyle.ui" line="9875"/>
         <source>Reset &apos;Background&apos; value</source>
         <translation>Reset &apos;Background&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10955"/>
+        <location filename="../../mscore/editstyle.ui" line="9923"/>
         <source>Reset &apos;Border&apos; value</source>
         <translation>Reset &apos;Border&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10883"/>
+        <location filename="../../mscore/editstyle.ui" line="9950"/>
         <source>Reset &apos;Text margin&apos; value</source>
         <translation>Reset &apos;Text margin&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="11036"/>
+        <location filename="../../mscore/editstyle.ui" line="9984"/>
         <source>Reset &apos;Border radius&apos; value</source>
         <translation>Reset &apos;Border radius&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10938"/>
+        <location filename="../../mscore/editstyle.ui" line="9822"/>
         <source>Reset &apos;Frame&apos; value</source>
         <translation>Reset &apos;Frame&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="10824"/>
+        <location filename="../../mscore/editstyle.ui" line="9670"/>
         <source>Reset &apos;Size changes with staff space setting&apos; value</source>
         <translation>Reset &apos;Size changes with staff space setting&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="8089"/>
+        <location filename="../../mscore/editstyle.ui" line="7141"/>
         <source>Articulation size:</source>
         <translation>Artikulaatiomerkin koko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="90"/>
-        <location filename="../../mscore/editstyle.ui" line="3281"/>
+        <location filename="../../mscore/editstyle.ui" line="96"/>
+        <location filename="../../mscore/editstyle.ui" line="2437"/>
         <source>Accidentals</source>
         <translation>Etumerkit</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3291"/>
+        <location filename="../../mscore/editstyle.ui" line="2447"/>
         <source>Accidental</source>
         <translation>Tilapäinen etumerkintä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3296"/>
+        <location filename="../../mscore/editstyle.ui" line="2452"/>
         <source>Semitones offset</source>
         <translation>Puolisävelaskeleen poikkeama</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3301"/>
+        <location filename="../../mscore/editstyle.ui" line="2457"/>
         <source>Cents offset</source>
         <translation>Sadasosapuolisävelaskeleen poikkeama</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="3318"/>
+        <location filename="../../mscore/editstyle.ui" line="2474"/>
         <source>Only for a change to C Maj / A min</source>
         <translation>Vain vaihdossa C duuri / A molli</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="115"/>
-        <location filename="../../mscore/editstyle.ui" line="5159"/>
+        <location filename="../../mscore/editstyle.ui" line="121"/>
+        <location filename="../../mscore/editstyle.ui" line="4296"/>
         <source>Tuplets</source>
         <translation>Rytmilliset poikkeusjaot</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5213"/>
+        <location filename="../../mscore/editstyle.ui" line="4331"/>
         <source>Maximum slope:</source>
         <translation>Enimmäiskaltevuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5252"/>
+        <location filename="../../mscore/editstyle.ui" line="4357"/>
         <source>Vertical distance from stem:</source>
         <translation>Pystysuora etäisyys varresta</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5284"/>
+        <location filename="../../mscore/editstyle.ui" line="4418"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
         <translation>Reset &apos;Vertical distance from notehead&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5307"/>
+        <location filename="../../mscore/editstyle.ui" line="4376"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
         <translation>Reset &apos;Vertical distance from stem&apos; value</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.ui" line="5330"/>
+        <location filename="../../mscore/editstyle.ui" line="4317"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
         <translation>Reset &apos;Maximum slope&apos; value</translation>
     </message>
@@ -4741,18 +4779,18 @@ space unit</extracomment>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../fluid/fluidgui.cpp" line="281"/>
-        <location filename="../../fluid/fluidgui.cpp" line="316"/>
+        <location filename="../../fluid/fluidgui.cpp" line="287"/>
+        <location filename="../../fluid/fluidgui.cpp" line="322"/>
         <source>MuseScore</source>
         <translation>MuseScore </translation>
     </message>
     <message>
-        <location filename="../../fluid/fluidgui.cpp" line="282"/>
+        <location filename="../../fluid/fluidgui.cpp" line="288"/>
         <source>SoundFont %1 already loaded</source>
         <translation>Äänifontti %1 on jo ladattu</translation>
     </message>
     <message>
-        <location filename="../../fluid/fluidgui.cpp" line="317"/>
+        <location filename="../../fluid/fluidgui.cpp" line="323"/>
         <source>Cannot load SoundFont %1</source>
         <translation>Äänifontin %1 lataus ei onnistu</translation>
     </message>
@@ -4760,17 +4798,17 @@ space unit</extracomment>
 <context>
     <name>FontStyleSelect</name>
     <message>
-        <location filename="../../mscore/inspector/font_style_select.ui" line="44"/>
+        <location filename="../../mscore/inspector/font_style_select.ui" line="56"/>
         <source>Bold</source>
         <translation>Lihavoitu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/font_style_select.ui" line="64"/>
+        <location filename="../../mscore/inspector/font_style_select.ui" line="85"/>
         <source>Italic</source>
         <translation>Kursiivi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/font_style_select.ui" line="84"/>
+        <location filename="../../mscore/inspector/font_style_select.ui" line="114"/>
         <source>Underline</source>
         <translation>Alleviivattu</translation>
     </message>
@@ -4796,7 +4834,7 @@ space unit</extracomment>
 <context>
     <name>GreendotButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5446"/>
+        <location filename="../../mscore/musescore.cpp" line="5569"/>
         <source>Record</source>
         <translation>äänitä</translation>
     </message>
@@ -4880,22 +4918,22 @@ space unit</extracomment>
         <translation>Tilapäinen tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_accidental.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_accidental.ui" line="57"/>
         <source>Accidental</source>
         <translation>Tilapäinen etumerkintä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_accidental.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_accidental.ui" line="88"/>
         <source>Bracket type</source>
         <translation>Hakasulkeen tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_accidental.ui" line="89"/>
+        <location filename="../../mscore/inspector/inspector_accidental.ui" line="95"/>
         <source>Bracket type:</source>
         <translation>Hakasulkeen tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_accidental.ui" line="105"/>
+        <location filename="../../mscore/inspector/inspector_accidental.ui" line="111"/>
         <source>Small</source>
         <translation>Pieni</translation>
     </message>
@@ -4908,419 +4946,412 @@ space unit</extracomment>
         <translation>Ambituksen tarkistus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="57"/>
         <source>Ambitus</source>
         <translation>ääniala</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="581"/>
         <source>Head group:</source>
         <translation>Pääryhmä:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="471"/>
         <source>Head group</source>
         <translation>Pääryhmä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="102"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="478"/>
         <source>Normal</source>
         <translation>Normaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="107"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="483"/>
         <source>Cross</source>
         <translation>Ristiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="112"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="488"/>
         <source>Diamond</source>
         <translation>Timantti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="117"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="493"/>
         <source>Triangle</source>
         <translation>Triangeli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="498"/>
         <source>Slash</source>
         <translation>Kauttaviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="127"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="503"/>
         <source>XCircle</source>
         <translation>X-ympyrä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="508"/>
         <source>Do</source>
         <translation>Do</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="137"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="513"/>
         <source>Re</source>
         <translation>Re</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="142"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="518"/>
         <source>Mi</source>
         <translation>Mi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="147"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="523"/>
         <source>Fa</source>
         <translation>Fa</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="152"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="528"/>
         <source>Sol</source>
         <translation>Sol</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="157"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="533"/>
         <source>La</source>
         <translation>La</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="162"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="538"/>
         <source>Ti</source>
         <translation>Ti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="167"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="543"/>
         <source>Alt. Brevis</source>
         <translation>Alt.Brevis</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="175"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="600"/>
         <source>Line thickness</source>
         <translation>Viivan paksuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="178"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="603"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="191"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="105"/>
         <source>Bottom note:</source>
         <translation>Alin nuotti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="206"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="244"/>
         <source>Bottom note</source>
         <translation>Alin nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="224"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="476"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="262"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="639"/>
         <source>C♭♭</source>
         <translation>C♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="229"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="481"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="267"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="644"/>
         <source>C♭</source>
         <translation>C♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="234"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="486"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="272"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="649"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="239"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="491"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="277"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="654"/>
         <source>C♯</source>
         <translation>C♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="244"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="496"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="282"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="659"/>
         <source>C♯♯</source>
         <translation>C♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="249"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="501"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="287"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="664"/>
         <source>D♭♭</source>
         <translation>D♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="254"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="506"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="292"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="669"/>
         <source>D♭</source>
         <translation>D♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="259"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="511"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="297"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="674"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="264"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="516"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="302"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="679"/>
         <source>D♯</source>
         <translation>D♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="269"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="521"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="307"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="684"/>
         <source>D♯♯</source>
         <translation>D♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="274"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="526"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="312"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="689"/>
         <source>E♭♭</source>
         <translation>E♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="279"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="531"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="317"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="694"/>
         <source>E♭</source>
         <translation>E♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="284"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="536"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="322"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="699"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="289"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="541"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="327"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="704"/>
         <source>E♯</source>
         <translation>E♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="294"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="546"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="332"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="709"/>
         <source>E♯♯</source>
         <translation>E♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="299"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="551"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="337"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="714"/>
         <source>F♭♭</source>
         <translation>F♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="304"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="556"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="342"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="719"/>
         <source>F♭</source>
         <translation>F♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="309"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="561"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="347"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="724"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="314"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="566"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="352"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="729"/>
         <source>F♯</source>
         <translation>F♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="319"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="571"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="357"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="734"/>
         <source>F♯♯</source>
         <translation>F♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="324"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="576"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="362"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="739"/>
         <source>G♭♭</source>
         <translation>G♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="329"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="581"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="367"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="744"/>
         <source>G♭</source>
         <translation>G♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="334"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="586"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="372"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="749"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="339"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="591"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="377"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="754"/>
         <source>G♯</source>
         <translation>G♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="344"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="596"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="382"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="759"/>
         <source>G♯♯</source>
         <translation>G♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="349"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="601"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="387"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="764"/>
         <source>A♭♭</source>
         <translation>A♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="354"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="606"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="392"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="769"/>
         <source>A♭</source>
         <translation>A♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="359"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="611"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="397"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="774"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="364"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="616"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="402"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="779"/>
         <source>A♯</source>
         <translation>A♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="369"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="621"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="407"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="784"/>
         <source>A♯♯</source>
         <translation>A♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="374"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="626"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="412"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="789"/>
         <source>B♭♭</source>
         <translation>B♭♭</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="379"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="631"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="417"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="794"/>
         <source>B♭</source>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="384"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="636"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="422"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="799"/>
         <source>B</source>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="389"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="641"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="427"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="804"/>
         <source>B♯</source>
         <translation>B♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="394"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="646"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="432"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="809"/>
         <source>B♯♯</source>
         <translation>B♯♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="402"/>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="654"/>
-        <source>Oct.:</source>
-        <extracomment>Octave</extracomment>
-        <translation>Okt.:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="415"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="440"/>
         <source>Bottom octave</source>
-        <translation type="unfinished"/>
+        <translation>Alin oktaavi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="811"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="554"/>
         <source>Has line</source>
         <translation>Viiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="430"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="226"/>
         <source>Line thickness:</source>
         <translation>Viivan paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="443"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="203"/>
         <source>Top note:</source>
         <translation>Ylin nuotti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="458"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="621"/>
         <source>Top note</source>
         <translation>Ylin nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="667"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="817"/>
         <source>Top octave</source>
-        <translation type="unfinished"/>
+        <translation>Ylin oktaavi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="682"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="168"/>
         <source>Head type</source>
         <translation>Pään malli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="689"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="175"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="694"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="180"/>
         <source>Whole</source>
         <translation>Koko</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="699"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="185"/>
         <source>Half</source>
         <translation>Puoli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="704"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="190"/>
         <source>Quarter</source>
         <translation>Neljäsosa</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="709"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="195"/>
         <source>Breve</source>
         <translation>Brevis</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="717"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="118"/>
         <source>Head type:</source>
         <translation>Pään malli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="748"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="835"/>
         <source>Update Range</source>
         <translation>Päivitä alue</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="770"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="92"/>
         <source>Direction:</source>
         <translation>Suunta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="783"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="137"/>
         <source>Direction</source>
         <translation>Suunta</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="790"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="144"/>
         <source>Upright</source>
         <translation>Pysty</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="795"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="149"/>
         <source>Leaning Left</source>
         <translation>Kallistuu vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="800"/>
+        <location filename="../../mscore/inspector/inspector_ambitus.ui" line="154"/>
         <source>Leaning Right</source>
         <translation>Kallistuu oikealle</translation>
     </message>
@@ -5333,7 +5364,7 @@ space unit</extracomment>
         <translation>Arpeggiotarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="57"/>
         <source>Arpeggio</source>
         <translation>Arpeggio</translation>
     </message>
@@ -5348,7 +5379,7 @@ space unit</extracomment>
         <translation>Venytys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="102"/>
+        <location filename="../../mscore/inspector/inspector_arpeggio.ui" line="108"/>
         <source>Stretch</source>
         <translation>Venytys</translation>
     </message>
@@ -5361,102 +5392,102 @@ space unit</extracomment>
         <translation>Nivellyksen tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="57"/>
         <source>Articulation</source>
         <translation>Artikulaatio</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="130"/>
         <source>Direction:</source>
         <translation>Suunta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="143"/>
         <source>Anchor:</source>
         <translation>Ankkuri:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="88"/>
         <source>Anchor</source>
         <translation>Ankkuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="112"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="92"/>
         <source>Above Staff</source>
         <translation>Viivaston yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="117"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="97"/>
         <source>Below Staff</source>
         <translation>Viivaston alapuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="102"/>
         <source>Chord Automatic</source>
         <translation>Automaattinen sointu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="127"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="107"/>
         <source>Above Chord</source>
         <translation>Soinnun yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="112"/>
         <source>Below Chord</source>
         <translation>Soinnun alapuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="140"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="182"/>
         <source>Direction</source>
         <translation>Suunta</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="144"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="186"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="149"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="191"/>
         <source>Up</source>
         <translation>Ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="154"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="196"/>
         <source>Down</source>
         <translation>Alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="185"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="265"/>
         <source>Ornament style:</source>
         <translation>Korusävelten tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="198"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="281"/>
         <source>Ornament style</source>
         <translation>Korusävelten tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="162"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="239"/>
         <source>Time stretch:</source>
         <translation>Kesto:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="175"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="255"/>
         <source>Time stretch</source>
         <translation>Kesto</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="202"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="285"/>
         <source>Default</source>
         <translation>Oletus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="207"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="290"/>
         <source>Baroque</source>
         <translation>Barokki</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_articulation.ui" line="215"/>
+        <location filename="../../mscore/inspector/inspector_articulation.ui" line="204"/>
         <source>Play</source>
         <translation>Toista</translation>
     </message>
@@ -5469,77 +5500,77 @@ space unit</extracomment>
         <translation>Tahtiviivan tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="57"/>
         <source>Barline</source>
         <translation>Tahtiviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="147"/>
         <source>Style</source>
         <translation>Tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="159"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="252"/>
         <source>Short 1</source>
         <translation>Lyhyt 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="166"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="259"/>
         <source>Short 2</source>
         <translation>Lyhyt 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="177"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="156"/>
         <source>Default</source>
         <translation>Oletus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="184"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="163"/>
         <source>Tick 1</source>
         <translation>Rasti 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="191"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="170"/>
         <source>Tick 2</source>
         <translation>Rasti 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="200"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="179"/>
         <source>Span presets:</source>
         <translation>Jännevälin esiasetukset:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="207"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="243"/>
         <source>Span to next staff</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="214"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="284"/>
         <source>Set as staff default</source>
         <translation>Aseta oletusviivastoksi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="89"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="192"/>
         <source>Style:</source>
         <translation>Tyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="230"/>
         <source>Span from:</source>
         <translation>Venymä ylhäältä:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="131"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="211"/>
         <source>Span from</source>
         <translation>Venymä ylhäältä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="144"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="128"/>
         <source>Span to:</source>
         <translation>Venymä alhaalta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_barline.ui" line="121"/>
+        <location filename="../../mscore/inspector/inspector_barline.ui" line="274"/>
         <source>Span to</source>
         <translation>Venymä alhaalta</translation>
     </message>
@@ -5552,29 +5583,39 @@ space unit</extracomment>
         <translation>Palkin tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="57"/>
         <source>Beam</source>
         <translation>Palkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="177"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="182"/>
+        <source>Force horizontal</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="195"/>
         <source>Direction</source>
         <translation>Suunta</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="181"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="199"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="186"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="204"/>
         <source>Up</source>
         <translation>Ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="191"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="209"/>
         <source>Down</source>
         <translation>Alas</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="220"/>
+        <source>Custom position</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_beam.ui" line="92"/>
@@ -5597,29 +5638,19 @@ space unit</extracomment>
         <translation>Sijainti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="131"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="137"/>
         <source>Grow left</source>
         <translation>Kasvata vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="144"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="156"/>
         <source>Grow right</source>
         <translation>Kasvata oikealle</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="160"/>
+        <location filename="../../mscore/inspector/inspector_beam.ui" line="172"/>
         <source>Local relayout</source>
         <translation>Paikallinen uudelleenvälistys</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="202"/>
-        <source>User position</source>
-        <translation>Käyttäjän sijainti</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_beam.ui" line="170"/>
-        <source>Horizontal</source>
-        <translation>Vaakasuora</translation>
     </message>
 </context>
 <context>
@@ -5630,62 +5661,62 @@ space unit</extracomment>
         <translation>Taivutuksen tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="50"/>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="60"/>
         <source>Bend</source>
         <translation>Venytys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="85"/>
-        <source>Font size:</source>
-        <translation>Fonttikoko:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="104"/>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="91"/>
         <source>Play</source>
         <translation>Toista</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="143"/>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="98"/>
+        <source>Style:</source>
+        <translation>Tyyli:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="114"/>
+        <source>Line thickness</source>
+        <translation>Viivan paksuus</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="151"/>
+        <source>Font:</source>
+        <translation>Fontti:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="164"/>
+        <source>Line thickness:</source>
+        <translation>Viivan paksuus:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="226"/>
+        <source>Size:</source>
+        <translation>Koko:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="261"/>
         <source>Font face</source>
         <translation>Fontin ulkoasu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="150"/>
-        <source>Font face:</source>
-        <translation>Kirjasin:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="163"/>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="193"/>
         <source>Font size</source>
         <translation>Fonttikoko</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="166"/>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="196"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="176"/>
-        <source>Font style:</source>
-        <translation>Fonttityyli:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="186"/>
-        <source>Line width:</source>
-        <translation>viivan leveys:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="199"/>
-        <source>Line width</source>
-        <translation>Viivan leveys</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="202"/>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="117"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bend.ui" line="111"/>
+        <location filename="../../mscore/inspector/inspector_bend.ui" line="278"/>
         <source>Properties</source>
         <translation>Ominaisuudet</translation>
     </message>
@@ -5698,17 +5729,17 @@ space unit</extracomment>
         <translation>Bracket Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bracket.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_bracket.ui" line="57"/>
         <source>Bracket</source>
         <translation>Hakasulje</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bracket.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_bracket.ui" line="88"/>
         <source>Column</source>
         <translation>Sarake</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_bracket.ui" line="89"/>
+        <location filename="../../mscore/inspector/inspector_bracket.ui" line="95"/>
         <source>Column:</source>
         <translation>Sarake:</translation>
     </message>
@@ -5721,7 +5752,7 @@ space unit</extracomment>
         <translation>Layout Break Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_break.ui" line="44"/>
+        <location filename="../../mscore/inspector/inspector_break.ui" line="54"/>
         <source>Layout Break</source>
         <translation>Ulkoasu katkaisu</translation>
     </message>
@@ -5734,23 +5765,23 @@ space unit</extracomment>
         <translation>Breath/Caesura Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_caesura.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="57"/>
         <source>Breath/Caesura</source>
         <translation>Hengitys/kesuura</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_caesura.ui" line="85"/>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="91"/>
         <source>s</source>
         <extracomment>seconds</extracomment>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_caesura.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="107"/>
         <source>Pause:</source>
         <translation>Pysäytä:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_caesura.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_caesura.ui" line="88"/>
         <source>Pause</source>
         <translation>Pysäytä</translation>
     </message>
@@ -5763,47 +5794,47 @@ space unit</extracomment>
         <translation>Sointutarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="57"/>
         <source>Chord</source>
         <translation>Sointu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="116"/>
         <source>Stem direction:</source>
         <translation>Varren suunta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="88"/>
         <source>Stem direction</source>
         <translation>Varren suunta</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="99"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="92"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="104"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="97"/>
         <source>Up</source>
         <translation>Ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="109"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="102"/>
         <source>Down</source>
         <translation>Alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="117"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="220"/>
         <source>Offset:</source>
         <translation>Poikkeama:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="133"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="154"/>
         <source>Small</source>
         <translation>Pieni</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_chord.ui" line="143"/>
+        <location filename="../../mscore/inspector/inspector_chord.ui" line="193"/>
         <source>Stemless</source>
         <translation>Varreton</translation>
     </message>
@@ -5816,12 +5847,12 @@ space unit</extracomment>
         <translation>Nuottiavaintarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_clef.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_clef.ui" line="60"/>
         <source>Clef</source>
         <translation>Nuottiavain</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_clef.ui" line="91"/>
+        <location filename="../../mscore/inspector/inspector_clef.ui" line="94"/>
         <source>Show courtesy</source>
         <translation>Näytä ennakkovaroitus</translation>
     </message>
@@ -5834,62 +5865,97 @@ space unit</extracomment>
         <translation>Dynamiikkatarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="57"/>
         <source>Dynamic</source>
         <translation>Dynamiikka</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="191"/>
         <source>Dynamic range:</source>
         <translation>Dynaaminen alue:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="118"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="240"/>
         <source>Dynamic range</source>
         <translation>Dynaaminen alue</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="140"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="204"/>
         <source>Style:</source>
         <translation>Tyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="153"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="98"/>
         <source>Style</source>
         <translation>Tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="160"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="262"/>
+        <source>Velocity change:</source>
+        <translation>Nopeuden muutos:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="291"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="177"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="272"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="105"/>
         <source>Velocity:</source>
         <translation>Voimakkuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="134"/>
         <source>Velocity</source>
         <translation>Voimakkuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="154"/>
+        <source>Slow</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="159"/>
+        <source>Normal</source>
+        <translation>Normaali</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="164"/>
+        <source>Fast</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="178"/>
+        <source>Velocity change</source>
+        <translation>Voimakkuuden muutos</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="227"/>
+        <source>Velocity change speed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="230"/>
+        <source>Change speed:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="244"/>
         <source>Staff</source>
         <translation>Viivasto</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="127"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="249"/>
         <source>Part</source>
         <translation>Stemma</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_dynamic.ui" line="254"/>
         <source>System</source>
         <translation>Systeemi</translation>
     </message>
@@ -5902,47 +5968,47 @@ space unit</extracomment>
         <translation>Elementin tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="50"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="63"/>
         <source>Element</source>
         <translation>Elementti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="85"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="231"/>
         <source>Automatic placement</source>
         <translation>Automaattinen sijoittelu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="92"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="238"/>
+        <source>Stacking order (Z):</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="270"/>
         <source>Offset</source>
         <translation>Poikkeama:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="112"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="254"/>
         <source>Offset:</source>
         <translation>Poikkeama:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="163"/>
-        <source>Stacking order:</source>
-        <translation>Pinoamisjärjestys:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="176"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="94"/>
         <source>Stacking order</source>
         <translation>Pinoamisjärjestys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="99"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="191"/>
         <source>Color:</source>
         <translation>Väri:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="135"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="210"/>
         <source>Color</source>
         <translation>Väri</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_element.ui" line="128"/>
+        <location filename="../../mscore/inspector/inspector_element.ui" line="158"/>
         <source>Visible</source>
         <translation>Näkyvä</translation>
     </message>
@@ -5968,42 +6034,42 @@ space unit</extracomment>
         <translation>Fermaattitarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fermata.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_fermata.ui" line="57"/>
         <source>Fermata</source>
         <translation>Fermaatti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fermata.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_fermata.ui" line="131"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fermata.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_fermata.ui" line="150"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fermata.ui" line="99"/>
+        <location filename="../../mscore/inspector/inspector_fermata.ui" line="154"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fermata.ui" line="104"/>
+        <location filename="../../mscore/inspector/inspector_fermata.ui" line="159"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fermata.ui" line="112"/>
+        <location filename="../../mscore/inspector/inspector_fermata.ui" line="118"/>
         <source>Time stretch:</source>
         <translation>Kesto:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fermata.ui" line="125"/>
+        <location filename="../../mscore/inspector/inspector_fermata.ui" line="88"/>
         <source>Time stretch</source>
         <translation>Kesto</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fermata.ui" line="135"/>
+        <location filename="../../mscore/inspector/inspector_fermata.ui" line="167"/>
         <source>Play</source>
         <translation>Toista</translation>
     </message>
@@ -6016,17 +6082,17 @@ space unit</extracomment>
         <translation>Sormituksen tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fingering.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_fingering.ui" line="57"/>
         <source>Fingering</source>
         <translation>Sormitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fingering.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_fingering.ui" line="88"/>
         <source>Style</source>
         <translation>Tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fingering.ui" line="89"/>
+        <location filename="../../mscore/inspector/inspector_fingering.ui" line="95"/>
         <source>Style:</source>
         <translation>Tyyli:</translation>
     </message>
@@ -6039,17 +6105,17 @@ space unit</extracomment>
         <translation>Tekstikehyksen tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_frametext.ui" line="39"/>
+        <location filename="../../mscore/inspector/inspector_frametext.ui" line="49"/>
         <source>Frame Text</source>
         <translation>Tekstikehys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_frametext.ui" line="74"/>
+        <location filename="../../mscore/inspector/inspector_frametext.ui" line="77"/>
         <source>Style:</source>
         <translation>Tyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_frametext.ui" line="87"/>
+        <location filename="../../mscore/inspector/inspector_frametext.ui" line="96"/>
         <source>Style</source>
         <translation>Tyyli</translation>
     </message>
@@ -6062,69 +6128,165 @@ space unit</extracomment>
         <translation>Fretboard Diagram Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="50"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="66"/>
         <source>Fretboard Diagram</source>
         <translation>Otelautakuva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="97"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="136"/>
+        <source>Above</source>
+        <translation>Yläpuolella</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="141"/>
+        <source>Below</source>
+        <translation>Alapuolella</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="149"/>
+        <source>Fret number:</source>
+        <translation>Nauhan koko:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="242"/>
+        <source>Reset show nut</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="262"/>
+        <source>Fret number</source>
+        <translation>Nauhan koko</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="282"/>
         <source>Scale:</source>
         <translation>Skaala:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="107"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="306"/>
+        <source>Use square symbol</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="309"/>
+        <source>□</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="331"/>
+        <source>Use cross symbol</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="334"/>
+        <source>X</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="356"/>
+        <source>Use triangle symbol</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="359"/>
+        <source>△</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="381"/>
+        <source>Use black dot symbol</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="384"/>
+        <source>⚫</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="406"/>
+        <source>Add a barre (shift)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="409"/>
+        <source>Add a barre</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="412"/>
+        <source>Barre</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="437"/>
+        <source>Clear the fret diagram</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="440"/>
+        <source>Clear</source>
+        <translation>Tyhjennä</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="459"/>
+        <source>Add multiple dots per string (ctrl)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="465"/>
+        <source>Add multiple dots per string</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="468"/>
+        <source>Multiple dots</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="480"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="483"/>
+        <source>Show nut</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="223"/>
         <source>Scale</source>
         <translation>Mittakaava</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="126"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="272"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="136"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="132"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="153"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="184"/>
         <source>Frets:</source>
         <translation>Nauhat:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="163"/>
-        <source>Barré:</source>
-        <translation>Barré:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="173"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="194"/>
         <source>Strings:</source>
         <translation>Kielet:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="183"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="100"/>
         <source>Frets</source>
         <translation>Nauhat:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="193"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="116"/>
         <source>Strings</source>
         <translation>Jouset</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="203"/>
+        <location filename="../../mscore/inspector/inspector_fret.ui" line="207"/>
         <source>Barré</source>
         <translation>Barré</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="210"/>
-        <source>Offset:</source>
-        <translation>Poikkeama:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_fret.ui" line="220"/>
-        <source>Offset</source>
-        <translation>Poikkeama</translation>
     </message>
 </context>
 <context>
@@ -6135,123 +6297,107 @@ space unit</extracomment>
         <translation>Glissando-tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="57"/>
         <source>Glissando</source>
         <translation>Glissando</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="252"/>
+        <source>Size:</source>
+        <translation>Koko:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="285"/>
         <source>Text:</source>
         <translation>Teksti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="95"/>
-        <source>Font size:</source>
-        <translation>Fonttikoko:</translation>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="305"/>
+        <source>Font:</source>
+        <translation>Fontti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="145"/>
         <source>Type:</source>
         <translation>Tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="121"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="99"/>
         <source>Play style:</source>
         <translation>Soittotyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="134"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="174"/>
         <source>Play style</source>
         <translation>Soittotyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="143"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="183"/>
         <source>White Keys</source>
         <translation>Valkoiset koskettimet</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="148"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="188"/>
         <source>Black Keys</source>
         <translation>Mustat koskettimet</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="195"/>
-        <source>Font face:</source>
-        <translation>Kirjasin:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="214"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="268"/>
         <source>Font face</source>
         <translation>Fontin ulkoasu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="221"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="239"/>
         <source>Font size</source>
         <translation>Fonttikoko</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="224"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="242"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="244"/>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="297"/>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="311"/>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="325"/>
-        <source>Reset to default</source>
-        <translation>Palauta oletukset</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="234"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="275"/>
         <source>Style:</source>
         <translation>Tyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="138"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="178"/>
         <source>Chromatic</source>
         <translation>Kromaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="153"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="193"/>
         <source>Diatonic</source>
         <translation>Diatoninen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="161"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="128"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="165"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="132"/>
         <source>Straight</source>
         <translation>Vakaa</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="170"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="137"/>
         <source>Wavy</source>
         <translation>Aaltoileva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="247"/>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="300"/>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="314"/>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="328"/>
-        <source>Reset &apos;Font size&apos; value</source>
-        <translation>Palauta &apos;fonttikoko&apos; arvo</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="258"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="331"/>
         <source>Text</source>
         <translation>Teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="181"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="214"/>
         <source>Show text</source>
         <translation>Näytä teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_glissando.ui" line="188"/>
+        <location filename="../../mscore/inspector/inspector_glissando.ui" line="82"/>
         <source>Play</source>
         <translation>Toista</translation>
     </message>
@@ -6264,7 +6410,7 @@ space unit</extracomment>
         <translation>Elementtiryhmän tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_group_element.ui" line="39"/>
+        <location filename="../../mscore/inspector/inspector_group_element.ui" line="49"/>
         <source>Element Group</source>
         <translation>Elementtiryhmä</translation>
     </message>
@@ -6288,6 +6434,16 @@ space unit</extracomment>
         <source>Set Invisible</source>
         <translation>Aseta näkymättömäksi</translation>
     </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_group_element.ui" line="117"/>
+        <source>Enable Autoplace</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_group_element.ui" line="127"/>
+        <source>Disable Autoplace</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>InspectorHBox</name>
@@ -6297,52 +6453,52 @@ space unit</extracomment>
         <translation>Vaakasuoran kehyksen tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="60"/>
         <source>Horizontal Frame</source>
         <translation>Vaakasuora kehys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="91"/>
         <source>Right gap</source>
         <translation>OIkea tyhjä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="85"/>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="117"/>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="133"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="94"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="154"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="110"/>
         <source>Width:</source>
         <translation>Leveys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="114"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="129"/>
         <source>Width</source>
         <translation>Leveys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="130"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="151"/>
         <source>Left gap</source>
         <translation>Vasen tyhjä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="149"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="170"/>
         <source>Left gap:</source>
         <translation>Vasen aukko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="162"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="183"/>
         <source>Right gap:</source>
         <translation>Oikea aukko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hbox.ui" line="175"/>
+        <location filename="../../mscore/inspector/inspector_hbox.ui" line="196"/>
         <source>Create system header</source>
-        <translation type="unfinished"/>
+        <translation>Luo järjestelmän otsikko</translation>
     </message>
 </context>
 <context>
@@ -6353,113 +6509,135 @@ space unit</extracomment>
         <translation>Dynamiikkaviivan tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="60"/>
         <source>Hairpin</source>
         <translation>Dynamiikkaviivat</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="117"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="101"/>
+        <source>Dynamics change method</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="105"/>
+        <source>Default (linear)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="223"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="226"/>
+        <source>Use single note dynamics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="285"/>
+        <source>Dynamics method:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="439"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="121"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="443"/>
         <source>Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="126"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="448"/>
         <source>Decrescendo</source>
         <translation>Decrescendo</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="134"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="236"/>
         <source>Dynamic range:</source>
         <translation>Dynaaminen alue:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="147"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="356"/>
         <source>Continue height:</source>
         <translation>Jatka korkeutta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="98"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="113"/>
         <source>Velocity change:</source>
         <translation>Nopeuden muutos:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="88"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="213"/>
         <source>Velocity change</source>
         <translation>Voimakkuuden muutos</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="160"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="323"/>
         <source>Height:</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="173"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="401"/>
         <source>Height</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="176"/>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="202"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="385"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="404"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="186"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="272"/>
         <source>Type:</source>
         <translation>Tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="199"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="382"/>
         <source>Continue height</source>
         <translation>Jatka korkeutta</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="212"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="152"/>
         <source>Dynamic range</source>
         <translation>Dynaaminen alue</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="216"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="156"/>
         <source>Staff</source>
         <translation>Viivasto</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="221"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="161"/>
         <source>Part</source>
         <translation>Stemma</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="226"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="166"/>
         <source>System</source>
         <translation>Systeemi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="234"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="249"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="247"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="180"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="251"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="184"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="256"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="189"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="267"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="336"/>
+        <location filename="../../mscore/inspector/inspector_hairpin.ui" line="339"/>
         <source>Circled tip</source>
         <translation>Pyöristetty kärki</translation>
     </message>
@@ -6472,7 +6650,7 @@ space unit</extracomment>
         <translation>Sointumerkkitarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_harmony.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_harmony.ui" line="57"/>
         <source>Chord Symbol</source>
         <translation>Sointumerkki</translation>
     </message>
@@ -6482,19 +6660,29 @@ space unit</extracomment>
         <translation>Tyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_harmony.ui" line="92"/>
+        <location filename="../../mscore/inspector/inspector_harmony.ui" line="101"/>
         <source>Style</source>
         <translation>Tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_harmony.ui" line="99"/>
+        <location filename="../../mscore/inspector/inspector_harmony.ui" line="108"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_harmony.ui" line="112"/>
+        <location filename="../../mscore/inspector/inspector_harmony.ui" line="127"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_harmony.ui" line="131"/>
+        <source>Above</source>
+        <translation>Yläpuolella</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_harmony.ui" line="136"/>
+        <source>Below</source>
+        <translation>Alapuolella</translation>
     </message>
 </context>
 <context>
@@ -6505,7 +6693,7 @@ space unit</extracomment>
         <translation>Kuvatarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_image.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_image.ui" line="57"/>
         <source>Image</source>
         <translation>Kuva</translation>
     </message>
@@ -6548,19 +6736,19 @@ space unit</extracomment>
         <translation>Instrument Name Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_iname.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_iname.ui" line="57"/>
         <source>Instrument Name</source>
         <translation>Soittimen nimi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_iname.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_iname.ui" line="88"/>
         <source>Layout position</source>
-        <translation type="unfinished"/>
+        <translation>Ulkoasun sijainti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_iname.ui" line="92"/>
+        <location filename="../../mscore/inspector/inspector_iname.ui" line="98"/>
         <source>Layout position:</source>
-        <translation type="unfinished"/>
+        <translation>Ulkoasun sijainti:</translation>
     </message>
 </context>
 <context>
@@ -6571,7 +6759,7 @@ space unit</extracomment>
         <translation>Change Instrument Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_instrchange.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_instrchange.ui" line="57"/>
         <source>Change Instrument</source>
         <translation>Vaihda instrumentti</translation>
     </message>
@@ -6581,7 +6769,7 @@ space unit</extracomment>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_instrchange.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_instrchange.ui" line="101"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
@@ -6594,7 +6782,7 @@ space unit</extracomment>
         <translation>Hypyn tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_jump.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_jump.ui" line="57"/>
         <source>Jump</source>
         <translation>Hyppy</translation>
     </message>
@@ -6642,12 +6830,12 @@ space unit</extracomment>
         <translation>Tahtilajimerkinnän tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_keysig.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_keysig.ui" line="57"/>
         <source>Key Signature</source>
         <translation>Sävellajimerkintä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_keysig.ui" line="85"/>
+        <location filename="../../mscore/inspector/inspector_keysig.ui" line="91"/>
         <source>Show courtesy</source>
         <translation>Näytä ennakkovaroitus</translation>
     </message>
@@ -6660,7 +6848,7 @@ space unit</extracomment>
         <translation>Lasson tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_lasso.ui" line="39"/>
+        <location filename="../../mscore/inspector/inspector_lasso.ui" line="49"/>
         <source>Lasso</source>
         <translation>Lasso</translation>
     </message>
@@ -6693,7 +6881,7 @@ space unit</extracomment>
         <translation>Let Ring Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_letring.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_letring.ui" line="57"/>
         <source>Let Ring</source>
         <translation>Anna soida</translation>
     </message>
@@ -6703,17 +6891,17 @@ space unit</extracomment>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_letring.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_letring.ui" line="101"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_letring.ui" line="99"/>
+        <location filename="../../mscore/inspector/inspector_letring.ui" line="105"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_letring.ui" line="104"/>
+        <location filename="../../mscore/inspector/inspector_letring.ui" line="110"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
@@ -6726,103 +6914,103 @@ space unit</extracomment>
         <translation>Viivan tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="60"/>
         <source>Line</source>
         <translation>Viiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="85"/>
         <source>Line color:</source>
         <translation>Viivan väri:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="98"/>
         <source>Line thickness:</source>
         <translation>Viivan paksuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="111"/>
         <source>Line style:</source>
         <translation>Viivatyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="124"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="127"/>
         <source>Allow diagonal</source>
         <translation>Salli diagonaalinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="137"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="140"/>
         <source>Line color</source>
         <translation>Viivan väri</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="182"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="185"/>
         <source>Custom dashed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="200"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="203"/>
         <source>Dash gap width:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="213"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="216"/>
         <source>Dash line length:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="232"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="235"/>
         <source>Line thickness</source>
         <translation>Viivan paksuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="235"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="238"/>
         <source>sp</source>
         <extracomment>Staff space unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="245"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="248"/>
         <source>Dash line length</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="261"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="264"/>
         <source>Dash gap width</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="153"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="156"/>
         <source>Line style</source>
         <translation>Viivan tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="157"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="160"/>
         <source>Continuous</source>
         <translation>Jatkuva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="162"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="165"/>
         <source>Dashed</source>
         <translation>Katkoviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="167"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="170"/>
         <source>Dotted</source>
         <translation>Pisteviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="172"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="175"/>
         <source>Dash-dotted</source>
         <translation>Katkopisteviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="177"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="180"/>
         <source>Dash-dot-dotted</source>
         <translation>Katko-piste-piste</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_line.ui" line="193"/>
+        <location filename="../../mscore/inspector/inspector_line.ui" line="196"/>
         <source>Line visible</source>
         <translation>Viiva näkyvä</translation>
     </message>
@@ -6835,7 +7023,7 @@ space unit</extracomment>
         <translation>Sanoituksen tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_lyric.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_lyric.ui" line="57"/>
         <source>Lyrics</source>
         <translation>Sanoitus</translation>
     </message>
@@ -6845,27 +7033,27 @@ space unit</extracomment>
         <translation>Tyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_lyric.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_lyric.ui" line="101"/>
         <source>Style</source>
         <translation>Tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_lyric.ui" line="102"/>
+        <location filename="../../mscore/inspector/inspector_lyric.ui" line="108"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_lyric.ui" line="115"/>
+        <location filename="../../mscore/inspector/inspector_lyric.ui" line="127"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_lyric.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_lyric.ui" line="144"/>
         <source>Verse:</source>
         <translation>Säkeistö:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_lyric.ui" line="145"/>
+        <location filename="../../mscore/inspector/inspector_lyric.ui" line="163"/>
         <source>Verse</source>
         <translation>säkeistö:</translation>
     </message>
@@ -6878,7 +7066,7 @@ space unit</extracomment>
         <translation>Merkin tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="39"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="49"/>
         <source>Marker</source>
         <translation>Merkki</translation>
     </message>
@@ -6888,57 +7076,57 @@ space unit</extracomment>
         <translation>Etiketti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="87"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="93"/>
         <source>Label</source>
         <translation>Etiketti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="98"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="110"/>
         <source>Segno</source>
         <translation>Segno</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="120"/>
         <source>Coda</source>
         <translation>Kooda</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="94"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="106"/>
         <source>Marker type</source>
         <translation>Merkin tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="103"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="115"/>
         <source>Segno Variation</source>
         <translation>Segno</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="113"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="125"/>
         <source>Varied Coda</source>
-        <translation type="unfinished"/>
+        <translation>Muuttuva coda</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="118"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="130"/>
         <source>Codetta</source>
         <translation>Codetta</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="123"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="135"/>
         <source>Fine</source>
         <translation>Fine</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="128"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="140"/>
         <source>To Coda</source>
         <translation>Koodaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="133"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="145"/>
         <source>Custom</source>
         <translation>Muokattu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_marker.ui" line="141"/>
+        <location filename="../../mscore/inspector/inspector_marker.ui" line="153"/>
         <source>Marker type:</source>
         <translation>Merkin tyyppi:</translation>
     </message>
@@ -6951,164 +7139,159 @@ space unit</extracomment>
         <translation>Nuottitarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="57"/>
         <source>Note</source>
         <translation>Nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="343"/>
         <source>Head group</source>
         <translation>Pääryhmä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="92"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="566"/>
+        <source>Fix to line:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="589"/>
         <source>Line</source>
         <translation>Viiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="105"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="429"/>
         <source>Velocity type</source>
         <translation>Voimakkuuden tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="109"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="433"/>
         <source>Offset</source>
         <translation>Poikkeama</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="114"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="438"/>
         <source>User</source>
         <translation>Käyttäjä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="516"/>
         <source>Velocity</source>
         <translation>Voimakkuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="155"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="187"/>
         <source>Mirror head</source>
-        <translation type="unfinished"/>
+        <translation>Peilaa pää</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="284"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="330"/>
         <source>Play</source>
         <translation>Toista</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="360"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="238"/>
         <source>Select</source>
         <translation>Valitse</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="375"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="149"/>
         <source>Dot 3</source>
         <translation>Piste 3</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="382"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="136"/>
         <source>Dot 2</source>
         <translation>Piste 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="389"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="123"/>
         <source>Dot 1</source>
         <translation>Piste 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="396"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="162"/>
         <source>Dot 4</source>
         <translation>Piste 4</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="403"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="269"/>
         <source>Hook</source>
         <translation>Väkä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="410"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="256"/>
         <source>Stem</source>
         <translation>Varsi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="417"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="282"/>
         <source>Beam</source>
         <translation>Palkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="424"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="295"/>
         <source>Tuplet</source>
         <translation>Poikkeusjako</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="135"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="369"/>
         <source>Head type</source>
         <translation>Pään malli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="159"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="191"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="142"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="209"/>
         <source>Mirror head:</source>
         <translation>Peilaa nupin pää:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="164"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="196"/>
         <source>Left</source>
         <translation>Vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="169"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="201"/>
         <source>Right</source>
         <translation>Oikealle</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="177"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="468"/>
         <source>Tuning</source>
         <translation>Viritys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="193"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="304"/>
         <source>Head type:</source>
         <translation>Pään malli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="206"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="376"/>
         <source>Head group:</source>
         <translation>Pääryhmä:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="219"/>
-        <source>Line:</source>
-        <translation>Viiva;</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="232"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="529"/>
         <source>Velocity:</source>
         <translation>Voimakkuus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="245"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="539"/>
         <source>Tuning:</source>
         <translation>Viritys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="274"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="95"/>
         <source>Small</source>
         <translation>Pieni</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="258"/>
+        <location filename="../../mscore/inspector/inspector_note.ui" line="500"/>
         <source>Velocity type:</source>
         <translation>Voimakkuuden tyyppi:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_note.ui" line="294"/>
-        <source>Fix to line</source>
-        <translation>Sovita viivastolle</translation>
     </message>
 </context>
 <context>
@@ -7119,7 +7302,7 @@ space unit</extracomment>
         <translation>Note Dot Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_notedot.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_notedot.ui" line="57"/>
         <source>Note Dot</source>
         <translation>Nuotin piste</translation>
     </message>
@@ -7129,22 +7312,22 @@ space unit</extracomment>
         <translation>Pisteen paikka:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_notedot.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_notedot.ui" line="101"/>
         <source>Dot position</source>
         <translation>Pisteen paikka</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_notedot.ui" line="99"/>
+        <location filename="../../mscore/inspector/inspector_notedot.ui" line="105"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_notedot.ui" line="104"/>
+        <location filename="../../mscore/inspector/inspector_notedot.ui" line="110"/>
         <source>Top</source>
         <translation>Ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_notedot.ui" line="109"/>
+        <location filename="../../mscore/inspector/inspector_notedot.ui" line="115"/>
         <source>Bottom</source>
         <translation>Alas</translation>
     </message>
@@ -7157,7 +7340,7 @@ space unit</extracomment>
         <translation>Ottava-tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="57"/>
         <source>Ottava</source>
         <translation>Ottava</translation>
     </message>
@@ -7172,57 +7355,57 @@ space unit</extracomment>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="114"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="112"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="118"/>
         <source>8va alta</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="117"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="123"/>
         <source>8va bassa</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="128"/>
         <source>15ma alta</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="127"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="133"/>
         <source>15ma bassa</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="138"/>
         <source>22ma alta</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="137"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="143"/>
         <source>22ma bassa</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="145"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="157"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="149"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="161"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="154"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="166"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_ottava.ui" line="165"/>
+        <location filename="../../mscore/inspector/inspector_ottava.ui" line="177"/>
         <source>Numbers only</source>
         <translation>Vain numeroita</translation>
     </message>
@@ -7235,7 +7418,7 @@ space unit</extracomment>
         <translation>Palm Mute Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_palmmute.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_palmmute.ui" line="57"/>
         <source>Palm Mute</source>
         <translation>Demppaus</translation>
     </message>
@@ -7245,17 +7428,17 @@ space unit</extracomment>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_palmmute.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_palmmute.ui" line="101"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_palmmute.ui" line="99"/>
+        <location filename="../../mscore/inspector/inspector_palmmute.ui" line="105"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_palmmute.ui" line="104"/>
+        <location filename="../../mscore/inspector/inspector_palmmute.ui" line="110"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
@@ -7268,7 +7451,7 @@ space unit</extracomment>
         <translation>Pedal Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_pedal.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_pedal.ui" line="57"/>
         <source>Pedal</source>
         <translation>Pedaali</translation>
     </message>
@@ -7278,17 +7461,17 @@ space unit</extracomment>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_pedal.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_pedal.ui" line="101"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_pedal.ui" line="99"/>
+        <location filename="../../mscore/inspector/inspector_pedal.ui" line="105"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_pedal.ui" line="104"/>
+        <location filename="../../mscore/inspector/inspector_pedal.ui" line="110"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
@@ -7301,12 +7484,12 @@ space unit</extracomment>
         <translation>Tauon tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_rest.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_rest.ui" line="60"/>
         <source>Rest</source>
         <translation>Tauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_rest.ui" line="85"/>
+        <location filename="../../mscore/inspector/inspector_rest.ui" line="88"/>
         <source>Small</source>
         <translation>Pieni</translation>
     </message>
@@ -7319,23 +7502,23 @@ space unit</extracomment>
         <translation>Kaaren tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_segment.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_segment.ui" line="57"/>
         <source>Segment</source>
         <translation>Segmentti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_segment.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_segment.ui" line="111"/>
         <source>Leading space</source>
         <translation>Lisätila</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_segment.ui" line="85"/>
+        <location filename="../../mscore/inspector/inspector_segment.ui" line="114"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_segment.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_segment.ui" line="92"/>
         <source>Leading space:</source>
         <translation>Lisätila edessä:</translation>
     </message>
@@ -7343,17 +7526,17 @@ space unit</extracomment>
 <context>
     <name>InspectorSlur</name>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="57"/>
         <source>Slur/Tie</source>
         <translation>Kaari</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="109"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="115"/>
         <source>Line type:</source>
         <translation>Viivan tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="88"/>
         <source>Line type</source>
         <translation>Viivan tyyppi</translation>
     </message>
@@ -7363,47 +7546,47 @@ space unit</extracomment>
         <translation>Slur/Tie Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="86"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="92"/>
         <source>Continuous</source>
         <translation>Jatkuva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="91"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="97"/>
         <source>Dotted</source>
         <translation>Pisteviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="96"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="102"/>
         <source>Dashed</source>
         <translation>Katkoviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="107"/>
         <source>Wide Dashed</source>
         <translation>Wide Dashed</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="128"/>
         <source>Direction:</source>
         <translation>Suunta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="135"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="147"/>
         <source>Direction</source>
         <translation>Suunta</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="139"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="151"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="144"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="156"/>
         <source>Up</source>
         <translation>Ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_slur.ui" line="149"/>
+        <location filename="../../mscore/inspector/inspector_slur.ui" line="161"/>
         <source>Down</source>
         <translation>Alas</translation>
     </message>
@@ -7416,7 +7599,7 @@ space unit</extracomment>
         <translation>Välistäjän tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_spacer.ui" line="39"/>
+        <location filename="../../mscore/inspector/inspector_spacer.ui" line="49"/>
         <source>Spacer</source>
         <translation>Välistäjä</translation>
     </message>
@@ -7426,12 +7609,12 @@ space unit</extracomment>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_spacer.ui" line="87"/>
+        <location filename="../../mscore/inspector/inspector_spacer.ui" line="93"/>
         <source>Height</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_spacer.ui" line="90"/>
+        <location filename="../../mscore/inspector/inspector_spacer.ui" line="96"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
@@ -7445,27 +7628,27 @@ space unit</extracomment>
         <translation>Staff/System Text Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftext.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_stafftext.ui" line="60"/>
         <source>Staff/System Text</source>
         <translation>Viivaston/systeemin teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftext.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_stafftext.ui" line="130"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftext.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_stafftext.ui" line="162"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftext.ui" line="112"/>
+        <location filename="../../mscore/inspector/inspector_stafftext.ui" line="101"/>
         <source>Style:</source>
         <translation>Tyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftext.ui" line="125"/>
+        <location filename="../../mscore/inspector/inspector_stafftext.ui" line="123"/>
         <source>Style</source>
         <translation>Tyyli</translation>
     </message>
@@ -7478,100 +7661,100 @@ space unit</extracomment>
         <translation>Staff Type Change Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="50"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="60"/>
         <source>Staff Type Change</source>
         <translation>Viivastotyylin muuttaminen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="84"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="291"/>
         <source>Lines:</source>
         <translation>Viivat:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="97"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="244"/>
         <source>Lines</source>
         <translation>Viivat</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="110"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="177"/>
         <source>Step offset:</source>
         <translation>Askelpoikkeama:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="123"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="91"/>
         <source>Step offset</source>
         <translation>Askelpoikkeama</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="136"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="321"/>
         <source>Line distance:</source>
         <translation>Viivojen välimatka:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="149"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="147"/>
         <source>Line distance</source>
         <translation>Viivan etäisyys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="152"/>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="294"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="150"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="196"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="171"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="114"/>
         <source>Slash style</source>
         <translation>Varreton tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="181"/>
-        <source>Notehead scheme</source>
-        <translation type="unfinished"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="311"/>
+        <source>Offset:</source>
+        <translation>Poikkeama:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="188"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="337"/>
+        <source>Notehead scheme</source>
+        <translation>Nuotinpään rakenne:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="447"/>
         <source>Notehead scheme:</source>
         <translation>Nuotinpään rakenne:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="201"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="369"/>
         <source>Show barlines</source>
         <translation>Näytä tahtiviivat</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="208"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="160"/>
         <source>Show ledger lines</source>
         <translation>Näytä apuviivat</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="215"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="420"/>
         <source>Generate clefs</source>
-        <translation type="unfinished"/>
+        <translation>Luo avaimet</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="222"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="257"/>
         <source>Generate time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Luo tahtilajit</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="229"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="403"/>
         <source>Generate key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Luo sävellajit</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="236"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="131"/>
         <source>Scale:</source>
         <translation>Skaala:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="252"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="350"/>
         <source>Scale</source>
         <translation>Mittakaava</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="271"/>
-        <source>Offset Y:</source>
-        <translation>Poikkeama Y:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="284"/>
@@ -7579,7 +7762,7 @@ space unit</extracomment>
         <translation>Pieni</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="291"/>
+        <location filename="../../mscore/inspector/inspector_stafftypechange.ui" line="193"/>
         <source>Offset Y</source>
         <translation>Poikkeama Y</translation>
     </message>
@@ -7592,33 +7775,33 @@ space unit</extracomment>
         <translation>Varren tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stem.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_stem.ui" line="54"/>
         <source>Stem</source>
         <translation>Varsi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stem.ui" line="82"/>
-        <source>Line width</source>
-        <translation>Viivan leveys</translation>
+        <location filename="../../mscore/inspector/inspector_stem.ui" line="85"/>
+        <source>Line thickness</source>
+        <translation>Viivan paksuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stem.ui" line="85"/>
-        <location filename="../../mscore/inspector/inspector_stem.ui" line="124"/>
+        <location filename="../../mscore/inspector/inspector_stem.ui" line="98"/>
+        <source>Line thickness:</source>
+        <translation>Viivan paksuus:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_stem.ui" line="111"/>
+        <source>Length change:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_stem.ui" line="88"/>
+        <location filename="../../mscore/inspector/inspector_stem.ui" line="133"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_stem.ui" line="95"/>
-        <source>Line width:</source>
-        <translation>viivan leveys:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_stem.ui" line="108"/>
-        <source>Length offset:</source>
-        <translation>Pituuspoikkema:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_stem.ui" line="121"/>
+        <location filename="../../mscore/inspector/inspector_stem.ui" line="130"/>
         <source>Length offset</source>
         <translation>Pituuspoikkeama</translation>
     </message>
@@ -7631,7 +7814,7 @@ space unit</extracomment>
         <translation>Tekstikehyksen tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="57"/>
         <source>Text Frame</source>
         <translation>Tekstikehys</translation>
     </message>
@@ -7646,67 +7829,67 @@ space unit</extracomment>
         <translation>Ylämarginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="114"/>
         <source>Left margin</source>
         <translation>Vasen marginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="111"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="153"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="169"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="259"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="117"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="165"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="187"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="295"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="124"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="130"/>
         <source>Bottom margin:</source>
         <translation>Alamarginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="137"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="143"/>
         <source>Right margin:</source>
         <translation>Oikea marginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="150"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="162"/>
         <source>Right margin</source>
         <translation>Oikea marginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="166"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="184"/>
         <source>Bottom margin</source>
         <translation>Alamarginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="192"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="216"/>
         <source>Top gap</source>
         <translation>Ylä tyhjä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="195"/>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="227"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="219"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="257"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="211"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="235"/>
         <source>Top gap:</source>
         <translation>Ylin aukko:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="224"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="254"/>
         <source>Bottom gap</source>
         <translation>Ala tyhjä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="243"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="273"/>
         <source>Left margin:</source>
         <translation>Vasen marginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tbox.ui" line="256"/>
+        <location filename="../../mscore/inspector/inspector_tbox.ui" line="292"/>
         <source>Top margin</source>
         <translation>Ylämarginaali</translation>
     </message>
@@ -7719,12 +7902,12 @@ space unit</extracomment>
         <translation>Tempo:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="120"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="126"/>
         <source>Follow text</source>
         <translation>Seuraa tekstiä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="101"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
@@ -7734,32 +7917,32 @@ space unit</extracomment>
         <translation>Tempotekstin tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="57"/>
         <source>Tempo Text</source>
         <translation>Tempoteksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="98"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="104"/>
         <source>BPM</source>
         <translation>BPM (iskua minuutissa):</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="127"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="133"/>
         <source>Style:</source>
         <translation>Tyyli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="140"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="152"/>
         <source>Style</source>
         <translation>Tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="147"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="159"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="160"/>
+        <location filename="../../mscore/inspector/inspector_tempotext.ui" line="178"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
@@ -7772,122 +7955,102 @@ space unit</extracomment>
         <translation>Tekstin tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="75"/>
         <source>Text</source>
         <translation>Teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="88"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="106"/>
         <source>Remove Custom Formatting</source>
         <translation>Poista mukautettu muotoilu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="113"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="248"/>
+        <source>Corner radius:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="284"/>
+        <source>Margin:</source>
+        <translation>Marginaali:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="314"/>
+        <source>Thickness:</source>
+        <translation>Paksuus:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="369"/>
+        <source>Highlight:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="437"/>
         <source>Frame:</source>
         <translation>Kehys:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="133"/>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="136"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="491"/>
+        <source>Follow staff size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="157"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="160"/>
         <source>Font size</source>
         <translation>Fonttikoko</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="139"/>
-        <source>pt</source>
-        <translation>pt</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="161"/>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="164"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="459"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="462"/>
         <source>Font face</source>
         <translation>Fontin ulkoasu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="174"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="129"/>
         <source>Frame</source>
         <translation>Kehys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="181"/>
-        <source>Font size:</source>
-        <translation>Fonttikoko:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="197"/>
-        <source>Font face:</source>
-        <translation>Kirjasin:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="216"/>
-        <source>Font style:</source>
-        <translation>Fonttityyli:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="256"/>
-        <source>Border radius:</source>
-        <translation>Säde:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="269"/>
-        <source>Background:</source>
-        <translation>Tausta:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="282"/>
-        <source>Text margin:</source>
-        <translation>Tekstin marginaali:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="295"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="264"/>
         <source>Foreground color</source>
-        <translation type="unfinished"/>
+        <translation>Edustan väri</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="305"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="235"/>
         <source>Text margin</source>
-        <translation type="unfinished"/>
+        <translation>Tekstin marginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="308"/>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="372"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="238"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="356"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="318"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="385"/>
         <source>Background color</source>
-        <translation type="unfinished"/>
+        <translation>Taustaväri</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="328"/>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="395"/>
         <source>Border:</source>
         <translation>Raja:</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="350"/>
-        <source>Foreground:</source>
-        <translation>Edusta:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="366"/>
         <source>Border</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="385"/>
-        <source>Border radius</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_text.ui" line="395"/>
-        <source>Text alignment</source>
-        <translation>Tekstin kohdistaminen</translation>
+        <translation>Raja</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_text.ui" line="411"/>
-        <source>Size follows &apos;Staff space&apos; setting</source>
-        <translation>Koko seuraa &apos;Nuottiviivojen väli&apos; -asetusta</translation>
+        <source>Border radius</source>
+        <translation>Säde</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_text.ui" line="142"/>
+        <source>Text alignment</source>
+        <translation>Tekstin kohdistaminen</translation>
     </message>
 </context>
 <context>
@@ -7898,27 +8061,27 @@ space unit</extracomment>
         <translation>Tekstiviivan tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textline.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_textline.ui" line="57"/>
         <source>Text Line</source>
         <translation>Tekstiviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textline.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_textline.ui" line="88"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textline.ui" line="86"/>
+        <location filename="../../mscore/inspector/inspector_textline.ui" line="92"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textline.ui" line="91"/>
+        <location filename="../../mscore/inspector/inspector_textline.ui" line="97"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textline.ui" line="99"/>
+        <location filename="../../mscore/inspector/inspector_textline.ui" line="105"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
@@ -7931,197 +8094,162 @@ space unit</extracomment>
         <translation>Text Line Core Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="57"/>
         <source>Text Line Core</source>
-        <translation type="unfinished"/>
+        <translation>Tekstirivin ydin</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="88"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1073"/>
         <source>Height</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="91"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="175"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1023"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1076"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="101"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1054"/>
         <source>End hook height</source>
         <translation>Loppuväkäsen korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="104"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="143"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1004"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1057"/>
         <source>Height:</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="123"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="156"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="407"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="979"/>
         <source>End hook</source>
         <translation>Loppuväkänen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="130"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="368"/>
         <source>Begin hook:</source>
         <translation>Alkuväkänen:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="159"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="410"/>
         <source>End hook:</source>
         <translation>Loppuväkänen:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="172"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="1020"/>
         <source>Begin hook height</source>
         <translation>Alkuväkäsen korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="191"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="400"/>
         <source>Begin Text</source>
         <translation>Alkuteksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="204"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="429"/>
         <source>Continue Text</source>
-        <translation type="unfinished"/>
+        <translation>Jatka tekstiä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="217"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="361"/>
         <source>End Text</source>
         <translation>Lopputeksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="242"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="856"/>
         <source>End text</source>
         <translation>Lopputeksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="249"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="547"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="820"/>
-        <source>Style:</source>
-        <translation>Tyyli:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="259"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="508"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="781"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="242"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="639"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="886"/>
         <source>Font size</source>
         <translation>Fonttikoko</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="262"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="511"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="784"/>
-        <source>pt</source>
-        <translation>pt</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="272"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="534"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="807"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="280"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="500"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="822"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="285"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="521"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="749"/>
-        <source>Size:</source>
-        <translation>Koko:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="298"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="600"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="830"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="125"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="601"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="815"/>
         <source>Offset</source>
         <translation>Poikkeama</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="317"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="488"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="774"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="154"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="620"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="877"/>
         <source>Font face</source>
         <translation>Fontin ulkoasu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="324"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="557"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="719"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="197"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="548"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="749"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="328"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="561"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="723"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="201"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="552"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="753"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="333"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="566"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="728"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="206"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="557"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="758"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="341"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="495"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="706"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="324"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="472"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="837"/>
         <source>Text:</source>
         <translation>Teksti:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="354"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="574"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="794"/>
-        <source>Font face:</source>
-        <translation>Kirjasin:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="367"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="587"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="736"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="309"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="519"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="720"/>
         <source>Offset:</source>
         <translation>Poikkeama:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="380"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="607"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="847"/>
-        <source>Alignment:</source>
-        <translation>Ryhmittyminen:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="390"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="617"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="837"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="220"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="683"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="930"/>
         <source>Text alignment</source>
         <translation>Tekstin kohdistaminen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="393"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="620"/>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="840"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="223"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="686"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="933"/>
         <source>Alignment</source>
         <translation>Tasaus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="469"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="491"/>
         <source>Continue text</source>
-        <translation type="unfinished"/>
+        <translation>Jatka tekstiä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="699"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="343"/>
         <source>Begin text</source>
         <translation>Alkuteksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="914"/>
+        <location filename="../../mscore/inspector/inspector_textlinebase.ui" line="387"/>
         <source>Begin hook</source>
         <translation>Alkuväkänen</translation>
     </message>
@@ -8134,22 +8262,22 @@ space unit</extracomment>
         <translation>Tahtilajimerkinnän tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_timesig.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_timesig.ui" line="60"/>
         <source>Time Signature</source>
         <translation>Tahtiosoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_timesig.ui" line="92"/>
+        <location filename="../../mscore/inspector/inspector_timesig.ui" line="95"/>
         <source>Scale:</source>
         <translation>Skaala:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_timesig.ui" line="102"/>
+        <location filename="../../mscore/inspector/inspector_timesig.ui" line="111"/>
         <source>Scale</source>
         <translation>Mittakaava</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_timesig.ui" line="85"/>
+        <location filename="../../mscore/inspector/inspector_timesig.ui" line="88"/>
         <source>Show courtesy</source>
         <translation>Näytä ennakkovaroitus</translation>
     </message>
@@ -8162,42 +8290,42 @@ space unit</extracomment>
         <translation>Tremolo Bar Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="50"/>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="60"/>
         <source>Tremolo Bar</source>
         <translation>Tremolo-palkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="85"/>
-        <source>Line width</source>
-        <translation>Viivan leveys</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="88"/>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="94"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="107"/>
-        <source>Line Width:</source>
-        <translation>Viivan leveys:</translation>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="91"/>
+        <source>Line thickness</source>
+        <translation>Viivan paksuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="139"/>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="113"/>
+        <source>Line thickness:</source>
+        <translation>Viivan paksuus:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="145"/>
         <source>Play</source>
         <translation>Toista</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="146"/>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="152"/>
         <source>Scale:</source>
         <translation>Skaala:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="159"/>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="171"/>
         <source>Scale</source>
         <translation>Mittakaava</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="178"/>
+        <location filename="../../mscore/inspector/inspector_tremolo.ui" line="220"/>
         <source>Properties</source>
         <translation>Ominaisuudet</translation>
     </message>
@@ -8210,82 +8338,82 @@ space unit</extracomment>
         <translation>Trillitarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="57"/>
         <source>Trill</source>
         <translation>Trilli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="204"/>
         <source>Type:</source>
         <translation>Tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="224"/>
         <source>Ornament style:</source>
         <translation>Korusävelten tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="191"/>
         <source>Placement:</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="127"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="88"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="131"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="92"/>
         <source>Trill Line</source>
         <translation>Trilliviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="136"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="97"/>
         <source>Up Prall</source>
         <translation>Nouseva trilli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="141"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="102"/>
         <source>Down Prall</source>
         <translation>Laskeva trilli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="146"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="107"/>
         <source>Prall Prall</source>
         <translation>Prall Prall -trilli</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="160"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="121"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="164"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="125"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="169"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="130"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="183"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="154"/>
         <source>Direction</source>
         <translation>Suunta</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="187"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="158"/>
         <source>Default</source>
         <translation>Oletus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="192"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="163"/>
         <source>Baroque</source>
         <translation>Barokki</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_trill.ui" line="200"/>
+        <location filename="../../mscore/inspector/inspector_trill.ui" line="217"/>
         <source>Play</source>
         <translation>Toista</translation>
     </message>
@@ -8298,111 +8426,121 @@ space unit</extracomment>
         <translation>Tuplettitarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="156"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="57"/>
         <source>Tuplet</source>
         <translation>Poikkeusjako</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="191"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="187"/>
         <source>Number type</source>
         <translation>Numeron tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="195"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="191"/>
         <source>Number</source>
         <translation>Numero</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="200"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="196"/>
         <source>Ratio</source>
         <translation>Suhde</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="213"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="209"/>
+        <source>Font:</source>
+        <translation>Fontti:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="222"/>
+        <source>Line thickness</source>
+        <translation>Viivan paksuus</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="263"/>
         <source>Number type:</source>
         <translation>Numeron tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="226"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="298"/>
+        <source>Style:</source>
+        <translation>Tyyli:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="345"/>
+        <source>Size:</source>
+        <translation>Koko:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="352"/>
+        <source>Line thickness:</source>
+        <translation>Viivan paksuus:</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="82"/>
         <source>Bracket type:</source>
         <translation>Hakasulkeen tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="239"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="241"/>
         <source>Bracket type</source>
         <translation>Hakasulkeen tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="248"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="250"/>
         <source>Bracket</source>
         <translation>Hakasulje</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="267"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="155"/>
         <source>Direction:</source>
         <translation>Suunta:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="280"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="111"/>
         <source>Direction</source>
         <translation>Suunta</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="243"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="284"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="115"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="245"/>
         <source>Auto</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="47"/>
-        <source>Text</source>
-        <translation>Teksti</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="103"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="106"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="282"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="285"/>
         <source>Font size</source>
         <translation>Fonttikoko</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="109"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="288"/>
         <source>pt</source>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="119"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="122"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="139"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="142"/>
         <source>Font face</source>
         <translation>Fontin ulkoasu</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="205"/>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="253"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="201"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="255"/>
         <source>None</source>
         <translation>Ei mitään</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="289"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="120"/>
         <source>Up</source>
         <translation>Ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="294"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="125"/>
         <source>Down</source>
         <translation>Alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="302"/>
-        <source>Line width:</source>
-        <translation>viivan leveys:</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="315"/>
-        <source>Line width</source>
-        <translation>Viivan leveys</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="318"/>
+        <location filename="../../mscore/inspector/inspector_tuplet.ui" line="225"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
@@ -8415,93 +8553,93 @@ space unit</extracomment>
         <translation>Pystysuoran kehyksen tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="47"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="60"/>
         <source>Vertical Frame</source>
         <translation>Pystysuora kehys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="82"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="85"/>
         <source>Right margin:</source>
         <translation>Oikea marginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="272"/>
         <source>Bottom margin:</source>
         <translation>Alamarginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="108"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="350"/>
         <source>Left margin</source>
         <translation>Vasen marginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="111"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="249"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="265"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="281"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="183"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="237"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="259"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="353"/>
         <source>mm</source>
         <translation>mm</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="127"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="117"/>
         <source>Top gap</source>
         <translation>Ylä tyhjä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="130"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="162"/>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="191"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="120"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="158"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="205"/>
         <source>sp</source>
         <extracomment>spatium unit</extracomment>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="146"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="386"/>
         <source>Top gap:</source>
         <translation>Ylin väli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="159"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="202"/>
         <source>Height</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="175"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="305"/>
         <source>Height:</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="188"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="155"/>
         <source>Bottom gap</source>
         <translation>Ala tyhjä</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="207"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="331"/>
         <source>Top margin:</source>
         <translation>Ylämarginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="220"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="136"/>
         <source>Left margin:</source>
         <translation>Vasen marginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="233"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="318"/>
         <source>Bottom gap:</source>
         <translation>Alin väli:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="246"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="234"/>
         <source>Top margin</source>
         <translation>Ylämarginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="262"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="256"/>
         <source>Right margin</source>
         <translation>Oikea marginaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vbox.ui" line="278"/>
+        <location filename="../../mscore/inspector/inspector_vbox.ui" line="180"/>
         <source>Bottom margin</source>
         <translation>Alamarginaali</translation>
     </message>
@@ -8514,8 +8652,8 @@ space unit</extracomment>
         <translation>Vibrato Inspector</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="47"/>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="136"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="57"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="148"/>
         <source>Vibrato</source>
         <translation>Vibrato</translation>
     </message>
@@ -8525,47 +8663,47 @@ space unit</extracomment>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="95"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="101"/>
         <source>Placement</source>
         <translation>Sijoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="99"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="105"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="104"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="110"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="112"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="118"/>
         <source>Play</source>
         <translation>Toista</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="119"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="125"/>
         <source>Type:</source>
         <translation>Tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="132"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="144"/>
         <source>Type</source>
         <translation>Tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="141"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="153"/>
         <source>Vibrato Wide</source>
-        <translation type="unfinished"/>
+        <translation>Vibraton leveys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="146"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="158"/>
         <source>Vibrato Sawtooth</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="151"/>
+        <location filename="../../mscore/inspector/inspector_vibrato.ui" line="163"/>
         <source>Vibrato Sawtooth Wide</source>
         <translation type="unfinished"/>
     </message>
@@ -8578,7 +8716,7 @@ space unit</extracomment>
         <translation>Volta-tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector_volta.ui" line="39"/>
+        <location filename="../../mscore/inspector/inspector_volta.ui" line="49"/>
         <source>Volta</source>
         <translation>Maali</translation>
     </message>
@@ -8690,7 +8828,7 @@ space unit</extracomment>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="399"/>
+        <location filename="../../mscore/instrwidget.cpp" line="400"/>
         <source>All instruments</source>
         <translation>Kaikki instrumentit</translation>
     </message>
@@ -9185,16 +9323,6 @@ Tämä tarvitsee tehdä vain kerran.
 
 Haluatko osoittaa tiedoston %2 sijainnin nyt?</translation>
     </message>
-    <message>
-        <source>MuseScore does not export MP3 files directly, but instead uses the freely available LAME library.  You must obtain %1 separately (for details check the handbook), and then locate the file for MuseScore.
-You only need to do this once.
-
-Would you like to locate %2 now?</source>
-        <translation type="vanished">MuseScore ei vie MP3-tiedostoja suoraan, vaan käyttää vapaasti saatavaa LAME-kirjastoa. %1 täytyy hakea erikseen (katso tarkemmin käsikirjasta) ja osoittaa sitten tiedoston sijainti MuseScorelle.
-Tämä tarvitsee tehdä vain kerran.
-
-Haluatko osoittaa tiedoston %2 sijainnin nyt?</translation>
-    </message>
 </context>
 <context>
     <name>MasterPalette</name>
@@ -9206,7 +9334,7 @@ Haluatko osoittaa tiedoston %2 sijainnin nyt?</translation>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="195"/>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
-        <location filename="../../mscore/musescore.cpp" line="5821"/>
+        <location filename="../../mscore/musescore.cpp" line="5959"/>
         <source>Symbols</source>
         <translation>Symbolit</translation>
     </message>
@@ -9214,15 +9342,16 @@ Haluatko osoittaa tiedoston %2 sijainnin nyt?</translation>
 <context>
     <name>MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="269"/>
+        <location filename="../../mscore/measureproperties.cpp" line="272"/>
         <source>MuseScore</source>
         <translation>MuseScore </translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="270"/>
+        <location filename="../../mscore/measureproperties.cpp" line="273"/>
         <source>Cannot change measure length:
 tuplet would cross measure</source>
-        <translation type="unfinished"/>
+        <translation>Tahdin pituutta ei voi muuttaa:
+poikkeusjako ylittäisi tahtiviivan</translation>
     </message>
 </context>
 <context>
@@ -9496,28 +9625,23 @@ tuplet would cross measure</source>
 <context>
     <name>Mixer</name>
     <message>
-        <location filename="../../mscore/mixer.ui" line="43"/>
+        <location filename="../../mscore/mixer.ui" line="33"/>
+        <source>Play part only</source>
+        <translation>Soita vain osa</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/mixer.ui" line="50"/>
         <source>Show/hide details</source>
         <translation>Näytä/piilota yksityiskohdat</translation>
     </message>
     <message>
-        <location filename="../../mscore/mixer.ui" line="106"/>
+        <location filename="../../mscore/mixer.ui" line="113"/>
         <source>Master Gain</source>
         <translation>Päävoimakkuus</translation>
     </message>
 </context>
 <context>
     <name>MixerDetails</name>
-    <message>
-        <location filename="../../mscore/mixerdetails.ui" line="42"/>
-        <source>MIDI Out controllers</source>
-        <translation>MIDI Ulos ohjaimet</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/mixerdetails.ui" line="45"/>
-        <source>MIDI</source>
-        <translation>MIDI</translation>
-    </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="53"/>
         <source>Chorus:</source>
@@ -9546,6 +9670,11 @@ tuplet would cross measure</source>
         <translation>MIDI-portin numero</translation>
     </message>
     <message>
+        <location filename="../../mscore/mixerdetails.ui" line="42"/>
+        <source>MIDI OUT controllers</source>
+        <translation>MIDI ulos ohjaimet</translation>
+    </message>
+    <message>
         <location filename="../../mscore/mixerdetails.ui" line="138"/>
         <location filename="../../mscore/mixerdetails.ui" line="327"/>
         <source>Channel:</source>
@@ -9562,10 +9691,6 @@ tuplet would cross measure</source>
         <translation>Reverb-efekti:</translation>
     </message>
     <message>
-        <source>Mute Per Voice</source>
-        <translation type="vanished">Vaimenna ääni</translation>
-    </message>
-    <message>
         <location filename="../../mscore/mixerdetails.ui" line="311"/>
         <location filename="../../mscore/mixerdetails.ui" line="432"/>
         <source>Pan</source>
@@ -9579,12 +9704,12 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="334"/>
         <source>Patch:</source>
-        <translation type="unfinished"/>
+        <translation>Alue:</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="469"/>
         <source>Patch voice</source>
-        <translation type="unfinished"/>
+        <translation>Äänialue</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="384"/>
@@ -9615,12 +9740,12 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="484"/>
         <source>Track color:</source>
-        <translation type="unfinished"/>
+        <translation>Raidan väri:</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="510"/>
         <source>Track color</source>
-        <translation type="unfinished"/>
+        <translation>Raidan väri</translation>
     </message>
     <message>
         <location filename="../../mscore/mixerdetails.ui" line="375"/>
@@ -9710,34 +9835,38 @@ tuplet would cross measure</source>
 <context>
     <name>Ms::AboutBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4483"/>
+        <location filename="../../mscore/musescore.cpp" line="4604"/>
         <source>Unstable Prerelease for Version: %1</source>
         <translation>Epävakaa esijulkaisu versiolle %javascript:;1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4486"/>
+        <location filename="../../mscore/musescore.cpp" line="4607"/>
         <source>Version: %1</source>
         <translation>Versio %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4489"/>
+        <location filename="../../mscore/musescore.cpp" line="4610"/>
         <source>Revision: %1</source>
         <translation>Tarkistus: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4493"/>
+        <location filename="../../mscore/musescore.cpp" line="4615"/>
         <source>Visit %1www.musescore.org%2 for new versions and more information.
-Support MuseScore with your %3donation%4.
-
-Copyright &amp;copy; 1999-2019 Werner Schweer and Others.
+Support MuseScore with your %3donation%4.</source>
+        <translation>Vieraile sivulla %1www.musescore.org%2 löytääksesi uusia versioita ja lisää tietoa.Tue MuseScorea %3lahjoituksellasi%4</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="4622"/>
+        <source>Copyright &amp;copy; 1999-2019 Werner Schweer and Others.
 Published under the GNU General Public License.</source>
-        <translation type="unfinished"/>
+        <translation>Tekijänoikeus &amp;copy; 1999-2019 Werner Schweer ja Muut. 
+Julkaistu lisenssillä GNU General Public License. </translation>
     </message>
 </context>
 <context>
     <name>Ms::AboutMusicXMLBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4535"/>
+        <location filename="../../mscore/musescore.cpp" line="4658"/>
         <source>MusicXML is an open file format for exchanging digital sheet music,
 supported by many applications.
 Copyright © 2004-2018 the Contributors to the MusicXML
@@ -9800,6 +9929,31 @@ Ihmisen luettavissa oleva yhteenveto on saatavana:
         <location filename="../../mscore/harmonyedit.cpp" line="46"/>
         <source>Chord Symbols Style Editor</source>
         <translation>Sointumerkkien tyylieditori</translation>
+    </message>
+</context>
+<context>
+    <name>Ms::CrashReporter</name>
+    <message>
+        <location filename="../../crashreporter/crashreporter.cpp" line="126"/>
+        <source>Success!</source>
+        <translation>Onnistui!</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.cpp" line="126"/>
+        <source>Crash report uploaded successfully!</source>
+        <translation>Kaatumisraportti ladattu onnistuneesti!</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.cpp" line="137"/>
+        <source>Error</source>
+        <translation>Virhe</translation>
+    </message>
+    <message>
+        <location filename="../../crashreporter/crashreporter.cpp" line="137"/>
+        <source>Error while uploading crash report:
+%1</source>
+        <translation>Virhe kaatumisraportin latauksessa:
+%1</translation>
     </message>
 </context>
 <context>
@@ -9906,7 +10060,7 @@ avaaminen epäonnistui: %1</translation>
 <context>
     <name>Ms::EditStaff</name>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="311"/>
+        <location filename="../../mscore/editstaff.cpp" line="312"/>
         <source>The instrument name is invalid.</source>
         <translation>Instrumentin nimi on virheellinen</translation>
     </message>
@@ -9929,168 +10083,164 @@ avaaminen epäonnistui: %1</translation>
 <context>
     <name>Ms::EditStyle</name>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="47"/>
+        <location filename="../../mscore/editstyle.cpp" line="56"/>
         <source>Apply to all Parts</source>
         <translation>Käytä kaikkiin stemmoihin</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="392"/>
+        <location filename="../../mscore/editstyle.cpp" line="379"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="393"/>
+        <location filename="../../mscore/editstyle.cpp" line="380"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="397"/>
+        <location filename="../../mscore/editstyle.cpp" line="384"/>
         <source>Segment</source>
         <translation>Segmentti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="398"/>
+        <location filename="../../mscore/editstyle.cpp" line="385"/>
         <source>Measure</source>
         <translation>Tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="399"/>
+        <location filename="../../mscore/editstyle.cpp" line="386"/>
         <source>System</source>
         <translation>Järjestelmän kieli</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="402"/>
+        <location filename="../../mscore/editstyle.cpp" line="389"/>
         <source>Number</source>
         <translation>Numero</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="403"/>
+        <location filename="../../mscore/editstyle.cpp" line="390"/>
         <source>Ratio</source>
         <translation>Suhde</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="404"/>
-        <location filename="../../mscore/editstyle.cpp" line="409"/>
+        <location filename="../../mscore/editstyle.cpp" line="391"/>
+        <location filename="../../mscore/editstyle.cpp" line="396"/>
+        <location filename="../../mscore/editstyle.cpp" line="572"/>
         <source>None</source>
         <translation>Ei mitään</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="407"/>
+        <location filename="../../mscore/editstyle.cpp" line="394"/>
         <source>Automatic</source>
         <translation>Automaattinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="408"/>
+        <location filename="../../mscore/editstyle.cpp" line="395"/>
         <source>Bracket</source>
         <translation>Hakasulje</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="447"/>
+        <location filename="../../mscore/editstyle.cpp" line="434"/>
         <source>Page number, except on first page</source>
         <translation>sivunumerointi, paitsi ensimmäiselle sivulle</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="449"/>
+        <location filename="../../mscore/editstyle.cpp" line="436"/>
         <source>Page number, if there is more than one page</source>
         <translation>sivunumero, jos on enemmän kuin yksi sivu</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="451"/>
+        <location filename="../../mscore/editstyle.cpp" line="438"/>
         <source>Page number, on all pages</source>
         <translation>Sivunumerot, kaikille sivuille</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="453"/>
+        <location filename="../../mscore/editstyle.cpp" line="440"/>
         <source>Number of pages</source>
         <translation>Sivujen lukumäärä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="455"/>
+        <location filename="../../mscore/editstyle.cpp" line="442"/>
         <source>File name</source>
         <translation>Tiedostonimi</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="457"/>
+        <location filename="../../mscore/editstyle.cpp" line="444"/>
         <source>File path+name</source>
         <translation>Tiedostopolku ja -nimi</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="459"/>
+        <location filename="../../mscore/editstyle.cpp" line="446"/>
         <source>Part name, except on first page</source>
         <translation>Stemmojen nimet, paitsi ensimmäiselle sivulle</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="461"/>
+        <location filename="../../mscore/editstyle.cpp" line="448"/>
         <source>Part name, on all pages</source>
         <translation>Stemmojen nimet, kaikille sivuille</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="463"/>
+        <location filename="../../mscore/editstyle.cpp" line="450"/>
         <source>Current date</source>
         <translation>Tämänhetkinen päivä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="465"/>
+        <location filename="../../mscore/editstyle.cpp" line="452"/>
         <source>Creation date</source>
         <translation>Luomispäivä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="467"/>
+        <location filename="../../mscore/editstyle.cpp" line="454"/>
         <source>Last modification time</source>
         <translation>Viimeisin muutosaika</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="469"/>
+        <location filename="../../mscore/editstyle.cpp" line="456"/>
         <source>Last modification date</source>
         <translation>Viimeisin muutospäivä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="471"/>
+        <location filename="../../mscore/editstyle.cpp" line="458"/>
         <source>Copyright, on first page only</source>
         <translation>Tekijänoikeus, vain ensimmäiselle sivulle</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="473"/>
+        <location filename="../../mscore/editstyle.cpp" line="460"/>
         <source>Copyright, on all pages</source>
         <translation>Tekijänoikeus kaikille sivuille</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="475"/>
+        <location filename="../../mscore/editstyle.cpp" line="462"/>
         <source>The $ sign itself</source>
-        <translation type="unfinished"/>
+        <translation>$ merkki itsessään </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="477"/>
+        <location filename="../../mscore/editstyle.cpp" line="464"/>
         <source>Metadata tag, see below</source>
-        <translation type="unfinished"/>
+        <translation>metadata tunniste, katso alta </translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="479"/>
+        <location filename="../../mscore/editstyle.cpp" line="466"/>
         <source>Available metadata tags and their current values</source>
-        <translation type="unfinished"/>
+        <translation>Käytettävissä olevat metadata tunnisteet ja niiden nykyiset arvot</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="481"/>
+        <location filename="../../mscore/editstyle.cpp" line="468"/>
         <source>(in File &gt; Score Properties…):</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="584"/>
-        <source>No frame</source>
-        <translation>Ei kehystä</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstyle.cpp" line="585"/>
+        <location filename="../../mscore/editstyle.cpp" line="573"/>
         <source>Square</source>
         <translation>Neliö</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="586"/>
+        <location filename="../../mscore/editstyle.cpp" line="574"/>
         <source>Circle</source>
         <translation>Ympyrä</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstyle.cpp" line="444"/>
+        <location filename="../../mscore/editstyle.cpp" line="431"/>
         <source>Special symbols in header/footer</source>
         <translation>Erikoismerkit ylä-/alatunnisteessa</translation>
     </message>
@@ -10100,16 +10250,12 @@ avaaminen epäonnistui: %1</translation>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="235"/>
         <source>Extension Updates Available</source>
-        <translation type="unfinished"/>
+        <translation>Lisäosien päivityksiä saatavana </translation>
     </message>
     <message>
         <location filename="../../mscore/updatechecker.cpp" line="236"/>
         <source>One or more installed extensions have updates available in Help &gt; Resource Manager…</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>One or more installed extensions have updates available in Help / Resource Manager…</source>
-        <translation type="unfinished"/>
+        <translation>Yhdellä tai useammalla asennetulla laajennuksella on päivityksiä, jotka ovat käytettävissä Ohje&gt; Resurssienhallinta…</translation>
     </message>
 </context>
 <context>
@@ -10137,17 +10283,17 @@ avaaminen epäonnistui: %1</translation>
 <context>
     <name>Ms::InspectorAccidental</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="843"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="846"/>
         <source>None</source>
         <translation>Ei mitään</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="844"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="847"/>
         <source>Parenthesis</source>
         <translation>Sulut</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="845"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="848"/>
         <source>Bracket</source>
         <translation>Hakasulje</translation>
     </message>
@@ -10155,12 +10301,12 @@ avaaminen epäonnistui: %1</translation>
 <context>
     <name>Ms::InspectorBase</name>
     <message>
-        <location filename="../../mscore/inspector/inspectorBase.cpp" line="40"/>
+        <location filename="../../mscore/inspector/inspectorBase.cpp" line="41"/>
         <source>Inspector</source>
         <translation>Tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspectorBase.cpp" line="545"/>
+        <location filename="../../mscore/inspector/inspectorBase.cpp" line="551"/>
         <source>Set as style</source>
         <translation>Aseta tyyliksi</translation>
     </message>
@@ -10168,22 +10314,22 @@ avaaminen epäonnistui: %1</translation>
 <context>
     <name>Ms::InspectorGroupElement</name>
     <message>
-        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="40"/>
+        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="42"/>
         <source>Select</source>
         <translation>Valitse</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="53"/>
+        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="54"/>
         <source>Notes</source>
         <translation>Nuotit</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="59"/>
+        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="60"/>
         <source>Grace Notes</source>
         <translation>Korusävelet</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="65"/>
+        <location filename="../../mscore/inspector/inspectorGroupElement.cpp" line="66"/>
         <source>Rests</source>
         <translation>Tauot</translation>
     </message>
@@ -10210,6 +10356,31 @@ avaaminen epäonnistui: %1</translation>
         <source>Decrescendo Line</source>
         <translation>Decrescendo-viiva</translation>
     </message>
+    <message>
+        <location filename="../../mscore/inspector/inspectorHairpin.cpp" line="40"/>
+        <source>Default (linear)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspectorHairpin.cpp" line="41"/>
+        <source>Ease-in and out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspectorHairpin.cpp" line="42"/>
+        <source>Ease-in</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspectorHairpin.cpp" line="43"/>
+        <source>Ease-out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/inspector/inspectorHairpin.cpp" line="44"/>
+        <source>Exponential</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>Ms::InspectorLasso</name>
@@ -10223,32 +10394,32 @@ avaaminen epäonnistui: %1</translation>
 <context>
     <name>Ms::InspectorRest</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="614"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="613"/>
         <source>Select</source>
         <translation>Valitse</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="627"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="628"/>
         <source>Dot 1</source>
         <translation>Piste 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="630"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="631"/>
         <source>Dot 2</source>
         <translation>Piste 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="633"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="634"/>
         <source>Dot 3</source>
         <translation>Piste 3</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="636"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="641"/>
         <source>Dot 4</source>
         <translation>Piste 4</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="641"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="644"/>
         <source>Tuplet</source>
         <translation>Poikkeusjako</translation>
     </message>
@@ -10256,18 +10427,18 @@ avaaminen epäonnistui: %1</translation>
 <context>
     <name>Ms::InstrumentsDialog</name>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="76"/>
+        <location filename="../../mscore/instrdialog.cpp" line="85"/>
         <source>Save Instrument List</source>
         <translation>Tallenna instumenttiluettelo</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="78"/>
-        <location filename="../../mscore/instrdialog.cpp" line="121"/>
+        <location filename="../../mscore/instrdialog.cpp" line="87"/>
+        <location filename="../../mscore/instrdialog.cpp" line="130"/>
         <source>MuseScore Instruments</source>
         <translation>MuseScore-instrumentit</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="91"/>
+        <location filename="../../mscore/instrdialog.cpp" line="100"/>
         <source>Open Instruments File
 %1
 failed: %2</source>
@@ -10276,22 +10447,22 @@ failed: %2</source>
 avaaminen epäonnistui: %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="107"/>
+        <location filename="../../mscore/instrdialog.cpp" line="116"/>
         <source>Write Instruments File failed: %1</source>
         <translation>Instrumenttitiedoston kirjoittaminen epäonnistui: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="92"/>
+        <location filename="../../mscore/instrdialog.cpp" line="101"/>
         <source>Open Instruments File</source>
         <translation>Avaa instrumenttitiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="108"/>
+        <location filename="../../mscore/instrdialog.cpp" line="117"/>
         <source>Write Instruments File</source>
         <translation>Kirjoita instrumenttitiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="119"/>
+        <location filename="../../mscore/instrdialog.cpp" line="128"/>
         <source>Load Instrument List</source>
         <translation>Lataa instumenttiluettelo</translation>
     </message>
@@ -10355,23 +10526,23 @@ avaaminen epäonnistui: %2</translation>
 <context>
     <name>Ms::LoginDialog</name>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="48"/>
+        <location filename="../../mscore/logindialog.cpp" line="49"/>
         <source>%1Create an account%2</source>
         <translation>%1Luo tili%2</translation>
     </message>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="51"/>
+        <location filename="../../mscore/logindialog.cpp" line="52"/>
         <source>%1Forgot password?%2</source>
         <translation>%1Unohtuiko salasana?%2</translation>
     </message>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="69"/>
-        <location filename="../../mscore/logindialog.cpp" line="91"/>
+        <location filename="../../mscore/logindialog.cpp" line="70"/>
+        <location filename="../../mscore/logindialog.cpp" line="92"/>
         <source>Login error</source>
         <translation>Sisäänkirjautumisvirhe</translation>
     </message>
     <message>
-        <location filename="../../mscore/logindialog.cpp" line="69"/>
+        <location filename="../../mscore/logindialog.cpp" line="70"/>
         <source>Please fill in your username and password</source>
         <translation>Anna käyttäjänimesi ja salasanasi</translation>
     </message>
@@ -10379,93 +10550,99 @@ avaaminen epäonnistui: %2</translation>
 <context>
     <name>Ms::LoginManager</name>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="240"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="269"/>
+        <source>Error</source>
+        <translation>Virhe</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/network/loginmanager.cpp" line="281"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="517"/>
         <source>Network error</source>
         <translation>Tiedonsiirtovirhe</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="112"/>
-        <location filename="../../mscore/loginmanager.cpp" line="240"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="281"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="517"/>
         <source>Please check your Internet connection</source>
         <translation>Ole hyvä ja tarkista internetyhteys</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="114"/>
-        <location filename="../../mscore/loginmanager.cpp" line="243"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="283"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="520"/>
         <source>Please upgrade</source>
         <translation>Ole hyvä ja päivitä uudempaan versioon</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="114"/>
-        <location filename="../../mscore/loginmanager.cpp" line="243"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="283"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="520"/>
         <source>Your MuseScore version is too old to use this feature.
 %1Please upgrade first%2.</source>
         <translation>MuseScore-versiosi on liian vanha tämän ominasuuden käyttämiseksi.
 %1Päivitä ensin%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="212"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="437"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="566"/>
+        <source>Wrong response from the server</source>
+        <translation>Virheellinen vastaus palvelimelta</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/network/loginmanager.cpp" line="489"/>
         <source>Unsuccessful login. Please try again.</source>
         <translation>Kirjautuminen epäonnistui, yritä uudelleen.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="218"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="495"/>
         <source>Sorry, wrong email address, username or password. Please check again. %1Have you forgotten your password%2?</source>
         <translation>Sähköpostiosoite, käyttäjätunnus tai salasana oli väärin. Tarkista uudelleen. %1Oletko unohtanut salasanasi%2?</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="223"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="500"/>
         <source>This account has been blocked.</source>
         <translation>Tämä käyttäjätunnus on estetty.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="226"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="503"/>
         <source>Your account has not been activated yet. Please check your mailbox to activate your account or %1request a new activation email%2.</source>
         <translation>Käyttäjätunnustasi ei ole vielä aktivoitu. Tarkista, onko sähköpostilaatikossasi aktivointiviestiä, tai %1pyydä uusi viesti%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="231"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="508"/>
         <source>The local time on your device is not set right. Please check it and adjust. It&apos;s advised to set the time/timezone to automatic. If you still can&apos;t log in, %1contact us%2.</source>
         <translation>Koneesi paikallinen aika ei ole asetettu oikein. Ole hyvä ja tarkista ja aseta uudelleen. On suositeltavaa, että aika/aikavyöhyke valitaan automaattiseksi. Jos et kuitenkaan voi kirjautua sisään, %1ota meihin yhteyttä%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="294"/>
-        <source>Error while getting user info. Please try again</source>
-        <translation>Käyttäjätietojen hakeminen ei onnistunut. Yritä uudelleen</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/loginmanager.cpp" line="298"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="569"/>
         <source>Error while getting user info: %1</source>
         <translation>Käyttäjätietojen hakeminen ei onnistunut: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="435"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="757"/>
         <source>Uploading…</source>
         <translation>Ladataan…</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="436"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="758"/>
         <source>Cancel</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="472"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="794"/>
         <source>Upload Error</source>
         <translation>Latausvirhe</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="473"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="795"/>
         <source>Sorry, MuseScore couldn&apos;t upload the audio file. Error %1</source>
         <translation>Pahoittelemme, MuseScore ei voinut ladata äänitiedostoa. Virhe %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="576"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="913"/>
         <source>An error occurred during the file transfer. Please try again</source>
         <translation>Tiedostonsiirto ei onnistunut. Yritä uudelleen</translation>
     </message>
     <message>
-        <location filename="../../mscore/loginmanager.cpp" line="580"/>
+        <location filename="../../mscore/network/loginmanager.cpp" line="917"/>
         <source>Cannot upload: %1</source>
         <translation>Ei voi ladata: %1 </translation>
     </message>
@@ -10549,12 +10726,12 @@ avaaminen epäonnistui: %2</translation>
 <context>
     <name>Ms::MetaEditDialog</name>
     <message>
-        <location filename="../../mscore/metaedit.cpp" line="73"/>
+        <location filename="../../mscore/metaedit.cpp" line="74"/>
         <source>Input Tag Name</source>
         <translation>Syötä tunnisteen nimi</translation>
     </message>
     <message>
-        <location filename="../../mscore/metaedit.cpp" line="74"/>
+        <location filename="../../mscore/metaedit.cpp" line="75"/>
         <source>New tag name:</source>
         <translation>Uuden tunnisteen nimi:</translation>
     </message>
@@ -10562,14 +10739,14 @@ avaaminen epäonnistui: %2</translation>
 <context>
     <name>Ms::Mixer</name>
     <message>
-        <location filename="../../mscore/mixer.cpp" line="104"/>
-        <location filename="../../mscore/mixer.cpp" line="151"/>
+        <location filename="../../mscore/mixer.cpp" line="105"/>
+        <location filename="../../mscore/mixer.cpp" line="152"/>
         <location filename="../../mscore/mixer.cpp" line="192"/>
         <source>Decibels: %1</source>
         <translation>Desibeliä: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/mixer.cpp" line="206"/>
+        <location filename="../../mscore/mixer.cpp" line="226"/>
         <source>Mixer</source>
         <translation>Mikseri</translation>
     </message>
@@ -10577,7 +10754,7 @@ avaaminen epäonnistui: %2</translation>
 <context>
     <name>Ms::MixerDetails</name>
     <message>
-        <location filename="../../mscore/mixerdetails.cpp" line="252"/>
+        <location filename="../../mscore/mixerdetails.cpp" line="271"/>
         <source>Staff #%1</source>
         <translation>Viivasto #%1</translation>
     </message>
@@ -10663,411 +10840,417 @@ Patch: %5</translation>
     <name>Ms::MuseScore</name>
     <message>
         <location filename="../../mscore/exportaudio.cpp" line="296"/>
-        <location filename="../../mscore/musescore.cpp" line="6638"/>
+        <location filename="../../mscore/musescore.cpp" line="6793"/>
         <source>Cancel</source>
         <translation>OK</translation>
     </message>
     <message>
         <location filename="../../mscore/exportaudio.cpp" line="297"/>
-        <location filename="../../mscore/musescore.cpp" line="6639"/>
+        <location filename="../../mscore/musescore.cpp" line="6794"/>
         <source>Exporting…</source>
         <translation>Viedään…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6570"/>
-        <location filename="../../mscore/musescore.cpp" line="6582"/>
+        <location filename="../../mscore/musescore.cpp" line="6725"/>
+        <location filename="../../mscore/musescore.cpp" line="6737"/>
         <source>Error Opening LAME library</source>
         <translation>Virhe avattaessa LAME kirjastoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6571"/>
+        <location filename="../../mscore/musescore.cpp" line="6726"/>
         <source>Could not open MP3 encoding library!</source>
         <translation>MP3 koodattua kirjastoa ei pystytty avaamaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6583"/>
+        <location filename="../../mscore/musescore.cpp" line="6738"/>
         <source>Not a valid or supported MP3 encoding library!</source>
-        <translation type="unfinished"/>
+        <translation>Ei kelvollinen tai tuettu MP3-koodauskirjasto!</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6538"/>
-        <location filename="../../mscore/musescore.cpp" line="6607"/>
-        <location filename="../../mscore/musescore.cpp" line="6764"/>
+        <location filename="../../mscore/musescore.cpp" line="6692"/>
+        <location filename="../../mscore/musescore.cpp" line="6762"/>
+        <location filename="../../mscore/musescore.cpp" line="6919"/>
         <source>Encoding Error</source>
         <translation>Ohjelmointi virhe</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2327"/>
+        <location filename="../../mscore/musescore.cpp" line="2400"/>
         <source>Reset the positions of all elements?</source>
         <translation>Palauta kaikkien elementtien sijainnit?</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2329"/>
+        <location filename="../../mscore/musescore.cpp" line="2402"/>
         <source>To best take advantage of automatic placement in MuseScore 3 when importing &apos;%1&apos; from MuseScore %2, it is recommended to reset the positions of all elements.</source>
-        <translation type="unfinished"/>
+        <translation>Jos haluat parhaiten hyödyntää automaattista sijoittelua MuseScore 3: ssa, kun tuodaan &apos;% 1&apos; MuseScore% 2: sta, on suositeltavaa nollata kaikkien elementtien sijainnit.</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4087"/>
+        <location filename="../../mscore/musescore.cpp" line="4189"/>
+        <source>Insert mode</source>
+        <translation>Lisäys tila</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/musescore.cpp" line="4203"/>
         <source>Drumset input mode</source>
         <translation>Rumpusetin syöttötila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5550"/>
+        <location filename="../../mscore/musescore.cpp" line="5673"/>
         <source>Invalid Command</source>
         <translation>Virheellinen komento</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5551"/>
+        <location filename="../../mscore/musescore.cpp" line="5674"/>
         <source>Command %1 not valid in current state</source>
         <translation>Komento %1 ei kelvollinen nykyisessä tilassa</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6608"/>
+        <location filename="../../mscore/musescore.cpp" line="6763"/>
         <source>Unable to initialize MP3 stream</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6539"/>
+        <location filename="../../mscore/musescore.cpp" line="6693"/>
         <source>Unable to open target file for writing</source>
         <translation>Kohdetiedostoa ei voida avata kirjoittamista varten</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6765"/>
+        <location filename="../../mscore/musescore.cpp" line="6920"/>
         <source>Error %1 returned from MP3 encoder</source>
-        <translation type="unfinished"/>
+        <translation>Virhe% 1 palautui MP3-kooderista</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="243"/>
-        <location filename="../../mscore/musescore.cpp" line="4931"/>
+        <location filename="../../mscore/file.cpp" line="248"/>
+        <location filename="../../mscore/musescore.cpp" line="5054"/>
         <source>MuseScore</source>
         <translation>MuseScore </translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="244"/>
+        <location filename="../../mscore/file.cpp" line="249"/>
         <source>Save changes to the score &quot;%1&quot;
 before closing?</source>
         <translation>Tallenna muutokset partituuriin &quot;%1&quot;
 ennen sulkemista?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="279"/>
-        <location filename="../../mscore/file.cpp" line="281"/>
-        <location filename="../../mscore/file.cpp" line="2476"/>
+        <location filename="../../mscore/file.cpp" line="284"/>
+        <location filename="../../mscore/file.cpp" line="286"/>
+        <location filename="../../mscore/file.cpp" line="2491"/>
         <source>All Supported Files</source>
         <translation>Kaikki tuetut tiedostot</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="283"/>
+        <location filename="../../mscore/file.cpp" line="288"/>
         <source>MuseScore Files</source>
         <translation>MuseScore-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="284"/>
+        <location filename="../../mscore/file.cpp" line="289"/>
         <source>MusicXML Files</source>
         <translation>MusicXML-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="285"/>
+        <location filename="../../mscore/file.cpp" line="290"/>
         <source>MIDI Files</source>
         <translation>MIDI-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="286"/>
+        <location filename="../../mscore/file.cpp" line="291"/>
         <source>MuseData Files</source>
         <translation>MuseData-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="287"/>
+        <location filename="../../mscore/file.cpp" line="292"/>
         <source>Capella Files</source>
         <translation>Capella-tiedostot</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="288"/>
+        <location filename="../../mscore/file.cpp" line="293"/>
         <source>BB Files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>BB-tiedostot (kokeellinen)</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="290"/>
+        <location filename="../../mscore/file.cpp" line="295"/>
         <source>PDF Files (experimental OMR)</source>
-        <translation type="unfinished"/>
+        <translation>PDF tiedostot (kokeellinen OMR)</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="292"/>
+        <location filename="../../mscore/file.cpp" line="297"/>
         <source>Overture / Score Writer Files (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="293"/>
+        <location filename="../../mscore/file.cpp" line="298"/>
         <source>Bagpipe Music Writer Files (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="294"/>
+        <location filename="../../mscore/file.cpp" line="299"/>
         <source>Guitar Pro</source>
         <translation>Guitar Pro</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="295"/>
+        <location filename="../../mscore/file.cpp" line="300"/>
         <source>Load Score</source>
         <translation>Lataa partituuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="407"/>
-        <location filename="../../mscore/file.cpp" line="1761"/>
-        <location filename="../../mscore/file.cpp" line="2354"/>
-        <location filename="../../mscore/file.cpp" line="2425"/>
-        <source>MuseScore File</source>
-        <translation>MuseScore-tiedosto</translation>
+        <location filename="../../mscore/file.cpp" line="412"/>
+        <location filename="../../mscore/file.cpp" line="1766"/>
+        <location filename="../../mscore/file.cpp" line="2368"/>
+        <location filename="../../mscore/file.cpp" line="2439"/>
+        <source>MuseScore 3 File</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="408"/>
-        <location filename="../../mscore/file.cpp" line="1682"/>
-        <location filename="../../mscore/file.cpp" line="1762"/>
-        <location filename="../../mscore/file.cpp" line="2355"/>
-        <source>Uncompressed MuseScore File</source>
-        <translation>Pakkaamaton MuseScore-tiedosto</translation>
+        <location filename="../../mscore/file.cpp" line="413"/>
+        <location filename="../../mscore/file.cpp" line="1687"/>
+        <location filename="../../mscore/file.cpp" line="1767"/>
+        <location filename="../../mscore/file.cpp" line="2369"/>
+        <location filename="../../mscore/file.cpp" line="2440"/>
+        <source>Uncompressed MuseScore 3 File</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="423"/>
+        <location filename="../../mscore/file.cpp" line="428"/>
         <source>Save Score</source>
         <translation>Tallenna partituuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="431"/>
-        <location filename="../../mscore/file.cpp" line="438"/>
+        <location filename="../../mscore/file.cpp" line="436"/>
+        <location filename="../../mscore/file.cpp" line="443"/>
         <source>Save File</source>
         <translation>Tallenna tiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="465"/>
+        <location filename="../../mscore/file.cpp" line="470"/>
         <source>Untitled</source>
         <translation>Nimetön</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1009"/>
-        <location filename="../../mscore/file.cpp" line="1036"/>
-        <location filename="../../mscore/musescore.cpp" line="5968"/>
+        <location filename="../../mscore/file.cpp" line="1014"/>
+        <location filename="../../mscore/file.cpp" line="1041"/>
+        <location filename="../../mscore/musescore.cpp" line="6106"/>
         <source>Load Style</source>
         <translation>Lataa tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1011"/>
+        <location filename="../../mscore/file.cpp" line="1016"/>
         <source>MuseScore Styles</source>
         <translation>MuseScore-tyylit</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1016"/>
-        <location filename="../../mscore/file.cpp" line="1053"/>
-        <location filename="../../mscore/file.cpp" line="1136"/>
-        <location filename="../../mscore/musescore.cpp" line="5958"/>
+        <location filename="../../mscore/file.cpp" line="1021"/>
+        <location filename="../../mscore/file.cpp" line="1058"/>
+        <location filename="../../mscore/file.cpp" line="1141"/>
+        <location filename="../../mscore/musescore.cpp" line="6096"/>
         <source>Save Style</source>
         <translation>Tallenna tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1018"/>
-        <location filename="../../mscore/file.cpp" line="1037"/>
-        <location filename="../../mscore/file.cpp" line="1054"/>
+        <location filename="../../mscore/file.cpp" line="1023"/>
+        <location filename="../../mscore/file.cpp" line="1042"/>
+        <location filename="../../mscore/file.cpp" line="1059"/>
         <source>MuseScore Style File</source>
         <translation>Musescore-tyylitiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1078"/>
+        <location filename="../../mscore/file.cpp" line="1083"/>
         <source>Chord Symbols Style File</source>
         <translation>Sointumerkkien tyylitiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1089"/>
-        <location filename="../../mscore/file.cpp" line="1117"/>
+        <location filename="../../mscore/file.cpp" line="1094"/>
+        <location filename="../../mscore/file.cpp" line="1122"/>
         <source>Load Chord Symbols Style</source>
         <translation>Lataa sointumerkkien tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1096"/>
+        <location filename="../../mscore/file.cpp" line="1101"/>
         <source>Save Chord Symbols Style</source>
         <translation>Tallenna sointumerkkien tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1160"/>
+        <location filename="../../mscore/file.cpp" line="1165"/>
         <source>PDF Scan File</source>
         <translation>PDF-skannaustiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1165"/>
-        <location filename="../../mscore/file.cpp" line="1176"/>
+        <location filename="../../mscore/file.cpp" line="1170"/>
+        <location filename="../../mscore/file.cpp" line="1181"/>
         <source>Choose PDF Scan</source>
         <translation>Valitse PDF-skannaus</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1206"/>
+        <location filename="../../mscore/file.cpp" line="1211"/>
         <source>Ogg Audio File</source>
         <translation>Ogg-äänitiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1211"/>
+        <location filename="../../mscore/file.cpp" line="1216"/>
         <source>Choose Audio File</source>
         <translation>Valitse äänitiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1222"/>
+        <location filename="../../mscore/file.cpp" line="1227"/>
         <source>Choose Ogg Audio File</source>
         <translation>Valitse Ogg-äänitiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1252"/>
+        <location filename="../../mscore/file.cpp" line="1257"/>
         <source>Save Image</source>
         <translation>Tallenna kuva</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1340"/>
+        <location filename="../../mscore/file.cpp" line="1345"/>
         <source>Load Palette</source>
         <translation>Lataa paletti</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1341"/>
-        <location filename="../../mscore/file.cpp" line="1345"/>
+        <location filename="../../mscore/file.cpp" line="1346"/>
+        <location filename="../../mscore/file.cpp" line="1350"/>
         <source>MuseScore Palette</source>
         <translation>MuseScore-paletti</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1344"/>
+        <location filename="../../mscore/file.cpp" line="1349"/>
         <source>Save Palette</source>
         <translation>Tallenna paletti</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1422"/>
+        <location filename="../../mscore/file.cpp" line="1427"/>
         <source>Load Plugin</source>
         <translation>Lataa liitännäinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1423"/>
+        <location filename="../../mscore/file.cpp" line="1428"/>
         <source>MuseScore Plugin</source>
         <translation>MuseScore-liitännäinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1426"/>
-        <location filename="../../mscore/file.cpp" line="1476"/>
+        <location filename="../../mscore/file.cpp" line="1431"/>
+        <location filename="../../mscore/file.cpp" line="1481"/>
         <source>Save Plugin</source>
         <translation>Tallenna liitännäinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1427"/>
+        <location filename="../../mscore/file.cpp" line="1432"/>
         <source>MuseScore Plugin File</source>
         <translation>MuseScore-liitännäistiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1505"/>
+        <location filename="../../mscore/file.cpp" line="1510"/>
         <source>Load Drumset</source>
         <translation>Lataa rumpusetti</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1506"/>
+        <location filename="../../mscore/file.cpp" line="1511"/>
         <source>MuseScore Drumset</source>
         <translation>MuseScore-rumpusetti</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1509"/>
+        <location filename="../../mscore/file.cpp" line="1514"/>
         <source>Save Drumset</source>
         <translation>Tallenna rumpusetti</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1510"/>
+        <location filename="../../mscore/file.cpp" line="1515"/>
         <source>MuseScore Drumset File</source>
         <translation>MuseScore-rumputiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1668"/>
-        <location filename="../../mscore/file.cpp" line="1747"/>
+        <location filename="../../mscore/file.cpp" line="1673"/>
+        <location filename="../../mscore/file.cpp" line="1752"/>
         <source>PDF File</source>
         <translation>PDF tiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1669"/>
-        <location filename="../../mscore/file.cpp" line="1748"/>
-        <location filename="../../mscore/file.cpp" line="2479"/>
+        <location filename="../../mscore/file.cpp" line="1674"/>
+        <location filename="../../mscore/file.cpp" line="1753"/>
+        <location filename="../../mscore/file.cpp" line="2494"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG bittikarttagrafiikka</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1670"/>
-        <location filename="../../mscore/file.cpp" line="1749"/>
-        <location filename="../../mscore/file.cpp" line="2477"/>
+        <location filename="../../mscore/file.cpp" line="1675"/>
+        <location filename="../../mscore/file.cpp" line="1754"/>
+        <location filename="../../mscore/file.cpp" line="2492"/>
         <source>Scalable Vector Graphics</source>
         <translation>Skaalattava vektorigrafiikka</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1672"/>
-        <location filename="../../mscore/file.cpp" line="1751"/>
+        <location filename="../../mscore/file.cpp" line="1677"/>
+        <location filename="../../mscore/file.cpp" line="1756"/>
         <source>Wave Audio</source>
         <translation>Wave Audio</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1673"/>
-        <location filename="../../mscore/file.cpp" line="1752"/>
+        <location filename="../../mscore/file.cpp" line="1678"/>
+        <location filename="../../mscore/file.cpp" line="1757"/>
         <source>FLAC Audio</source>
         <translation>FLAC Audio</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1674"/>
-        <location filename="../../mscore/file.cpp" line="1753"/>
+        <location filename="../../mscore/file.cpp" line="1679"/>
+        <location filename="../../mscore/file.cpp" line="1758"/>
         <source>Ogg Vorbis Audio</source>
         <translation>Ogg Vorbis Audio</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1677"/>
-        <location filename="../../mscore/file.cpp" line="1756"/>
+        <location filename="../../mscore/file.cpp" line="1682"/>
+        <location filename="../../mscore/file.cpp" line="1761"/>
         <source>MP3 Audio</source>
         <translation>MP3 Audio</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1679"/>
-        <location filename="../../mscore/file.cpp" line="1758"/>
+        <location filename="../../mscore/file.cpp" line="1684"/>
+        <location filename="../../mscore/file.cpp" line="1763"/>
         <source>Standard MIDI File</source>
         <translation>Standardi MIDI-tiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1680"/>
-        <location filename="../../mscore/file.cpp" line="1759"/>
+        <location filename="../../mscore/file.cpp" line="1685"/>
+        <location filename="../../mscore/file.cpp" line="1764"/>
         <source>Compressed MusicXML File</source>
         <translation>Pakattu MusicXML-tiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1681"/>
-        <location filename="../../mscore/file.cpp" line="1760"/>
+        <location filename="../../mscore/file.cpp" line="1686"/>
+        <location filename="../../mscore/file.cpp" line="1765"/>
         <source>Uncompressed MusicXML File</source>
         <translation>Pakkaamaton MusicXML-tiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1684"/>
-        <location filename="../../mscore/file.cpp" line="1734"/>
+        <location filename="../../mscore/file.cpp" line="1689"/>
+        <location filename="../../mscore/file.cpp" line="1739"/>
         <source>Export</source>
         <translation>Vienti</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1734"/>
-        <location filename="../../mscore/file.cpp" line="1809"/>
-        <location filename="../../mscore/file.cpp" line="2407"/>
-        <location filename="../../mscore/file.cpp" line="2452"/>
+        <location filename="../../mscore/file.cpp" line="1739"/>
+        <location filename="../../mscore/file.cpp" line="1814"/>
+        <location filename="../../mscore/file.cpp" line="2421"/>
+        <location filename="../../mscore/file.cpp" line="2467"/>
         <source>Cannot determine file type</source>
         <translation>Ei voida määrittää tiedostotyyppiä</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1764"/>
-        <location filename="../../mscore/file.cpp" line="1809"/>
-        <location filename="../../mscore/file.cpp" line="1876"/>
+        <location filename="../../mscore/file.cpp" line="1769"/>
+        <location filename="../../mscore/file.cpp" line="1814"/>
+        <location filename="../../mscore/file.cpp" line="1881"/>
         <source>Export Parts</source>
         <translation>Vie stemmat</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1816"/>
-        <location filename="../../mscore/file.cpp" line="2560"/>
-        <location filename="../../mscore/file.cpp" line="2786"/>
+        <location filename="../../mscore/file.cpp" line="1821"/>
+        <location filename="../../mscore/file.cpp" line="2575"/>
+        <location filename="../../mscore/file.cpp" line="2801"/>
         <source>Confirm Replace</source>
         <translation>Vahvista poistaminen</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1817"/>
-        <location filename="../../mscore/file.cpp" line="2561"/>
-        <location filename="../../mscore/file.cpp" line="2787"/>
+        <location filename="../../mscore/file.cpp" line="1822"/>
+        <location filename="../../mscore/file.cpp" line="2576"/>
+        <location filename="../../mscore/file.cpp" line="2802"/>
         <source>&quot;%1&quot; already exists.
 Do you want to replace it?
 </source>
@@ -11076,104 +11259,104 @@ Haluatko korvata jo olemassa olevan?
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1818"/>
-        <location filename="../../mscore/file.cpp" line="2563"/>
-        <location filename="../../mscore/file.cpp" line="2789"/>
+        <location filename="../../mscore/file.cpp" line="1823"/>
+        <location filename="../../mscore/file.cpp" line="2578"/>
+        <location filename="../../mscore/file.cpp" line="2804"/>
         <source>Replace</source>
         <translation>Korvaa</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1819"/>
-        <location filename="../../mscore/file.cpp" line="2564"/>
-        <location filename="../../mscore/file.cpp" line="2790"/>
+        <location filename="../../mscore/file.cpp" line="1824"/>
+        <location filename="../../mscore/file.cpp" line="2579"/>
+        <location filename="../../mscore/file.cpp" line="2805"/>
         <source>Skip</source>
         <translation>Ohita</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1832"/>
-        <location filename="../../mscore/file.cpp" line="2565"/>
-        <location filename="../../mscore/file.cpp" line="2791"/>
+        <location filename="../../mscore/file.cpp" line="1837"/>
+        <location filename="../../mscore/file.cpp" line="2580"/>
+        <location filename="../../mscore/file.cpp" line="2806"/>
         <source>Replace All</source>
         <translation>Korvaa kaikki</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1833"/>
-        <location filename="../../mscore/file.cpp" line="2566"/>
-        <location filename="../../mscore/file.cpp" line="2792"/>
+        <location filename="../../mscore/file.cpp" line="1838"/>
+        <location filename="../../mscore/file.cpp" line="2581"/>
+        <location filename="../../mscore/file.cpp" line="2807"/>
         <source>Skip All</source>
         <translation>Ohita kaikki</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1856"/>
+        <location filename="../../mscore/file.cpp" line="1861"/>
         <source>Score_and_Parts</source>
         <translation>Partituuri_ja_stemmat</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1876"/>
+        <location filename="../../mscore/file.cpp" line="1881"/>
         <source>Parts were successfully exported</source>
         <translation>Stemmojen vienti onnistui</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1928"/>
-        <location filename="../../mscore/file.cpp" line="2357"/>
-        <location filename="../../mscore/file.cpp" line="2407"/>
+        <location filename="../../mscore/file.cpp" line="1933"/>
+        <location filename="../../mscore/file.cpp" line="2371"/>
+        <location filename="../../mscore/file.cpp" line="2421"/>
         <source>Save As</source>
         <translation>Tallenna nimellä</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2009"/>
+        <location filename="../../mscore/file.cpp" line="2014"/>
         <source>MuseScore:</source>
         <translation>MuseScore: </translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2009"/>
+        <location filename="../../mscore/file.cpp" line="2014"/>
         <source>Cannot write into %1</source>
         <translation>%1:een ei voi kirjoittaa</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2132"/>
+        <location filename="../../mscore/file.cpp" line="2136"/>
         <source>Score and Parts</source>
         <translation>Partituuri ja stemmat</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2356"/>
+        <location filename="../../mscore/file.cpp" line="2370"/>
         <source>Save a Copy</source>
         <translation>Tallenna kopio</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2421"/>
-        <location filename="../../mscore/file.cpp" line="2426"/>
-        <location filename="../../mscore/file.cpp" line="2452"/>
+        <location filename="../../mscore/file.cpp" line="2435"/>
+        <location filename="../../mscore/file.cpp" line="2441"/>
+        <location filename="../../mscore/file.cpp" line="2467"/>
         <source>Save Selection</source>
         <translation>Tallenna valinta</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2421"/>
+        <location filename="../../mscore/file.cpp" line="2435"/>
         <source>Please select one or more measures</source>
         <translation>Ole hyvä ja valitse yksi tai useampi tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2461"/>
+        <location filename="../../mscore/file.cpp" line="2476"/>
         <source>Save Selected</source>
         <translation>Tallenna valinta</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2474"/>
+        <location filename="../../mscore/file.cpp" line="2489"/>
         <source>Insert Image</source>
         <translation>Lisää kuva</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2478"/>
+        <location filename="../../mscore/file.cpp" line="2493"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2704"/>
+        <location filename="../../mscore/file.cpp" line="2719"/>
         <source>Images</source>
         <translation>Kuvat</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2704"/>
+        <location filename="../../mscore/file.cpp" line="2719"/>
         <source>All</source>
         <translation>Kaikki</translation>
     </message>
@@ -11188,450 +11371,450 @@ Haluatko korvata jo olemassa olevan?
         <translation>Tahdin toistomerkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="416"/>
+        <location filename="../../mscore/menus.cpp" line="418"/>
         <source>System break</source>
         <translation>Systeemin vaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="421"/>
+        <location filename="../../mscore/menus.cpp" line="423"/>
         <source>Page break</source>
         <translation>Sivunvaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="426"/>
+        <location filename="../../mscore/menus.cpp" line="428"/>
         <source>Section break</source>
         <translation>Jaksonvaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="432"/>
+        <location filename="../../mscore/menus.cpp" line="434"/>
         <source>Don&apos;t break</source>
         <translation>Älä hajota</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="439"/>
+        <location filename="../../mscore/menus.cpp" line="441"/>
         <source>Staff spacer down</source>
         <translation>Viivastovälistäjä alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="445"/>
+        <location filename="../../mscore/menus.cpp" line="447"/>
         <source>Staff spacer up</source>
         <translation>Viivastovälistäjä ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="451"/>
+        <location filename="../../mscore/menus.cpp" line="453"/>
         <source>Staff spacer fixed down</source>
-        <translation type="unfinished"/>
+        <translation>Viivastovälistäjä kiinnitetty alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="473"/>
+        <location filename="../../mscore/menus.cpp" line="475"/>
         <source>Fingering %1</source>
         <translation>Sormitus %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="479"/>
+        <location filename="../../mscore/menus.cpp" line="481"/>
         <source>RH Guitar Fingering %1</source>
         <translation>RH Kitaran sormitus %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="485"/>
+        <location filename="../../mscore/menus.cpp" line="487"/>
         <source>LH Guitar Fingering %1</source>
         <translation>LH Kitaran sormitus %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="491"/>
+        <location filename="../../mscore/menus.cpp" line="493"/>
         <source>String number %1</source>
         <translation>Kieli numero %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="823"/>
+        <location filename="../../mscore/menus.cpp" line="825"/>
         <source>Arpeggio</source>
         <translation>Arpeggio</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="828"/>
+        <location filename="../../mscore/menus.cpp" line="830"/>
         <source>Glissando</source>
         <translation>Glissando</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1245"/>
+        <location filename="../../mscore/menus.cpp" line="1247"/>
         <source>Metric modulation</source>
         <translation>Metrinen modulaatio</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1249"/>
-        <location filename="../../mscore/menus.cpp" line="1253"/>
+        <location filename="../../mscore/menus.cpp" line="1251"/>
+        <location filename="../../mscore/menus.cpp" line="1255"/>
         <source>Tempo text</source>
         <translation>Tempo teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1275"/>
+        <location filename="../../mscore/menus.cpp" line="1277"/>
         <source>Staff Text</source>
         <translation>Viivaston teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1276"/>
+        <location filename="../../mscore/menus.cpp" line="1278"/>
         <source>Staff text</source>
         <translation>Viivaston teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1279"/>
+        <location filename="../../mscore/menus.cpp" line="1281"/>
         <source>Expression</source>
         <translation>Esitystapa</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1282"/>
+        <location filename="../../mscore/menus.cpp" line="1284"/>
         <source>Expression text</source>
         <translation>esitystapateksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1285"/>
+        <location filename="../../mscore/menus.cpp" line="1287"/>
         <source>Change Instr.</source>
         <translation>Vaihda instr.</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1289"/>
+        <location filename="../../mscore/menus.cpp" line="1291"/>
         <source>Staff type change</source>
         <translation>Viivastotyylin muuttaminen</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1301"/>
+        <location filename="../../mscore/menus.cpp" line="1303"/>
         <source>System Text</source>
         <translation>Systeemin teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1302"/>
+        <location filename="../../mscore/menus.cpp" line="1304"/>
         <source>System text</source>
         <translation>Systeemin teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1296"/>
         <location filename="../../mscore/menus.cpp" line="1298"/>
+        <location filename="../../mscore/menus.cpp" line="1300"/>
         <source>Swing</source>
         <translation>Swing</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1293"/>
+        <location filename="../../mscore/menus.cpp" line="1295"/>
         <source>Rehearsal mark</source>
         <translation>Harjoitusmerkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1286"/>
+        <location filename="../../mscore/menus.cpp" line="1288"/>
         <source>Instrument change</source>
         <translation>Instrumentin vaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1306"/>
         <location filename="../../mscore/menus.cpp" line="1308"/>
+        <location filename="../../mscore/menus.cpp" line="1310"/>
         <source>pizz.</source>
-        <translation type="unfinished"/>
+        <translation>pizz.</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1311"/>
         <location filename="../../mscore/menus.cpp" line="1313"/>
+        <location filename="../../mscore/menus.cpp" line="1315"/>
         <source>arco</source>
         <translation>arco</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1316"/>
         <location filename="../../mscore/menus.cpp" line="1318"/>
+        <location filename="../../mscore/menus.cpp" line="1320"/>
         <source>tremolo</source>
         <translation>tremolo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1321"/>
         <location filename="../../mscore/menus.cpp" line="1323"/>
+        <location filename="../../mscore/menus.cpp" line="1325"/>
         <source>mute</source>
         <translation>vaimenna</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1326"/>
         <location filename="../../mscore/menus.cpp" line="1328"/>
+        <location filename="../../mscore/menus.cpp" line="1330"/>
         <source>open</source>
-        <translation type="unfinished"/>
+        <translation>avoin</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1358"/>
+        <location filename="../../mscore/menus.cpp" line="1360"/>
         <source>4/4 common time</source>
         <translation>4/4-tahtilaji</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1359"/>
+        <location filename="../../mscore/menus.cpp" line="1361"/>
         <source>2/2 alla breve</source>
         <translation>2/2 alla breve</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1938"/>
+        <location filename="../../mscore/musescore.cpp" line="1949"/>
         <source>&amp;Add</source>
         <translation>&amp;Luo</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1939"/>
+        <location filename="../../mscore/musescore.cpp" line="1950"/>
         <source>&amp;Measures</source>
         <translation>&amp;Tahdit</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1940"/>
+        <location filename="../../mscore/musescore.cpp" line="1951"/>
         <source>&amp;Frames</source>
         <translation>&amp;Kehykset</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1941"/>
+        <location filename="../../mscore/musescore.cpp" line="1952"/>
         <source>&amp;Text</source>
         <translation>&amp;Teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1942"/>
+        <location filename="../../mscore/musescore.cpp" line="1953"/>
         <source>&amp;Lines</source>
         <translation>&amp;Viivat</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="274"/>
+        <location filename="../../mscore/musescore.cpp" line="281"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Yhtään tahtia ei ole valittu:
 Valitse tahti ja yritä uudelleen</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1928"/>
+        <location filename="../../mscore/musescore.cpp" line="1939"/>
         <source>Measure:Beat:Tick</source>
         <translation>Tahti:Isku:Rasti</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1045"/>
+        <location filename="../../mscore/musescore.cpp" line="1058"/>
         <source>Switch layer</source>
         <translation>Vaihda tasoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1050"/>
+        <location filename="../../mscore/musescore.cpp" line="1063"/>
         <source>Switch play mode</source>
         <translation>Vaihda toistotilaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1977"/>
+        <location filename="../../mscore/musescore.cpp" line="1988"/>
         <source>Show MIDI import panel</source>
         <translation>Näytä MIDI tuontipaneeli</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1965"/>
+        <location filename="../../mscore/musescore.cpp" line="1976"/>
         <source>File Operations</source>
         <translation>Tiedostotoiminnot</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="932"/>
-        <location filename="../../mscore/musescore.cpp" line="1972"/>
+        <location filename="../../mscore/musescore.cpp" line="945"/>
+        <location filename="../../mscore/musescore.cpp" line="1983"/>
         <source>View Mode</source>
         <translation>Näytä tila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="933"/>
-        <location filename="../../mscore/musescore.cpp" line="1973"/>
+        <location filename="../../mscore/musescore.cpp" line="946"/>
+        <location filename="../../mscore/musescore.cpp" line="1984"/>
         <source>Page View</source>
         <translation>Sivunäkymä</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="934"/>
-        <location filename="../../mscore/musescore.cpp" line="1974"/>
+        <location filename="../../mscore/musescore.cpp" line="947"/>
+        <location filename="../../mscore/musescore.cpp" line="1985"/>
         <source>Continuous View</source>
         <translation>Jatkuva näkymä</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1966"/>
+        <location filename="../../mscore/musescore.cpp" line="1977"/>
         <source>Playback Controls</source>
         <translation>Toistosäätimet</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1967"/>
+        <location filename="../../mscore/musescore.cpp" line="1978"/>
         <source>Concert Pitch</source>
         <translation>Soiva sävelkorkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1968"/>
+        <location filename="../../mscore/musescore.cpp" line="1979"/>
         <source>Image Capture</source>
         <translation>Kuvakaappaus</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1969"/>
+        <location filename="../../mscore/musescore.cpp" line="1980"/>
         <source>Note Input</source>
         <translation>Nuotinsyöttö</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="566"/>
+        <location filename="../../mscore/musescore.cpp" line="571"/>
         <source>Note Entry Methods</source>
         <translation>Nuotinkirjoitustavat</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1931"/>
+        <location filename="../../mscore/musescore.cpp" line="1942"/>
         <source>&amp;File</source>
         <translation>&amp;Tiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1932"/>
+        <location filename="../../mscore/musescore.cpp" line="1943"/>
         <source>Open &amp;Recent</source>
         <translation>Avaa &amp;äskeinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1933"/>
+        <location filename="../../mscore/musescore.cpp" line="1944"/>
         <source>&amp;Edit</source>
         <translation>&amp;Muokkaa</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1949"/>
+        <location filename="../../mscore/musescore.cpp" line="1960"/>
         <source>&amp;Measure</source>
         <translation>&amp;Tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1947"/>
+        <location filename="../../mscore/musescore.cpp" line="1958"/>
         <source>&amp;Tools</source>
         <translation>&amp;Työkalut</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1948"/>
+        <location filename="../../mscore/musescore.cpp" line="1959"/>
         <source>&amp;Voices</source>
         <translation>&amp;Äänet</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1936"/>
+        <location filename="../../mscore/musescore.cpp" line="1947"/>
         <source>W&amp;orkspaces</source>
         <translation>T&amp;yötilat</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1937"/>
+        <location filename="../../mscore/musescore.cpp" line="1948"/>
         <source>&amp;Preferences…</source>
         <translation>&amp;Asetukset…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1934"/>
+        <location filename="../../mscore/musescore.cpp" line="1945"/>
         <source>&amp;View</source>
         <translation>&amp;Näytä</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1935"/>
+        <location filename="../../mscore/musescore.cpp" line="1946"/>
         <source>&amp;Toolbars</source>
         <translation>&amp;Työkalupalkit</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1945"/>
+        <location filename="../../mscore/musescore.cpp" line="1956"/>
         <source>T&amp;uplets</source>
         <translation>T&amp;upletit</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1950"/>
+        <location filename="../../mscore/musescore.cpp" line="1961"/>
         <source>&amp;Plugins</source>
         <translation>&amp;Liitännäiset</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1951"/>
+        <location filename="../../mscore/musescore.cpp" line="1962"/>
         <source>&amp;Help</source>
         <translation>&amp;Ohje</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1957"/>
+        <location filename="../../mscore/musescore.cpp" line="1968"/>
         <source>&amp;Online Handbook</source>
         <translation>&amp;Käsikirja verkossa</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1954"/>
+        <location filename="../../mscore/musescore.cpp" line="1965"/>
         <source>&amp;About…</source>
         <translation>&amp;Tietoja…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="725"/>
+        <location filename="../../mscore/musescore.cpp" line="730"/>
         <source>Please wait, unpacking extension…</source>
         <translation>Odota, purkaa päätettä…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="799"/>
+        <location filename="../../mscore/musescore.cpp" line="809"/>
         <source>Please wait, loading soundfonts…</source>
         <translation>Odota, lataa äänifontteja…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="935"/>
-        <location filename="../../mscore/musescore.cpp" line="1975"/>
+        <location filename="../../mscore/musescore.cpp" line="948"/>
+        <location filename="../../mscore/musescore.cpp" line="1986"/>
         <source>Single Page</source>
         <translation>Yksittäinen sivu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1048"/>
+        <location filename="../../mscore/musescore.cpp" line="1061"/>
         <source>Synthesizer</source>
         <translation>Syntetisaattori</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1049"/>
+        <location filename="../../mscore/musescore.cpp" line="1062"/>
         <source>Audio track</source>
         <translation>Ääniraita</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1602"/>
+        <location filename="../../mscore/musescore.cpp" line="1616"/>
         <source>&amp;Stretch</source>
         <translation>&amp;Venytys</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1943"/>
+        <location filename="../../mscore/musescore.cpp" line="1954"/>
         <source>N&amp;otes</source>
         <translation>N&amp;uotit</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1944"/>
+        <location filename="../../mscore/musescore.cpp" line="1955"/>
         <source>&amp;Intervals</source>
         <translation>&amp;intervallit</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1946"/>
+        <location filename="../../mscore/musescore.cpp" line="1957"/>
         <source>F&amp;ormat</source>
         <translation>M&amp;uotoilu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1952"/>
+        <location filename="../../mscore/musescore.cpp" line="1963"/>
         <source>&amp;Tours</source>
         <translation>&amp;Esittelykierrokset</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1955"/>
+        <location filename="../../mscore/musescore.cpp" line="1966"/>
         <source>About &amp;Qt…</source>
         <translation>Tietoja &amp;Qt:stä…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1956"/>
+        <location filename="../../mscore/musescore.cpp" line="1967"/>
         <source>About &amp;MusicXML…</source>
         <translation>Tietoja &amp;MusicXML:sta…</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1959"/>
+        <location filename="../../mscore/musescore.cpp" line="1970"/>
         <source>Check for &amp;Update</source>
         <translation>Tarkista päivitykset</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1960"/>
+        <location filename="../../mscore/musescore.cpp" line="1971"/>
         <source>Ask for Help</source>
         <translation>Kysy apua</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1961"/>
+        <location filename="../../mscore/musescore.cpp" line="1972"/>
         <source>Report a Bug</source>
         <translation>Ilmoita virheestä</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1962"/>
+        <location filename="../../mscore/musescore.cpp" line="1973"/>
         <source>Leave feedback</source>
         <translation>Jätä palautetta</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1963"/>
+        <location filename="../../mscore/musescore.cpp" line="1974"/>
         <source>Revert to Factory Settings</source>
         <translation>Palauta tehdasasetuksiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="1970"/>
+        <location filename="../../mscore/musescore.cpp" line="1981"/>
         <source>Feedback</source>
         <translation>Palaute</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2071"/>
+        <location filename="../../mscore/musescore.cpp" line="2082"/>
         <source>Are you sure?</source>
         <translation>Oletko varma?</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2072"/>
+        <location filename="../../mscore/musescore.cpp" line="2083"/>
         <source>This will reset all your preferences.
 Custom palettes, custom shortcuts, and the list of recent scores will be deleted. MuseScore will restart with its default settings.
 Reverting will not remove any scores from your computer.
@@ -11642,108 +11825,95 @@ Palauttaminen ei poista yhtään partituuria tietokoneeltasi.
 Haluatko varmasti jatkaa?</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="2285"/>
+        <location filename="../../mscore/musescore.cpp" line="2358"/>
         <source>Clear Recent Files</source>
         <translation>Tyhjennä valikko</translation>
     </message>
     <message>
-        <source>Reset all elements positions?</source>
-        <translation type="vanished">Palauta kaikkien elementtien sijainnit?</translation>
-    </message>
-    <message>
-        <source>This score was created in older versions of MuseScore. For a better experience of using MuseScore 3.0 it is recommended to reset elements positions to their default values.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="3792"/>
+        <location filename="../../mscore/musescore.cpp" line="3908"/>
         <source>System</source>
         <extracomment>The default language of the operating system. NOT a music system.</extracomment>
         <translation>Järjestelmän kieli</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3800"/>
+        <location filename="../../mscore/musescore.cpp" line="3916"/>
         <source>Error reading language file %s at line %d column %d: %s
 </source>
         <translation>Kielitiedoston %s lukemisessa tapahtui virhe rivillä %d sarakkeessa %d: %s
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4039"/>
+        <location filename="../../mscore/musescore.cpp" line="4155"/>
         <source>No score</source>
         <translation>Ei partituuria</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4053"/>
+        <location filename="../../mscore/musescore.cpp" line="4169"/>
         <source>Repitch input mode</source>
         <translation>Repitch-syöttötila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4058"/>
+        <location filename="../../mscore/musescore.cpp" line="4174"/>
         <source>Rhythm input mode</source>
         <translation>Rytminsyöttötila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4063"/>
+        <location filename="../../mscore/musescore.cpp" line="4179"/>
         <source>Realtime (automatic) note input mode</source>
         <translation>Reaaliaikainen (automaattinen) nuotinsyöttötila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4068"/>
+        <location filename="../../mscore/musescore.cpp" line="4184"/>
         <source>Realtime (manual) note input mode</source>
         <translation>Reaaliaikainen (manuaalinen) nuotinsyöttötila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4073"/>
-        <source>Timewise input mode</source>
-        <translation>Timewise-syöttötila</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/musescore.cpp" line="4078"/>
+        <location filename="../../mscore/musescore.cpp" line="4194"/>
         <source>Steptime note input mode</source>
         <translation>Steptime-nuotinsyöttötila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4095"/>
+        <location filename="../../mscore/musescore.cpp" line="4211"/>
         <source>TAB input mode</source>
         <translation>TAB-kirjoitustila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4098"/>
+        <location filename="../../mscore/musescore.cpp" line="4214"/>
         <source>Edit mode</source>
         <translation>Muokkaustila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4101"/>
+        <location filename="../../mscore/musescore.cpp" line="4217"/>
         <source>Text edit mode</source>
         <translation>Tekstin muokkaustila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4104"/>
+        <location filename="../../mscore/musescore.cpp" line="4220"/>
         <source>Lyrics edit mode</source>
         <translation>Sanoituksen muokkaustila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4107"/>
+        <location filename="../../mscore/musescore.cpp" line="4223"/>
         <source>Chord symbol/figured bass edit mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4110"/>
+        <location filename="../../mscore/musescore.cpp" line="4226"/>
         <source>Play</source>
         <translation>Toista</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4113"/>
+        <location filename="../../mscore/musescore.cpp" line="4229"/>
         <source>Image capture mode</source>
         <translation>Kuvakaappaustila</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4117"/>
+        <location filename="../../mscore/musescore.cpp" line="4233"/>
         <source>Score locked</source>
         <translation>Partituuri lukittu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="4932"/>
+        <location filename="../../mscore/musescore.cpp" line="5055"/>
         <source>The previous session quit unexpectedly.
 
 Restore session?</source>
@@ -11752,17 +11922,17 @@ Restore session?</source>
 Palauta istunto?</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6224"/>
+        <location filename="../../mscore/musescore.cpp" line="6378"/>
         <source>Warning</source>
         <translation>Varoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6225"/>
+        <location filename="../../mscore/musescore.cpp" line="6379"/>
         <source>Cannot create tuplet: Note value is too short</source>
         <translation>Ei voida luoda poikkeusjakoa: aika-arvo on liian lyhyt</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="6383"/>
+        <location filename="../../mscore/musescore.cpp" line="6537"/>
         <source>Go To: </source>
         <translation>Siirry tahtiin: </translation>
     </message>
@@ -11777,7 +11947,7 @@ Palauta istunto?</translation>
         <translation>Ei voi luoda poikkeusjakoa suhteella %1 kestolle %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="31"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="32"/>
         <source>This score cannot be saved online. Please fix the corrupted measures and try again.</source>
         <translation>Tätä partituuria ei voida tallentaa verkkoon. Korjaa vialliset tahdit ja yritä uudelleen.</translation>
     </message>
@@ -11862,7 +12032,7 @@ yhteys käytettävissä</translation>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="195"/>
         <source>Choose instruments on the left to add to instrument list on the right:</source>
-        <translation type="unfinished"/>
+        <translation>Valitse instrumentit vasemmalta lisätäksesi instrumenttilistaan oikealle:</translation>
     </message>
 </context>
 <context>
@@ -11885,12 +12055,12 @@ yhteys käytettävissä</translation>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="380"/>
         <source>Choose a key signature</source>
-        <translation type="unfinished"/>
+        <translation>Valitse sävellaji</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="391"/>
         <source>Key Signature: %1</source>
-        <translation type="unfinished"/>
+        <translation>Sävellaji %1</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="401"/>
@@ -11958,18 +12128,18 @@ yhteys käytettävissä</translation>
 <context>
     <name>Ms::Palette</name>
     <message>
-        <location filename="../../mscore/palette.cpp" line="240"/>
-        <location filename="../../mscore/palette.cpp" line="253"/>
+        <location filename="../../mscore/palette.cpp" line="242"/>
+        <location filename="../../mscore/palette.cpp" line="255"/>
         <source>More Elements…</source>
         <translation>lisää elementtejä…</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="249"/>
+        <location filename="../../mscore/palette.cpp" line="251"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="250"/>
+        <location filename="../../mscore/palette.cpp" line="252"/>
         <source>Properties…</source>
         <translation>Ominaisuudet …</translation>
     </message>
@@ -12008,7 +12178,7 @@ yhteys käytettävissä</translation>
         <translation>Lisää uusi työtila</translation>
     </message>
     <message>
-        <location filename="../../mscore/palettebox.cpp" line="291"/>
+        <location filename="../../mscore/palettebox.cpp" line="317"/>
         <source>New Palette</source>
         <translation>Uusi paletti</translation>
     </message>
@@ -12059,79 +12229,75 @@ yhteys käytettävissä</translation>
 <context>
     <name>Ms::PartEdit</name>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="461"/>
+        <location filename="../../mscore/parteditbase.cpp" line="459"/>
         <source>Sound: '%1' vs. '%2'
 </source>
         <translation>Ääni: &apos;%1&apos; vs. &apos;%2&apos;
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="463"/>
+        <location filename="../../mscore/parteditbase.cpp" line="461"/>
         <source>Volume: %1 vs. %2
 </source>
         <translation>Äänenvoimakkuus: %1 vs. %2
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="465"/>
+        <location filename="../../mscore/parteditbase.cpp" line="463"/>
         <source>Pan: %1 vs. %2
 </source>
         <translation>Panorointi: %1 vs. %2
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="467"/>
+        <location filename="../../mscore/parteditbase.cpp" line="465"/>
         <source>Reverb: %1 vs. %2
 </source>
         <translation>Jälkikaiku: %1 vs. %2
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="469"/>
+        <location filename="../../mscore/parteditbase.cpp" line="467"/>
         <source>Chorus: %1 vs. %2
 </source>
         <translation>Chorus: %1 vs. %2
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="471"/>
+        <location filename="../../mscore/parteditbase.cpp" line="469"/>
         <source>Solo: %1 vs. %2
 </source>
         <translation>Soolo: %1 vs. %2
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="473"/>
+        <location filename="../../mscore/parteditbase.cpp" line="471"/>
         <source>Mute: %1 vs. %2
 </source>
         <translation>Vaimenna: %1 vs. %2
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="476"/>
+        <location filename="../../mscore/parteditbase.cpp" line="474"/>
         <source>Instrument '%1'	Instrument '%2'
 </source>
         <translation>Instrumentti &apos;%1&apos;	Instrument &apos;%2&apos;
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="479"/>
+        <location filename="../../mscore/parteditbase.cpp" line="477"/>
         <source>There is already an instrument &apos;%1&apos; with MIDI port = %2 and channel = %3.</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentti &apos;%1&apos; on jo MIDI portissa &apos;%2 kanavassa %3</translation>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.cpp" line="481"/>
+        <location filename="../../mscore/parteditbase.cpp" line="479"/>
         <source>Do you want to synchronize the current instrument with an existing one?</source>
-        <translation type="unfinished"/>
+        <translation>Haluatko synkronoida kyseisen instrumentin olemassa olevan kanssa?</translation>
     </message>
     <message>
-        <source>Do you want to synchronize current instrument with an existing one?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../mscore/parteditbase.cpp" line="484"/>
+        <location filename="../../mscore/parteditbase.cpp" line="482"/>
         <source>Assign next free MIDI channel</source>
-        <translation type="unfinished"/>
+        <translation>Määritä seuraava vapaa MIDI kanava</translation>
     </message>
 </context>
 <context>
@@ -12145,7 +12311,7 @@ yhteys käytettävissä</translation>
 <context>
     <name>Ms::PianoTools</name>
     <message>
-        <location filename="../../mscore/pianotools.cpp" line="439"/>
+        <location filename="../../mscore/pianotools.cpp" line="440"/>
         <source>Piano Keyboard</source>
         <translation>Pianokoskettimisto</translation>
     </message>
@@ -12170,7 +12336,7 @@ yhteys käytettävissä</translation>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="120"/>
         <source>Subdiv.:</source>
-        <translation type="unfinished"/>
+        <translation>Alajako:</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll.cpp" line="122"/>
@@ -12241,86 +12407,87 @@ yhteys käytettävissä</translation>
 <context>
     <name>Ms::PluginCreator</name>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="50"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="51"/>
         <source>File Operations</source>
         <translation>Tiedostotoiminnot</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="75"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="76"/>
         <source>Edit Operations</source>
         <translation>Muokkaustoiminnot</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="199"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="200"/>
         <source>Plugin Creator</source>
         <translation>Liitännäisten luonti</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="245"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="323"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="416"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="502"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="246"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="324"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="417"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="503"/>
         <source>MuseScore</source>
         <translation>MuseScore </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="246"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="417"/>
-        <location filename="../../mscore/pluginCreator.cpp" line="503"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="247"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="418"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="504"/>
         <source>Plugin &quot;%1&quot; has changes.
 Save before closing?</source>
         <translation>Liitännäisessä &quot;%1&quot; on muutoksia.
 Tallennetaanko ennen sulkemista?</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="295"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="296"/>
         <source>Running…
 </source>
         <translation>Käynnissä…
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="305"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="306"/>
         <source>Creating component failed
 </source>
-        <translation type="unfinished"/>
+        <translation>Komponentin luominen epäonnistui
+</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="307"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="308"/>
         <source>line %1: %2
 </source>
         <translation>viiva %1: %2
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="316"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="317"/>
         <source>Plugin Details:</source>
         <translation>Liitännäisen detaljit:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="317"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="318"/>
         <source>Menu Path:</source>
         <translation>Valikkopolku:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="318"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="319"/>
         <source>Version:</source>
         <translation>Versio: </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="319"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="320"/>
         <source>Description:</source>
         <translation>Kuvaus:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="320"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="321"/>
         <source>Requires Score
 </source>
         <translation>Vaatii partituurin
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="324"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="325"/>
         <source>No score open.
 This plugin requires an open score to run.
 </source>
@@ -12329,27 +12496,27 @@ Tämä liitännäinen vaatii toimiakseen avoimen partituurin.
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="464"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="465"/>
         <source>Saving to:</source>
         <translation>Tallenna:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="466"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="467"/>
         <source>Save Plugin</source>
         <translation>Tallenna liitännäinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="466"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="467"/>
         <source>Cannot determine file type</source>
         <translation>Ei voida määrittää tiedostotyyppiä</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="512"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="513"/>
         <source>Untitled</source>
         <translation>Nimetön</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.cpp" line="572"/>
+        <location filename="../../mscore/plugin/pluginCreator.cpp" line="573"/>
         <source>Manual</source>
         <translation>Opas/Manuaalinen</translation>
     </message>
@@ -12357,12 +12524,12 @@ Tämä liitännäinen vaatii toimiakseen avoimen partituurin.
 <context>
     <name>Ms::PluginManager</name>
     <message>
-        <location filename="../../mscore/pluginManager.cpp" line="356"/>
+        <location filename="../../mscore/plugin/pluginManager.cpp" line="357"/>
         <source>MuseScore</source>
         <translation>MuseScore </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.cpp" line="357"/>
+        <location filename="../../mscore/plugin/pluginManager.cpp" line="358"/>
         <source>Plugins reloaded.</source>
         <translation>Liitännäiset ladattu uudelleen.</translation>
     </message>
@@ -12499,10 +12666,6 @@ Tämä liitännäinen vaatii toimiakseen avoimen partituurin.
         <location filename="../../mscore/prefsdialog.cpp" line="120"/>
         <source>320</source>
         <translation>320</translation>
-    </message>
-    <message>
-        <source>Warning: You used the same CoreMIDI IAC bus for input and output.  This will cause problematic loopback, whereby MuseScore&apos;s output MIDI messages will be sent back to MuseScore as input, causing confusion.  To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output.  Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="610"/>
@@ -12642,22 +12805,22 @@ Tämä liitännäinen vaatii toimiakseen avoimen partituurin.
 <context>
     <name>Ms::PreferencesListWidget</name>
     <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="29"/>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="30"/>
         <source>Preference</source>
         <translation>Asetus</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="29"/>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="30"/>
         <source>Value</source>
         <translation>Arvo</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="32"/>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="33"/>
         <source>Advanced preferences</source>
         <translation>Lisäasetukset</translation>
     </message>
     <message>
-        <location filename="../../mscore/preferenceslistwidget.cpp" line="33"/>
+        <location filename="../../mscore/preferenceslistwidget.cpp" line="34"/>
         <source>Access to more advanced preferences</source>
         <translation type="unfinished"/>
     </message>
@@ -12670,12 +12833,12 @@ Tämä liitännäinen vaatii toimiakseen avoimen partituurin.
         <translation>Palauta tyyli oletukseen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/resetButton.cpp" line="31"/>
+        <location filename="../../mscore/inspector/resetButton.cpp" line="34"/>
         <source>S</source>
         <translation>S</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/resetButton.cpp" line="32"/>
+        <location filename="../../mscore/inspector/resetButton.cpp" line="35"/>
         <source>Set as style</source>
         <translation>Aseta tyyliksi</translation>
     </message>
@@ -12780,7 +12943,7 @@ avaaminen epäonnistui: %2</translation>
         <translation>Tyylin kirjoitus epäonnistui: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/edit.cpp" line="2934"/>
+        <location filename="../../libmscore/edit.cpp" line="3029"/>
         <source>Please select the complete tuplet and retry the command</source>
         <translation>Valitse koko tupletti ja syötä komento uudelleen</translation>
     </message>
@@ -12788,46 +12951,46 @@ avaaminen epäonnistui: %2</translation>
 <context>
     <name>Ms::ScoreAccessibility</name>
     <message>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="107"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="110"/>
         <source>No selection</source>
         <translation>Ei valintaa</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="125"/>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="166"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="128"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="169"/>
         <source>Start Measure: %1; Start Beat: %2</source>
         <translation>Aloitustahti: %1; Aloituslyönti: %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="136"/>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="175"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="139"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="178"/>
         <source>End Measure: %1; End Beat: %2</source>
         <translation>Viimeinen tahti: %1; Viimeinen lyönti: %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="141"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="144"/>
         <source>Measure: %1</source>
         <translation>Tahti: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="143"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="146"/>
         <source>Beat: %1</source>
         <translation>Lyönti: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="153"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="156"/>
         <source>Staff %1</source>
         <translation>Viivasto %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="176"/>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="177"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="179"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="180"/>
         <source>Range Selection</source>
         <translation>Alueen valinta</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="180"/>
-        <location filename="../../mscore/scoreaccessibility.cpp" line="181"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="183"/>
+        <location filename="../../mscore/scoreaccessibility.cpp" line="184"/>
         <source>List Selection</source>
         <translation>Valintaluettelo</translation>
     </message>
@@ -12891,7 +13054,7 @@ avaaminen epäonnistui: %2</translation>
     <message>
         <location filename="../../mscore/scorecmp/scorelistmodel.cpp" line="141"/>
         <source>Session start</source>
-        <translation type="unfinished"/>
+        <translation>Osan alku</translation>
     </message>
 </context>
 <context>
@@ -13124,11 +13287,6 @@ avaaminen epäonnistui: %2</translation>
         <translation>Ohje</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="410"/>
-        <source>Delete Selected Measures</source>
-        <translation>Poista valitut tahdit</translation>
-    </message>
-    <message>
         <location filename="../../mscore/scoreview.cpp" line="383"/>
         <source>Edit Drumset…</source>
         <translation>Muokkaa rumpusettiä …</translation>
@@ -13144,19 +13302,24 @@ avaaminen epäonnistui: %2</translation>
         <translation>Jaa viivasto …</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="1594"/>
+        <location filename="../../mscore/scoreview.cpp" line="410"/>
+        <source>Remove Selected Measures</source>
+        <translation>Poista valitut tahdit</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/scoreview.cpp" line="1601"/>
         <source>Please select the complete tuplet/tremolo and retry the command</source>
         <translation>Valitse koko poikkeusjako/tremolo ja yritä leikkausta uudelleen</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="2216"/>
+        <location filename="../../mscore/scoreview.cpp" line="2249"/>
         <source>No measures selected:
 Please select a range of measures to join and try again</source>
         <translation>Tahtia ei valittu:
 Valitse yhdistettävät tahdit ja yritä uudelleen</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3894"/>
+        <location filename="../../mscore/scoreview.cpp" line="4069"/>
         <source>No staves found:
 please use the instruments dialog to
 first create some staves</source>
@@ -13165,7 +13328,7 @@ luo aluksi muutama viivasto käyttämällä
 instrumenttien valintaikkunaa</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="3976"/>
+        <location filename="../../mscore/scoreview.cpp" line="4151"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Yhtään tahtia ei ole valittu:
@@ -13409,17 +13572,17 @@ Haluatko nähdä näitä esittelykierroksia?</translation>
 <context>
     <name>Ms::TemplateBrowser</name>
     <message>
-        <location filename="../../mscore/templateBrowser.cpp" line="120"/>
+        <location filename="../../mscore/templateBrowser.cpp" line="113"/>
         <source>Choose Instruments</source>
         <translation>Valitse instrumentit</translation>
     </message>
     <message>
-        <location filename="../../mscore/templateBrowser.cpp" line="123"/>
+        <location filename="../../mscore/templateBrowser.cpp" line="116"/>
         <source>Create New Score…</source>
         <translation>Luo uusi partituuri…</translation>
     </message>
     <message>
-        <location filename="../../mscore/templateBrowser.cpp" line="147"/>
+        <location filename="../../mscore/templateBrowser.cpp" line="140"/>
         <source>Custom Templates</source>
         <translation>Omat mallit</translation>
     </message>
@@ -13525,17 +13688,17 @@ Haluatko nähdä näitä esittelykierroksia?</translation>
     <message>
         <location filename="../../mscore/timeline.cpp" line="757"/>
         <location filename="../../mscore/timeline.cpp" line="989"/>
-        <location filename="../../mscore/timeline.cpp" line="1275"/>
+        <location filename="../../mscore/timeline.cpp" line="1278"/>
         <source>Jumps and Markers</source>
         <translation>Hypyt ja merkit</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="758"/>
-        <location filename="../../mscore/timeline.cpp" line="1348"/>
-        <location filename="../../mscore/timeline.cpp" line="1390"/>
-        <location filename="../../mscore/timeline.cpp" line="2473"/>
-        <location filename="../../mscore/timeline.cpp" line="2708"/>
-        <location filename="../../mscore/timeline.cpp" line="2740"/>
+        <location filename="../../mscore/timeline.cpp" line="1351"/>
+        <location filename="../../mscore/timeline.cpp" line="1393"/>
+        <location filename="../../mscore/timeline.cpp" line="2487"/>
+        <location filename="../../mscore/timeline.cpp" line="2722"/>
+        <location filename="../../mscore/timeline.cpp" line="2754"/>
         <source>Measures</source>
         <translation>Tahdit</translation>
     </message>
@@ -13550,24 +13713,24 @@ Haluatko nähdä näitä esittelykierroksia?</translation>
         <translation>Mukautettu sävellajimerkintä</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="2697"/>
+        <location filename="../../mscore/timeline.cpp" line="2711"/>
         <source>Context menu</source>
         <translation>Kontekstivalikko</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="2699"/>
+        <location filename="../../mscore/timeline.cpp" line="2713"/>
         <source>Edit Instruments</source>
         <translation>Muokkaa instrumentteja</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="2717"/>
-        <location filename="../../mscore/timeline.cpp" line="2737"/>
+        <location filename="../../mscore/timeline.cpp" line="2731"/>
+        <location filename="../../mscore/timeline.cpp" line="2751"/>
         <source>Hide all</source>
         <translation>Piilota kaikki</translation>
     </message>
     <message>
-        <location filename="../../mscore/timeline.cpp" line="2720"/>
-        <location filename="../../mscore/timeline.cpp" line="2746"/>
+        <location filename="../../mscore/timeline.cpp" line="2734"/>
+        <location filename="../../mscore/timeline.cpp" line="2760"/>
         <source>Show all</source>
         <translation>Näytä kaikki</translation>
     </message>
@@ -13576,14 +13739,14 @@ Haluatko nähdä näitä esittelykierroksia?</translation>
     <name>Ms::ToolbarEditor</name>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="76"/>
-        <source> (not changeable)</source>
-        <translation>(ei muutettavissa)</translation>
+        <source>(not changeable)</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="124"/>
         <location filename="../../mscore/toolbarEditor.cpp" line="152"/>
-        <source>Spacer</source>
-        <translation>Välistäjä</translation>
+        <source>Separator</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -13641,92 +13804,92 @@ Haluatko nähdä näitä esittelykierroksia?</translation>
 <context>
     <name>Ms::UploadScoreDialog</name>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="58"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="59"/>
         <source>All Rights reserved</source>
         <translation>Kaikki oikeudet pidätetään</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="59"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="60"/>
         <source>Creative Commons Attribution</source>
         <translation>Creative Commons Attribution</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="60"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="61"/>
         <source>Creative Commons Attribution No Derivative Works</source>
         <translation>Creative Commons Attribution No Derivative Works</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="61"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="62"/>
         <source>Creative Commons Attribution Share Alike</source>
         <translation>Creative Commons Attribution Share Alike</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="62"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="63"/>
         <source>Creative Commons Attribution Noncommercial</source>
         <translation>Creative Commons Attribution Noncommercial</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="63"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="64"/>
         <source>Creative Commons Attribution Noncommercial Non Derivate Works</source>
         <translation>Creative Commons Attribution Noncommercial Non Derivate Works</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="64"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="65"/>
         <source>Creative Commons Attribution Noncommercial Share Alike</source>
         <translation>Creative Commons Attribution Noncommercial Share Alike</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="65"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="66"/>
         <source>Creative Commons Copyright Waiver</source>
         <translation>Creative Commons Copyright Waiver</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="67"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="68"/>
         <source>%1What does this mean?%2</source>
         <translation>%1Mitä tämä tarkoittaa?%2</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="75"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="76"/>
         <source>Respect the %1community guidelines%2. Only make your scores accessible to anyone with permission from the right holders.</source>
         <translation>Kunnioita %1yhteisön ohjeita%2. Älä anna partituuriasi kenenkään saataville ilman oikeuden omistajien lupaa.</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="80"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="81"/>
         <source>Use a comma to separate the tags</source>
         <translation>Erota tunnisteet pilkuilla</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="88"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="89"/>
         <source>Render the score with the current synth settings. %1More info%2.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="131"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="132"/>
         <source>Missing title</source>
         <translation>Puuttuva otsikko</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="131"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="132"/>
         <source>Please provide a title</source>
         <translation>Anna otsikko</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="172"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="173"/>
         <source>Success</source>
         <translation>Onnistui</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="173"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="174"/>
         <source>Finished! %1Go to my score%2.</source>
         <translation>Valmis! %1Mene omaan partituuriin%2.</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="186"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="187"/>
         <source>Error</source>
         <translation>Virhe</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="250"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="251"/>
         <source>[%1Link%2]</source>
         <translation>[%1Linkki%2]</translation>
     </message>
@@ -13913,27 +14076,27 @@ valitse toinen nimi:</translation>
     <message>
         <location filename="../../mscore/newwizard.ui" line="30"/>
         <source>Enter score title</source>
-        <translation type="unfinished"/>
+        <translation>Anna partituurin otsikko</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="47"/>
         <source>Enter score subtitle</source>
-        <translation type="unfinished"/>
+        <translation>Anna partituurin teksti</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="64"/>
         <source>Enter the composer&apos;s name</source>
-        <translation type="unfinished"/>
+        <translation>Anna säveltäjän nimi</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="81"/>
         <source>Enter the lyricist&apos;s name</source>
-        <translation type="unfinished"/>
+        <translation>Anna sanoittajan nimi</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="98"/>
         <source>Enter copyright information</source>
-        <translation type="unfinished"/>
+        <translation>Anna tekijänoikeus tiedot</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.ui" line="37"/>
@@ -14023,34 +14186,34 @@ valitse toinen nimi:</translation>
 <context>
     <name>OffsetSelect</name>
     <message>
-        <location filename="../../mscore/inspector/offset_select.ui" line="31"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="24"/>
         <source>X:</source>
         <translation>X:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/offset_select.ui" line="44"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="37"/>
         <source>Horizontal offset</source>
         <translation>Vaakapoikkeama</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/offset_select.ui" line="47"/>
-        <location filename="../../mscore/inspector/offset_select.ui" line="97"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="40"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="82"/>
         <source>sp</source>
         <translation>sp</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/offset_select.ui" line="60"/>
-        <location filename="../../mscore/inspector/offset_select.ui" line="110"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="56"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="105"/>
         <source>Snap to grid</source>
         <translation>Napsahda ruudukkoon</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/offset_select.ui" line="81"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="98"/>
         <source>Y:</source>
         <translation>Y:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/offset_select.ui" line="94"/>
+        <location filename="../../mscore/inspector/offset_select.ui" line="79"/>
         <source>Vertical offset</source>
         <translation>Pystypoikkeama</translation>
     </message>
@@ -14086,7 +14249,7 @@ valitse toinen nimi:</translation>
     <message>
         <location filename="../../mscore/omrpanel.ui" line="73"/>
         <source>Mark slices</source>
-        <translation type="unfinished"/>
+        <translation>Merkitse osat</translation>
     </message>
     <message>
         <location filename="../../mscore/omrpanel.ui" line="80"/>
@@ -14211,37 +14374,42 @@ valitse toinen nimi:</translation>
 <context>
     <name>Palette</name>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="119"/>
+        <location filename="../../libmscore/barline.cpp" line="194"/>
         <source>Normal barline</source>
         <translation>Normaali tahtiviiva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="123"/>
+        <location filename="../../libmscore/barline.cpp" line="198"/>
         <source>Dashed barline</source>
         <translation>Katkotahtiviiva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="125"/>
+        <location filename="../../libmscore/barline.cpp" line="200"/>
+        <source>End-start repeat</source>
+        <translation>Kertauksen lopetus ja aloitus</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/barline.cpp" line="201"/>
         <source>Dotted barline</source>
         <translation>Pistetahtiviiva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="124"/>
+        <location filename="../../libmscore/barline.cpp" line="199"/>
         <source>Final barline</source>
         <translation>Lopputahtiviiva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="120"/>
+        <location filename="../../libmscore/barline.cpp" line="195"/>
         <source>Double barline</source>
         <translation>Kaksoistahtiviiva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="121"/>
+        <location filename="../../libmscore/barline.cpp" line="196"/>
         <source>Start repeat</source>
         <translation>Kertauksen aloitus</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="122"/>
+        <location filename="../../libmscore/barline.cpp" line="197"/>
         <source>End repeat</source>
         <translation>Kertauksen lopetus</translation>
     </message>
@@ -14264,7 +14432,7 @@ valitse toinen nimi:</translation>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="226"/>
         <location filename="../../mscore/menus.cpp" line="224"/>
-        <location filename="../../mscore/musescore.cpp" line="5817"/>
+        <location filename="../../mscore/musescore.cpp" line="5955"/>
         <source>Key Signatures</source>
         <translation>Sävellajimerkinnät</translation>
     </message>
@@ -14304,194 +14472,210 @@ valitse toinen nimi:</translation>
         <translation>Kertaukset ja hypyt</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="406"/>
+        <location filename="../../mscore/menus.cpp" line="408"/>
         <source>Breaks &amp;&amp; Spacers</source>
         <translation>Vaihdot ja välistäjät</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="464"/>
+        <location filename="../../mscore/menus.cpp" line="466"/>
         <source>Fingering</source>
         <translation>Sormitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="514"/>
+        <location filename="../../mscore/menus.cpp" line="516"/>
         <source>Tremolo</source>
         <translation>Tremolo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="533"/>
+        <location filename="../../mscore/menus.cpp" line="535"/>
         <source>Noteheads</source>
         <translation>Nuotinpäät</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="564"/>
+        <location filename="../../mscore/menus.cpp" line="566"/>
         <source>Articulations</source>
         <translation>Artikulaatiot</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="649"/>
+        <location filename="../../mscore/menus.cpp" line="651"/>
         <source>Ornaments</source>
         <translation>Korukuviot</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="685"/>
+        <location filename="../../mscore/menus.cpp" line="687"/>
         <source>Accordion</source>
         <translation>Harmonikka</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="768"/>
+        <location filename="../../mscore/menus.cpp" line="770"/>
         <source>Brackets</source>
         <translation>Hakasulkeet</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="795"/>
+        <location filename="../../mscore/menus.cpp" line="776"/>
+        <source>Bracket</source>
+        <translation>Hakasulje</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/menus.cpp" line="777"/>
+        <source>Brace</source>
+        <translation>Aaltosulje</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/menus.cpp" line="778"/>
+        <source>Square</source>
+        <translation>Neliö</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/menus.cpp" line="797"/>
         <source>Breaths &amp;&amp; Pauses</source>
         <translation>Hengitykset &amp;&amp; tauot</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="816"/>
+        <location filename="../../mscore/menus.cpp" line="818"/>
         <source>Arpeggios &amp;&amp; Glissandos</source>
         <translation>Arpeggiot &amp;&amp; glissandot</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="879"/>
+        <location filename="../../mscore/menus.cpp" line="881"/>
         <source>Clefs</source>
         <translation>Nuottiavaimet</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="926"/>
+        <location filename="../../mscore/menus.cpp" line="928"/>
         <source>Grace Notes</source>
         <translation>Korusävelet</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="951"/>
+        <location filename="../../mscore/menus.cpp" line="953"/>
         <source>Bagpipe Embellishments</source>
         <translation>Säkkipillin koristekuviot</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="971"/>
+        <location filename="../../mscore/menus.cpp" line="973"/>
         <source>Lines</source>
         <translation>Viivat</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="989"/>
+        <location filename="../../mscore/menus.cpp" line="991"/>
         <source>Diminuendo hairpin</source>
         <translation>Diminuendo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="999"/>
+        <location filename="../../mscore/menus.cpp" line="1001"/>
         <source>Diminuendo line</source>
         <translation>Diminuendo katkoviivalla</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1015"/>
+        <location filename="../../mscore/menus.cpp" line="1017"/>
         <source>Prima volta</source>
         <translation>Ensimmäinen maali</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1024"/>
+        <location filename="../../mscore/menus.cpp" line="1026"/>
         <source>Seconda volta</source>
         <translation>Toinen maali</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1033"/>
+        <location filename="../../mscore/menus.cpp" line="1035"/>
         <source>Terza volta</source>
         <translation>Kolmas maali</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1042"/>
+        <location filename="../../mscore/menus.cpp" line="1044"/>
         <source>Seconda volta, open</source>
         <translation>Toinen maali, avoin</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1048"/>
+        <location filename="../../mscore/menus.cpp" line="1050"/>
         <source>8va alta</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1055"/>
+        <location filename="../../mscore/menus.cpp" line="1057"/>
         <source>8va bassa</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1061"/>
+        <location filename="../../mscore/menus.cpp" line="1063"/>
         <source>15ma alta</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1068"/>
+        <location filename="../../mscore/menus.cpp" line="1070"/>
         <source>15ma bassa</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1074"/>
+        <location filename="../../mscore/menus.cpp" line="1076"/>
         <source>22ma alta</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1080"/>
+        <location filename="../../mscore/menus.cpp" line="1082"/>
         <source>22ma bassa</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1088"/>
-        <location filename="../../mscore/menus.cpp" line="1096"/>
-        <location filename="../../mscore/menus.cpp" line="1102"/>
-        <location filename="../../mscore/menus.cpp" line="1108"/>
-        <location filename="../../mscore/menus.cpp" line="1114"/>
-        <location filename="../../mscore/menus.cpp" line="1120"/>
+        <location filename="../../mscore/menus.cpp" line="1090"/>
+        <location filename="../../mscore/menus.cpp" line="1098"/>
+        <location filename="../../mscore/menus.cpp" line="1104"/>
+        <location filename="../../mscore/menus.cpp" line="1110"/>
+        <location filename="../../mscore/menus.cpp" line="1116"/>
+        <location filename="../../mscore/menus.cpp" line="1122"/>
         <source>Pedal</source>
         <translation>Pedaali</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1133"/>
+        <location filename="../../mscore/menus.cpp" line="1135"/>
         <source>Text line</source>
         <translation>Tekstiviiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1138"/>
+        <location filename="../../mscore/menus.cpp" line="779"/>
+        <location filename="../../mscore/menus.cpp" line="1140"/>
         <source>Line</source>
         <translation>Viiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1141"/>
+        <location filename="../../mscore/menus.cpp" line="1143"/>
         <source>Ambitus</source>
         <translation>ääniala</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1145"/>
+        <location filename="../../mscore/menus.cpp" line="1147"/>
         <source>Let Ring</source>
         <translation>Anna soida</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1156"/>
+        <location filename="../../mscore/menus.cpp" line="1158"/>
         <source>Palm Mute</source>
         <translation>Demppaus</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1201"/>
+        <location filename="../../mscore/menus.cpp" line="1203"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1269"/>
+        <location filename="../../mscore/menus.cpp" line="1271"/>
         <source>Text</source>
         <translation>Teksti</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
-        <location filename="../../mscore/menus.cpp" line="1363"/>
-        <location filename="../../mscore/musescore.cpp" line="5819"/>
+        <location filename="../../mscore/menus.cpp" line="1365"/>
+        <location filename="../../mscore/musescore.cpp" line="5957"/>
         <source>Time Signatures</source>
         <translation>Tahtiosoitukset</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1383"/>
+        <location filename="../../mscore/menus.cpp" line="1385"/>
         <source>Fretboard Diagrams</source>
         <translation>Otelautakuvat</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1409"/>
+        <location filename="../../mscore/palette.cpp" line="1422"/>
         <source>Writing Palette File
 %1
 failed: </source>
@@ -14500,7 +14684,7 @@ failed: </source>
 kirjoittaminen epäonnistui: </translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="1410"/>
+        <location filename="../../mscore/palette.cpp" line="1423"/>
         <source>Writing Palette File</source>
         <translation>Kirjoitetaan palettitiedostoa</translation>
     </message>
@@ -14753,11 +14937,6 @@ kirjoittaminen epäonnistui: </translation>
         <translation>Ääni</translation>
     </message>
     <message>
-        <location filename="../../mscore/parteditbase.ui" line="515"/>
-        <source>MIDI:</source>
-        <translation>MIDI:</translation>
-    </message>
-    <message>
         <location filename="../../mscore/parteditbase.ui" line="522"/>
         <source>Port:</source>
         <translation>Portit</translation>
@@ -14819,61 +14998,62 @@ kirjoittaminen epäonnistui: </translation>
         <translation>Toistosijainti</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="252"/>
+        <location filename="../../mscore/playpanel.ui" line="288"/>
         <source>Relative tempo</source>
         <translation>Suhteellinen tempo</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="255"/>
+        <location filename="../../mscore/playpanel.ui" line="291"/>
         <source>Relative Tempo to 120 beats per minute</source>
         <translation>Suhteellinen tempo 120 lyöntiin per minuutti</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="404"/>
+        <location filename="../../mscore/playpanel.ui" line="486"/>
         <source>Metronome volume</source>
         <translation>Metronomin voimakkuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="407"/>
+        <location filename="../../mscore/playpanel.ui" line="254"/>
+        <location filename="../../mscore/playpanel.ui" line="489"/>
         <source>Metronome Volume</source>
         <translation>Metronome Volume</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="196"/>
-        <location filename="../../mscore/playpanel.ui" line="258"/>
-        <location filename="../../mscore/playpanel.ui" line="410"/>
+        <location filename="../../mscore/playpanel.ui" line="294"/>
+        <location filename="../../mscore/playpanel.ui" line="340"/>
+        <location filename="../../mscore/playpanel.ui" line="492"/>
         <source>Use up and down arrows to change value</source>
         <translation>Käytä ylä- ja alanuolinäppäimiä vaihtaaksesi arvoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="190"/>
+        <location filename="../../mscore/playpanel.ui" line="334"/>
         <source>Master volume</source>
         <translation>Päävoimakkuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="193"/>
+        <location filename="../../mscore/playpanel.ui" line="337"/>
         <source>Master Volume</source>
         <translation>Päävoimakkuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="283"/>
+        <location filename="../../mscore/playpanel.ui" line="263"/>
         <source>Volume</source>
         <extracomment>short text for volume slider</extracomment>
         <translation>Voimakkuus</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="212"/>
+        <location filename="../../mscore/playpanel.ui" line="598"/>
         <source>Actual tempo in quarter notes per minute</source>
         <translation>Todellinen tempo neljäsosanuoteissa per minuutti</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="379"/>
+        <location filename="../../mscore/playpanel.ui" line="242"/>
         <source>Tempo</source>
         <extracomment>short text for tempo slider</extracomment>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../mscore/playpanel.ui" line="345"/>
+        <location filename="../../mscore/playpanel.ui" line="501"/>
         <source>Relative tempo to 120 beats per minute</source>
         <translation>Suhteellinen tempo 120 lyöntiin per minuutti</translation>
     </message>
@@ -14881,78 +15061,78 @@ kirjoittaminen epäonnistui: </translation>
 <context>
     <name>PluginCreatorBase</name>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="49"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="49"/>
         <source>Run</source>
         <translation>Suorita</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="62"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="62"/>
         <source>Stop</source>
         <translation>Pysäytä</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="91"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="91"/>
         <source>File</source>
         <translation>Tiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="102"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="102"/>
         <source>Help</source>
         <translation>Ohje</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="108"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="108"/>
         <source>Edit</source>
         <translation>Muokkaa</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="120"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="120"/>
         <source>New</source>
         <translation>Uusi</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="128"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="128"/>
         <source>Open…</source>
         <translation>Avaa…</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="136"/>
-        <location filename="../../mscore/pluginCreator.ui" line="139"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="136"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="139"/>
         <source>Save</source>
         <translation>Tallenna</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="179"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="179"/>
         <source>Reload</source>
         <translation>Lataa uudelleen</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="187"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="187"/>
         <source>Save As…</source>
         <translation>Tallenna nimellä…</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="147"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="147"/>
         <source>Manual</source>
         <translation>Opas</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="155"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="155"/>
         <source>Undo</source>
         <translation>Kumoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="163"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="163"/>
         <source>Redo</source>
         <translation>Tee uudelleen</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="171"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="171"/>
         <source>Close Plugin Creator</source>
         <translation>Sulje liitännäisten luonti</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginCreator.ui" line="182"/>
+        <location filename="../../mscore/plugin/pluginCreator.ui" line="182"/>
         <source>Reload current plugin source</source>
         <translation>Lataa uudelleen nykyisten liitännäisten lähde</translation>
     </message>
@@ -14960,49 +15140,49 @@ kirjoittaminen epäonnistui: </translation>
 <context>
     <name>PluginManager</name>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="17"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="17"/>
         <source>Plugin Manager</source>
         <translation>Liitännäisten hallinta</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="44"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="47"/>
         <source>Name:</source>
         <translation>Nimi:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="88"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="91"/>
         <source>Version:</source>
         <translation>Versio: </translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="81"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="84"/>
         <source>Path:</source>
         <translation>Polku:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="102"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="105"/>
         <source>Shortcut:</source>
         <translation>Pikanäppäin:</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="114"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="117"/>
         <source>Define Shortcut</source>
         <translation>Määritä pikanäppäin</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="121"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="124"/>
         <source>Clear Shortcut</source>
         <translation>Tyhjennä pikanäppäin</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="128"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="131"/>
         <source>Reload all plugins.
 This will re-evaluate all plugins, picking up any changes that may have occurred.</source>
         <translation>Uudelleenlataa kaikki liitännäiset.
 Tämä käy läpi kaikki liitännäiset ja poimii mahdollisesti tapahtuneet muutokset.</translation>
     </message>
     <message>
-        <location filename="../../mscore/pluginManager.ui" line="132"/>
+        <location filename="../../mscore/plugin/pluginManager.ui" line="135"/>
         <source>Reload Plugins</source>
         <translation>Lataa liitännäiset uudelleen</translation>
     </message>
@@ -15028,7 +15208,7 @@ Tämä käy läpi kaikki liitännäiset ja poimii mahdollisesti tapahtuneet muut
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="93"/>
         <source>Preferences Tab Manager</source>
-        <translation type="unfinished"/>
+        <translation>Välilehden asetukset</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="103"/>
@@ -15286,7 +15466,7 @@ Tämä käy läpi kaikki liitännäiset ja poimii mahdollisesti tapahtuneet muut
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="617"/>
         <source>Opens a folder dialog for selecting the image folder</source>
-        <translation type="unfinished"/>
+        <translation>Avaa valintaikkunan kuvakansion valitsemiseksi</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="637"/>
@@ -15537,11 +15717,6 @@ Tämä käy läpi kaikki liitännäiset ja poimii mahdollisesti tapahtuneet muut
         <location filename="../../mscore/prefsdialog.ui" line="1280"/>
         <source>Default duration</source>
         <translation>Oletuskesto</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="1302"/>
-        <source>Play whole chord when adding note</source>
-        <translation>Soita koko sointu nuottia lisätessä</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1325"/>
@@ -15907,11 +16082,6 @@ Tämä käy läpi kaikki liitännäiset ja poimii mahdollisesti tapahtuneet muut
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3484"/>
-        <source>PNG</source>
-        <translation>PNG</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="2424"/>
         <source>Default zoom:</source>
         <translation>Oletusnäkymä</translation>
@@ -16013,16 +16183,6 @@ Tämä käy läpi kaikki liitännäiset ja poimii mahdollisesti tapahtuneet muut
         <location filename="../../mscore/prefsdialog.ui" line="2661"/>
         <source>I/O</source>
         <translation>I/O</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2679"/>
-        <source>PulseAudio</source>
-        <translation>PulseAudio</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="2698"/>
-        <source>PortAudio</source>
-        <translation>PortAudio</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2720"/>
@@ -16153,10 +16313,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>Käytä JACK-MIDI:ä</translation>
     </message>
     <message>
-        <source>Attention: Any changes on this page require a restart of MuseScore.  Precise MIDI output timing is only possible via JACK.</source>
-        <translation type="vanished">Huomio: Muutos tällä sivulla edellyttää MuseScoren uudelleenkäynnistyksen. Tarkka MIDI lähdön ajoitus on mahdollista vain JACK-audiopalvelimella.</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="3233"/>
         <source>Import</source>
         <translation>Tuonti</translation>
@@ -16243,6 +16399,11 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>Soita nuotteja muokatessa</translation>
     </message>
     <message>
+        <location filename="../../mscore/prefsdialog.ui" line="1302"/>
+        <source>Play whole chord when editing</source>
+        <translation>Soita koko sointu editoitaessa</translation>
+    </message>
+    <message>
         <location filename="../../mscore/prefsdialog.ui" line="1735"/>
         <source>Real-time advance</source>
         <translation>Real-time advance</translation>
@@ -16321,7 +16482,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3193"/>
         <source>Restart Audio and MIDI Devices</source>
-        <translation type="unfinished"/>
+        <translation>Käynnistä Audio ja MIDI -laitteet uudelleen</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3230"/>
@@ -16364,14 +16525,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>Valitse Guitar Pro tuonnin merkistö</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3346"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3349"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3583"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3586"/>
-        <source>MusicXML</source>
-        <translation>MusicXML</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="3355"/>
         <source>Import layout</source>
         <translation>Tuo ulkoasu</translation>
@@ -16380,14 +16533,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <location filename="../../mscore/prefsdialog.ui" line="3362"/>
         <source>Import system and page breaks</source>
         <translation>Tuo systeemin- ja sivunvaihdot</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3378"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3381"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3551"/>
-        <location filename="../../mscore/prefsdialog.ui" line="3554"/>
-        <source>MIDI</source>
-        <translation>MIDI</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3387"/>
@@ -16539,11 +16684,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
         <translation>Älä vie systeemin- ja sivunvaihtoja</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.ui" line="3631"/>
-        <source>PDF</source>
-        <translation>PDF</translation>
-    </message>
-    <message>
         <location filename="../../mscore/prefsdialog.ui" line="3520"/>
         <location filename="../../mscore/prefsdialog.ui" line="3644"/>
         <source>Resolution DPI</source>
@@ -16673,12 +16813,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../mscore/mscorePlugins.cpp" line="419"/>
+        <location filename="../../mscore/plugin/mscorePlugins.cpp" line="419"/>
         <source>MuseScore</source>
         <translation>MuseScore </translation>
     </message>
     <message>
-        <location filename="../../mscore/mscorePlugins.cpp" line="420"/>
+        <location filename="../../mscore/plugin/mscorePlugins.cpp" line="420"/>
         <source>No score open.
 This plugin requires an open score to run.
 </source>
@@ -16711,109 +16851,91 @@ failed: %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="785"/>
-        <location filename="../../libmscore/hairpin.cpp" line="791"/>
+        <location filename="../../libmscore/durationtype.cpp" line="794"/>
+        <location filename="../../libmscore/hairpin.cpp" line="875"/>
         <location filename="../../libmscore/jump.cpp" line="94"/>
         <source>Custom</source>
         <translation>Muokattu</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="787"/>
+        <location filename="../../libmscore/durationtype.cpp" line="796"/>
         <source>Longa</source>
         <translation>Longa</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="788"/>
+        <location filename="../../libmscore/durationtype.cpp" line="797"/>
         <source>Breve</source>
         <translation>Brevis</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="789"/>
+        <location filename="../../libmscore/durationtype.cpp" line="798"/>
         <source>Whole</source>
         <translation>Koko</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="790"/>
+        <location filename="../../libmscore/durationtype.cpp" line="799"/>
         <source>Half</source>
         <translation>Puoli</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="791"/>
+        <location filename="../../libmscore/durationtype.cpp" line="800"/>
         <source>Quarter</source>
         <translation>Neljäsosa</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="792"/>
+        <location filename="../../libmscore/durationtype.cpp" line="801"/>
         <source>Eighth</source>
         <translation>Kahdeksasosa</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="793"/>
+        <location filename="../../libmscore/durationtype.cpp" line="802"/>
         <source>16th</source>
         <translation>1/16</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="794"/>
+        <location filename="../../libmscore/durationtype.cpp" line="803"/>
         <source>32nd</source>
         <translation>1/32</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="795"/>
+        <location filename="../../libmscore/durationtype.cpp" line="804"/>
         <source>64th</source>
         <translation>1/64</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="796"/>
+        <location filename="../../libmscore/durationtype.cpp" line="805"/>
         <source>128th</source>
         <translation>1/128</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="797"/>
+        <location filename="../../libmscore/durationtype.cpp" line="806"/>
         <source>256th</source>
         <translation>256.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="798"/>
+        <location filename="../../libmscore/durationtype.cpp" line="807"/>
         <source>512th</source>
         <translation>512.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="799"/>
+        <location filename="../../libmscore/durationtype.cpp" line="808"/>
         <source>1024th</source>
         <translation>1024.</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="800"/>
+        <location filename="../../libmscore/durationtype.cpp" line="809"/>
         <source>Zero</source>
         <translation>Nolla</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="801"/>
+        <location filename="../../libmscore/durationtype.cpp" line="810"/>
         <source>Measure</source>
         <translation>Tahti</translation>
     </message>
     <message>
-        <location filename="../../libmscore/durationtype.cpp" line="802"/>
+        <location filename="../../libmscore/durationtype.cpp" line="811"/>
         <source>Invalid</source>
         <translation>epäkelpo</translation>
-    </message>
-    <message>
-        <source>double flat</source>
-        <translation type="vanished">kaksoisalennus</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/harmony.cpp" line="1571"/>
-        <source>flat</source>
-        <translation>alennus</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/harmony.cpp" line="1566"/>
-        <source>sharp</source>
-        <translation>Korotus</translation>
-    </message>
-    <message>
-        <source>double sharp</source>
-        <translation type="vanished">kaksoiskorotus</translation>
     </message>
     <message>
         <location filename="../../libmscore/stafftype.cpp" line="1203"/>
@@ -16920,24 +17042,24 @@ failed: %2</source>
         <translation>Tab. 8-str. yleinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="155"/>
+        <location filename="../../mscore/file.cpp" line="160"/>
         <source>Cannot read file %1:
 </source>
         <translation>Ei voida lukea tiedostoa %1:
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="162"/>
+        <location filename="../../mscore/file.cpp" line="167"/>
         <source>bad format</source>
         <translation>Huono muotoilu</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="166"/>
+        <location filename="../../mscore/file.cpp" line="171"/>
         <source>unknown type</source>
         <translation>Tuntematon tyyppi</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="171"/>
+        <location filename="../../mscore/file.cpp" line="176"/>
         <source>It was last saved with a version older than 2.0.0.
 You can convert this score by opening and then
 saving with MuseScore version 2.x.
@@ -16945,31 +17067,31 @@ Visit the %1MuseScore download page%2 to obtain such a 2.x version.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="180"/>
+        <location filename="../../mscore/file.cpp" line="185"/>
         <source>This score was saved using a newer version of MuseScore.
 Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>Tämä partituuri oli tallennettu MuseScoren uudemmassa versiossa.
 Vieraile %1MuseScoren verkkosivustolla%2 hankkiaksesi uusimman version.</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="187"/>
+        <location filename="../../mscore/file.cpp" line="192"/>
         <source>File &quot;%1&quot; not found.</source>
         <translation>Tiedostoa &quot;%1&quot; ei löytynyt.</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="190"/>
+        <location filename="../../mscore/file.cpp" line="195"/>
         <source>File &quot;%1&quot; corrupted.</source>
         <translation>Tiedosto &quot;%1&quot; vahingoittunut.</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="195"/>
+        <location filename="../../mscore/file.cpp" line="200"/>
         <source>It was last saved with a developer version of 3.0.
 </source>
         <translation>Tallennettu viimeksi 3.0 kehittäjäversiossa.
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="213"/>
+        <location filename="../../mscore/file.cpp" line="218"/>
         <source>Load Error</source>
         <translation>Latausvirhe</translation>
     </message>
@@ -17028,30 +17150,30 @@ ei voitu avata</translation>
 ei voitu avata</translation>
     </message>
     <message>
-        <location filename="../../mscore/uploadscoredialog.cpp" line="30"/>
+        <location filename="../../mscore/uploadscoredialog.cpp" line="31"/>
         <source>Upload Error</source>
         <translation>Latausvirhe</translation>
     </message>
     <message>
-        <location filename="../../libmscore/ambitus.cpp" line="758"/>
+        <location filename="../../libmscore/ambitus.cpp" line="767"/>
         <source>%1; Top pitch: %2%3; Bottom pitch: %4%5</source>
         <translation>%1; Ylin sävelkorkeus: %2%3; Alin sävelkorkeus: %4%5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="1324"/>
-        <location filename="../../libmscore/chordrest.cpp" line="1151"/>
-        <location filename="../../libmscore/chordrest.cpp" line="1157"/>
-        <location filename="../../libmscore/note.cpp" line="2904"/>
-        <location filename="../../libmscore/note.cpp" line="2913"/>
+        <location filename="../../libmscore/barline.cpp" line="1507"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1169"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1175"/>
+        <location filename="../../libmscore/note.cpp" line="2852"/>
+        <location filename="../../libmscore/note.cpp" line="2861"/>
         <source>%1 Start of %2</source>
         <translation>%1 Alkaa %2 </translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="1326"/>
-        <location filename="../../libmscore/chordrest.cpp" line="1153"/>
-        <location filename="../../libmscore/chordrest.cpp" line="1162"/>
-        <location filename="../../libmscore/note.cpp" line="2907"/>
-        <location filename="../../libmscore/note.cpp" line="2920"/>
+        <location filename="../../libmscore/barline.cpp" line="1509"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1171"/>
+        <location filename="../../libmscore/chordrest.cpp" line="1180"/>
+        <location filename="../../libmscore/note.cpp" line="2855"/>
+        <location filename="../../libmscore/note.cpp" line="2868"/>
         <source>%1 End of %2</source>
         <translation>%1 Loppuu %2 </translation>
     </message>
@@ -17066,70 +17188,70 @@ ei voitu avata</translation>
         <translation>Tahti %1 Viivasto %2, ääni %3 liian pitkä. Odotettu: %4; Löydetty: %5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="667"/>
+        <location filename="../../libmscore/chordrest.cpp" line="682"/>
         <source>Duplet</source>
         <translation>Duoli</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="670"/>
+        <location filename="../../libmscore/chordrest.cpp" line="685"/>
         <source>Triplet</source>
         <translation>Trioli</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="673"/>
+        <location filename="../../libmscore/chordrest.cpp" line="688"/>
         <source>Quadruplet</source>
         <translation>Kvartoli</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="676"/>
+        <location filename="../../libmscore/chordrest.cpp" line="691"/>
         <source>Quintuplet</source>
         <translation>Kvintoli</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="679"/>
+        <location filename="../../libmscore/chordrest.cpp" line="694"/>
         <source>Sextuplet</source>
         <translation>Sekstoli</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="682"/>
+        <location filename="../../libmscore/chordrest.cpp" line="697"/>
         <source>Septuplet</source>
         <translation>Septoli</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="685"/>
+        <location filename="../../libmscore/chordrest.cpp" line="700"/>
         <source>Octuplet</source>
         <translation>Oktoli</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="688"/>
+        <location filename="../../libmscore/chordrest.cpp" line="703"/>
         <source>Nonuplet</source>
         <translation>Novemoli</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="691"/>
+        <location filename="../../libmscore/chordrest.cpp" line="706"/>
         <source>Custom tuplet</source>
         <translation>Mukautettu tupletti</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="700"/>
+        <location filename="../../libmscore/chordrest.cpp" line="715"/>
         <location filename="../../libmscore/tempotext.cpp" line="428"/>
         <source>Dotted %1</source>
         <translation>Pisteellinen %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="703"/>
+        <location filename="../../libmscore/chordrest.cpp" line="718"/>
         <location filename="../../libmscore/tempotext.cpp" line="430"/>
         <source>Double dotted %1</source>
         <translation>Kaksoispisteellinen %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="706"/>
+        <location filename="../../libmscore/chordrest.cpp" line="721"/>
         <location filename="../../libmscore/tempotext.cpp" line="432"/>
         <source>Triple dotted %1</source>
         <translation>Kolmoispisteellinen %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/chordrest.cpp" line="709"/>
+        <location filename="../../libmscore/chordrest.cpp" line="724"/>
         <location filename="../../libmscore/tempotext.cpp" line="434"/>
         <source>Quadruple dotted %1</source>
         <translation type="unfinished"/>
@@ -17142,96 +17264,96 @@ ei voitu avata</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/fingering.cpp" line="137"/>
+        <location filename="../../libmscore/fingering.cpp" line="215"/>
         <source>String number</source>
         <translation>Kielen numero</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="785"/>
+        <location filename="../../libmscore/hairpin.cpp" line="869"/>
         <source>Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="788"/>
+        <location filename="../../libmscore/hairpin.cpp" line="872"/>
         <source>Decrescendo</source>
         <translation>Decrescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/keysig.cpp" line="614"/>
+        <location filename="../../libmscore/keysig.cpp" line="634"/>
         <source>%1: Custom</source>
         <translation>%1: Muokattu</translation>
     </message>
     <message>
-        <location filename="../../libmscore/mscore.cpp" line="496"/>
+        <location filename="../../mscore/plugin/api/qmlpluginapi.cpp" line="354"/>
         <source>You can&apos;t create an enum</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2203"/>
+        <location filename="../../libmscore/note.cpp" line="2206"/>
         <source>Acciaccatura</source>
         <translation>lyhyt etuhele</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2205"/>
+        <location filename="../../libmscore/note.cpp" line="2208"/>
         <source>Appoggiatura</source>
         <translation>pitkä etuhele</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2209"/>
+        <location filename="../../libmscore/note.cpp" line="2212"/>
         <source>Grace note after</source>
         <translation>Koru nuotin jälkeen</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2213"/>
+        <location filename="../../libmscore/note.cpp" line="2216"/>
         <source>Grace note before</source>
         <translation>Koru ennen nuottia</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2215"/>
+        <location filename="../../libmscore/note.cpp" line="2218"/>
         <source>Note</source>
         <translation>Nuotti</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2856"/>
-        <location filename="../../libmscore/note.cpp" line="2875"/>
-        <location filename="../../libmscore/rest.cpp" line="790"/>
-        <location filename="../../libmscore/rest.cpp" line="800"/>
+        <location filename="../../libmscore/note.cpp" line="2804"/>
+        <location filename="../../libmscore/note.cpp" line="2823"/>
+        <location filename="../../libmscore/rest.cpp" line="791"/>
+        <location filename="../../libmscore/rest.cpp" line="801"/>
         <source>Voice: %1</source>
         <translation>Ääni: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2860"/>
+        <location filename="../../libmscore/note.cpp" line="2808"/>
         <source>Beat slash</source>
         <translation>Iskuvinoviiva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2860"/>
+        <location filename="../../libmscore/note.cpp" line="2808"/>
         <source>Rhythm slash</source>
         <translation>Rytmivinoviiva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2865"/>
+        <location filename="../../libmscore/note.cpp" line="2813"/>
         <source>%1; Pitch: %2; Duration: %3%4</source>
         <translation>%1; Sävelkorkeus: %2; Kesto: %3%4</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2879"/>
+        <location filename="../../libmscore/note.cpp" line="2827"/>
         <source>Beat Slash</source>
         <translation>Iskuvinoviiva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="2879"/>
+        <location filename="../../libmscore/note.cpp" line="2827"/>
         <source>Rhythm Slash</source>
         <translation>Rytmivinoviiva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/read206.cpp" line="3730"/>
-        <location filename="../../libmscore/read301.cpp" line="199"/>
+        <location filename="../../libmscore/read206.cpp" line="3805"/>
+        <location filename="../../libmscore/read301.cpp" line="201"/>
         <source>XML read error at line %1, column %2: %3</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/rest.cpp" line="791"/>
+        <location filename="../../libmscore/rest.cpp" line="792"/>
         <source>%1; Duration: %2; %3</source>
         <translation>%1; Kesto: %2; %3 </translation>
     </message>
@@ -17290,17 +17412,17 @@ ei voitu avata</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1798"/>
+        <location filename="../../libmscore/segment.cpp" line="1805"/>
         <source>Annotations:</source>
         <translation>Huomautuksia:</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1820"/>
+        <location filename="../../libmscore/segment.cpp" line="1827"/>
         <source>Start of </source>
         <translation>Alkuun</translation>
     </message>
     <message>
-        <location filename="../../libmscore/segment.cpp" line="1834"/>
+        <location filename="../../libmscore/segment.cpp" line="1841"/>
         <source>End of </source>
         <translation>Loppuun</translation>
     </message>
@@ -17326,21 +17448,16 @@ ei voitu avata</translation>
         <translation>%1/%2 aika</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="983"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="986"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="41"/>
         <source>Above</source>
         <translation>Yläpuolella</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="984"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="987"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="42"/>
         <source>Below</source>
         <translation>Alapuolella</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/inspector/inspectorTextBase.cpp" line="53"/>
-        <source>No frame</source>
-        <translation>Ei kehystä</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspectorTextBase.cpp" line="54"/>
@@ -17353,6 +17470,7 @@ ei voitu avata</translation>
         <translation>Ympyrä</translation>
     </message>
     <message>
+        <location filename="../../mscore/inspector/inspectorTextBase.cpp" line="53"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="27"/>
         <source>None</source>
         <translation>Ei mitään</translation>
@@ -17383,12 +17501,12 @@ ei voitu avata</translation>
         <translation>Vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="4165"/>
+        <location filename="../../mscore/shortcut.cpp" line="4210"/>
         <source>Load Shortcuts</source>
         <translation>Lataa pikanäppäimet</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="4165"/>
+        <location filename="../../mscore/shortcut.cpp" line="4210"/>
         <source>Can&apos;t load shortcuts file: %1</source>
         <translation>Ei voida ladata pikanäppäintiedostoa: %1</translation>
     </message>
@@ -17398,11 +17516,13 @@ ei voitu avata</translation>
         <translation>kaksoisalennus</translation>
     </message>
     <message>
+        <location filename="../../libmscore/harmony.cpp" line="1592"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="264"/>
         <source>♭</source>
         <translation>alennus</translation>
     </message>
     <message>
+        <location filename="../../libmscore/harmony.cpp" line="1587"/>
         <location filename="../../libmscore/pitchspelling.cpp" line="273"/>
         <source>♯</source>
         <translation>Korotus</translation>
@@ -17413,7 +17533,7 @@ ei voitu avata</translation>
         <translation>kaksoiskorotus</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrwidget.cpp" line="422"/>
+        <location filename="../../mscore/instrwidget.cpp" line="424"/>
         <location filename="../../mscore/templateBrowser.cpp" line="55"/>
         <source>%1 category</source>
         <translation type="unfinished"/>
@@ -17422,137 +17542,137 @@ ei voitu avata</translation>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../../mscore/capella.cpp" line="2722"/>
-        <location filename="../../mscore/importmidi/importmidi.cpp" line="1203"/>
+        <location filename="../../mscore/capella.cpp" line="2710"/>
+        <location filename="../../mscore/importmidi/importmidi.cpp" line="1202"/>
         <source>Load failed: %1</source>
         <translation>Lataaminen epäonnistui: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/capella.cpp" line="2723"/>
-        <location filename="../../mscore/importmidi/importmidi.cpp" line="1204"/>
-        <location filename="../../mscore/instrdialog.cpp" line="132"/>
-        <location filename="../../mscore/musescore.cpp" line="3805"/>
+        <location filename="../../mscore/capella.cpp" line="2711"/>
+        <location filename="../../mscore/importmidi/importmidi.cpp" line="1203"/>
+        <location filename="../../mscore/instrdialog.cpp" line="141"/>
+        <location filename="../../mscore/musescore.cpp" line="3921"/>
         <source>Quit</source>
         <translation>Lopeta</translation>
     </message>
     <message>
-        <location filename="../../mscore/capella.cpp" line="2721"/>
+        <location filename="../../mscore/capella.cpp" line="2709"/>
         <source>Import Capella</source>
         <translation>Tuo Capellasta</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2189"/>
+        <location filename="../../mscore/file.cpp" line="2200"/>
         <source>Install SoundFont</source>
         <translation>Asenna äänifontti</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2190"/>
+        <location filename="../../mscore/file.cpp" line="2201"/>
         <source>Do you want to install the SoundFont %1?</source>
         <translation>Haluatko asentaa äänifontin %1?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2205"/>
+        <location filename="../../mscore/file.cpp" line="2216"/>
         <source>Overwrite?</source>
         <translation>Korvataanko?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2206"/>
+        <location filename="../../mscore/file.cpp" line="2217"/>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
         <translation>&quot;%1&quot; on jo olemassa.
 Haluatko korvata jo olemassa olevan?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2214"/>
+        <location filename="../../mscore/file.cpp" line="2225"/>
         <source>SoundFont installed</source>
         <translation>Äänifontti asennettu</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2214"/>
+        <location filename="../../mscore/file.cpp" line="2225"/>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
         <translation>Äänifontti asennettu. Lisää se kohdassa Näytä &gt; Syntetisaattori ja valitse soitinääni kohdassa Näytä &gt; Mikseri.</translation>
     </message>
     <message>
-        <location filename="../../mscore/importmidi/importmidi.cpp" line="1202"/>
+        <location filename="../../mscore/importmidi/importmidi.cpp" line="1201"/>
         <source>Load MIDI</source>
         <translation>Lataa MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/instrdialog.cpp" line="130"/>
+        <location filename="../../mscore/instrdialog.cpp" line="139"/>
         <source>Load Style Failed</source>
         <translation>Lataa tyyli epäonnistui</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="621"/>
         <location filename="../../mscore/musescore.cpp" line="626"/>
-        <location filename="../../mscore/musescore.cpp" line="656"/>
+        <location filename="../../mscore/musescore.cpp" line="631"/>
         <location filename="../../mscore/musescore.cpp" line="661"/>
         <location filename="../../mscore/musescore.cpp" line="666"/>
-        <location filename="../../mscore/musescore.cpp" line="681"/>
-        <location filename="../../mscore/musescore.cpp" line="700"/>
-        <location filename="../../mscore/musescore.cpp" line="711"/>
-        <location filename="../../mscore/musescore.cpp" line="744"/>
+        <location filename="../../mscore/musescore.cpp" line="671"/>
+        <location filename="../../mscore/musescore.cpp" line="686"/>
+        <location filename="../../mscore/musescore.cpp" line="705"/>
+        <location filename="../../mscore/musescore.cpp" line="716"/>
+        <location filename="../../mscore/musescore.cpp" line="749"/>
         <source>Import Extension File</source>
         <translation>Tuo lisäosatiedosto</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="621"/>
+        <location filename="../../mscore/musescore.cpp" line="626"/>
         <source>Cannot import extension on read-only storage: %1</source>
         <translation>Ei voi tuoda lisäosaa vain luettavaan tilaan: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="626"/>
+        <location filename="../../mscore/musescore.cpp" line="631"/>
         <source>Cannot import extension: storage %1 is full</source>
         <translation>Ei voi tuoda lisäosaa: tila %1 on täynnä</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="656"/>
+        <location filename="../../mscore/musescore.cpp" line="661"/>
         <source>Corrupted extension: no metadata.json</source>
         <translation>Viallinen lisäosa: ei sisällä tiedostoa metadata.json</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="661"/>
+        <location filename="../../mscore/musescore.cpp" line="666"/>
         <source>Corrupted extension: unsupported directories in root directory</source>
         <translation>Viallinen lisäosa: tuntemattomia hakemistoja juurihakemistossa</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="666"/>
+        <location filename="../../mscore/musescore.cpp" line="671"/>
         <source>Corrupted extension: unsupported files in root directory</source>
         <translation>Viallinen lisäosa: tuntemattomia tiedostoja juurihakemistossa</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="681"/>
+        <location filename="../../mscore/musescore.cpp" line="686"/>
         <source>Corrupted extension: corrupted metadata.json</source>
         <translation>Viallinen lisäosa: viallinen metadata.json</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="700"/>
+        <location filename="../../mscore/musescore.cpp" line="705"/>
         <source>A newer version is already installed</source>
         <translation>Uudempi versio on jo asennettu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="711"/>
+        <location filename="../../mscore/musescore.cpp" line="716"/>
         <source>Error while deleting previous version of the extension: %1</source>
         <translation>Virhe poistaessa lisäosan edellistä versiota: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="744"/>
+        <location filename="../../mscore/musescore.cpp" line="749"/>
         <source>Unable to extract files from the extension</source>
         <translation>Tiedostojen purku lisäosasta ei onnistu</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="3803"/>
+        <location filename="../../mscore/musescore.cpp" line="3919"/>
         <source>Load Languages Failed:</source>
         <translation>Kielten lataus epäonnistui:</translation>
     </message>
     <message>
-        <location filename="../../mscore/palettebox.cpp" line="250"/>
+        <location filename="../../mscore/palettebox.cpp" line="276"/>
         <location filename="../../mscore/workspace.cpp" line="126"/>
         <source>Are you sure?</source>
         <translation>Oletko varma?</translation>
     </message>
     <message>
-        <location filename="../../mscore/palettebox.cpp" line="251"/>
+        <location filename="../../mscore/palettebox.cpp" line="277"/>
         <source>Do you really want to delete the &apos;%1&apos; palette?</source>
         <translation>Haluatko todella poistaa &apos;%1&apos; paletin?</translation>
     </message>
@@ -17562,12 +17682,12 @@ Haluatko korvata jo olemassa olevan?</translation>
         <translation>Haluatko todella poistaa työtilan &apos;%1&apos;?</translation>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="267"/>
+        <location filename="../../mscore/palette.cpp" line="269"/>
         <source>Delete palette cell</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/palette.cpp" line="268"/>
+        <location filename="../../mscore/palette.cpp" line="270"/>
         <source>Are you sure you want to delete palette cell &quot;%1&quot;?</source>
         <translation type="unfinished"/>
     </message>
@@ -17614,7 +17734,7 @@ Haluatko korvata jo olemassa olevan?</translation>
 <context>
     <name>RecordButton</name>
     <message>
-        <location filename="../../mscore/musescore.cpp" line="5435"/>
+        <location filename="../../mscore/musescore.cpp" line="5558"/>
         <source>Record</source>
         <translation>äänitä</translation>
     </message>
@@ -17677,25 +17797,23 @@ Haluatko korvata jo olemassa olevan?</translation>
 <context>
     <name>ScaleSelect</name>
     <message>
-        <location filename="../../mscore/inspector/scale_select.ui" line="21"/>
+        <location filename="../../mscore/inspector/scale_select.ui" line="51"/>
         <source>Horizontal scale</source>
         <translation>Vaakasuora skaala</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/scale_select.ui" line="24"/>
+        <location filename="../../mscore/inspector/scale_select.ui" line="38"/>
         <source>X:</source>
-        <extracomment>horizontal</extracomment>
         <translation>X:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/scale_select.ui" line="43"/>
+        <location filename="../../mscore/inspector/scale_select.ui" line="89"/>
         <source>Vertical scale</source>
         <translation>Pystysuora skaala</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/scale_select.ui" line="46"/>
+        <location filename="../../mscore/inspector/scale_select.ui" line="76"/>
         <source>Y:</source>
-        <extracomment>vertical</extracomment>
         <translation>Y:</translation>
     </message>
 </context>
@@ -18198,25 +18316,23 @@ Note: Ctrl+Shift+1 is one key combination</source>
 <context>
     <name>SizeSelect</name>
     <message>
-        <location filename="../../mscore/inspector/size_select.ui" line="21"/>
+        <location filename="../../mscore/inspector/size_select.ui" line="37"/>
         <source>Width</source>
         <translation>Leveys</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/size_select.ui" line="24"/>
+        <location filename="../../mscore/inspector/size_select.ui" line="30"/>
         <source>W:</source>
-        <extracomment>width</extracomment>
         <translation>L:</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/size_select.ui" line="43"/>
+        <location filename="../../mscore/inspector/size_select.ui" line="72"/>
         <source>Height</source>
         <translation>Korkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/size_select.ui" line="46"/>
+        <location filename="../../mscore/inspector/size_select.ui" line="65"/>
         <source>H:</source>
-        <extracomment>height</extracomment>
         <translation>P:</translation>
     </message>
 </context>
@@ -18610,6 +18726,97 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <source>Change Tuning</source>
         <translation>Muuta viritystä</translation>
     </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="305"/>
+        <source>Dynamics</source>
+        <translation>Dynamiikka</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="311"/>
+        <source>Dynamics method:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="322"/>
+        <source>Velocity only (no single-note dynamics)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="327"/>
+        <source>Default (single-note dynamics and velocity)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="332"/>
+        <source>CC events only (constant velocity)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="344"/>
+        <source>CC 1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="349"/>
+        <source>CC 2 (default)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="354"/>
+        <source>CC 4</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="359"/>
+        <source>CC 11</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="367"/>
+        <source>CC to use:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="374"/>
+        <location filename="../../mscore/synthcontrol.ui" line="377"/>
+        <source>Advanced Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="383"/>
+        <source>Switch all patches:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="403"/>
+        <source>Switch all patches to expressive</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="406"/>
+        <source>To Expressive</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="413"/>
+        <source>Switch all patches to non-expressive</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="416"/>
+        <source>To Non-Expressive</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="423"/>
+        <source>Reset all patches to defaults</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/synthcontrol.ui" line="426"/>
+        <source>Reset All</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>TemplateBrowser</name>
@@ -18668,237 +18875,237 @@ Note: Ctrl+Shift+1 is one key combination</source>
 <context>
     <name>TextStyle</name>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1792"/>
+        <location filename="../../libmscore/style.cpp" line="1908"/>
         <source>Title</source>
         <translation>Otsikko</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1793"/>
+        <location filename="../../libmscore/style.cpp" line="1909"/>
         <source>Subtitle</source>
         <translation>Alaotsikko</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1794"/>
+        <location filename="../../libmscore/style.cpp" line="1910"/>
         <source>Composer</source>
         <translation>Säveltäjä</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1795"/>
+        <location filename="../../libmscore/style.cpp" line="1911"/>
         <source>Lyricist</source>
         <translation>Runoilija</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1797"/>
+        <location filename="../../libmscore/style.cpp" line="1913"/>
         <source>Lyrics Odd Lines</source>
         <translation>Sanat (parittomat rivit)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1798"/>
+        <location filename="../../libmscore/style.cpp" line="1914"/>
         <source>Lyrics Even Lines</source>
         <translation>Sanat (parilliset rivit)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1799"/>
+        <location filename="../../libmscore/style.cpp" line="1915"/>
         <source>Fingering</source>
         <translation>Sormitus</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1800"/>
+        <location filename="../../libmscore/style.cpp" line="1916"/>
         <source>LH Guitar Fingering</source>
         <translation>VK Kitaran sormitus</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1801"/>
+        <location filename="../../libmscore/style.cpp" line="1917"/>
         <source>RH Guitar Fingering</source>
         <translation>OK Kitaran sormitus</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1802"/>
+        <location filename="../../libmscore/style.cpp" line="1918"/>
         <source>String Number</source>
         <translation>Kielinumero</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1804"/>
+        <location filename="../../libmscore/style.cpp" line="1920"/>
         <source>Instrument Name (Long)</source>
         <translation>Soittimen nimi (pitkä)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1805"/>
+        <location filename="../../libmscore/style.cpp" line="1921"/>
         <source>Instrument Name (Short)</source>
         <translation>Soittimen nimi (lyhyt)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1806"/>
+        <location filename="../../libmscore/style.cpp" line="1922"/>
         <source>Instrument Name (Part)</source>
         <translation>Soittimen nimi (stemma)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1807"/>
+        <location filename="../../libmscore/style.cpp" line="1923"/>
         <source>Dynamics</source>
         <translation>Dynamiikka</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1810"/>
+        <location filename="../../libmscore/style.cpp" line="1926"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1811"/>
+        <location filename="../../libmscore/style.cpp" line="1927"/>
         <source>Metronome</source>
         <translation>Metronomi</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1812"/>
+        <location filename="../../libmscore/style.cpp" line="1928"/>
         <source>Measure Number</source>
         <translation>Tahtinumero</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1813"/>
+        <location filename="../../libmscore/style.cpp" line="1929"/>
         <source>Translator</source>
         <translation>Kääntäjä</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1814"/>
+        <location filename="../../libmscore/style.cpp" line="1930"/>
         <source>Tuplet</source>
         <translation>Poikkeusjako</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1816"/>
+        <location filename="../../libmscore/style.cpp" line="1932"/>
         <source>System</source>
         <translation>Systeemi</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1817"/>
+        <location filename="../../libmscore/style.cpp" line="1933"/>
         <source>Staff</source>
         <translation>Viivasto</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1818"/>
+        <location filename="../../libmscore/style.cpp" line="1934"/>
         <source>Chord Symbol</source>
         <translation>Sointumerkki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1820"/>
+        <location filename="../../libmscore/style.cpp" line="1936"/>
         <source>Rehearsal Mark</source>
         <translation>Harjoitusmerkki</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1822"/>
+        <location filename="../../libmscore/style.cpp" line="1938"/>
         <source>Repeat Text Left</source>
         <translation>Toista teksti vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1823"/>
+        <location filename="../../libmscore/style.cpp" line="1939"/>
         <source>Repeat Text Right</source>
         <translation>Toista teksti oikealle</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1829"/>
+        <location filename="../../libmscore/style.cpp" line="1945"/>
         <source>Volta</source>
         <translation>Maali</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1824"/>
+        <location filename="../../libmscore/style.cpp" line="1940"/>
         <source>Frame</source>
         <translation>Kehys</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1791"/>
+        <location filename="../../libmscore/style.cpp" line="1907"/>
         <source>Default</source>
         <translation>Oletus</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1808"/>
+        <location filename="../../libmscore/style.cpp" line="1924"/>
         <source>Expression</source>
         <translation>Esitystapa</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1819"/>
+        <location filename="../../libmscore/style.cpp" line="1935"/>
         <source>Chord Symbol (Alternate)</source>
         <translation>Sointumerkki (vuorottainen)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1825"/>
+        <location filename="../../libmscore/style.cpp" line="1941"/>
         <source>Text Line</source>
         <translation>Tekstiviiva</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1826"/>
+        <location filename="../../libmscore/style.cpp" line="1942"/>
         <source>Glissando</source>
         <translation>Glissando</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1828"/>
+        <location filename="../../libmscore/style.cpp" line="1944"/>
         <source>Ottava</source>
         <translation>Ottava</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1830"/>
+        <location filename="../../libmscore/style.cpp" line="1946"/>
         <source>Pedal</source>
         <translation>Pedaali</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1831"/>
+        <location filename="../../libmscore/style.cpp" line="1947"/>
         <source>Let Ring</source>
         <translation>Anna soida</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1832"/>
+        <location filename="../../libmscore/style.cpp" line="1948"/>
         <source>Palm Mute</source>
         <translation>Demppaus</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1834"/>
+        <location filename="../../libmscore/style.cpp" line="1950"/>
         <source>Hairpin</source>
         <translation>Dynamiikkaviivat</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1835"/>
+        <location filename="../../libmscore/style.cpp" line="1951"/>
         <source>Bend</source>
         <translation>Venytys</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1836"/>
+        <location filename="../../libmscore/style.cpp" line="1952"/>
         <source>Header</source>
         <translation>Ylätunniste</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1837"/>
+        <location filename="../../libmscore/style.cpp" line="1953"/>
         <source>Footer</source>
         <translation>Alatunniste</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1838"/>
+        <location filename="../../libmscore/style.cpp" line="1954"/>
         <source>Instrument Change</source>
         <translation>Instrumentin vaihto</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1840"/>
+        <location filename="../../libmscore/style.cpp" line="1956"/>
         <source>User-1</source>
         <translation>Käyttäjä-1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1841"/>
+        <location filename="../../libmscore/style.cpp" line="1957"/>
         <source>User-2</source>
         <translation>Käyttäjä-2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1842"/>
+        <location filename="../../libmscore/style.cpp" line="1958"/>
         <source>User-3</source>
         <translation>Käyttäjä-3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1843"/>
+        <location filename="../../libmscore/style.cpp" line="1959"/>
         <source>User-4</source>
         <translation>Käyttäjä-4</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1844"/>
+        <location filename="../../libmscore/style.cpp" line="1960"/>
         <source>User-5</source>
         <translation>Käyttäjä-5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/style.cpp" line="1846"/>
+        <location filename="../../libmscore/style.cpp" line="1962"/>
         <source>User-6</source>
         <translation>Käyttäjä-6</translation>
     </message>
@@ -19057,7 +19264,6 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/timesigwizard.ui" line="49"/>
         <source>Enter a numerical time signature such as four-four or six-eight</source>
         <translation type="unfinished"/>
     </message>
@@ -19133,6 +19339,10 @@ Note: Ctrl+Shift+1 is one key combination</source>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="172"/>
+        <source>Use the common time symbol, the letter C, and a 4/4 meter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Use the common time symbol, the letter C, and a four-four meter</source>
         <translation type="unfinished"/>
     </message>
@@ -19147,6 +19357,11 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../mscore/timesigwizard.ui" line="192"/>
+        <source>Use the cut time symbol, the letter C with a vertical line through it, and a 2/2 meter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/timesigwizard.ui" line="373"/>
         <source>The number of measures initially present in the score</source>
         <translation type="unfinished"/>
@@ -19157,12 +19372,16 @@ Note: Ctrl+Shift+1 is one key combination</source>
         <translation>4/4-tahtilaji</translation>
     </message>
     <message>
+        <location filename="../../mscore/timesigwizard.ui" line="49"/>
+        <source>Enter a numerical time signature such as 4/4 or 6/8</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../mscore/timesigwizard.ui" line="169"/>
         <source>Common Time</source>
         <translation>4/4-tahtilaji</translation>
     </message>
     <message>
-        <location filename="../../mscore/timesigwizard.ui" line="192"/>
         <source>Use the cut time symbol, the letter C with a vertical line through it, and a two-two meter</source>
         <translation type="unfinished"/>
     </message>
@@ -19794,7 +20013,7 @@ Note: Ctrl+Shift+1 is one key combination</source>
 <context>
     <name>Workspace</name>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="221"/>
+        <location filename="../../mscore/workspace.cpp" line="223"/>
         <source>Writing Workspace File
 %1
 failed: </source>
@@ -19803,7 +20022,7 @@ failed: </source>
 kirjoittaminen epäonnistui: </translation>
     </message>
     <message>
-        <location filename="../../mscore/workspace.cpp" line="222"/>
+        <location filename="../../mscore/workspace.cpp" line="224"/>
         <source>Writing Workspace File</source>
         <translation>Kirjoitetaan työtilatiedostoa</translation>
     </message>
@@ -19918,10 +20137,6 @@ kirjoittaminen epäonnistui: </translation>
         <translation>Avaa…</translation>
     </message>
     <message>
-        <source>File: Open</source>
-        <translation type="vanished">Tiedosto: Avaa</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="48"/>
         <source>Load score from file</source>
         <translation>Lataa partituuri tiedostosta</translation>
@@ -19930,10 +20145,6 @@ kirjoittaminen epäonnistui: </translation>
         <location filename="../../mscore/shortcut.cpp" line="56"/>
         <source>Save</source>
         <translation>Tallenna</translation>
-    </message>
-    <message>
-        <source>File: Save</source>
-        <translation type="vanished">Tiedosto: Tallenna</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="58"/>
@@ -19946,10 +20157,6 @@ kirjoittaminen epäonnistui: </translation>
         <translation>Tallenna verkkoon…</translation>
     </message>
     <message>
-        <source>File: Save online</source>
-        <translation type="vanished">Tiedosto: Tallenna verkkoon</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="67"/>
         <source>Save score on MuseScore.com</source>
         <translation>Tallenna partituuri sivulla MuseScore.com</translation>
@@ -19958,10 +20165,6 @@ kirjoittaminen epäonnistui: </translation>
         <location filename="../../mscore/shortcut.cpp" line="77"/>
         <source>Save As…</source>
         <translation>Tallenna nimellä…</translation>
-    </message>
-    <message>
-        <source>File: Save as</source>
-        <translation type="vanished">Tiedosto: Tallenna nimellä</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="79"/>
@@ -19987,10 +20190,6 @@ kirjoittaminen epäonnistui: </translation>
         <location filename="../../mscore/shortcut.cpp" line="99"/>
         <source>Save a Copy…</source>
         <translation>Tallenna kopio…</translation>
-    </message>
-    <message>
-        <source>File: Save a copy</source>
-        <translation type="vanished">Tiedosto: Tallenna kopio</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="101"/>
@@ -20048,10 +20247,6 @@ kirjoittaminen epäonnistui: </translation>
         <translation>Sulje</translation>
     </message>
     <message>
-        <source>File: Close</source>
-        <translation type="vanished">Tiedosto: Sulje</translation>
-    </message>
-    <message>
         <location filename="../../mscore/shortcut.cpp" line="142"/>
         <source>Close current score</source>
         <translation>Sulje nykyinen partituuri</translation>
@@ -20060,10 +20255,6 @@ kirjoittaminen epäonnistui: </translation>
         <location filename="../../mscore/shortcut.cpp" line="148"/>
         <source>New…</source>
         <translation>Uusi…</translation>
-    </message>
-    <message>
-        <source>File: New</source>
-        <translation type="vanished">Tiedosto: Uusi</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="150"/>
@@ -20123,1958 +20314,1890 @@ kirjoittaminen epäonnistui: </translation>
         <translation>Liitä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="221"/>
+        <location filename="../../mscore/shortcut.cpp" line="251"/>
         <source>Swap with Clipboard</source>
         <translation>Vaihda leikepöydältä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="222"/>
+        <location filename="../../mscore/shortcut.cpp" line="252"/>
         <source>Swap with clipboard</source>
         <translation>Vaihda leikepöydältä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="231"/>
+        <location filename="../../mscore/shortcut.cpp" line="261"/>
         <source>Instruments…</source>
         <translation>Instrumentit…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="232"/>
+        <location filename="../../mscore/shortcut.cpp" line="262"/>
         <source>Show instruments dialog</source>
         <translation>Näytä instrumentin valintaikkuna</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="238"/>
-        <location filename="../../mscore/shortcut.cpp" line="1907"/>
+        <location filename="../../mscore/shortcut.cpp" line="268"/>
+        <location filename="../../mscore/shortcut.cpp" line="1935"/>
         <source>Note Input</source>
         <translation>Nuotinsyöttö</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="239"/>
+        <location filename="../../mscore/shortcut.cpp" line="269"/>
         <source>Note input</source>
         <translation>Nuotinsyöttö</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="250"/>
+        <location filename="../../mscore/shortcut.cpp" line="280"/>
         <source>Enter notes with a mouse or keyboard</source>
         <translation>Lisää nuotteja hiirellä tai näppäimistöllä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="260"/>
+        <location filename="../../mscore/shortcut.cpp" line="290"/>
         <source>Re-Pitch</source>
         <translation>Muuta sävelkorkeutta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="261"/>
+        <location filename="../../mscore/shortcut.cpp" line="291"/>
         <source>Replace pitches without changing rhythms</source>
         <translation>Korvaa sävelkorkeudet muuttamatta rytmejä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="271"/>
+        <location filename="../../mscore/shortcut.cpp" line="301"/>
         <source>Rhythm</source>
         <translation>Rytmi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="272"/>
+        <location filename="../../mscore/shortcut.cpp" line="302"/>
         <source>Enter durations with a single click or keypress</source>
         <translation>Sijoita aika-arvoja yksittäisellä klikkauksella tai näppäinpainalluksella</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="283"/>
+        <location filename="../../mscore/shortcut.cpp" line="313"/>
         <source>Perform the piece at a fixed tempo indicated by a metronome beat</source>
         <translation>Soita kappale metronomin ilmaisemalla vakiotempolla</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="294"/>
+        <location filename="../../mscore/shortcut.cpp" line="324"/>
         <source>Perform the piece while tapping a key or pedal to set the tempo</source>
         <translation>Soita kappale näppäilemällä näppäintä tai pedaalia tempon säätämiseksi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="304"/>
-        <source>Timewise</source>
-        <translation>Timewise</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="305"/>
+        <location filename="../../mscore/shortcut.cpp" line="335"/>
         <source>Insert notes increasing measure duration</source>
         <translation>Lisää nuotteja kasvattaen tahdin kestoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="315"/>
+        <location filename="../../mscore/shortcut.cpp" line="345"/>
         <source>Respell Pitches</source>
         <translation>Muuta sävelkorkeuksien kirjoitusasua</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="316"/>
+        <location filename="../../mscore/shortcut.cpp" line="346"/>
         <source>Respell pitches</source>
         <translation>Muuta sävelkorkeuksien kirjoitusasua</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="325"/>
+        <location filename="../../mscore/shortcut.cpp" line="355"/>
         <source>Unison Above</source>
         <translation>Priimi ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="326"/>
+        <location filename="../../mscore/shortcut.cpp" line="356"/>
         <source>Enter unison above</source>
         <translation>Luo yläpuolisen unisonon</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="332"/>
+        <location filename="../../mscore/shortcut.cpp" line="362"/>
         <source>Second Above</source>
         <translation>Sekunti ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="333"/>
+        <location filename="../../mscore/shortcut.cpp" line="363"/>
         <source>Enter second above</source>
         <translation>Luo yläpuolisen sekunnin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="339"/>
+        <location filename="../../mscore/shortcut.cpp" line="369"/>
         <source>Third Above</source>
         <translation>Terssi ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="340"/>
+        <location filename="../../mscore/shortcut.cpp" line="370"/>
         <source>Enter third above</source>
         <translation>Luo yläpuolisen terssin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="346"/>
+        <location filename="../../mscore/shortcut.cpp" line="376"/>
         <source>Fourth Above</source>
         <translation>Kvartti ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="347"/>
+        <location filename="../../mscore/shortcut.cpp" line="377"/>
         <source>Enter fourth above</source>
         <translation>Luo yläpuolisen kvartin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="353"/>
+        <location filename="../../mscore/shortcut.cpp" line="383"/>
         <source>Fifth Above</source>
         <translation>Kvintti ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="354"/>
+        <location filename="../../mscore/shortcut.cpp" line="384"/>
         <source>Enter fifth above</source>
         <translation>Luo yläpuolisen kvintin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="360"/>
+        <location filename="../../mscore/shortcut.cpp" line="390"/>
         <source>Sixth Above</source>
         <translation>Seksti ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="361"/>
+        <location filename="../../mscore/shortcut.cpp" line="391"/>
         <source>Enter sixth above</source>
         <translation>Luo yläpuolisen sekstin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="367"/>
+        <location filename="../../mscore/shortcut.cpp" line="397"/>
         <source>Seventh Above</source>
         <translation>Septimi ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="368"/>
+        <location filename="../../mscore/shortcut.cpp" line="398"/>
         <source>Enter seventh above</source>
         <translation>Luo yläpuolisen septimin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="374"/>
+        <location filename="../../mscore/shortcut.cpp" line="404"/>
         <source>Octave Above</source>
         <translation>Oktaavi ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="375"/>
+        <location filename="../../mscore/shortcut.cpp" line="405"/>
         <source>Enter octave above</source>
         <translation>Luo yläpuolisen oktaavin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="381"/>
+        <location filename="../../mscore/shortcut.cpp" line="411"/>
         <source>Ninth Above</source>
         <translation>Nooni ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="382"/>
+        <location filename="../../mscore/shortcut.cpp" line="412"/>
         <source>Enter ninth above</source>
         <translation>Luo yläpuolisen noonin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="388"/>
+        <location filename="../../mscore/shortcut.cpp" line="418"/>
         <source>Second Below</source>
         <translation>Sekunti alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="389"/>
+        <location filename="../../mscore/shortcut.cpp" line="419"/>
         <source>Enter second below</source>
         <translation>Luo alapuolisen sekunnin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="395"/>
+        <location filename="../../mscore/shortcut.cpp" line="425"/>
         <source>Third Below</source>
         <translation>Terssi alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="396"/>
+        <location filename="../../mscore/shortcut.cpp" line="426"/>
         <source>Enter third below</source>
         <translation>Luo alapuolisen terssin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="402"/>
+        <location filename="../../mscore/shortcut.cpp" line="432"/>
         <source>Fourth Below</source>
         <translation>Kvartti alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="403"/>
+        <location filename="../../mscore/shortcut.cpp" line="433"/>
         <source>Enter fourth below</source>
         <translation>Luo alapuolisen kvartin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="409"/>
+        <location filename="../../mscore/shortcut.cpp" line="439"/>
         <source>Fifth Below</source>
         <translation>Kvintti alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="410"/>
+        <location filename="../../mscore/shortcut.cpp" line="440"/>
         <source>Enter fifth below</source>
         <translation>Luo alapuolisen kvintin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="416"/>
+        <location filename="../../mscore/shortcut.cpp" line="446"/>
         <source>Sixth Below</source>
         <translation>Seksti alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="417"/>
+        <location filename="../../mscore/shortcut.cpp" line="447"/>
         <source>Enter sixth below</source>
         <translation>Luo alapuolisen sekstin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="423"/>
+        <location filename="../../mscore/shortcut.cpp" line="453"/>
         <source>Seventh Below</source>
         <translation>Septimi alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="424"/>
+        <location filename="../../mscore/shortcut.cpp" line="454"/>
         <source>Enter seventh below</source>
         <translation>Luo alapuolisen septimin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="430"/>
+        <location filename="../../mscore/shortcut.cpp" line="460"/>
         <source>Octave Below</source>
         <translation>Oktaavi alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="431"/>
+        <location filename="../../mscore/shortcut.cpp" line="461"/>
         <source>Enter octave below</source>
         <translation>Luo alapuolisen oktaavin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="437"/>
+        <location filename="../../mscore/shortcut.cpp" line="467"/>
         <source>Ninth Below</source>
         <translation>Nooni alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="438"/>
+        <location filename="../../mscore/shortcut.cpp" line="468"/>
         <source>Enter ninth below</source>
         <translation>Luo alapuolisen noonin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="444"/>
+        <location filename="../../mscore/shortcut.cpp" line="474"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="445"/>
+        <location filename="../../mscore/shortcut.cpp" line="475"/>
         <source>Enter note A</source>
         <translation>Syötä nuotti A</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="451"/>
+        <location filename="../../mscore/shortcut.cpp" line="481"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="452"/>
+        <location filename="../../mscore/shortcut.cpp" line="482"/>
         <source>Enter note B</source>
         <translation>Syötä nuotti B</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="458"/>
+        <location filename="../../mscore/shortcut.cpp" line="488"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="459"/>
+        <location filename="../../mscore/shortcut.cpp" line="489"/>
         <source>Enter note C</source>
         <translation>Syötä nuotti C</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="465"/>
+        <location filename="../../mscore/shortcut.cpp" line="495"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="466"/>
+        <location filename="../../mscore/shortcut.cpp" line="496"/>
         <source>Enter note D</source>
         <translation>Syötä nuotti D</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="472"/>
+        <location filename="../../mscore/shortcut.cpp" line="502"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="473"/>
+        <location filename="../../mscore/shortcut.cpp" line="503"/>
         <source>Enter note E</source>
         <translation>Syötä nuotti E</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="479"/>
+        <location filename="../../mscore/shortcut.cpp" line="509"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="480"/>
+        <location filename="../../mscore/shortcut.cpp" line="510"/>
         <source>Enter note F</source>
         <translation>Syötä nuotti F</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="486"/>
+        <location filename="../../mscore/shortcut.cpp" line="516"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="487"/>
+        <location filename="../../mscore/shortcut.cpp" line="517"/>
         <source>Enter note G</source>
         <translation>Syötä nuotti G</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="494"/>
+        <location filename="../../mscore/shortcut.cpp" line="524"/>
         <source>Add note A to chord</source>
         <translation>Lisää sointuun nuotti A</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="501"/>
+        <location filename="../../mscore/shortcut.cpp" line="531"/>
         <source>Add note B to chord</source>
         <translation>Lisää sointuun nuotti B</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="508"/>
+        <location filename="../../mscore/shortcut.cpp" line="538"/>
         <source>Add note C to chord</source>
         <translation>Lisää sointuun nuotti C</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="515"/>
+        <location filename="../../mscore/shortcut.cpp" line="545"/>
         <source>Add note D to chord</source>
         <translation>Lisää sointuun nuotti D</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="522"/>
+        <location filename="../../mscore/shortcut.cpp" line="552"/>
         <source>Add note E to chord</source>
         <translation>Lisää sointuun nuotti E</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="529"/>
+        <location filename="../../mscore/shortcut.cpp" line="559"/>
         <source>Add note F to chord</source>
         <translation>Lisää sointuun nuotti F</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="536"/>
+        <location filename="../../mscore/shortcut.cpp" line="566"/>
         <source>Add note G to chord</source>
         <translation>Lisää sointuun nuotti G</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="549"/>
+        <location filename="../../mscore/shortcut.cpp" line="579"/>
         <source>Insert A</source>
         <translation>Sijoita A</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="550"/>
+        <location filename="../../mscore/shortcut.cpp" line="580"/>
         <source>Insert note A</source>
         <translation>Sijoita nuotti A</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="556"/>
+        <location filename="../../mscore/shortcut.cpp" line="586"/>
         <source>Insert B</source>
         <translation>Sijoita H</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="557"/>
+        <location filename="../../mscore/shortcut.cpp" line="587"/>
         <source>Insert note B</source>
         <translation>Sijoita nuotti H</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="563"/>
+        <location filename="../../mscore/shortcut.cpp" line="593"/>
         <source>Insert C</source>
         <translation>Sijoita C</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="564"/>
+        <location filename="../../mscore/shortcut.cpp" line="594"/>
         <source>Insert note C</source>
         <translation>Sijoita nuotti C</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="570"/>
+        <location filename="../../mscore/shortcut.cpp" line="600"/>
         <source>Insert D</source>
         <translation>Sijoita D</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="571"/>
+        <location filename="../../mscore/shortcut.cpp" line="601"/>
         <source>Insert note D</source>
         <translation>Sijoita nuotti D</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="577"/>
+        <location filename="../../mscore/shortcut.cpp" line="607"/>
         <source>Insert E</source>
         <translation>Sijoita E</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="578"/>
+        <location filename="../../mscore/shortcut.cpp" line="608"/>
         <source>Insert note E</source>
         <translation>Sijoita nuotti E</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="584"/>
+        <location filename="../../mscore/shortcut.cpp" line="614"/>
         <source>Insert F</source>
         <translation>Sijoita F</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="585"/>
+        <location filename="../../mscore/shortcut.cpp" line="615"/>
         <source>Insert note F</source>
         <translation>Sijoita nuotti F</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="591"/>
+        <location filename="../../mscore/shortcut.cpp" line="621"/>
         <source>Insert G</source>
         <translation>Sijoita G</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="592"/>
+        <location filename="../../mscore/shortcut.cpp" line="622"/>
         <source>Insert note G</source>
         <translation>Sijoita nuotti G</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="598"/>
-        <location filename="../../mscore/shortcut.cpp" line="1522"/>
-        <location filename="../../mscore/shortcut.cpp" line="1524"/>
+        <location filename="../../mscore/shortcut.cpp" line="628"/>
+        <location filename="../../mscore/shortcut.cpp" line="1550"/>
+        <location filename="../../mscore/shortcut.cpp" line="1552"/>
         <source>Rest</source>
         <translation>Tauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="599"/>
+        <location filename="../../mscore/shortcut.cpp" line="629"/>
         <source>Enter rest</source>
         <translation>Syötä tauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="608"/>
+        <location filename="../../mscore/shortcut.cpp" line="638"/>
         <source>Move the cursor forward in real-time input mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="615"/>
+        <location filename="../../mscore/shortcut.cpp" line="645"/>
         <source>Staccato</source>
         <translation>Staccato</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="616"/>
+        <location filename="../../mscore/shortcut.cpp" line="646"/>
         <source>Toggle staccato</source>
         <translation>Staccato päälle/pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="645"/>
+        <location filename="../../mscore/shortcut.cpp" line="675"/>
         <source>Tenuto</source>
         <translation>Tenuto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="646"/>
+        <location filename="../../mscore/shortcut.cpp" line="676"/>
         <source>Toggle tenuto</source>
         <translation>Tenuto päälle/pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="655"/>
+        <location filename="../../mscore/shortcut.cpp" line="685"/>
         <source>Trill</source>
         <translation>Trilli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="656"/>
+        <location filename="../../mscore/shortcut.cpp" line="686"/>
         <source>Toggle trill</source>
         <translation>Trilli päälle/pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="665"/>
+        <location filename="../../mscore/shortcut.cpp" line="695"/>
         <source>Marcato</source>
         <translation>Marcato</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="666"/>
+        <location filename="../../mscore/shortcut.cpp" line="696"/>
         <source>Toggle marcato</source>
         <translation>Marcato päälle/pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="675"/>
+        <location filename="../../mscore/shortcut.cpp" line="705"/>
         <source>Sforzato</source>
         <translation>Sforzato</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="676"/>
+        <location filename="../../mscore/shortcut.cpp" line="706"/>
         <source>Toggle sforzato</source>
         <translation>Sforzato päälle/pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="625"/>
+        <location filename="../../mscore/shortcut.cpp" line="655"/>
         <source>Up Bow</source>
         <translation>työntöjousi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="626"/>
+        <location filename="../../mscore/shortcut.cpp" line="656"/>
         <source>Toggle up bow</source>
         <translation>Työntöjousi päälle/pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="635"/>
+        <location filename="../../mscore/shortcut.cpp" line="665"/>
         <source>Down Bow</source>
         <translation>Vetojousi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="636"/>
+        <location filename="../../mscore/shortcut.cpp" line="666"/>
         <source>Toggle down bow</source>
         <translation>Vetojousi päälle/pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="685"/>
+        <location filename="../../mscore/shortcut.cpp" line="715"/>
         <source>Increase Layout Stretch</source>
         <translation>Väljennä asettelua</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="686"/>
+        <location filename="../../mscore/shortcut.cpp" line="716"/>
         <source>Increase layout stretch</source>
         <translation>Väljennä asettelua</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="687"/>
+        <location filename="../../mscore/shortcut.cpp" line="717"/>
         <source>Increase layout stretch factor of selected measures</source>
         <translation>Väljennä valittujen tahtien asettelua</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="695"/>
+        <location filename="../../mscore/shortcut.cpp" line="725"/>
         <source>Decrease Layout Stretch</source>
         <translation>Tiivistä asettelua</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="696"/>
+        <location filename="../../mscore/shortcut.cpp" line="726"/>
         <source>Decrease layout stretch</source>
         <translation>Tiivistä asettelua</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="697"/>
+        <location filename="../../mscore/shortcut.cpp" line="727"/>
         <source>Decrease layout stretch factor of selected measures</source>
         <translation>Tiivistä valittujen tahtien asettelua</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="725"/>
+        <location filename="../../mscore/shortcut.cpp" line="755"/>
         <source>Regroup Rhythms</source>
         <translation>Järjestä rytmit uudelleen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="726"/>
+        <location filename="../../mscore/shortcut.cpp" line="756"/>
         <source>Regroup rhythms</source>
         <translation>Järjestä rytmit uudelleen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="727"/>
+        <location filename="../../mscore/shortcut.cpp" line="757"/>
         <source>Combine rests and tied notes from selection and resplit at rhythmical locations</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="735"/>
+        <location filename="../../mscore/shortcut.cpp" line="765"/>
         <source>Flip Direction</source>
         <translation>Vaihda suunta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="736"/>
+        <location filename="../../mscore/shortcut.cpp" line="766"/>
         <source>Flip direction</source>
         <translation>Vaihda suunta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="745"/>
+        <location filename="../../mscore/shortcut.cpp" line="775"/>
         <source>Up</source>
         <translation>Ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="746"/>
+        <location filename="../../mscore/shortcut.cpp" line="776"/>
         <source>Pitch up or move text or articulation up</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="755"/>
+        <location filename="../../mscore/shortcut.cpp" line="785"/>
         <source>Diatonic Up</source>
         <translation>Diatoninen ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="756"/>
+        <location filename="../../mscore/shortcut.cpp" line="786"/>
         <source>Diatonic pitch up</source>
         <translation>Diatoninen sävelkorkeus ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="766"/>
+        <location filename="../../mscore/shortcut.cpp" line="796"/>
         <source>Up Octave</source>
         <translation>Oktaavi ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="767"/>
+        <location filename="../../mscore/shortcut.cpp" line="797"/>
         <source>Pitch up octave</source>
         <translation>Nosta oktaavi ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="768"/>
+        <location filename="../../mscore/shortcut.cpp" line="798"/>
         <source>Pitch up by an octave or move text or articulation up</source>
         <translation>Siirrä oktaavi ylös tai siirrä teksti tai artikulaatio ylöspäin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="776"/>
+        <location filename="../../mscore/shortcut.cpp" line="806"/>
         <source>Up Note in Chord</source>
         <translation>Yläpuolinen nuotti soinnussa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="777"/>
+        <location filename="../../mscore/shortcut.cpp" line="807"/>
         <source>Go to higher pitched note in chord</source>
         <translation>Mene soinnun ylempään nuottiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="786"/>
+        <location filename="../../mscore/shortcut.cpp" line="816"/>
         <source>Top Note in Chord</source>
         <translation>Ylin nuotti soinnussa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="787"/>
+        <location filename="../../mscore/shortcut.cpp" line="817"/>
         <source>Go to top note in chord</source>
         <translation>Mene soinnun ylimpään nuottiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="796"/>
+        <location filename="../../mscore/shortcut.cpp" line="826"/>
         <source>Move Up</source>
         <translation>Siirrä ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="797"/>
+        <location filename="../../mscore/shortcut.cpp" line="827"/>
         <source>Move up</source>
         <translation>Siirrä ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="807"/>
+        <location filename="../../mscore/shortcut.cpp" line="837"/>
         <source>Down</source>
         <translation>Alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="808"/>
+        <location filename="../../mscore/shortcut.cpp" line="838"/>
         <source>Pitch down or move text or articulation down</source>
         <translation>Sävelkorkeus alas tai siirrä teksti tai artikulaatio alaspäin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="817"/>
+        <location filename="../../mscore/shortcut.cpp" line="847"/>
         <source>Diatonic Down</source>
         <translation>Diatoninen alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="818"/>
+        <location filename="../../mscore/shortcut.cpp" line="848"/>
         <source>Diatonic pitch down</source>
         <translation>Diatoninen sävelkorkeus alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="828"/>
+        <location filename="../../mscore/shortcut.cpp" line="858"/>
         <source>Down Octave</source>
         <translation>Oktaavi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="829"/>
+        <location filename="../../mscore/shortcut.cpp" line="859"/>
         <source>Pitch down octave</source>
         <translation>Laske oktaavi alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="830"/>
+        <location filename="../../mscore/shortcut.cpp" line="860"/>
         <source>Pitch down by an octave or move text or articulation down</source>
         <translation>Laske oktaavi alas tai siirrä teksti tai artikulaatio alaspäin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="839"/>
+        <location filename="../../mscore/shortcut.cpp" line="869"/>
         <source>Down Note in Chord</source>
         <translation>Alapuolinen nuotti sinnussa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="840"/>
+        <location filename="../../mscore/shortcut.cpp" line="870"/>
         <source>Go to lower pitched note in chord</source>
         <translation>Mene soinnun alempaan nuottiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="850"/>
+        <location filename="../../mscore/shortcut.cpp" line="880"/>
         <source>Next Segment Element</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="851"/>
+        <location filename="../../mscore/shortcut.cpp" line="881"/>
         <source>Accessibility: Next segment element</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="861"/>
+        <location filename="../../mscore/shortcut.cpp" line="891"/>
         <source>Previous Segment Element</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="862"/>
+        <location filename="../../mscore/shortcut.cpp" line="892"/>
         <source>Accessibility: Previous segment element</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="872"/>
+        <location filename="../../mscore/shortcut.cpp" line="902"/>
         <source>Next Element</source>
         <translation>Seuraava elementti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="873"/>
+        <location filename="../../mscore/shortcut.cpp" line="903"/>
         <source>Accessibility: Next element</source>
         <translation>Saavutettavuus: seuraava elementti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="883"/>
+        <location filename="../../mscore/shortcut.cpp" line="913"/>
         <source>Previous Element</source>
         <translation>Edellinen elementti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="884"/>
+        <location filename="../../mscore/shortcut.cpp" line="914"/>
         <source>Accessibility: Previous element</source>
         <translation>Saavutettavuus: edellinen elementti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="894"/>
-        <location filename="../../mscore/shortcut.cpp" line="895"/>
-        <location filename="../../mscore/shortcut.cpp" line="896"/>
+        <location filename="../../mscore/shortcut.cpp" line="924"/>
+        <location filename="../../mscore/shortcut.cpp" line="925"/>
+        <location filename="../../mscore/shortcut.cpp" line="926"/>
         <source>Palette Search</source>
         <translation>Palettihaku</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="905"/>
+        <location filename="../../mscore/shortcut.cpp" line="935"/>
         <source>Apply Current Palette Element</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="906"/>
+        <location filename="../../mscore/shortcut.cpp" line="936"/>
         <source>Apply current palette element</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="916"/>
+        <location filename="../../mscore/shortcut.cpp" line="946"/>
         <source>First Element</source>
         <translation>Ensimmäinen elementti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="917"/>
+        <location filename="../../mscore/shortcut.cpp" line="947"/>
         <source>Go to the first element</source>
         <translation>Siirry ensimmäiseen elementtiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="927"/>
+        <location filename="../../mscore/shortcut.cpp" line="957"/>
         <source>Last Element</source>
         <translation>Viimeisin elementti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="928"/>
+        <location filename="../../mscore/shortcut.cpp" line="958"/>
         <source>Go to the last element</source>
         <translation>Siirry viimeisimpään elementtiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="938"/>
+        <location filename="../../mscore/shortcut.cpp" line="968"/>
         <source>Bottom Note in Chord</source>
         <translation>Alin nuotti soinnussa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="939"/>
+        <location filename="../../mscore/shortcut.cpp" line="969"/>
         <source>Go to bottom note in chord</source>
         <translation>Mene soinnun alimpaan nuottiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="949"/>
+        <location filename="../../mscore/shortcut.cpp" line="979"/>
         <source>Move Down</source>
         <translation>Siirrä alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="950"/>
+        <location filename="../../mscore/shortcut.cpp" line="980"/>
         <source>Move down</source>
         <translation>Siirrä alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="960"/>
+        <location filename="../../mscore/shortcut.cpp" line="990"/>
         <source>Previous Chord</source>
         <translation>Edellinen sointu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="961"/>
+        <location filename="../../mscore/shortcut.cpp" line="991"/>
         <source>Go to previous chord or move text left</source>
         <translation>Siirry edelliseen sointuun tai siirrä tekstiä vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="967"/>
+        <location filename="../../mscore/shortcut.cpp" line="997"/>
         <source>Previous Measure</source>
         <translation>Edellinen tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="968"/>
+        <location filename="../../mscore/shortcut.cpp" line="998"/>
         <source>Go to previous measure or move text left</source>
         <translation>Mene edelliseen tahtiin tai siirrä tekstiä vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="974"/>
+        <location filename="../../mscore/shortcut.cpp" line="1004"/>
         <source>Previous Staff or Voice</source>
         <translation>Edellinen viivasto tai ääni</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="975"/>
+        <location filename="../../mscore/shortcut.cpp" line="1005"/>
         <source>Previous staff or voice</source>
         <translation>Edellinen viivasto tai ääni</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="981"/>
+        <location filename="../../mscore/shortcut.cpp" line="1011"/>
         <source>Next Chord</source>
         <translation>Seuraava sointu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="982"/>
+        <location filename="../../mscore/shortcut.cpp" line="1012"/>
         <source>Go to next chord or move text right</source>
         <translation>Siirry edelliseen sointuun tai siirrä tekstiä oikealle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="988"/>
+        <location filename="../../mscore/shortcut.cpp" line="1018"/>
         <source>Next Measure</source>
         <translation>Seuraava tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="989"/>
+        <location filename="../../mscore/shortcut.cpp" line="1019"/>
         <source>Go to next measure or move text right</source>
         <translation>Mene edelliseen tahtiin tai siirrä tekstiä oikealle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="995"/>
+        <location filename="../../mscore/shortcut.cpp" line="1025"/>
         <source>Next Staff or Voice</source>
         <translation>Seuraava viivasto tai ääni</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="996"/>
+        <location filename="../../mscore/shortcut.cpp" line="1026"/>
         <source>Next staff or voice</source>
         <translation>Seuraava viivasto tai ääni</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1002"/>
+        <location filename="../../mscore/shortcut.cpp" line="1032"/>
         <source>Add Previous Chord to Selection</source>
         <translation>Lisää edellinen sointu valintaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1003"/>
+        <location filename="../../mscore/shortcut.cpp" line="1033"/>
         <source>Add previous chord to selection</source>
         <translation>Lisää edellinen sointu valintaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1009"/>
+        <location filename="../../mscore/shortcut.cpp" line="1039"/>
         <source>Select to Beginning of Measure</source>
         <translation>Valitse tahdin alkuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1010"/>
+        <location filename="../../mscore/shortcut.cpp" line="1040"/>
         <source>Select to beginning of measure</source>
         <translation>valitse tahdin alkuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1016"/>
+        <location filename="../../mscore/shortcut.cpp" line="1046"/>
         <source>Add Next Chord to Selection</source>
         <translation>Lisää seuraava sointu valintaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1017"/>
+        <location filename="../../mscore/shortcut.cpp" line="1047"/>
         <source>Add next chord to selection</source>
         <translation>Lisää seuraava sointu valintaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1023"/>
+        <location filename="../../mscore/shortcut.cpp" line="1053"/>
         <source>Select Section</source>
         <translation>Valitse jakso</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1024"/>
+        <location filename="../../mscore/shortcut.cpp" line="1054"/>
         <source>Select section</source>
         <translation>Valitse jakso</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1030"/>
+        <location filename="../../mscore/shortcut.cpp" line="1060"/>
         <source>Move Chord/Rest Right</source>
         <translation>Siirrä sointu/tauko oikealle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1031"/>
+        <location filename="../../mscore/shortcut.cpp" line="1061"/>
         <source>Move chord/rest right</source>
         <translation>Siirrä sointu/tauko oikealle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1037"/>
+        <location filename="../../mscore/shortcut.cpp" line="1067"/>
         <source>Move Chord/Rest left</source>
         <translation>Siirrä sointu/tauko vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1038"/>
+        <location filename="../../mscore/shortcut.cpp" line="1068"/>
         <source>Move chord/rest left</source>
         <translation>Siirrä sointu/tauko vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1044"/>
+        <location filename="../../mscore/shortcut.cpp" line="1074"/>
         <source>Select to End of Measure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1045"/>
+        <location filename="../../mscore/shortcut.cpp" line="1075"/>
         <source>Select to end of measure</source>
         <translation>Valitse tahdin loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1051"/>
+        <location filename="../../mscore/shortcut.cpp" line="1081"/>
         <source>Select to Beginning of Line</source>
         <translation>Valitse tahdin alkuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1052"/>
+        <location filename="../../mscore/shortcut.cpp" line="1082"/>
         <source>Select to beginning of line</source>
         <translation>Valitse rivin alkuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1058"/>
+        <location filename="../../mscore/shortcut.cpp" line="1088"/>
         <source>Select to End of Line</source>
         <translation>Valitse rivin loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1059"/>
+        <location filename="../../mscore/shortcut.cpp" line="1089"/>
         <source>Select to end of line</source>
         <translation>Valitse rivin loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1065"/>
+        <location filename="../../mscore/shortcut.cpp" line="1095"/>
         <source>Select to Beginning of Score</source>
         <translation>Valitse tahdin alkuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1066"/>
+        <location filename="../../mscore/shortcut.cpp" line="1096"/>
         <source>Select to beginning of score</source>
         <translation>Valitse partituurin alkuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1072"/>
+        <location filename="../../mscore/shortcut.cpp" line="1102"/>
         <source>Select to End of Score</source>
         <translation>Valitse rivin loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1073"/>
+        <location filename="../../mscore/shortcut.cpp" line="1103"/>
         <source>Select to end of score</source>
         <translation>Valitse partituurin loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1079"/>
+        <location filename="../../mscore/shortcut.cpp" line="1109"/>
         <source>Add Staff Above to Selection</source>
         <translation>Lisää yläpuolinen viivasto valintaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1080"/>
+        <location filename="../../mscore/shortcut.cpp" line="1110"/>
         <source>Add staff above to selection</source>
         <translation>Lisää yläpuolinen viivasto valintaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1086"/>
+        <location filename="../../mscore/shortcut.cpp" line="1116"/>
         <source>Add Staff Below to Selection</source>
         <translation>Lisää alapuolinen viivasto valintaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1087"/>
+        <location filename="../../mscore/shortcut.cpp" line="1117"/>
         <source>Add staff below to selection</source>
         <translation>Lisää alapuolinen viivasto valintaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1093"/>
+        <location filename="../../mscore/shortcut.cpp" line="1123"/>
         <source>Page: Previous</source>
         <translation>Sivu: edellinen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1099"/>
+        <location filename="../../mscore/shortcut.cpp" line="1129"/>
         <source>Page: Next</source>
         <translation>Sivu: seuraava</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1105"/>
+        <location filename="../../mscore/shortcut.cpp" line="1135"/>
         <source>Page: Top</source>
         <translation>Sivu: Ylä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1111"/>
+        <location filename="../../mscore/shortcut.cpp" line="1141"/>
         <source>Page: End</source>
         <translation>Sivu: loppu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1117"/>
+        <location filename="../../mscore/shortcut.cpp" line="1147"/>
         <source>Slur</source>
         <translation>Sidekaari</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1118"/>
+        <location filename="../../mscore/shortcut.cpp" line="1148"/>
         <source>Add slur</source>
         <translation>Lisää legato-kaari</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1124"/>
+        <location filename="../../mscore/shortcut.cpp" line="1154"/>
         <source>Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1125"/>
+        <location filename="../../mscore/shortcut.cpp" line="1155"/>
         <source>Add crescendo</source>
         <translation>Lisää crescendo</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1135"/>
+        <location filename="../../mscore/shortcut.cpp" line="1164"/>
         <source>Decrescendo</source>
         <translation>Decrescendo</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1136"/>
+        <location filename="../../mscore/shortcut.cpp" line="1165"/>
         <source>Add decrescendo</source>
         <translation>Lisää decrescendo</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1167"/>
+        <location filename="../../mscore/shortcut.cpp" line="1195"/>
         <source>Escape</source>
         <translation>Escape</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1173"/>
-        <location filename="../../mscore/shortcut.cpp" line="1174"/>
+        <location filename="../../mscore/shortcut.cpp" line="1201"/>
+        <location filename="../../mscore/shortcut.cpp" line="1202"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1175"/>
-        <source>Delete contents of the selected measures</source>
-        <translation>Poista sisältö valituista tahdista</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1183"/>
+        <location filename="../../mscore/shortcut.cpp" line="1211"/>
         <source>Full Measure Rest</source>
         <translation>Koko tahdin tauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1184"/>
+        <location filename="../../mscore/shortcut.cpp" line="1212"/>
         <source>Full measure rest</source>
         <translation>Koko tahdin tauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1185"/>
-        <source>Converts the measure to a full measure rest</source>
-        <translation>Muuttaa tahdin koko tahdin tauoksi</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1193"/>
-        <source>Timewise Delete</source>
-        <translation>Timewise Poisto</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1194"/>
-        <source>Timewise delete</source>
-        <translation>Timewise poisto</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1195"/>
-        <source>Delete element and duration</source>
-        <translation>Poista elementti ja kesto</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1203"/>
+        <location filename="../../mscore/shortcut.cpp" line="1231"/>
         <source>Append One Measure</source>
         <translation>Lisää tahti loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1204"/>
+        <location filename="../../mscore/shortcut.cpp" line="1232"/>
         <source>Append one measure</source>
         <translation>Lisää tahti loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1210"/>
+        <location filename="../../mscore/shortcut.cpp" line="1238"/>
         <source>Append Measures…</source>
         <translation>Lisää tahteja loppuun…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1211"/>
+        <location filename="../../mscore/shortcut.cpp" line="1239"/>
         <source>Append measures</source>
         <translation>Lisää tahteja loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1217"/>
+        <location filename="../../mscore/shortcut.cpp" line="1245"/>
         <source>Insert One Measure</source>
         <translation>Lisää tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1218"/>
+        <location filename="../../mscore/shortcut.cpp" line="1246"/>
         <source>Insert one measure</source>
         <translation>Lisää tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1226"/>
+        <location filename="../../mscore/shortcut.cpp" line="1254"/>
         <source>Insert Measures…</source>
         <translation>Lisää tahteja valitun edelle…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1227"/>
+        <location filename="../../mscore/shortcut.cpp" line="1255"/>
         <source>Insert measures</source>
         <translation>Lisää tahteja valitun edelle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1233"/>
+        <location filename="../../mscore/shortcut.cpp" line="1261"/>
         <source>Insert Horizontal Frame</source>
         <translation>Lisää vaakasuora kehys väliin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1234"/>
+        <location filename="../../mscore/shortcut.cpp" line="1262"/>
         <source>Insert horizontal frame</source>
         <translation>Lisää vaakasuora kehys väliin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1242"/>
+        <location filename="../../mscore/shortcut.cpp" line="1270"/>
         <source>Insert Text Frame</source>
         <translation>Lisää tekstikehys</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1243"/>
+        <location filename="../../mscore/shortcut.cpp" line="1271"/>
         <source>Insert text frame</source>
         <translation>Lisää tekstikehys</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1251"/>
+        <location filename="../../mscore/shortcut.cpp" line="1279"/>
         <source>Append Text Frame</source>
         <translation>Lisää tekstikehys loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1252"/>
+        <location filename="../../mscore/shortcut.cpp" line="1280"/>
         <source>Append text frame</source>
         <translation>Lisää tekstikehys loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1258"/>
+        <location filename="../../mscore/shortcut.cpp" line="1286"/>
         <source>Insert Fretboard Diagram Frame</source>
         <translation>Lisää otelautakuvakehys</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1259"/>
+        <location filename="../../mscore/shortcut.cpp" line="1287"/>
         <source>Insert fretboard diagram frame</source>
         <translation>Lisää otelautakuvakehys</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1267"/>
+        <location filename="../../mscore/shortcut.cpp" line="1295"/>
         <source>Insert Vertical Frame</source>
         <translation>Lisää pystysuora kehys väliin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1268"/>
+        <location filename="../../mscore/shortcut.cpp" line="1296"/>
         <source>Insert vertical frame</source>
         <translation>Lisää pystysuora kehys väliin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1276"/>
+        <location filename="../../mscore/shortcut.cpp" line="1304"/>
         <source>Append Horizontal Frame</source>
         <translation>Lisää vaakasuora kehys loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1277"/>
+        <location filename="../../mscore/shortcut.cpp" line="1305"/>
         <source>Append horizontal frame</source>
         <translation>Lisää vaakasuora kehys loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1283"/>
+        <location filename="../../mscore/shortcut.cpp" line="1311"/>
         <source>Append Vertical Frame</source>
         <translation>Lisää pystysuora kehys loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1284"/>
+        <location filename="../../mscore/shortcut.cpp" line="1312"/>
         <source>Append vertical frame</source>
         <translation>Lisää pystysuora kehys loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1290"/>
+        <location filename="../../mscore/shortcut.cpp" line="1318"/>
         <source>Duplet</source>
         <translation>Duoli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1296"/>
+        <location filename="../../mscore/shortcut.cpp" line="1324"/>
         <source>Triplet</source>
         <translation>Trioli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1302"/>
+        <location filename="../../mscore/shortcut.cpp" line="1330"/>
         <source>Quadruplet</source>
         <translation>Kvartoli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1308"/>
+        <location filename="../../mscore/shortcut.cpp" line="1336"/>
         <source>Quintuplet</source>
         <translation>Kvintoli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1314"/>
+        <location filename="../../mscore/shortcut.cpp" line="1342"/>
         <source>Sextuplet</source>
         <translation>Sekstoli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1320"/>
+        <location filename="../../mscore/shortcut.cpp" line="1348"/>
         <source>Septuplet</source>
         <translation>Septoli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1326"/>
+        <location filename="../../mscore/shortcut.cpp" line="1354"/>
         <source>Octuplet</source>
         <translation>Oktoli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1332"/>
+        <location filename="../../mscore/shortcut.cpp" line="1360"/>
         <source>Nonuplet</source>
         <translation>Novemoli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1338"/>
+        <location filename="../../mscore/shortcut.cpp" line="1366"/>
         <source>Other…</source>
         <translation>Muita…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1339"/>
+        <location filename="../../mscore/shortcut.cpp" line="1367"/>
         <source>Other tuplets</source>
         <translation>Muita poikkeusjakoja</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1345"/>
-        <location filename="../../mscore/shortcut.cpp" line="1347"/>
+        <location filename="../../mscore/shortcut.cpp" line="1373"/>
+        <location filename="../../mscore/shortcut.cpp" line="1375"/>
         <source>Longa</source>
         <translation>Longa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1346"/>
+        <location filename="../../mscore/shortcut.cpp" line="1374"/>
         <source>Note duration: Longa</source>
         <translation>Nuotin kesto: Neljä kokonuottia</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1356"/>
+        <location filename="../../mscore/shortcut.cpp" line="1384"/>
         <source>Double Whole Note</source>
         <translation>Kaksoiskokonuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1357"/>
+        <location filename="../../mscore/shortcut.cpp" line="1385"/>
         <source>Note duration: Double whole</source>
         <translation>Nuotin kesto: kaksoiskokonuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1358"/>
-        <location filename="../../mscore/shortcut.cpp" line="3053"/>
+        <location filename="../../mscore/shortcut.cpp" line="1386"/>
+        <location filename="../../mscore/shortcut.cpp" line="3081"/>
         <source>Double whole note</source>
         <translation>Kaksoiskokonuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1367"/>
+        <location filename="../../mscore/shortcut.cpp" line="1395"/>
         <source>Whole Note</source>
         <translation>Kokonuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1368"/>
+        <location filename="../../mscore/shortcut.cpp" line="1396"/>
         <source>Note duration: Whole</source>
         <translation>Nuotin kesto: Koko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1369"/>
-        <location filename="../../mscore/shortcut.cpp" line="3063"/>
+        <location filename="../../mscore/shortcut.cpp" line="1397"/>
+        <location filename="../../mscore/shortcut.cpp" line="3091"/>
         <source>Whole note</source>
         <translation>Kokonuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1378"/>
+        <location filename="../../mscore/shortcut.cpp" line="1406"/>
         <source>Half Note</source>
         <translation>Puolinuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1379"/>
+        <location filename="../../mscore/shortcut.cpp" line="1407"/>
         <source>Note duration: Half</source>
         <translation>Nuotin kesto: Puoli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1380"/>
-        <location filename="../../mscore/shortcut.cpp" line="3073"/>
+        <location filename="../../mscore/shortcut.cpp" line="1408"/>
+        <location filename="../../mscore/shortcut.cpp" line="3101"/>
         <source>Half note</source>
         <translation>Puolinuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1389"/>
+        <location filename="../../mscore/shortcut.cpp" line="1417"/>
         <source>Quarter Note</source>
         <translation>Neljäsosanuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1390"/>
+        <location filename="../../mscore/shortcut.cpp" line="1418"/>
         <source>Note duration: Quarter</source>
         <translation>Nuotin kesto: Neljäsosa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1391"/>
-        <location filename="../../mscore/shortcut.cpp" line="3083"/>
+        <location filename="../../mscore/shortcut.cpp" line="1419"/>
+        <location filename="../../mscore/shortcut.cpp" line="3111"/>
         <source>Quarter note</source>
         <translation>Neljäsosanuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1400"/>
+        <location filename="../../mscore/shortcut.cpp" line="1428"/>
         <source>Eighth Note</source>
         <translation>Kahdeksasosanuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1401"/>
+        <location filename="../../mscore/shortcut.cpp" line="1429"/>
         <source>Note duration: Eighth</source>
         <translation>Nuotin kesto: Kahdeksasosa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1402"/>
-        <location filename="../../mscore/shortcut.cpp" line="3093"/>
+        <location filename="../../mscore/shortcut.cpp" line="1430"/>
+        <location filename="../../mscore/shortcut.cpp" line="3121"/>
         <source>Eighth note</source>
         <translation>Kahdeksasosanuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1411"/>
+        <location filename="../../mscore/shortcut.cpp" line="1439"/>
         <source>16th Note</source>
         <translation>1/16-nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1412"/>
+        <location filename="../../mscore/shortcut.cpp" line="1440"/>
         <source>Note duration: 16th</source>
         <translation>Nuotin kesto: 1/16-osa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1413"/>
-        <location filename="../../mscore/shortcut.cpp" line="3103"/>
+        <location filename="../../mscore/shortcut.cpp" line="1441"/>
+        <location filename="../../mscore/shortcut.cpp" line="3131"/>
         <source>16th note</source>
         <translation>1/16-nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1422"/>
+        <location filename="../../mscore/shortcut.cpp" line="1450"/>
         <source>32nd Note</source>
         <translation>1/32-nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1423"/>
+        <location filename="../../mscore/shortcut.cpp" line="1451"/>
         <source>Note duration: 32nd</source>
         <translation>Nuotin kesto: 1/32-osa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1424"/>
-        <location filename="../../mscore/shortcut.cpp" line="3113"/>
+        <location filename="../../mscore/shortcut.cpp" line="1452"/>
+        <location filename="../../mscore/shortcut.cpp" line="3141"/>
         <source>32nd note</source>
         <translation>1/32-nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1433"/>
+        <location filename="../../mscore/shortcut.cpp" line="1461"/>
         <source>64th Note</source>
         <translation>1/64-nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1434"/>
+        <location filename="../../mscore/shortcut.cpp" line="1462"/>
         <source>Note duration: 64th</source>
         <translation>Nuotin kesto: 1/64-osa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1435"/>
-        <location filename="../../mscore/shortcut.cpp" line="3123"/>
+        <location filename="../../mscore/shortcut.cpp" line="1463"/>
+        <location filename="../../mscore/shortcut.cpp" line="3151"/>
         <source>64th note</source>
         <translation>1/64-nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1444"/>
+        <location filename="../../mscore/shortcut.cpp" line="1472"/>
         <source>128th Note</source>
         <translation>1/128-nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1445"/>
+        <location filename="../../mscore/shortcut.cpp" line="1473"/>
         <source>Note duration: 128th</source>
         <translation>Nuotin kesto: 1/128-osa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1446"/>
-        <location filename="../../mscore/shortcut.cpp" line="3133"/>
+        <location filename="../../mscore/shortcut.cpp" line="1474"/>
+        <location filename="../../mscore/shortcut.cpp" line="3161"/>
         <source>128th note</source>
         <translation>1/128-nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1455"/>
+        <location filename="../../mscore/shortcut.cpp" line="1483"/>
         <source>Increase Active Duration</source>
         <translation>Lisää aktiivista kestoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1456"/>
+        <location filename="../../mscore/shortcut.cpp" line="1484"/>
         <source>Increase active duration</source>
         <translation>Lisää aktiivista kestoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1462"/>
+        <location filename="../../mscore/shortcut.cpp" line="1490"/>
         <source>Decrease Active Duration</source>
         <translation>Vähennä aktiivista kestoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1463"/>
+        <location filename="../../mscore/shortcut.cpp" line="1491"/>
         <source>Decrease active duration</source>
         <translation>Vähennä aktiivista kestoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1469"/>
+        <location filename="../../mscore/shortcut.cpp" line="1497"/>
         <source>Augmentation Dot</source>
         <translation>Pidennyspiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1470"/>
+        <location filename="../../mscore/shortcut.cpp" line="1498"/>
         <source>Note duration: Augmentation dot</source>
         <translation>Nuotin kesto: pidennyspiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1471"/>
+        <location filename="../../mscore/shortcut.cpp" line="1499"/>
         <source>Augmentation dot</source>
         <translation>Pidennyspiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1480"/>
+        <location filename="../../mscore/shortcut.cpp" line="1508"/>
         <source>Double Augmentation Dot</source>
         <translation>Pidennyskaksoispiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1481"/>
+        <location filename="../../mscore/shortcut.cpp" line="1509"/>
         <source>Note duration: Double augmentation dot</source>
         <translation>Nuotin kesto: pidennyskaksoispiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1482"/>
+        <location filename="../../mscore/shortcut.cpp" line="1510"/>
         <source>Double augmentation dot</source>
         <translation>Pidennyskaksoispiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1491"/>
+        <location filename="../../mscore/shortcut.cpp" line="1519"/>
         <source>Triple Augmentation Dot</source>
         <translation>Kolminkertainen Pidennyspiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1492"/>
+        <location filename="../../mscore/shortcut.cpp" line="1520"/>
         <source>Note duration: Triple augmentation dot</source>
         <translation>Nuotin kesto: Kolminkertainen pidennyspiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1493"/>
+        <location filename="../../mscore/shortcut.cpp" line="1521"/>
         <source>Triple augmentation dot</source>
         <translation>Kolminkertainen pidennyspiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1502"/>
+        <location filename="../../mscore/shortcut.cpp" line="1530"/>
         <source>Quadruple Augmentation Dot</source>
         <translation>Nelinkertainen pidennyspiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1503"/>
+        <location filename="../../mscore/shortcut.cpp" line="1531"/>
         <source>Note duration: Quadruple augmentation dot</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1504"/>
+        <location filename="../../mscore/shortcut.cpp" line="1532"/>
         <source>Quadruple augmentation dot</source>
         <translation>Nelinkertainen pidennyspiste</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1513"/>
-        <location filename="../../mscore/shortcut.cpp" line="1515"/>
+        <location filename="../../mscore/shortcut.cpp" line="1541"/>
+        <location filename="../../mscore/shortcut.cpp" line="1543"/>
         <source>Tie</source>
         <translation>Yhdyskaari</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1514"/>
+        <location filename="../../mscore/shortcut.cpp" line="1542"/>
         <source>Note duration: Tie</source>
         <translation>Nuotin kesto: sidos</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1523"/>
+        <location filename="../../mscore/shortcut.cpp" line="1551"/>
         <source>Note input: Rest</source>
         <translation>Nuotinsyöttö: tauko</translation>
     </message>
     <message>
-        <source>Double Sharp</source>
-        <translation type="vanished">Kaksoiskorotus</translation>
-    </message>
-    <message>
-        <source>Note input: Double sharp</source>
-        <translation type="vanished">Nuotinkirjoitustila: kaksoiskorotus</translation>
-    </message>
-    <message>
-        <source>Double sharp</source>
-        <translation type="vanished">Kaksoiskorotus</translation>
-    </message>
-    <message>
-        <source>Sharp</source>
-        <translation type="vanished">Korotus</translation>
-    </message>
-    <message>
-        <source>Note input: Sharp</source>
-        <translation type="vanished">Nuotinkirjoitustila: korotus</translation>
-    </message>
-    <message>
-        <source>Natural</source>
-        <translation type="vanished">Palautusmerkki</translation>
-    </message>
-    <message>
-        <source>Note input: Natural</source>
-        <translation type="vanished">Nuotinkirjoitustila: palautusmerkki</translation>
-    </message>
-    <message>
-        <source>Flat</source>
-        <translation type="vanished">Alennus</translation>
-    </message>
-    <message>
-        <source>Note input: Flat</source>
-        <translation type="vanished">Nuotinkirjoitustila: alennus</translation>
-    </message>
-    <message>
-        <source>Double Flat</source>
-        <translation type="vanished">Kaksoisalennus</translation>
-    </message>
-    <message>
-        <source>Note input: Double flat</source>
-        <translation type="vanished">Nuotinkirjoitustila: kaksoisalennus</translation>
-    </message>
-    <message>
-        <source>Double flat</source>
-        <translation type="vanished">Kaksoisalennus</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="1583"/>
-        <location filename="../../mscore/shortcut.cpp" line="1585"/>
+        <location filename="../../mscore/shortcut.cpp" line="1611"/>
+        <location filename="../../mscore/shortcut.cpp" line="1613"/>
         <source>Acciaccatura</source>
         <translation>lyhyt etuhele</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1584"/>
+        <location filename="../../mscore/shortcut.cpp" line="1612"/>
         <source>Add acciaccatura</source>
         <translation>Lisää lyhyt etuhele</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1594"/>
-        <location filename="../../mscore/shortcut.cpp" line="1596"/>
+        <location filename="../../mscore/shortcut.cpp" line="1622"/>
+        <location filename="../../mscore/shortcut.cpp" line="1624"/>
         <source>Appoggiatura</source>
         <translation>pitkä etuhele</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1595"/>
+        <location filename="../../mscore/shortcut.cpp" line="1623"/>
         <source>Add appoggiatura</source>
         <translation>Lisää pitkä etuhele</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1606"/>
+        <location filename="../../mscore/shortcut.cpp" line="1634"/>
         <source>Grace: Quarter</source>
         <translation>Koru: neljäsosa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1607"/>
+        <location filename="../../mscore/shortcut.cpp" line="1635"/>
         <source>Add quarter grace note</source>
         <translation>Lisää neljäsosakoru</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1608"/>
+        <location filename="../../mscore/shortcut.cpp" line="1636"/>
         <source>Grace: quarter</source>
         <translation>Koru: neljäsosa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1618"/>
-        <location filename="../../mscore/shortcut.cpp" line="1620"/>
+        <location filename="../../mscore/shortcut.cpp" line="1646"/>
+        <location filename="../../mscore/shortcut.cpp" line="1648"/>
         <source>Grace: 16th</source>
         <translation>Koru: 1/16</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1619"/>
+        <location filename="../../mscore/shortcut.cpp" line="1647"/>
         <source>Add 16th grace note</source>
         <translation>Lisää 1/16-koru</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1630"/>
-        <location filename="../../mscore/shortcut.cpp" line="1632"/>
+        <location filename="../../mscore/shortcut.cpp" line="1658"/>
+        <location filename="../../mscore/shortcut.cpp" line="1660"/>
         <source>Grace: 32nd</source>
         <translation>Koru: 1/32</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1631"/>
+        <location filename="../../mscore/shortcut.cpp" line="1659"/>
         <source>Add 32nd grace note</source>
         <translation>Lisää 1/32-koru</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1643"/>
+        <location filename="../../mscore/shortcut.cpp" line="1671"/>
         <source>Add Eighth grace note after</source>
         <translation>Lisää kahdeksasosakoru jälkeen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1644"/>
+        <location filename="../../mscore/shortcut.cpp" line="1672"/>
         <source>Grace: eighth after</source>
         <translation>Koru: kahdeksasosa jälkeen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1656"/>
+        <location filename="../../mscore/shortcut.cpp" line="1684"/>
         <source>Grace: 16th after</source>
         <translation>Koru: 1/16 jälkeen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1655"/>
+        <location filename="../../mscore/shortcut.cpp" line="1683"/>
         <source>Add 16th grace note after</source>
         <translation>Lisää 1/16-koru jälkeen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1668"/>
+        <location filename="../../mscore/shortcut.cpp" line="1696"/>
         <source>Grace: 32nd after</source>
         <translation>Koru: 1/32 jälkeen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1667"/>
+        <location filename="../../mscore/shortcut.cpp" line="1695"/>
         <source>Add 32nd grace note after</source>
         <translation>Lisää 1/32-koru jälkeen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1677"/>
+        <location filename="../../mscore/shortcut.cpp" line="1705"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1678"/>
+        <location filename="../../mscore/shortcut.cpp" line="1706"/>
         <source>Voice 1</source>
         <translation>Ääni 1</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1685"/>
+        <location filename="../../mscore/shortcut.cpp" line="1713"/>
         <source>2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1686"/>
+        <location filename="../../mscore/shortcut.cpp" line="1714"/>
         <source>Voice 2</source>
         <translation>Ääni 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1693"/>
+        <location filename="../../mscore/shortcut.cpp" line="1721"/>
         <source>3</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1694"/>
+        <location filename="../../mscore/shortcut.cpp" line="1722"/>
         <source>Voice 3</source>
         <translation>Ääni 3</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1701"/>
+        <location filename="../../mscore/shortcut.cpp" line="1729"/>
         <source>4</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1702"/>
+        <location filename="../../mscore/shortcut.cpp" line="1730"/>
         <source>Voice 4</source>
         <translation>Ääni 4</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1709"/>
+        <location filename="../../mscore/shortcut.cpp" line="1737"/>
         <source>MIDI Input</source>
         <translation>MIDI syöte</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1710"/>
+        <location filename="../../mscore/shortcut.cpp" line="1738"/>
         <source>Toggle &apos;MIDI Input&apos;</source>
         <translation>MIDI-syöte</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1815"/>
+        <location filename="../../mscore/shortcut.cpp" line="1843"/>
         <source>Toggle &apos;Play Panel&apos;</source>
         <translation>Toistopaneeli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1855"/>
+        <location filename="../../mscore/shortcut.cpp" line="1883"/>
         <source>Toggle &apos;MIDI Import Panel&apos;</source>
         <translation>MIDI-tuontipaneeli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1887"/>
+        <location filename="../../mscore/shortcut.cpp" line="1915"/>
         <source>Toggle &apos;Playback Controls&apos; toolbar</source>
         <translation>Toistosäätimien palkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1894"/>
+        <location filename="../../mscore/shortcut.cpp" line="1922"/>
         <source>Toggle &apos;Concert Pitch&apos; toolbar</source>
         <translation>Soivan sävelkorkeuden palkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1901"/>
+        <location filename="../../mscore/shortcut.cpp" line="1929"/>
         <source>Toggle &apos;Image Capture&apos; toolbar</source>
         <translation>Kuvakaappauspalkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1922"/>
+        <location filename="../../mscore/shortcut.cpp" line="1950"/>
         <source>Toggle &apos;Status Bar&apos;</source>
         <translation>Tilarivi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2062"/>
+        <location filename="../../mscore/shortcut.cpp" line="2090"/>
         <source>Player: play</source>
         <translation>Soitin: toista</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2112"/>
+        <location filename="../../mscore/shortcut.cpp" line="2140"/>
         <source>Seek to Begin</source>
         <translation>Hae alkuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2113"/>
+        <location filename="../../mscore/shortcut.cpp" line="2141"/>
         <source>Player: seek to begin</source>
         <translation>Soitin: hae alkuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2123"/>
+        <location filename="../../mscore/shortcut.cpp" line="2151"/>
         <source>Player: rewind</source>
         <translation>Soitin: kelaa taaksepäin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2131"/>
+        <location filename="../../mscore/shortcut.cpp" line="2159"/>
         <source>Seek to End</source>
         <translation>Loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2132"/>
+        <location filename="../../mscore/shortcut.cpp" line="2160"/>
         <source>Player: seek to end</source>
         <translation>Soitin: loppuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2139"/>
+        <location filename="../../mscore/shortcut.cpp" line="2167"/>
         <source>Toggle &apos;Play Repeats&apos;</source>
         <translation>Toista kertaukset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2149"/>
+        <location filename="../../mscore/shortcut.cpp" line="2177"/>
         <source>Pan Score</source>
         <translation>Panoroi partituuria</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2150"/>
+        <location filename="../../mscore/shortcut.cpp" line="2178"/>
         <source>Toggle &apos;Pan Score&apos;</source>
         <translation>Partituurin panorointi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2151"/>
+        <location filename="../../mscore/shortcut.cpp" line="2179"/>
         <source>Pan score automatically</source>
         <translation>Panoroi partituuria automaattisesti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2314"/>
+        <location filename="../../mscore/shortcut.cpp" line="2342"/>
         <source>Toggle &apos;System Break&apos;</source>
         <translation>Vaihda &quot;Systeemin vaihto&quot;</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2324"/>
+        <location filename="../../mscore/shortcut.cpp" line="2352"/>
         <source>Toggle &apos;Page Break&apos;</source>
         <translation>Sivunvaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2334"/>
+        <location filename="../../mscore/shortcut.cpp" line="2362"/>
         <source>Toggle &apos;Section Break&apos;</source>
         <translation>Jaksonvaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2350"/>
+        <location filename="../../mscore/shortcut.cpp" line="2378"/>
         <source>Reset Shapes and Positions</source>
         <translation>Palauta muodot ja sijainnit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2351"/>
+        <location filename="../../mscore/shortcut.cpp" line="2379"/>
         <source>Reset shapes and positions</source>
         <translation>Palauta muodot ja sijainnit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2352"/>
+        <location filename="../../mscore/shortcut.cpp" line="2380"/>
         <source>Reset shapes and positions of selected elements to their defaults</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2364"/>
+        <location filename="../../mscore/shortcut.cpp" line="2392"/>
         <source>Reset Layout Stretch</source>
         <translation>Palauta asettelun pituus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2365"/>
+        <location filename="../../mscore/shortcut.cpp" line="2393"/>
         <source>Reset layout stretch</source>
         <translation>Palauta asettelun pituus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2366"/>
+        <location filename="../../mscore/shortcut.cpp" line="2394"/>
         <source>Reset layout stretch factor of selected measures or entire score</source>
         <translation>Palauta valittujen tahtien tai koko partituurin asettelun pituus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2418"/>
+        <location filename="../../mscore/shortcut.cpp" line="2446"/>
         <source>Mark Irregular Measures</source>
         <translation>Osoita epäsäännölliset tahdit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2419"/>
+        <location filename="../../mscore/shortcut.cpp" line="2447"/>
         <source>Mark irregular measures</source>
         <translation>Osoita epäsäännölliset tahdit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2515"/>
+        <location filename="../../mscore/shortcut.cpp" line="2543"/>
         <source>Style…</source>
         <translation>Tyyli…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2516"/>
+        <location filename="../../mscore/shortcut.cpp" line="2544"/>
         <source>Edit style</source>
         <translation>Muokkaa tyyliä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2553"/>
+        <location filename="../../mscore/shortcut.cpp" line="2581"/>
         <source>All Similar Elements with More Options</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2651"/>
+        <location filename="../../mscore/shortcut.cpp" line="2679"/>
         <source>Change Enharmonic Spelling (Both Modes)</source>
         <translation>Muuta enharmonista kirjoitusasua (Molemmat Tilat)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2652"/>
+        <location filename="../../mscore/shortcut.cpp" line="2680"/>
         <source>Change enharmonic spelling (both modes)</source>
         <translation>Muuta enharmonista kirjoitusasua (molemmat tilat)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2653"/>
+        <location filename="../../mscore/shortcut.cpp" line="2681"/>
         <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2659"/>
+        <location filename="../../mscore/shortcut.cpp" line="2687"/>
         <source>Change Enharmonic Spelling (Current Mode)</source>
         <translation>Muuta enharmonista kirjoitusasua (Nykyinen Tila)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2660"/>
+        <location filename="../../mscore/shortcut.cpp" line="2688"/>
         <source>Change enharmonic spelling (current mode)</source>
         <translation>Muuta enharmonista kirjoitusasua (nykyinen tila)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2661"/>
+        <location filename="../../mscore/shortcut.cpp" line="2689"/>
         <source>Change enharmonic note (alters the spelling in the current mode only)</source>
         <translation>Muuta enharmonista nuottia (muuttaa vain nykyisen tilan kirjoitusasua)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2675"/>
+        <location filename="../../mscore/shortcut.cpp" line="2703"/>
         <source>Toggle &apos;Image Capture&apos;</source>
         <translation>Kuvakaappaus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2686"/>
+        <location filename="../../mscore/shortcut.cpp" line="2714"/>
         <source>Show PDF Image</source>
         <translation>Näytä PDF-kuva</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2687"/>
+        <location filename="../../mscore/shortcut.cpp" line="2715"/>
         <source>Show PDF image</source>
         <translation>Näytä PDF-kuva</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2737"/>
+        <location filename="../../mscore/shortcut.cpp" line="2765"/>
         <source>Score Comparison Tool</source>
         <translation>Partituurien vertailutyökalu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2738"/>
+        <location filename="../../mscore/shortcut.cpp" line="2766"/>
         <source>Score comparison tool</source>
         <translation>Partituurien vertailutyökalu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2751"/>
+        <location filename="../../mscore/shortcut.cpp" line="2779"/>
         <source>Split Measure Before Selected Note/Rest</source>
         <translation>Jaa tahti ennen valittua nuottia/taukoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2752"/>
+        <location filename="../../mscore/shortcut.cpp" line="2780"/>
         <source>Split measure before selected note/rest</source>
         <translation>Jaa tahti ennen valittua nuottia/taukoa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2851"/>
+        <location filename="../../mscore/shortcut.cpp" line="2879"/>
         <source>PDF Transcribing Assistant</source>
         <translation>PDF-transkriptioväline</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2852"/>
+        <location filename="../../mscore/shortcut.cpp" line="2880"/>
         <source>Show PDF transcribing assistant</source>
         <translation>Näytä PDF-transkriptioväline</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2859"/>
+        <location filename="../../mscore/shortcut.cpp" line="2887"/>
         <source>Loop Playback</source>
         <translation>Silmukkatoisto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2860"/>
+        <location filename="../../mscore/shortcut.cpp" line="2888"/>
         <source>Toggle &apos;Loop Playback&apos;</source>
         <translation>Silmukkatoisto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2904"/>
+        <location filename="../../mscore/shortcut.cpp" line="2932"/>
         <source>Toggle &apos;Count-In&apos; playback</source>
         <translation>Laskeminen tahtiosoituksen mukaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2980"/>
+        <location filename="../../mscore/shortcut.cpp" line="3008"/>
         <source>Toggle &apos;View Mode&apos;</source>
         <translation>Näkymän tila</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3005"/>
+        <location filename="../../mscore/shortcut.cpp" line="3033"/>
         <source>Toggle &apos;Visibility&apos;</source>
         <translation>Näkyvyys</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3394"/>
+        <location filename="../../mscore/shortcut.cpp" line="3412"/>
+        <source>Add Brackets to Accidental</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3413"/>
+        <source>Add brackets to accidental</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3422"/>
         <source>Add Parentheses to Element</source>
         <translation>Lisää Sulkeet Merkkiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3395"/>
+        <location filename="../../mscore/shortcut.cpp" line="3423"/>
         <source>Add parentheses to element</source>
         <translation>Lisää sulkeet merkkiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3404"/>
-        <location filename="../../mscore/shortcut.cpp" line="3405"/>
+        <location filename="../../mscore/shortcut.cpp" line="3432"/>
+        <location filename="../../mscore/shortcut.cpp" line="3433"/>
         <source>Toggle &apos;Create Multimeasure Rest&apos;</source>
         <translation>Monitahtinen tauko päälle/pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3414"/>
-        <location filename="../../mscore/shortcut.cpp" line="3415"/>
+        <location filename="../../mscore/shortcut.cpp" line="3442"/>
+        <location filename="../../mscore/shortcut.cpp" line="3443"/>
         <source>Toggle &apos;Hide Empty Staves&apos;</source>
         <translation>Piilota &apos;tyhjät viivastot&apos;</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3496"/>
+        <location filename="../../mscore/shortcut.cpp" line="3524"/>
         <source>Toggle &apos;Rhythmic Slash Notation&apos;</source>
         <translation>&apos;Rytmin nuotinnos vinoviivoin&apos;</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3505"/>
+        <location filename="../../mscore/shortcut.cpp" line="3533"/>
         <source>Add/Remove System Breaks…</source>
         <translation>Lisää / Poista systeemin vaihto…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3506"/>
+        <location filename="../../mscore/shortcut.cpp" line="3534"/>
         <source>Add/remove system breaks</source>
         <translation>Lisää / Poista systeemin vaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1720"/>
+        <location filename="../../mscore/shortcut.cpp" line="1748"/>
         <source>Beam Start</source>
         <translation>Palkin alku</translation>
     </message>
@@ -22114,2058 +22237,2134 @@ kirjoittaminen epäonnistui: </translation>
         <translation>Tiedosto: Uusi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="249"/>
+        <location filename="../../mscore/shortcut.cpp" line="220"/>
+        <source>Paste Half Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="221"/>
+        <source>Paste half duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="230"/>
+        <source>Paste Double Duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="231"/>
+        <source>Paste double duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="240"/>
+        <source>Paste Special</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="241"/>
+        <source>Paste special</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="279"/>
         <source>Step-Time (Default)</source>
         <translation>Step-Time (oletus)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="282"/>
+        <location filename="../../mscore/shortcut.cpp" line="312"/>
         <source>Real-Time (Automatic)</source>
         <translation>Reaaliaikainen (automaattinen)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="293"/>
+        <location filename="../../mscore/shortcut.cpp" line="323"/>
         <source>Real-Time (Manual)</source>
         <translation>Reaaliaikainen (manuaalinen)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="493"/>
+        <location filename="../../mscore/shortcut.cpp" line="334"/>
+        <source>Insert</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="523"/>
         <source>Add A to Chord</source>
         <translation>Lisää A sointuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="500"/>
+        <location filename="../../mscore/shortcut.cpp" line="530"/>
         <source>Add B to Chord</source>
         <translation>Lisää H sointuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="507"/>
+        <location filename="../../mscore/shortcut.cpp" line="537"/>
         <source>Add C to Chord</source>
         <translation>Lisää C sointuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="514"/>
+        <location filename="../../mscore/shortcut.cpp" line="544"/>
         <source>Add D to Chord</source>
         <translation>Lisää D sointuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="521"/>
+        <location filename="../../mscore/shortcut.cpp" line="551"/>
         <source>Add E to Chord</source>
         <translation>Lisää E sointuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="528"/>
+        <location filename="../../mscore/shortcut.cpp" line="558"/>
         <source>Add F to Chord</source>
         <translation>LIsää F sointuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="535"/>
+        <location filename="../../mscore/shortcut.cpp" line="565"/>
         <source>Add G to Chord</source>
         <translation>Lisää G sointuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="542"/>
+        <location filename="../../mscore/shortcut.cpp" line="572"/>
         <source>Add Tied Note to Chord</source>
         <translation>Lisää Yhdistetty Nuotti Sointuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="543"/>
+        <location filename="../../mscore/shortcut.cpp" line="573"/>
         <source>Add tied note to chord</source>
         <translation>Lisää yhdistetty nuotti sointuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="607"/>
+        <location filename="../../mscore/shortcut.cpp" line="637"/>
         <source>Real-Time Advance</source>
         <translation>Real-Time Advance</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="705"/>
+        <location filename="../../mscore/shortcut.cpp" line="735"/>
         <source>Reset Beams</source>
         <translation>Palauta palkit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="706"/>
+        <location filename="../../mscore/shortcut.cpp" line="736"/>
         <source>Reset beams</source>
         <translation>Palauta palkit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="707"/>
+        <location filename="../../mscore/shortcut.cpp" line="737"/>
         <source>Reset beams of selected measures</source>
         <translation>Palauta valittujen tahtien palkit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="715"/>
+        <location filename="../../mscore/shortcut.cpp" line="745"/>
         <source>Reset Style</source>
         <translation>Palauta tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="716"/>
+        <location filename="../../mscore/shortcut.cpp" line="746"/>
         <source>Reset style</source>
         <translation>Palauta tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="717"/>
+        <location filename="../../mscore/shortcut.cpp" line="747"/>
         <source>Reset all style values to default</source>
         <translation>Palauta kaikki tyyliarvot oletuksiin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1146"/>
+        <location filename="../../mscore/shortcut.cpp" line="1174"/>
         <source>Ottava 8va alta</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1147"/>
+        <location filename="../../mscore/shortcut.cpp" line="1175"/>
         <source>Add ottava 8va alta</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1156"/>
+        <location filename="../../mscore/shortcut.cpp" line="1184"/>
         <source>Ottava 8va bassa</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1157"/>
+        <location filename="../../mscore/shortcut.cpp" line="1185"/>
         <source>Add ottava 8va bassa</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1533"/>
-        <location filename="../../mscore/shortcut.cpp" line="1535"/>
+        <location filename="../../mscore/shortcut.cpp" line="1203"/>
+        <source>Delete the selected element(s)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1213"/>
+        <source>Convert the measure to a full measure rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1221"/>
+        <source>Remove Selected Range</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1222"/>
+        <source>Remove selected range</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1223"/>
+        <source>Remove element and duration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="1561"/>
+        <location filename="../../mscore/shortcut.cpp" line="1563"/>
         <source>Double ♯</source>
         <translation>Kaksoiskorotus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1534"/>
+        <location filename="../../mscore/shortcut.cpp" line="1562"/>
         <source>Note input: Double ♯</source>
         <translation>Nuotinkirjoitustila: kaksoiskorotus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1543"/>
-        <location filename="../../mscore/shortcut.cpp" line="1545"/>
+        <location filename="../../mscore/shortcut.cpp" line="1571"/>
+        <location filename="../../mscore/shortcut.cpp" line="1573"/>
         <source>♯</source>
         <translation>Korotus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1544"/>
+        <location filename="../../mscore/shortcut.cpp" line="1572"/>
         <source>Note input: ♯</source>
         <translation>Nuotinkirjoitustila: korotus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1553"/>
-        <location filename="../../mscore/shortcut.cpp" line="1555"/>
+        <location filename="../../mscore/shortcut.cpp" line="1581"/>
+        <location filename="../../mscore/shortcut.cpp" line="1583"/>
         <source>♮</source>
         <translation>Palautusmerkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1554"/>
+        <location filename="../../mscore/shortcut.cpp" line="1582"/>
         <source>Note input: ♮</source>
         <translation>Nuotinkirjoitustila: palautusmerkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1563"/>
-        <location filename="../../mscore/shortcut.cpp" line="1565"/>
+        <location filename="../../mscore/shortcut.cpp" line="1591"/>
+        <location filename="../../mscore/shortcut.cpp" line="1593"/>
         <source>♭</source>
         <translation>alennus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1564"/>
+        <location filename="../../mscore/shortcut.cpp" line="1592"/>
         <source>Note input: ♭</source>
         <translation>Nuotinkirjoitustila: alennus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1573"/>
-        <location filename="../../mscore/shortcut.cpp" line="1575"/>
+        <location filename="../../mscore/shortcut.cpp" line="1601"/>
+        <location filename="../../mscore/shortcut.cpp" line="1603"/>
         <source>Double ♭</source>
         <translation>Kaksoisalennus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1574"/>
+        <location filename="../../mscore/shortcut.cpp" line="1602"/>
         <source>Note input: Double ♭</source>
         <translation>Nuotinkirjoitustila: kaksoisalennus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1642"/>
+        <location filename="../../mscore/shortcut.cpp" line="1670"/>
         <source>Grace: Eighth After</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1654"/>
+        <location filename="../../mscore/shortcut.cpp" line="1682"/>
         <source>Grace: 16th After</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1666"/>
+        <location filename="../../mscore/shortcut.cpp" line="1694"/>
         <source>Grace: 32nd After</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1721"/>
+        <location filename="../../mscore/shortcut.cpp" line="1749"/>
         <source>Beam start</source>
         <translation>Palkin alku</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1731"/>
+        <location filename="../../mscore/shortcut.cpp" line="1759"/>
         <source>Beam Middle</source>
         <translation>Keskellä palkkia</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1732"/>
+        <location filename="../../mscore/shortcut.cpp" line="1760"/>
         <source>Beam middle</source>
         <translation>Keskellä palkkia</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1742"/>
+        <location filename="../../mscore/shortcut.cpp" line="1770"/>
         <source>No Beam</source>
         <translation>Ei palkkia</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1743"/>
+        <location filename="../../mscore/shortcut.cpp" line="1771"/>
         <source>No beam</source>
         <translation>Ei palkkia</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1753"/>
+        <location filename="../../mscore/shortcut.cpp" line="1781"/>
         <source>Beam 16th Sub</source>
         <translation>Palkin alajako 1/16</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1754"/>
+        <location filename="../../mscore/shortcut.cpp" line="1782"/>
         <source>Beam 16th sub</source>
         <translation>Palkin alajako 1/16</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1764"/>
+        <location filename="../../mscore/shortcut.cpp" line="1792"/>
         <source>Beam 32nd Sub</source>
         <translation>Palkin alajako 1/32</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1765"/>
+        <location filename="../../mscore/shortcut.cpp" line="1793"/>
         <source>Beam 32nd sub</source>
         <translation>Palkin alajako 1/32</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1775"/>
+        <location filename="../../mscore/shortcut.cpp" line="1803"/>
         <source>Auto Beam</source>
         <translation>Automaattinen palkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1776"/>
+        <location filename="../../mscore/shortcut.cpp" line="1804"/>
         <source>Auto beam</source>
         <translation>Automaattinen palkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1786"/>
+        <location filename="../../mscore/shortcut.cpp" line="1814"/>
         <source>Feathered Beam, Slower</source>
         <translation>Viuhkamainen palkki, hitaammin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1787"/>
+        <location filename="../../mscore/shortcut.cpp" line="1815"/>
         <source>Feathered beam, slower</source>
         <translation>Viuhkamainen palkki, hitaammin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1795"/>
+        <location filename="../../mscore/shortcut.cpp" line="1823"/>
         <source>Feathered Beam, Faster</source>
         <translation>Viuhkamainen palkki, nopeammin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1796"/>
+        <location filename="../../mscore/shortcut.cpp" line="1824"/>
         <source>Feathered beam, faster</source>
         <translation>Viuhkamainen palkki, nopeammin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1804"/>
+        <location filename="../../mscore/shortcut.cpp" line="1832"/>
         <source>Palettes</source>
         <translation>Paletit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1805"/>
+        <location filename="../../mscore/shortcut.cpp" line="1833"/>
         <source>Toggle &apos;Palettes&apos;</source>
         <translation>Paletit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1814"/>
+        <location filename="../../mscore/shortcut.cpp" line="1842"/>
         <source>Play Panel</source>
         <translation>Toistopaneeli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1824"/>
+        <location filename="../../mscore/shortcut.cpp" line="1852"/>
         <source>Selection Filter</source>
         <translation>Valintasuodin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1825"/>
+        <location filename="../../mscore/shortcut.cpp" line="1853"/>
         <source>Toggle &apos;Selection Filter&apos;</source>
         <translation>Valintasuodatin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1834"/>
+        <location filename="../../mscore/shortcut.cpp" line="1862"/>
         <source>Navigator</source>
         <translation>Navigaattori</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1835"/>
+        <location filename="../../mscore/shortcut.cpp" line="1863"/>
         <source>Toggle &apos;Navigator&apos;</source>
         <translation>Navigaattori</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1844"/>
+        <location filename="../../mscore/shortcut.cpp" line="1872"/>
         <source>Timeline</source>
         <translation>Aikajana</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1845"/>
+        <location filename="../../mscore/shortcut.cpp" line="1873"/>
         <source>Toggle &apos;Timeline&apos;</source>
         <translation>Aikajana</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1854"/>
+        <location filename="../../mscore/shortcut.cpp" line="1882"/>
         <source>MIDI Import Panel</source>
         <translation>MIDI-tuonnin ikkuna</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1869"/>
+        <location filename="../../mscore/shortcut.cpp" line="1897"/>
         <source>Mixer</source>
         <translation>Mikseri</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1870"/>
+        <location filename="../../mscore/shortcut.cpp" line="1898"/>
         <source>Toggle &apos;Mixer&apos;</source>
         <translation>Mikseri</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1879"/>
+        <location filename="../../mscore/shortcut.cpp" line="1907"/>
         <source>File Operations</source>
         <translation>Tiedostotoiminnot</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1880"/>
+        <location filename="../../mscore/shortcut.cpp" line="1908"/>
         <source>Toggle &apos;File Operations&apos; toolbar</source>
         <translation>Tiedostotoimintojen työkalupalkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1886"/>
+        <location filename="../../mscore/shortcut.cpp" line="1914"/>
         <source>Playback Controls</source>
         <translation>Toistosäätimet</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1893"/>
-        <location filename="../../mscore/shortcut.cpp" line="2283"/>
+        <location filename="../../mscore/shortcut.cpp" line="1921"/>
+        <location filename="../../mscore/shortcut.cpp" line="2311"/>
         <source>Concert Pitch</source>
         <translation>Soiva sävelkorkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1900"/>
-        <location filename="../../mscore/shortcut.cpp" line="2674"/>
+        <location filename="../../mscore/shortcut.cpp" line="1928"/>
+        <location filename="../../mscore/shortcut.cpp" line="2702"/>
         <source>Image Capture</source>
         <translation>Kuvakaappaus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1908"/>
+        <location filename="../../mscore/shortcut.cpp" line="1936"/>
         <source>Toggle &apos;Note Input&apos; toolbar</source>
         <translation>Nuotinsyöttöpalkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1914"/>
+        <location filename="../../mscore/shortcut.cpp" line="1942"/>
         <source>Feedback</source>
         <translation>Palaute</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1915"/>
+        <location filename="../../mscore/shortcut.cpp" line="1943"/>
         <source>Toggle &apos;Feedback&apos; toolbar</source>
         <translation>Palaute-työkalupalkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1921"/>
+        <location filename="../../mscore/shortcut.cpp" line="1949"/>
         <source>Status Bar</source>
         <translation>Tilarivi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1928"/>
+        <location filename="../../mscore/shortcut.cpp" line="1956"/>
         <source>Quit</source>
         <translation>Lopeta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1934"/>
+        <location filename="../../mscore/shortcut.cpp" line="1962"/>
         <source>Zoom Canvas</source>
         <translation>Kankaan zoomaus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1935"/>
+        <location filename="../../mscore/shortcut.cpp" line="1963"/>
         <source>Zoom canvas</source>
         <translation>Zoomaus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1941"/>
+        <location filename="../../mscore/shortcut.cpp" line="1969"/>
         <source>Lyrics</source>
         <translation>Sanoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1942"/>
+        <location filename="../../mscore/shortcut.cpp" line="1970"/>
         <source>Add lyrics</source>
         <translation>Lisää sanoitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1952"/>
+        <location filename="../../mscore/shortcut.cpp" line="1980"/>
         <source>Tempo Marking</source>
         <translation>Tempomerkintä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1953"/>
+        <location filename="../../mscore/shortcut.cpp" line="1981"/>
         <source>Add tempo marking</source>
         <translation>Lisää tempomerkintä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1963"/>
+        <location filename="../../mscore/shortcut.cpp" line="1991"/>
         <source>System Text</source>
         <translation>Systeemin teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1964"/>
+        <location filename="../../mscore/shortcut.cpp" line="1992"/>
         <source>Add system text</source>
         <translation>Lisää systeemin teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1970"/>
+        <location filename="../../mscore/shortcut.cpp" line="1998"/>
         <source>Staff Text</source>
         <translation>Viivaston teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1971"/>
+        <location filename="../../mscore/shortcut.cpp" line="1999"/>
         <source>Add staff text</source>
         <translation>Lisää viivaston teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1977"/>
+        <location filename="../../mscore/shortcut.cpp" line="2005"/>
         <source>Expression Text</source>
         <translation>Esitystapateksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1978"/>
+        <location filename="../../mscore/shortcut.cpp" line="2006"/>
         <source>Expression text</source>
         <translation>esitystapateksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1984"/>
+        <location filename="../../mscore/shortcut.cpp" line="2012"/>
         <source>Text</source>
         <translation>Teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1985"/>
+        <location filename="../../mscore/shortcut.cpp" line="2013"/>
         <source>Add frame text</source>
         <translation>Lisää kehyksen teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1991"/>
+        <location filename="../../mscore/shortcut.cpp" line="2019"/>
         <source>Title</source>
         <translation>Otsikko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1992"/>
+        <location filename="../../mscore/shortcut.cpp" line="2020"/>
         <source>Add title text</source>
         <translation>Lisää otsikkoteksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1998"/>
+        <location filename="../../mscore/shortcut.cpp" line="2026"/>
         <source>Subtitle</source>
         <translation>Alaotsikko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="1999"/>
+        <location filename="../../mscore/shortcut.cpp" line="2027"/>
         <source>Add subtitle text</source>
         <translation>Lisää alaotsikon teksti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2005"/>
+        <location filename="../../mscore/shortcut.cpp" line="2033"/>
         <source>Composer</source>
         <translation>Säveltäjä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2006"/>
+        <location filename="../../mscore/shortcut.cpp" line="2034"/>
         <source>Add composer text</source>
         <translation>Lisää säveltäjä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2012"/>
+        <location filename="../../mscore/shortcut.cpp" line="2040"/>
         <source>Lyricist</source>
         <translation>Runoilija</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2013"/>
+        <location filename="../../mscore/shortcut.cpp" line="2041"/>
         <source>Add lyricist text</source>
         <translation>Lisää runoilija</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2019"/>
+        <location filename="../../mscore/shortcut.cpp" line="2047"/>
         <source>Part Name</source>
         <translation>Stemman nimi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2020"/>
+        <location filename="../../mscore/shortcut.cpp" line="2048"/>
         <source>Add part name</source>
         <translation>Lisää stemman nimi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2026"/>
+        <location filename="../../mscore/shortcut.cpp" line="2054"/>
         <source>Chord Symbol</source>
         <translation>Sointumerkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2027"/>
+        <location filename="../../mscore/shortcut.cpp" line="2055"/>
         <source>Add chord symbol</source>
         <translation>Lisää sointumerkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2033"/>
+        <location filename="../../mscore/shortcut.cpp" line="2061"/>
         <source>Rehearsal Mark</source>
         <translation>Harjoitusmerkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2034"/>
+        <location filename="../../mscore/shortcut.cpp" line="2062"/>
         <source>Add rehearsal mark</source>
         <translation>Lisää harjoitusmerkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2040"/>
+        <location filename="../../mscore/shortcut.cpp" line="2068"/>
         <source>Instrument Change</source>
         <translation>Instrumentin vaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2041"/>
+        <location filename="../../mscore/shortcut.cpp" line="2069"/>
         <source>Add instrument change</source>
         <translation>Lisää instrumentin vaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2047"/>
+        <location filename="../../mscore/shortcut.cpp" line="2075"/>
         <source>Fingering</source>
         <translation>Sormitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2048"/>
+        <location filename="../../mscore/shortcut.cpp" line="2076"/>
         <source>Add fingering</source>
         <translation>Lisää sormitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2054"/>
+        <location filename="../../mscore/shortcut.cpp" line="2082"/>
         <source>Picture</source>
         <translation>Kuva</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2055"/>
+        <location filename="../../mscore/shortcut.cpp" line="2083"/>
         <source>Add picture</source>
         <translation>Lisää kuva</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2061"/>
+        <location filename="../../mscore/shortcut.cpp" line="2089"/>
         <source>Play</source>
         <translation>Toista</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2063"/>
+        <location filename="../../mscore/shortcut.cpp" line="2091"/>
         <source>Start or stop playback</source>
         <translation>Aloita / lopeta toisto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2072"/>
+        <location filename="../../mscore/shortcut.cpp" line="2100"/>
         <source>Play Previous Chord</source>
         <translation>Soita edellinen sointu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2073"/>
+        <location filename="../../mscore/shortcut.cpp" line="2101"/>
         <source>Play previous chord</source>
         <translation>Soita edellinen sointu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2082"/>
+        <location filename="../../mscore/shortcut.cpp" line="2110"/>
         <source>Play Previous Measure</source>
         <translation>Soita edellinen tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2083"/>
+        <location filename="../../mscore/shortcut.cpp" line="2111"/>
         <source>Play previous measure</source>
         <translation>Soita edellinen tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2092"/>
+        <location filename="../../mscore/shortcut.cpp" line="2120"/>
         <source>Play Next Chord</source>
         <translation>Soita seuraava sointu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2093"/>
+        <location filename="../../mscore/shortcut.cpp" line="2121"/>
         <source>Play next chord</source>
         <translation>Soita seuraava sointu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2102"/>
+        <location filename="../../mscore/shortcut.cpp" line="2130"/>
         <source>Play Next Measure</source>
         <translation>Soita seuraava tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2103"/>
+        <location filename="../../mscore/shortcut.cpp" line="2131"/>
         <source>Play next measure</source>
         <translation>Soita seuraava tahti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2122"/>
+        <location filename="../../mscore/shortcut.cpp" line="2150"/>
         <source>Rewind</source>
         <translation>Kelaa taaksepäin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2124"/>
+        <location filename="../../mscore/shortcut.cpp" line="2152"/>
         <source>Rewind to start position</source>
         <translation>Hyppää alkuun</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2138"/>
+        <location filename="../../mscore/shortcut.cpp" line="2166"/>
         <source>Play Repeats</source>
         <translation>Soita kertaukset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2140"/>
+        <location filename="../../mscore/shortcut.cpp" line="2168"/>
         <source>Play repeats</source>
         <translation>Soita kertaukset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2160"/>
+        <location filename="../../mscore/shortcut.cpp" line="2188"/>
         <source>Load Style…</source>
         <translation>Lataa tyyli…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2161"/>
+        <location filename="../../mscore/shortcut.cpp" line="2189"/>
         <source>Load style</source>
         <translation>Lataa tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2171"/>
+        <location filename="../../mscore/shortcut.cpp" line="2199"/>
         <source>Save Style…</source>
         <translation>Tallenna tyyli…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2172"/>
+        <location filename="../../mscore/shortcut.cpp" line="2200"/>
         <source>Save style</source>
         <translation>Tallenna tyyli</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2182"/>
+        <location filename="../../mscore/shortcut.cpp" line="2210"/>
         <source>Select All</source>
         <translation>Valitse kaikki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2183"/>
+        <location filename="../../mscore/shortcut.cpp" line="2211"/>
         <source>Select all</source>
         <translation>Valitse kaikki</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2192"/>
+        <location filename="../../mscore/shortcut.cpp" line="2220"/>
         <source>&amp;Transpose…</source>
         <translation>&amp;Transponoi…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2193"/>
+        <location filename="../../mscore/shortcut.cpp" line="2221"/>
         <source>Transpose</source>
         <translation>Transponointi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2203"/>
+        <location filename="../../mscore/shortcut.cpp" line="2231"/>
         <source>Treble Clef</source>
         <translation>Diskanttiavain</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2204"/>
+        <location filename="../../mscore/shortcut.cpp" line="2232"/>
         <source>Add treble clef</source>
         <translation>Lisää diskanttiavain</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2213"/>
+        <location filename="../../mscore/shortcut.cpp" line="2241"/>
         <source>Bass Clef</source>
         <translation>Bassoavain</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2214"/>
+        <location filename="../../mscore/shortcut.cpp" line="2242"/>
         <source>Add bass clef</source>
         <translation>Lisää bassoavain</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2223"/>
+        <location filename="../../mscore/shortcut.cpp" line="2251"/>
         <source>Exchange Voice 1-2</source>
         <translation>Vaihda äänet 1-2</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2224"/>
+        <location filename="../../mscore/shortcut.cpp" line="2252"/>
         <source>Exchange voice 1-2</source>
         <translation>Vaihda äänet 1-2</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2233"/>
+        <location filename="../../mscore/shortcut.cpp" line="2261"/>
         <source>Exchange Voice 1-3</source>
         <translation>Vaihda äänet 1-3</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2234"/>
+        <location filename="../../mscore/shortcut.cpp" line="2262"/>
         <source>Exchange voice 1-3</source>
         <translation>Vaihda äänet 1-3</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2243"/>
+        <location filename="../../mscore/shortcut.cpp" line="2271"/>
         <source>Exchange Voice 1-4</source>
         <translation>Vaihda äänet 1-4</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2244"/>
+        <location filename="../../mscore/shortcut.cpp" line="2272"/>
         <source>Exchange voice 1-4</source>
         <translation>Vaihda äänet 1-4</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2253"/>
+        <location filename="../../mscore/shortcut.cpp" line="2281"/>
         <source>Exchange Voice 2-3</source>
         <translation>Vaihda äänet 2-3</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2254"/>
+        <location filename="../../mscore/shortcut.cpp" line="2282"/>
         <source>Exchange voice 2-3</source>
         <translation>Vaihda äänet 2-3</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2263"/>
+        <location filename="../../mscore/shortcut.cpp" line="2291"/>
         <source>Exchange Voice 2-4</source>
         <translation>Vaihda äänet 2-4</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2264"/>
+        <location filename="../../mscore/shortcut.cpp" line="2292"/>
         <source>Exchange voice 2-4</source>
         <translation>Vaihda äänet 2-4</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2273"/>
+        <location filename="../../mscore/shortcut.cpp" line="2301"/>
         <source>Exchange Voice 3-4</source>
         <translation>Vaihda äänet 3-4</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2274"/>
+        <location filename="../../mscore/shortcut.cpp" line="2302"/>
         <source>Exchange voice 3-4</source>
         <translation>Vaihda äänet 3-4</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2284"/>
+        <location filename="../../mscore/shortcut.cpp" line="2312"/>
         <source>Display in concert pitch</source>
         <translation>Näytä soiva sävelkorkeus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2293"/>
+        <location filename="../../mscore/shortcut.cpp" line="2321"/>
         <source>Repeat Last Command</source>
         <translation>Toista viimeisin komento</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2294"/>
+        <location filename="../../mscore/shortcut.cpp" line="2322"/>
         <source>Repeat last command</source>
         <translation>Toista viimeinen komento</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2302"/>
+        <location filename="../../mscore/shortcut.cpp" line="2330"/>
         <source>Score Properties…</source>
         <translation>Partituurin ominaisuudet…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2303"/>
+        <location filename="../../mscore/shortcut.cpp" line="2331"/>
         <source>Edit score properties</source>
         <translation>Muokkaa partituurin ominaisuuksia</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2313"/>
+        <location filename="../../mscore/shortcut.cpp" line="2341"/>
         <source>Toggle System Break</source>
         <translation>Systeeminvaihto päälle/pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2323"/>
+        <location filename="../../mscore/shortcut.cpp" line="2351"/>
         <source>Toggle Page Break</source>
         <translation>Sivunvaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2333"/>
+        <location filename="../../mscore/shortcut.cpp" line="2361"/>
         <source>Toggle Section Break</source>
         <translation>Jaksonvaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2343"/>
+        <location filename="../../mscore/shortcut.cpp" line="2371"/>
         <source>Edit Element</source>
         <translation>Muokkaa elementtiä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2344"/>
+        <location filename="../../mscore/shortcut.cpp" line="2372"/>
         <source>Edit element</source>
         <translation>Muokkaa elementtiä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2358"/>
+        <location filename="../../mscore/shortcut.cpp" line="2386"/>
         <source>Debugger</source>
         <translation>Virheen tarkistus</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2374"/>
+        <location filename="../../mscore/shortcut.cpp" line="2402"/>
         <source>Show Invisible</source>
         <translation>Näytä näkymätön</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2375"/>
+        <location filename="../../mscore/shortcut.cpp" line="2403"/>
         <source>Show invisible</source>
         <translation>Näytä näkymätön</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2385"/>
+        <location filename="../../mscore/shortcut.cpp" line="2413"/>
         <source>Show Unprintable</source>
         <translation>Näytä tulostumaton</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2386"/>
+        <location filename="../../mscore/shortcut.cpp" line="2414"/>
         <source>Show unprintable</source>
         <translation>Näytä tulostumaton</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2396"/>
+        <location filename="../../mscore/shortcut.cpp" line="2424"/>
         <source>Show Frames</source>
         <translation>Näytä kehykset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2397"/>
+        <location filename="../../mscore/shortcut.cpp" line="2425"/>
         <source>Show frames</source>
         <translation>Näytä kehykset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2407"/>
+        <location filename="../../mscore/shortcut.cpp" line="2435"/>
         <source>Show Page Margins</source>
         <translation>Näytä marginaalit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2408"/>
+        <location filename="../../mscore/shortcut.cpp" line="2436"/>
         <source>Show page margins</source>
         <translation>Näytä marginaalit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2429"/>
+        <location filename="../../mscore/shortcut.cpp" line="2457"/>
         <source>Insert Special Characters…</source>
         <translation>Sijoita erikoismerkkejä…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2430"/>
+        <location filename="../../mscore/shortcut.cpp" line="2458"/>
         <source>Insert special characters</source>
         <translation>Sijoita erikoismerkkejä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2438"/>
+        <location filename="../../mscore/shortcut.cpp" line="2466"/>
         <source>Whole Rest</source>
         <translation>Kokotauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2439"/>
+        <location filename="../../mscore/shortcut.cpp" line="2467"/>
         <source>Note input: Whole rest</source>
         <translation>Nuotinsyöttö: kokotauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2445"/>
+        <location filename="../../mscore/shortcut.cpp" line="2473"/>
         <source>Half Rest</source>
         <translation>Puolitauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2446"/>
+        <location filename="../../mscore/shortcut.cpp" line="2474"/>
         <source>Note input: Half rest</source>
         <translation>Nuotinsyöttö: puolitauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2452"/>
+        <location filename="../../mscore/shortcut.cpp" line="2480"/>
         <source>Quarter Rest</source>
         <translation>Neljäsosatauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2453"/>
+        <location filename="../../mscore/shortcut.cpp" line="2481"/>
         <source>Note input: Quarter rest</source>
         <translation>Nuotinsyöttö: neljäsosatauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2459"/>
+        <location filename="../../mscore/shortcut.cpp" line="2487"/>
         <source>Eighth Rest</source>
         <translation>Kahdeksasosatauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2460"/>
+        <location filename="../../mscore/shortcut.cpp" line="2488"/>
         <source>Note input: Eighth rest</source>
         <translation>Nuotinsyöttö: kahdeksasosatauko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2466"/>
+        <location filename="../../mscore/shortcut.cpp" line="2494"/>
         <source>Backspace</source>
         <translation>Askelpalautin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2477"/>
+        <location filename="../../mscore/shortcut.cpp" line="2505"/>
         <source>Find</source>
         <translation>Etsi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2483"/>
+        <location filename="../../mscore/shortcut.cpp" line="2511"/>
         <source>Zoom In</source>
         <translation>Suurenna</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2484"/>
+        <location filename="../../mscore/shortcut.cpp" line="2512"/>
         <source>Zoom in</source>
         <translation>Lähennä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2491"/>
+        <location filename="../../mscore/shortcut.cpp" line="2519"/>
         <source>Zoom Out</source>
         <translation>Pienennä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2492"/>
+        <location filename="../../mscore/shortcut.cpp" line="2520"/>
         <source>Zoom out</source>
         <translation>Loitonna</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2498"/>
-        <location filename="../../mscore/shortcut.cpp" line="2499"/>
+        <location filename="../../mscore/shortcut.cpp" line="2526"/>
+        <location filename="../../mscore/shortcut.cpp" line="2527"/>
         <source>Zoom to 100%</source>
         <translation>Lähennä 100%:iin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2505"/>
+        <location filename="../../mscore/shortcut.cpp" line="2533"/>
         <source>Mirror Notehead</source>
         <translation>Peilaa Nuotinpää</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2506"/>
+        <location filename="../../mscore/shortcut.cpp" line="2534"/>
         <source>Mirror notehead</source>
         <translation>Peilaa nuotinpää</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2525"/>
+        <location filename="../../mscore/shortcut.cpp" line="2553"/>
         <source>Chord Symbols…</source>
         <translation>Sointumerkit…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2526"/>
+        <location filename="../../mscore/shortcut.cpp" line="2554"/>
         <source>Edit chord symbols style</source>
         <translation>Muokkaa sointumerkkien tyyliä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2532"/>
+        <location filename="../../mscore/shortcut.cpp" line="2560"/>
         <source>All Similar Elements</source>
         <translation>Kaikki samanlaiset elementit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2533"/>
+        <location filename="../../mscore/shortcut.cpp" line="2561"/>
         <source>Select all similar elements</source>
         <translation>Valitse kaikki samanlaiset elementit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2539"/>
+        <location filename="../../mscore/shortcut.cpp" line="2567"/>
         <source>All Similar Elements in Same Staff</source>
         <translation>Kaikki samanlaiset elementit samalla viivastolla</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2540"/>
+        <location filename="../../mscore/shortcut.cpp" line="2568"/>
         <source>Select all similar elements in same staff</source>
         <translation>Valitse kaikki samanlaiset elementit samalla viivastolla</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2546"/>
+        <location filename="../../mscore/shortcut.cpp" line="2574"/>
         <source>All Similar Elements in Range Selection</source>
         <translation>Kaikki samanlaiset elementit valinta-alueelta.</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2547"/>
+        <location filename="../../mscore/shortcut.cpp" line="2575"/>
         <source>Select all similar elements in the range selection</source>
         <translation>Valitse kaikki samanlaiset elementit valitulta alueelta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2554"/>
+        <location filename="../../mscore/shortcut.cpp" line="2582"/>
         <source>Select all similar elements with more options</source>
         <translation>Valitse kaikki samanlaiset elementit lisävaihtoedoilla</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2560"/>
+        <location filename="../../mscore/shortcut.cpp" line="2588"/>
         <source>Synthesizer</source>
         <translation>Syntetisaattori</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2570"/>
+        <location filename="../../mscore/shortcut.cpp" line="2598"/>
         <source>Double Duration</source>
         <translation>Kaksinkertainen kesto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2571"/>
+        <location filename="../../mscore/shortcut.cpp" line="2599"/>
         <source>Double duration</source>
         <translation>Kaksinkertainen kesto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2580"/>
+        <location filename="../../mscore/shortcut.cpp" line="2608"/>
         <source>Half Duration</source>
         <translation>puolikesto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2581"/>
+        <location filename="../../mscore/shortcut.cpp" line="2609"/>
         <source>Half duration</source>
         <translation>puolikesto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2590"/>
+        <location filename="../../mscore/shortcut.cpp" line="2618"/>
         <source>Increase Duration Dotted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2591"/>
+        <location filename="../../mscore/shortcut.cpp" line="2619"/>
         <source>Increase duration dotted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2600"/>
+        <location filename="../../mscore/shortcut.cpp" line="2628"/>
         <source>Decrease Duration Dotted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2601"/>
+        <location filename="../../mscore/shortcut.cpp" line="2629"/>
         <source>Decrease duration dotted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2610"/>
+        <location filename="../../mscore/shortcut.cpp" line="2638"/>
         <source>Repeat Selection</source>
         <translation>Toista valinta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2611"/>
+        <location filename="../../mscore/shortcut.cpp" line="2639"/>
         <source>Repeat selection</source>
         <translation>Toista valinta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2619"/>
+        <location filename="../../mscore/shortcut.cpp" line="2647"/>
         <source>Pan Piano Roll</source>
         <translation>Panoroi pianorullaa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2620"/>
+        <location filename="../../mscore/shortcut.cpp" line="2648"/>
         <source>Toggle pan piano roll</source>
         <translation>Pianon panoroinnin vaihto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2621"/>
+        <location filename="../../mscore/shortcut.cpp" line="2649"/>
         <source>Pan roll during playback</source>
         <translation>Vieritä rullaa soiton aikana</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2630"/>
+        <location filename="../../mscore/shortcut.cpp" line="2658"/>
         <source>Documents Side by Side</source>
         <translation>Dokumentit rinnakkain</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2631"/>
+        <location filename="../../mscore/shortcut.cpp" line="2659"/>
         <source>Display documents side by side</source>
         <translation>Näytä dokumentit rinnakkain</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2637"/>
+        <location filename="../../mscore/shortcut.cpp" line="2665"/>
         <source>Documents Stacked</source>
         <translation>Dokumentit päällekkäin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2638"/>
+        <location filename="../../mscore/shortcut.cpp" line="2666"/>
         <source>Display documents stacked</source>
         <translation>Näytä dokumentit päällekkäin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2644"/>
+        <location filename="../../mscore/shortcut.cpp" line="2672"/>
         <source>Parts…</source>
         <translation>Erilliset stemmat…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2645"/>
+        <location filename="../../mscore/shortcut.cpp" line="2673"/>
         <source>Manage parts</source>
         <translation>Hallitse stemmoja</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2667"/>
+        <location filename="../../mscore/shortcut.cpp" line="2695"/>
         <source>Create New Revision</source>
         <translation>Luo uusi korjattu versio</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2668"/>
+        <location filename="../../mscore/shortcut.cpp" line="2696"/>
         <source>Create new revision</source>
         <translation>Luo uusi korjattu versio</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2694"/>
+        <location filename="../../mscore/shortcut.cpp" line="2722"/>
         <source>Full Screen</source>
         <translation>Kokoruututila</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2695"/>
+        <location filename="../../mscore/shortcut.cpp" line="2723"/>
         <source>Full screen</source>
         <translation>Kokoruututila</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2701"/>
+        <location filename="../../mscore/shortcut.cpp" line="2729"/>
         <source>Enable Snap to Horizontal Grid</source>
         <translation>Ota käyttöön Vaakasuoraan ruudukkoon kiinni napsahtaminen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2702"/>
+        <location filename="../../mscore/shortcut.cpp" line="2730"/>
         <source>Enable snap to horizontal grid</source>
         <translation>Ota käyttöön vaakasuoraan ruudukkoon kiinni napsahtaminen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2712"/>
+        <location filename="../../mscore/shortcut.cpp" line="2740"/>
         <source>Enable Snap to Vertical Grid</source>
         <translation>Ota käyttöön kohtisuoraan ruudukkoon kiinni napsahtaminen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2713"/>
+        <location filename="../../mscore/shortcut.cpp" line="2741"/>
         <source>Enable snap to vertical grid</source>
         <translation>Ota käyttöön kohtisuoraan ruudukkoon kiinni napsahtaminen</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2723"/>
+        <location filename="../../mscore/shortcut.cpp" line="2751"/>
         <source>Configure Grid</source>
         <translation>Määritä ruudukko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2724"/>
+        <location filename="../../mscore/shortcut.cpp" line="2752"/>
         <source>Configure grid</source>
         <translation>Määritä ruudukko</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2730"/>
+        <location filename="../../mscore/shortcut.cpp" line="2758"/>
         <source>Piano Keyboard</source>
         <translation>Pianokoskettimisto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2731"/>
+        <location filename="../../mscore/shortcut.cpp" line="2759"/>
         <source>Piano keyboard</source>
         <translation>Pianokoskettimisto</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2744"/>
+        <location filename="../../mscore/shortcut.cpp" line="2772"/>
         <source>Additional Media…</source>
         <translation>Lisämedia…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2745"/>
+        <location filename="../../mscore/shortcut.cpp" line="2773"/>
         <source>Show media dialog</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2758"/>
+        <location filename="../../mscore/shortcut.cpp" line="2786"/>
         <source>Join Selected Measures</source>
         <translation>Yhdistä valitut tahdit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2759"/>
+        <location filename="../../mscore/shortcut.cpp" line="2787"/>
         <source>Join selected measures</source>
         <translation>Yhdistä valitut tahdit</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2765"/>
+        <location filename="../../mscore/shortcut.cpp" line="2793"/>
         <source>Page Settings…</source>
         <translation>Sivun asetukset…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2766"/>
+        <location filename="../../mscore/shortcut.cpp" line="2794"/>
         <source>Page settings</source>
         <translation>Sivun asetukset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2772"/>
+        <location filename="../../mscore/shortcut.cpp" line="2800"/>
         <source>Album…</source>
         <translation>Albumi…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2773"/>
+        <location filename="../../mscore/shortcut.cpp" line="2801"/>
         <source>Album</source>
         <translation>Albumi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2782"/>
+        <location filename="../../mscore/shortcut.cpp" line="2810"/>
         <source>Layers…</source>
         <translation>Kerrokset…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2783"/>
+        <location filename="../../mscore/shortcut.cpp" line="2811"/>
         <source>Layers</source>
         <translation>Kerrokset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2792"/>
+        <location filename="../../mscore/shortcut.cpp" line="2820"/>
         <source>Next Score</source>
         <translation>Seuraava Partituuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2793"/>
+        <location filename="../../mscore/shortcut.cpp" line="2821"/>
         <source>Next score</source>
         <translation>Seuraava partituuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2802"/>
+        <location filename="../../mscore/shortcut.cpp" line="2830"/>
         <source>Previous Score</source>
         <translation>Edellinen Partituuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2803"/>
+        <location filename="../../mscore/shortcut.cpp" line="2831"/>
         <source>Previous score</source>
         <translation>Edellinen partituuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2813"/>
+        <location filename="../../mscore/shortcut.cpp" line="2841"/>
         <source>Plugin Creator…</source>
         <translation>Liitännäisten luonti…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2814"/>
+        <location filename="../../mscore/shortcut.cpp" line="2842"/>
         <source>Plugin creator</source>
         <translation>Liitännäisten luonti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2823"/>
+        <location filename="../../mscore/shortcut.cpp" line="2851"/>
         <source>Plugin Manager…</source>
         <translation>Liitännäisten hallinta…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2824"/>
+        <location filename="../../mscore/shortcut.cpp" line="2852"/>
         <source>Plugin manager</source>
         <translation>Liitännäisten hallinta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2833"/>
+        <location filename="../../mscore/shortcut.cpp" line="2861"/>
         <source>Inspector</source>
         <translation>Tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2834"/>
+        <location filename="../../mscore/shortcut.cpp" line="2862"/>
         <source>Show inspector</source>
         <translation>Näytä tarkastaja</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2840"/>
+        <location filename="../../mscore/shortcut.cpp" line="2868"/>
         <source>Resource Manager…</source>
         <translation>Resurssienhallinta…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2841"/>
+        <location filename="../../mscore/shortcut.cpp" line="2869"/>
         <source>Resource manager</source>
         <translation>Resurssienhallinta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2870"/>
+        <location filename="../../mscore/shortcut.cpp" line="2898"/>
         <source>Loop In</source>
         <translation>Silmukkatoisto sisään</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2871"/>
+        <location filename="../../mscore/shortcut.cpp" line="2899"/>
         <source>Set loop in position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2881"/>
+        <location filename="../../mscore/shortcut.cpp" line="2909"/>
         <source>Loop Out</source>
         <translation>Silmukkatoisto ulos</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2882"/>
+        <location filename="../../mscore/shortcut.cpp" line="2910"/>
         <source>Set loop out position</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2892"/>
+        <location filename="../../mscore/shortcut.cpp" line="2920"/>
         <source>Metronome</source>
         <translation>Metronomi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2893"/>
+        <location filename="../../mscore/shortcut.cpp" line="2921"/>
         <source>Toggle metronome playback</source>
         <translation>Metronomi soittaessa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2894"/>
+        <location filename="../../mscore/shortcut.cpp" line="2922"/>
         <source>Play metronome during playback</source>
         <translation>Soita metronomia toiston aikana</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2903"/>
+        <location filename="../../mscore/shortcut.cpp" line="2931"/>
         <source>Count-In</source>
         <translation>Laskeminen tahtiosoituksen mukaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2905"/>
+        <location filename="../../mscore/shortcut.cpp" line="2933"/>
         <source>Play count-in at playback start</source>
         <translation>Lasketaan tahtiosoituksen mukaan toiston alussa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2914"/>
+        <location filename="../../mscore/shortcut.cpp" line="2942"/>
         <source>Figured Bass</source>
         <translation>Kenraalibasso</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2915"/>
+        <location filename="../../mscore/shortcut.cpp" line="2943"/>
         <source>Add figured bass</source>
         <translation>Lisää kenraalibasso</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2925"/>
+        <location filename="../../mscore/shortcut.cpp" line="2953"/>
         <source>Transpose Up</source>
         <translation>Transponoi Ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2926"/>
+        <location filename="../../mscore/shortcut.cpp" line="2954"/>
         <source>Transpose up</source>
         <translation>Transponoi ylös</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2932"/>
+        <location filename="../../mscore/shortcut.cpp" line="2960"/>
         <source>Transpose Down</source>
         <translation>Transponoi Alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2933"/>
+        <location filename="../../mscore/shortcut.cpp" line="2961"/>
         <source>Transpose down</source>
         <translation>Transponoi alas</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2939"/>
+        <location filename="../../mscore/shortcut.cpp" line="2967"/>
         <source>Master Palette…</source>
         <translation>Pääpaletti…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2940"/>
+        <location filename="../../mscore/shortcut.cpp" line="2968"/>
         <source>Show master palette</source>
         <translation>Näytä pääpaletti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2949"/>
+        <location filename="../../mscore/shortcut.cpp" line="2977"/>
         <source>Key Signatures…</source>
         <translation>Sävellajimerkinnät …</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2950"/>
+        <location filename="../../mscore/shortcut.cpp" line="2978"/>
         <source>Show key signature palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2959"/>
+        <location filename="../../mscore/shortcut.cpp" line="2987"/>
         <source>Time Signatures…</source>
         <translation>Tahtilajimerkinnät…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2960"/>
+        <location filename="../../mscore/shortcut.cpp" line="2988"/>
         <source>Show time signature palette</source>
         <translation>Näytä tahtiosoituspaletti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2969"/>
+        <location filename="../../mscore/shortcut.cpp" line="2997"/>
         <source>Symbols…</source>
         <translation>Symbolit …</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2970"/>
+        <location filename="../../mscore/shortcut.cpp" line="2998"/>
         <source>Show symbol palette</source>
         <translation>Näytä symbolipaletti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2979"/>
+        <location filename="../../mscore/shortcut.cpp" line="3007"/>
         <source>Toggle View Mode</source>
         <translation>Vaihda näkymän tilaa</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2990"/>
+        <location filename="../../mscore/shortcut.cpp" line="3018"/>
         <source>Next Syllable</source>
         <translation>Seuraava Tavu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2991"/>
+        <location filename="../../mscore/shortcut.cpp" line="3019"/>
         <source>Next syllable</source>
         <translation>Seuraava tavu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2997"/>
+        <location filename="../../mscore/shortcut.cpp" line="3025"/>
         <source>Previous Syllable</source>
         <translation>Edellinen Tavu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="2998"/>
+        <location filename="../../mscore/shortcut.cpp" line="3026"/>
         <source>Previous syllable</source>
         <translation>Edellinen tavu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3004"/>
+        <location filename="../../mscore/shortcut.cpp" line="3032"/>
         <source>Toggle Visibility</source>
         <translation>Näkyvyys päälle/pois</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3011"/>
+        <location filename="../../mscore/shortcut.cpp" line="3039"/>
         <source>Set Visible</source>
         <translation>Aseta näkyväksi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3012"/>
+        <location filename="../../mscore/shortcut.cpp" line="3040"/>
         <source>Set visible</source>
         <translation>Aseta näkyväksi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3018"/>
+        <location filename="../../mscore/shortcut.cpp" line="3046"/>
         <source>Set Invisible</source>
         <translation>Aseta näkymättömäksi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3019"/>
+        <location filename="../../mscore/shortcut.cpp" line="3047"/>
         <source>Set invisible</source>
         <translation>Aseta näkymättömäksi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3025"/>
+        <location filename="../../mscore/shortcut.cpp" line="3053"/>
         <source>Note Anchored Line</source>
         <translation>Nuotteihin ankkuroitu viiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3026"/>
+        <location filename="../../mscore/shortcut.cpp" line="3054"/>
         <source>Note anchored line</source>
         <translation>Nuotteihin ankkuroitu viiva</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3032"/>
+        <location filename="../../mscore/shortcut.cpp" line="3060"/>
         <source>Lock Score</source>
         <translation>Lukitse Partituuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3033"/>
+        <location filename="../../mscore/shortcut.cpp" line="3061"/>
         <source>Lock score</source>
         <translation>Lukitse partituuri</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3041"/>
+        <location filename="../../mscore/shortcut.cpp" line="3069"/>
         <source>Longa (TAB)</source>
         <translation>Longa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3042"/>
+        <location filename="../../mscore/shortcut.cpp" line="3070"/>
         <source>Note duration: Longa (TAB)</source>
         <translation>Nuotin kesto: Longa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3043"/>
+        <location filename="../../mscore/shortcut.cpp" line="3071"/>
         <source>Longa note</source>
         <translation>Longa-nuotti</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3051"/>
+        <location filename="../../mscore/shortcut.cpp" line="3079"/>
         <source>Double Whole Note (TAB)</source>
         <translation>Kaksoiskokonuotti (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3052"/>
+        <location filename="../../mscore/shortcut.cpp" line="3080"/>
         <source>Note duration: Double whole (TAB)</source>
         <translation>Nuotin kesto: kaksoiskokonuotti (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3061"/>
+        <location filename="../../mscore/shortcut.cpp" line="3089"/>
         <source>Whole Note (TAB)</source>
         <translation>Kokonuotti (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3062"/>
+        <location filename="../../mscore/shortcut.cpp" line="3090"/>
         <source>Note duration: Whole (TAB)</source>
         <translation>Nuotin kesto: Koko (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3071"/>
+        <location filename="../../mscore/shortcut.cpp" line="3099"/>
         <source>Half Note (TAB)</source>
         <translation>Puolinuotti (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3072"/>
+        <location filename="../../mscore/shortcut.cpp" line="3100"/>
         <source>Note duration: Half (TAB)</source>
         <translation>Nuotin kesto: Puoli (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3081"/>
+        <location filename="../../mscore/shortcut.cpp" line="3109"/>
         <source>Quarter Note (TAB)</source>
         <translation>Neljäsosanuotti (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3082"/>
+        <location filename="../../mscore/shortcut.cpp" line="3110"/>
         <source>Note duration: Quarter (TAB)</source>
         <translation>Nuotin kesto: Neljäsosa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3091"/>
+        <location filename="../../mscore/shortcut.cpp" line="3119"/>
         <source>Eighth Note (TAB)</source>
         <translation>Kahdeksasosanuotti (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3092"/>
+        <location filename="../../mscore/shortcut.cpp" line="3120"/>
         <source>Note duration: Eighth (TAB)</source>
         <translation>Nuotin kesto: kahdeksasosa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3101"/>
+        <location filename="../../mscore/shortcut.cpp" line="3129"/>
         <source>16th Note (TAB)</source>
         <translation>1/16-nuotti (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3102"/>
+        <location filename="../../mscore/shortcut.cpp" line="3130"/>
         <source>Note duration: 16th (TAB)</source>
         <translation>Nuotin kesto: 1/16-osa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3111"/>
+        <location filename="../../mscore/shortcut.cpp" line="3139"/>
         <source>32nd Note (TAB)</source>
         <translation>1/32-nuotti (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3112"/>
+        <location filename="../../mscore/shortcut.cpp" line="3140"/>
         <source>Note duration: 32nd (TAB)</source>
         <translation>Nuotin kesto: 1/32-osa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3121"/>
+        <location filename="../../mscore/shortcut.cpp" line="3149"/>
         <source>64th Note (TAB)</source>
         <translation>1/64-nuotti (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3122"/>
+        <location filename="../../mscore/shortcut.cpp" line="3150"/>
         <source>Note duration: 64th (TAB)</source>
         <translation>Nuotin kesto: 1/64-osa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3131"/>
+        <location filename="../../mscore/shortcut.cpp" line="3159"/>
         <source>128th Note (TAB)</source>
         <translation>1/128-osa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3132"/>
+        <location filename="../../mscore/shortcut.cpp" line="3160"/>
         <source>Note duration: 128th (TAB)</source>
         <translation>Nuotin kesto: 1/128-osa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3141"/>
+        <location filename="../../mscore/shortcut.cpp" line="3169"/>
         <source>Increase Active Duration (TAB)</source>
         <translation>Lisää Aktiivista Kestoa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3142"/>
+        <location filename="../../mscore/shortcut.cpp" line="3170"/>
         <source>Increase active duration (TAB)</source>
         <translation>Lisää aktiivista kestoa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3148"/>
+        <location filename="../../mscore/shortcut.cpp" line="3176"/>
         <source>Decrease Active Duration (TAB)</source>
         <translation>Vähennä Aktiivista Kestoa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3149"/>
+        <location filename="../../mscore/shortcut.cpp" line="3177"/>
         <source>Decrease active duration (TAB)</source>
         <translation>Vähennä aktiivista kestoa (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3155"/>
-        <location filename="../../mscore/shortcut.cpp" line="3164"/>
+        <location filename="../../mscore/shortcut.cpp" line="3183"/>
+        <location filename="../../mscore/shortcut.cpp" line="3192"/>
         <source>Rest (TAB)</source>
         <translation>Tauko (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3156"/>
+        <location filename="../../mscore/shortcut.cpp" line="3184"/>
         <source>Enter rest (TAB)</source>
         <translation>Sijoita tauko (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3165"/>
+        <location filename="../../mscore/shortcut.cpp" line="3193"/>
         <source>Note input: Rest (TAB)</source>
         <translation>Nuotinsyöttö: tauko (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3171"/>
+        <location filename="../../mscore/shortcut.cpp" line="3199"/>
         <source>String Above (TAB)</source>
         <translation>Ylempi kieli (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3172"/>
+        <location filename="../../mscore/shortcut.cpp" line="3200"/>
         <source>Select string above (TAB only)</source>
         <translation>Valitse ylempi kieli (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3178"/>
+        <location filename="../../mscore/shortcut.cpp" line="3206"/>
         <source>String Below (TAB)</source>
         <translation>Alempi kieli (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3179"/>
+        <location filename="../../mscore/shortcut.cpp" line="3207"/>
         <source>Select string below (TAB only)</source>
         <translation>Valitse alempi kieli (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3185"/>
+        <location filename="../../mscore/shortcut.cpp" line="3213"/>
         <source>Fret 0 (TAB)</source>
         <translation>Fret 0 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3186"/>
+        <location filename="../../mscore/shortcut.cpp" line="3214"/>
         <source>Add fret 0 on current string (TAB only)</source>
         <translation>Lisää nauha 0 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3192"/>
+        <location filename="../../mscore/shortcut.cpp" line="3220"/>
         <source>Fret 1 (TAB)</source>
         <translation>Fret 1 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3193"/>
+        <location filename="../../mscore/shortcut.cpp" line="3221"/>
         <source>Add fret 1 on current string (TAB only)</source>
         <translation>Lisää nauha 1 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3199"/>
+        <location filename="../../mscore/shortcut.cpp" line="3227"/>
         <source>Fret 2 (TAB)</source>
         <translation>Fret 2 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3200"/>
+        <location filename="../../mscore/shortcut.cpp" line="3228"/>
         <source>Add fret 2 on current string (TAB only)</source>
         <translation>Lisää nauha 2 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3206"/>
+        <location filename="../../mscore/shortcut.cpp" line="3234"/>
         <source>Fret 3 (TAB)</source>
         <translation>Fret 3 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3207"/>
+        <location filename="../../mscore/shortcut.cpp" line="3235"/>
         <source>Add fret 3 on current string (TAB only)</source>
         <translation>Lisää nauha 3 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3213"/>
+        <location filename="../../mscore/shortcut.cpp" line="3241"/>
         <source>Fret 4 (TAB)</source>
         <translation>Fret 4 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3214"/>
+        <location filename="../../mscore/shortcut.cpp" line="3242"/>
         <source>Add fret 4 on current string (TAB only)</source>
         <translation>Lisää nauha 4 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3220"/>
+        <location filename="../../mscore/shortcut.cpp" line="3248"/>
         <source>Fret 5 (TAB)</source>
         <translation>Fret 5 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3221"/>
+        <location filename="../../mscore/shortcut.cpp" line="3249"/>
         <source>Add fret 5 on current string (TAB only)</source>
         <translation>Lisää nauha 5 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3227"/>
+        <location filename="../../mscore/shortcut.cpp" line="3255"/>
         <source>Fret 6 (TAB)</source>
         <translation>Fret 6 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3228"/>
+        <location filename="../../mscore/shortcut.cpp" line="3256"/>
         <source>Add fret 6 on current string (TAB only)</source>
         <translation>Lisää nauha 6 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3234"/>
+        <location filename="../../mscore/shortcut.cpp" line="3262"/>
         <source>Fret 7 (TAB)</source>
         <translation>Fret 7 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3235"/>
+        <location filename="../../mscore/shortcut.cpp" line="3263"/>
         <source>Add fret 7 on current string (TAB only)</source>
         <translation>Lisää nauha 7 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3241"/>
+        <location filename="../../mscore/shortcut.cpp" line="3269"/>
         <source>Fret 8 (TAB)</source>
         <translation>Fret 8 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3242"/>
+        <location filename="../../mscore/shortcut.cpp" line="3270"/>
         <source>Add fret 8 on current string (TAB only)</source>
         <translation>Lisää nauha 8 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3248"/>
+        <location filename="../../mscore/shortcut.cpp" line="3276"/>
         <source>Fret 9 (TAB)</source>
         <translation>Fret 9 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3249"/>
+        <location filename="../../mscore/shortcut.cpp" line="3277"/>
         <source>Add fret 9 on current string (TAB only)</source>
         <translation>Lisää nauha 9 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3255"/>
+        <location filename="../../mscore/shortcut.cpp" line="3283"/>
         <source>Fret 10 (TAB)</source>
         <translation>Fret 10 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3256"/>
+        <location filename="../../mscore/shortcut.cpp" line="3284"/>
         <source>Add fret 10 on current string (TAB only)</source>
         <translation>Lisää nauha 10 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3262"/>
+        <location filename="../../mscore/shortcut.cpp" line="3290"/>
         <source>Fret 11 (TAB)</source>
         <translation>Fret 11 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3263"/>
+        <location filename="../../mscore/shortcut.cpp" line="3291"/>
         <source>Add fret 11 on current string (TAB only)</source>
         <translation>Lisää nauha 11 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3269"/>
+        <location filename="../../mscore/shortcut.cpp" line="3297"/>
         <source>Fret 12 (TAB)</source>
         <translation>Fret 12 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3270"/>
+        <location filename="../../mscore/shortcut.cpp" line="3298"/>
         <source>Add fret 12 on current string (TAB only)</source>
         <translation>Lisää nauha 12 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3276"/>
+        <location filename="../../mscore/shortcut.cpp" line="3304"/>
         <source>Fret 13 (TAB)</source>
         <translation>Fret 13 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3277"/>
+        <location filename="../../mscore/shortcut.cpp" line="3305"/>
         <source>Add fret 13 on current string (TAB only)</source>
         <translation>Lisää nauha 13 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3283"/>
+        <location filename="../../mscore/shortcut.cpp" line="3311"/>
         <source>Fret 14 (TAB)</source>
         <translation>Fret 14 (TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3284"/>
+        <location filename="../../mscore/shortcut.cpp" line="3312"/>
         <source>Add fret 14 on current string (TAB only)</source>
         <translation>Lisää nauha 14 nykyiseen kieleen (vain TAB)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3293"/>
+        <location filename="../../mscore/shortcut.cpp" line="3321"/>
         <source>Longa Advance (F.B./Chord Symbol)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3294"/>
+        <location filename="../../mscore/shortcut.cpp" line="3322"/>
         <source>Advance of a longa (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3300"/>
+        <location filename="../../mscore/shortcut.cpp" line="3328"/>
         <source>Breve Advance (F.B./Chord Symbol)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3301"/>
+        <location filename="../../mscore/shortcut.cpp" line="3329"/>
         <source>Advance of a double whole note (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3307"/>
+        <location filename="../../mscore/shortcut.cpp" line="3335"/>
         <source>Whole Note Advance (F.B./Chord Symbol)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3308"/>
+        <location filename="../../mscore/shortcut.cpp" line="3336"/>
         <source>Advance of a whole note (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3314"/>
+        <location filename="../../mscore/shortcut.cpp" line="3342"/>
         <source>Half Note Advance (F.B./Chord Symbol)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3315"/>
+        <location filename="../../mscore/shortcut.cpp" line="3343"/>
         <source>Advance of a half note (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3321"/>
+        <location filename="../../mscore/shortcut.cpp" line="3349"/>
         <source>Quarter Note Advance (F.B./Chord Symbol)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3322"/>
+        <location filename="../../mscore/shortcut.cpp" line="3350"/>
         <source>Advance of a quarter note (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3328"/>
+        <location filename="../../mscore/shortcut.cpp" line="3356"/>
         <source>Eighth Note Advance (F.B./Chord Symbol)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3329"/>
+        <location filename="../../mscore/shortcut.cpp" line="3357"/>
         <source>Advance of an eighth note (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3335"/>
+        <location filename="../../mscore/shortcut.cpp" line="3363"/>
         <source>16th Note Advance (F.B./Chord Symbol)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3336"/>
+        <location filename="../../mscore/shortcut.cpp" line="3364"/>
         <source>Advance of a 16th note (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3342"/>
+        <location filename="../../mscore/shortcut.cpp" line="3370"/>
         <source>32nd Note Advance (F.B./Chord Symbol)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3343"/>
+        <location filename="../../mscore/shortcut.cpp" line="3371"/>
         <source>Advance of a 32nd note (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3349"/>
+        <location filename="../../mscore/shortcut.cpp" line="3377"/>
         <source>64th Note Advance (F.B./Chord Symbol)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3350"/>
+        <location filename="../../mscore/shortcut.cpp" line="3378"/>
         <source>Advance of a 64th note (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3356"/>
+        <location filename="../../mscore/shortcut.cpp" line="3384"/>
         <source>Previous Measure (F.B./Chord Symbol)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3357"/>
+        <location filename="../../mscore/shortcut.cpp" line="3385"/>
         <source>Previous measure (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3363"/>
+        <location filename="../../mscore/shortcut.cpp" line="3391"/>
         <source>Next Measure (F.B./Chord Symbol)</source>
         <translation>Seuraava tahti (F.B./sointumerkki)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3364"/>
+        <location filename="../../mscore/shortcut.cpp" line="3392"/>
         <source>Next measure (Figured bass/Chord symbol only)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3370"/>
+        <location filename="../../mscore/shortcut.cpp" line="3398"/>
         <source>Previous Beat (Chord Symbol)</source>
         <translation>Edellinen isku (sointumerkki)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3371"/>
+        <location filename="../../mscore/shortcut.cpp" line="3399"/>
         <source>Previous beat (Chord symbol)</source>
         <translation>Edellinen isku (sointumerkki)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3377"/>
+        <location filename="../../mscore/shortcut.cpp" line="3405"/>
         <source>Next Beat (Chord Symbol)</source>
         <translation>Seuraava Isku (sointumerkki)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3378"/>
+        <location filename="../../mscore/shortcut.cpp" line="3406"/>
         <source>Next beat (Chord symbol)</source>
         <translation>Seuraava isku (sointumerkki)</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3384"/>
-        <source>Add Brackets to Element</source>
-        <translation>Lisää sulkeet merkkiin</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3385"/>
-        <source>Add brackets to element</source>
-        <translation>Lisää sulkeet merkkiin</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/shortcut.cpp" line="3537"/>
+        <location filename="../../mscore/shortcut.cpp" line="3565"/>
         <source>Start Center…</source>
         <translation>Aloituskeskus…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3547"/>
+        <location filename="../../mscore/shortcut.cpp" line="3575"/>
         <source>Customize Toolbars…</source>
         <translation>Mukauta työkalupalkkeja…</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3548"/>
+        <location filename="../../mscore/shortcut.cpp" line="3576"/>
         <source>Customize toolbars</source>
         <translation>Mukauta työkalupalkkeja</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3557"/>
+        <location filename="../../mscore/shortcut.cpp" line="3585"/>
         <source>Remove Empty Trailing Measures</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3558"/>
+        <location filename="../../mscore/shortcut.cpp" line="3586"/>
         <source>Remove empty trailing measures</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3567"/>
+        <location filename="../../mscore/shortcut.cpp" line="3595"/>
+        <location filename="../../mscore/shortcut.cpp" line="3596"/>
+        <source>Unroll Repeats</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3605"/>
         <source>Toggle Insert Mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3568"/>
+        <location filename="../../mscore/shortcut.cpp" line="3606"/>
         <source>Toggle &apos;Insert Mode&apos;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3577"/>
+        <location filename="../../mscore/shortcut.cpp" line="3615"/>
         <source>Show Tours</source>
         <translation>Näytä esittelykierrokset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3578"/>
+        <location filename="../../mscore/shortcut.cpp" line="3616"/>
         <source>Show tours</source>
         <translation>Näytä esittelykierrokset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3579"/>
+        <location filename="../../mscore/shortcut.cpp" line="3617"/>
         <source>Toggle display of tours</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3588"/>
+        <location filename="../../mscore/shortcut.cpp" line="3626"/>
         <source>Reset Tours</source>
         <translation>palauta esittelykierrokset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3589"/>
+        <location filename="../../mscore/shortcut.cpp" line="3627"/>
         <source>Reset tours</source>
         <translation>palauta esittelykierrokset</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3598"/>
+        <location filename="../../mscore/shortcut.cpp" line="3636"/>
+        <source>Toggle Automatic Placement</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3637"/>
+        <source>Toggle &apos;Automatic Placement&apos; for selected elements</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3643"/>
+        <source>Toggle Automatic Placement Globally</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3644"/>
+        <source>Toggle &apos;Automatic Placement&apos; globally</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../mscore/shortcut.cpp" line="3653"/>
         <source>Report a Bug</source>
         <translation>Ilmoita virheestä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3599"/>
+        <location filename="../../mscore/shortcut.cpp" line="3654"/>
         <source>Report a bug</source>
         <translation>Ilmoita bugista</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3608"/>
+        <location filename="../../mscore/shortcut.cpp" line="3663"/>
         <source>Leave Feedback</source>
         <translation>Jätä palautetta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3609"/>
+        <location filename="../../mscore/shortcut.cpp" line="3664"/>
         <source>Leave feedback</source>
         <translation>Jätä palautetta</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3424"/>
+        <location filename="../../mscore/shortcut.cpp" line="3452"/>
         <source>Bold Face</source>
         <translation>Lihavoitu ulkoasu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3425"/>
+        <location filename="../../mscore/shortcut.cpp" line="3453"/>
         <source>Bold face</source>
         <translation>Lihavoitu ulkoasu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3431"/>
+        <location filename="../../mscore/shortcut.cpp" line="3459"/>
         <source>Italic</source>
         <translation>Kursiivi</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3437"/>
+        <location filename="../../mscore/shortcut.cpp" line="3465"/>
         <source>Underline</source>
         <translation>Alleviivattu</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3443"/>
+        <location filename="../../mscore/shortcut.cpp" line="3471"/>
         <source>Move Word Left</source>
         <translation>Siirrä Sana Vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3444"/>
+        <location filename="../../mscore/shortcut.cpp" line="3472"/>
         <source>Move word left</source>
         <translation>Siirrä sana vasemmalle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3454"/>
+        <location filename="../../mscore/shortcut.cpp" line="3482"/>
         <source>Move Word Right</source>
         <translation>Siirrä Sana Oikealle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3455"/>
+        <location filename="../../mscore/shortcut.cpp" line="3483"/>
         <source>Move word right</source>
         <translation>Siirrä sana oikealle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3465"/>
-        <location filename="../../mscore/shortcut.cpp" line="3466"/>
+        <location filename="../../mscore/shortcut.cpp" line="3493"/>
+        <location filename="../../mscore/shortcut.cpp" line="3494"/>
         <source>Explode</source>
         <translation>Hajota</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3467"/>
+        <location filename="../../mscore/shortcut.cpp" line="3495"/>
         <source>Explode contents of top selected staff into staves below</source>
         <translation>Hajota ylimmän valitun viivaston sisältö alempiin viivastoihin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3475"/>
-        <location filename="../../mscore/shortcut.cpp" line="3476"/>
+        <location filename="../../mscore/shortcut.cpp" line="3503"/>
+        <location filename="../../mscore/shortcut.cpp" line="3504"/>
         <source>Implode</source>
         <translation>Yhdistä</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3477"/>
+        <location filename="../../mscore/shortcut.cpp" line="3505"/>
         <source>Implode contents of selected staves into top selected staff</source>
         <translation>Yhdistä valittujen viivastojen sisältö ylimpään valittuun viivastoon</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3485"/>
+        <location filename="../../mscore/shortcut.cpp" line="3513"/>
         <source>Fill With Slashes</source>
         <translation>Täytä vinoviivoilla</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3486"/>
+        <location filename="../../mscore/shortcut.cpp" line="3514"/>
         <source>Fill with slashes</source>
         <translation>Täytä vinoviivoilla</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3495"/>
+        <location filename="../../mscore/shortcut.cpp" line="3523"/>
         <source>Toggle Rhythmic Slash Notation</source>
         <translation>Rytmin nuotinnos vinoviivoin</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3516"/>
+        <location filename="../../mscore/shortcut.cpp" line="3544"/>
         <source>Resequence Rehearsal Marks</source>
         <translation>Järjestä harjoitusmerkit uudestaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3517"/>
+        <location filename="../../mscore/shortcut.cpp" line="3545"/>
         <source>Resequence rehearsal marks</source>
         <translation>Järjestä harjoitusmerkit uudestaan</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3526"/>
+        <location filename="../../mscore/shortcut.cpp" line="3554"/>
         <source>Copy Lyrics to Clipboard</source>
         <translation>Kopioi sanoitus leikepöydälle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3527"/>
+        <location filename="../../mscore/shortcut.cpp" line="3555"/>
         <source>Copy lyrics to clipboard</source>
         <translation>Kopioi sanoitus leikepöydälle</translation>
     </message>
     <message>
-        <location filename="../../mscore/shortcut.cpp" line="3538"/>
+        <location filename="../../mscore/shortcut.cpp" line="3566"/>
         <source>Start center</source>
         <translation>Aloituskeskus</translation>
     </message>
@@ -24173,32 +24372,32 @@ kirjoittaminen epäonnistui: </translation>
 <context>
     <name>articulation</name>
     <message>
-        <location filename="../../mscore/menus.cpp" line="631"/>
+        <location filename="../../mscore/menus.cpp" line="633"/>
         <source>Bend</source>
         <translation>Venytys</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="637"/>
+        <location filename="../../mscore/menus.cpp" line="639"/>
         <source>Tremolo bar</source>
         <translation>Tremolo-palkki</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="852"/>
+        <location filename="../../mscore/menus.cpp" line="854"/>
         <source>Slide out down</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="857"/>
+        <location filename="../../mscore/menus.cpp" line="859"/>
         <source>Slide out up</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="862"/>
+        <location filename="../../mscore/menus.cpp" line="864"/>
         <source>Slide in above</source>
         <translation>Rip ylhäältä</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="867"/>
+        <location filename="../../mscore/menus.cpp" line="869"/>
         <source>Slide in below</source>
         <translation>Rip alhaalta</translation>
     </message>
@@ -24211,19 +24410,19 @@ kirjoittaminen epäonnistui: </translation>
         <translation>c</translation>
     </message>
     <message>
-        <location filename="../../awl/utils.cpp" line="24"/>
-        <source>c#</source>
-        <translation>c#</translation>
-    </message>
-    <message>
         <location filename="../../awl/utils.cpp" line="25"/>
         <source>d</source>
         <translation>d</translation>
     </message>
     <message>
+        <location filename="../../awl/utils.cpp" line="24"/>
+        <source>c♯</source>
+        <translation>c♯</translation>
+    </message>
+    <message>
         <location filename="../../awl/utils.cpp" line="26"/>
-        <source>d#</source>
-        <translation>d#</translation>
+        <source>d♯</source>
+        <translation>d♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="27"/>
@@ -24237,8 +24436,43 @@ kirjoittaminen epäonnistui: </translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="29"/>
-        <source>f#</source>
-        <translation>f#</translation>
+        <source>f♯</source>
+        <translation>f♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="31"/>
+        <source>g♯</source>
+        <translation>g♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="33"/>
+        <source>a♯</source>
+        <translation>a♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="38"/>
+        <source>C♯</source>
+        <translation>C♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="40"/>
+        <source>D♯</source>
+        <translation>D♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="43"/>
+        <source>F♯</source>
+        <translation>F♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="45"/>
+        <source>G♯</source>
+        <translation>G♯</translation>
+    </message>
+    <message>
+        <location filename="../../awl/utils.cpp" line="47"/>
+        <source>A♯</source>
+        <translation>A♯</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="30"/>
@@ -24246,19 +24480,9 @@ kirjoittaminen epäonnistui: </translation>
         <translation>g</translation>
     </message>
     <message>
-        <location filename="../../awl/utils.cpp" line="31"/>
-        <source>g#</source>
-        <translation>g#</translation>
-    </message>
-    <message>
         <location filename="../../awl/utils.cpp" line="32"/>
         <source>a</source>
         <translation>a</translation>
-    </message>
-    <message>
-        <location filename="../../awl/utils.cpp" line="33"/>
-        <source>a#</source>
-        <translation>a#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="34"/>
@@ -24271,19 +24495,9 @@ kirjoittaminen epäonnistui: </translation>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../awl/utils.cpp" line="38"/>
-        <source>C#</source>
-        <translation>C#</translation>
-    </message>
-    <message>
         <location filename="../../awl/utils.cpp" line="39"/>
         <source>D</source>
         <translation>D</translation>
-    </message>
-    <message>
-        <location filename="../../awl/utils.cpp" line="40"/>
-        <source>D#</source>
-        <translation>D#</translation>
     </message>
     <message>
         <location filename="../../awl/utils.cpp" line="41"/>
@@ -24296,28 +24510,13 @@ kirjoittaminen epäonnistui: </translation>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../awl/utils.cpp" line="43"/>
-        <source>F#</source>
-        <translation>F#</translation>
-    </message>
-    <message>
         <location filename="../../awl/utils.cpp" line="44"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../awl/utils.cpp" line="45"/>
-        <source>G#</source>
-        <translation>G#</translation>
-    </message>
-    <message>
         <location filename="../../awl/utils.cpp" line="46"/>
         <source>A</source>
-        <translation>A</translation>
-    </message>
-    <message>
-        <location filename="../../awl/utils.cpp" line="47"/>
-        <source>A#</source>
         <translation>A</translation>
     </message>
     <message>
@@ -25184,6 +25383,174 @@ kirjoittaminen epäonnistui: </translation>
     </message>
 </context>
 <context>
+    <name>clefTable</name>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="36"/>
+        <source>Treble clef</source>
+        <translation>Diskanttiavain</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="38"/>
+        <source>Treble clef 15ma bassa</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="39"/>
+        <source>Treble clef 8va bassa</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="40"/>
+        <source>Treble clef 8va alta</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="41"/>
+        <source>Treble clef 15ma alta</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="42"/>
+        <source>Double treble clef 8va bassa on 2nd line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="43"/>
+        <source>Treble clef optional 8va bassa</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="44"/>
+        <source>French violin clef</source>
+        <translation>Ranskalainen viuluavain</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="45"/>
+        <source>Soprano clef</source>
+        <translation>Sopraanoavain</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="46"/>
+        <source>Mezzo-soprano clef</source>
+        <translation>Mezzosopraanoavain</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="47"/>
+        <source>Alto clef</source>
+        <translation>Alttoavain</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="48"/>
+        <source>Tenor clef</source>
+        <translation>Tenoriavain</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="49"/>
+        <source>Baritone clef (C clef)</source>
+        <translation>Baritoniavain (C-avain)</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="50"/>
+        <source>C clef, H shape (19th century)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="51"/>
+        <source>Alto clef (French, 18th century)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="52"/>
+        <source>Tenor clef (French, 18th century)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="53"/>
+        <source>Alto clef (French, 20th century)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="54"/>
+        <source>Tenor clef (French, 20th century)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="55"/>
+        <source>Bass clef</source>
+        <translation>Bassoavain</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="56"/>
+        <source>Bass clef 15ma bassa</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="57"/>
+        <source>Bass clef 8va bassa</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="58"/>
+        <source>Bass clef 8va alta</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="59"/>
+        <source>Bass clef 15ma alta</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="60"/>
+        <source>Baritone clef (F clef)</source>
+        <translation>Baritoniavain (F-avain)</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="61"/>
+        <source>Subbass clef</source>
+        <translation>Subbassoavain</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="62"/>
+        <source>F clef (French, 18th century)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="63"/>
+        <source>F clef (19th century)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="64"/>
+        <source>Percussion</source>
+        <translation>Säveltasoton avain</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="65"/>
+        <source>Percussion 2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="66"/>
+        <source>Tablature</source>
+        <translation>Tabulatuuri</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="67"/>
+        <source>Tablature 4 lines</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="68"/>
+        <source>Tablature Serif</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/clef.cpp" line="69"/>
+        <source>Tablature Serif 4 lines</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>drumset</name>
     <message>
         <location filename="../../libmscore/drumset.cpp" line="250"/>
@@ -25543,62 +25910,62 @@ kirjoittaminen epäonnistui: </translation>
 <context>
     <name>editstaff</name>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="535"/>
+        <location filename="../../mscore/editstaff.cpp" line="543"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="536"/>
-        <source>C#</source>
-        <translation>C#</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.cpp" line="537"/>
+        <location filename="../../mscore/editstaff.cpp" line="545"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="538"/>
-        <source>Eb</source>
-        <translation>Eb</translation>
+        <location filename="../../mscore/editstaff.cpp" line="544"/>
+        <source>C♯</source>
+        <translation>C♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="539"/>
+        <location filename="../../mscore/editstaff.cpp" line="546"/>
+        <source>E♭</source>
+        <translation>E♭</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.cpp" line="547"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="540"/>
+        <location filename="../../mscore/editstaff.cpp" line="548"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="541"/>
-        <source>F#</source>
-        <translation>F#</translation>
+        <location filename="../../mscore/editstaff.cpp" line="549"/>
+        <source>F♯</source>
+        <translation>F♯</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="542"/>
+        <location filename="../../mscore/editstaff.cpp" line="551"/>
+        <source>A♭</source>
+        <translation>A♭</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.cpp" line="553"/>
+        <source>B♭</source>
+        <translation>B♭</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstaff.cpp" line="550"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="543"/>
-        <source>Ab</source>
-        <translation>Ab</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.cpp" line="544"/>
+        <location filename="../../mscore/editstaff.cpp" line="552"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstaff.cpp" line="545"/>
-        <source>Bb</source>
-        <translation>Bb</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstaff.cpp" line="546"/>
+        <location filename="../../mscore/editstaff.cpp" line="554"/>
         <source>B</source>
         <translation>H</translation>
     </message>
@@ -25611,19 +25978,19 @@ kirjoittaminen epäonnistui: </translation>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="214"/>
-        <source>C#</source>
-        <translation>C#</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstringdata.cpp" line="215"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
+        <location filename="../../mscore/editstringdata.cpp" line="214"/>
+        <source>C♯</source>
+        <translation>C♯</translation>
+    </message>
+    <message>
         <location filename="../../mscore/editstringdata.cpp" line="216"/>
-        <source>Eb</source>
-        <translation>Eb</translation>
+        <source>E♭</source>
+        <translation>E♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="217"/>
@@ -25637,8 +26004,18 @@ kirjoittaminen epäonnistui: </translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="219"/>
-        <source>F#</source>
-        <translation>F#</translation>
+        <source>F♯</source>
+        <translation>F♯</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstringdata.cpp" line="221"/>
+        <source>A♭</source>
+        <translation>A♭</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/editstringdata.cpp" line="223"/>
+        <source>B♭</source>
+        <translation>B♭</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="220"/>
@@ -25646,19 +26023,9 @@ kirjoittaminen epäonnistui: </translation>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../mscore/editstringdata.cpp" line="221"/>
-        <source>Ab</source>
-        <translation>Ab</translation>
-    </message>
-    <message>
         <location filename="../../mscore/editstringdata.cpp" line="222"/>
         <source>A</source>
         <translation>A</translation>
-    </message>
-    <message>
-        <location filename="../../mscore/editstringdata.cpp" line="223"/>
-        <source>Bb</source>
-        <translation>Bb</translation>
     </message>
     <message>
         <location filename="../../mscore/editstringdata.cpp" line="224"/>
@@ -26191,6 +26558,119 @@ kirjoittaminen epäonnistui: </translation>
     </message>
 </context>
 <context>
+    <name>error</name>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="129"/>
+        <source>No note selected:
+Please select a note and retry
+</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="130"/>
+        <source>No chord/rest selected:
+Please select a chord or rest and retry</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="131"/>
+        <source>No note or lyrics selected:
+Please select a note or lyrics and retry</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="132"/>
+        <source>No note or rest selected:
+Please select a note or rest and retry</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="133"/>
+        <source>No note or slur selected:
+Please select a note or slur and retry</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="134"/>
+        <source>No staff selected:
+Please select one or more staves and retry
+</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="135"/>
+        <source>No note or figured bass selected:
+Please select a note or figured bass and retry</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="137"/>
+        <source>Cannot insert chord/rest in tuplet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="138"/>
+        <source>Cannot split tuplet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="139"/>
+        <source>Cannot split measure here:
+First beat of measure</source>
+        <translation>Tahtia ei voida jakaa tästä:
+tahdin ensimmäinen isku</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="140"/>
+        <source>Cannot split measure here:
+Cannot split tuplet</source>
+        <translation>Tahtia ei voida jakaa tästä:
+poikkeusjakoa ei voida jakaa</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="142"/>
+        <source>No destination to paste</source>
+        <translation>Ei kohdetta liittämiselle</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="143"/>
+        <source>Cannot paste into tuplet</source>
+        <translation>Ei voida liittää poikkeusjakoon</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="144"/>
+        <source>Tuplet cannot cross barlines</source>
+        <translation>Poikkeusjako ei voi ylittää tahtiviivaa</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="145"/>
+        <source>Cannot paste in local time signature</source>
+        <translation>Ei voida liittää nykyiseen tahtilajimerkintään</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="146"/>
+        <source>Cannot paste in tremolo</source>
+        <translation>Ei voida liittää tremoloon</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="147"/>
+        <source>Nothing to paste</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="148"/>
+        <source>Destination is not a chord or rest</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/mscore.cpp" line="149"/>
+        <source>Cannot change local time signature:
+Measure is not empty</source>
+        <translation>Ei voida muuttaa nykyistä tahtilajimerkintää:
+tahti ei ole tyhjä</translation>
+    </message>
+</context>
+<context>
     <name>extensions_directory</name>
     <message>
         <location filename="../../mscore/preferences.cpp" line="86"/>
@@ -26408,22 +26888,22 @@ kirjoittaminen epäonnistui: </translation>
 <context>
     <name>lines</name>
     <message>
-        <location filename="../../mscore/menus.cpp" line="979"/>
+        <location filename="../../mscore/menus.cpp" line="981"/>
         <source>Slur</source>
         <translation>Sidekaari</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="984"/>
+        <location filename="../../mscore/menus.cpp" line="986"/>
         <source>Crescendo hairpin</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="994"/>
+        <location filename="../../mscore/menus.cpp" line="996"/>
         <source>Crescendo line</source>
         <translation>Crescendo katkoviivalla</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1006"/>
+        <location filename="../../mscore/menus.cpp" line="1008"/>
         <source>Dynamic + hairpin</source>
         <translation type="unfinished"/>
     </message>
@@ -26654,117 +27134,117 @@ kirjoittaminen epäonnistui: </translation>
     <message>
         <location filename="../../libmscore/note.cpp" line="261"/>
         <source>A♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>A♯ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="262"/>
         <source>A (Name)</source>
-        <translation type="unfinished"/>
+        <translation>A (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="263"/>
         <source>A♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>A♭ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="264"/>
         <source>B♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>B♯ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="265"/>
         <source>B (Name)</source>
-        <translation type="unfinished"/>
+        <translation>B (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="266"/>
         <source>B♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>B♭ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="267"/>
         <source>C♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>C♯ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="268"/>
         <source>C (Name)</source>
-        <translation type="unfinished"/>
+        <translation>C (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="269"/>
         <source>C♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>C♭ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="270"/>
         <source>D♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>D♯ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="271"/>
         <source>D (Name)</source>
-        <translation type="unfinished"/>
+        <translation>D (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="272"/>
         <source>D♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>D♭ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="273"/>
         <source>E♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>E♯ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="274"/>
         <source>E (Name)</source>
-        <translation type="unfinished"/>
+        <translation>E (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="275"/>
         <source>E♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>E♭ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="276"/>
         <source>F♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>F♯ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="277"/>
         <source>F (Name)</source>
-        <translation type="unfinished"/>
+        <translation>F (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="278"/>
         <source>F♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>F♭ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="279"/>
         <source>G♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>G♯ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="280"/>
         <source>G (Name)</source>
-        <translation type="unfinished"/>
+        <translation>G (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="281"/>
         <source>G♭ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>G♭ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="282"/>
         <source>H (Name)</source>
-        <translation type="unfinished"/>
+        <translation>H (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="283"/>
         <source>H♯ (Name)</source>
-        <translation type="unfinished"/>
+        <translation>H♯ (Nimi)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="284"/>
@@ -27349,9 +27829,79 @@ kirjoittaminen epäonnistui: </translation>
         <translation>Kaksoisalennus</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="2992"/>
+        <source>Double flat equal tempered semitone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="2993"/>
+        <source>Double flat lowered by one syntonic comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="2994"/>
+        <source>Double flat raised by one syntonic comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="2996"/>
+        <source>Double flat lowered by three syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="2997"/>
+        <source>Double flat raised by three syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="2999"/>
+        <source>Double flat lowered by two syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3000"/>
+        <source>Double flat raised by two syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3001"/>
         <source>Double sharp</source>
         <translation>Kaksoiskorotus</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3003"/>
+        <source>Double sharp equal tempered semitone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3004"/>
+        <source>Double sharp lowered by one syntonic comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3005"/>
+        <source>Double sharp raised by one syntonic comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3006"/>
+        <source>Double sharp lowered by three syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3007"/>
+        <source>Double sharp raised by three syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3008"/>
+        <source>Double sharp lowered by two syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3009"/>
+        <source>Double sharp raised by two syntonic commas</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3018"/>
@@ -27369,6 +27919,41 @@ kirjoittaminen epäonnistui: </translation>
         <translation>Alennus</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3022"/>
+        <source>Flat equal tempered semitone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3024"/>
+        <source>Flat lowered by one syntonic comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3025"/>
+        <source>Flat raised by one syntonic comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3029"/>
+        <source>Flat lowered by three syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3030"/>
+        <source>Flat raised by three syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3032"/>
+        <source>Flat lowered by two syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3033"/>
+        <source>Flat raised by two syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3046"/>
         <source>Koron (quarter tone flat)</source>
         <translation type="unfinished"/>
@@ -27379,9 +27964,34 @@ kirjoittaminen epäonnistui: </translation>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3051"/>
+        <source>Lower by one septimal comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3052"/>
+        <source>Lower by one tridecimal quartertone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3053"/>
+        <source>Lower by one undecimal quartertone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3054"/>
+        <source>Lower by two septimal commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3058"/>
         <source>Natural</source>
         <translation>Palautusmerkki</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3060"/>
+        <source>Natural equal tempered semitone</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3061"/>
@@ -27389,8 +27999,48 @@ kirjoittaminen epäonnistui: </translation>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3063"/>
+        <source>Natural lowered by one syntonic comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3064"/>
+        <source>Natural raised by one syntonic comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3067"/>
         <source>Natural sharp</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3068"/>
+        <source>Natural lowered by three syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3069"/>
+        <source>Natural raised by three syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3070"/>
+        <source>Natural lowered by two syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3071"/>
+        <source>Natural raised by two syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3082"/>
+        <source>Lower by one equal tempered quarter-tone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3083"/>
+        <source>Raise by one equal tempered quarter tone</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -27416,13 +28066,68 @@ kirjoittaminen epäonnistui: </translation>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3099"/>
+        <source>Raise by one septimal comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3100"/>
+        <source>Raise by one tridecimal quartertone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3101"/>
+        <source>Raise by one undecimal quartertone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3102"/>
+        <source>Raise by two septimal commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3108"/>
         <source>Sharp</source>
         <translation>Korotus</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="3110"/>
+        <source>Sharp equal tempered semitone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3112"/>
+        <source>Sharp lowered by one syntonic comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3113"/>
+        <source>Sharp raised by one syntonic comma</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="3119"/>
         <source>Sharp sharp</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3120"/>
+        <source>Sharp lowered by three syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3121"/>
+        <source>Sharp raised by three syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3122"/>
+        <source>Sharp lowered by two syntonic commas</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="3123"/>
+        <source>Sharp raised by two syntonic commas</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -27465,12 +28170,12 @@ kirjoittaminen epäonnistui: </translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3240"/>
         <source>Accent-staccato above</source>
-        <translation type="unfinished"/>
+        <translation>Aksentti staccato yläpuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3241"/>
         <source>Accent-staccato below</source>
-        <translation type="unfinished"/>
+        <translation>Aksentti staccato alapuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3242"/>
@@ -27495,42 +28200,42 @@ kirjoittaminen epäonnistui: </translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3246"/>
         <source>Marcato-staccato above</source>
-        <translation type="unfinished"/>
+        <translation>Marcato-staccato yläpuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3247"/>
         <source>Marcato-staccato below</source>
-        <translation type="unfinished"/>
+        <translation>Marcato-staccato alapuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3248"/>
         <source>Marcato-tenuto above</source>
-        <translation type="unfinished"/>
+        <translation>Marcato-tenuto yläpuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3249"/>
         <source>Marcato-tenuto below</source>
-        <translation type="unfinished"/>
+        <translation>Marcato-tenuto alapuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3250"/>
         <source>Soft accent above</source>
-        <translation type="unfinished"/>
+        <translation>pehmeä aksentti yläpuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3251"/>
         <source>Soft accent below</source>
-        <translation type="unfinished"/>
+        <translation>pehmeä aksentti alapuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3252"/>
         <source>Soft accent-staccato above</source>
-        <translation type="unfinished"/>
+        <translation>pehmeä aksentti-staccato yläpuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3253"/>
         <source>Soft accent-staccato below</source>
-        <translation type="unfinished"/>
+        <translation>pehmeä aksentti-staccato alapuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3254"/>
@@ -27745,22 +28450,22 @@ kirjoittaminen epäonnistui: </translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3606"/>
         <source>Very long fermata above</source>
-        <translation type="unfinished"/>
+        <translation>Hyvin pitkä fermaatti yläpuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3607"/>
         <source>Very long fermata below</source>
-        <translation type="unfinished"/>
+        <translation>Hyvin pitkä fermaatti alapuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3608"/>
         <source>Very short fermata above</source>
-        <translation type="unfinished"/>
+        <translation>Hyvin lyhyt fermaatti yläpuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3609"/>
         <source>Very short fermata below</source>
-        <translation type="unfinished"/>
+        <translation>Hyvin lyhyt fermaatti alapuolelle</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3770"/>
@@ -27806,6 +28511,11 @@ kirjoittaminen epäonnistui: </translation>
         <location filename="../../libmscore/sym.cpp" line="4554"/>
         <source>Inverted mordent</source>
         <translation>Käänteinen mordentti</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="4574"/>
+        <source>Mordent with upper prefix</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="4576"/>
@@ -27861,6 +28571,21 @@ kirjoittaminen epäonnistui: </translation>
         <location filename="../../libmscore/sym.cpp" line="5040"/>
         <source>Up bow</source>
         <translation>Työntöjousi</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="5043"/>
+        <source>System divider</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="5044"/>
+        <source>Extra long system divider</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../libmscore/sym.cpp" line="5045"/>
+        <source>Long system divider</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5201"/>
@@ -29140,6 +29865,24 @@ kirjoittaminen epäonnistui: </translation>
     </message>
 </context>
 <context>
+    <name>toolbar</name>
+    <message>
+        <location filename="../../mscore/toolbarEditor.cpp" line="20"/>
+        <source>Note Input</source>
+        <translation>Nuotinsyöttö</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/toolbarEditor.cpp" line="21"/>
+        <source>File Operations</source>
+        <translation>Tiedostotoiminnot</translation>
+    </message>
+    <message>
+        <location filename="../../mscore/toolbarEditor.cpp" line="22"/>
+        <source>Playback Controls</source>
+        <translation>Toistosäätimet</translation>
+    </message>
+</context>
+<context>
     <name>trillType</name>
     <message>
         <location filename="../../libmscore/trill.cpp" line="34"/>
@@ -29165,122 +29908,122 @@ kirjoittaminen epäonnistui: </translation>
 <context>
     <name>utils</name>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="467"/>
+        <location filename="../../libmscore/utils.cpp" line="481"/>
         <source>c</source>
         <translation>c</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="468"/>
-        <source>c#</source>
-        <translation>c#</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="469"/>
+        <location filename="../../libmscore/utils.cpp" line="483"/>
         <source>d</source>
         <translation>d</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="470"/>
-        <source>d#</source>
-        <translation>d#</translation>
+        <location filename="../../libmscore/utils.cpp" line="482"/>
+        <source>c♯</source>
+        <translation>c♯</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="471"/>
+        <location filename="../../libmscore/utils.cpp" line="484"/>
+        <source>d♯</source>
+        <translation>d♯</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="485"/>
         <source>e</source>
         <translation>e</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="472"/>
+        <location filename="../../libmscore/utils.cpp" line="486"/>
         <source>f</source>
         <translation>f</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="473"/>
-        <source>f#</source>
-        <translation>f#</translation>
+        <location filename="../../libmscore/utils.cpp" line="487"/>
+        <source>f♯</source>
+        <translation>f♯</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="474"/>
+        <location filename="../../libmscore/utils.cpp" line="489"/>
+        <source>g♯</source>
+        <translation>g♯</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="491"/>
+        <source>a♯</source>
+        <translation>a♯</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="496"/>
+        <source>C♯</source>
+        <translation>C♯</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="498"/>
+        <source>D♯</source>
+        <translation>D♯</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="501"/>
+        <source>F♯</source>
+        <translation>F♯</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="503"/>
+        <source>G♯</source>
+        <translation>G♯</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="505"/>
+        <source>A♯</source>
+        <translation>A♯</translation>
+    </message>
+    <message>
+        <location filename="../../libmscore/utils.cpp" line="488"/>
         <source>g</source>
         <translation>g</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="475"/>
-        <source>g#</source>
-        <translation>g#</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="476"/>
+        <location filename="../../libmscore/utils.cpp" line="490"/>
         <source>a</source>
         <translation>a</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="477"/>
-        <source>a#</source>
-        <translation>a#</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="478"/>
+        <location filename="../../libmscore/utils.cpp" line="492"/>
         <source>b</source>
         <translation>h</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="481"/>
+        <location filename="../../libmscore/utils.cpp" line="495"/>
         <source>C</source>
         <translation>C</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="482"/>
-        <source>C#</source>
-        <translation>C#</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="483"/>
+        <location filename="../../libmscore/utils.cpp" line="497"/>
         <source>D</source>
         <translation>D</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="484"/>
-        <source>D#</source>
-        <translation>D#</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="485"/>
+        <location filename="../../libmscore/utils.cpp" line="499"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="486"/>
+        <location filename="../../libmscore/utils.cpp" line="500"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="487"/>
-        <source>F#</source>
-        <translation>F#</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="488"/>
+        <location filename="../../libmscore/utils.cpp" line="502"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="489"/>
-        <source>G#</source>
-        <translation>G#</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="490"/>
+        <location filename="../../libmscore/utils.cpp" line="504"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../../libmscore/utils.cpp" line="491"/>
-        <source>A#</source>
-        <translation>A</translation>
-    </message>
-    <message>
-        <location filename="../../libmscore/utils.cpp" line="492"/>
+        <location filename="../../libmscore/utils.cpp" line="506"/>
         <source>B</source>
         <translation>H</translation>
     </message>
