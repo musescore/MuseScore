@@ -414,6 +414,17 @@ Element* Arpeggio::drop(EditData& data)
       }
 
 //---------------------------------------------------------
+//   reset
+//---------------------------------------------------------
+
+void Arpeggio::reset()
+      {
+      undoChangeProperty(Pid::ARP_USER_LEN1, 0.0);
+      undoChangeProperty(Pid::ARP_USER_LEN2, 0.0);
+      Element::reset();
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
