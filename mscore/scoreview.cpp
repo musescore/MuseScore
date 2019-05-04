@@ -548,7 +548,9 @@ void ScoreView::moveCursor(const Fraction& tick)
             qreal x2;
             Fraction t2;
             Segment* ns = s->next(SegmentType::ChordRest);
-            if (ns && ns->visible()) {
+            while (ns && !ns->visible())
+                  ns = ns->next(SegmentType::ChordRest);
+            if (ns) {
                   t2 = ns->tick();
                   x2 = ns->canvasPos().x();
                   }
