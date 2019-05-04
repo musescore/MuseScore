@@ -428,17 +428,17 @@ void GuitarPro6::readChord(QDomNode* diagram, int track)
 
                   // if there are unspecified string values, add the X marker to that string
                   while (counter < string) {
-                        fretDiagram->setMarker(counter, 'X');
+                        fretDiagram->setMarker(counter, FretMarkerType::CROSS);
                         counter++;
                         }
 
                   // look at the specified string/fret and add to diagram
                   if (fret == 0) {
-                        fretDiagram->setMarker(string, '0');
+                        fretDiagram->setMarker(string, FretMarkerType::CIRCLE);
                         counter++;
                         }
                   else {
-                        fretDiagram->setDot(string, fret);
+                        fretDiagram->setDot(string, fret, true);
                         counter++;
                         }
                   }
@@ -448,7 +448,7 @@ void GuitarPro6::readChord(QDomNode* diagram, int track)
 
       // mark any missing strings as 'X'
       while (counter < stringCount) {
-            fretDiagram->setMarker(counter, 'X');
+            fretDiagram->setMarker(counter, FretMarkerType::CROSS);
             counter++;
             }
 

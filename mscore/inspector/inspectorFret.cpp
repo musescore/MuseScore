@@ -36,16 +36,33 @@ InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
             { Pid::PLACEMENT,    0, f.placement,   f.resetPlacement   },
             { Pid::FRET_STRINGS, 0, f.strings,     f.resetStrings     },
             { Pid::FRET_FRETS,   0, f.frets,       f.resetFrets       },
-            { Pid::FRET_BARRE,   0, f.barre,       f.resetBarre       },
+            { Pid::FRET_NUT,     0, f.showNut,     f.resetShowNut     },
             };
       const std::vector<InspectorPanel> ppList = {
             { f.title, f.panel }
             };
+
+      dotTypeButtons = {
+            f.circleSelect,
+            f.crossSelect,
+            f.triangleSelect,
+            f.squareSelect
+            };
+
       mapSignals(iiList, ppList);
       int fretNumber = toFretDiagram(inspector->element())->fretOffset() + 1;
       f.fretNumber->setValue(fretNumber);
-      connect(f.fretNumber, SIGNAL(valueChanged(int)), SLOT(fretNumberChanged(int)));
-      connect(f.resetFretNumber, SIGNAL(resetClicked()), SLOT(resetFretNumber()));
+      f.resetFretNumber->setEnabled(fretNumber != 1);
+      connect(f.fretNumber,      SIGNAL(valueChanged(int)), SLOT(fretNumberChanged(int)));
+      connect(f.resetFretNumber, SIGNAL(resetClicked()),    SLOT(resetFretNumber()));
+
+      connect(f.circleSelect,   SIGNAL(toggled(bool)), SLOT(circleButtonToggled(bool)));
+      connect(f.crossSelect,    SIGNAL(toggled(bool)), SLOT(crossButtonToggled(bool)));
+      connect(f.triangleSelect, SIGNAL(toggled(bool)), SLOT(triangleButtonToggled(bool)));
+      connect(f.squareSelect,   SIGNAL(toggled(bool)), SLOT(squareButtonToggled(bool)));
+      connect(f.toggleBarre,    SIGNAL(toggled(bool)), SLOT(barreButtonToggled(bool)));
+      connect(f.toggleMultidot, SIGNAL(toggled(bool)), SLOT(multidotButtonToggled(bool)));
+      connect(f.clearButton,    SIGNAL(clicked()),     SLOT(clearButtonClicked()));
       }
 
 //---------------------------------------------------------
@@ -100,5 +117,88 @@ void InspectorFretDiagram::resetFretNumber()
       f.diagram->setFretDiagram(fd);
       }
 
+//---------------------------------------------------------
+//   genericButtonToggled
+//---------------------------------------------------------
+
+void InspectorFretDiagram::genericButtonToggled(QPushButton* b, bool v, FretDotType dtype)
+      {
+      for (QPushButton* p : dotTypeButtons) {
+            p->blockSignals(true);
+            p->setChecked(false);
+            }
+
+      if (v) {
+            f.diagram->setCurrentDotType(dtype);
+            b->setChecked(true);
+            }
+      
+      f.diagram->setAutomaticDotType(!v);
+
+      for (QPushButton* p : dotTypeButtons)
+            p->blockSignals(false);
+      }
+//---------------------------------------------------------
+//   circleButtonToggled
+//---------------------------------------------------------
+
+void InspectorFretDiagram::circleButtonToggled(bool v) 
+      {
+      genericButtonToggled(f.circleSelect, v, FretDotType::NORMAL);
+      }
+
+//---------------------------------------------------------
+//   crossButtonToggled
+//---------------------------------------------------------
+
+void InspectorFretDiagram::crossButtonToggled(bool v) 
+      {
+      genericButtonToggled(f.crossSelect, v, FretDotType::CROSS);
+      }
+
+//---------------------------------------------------------
+//   squareButtonToggled
+//---------------------------------------------------------
+
+void InspectorFretDiagram::squareButtonToggled(bool v) 
+      {
+      genericButtonToggled(f.squareSelect, v, FretDotType::SQUARE);
+      }
+
+//---------------------------------------------------------
+//   triangleButtonToggled
+//---------------------------------------------------------
+
+void InspectorFretDiagram::triangleButtonToggled(bool v) 
+      {
+      genericButtonToggled(f.triangleSelect, v, FretDotType::TRIANGLE);
+      }
+
+//---------------------------------------------------------
+//   barreButtonToggled
+//---------------------------------------------------------
+
+void InspectorFretDiagram::barreButtonToggled(bool v) 
+      {
+      f.diagram->setBarreMode(v);
+      }
+
+//---------------------------------------------------------
+//   multidotButtonToggled
+//---------------------------------------------------------
+
+void InspectorFretDiagram::multidotButtonToggled(bool v) 
+      {
+      f.diagram->setMultidotMode(v);
+      }
+
+//---------------------------------------------------------
+//   clearButtonClicked
+//---------------------------------------------------------
+
+void InspectorFretDiagram::clearButtonClicked() 
+      {
+      f.diagram->clear();
+      }
 }
 
