@@ -1709,7 +1709,7 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
             if (!done) {
                   if (staffL->isPitchedStaff(segment->tick())) {
                         bool error = false;
-                        AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->staff()->idx(), lineR2, error);
+                        AccidentalVal acciv2 = measureR->findAccidental(chordR->segment(), chordR->vStaffIdx(), lineR2, error);
                         int acci2 = int(acciv2);
                         // epitch (effective pitch) is a visible pitch so line2pitch returns exactly that.
                         halfsteps = line2pitch(lineL-deltastep, clefL, Key::C) + acci2 - epitchL;
