@@ -37,6 +37,7 @@ vtest/META-INF
 vtest/Thumbnails
 vtest/Pictures
 .vs
+.vscode
 dependencies
 
 # Downloaded files during build process

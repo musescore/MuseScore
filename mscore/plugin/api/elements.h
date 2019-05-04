@@ -234,7 +234,7 @@ class Element : public Ms::PluginAPI::ScoreElement {
       API_PROPERTY( glissandoStyle,          GLISSANDO_STYLE           )
       API_PROPERTY( fretStrings,             FRET_STRINGS              )
       API_PROPERTY( fretFrets,               FRET_FRETS                )
-      API_PROPERTY( fretBarre,               FRET_BARRE                )
+      /*API_PROPERTY( fretBarre,               FRET_BARRE                )*/
       API_PROPERTY( fretOffset,              FRET_OFFSET               )
       API_PROPERTY( fretNumPos,              FRET_NUM_POS              )
       API_PROPERTY( systemBracket,           SYSTEM_BRACKET            )
