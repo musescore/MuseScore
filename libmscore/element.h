@@ -155,6 +155,8 @@ class Element : public ScoreElement {
       qreal _mag;                 ///< standard magnification (derived value)
       QPointF _pos;               ///< Reference position, relative to _parent.
       QPointF _offset;            ///< offset from reference position, set by autoplace or user
+      qreal _offsetAdjust;        ///< portion of offset attributable to autoplace
+      bool _fixed;                ///< offset is fixed, not changed by layout
       int _track;                 ///< staffIdx * VOICES + voice
       mutable ElementFlags _flags;
                                   ///< valid after call to layout()
@@ -163,6 +165,7 @@ class Element : public ScoreElement {
   protected:
       mutable int _z;
       QColor _color;              ///< element color attribute
+      bool _offsetChanged;        ///< set by user actions, checked and cleared during layout
 
    public:
       Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
@@ -206,6 +209,11 @@ class Element : public ScoreElement {
       bool generated() const                  { return flag(ElementFlag::GENERATED);  }
       void setGenerated(bool val)             { setFlag(ElementFlag::GENERATED, val);   }
 
+      bool fixed() const                      { return _fixed;          }
+      void setFixed(bool v)                   { _fixed = v;             }
+      bool offsetChanged() const              { return _offsetChanged;  }
+      void setOffsetChanged(bool v)           { _offsetChanged = v;     }
+
       const QPointF& ipos() const             { return _pos;                    }
       virtual const QPointF pos() const       { return _pos + _offset;          }
       virtual qreal x() const                 { return _pos.x() + _offset.x(); }
@@ -216,6 +224,8 @@ class Element : public ScoreElement {
       qreal& rxpos()                          { return _pos.rx();        }
       qreal& rypos()                          { return _pos.ry();        }
       virtual void move(const QPointF& s)     { _pos += s;               }
+      qreal offsetAdjust() const              { return _offsetAdjust;    }
+      void setOffsetAdjust(qreal v)           { _offsetAdjust = v;       }
 
       virtual QPointF pagePos() const;          ///< position in page coordinates
       virtual QPointF canvasPos() const;        ///< position in canvas coordinates
@@ -456,6 +466,7 @@ class Element : public ScoreElement {
 
       void autoplaceSegmentElement(qreal minDistance);      // helper function
       void autoplaceMeasureElement(qreal minDistance);
+      void autoplaceCalculateOffset(QRectF& r, qreal minDistance);
       qreal styleP(Sid idx) const;
       };
 

@@ -345,6 +345,7 @@ void LineSegment::editDrag(EditData& ed)
                   // Only for moving, no y limitation
                   QPointF deltaMove(ed.delta.x(), ed.delta.y());
                   setOffset(offset() + deltaMove);
+                  setOffsetChanged(true);
                   }
                   break;
             default:

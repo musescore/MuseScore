@@ -228,7 +228,7 @@ class Note final : public Element {
       bool _small         { false };
       bool _play          { true  };      // note is not played if false
       mutable bool _mark  { false };      // for use in sequencer
-      bool _fixed         { false };      // for slash notation
+      //bool _fixed         { false };      // for slash notation
 
       MScore::DirectionH _userMirror { MScore::DirectionH::AUTO };      ///< user override of mirror
       Direction _userDotPosition     { Direction::AUTO };               ///< user override of dot position
@@ -331,8 +331,8 @@ class Note final : public Element {
       void setTuning(qreal v)             { _tuning = v;      }
       void undoSetTpc(int v);
       int transposition() const;
-      bool fixed() const                  { return _fixed;     }
-      void setFixed(bool v)               { _fixed = v;        }
+      //bool fixed() const                  { return _fixed;     }
+      //void setFixed(bool v)               { _fixed = v;        }
       int fixedLine() const               { return _fixedLine; }
       void setFixedLine(int v)            { _fixedLine = v;    }
 

@@ -338,6 +338,7 @@ class TextBase : public Element {
       virtual Pid propertyId(const QStringRef& xmlName) const override;
       virtual Sid getPropertyStyle(Pid) const;
       virtual void styleChanged();
+      void reset() override;
       void editInsertText(TextCursor*, const QString&);
 
       TextCursor* cursor(const EditData&);
