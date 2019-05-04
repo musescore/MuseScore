@@ -69,6 +69,7 @@ class Arpeggio final : public Element {
 
       virtual void read(XmlReader& e) override;
       virtual void write(XmlWriter& xml) const override;
+      virtual void reset() override;
 
       int span() const      { return _span; }
       void setSpan(int val) { _span = val; }
