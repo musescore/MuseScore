@@ -1693,6 +1693,8 @@ int articulationExcursion(Note *noteL, Note *noteR, int deltastep)
             if (!e || e->type() != ElementType::CHORD)
                   continue;
             Chord* chord = toChord(e);
+            if (chord->vStaffIdx() != chordL->vStaffIdx())
+                  continue;
             for (Note* note : chord->notes()) {
                   if (note->tieBack())
                         continue;
