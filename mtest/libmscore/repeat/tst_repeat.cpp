@@ -117,11 +117,11 @@ void TestRepeat::initTestCase()
 
 void TestRepeat::repeat(const char* f1, const QString & ref)
       {
-      Score* score = readScore(DIR + f1);
+      MasterScore* score = readScore(DIR + f1);
       QVERIFY(score);
-      score->updateRepeatList(true);
+      score->setExpandRepeats(true);
       QStringList sl;
-      for (const RepeatSegment* rs : *score->repeatList()) {
+      for (const RepeatSegment* rs : score->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
             for (Measure* m = score->tick2measure(Fraction::fromTicks(startTick)); m; m = m->nextMeasure()) {

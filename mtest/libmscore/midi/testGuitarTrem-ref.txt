@@ -547,9 +547,9 @@ Tick  =   9556   Type  =   224   Pitch  =   109   Velocity  =    64   Channel  =
 Tick  =   9572   Type  =   224   Pitch  =    68   Velocity  =    64   Channel  =     0    
 Tick  =   9588   Type  =   224   Pitch  =    27   Velocity  =    64   Channel  =     0    
 Tick  =   9599   Type  =   144   Pitch  =    60   Velocity  =     0   Channel  =     0    
+Tick  =   9600   Type  =   224   Pitch  =     0   Velocity  =    64   Channel  =     0    
 Tick  =   9600   Type  =   144   Pitch  =    60   Velocity  =    80   Channel  =     0    
 Tick  =   9600   Type  =   176   Pitch  =     2   Velocity  =    80   Channel  =     0    
-Tick  =   9600   Type  =   224   Pitch  =     0   Velocity  =    64   Channel  =     0    
 Tick  =   9600   Type  =   224   Pitch  =     0   Velocity  =    64   Channel  =     0    
 Tick  =   9600   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
 Tick  =   9616   Type  =   224   Pitch  =     0   Velocity  =    64   Channel  =     0    
