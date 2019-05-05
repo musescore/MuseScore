@@ -77,6 +77,7 @@ struct StaffRenderData {
       Fraction lastHairpinStart = Fraction(-1, 1);
       Fraction lastDynamicEnd   = Fraction(-1, 1);
       std::map<int, NPlayEvent> tempPlayEvents;
+      int partStaffIdx = 0;
       };
 
 bool graceNotesMerged(Chord *chord);
@@ -201,7 +202,7 @@ void MasterScore::updateChannel()
                         Chord* c = toChord(e);
                         int channel = st->channel(c->tick(), c->voice());
                         Instrument* instr = c->part()->instrument(c->tick());
-                        if (channel >= instr->channel().size()) {
+                        if (channel >= int(instr->channel().size())) {
                               qDebug() << "Channel " << channel << " too high. Max " << instr->channel().size();
                               channel = 0;
                               }
@@ -694,6 +695,8 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
 
       static const VeloChangeMethod defaultChangeMethod = VeloChangeMethod::NORMAL;
 
+      MasterScore* master = staff->masterScore();
+
       int lastSubchannel = -1;
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
             Fraction tick = seg->tick();
@@ -731,8 +734,10 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
 
                   // This is a slightly hacky way of always getting a channel, no matter
                   // if there are notes or not.
+                  // Also, choose the correct channel for playback for this staff - there is one
+                  // channel per staff. See Instrument::updateStaffChannels for explanation.
                   if (lastSubchannel != -1)
-                        channel = instr->channel(lastSubchannel)->channel();
+                        channel = master->playbackChannel(instr->staffChannel(lastSubchannel, renderData.partStaffIdx))->channel();
                   else
                         continue;
 
@@ -768,8 +773,22 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                                     continue;
                                     }
 
-                              if (s->isHairpin() && s->staff() == st1) {
+                              if (s->isHairpin()) {
                                     h = toHairpin(s);
+                                    switch (h->dynRange()) {
+                                          case Dynamic::Range::STAFF:
+                                                if (h->staff() != st1)
+                                                      continue;
+                                                break;
+                                          case Dynamic::Range::PART:
+                                                if (h->part() != st1->part())
+                                                      continue;
+                                                break;
+                                          case Dynamic::Range::SYSTEM:
+                                          default:
+                                                break;
+                                          }
+
                                     singleNoteDynamics = h->singleNoteDynamics() || singleNoteDynamics;
                                     if (singleNoteDynamics) {
                                           hairpinStartTick = Fraction::fromTicks(it.start);
@@ -1209,7 +1228,7 @@ void Score::updateVelo()
 //   renderStaffSegment
 //---------------------------------------------------------
 
-void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, Staff* staff, DynamicsRenderMethod method, int cc)
+void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, Staff* staff, DynamicsRenderMethod method, int cc, int partStaffIdx)
       {
       Measure* start = chunk.startMeasure();
       Measure* end = chunk.endMeasure();
@@ -1217,6 +1236,7 @@ void MidiRenderer::renderStaffChunk(const Chunk& chunk, EventMap* events, Staff*
 
       Measure* lastMeasure = start->prevMeasure();
       StaffRenderData renderData;
+      renderData.partStaffIdx = partStaffIdx;
 
       for (Measure* m = start; m != end; m = m->nextMeasure()) {
             if (lastMeasure && m->isRepeatMeasure(staff)) {
@@ -2473,6 +2493,7 @@ void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, con
 void MidiRenderer::renderScore(EventMap* events, const SynthesizerState& synthState, bool metronome)
       {
       updateState();
+
       for (const Chunk& chunk : chunks) {
             renderChunk(chunk, events, synthState, metronome);
             }
@@ -2482,8 +2503,16 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Synth
       {
       // TODO: avoid doing it multiple times for the same measures
       score->createPlayEvents(chunk.startMeasure(), chunk.endMeasure());
-
       score->updateChannel();
+
+      // Update the channels needed for correct dynamics playback
+      for (Part* p : score->parts()) {
+            for (const auto& i : *p->instruments())  {
+                  i.second->updateStaffChannels(p->nstaves(), score);
+                  }
+            }
+      score->rebuildMidiMapping();
+
       score->updateVelo();
 
       SynthesizerState s = score->synthesizerState();
@@ -2522,8 +2551,11 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Synth
             }
 
       // create note & other events
-      for (Staff* st : score->staves())
-            renderStaffChunk(chunk, events, st, renderMethod, cc);
+      for (Part* p : score->parts()) {
+            int relativeIdx = 0;
+            for (Staff* st : *p->staves())
+                  renderStaffChunk(chunk, events, st, renderMethod, cc, relativeIdx++);
+            }
       events->fixupMIDI();
 
       // create sustain pedal events

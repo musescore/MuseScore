@@ -163,6 +163,7 @@ void Instrument::operator=(const Instrument& i)
 Instrument::~Instrument()
       {
       qDeleteAll(_channel);
+      qDeleteAll(_staffChannel);
       delete _drumset;
       }
 
@@ -1440,6 +1441,60 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
       }
 
 //---------------------------------------------------------
+//   Instrument::updateStaffChannels
+//---------------------------------------------------------
+
+void Instrument::updateStaffChannels(int nstaves, MasterScore* ms)
+      {
+      clearStaffChannels();
+
+      // The channels will be ordered as follows:
+      //    0 - main channel (stave 0)
+      //    1 - possible other main channel (e.g. mute, stave 0)
+      //    2 - possible other main channel (e.g. tremolo, stave 0)
+      //    3 - channel 0 (stave 1)
+      //    4 - channel 1 (stave 1)
+      //    5 - channel 2 (stave 1)
+      //    6 - channel 1 (stave 2)
+      //    7 - channel 2 (stave 2)
+      //    etc.
+      _staffChannel.reserve(int(_channel.size()) * (nstaves-1));
+      for (int j = 1; j < nstaves; ++j) {
+            for (int i = 0; i < _channel.size(); ++i)
+                  _staffChannel.append(new Channel(*_channel[i]));
+            }
+
+      ms->rebuildMidiMapping();
+      }
+
+//---------------------------------------------------------
+//   Instrument::clearStaffChannels
+//---------------------------------------------------------
+
+void Instrument::clearStaffChannels()
+      {
+      // Delete old staff channel objects
+      qDeleteAll(_staffChannel);
+      _staffChannel.clear();
+      }
+
+//---------------------------------------------------------
+//   Instrument::staffChannel
+//---------------------------------------------------------
+
+Channel* Instrument::staffChannel(int normalChannelIdx, int partStaffIdx)
+      {
+      if (partStaffIdx == 0) {
+            Q_ASSERT(normalChannelIdx < int(_channel.size()));
+            return _channel[normalChannelIdx];
+            }
+      
+      int id = normalChannelIdx + (partStaffIdx - 1) * int(_channel.size());
+      Q_ASSERT(id >= 0 && id < int(_staffChannel.size()));
+      return _staffChannel[id];
+      }
+
+//---------------------------------------------------------
 //   Instrument::playbackChannel
 //---------------------------------------------------------
 
@@ -1447,7 +1502,6 @@ const Channel* Instrument::playbackChannel(int idx, const MasterScore* score) co
       {
       return score->playbackChannel(channel(idx));
       }
-
 
 //---------------------------------------------------------
 //   Instrument::playbackChannel

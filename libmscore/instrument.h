@@ -260,6 +260,7 @@ class Instrument {
       QList<NamedEventList>   _midiActions;
       QList<MidiArticulation> _articulation;
       QList<Channel*> _channel;      // at least one entry
+      QList<Channel*> _staffChannel; // holds channels for playback of multiple staves
       QList<ClefTypeList> _clefType;
 
       bool _singleNoteDynamics;
@@ -298,6 +299,8 @@ class Instrument {
       void setProfessionalPitchRange(int a, int b)           { _minPitchP = a; _maxPitchP = b; }
       Channel* channel(int idx)                              { return _channel[idx];  }
       const Channel* channel(int idx) const                  { return _channel[idx];  }
+      Channel* allChannel(int idx)                           { return (_channel + _staffChannel)[idx]; }
+      const Channel* allChannel(int idx) const               { return (_channel + _staffChannel)[idx]; }
       Channel* playbackChannel(int idx, MasterScore*);
       const Channel* playbackChannel(int idx, const MasterScore*) const;
       ClefTypeList clefType(int staffIdx) const;
@@ -307,8 +310,12 @@ class Instrument {
       const QList<MidiArticulation>& articulation() const    { return _articulation; }
 
       const QList<Channel*>& channel() const                 { return _channel; }
+      const QList<Channel*>  allChannel() const              { return _channel + _staffChannel; }
       void appendChannel(Channel* c)                         { _channel.append(c); }
       void clearChannels()                                   { _channel.clear(); }
+      void updateStaffChannels(int nstaves, MasterScore* ms);
+      void clearStaffChannels();
+      Channel* staffChannel(int normalChannelIdx, int partStaffIdx);
 
       void setMidiActions(const QList<NamedEventList>& l)    { _midiActions = l;  }
       void setArticulation(const QList<MidiArticulation>& l) { _articulation = l; }

@@ -53,7 +53,7 @@ void MasterScore::checkMidiMapping()
             const InstrumentList* il = part->instruments();
             for (auto i = il->begin(); i != il->end(); ++i) {
                   const Instrument* instr = i->second;
-                  for (int j = 0; j < instr->channel().size(); ++j)
+                  for (int j = 0; j < instr->allChannel().size(); ++j)
                         drum.append(instr->useDrumset());
                   }
             }
@@ -151,15 +151,15 @@ void MasterScore::rebuildExcerptsMidiMapping()
                         const Instrument* iMaster = item.second;
                         const int tick = item.first;
                         Instrument* iLocal = p->instrument(Fraction::fromTicks(tick));
-                        const int nchannels = iMaster->channel().size();
-                        if (iLocal->channel().size() != nchannels) {
+                        const int nchannels = iMaster->allChannel().size();
+                        if (iLocal->allChannel().size() != nchannels) {
                               // may happen, e.g., if user changes an instrument
                               (*iLocal) = (*iMaster);
                               continue;
                               }
                         for (int c = 0; c < nchannels; ++c) {
-                              Channel* cLocal = iLocal->channel(c);
-                              const Channel* cMaster = iMaster->channel(c);
+                              Channel* cLocal = iLocal->allChannel(c);
+                              const Channel* cMaster = iMaster->allChannel(c);
                               cLocal->setChannel(cMaster->channel());
                               }
                         }
@@ -180,7 +180,7 @@ void MasterScore::reorderMidiMapping()
             const InstrumentList* il = part->instruments();
             for (auto i = il->begin(); i != il->end(); ++i) {
                   const Instrument* instr = i->second;
-                  for (Channel* channel : instr->channel()) {
+                  for (Channel* channel : instr->allChannel()) {
                         if (!(_midiMapping[sequenceNumber].part() == part
                               && _midiMapping[sequenceNumber].masterChannel == channel)) {
                               int shouldBe = channel->channel();
@@ -216,7 +216,7 @@ void MasterScore::removeDeletedMidiMapping()
             for (auto i = il->begin(); i != il->end() && !channelExists; ++i) {
                   const Instrument* instr = i->second;
                   channelExists = (_midiMapping[index].articulation()->channel() != -1
-                      && instr->channel().contains(_midiMapping[index].masterChannel)
+                      && instr->allChannel().contains(_midiMapping[index].masterChannel)
                       && !(_midiMapping[index].port() == -1 && _midiMapping[index].channel() == -1));
                   if (channelExists)
                         break;
@@ -263,7 +263,7 @@ int MasterScore::updateMidiMapping()
             for (auto i = il->begin(); i != il->end(); ++i) {
                   const Instrument* instr = i->second;
                   bool drum = instr->useDrumset();
-                  for (Channel* channel : instr->channel()) {
+                  for (Channel* channel : instr->allChannel()) {
                         bool channelExists = false;
                         for (const MidiMapping& mapping: _midiMapping) {
                               if (channel == mapping.masterChannel && channel->channel() != -1) {

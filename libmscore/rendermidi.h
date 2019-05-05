@@ -94,7 +94,7 @@ class MidiRenderer {
       void updateChunksPartition();
       void updateState();
 
-      void renderStaffChunk(const Chunk&, EventMap* events, Staff*, DynamicsRenderMethod method, int cc);
+      void renderStaffChunk(const Chunk&, EventMap* events, Staff*, DynamicsRenderMethod method, int cc, int partStaffIdx);
       void renderSpanners(const Chunk&, EventMap* events);
       void renderMetronome(const Chunk&, EventMap* events);
       void renderMetronome(EventMap* events, Measure* m, const Fraction& tickOffset);
