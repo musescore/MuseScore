@@ -84,6 +84,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Height' value</string>
+        </property>
        </widget>
       </item>
       <item row="7" column="0" colspan="3">
@@ -134,6 +137,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Text' value</string>
+           </property>
           </widget>
          </item>
          <item row="3" column="0" colspan="2">
@@ -163,6 +169,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Font style' values</string>
+           </property>
           </widget>
          </item>
          <item row="6" column="2">
@@ -173,6 +182,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Placement' value</string>
+           </property>
           </widget>
          </item>
          <item row="7" column="2">
@@ -182,6 +194,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Offset' values</string>
            </property>
           </widget>
          </item>
@@ -232,6 +247,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Font face' value</string>
+           </property>
           </widget>
          </item>
          <item row="4" column="0" colspan="2">
@@ -254,6 +272,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="accessibleName">
+              <string>Reset 'Font size' value</string>
+             </property>
             </widget>
            </item>
            <item>
@@ -270,7 +291,11 @@
             </spacer>
            </item>
            <item>
-            <widget class="Ms::FontStyleSelect" name="beginFontStyle" native="true"/>
+            <widget class="Ms::FontStyleSelect" name="beginFontStyle" native="true">
+             <property name="accessibleName">
+              <string>Font style</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -294,6 +319,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Alignment' values</string>
            </property>
           </widget>
          </item>
@@ -462,6 +490,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Alignment' values</string>
+           </property>
           </widget>
          </item>
          <item row="0" column="0" colspan="2">
@@ -534,6 +565,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Placement' value</string>
+           </property>
           </widget>
          </item>
          <item row="6" column="1">
@@ -567,6 +601,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Offset' values</string>
+           </property>
           </widget>
          </item>
          <item row="0" column="2">
@@ -577,6 +614,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Text' value</string>
+           </property>
           </widget>
          </item>
          <item row="2" column="2">
@@ -586,6 +626,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Font face' value</string>
            </property>
           </widget>
          </item>
@@ -629,6 +672,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Font style' values</string>
+           </property>
           </widget>
          </item>
          <item row="4" column="0" colspan="2">
@@ -651,6 +697,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="accessibleName">
+              <string>Reset 'Font size' value</string>
+             </property>
             </widget>
            </item>
            <item>
@@ -667,7 +716,11 @@
             </spacer>
            </item>
            <item>
-            <widget class="Ms::FontStyleSelect" name="continueFontStyle" native="true"/>
+            <widget class="Ms::FontStyleSelect" name="continueFontStyle" native="true">
+             <property name="accessibleName">
+              <string>Font style</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -735,6 +788,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Font style' values</string>
+           </property>
           </widget>
          </item>
          <item row="6" column="2">
@@ -768,6 +824,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Offset' values</string>
+           </property>
           </widget>
          </item>
          <item row="5" column="3">
@@ -777,6 +836,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Alignment' values</string>
            </property>
           </widget>
          </item>
@@ -788,6 +850,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Placement' value</string>
+           </property>
           </widget>
          </item>
          <item row="0" column="3">
@@ -798,10 +863,17 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Text' value</string>
+           </property>
           </widget>
          </item>
          <item row="2" column="3">
-          <widget class="Ms::ResetButton" name="resetEndFontFace" native="true"/>
+          <widget class="Ms::ResetButton" name="resetEndFontFace" native="true">
+           <property name="accessibleName">
+            <string>Reset 'Font face' value</string>
+           </property>
+          </widget>
          </item>
          <item row="7" column="2">
           <widget class="Ms::OffsetSelect" name="endTextOffset" native="true">
@@ -898,6 +970,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="accessibleName">
+              <string>Reset 'Font size' value</string>
+             </property>
             </widget>
            </item>
            <item>
@@ -914,7 +989,11 @@
             </spacer>
            </item>
            <item>
-            <widget class="Ms::FontStyleSelect" name="endFontStyle" native="true"/>
+            <widget class="Ms::FontStyleSelect" name="endFontStyle" native="true">
+             <property name="accessibleName">
+              <string>Font style</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -945,6 +1024,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Height' value</string>
+        </property>
        </widget>
       </item>
       <item row="3" column="2">
@@ -955,6 +1037,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'End hook' value</string>
+        </property>
        </widget>
       </item>
       <item row="0" column="2">
@@ -964,6 +1049,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Begin hook' value</string>
         </property>
        </widget>
       </item>
@@ -1090,6 +1178,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>Ms::FontStyleSelect</class>
    <extends>QWidget</extends>
    <header>inspector/fontStyleSelect.h</header>
@@ -1105,12 +1199,6 @@
    <class>Ms::OffsetSelect</class>
    <extends>QWidget</extends>
    <header>inspector/offsetSelect.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Ms::ResetButton</class>
-   <extends>QWidget</extends>
-   <header>inspector/resetButton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -1136,9 +1224,7 @@
   <tabstop>endFontSize</tabstop>
   <tabstop>endTextPlacement</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>hasBeginText</sender>

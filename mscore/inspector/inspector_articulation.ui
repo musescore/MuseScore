@@ -122,6 +122,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Anchor' value</string>
+        </property>
        </widget>
       </item>
       <item row="0" column="0">
@@ -158,6 +161,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Play' value</string>
+        </property>
        </widget>
       </item>
       <item row="0" column="2">
@@ -167,6 +173,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
         </property>
        </widget>
       </item>
@@ -230,6 +239,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Time stretch' value</string>
            </property>
           </widget>
          </item>
@@ -300,6 +312,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Ornament style' value</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -323,9 +338,7 @@
   <tabstop>direction</tabstop>
   <tabstop>anchor</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>playArticulation</sender>

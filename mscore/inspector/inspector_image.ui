@@ -134,6 +134,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Scale to frame size' value</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="3">
@@ -143,6 +146,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Size' values</string>
         </property>
        </widget>
       </item>
@@ -154,6 +160,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Size in spatium units' value</string>
+        </property>
        </widget>
       </item>
       <item row="4" column="3">
@@ -163,6 +172,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Lock aspect ratio' value</string>
         </property>
        </widget>
       </item>
@@ -191,8 +203,6 @@
   <tabstop>sizeIsSpatium</tabstop>
   <tabstop>lockAspectRatio</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -84,6 +84,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Change speed' value</string>
+        </property>
        </widget>
       </item>
       <item row="6" column="1">
@@ -120,6 +123,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Style' value</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="1">
@@ -145,6 +151,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Change speed</string>
         </property>
         <property name="currentIndex">
          <number>1</number>
@@ -218,6 +227,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Dynamic range' value</string>
         </property>
        </widget>
       </item>
@@ -309,6 +321,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
         </property>
        </widget>
       </item>
