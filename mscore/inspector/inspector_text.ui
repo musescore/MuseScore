@@ -115,6 +115,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Frame' value</string>
+        </property>
        </widget>
       </item>
       <item row="6" column="1" colspan="2">
@@ -140,6 +143,9 @@
         </property>
         <property name="toolTip">
          <string>Text alignment</string>
+        </property>
+        <property name="accessibleName">
+         <string>Alignment</string>
         </property>
        </widget>
       </item>
@@ -172,6 +178,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="accessibleName">
+           <string>Reset 'Style' values</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -194,6 +203,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="accessibleName">
+           <string>Style</string>
           </property>
          </widget>
         </item>
@@ -232,7 +244,7 @@
             </sizepolicy>
            </property>
            <property name="accessibleName">
-            <string>Text margin</string>
+            <string>Margin</string>
            </property>
            <property name="suffix">
             <string>sp</string>
@@ -261,7 +273,7 @@
             </sizepolicy>
            </property>
            <property name="accessibleName">
-            <string>Foreground color</string>
+            <string>Border color</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::Box</enum>
@@ -275,6 +287,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Border color' values</string>
            </property>
           </widget>
          </item>
@@ -296,6 +311,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Width' value</string>
+           </property>
           </widget>
          </item>
          <item row="6" column="2">
@@ -305,6 +323,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Corner radius' value</string>
            </property>
           </widget>
          </item>
@@ -326,6 +347,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Thickness' value</string>
+           </property>
           </widget>
          </item>
          <item row="3" column="2">
@@ -335,6 +359,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Highlight color' values</string>
            </property>
           </widget>
          </item>
@@ -347,7 +374,7 @@
             </sizepolicy>
            </property>
            <property name="accessibleName">
-            <string>Border</string>
+            <string>Thickness</string>
            </property>
            <property name="prefix">
             <string/>
@@ -382,7 +409,7 @@
             </sizepolicy>
            </property>
            <property name="accessibleName">
-            <string>Background color</string>
+            <string>Highlight color</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::Box</enum>
@@ -408,7 +435,7 @@
             </sizepolicy>
            </property>
            <property name="accessibleName">
-            <string>Border radius</string>
+            <string>Corner radius</string>
            </property>
           </widget>
          </item>
@@ -422,6 +449,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Font face' value</string>
         </property>
        </widget>
       </item>
@@ -471,6 +501,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Alignment' values</string>
+        </property>
        </widget>
       </item>
       <item row="3" column="0" colspan="3">
@@ -500,6 +533,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Follow staff size' value</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="3">
@@ -510,6 +546,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Style' values</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -518,6 +557,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Ms::ResetButton</class>
+   <extends>QWidget</extends>
+   <header>inspector/resetButton.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>Awl::ColorLabel</class>
    <extends>QFrame</extends>
@@ -536,12 +581,6 @@
    <header>inspector/alignSelect.h</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>Ms::ResetButton</class>
-   <extends>QWidget</extends>
-   <header>inspector/resetButton.h</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
@@ -554,8 +593,6 @@
   <tabstop>frameRound</tabstop>
   <tabstop>resetToStyle</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

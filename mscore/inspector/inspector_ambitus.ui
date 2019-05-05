@@ -84,6 +84,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Line thickness' value</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
@@ -217,6 +220,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Has line' value</string>
         </property>
        </widget>
       </item>
@@ -457,6 +463,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Head type' value</string>
+        </property>
        </widget>
       </item>
       <item row="0" column="1">
@@ -563,6 +572,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Head group' value</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="2">
@@ -572,6 +584,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Direction' value</string>
         </property>
        </widget>
       </item>
@@ -861,9 +876,7 @@
   <tabstop>bottomTpc</tabstop>
   <tabstop>bottomOctave</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>hasLine</sender>

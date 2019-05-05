@@ -104,6 +104,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Head group' value</string>
+        </property>
        </widget>
       </item>
       <item row="12" column="0" colspan="4">
@@ -173,6 +176,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Head type' value</string>
+        </property>
        </widget>
       </item>
       <item row="3" column="2">
@@ -223,6 +229,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Play' value</string>
         </property>
        </widget>
       </item>
@@ -319,6 +328,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Small' value</string>
+        </property>
        </widget>
       </item>
       <item row="5" column="0" colspan="3">
@@ -354,6 +366,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Mirror head' value</string>
         </property>
        </widget>
       </item>
@@ -415,6 +430,9 @@
              <height>0</height>
             </size>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Velocity type' value</string>
+           </property>
           </widget>
          </item>
          <item row="2" column="1">
@@ -454,6 +472,9 @@
              <height>0</height>
             </size>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Velocity' value</string>
+           </property>
           </widget>
          </item>
          <item row="1" column="1">
@@ -491,6 +512,9 @@
              <width>10</width>
              <height>0</height>
             </size>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Tuning' value</string>
            </property>
           </widget>
          </item>
@@ -575,6 +599,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="accessibleName">
+           <string>Reset 'Fix to line' value</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -605,6 +632,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Line' value</string>
         </property>
        </widget>
       </item>
@@ -642,9 +672,7 @@
   <tabstop>beam</tabstop>
   <tabstop>tuplet</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>fixed</sender>

@@ -109,6 +109,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Color' values</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="3">
@@ -118,6 +121,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Offset' values</string>
         </property>
        </widget>
       </item>
@@ -129,6 +135,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Stacking order (Z)' value</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="3">
@@ -138,6 +147,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Automatic placement' value</string>
         </property>
        </widget>
       </item>
@@ -166,6 +178,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="accessibleName">
+           <string>Reset 'Visible' value</string>
           </property>
          </widget>
         </item>
@@ -302,8 +317,6 @@
   <tabstop>autoplace</tabstop>
   <tabstop>z</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

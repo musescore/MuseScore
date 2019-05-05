@@ -197,6 +197,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Follow text' value</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="2">
@@ -206,6 +209,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Tempo' value</string>
         </property>
        </widget>
       </item>
@@ -217,6 +223,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Style' value</string>
+        </property>
        </widget>
       </item>
       <item row="3" column="2">
@@ -226,6 +235,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
         </property>
        </widget>
       </item>
@@ -249,8 +261,6 @@
   <tabstop>style</tabstop>
   <tabstop>placement</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

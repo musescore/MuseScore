@@ -186,6 +186,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="3">
@@ -195,6 +198,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Numbers only' value</string>
         </property>
        </widget>
       </item>

@@ -79,19 +79,6 @@
       <property name="spacing">
        <number>3</number>
       </property>
-      <item row="4" column="0">
-       <widget class="QCheckBox" name="playBend">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Play</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
@@ -141,6 +128,9 @@
             <height>0</height>
            </size>
           </property>
+          <property name="accessibleName">
+           <string>Font style</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -179,6 +169,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Size' value</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="1">
@@ -207,6 +200,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Font' value</string>
         </property>
        </widget>
       </item>
@@ -240,6 +236,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Style' values</string>
         </property>
        </widget>
       </item>
@@ -276,6 +275,19 @@
        <widget class="QPushButton" name="properties">
         <property name="text">
          <string>Properties</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <widget class="QCheckBox" name="playBend">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Play</string>
         </property>
        </widget>
       </item>
