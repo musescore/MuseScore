@@ -151,11 +151,10 @@ MasterScore* MasterScore::unrollRepeats()
       score->setName(original->title()+"_unrolled");
 
       // figure out repeat structure
-      original->repeatList()->unwind();
-      original->setPlaylistDirty();
+      original->setExpandRepeats(true);
 
       // if no repeats, just return the score as-is
-      if (original->repeatList()->count() == 1)
+      if (original->repeatList().size() == 1)
             return score;
 
       // remove excerpts for now (they are re-created after unrolling master score)
@@ -167,7 +166,7 @@ MasterScore* MasterScore::unrollRepeats()
 
       // follow along with the repeatList
       bool first = true;
-      for (const RepeatSegment* rs: *(original->repeatList()) ) {
+      for (const RepeatSegment* rs: original->repeatList()) {
             Fraction startTick = Fraction::fromTicks(rs->tick);
             Fraction endTick   = Fraction::fromTicks(rs->tick + rs->len());
 

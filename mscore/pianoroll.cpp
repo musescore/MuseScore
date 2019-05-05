@@ -598,8 +598,8 @@ void PianorollEditor::keyReleased(int /*p*/)
 void PianorollEditor::heartBeat(Seq* s)
       {
       unsigned tick = s->getCurTick();
-      if (score()->repeatList())
-            tick = score()->repeatList()->utick2tick(tick);
+      if (score()->masterScore())
+            tick = score()->masterScore()->repeatList().utick2tick(tick);
       if (locator[0].tick() != tick) {
             posChanged(POS::CURRENT, tick);
             if (preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG))
