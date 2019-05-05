@@ -131,6 +131,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Stemless' value</string>
+        </property>
        </widget>
       </item>
       <item row="3" column="2">
@@ -140,6 +143,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Stem direction' value</string>
         </property>
        </widget>
       </item>
@@ -168,6 +174,9 @@
             <width>18</width>
             <height>16777215</height>
            </size>
+          </property>
+          <property name="accessibleName">
+           <string>Reset 'Small' value</string>
           </property>
          </widget>
         </item>
@@ -204,6 +213,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Offset' values</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="0" colspan="2">
@@ -235,6 +247,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="accessibleName">
+           <string>Offset</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -264,8 +279,6 @@
   <tabstop>stemless</tabstop>
   <tabstop>stemDirection</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -84,6 +84,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Style' value</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="2">
@@ -93,6 +96,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Span to next staff' value</string>
         </property>
        </widget>
       </item>
@@ -104,6 +110,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Span to' value</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="2">
@@ -113,6 +122,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Span from' value</string>
         </property>
        </widget>
       </item>
@@ -311,8 +323,6 @@
   <tabstop>presetShort1</tabstop>
   <tabstop>presetShort2</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
