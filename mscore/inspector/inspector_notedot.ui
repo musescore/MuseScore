@@ -125,6 +125,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Dot position' value</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -144,8 +147,6 @@
   <tabstop>title</tabstop>
   <tabstop>dotPosition</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

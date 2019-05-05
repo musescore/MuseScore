@@ -91,7 +91,7 @@
       <item row="2" column="1" colspan="2">
        <widget class="Ms::OffsetSelect" name="pos" native="true">
         <property name="accessibleName">
-         <string>Offset</string>
+         <string>Position</string>
         </property>
        </widget>
       </item>

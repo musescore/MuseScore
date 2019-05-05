@@ -100,6 +100,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="2">
@@ -109,6 +112,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Time stretch' value</string>
         </property>
        </widget>
       </item>
@@ -176,6 +182,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Play' value</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -197,9 +206,7 @@
   <tabstop>playArticulation</tabstop>
   <tabstop>timeStretch</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>playArticulation</sender>

@@ -120,6 +120,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Small' value</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="3">
@@ -129,6 +132,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Bracket type' value</string>
         </property>
        </widget>
       </item>
@@ -150,8 +156,6 @@
   <tabstop>small</tabstop>
   <tabstop>bracket</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

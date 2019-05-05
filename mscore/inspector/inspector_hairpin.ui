@@ -87,6 +87,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Use single note dynamics' value</string>
+        </property>
        </widget>
       </item>
       <item row="11" column="1">
@@ -128,6 +131,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
+        </property>
        </widget>
       </item>
       <item row="11" column="2">
@@ -137,6 +143,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Dynamics method' value</string>
         </property>
        </widget>
       </item>
@@ -199,6 +208,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Dynamic range' value</string>
+        </property>
        </widget>
       </item>
       <item row="7" column="1">
@@ -219,9 +231,6 @@
       </item>
       <item row="10" column="0" colspan="2">
        <widget class="QCheckBox" name="singleNoteDynamics">
-        <property name="accessibleName">
-         <string>Use single note dynamics</string>
-        </property>
         <property name="text">
          <string>Use single note dynamics</string>
         </property>
@@ -263,6 +272,9 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Reset 'Velocity change' value</string>
         </property>
        </widget>
       </item>
@@ -315,6 +327,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Reset 'Continue height' value</string>
+           </property>
           </widget>
          </item>
          <item row="1" column="0">
@@ -332,9 +347,6 @@
            <property name="focusPolicy">
             <enum>Qt::TabFocus</enum>
            </property>
-           <property name="accessibleName">
-            <string>Circled tip</string>
-           </property>
            <property name="text">
             <string>Circled tip</string>
            </property>
@@ -347,6 +359,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Height' value</string>
            </property>
           </widget>
          </item>
@@ -367,6 +382,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Reset 'Circled tip' value</string>
            </property>
           </widget>
          </item>

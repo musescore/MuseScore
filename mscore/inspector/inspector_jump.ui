@@ -151,6 +151,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="accessibleName">
+         <string>Reset 'Play repeats' value</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -173,8 +176,6 @@
   <tabstop>continueAt</tabstop>
   <tabstop>playRepeats</tabstop>
  </tabstops>
- <resources>
-  <include location="../musescore.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
