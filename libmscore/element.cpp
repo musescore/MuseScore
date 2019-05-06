@@ -167,8 +167,8 @@ Element::Element(Score* s, ElementFlags f)
       _mag           = 1.0;
       _tag           = 1;
       _z             = -1;
-      _fixed         = false;
       _offsetChanged = 0;
+      //_minDistance   = 0.0;
       }
 
 Element::Element(const Element& e)
@@ -185,8 +185,8 @@ Element::Element(const Element& e)
       _tag        = e._tag;
       _z          = e._z;
       _color      = e._color;
-      _fixed      = e._fixed;
       _offsetChanged = e._offsetChanged;
+      _minDistance   = e._minDistance;
       itemDiscovered = false;
       }
 
@@ -229,7 +229,7 @@ void Element::reset()
       {
       undoResetProperty(Pid::AUTOPLACE);
       undoResetProperty(Pid::PLACEMENT);
-      undoResetProperty(Pid::FIXED);
+      undoResetProperty(Pid::MIN_DISTANCE);
       undoResetProperty(Pid::OFFSET);
       setOffsetChanged(false);
       ScoreElement::reset();
@@ -577,9 +577,6 @@ void Element::writeProperties(XmlWriter& xml) const
             if (propertyFlags(pid) == PropertyFlags::NOSTYLE)
                   writeProperty(xml, pid);
             }
-      writeProperty(xml, Pid::FIXED);
-      if (fixed())
-            writeProperty(xml, Pid::CHANGED_POS);
       }
 
 //---------------------------------------------------------
@@ -594,9 +591,7 @@ bool Element::readProperties(XmlReader& e)
             ;
       else if (readProperty(tag, e, Pid::OFFSET))
             ;
-      else if (readProperty(tag, e, Pid::FIXED))
-            ;
-      else if (readProperty(tag, e, Pid::CHANGED_POS))
+      else if (readProperty(tag, e, Pid::MIN_DISTANCE))
             ;
       else if (readProperty(tag, e, Pid::AUTOPLACE))
             ;
@@ -1162,10 +1157,8 @@ QVariant Element::getProperty(Pid propertyId) const
                   return selected();
             case Pid::OFFSET:
                   return _offset;
-            case Pid::CHANGED_POS:
-                  return _changedPos;
-            case Pid::FIXED:
-                  return fixed();
+            case Pid::MIN_DISTANCE:
+                  return _minDistance;
             case Pid::PLACEMENT:
                   return int(placement());
             case Pid::AUTOPLACE:
@@ -1209,11 +1202,8 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
             case Pid::OFFSET:
                   _offset = v.toPointF();
                   break;
-            case Pid::CHANGED_POS:
-                  _changedPos = v.toPointF();
-                  break;
-            case Pid::FIXED:
-                  setFixed(v.toBool());
+            case Pid::MIN_DISTANCE:
+                  setMinDistance(v.value<Spatium>());
                   break;
             case Pid::PLACEMENT:
                   setPlacement(Placement(v.toInt()));
@@ -1276,13 +1266,12 @@ QVariant Element::propertyDefault(Pid pid) const
                         return v;
                   return QPointF();
                   }
-            case Pid::CHANGED_POS:
-                  return QPointF();
-            case Pid::FIXED:
-                  return false;
-                  break;
-            case Pid::STAFF_YOFFSET:
+            case Pid::MIN_DISTANCE: {
+                  QVariant v = ScoreElement::propertyDefault(pid);
+                  if (v.isValid())
+                        return v;
                   return 0.0;
+                  }
             case Pid::AUTOPLACE:
                   return true;
             case Pid::Z:
@@ -2009,6 +1998,9 @@ void Element::startEditDrag(EditData& ed)
             ed.addData(eed);
             }
       eed->pushProperty(Pid::OFFSET);
+      eed->pushProperty(Pid::AUTOPLACE);
+      if (ed.modifiers & Qt::AltModifier)
+            setAutoplace(false);
       }
 
 //---------------------------------------------------------
@@ -2187,13 +2179,11 @@ void Element::autoplaceSegmentElement(qreal minDistance)
 
 void Element::setOffsetChanged(bool v, bool absolute, const QPointF& diff)
       {
-      if (v) {
+      if (v)
             _offsetChanged = absolute ? 1 : -1;
-            _changedPos = pos() + diff;
-            }
-      else {
+      else
             _offsetChanged = 0;
-            }
+      _changedPos = pos() + diff;
       }
 
 //---------------------------------------------------------
@@ -2211,9 +2201,22 @@ void Element::autoplaceCalculateOffset(QRectF& r, qreal minDistance)
 
 void Element::autoplaceSegmentElement(qreal minDistance)
       {
+      // rebase vertical offset on drag
+      int changed = offsetChanged();
+      qreal rebase = _changedPos.y() - pos().y();
+      if (changed > 0) {
+            QPointF p = offset();
+            p.ry() += rebase;
+            rebase = 0.0;
+            undoChangeProperty(Pid::OFFSET, p);
+            }
+
       if (autoplace() && parent()) {
             Segment* s = toSegment(parent());
             Measure* m = s->measure();
+
+            minDistance = _minDistance.val() * score()->spatium();
+            qreal sp = score()->spatium();
 
             int si = staffIdx();
             if (systemFlag()) {
@@ -2222,22 +2225,13 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                         si = firstVis;
                   }
             else {
-                  minDistance *= staff()->mag(tick());
+                  qreal mag = staff()->mag(tick());
+                  minDistance *= mag;
+                  sp *= mag;
                   }
 
             SysStaff* ss = m->system()->staff(si);
-#if 1
             QRectF r = bbox().translated(m->pos() + s->pos() + pos());
-
-            int changed = offsetChanged();
-            qreal rebase = _changedPos.y() - pos().y();
-            if (changed > 0) {
-                  // rebase offset
-                  QPointF p = offset();
-                  p.ry() += rebase;
-                  undoChangeProperty(Pid::OFFSET, p);       //ryoffset() += rebase;
-                  r.translate(0.0, rebase);
-                  }
 
             SkylineLine sk(!placeAbove());
             qreal d;
@@ -2254,125 +2248,54 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                   qreal yd = d + minDistance;
                   if (placeAbove())
                         yd *= -1.0;
-                  if (fixed()) {
-                        if (changed)
-                              undoChangeProperty(Pid::CHANGED_POS, QPointF(0.0, -yd));//_changedPos = QPointF(0.0, -yd);
-                        // fixed user offset
-                        bool outside = placeAbove() ? r.bottom() < 0.0 : r.top() > staff()->height();
-                        if (outside)
-                              yd += _changedPos.y();
-                        else
+
+                  if (changed) {
+                        // user moved element with the skyline
+                        // we may need to adjust minDistance, yd, and/or offset
+                        PropertyFlags pf = propertyFlags(Pid::MIN_DISTANCE);
+                        if (pf == PropertyFlags::STYLED)
+                              pf = PropertyFlags::UNSTYLED;
+                        qreal adjustedY = pos().y() + yd;
+                        qreal diff = _changedPos.y() - adjustedY;
+                        bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
+                        if (inStaff) {
+                              // any movement into staff becomes fixed
+                              undoChangeProperty(Pid::MIN_DISTANCE, -999.99, pf);
                               yd = 0.0;
-                        //undoChangeProperty(Pid::CHANGED_POS, QPointF(0.0, -yd));
-                        }
-                  else if (changed) {
-                        // user apparently moved element into skyline
-                        // but perhaps not really, if performing a relative adjustment
-                        bool fix = false;
-                        if (changed < 0) {
-                              // relative movement (cursor): fix only if moving vertically into direction of skyline
-                              qreal adjustedY = pos().y() + yd;
-                              if ((placeAbove() && _changedPos.y() > adjustedY) || (placeBelow() && _changedPos.y() < adjustedY)) {
-                                    // rebase offset
-                                    // TODO: DEBUG - still need to do min/max in cases where user offset was already set?
-                                    //ryoffset() += rebase;
-                                    QPointF p = offset();
-                                    p.ry() += rebase;
-                                    undoChangeProperty(Pid::OFFSET, p);       //ryoffset() += rebase;
-                                    //_changedPos = QPointF(0.0, rebase - yd);
-                                    undoChangeProperty(Pid::CHANGED_POS, QPointF(0.0, rebase - yd));
-                                    fix = true;
+                              }
+                        else if (!isStyled(Pid::MIN_DISTANCE)) {
+                              undoChangeProperty(Pid::MIN_DISTANCE, -d / sp, pf);
+                              yd += diff;
+                              }
+                        else {
+                              // min distance still styled
+                              // user apparently moved element into skyline
+                              // but perhaps not really, if performing a relative adjustment
+                              if (changed < 0) {
+                                    // relative movement (cursor): fix only if moving vertically into direction of skyline
+                                    if ((placeAbove() && diff > 0.0) || (placeBelow() && diff < 0.0)) {
+                                          // rebase offset
+                                          QPointF p = offset();
+                                          p.ry() += rebase;
+                                          undoChangeProperty(Pid::OFFSET, p);
+                                          r.translate(0.0, rebase);
+                                          undoChangeProperty(Pid::MIN_DISTANCE, (minDistance - diff) / sp, pf);
+                                          yd = 0.0;
+                                          }
                                     }
-                              }
-                        else if (changed > 0) {
-                              // absolute movement (drag): fix unconditionally
-                              //_changedPos = QPointF(0.0, -yd);
-                              undoChangeProperty(Pid::CHANGED_POS, QPointF(0.0, -yd));
-                              fix = true;
-                              }
-                        if (fix) {
-                              yd = 0.0;
-                              score()->undo(new ChangeProperty(this, Pid::FIXED, true));
+                              else {
+                                    // absolute movement (drag): fix unconditionally
+                                    undoChangeProperty(Pid::MIN_DISTANCE, -d / sp, pf);
+                                    yd = 0.0;
+                                    }
                               }
                         }
                   rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
-            if (addToSkyline() && minDistance >= 0.0)
+            if (addToSkyline())
                   ss->skyline().add(r);
             }
-#else
-            QRectF r = bbox().translated(m->pos() + s->pos() + ipos());
-            qreal defaultOffset = propertyDefault(Pid::OFFSET).toPointF().y();
-            QPointF p = QPointF(offset().x(), defaultOffset);
-            r.translate(p);
-
-            int changed = offsetChanged();
-            qreal rebase = changed ? _changedPos.y() - pos().y() : 0;
-            //if (changed)
-            //      r.translate(0.0, rebase);
-
-//            if (!fixed()) {
-            SkylineLine sk(!placeAbove());
-            qreal d;
-            if (placeAbove()) {
-                  sk.add(r.x(), r.bottom(), r.width());
-                  d = sk.minDistance(ss->skyline().north());
-                  }
-            else {
-                  sk.add(r.x(), r.top(), r.width());
-                  d = ss->skyline().south().minDistance(sk);
-                  }
-            qreal yd = d + minDistance;
-            bool defaultIntrudes = (yd > 0);
-            qreal adj = placeAbove() ? -yd : yd;
-
-            if (changed < 0)
-                  ryoffset() += rebase;
-            qreal userOffset = offset().y() - defaultOffset;
-            //if (changed > 0)
-            //      userOffset += rebase;
-
-            if (fixed()) {
-                  // fixed user offset - do nothing unless outside staff
-                  qreal y = pos().y();
-                  bool outside = placeAbove() ? y < 0.0 : y > staff()->height();
-                  if (outside)
-                        ryoffset() += adj - userOffset;     // TODO: DEBUG
-                  }
-            else if (isStyled(Pid::OFFSET)) {
-                  // no user offset - normal adjustment
-                  if (defaultIntrudes) {
-                        rypos() += adj;
-                        }
-                  }
-            else {
-                  // non-fixed user offset
-                  bool actualIntrudes = placeAbove() ? userOffset + rebase > adj : userOffset + rebase < adj;
-                  if (actualIntrudes && changed) {
-                        // user moved element into skyline - allow the overlap
-                        if (changed > 0)
-                              ryoffset() += adj;
-                        if (!fixed())
-                              score()->undo(new ChangeProperty(this, Pid::FIXED, true));
-                        }
-                  else if (actualIntrudes) {
-                        // normal adjustment
-                        rypos() += adj - userOffset;
-                        }
-                  else if (defaultIntrudes && changed > 0) {
-                        // user moved element - adjust
-                        rypos() += rebase + adj + userOffset;     // TODO: DEBUG
-                        }
-                  }
-//                  }
-
-            if (addToSkyline() && minDistance >= 0.0) {
-                  r = bbox().translated(m->pos() + s->pos() + pos());
-                  ss->skyline().add(r);
-                  }
-            }
-#endif
       _offsetChanged = 0;
       }
 

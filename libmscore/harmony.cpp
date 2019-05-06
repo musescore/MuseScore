@@ -139,6 +139,7 @@ qDebug("ResolveDegreeList: not found in table");
 
 const ElementStyle chordSymbolStyle {
       { Sid::harmonyPlacement, Pid::PLACEMENT  },
+      { Sid::minHarmonyDistance, Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------

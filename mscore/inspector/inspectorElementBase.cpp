@@ -32,6 +32,7 @@ InspectorElementBase::InspectorElementBase(QWidget* parent)
             { Pid::COLOR,     0, e.color,      e.resetColor     },
             { Pid::OFFSET,    0, e.offset,     e.resetOffset    },
             { Pid::AUTOPLACE, 0, e.autoplace,  e.resetAutoplace },
+            { Pid::MIN_DISTANCE, 0, e.minDistance, e.resetMinDistance },
             };
       pList = { { e.title, e.panel } };
       }

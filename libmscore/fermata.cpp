@@ -31,6 +31,7 @@ namespace Ms {
 
 static const ElementStyle fermataStyle {
       { Sid::fermataPosAbove, Pid::OFFSET },
+      { Sid::fermataMinDistance, Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------

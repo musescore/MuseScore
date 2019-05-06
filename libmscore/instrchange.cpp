@@ -29,6 +29,7 @@ namespace Ms {
 
 static const ElementStyle instrumentChangeStyle {
       { Sid::instrumentChangePlacement,          Pid::PLACEMENT              },
+      { Sid::instrumentChangeMinDistance,        Pid::MIN_DISTANCE           },
       };
 
 //---------------------------------------------------------

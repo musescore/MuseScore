@@ -147,6 +147,9 @@ void LineSegment::startEditDrag(EditData& ed)
       ElementEditData* eed = ed.getData(this);
       eed->pushProperty(Pid::OFFSET);
       eed->pushProperty(Pid::OFFSET2);
+      eed->pushProperty(Pid::AUTOPLACE);
+      if (ed.modifiers & Qt::AltModifier)
+            setAutoplace(false);
       }
 
 //---------------------------------------------------------

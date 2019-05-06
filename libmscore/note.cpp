@@ -583,7 +583,7 @@ Note::Note(const Note& n, bool link)
       _userMirror        = n._userMirror;
       _small             = n._small;
       _userDotPosition   = n._userDotPosition;
-      //_fixed             = n._fixed;
+      _fixed             = n._fixed;
       _fixedLine         = n._fixedLine;
       _accidental        = 0;
       _cachedNoteheadSym = n._cachedNoteheadSym;
