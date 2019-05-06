@@ -318,6 +318,7 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::CLEF_TYPE_TRANSPOSING,   true,  "transposingClefType",   P_TYPE::CLEF_TYPE,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "transposing clef type") },
       { Pid::KEY,                     true,  "accidental",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "key")              },
       { Pid::ACTION,                  false, "action",                P_TYPE::STRING,              0                                                           },
+      { Pid::CHANGED_POS,             false, "changedPos",            P_TYPE::POINT_SP,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "changed position") },
 
       { Pid::END, false, "++end++", P_TYPE::INT, DUMMY_QT_TRANSLATE_NOOP("propertyName", "<invalid property>") }
       };
