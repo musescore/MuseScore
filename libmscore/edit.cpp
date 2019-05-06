@@ -1480,7 +1480,9 @@ void Score::cmdFlip()
                || e->isPedalSegment()
                || e->isFermata()
                || e->isLyrics()
-               || e->isTrillSegment()) {
+               || e->isTrillSegment()
+               || e->isHarmony()
+               || e->isInstrumentChange()) {
                   e->undoChangeProperty(Pid::AUTOPLACE, true);
                   // getProperty() delegates call from spannerSegment to Spanner:
                   Placement p = Placement(e->getProperty(Pid::PLACEMENT).toInt());
