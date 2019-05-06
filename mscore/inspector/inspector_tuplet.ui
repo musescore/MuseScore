@@ -98,7 +98,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Teset 'Style' values</string>
+         <string>Reset 'Style' values</string>
         </property>
        </widget>
       </item>
