@@ -20,6 +20,7 @@ namespace Ms {
 
 static const ElementStyle systemStyle {
       { Sid::systemTextPlacement,                Pid::PLACEMENT              },
+      { Sid::systemTextMinDistance,              Pid::MIN_DISTANCE           },
       };
 
 //---------------------------------------------------------

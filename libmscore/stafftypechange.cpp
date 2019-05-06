@@ -212,7 +212,8 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      staff()->staffTypeListChanged(measure()->tick());
+      if (parent())
+            staff()->staffTypeListChanged(measure()->tick());
       return true;
       }
 

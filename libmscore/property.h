@@ -331,7 +331,7 @@ enum class Pid {
       CLEF_TYPE_TRANSPOSING,
       KEY,
       ACTION, // for Icon
-      CHANGED_POS,
+      MIN_DISTANCE,
 
       END
       };
