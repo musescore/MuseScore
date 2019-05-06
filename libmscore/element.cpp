@@ -168,7 +168,7 @@ Element::Element(Score* s, ElementFlags f)
       _tag           = 1;
       _z             = -1;
       _offsetChanged = 0;
-      //_minDistance   = 0.0;
+      _minDistance   = Spatium(0.0);
       }
 
 Element::Element(const Element& e)
@@ -2279,7 +2279,8 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                                           p.ry() += rebase;
                                           undoChangeProperty(Pid::OFFSET, p);
                                           r.translate(0.0, rebase);
-                                          undoChangeProperty(Pid::MIN_DISTANCE, (minDistance - diff) / sp, pf);
+                                          qreal nmd = placeAbove() ? minDistance - diff : minDistance + diff;
+                                          undoChangeProperty(Pid::MIN_DISTANCE, nmd / sp, pf);
                                           yd = 0.0;
                                           }
                                     }
