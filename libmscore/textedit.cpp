@@ -71,12 +71,14 @@ void TextBase::startEdit(EditData& ed)
 void TextBase::endEdit(EditData& ed)
       {
       TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-      score()->undoStack()->remove(ted->startUndoIdx);           // remove all undo/redo records
+      const QString actualText = xmlText();
+      UndoStack* undo = score()->undoStack();
+      while (undo->getCurIdx() > ted->startUndoIdx)
+            undo->undo(&ed);
 
       // replace all undo/redo records collected during text editing with
       // one property change
 
-      QString actualText = xmlText();
       if (ted->oldXmlText.isEmpty()) {
             UndoStack* us = score()->undoStack();
             UndoCommand* ucmd = us->last();
@@ -93,7 +95,6 @@ void TextBase::endEdit(EditData& ed)
                                     ed.element = 0;
                                     }
                               else {
-                                    setXmlText(ted->oldXmlText);  // reset text to value before editing
                                     us->reopen();
                                     // combine undo records of text creation with text editing
                                     undoChangeProperty(Pid::TEXT, actualText);
@@ -113,7 +114,6 @@ void TextBase::endEdit(EditData& ed)
             score()->endCmd();
             return;
             }
-      setXmlText(ted->oldXmlText);                    // reset text to value before editing
       score()->startCmd();
       undoChangeProperty(Pid::TEXT, actualText);      // change property to set text to actual value again
                                                       // this also changes text of linked elements
