@@ -532,7 +532,7 @@ void MuseScore::editInstrList()
 
       masterScore->setLayoutAll();
       masterScore->endCmd();
-      masterScore->rebuildAndUpdateExpressive(synti);
+      masterScore->rebuildAndUpdateExpressive(MuseScore::synthesizer("Fluid"));
       seq->initInstruments();
       }
 

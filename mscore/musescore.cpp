@@ -6657,6 +6657,15 @@ SynthesizerState MuseScore::synthesizerState() const
       }
 
 //---------------------------------------------------------
+//   synthesizer
+//---------------------------------------------------------
+
+Synthesizer* MuseScore::synthesizer(const QString& name)
+      {
+      return synti ? synti->synthesizer(name) : nullptr;
+      }
+
+//---------------------------------------------------------
 //   canSaveMp3
 //---------------------------------------------------------
 

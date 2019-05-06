@@ -764,7 +764,7 @@ MasterScore* MuseScore::getNewFile()
             score->setSynthesizerState(synti->state());
 
       // Call this even if synti doesn't exist - we need to rebuild either way
-      score->rebuildAndUpdateExpressive(synti);
+      score->rebuildAndUpdateExpressive(MuseScore::synthesizer("Fluid"));
 
       {
             ScoreLoad sl;
@@ -2340,7 +2340,7 @@ Score::FileError readScore(MasterScore* score, QString name, bool ignoreVersionE
             s->setLayoutAll();
             }
       score->updateChannel();
-      score->updateExpressive(synti);
+      score->updateExpressive(MuseScore::synthesizer("Fluid"));
       score->setSaved(false);
       score->update();
 
