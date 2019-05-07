@@ -1351,7 +1351,17 @@ void SpannerSegment::autoplaceSpannerSegment(qreal minDistance)
 
       if (spanner()->anchor() == Spanner::Anchor::NOTE)
             return;
+#if 0
+      // TODO:
+      // - add MIN_DISTANCE to element style and align with PR for spanner placement
+      // - eliminate minDistance parameter
+      // - factor out calculation of "yd" from setting of rypos() below
 
+      // rebase vertical offset on drag
+      qreal rebase = 0.0;
+      if (offsetChanged())
+            rebase = rebaseOffset();
+#endif
       if (autoplace()) {
             if (!systemFlag() && !spanner()->systemFlag())
                   minDistance *= staff()->mag(spanner()->tick());

@@ -466,6 +466,7 @@ class Element : public ScoreElement {
       void autoplaceMeasureElement(bool add = true);
       void autoplaceCalculateOffset(QRectF& r, qreal minDistance);
       qreal rebaseOffset();
+      bool rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool fix);
 
       qreal styleP(Sid idx) const;
       };
