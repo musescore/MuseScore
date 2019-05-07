@@ -1366,8 +1366,8 @@ void SpannerSegment::autoplaceSpannerSegment()
                   sp *= staff()->mag(spanner()->tick());
             qreal md = minDistance().val() * sp;
             SkylineLine sl(!spanner()->placeAbove());
-            Shape sh = shape().translated(pos());
-            sl.add(sh);
+            Shape sh = shape();
+            sl.add(sh.translated(pos()));
             qreal yd = 0.0;
             if (spanner()->placeAbove()) {
                   qreal d  = system()->topDistance(staffIdx(), sl);
@@ -1383,7 +1383,8 @@ void SpannerSegment::autoplaceSpannerSegment()
                   if (offsetChanged()) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = spanner()->placeAbove() ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < staff()->height();
+                        qreal adj = pos().y() + rebase;
+                        bool inStaff = spanner()->placeAbove() ? sh.bottom() + adj > 0.0 : sh.top() + adj < staff()->height();
                         rebaseMinDistance(md, yd, sp, rebase, inStaff);
                         }
                   rypos() += yd;
