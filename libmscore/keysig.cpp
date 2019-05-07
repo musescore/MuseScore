@@ -109,9 +109,11 @@ void KeySig::layout()
       if (staff()) {
             // Look for a clef before the key signature at the same tick
             Clef* c = nullptr;
-            for (Segment* seg = segment()->prev1(); !c && seg && seg->tick() == tick(); seg = seg->prev1())
-                  if (seg->isClefType() || seg->isHeaderClefType())
-                        c = toClef(seg->element(track()));
+            if (segment()) {
+                  for (Segment* seg = segment()->prev1(); !c && seg && seg->tick() == tick(); seg = seg->prev1())
+                        if (seg->isClefType() || seg->isHeaderClefType())
+                              c = toClef(seg->element(track()));
+                  }
             if (c)
                   clef = c->clefType();
             else
