@@ -1491,6 +1491,7 @@ void MuseScore::setDefaultPalette()
       paletteBox->addPalette(newFingeringPalette());
       paletteBox->addPalette(newRepeatsPalette());
       paletteBox->addPalette(newFretboardDiagramPalette());
+      paletteBox->addPalette(newAccordionPalette());
       paletteBox->addPalette(newBagpipeEmbellishmentPalette());
       paletteBox->addPalette(newBreaksPalette());
       paletteBox->addPalette(newFramePalette());
