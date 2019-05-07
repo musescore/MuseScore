@@ -655,12 +655,12 @@ bool Score::saveFile(QFileInfo& info)
 //   loadStyle
 //---------------------------------------------------------
 
-bool Score::loadStyle(const QString& fn)
+bool Score::loadStyle(const QString& fn, bool ignore)
       {
       QFile f(fn);
       if (f.open(QIODevice::ReadOnly)) {
             MStyle st = style();
-            if (st.load(&f)) {
+            if (st.load(&f, ignore)) {
                   undo(new ChangeStyle(this, st));
                   return true;
                   }
