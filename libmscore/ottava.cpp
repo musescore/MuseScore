@@ -59,7 +59,7 @@ static const ElementStyle ottavaStyle {
 void OttavaSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(styleP(Sid::ottavaMinDistance));
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -237,6 +237,7 @@ int Ottava::pitchShift() const
 
 static const ElementStyle ottavaSegmentStyle {
       { Sid::ottavaPosAbove, Pid::OFFSET },
+      { Sid::ottavaMinDistance, Pid::MIN_DISTANCE },
       };
 
 LineSegment* Ottava::createLineSegment()

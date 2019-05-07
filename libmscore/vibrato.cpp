@@ -122,7 +122,7 @@ void VibratoSegment::layout()
       else
             symbolLine(SymId::wiggleVibrato, SymId::wiggleVibrato);
 
-      autoplaceSpannerSegment(styleP(Sid::vibratoMinDistance));
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------

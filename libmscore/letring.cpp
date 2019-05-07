@@ -49,7 +49,7 @@ static const ElementStyle letRingStyle {
 void LetRingSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(styleP(Sid::letRingMinDistance));
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------

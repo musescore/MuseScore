@@ -51,7 +51,7 @@ static const ElementStyle pedalStyle {
 void PedalSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(styleP(Sid::pedalMinDistance));
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -141,6 +141,7 @@ void Pedal::write(XmlWriter& xml) const
 
 static const ElementStyle pedalSegmentStyle {
       { Sid::pedalPosBelow, Pid::OFFSET },
+      { Sid::pedalMinDistance, Pid::MIN_DISTANCE },
       };
 
 LineSegment* Pedal::createLineSegment()

@@ -118,7 +118,7 @@ class SpannerSegment : public Element {
       virtual Element* prevSegmentElement() override;
       virtual QString accessibleInfo() const override;
       virtual void triggerLayout() const override;
-      void autoplaceSpannerSegment(qreal minDistance);
+      void autoplaceSpannerSegment();
       };
 
 //----------------------------------------------------------------------------------

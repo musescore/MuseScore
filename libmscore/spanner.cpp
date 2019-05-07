@@ -1340,7 +1340,7 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
 //   autoplaceSpannerSegment
 //---------------------------------------------------------
 
-void SpannerSegment::autoplaceSpannerSegment(qreal minDistance)
+void SpannerSegment::autoplaceSpannerSegment()
       {
       if (!parent()) {
             setOffset(QPointF());
@@ -1351,35 +1351,45 @@ void SpannerSegment::autoplaceSpannerSegment(qreal minDistance)
 
       if (spanner()->anchor() == Spanner::Anchor::NOTE)
             return;
-#if 0
+
       // TODO:
-      // - add MIN_DISTANCE to element style and align with PR for spanner placement
-      // - eliminate minDistance parameter
-      // - factor out calculation of "yd" from setting of rypos() below
+      // - add style for textline, letring, vibrato
 
       // rebase vertical offset on drag
       qreal rebase = 0.0;
       if (offsetChanged())
             rebase = rebaseOffset();
-#endif
+
       if (autoplace()) {
+            qreal sp = score()->spatium();
             if (!systemFlag() && !spanner()->systemFlag())
-                  minDistance *= staff()->mag(spanner()->tick());
+                  sp *= staff()->mag(spanner()->tick());
+            qreal md = minDistance().val() * sp;
             SkylineLine sl(!spanner()->placeAbove());
-            QPointF p = pos();
-            p.ry() -= offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
-            sl.add(shape().translated(p));
+            Shape sh = shape().translated(pos());
+            sl.add(sh);
+            qreal yd = 0.0;
             if (spanner()->placeAbove()) {
                   qreal d  = system()->topDistance(staffIdx(), sl);
-                  if (d > -minDistance)
-                        rypos() += -(d + minDistance);
+                  if (d > -md)
+                        yd = -(d + md);
                   }
             else {
                   qreal d  = system()->bottomDistance(staffIdx(), sl);
-                  if (d > -minDistance)
-                        rypos() += d + minDistance;
+                  if (d > -md)
+                        yd = d + md;
+                  }
+            if (yd != 0.0) {
+                  if (offsetChanged()) {
+                        // user moved element within the skyline
+                        // we may need to adjust minDistance, yd, and/or offset
+                        bool inStaff = spanner()->placeAbove() ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < staff()->height();
+                        rebaseMinDistance(md, yd, sp, rebase, inStaff);
+                        }
+                  rypos() += yd;
                   }
             }
+      setOffsetChanged(false);
       }
 
 //---------------------------------------------------------

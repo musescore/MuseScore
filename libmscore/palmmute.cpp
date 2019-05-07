@@ -50,7 +50,7 @@ static const ElementStyle palmMuteStyle {
 void PalmMuteSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(styleP(Sid::palmMuteMinDistance));
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -138,6 +138,7 @@ void PalmMute::write(XmlWriter& xml) const
 
 static const ElementStyle palmMuteSegmentStyle {
       { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
+      { Sid::palmMuteMinDistance,                   Pid::MIN_DISTANCE           },
       };
 
 LineSegment* PalmMute::createLineSegment()
