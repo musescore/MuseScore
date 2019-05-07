@@ -2560,6 +2560,7 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
 
       QAction* a = getAction("concert-pitch");
       a->setChecked(cs->styleB(Sid::concertPitch));
+      a->setText(a->isChecked() ? tr("Concert Pitch") : tr("Transposed"));
 
       setPos(cs->inputPos());
       //showMessage(cs->filePath(), 2000);
@@ -5818,7 +5819,9 @@ void MuseScore::endCmd()
                   SelState ss = cs->selection().state();
                   selectionChanged(ss);
                   }
-            getAction("concert-pitch")->setChecked(cs->styleB(Sid::concertPitch));
+            QAction* a = getAction("concert-pitch");
+            a->setChecked(cs->styleB(Sid::concertPitch));
+            a->setText(a->isChecked() ? tr("Concert Pitch") : tr("Transposed"));
 
             if (e == 0 && cs->noteEntryMode())
                   e = cs->inputState().cr();

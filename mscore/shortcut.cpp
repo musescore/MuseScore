@@ -2309,7 +2309,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "concert-pitch",
          QT_TRANSLATE_NOOP("action","Concert Pitch"),
-         QT_TRANSLATE_NOOP("action","Display in concert pitch"),
+         QT_TRANSLATE_NOOP("action","Toggle between 'Concert Pitch' and 'Transposed'"),
          0,
          Icons::Invalid_ICON,
          Qt::WindowShortcut
