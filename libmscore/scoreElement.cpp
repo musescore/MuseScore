@@ -288,13 +288,23 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v)
 
 void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
       {
+      if ((getProperty(id) == v) && (propertyFlags(id) == ps))
+            return;
       bool doUpdateInspector = false;
       if (id == Pid::PLACEMENT || id == Pid::HAIRPIN_TYPE) {
             // first set property, then set offset for above/below if styled
             changeProperties(this, id, v, ps);
 
-            if (isStyled(Pid::OFFSET))
-                  ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * score()->spatium());
+            if (isStyled(Pid::OFFSET)) {
+                  // TODO: maybe it just makes more sense to do this in Element::undoChangeProperty,
+                  // but some of the overrides call ScoreElement explicitly
+                  qreal sp;
+                  if (isElement())
+                        sp = toElement(this)->spatium();
+                  else
+                        sp = score()->spatium();
+                  ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * sp);
+                  }
             doUpdateInspector = true;
             }
       else if (id == Pid::SUB_STYLE) {
@@ -377,7 +387,7 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
             return;
       QVariant p = getProperty(pid);
       if (!p.isValid()) {
-            qDebug("%s invalid property %d <%s><%s>", name(), int(pid), propertyName(pid), propertyQmlName(pid));
+            qDebug("%s invalid property %d <%s>", name(), int(pid), propertyName(pid));
             return;
             }
       PropertyFlags f = propertyFlags(pid);
@@ -432,7 +442,7 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
 
 Pid ScoreElement::propertyId(const QStringRef& xmlName) const
       {
-      return propertyIdName(xmlName);
+      return Ms::propertyId(xmlName);
       }
 
 //---------------------------------------------------------
@@ -448,6 +458,10 @@ QString ScoreElement::propertyUserValue(Pid id) const
                   QPointF p = val.toPointF();
                   return QString("(%1, %2)").arg(p.x()).arg(p.y());
                   }
+            case P_TYPE::DIRECTION:
+                  return toUserString(val.value<Direction>());
+            case P_TYPE::SYMID:
+                  return Sym::id2userName(val.value<SymId>());
             default:
                   break;
             }
@@ -796,14 +810,28 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
       switch (propertyType(pid)) {
             case P_TYPE::SP_REAL:
                   return score()->styleP(sid);
-            case P_TYPE::POINT_SP:
-                  return score()->styleV(sid).toPointF() * score()->spatium();
+            case P_TYPE::POINT_SP: {
+                  QPointF val = score()->styleV(sid).toPointF() * score()->spatium();
+                  if (isElement()) {
+                        const Element* e = toElement(this);
+                        if (e->staff() && !e->systemFlag())
+                              val *= e->staff()->mag(e->tick());
+                        }
+                  return val;
+                  }
             case P_TYPE::POINT_SP_MM: {
                   QPointF val = score()->styleV(sid).toPointF();
-                  if (sizeIsSpatiumDependent())
+                  if (sizeIsSpatiumDependent()) {
                         val *= score()->spatium();
-                  else
+                        if (isElement()) {
+                              const Element* e = toElement(this);
+                              if (e->staff() && !e->systemFlag())
+                                    val *= e->staff()->mag(e->tick());
+                              }
+                        }
+                  else {
                         val *= DPMM;
+                        }
                   return val;
                   }
             default:

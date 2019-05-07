@@ -39,6 +39,7 @@
 #include "note.h"
 #include "drumset.h"
 #include "rest.h"
+#include "fret.h"
 
 Q_DECLARE_LOGGING_CATEGORY(undoRedo)
 
@@ -147,6 +148,8 @@ class UndoStack {
       int cleanState;
       int curIdx;
 
+      void remove(int idx);
+
    public:
       UndoStack();
       ~UndoStack();
@@ -163,7 +166,6 @@ class UndoStack {
       int state() const             { return stateList[curIdx];    }
       bool isClean() const          { return cleanState == state();     }
       int getCurIdx() const         { return curIdx; }
-      void remove(int idx);
       bool empty() const            { return !canUndo() && !canRedo();  }
       UndoMacro* current() const    { return curCmd;               }
       UndoMacro* last() const       { return curIdx > 0 ? list[curIdx-1] : 0; }
@@ -428,7 +430,7 @@ class ExchangeVoice : public UndoCommand {
 
 class CloneVoice : public UndoCommand {
       Segment* sf;
-      int lTick;
+      Fraction lTick;
       Segment* d;             //Destination
       int strack, dtrack;
       int otrack;
@@ -436,7 +438,7 @@ class CloneVoice : public UndoCommand {
       bool first = true;      //first redo
 
    public:
-      CloneVoice(Segment* sf, int lTick, Segment* d, int strack, int dtrack, int otrack, bool linked = true);
+      CloneVoice(Segment* sf, const Fraction& lTick, Segment* d, int strack, int dtrack, int otrack, bool linked = true);
       virtual void undo(EditData*) override;
       virtual void redo(EditData*) override;
       UNDO_NAME("CloneVoice")
@@ -448,12 +450,12 @@ class CloneVoice : public UndoCommand {
 
 class ChangeInstrumentShort : public UndoCommand {
       Part* part;
-      int tick;
+      Fraction tick;
       QList<StaffName> text;
       void flip(EditData*) override;
 
    public:
-      ChangeInstrumentShort(int, Part*, QList<StaffName>);
+      ChangeInstrumentShort(const Fraction&, Part*, QList<StaffName>);
       UNDO_NAME("ChangeInstrumentShort")
       };
 
@@ -463,13 +465,13 @@ class ChangeInstrumentShort : public UndoCommand {
 
 class ChangeInstrumentLong : public UndoCommand {
       Part* part;
-      int tick;
+      Fraction tick;
       QList<StaffName> text;
       void flip(EditData*) override;
 
    public:
       const QList<StaffName>& longNames() const;
-      ChangeInstrumentLong(int, Part*, QList<StaffName>);
+      ChangeInstrumentLong(const Fraction&, Part*, QList<StaffName>);
       UNDO_NAME("ChangeInstrumentLong")
       };
 
@@ -570,6 +572,22 @@ class ChangePatch : public UndoCommand {
       };
 
 //---------------------------------------------------------
+//   SetUserBankController
+//---------------------------------------------------------
+
+class SetUserBankController : public UndoCommand {
+      Channel* channel;
+      bool val;
+
+      void flip(EditData*) override;
+
+   public:
+      SetUserBankController(Channel* c, bool v)
+         : channel(c), val(v) {}
+      UNDO_NAME("SetUserBankController")
+      };
+
+//---------------------------------------------------------
 //   ChangeStaff
 //---------------------------------------------------------
 
@@ -650,6 +668,21 @@ class ChangeStyleVal : public UndoCommand {
    public:
       ChangeStyleVal(Score* s, Sid i, const QVariant& v) : score(s), idx(i), value(v) {}
       UNDO_NAME("ChangeStyleVal")
+      };
+
+//---------------------------------------------------------
+//   ChangePageNumberOffset
+//---------------------------------------------------------
+
+class ChangePageNumberOffset : public UndoCommand {
+      Score* score;
+      int pageOffset;
+
+      void flip(EditData*) override;
+
+   public:
+      ChangePageNumberOffset(Score* s, int po) : score(s), pageOffset(po) {}
+      UNDO_NAME("ChangePageNumberOffset")
       };
 
 //---------------------------------------------------------
@@ -1120,14 +1153,14 @@ class ChangeMMRest : public UndoCommand {
 
 class InsertTime : public UndoCommand {
       Score* score;
-      int tick;
-      int len;
+      Fraction tick;
+      Fraction len;
 
       void redo(EditData*) override;
       void undo(EditData*) override;
 
    public:
-      InsertTime(Score* _score, int _tick, int _len)
+      InsertTime(Score* _score, const Fraction& _tick, const Fraction& _len)
          : score(_score), tick(_tick), len(_len) {}
       UNDO_NAME("InsertTime")
       };
@@ -1138,13 +1171,13 @@ class InsertTime : public UndoCommand {
 
 class InsertTimeUnmanagedSpanner : public UndoCommand {
       Score* score;
-      int tick;
-      int len;
+      Fraction tick;
+      Fraction len;
 
       void flip(EditData*) override;
 
    public:
-      InsertTimeUnmanagedSpanner(Score* s, int _tick, int _len)
+      InsertTimeUnmanagedSpanner(Score* s, const Fraction& _tick, const Fraction& _len)
          : score(s), tick(_tick), len(_len) {}
       UNDO_NAME("InsertTimeUnmanagedSpanner")
       };
@@ -1275,14 +1308,19 @@ class ChangeGap : public UndoCommand {
 //---------------------------------------------------------
 
 class FretDot : public UndoCommand {
-      FretDiagram* fret;
+      FretDiagram* diagram;
       int string;
-      int dot;
+      int fret;
+      bool add;
+      FretDotType dtype;
+      FretUndoData undoData;
 
-      void flip(EditData*) override;
+      void redo(EditData*) override;
+      void undo(EditData*) override;
 
    public:
-      FretDot(FretDiagram* f, int _string, int _dot) : fret(f), string(_string), dot(_dot) {}
+      FretDot(FretDiagram* d, int _string, int _fret, bool _add = false, FretDotType _dtype = FretDotType::NORMAL)
+         : diagram(d), string(_string), fret(_fret), add(_add), dtype(_dtype) {}
       UNDO_NAME("FretDot")
       };
 
@@ -1291,15 +1329,74 @@ class FretDot : public UndoCommand {
 //---------------------------------------------------------
 
 class FretMarker : public UndoCommand {
-      FretDiagram* fret;
+      FretDiagram* diagram;
       int string;
-      int marker;
+      FretMarkerType mtype;
+      FretUndoData undoData;
 
-      void flip(EditData*) override;
+      void redo(EditData*) override;
+      void undo(EditData*) override;
 
    public:
-      FretMarker(FretDiagram* f, int _string, int _marker) : fret(f), string(_string), marker(_marker) {}
+      FretMarker(FretDiagram* d, int _string, FretMarkerType _mtype) : diagram(d), string(_string), mtype(_mtype) {}
       UNDO_NAME("FretMarker")
+      };
+
+//---------------------------------------------------------
+//   FretBarre
+//---------------------------------------------------------
+
+class FretBarre : public UndoCommand {
+      FretDiagram* diagram;
+      int string;
+      int fret;
+      bool add;
+      FretUndoData undoData;
+
+      void redo(EditData*) override;
+      void undo(EditData*) override;
+
+   public:
+      FretBarre(FretDiagram* d, int _string, int _fret, bool _add = false) : diagram(d), string(_string), fret(_fret), add(_add) {}
+      UNDO_NAME("FretBarre")
+      };
+
+//---------------------------------------------------------
+//   FretClear
+//---------------------------------------------------------
+
+class FretClear : public UndoCommand {
+      FretDiagram* diagram;
+      FretUndoData undoData;
+
+      void redo(EditData*) override;
+      void undo(EditData*) override;
+
+   public:
+      FretClear(FretDiagram* d) : diagram(d) {}
+      UNDO_NAME("FretClear")
+      };
+
+//---------------------------------------------------------
+//   MoveTremolo
+//---------------------------------------------------------
+
+class MoveTremolo : public UndoCommand {
+      Score* score;
+      Fraction chord1Tick;
+      Fraction chord2Tick;
+      Tremolo* trem;
+      int track;
+
+      Chord* oldC1;
+      Chord* oldC2;
+
+      void undo(EditData*) override;
+      void redo(EditData*) override;
+
+   public:
+      MoveTremolo(Score* s, Fraction c1, Fraction c2, Tremolo* tr, int t) : score(s), chord1Tick(c1), chord2Tick(c2), trem(tr), track(t) {}
+      UNDO_NAME("MoveTremolo")
       };
 
 }     // namespace Ms

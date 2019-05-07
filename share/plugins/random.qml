@@ -36,7 +36,7 @@ MuseScore {
             cursor.rewind(0);
 
             var ts = newElement(Element.TIMESIG);
-            ts.setSig(numerator, denominator);
+            ts.timesig = fraction(numerator, denominator);
             cursor.add(ts);
 
             cursor.rewind(0);

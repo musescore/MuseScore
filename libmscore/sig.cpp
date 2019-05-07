@@ -19,7 +19,7 @@ namespace Ms {
 //   ticks_beat
 //---------------------------------------------------------
 
-static int ticks_beat(int n)
+int ticks_beat(int n)
       {
       int m = (MScore::division * 4) / n;
       if ((MScore::division * 4) % n) {

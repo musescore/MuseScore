@@ -53,7 +53,7 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
     }
 
     EventMap events;
-    score->renderMidi(&events);
+    score->renderMidi(&events, synthesizerState());
     if(events.size() == 0)
           return false;
 
@@ -92,16 +92,16 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
           //
           // init instruments
           //
-          foreach(Part* part, score->parts()) {
+          for (Part* part : score->parts()) {
                 const InstrumentList* il = part->instruments();
-                for(auto i = il->begin(); i!= il->end(); i++) {
-                      for (const Channel* a : i->second->channel()) {
-                            a->updateInitList();
-                            for (MidiCoreEvent e : a->init) {
+                for (auto i = il->begin(); i!= il->end(); i++) {
+                      for (const Channel* instrChan : i->second->channel()) {
+                            const Channel* a = score->masterScore()->playbackChannel(instrChan);
+                            for (MidiCoreEvent e : a->initList()) {
                                   if (e.type() == ME_INVALID)
                                         continue;
                                   e.setChannel(a->channel());
-                                  int syntiIdx = synth->index(score->masterScore()->midiMapping(a->channel())->articulation->synti());
+                                  int syntiIdx = synth->index(score->masterScore()->midiMapping(a->channel())->articulation()->synti());
 								  synth->play(e, syntiIdx);
                                   }
                             }
@@ -136,7 +136,7 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                       const NPlayEvent& e = playPos->second;
                       if (e.isChannelEvent()) {
                             int channelIdx = e.channel();
-                            Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation;
+                            const Channel* c = score->masterScore()->midiMapping(channelIdx)->articulation();
                             if (!c->mute()) {
                                   synth->play(e, synth->index(c->synti()));
                                   }
@@ -268,7 +268,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
             }
 
       EventMap events;
-      score->renderMidi(&events);
+      score->renderMidi(&events, synthesizerState());
       if(events.size() == 0)
             return false;
 
@@ -294,7 +294,7 @@ bool MuseScore::saveAudio(Score* score, const QString& name)
       progress.setWindowModality(Qt::ApplicationModal);
       //progress.setCancelButton(0);
       progress.setCancelButtonText(tr("Cancel"));
-      progress.setLabelText(tr("Exporting..."));
+      progress.setLabelText(tr("Exporting…"));
       if (!MScore::noGui) {
           // callback function that will update the progress bar
           // it will return false and thus cancel the export if the user

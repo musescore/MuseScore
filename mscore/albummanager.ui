@@ -22,7 +22,7 @@
      <item row="5" column="1">
       <widget class="QPushButton" name="add">
        <property name="text">
-        <string>Add Score...</string>
+        <string>Add Score…</string>
        </property>
       </widget>
      </item>
@@ -108,7 +108,7 @@
      <item row="6" column="1">
       <widget class="QPushButton" name="addNew">
        <property name="text">
-        <string>Add new Score...</string>
+        <string>Add new Score…</string>
        </property>
       </widget>
      </item>

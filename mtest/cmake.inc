@@ -30,7 +30,7 @@ target_link_libraries(
       )
 
 if (OMR)
-      target_link_libraries(${TARGET} omr poppler)
+      target_link_libraries(${TARGET} omr poppler-qt5)
       if (OCR)
             target_link_libraries(${TARGET} tesseract_api)
       endif (OCR)
@@ -39,9 +39,14 @@ endif (OMR)
 target_link_libraries(
       ${TARGET}
       ${QT_LIBRARIES}
-      mscore_freetype
       z
       )
+
+if (USE_SYSTEM_FREETYPE)
+      target_link_libraries(${TARGET} freetype)
+else (USE_SYSTEM_FREETYPE)
+      target_link_libraries(${TARGET} mscore_freetype)
+endif (USE_SYSTEM_FREETYPE)
 
 if (NOT MINGW AND NOT APPLE)
    target_link_libraries(${TARGET}

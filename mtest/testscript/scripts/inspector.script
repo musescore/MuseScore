@@ -1,0 +1,13 @@
+init init/Treble.mscx
+cmd note-input
+cmd note-a
+cmd escape
+inspector Note offset -12.5;0
+inspector Chord offset 0;-12.5 parent 1
+inspector Chord small 1 parent 1
+inspector Chord StemDirection down parent 1
+palette StaffText style Staff text Staff&#032Text
+inspector StaffText align center,baseline
+inspector StaffText color #ff0000
+cmd del-empty-measures
+test score inspector.mscx

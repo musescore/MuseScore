@@ -58,7 +58,6 @@ class MuseScoreView {
       virtual int gripCount() const { return 0; }
       virtual void setDropRectangle(const QRectF&) {};
       virtual void cmdAddSlur(ChordRest*, ChordRest*) {};
-      virtual void cmdAddHairpin(HairpinType) {};
       virtual void startEdit() {};
       virtual void startEditMode(Element*) {};
       virtual void startEdit(Element*, Grip /*startGrip*/) {};
@@ -66,6 +65,7 @@ class MuseScoreView {
       virtual void drawBackground(QPainter*, const QRectF&) const = 0;
       virtual void setDropTarget(const Element*) {}
 
+      virtual void textTab(bool /*back*/) {}
       virtual void lyricsTab(bool /*back*/, bool /*end*/, bool /*moveOnly*/) {}
       virtual void lyricsReturn() {}
       virtual void lyricsEndEdit() {}

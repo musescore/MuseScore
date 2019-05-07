@@ -455,8 +455,8 @@ static void createMeasures(Score* score, const QVector<Fraction>& ml, const QVec
       {
       for (int i = 0; i < ml.size(); ++i) {
             Measure* measure  = new Measure(score);
-            measure->setTick(ms.at(i).ticks());
-            measure->setLen(ml.at(i));
+            measure->setTick(ms.at(i));
+            measure->setTicks(ml.at(i));
             measure->setNo(i);
             score->measures()->add(measure);
             }
@@ -726,7 +726,7 @@ static void doCredits(Score* score, const CreditWordsList& credits, const int pa
             }
 
       if (vbox) {
-            vbox->setTick(0);
+            vbox->setTick(Fraction(0,1));
             score->measures()->add(vbox);
             }
       }
@@ -828,7 +828,7 @@ Score::FileError MusicXMLParserPass1::parse()
 static bool allStaffGroupsIdentical(Part const* const p)
       {
       for (int i = 1; i < p->nstaves(); ++i) {
-            if (p->staff(0)->constStaffType(0)->group() != p->staff(i)->constStaffType(0)->group())
+            if (p->staff(0)->constStaffType(Fraction(0,1))->group() != p->staff(i)->constStaffType(Fraction(0,1))->group())
                   return false;
             }
       return true;

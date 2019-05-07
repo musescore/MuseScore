@@ -75,7 +75,7 @@ int PianoLevelFilterVeloOffset::value(Staff* staff, Note* note, NoteEvent* /*evt
       //Change velocity to equivilent in new metric
       switch (Note::ValueType(note->veloType())) {
             case Note::ValueType::USER_VAL: {
-                  int dynamicsVel = staff->velocities().velo(note->tick());
+                  int dynamicsVel = staff->velocities().velo(note->tick().ticks());
                   return (int)((note->veloOffset() / (qreal)dynamicsVel - 1) * 100);
                   }
             default:
@@ -96,7 +96,7 @@ void PianoLevelFilterVeloOffset::setValue(Staff* staff, Note* note, NoteEvent* /
 
       switch (Note::ValueType(note->veloType())) {
             case Note::ValueType::USER_VAL: {
-                  int dynamicsVel = staff->velocities().velo(note->tick());
+                  int dynamicsVel = staff->velocities().velo(note->tick().ticks());
                   int newVelocity = (int)(dynamicsVel * (1 + value / 100.0));
 
                   score->undo(new ChangeVelocity(note, Note::ValueType::USER_VAL, newVelocity));
@@ -126,7 +126,7 @@ int PianoLevelFilterVeloUser::value(Staff* staff, Note* note, NoteEvent* /*evt*/
                   return note->veloOffset();
             default:
             case Note::ValueType::OFFSET_VAL: {
-                  int dynamicsVel = staff->velocities().velo(note->tick());
+                  int dynamicsVel = staff->velocities().velo(note->tick().ticks());
                   return (int)(dynamicsVel * (1 + note->veloOffset() / 100.0));
                   }
             }
@@ -148,7 +148,7 @@ void PianoLevelFilterVeloUser::setValue(Staff* staff, Note* note, NoteEvent* /*e
                   break;
             default:
             case Note::ValueType::OFFSET_VAL: {
-                  int dynamicsVel = staff->velocities().velo(note->tick());
+                  int dynamicsVel = staff->velocities().velo(note->tick().ticks());
                   int newVelocity = (int)((value / (qreal)dynamicsVel - 1) * 100);
 
                   score->undo(new ChangeVelocity(note, Note::ValueType::OFFSET_VAL, newVelocity));

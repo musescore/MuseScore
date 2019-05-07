@@ -135,7 +135,7 @@
         <item row="5" column="2">
          <widget class="QPushButton" name="changeStaffType">
           <property name="text">
-           <string>Advanced Style Properties...</string>
+           <string>Advanced Style Properties…</string>
           </property>
          </widget>
         </item>
@@ -317,7 +317,7 @@
      <property name="title">
       <string>Part Properties</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0,0,0">
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0,0,0,0">
       <item>
        <layout class="QGridLayout" name="grid_PartProps">
         <property name="leftMargin">
@@ -344,7 +344,7 @@
           <item>
            <widget class="QPushButton" name="changeInstrument">
             <property name="text">
-             <string>Change Instrument...</string>
+             <string>Change Instrument…</string>
             </property>
            </widget>
           </item>
@@ -803,7 +803,7 @@
          <item>
           <widget class="QPushButton" name="editStringData">
            <property name="text">
-            <string>Edit String Data...</string>
+            <string>Edit String Data…</string>
            </property>
           </widget>
          </item>
@@ -821,6 +821,16 @@
           </spacer>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="singleNoteDynamics">
+        <property name="accessibleName">
+         <string>Use single note dynamics</string>
+        </property>
+        <property name="text">
+         <string>Use single note dynamics</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -937,6 +947,7 @@
   <tabstop>editStringData</tabstop>
  </tabstops>
  <resources>
+  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

@@ -34,7 +34,7 @@ void SpannerMap::update() const
       {
       std::vector< ::Interval<Spanner*> > intervals;
       for (auto i : *this)
-            intervals.push_back(Interval<Spanner*>(i.second->tick(), i.second->tick2(), i.second));
+            intervals.push_back(Interval<Spanner*>(i.second->tick().ticks(), i.second->tick2().ticks(), i.second));
       tree = IntervalTree<Spanner*>(intervals);
       dirty = false;
       }
@@ -81,7 +81,7 @@ void SpannerMap::addSpanner(Spanner* s)
             }
 #endif
 #endif
-      insert(std::pair<int,Spanner*>(s->tick(), s));
+      insert(std::pair<int,Spanner*>(s->tick().ticks(), s));
       dirty = true;
       }
 

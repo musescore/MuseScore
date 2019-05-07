@@ -98,6 +98,7 @@ class KeySigEvent {
       KeySigEvent(const KeySigEvent&);
 
       bool operator==(const KeySigEvent& e) const;
+      bool operator!=(const KeySigEvent& e) const { return !(*this == e); }
 
       void setKey(Key v);
       void print() const;

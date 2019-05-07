@@ -12,6 +12,7 @@
 
 #include "musescore.h"
 #include "logindialog.h"
+#include "network/loginmanager.h"
 #include "kQOAuth/kqoauthrequest_xauth.h"
 
 namespace Ms {

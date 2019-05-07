@@ -209,7 +209,7 @@ void Harmony::write(XmlWriter& xml) const
             if (staff()) {
                   // parent can be a fret diagram
                   Segment* segment = parent()->isSegment() ? toSegment(parent()) : toSegment(parent()->parent());
-                  int tick = segment ? segment->tick() : -1;
+                  Fraction tick = segment ? segment->tick() : Fraction(-1,1);
                   const Interval& interval = part()->instrument(tick)->transpose();
                   if (xml.clipboardmode() && !score()->styleB(Sid::concertPitch) && interval.chromatic) {
                         rRootTpc = transposeTpc(_rootTpc, interval, true);
@@ -706,12 +706,17 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
 void Harmony::startEdit(EditData& ed)
       {
       if (!textList.empty()) {
+            // convert chord symbol to plain text
             setXmlText(harmonyName());
-            // force layout, but restore original position
-            QPointF p = ipos();
-            layout();
-            setPos(p);
+            // clear rendering
+            for (const TextSegment* t : textList)
+                  delete t;
+            textList.clear();
             }
+
+      // layout as text, without position reset
+      TextBase::layout1();
+      triggerLayout();
 
       TextBase::startEdit(ed);
       }
@@ -724,20 +729,21 @@ bool Harmony::edit(EditData& ed)
       {
       if (ed.key == Qt::Key_Return)
             return true; // Harmony only single line
+
       bool rv = TextBase::edit(ed);
-      setHarmony(plainText());
 
-      // force layout, but restore original position
-      QPointF p = ipos();
-      layout();
-      setPos(p);
+      // layout as text, without position reset
+      TextBase::layout1();
+      triggerLayout();
 
-      int root, base;
+      // check spelling
+      int root = TPC_INVALID;
+      int base = TPC_INVALID;
       QString str = xmlText();
-      showSpell = !str.isEmpty() && !parseHarmony(str, &root, &base, true);
-
+      showSpell = !str.isEmpty() && !parseHarmony(str, &root, &base, true) && root == TPC_INVALID;
       if (showSpell)
             qDebug("bad spell");
+
       return rv;
       }
 
@@ -747,8 +753,12 @@ bool Harmony::edit(EditData& ed)
 
 void Harmony::endEdit(EditData& ed)
       {
+      // render to layout as chord symbol
+      setHarmony(plainText());
+      // disable spell check
       showSpell = false;
-      TextBase::endEdit(ed);
+
+      TextBase::endEdit(ed);  // layout happens here
 
       if (links()) {
             for (ScoreElement* e : *links()) {
@@ -762,7 +772,7 @@ void Harmony::endEdit(EditData& ed)
                   if (score()->styleB(Sid::concertPitch) != h->score()->styleB(Sid::concertPitch)) {
                         Part* partDest = h->part();
                         Segment* segment = toSegment(parent());
-                        int tick = segment ? segment->tick() : -1;
+                        Fraction tick = segment ? segment->tick() : Fraction(-1,1);
                         Interval interval = partDest->instrument(tick)->transpose();
                         if (!interval.isZero()) {
                               if (!h->score()->styleB(Sid::concertPitch))
@@ -774,6 +784,7 @@ void Harmony::endEdit(EditData& ed)
                               h->setBaseTpc(baseTpc);
                               h->setXmlText(h->harmonyName());
                               h->setHarmony(h->plainText());
+                              h->triggerLayout();
                               }
                         }
                   }
@@ -1007,19 +1018,16 @@ const ChordDescription* Harmony::generateDescription()
 
 void Harmony::layout()
       {
-      if (isLayoutInvalid())
-            createLayout();
-      if (textBlockList().empty())
-            textBlockList().append(TextBlock());
-      calculateBoundingRect();    // for normal symbols this is called in layout: computeMinWidth()
-
       if (!parent()) {
             setPos(0.0, 0.0);
             setOffset(0.0, 0.0);
+            layout1();
             return;
             }
       //if (isStyled(Pid::OFFSET))
       //      setOffset(propertyDefault(Pid::OFFSET).toPointF());
+
+      layout1();
 
       qreal yy = 0.0;
       qreal xx = 0.0;
@@ -1052,9 +1060,22 @@ void Harmony::layout()
             }
 
       setPos(xx, yy);
+      }
 
+//---------------------------------------------------------
+//   layout1
+//---------------------------------------------------------
+
+void Harmony::layout1()
+      {
+      if (isLayoutInvalid())
+            createLayout();
+      if (textBlockList().empty())
+            textBlockList().append(TextBlock());
+      calculateBoundingRect();    // for normal symbols this is called in layout: computeMinWidth()
       if (hasFrame())
             layoutFrame();
+      score()->addRefresh(canvasBoundingRect());
       }
 
 //---------------------------------------------------------
@@ -1563,12 +1584,12 @@ QString Harmony::screenReaderInfo() const
 
       if (const_cast<Harmony*>(this)->parsedForm() && !hTextName().isEmpty()) {
             QString aux = const_cast<Harmony*>(this)->parsedForm()->handle();
-            aux = aux.replace("#", QObject::tr("sharp")).replace("<", "");
+            aux = aux.replace("#", QObject::tr("♯")).replace("<", "");
             QString extension = "";
 
             foreach (QString s, aux.split(">", QString::SkipEmptyParts)) {
                   if(!s.contains("blues"))
-                        s.replace("b", QObject::tr("flat"));
+                        s.replace("b", QObject::tr("♭"));
                   extension += s + " ";
                   }
             rez = QString("%1 %2").arg(rez).arg(extension);

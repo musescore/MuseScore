@@ -33,6 +33,7 @@
       <Instrument>
         <longName>Guitar 1</longName>
         <trackName></trackName>
+        <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
           <string>40</string>
@@ -215,6 +216,7 @@ Innuendo</text>
         <Instrument>
           <longName>Guitar 1</longName>
           <trackName></trackName>
+          <singleNoteDynamics>0</singleNoteDynamics>
           <StringData>
             <frets>24</frets>
             <string>40</string>

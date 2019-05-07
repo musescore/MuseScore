@@ -66,12 +66,26 @@ class Dynamic final : public TextBase {
             STAFF, PART, SYSTEM
             };
 
+      enum class Speed : char {
+            SLOW, NORMAL, FAST
+            };
+
+      struct ChangeSpeedItem {
+            Speed speed;
+            const char* name;
+            };
+
+      Q_ENUM(Type);
+
    private:
       Type _dynamicType;
 
       mutable QPointF dragOffset;
       int _velocity;     // associated midi velocity 0-127
       Range _dynRange;   // STAFF, PART, SYSTEM
+
+      int _changeInVelocity         { 128 };
+      Speed _velChangeSpeed         { Speed::NORMAL };
 
       virtual QRectF drag(EditData&) override;
       virtual Sid getPropertyStyle(Pid) const override;
@@ -86,7 +100,8 @@ class Dynamic final : public TextBase {
 
       void setDynamicType(Type val)               { _dynamicType = val;   }
       void setDynamicType(const QString&);
-      QString dynamicTypeName() const;
+      static QString dynamicTypeName(Dynamic::Type type);
+      QString dynamicTypeName() const { return dynamicTypeName(_dynamicType); }
       Type dynamicType() const                     { return _dynamicType; }
       virtual int subtype() const override         { return (int) _dynamicType; }
       virtual QString subtypeName() const override { return dynamicTypeName(); }
@@ -106,13 +121,26 @@ class Dynamic final : public TextBase {
       void setDynRange(Range t) { _dynRange = t;    }
       void undoSetDynRange(Range t);
 
+      int changeInVelocity() const;
+      void setChangeInVelocity(int val);
+      Fraction velocityChangeLength() const;
+
+      Speed velChangeSpeed() const  { return _velChangeSpeed; }
+      void setVelChangeSpeed(Speed val) { _velChangeSpeed = val; }
+      static QString speedToName(Speed speed);
+      static Speed nameToSpeed(QString name);
+
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool     setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      virtual QString propertyUserValue(Pid) const override;
 
       virtual QString accessibleInfo() const override;
       virtual QString screenReaderInfo() const override;
       void doAutoplace();
+
+      static const std::vector<ChangeSpeedItem> changeSpeedTable;
       };
 
 }     // namespace Ms

@@ -5,7 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <doubleBarDistance>0.46</doubleBarDistance>
       <endBarDistance>0.65</endBarDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
@@ -46,6 +46,7 @@
       <systemFrameWidth>0.2</systemFrameWidth>
       <systemFrameRound>25</systemFrameRound>
       <staffAlign>left,top</staffAlign>
+      <staffPosAbove x="0" y="-4"/>
       <staffFramePadding>0.5</staffFramePadding>
       <staffFrameWidth>0.2</staffFrameWidth>
       <staffFrameRound>25</staffFrameRound>
@@ -452,9 +453,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -491,9 +489,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>-1/640</fractions>
-            </location>
           <Rest>
             <durationType>half</durationType>
             </Rest>
@@ -639,9 +634,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>1/1920</fractions>
-            </location>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -678,9 +670,6 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <location>
-            <fractions>-1/1920</fractions>
-            </location>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>

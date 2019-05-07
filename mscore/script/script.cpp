@@ -55,6 +55,7 @@ bool Script::execute(ScriptContext& ctx) const
       for (const auto& e : _entries) {
             if (e) {
                   if (!e->execute(ctx)) {
+                        ctx.execLog() << "Script::execute: operation failed:" << e->serialize() << endl;
                         if (ctx.stopOnError())
                               return false;
                         success = false;
@@ -65,12 +66,12 @@ bool Script::execute(ScriptContext& ctx) const
       }
 
 //---------------------------------------------------------
-//   Script::execCmd
+//   Script::addFromLine
 //---------------------------------------------------------
 
-void Script::execCmd(MuseScore* score, QAction* a, const QString& cmd)
+void Script::addFromLine(const QString& line)
       {
-      score->cmd(a, cmd);
+      addEntry(ScriptEntry::deserialize(line));
       }
 
 //---------------------------------------------------------
@@ -156,6 +157,39 @@ void ScriptRecorder::recordCommand(const QString& name)
       {
       if (_recording)
             _script.addCommand(name);
+      syncRecord();
+      }
+
+//---------------------------------------------------------
+//   ScriptRecorder::recordPaletteElement
+//---------------------------------------------------------
+
+void ScriptRecorder::recordPaletteElement(Element* e)
+      {
+      if (_recording)
+            _script.addEntry(PaletteElementScriptEntry::fromContext(e, _ctx));
+      syncRecord();
+      }
+
+//---------------------------------------------------------
+//   ScriptRecorder::recordCurrentScoreChange
+//---------------------------------------------------------
+
+void ScriptRecorder::recordCurrentScoreChange()
+      {
+      if (_recording)
+            _script.addEntry(ExcerptChangeScriptEntry::fromContext(_ctx));
+      syncRecord();
+      }
+
+//---------------------------------------------------------
+//   ScriptRecorder::recordInspectorValueChange
+//---------------------------------------------------------
+
+void ScriptRecorder::recordInspectorValueChange(const Element* e, const InspectorItem& ii, const QVariant& value)
+      {
+      if (_recording)
+            _script.addEntry(InspectorScriptEntry::fromContext(e, ii, value));
       syncRecord();
       }
 

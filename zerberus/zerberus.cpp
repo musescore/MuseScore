@@ -257,7 +257,7 @@ void Zerberus::updatePatchList()
       patches.clear();
       int idx = 0;
       for (ZInstrument* i : instruments) {
-            Ms::MidiPatch* p = new Ms::MidiPatch { false, name(), 0, idx, i->name() };
+            Ms::MidiPatch* p = new Ms::MidiPatch { false, name(), 0, idx, 0, i->name() };
             patches.append(p);
             ++idx;
             }
@@ -323,6 +323,19 @@ QStringList Zerberus::soundFonts() const
       QStringList sl;
       for (ZInstrument* i : instruments)
             sl.append(i->path());
+      return sl;
+      }
+
+//---------------------------------------------------------
+//   soundFontsInfo
+//---------------------------------------------------------
+
+std::vector<Ms::SoundFontInfo> Zerberus::soundFontsInfo() const
+      {
+      std::vector<Ms::SoundFontInfo> sl;
+      sl.reserve(instruments.size());
+      for (ZInstrument* i : instruments)
+            sl.emplace_back(i->path());
       return sl;
       }
 

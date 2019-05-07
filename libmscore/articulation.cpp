@@ -284,6 +284,7 @@ QLineF Articulation::dragAnchor() const
 QVariant Articulation::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::SYMBOL:              return QVariant::fromValue(_symId);
             case Pid::DIRECTION:           return QVariant::fromValue<Direction>(direction());
             case Pid::ARTICULATION_ANCHOR: return int(anchor());
             case Pid::ORNAMENT_STYLE:      return int(ornamentStyle());
@@ -300,6 +301,9 @@ QVariant Articulation::getProperty(Pid propertyId) const
 bool Articulation::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case Pid::SYMBOL:
+                  setSymId(v.value<SymId>());
+                  break;
             case Pid::DIRECTION:
                   setDirection(v.value<Direction>());
                   break;
@@ -421,15 +425,23 @@ const char* Articulation::symId2ArticulationName(SymId symId)
 
             case SymId::articStaccatoAbove:
             case SymId::articStaccatoBelow:
+                  return "staccato";
+
             case SymId::articAccentStaccatoAbove:
             case SymId::articAccentStaccatoBelow:
+                  return "sforzatoStaccato";
+
             case SymId::articMarcatoStaccatoAbove:
             case SymId::articMarcatoStaccatoBelow:
-                  return "staccato";
+                  return "marcatoStaccato";
 
             case SymId::articTenutoStaccatoAbove:
             case SymId::articTenutoStaccatoBelow:
                   return "portato";
+
+            case SymId::articMarcatoTenutoAbove:
+            case SymId::articMarcatoTenutoBelow:
+                  return "marcatoTenuto";
 
             case SymId::articTenutoAbove:
             case SymId::articTenutoBelow:
@@ -458,6 +470,17 @@ const char* Articulation::symId2ArticulationName(SymId symId)
             default:
                   return "---";
             }
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Articulation::propertyId(const QStringRef& xmlName) const
+      {
+      if (xmlName == "subtype")
+            return Pid::SYMBOL;
+      return Element::propertyId(xmlName);
       }
 
 //---------------------------------------------------------
@@ -505,7 +528,7 @@ void Articulation::resetProperty(Pid id)
 
 qreal Articulation::mag() const
       {
-      return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag): 1.0;
+      return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
       }
 
 bool Articulation::isTenuto() const
@@ -568,8 +591,8 @@ QString Articulation::accessibleInfo() const
 
 void Articulation::doAutoplace()
       {
-      qreal minDistance = score()->styleP(Sid::dynamicsMinDistance);
-      if (autoplace() && visible() && parent()) {
+      qreal minDistance = score()->styleS(Sid::articulationMinDistance).val() * spatium();
+      if (autoplace() && parent()) {
             Segment* s = segment();
             Measure* m = measure();
             int si     = staffIdx();

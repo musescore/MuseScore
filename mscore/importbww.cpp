@@ -24,6 +24,7 @@
 #include "bww2mxml/writer.h"
 #include "bww2mxml/parser.h"
 
+#include "libmscore/fraction.h"
 #include "libmscore/barline.h"
 #include "libmscore/box.h"
 #include "libmscore/chord.h"
@@ -113,7 +114,7 @@ static void setTempo(Ms::Score* score, int tempo)
       tempoText += QString(" = %1").arg(tempo);
       tt->setPlainText(tempoText);
       Ms::Measure* measure = score->firstMeasure();
-      Ms::Segment* segment = measure->getSegment(Ms::SegmentType::ChordRest, 0);
+      Ms::Segment* segment = measure->getSegment(Ms::SegmentType::ChordRest, Ms::Fraction(0,1));
       segment->add(tt);
       }
 
@@ -156,7 +157,7 @@ private:
       QMap<QString, StepAlterOct> stepAlterOctMap;      ///< Map bww pitch to step/alter/oct
       QMap<QString, QString> typeMap;                   ///< Map bww note types to MusicXML
       unsigned int measureNumber;                       ///< Current measure number
-      unsigned int tick;                                ///< Current tick
+      Ms::Fraction tick;                                    ///< Current tick
       Ms::Measure* currentMeasure;                          ///< Current measure
       Ms::Tuplet* tuplet;                                   ///< Current tuplet
       Ms::Volta* lastVolta;                                 ///< Current volta
@@ -174,7 +175,7 @@ MsScWriter::MsScWriter()
       beats(4),
       beat(4),
       measureNumber(0),
-      tick(0),
+      tick(Ms::Fraction(0,1)),
       currentMeasure(0),
       tuplet(0),
       lastVolta(0),
@@ -362,7 +363,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
             cr->setDurationType(durationType);
             sd = Ms::Direction::DOWN;
             }
-      cr->setDuration(durationType.fraction());
+      cr->setTicks(durationType.fraction());
       cr->setDots(dots);
       cr->setStemDirection(sd);
       // add note to chord
@@ -386,10 +387,10 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
                   currentGraceNotes.clear();
                   }
             doTriplet(cr, triplet);
-            int tickBefore = tick;
-            tick += ticks;
-            Ms::Fraction nl(Ms::Fraction::fromTicks(tick - currentMeasure->tick()));
-            currentMeasure->setLen(nl);
+            Ms::Fraction tickBefore = tick;
+            tick += Ms::Fraction::fromTicks(ticks);
+            Ms::Fraction nl(tick - currentMeasure->tick());
+            currentMeasure->setTicks(nl);
             qDebug() << "MsScWriter::note()"
                      << "tickBefore:" << tickBefore
                      << "tick:" << tick
@@ -435,7 +436,7 @@ void MsScWriter::header(const QString title, const QString type,
       // addText(vbox, score, strPoet, Ms::Tid::POET);
       // addText(vbox, score, strTranslator, Ms::Tid::TRANSLATOR);
       if (vbox) {
-            vbox->setTick(0);
+            vbox->setTick(Ms::Fraction(0,1));
             score->measures()->add(vbox);
             }
       if (!footer.isEmpty())
@@ -488,7 +489,7 @@ void MsScWriter::doTriplet(Ms::Chord* cr, StartStop triplet)
             tuplet = new Ms::Tuplet(score);
             tuplet->setTrack(0);
             tuplet->setRatio(Ms::Fraction(3, 2));
-            tuplet->setTick(tick);
+//            tuplet->setTick(tick);
             currentMeasure->add(tuplet);
             }
       else if (triplet == ST_STOP) {

@@ -282,6 +282,7 @@ NewWizardTemplatePage::NewWizardTemplatePage(QWidget* parent)
       setLayout(layout);
 
       connect(templateFileBrowser, SIGNAL(scoreSelected(const QString&)), SLOT(templateChanged(const QString&)));
+      connect(templateFileBrowser, SIGNAL(scoreActivated(const QString&)), SLOT(fileAccepted(const QString&)));
       buildTemplatesList();
       }
 
@@ -346,6 +347,7 @@ void NewWizardTemplatePage::fileAccepted(const QString& s)
 
 void NewWizardTemplatePage::templateChanged(const QString& s)
       {
+      setFinalPage(QFileInfo(s).completeBaseName() != "00-Blank");
       path = s;
       emit completeChanged();
       }

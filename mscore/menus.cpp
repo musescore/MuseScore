@@ -365,6 +365,7 @@ Palette* MuseScore::newRepeatsPalette()
 
             Marker* mk = new Marker(gscore);
             mk->setMarkerType(markerTypeTable[i].type);
+            mk->styleChanged();
             sp->append(mk, qApp->translate("markerType", markerTypeTable[i].name.toUtf8().constData()));
             }
 
@@ -381,6 +382,7 @@ Palette* MuseScore::newRepeatsPalette()
             switch (bti->type) {
                   case BarLineType::START_REPEAT:
                   case BarLineType::END_REPEAT:
+                  case BarLineType::END_START_REPEAT:
                         break;
                   default:
                         continue;
@@ -771,16 +773,16 @@ Palette* MuseScore::newBracketsPalette()
       sp->setDrawGrid(true);
 
       for (auto t : std::array<std::pair<BracketType,const char*>, 4> {
-         {{ BracketType::NORMAL, "Bracket" },
-         { BracketType::BRACE,  "Brace"   },
-         { BracketType::SQUARE, "Square"  },
-         { BracketType::LINE,   "Line"    }}
+         {{ BracketType::NORMAL, QT_TRANSLATE_NOOP("Palette", "Bracket") },
+          { BracketType::BRACE,  QT_TRANSLATE_NOOP("Palette", "Brace")   },
+          { BracketType::SQUARE, QT_TRANSLATE_NOOP("Palette", "Square")  },
+          { BracketType::LINE,   QT_TRANSLATE_NOOP("Palette", "Line")    }}
          } ) {
             Bracket* b1      = new Bracket(gscore);
             BracketItem* bi1 = new BracketItem(gscore);
             bi1->setBracketType(t.first);
             b1->setBracketItem(bi1);
-            sp->append(b1, tr(t.second));      // Brace, Square, Line
+            sp->append(b1, qApp->translate("Palette", t.second));      // Bracket, Brace, Square, Line
             }
       return sp;
       }
@@ -1045,39 +1047,39 @@ Palette* MuseScore::newLinesPalette()
       ottava->setOttavaType(OttavaType::OTTAVA_8VA);
       ottava->setLen(w);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8va"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8va alta"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_8VB);
       ottava->setLen(w);
       ottava->setPlacement(Placement::BELOW);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8vb"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "8va bassa"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_15MA);
       ottava->setLen(w);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15ma"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15ma alta"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_15MB);
       ottava->setLen(w);
       ottava->setPlacement(Placement::BELOW);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15mb"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "15ma bassa"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_22MA);
       ottava->setLen(w);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22ma"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22ma alta"));
 
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_22MB);
       ottava->setLen(w);
       ottava->styleChanged();
-      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22mb"));
+      sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22ma bassa"));
 
       Pedal* pedal;
       pedal = new Pedal(gscore);
@@ -1263,7 +1265,7 @@ Palette* MuseScore::newTempoPalette(bool defaultPalette)
 //   newTextPalette
 //---------------------------------------------------------
 
-Palette* MuseScore::newTextPalette()
+Palette* MuseScore::newTextPalette(bool defaultPalette)
       {
       Palette* sp = new Palette;
       sp->setName(QT_TRANSLATE_NOOP("Palette", "Text"));
@@ -1278,6 +1280,7 @@ Palette* MuseScore::newTextPalette()
       st = new StaffText(gscore, Tid::EXPRESSION);
       st->setXmlText(tr("Expression"));
       st->setPlacement(Placement::BELOW);
+      st->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
       sp->append(st, tr("Expression text"));
 
       InstrumentChange* is = new InstrumentChange(gscore);
@@ -1299,6 +1302,33 @@ Palette* MuseScore::newTextPalette()
       stxt = new SystemText(gscore);
       stxt->setXmlText(tr("System Text"));
       sp->append(stxt, tr("System text"));
+
+      if (!defaultPalette) {
+            StaffText* pz = new StaffText(gscore);
+            pz->setXmlText(tr("pizz."));
+            pz->setChannelName(0, "pizzicato");
+            sp->append(pz, tr("pizz."));
+
+            StaffText* ar = new StaffText(gscore);
+            ar->setXmlText(tr("arco"));
+            ar->setChannelName(0, "arco");
+            sp->append(ar, tr("arco"));
+
+            StaffText* tm = new StaffText(gscore, Tid::EXPRESSION);
+            tm->setXmlText(tr("tremolo"));
+            tm->setChannelName(0, "tremolo");
+            sp->append(tm, tr("tremolo"));
+
+            StaffText* mu = new StaffText(gscore);
+            mu->setXmlText(tr("mute"));
+            mu->setChannelName(0, "mute");
+            sp->append(mu, tr("mute"));
+
+            StaffText* no = new StaffText(gscore);
+            no->setXmlText(tr("open"));
+            no->setChannelName(0, "open");
+            sp->append(no, tr("open"));
+            }
 
       return sp;
       }
@@ -1430,7 +1460,7 @@ void MuseScore::setDefaultPalette()
       paletteBox->addPalette(newBarLinePalette());
       paletteBox->addPalette(newArpeggioPalette());
       paletteBox->addPalette(newTremoloPalette());
-      paletteBox->addPalette(newTextPalette());
+      paletteBox->addPalette(newTextPalette(true));
       paletteBox->addPalette(newTempoPalette(true));
       paletteBox->addPalette(newDynamicsPalette(true));
       paletteBox->addPalette(newFingeringPalette());
@@ -1504,6 +1534,17 @@ void MuseScore::addTempo()
       cs->undoAddElement(tt);
       cs->select(tt, SelectType::SINGLE, 0);
       cs->endCmd();
+      Measure* m = tt->findMeasure();
+      if (m && m->hasMMRest() && tt->links()) {
+            Measure* mmRest = m->mmRest();
+            for (ScoreElement* se1 : *tt->links()) {
+                  TempoText* tt1 = toTempoText(se1);
+                  if (tt != tt1 && tt1->findMeasure() == mmRest) {
+                        tt = tt1;
+                        break;
+                        }
+                  }
+            }
       cv->startEditMode(tt);
       }
 

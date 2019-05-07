@@ -30,7 +30,7 @@ Note* Tie::editEndNote;
 void TieSegment::updateGrips(EditData& ed) const
       {
       QPointF p(pagePos());
-      p -= QPointF(0.0, system()->staff(staffIdx())->y());   // ??
+      //p -= QPointF(0.0, system()->staff(staffIdx())->y());   // ??
       for (int i = 0; i < int(Grip::GRIPS); ++i)
             ed.grip[i].translate(_ups[i].p + _ups[i].off + p);
       }
@@ -46,26 +46,27 @@ void TieSegment::draw(QPainter* painter) const
             return;
 
       QPen pen(curColor());
+      qreal mag = staff() ? staff()->mag(tie()->tick()) : 1.0;
       switch (slurTie()->lineType()) {
             case 0:
                   painter->setBrush(QBrush(pen.color()));
                   pen.setCapStyle(Qt::RoundCap);
                   pen.setJoinStyle(Qt::RoundJoin);
-                  pen.setWidthF(score()->styleP(Sid::SlurEndWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurEndWidth) * mag);
                   break;
             case 1:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
                   pen.setStyle(Qt::DotLine);
                   break;
             case 2:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
                   pen.setStyle(Qt::DashLine);
                   break;
             case 3:
                   painter->setBrush(Qt::NoBrush);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth));
+                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
                   pen.setStyle(Qt::CustomDashLine);
                   QVector<qreal> dashes { 5.0, 5.0 };
                   pen.setDashPattern(dashes);
@@ -249,6 +250,8 @@ void TieSegment::computeBezier(QPointF p6o)
       QPointF p4(c2, -shoulderH);
 
       qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
+      if (staff())
+            w *= staff()->mag(tie()->tick());
       QPointF th(0.0, w);    // thickness of slur
 
       QPointF p3o = p6o + t.map(ups(Grip::BEZIER1).off);
@@ -287,8 +290,12 @@ void TieSegment::computeBezier(QPointF p6o)
       shapePath.cubicTo(p4 +p4o + th, p3 + p3o + th, QPointF());
 
       // translate back
+      double y = pp1.y();
+      const double offsetFactor = 0.2;
+      if (staff()->isTabStaff(slurTie()->tick()))
+          y += (_spatium * (slurTie()->up() ? -offsetFactor : offsetFactor));
       t.reset();
-      t.translate(pp1.x(), pp1.y());
+      t.translate(pp1.x(), y);
       t.rotateRadians(sinb);
       path                  = t.map(path);
       shapePath             = t.map(shapePath);
@@ -305,17 +312,15 @@ void TieSegment::computeBezier(QPointF p6o)
 //      path.translate(staffOffset);
 //      shapePath.translate(staffOffset);
 
-      QPainterPath p;
-      p.moveTo(QPointF());
-      p.cubicTo(p3 + p3o, p4 + p4o, p2);
       _shape.clear();
       QPointF start;
       start = t.map(start);
 
       qreal minH = qAbs(3.0 * w);
       int nbShapes = 15;
+      const CubicBezier b(pp1, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
       for (int i = 1; i <= nbShapes; i++) {
-            QPointF point = t.map(p.pointAtPercent(i/float(nbShapes)));
+            const QPointF point = b.pointAtPercent(i/float(nbShapes));
             QRectF re = QRectF(start, point).normalized();
             if (re.height() < minH) {
                   d = (minH - re.height()) * .5;
@@ -483,19 +488,41 @@ void Tie::slurPos(SlurPos* sp)
             }
       Chord* ec = endNote()->chord();
       sp->p2    = ec->pos() + ec->segment()->pos() + ec->measure()->pos();
-      if ((sc->measure() == sp->system1->lastMeasure()) && (ec->measure() != sc->measure()))
+      if (sp->system1 && (sc->measure() == sp->system1->lastMeasure()) && (ec->measure() != sc->measure()))
             sp->system2 = nullptr;
       else
             sp->system2 = ec->measure()->system();
 
+      // force tie to be horizontal except for cross-staff or if there is a difference of enharmonic spelling
+      bool horizontal = startNote()->tpc() == endNote()->tpc() && sc->vStaffIdx() == ec->vStaffIdx();
+
       hw = endNote()->tabHeadWidth(stt);
-      if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up))
+      if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up)) {
             xo = endNote()->x() - hw * 0.12;
-      else if (shortStart)
+            if (!horizontal)
+                  yo = endNote()->pos().y() + yOffInside;
+            }
+      else if (shortStart) {
             xo = endNote()->x() + hw * 0.15;
-      else
+            if (!horizontal)
+                  yo = endNote()->pos().y() + yOffOutside;
+            }
+      else {
             xo = endNote()->x() + hw * 0.35;
+            if (!horizontal)
+                  yo = endNote()->pos().y() + yOffOutside;
+            }
       sp->p2 += QPointF(xo, yo);
+
+      // adjust for cross-staff
+      if (sc->vStaffIdx() != vStaffIdx() && sp->system1) {
+            qreal diff = sp->system1->staff(sc->vStaffIdx())->y() - sp->system1->staff(vStaffIdx())->y();
+            sp->p1.ry() += diff;
+            }
+      if (ec->vStaffIdx() != vStaffIdx() && sp->system2) {
+            qreal diff = sp->system2->staff(ec->vStaffIdx())->y() - sp->system2->staff(vStaffIdx())->y();
+            sp->p2.ry() += diff;
+            }
       }
 
 //---------------------------------------------------------
@@ -657,7 +684,7 @@ TieSegment* Tie::layoutBack(System* system)
       segment->setSystem(system);
 
       qreal x;
-      Segment* seg = endNote()->chord()->segment()->prev();
+      Segment* seg = endNote()->chord()->segment()->prevEnabled();
       if (seg) {
             // find maximum width
             qreal width = 0.0;

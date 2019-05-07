@@ -154,9 +154,9 @@ QSize HPiano::sizeHint() const
 //   pressKeys
 //---------------------------------------------------------
 
-void HPiano::setPressedPitches(QSet<int> pitches)
+void HPiano::setPressedPlaybackPitches(QSet<int> pitches)
       {
-      _pressedPitches = pitches;
+      _pressedPlaybackPitches = pitches;
       updateAllKeys();
       }
 
@@ -218,7 +218,8 @@ void HPiano::clearSelection()
 void HPiano::updateAllKeys()
       {
       for (PianoKeyItem* key : keys) {
-            key->setPressed(_pressedPitches.contains(key->pitch()));
+            key->setPressed(_pressedPitches.contains(key->pitch())
+                            || _pressedPlaybackPitches.contains(key->pitch()));
             key->update();
             }
       }
@@ -443,13 +444,13 @@ void PianoTools::retranslate()
 //   heartBeat
 //---------------------------------------------------------
 
-void PianoTools::heartBeat(QList<const Ms::Note *> notes)
+void PianoTools::setPlaybackNotes(QList<const Ms::Note *> notes)
       {
       QSet<int> pitches;
       for (const Note* note : notes) {
           pitches.insert(note->ppitch());
           }
-      _piano->setPressedPitches(pitches);
+      _piano->setPressedPlaybackPitches(pitches);
       }
 
 //---------------------------------------------------------

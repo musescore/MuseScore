@@ -5,7 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <lyricsDashForce>0</lyricsDashForce>
       <doubleBarDistance>0.46</doubleBarDistance>
       <endBarDistance>0.65</endBarDistance>
       <clefLeftMargin>0.64</clefLeftMargin>
@@ -48,6 +48,7 @@
       <systemFrameWidth>0.2</systemFrameWidth>
       <systemFrameRound>25</systemFrameRound>
       <staffAlign>left,top</staffAlign>
+      <staffPosAbove x="0" y="-4"/>
       <staffFramePadding>0.5</staffFramePadding>
       <staffFrameWidth>0.2</staffFrameWidth>
       <staffFrameRound>25</staffFrameRound>
@@ -181,7 +182,7 @@
     <Staff id="1">
       <VBox>
         <height>8</height>
-        <bottomGap>6</bottomGap>
+        <bottomGap>13</bottomGap>
         </VBox>
       <Measure>
         <stretch>0.9</stretch>
@@ -278,7 +279,6 @@
       <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
-        <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
         <clefLeftMargin>0.64</clefLeftMargin>
         <clefKeyRightMargin>1.75</clefKeyRightMargin>
         <barNoteDistance>1.2</barNoteDistance>
@@ -351,7 +351,7 @@
       <Staff id="1">
         <VBox>
           <height>8</height>
-          <bottomGap>6</bottomGap>
+          <bottomGap>13</bottomGap>
           <Text>
             <style>Instrument Name (Part)</style>
             <text>Bass</text>

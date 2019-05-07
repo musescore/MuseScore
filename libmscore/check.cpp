@@ -94,7 +94,7 @@ qDebug("checkScore: remove empty ChordRest segment");
       ChordRest* lcr = 0;
       for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
             int track = staffIdx * VOICES;
-            int tick  = 0;
+            Fraction tick  = Fraction(0,1);
             Staff* st = staff(staffIdx);
             for (Segment* s = firstMeasure()->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
                   ChordRest* cr = toChordRest(s->element(track));
@@ -103,17 +103,17 @@ qDebug("checkScore: remove empty ChordRest segment");
                   if (s->tick() != tick) {
                         if (lcr) {
                               Fraction timeStretch = st->timeStretch(lcr->tick());
-                              Fraction f = cr->globalDuration() * timeStretch;
+                              Fraction f = cr->globalTicks() * timeStretch;
                               qDebug("Chord/Rest gap at tick %d(%s+%d)-%d(%s) staffIdx %d measure %d (len = %d)",
-                                 tick, lcr->name(), f.ticks(),
-                                 s->tick(), cr->name(), staffIdx, cr->measure()->no(),
-                                 cr->tick() - tick);
+                                 tick.ticks(), lcr->name(), f.ticks(),
+                                 s->tick().ticks(), cr->name(), staffIdx, cr->measure()->no(),
+                                 (cr->tick() - tick).ticks());
                               }
                         else {
                               qDebug("Chord/Rest gap at tick %d-%d(%s) staffIdx %d measure %d (len = %d)",
-                                 tick,
-                                 s->tick(), cr->name(), staffIdx, cr->measure()->no(),
-                                 cr->tick() - tick);
+                                 tick.ticks(),
+                                 s->tick().ticks(), cr->name(), staffIdx, cr->measure()->no(),
+                                 (cr->tick() - tick).ticks());
                               }
 #if 0
                         if (cr->tick() > tick) {
@@ -154,9 +154,9 @@ qDebug("    -   Rest %d/%d", d.fraction().numerator(), d.fraction().denominator(
                         tick = s->tick();
                         }
                   Fraction timeStretch = st->timeStretch(tick);
-                  Fraction f = cr->globalDuration() * timeStretch;
+                  Fraction f = cr->globalTicks() * timeStretch;
 //                  qDebug("%s %d + %d = %d", cr->name(), tick, f.ticks(), tick + f.ticks());
-                  tick      += f.ticks();
+                  tick      += f;
                   lcr        = cr;
                   }
             }
@@ -174,7 +174,7 @@ bool Score::sanityCheck(const QString& name)
       int mNumber = 1;
       QString error;
       for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-            Fraction mLen = m->len();
+            Fraction mLen = m->ticks();
             int endStaff  = staves().size();
             for (int staffIdx = 0; staffIdx < endStaff; ++staffIdx) {
                   Rest* fmrest0 = 0;      // full measure rest in voice 0
@@ -187,7 +187,7 @@ bool Score::sanityCheck(const QString& name)
                               ChordRest* cr = toChordRest(s->element(staffIdx * VOICES + v));
                               if (cr == 0)
                                     continue;
-                              voices[v] += cr->actualFraction();
+                              voices[v] += cr->actualTicks();
                               if (v == 0 && cr->isRest()) {
                                     Rest* r = toRest(cr);
                                     if (r->durationType().isMeasure()) {
@@ -207,8 +207,8 @@ bool Score::sanityCheck(const QString& name)
                         // try to fix a bad full measure rest
                         if (fmrest0) {
                               // fmrest0->setDuration(mLen * fmrest0->staff()->timeStretch(fmrest0->tick()));
-                              fmrest0->setDuration(mLen);
-                              if (fmrest0->actualFraction() != mLen)
+                              fmrest0->setTicks(mLen);
+                              if (fmrest0->actualTicks() != mLen)
                                     fprintf(stderr,"whoo???\n");
                               }
                         }
@@ -259,7 +259,7 @@ bool Score::checkKeys()
       {
       bool rc = true;
       for (int i = 0; i < nstaves(); ++i) {
-            Key k = staff(i)->key(0);
+            Key k = staff(i)->key(Fraction(0,1));
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
                   Segment* s = m->findSegment(SegmentType::KeySig, m->tick());
                   if (s) {
@@ -268,7 +268,7 @@ bool Score::checkKeys()
                               k = toKeySig(element)->key();
                         }
                   if (staff(i)->key(m->tick()) != k) {
-                        qDebug("measure %d (tick %d) : key %d, map %d", m->no(), m->tick(), int(k),
+                        qDebug("measure %d (tick %d) : key %d, map %d", m->no(), m->tick().ticks(), int(k),
                            int(staff(i)->key(m->tick())));
                         rc = false;
                         }
@@ -322,17 +322,20 @@ bool Score::checkClefs()
 void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch)
       {
       qDebug("measure %6d pos %d, len %d/%d, stretch %d/%d track %d",
-         tick(), pos.ticks(), len.numerator(), len.denominator(), stretch.numerator(), stretch.denominator(),
+         tick().ticks(),
+         pos.ticks(),
+         len.numerator(), len.denominator(),
+         stretch.numerator(), stretch.denominator(),
          track);
       TDuration d;
       d.setVal(len.ticks());
       if (d.isValid()) {
             Rest* rest = new Rest(score());
-            rest->setDuration(len);
+            rest->setTicks(len);
             rest->setDurationType(d);
             rest->setTrack(track);
             rest->setGap(true);
-            score()->undoAddCR(rest, this, (pos / stretch).ticks() + tick());
+            score()->undoAddCR(rest, this, (pos / stretch) + tick());
             }
       }
 
@@ -348,31 +351,31 @@ void Measure::checkMeasure(int staffIdx)
       if (isMMRest())
             return;
 
-      int strack = staffIdx * VOICES;
-      int dtrack = strack + (hasVoices(staffIdx) ? VOICES : 1);
-
+      int strack       = staffIdx * VOICES;
+      int dtrack       = strack + (hasVoices(staffIdx) ? VOICES : 1);
       Fraction stretch = score()->staff(staffIdx)->timeStretch(tick());
-      Fraction f       = len() * stretch;
+      Fraction f       = ticks() * stretch;
 
       for (int track = strack; track < dtrack; track++) {
-            Fraction expectedPos = 0;
-            Fraction currentPos  = 0;
+            Fraction expectedPos = Fraction(0,1);
+            Fraction currentPos  = Fraction(0,1);
 
-//            printf("Check measure==\n");
             for (Segment* seg = first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
                   Element* e = seg->element(track);
                   if (!e)
                         continue;
 
                   ChordRest* cr = toChordRest(e);
-                  currentPos    = seg->rfrac() * stretch;
-//                  printf("   %d/%d  ", seg->rfrac().numerator(), seg->rfrac().denominator());
-//                  fflush(stdout);
+                  currentPos    = seg->rtick() * stretch;
 
-                  if (currentPos < expectedPos)
-                        qDebug("overlap measure %6d at %d-%d track %d", tick(), (currentPos/stretch).ticks(), (expectedPos/stretch).ticks(), track);
-                  else if (currentPos > expectedPos)
+                  if (currentPos < expectedPos) {
+                        qDebug("in measure overrun %6d at %d-%d track %d", tick().ticks(), (currentPos/stretch).ticks(), (expectedPos/stretch).ticks(), track);
+                        break;
+                        }
+                  else if (currentPos > expectedPos) {
+                        qDebug("in measure underrun %6d at %d-%d track %d", tick().ticks(), (currentPos/stretch).ticks(), (expectedPos/stretch).ticks(), track);
                         fillGap(expectedPos, currentPos - expectedPos, track, stretch);
+                        }
 
                   DurationElement* de = cr;
                   Tuplet* tuplet = cr->topTuplet();
@@ -380,16 +383,15 @@ void Measure::checkMeasure(int staffIdx)
                         seg = skipTuplet(tuplet);
                         de  = tuplet;
                         }
-//                  printf("   + %d/%d\n", de->duration().numerator(), de->duration().denominator());
-                  expectedPos = currentPos + de->duration();
+                  expectedPos = currentPos + de->ticks();
                   }
             if (f > expectedPos) {
                   // don't fill empty voices
-                  if (expectedPos != 0)
-                        fillGap(expectedPos, len() - expectedPos, track, stretch);
+                  if (expectedPos.isNotZero())
+                        fillGap(expectedPos, ticks() - expectedPos, track, stretch);
                   }
             else if (f < expectedPos)
-                  qDebug("overfilled measure %6d, %d > %d, track %d", tick(), expectedPos.ticks(), f.ticks(), track);
+                  qDebug("measure overrun %6d, %d > %d, track %d", tick().ticks(), expectedPos.ticks(), f.ticks(), track);
             }
       }
 

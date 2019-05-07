@@ -5,7 +5,7 @@
     </Message>
   <Message>
     <Text>This is the score view, where you can view and edit your score.
-    Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
+    Use your mouse wheel or touchpad to scroll (with "Shift" to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</Text>
     <Widget>scoreview</Widget>
     </Message>
@@ -20,7 +20,7 @@
     </Message>
   <Message>
     <Text>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
-    You can also save to your musescore.com account if you go to File / Save Online.
+    You can also save to your musescore.com account if you go to File > Save Online.
     The controls at the right of this toolbar control the display of your score.</Text>
     <Widget>file-operations</Widget>
     </Message>
@@ -42,7 +42,7 @@
     </Message>
   <Message>
     <Text>The main menu contains most other commands.
-    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</Text>
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: "Ctrl"+clicking) within the score view.</Text>
     <Widget>menubar</Widget>
     <Widget>File</Widget>
     </Message>
@@ -50,6 +50,6 @@
     <Text>That's the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect "Continue showing tours" before closing this window.
-    You can also enable/disable and reset tours in Help / Tours.</Text>
+    You can also enable/disable and reset tours in Help > Tours.</Text>
     </Message>
   </Tour>

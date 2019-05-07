@@ -1,0 +1,83 @@
+init init/Treble.mscx
+cmd note-input
+cmd escape
+palette TimeSig timesig 2/4
+cmd note-input
+cmd escape
+cmd next-chord
+cmd next-chord
+palette TimeSig timesig 3/4
+cmd note-input
+cmd escape
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+palette TimeSig timesig 4/4 subtype 0
+cmd note-input
+cmd escape
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+palette TimeSig timesig 6/4
+cmd note-input
+cmd escape
+cmd next-measure
+cmd next-measure
+cmd next-measure
+palette TimeSig timesig 3/8
+cmd note-input
+cmd escape
+cmd next-measure
+palette TimeSig timesig 12/8
+cmd note-input
+cmd escape
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+palette TimeSig timesig 2/2
+cmd note-input
+cmd escape
+cmd note-input
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd escape
+test score palette_timesigs_1.mscx

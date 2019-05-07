@@ -192,6 +192,7 @@ class ScoreElement {
       virtual ElementType type() const = 0;
 
       static ElementType name2type(const QStringRef&, bool silent = false);
+      static ElementType name2type(const QString& s) { return name2type(QStringRef(&s)); }
       static const char* name(ElementType);
 
       virtual QVariant getProperty(Pid) const = 0;
@@ -357,6 +358,7 @@ class ScoreElement {
       bool isSlurTieSegment() const  { return isSlurSegment() || isTieSegment(); }
       bool isSLineSegment() const;
       bool isBox() const { return isVBox() || isHBox() || isTBox() || isFBox(); }
+      bool isVBoxBase() const { return isVBox() || isTBox() || isFBox(); }
       bool isMeasureBase() const { return isMeasure() || isBox(); }
       bool isTextBase() const;
       bool isTextLineBaseSegment() const {
@@ -584,7 +586,6 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(Page)
       CONVERT(SystemText)
       CONVERT(BracketItem)
-      CONVERT(Score)
       CONVERT(Staff)
       CONVERT(Part)
       CONVERT(BagpipeEmbellishment)

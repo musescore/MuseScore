@@ -96,8 +96,9 @@ struct StyleVal2 {
       { Sid::minSystemDistance,           Spatium(8.5)  },
       { Sid::maxSystemDistance,           Spatium(15.0) },
 
-      { Sid::lyricsMinBottomDistance,     Spatium(4.0)  },
+//      { Sid::lyricsMinBottomDistance,     Spatium(4.0)  },      // no longer makes sense
       { Sid::lyricsLineHeight,            QVariant(1.0) },
+      { Sid::lyricsDashForce,             QVariant(false) },
       { Sid::figuredBassFontFamily,       QVariant(QString("MScoreBC")) },
       { Sid::figuredBassFontSize,         QVariant(8.0) },
       { Sid::figuredBassYOffset,          QVariant(6.0) },
@@ -283,7 +284,7 @@ struct StyleVal2 {
       { Sid::staffTextAlign,              QVariant::fromValue(Align::LEFT | Align::TOP) },      // different from 3.x
 //      { Sid::staffTextOffsetType,         int(OffsetType::SPATIUM)   },
 //      { Sid::staffTextPlacement,          int(Placement::ABOVE) },
-//      { Sid::staffTextPosAbove,           QPointF(.0, -2.0) },
+      { Sid::staffTextPosAbove,           QPointF(.0, -4.0) },
 //      { Sid::staffTextMinDistance,        Spatium(0.5)  },
 //      { Sid::staffTextFrameType,          int(FrameType::NO_FRAME) },
 //      { Sid::staffTextFramePadding,       0.2 },
@@ -357,6 +358,15 @@ struct StyleVal2 {
       };
 
 //---------------------------------------------------------
+//   excessTextStyles206
+//    The first map has the name of the style as the string
+//    The second map has the mapping of each Sid that the style identifies
+//    to the default value for that sid.
+//---------------------------------------------------------
+
+static std::map<QString, std::map<Sid, QVariant>> excessTextStyles206;
+
+//---------------------------------------------------------
 //   setPageFormat
 //    set Style from PageFormat
 //---------------------------------------------------------
@@ -412,11 +422,11 @@ void readPageFormat(MStyle* style, XmlReader& e)
 //   readTextStyle206
 //---------------------------------------------------------
 
-void readTextStyle206(MStyle* style, XmlReader& e)
+void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid, QVariant>>& excessStyles)
       {
       QString family = "FreeSerif";
       double size = 10;
-      bool sizeIsSpatiumDependent = true;
+      bool sizeIsSpatiumDependent = false;
       FontStyle fontStyle = FontStyle::Normal;
       Align align = Align::LEFT;
       QPointF offset;
@@ -609,22 +619,32 @@ void readTextStyle206(MStyle* style, XmlReader& e)
                   break;
                   }
             }
+
+      bool isExcessStyle = false;
       if (ss == Tid::TEXT_STYLES) {
             ss = e.addUserTextStyle(name);
             if (ss == Tid::TEXT_STYLES) {
                   qDebug("unhandled substyle <%s>", qPrintable(name));
-                  return;
+                  isExcessStyle = true;
                   }
-            int idx = int(ss) - int(Tid::USER1);
-            if ((idx < 0) || (idx > 5)) {
-                  qDebug("User style index %d outside of range [0,5].", idx);
-                  return;
+            else {
+                  int idx = int(ss) - int(Tid::USER1);
+                  if ((idx < 0) || (idx > 5)) {
+                        qDebug("User style index %d outside of range [0,5].", idx);
+                        return;
+                        }
+                  Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name };
+                  style->set(sid[idx], name);
                   }
-            Sid sid[] = { Sid::user1Name, Sid::user2Name, Sid::user3Name, Sid::user4Name, Sid::user5Name, Sid::user6Name };
-            style->set(sid[idx], name);
             }
 
-      for (const auto& i : *textStyle(ss)) {
+      std::map<Sid, QVariant> excessPairs;
+      const TextStyle* ts;
+      if (isExcessStyle)
+            ts = textStyle("User-1");
+      else
+            ts = textStyle(ss);
+      for (const auto& i : *ts) {
             QVariant value;
             if (i.sid == Sid::NOSTYLE)
                   break;
@@ -715,11 +735,18 @@ void readTextStyle206(MStyle* style, XmlReader& e)
 //                        qDebug("unhandled property <%s>%d", propertyName(i.pid), int (i.pid));
                         break;
                   }
-            if (value.isValid())
-                  style->set(i.sid, value);
+            if (value.isValid()) {
+                  if (isExcessStyle)
+                        excessPairs[i.sid] = value;
+                  else
+                        style->set(i.sid, value);
+                  }
 //            else
 //                  qDebug("invalid style value <%s> pid<%s>", MStyle::valueName(i.sid), propertyName(i.pid));
             }
+
+      if (isExcessStyle && excessPairs.size() > 0)
+            excessStyles[name] = excessPairs;
       }
 
 //---------------------------------------------------------
@@ -998,6 +1025,10 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
             else
                  e.unknown();
             }
+
+      // Read single-note dynamics from template
+      i->setSingleNoteDynamicsFromTemplate();
+
       if (i->channel().empty()) {      // for backward compatibility
             Channel* a = new Channel;
             a->setName(Channel::DEFAULT_NAME);
@@ -1012,7 +1043,6 @@ static void readInstrument(Instrument *i, Part* p, XmlReader& e)
       if (i->useDrumset()) {
             if (i->channel()[0]->bank() == 0)
                   i->channel()[0]->setBank(128);
-            i->channel()[0]->updateInitList();
             }
       }
 
@@ -1059,7 +1089,7 @@ void readPart206(Part* part, XmlReader& e)
                   readInstrument(i, part, e);
                   Drumset* ds = i->drumset();
                   Staff*   s = part->staff(0);
-                  int lld = s ? qRound(s->lineDistance(0)) : 1;
+                  int lld = s ? qRound(s->lineDistance(Fraction(0,1))) : 1;
                   if (ds && s && lld > 1) {
                         for (int j = 0; j < DRUM_INSTRUMENTS; ++j)
                               ds->drum(j).line /= lld;
@@ -1142,7 +1172,7 @@ static void readNote(Note* note, XmlReader& e)
                   note->setTpc2(tpc);
             }
       if (!(tpcIsValid(note->tpc1()) && tpcIsValid(note->tpc2()))) {
-            int tick = note->chord() ? note->chord()->tick() : -1;
+            Fraction tick = note->chord() ? note->chord()->tick() : Fraction(-1,1);
             Interval v = note->staff() ? note->part()->instrument(tick)->transpose() : Interval();
             if (tpcIsValid(note->tpc1())) {
                   v.flip();
@@ -1196,6 +1226,100 @@ static void readNote(Note* note, XmlReader& e)
                   }
             }
 #endif
+      }
+
+//---------------------------------------------------------
+//   adjustPlacement
+//---------------------------------------------------------
+
+static void adjustPlacement(Element* e)
+      {
+      if (!e || !e->staff())
+            return;
+
+      // element to use to determine placement
+      // for spanners, choose first segment
+      Element* ee;
+      Spanner* spanner;
+      if (e->isSpanner()) {
+            spanner = toSpanner(e);
+            if (spanner->spannerSegments().empty())
+                  return;
+            ee = spanner->spannerSegments().front();
+            if (!ee)
+                  return;
+            }
+      else {
+            spanner = nullptr;
+            ee = e;
+            }
+
+      // determine placement based on offset
+      // anything below staff will be set to below
+      qreal staffHeight = e->staff()->height();
+      qreal threshold = staffHeight;
+      qreal offsetAdjust = 0.0;
+      Placement defaultPlacement = Placement(e->propertyDefault(Pid::PLACEMENT).toInt());
+      Placement newPlacement;
+      // most offsets will be recorded as relative to top staff line
+      // exceptions are styled offsets on elements with default placement below
+      qreal normalize;
+      if (defaultPlacement == Placement::BELOW && ee->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED)
+            normalize = staffHeight;
+      else
+            normalize = 0.0;
+      qreal ypos = ee->offset().y() + normalize;
+      if (ypos >= threshold) {
+            newPlacement = Placement::BELOW;
+            offsetAdjust -= staffHeight;
+            }
+      else {
+            newPlacement = Placement::ABOVE;
+            }
+
+      // set placement
+      e->setProperty(Pid::PLACEMENT, int(newPlacement));
+      if (newPlacement != defaultPlacement)
+            e->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+
+      // adjust offset
+      if (spanner) {
+            // adjust segments individually
+            for (auto a : spanner->spannerSegments()) {
+                  // spanner segments share the placement setting of the spanner
+                  // just adjust offset
+                  if (defaultPlacement == Placement::BELOW && a->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED)
+                        normalize = staffHeight;
+                  else
+                        normalize = 0.0;
+                  qreal yp = a->offset().y() + normalize;
+                  a->ryoffset() += normalize + offsetAdjust;
+
+                  // if any segments are offset to opposite side of staff from placement,
+                  // or if they are within staff,
+                  // disable autoplace
+                  bool disableAutoplace;
+                  if (yp + a->height() <= 0.0)
+                        disableAutoplace = (newPlacement == Placement::BELOW);
+                  else if (yp > staffHeight)
+                        disableAutoplace = (newPlacement == Placement::ABOVE);
+                  else
+                        disableAutoplace = true;
+                  if (disableAutoplace)
+                        a->setAutoplace(false);
+                  // needed for https://musescore.org/en/node/281312
+                  // ideally we would rebase and calculate new offset
+                  // but this may not be possible
+                  // since original offset is relative to system
+                  a->rxoffset() = 0;
+                  }
+            }
+      else {
+            e->ryoffset() += normalize + offsetAdjust;
+            // if within staff, disable autoplace
+            if (ypos + e->height() > 0.0 && ypos <= staffHeight)
+                  e->setAutoplace(false);
+            }
       }
 
 //---------------------------------------------------------
@@ -1340,7 +1464,7 @@ bool readNoteProperties206(Note* note, XmlReader& e)
                         placeholder->setAnchor(Spanner::Anchor::NOTE);
                         placeholder->setEndElement(note);
                         placeholder->setTrack2(note->track());
-                        placeholder->setTick(0);
+                        placeholder->setTick(Fraction(0,1));
                         placeholder->setTick2(e.tick());
                         e.addSpanner(id1, placeholder);
                         }
@@ -1383,9 +1507,7 @@ bool readNoteProperties206(Note* note, XmlReader& e)
                   note->addSpannerFor(sp);
                   sp->setParent(note);
                   }
-            for (auto a : sp->spannerSegments()) {
-                  a->setProperty(Pid::PLACEMENT, a->offset().y() > 0.0 ? int(Placement::BELOW) : int(Placement::ABOVE));
-                  }
+            adjustPlacement(sp);
             }
       else if (tag == "offset")
             note->Element::readProperties(e);
@@ -1432,12 +1554,25 @@ static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be, QSt
             return true;
 
       if (!be->isTuplet()) {      // Hack
-            Tid ss;
-            ss = e.lookupUserTextStyle(s);
-            if (ss == Tid::TEXT_STYLES)
-                  ss = textStyleFromName(s);
-            if (ss != Tid::TEXT_STYLES)
-                  t->initTid(ss);
+            if (excessTextStyles206.find(s) != excessTextStyles206.end()) {
+                  // Init the text with a style that can't be stored as a user style
+                  // due to the limit on the number of user styles possible.
+                  // Use User-1, since it has all the possible user style pids
+                  t->initTid(Tid::DEFAULT);
+                  std::map<Sid, QVariant> styleVals = excessTextStyles206[s];
+                  for (const StyledProperty& p : *textStyle("User-1")) {
+                        if (t->getProperty(p.pid) == t->propertyDefault(p.pid) && styleVals.find(p.sid) != styleVals.end())
+                              t->setProperty(p.pid, styleVals[p.sid]);
+                        }
+                  }
+            else {
+                  Tid ss;
+                  ss = e.lookupUserTextStyle(s);
+                  if (ss == Tid::TEXT_STYLES)
+                        ss = textStyleFromName(s);
+                  if (ss != Tid::TEXT_STYLES)
+                        t->initTid(ss);
+                  }
             }
 
       return true;
@@ -1447,7 +1582,7 @@ static bool readTextPropertyStyle206(XmlReader& e, TextBase* t, Element* be, QSt
 //   readTextProperties206
 //---------------------------------------------------------
 
-static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
+static bool readTextProperties206(XmlReader& e, TextBase* t)
       {
       const QStringRef& tag(e.name());
       if (tag == "style") {
@@ -1507,15 +1642,7 @@ static bool readTextProperties206(XmlReader& e, TextBase* t, Element* be)
             t->readProperty(e, Pid::OFFSET);
             if ((char(t->align()) & char(Align::VMASK)) == char(Align::TOP))
                   t->ryoffset() += .5 * t->score()->spatium();     // HACK: bbox is different in 2.x
-            if (t->staff()) {
-                  qreal staffHeight = t->staff()->height();
-                  if (t->offset().y() >= staffHeight) {
-                        t->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                        t->ryoffset() -= staffHeight;
-                        }
-                  else
-                        t->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-                  }
+            adjustPlacement(t);
             }
       else if (!t->readProperties(e))
             return false;
@@ -1530,7 +1657,7 @@ static void readText206(XmlReader& e, TextBase* t, Element* be)
       {
       readTextPropertyStyle206(e, t, be, e.name());
       while (e.readNextStartElement()) {
-            if (!readTextProperties206(e, t, be))
+            if (!readTextProperties206(e, t))
                   e.unknown();
             }
       }
@@ -1548,7 +1675,7 @@ static void readTempoText(TempoText* t, XmlReader& e)
                   t->setTempo(e.readDouble());
             else if (tag == "followText")
                   t->setFollowText(e.readInt());
-            else if (!readTextProperties206(e, t, t))
+            else if (!readTextProperties206(e, t))
                   e.unknown();
             }
       // check sanity
@@ -1576,7 +1703,7 @@ static void readMarker(Marker* m, XmlReader& e)
                   m->setLabel(s);
                   mt = m->markerType(s);
                   }
-            else if (!readTextProperties206(e, m, m))
+            else if (!readTextProperties206(e, m))
                   e.unknown();
             }
       m->setMarkerType(mt);
@@ -1597,7 +1724,7 @@ static void readDynamic(Dynamic* d, XmlReader& e)
                   d->setVelocity(e.readInt());
             else if (tag == "dynType")
                   d->setDynRange(Dynamic::Range(e.readInt()));
-            else if (!readTextProperties206(e, d, d))
+            else if (!readTextProperties206(e, d))
                   e.unknown();
             }
       }
@@ -1628,9 +1755,9 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             else if (!readTupletProperties206(e, tuplet))
                   e.unknown();
             }
-      Fraction r = (tuplet->ratio() == 1) ? tuplet->ratio() : tuplet->ratio().reduced();
+      Fraction r = (tuplet->ratio() == Fraction(1,1)) ? tuplet->ratio() : tuplet->ratio().reduced();
       Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
-      tuplet->setDuration(f.reduced());
+      tuplet->setTicks(f.reduced());
       }
 
 //---------------------------------------------------------
@@ -1662,7 +1789,7 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e)
 
       // if any endTick, make it relative to current tick
       if (iEndTick)
-            lyrics->setTicks(iEndTick - e.tick());
+            lyrics->setTicks(Fraction::fromTicks(iEndTick) - e.tick());
       if (_verseNumber) {
             // TODO: add text to main text
             delete _verseNumber;
@@ -1759,21 +1886,21 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                               // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
                               // (see Fraction() constructor in fraction.h; this happens for instance
                               // when pasting selection from clipboard): they should not be converted
-                              ch->duration().numerator() != 0 &&
+                              ch->ticks().numerator() != 0 &&
                               // rest durations are initialized to full measure duration when
                               // created upon reading the <Rest> tag (see Measure::read() )
                               // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                              (ch->actualDurationType()==TDuration::DurationType::V_WHOLE && ch->duration() <= Fraction(4, 4)) ) {
+                              (ch->actualDurationType()==TDuration::DurationType::V_WHOLE && ch->ticks() <= Fraction(4, 4)) ) {
                         // old pre 2.0 scores: convert
                         ch->setDurationType(TDuration::DurationType::V_MEASURE);
                         }
                   else  // not from old score: set duration fraction from duration type
-                        ch->setDuration(ch->actualDurationType().fraction());
+                        ch->setTicks(ch->actualDurationType().fraction());
                   }
             else {
                   if (ch->score()->mscVersion() <= 114) {
                         SigEvent event = ch->score()->sigmap()->timesig(e.tick());
-                        ch->setDuration(event.timesig());
+                        ch->setTicks(event.timesig());
                         }
                   }
             }
@@ -1799,7 +1926,7 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
             ch->setBeamMode(bm);
             }
       else if (tag == "Articulation") {
-            Element* el = readArticulation(ch, e);
+            Element* el = readArticulation(ch->score(), e);
             if (el->isFermata())
                   ch->segment()->add(el);
             else
@@ -1820,7 +1947,7 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
       else if (tag == "small")
             ch->setSmall(e.readInt());
       else if (tag == "duration")
-            ch->setDuration(e.readFraction());
+            ch->setTicks(e.readFraction());
       else if (tag == "ticklen") {      // obsolete (version < 1.12)
             int mticks = ch->score()->sigmap()->timesig(e.tick()).timesig().ticks();
             int i = e.readInt();
@@ -1828,11 +1955,11 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                   i = mticks;
             if ((ch->type() == ElementType::REST) && (mticks == i)) {
                   ch->setDurationType(TDuration::DurationType::V_MEASURE);
-                  ch->setDuration(Fraction::fromTicks(i));
+                  ch->setTicks(Fraction::fromTicks(i));
                   }
             else {
                   Fraction f = Fraction::fromTicks(i);
-                  ch->setDuration(f);
+                  ch->setTicks(f);
                   ch->setDurationType(TDuration(f));
                   }
             }
@@ -1860,8 +1987,8 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                   }
             else {
                   if (atype == "start") {
-                        if (spanner->ticks() > 0 && spanner->tick() == -1) // stop has been read first
-                              spanner->setTicks(spanner->ticks() - e.tick() - 1);
+                        if (spanner->ticks() > Fraction(0,1) && spanner->tick() == Fraction(-1,1)) // stop has been read first
+                              spanner->setTicks(spanner->ticks() - e.tick() - Fraction::fromTicks(1));
                         spanner->setTick(e.tick());
                         spanner->setTrack(ch->track());
                         if (spanner->type() == ElementType::SLUR)
@@ -2228,15 +2355,7 @@ static void readVolta206(XmlReader& e, Volta* volta)
             else if (!readTextLineProperties(e, volta))
                   e.unknown();
             }
-      for (auto a : volta->spannerSegments()) {
-            qreal belowThreshold = a->spatium() * 4.0;
-            if (a->offset().y() >= belowThreshold) {
-                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                  a->ryoffset() -= a->spatium() * 4.0;
-                  }
-            else
-                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-            }
+      adjustPlacement(volta);
       }
 
 //---------------------------------------------------------
@@ -2249,15 +2368,7 @@ static void readPedal(XmlReader& e, Pedal* pedal)
             if (!readTextLineProperties(e, pedal))
                   e.unknown();
             }
-      for (auto a : pedal->spannerSegments()) {
-            qreal belowThreshold = a->spatium() * 4.0;
-            if (a->offset().y() >= belowThreshold) {
-                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                  a->ryoffset() -= a->spatium() * 4.0;
-                  }
-            else
-                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-            }
+      adjustPlacement(pedal);
       }
 
 //---------------------------------------------------------
@@ -2292,15 +2403,8 @@ static void readOttava(XmlReader& e, Ottava* ottava)
             else if (!readTextLineProperties(e, ottava))
                   e.unknown();
             }
-      for (auto a : ottava->spannerSegments()) {
-            qreal belowThreshold = a->spatium() * 4.0;
-            if (a->offset().y() >= belowThreshold) {
-                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                  a->ryoffset() -= a->spatium() * 4.0;
-                  }
-            else
-                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-            }
+      ottava->styleChanged();
+      adjustPlacement(ottava);
       }
 
 //---------------------------------------------------------
@@ -2348,16 +2452,7 @@ void readHairpin206(XmlReader& e, Hairpin* h)
             h->setContinueText("");
             h->setEndText("");
             }
-      for (auto a : h->spannerSegments()) {
-            qreal belowThreshold = a->spatium() * 4.0;
-            if (a->offset().y() >= belowThreshold) {
-                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                  a->ryoffset() -= a->spatium() * 4.0;
-                  }
-            else
-                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-            a->rxoffset() = 0;
-            }
+      adjustPlacement(h);
       }
 
 //---------------------------------------------------------
@@ -2376,13 +2471,14 @@ void readTrill206(XmlReader& e, Trill* t)
                   _accidental->setParent(t);
                   t->setAccidental(_accidental);
                   }
-            else if ( tag == "ornamentStyle")
+            else if (tag == "ornamentStyle")
                   t->readProperty(e, Pid::ORNAMENT_STYLE);
-            else if ( tag == "play")
+            else if (tag == "play")
                   t->setPlayArticulation(e.readBool());
             else if (!t->SLine::readProperties(e))
                   e.unknown();
             }
+      adjustPlacement(t);
       }
 
 //---------------------------------------------------------
@@ -2395,15 +2491,7 @@ void readTextLine206(XmlReader& e, TextLineBase* tlb)
             if (!readTextLineProperties(e, tlb))
                   e.unknown();
             }
-      for (auto a : tlb->spannerSegments()) {
-            qreal belowThreshold = a->spatium() * 4.0;
-            if (a->offset().y() >= belowThreshold) {
-                  a->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                  a->ryoffset() -= a->spatium() * 4.0;
-                  }
-            else
-                  a->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-            }
+      adjustPlacement(tlb);
       }
 
 //---------------------------------------------------------
@@ -2442,12 +2530,13 @@ static void setFermataPlacement(Element* el, ArticulationAnchor anchor, Directio
 //   readArticulation
 //---------------------------------------------------------
 
-Element* readArticulation(ChordRest* cr, XmlReader& e)
+Element* readArticulation(Score* score, XmlReader& e)
       {
       Element* el = 0;
       SymId sym = SymId::fermataAbove;          // default -- backward compatibility (no type = ufermata in 1.2)
       ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
       Direction direction = Direction::AUTO;
+      int track = e.track();
       double timeStretch = 0.0;
       bool useDefaultPlacement = true;
 
@@ -2499,7 +2588,7 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                                           sym       = al[i].id;
                                           bool up   = al[i].up;
                                           direction = up ? Direction::UP : Direction::DOWN;
-                                          if ((direction == Direction::DOWN) != (cr->track() & 1))
+                                          if ((direction == Direction::DOWN) != (track & 1))
                                                 useDefaultPlacement = false;
                                           break;
                                           }
@@ -2520,10 +2609,10 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
                         case SymId::fermataLongBelow:
                         case SymId::fermataVeryLongAbove:
                         case SymId::fermataVeryLongBelow:
-                              el = new Fermata(sym, cr->score());
+                              el = new Fermata(sym, score);
                               break;
                         default:
-                              el = new Articulation(sym, cr->score());
+                              el = new Articulation(sym, score);
                               toArticulation(el)->setDirection(direction);
                               break;
                         };
@@ -2555,16 +2644,16 @@ Element* readArticulation(ChordRest* cr, XmlReader& e)
             }
       // Special case for "no type" = ufermata, with missing subtype tag
       if (!el)
-            el = new Fermata(sym, cr->score());
+            el = new Fermata(sym, score);
       if (el->isFermata()) {
             if (timeStretch != 0.0)
                   el->setProperty(Pid::TIME_STRETCH, timeStretch);
             if (useDefaultPlacement)
-                  el->setPlacement(cr->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+                  el->setPlacement(track & 1 ? Placement::BELOW : Placement::ABOVE);
             else
                   setFermataPlacement(el, anchor, direction);
             }
-      el->setTrack(cr->track());
+      el->setTrack(track);
       return el;
       }
 
@@ -2657,18 +2746,18 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
 
       // tick is obsolete
       if (e.hasAttribute("tick"))
-            e.initTick(score->fileDivision(e.intAttribute("tick")));
+            e.setTick(Fraction::fromTicks(score->fileDivision(e.intAttribute("tick"))));
 
       bool irregular;
       if (e.hasAttribute("len")) {
             QStringList sl = e.attribute("len").split('/');
             if (sl.size() == 2)
-                  m->setLen(Fraction(sl[0].toInt(), sl[1].toInt()));
+                  m->setTicks(Fraction(sl[0].toInt(), sl[1].toInt()));
             else
                   qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
             irregular = true;
-            score->sigmap()->add(m->tick(), SigEvent(m->len(), m->timesig()));
-            score->sigmap()->add(m->endTick(), SigEvent(m->timesig()));
+            score->sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
+            score->sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
             }
       else
             irregular = false;
@@ -2679,18 +2768,20 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
       // keep track of tick of previous element
       // this allows markings that need to apply to previous element to do so
       // even though we may have already advanced to next tick position
-      int lastTick = e.tick();
+      Fraction lastTick = e.tick();
 
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
             if (tag == "move")
-                  e.initTick(e.readFraction().ticks() + m->tick());
+                  e.setTick(e.readFraction() + m->tick());
             else if (tag == "tick") {
-                  e.initTick(score->fileDivision(e.readInt()));
+                  e.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
                   lastTick = e.tick();
                   }
             else if (tag == "BarLine") {
+                  Fermata* fermataAbove = nullptr;
+                  Fermata* fermataBelow = nullptr;
                   BarLine* bl = new BarLine(score);
                   bl->setTrack(e.track());
                   while (e.readNextStartElement()) {
@@ -2712,9 +2803,17 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         else if (t == "spanToOffset")
                               bl->setSpanTo(e.readInt());
                         else if (t == "Articulation") {
-                              Articulation* a = new Articulation(score);
-                              a->read(e);
-                              bl->add(a);
+                              Element* el = readArticulation(score, e);
+                              if (el->isFermata()) {
+                                    if (el->placement() == Placement::ABOVE)
+                                          fermataAbove = toFermata(el);
+                                    else {
+                                          fermataBelow = toFermata(el);
+                                          fermataBelow->setTrack((bl->staffIdx() + bl->spanStaff()) * VOICES);
+                                          }
+                                    }
+                              else
+                                    bl->add(el);
                               }
                         else if (!bl->Element::readProperties(e))
                               e.unknown();
@@ -2736,6 +2835,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         st = SegmentType::EndBarLine;
                   segment = m->getSegment(st, e.tick());
                   segment->add(bl);
+                  bl->layout();
+                  if (fermataAbove)
+                        segment->add(fermataAbove);
+                  if (fermataBelow)
+                        segment->add(fermataBelow);
                   }
             else if (tag == "Chord") {
                   Chord* chord = new Chord(score);
@@ -2753,23 +2857,23 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               chord->add(gc);
                               }
                         graceNotes.clear();
-                        int crticks = chord->actualTicks();
-                        lastTick    = e.tick();
+                        Fraction crticks = chord->actualTicks();
+                        lastTick         = e.tick();
                         e.incTick(crticks);
                         }
                   }
             else if (tag == "Rest") {
                   Rest* rest = new Rest(score);
                   rest->setDurationType(TDuration::DurationType::V_MEASURE);
-                  rest->setDuration(m->timesig()/timeStretch);
+                  rest->setTicks(m->timesig()/timeStretch);
                   rest->setTrack(e.track());
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   rest->setParent(segment);
                   readRest(rest, e);
                   segment->add(rest);
 
-                  if (!rest->duration().isValid())     // hack
-                        rest->setDuration(m->timesig()/timeStretch);
+                  if (!rest->ticks().isValid())     // hack
+                        rest->setTicks(m->timesig()/timeStretch);
 
                   lastTick = e.tick();
                   e.incTick(rest->actualTicks());
@@ -2777,13 +2881,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             else if (tag == "Breath") {
                   Breath* breath = new Breath(score);
                   breath->setTrack(e.track());
-                  int tick = e.tick();
+                  Fraction tick = e.tick();
                   breath->read(e);
                   // older scores placed the breath segment right after the chord to which it applies
                   // rather than before the next chordrest segment with an element for the staff
                   // result would be layout too far left if there are other segments due to notes in other staves
                   // we need to find tick of chord to which this applies, and add its duration
-                  int prevTick;
+                  Fraction prevTick;
                   if (e.tick() < tick)
                         prevTick = e.tick();    // use our own tick if we explicitly reset to earlier position
                   else
@@ -2884,8 +2988,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   clef->setTrack(e.track());
                   clef->read(e);
                   clef->setGenerated(false);
-                  if (e.tick() == 0) {
-                        if (score->staff(staffIdx)->clef(0) != clef->clefType())
+                  if (e.tick().isZero()) {
+                        if (score->staff(staffIdx)->clef(Fraction(0,1)) != clef->clefType())
                               score->staff(staffIdx)->setDefaultClefType(clef->clefType());
                         if (clef->links() && clef->links()->size() == 1) {
                               e.linkIds().remove(clef->links()->lid());
@@ -2945,7 +3049,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   ts->setTrack(e.track());
                   ts->read(e);
                   // if time sig not at beginning of measure => courtesy time sig
-                  int currTick = e.tick();
+                  Fraction currTick = e.tick();
                   bool courtesySig = (currTick > m->tick());
                   if (courtesySig) {
                         // if courtesy sig., just add it without map processing
@@ -2961,12 +3065,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         m->setTimesig(ts->sig() / timeStretch);
 
                         if (irregular) {
-                              score->sigmap()->add(m->tick(), SigEvent(m->len(), m->timesig()));
-                              score->sigmap()->add(m->endTick(), SigEvent(m->timesig()));
+                              score->sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
+                              score->sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
                               }
                         else {
-                              m->setLen(m->timesig());
-                              score->sigmap()->add(m->tick(), SigEvent(m->timesig()));
+                              m->setTicks(m->timesig());
+                              score->sigmap()->add(m->tick().ticks(), SigEvent(m->timesig()));
                               }
                         }
                   }
@@ -2974,14 +3078,15 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   KeySig* ks = new KeySig(score);
                   ks->setTrack(e.track());
                   ks->read(e);
-                  int curTick = e.tick();
-                  if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick == 0) {
+                  Fraction curTick = e.tick();
+                  if (!ks->isCustom() && !ks->isAtonal() && ks->key() == Key::C && curTick.isZero()) {
                         // ignore empty key signature
                         qDebug("remove keysig c at tick 0");
                         if (ks->links()) {
                               if (ks->links()->size() == 1)
                                     e.linkIds().remove(ks->links()->lid());
                               }
+                        delete ks;
                         }
                   else {
                         // if key sig not at beginning of measure => courtesy key sig
@@ -3034,6 +3139,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               }
                         }
                   else {
+#if 0
+                        // This code was added at commit ed5b615
+                        // but it seems to no longer be appropriate.
+                        // autoplace is usually true,
+                        // exception is text within staff,
+                        // and in this case offset is already correct without further adjustment.
                         if (!t->autoplace()) {
                               // adjust position
                               qreal userY = t->offset().y() / t->spatium();
@@ -3042,6 +3153,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               t->setAlign(Align::LEFT | Align::TOP);
                               t->ryoffset() = yo;
                               }
+#endif
                         segment = m->getSegment(SegmentType::ChordRest, e.tick());
                         segment->add(t);
                         }
@@ -3098,16 +3210,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   // for symbols attached to anything but a measure
                   el->setTrack(e.track());
                   el->read(e);
-                  if (el->staff() && (el->isHarmony() || el->isFretDiagram() || el->isInstrumentChange())) {
-                        qreal staffHeight = el->staff()->height();
-                        if (el->offset().y() >= staffHeight) {
-                              el->setProperty(Pid::PLACEMENT, int(Placement::BELOW));
-                              el->ryoffset() -= staffHeight;
-                              }
-                        else
-                              el->setProperty(Pid::PLACEMENT, int(Placement::ABOVE));
-                        }
-
+                  if (el->staff() && (el->isHarmony() || el->isFretDiagram() || el->isInstrumentChange()))
+                        adjustPlacement(el);
                   segment = m->getSegment(SegmentType::ChordRest, e.tick());
                   segment->add(el);
                   }
@@ -3239,7 +3343,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   m->setMMRestCount(e.readInt());
                   // set tick to previous measure
                   m->setTick(e.lastMeasure()->tick());
-                  e.initTick(e.lastMeasure()->tick());
+                  e.setTick(e.lastMeasure()->tick());
                   }
             else if (m->MeasureBase::readProperties(e))
                   ;
@@ -3259,6 +3363,10 @@ static void readBox(Box* b, XmlReader& e)
       b->setRightMargin(0.0);
       b->setTopMargin(0.0);
       b->setBottomMargin(0.0);
+      b->setTopGap(0.0);
+      b->setBottomGap(0.0);
+      b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
+      b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
 
       b->setBoxHeight(Spatium(0));     // override default set in constructor
       b->setBoxWidth(Spatium(0));
@@ -3316,14 +3424,22 @@ static void readBox(Box* b, XmlReader& e)
 static void readStaffContent(Score* score, XmlReader& e)
       {
       int staff = e.intAttribute("id", 1) - 1;
-      e.initTick(0);
+      e.setTick(Fraction(0,1));
       e.setTrack(staff * VOICES);
+      Box* lastReadBox = nullptr;
+      bool readMeasureLast = false;
 
       if (staff == 0) {
             while (e.readNextStartElement()) {
                   const QStringRef& tag(e.name());
 
                   if (tag == "Measure") {
+                        if (lastReadBox) {
+                              lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).toReal());
+                              lastReadBox = nullptr;
+                              }
+                        readMeasureLast = true;
+
                         Measure* measure = 0;
                         measure = new Measure(score);
                         measure->setTick(e.tick());
@@ -3332,7 +3448,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                         //
                         Measure* m = e.lastMeasure(); // measure->prevMeasure();
                         Fraction f(m ? m->timesig() : Fraction(4,4));
-                        measure->setLen(f);
+                        measure->setTicks(f);
                         measure->setTimesig(f);
 
                         readMeasure(measure, staff, e);
@@ -3340,7 +3456,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                         if (!measure->isMMRest()) {
                               score->measures()->add(measure);
                               e.setLastMeasure(measure);
-                              e.initTick(measure->tick() + measure->ticks());
+                              e.setTick(measure->endTick());
                               }
                         else {
                               // this is a multi measure rest
@@ -3358,9 +3474,21 @@ static void readStaffContent(Score* score, XmlReader& e)
                         readBox(b, e);
                         b->setTick(e.tick());
                         score->measures()->add(b);
+
+                        // If it's the first box, and comes before any measures, reset to
+                        // 301 default.
+                        if (!readMeasureLast && !lastReadBox) {
+                              b->setTopGap(b->propertyDefault(Pid::TOP_GAP).toReal());
+                              b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::STYLED);
+                              }
+                        else if (readMeasureLast)
+                              b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).toReal());
+
+                        lastReadBox = b;
+                        readMeasureLast = false;
                         }
                   else if (tag == "tick")
-                        e.initTick(score->fileDivision(e.readInt()));
+                        e.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
                   else
                         e.unknown();
                   }
@@ -3377,7 +3505,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                               measure->setTick(e.tick());
                               score->measures()->add(measure);
                               }
-                        e.initTick(measure->tick());
+                        e.setTick(measure->tick());
                         readMeasure(measure, staff, e);
                         measure->checkMeasure(staff);
                         if (measure->isMMRest())
@@ -3391,7 +3519,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                               }
                         }
                   else if (tag == "tick")
-                        e.initTick(score->fileDivision(e.readInt()));
+                        e.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
                   else
                         e.unknown();
                   }
@@ -3406,11 +3534,11 @@ static void readStyle(MStyle* style, XmlReader& e)
       {
       QString oldChordDescriptionFile = style->value(Sid::chordDescriptionFile).toString();
       bool chordListTag = false;
+      excessTextStyles206.clear();
       while (e.readNextStartElement()) {
             QString tag = e.name().toString();
-
             if (tag == "TextStyle")
-                  readTextStyle206(style, e);
+                  readTextStyle206(style, e, excessTextStyles206);
             else if (tag == "Spatium")
                   style->set(Sid::spatium, e.readDouble() * DPMM);
             else if (tag == "page-layout")
@@ -3424,6 +3552,11 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "lyricsDistance") {
                   qreal y = e.readDouble();
                   style->set(Sid::lyricsPosBelow, QPointF(0.0, y));
+                  }
+            else if (tag == "lyricsMinBottomDistance") {
+                  // no longer meaningful since it is now measured from skyline rather than staff
+                  //style->set(Sid::lyricsMinBottomDistance, QPointF(0.0, y));
+                  e.skipCurrentElement();
                   }
             else if (tag == "ottavaHook") {
                   qreal y = qAbs(e.readDouble());
@@ -3486,11 +3619,8 @@ static void readStyle(MStyle* style, XmlReader& e)
             }
 
       // make sure we have a chordlist
-      if (!style->chordList()->loaded() && !chordListTag) {
-            if (style->value(Sid::chordsXmlFile).toBool())
-                  style->chordList()->read("chords.xml");
-            style->chordList()->read(newChordDescriptionFile);
-            }
+      if (!chordListTag)
+            style->checkChordList();
       }
 
 //---------------------------------------------------------
@@ -3542,6 +3672,8 @@ static bool readScore(Score* score, XmlReader& e)
                   score->setCurrentLayer(e.readInt());
             else if (tag == "Synthesizer")
                   score->synthesizerState().read(e);
+            else if (tag == "page-offset")
+                  score->setPageNumberOffset(e.readInt());
             else if (tag == "Division")
                   score->setFileDivision(e.readInt());
             else if (tag == "showInvisible")
@@ -3637,13 +3769,13 @@ static bool readScore(Score* score, XmlReader& e)
                   else {
                         e.tracks().clear();
                         MasterScore* m = score->masterScore();
-                        Score* s = new Score(m, MScore::defaultStyle());
+                        Score* s = new Score(m, MScore::baseStyle());
                         Excerpt* ex = new Excerpt(m);
 
                         ex->setPartScore(s);
-                        ex->setTracks(e.tracks());
                         e.setLastMeasure(nullptr);
                         readScore(s, e);
+                        ex->setTracks(e.tracks());
                         m->addExcerpt(ex);
                         }
                   }

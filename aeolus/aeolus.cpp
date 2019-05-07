@@ -55,7 +55,7 @@ Synthesizer* createAeolus()
 Aeolus::Aeolus()
       {
       model = 0;
-      patchList.append(new MidiPatch { false, "Aeolus", 0, 0, "Aeolus" });
+      patchList.append(new MidiPatch { false, "Aeolus", 0, 0, 0, "Aeolus" });
 
       _sc_cmode = 0;
       _sc_group = 0;

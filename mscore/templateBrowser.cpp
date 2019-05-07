@@ -74,6 +74,7 @@ TemplateBrowser::TemplateBrowser(QWidget* parent)
       else
             preview->setVisible(false);
       connect(templateTree, &QTreeWidget::itemSelectionChanged, this, &TemplateBrowser::scoreClicked);
+      connect(templateTree, &QTreeWidget::itemActivated, this, &TemplateBrowser::handleItemActivated);
       templateSearch->setFilterableView(templateTree);
       }
 
@@ -84,30 +85,25 @@ TemplateBrowser::TemplateBrowser(QWidget* parent)
 TemplateItem* TemplateBrowser::genTemplateItem(QTreeWidgetItem* p, const QFileInfo& fi)
       {
       ScoreInfo si(fi);
-      QPixmap pm(QSize(181,256));
+      QPixmap pm;
       if (!QPixmapCache::find(fi.filePath(), &pm)) {
-            //load and scale pixmap
-            QPixmap pixmap = mscore->extractThumbnail(fi.filePath());
-            if (pixmap.isNull())
-                  pixmap = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
-            // draw pixmap and add border
-            pm.fill(Qt::transparent);
-            QPainter painter( &pm );
-            painter.setRenderHint(QPainter::Antialiasing);
-            painter.setRenderHint(QPainter::TextAntialiasing);
-            painter.drawPixmap(0, 0, pixmap);
-            painter.setPen(QPen(QColor(0, 0, 0, 128), 1));
-            painter.setBrush(Qt::white);
             if (fi.completeBaseName() == "00-Blank" || fi.completeBaseName() == "Create_New_Score") {
-                  qreal round = 8.0 * qApp->devicePixelRatio();
-                  painter.drawRoundedRect(QRectF(0, 0, pm.width() - 1 , pm.height() - 1), round, round);
+                  // draw a custom thumbnail for these special templates
+                  const QSize thumbnailSize = QSize(181,256); // A4 aspect ratio
+                  const qreal pixelRatio = qApp->devicePixelRatio();
+                  pm = QPixmap(thumbnailSize * pixelRatio);
+                  pm.setDevicePixelRatio(pixelRatio);
+                  pm.fill(Qt::transparent); // transparent at corners
+                  QPainter painter(&pm);
+                  painter.setRenderHint(QPainter::Antialiasing);
+                  painter.setPen(QPen(QColor(0, 0, 0, 128), 1));
+                  painter.setBrush(Qt::white);
+                  const qreal cornerRadius = 12.0;
+                  painter.drawRoundedRect(QRect(QPoint(0, 0), thumbnailSize), cornerRadius, cornerRadius);
+                  painter.end();
+
+                  QPixmapCache::insert(fi.filePath(), pm);
                   }
-            else
-                  painter.drawRect(0, 0, pm.width()  - 1, pm.height()  - 1);
-            if (fi.completeBaseName() != "00-Blank")
-                  painter.drawPixmap(1, 1, pixmap);
-            painter.end();
-            QPixmapCache::insert(fi.filePath(), pm);
             }
 
       si.setPixmap(pm);
@@ -117,14 +113,14 @@ TemplateItem* TemplateBrowser::genTemplateItem(QTreeWidgetItem* p, const QFileIn
             item->setText(0, tr("Choose Instruments"));
             }
       else if (fi.completeBaseName() == "Create_New_Score") {
-            item->setText(0, tr("Create New Score..."));
+            item->setText(0, tr("Create New Score…"));
             }
       else {
             QString s(si.completeBaseName());
             if (!s.isEmpty() && s[0].isNumber() && _stripNumbers)
                   s = s.mid(3);
             s = s.replace('_', ' ');
-            item->setText(0, s);
+            item->setText(0, qApp->translate("Templates", s.toUtf8().constData()));
             }
       return item;
       }
@@ -150,7 +146,7 @@ void TemplateBrowser::setScores(QFileInfoList& s)
                   if (!st.isEmpty() && st[0].isNumber() && _stripNumbers)
                         st = st.mid(3);
                   st = st.replace('_', ' ');
-                  TemplateCategory* category = new TemplateCategory(st, templateTree);
+                  TemplateCategory* category = new TemplateCategory(qApp->translate("Templates", st.toUtf8().data()), templateTree);
                   QDir dir(fil.filePath());
                   unsigned childCount = 0; //nbr of entries added
                   for (const QFileInfo& fi : dir.entryInfoList(filter, QDir::Files, QDir::Name)) {
@@ -212,4 +208,13 @@ void TemplateBrowser::scoreClicked()
       emit scoreSelected(""); // no score selected
       }
 
+//---------------------------------------------------------
+//   handleItemActivated
+//---------------------------------------------------------
+
+void TemplateBrowser::handleItemActivated(QTreeWidgetItem* item)
+      {
+      if (item->flags() & Qt::ItemIsSelectable)
+            emit scoreActivated(static_cast<TemplateItem*>(item)->info().filePath());
+      }
 }

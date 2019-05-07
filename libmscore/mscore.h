@@ -228,6 +228,7 @@ enum class BarLineType {
       END_REPEAT       = 8,
       BROKEN           = 0x10,
       END              = 0x20,
+      END_START_REPEAT = 0x40,
       DOTTED           = 0x80
       };
 
@@ -277,6 +278,7 @@ enum MsError {
       CANNOT_CHANGE_LOCAL_TIMESIG,
       };
 
+/// \cond PLUGIN_API \private \endcond
 struct MScoreError {
       MsError no;
       const char* group;
@@ -285,6 +287,7 @@ struct MScoreError {
 
 //---------------------------------------------------------
 //   MPaintDevice
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 class MPaintDevice : public QPaintDevice {
@@ -303,7 +306,8 @@ class MPaintDevice : public QPaintDevice {
 //    MuseScore application object
 //---------------------------------------------------------
 
-class MScore : public QObject {
+class MScore {
+      Q_GADGET
       static MStyle _baseStyle;          // buildin initial style
       static MStyle _defaultStyle;       // buildin modified by preferences
       static MStyle* _defaultStyleForParts;
@@ -312,15 +316,13 @@ class MScore : public QObject {
       static int _hRaster, _vRaster;
       static bool _verticalOrientation;
 
-#ifdef SCRIPT_INTERFACE
-      static QQmlEngine* _qml;
-#endif
-
       static MPaintDevice* _paintDevice;
 
    public:
-      enum class DirectionH : char { AUTO, LEFT, RIGHT };
-      enum class OrnamentStyle : char { DEFAULT, BAROQUE};
+      enum class DirectionH : char { /**.\{*/ AUTO, LEFT, RIGHT /**\}*/ };
+      enum class OrnamentStyle : char { /**.\{*/ DEFAULT, BAROQUE /**\}*/ };
+      Q_ENUM(DirectionH)
+      Q_ENUM(OrnamentStyle)
 
       static MsError _error;
       static std::vector<MScoreError> errorList;
@@ -373,7 +375,6 @@ class MScore : public QObject {
       static bool showSystemBoundingRect;
       static bool showCorruptedMeasures;
       static bool useFallbackFont;
-      static bool autoplaceSlurs;
 // #endif
       static bool debugMode;
       static bool testMode;
@@ -397,11 +398,7 @@ class MScore : public QObject {
       static qreal horizontalPageGapEven;
       static qreal horizontalPageGapOdd;
 
-#ifdef SCRIPT_INTERFACE
-      static QQmlEngine* qml();
-#endif
       static MPaintDevice* paintDevice();
-      virtual void endCmd() { };
 
       static void setError(MsError e) { _error = e; }
       static const char* errorMessage();
@@ -429,41 +426,8 @@ inline static int limit(int val, int min, int max)
             return min;
       return val;
       }
-
-//---------------------------------------------------------
-//   qml access to containers
-//
-//   QmlListAccess provides a convenience interface for
-//   QQmlListProperty providing read-only access to plugins
-//   for std::vector, QVector and QList items
-//---------------------------------------------------------
-
-template <typename T> class QmlListAccess : public QQmlListProperty<T> {
-public:
-      QmlListAccess<T>(QObject* obj, std::vector<T*>& container)
-            : QQmlListProperty<T>(obj, &container, &stdVectorCount, &stdVectorAt) {};
-
-      QmlListAccess<T>(QObject* obj, QVector<T*>& container)
-            : QQmlListProperty<T>(obj, &container, &qVectorCount, &qVectorAt) {};
-
-      QmlListAccess<T>(QObject* obj, QList<T*>& container)
-            : QQmlListProperty<T>(obj, &container, &qListCount, &qListAt) {};
-
-      static int stdVectorCount(QQmlListProperty<T>* l)     { return static_cast<std::vector<T*>*>(l->data)->size(); }
-      static T* stdVectorAt(QQmlListProperty<T>* l, int i)  { return static_cast<std::vector<T*>*>(l->data)->at(i); }
-      static int qVectorCount(QQmlListProperty<T>* l)       { return static_cast<QVector<T*>*>(l->data)->size(); }
-      static T* qVectorAt(QQmlListProperty<T>* l, int i)    { return static_cast<QVector<T*>*>(l->data)->at(i); }
-      static int qListCount(QQmlListProperty<T>* l)         { return static_cast<QList<T*>*>(l->data)->size(); }
-      static T* qListAt(QQmlListProperty<T>* l, int i)      { return static_cast<QList<T*>*>(l->data)->at(i); }
-      };
-
 }     // namespace Ms
 
-// Q_DECLARE_METATYPE(Ms::Direction);
-// Q_DECLARE_METATYPE(Ms::MSQE_Direction::E);
-// Q_DECLARE_METATYPE(Ms::Direction::E);
-
-Q_DECLARE_METATYPE(Ms::MScore::DirectionH);
 Q_DECLARE_METATYPE(Ms::BarLineType);
 
 #endif

@@ -141,6 +141,7 @@ enum class Pid {
       TEMPO,
       TEMPO_FOLLOW_TEXT,
       ACCIDENTAL_BRACKET,
+      ACCIDENTAL_TYPE,
       NUMERATOR_STRING,
       DENOMINATOR_STRING,
       FBPREFIX,             // used for FiguredBassItem
@@ -163,13 +164,17 @@ enum class Pid {
       HAIRPIN_HEIGHT,
       HAIRPIN_CONT_HEIGHT,
       VELO_CHANGE,
+      VELO_CHANGE_METHOD,
+      VELO_CHANGE_SPEED,
+      DYNAMIC_TYPE,
       DYNAMIC_RANGE,
+      SINGLE_NOTE_DYNAMICS,
+//100
       PLACEMENT,
       VELOCITY,
       JUMP_TO,
       PLAY_UNTIL,
       CONTINUE_AT,
-//100
       LABEL,
       MARKER_TYPE,
       ARP_USER_LEN1,
@@ -185,7 +190,6 @@ enum class Pid {
       DIAGONAL,
       GROUPS,
       LINE_STYLE,
-      LINE_COLOR,
       LINE_WIDTH,
       LASSO_POS,
       LASSO_SIZE,
@@ -220,20 +224,15 @@ enum class Pid {
       LINE_VISIBLE,
       MAG,
       USE_DRUMSET,
-      PART_VOLUME,
-      PART_MUTE,
-      PART_PAN,
-      PART_REVERB,
-
-      PART_CHORUS,
       DURATION,
       DURATION_TYPE,
       ROLE,
       TRACK,
+
       GLISSANDO_STYLE,
       FRET_STRINGS,
       FRET_FRETS,
-      FRET_BARRE,
+      FRET_NUT,
       FRET_OFFSET,
 
       FRET_NUM_POS,
@@ -279,10 +278,10 @@ enum class Pid {
 
       FRAME_TYPE,
       FRAME_WIDTH,
-//200
       FRAME_PADDING,
       FRAME_ROUND,
       FRAME_FG_COLOR,
+//200
       FRAME_BG_COLOR,
       SIZE_SPATIUM_DEPENDENT,
       ALIGN,
@@ -328,6 +327,11 @@ enum class Pid {
       VOICE,
       POSITION,
 
+      CLEF_TYPE_CONCERT,
+      CLEF_TYPE_TRANSPOSING,
+      KEY,
+      ACTION, // for Icon
+
       END
       };
 
@@ -368,17 +372,20 @@ enum class P_TYPE : char {
       FONT,
       SUB_STYLE,
       ALIGN,
+      CHANGE_METHOD,    // enum class VeloChangeMethod (for single notedynamics)
+      CHANGE_SPEED,     // enum class Dynamic::Speed
+      CLEF_TYPE,        // enum class ClefType
+      DYNAMIC_TYPE      // enum class Dynamic::Type
       };
 
 extern QVariant readProperty(Pid type, XmlReader& e);
+extern QVariant propertyFromString(Pid type, QString value);
+extern QString propertyToString(Pid, QVariant value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
-extern const char* propertyQmlName(Pid);
 extern bool propertyLink(Pid id);
-extern Pid propertyIdQml(const QString& qmlName);
-extern Pid propertyIdQml(const QStringRef& qmlName);
-extern Pid propertyIdName(const QString& name);
-extern Pid propertyIdName(const QStringRef& name);
+extern Pid propertyId(const QString& name);
+extern Pid propertyId(const QStringRef& name);
 extern QString propertyUserName(Pid);
 
 }     // namespace Ms

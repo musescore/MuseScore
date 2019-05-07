@@ -956,7 +956,7 @@ void Timeline::drawGrid(int global_rows, int global_cols)
             for (Segment* curr_seg = cm->first(); curr_seg; curr_seg = curr_seg->next()) {
                   //Toggle no_key if initial key signature is found
                   if (curr_seg->isKeySigType() && cm == _score->firstMeasure()) {
-                        if (no_key && curr_seg->tick() == 0)
+                        if (no_key && curr_seg->tick().isZero())
                               no_key = false;
                         }
 
@@ -1127,7 +1127,7 @@ void Timeline::key_meta(Segment* seg, int* stagger, int pos)
                   }
 
             //Ignore unpitched staves
-            if ((seg && !stave->isPitchedStaff(seg->tick())) || (!seg && !stave->isPitchedStaff(0))) {
+            if ((seg && !stave->isPitchedStaff(seg->tick())) || (!seg && !stave->isPitchedStaff(Fraction(0,1)))) {
                   track += VOICES;
                   continue;
                   }
@@ -1143,7 +1143,7 @@ void Timeline::key_meta(Segment* seg, int* stagger, int pos)
             if (seg)
                   global_key = stave->key(seg->tick());
             else
-                  global_key = stave->key(0);
+                  global_key = stave->key(Fraction(0,1));
             if (curr_key_sig) {
                   if (curr_key_sig->generated())
                         return;
@@ -1230,6 +1230,9 @@ void Timeline::barline_meta(Segment* seg, int* stagger, int pos)
                         break;
                   case BarLineType::END_REPEAT:
                         repeat_text = QString("End repeat");
+                        break;
+                  case BarLineType::END_START_REPEAT:
+                        repeat_text = QString("End-start repeat");
                         break;
                   case BarLineType::DOUBLE:
                         repeat_text = QString("Double barline");
@@ -1466,9 +1469,14 @@ bool Timeline::addMetaValue(int x, int pos, QString meta_text, int row, ElementT
             graphics_text_item->setY(grid_height * row + verticalScrollBar()->value() - 2);
             item_to_add = graphics_text_item;
             }
+      else if (row == 0 ) {
+            graphics_text_item->setX(x);
+            graphics_text_item->setY(grid_height * row + verticalScrollBar()->value() - 6);
+            item_to_add = graphics_text_item;
+            }
       else {
             graphics_text_item->setX(x);
-            graphics_text_item->setY(grid_height * row + verticalScrollBar()->value());
+            graphics_text_item->setY(grid_height * row + verticalScrollBar()->value() - 1);
             item_to_add = graphics_text_item;
             }
 
@@ -1729,7 +1737,7 @@ void Timeline::drawSelection()
       const Selection& selection = _score->selection();
       const QList<Element*>& el = selection.elements();
       for (Element* element : el) {
-            if (element->tick() == -1)
+            if (element->tick() == Fraction(-1,1))
                   continue;
             else {
                   switch (element->type()) {
@@ -1748,7 +1756,7 @@ void Timeline::drawSelection()
                   }
 
             int staffIdx;
-            int tick = element->tick();
+            Fraction tick = element->tick();
             Measure* measure = _score->tick2measure(tick);
             staffIdx = element->staffIdx();
             if (numToStaff(staffIdx) && !numToStaff(staffIdx)->show())
@@ -2226,6 +2234,9 @@ void Timeline::wheelEvent(QWheelEvent* event)
 
 void Timeline::updateGrid()
       {
+      if (!isVisible())
+            return;
+
       if (_score && _score->firstMeasure()) {
             drawGrid(nstaves(), _score->nmeasures());
             updateView();
@@ -2299,6 +2310,9 @@ void Timeline::objectDestroyed(QObject* obj)
 
 void Timeline::updateView()
       {
+      if (!isVisible())
+            return;
+
       if (_cv && _score) {
             QRectF canvas = QRectF(_cv->matrix().inverted().mapRect(_cv->geometry()));
 
@@ -2491,7 +2505,7 @@ std::vector<std::pair<QString, bool>> Timeline::getLabels()
             part_name = doc.toPlainText();
             if (part_name.isEmpty())
                   part_name = part_list.at(stave)->instrumentName();
-            
+
             std::pair<QString, bool> instrument_label(part_name, part_list.at(stave)->show());
             row_labels.push_back(instrument_label);
             }
@@ -2837,7 +2851,7 @@ void Timeline::requestInstrumentDialog()
       QAction* act = getAction("instruments");
       mscore->cmd(act);
       if (mscore->getMixer())
-            mscore->getMixer()->setScore(_score->masterScore());
+            mscore->getMixer()->setScore(_score);
       }
 
 }

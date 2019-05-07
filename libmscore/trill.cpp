@@ -117,9 +117,9 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 
       _symbols.clear();
       _symbols.push_back(start);
-      qreal w1 = f->bbox(start, mag).width();
-      qreal w2 = f->width(fill, mag);
-      qreal w3 = f->width(end, mag);
+      qreal w1 = f->advance(start, mag);
+      qreal w2 = f->advance(fill, mag);
+      qreal w3 = f->advance(end, mag);
       int n    = lrint((w - w1 - w3) / w2);
       for (int i = 0; i < n; ++i)
            _symbols.push_back(fill);
@@ -165,7 +165,7 @@ void TrillSegment::layout()
       else
             symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
 
-      autoplaceSpannerSegment(spatium() * 1.0);
+      autoplaceSpannerSegment(styleP(Sid::trillMinDistance));
       }
 
 //---------------------------------------------------------
@@ -343,6 +343,7 @@ void Trill::write(XmlWriter& xml) const
       xml.tag("subtype", trillTypeName());
       writeProperty(xml, Pid::PLAY);
       writeProperty(xml, Pid::ORNAMENT_STYLE);
+      writeProperty(xml, Pid::PLACEMENT);
       SLine::writeProperties(xml);
       if (_accidental)
             _accidental->write(xml);

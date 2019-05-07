@@ -53,6 +53,15 @@ Channel *MixerTrackItem::focusedChan()
       }
 
 //---------------------------------------------------------
+//   playbackChannel
+//---------------------------------------------------------
+
+Channel* MixerTrackItem::playbackChannel(const Channel* channel)
+      {
+      return _part->masterScore()->playbackChannel(channel);
+      }
+
+//---------------------------------------------------------
 //   color
 //---------------------------------------------------------
 
@@ -74,11 +83,11 @@ void MixerTrackItem::setVolume(char value)
             const InstrumentList* il = _part->instruments();
             for (auto it = il->begin(); it != il->end(); ++it) {
                   Instrument* instr = it->second;
-                  for (Channel *chan: instr->channel()) {
+                  for (const Channel* instrChan: instr->channel()) {
+                        Channel* chan = playbackChannel(instrChan);
                         if (chan->volume() != value) {
                               chan->setVolume(value);
                               seq->setController(chan->channel(), CTRL_VOLUME, chan->volume());
-                              chan->updateInitList();
                               }
                         }
                   }
@@ -87,7 +96,6 @@ void MixerTrackItem::setVolume(char value)
             if (_chan->volume() != value) {
                   _chan->setVolume(value);
                   seq->setController(_chan->channel(), CTRL_VOLUME, _chan->volume());
-                  _chan->updateInitList();
                   }
             }
       }
@@ -104,11 +112,11 @@ void MixerTrackItem::setPan(char value)
             const InstrumentList* il = _part->instruments();
             for (auto it = il->begin(); it != il->end(); ++it) {
                   Instrument* instr = it->second;
-                  for (Channel *chan: instr->channel()) {
+                  for (const Channel* instrChan: instr->channel()) {
+                        Channel* chan = playbackChannel(instrChan);
                         if (chan->pan() != value) {
                               chan->setPan(value);
                               seq->setController(chan->channel(), CTRL_PANPOT, chan->pan());
-                              chan->updateInitList();
                               }
                         }
                   }
@@ -117,7 +125,6 @@ void MixerTrackItem::setPan(char value)
             if (_chan->pan() != value) {
                   _chan->setPan(value);
                   seq->setController(_chan->channel(), CTRL_PANPOT, _chan->pan());
-                  _chan->updateInitList();
                   }
             }
       }
@@ -134,11 +141,11 @@ void MixerTrackItem::setChorus(char value)
             const InstrumentList* il = _part->instruments();
             for (auto it = il->begin(); it != il->end(); ++it) {
                   Instrument* instr = it->second;
-                  for (Channel *chan: instr->channel()) {
+                  for (const Channel* instrChan: instr->channel()) {
+                        Channel* chan = playbackChannel(instrChan);
                         if (chan->chorus() != value) {
                               chan->setChorus(value);
                               seq->setController(chan->channel(), CTRL_CHORUS_SEND, chan->chorus());
-                              chan->updateInitList();
                               }
                         }
                   }
@@ -147,7 +154,6 @@ void MixerTrackItem::setChorus(char value)
             if (_chan->chorus() != value) {
                   _chan->setChorus(value);
                   seq->setController(_chan->channel(), CTRL_CHORUS_SEND, _chan->chorus());
-                  _chan->updateInitList();
                   }
             }
       }
@@ -164,11 +170,11 @@ void MixerTrackItem::setReverb(char value)
             const InstrumentList* il = _part->instruments();
             for (auto it = il->begin(); it != il->end(); ++it) {
                   Instrument* instr = it->second;
-                  for (Channel *chan: instr->channel()) {
+                  for (const Channel* instrChan: instr->channel()) {
+                        Channel* chan = playbackChannel(instrChan);
                         if (chan->reverb() != value) {
                               chan->setReverb(value);
                               seq->setController(chan->channel(), CTRL_REVERB_SEND, chan->reverb());
-                              chan->updateInitList();
                               }
                         }
                   }
@@ -177,7 +183,6 @@ void MixerTrackItem::setReverb(char value)
             if (_chan->reverb() != value) {
                   _chan->setReverb(value);
                   seq->setController(_chan->channel(), CTRL_REVERB_SEND, _chan->reverb());
-                  _chan->updateInitList();
                   }
             }
       }
@@ -194,7 +199,8 @@ void MixerTrackItem::setColor(int valueRgb)
             const InstrumentList* il = _part->instruments();
             for (auto it = il->begin(); it != il->end(); ++it) {
                   Instrument* instr = it->second;
-                  for (Channel *chan: instr->channel()) {
+                  for (const Channel* instrChan: instr->channel()) {
+                        Channel* chan = playbackChannel(instrChan);
                         chan->setColor(valueRgb);
                         }
                   }
@@ -214,7 +220,8 @@ void MixerTrackItem::setMute(bool value)
             const InstrumentList* il = _part->instruments();
             for (auto it = il->begin(); it != il->end(); ++it) {
                   Instrument* instr = it->second;
-                  for (Channel *chan: instr->channel()) {
+                  for (const Channel* instrChan: instr->channel()) {
+                        Channel* chan = playbackChannel(instrChan);
                         if (value)
                               seq->stopNotes(chan->channel());
                         chan->setMute(value);
@@ -238,7 +245,8 @@ void MixerTrackItem::setSolo(bool value)
             const InstrumentList* il = _part->instruments();
             for (auto it = il->begin(); it != il->end(); ++it) {
                   Instrument* instr = it->second;
-                  for (Channel *chan: instr->channel()) {
+                  for (const Channel* instrChan: instr->channel()) {
+                        Channel* chan = playbackChannel(instrChan);
                         chan->setSolo(value);
                         }
                   }
@@ -253,7 +261,8 @@ void MixerTrackItem::setSolo(bool value)
             const InstrumentList* il = p->instruments();
             for (auto i = il->begin(); i != il->end(); ++i) {
                   const Instrument* instr = i->second;
-                  for (Channel* a : instr->channel()) {
+                  for (const Channel* instrChan: instr->channel()) {
+                        Channel* a = playbackChannel(instrChan);
                         if (a->solo()) {
                               numSolo++;
                               }
@@ -265,7 +274,8 @@ void MixerTrackItem::setSolo(bool value)
             const InstrumentList* il = p->instruments();
             for (auto i = il->begin(); i != il->end(); ++i) {
                   const Instrument* instr = i->second;
-                  for (Channel* a : instr->channel()) {
+                  for (const Channel* instrChan: instr->channel()) {
+                        Channel* a = playbackChannel(instrChan);
                         if (numSolo == 0) {
                               a->setSoloMute(false);
                               }

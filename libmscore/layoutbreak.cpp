@@ -282,13 +282,14 @@ QVariant LayoutBreak::propertyDefault(Pid id) const
       }
 
 //---------------------------------------------------------
-//   undoLayoutBreakType
+//   propertyId
 //---------------------------------------------------------
 
-void LayoutBreak::undoSetLayoutBreakType(Type t)
+Pid LayoutBreak::propertyId(const QStringRef& name) const
       {
-      undoChangeProperty(Pid::LAYOUT_BREAK, int(t));
+      if (name == propertyName(Pid::LAYOUT_BREAK))
+            return Pid::LAYOUT_BREAK;
+      return Element::propertyId(name);
       }
-
 }
 

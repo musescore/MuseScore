@@ -535,7 +535,7 @@ class BasicDurationalObj : public CapellaObj {
       void readCapx(XmlReader& e, unsigned int& fullm);
       void readCapxDisplay(XmlReader& e);
       void readCapxObjectArray(XmlReader& e);
-      int ticks() const;
+      Fraction ticks() const;
       bool invisible;
       QList<BasicDrawObj*> objects;
       };

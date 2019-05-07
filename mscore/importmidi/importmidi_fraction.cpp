@@ -6,7 +6,6 @@
 
 namespace Ms {
 
-
 #ifdef QT_DEBUG
 
 //---------------------------------------------------------------------------------------
@@ -72,43 +71,27 @@ bool isUnaryNegationOverflow(int a)             // -a
 
 #endif
 
-//---------------------------------------------------------------------------------------
-
-
 namespace {
 
-// greatest common divisor
+//---------------------------------------------------------
+//   lcm
+//    least common multiple. always returns a positive val
+//---------------------------------------------------------
 
-int gcd(int a, int b)
+static unsigned lcm(int a, int b)
       {
-
-      Q_ASSERT_X(!isUnaryNegationOverflow(a),
-                 "ReducedFraction, gcd", "Unary negation overflow");
-
-      if (b == 0)
-            return a < 0 ? -a : a;
-
-      Q_ASSERT_X(!isRemainderOverflow(a, b),
-                 "ReducedFraction, gcd", "Remainder overflow");
-
-      return gcd(b, a % b);
-      }
-
-// least common multiple
-
-unsigned lcm(int a, int b)
-      {
-      const int tmp = gcd(a, b);
-
-      Q_ASSERT_X(!isDivisionOverflow(a, tmp),
+      const int g =  Ms::gcd(a, b);
+      
+      Q_ASSERT_X(!isDivisionOverflow(a, g),
                  "ReducedFraction, lcm", "Division overflow");
-      Q_ASSERT_X(!isMultiplicationOverflow(a / tmp, b),
+      Q_ASSERT_X(!isMultiplicationOverflow(a / g, b),
                  "ReducedFraction, lcm", "Multiplication overflow");
 
-      return a / tmp * b;
+      const int l = (a / g) * b; // Divide first to minimize overflow risk
+      return (l >= 0 ? l : -l);
       }
 
-} // namespace
+}
 
 //-----------------------------------------------------------------------------
 

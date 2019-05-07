@@ -34,6 +34,7 @@ struct BeamFragment;
 //---------------------------------------------------------
 
 class Beam final : public Element {
+      Q_GADGET
       QVector<ChordRest*> _elements;        // must be sorted by tick
       QVector<QLineF*> beamSegments;
       Direction _direction;
@@ -69,9 +70,11 @@ class Beam final : public Element {
 
    public:
       enum class Mode : signed char {
+            ///.\{
             AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
+            ///\}
             };
-      Q_ENUMS(Mode)
+      Q_ENUM(Mode)
 
       Beam(Score* = 0);
       Beam(const Beam&);
@@ -87,8 +90,8 @@ class Beam final : public Element {
       virtual void editDrag(EditData&) override;
       virtual void updateGrips(EditData&) const override;
 
-      virtual int tick() const override;
-      virtual int rtick() const override;
+      virtual Fraction tick() const override;
+      virtual Fraction rtick() const override;
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
@@ -105,6 +108,7 @@ class Beam final : public Element {
       const QVector<ChordRest*>& elements() { return _elements;  }
       void clear()                        { _elements.clear(); }
       bool empty() const                { return _elements.empty(); }
+      bool contains(const ChordRest* cr) const { return std::find(_elements.begin(), _elements.end(), cr) != _elements.end(); }
 
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
@@ -155,8 +159,4 @@ class Beam final : public Element {
 
 
 }     // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::Beam::Mode);
-
 #endif
-

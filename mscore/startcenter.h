@@ -89,7 +89,7 @@ class Startcenter : public AbstractDialog, public Ui::Startcenter {
       void closed(bool);
 
     public:
-      Startcenter();
+      Startcenter(QWidget* parent);
       ~Startcenter();
       void updateRecentScores();
       void writeSettings();

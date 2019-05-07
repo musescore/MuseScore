@@ -39,7 +39,8 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
       //       score, qPrintable(name), dev);
 
       MxmlLogger logger;
-      logger.setLoggingLevel(MxmlLogger::Level::MXML_INFO);
+      logger.setLoggingLevel(MxmlLogger::Level::MXML_ERROR); // errors only
+      //logger.setLoggingLevel(MxmlLogger::Level::MXML_INFO);
       //logger.setLoggingLevel(MxmlLogger::Level::MXML_TRACE); // also include tracing
 
       // pass 1

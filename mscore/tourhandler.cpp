@@ -154,7 +154,8 @@ void TourHandler::loadTour(XmlReader& tourXml)
                   while (tourXml.readNextStartElement()) {
                         if (tourXml.name() == "Text") {
                               QTextDocument doc;
-                              QString ttext = qApp->translate("TourXML", tourXml.readXml().toUtf8().data());
+                              QString rawText = tourXml.readElementText();
+                              QString ttext = qApp->translate("TourXML", rawText.toUtf8().constData());
                               doc.setHtml(ttext);
                               text = doc.toPlainText().replace("\\n", "\n");
                               }
@@ -298,7 +299,7 @@ void TourHandler::clearWidgetsFromTour(QString tourName)
 
 void TourHandler::startTour(QString lookupString)
       {
-      if (!preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS))
+      if (!preferences.getBool(PREF_UI_APP_STARTUP_SHOWTOURS) || MScore::noGui)
             return;
 
       Tour* tour = nullptr;

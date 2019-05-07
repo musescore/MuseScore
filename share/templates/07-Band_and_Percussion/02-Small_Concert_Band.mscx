@@ -22,7 +22,7 @@
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="poet"></metaTag>
-    <metaTag name="source">https://musescore.com/score/3136041</metaTag>
+    <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
@@ -69,9 +69,21 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
-          <velocity>120</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
+            <velocity>150</velocity>
+            <gateTime>100</gateTime>
+        </Articulation>
+        <Articulation name="sforzatoStaccato">
+              <velocity>150</velocity>
+              <gateTime>50</gateTime>
+        </Articulation>
+        <Articulation name="marcatoStaccato">
+              <velocity>120</velocity>
+              <gateTime>50</gateTime>
+        </Articulation>
+        <Articulation name="marcatoTenuto">
+              <velocity>120</velocity>
+              <gateTime>100</gateTime>
+        </Articulation>
         <Channel>
           <program value="73"/>
           <synti>Fluid</synti>
@@ -615,7 +627,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="56"/>
           <synti>Fluid</synti>
           </Channel>
@@ -672,7 +684,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="56"/>
           <synti>Fluid</synti>
           </Channel>

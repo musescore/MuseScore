@@ -80,7 +80,7 @@ void StaffState::read(XmlReader& e)
 
 void StaffState::draw(QPainter* painter) const
       {
-      if (score()->printing())
+      if (score()->printing() || !score()->showUnprintable())
             return;
       QPen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
          lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);

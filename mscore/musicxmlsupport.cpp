@@ -172,14 +172,14 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
 
       QString strType;
       switch (type) {
-            case 0:  strType = "Debug"; break;
-            case 1:  strType = "Warning"; break;
-            case 2:  strType = "Critical"; break;
-            case 3:  strType = "Fatal"; break;
-            default: strType = "Unknown"; break;
+            case 0:  strType = tr("Debug"); break;
+            case 1:  strType = tr("Warning"); break;
+            case 2:  strType = tr("Critical"); break;
+            case 3:  strType = tr("Fatal"); break;
+            default: strType = tr("Unknown"); break;
             }
 
-      QString errorStr = QString("%1 error: line %2 column %3 %4")
+      QString errorStr = QString(tr("%1 error: line %2 column %3 %4"))
             .arg(strType)
             .arg(sourceLocation.line())
             .arg(sourceLocation.column())
@@ -355,11 +355,11 @@ Fraction MxmlSupport::calculateFraction(QString type, int dots, int normalNotes,
             // dot(s)
             Fraction f_no_dots = f;
             for (int i = 0; i < dots; ++i)
-                  f += (f_no_dots / (2 << i));
+                  f += (f_no_dots / Fraction(2 << i, 1));
             // tuplet
             if (actualNotes > 0 && normalNotes > 0) {
                   f *= normalNotes;
-                  f /= actualNotes;
+                  f /= Fraction(actualNotes,1);
                   }
             // clean up (just in case)
             f.reduce();

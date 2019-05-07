@@ -22,6 +22,7 @@
 #include "libmscore/text.h"
 #include "libmscore/measure.h"
 #include "libmscore/repeatlist.h"
+#include "libmscore/synthesizerstate.h"
 #include "preferences.h"
 
 namespace Ms {
@@ -83,7 +84,7 @@ void ExportMidi::writeHeader()
       //--------------------------------------------
 
       TimeSigMap* sigmap = cs->sigmap();
-      foreach(const RepeatSegment* rs, *cs->repeatList()) {
+      for (const RepeatSegment* rs : cs->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
@@ -134,7 +135,7 @@ void ExportMidi::writeHeader()
             KeyList* keys = staff->keyList();
 
             bool initialKeySigFound = false;
-            for (const RepeatSegment* rs : *cs->repeatList()) {
+            for (const RepeatSegment* rs : cs->repeatList()) {
                   int startTick  = rs->tick;
                   int endTick    = startTick + rs->len();
                   int tickOffset = rs->utick - rs->tick;
@@ -206,9 +207,15 @@ void ExportMidi::writeHeader()
 //  write
 //    export midi file
 //    return false on error
+//
+//    The 3rd and 4th versions of write create a temporary, unitialized synth state
+//    so we can render the midi - it should fall back correctly to the defaults, with a warning.
+//    These should only be used for tests. When actually rendering midi as a user action,
+//    make sure to use the 1st and 2nd versions, passing the global musescore synth state
+//    from mscore->synthesizerState() as the synthState parameter.
 //---------------------------------------------------------
 
-bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs)
+bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState)
       {
       mf.setDivision(MScore::division);
       mf.setFormat(1);
@@ -218,7 +225,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
             tracks.append(MidiTrack());
 
       EventMap events;
-      cs->renderMidi(&events, false, midiExpandRepeats);
+      cs->renderMidi(&events, false, midiExpandRepeats, synthState);
 
       pauseMap.calculate(cs);
       writeHeader();
@@ -237,7 +244,8 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                   // Pass through the all channels of the instrument
                   // "normal", "pizzicato", "tremolo" for Strings,
                   // "normal", "mute" for Trumpet
-                  foreach(const Channel* ch, j->second->channel()) {
+                  for (const Channel* instrChan : j->second->channel()) {
+                        const Channel* ch = part->masterScore()->playbackChannel(instrChan);
                         char port    = part->masterScore()->midiPort(ch->channel());
                         char channel = part->masterScore()->midiChannel(ch->channel());
 
@@ -250,7 +258,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                                     // set pitch bend sensitivity to 12 semitones:
                                     track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
                                     track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
-                                    track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 12));
+                                    track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, PITCH_BEND_SENSITIVITY));
 
                                     // reset fine tuning
                                     /*track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 1));
@@ -325,12 +333,24 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
       return !mf.write(device);
       }
 
-bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportRPNs)
+bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState)
       {
       f.setFileName(name);
       if (!f.open(QIODevice::WriteOnly))
             return false;
-       return write(&f, midiExpandRepeats, exportRPNs);
+      return write(&f, midiExpandRepeats, exportRPNs, synthState);
+      }
+
+bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs)
+      {
+      SynthesizerState ss;
+      return write(device, midiExpandRepeats, exportRPNs, ss);
+      }
+
+bool ExportMidi::write(const QString& name, bool midiExpandRepeats, bool exportRPNs)
+      {
+      SynthesizerState ss;
+      return write(name, midiExpandRepeats, exportRPNs, ss);
       }
 
 //---------------------------------------------------------
@@ -350,7 +370,7 @@ void ExportMidi::PauseMap::calculate(const Score* s)
       tempomapWithPauses = new TempoMap();
       tempomapWithPauses->setRelTempo(tempomap->relTempo());
 
-      foreach(const RepeatSegment* rs, *s->repeatList()) {
+      for (const RepeatSegment* rs : s->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;

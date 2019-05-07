@@ -18,6 +18,7 @@
 //=============================================================================
 
 #include "preferenceslistwidget.h"
+#include <cfloat>
 
 namespace Ms {
 

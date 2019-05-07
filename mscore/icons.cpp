@@ -85,6 +85,7 @@ static const char* iconNames[] = {
       "document-new.svg",
       "document-save.svg",
       "document-save-as.svg",
+      "document-save-online.svg",
       "mscore.png",
       "acciaccatura.svg",
       "appoggiatura.svg",

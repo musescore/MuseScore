@@ -28,7 +28,7 @@ const char* keyNames[] = {
       QT_TRANSLATE_NOOP("MuseScore", "C♭ major, A♭ minor"),
       QT_TRANSLATE_NOOP("MuseScore", "D major, B minor"),
       QT_TRANSLATE_NOOP("MuseScore", "G♭ major, E♭ minor"),
-      QT_TRANSLATE_NOOP("MuseScore", "A major, F# minor"),
+      QT_TRANSLATE_NOOP("MuseScore", "A major, F♯ minor"),
       QT_TRANSLATE_NOOP("MuseScore", "D♭ major, B♭ minor"),
       QT_TRANSLATE_NOOP("MuseScore", "E major, C♯ minor"),
       QT_TRANSLATE_NOOP("MuseScore", "A♭ major, F minor"),
@@ -106,8 +106,18 @@ void KeySig::layout()
 
       // determine current clef for this staff
       ClefType clef = ClefType::G;
-      if (staff())
-            clef = staff()->clef(tick());
+      if (staff()) {
+            // Look for a clef before the key signature at the same tick
+            Clef* c = nullptr;
+            for (Segment* seg = segment()->prev1(); !c && seg && seg->tick() == tick(); seg = seg->prev1())
+                  if (seg->isClefType() || seg->isHeaderClefType())
+                        c = toClef(seg->element(track()));
+            if (c)
+                  clef = c->clefType();
+            else
+                  // no clef found, so get the clef type from the clefs list, using the previous tick
+                  clef = staff()->clef(tick() - Fraction::fromTicks(1));
+            }
 
       int accidentals = 0, naturals = 0;
       int t1 = int(_sig.key());
@@ -136,7 +146,7 @@ void KeySig::layout()
       // If we're not force hiding naturals (Continuous panel), use score style settings
       if (!_hideNaturals) {
             const bool newSection = (!segment()
-               || (segment()->rtick() == 0 && (!prevMeasure || prevMeasure->sectionBreak()))
+               || (segment()->rtick().isZero() && (!prevMeasure || prevMeasure->sectionBreak()))
                );
             naturalsOn = !newSection && (score()->styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
             }
@@ -154,7 +164,7 @@ void KeySig::layout()
       Key t2      = Key::C;
       if (naturalsOn) {
             if (staff())
-                  t2 = staff()->key(tick() - 1);
+                  t2 = staff()->key(tick() - Fraction(1, 480*4));
             if (t2 == Key::C)
                   naturalsOn = false;
             else {
@@ -272,7 +282,7 @@ Shape KeySig::shape() const
       {
       QRectF box(bbox());
       const Staff* st = staff();
-      if (st && autoplace() && visible()) {
+      if (st && addToSkyline()) {
             // Extend key signature shape up and down to
             // the first ledger line height to ensure that
             // no notes will be too close to the keysig.
@@ -507,6 +517,18 @@ bool KeySig::operator==(const KeySig& k) const
       }
 
 //---------------------------------------------------------
+//   isChange
+//---------------------------------------------------------
+
+bool KeySig::isChange() const
+      {
+      if (!staff())
+            return false;
+      Fraction keyTick = tick();
+      return staff()->currentKeyTick(keyTick) == keyTick;
+      }
+
+//---------------------------------------------------------
 //   changeKeySigEvent
 //---------------------------------------------------------
 
@@ -515,15 +537,6 @@ void KeySig::changeKeySigEvent(const KeySigEvent& t)
       if (_sig == t)
             return;
       setKeySigEvent(t);
-      }
-
-//---------------------------------------------------------
-//   tick
-//---------------------------------------------------------
-
-int KeySig::tick() const
-      {
-      return segment() ? segment()->tick() : 0;
       }
 
 //---------------------------------------------------------
@@ -542,6 +555,7 @@ void KeySig::undoSetShowCourtesy(bool v)
 QVariant KeySig::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
+            case Pid::KEY:           return int(key());
             case Pid::SHOW_COURTESY: return int(showCourtesy());
             default:
                   return Element::getProperty(propertyId);
@@ -555,6 +569,11 @@ QVariant KeySig::getProperty(Pid propertyId) const
 bool KeySig::setProperty(Pid propertyId, const QVariant& v)
       {
       switch (propertyId) {
+            case Pid::KEY:
+                  if (generated())
+                        return false;
+                  setKey(Key(v.toInt()));
+                  break;
             case Pid::SHOW_COURTESY:
                   if (generated())
                         return false;
@@ -577,6 +596,7 @@ bool KeySig::setProperty(Pid propertyId, const QVariant& v)
 QVariant KeySig::propertyDefault(Pid id) const
       {
       switch (id) {
+            case Pid::KEY:               return int(Key::INVALID);
             case Pid::SHOW_COURTESY:     return true;
             default:
                   return Element::propertyDefault(id);

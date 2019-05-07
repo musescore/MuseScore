@@ -138,7 +138,7 @@ void Location::fillPositionForElement(const Element* e, bool absfrac)
       if (track() == absDefaults.track())
             setTrack(track(e));
       if (frac() == absDefaults.frac())
-            setFrac(absfrac ? e->afrac() : e->rfrac());
+            setFrac(absfrac ? e->tick() : e->rtick());
       if (measure() == absDefaults.measure())
             setMeasure(absfrac ? 0 : measure(e));
       }
@@ -265,7 +265,7 @@ QVariant Location::getLocationProperty(Pid pid, const Element* start, const Elem
             case Pid::LOCATION_MEASURES:
                   return measure(end) - measure(start);
             case Pid::LOCATION_FRACTIONS:
-                  return end->rfrac() - start->rfrac();
+                  return end->rtick() - start->rtick();
             case Pid::LOCATION_GRACE:
                   return graceIndex(end) - graceIndex(end);
             case Pid::LOCATION_NOTE:

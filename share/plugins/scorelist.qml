@@ -1,10 +1,10 @@
 import QtQuick 2.0
-import MuseScore 3.0
+import MuseScore 1.0
 
 
 MuseScore {
     menuPath: "Plugins.scorelist"
-    version:  "3.0"
+    version:  "2.0"
     description: "This test plugin iterates through the score list."
     pluginType: "dialog"
 

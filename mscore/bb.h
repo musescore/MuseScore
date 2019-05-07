@@ -140,7 +140,7 @@ class BBFile {
 
       int timesigZ() { return styles[_style].timesigZ; }
       int timesigN() { return styles[_style].timesigN; }
-      int processPendingNotes(Score*, QList<MNote*>* notes, int, int);
+      Fraction processPendingNotes(Score*, QList<MNote*>* notes, const Fraction&, int);
 
    public:
       BBFile();

@@ -28,8 +28,6 @@
 #include "ui_aboutmusicxmlbox.h"
 #include "singleapp/src/QtSingleApplication"
 #include "updatechecker.h"
-// #include "loginmanager.h"
-// #include "uploadscoredialog.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/score.h"
 #include "newwizard.h"
@@ -90,13 +88,17 @@ class TDockWidget;
 class Sym;
 class MasterPalette;
 class PluginCreator;
+#ifdef SCRIPT_INTERFACE
 class PluginManager;
+class QmlPluginEngine;
+#endif
 class MasterSynthesizer;
 class SynthesizerState;
 class Driver;
 class Seq;
 class ImportMidiPanel;
 class ScoreComparisonTool;
+class ScriptRecorder;
 class ScriptRecorderWidget;
 class Startcenter;
 class HelpBrowser;
@@ -237,6 +239,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       static const std::list<const char*> _allPlaybackControlEntries;
       std::list<const char*> _playbackControlEntries { _allPlaybackControlEntries };
 
+      bool _playPartOnly = true; // play part only vs. full score
+
       QVBoxLayout* layout;    // main window layout
       QSplitter* splitter;
       ScoreTab* tab1;
@@ -283,7 +287,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       InsertMeasuresDialog* insertMeasuresDialog { 0 };
       MasterPalette* masterPalette         { 0 };
       PluginCreator* _pluginCreator        { 0 };
+#ifdef SCRIPT_INTERFACE
       PluginManager* pluginManager         { 0 };
+      QmlPluginEngine* _qmlEngine          { 0 };
+#endif
       SelectionWindow* selectionWindow     { 0 };
 
       QMenu* menuFile;
@@ -551,13 +558,13 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void onLongOperationFinished();
 
       virtual QMenu* createPopupMenu() override;
-      
-      QJsonValue exportPdfAsJSON(Score*);
+
+      QByteArray exportPdfAsJSON(Score*);
 
    public slots:
       virtual void cmd(QAction* a);
       void dirtyChanged(Score*);
-      void setPos(int tick);
+      void setPos(const Fraction& tick);
       void pluginTriggered(int);
       void handleMessage(const QString& message);
       void setCurrentScoreView(ScoreView*);
@@ -613,6 +620,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void showPluginManager();
 
 //      void updateTabNames();
+      void updatePaletteBeamMode(bool unselect = false);
       QProgressBar* showProgressBar();
       void hideProgressBar();
       void addRecentScore(Score*);
@@ -629,7 +637,10 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       PianorollEditor* getPianorollEditor() const { return pianorollEditor; }
       DrumrollEditor* getDrumrollEditor() const   { return drumrollEditor; }
       PianoTools* pianoTools() const              { return _pianoTools; }
+#ifdef SCRIPT_INTERFACE
       PluginManager* getPluginManager() const     { return pluginManager; }
+      QmlPluginEngine* getPluginEngine();
+#endif
       void writeSessionFile(bool);
       bool restoreSession(bool);
       bool splitScreen() const { return _splitScreen; }
@@ -698,6 +709,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void exportFile();
       bool exportParts();
       virtual bool saveAs(Score*, bool saveCopy, const QString& path, const QString& ext);
+      QString saveFilename(QString fn);
       bool savePdf(const QString& saveName);
       bool savePdf(Score* cs, const QString& saveName);
       bool savePdf(QList<Score*> cs, const QString& saveName);
@@ -731,13 +743,15 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool exportMp3AsJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       bool exportPartsPdfsToJSON(const QString& inFilePath, const QString& outFilePath = "/dev/stdout");
       /////////////////////////////////////////////////
+
+      void scoreUnrolled(MasterScore* original);
       
       virtual void closeScore(Score* score);
 
       void addTempo();
       void addMetronome();
 
-      SynthesizerState synthesizerState();
+      SynthesizerState synthesizerState() const;
 
       Q_INVOKABLE QString getLocaleISOCode() const;
       Navigator* navigator() const;
@@ -761,7 +775,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setMidiReopenInProgress(const QString &file);
 
       static Palette* newTempoPalette(bool defaultPalette = false);
-      static Palette* newTextPalette();
+      static Palette* newTextPalette(bool defaultPalette = false);
       static Palette* newTimePalette();
       static Palette* newRepeatsPalette();
       static Palette* newBreaksPalette();
@@ -840,6 +854,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void setPlaybackControlEntries(std::list<const char*> l)       { _playbackControlEntries = l; }
       void populatePlaybackControls();
 
+      bool playPartOnly() const { return _playPartOnly; }
+      void setPlayPartOnly(bool val);
+
       static void updateUiStyleAndTheme();
 
       void showError();
@@ -852,8 +869,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       bool uninstallExtension(QString extensionId);
       Q_INVOKABLE bool isInstalledExtension(QString extensionId);
 
+      ScriptRecorder* getScriptRecorder();
       bool runTestScripts(const QStringList& scripts);
-      friend class Script;
       };
 
 extern MuseScore* mscore;
@@ -869,6 +886,7 @@ extern void loadTranslation(QString fileName, QString localeName);
 extern void setMscoreLocale(QString localeName);
 extern bool saveMxl(Score*, const QString& name);
 extern bool saveMxl(Score*, QIODevice*);
+extern bool saveXml(Score*, QIODevice*);
 extern bool saveXml(Score*, const QString& name);
 
 struct PluginDescription;

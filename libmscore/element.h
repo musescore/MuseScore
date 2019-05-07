@@ -36,6 +36,7 @@ class XmlWriter;
 enum class SymId;
 enum class Pid;
 enum class OffsetType : char;
+class StaffType;
 
 //---------------------------------------------------------
 //   Grip
@@ -205,9 +206,7 @@ class Element : public ScoreElement {
       bool generated() const                  { return flag(ElementFlag::GENERATED);  }
       void setGenerated(bool val)             { setFlag(ElementFlag::GENERATED, val);   }
 
-      //TODO: rename to pos()
       const QPointF& ipos() const             { return _pos;                    }
-      //TODO: rename to posWithUserOffset()
       virtual const QPointF pos() const       { return _pos + _offset;          }
       virtual qreal x() const                 { return _pos.x() + _offset.x(); }
       virtual qreal y() const                 { return _pos.y() + _offset.y(); }
@@ -223,12 +222,15 @@ class Element : public ScoreElement {
       qreal pageX() const;
       qreal canvasX() const;
 
-      const QPointF& offset() const            { return _offset;  }
-      virtual void setOffset(const QPointF& o) { _offset = o;     }
-      void setOffset(qreal x, qreal y) { _offset.rx() = x, _offset.ry() = y; }
-      QPointF& roffset()                       { return _offset; }
-      qreal& rxoffset()                        { return _offset.rx(); }
-      qreal& ryoffset()                        { return _offset.ry(); }
+      const QPointF& offset() const               { return _offset;  }
+      virtual void setOffset(const QPointF& o)    { _offset = o;     }
+      void setOffset(qreal x, qreal y)            { _offset.rx() = x, _offset.ry() = y; }
+      QPointF& roffset()                          { return _offset; }
+      qreal& rxoffset()                           { return _offset.rx(); }
+      qreal& ryoffset()                           { return _offset.ry(); }
+
+      virtual Fraction tick() const;
+      virtual Fraction rtick() const;
 
       bool isNudged() const                       { return !_offset.isNull(); }
 
@@ -296,6 +298,7 @@ class Element : public ScoreElement {
       int voice() const                       { return _track & 3;         }
       void setVoice(int v)                    { _track = (_track / VOICES) * VOICES + v; }
       Staff* staff() const;
+      StaffType* staffType() const;
       Part* part() const;
 
       virtual void add(Element*);
@@ -324,7 +327,7 @@ class Element : public ScoreElement {
 
       static ElementType readType(XmlReader& node, QPointF*, Fraction*);
 
-      QByteArray mimeData(const QPointF&) const;
+      virtual QByteArray mimeData(const QPointF&) const;
 /**
  Return true if this element accepts a drop at canvas relative \a pos
  of given element \a type and \a subtype.
@@ -364,11 +367,6 @@ class Element : public ScoreElement {
       bool isPrintable() const;
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
-      virtual int tick() const;       // utility, searches for segment / segment parent
-      virtual int rtick() const;      // utility, searches for segment / segment parent
-      virtual Fraction rfrac() const; // utility, searches for segment / segment parent
-      virtual Fraction afrac() const; // utility, searches for segment / segment parent
-
       //
       // check element for consistency; return false if element
       // is not valid
@@ -404,8 +402,9 @@ class Element : public ScoreElement {
       uint tag() const                 { return _tag;                      }
       void setTag(uint val)            { _tag = val;                       }
 
-      bool autoplace() const           { return !flag(ElementFlag::NO_AUTOPLACE); }
-      void setAutoplace(bool v)        { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
+      bool autoplace() const;
+      virtual void setAutoplace(bool v)   { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
+      bool addToSkyline() const           { return !(_flags & (ElementFlag::INVISIBLE|ElementFlag::NO_AUTOPLACE)); }
 
       virtual QVariant getProperty(Pid) const override;
       virtual bool setProperty(Pid, const QVariant&) override;

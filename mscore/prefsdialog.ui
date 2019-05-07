@@ -1299,7 +1299,7 @@
           <item row="1" column="0">
            <widget class="QCheckBox" name="playChordOnAddNote">
             <property name="text">
-             <string>Play whole chord when adding note</string>
+             <string>Play whole chord when editing</string>
             </property>
            </widget>
           </item>
@@ -2676,7 +2676,7 @@
           </size>
          </property>
          <property name="title">
-          <string>PulseAudio</string>
+          <string notr="true">PulseAudio</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -2695,7 +2695,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>PortAudio</string>
+          <string notr="true">PortAudio</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -3190,7 +3190,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           <item row="0" column="0">
            <widget class="QPushButton" name="rescanDrivers">
             <property name="text">
-             <string>Restart Audio &amp;&amp; MIDI Devices</string>
+             <string>Restart Audio and MIDI Devices</string>
             </property>
            </widget>
           </item>
@@ -3208,56 +3208,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
            </spacer>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="restartWarning">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="palette">
-          <palette>
-           <active>
-            <colorrole role="WindowText">
-             <brush brushstyle="SolidPattern">
-              <color alpha="255">
-               <red>255</red>
-               <green>1</green>
-               <blue>39</blue>
-              </color>
-             </brush>
-            </colorrole>
-           </active>
-           <inactive>
-            <colorrole role="WindowText">
-             <brush brushstyle="SolidPattern">
-              <color alpha="255">
-               <red>255</red>
-               <green>1</green>
-               <blue>39</blue>
-              </color>
-             </brush>
-            </colorrole>
-           </inactive>
-           <disabled>
-            <colorrole role="WindowText">
-             <brush brushstyle="SolidPattern">
-              <color alpha="255">
-               <red>119</red>
-               <green>119</green>
-               <blue>121</blue>
-              </color>
-             </brush>
-            </colorrole>
-           </disabled>
-          </palette>
-         </property>
-         <property name="text">
-          <string>Attention: Any changes on this page require a restart of MuseScore.  Precise MIDI output timing is only possible via JACK.</string>
-         </property>
         </widget>
        </item>
        <item>
@@ -3393,10 +3343,10 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </sizepolicy>
          </property>
          <property name="accessibleName">
-          <string>MusicXML</string>
+          <string notr="true">MusicXML</string>
          </property>
          <property name="title">
-          <string>MusicXML</string>
+          <string notr="true">MusicXML</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
@@ -3425,10 +3375,10 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </size>
          </property>
          <property name="accessibleName">
-          <string>MIDI</string>
+          <string notr="true">MIDI</string>
          </property>
          <property name="title">
-          <string>MIDI</string>
+          <string notr="true">MIDI</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_10">
           <item>
@@ -3531,7 +3481,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_9">
          <property name="title">
-          <string>PNG</string>
+          <string notr="true">PNG</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="0">
@@ -3598,10 +3548,10 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </sizepolicy>
          </property>
          <property name="accessibleName">
-          <string>MIDI</string>
+          <string notr="true">MIDI</string>
          </property>
          <property name="title">
-          <string>MIDI</string>
+          <string notr="true">MIDI</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
@@ -3630,10 +3580,10 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
           </sizepolicy>
          </property>
          <property name="accessibleName">
-          <string>MusicXML</string>
+          <string notr="true">MusicXML</string>
          </property>
          <property name="title">
-          <string>MusicXML</string>
+          <string notr="true">MusicXML</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_14">
           <item>
@@ -3678,7 +3628,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
        <item row="0" column="1">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>PDF</string>
+          <string notr="true">PDF</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
@@ -4003,7 +3953,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             <string>Loads a Shortcut List</string>
            </property>
            <property name="text">
-            <string>Load</string>
+            <string>Load…</string>
            </property>
           </widget>
          </item>
@@ -4023,7 +3973,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             <string>Opens a dialog for defining a new shortcut for the selected action</string>
            </property>
            <property name="text">
-            <string>Define...</string>
+            <string>Define…</string>
            </property>
           </widget>
          </item>

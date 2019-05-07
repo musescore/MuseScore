@@ -17,6 +17,7 @@
 #include "texttools.h"
 #include "fotomode.h"
 #include "tourhandler.h"
+#include "scoreaccessibility.h"
 #include "libmscore/score.h"
 #include "libmscore/keysig.h"
 #include "libmscore/segment.h"
@@ -255,6 +256,7 @@ void ScoreView::mouseReleaseEvent(QMouseEvent*)
                         _score->deselectAll();
                         _score->update();
                         mscore->updateInspector();
+                        ScoreAccessibility::instance()->updateAccessibilityInfo();
                         }
             case ViewState::EDIT:
             case ViewState::NOTE_ENTRY:
@@ -305,12 +307,29 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                         }
                   }
             else {
-                  if (st == SelectType::ADD && e->selected())
-                        e->score()->deselect(e);
-                  else
+                  if (st == SelectType::ADD) {
+                        // e is the top element in stacking order,
+                        // but we want to replace it with "first non-measure element after a selected element"
+                        // (if such an element exists)
+                        QList<Element*> ll = elementsNear(editData.startMove);
+                        bool found = false;
+                        for (Element* ee : ll) {
+                              if (found) {
+                                    e = ee;
+                                    if (!e->isMeasure())
+                                          break;
+                                    }
+                              else if (ee->selected()) {
+                                    found = true;
+                                    ee->score()->deselect(ee);
+                                    e = nullptr;
+                                    }
+                              }
+                        }
+                  if (e)
                         e->score()->select(e, st, -1);
                   }
-            if (e->isNote()) {
+            if (e && e->isNote()) {
                   e->score()->updateCapo();
                   mscore->play(e);
                   }
@@ -336,10 +355,14 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                         _score->setUpdateAll();
                         clickOffElement = false;
                         }
+                  else if (st == SelectType::ADD)
+                        clickOffElement = false;
                   else
                         clickOffElement = true;
                   }
-            else if (st != SelectType::ADD)
+            else if (st == SelectType::ADD)
+                  clickOffElement = false;
+            else
                   clickOffElement = true;
             }
       _score->update();
@@ -359,14 +382,11 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       editData.buttons   = ev->buttons();
       editData.modifiers = qApp->keyboardModifiers();
 
-      Element* e         = elementNear(editData.startMove);
-//       qDebug("element %s", e ? e->name() : "--");
-
       switch (state) {
             case ViewState::NORMAL:
                   if (ev->button() == Qt::RightButton)   // context menu?
                         break;
-                  editData.element = e;
+                  editData.element = elementNear(editData.startMove);
                   mousePressEventNormal(ev);
                   break;
 
@@ -397,13 +417,19 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   }
                   break;
 
-            case ViewState::NOTE_ENTRY:
+            case ViewState::NOTE_ENTRY: {
                   _score->startCmd();
+                  bool restMode = _score->inputState().rest();
+                  if (ev->button() == Qt::RightButton)
+                        _score->inputState().setRest(!restMode);
                   _score->putNote(editData.startMove, ev->modifiers() & Qt::ShiftModifier, ev->modifiers() & Qt::ControlModifier);
+                  if (ev->button() == Qt::RightButton)
+                        _score->inputState().setRest(restMode);
                   _score->endCmd();
                   if (_score->inputState().cr())
                         adjustCanvasPosition(_score->inputState().cr(), false);
                   shadowNote->setVisible(false);
+                  }
                   break;
 
             case ViewState::EDIT: {
@@ -421,7 +447,9 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                               }
                         if (!gripFound) {
                               changeState(ViewState::NORMAL);
-                              editData.element = e;
+                              // changeState may trigger layout and destroy some elements
+                              // so we should search elementNear after changeState.
+                              editData.element = elementNear(editData.startMove);
                               mousePressEventNormal(ev);
                               break;
                               }
@@ -429,23 +457,28 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   else {
                         if (!editData.element->canvasBoundingRect().contains(editData.startMove)) {
                               changeState(ViewState::NORMAL);
-                              editData.element = e;
+                              // changeState may trigger layout and destroy some elements
+                              // so we should search elementNear after changeState.
+                              editData.element = elementNear(editData.startMove);
                               mousePressEventNormal(ev);
                               }
                         else {
                               editData.element->mousePress(editData);
                               score()->update();
+                              if (editData.element->isTextBase() && mscore->textTools())
+                                    mscore->textTools()->updateTools(editData);
                               }
                         }
                   }
                   break;
 
             case ViewState::PLAY: {
+                  Element* e = elementNear(editData.startMove);
                   if (seq && e && (e->isNote() || e->isRest())) {
                         if (e->isNote())
                               e = e->parent();
                         ChordRest* cr = toChordRest(e);
-                        seq->seek(seq->score()->repeatList()->tick2utick(cr->tick()));
+                        seq->seek(seq->score()->repeatList().tick2utick(cr->tick().ticks()));
                         }
                   }
                   break;
@@ -517,7 +550,7 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
                   break;
 
             case ViewState::PLAY:
-                  if (drag && !editData.element)
+                  if (drag)
                         dragScoreView(me);
                   break;
 

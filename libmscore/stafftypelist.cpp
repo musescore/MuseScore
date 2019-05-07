@@ -20,12 +20,12 @@ namespace Ms {
 //   staffType
 //---------------------------------------------------------
 
-const StaffType& StaffTypeList::staffType(int tick) const
+const StaffType& StaffTypeList::staffType(const Fraction& tick) const
       {
       static const StaffType st;
       if (empty())
             return st;
-      auto i = upper_bound(tick);
+      auto i = upper_bound(tick.ticks());
       if (i == begin())
             return st;
       return (--i)->second;
@@ -35,17 +35,11 @@ const StaffType& StaffTypeList::staffType(int tick) const
 //   staffType
 //---------------------------------------------------------
 
-StaffType& StaffTypeList::staffType(int tick)
+StaffType& StaffTypeList::staffType(const Fraction& tick)
       {
-//      static StaffType st;
-//      if (empty())
-//            return st;
-
       Q_ASSERT(!empty());
-      auto i = upper_bound(tick);
+      auto i = upper_bound(tick.ticks());
       Q_ASSERT(i != begin());
-//      if (i == begin())
-//            return st;
       return (--i)->second;
       }
 
@@ -53,13 +47,13 @@ StaffType& StaffTypeList::staffType(int tick)
 //   setStaffType
 //---------------------------------------------------------
 
-StaffType* StaffTypeList::setStaffType(int tick, const StaffType& st)
+StaffType* StaffTypeList::setStaffType(const Fraction& tick, const StaffType& st)
       {
-      Q_ASSERT(tick >= 0);
-      auto i = find(tick);
+      Q_ASSERT(tick >= Fraction(0,1));
+      auto i = find(tick.ticks());
       StaffType* nst;
       if (i == end()) {
-            auto k = insert(std::pair<int, StaffType>(tick, st));
+            auto k = insert(std::pair<int, StaffType>(tick.ticks(), st));
             nst = &(k.first->second);
             }
       else {

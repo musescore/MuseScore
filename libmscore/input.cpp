@@ -49,9 +49,9 @@ StaffGroup InputState::staffGroup() const
 //   tick
 //---------------------------------------------------------
 
-int InputState::tick() const
+Fraction InputState::tick() const
       {
-      return _segment ? _segment->tick() : 0;
+      return _segment ? _segment->tick() : Fraction(0,1);
       }
 
 //---------------------------------------------------------
@@ -154,13 +154,14 @@ Segment* InputState::nextInputPos() const
       Measure* m = _segment->measure();
       Segment* s = _segment->next1(SegmentType::ChordRest);
       for (; s; s = s->next1(SegmentType::ChordRest)) {
-            if (s->element(_track) || s->measure() != m) {
-                  if (s->element(_track)) {
-                        if (s->element(_track)->isRest() && toRest(s->element(_track))->isGap())
-                              continue;
-                        }
-                  return s;
+            if (s->element(_track)) {
+                  if (s->element(_track)->isRest() && toRest(s->element(_track))->isGap())
+                        m = s->measure();
+                  else
+                        return s;
                   }
+            else if (s->measure() != m)
+                  return s;
             }
       return 0;
       }

@@ -83,6 +83,8 @@ class InspectorBase : public QWidget {
       virtual void setElement();
       virtual void postInit() {} // called in setElement and valueChanged
       QWidget* addWidget();
+
+      friend class InspectorScriptEntry;
       };
 
 

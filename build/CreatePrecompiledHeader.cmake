@@ -98,7 +98,7 @@ macro( vstudio_pch target_name )
     if( MSVC )
         # Prepare paths and filenames
         message(STATUS "Preparing pre-compiled headers for ${target_name}")
-        set(_pch_path "${CMAKE_CURRENT_BINARY_DIR}/${target_name}_pch")
+        set(_pch_path "${CMAKE_CURRENT_BINARY_DIR}/$(Configuration)")
         make_directory("${_pch_path}")
         set(_pch_file "${_pch_path}/${PCH_HEADERNAME}.pch")
         set(_pch_force_use "/Fp${_pch_file} /Yu${PCH_HEADER}")

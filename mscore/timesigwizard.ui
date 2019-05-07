@@ -46,7 +46,7 @@
            <string>Custom numerical time signature</string>
           </property>
           <property name="accessibleDescription">
-           <string>Enter a numerical time signature such as four-four or six-eight</string>
+           <string>Enter a numerical time signature such as 4/4 or 6/8</string>
           </property>
           <property name="text">
            <string notr="true"/>
@@ -169,7 +169,7 @@
          <string>Common Time</string>
         </property>
         <property name="accessibleDescription">
-         <string>Use the common time symbol, the letter C, and a four-four meter</string>
+         <string>Use the common time symbol, the letter C, and a 4/4 meter</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -189,7 +189,7 @@
          <string>Cut Time</string>
         </property>
         <property name="accessibleDescription">
-         <string>Use the cut time symbol, the letter C with a vertical line through it, and a two-two meter</string>
+         <string>Use the cut time symbol, the letter C with a vertical line through it, and a 2/2 meter</string>
         </property>
         <property name="text">
          <string notr="true"/>

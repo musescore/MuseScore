@@ -102,6 +102,8 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       QColor color = curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
       qreal textlineLineWidth = tl->lineWidth();
+      if (staff())
+            textlineLineWidth *= mag();
       QPen pen(color, textlineLineWidth, tl->lineStyle());
       if (tl->lineStyle() == Qt::CustomDashLine) {
             QVector<qreal> dashes { tl->dashLineLen(), tl->dashGapLen() };
@@ -114,7 +116,16 @@ void TextLineBaseSegment::draw(QPainter* painter) const
             painter->drawLines(&points[2], 1);
             }
       else {
-            for (int i = 0; i < npoints; ++i)
+            int start = 0;
+            //if there is an end hook, draw it with a solid line
+            if (npoints > 1) {
+                  painter->drawLines(&points[0], 1);
+                  painter->drawLines(&points[1], 1);
+                  pen.setStyle(Qt::SolidLine);
+                  painter->setPen(pen);
+                  start = 2;
+                  }
+            for (int i = start; i < npoints; ++i)
                   painter->drawLines(&points[i], 1);
             }
       }
@@ -155,7 +166,7 @@ void TextLineBaseSegment::layout()
       {
       npoints      = 0;
       TextLineBase* tl = textLineBase();
-      qreal _spatium = spatium();
+      qreal _spatium = tl->spatium();
 
       if (spanner()->placeBelow())
             rypos() = staff() ? staff()->height() : 0.0;
@@ -169,7 +180,7 @@ void TextLineBaseSegment::layout()
                   _text->setXmlText(tl->beginText());
                   _text->setFamily(tl->beginFontFamily());
                   _text->setSize(tl->beginFontSize());
-                  _text->setOffset(tl->beginTextOffset());
+                  _text->setOffset(tl->beginTextOffset() * mag());
                   _text->setAlign(tl->beginTextAlign());
                   _text->setBold(tl->beginFontStyle() & FontStyle::Bold);
                   _text->setItalic(tl->beginFontStyle() & FontStyle::Italic);
@@ -180,7 +191,7 @@ void TextLineBaseSegment::layout()
                   _text->setXmlText(tl->continueText());
                   _text->setFamily(tl->continueFontFamily());
                   _text->setSize(tl->continueFontSize());
-                  _text->setOffset(tl->continueTextOffset());
+                  _text->setOffset(tl->continueTextOffset() * mag());
                   _text->setAlign(tl->continueTextAlign());
                   _text->setBold(tl->continueFontStyle() & FontStyle::Bold);
                   _text->setItalic(tl->continueFontStyle() & FontStyle::Italic);
@@ -250,7 +261,7 @@ void TextLineBaseSegment::layout()
             }
 
       if (textLineBase()->endHookType() != HookType::NONE) {
-            qreal h = pp2.y() + point(textLineBase()->endHookHeight());
+            qreal h = pp2.y() + textLineBase()->endHookHeight().val() * _spatium;
             if (h > y2)
                   y2 = h;
             else if (h < y1)
@@ -258,7 +269,7 @@ void TextLineBaseSegment::layout()
             }
 
       if (textLineBase()->beginHookType() != HookType::NONE) {
-            qreal h = point(textLineBase()->beginHookHeight());
+            qreal h = textLineBase()->beginHookHeight().val() * _spatium;
             if (h > y2)
                   y2 = h;
             else if (h < y1)
@@ -432,8 +443,10 @@ void TextLineBase::spatiumChanged(qreal /*ov*/, qreal /*nv*/)
 
 void TextLineBase::writeProperties(XmlWriter& xml) const
       {
-      for (Pid pid : pids)
-            writeProperty(xml, pid);
+      for (Pid pid : pids) {
+            if (!isStyled(pid)) 
+                  writeProperty(xml, pid);
+            }
       SLine::writeProperties(xml);
       }
 
@@ -444,7 +457,7 @@ void TextLineBase::writeProperties(XmlWriter& xml) const
 bool TextLineBase::readProperties(XmlReader& e)
       {
       const QStringRef& tag(e.name());
-      for (Pid i :pids) {
+      for (Pid i : pids) {
             if (readProperty(tag, e, i)) {
                   setPropertyFlags(i, PropertyFlags::UNSTYLED);
                   return true;

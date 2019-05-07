@@ -35,7 +35,7 @@ extern MScore* mscore;
 MCursor::MCursor(MasterScore* s)
       {
       _score = s;
-      move(0, 0);
+      move(0, Fraction(0,1));
       }
 
 //---------------------------------------------------------
@@ -46,7 +46,7 @@ void MCursor::createMeasures()
       {
       Measure* measure;
       for (;;) {
-            int tick = 0;
+            Fraction tick = Fraction(0,1);
             measure = _score->lastMeasure();
             if (measure) {
                   tick = measure->tick() + measure->ticks();
@@ -56,7 +56,7 @@ void MCursor::createMeasures()
             measure = new Measure(_score);
             measure->setTick(tick);
             measure->setTimesig(_sig);
-            measure->setLen(_sig);
+            measure->setTicks(_sig);
             _score->measures()->add(measure);
             }
       }
@@ -75,7 +75,7 @@ Chord* MCursor::addChord(int pitch, const TDuration& duration)
             chord = new Chord(_score);
             chord->setTrack(_track);
             chord->setDurationType(duration);
-            chord->setDuration(duration.fraction());
+            chord->setTicks(duration.fraction());
             segment->add(chord);
             }
       Note* note = new Note(_score);
@@ -120,7 +120,7 @@ TimeSig* MCursor::addTimeSig(const Fraction& f)
             ts->setTrack(i * VOICES);
             segment->add(ts);
             }
-      _score->sigmap()->add(_tick, SigEvent(f));
+      _score->sigmap()->add(_tick.ticks(), SigEvent(f));
       return ts;
       }
 
@@ -133,14 +133,14 @@ void MCursor::createScore(const QString& name)
       delete _score;
       _score = new MasterScore(mscore->baseStyle());
       _score->setName(name);
-      move(0, 0);
+      move(0, Fraction(0,1));
       }
 
 //---------------------------------------------------------
 //   move
 //---------------------------------------------------------
 
-void MCursor::move(int t, int tick)
+void MCursor::move(int t, const Fraction& tick)
       {
       _track = t;
       _tick = tick;

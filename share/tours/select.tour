@@ -17,8 +17,8 @@
     </Message>
   <Message>
     <Text>A list selection is a combination of single selections.
-    Press Ctrl (macOS: Cmd) while clicking to add or remove elements to the list selection.
-    You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
+    Press "Ctrl" (macOS: "Cmd") while clicking to add or remove elements to the list selection.
+    You can also quickly select similar elements by right-clicking (macOS: "Ctrl"+clicking) one
     and then choosing one of the "Select" options from the resulting popup menu.</Text>
     <Widget>scoreview</Widget>
     </Message>

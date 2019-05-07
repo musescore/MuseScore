@@ -50,6 +50,23 @@ void TestLinks::initTestCase()
       }
 
 //---------------------------------------------------------
+//   addTitleText
+//---------------------------------------------------------
+
+static void addTitleText(Score* score, const QString& title)
+      {
+      MeasureBase* measure = score->first();
+      if (!measure->isVBox()) {
+            score->insertMeasure(ElementType::VBOX, measure);
+            measure = score->first();
+            }
+
+      Text* text = new Text(score, Tid::TITLE);
+      text->setPlainText(title);
+      measure->add(text);
+      }
+
+//---------------------------------------------------------
 //   test3LinkedSameScore
 ///  Create an empty 1 staff score
 ///  Add 2 linked staff
@@ -62,7 +79,7 @@ void TestLinks::test3LinkedSameScore_99796()
       c.setTimeSig(Fraction(4,4));
       c.createScore("test");
       c.addPart("voice");
-      c.move(0, 0);     // move to track 0 tick 0
+      c.move(0, Fraction(0,1));     // move to track 0 tick 0
 
       c.addKeySig(Key(1));
       c.addTimeSig(Fraction(4,4));
@@ -165,14 +182,14 @@ void TestLinks::test3LinkedParts_99796()
       c.setTimeSig(Fraction(4,4));
       c.createScore("test");
       c.addPart("voice");
-      c.move(0, 0);     // move to track 0 tick 0
+      c.move(0, Fraction(0,1));     // move to track 0 tick 0
 
       c.addKeySig(Key(1));
       c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
       MasterScore* score = c.score();
-      score->addText("title", "Title");
+      addTitleText(score, "Title");
       score->doLayout();
       // delete chord
       Measure* m = score->firstMeasure();
@@ -246,14 +263,14 @@ void TestLinks::test4LinkedParts_94911()
       c.setTimeSig(Fraction(4,4));
       c.createScore("test");
       c.addPart("electric-guitar");
-      c.move(0, 0);     // move to track 0 tick 0
+      c.move(0, Fraction(0,1));     // move to track 0 tick 0
 
 //      c.addKeySig(Key(1));
 //      c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
       MasterScore* score = c.score();
-      score->addText("title", "Title");
+      addTitleText(score, "Title");
       score->doLayout();
       // delete chord
       Measure* m = score->firstMeasure();
@@ -368,14 +385,14 @@ void TestLinks::test5LinkedParts_94911()
       c.setTimeSig(Fraction(4,4));
       c.createScore("test");
       c.addPart("electric-guitar");
-      c.move(0, 0);     // move to track 0 tick 0
+      c.move(0, Fraction(0,1));     // move to track 0 tick 0
 
 //      c.addKeySig(Key(1));
 //      c.addTimeSig(Fraction(4,4));
       c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
       MasterScore* score = c.score();
-      score->addText("title", "Title");
+      addTitleText(score, "Title");
       score->doLayout();
       // delete chord
       Measure* m = score->firstMeasure();

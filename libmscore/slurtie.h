@@ -41,7 +41,34 @@ struct UP {
       QPointF p;            // layout position relative to pos()
       QPointF off;          // user offset in point units
 
+      QPointF pos() const { return p + off; }
       bool operator!=(const UP& up) const { return p != up.p || off != up.off; }
+      };
+
+//---------------------------------------------------------
+//   CubicBezier
+//    Helper class to optimize cubic Bezier curve points
+//    calculation.
+//---------------------------------------------------------
+
+class CubicBezier {
+      QPointF p1;
+      QPointF p2;
+      QPointF p3;
+      QPointF p4;
+
+   public:
+      CubicBezier(QPointF _p1, QPointF _p2, QPointF _p3, QPointF _p4)
+         : p1(_p1), p2(_p2), p3(_p3), p4(_p4) {}
+
+      QPointF pointAtPercent(qreal t) const
+            {
+            Q_ASSERT(t >= 0.0 && t <= 1.0);
+            const qreal r = 1.0 - t;
+            const QPointF B123 = r * (r*p1 + t*p2) + t * (r*p2 + t*p3);
+            const QPointF B234 = r * (r*p2 + t*p3) + t * (r*p3 + t*p4);
+            return r*B123 + t*B234;
+            }
       };
 
 class SlurTie;

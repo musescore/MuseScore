@@ -37,15 +37,14 @@ vtest/META-INF
 vtest/Thumbnails
 vtest/Pictures
 .vs
+.vscode
 dependencies
 
 # Downloaded files during build process
-MS_General.sf3
-MS_General-License.md
-MS_General-changelog.txt
 MuseScore_General.sf3
-MuseScore_General-License.md
-MuseScore_General-changelog.txt
+MuseScore_General_License.md
+MuseScore_General_Changelog.txt
+MuseScore_General_Readme.md
 VERSION
 /mscore/data/mscore.aps
 /msvc.*

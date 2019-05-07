@@ -51,7 +51,7 @@ static const ElementStyle pedalStyle {
 void PedalSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(spatium() * .7);
+      autoplaceSpannerSegment(styleP(Sid::pedalMinDistance));
       }
 
 //---------------------------------------------------------
@@ -122,8 +122,6 @@ void Pedal::write(XmlWriter& xml) const
          Pid::END_HOOK_TYPE,
          Pid::BEGIN_TEXT,
          Pid::END_TEXT,
-         Pid::LINE_WIDTH,
-         Pid::LINE_STYLE,
          Pid::LINE_VISIBLE,
          Pid::BEGIN_HOOK_TYPE
          }) {
@@ -132,7 +130,7 @@ void Pedal::write(XmlWriter& xml) const
       for (const StyledProperty& spp : *styledProperties())
             writeProperty(xml, spp.pid);
 
-      Element::writeProperties(xml);
+      SLine::writeProperties(xml);
       xml.etag();
       }
 
@@ -237,6 +235,14 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
                                           break;
                                     }
                               else if (seg->segmentType() == SegmentType::EndBarLine) {
+                                    if (!seg->enabled()) {
+                                          // disabled barline layout is not reliable
+                                          // use width of measure instead
+                                          Measure* m = seg->measure();
+                                          s = seg->system();
+                                          x = m->width() + m->pos().x() - nhw * 2;
+                                          seg = nullptr;
+                                          }
                                     break;
                                     }
                               }
@@ -253,7 +259,7 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
                         x -= c->x();
                   }
             if (!s) {
-                  int t = tick2();
+                  Fraction t = tick2();
                   Measure* m = score()->tick2measure(t);
                   s = m->system();
                   x = m->tick2pos(t);

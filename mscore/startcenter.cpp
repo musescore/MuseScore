@@ -27,7 +27,7 @@ void MuseScore::showStartcenter(bool show)
       {
       QAction* a = getAction("startcenter");
       if (show && startcenter == nullptr) {
-            startcenter = new Startcenter;
+            startcenter = new Startcenter(this);
             startcenter->addAction(a);
             startcenter->readSettings();
             connect(startcenter, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
@@ -45,8 +45,8 @@ void MuseScore::showStartcenter(bool show)
 //   Startcenter
 //---------------------------------------------------------
 
-Startcenter::Startcenter()
- : AbstractDialog(0)
+Startcenter::Startcenter(QWidget* parent)
+ : AbstractDialog(parent)
       {
       setObjectName("Startcenter");
       setupUi(this);
@@ -61,17 +61,28 @@ Startcenter::Startcenter()
 #ifdef USE_WEBENGINE
       if (!noWebView) {
             _webView = new MyWebView(this);
-            _webView->setMaximumWidth(200);  
+            _webView->setMaximumWidth(200);
 
             MyWebEnginePage* page = new MyWebEnginePage(this);
             MyWebUrlRequestInterceptor* wuri = new MyWebUrlRequestInterceptor(page);
-            page->profile()->setRequestInterceptor(wuri);
+            QWebEngineProfile* profile = page->profile();
+            profile->setRequestInterceptor(wuri);
             _webView->setPage(page);
 
             auto extendedVer = QString(VERSION) + "." + QString(BUILD_NUMBER);
-            _webView->setUrl(QUrl(QString("https://connect2.musescore.com/?version=%1").arg(extendedVer)));
+            QUrl connectPageUrl = QUrl(QString("https://connect2.musescore.com/?version=%1").arg(extendedVer));
+            _webView->setUrl(connectPageUrl);
 
             horizontalLayout->addWidget(_webView);
+            
+            //workaround for the crashes sometimes happend in Chromium on macOS with Qt 5.12
+            connect(_webView, &QWebEngineView::renderProcessTerminated, this, [this, profile, connectPageUrl](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
+                    {
+                    qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
+                    profile->clearHttpCache();
+                    _webView->load(connectPageUrl);
+                    _webView->show();
+                    });
             }
 #endif
 

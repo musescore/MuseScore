@@ -28,7 +28,7 @@ namespace Ms {
 class Part;
 class Instrument;
 class Channel;
-struct MidiMapping;
+class MidiMapping;
 class MixerTrackItem;
 
 typedef std::shared_ptr<MixerTrackItem> MixerTrackItemPtr;
@@ -49,6 +49,8 @@ private:
 
       Instrument* _instr;
       Channel* _chan;
+
+      Channel* playbackChannel(const Channel* channel);
 
 public:
       MixerTrackItem(TrackType tt, Part* part, Instrument* _instr, Channel* _chan);

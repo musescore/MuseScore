@@ -247,7 +247,12 @@ void Image::read(XmlReader& e)
             else if (tag == "lockAspectRatio")
                   readProperty(e, Pid::LOCK_ASPECT_RATIO);
             else if (tag == "sizeIsSpatium")
-                  readProperty(e, Pid::SIZE_IS_SPATIUM);
+                  // setting this using the property Pid::SIZE_IS_SPATIUM breaks, because the
+                  // property setter attempts to maintain a constant size. If we're reading, we
+                  // don't want to do that, because the stored size will be in:
+                  //    mm if size isn't spatium
+                  //    sp if size is spatium
+                  _sizeIsSpatium = e.readBool();
             else if (tag == "path")
                   _storePath = e.readElementText();
             else if (tag == "linkPath")
@@ -361,7 +366,7 @@ class ImageEditData : public ElementEditData {
 //   startDrag
 //---------------------------------------------------------
 
-void Image::startDrag(EditData& data)
+void Image::startEditDrag(EditData& data)
       {
       ImageEditData* ed = new ImageEditData();
       ed->e    = this;

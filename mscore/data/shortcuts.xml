@@ -53,6 +53,14 @@
     <seq>Ctrl+V</seq>
     </SC>
   <SC>
+    <key>paste-half</key>
+    <seq>Ctrl+Shift+Q</seq>
+    </SC>
+  <SC>
+    <key>paste-double</key>
+    <seq>Ctrl+Shift+W</seq>
+    </SC>
+  <SC>
     <key>swap</key>
     <seq>Ctrl+Shift+X</seq>
     </SC>
@@ -967,6 +975,10 @@
     <seq>;</seq>
     </SC>
   <SC>
+    <key>add-parentheses</key>
+    <seq>(</seq>
+    </SC>
+  <SC>
     <key>toggle-mmrest</key>
     <seq>M</seq>
     </SC>
@@ -1002,4 +1014,8 @@
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
     </SC>
+    <SC>
+      <key>toggle-autoplace</key>
+      <seq>=</seq>
+      </SC>
   </Shortcuts>

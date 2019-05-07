@@ -84,6 +84,7 @@ install(FILES
       07-Band_and_Percussion/06-Battery_Percussion.mscx
       07-Band_and_Percussion/07-Large_Pit_Percussion.mscx
       07-Band_and_Percussion/08-Small_Pit_Percussion.mscx
+      07-Band_and_Percussion/09-European_Concert_Band.mscx
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates/07-Band_and_Percussion
       )
 

@@ -46,6 +46,9 @@ class Icon final : public Element {
       virtual void read(XmlReader&) override;
       virtual void draw(QPainter*) const override;
       virtual void layout() override;
+
+      QVariant getProperty(Pid) const override;
+      bool setProperty(Pid, const QVariant&) override;
       };
 
 

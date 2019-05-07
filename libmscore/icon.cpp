@@ -12,6 +12,7 @@
 
 #include "xml.h"
 #include "icon.h"
+#include "property.h"
 
 namespace Ms {
 
@@ -64,5 +65,35 @@ void Icon::draw(QPainter* p) const
       p->drawPixmap(0, 0, pm);
       }
 
-}
+//---------------------------------------------------------
+//   Icon::getProperty
+//---------------------------------------------------------
 
+QVariant Icon::getProperty(Pid pid) const
+      {
+      switch (pid) {
+            case Pid::ACTION:
+                  return action();
+            default:
+                  break;
+            }
+      return Element::getProperty(pid);
+      }
+
+//---------------------------------------------------------
+//   Icon::setProperty
+//---------------------------------------------------------
+
+bool Icon::setProperty(Pid pid, const QVariant& v)
+      {
+      switch (pid) {
+            case Pid::ACTION:
+                  _action = v.toString().toLatin1();
+                  triggerLayout();
+                  break;
+            default:
+                  return Element::setProperty(pid, v);
+            }
+      return true;
+      }
+}

@@ -56,6 +56,15 @@ Ambitus::Ambitus(Score* s)
       }
 
 //---------------------------------------------------------
+//   mag
+//---------------------------------------------------------
+
+qreal Ambitus::mag() const
+      {
+      return staff() ? staff()->mag(tick()) : 1.0;
+      }
+
+//---------------------------------------------------------
 //   initFrom
 //---------------------------------------------------------
 
@@ -290,7 +299,7 @@ void Ambitus::layout()
       qreal       _spatium    = spatium();
       Staff*      stf         = nullptr;
       if (segm && track() > -1) {
-            int tick    = segm->tick();
+            Fraction tick    = segm->tick();
             stf         = score()->staff(staffIdx());
             lineDist    = stf->lineDistance(tick) * _spatium;
             numOfLines  = stf->lines(tick);
@@ -453,7 +462,7 @@ void Ambitus::draw(QPainter* p) const
 
       // draw ledger lines (if not in a palette)
       if (segment() && track() > -1) {
-            int tick          = segment()->tick();
+            Fraction tick          = segment()->tick();
             Staff* stf        = score()->staff(staffIdx());
             qreal lineDist    = stf->lineDistance(tick);
             int numOfLines    = stf->lines(tick);

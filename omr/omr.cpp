@@ -141,7 +141,7 @@ int Omr::pagesInDocument() const
 
 bool Omr::readPdf()
       {
-      QProgressDialog *progress = new QProgressDialog(QWidget::tr("Reading PDF..."), QWidget::tr("Cancel"), 0, 100, 0, Qt::FramelessWindowHint);
+      QProgressDialog *progress = new QProgressDialog(QWidget::tr("Reading PDF…"), QWidget::tr("Cancel"), 0, 100, 0, Qt::FramelessWindowHint);
       progress->setWindowModality(Qt::ApplicationModal);
       progress->show();
       progress->setRange(0, ACTION_NUM);
