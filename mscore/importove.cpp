@@ -1943,19 +1943,17 @@ void OveToMScore::convertArticulation(
                         delete pedal_;
                         pedal_ = 0;
                         }
-                  else {
-                        pedal_ = new Pedal(score_);
-                        pedal_->setTrack(track);
-                        Segment* seg = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
-                        pedal_->setTick(seg->tick());
-                        score_->addSpanner(pedal_);
-                        }
+                  pedal_ = new Pedal(score_);
+                  pedal_->setTrack(track);
+                  Segment* seg = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
+                  pedal_->setTick(seg->tick());
                   break;
                   }
             case OVE::ArticulationType::Pedal_Up :{
                   if(pedal_){
                         Segment* seg = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
                         pedal_->setTick2(seg->tick());
+                        score_->addSpanner(pedal_);
                         pedal_ = 0;
                         }
                   break;
