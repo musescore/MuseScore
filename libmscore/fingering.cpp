@@ -30,6 +30,7 @@ namespace Ms {
 
 static const ElementStyle fingeringStyle {
       { Sid::fingeringPlacement, Pid::PLACEMENT  },
+      { Sid::fingeringMinDistance, Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------
@@ -145,8 +146,8 @@ void Fingering::layout()
                                     Note* un = chord->upNote();
                                     top = qMin(0.0, un->y() + un->bbox().top());
                                     }
-                              qreal minDistance = score()->styleS(Sid::fingeringMinDistance).val() * spatium();
-                              top -= minDistance;
+                              qreal md = minDistance().val() * spatium();
+                              top -= md;
                               qreal diff = (bbox().bottom() + ipos().y() + n->y()) - top;
                               if (diff > 0.0)
                                     rypos() -= diff;
@@ -176,8 +177,8 @@ void Fingering::layout()
                                     Note* dn = chord->downNote();
                                     bottom = qMax(vStaff->height(), dn->y() + dn->bbox().bottom());
                                     }
-                              qreal minDistance = score()->styleS(Sid::fingeringMinDistance).val() * spatium();
-                              bottom += minDistance;
+                              qreal md = minDistance().val() * spatium();
+                              bottom += md;
                               qreal diff = bottom - (bbox().top() + ipos().y() + n->y());
                               if (diff > 0.0)
                                     rypos() += diff;
@@ -198,7 +199,8 @@ void Fingering::layout()
             setAutoplace(true);
             }
       // update offset after drag
-      qreal rebase = rebaseOffset();
+      if (offsetChanged())
+            rebaseOffset();
       }
 
 //---------------------------------------------------------

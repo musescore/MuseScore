@@ -2187,31 +2187,72 @@ void Element::setOffsetChanged(bool v, bool absolute, const QPointF& diff)
       }
 
 //---------------------------------------------------------
-//   autoplaceCalculateOffset
-//---------------------------------------------------------
-
-void Element::autoplaceCalculateOffset(QRectF& r, qreal minDistance)
-      {
-      // TODO: refactor
-      }
-
-//---------------------------------------------------------
 //   rebaseOffset
 //    calculates new offset for moved elements
 //    for drag & other actions that result in absolute position, apply the new offset
-//    for nudge & other actions that result in relative adjustment, return the difference
+//    for nudge & other actions that result in relative adjustment, return the vertical difference
 //---------------------------------------------------------
 
 qreal Element::rebaseOffset()
       {
-      qreal rebase = _changedPos.y() - pos().y();
+      QPointF p = _changedPos - pos();
       if (offsetChanged() > 0) {
-            QPointF p = offset();
-            p.ry() += rebase;
-            rebase = 0.0;
-            undoChangeProperty(Pid::OFFSET, p);
+            undoChangeProperty(Pid::OFFSET, offset() + p);
+            return 0.0;
             }
-      return rebase;
+      return p.y();
+      }
+
+//---------------------------------------------------------
+//   rebaseMinDistance
+//    calculates new minDistance for moved elements
+//    if necessary, also rebases offset
+//    updates md, yd
+//    returns true if shape needs to be rebased
+//---------------------------------------------------------
+
+bool Element::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool fix)
+      {
+      bool rc = false;
+      PropertyFlags pf = propertyFlags(Pid::MIN_DISTANCE);
+      if (pf == PropertyFlags::STYLED)
+            pf = PropertyFlags::UNSTYLED;
+      qreal adjustedY = pos().y() + yd;
+      qreal diff = _changedPos.y() - adjustedY;
+      if (fix) {
+            undoChangeProperty(Pid::MIN_DISTANCE, -999.99, pf);
+            yd = 0.0;
+            }
+      else if (!isStyled(Pid::MIN_DISTANCE)) {
+            md = (placeAbove() ? md + yd : md - yd) / sp;
+            undoChangeProperty(Pid::MIN_DISTANCE, md, pf);        // -d
+            yd += diff;
+            }
+      else {
+            // min distance still styled
+            // user apparently moved element into skyline
+            // but perhaps not really, if performing a relative adjustment
+            if (_offsetChanged < 0) {
+                  // relative movement (cursor): fix only if moving vertically into direction of skyline
+                  if ((placeAbove() && diff > 0.0) || (placeBelow() && diff < 0.0)) {
+                        // rebase offset
+                        QPointF p = offset();
+                        p.ry() += rebase;
+                        undoChangeProperty(Pid::OFFSET, p);
+                        md = (placeAbove() ? md - diff : md + diff) / sp;
+                        undoChangeProperty(Pid::MIN_DISTANCE, md, pf);
+                        rc = true;
+                        yd = 0.0;
+                        }
+                  }
+            else {
+                  // absolute movement (drag): fix unconditionally
+                  md = (placeAbove() ? md + yd : md - yd) / sp;
+                  undoChangeProperty(Pid::MIN_DISTANCE, md, pf);    // -d
+                  yd = 0.0;
+                  }
+            }
+      return rc;
       }
 
 //---------------------------------------------------------
@@ -2221,24 +2262,15 @@ qreal Element::rebaseOffset()
 void Element::autoplaceSegmentElement(bool add)
       {
       // rebase vertical offset on drag
-      qreal rebase = rebaseOffset();
-      int changed = offsetChanged();
-#if 0
-      qreal rebase = _changedPos.y() - pos().y();
-      if (changed > 0) {
-            QPointF p = offset();
-            p.ry() += rebase;
-            rebase = 0.0;
-            undoChangeProperty(Pid::OFFSET, p);
-            }
-#endif
+      qreal rebase = 0.0;
+      if (offsetChanged())
+            rebase = rebaseOffset();
+
       if (autoplace() && parent()) {
             Segment* s = toSegment(parent());
             Measure* m = s->measure();
 
-            qreal minDistance = _minDistance.val() * score()->spatium();
             qreal sp = score()->spatium();
-
             int si = staffIdx();
             if (systemFlag()) {
                   const int firstVis = m->system()->firstVisibleStaff();
@@ -2247,9 +2279,9 @@ void Element::autoplaceSegmentElement(bool add)
                   }
             else {
                   qreal mag = staff()->mag(tick());
-                  minDistance *= mag;
                   sp *= mag;
                   }
+            qreal minDistance = _minDistance.val() * sp;
 
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + s->pos() + pos());
@@ -2269,48 +2301,12 @@ void Element::autoplaceSegmentElement(bool add)
                   qreal yd = d + minDistance;
                   if (placeAbove())
                         yd *= -1.0;
-
-                  if (changed) {
+                  if (offsetChanged()) {
                         // user moved element with the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        PropertyFlags pf = propertyFlags(Pid::MIN_DISTANCE);
-                        if (pf == PropertyFlags::STYLED)
-                              pf = PropertyFlags::UNSTYLED;
-                        qreal adjustedY = pos().y() + yd;
-                        qreal diff = _changedPos.y() - adjustedY;
                         bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                        if (inStaff) {
-                              // any movement into staff becomes fixed
-                              undoChangeProperty(Pid::MIN_DISTANCE, -999.99, pf);
-                              yd = 0.0;
-                              }
-                        else if (!isStyled(Pid::MIN_DISTANCE)) {
-                              undoChangeProperty(Pid::MIN_DISTANCE, -d / sp, pf);
-                              yd += diff;
-                              }
-                        else {
-                              // min distance still styled
-                              // user apparently moved element into skyline
-                              // but perhaps not really, if performing a relative adjustment
-                              if (changed < 0) {
-                                    // relative movement (cursor): fix only if moving vertically into direction of skyline
-                                    if ((placeAbove() && diff > 0.0) || (placeBelow() && diff < 0.0)) {
-                                          // rebase offset
-                                          QPointF p = offset();
-                                          p.ry() += rebase;
-                                          undoChangeProperty(Pid::OFFSET, p);
-                                          r.translate(0.0, rebase);
-                                          qreal nmd = placeAbove() ? minDistance - diff : minDistance + diff;
-                                          undoChangeProperty(Pid::MIN_DISTANCE, nmd / sp, pf);
-                                          yd = 0.0;
-                                          }
-                                    }
-                              else {
-                                    // absolute movement (drag): fix unconditionally
-                                    undoChangeProperty(Pid::MIN_DISTANCE, -d / sp, pf);
-                                    yd = 0.0;
-                                    }
-                              }
+                        if (rebaseMinDistance(minDistance, yd, sp, rebase, inStaff))
+                              r.translate(0.0, rebase);
                         }
                   rypos() += yd;
                   r.translate(QPointF(0.0, yd));
@@ -2327,11 +2323,17 @@ void Element::autoplaceSegmentElement(bool add)
 
 void Element::autoplaceMeasureElement(bool add)
       {
+      // rebase vertical offset on drag
+      qreal rebase = 0.0;
+      if (offsetChanged())
+            rebase = rebaseOffset();
+
       if (autoplace() && parent()) {
             Measure* m = toMeasure(parent());
             int si     = staffIdx();
 
-            qreal minDistance = _minDistance.val() * score()->spatium();
+            qreal sp = score()->spatium();
+            qreal minDistance = _minDistance.val() * sp;
 
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + pos());
@@ -2352,6 +2354,13 @@ void Element::autoplaceMeasureElement(bool add)
                   qreal yd = d + minDistance;
                   if (placeAbove())
                         yd *= -1.0;
+                  if (offsetChanged()) {
+                        // user moved element with the skyline
+                        // we may need to adjust minDistance, yd, and/or offset
+                        bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
+                        if (rebaseMinDistance(minDistance, yd, sp, rebase, inStaff))
+                              r.translate(0.0, rebase);
+                        }
                   rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
@@ -2359,6 +2368,7 @@ void Element::autoplaceMeasureElement(bool add)
             if (add && addToSkyline())
                   ss->skyline().add(r);
             }
+      _offsetChanged = 0.0;
       }
 
 }
