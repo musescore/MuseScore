@@ -61,7 +61,7 @@ void RehearsalMark::layout()
                         rxpos() += qMin(leftX, barlineX) + width();
                         }
                   }
-            autoplaceSegmentElement(styleP(Sid::rehearsalMarkMinDistance));
+            autoplaceSegmentElement();
             }
       }
 

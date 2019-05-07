@@ -450,8 +450,7 @@ void FretDiagram::layout()
             setPos(QPointF());
             return;
             }
-      qreal minDistance = styleP(Sid::fretMinDistance);
-      autoplaceSegmentElement(minDistance);
+      autoplaceSegmentElement();
       if (_harmony)
             _harmony->layout();
       if (_harmony && _harmony->autoplace() && _harmony->parent()) {
@@ -462,6 +461,7 @@ void FretDiagram::layout()
             SysStaff* ss = m->system()->staff(si);
             QRectF r     = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos());
 
+            qreal minDistance = styleP(Sid::fretMinDistance);
             SkylineLine sk(false);
             sk.add(r.x(), r.bottom(), r.width());
             qreal d = sk.minDistance(ss->skyline().north());

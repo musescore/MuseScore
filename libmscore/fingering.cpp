@@ -197,6 +197,8 @@ void Fingering::layout()
             // restore autoplace
             setAutoplace(true);
             }
+      // update offset after drag
+      qreal rebase = rebaseOffset();
       }
 
 //---------------------------------------------------------

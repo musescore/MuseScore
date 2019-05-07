@@ -3249,7 +3249,7 @@ void layoutHarmonies(const std::vector<Segment*>& sl)
                         // But that layout (if it happens at all) does not do autoplace,
                         // so we need the full layout here.
                         h->layout();
-                        h->autoplaceSegmentElement(s->score()->styleP(Sid::minHarmonyDistance));
+                        h->autoplaceSegmentElement();
                         }
                   }
             }
@@ -3667,7 +3667,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                     int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
                                     if (effectiveTrack < strack || effectiveTrack >= etrack)
                                           continue;
-
+#if 1
                                     // clear layout for chord-based fingerings
                                     // do this before adding chord to skyline
                                     if (e->isChord()) {
@@ -3691,7 +3691,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                                       }
                                                 }
                                           }
-
+#endif
                                     // add element to skyline
                                     if (e->addToSkyline())
                                           skyline.add(e->shape().translated(e->pos() + p));
@@ -3854,7 +3854,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         d->layout();
 
                         if (d->autoplace()) {
-                              d->doAutoplace();
+                              d->autoplaceSegmentElement(false);
                               dynamics.push_back(d);
                               }
                         }

@@ -2196,13 +2196,34 @@ void Element::autoplaceCalculateOffset(QRectF& r, qreal minDistance)
       }
 
 //---------------------------------------------------------
+//   rebaseOffset
+//    calculates new offset for moved elements
+//    for drag & other actions that result in absolute position, apply the new offset
+//    for nudge & other actions that result in relative adjustment, return the difference
+//---------------------------------------------------------
+
+qreal Element::rebaseOffset()
+      {
+      qreal rebase = _changedPos.y() - pos().y();
+      if (offsetChanged() > 0) {
+            QPointF p = offset();
+            p.ry() += rebase;
+            rebase = 0.0;
+            undoChangeProperty(Pid::OFFSET, p);
+            }
+      return rebase;
+      }
+
+//---------------------------------------------------------
 //   autoplaceSegmentElement
 //---------------------------------------------------------
 
-void Element::autoplaceSegmentElement(qreal minDistance)
+void Element::autoplaceSegmentElement(bool add)
       {
       // rebase vertical offset on drag
+      qreal rebase = rebaseOffset();
       int changed = offsetChanged();
+#if 0
       qreal rebase = _changedPos.y() - pos().y();
       if (changed > 0) {
             QPointF p = offset();
@@ -2210,12 +2231,12 @@ void Element::autoplaceSegmentElement(qreal minDistance)
             rebase = 0.0;
             undoChangeProperty(Pid::OFFSET, p);
             }
-
+#endif
       if (autoplace() && parent()) {
             Segment* s = toSegment(parent());
             Measure* m = s->measure();
 
-            minDistance = _minDistance.val() * score()->spatium();
+            qreal minDistance = _minDistance.val() * score()->spatium();
             qreal sp = score()->spatium();
 
             int si = staffIdx();
@@ -2294,7 +2315,7 @@ void Element::autoplaceSegmentElement(qreal minDistance)
                   rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
-            if (addToSkyline())
+            if (add && addToSkyline())
                   ss->skyline().add(r);
             }
       _offsetChanged = 0;
@@ -2304,11 +2325,13 @@ void Element::autoplaceSegmentElement(qreal minDistance)
 //   autoplaceMeasureElement
 //---------------------------------------------------------
 
-void Element::autoplaceMeasureElement(qreal minDistance)
+void Element::autoplaceMeasureElement(bool add)
       {
       if (autoplace() && parent()) {
             Measure* m = toMeasure(parent());
             int si     = staffIdx();
+
+            qreal minDistance = _minDistance.val() * score()->spatium();
 
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + pos());
@@ -2333,7 +2356,7 @@ void Element::autoplaceMeasureElement(qreal minDistance)
                   r.translate(QPointF(0.0, yd));
                   }
             r.translate(0.0, yOff);
-            if (addToSkyline() && minDistance >= 0.0)
+            if (add && addToSkyline())
                   ss->skyline().add(r);
             }
       }

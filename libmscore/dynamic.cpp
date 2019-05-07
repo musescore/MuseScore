@@ -83,6 +83,7 @@ static Dyn dynList[] = {
 
 static const ElementStyle dynamicsStyle {
       { Sid::dynamicsPlacement, Pid::PLACEMENT },
+      { Sid::dynamicsMinDistance, Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------
