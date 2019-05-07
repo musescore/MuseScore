@@ -24,6 +24,7 @@ namespace Ms {
 
 static const ElementStyle markerStyle {
       { Sid::repeatLeftPlacement, Pid::PLACEMENT },
+      { Sid::repeatMinDistance,   Pid::MIN_DISTANCE },
       };
 
 //must be in sync with Marker::Type enum
@@ -174,7 +175,7 @@ void Marker::layout()
       if (layoutToParentWidth() && !(align() & (Align::RIGHT | Align::HCENTER)))
             rxpos() -= width() * 0.5;
 
-      autoplaceMeasureElement(styleP(Sid::repeatMinDistance));
+      autoplaceMeasureElement();
       }
 
 //---------------------------------------------------------

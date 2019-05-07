@@ -242,7 +242,7 @@ void Fermata::layout()
             }
       QRectF b(symBbox(_symId));
       setbbox(b.translated(-0.5 * b.width(), 0.0));
-      autoplaceSegmentElement(styleP(Sid::fermataMinDistance));
+      autoplaceSegmentElement();
       }
 
 //---------------------------------------------------------

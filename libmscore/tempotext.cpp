@@ -415,7 +415,7 @@ void TempoText::layout()
                         rxpos() += e->x();
                   }
             }
-      autoplaceSegmentElement(styleP(Sid::tempoMinDistance));
+      autoplaceSegmentElement();
       }
 
 //---------------------------------------------------------

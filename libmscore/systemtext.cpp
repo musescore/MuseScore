@@ -54,7 +54,7 @@ QVariant SystemText::propertyDefault(Pid id) const
 void SystemText::layout()
       {
       TextBase::layout();
-      autoplaceSegmentElement(styleP(Sid::systemTextMinDistance));
+      autoplaceSegmentElement();
       }
 
 //---------------------------------------------------------
