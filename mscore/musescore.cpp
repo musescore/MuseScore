@@ -6102,8 +6102,11 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (!name.isEmpty()) {
                   cs->startCmd();
                   if (!cs->loadStyle(name)) {
-                        QMessageBox::critical(this,
-                           tr("Load Style"), MScore::lastError);
+                        QMessageBox::StandardButton b = QMessageBox::warning(this, tr("Load Style"),
+                           tr("MuseScore may not be able to load this style file: %1").arg(MScore::lastError),
+                           QMessageBox::Cancel|QMessageBox::Ignore, QMessageBox::Cancel);
+                        if (b == QMessageBox::Ignore)
+                              cs->loadStyle(name, true);
                         }
                   cs->endCmd();
                   }
