@@ -165,7 +165,7 @@ void TrillSegment::layout()
       else
             symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
 
-      autoplaceSpannerSegment(styleP(Sid::trillMinDistance));
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -320,6 +320,7 @@ void Trill::layout()
 
 static const ElementStyle trillSegmentStyle {
       { Sid::trillPosAbove, Pid::OFFSET },
+      { Sid::trillMinDistance, Pid::MIN_DISTANCE },
       };
 
 LineSegment* Trill::createLineSegment()

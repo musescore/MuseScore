@@ -249,32 +249,48 @@ void HairpinSegment::layout()
 
       if (isStyled(Pid::OFFSET))
             roffset() = hairpin()->propertyDefault(Pid::OFFSET).toPointF();
+
+      // rebase vertical offset on drag
+      qreal rebase = 0.0;
+      if (offsetChanged())
+            rebase = rebaseOffset();
+
       if (autoplace()) {
-            qreal minDistance = score()->styleS(Sid::hairpinMinDistance).val() * spatium();
             qreal ymax = pos().y();
             qreal d;
             qreal ddiff = hairpin()->isLineType() ? 0.0 : _spatium * 0.5;
 
+            qreal sp = spatium();
+            qreal md = minDistance().val() * sp;
+
             SkylineLine sl(!hairpin()->placeAbove());
-            QPointF p = pos();
-            p.ry() -= offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
-            sl.add(shape().translated(p));
+            Shape sh = shape().translated(pos());
+            sl.add(sh);
             if (hairpin()->placeAbove()) {
                   d  = system()->topDistance(staffIdx(), sl);
-                  if (d > -minDistance)
-                        ymax -= d + minDistance;
+                  if (d > -md)
+                        ymax -= d + md;
                   // align hairpin with dynamics
                   ymax = qMin(ymax, dymax - ddiff);
                   }
             else {
                   d  = system()->bottomDistance(staffIdx(), sl);
-                  if (d > -minDistance)
-                        ymax += d + minDistance;
+                  if (d > -md)
+                        ymax += d + md;
                   // align hairpin with dynamics
                   if (!hairpin()->diagonal())
                         ymax = qMax(ymax, dymax - ddiff);
                   }
-            rypos() += ymax - pos().y();
+            qreal yd = ymax - pos().y();
+            if (yd != 0.0) {
+                  if (offsetChanged()) {
+                        // user moved element within the skyline
+                        // we may need to adjust minDistance, yd, and/or offset
+                        bool inStaff = spanner()->placeAbove() ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < staff()->height();
+                        rebaseMinDistance(md, yd, sp, rebase, inStaff);
+                        }
+                  rypos() += yd;
+                  }
 
             if (hairpin()->addToSkyline() && !hairpin()->diagonal()) {
                   // align dynamics with hairpin
@@ -610,6 +626,7 @@ void Hairpin::layout()
 
 static const ElementStyle hairpinSegmentStyle {
       { Sid::hairpinPosBelow, Pid::OFFSET },
+      { Sid::hairpinMinDistance, Pid::MIN_DISTANCE },
       };
 
 LineSegment* Hairpin::createLineSegment()
