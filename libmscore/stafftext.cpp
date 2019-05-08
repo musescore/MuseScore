@@ -46,7 +46,6 @@ void StaffText::layout()
       {
       TextBase::layout();
       autoplaceSegmentElement(styleP(Sid::staffTextMinDistance));
-      //autoplaceSegmentElement(minDistance());
       }
 
 //---------------------------------------------------------
