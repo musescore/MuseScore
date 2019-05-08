@@ -142,7 +142,7 @@ void Fingering::layout()
                               sk.add(r.x(), r.bottom(), r.width());
                               qreal d = sk.minDistance(ss->skyline().north());
                               qreal yd = 0.0;
-                              if (d > 0.0)
+                              if (d > 0.0 && isStyled(Pid::MIN_DISTANCE))
                                     yd -= d + height() * .25;
                               // force extra space above staff & chord (but not other fingerings)
                               qreal top;
@@ -178,7 +178,7 @@ void Fingering::layout()
                               sk.add(r.x(), r.top(), r.width());
                               qreal d = ss->skyline().south().minDistance(sk);
                               qreal yd = 0.0;
-                              if (d > 0.0)
+                              if (d > 0.0 && isStyled(Pid::MIN_DISTANCE))
                                     yd += d + height() * .25;
                               // force extra space below staff & chord (but not other fingerings)
                               qreal bottom;

@@ -3168,7 +3168,7 @@ Shape Chord::shape() const
       for (Note* note : _notes) {
             shape.add(note->shape().translated(note->pos()));
             for (Element* e : note->el()) {
-                  if (e->isFingering() && toFingering(e)->layoutType() == ElementType::CHORD)
+                  if (e->isFingering() && toFingering(e)->layoutType() == ElementType::CHORD && e->bbox().isValid())
                         shape.add(e->bbox().translated(e->pos() + note->pos()));
                   }
             }
