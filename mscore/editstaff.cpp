@@ -384,7 +384,7 @@ void EditStaff::apply()
 
       score->update();
       score->masterScore()->updateChannel();
-      staff->score()->masterScore()->rebuildAndUpdateExpressive(synti);
+      staff->score()->masterScore()->rebuildAndUpdateExpressive(MuseScore::synthesizer("Fluid"));
       }
 
 //---------------------------------------------------------
