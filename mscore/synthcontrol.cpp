@@ -281,7 +281,7 @@ void SynthControl::ccToUseChanged(int val)
 
 void SynthControl::switchExprButtonClicked()
       {
-      _score->masterScore()->updateExpressive(synti, true, true);
+      _score->masterScore()->updateExpressive(MuseScore::synthesizer("Fluid"), true, true);
       setAllUserBankController(true);
       updateMixer();
       }
@@ -292,7 +292,7 @@ void SynthControl::switchExprButtonClicked()
 
 void SynthControl::switchNonExprButtonClicked()
       {
-      _score->masterScore()->updateExpressive(synti, false, true);
+      _score->masterScore()->updateExpressive(MuseScore::synthesizer("Fluid"), false, true);
       setAllUserBankController(true);
       updateMixer();
       }
@@ -304,7 +304,7 @@ void SynthControl::switchNonExprButtonClicked()
 void SynthControl::resetExprButtonClicked()
       {
       setAllUserBankController(false);
-      _score->masterScore()->updateExpressive(synti);
+      _score->masterScore()->updateExpressive(MuseScore::synthesizer("Fluid"));
       updateMixer();
       }
 
@@ -459,7 +459,7 @@ void SynthControl::updateGui()
 
 void SynthControl::updateExpressivePatches()
       {
-      _score->masterScore()->rebuildAndUpdateExpressive(synti);
+      _score->masterScore()->rebuildAndUpdateExpressive(MuseScore::synthesizer("Fluid"));
       updateMixer();
       }
 
