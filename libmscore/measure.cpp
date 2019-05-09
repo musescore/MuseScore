@@ -395,11 +395,6 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool &
       int startTrack = staffIdx * VOICES;
       int endTrack   = startTrack + VOICES;
       for (Segment* segment = first(st); segment; segment = segment->next(st)) {
-            if (segment == s && staff->isPitchedStaff(tick())) {
-                  ClefType clef = staff->clef(s->tick());
-                  int l = relStep(line, clef);
-                  return tversatz.accidentalVal(l, error);
-                  }
             for (int track = startTrack; track < endTrack; ++track) {
                   Element* e = segment->element(track);
                   if (!e || !e->isChord())
@@ -422,6 +417,11 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool &
                         int l      = absStep(tpc, note->epitch());
                         tversatz.setAccidentalVal(l, tpc2alter(tpc));
                         }
+                  }
+            if (segment == s && staff->isPitchedStaff(tick())) {
+                  ClefType clef = staff->clef(s->tick());
+                  int l = relStep(line, clef);
+                  return tversatz.accidentalVal(l, error);
                   }
             }
       qDebug("segment not found");
