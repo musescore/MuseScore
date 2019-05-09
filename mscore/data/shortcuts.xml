@@ -18,7 +18,7 @@
     </SC>
   <SC>
     <key>file-save-as</key>
-    <std>63</std>
+    <seq>Ctrl+Shift+S</seq>
     </SC>
   <SC>
     <key>file-close</key>

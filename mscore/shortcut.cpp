@@ -3812,6 +3812,9 @@ void Shortcut::setKeys(const QList<QKeySequence>& ks)
 
 void Shortcut::setStandardKey(QKeySequence::StandardKey k)
       {
+      if (QKeySequence::keyBindings(k).empty()) // make sure key binding is set for OS
+            return;
+
       _standardKey = k;
       if (_action && k != QKeySequence::UnknownKey)
             _action->setShortcuts(_standardKey);
@@ -4109,8 +4112,11 @@ void Shortcut::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "key")
                   _key = e.readElementText().toLocal8Bit();
-            else if (tag == "std")
-                  _standardKey = QKeySequence::StandardKey(e.readInt());
+            else if (tag == "std") {
+                  int i = e.readInt();
+                  if (!QKeySequence::keyBindings((QKeySequence::StandardKey(i))).empty()) // make sure key binding is set for OS
+                        _standardKey = QKeySequence::StandardKey(i);
+                  }
             else if (tag == "seq") {
                   QKeySequence seq  = Shortcut::keySeqFromString(e.readElementText(), QKeySequence::PortableText);
 #ifndef NDEBUG
@@ -4163,7 +4169,7 @@ void Shortcut::load()
                                           }
                                     else if (tag == "std") {
                                           int i = e.readInt();
-                                          if(sc)
+                                          if(sc && !QKeySequence::keyBindings((QKeySequence::StandardKey(i))).empty()) // make sure key binding is set for OS
                                                 sc->_standardKey = QKeySequence::StandardKey(i);
                                           }
                                     else if (tag == "seq") {
@@ -4220,8 +4226,11 @@ static QList<Shortcut1> loadShortcuts(QString fileLocation)
                                     const QStringRef& tag(e.name());
                                     if (tag == "key")
                                           sc.key = e.readElementText().toLocal8Bit();
-                                    else if (tag == "std")
-                                          sc.standardKey = QKeySequence::StandardKey(e.readInt());
+                                    else if (tag == "std") {
+                                          int i = e.readInt();
+                                          if (!QKeySequence::keyBindings(QKeySequence::StandardKey(i)).empty()) // make sure key binding is set for OS
+                                                sc.standardKey = QKeySequence::StandardKey(i);
+                                          }
                                     else if (tag == "seq")
                                           sc.keys.append(Shortcut::keySeqFromString(e.readElementText(), QKeySequence::PortableText));
                                     else
