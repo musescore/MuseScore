@@ -1352,9 +1352,6 @@ void SpannerSegment::autoplaceSpannerSegment()
       if (spanner()->anchor() == Spanner::Anchor::NOTE)
             return;
 
-      // TODO:
-      // - add style for textline, letring, vibrato
-
       // rebase vertical offset on drag
       qreal rebase = 0.0;
       if (offsetChanged())
