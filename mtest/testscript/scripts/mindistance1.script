@@ -1,9 +1,10 @@
-init ../../../Documents/GitHub/MuseScore/mtest/testscript/scripts/init/Treble.mscx
+init init/Treble.mscx
 cmd note-input
 cmd note-c
+cmd pitch-down-octave
+cmd escape
+palette Dynamic subtype ppp
+cmd pitch-up-octave
 cmd pitch-up-octave
 cmd escape
-palette StaffText style Staff text Staff&#032Text
-cmd pitch-down-octave
-cmd pitch-down-octave
 test score mindistance1.mscx
