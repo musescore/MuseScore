@@ -129,7 +129,7 @@ float Mod::get_value(Channel* chan, Voice* voice)
                               v1 = voice->key;
                               break;
                         case FLUID_MOD_KEYPRESSURE:
-                              v1 = chan->key_pressure;
+                              v1 = chan->keyPressure(voice->key);
                               break;
                         case FLUID_MOD_CHANNELPRESSURE:
                               v1 = chan->channel_pressure;
@@ -222,7 +222,7 @@ float Mod::get_value(Channel* chan, Voice* voice)
                               v2 = voice->key;
                               break;
                         case FLUID_MOD_KEYPRESSURE:
-                              v2 = chan->key_pressure;
+                              v2 = chan->keyPressure(voice->key);
                               break;
                         case FLUID_MOD_CHANNELPRESSURE:
                               v2 = chan->channel_pressure;
