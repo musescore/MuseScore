@@ -41,6 +41,8 @@ static const ElementStyle palmMuteStyle {
       { Sid::palmMuteBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET      },
       { Sid::palmMuteEndHookType,                   Pid::END_HOOK_TYPE          },
       { Sid::palmMuteLineWidth,                     Pid::LINE_WIDTH             },
+      { Sid::palmMutePlacement,                     Pid::PLACEMENT              },
+      { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
       };
 
 //---------------------------------------------------------

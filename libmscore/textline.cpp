@@ -89,6 +89,11 @@ TextLine::TextLine(const TextLine& tl)
       {
       }
 
+static const ElementStyle textLineSegmentStyle {
+      { Sid::textLinePosAbove,      Pid::OFFSET       },
+      { Sid::textLineMinDistance,   Pid::MIN_DISTANCE },
+      };
+
 //---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
@@ -100,6 +105,7 @@ LineSegment* TextLine::createLineSegment()
       // note-anchored line segments are relative to system not to staff
       if (anchor() == Spanner::Anchor::NOTE)
             seg->setFlag(ElementFlag::ON_STAFF, false);
+      seg->initElementStyle(&textLineSegmentStyle);
       return seg;
       }
 
