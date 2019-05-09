@@ -409,7 +409,7 @@ void QmlEdit::move(QTextCursor::MoveOperation op)
       }
 
 //---------------------------------------------------------
-//   QmlEdit
+//   ~QmlEdit
 //---------------------------------------------------------
 
 QmlEdit::~QmlEdit()
@@ -423,13 +423,13 @@ QmlEdit::~QmlEdit()
 
 int QmlEdit::lineNumberAreaWidth()
       {
-      int digits = 1;
-      int max = qMax(1, blockCount());
-      while (max >= 10) {
-            max /= 10;
-            ++digits;
-            }
-      int space = 6 + fontMetrics().width(QLatin1Char('9')) * digits;
+      QString num { QString::number(blockCount()) };
+
+      // HACK: boundingRect() subtracts internal whitespace. Internal whitespace
+      // amounts to roughly half the width, so I multiply by 2. Then I also
+      // subtract twice the string's length px to combat the left margin growing
+      // each time the string grows.
+      int space { 6 + (fontMetrics().boundingRect(num).width() - num.size()) * 2 };
       return space;
       }
 
