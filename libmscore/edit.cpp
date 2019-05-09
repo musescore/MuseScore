@@ -1505,6 +1505,7 @@ void Score::cmdFlip()
                                     qreal oldY = off.y() - oldDefaultY;
                                     off.ry() = newDefaultY - oldY;
                                     ss->undoChangeProperty(Pid::OFFSET, off);
+                                    ss->setOffsetChanged(false);
                                     }
                               }
                         }
@@ -1513,6 +1514,7 @@ void Score::cmdFlip()
                         qreal oldY = off.y() - oldDefaultY;
                         off.ry() = newDefaultY - oldY;
                         ee->undoChangeProperty(Pid::OFFSET, off);
+                        ee->setOffsetChanged(false);
                         }
                   }
             }

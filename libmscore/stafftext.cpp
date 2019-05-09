@@ -45,7 +45,7 @@ StaffText::StaffText(Score* s, Tid tid)
 void StaffText::layout()
       {
       TextBase::layout();
-      autoplaceSegmentElement(styleP(Sid::staffTextMinDistance));
+      autoplaceSegmentElement();
       }
 
 //---------------------------------------------------------
