@@ -2199,13 +2199,39 @@ void Element::setOffsetChanged(bool v, bool absolute, const QPointF& diff)
 
 qreal Element::rebaseOffset(bool nox)
       {
+      QPointF off = offset();
       QPointF p = _changedPos - pos();
+      if (nox)
+            p.rx() = 0.0;
+      bool changedValue = _offsetChanged; // save to restore later
+
+      if (staff() && propertyFlags(Pid::PLACEMENT) != PropertyFlags::NOSTYLE) {
+            // check if flipped
+            // TODO: elements that support PLACEMENT but not as a styled property
+            QRectF r = bbox().translated(_changedPos);
+            qreal staffHeight = staff()->height();
+            bool flipped = placeAbove() ? r.top() > staffHeight : r.bottom() < 0.0;
+            if (flipped) {
+                  off.ry() += placeAbove() ? -staffHeight : staffHeight;
+                  undoChangeProperty(Pid::OFFSET, off + p);
+                  _offsetChanged = changedValue;
+                  rypos() += placeAbove() ? staffHeight : -staffHeight;
+                  PropertyFlags pf = propertyFlags(Pid::PLACEMENT);
+                  if (pf == PropertyFlags::STYLED)
+                        pf = PropertyFlags::UNSTYLED;
+                  Placement place = placeAbove() ? Placement::BELOW : Placement::ABOVE;
+                  undoChangeProperty(Pid::PLACEMENT, int(place), pf);
+                  undoResetProperty(Pid::MIN_DISTANCE);
+                  return 0.0;
+                  }
+            }
+
       if (offsetChanged() > 0) {
-            if (nox)
-                 p.rx() = 0.0;
-            undoChangeProperty(Pid::OFFSET, offset() + p);
+            undoChangeProperty(Pid::OFFSET, off + p);
+            _offsetChanged = changedValue;
             return 0.0;
             }
+
       return p.y();
       }
 
