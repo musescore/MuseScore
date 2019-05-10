@@ -537,8 +537,8 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
             }
       // If zip contains multiple files in root, or a single qml, create a
       // root folder in plugin dir for them.
-      // If zip contanis a single directory, copies that into plugin dir.
-      bool create_dir = true;
+      // If zip contains a single directory, don't use that directory's name
+      bool has_no_dir = true;
       std::set<QString> dirs;
       foreach(MQZipReader::FileInfo fi, allFiles) {
             QString dir_root = fi.filePath.split('/').first();
@@ -546,15 +546,21 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
             }
       if (dirs.size() == 1) {
             if (allFiles.size() > 1) // the element in dirs must be a dir then
-                  create_dir = false;
+                  has_no_dir = false;
             }
+      if (!has_no_dir) {
+            int stripped_len = allFiles.first().filePath.length() + 1;
+            // the directory in the archive is not to be added
+            allFiles.pop_front();
+            // strip the top directory in fi.filePath
+            for (auto& fi : allFiles)
+                  fi.filePath = fi.filePath.right(fi.filePath.size() - stripped_len);
+            }
+
       QString destination_prefix = dataPath + "/plugins";
-      if (create_dir) {
-            destination_prefix += "/" + f_pkg.completeBaseName();
-            QDir().mkdir(destination_prefix);
-            }
-      QString subdir = create_dir ? destination_prefix : destination_prefix + "/" + allFiles.first().filePath;
-      desc.dir = subdir;
+      destination_prefix += "/" + f_pkg.completeBaseName();
+      QDir().mkdir(destination_prefix);
+      desc.dir = destination_prefix;
       // extract and copy
       foreach(MQZipReader::FileInfo fi, allFiles) {
             if (fi.isDir)
@@ -726,6 +732,9 @@ void ResourceManager::downloadPluginPackage()
       package.setTarget(new_package.direct_link);
       // TODO: try to get extension name from direct_link, and add it to localPath
       QString localPath = dataPath + "/plugins/" + filenameBaseFromPageURL(page_url);
+      if (new_package.source == GITHUB || new_package.source == GITHUB_RELEASE) {
+            localPath += ".zip";
+      }
       QDir().mkpath(dataPath + "/plugins");
       package.setLocalFile(localPath);
       package.download();
