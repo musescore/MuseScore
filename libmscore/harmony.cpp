@@ -1028,9 +1028,13 @@ void Harmony::layout()
       //if (isStyled(Pid::OFFSET))
       //      setOffset(propertyDefault(Pid::OFFSET).toPointF());
 
+      if (placeBelow())
+            rypos() = staff() ? staff()->height() : 0.0;
+      else
+            rypos() = 0.0;
       layout1();
 
-      qreal yy = 0.0;
+      qreal yy = ipos().y();
       qreal xx = 0.0;
 
       if (parent()->isFretDiagram())
