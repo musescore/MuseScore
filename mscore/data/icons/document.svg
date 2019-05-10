@@ -7,25 +7,25 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="24"
+   width="24px"
+   height="24px"
+   viewBox="0 0 24 24"
    version="1.1"
-   width="18"
-   id="svg2"
-   inkscape:version="0.48.5 r10040"
-   sodipodi:docname="document.svg">
+   id="svg12"
+   sodipodi:docname="document.svg"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06">
   <metadata
-     id="metadata14">
+     id="metadata16">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>document-new</dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <defs
-     id="defs12" />
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -35,20 +35,45 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1156"
-     inkscape:window-height="838"
-     id="namedview10"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     id="namedview14"
      showgrid="false"
-     inkscape:zoom="9.8333333"
-     inkscape:cx="12"
-     inkscape:cy="12"
-     inkscape:window-x="664"
-     inkscape:window-y="163"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg2" />
-  <path
-     inkscape:connector-curvature="0"
-     id="path8"
-     style="fill:#3b3f45;stroke-width:2"
-     d="m 2.21894,4.000076 c -0.6876,0.1305 -1.231079,0.80009 -1.218749,1.49999 l 0,14.99999 c 7.5e-5,0.7854 0.714629,1.49985 1.499998,1.5 l 12.999991,0 c 0.78537,-1.5e-4 1.499924,-0.7146 1.499999,-1.5 l 0,-9.15629 c 0.009,-0.39615 -0.14625,-0.7935 -0.421875,-1.0782 L 11.23456,4.421876 c -0.284685,-0.27555 -0.682049,-0.43095 -1.078124,-0.4218 -3.299861,0 -4.659835,0 -7.937496,0 z m 1.781248,2.99999 5.999603,0 0,3.9999 4.000391,0 0,8.00009 -9.999994,0 z" />
+     inkscape:zoom="39.333333"
+     inkscape:cx="10.710701"
+     inkscape:cy="12.208678"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g6" />
+  <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title2">document-new</title>
+  <desc
+     id="desc4">Created with Sketch.</desc>
+  <defs
+     id="defs6" />
+  <g
+     id="Derived-24"
+     transform="translate(2,-2)"
+     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1">
+    <g
+       id="document-new"
+       style="fill:#3b3f45" />
+  </g>
+  <g
+     transform="translate(-334.9903,-244.14142)"
+     id="g6">
+    <path
+       inkscape:connector-curvature="0"
+       d="m 340.54626,261.85913 c -1.21704,0 -2.35613,0.44556 -3.41731,1.33666 -1.06118,0.8911 -1.59177,1.84904 -1.59176,2.87381 0,0.62377 0.23004,1.12501 0.69013,1.50373 0.4601,0.37872 1.06118,0.56809 1.80327,0.56809 1.21702,0 2.35609,-0.44556 3.41728,-1.33666 1.06119,-0.8911 1.59178,-1.84904 1.59178,-2.87381 0,-0.62377 -0.23004,-1.12502 -0.69014,-1.50373 -0.46009,-0.37873 -1.06119,-0.56809 -1.80325,-0.56809"
+       style="fill:#3b3f45"
+       id="path2" />
+    <path
+       id="path4"
+       style="fill:#3b3f45;stroke-width:1.50800002"
+       d="m 343.00022,263.78601 h -2 l 3.8e-4,-18.57252 c 0,0 0.99962,-0.99963 1.99462,-0.99963 h 7.995 l 6,6 v 11.79661 c 0,1.105 -0.895,2 -2,2 v -2 -10.96818 l -4.82843,-4.82843 h -7.16156 z"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccscccccc" />
+  </g>
 </svg>
