@@ -417,6 +417,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 //      void editFretDiagram(FretDiagram*);
       void editBendProperties(Bend*);
       void editTremoloBarProperties(TremoloBar*);
+      void selectInstrument(InstrumentChange*);
       EditData& getEditData()        { return editData; }
       void changeState(ViewState);
 
