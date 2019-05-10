@@ -768,8 +768,22 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                                     continue;
                                     }
 
-                              if (s->isHairpin() && s->staff() == st1) {
+                              if (s->isHairpin()) {
                                     h = toHairpin(s);
+                                    switch (h->dynRange()) {
+                                          case Dynamic::Range::STAFF:
+                                                if (h->staff() != st1)
+                                                      continue;
+                                                break;
+                                          case Dynamic::Range::PART:
+                                                if (h->part() != st1->part())
+                                                      continue;
+                                                break;
+                                          case Dynamic::Range::SYSTEM:
+                                          default:
+                                                break;
+                                          }
+
                                     singleNoteDynamics = h->singleNoteDynamics() || singleNoteDynamics;
                                     if (singleNoteDynamics) {
                                           hairpinStartTick = Fraction::fromTicks(it.start);
