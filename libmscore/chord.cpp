@@ -3149,7 +3149,7 @@ QString Chord::accessibleExtraInfo() const
 
 //---------------------------------------------------------
 //   shape
-//    does not contain ledger lines and articulations
+//    does not contain articulations
 //---------------------------------------------------------
 
 Shape Chord::shape() const
