@@ -2370,8 +2370,6 @@ void Element::autoplaceMeasureElement(bool add)
 
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + pos());
-            qreal yOff = offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
-            r.translate(0.0, -yOff);
 
             SkylineLine sk(!placeAbove());
             qreal d;
@@ -2397,7 +2395,6 @@ void Element::autoplaceMeasureElement(bool add)
                   rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
-            r.translate(0.0, yOff);
             if (add && addToSkyline())
                   ss->skyline().add(r);
             }
