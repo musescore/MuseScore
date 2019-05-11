@@ -1963,6 +1963,18 @@ void Chord::layoutPitched()
                   }
             }
 
+      if (!_articulations.isEmpty()) {
+            // TODO: allocate space to avoid "staircase" effect
+            // another alternative is to limit the width contribution of the articulation in layoutArticulations2()
+            //qreal aWidth = 0.0;
+            for (Articulation* a : articulations())
+                  a->layout();      // aWidth = qMax(aWidth, a->width());
+            //qreal w = width();
+            //qreal aExtra = (qMax(aWidth, w) - w) * 0.5;
+            //lll = qMax(lll, aExtra);
+            //rrr = qMax(rrr, aExtra);
+            }
+
       _spaceLw = lll;
       _spaceRw = rrr;
 
@@ -2307,6 +2319,12 @@ void Chord::layoutTablature()
                         + (dots()-1) * score()->styleS(Sid::dotDotDistance).val() * _spatium;
             x += symWidth(SymId::augmentationDot);
             rrr = qMax(rrr, x);
+            }
+
+      if (!_articulations.isEmpty()) {
+            // TODO: allocate space? see layoutPitched()
+            for (Articulation* a : articulations())
+                  a->layout();
             }
 
       _spaceLw = lll;
@@ -3235,7 +3253,6 @@ void Chord::layoutArticulations()
                   continue;
 
             bool bottom = !a->up();  // true: articulation is below chord;  false: articulation is above chord
-            a->layout();
 
             bool headSide = bottom == up();
             qreal x = centerX();
@@ -3359,7 +3376,6 @@ void Chord::layoutArticulations2()
 
             if (a->up()) {
                   if (!a->layoutCloseToNote()) {
-                        a->layout();
                         a->setPos(x, chordTopY);
                         a->doAutoplace();
                         }
@@ -3367,7 +3383,6 @@ void Chord::layoutArticulations2()
                   }
             else {
                   if (!a->layoutCloseToNote()) {
-                        a->layout();
                         a->setPos(x, chordBotY);
                         a->doAutoplace();
                         }
@@ -3383,7 +3398,6 @@ void Chord::layoutArticulations2()
       for (Articulation* a : _articulations) {
             ArticulationAnchor aa = a->anchor();
             if (aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
-                  a->layout();
                   if (a->up()) {
                         a->setPos(x, staffTopY);
                         staffTopY -= distance0;
@@ -3397,11 +3411,22 @@ void Chord::layoutArticulations2()
             }
       for (Articulation* a : _articulations) {
             if (a->addToSkyline()) {
+                  // the segment shape has already been calculated
+                  // so measure width and spacing is already determined
+                  // in line mode, we cannot add to segment shape without throwing this off
+                  // but adding to skyline is always good
                   Segment* s = segment();
                   Measure* m = s->measure();
                   QRectF r = a->bbox().translated(a->pos() + pos());
-                  s->staffShape(staffIdx()).add(r);
-                  r = a->bbox().translated(a->pos() + pos() + s->pos() + m->pos());
+                  // TODO: limit to width of chord
+                  // this avoids "staircase" effect due to space not having been allocated already
+                  // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()
+                  //qreal w = qMin(r.width(), width());
+                  //r.translate((r.width() - w) * 0.5, 0.0);
+                  //r.setWidth(w);
+                  if (!score()->lineMode())
+                        s->staffShape(staffIdx()).add(r);
+                  r.translate(s->pos() + m->pos());
                   m->system()->staff(vStaffIdx())->skyline().add(r);
                   }
             }

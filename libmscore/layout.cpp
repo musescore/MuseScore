@@ -2581,6 +2581,14 @@ void Score::getNextMeasure(LayoutContext& lc)
       Measure* measure = toMeasure(lc.curMeasure);
       measure->moveTicks(lc.tick - measure->tick());
 
+      if (lineMode() && (measure->tick() < lc.startTick || measure->tick() > lc.endTick)) {
+            // needed to reset segment widths if they can change after measure width is computed
+            //for (Segment& s : measure->segments())
+            //      s.createShapes();
+            lc.tick += measure->ticks();
+            return;
+            }
+
       connectTremolo(measure);
 
       //
@@ -3625,6 +3633,10 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   continue;
             Measure* m = toMeasure(mb);
             m->layoutMeasureNumber();
+            // in continuous view, entire score is one system
+            // but we only need to process the range
+            if (lineMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick))
+                  continue;
             for (Segment* s = m->first(); s; s = s->next()) {
                   if (s->isChordRestType() || !s->annotations().empty())
                         sl.push_back(s);
@@ -3644,6 +3656,9 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         continue;
                   Measure* m = toMeasure(mb);
                   MeasureNumber* mno = m->noText(staffIdx);
+                  // no need to build skyline outside of range in continuous view
+                  if (lineMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick))
+                        continue;
                   if (mno && mno->addToSkyline())
                         ss->skyline().add(mno->bbox().translated(m->pos() + mno->pos()));
                   if (m->staffLines(staffIdx)->addToSkyline())
@@ -3805,8 +3820,9 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
       // layout slurs
       //-------------------------------------------------------------
 
-      Fraction stick = system->measures().front()->tick();
-      Fraction etick = system->measures().back()->endTick();
+      bool useRange = false;  // TODO: lineMode();
+      Fraction stick = useRange ? lc.startTick : system->measures().front()->tick();
+      Fraction etick = useRange ? lc.endTick : system->measures().back()->endTick();
       auto spanners = score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
 
       std::vector<Spanner*> spanner;
@@ -4374,7 +4390,8 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 
       if (lineMode()) {
             lc.prevMeasure = 0;
-            lc.nextMeasure = _showVBox ? first() : firstMeasure();
+            lc.nextMeasure = m;     //_showVBox ? first() : firstMeasure();
+            lc.startTick   = m->tick();
             layoutLinear(layoutAll, lc);
             return;
             }

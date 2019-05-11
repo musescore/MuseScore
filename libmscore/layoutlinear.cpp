@@ -74,11 +74,10 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
 //    which contains one system
 //---------------------------------------------------------
 
-void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
+void Score::resetSystems(bool layoutAll, LayoutContext& lc)
       {
-// if (layoutAll) {
       Page* page = 0;
-      if (true) {
+      if (layoutAll) {
             for (System* s : _systems) {
                   for (SpannerSegment* ss : s->spannerSegments())
                         ss->setParent(0);
@@ -110,7 +109,8 @@ void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
             if (pages().isEmpty())
                   return;
             page = pages().front();
-            // system = systems().front();
+            System* system = systems().front();
+            system->clear();
             }
       lc.page = page;
       }
@@ -129,11 +129,12 @@ void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
       resetTempo();
 
       QPointF pos;
-      bool firstMeasure = true;
+      bool firstMeasure = true;     //lc.startTick.isZero();
 
       //set first measure to lc.nextMeasures for following
       //utilizing in getNextMeasure()
       lc.nextMeasure = _measures.first();
+      lc.tick = Fraction(0, 1);
       getNextMeasure(lc);
 
       while (lc.curMeasure) {
@@ -146,9 +147,9 @@ void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
             system->appendMeasure(lc.curMeasure);
             if (lc.curMeasure->isMeasure()) {
                   Measure* m = toMeasure(lc.curMeasure);
-                        if (m->mmRest()) {
-                              m->mmRest()->setSystem(nullptr);
-                              }
+                  if (m->mmRest()) {
+                        m->mmRest()->setSystem(nullptr);
+                        }
                   if (firstMeasure) {
                         system->layoutSystem(0.0);
                         if (m->repeatStart()) {
@@ -164,10 +165,35 @@ void Score::resetSystems(bool /*layoutAll*/, LayoutContext& lc)
                         m->removeSystemHeader();
                   if (m->trailer())
                         m->removeSystemTrailer();
-                  m->createEndBarLines(true);
-                  m->computeMinWidth();
-                  ww = m->width();
-                  m->stretchMeasure(ww);
+                  if (m->tick() >= lc.startTick && m->tick() <= lc.endTick) {
+                        // for measures in range, do full layout
+                        m->createEndBarLines(true);
+                        m->computeMinWidth();
+                        ww = m->width();
+                        m->stretchMeasure(ww);
+                        }
+                  else {
+                        // for measures not in range, use existing layout
+                        ww = m->width();
+                        if (m->pos() != pos) {
+                              // fix beam positions
+                              // other elements with system as parent are processed in layoutSystemElements()
+                              // but full beam processing is expensive and not needed if we adjust position here
+                              QPointF p = pos - m->pos();
+                              for (const Segment& s : m->segments()) {
+                                    if (!s.isChordRestType())
+                                          continue;
+                                    for (int track = 0; track < ntracks(); ++track) {
+                                          Element* e = s.element(track);
+                                          if (e) {
+                                                ChordRest* cr = toChordRest(e);
+                                                if (cr->beam() && cr->beam()->elements().front() == cr)
+                                                      cr->beam()->rpos() += p;
+                                                }
+                                          }
+                                    }
+                              }
+                        }
                   m->setPos(pos);
                   m->layoutStaffLines();
                   }
@@ -447,6 +473,8 @@ void LayoutContext::layoutLinear()
                         if (!e)
                               continue;
                         if (e->isChordRest()) {
+                              if (m->tick() < startTick || m->tick() > endTick)
+                                    continue;
                               if (!score->staff(track2staff(track))->show())
                                     continue;
                               ChordRest* cr = toChordRest(e);
