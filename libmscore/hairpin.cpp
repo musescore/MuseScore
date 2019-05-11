@@ -48,7 +48,7 @@ static const ElementStyle hairpinStyle {
       { Sid::hairpinHeight,                      Pid::HAIRPIN_HEIGHT             },
       { Sid::hairpinContHeight,                  Pid::HAIRPIN_CONT_HEIGHT        },
       { Sid::hairpinPlacement,                   Pid::PLACEMENT                  },
-      { Sid::hairpinPosAbove,                    Pid::OFFSET                     },
+      { Sid::hairpinPosBelow,                    Pid::OFFSET                     },
       { Sid::hairpinLineStyle,                   Pid::LINE_STYLE                 },
       };
 
@@ -861,6 +861,9 @@ QVariant Hairpin::propertyDefault(Pid id) const
 
             case Pid::VELO_CHANGE_METHOD:
                   return int(VeloChangeMethod::NORMAL);
+
+            case Pid::PLACEMENT:
+                  return score()->styleV(Sid::hairpinPlacement);
 
             default:
                   return TextLineBase::propertyDefault(id);

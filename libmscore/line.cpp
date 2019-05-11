@@ -999,6 +999,11 @@ void SLine::writeProperties(XmlWriter& xml) const
       for (const SpannerSegment* seg : spannerSegments()) {
             xml.stag("Segment", seg);
             xml.tag("subtype", int(seg->spannerSegmentType()));
+            // TODO:
+            // NOSTYLE offset written in Element::writeProperties,
+            // so we probably don't need to duplicate it here
+            // see https://musescore.org/en/node/286848
+            //if (seg->propertyFlags(Pid::OFFSET) & PropertyFlags::UNSTYLED)
             xml.tag("offset", seg->offset() / _spatium);
             xml.tag("off2", seg->userOff2() / _spatium);
             seg->Element::writeProperties(xml);
