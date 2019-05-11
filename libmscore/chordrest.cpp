@@ -282,8 +282,11 @@ bool ChordRest::readProperties(XmlReader& e)
             }
       else if (tag == "dots")
             setDots(e.readInt());
-      else if (tag == "staffMove")
+      else if (tag == "staffMove") {
             _staffMove = e.readInt();
+            if (vStaffIdx() < part()->staves()->first()->idx() || vStaffIdx() > part()->staves()->last()->idx())
+                  _staffMove = 0;
+            }
       else if (tag == "Spanner")
             Spanner::readSpanner(e, this, track());
       else if (tag == "Lyrics") {
