@@ -29,6 +29,7 @@ class VibratoSegment final : public LineSegment {
 
       void symbolLine(SymId start, SymId fill);
       void symbolLine(SymId start, SymId fill, SymId end);
+      virtual Sid getPropertyStyle(Pid) const override;
 
    protected:
    public:
@@ -51,6 +52,9 @@ class VibratoSegment final : public LineSegment {
 //---------------------------------------------------------
 
 class Vibrato final : public SLine {
+
+      virtual Sid getPropertyStyle(Pid) const override;
+
    public:
       enum class Type : char {
             GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE

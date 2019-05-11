@@ -507,8 +507,8 @@ static const StyleType styleTypes[] {
       { Sid::autoplaceVerticalAlignRange, "autoplaceVerticalAlignRange",     int(VerticalAlignRange::SYSTEM) },
 
       { Sid::textLinePlacement,         "textLinePlacement",         int(Placement::ABOVE)  },
-      { Sid::textLinePosAbove,          "textLinePosAbove",          QPointF(.0, -3.5) },
-      { Sid::textLinePosBelow,          "textLinePosBelow",          QPointF(.0, 3.5) },
+      { Sid::textLinePosAbove,          "textLinePosAbove",          QPointF(.0, -1.0) },
+      { Sid::textLinePosBelow,          "textLinePosBelow",          QPointF(.0, 1.0) },
       { Sid::textLineFrameType,         "textLineFrameType",          int(FrameType::NO_FRAME) },
       { Sid::textLineFramePadding,      "textLineFramePadding",       0.2 },
       { Sid::textLineFrameWidth,        "textLineFrameWidth",         0.1 },

@@ -51,6 +51,8 @@ static const ElementStyle pedalStyle {
 void PedalSegment::layout()
       {
       TextLineBaseSegment::layout();
+      if (isStyled(Pid::OFFSET))
+            roffset() = pedal()->propertyDefault(Pid::OFFSET).toPointF();
       autoplaceSpannerSegment();
       }
 
@@ -181,6 +183,9 @@ QVariant Pedal::propertyDefault(Pid propertyId) const
 
             case Pid::LINE_VISIBLE:
                   return true;
+
+            case Pid::PLACEMENT:
+                  return score()->styleV(Sid::pedalPlacement);
 
             default:
                   return TextLineBase::propertyDefault(propertyId);

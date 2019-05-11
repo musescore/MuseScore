@@ -47,6 +47,7 @@ int trillTableSize() {
 
 static const ElementStyle trillStyle {
       { Sid::trillPlacement, Pid::PLACEMENT },
+      { Sid::trillPosAbove,  Pid::OFFSET    },
       };
 
 //---------------------------------------------------------
@@ -136,6 +137,9 @@ void TrillSegment::layout()
       {
       if (staff())
             setMag(staff()->mag(tick()));
+      if (spanner()->placeBelow())
+            rypos() = staff() ? staff()->height() : 0.0;
+
       if (isSingleType() || isBeginType()) {
             Accidental* a = trill()->accidental();
             if (a) {
@@ -164,6 +168,8 @@ void TrillSegment::layout()
             }
       else
             symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+      if (isStyled(Pid::OFFSET))
+            roffset() = trill()->propertyDefault(Pid::OFFSET).toPointF();
 
       autoplaceSpannerSegment();
       }
@@ -264,7 +270,6 @@ Trill::Trill(Score* s)
       _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
       setPlayArticulation(true);
       initElementStyle(&trillStyle);
-      resetProperty(Pid::OFFSET);
       }
 
 Trill::~Trill()
