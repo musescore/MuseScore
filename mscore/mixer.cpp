@@ -76,11 +76,12 @@ Mixer::Mixer(QWidget* parent)
       showDetails(true),
       trackHolder(nullptr)
       {
-      setupUi(this);
+      
+      // note: because of setupUi side-effects (generating a showEvent) it's critical
+      // that enablePlay is created first.
+      enablePlay = new EnablePlayForWidget(this);
 
-      setWindowFlags(Qt::Tool);
-      setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      setAllowedAreas(Qt::DockWidgetAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea));
+      setupUi(this); //
 
       trackAreaLayout = new QHBoxLayout;
       trackAreaLayout->setMargin(0);
@@ -88,7 +89,7 @@ Mixer::Mixer(QWidget* parent)
       trackArea->setLayout(trackAreaLayout);
 
       mixerDetails = new MixerDetails(this);
-      detailsLayout = new QGridLayout(this);
+      detailsLayout = new QGridLayout();
 
       detailsLayout->addWidget(mixerDetails);
       detailsLayout->setContentsMargins(0, 0, 0, 0);
@@ -121,8 +122,6 @@ Mixer::Mixer(QWidget* parent)
       connect(tracks_scrollArea->horizontalScrollBar(), SIGNAL(rangeChanged(int, int)), SLOT(adjustScrollPosition(int, int)));
       connect(tracks_scrollArea->horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(checkKeptScrollValue(int)));
 
-      enablePlay = new EnablePlayForWidget(this);
-      readSettings();
       retranslate(true);
       }
 
@@ -203,6 +202,10 @@ void Mixer::masterVolumeChanged(double decibels)
 
 void Mixer::on_partOnlyCheckBox_toggled(bool checked)
       {
+          
+      if (!_activeScore) // cope with case of no score being present
+            return;
+          
       if (!_activeScore->excerpt())
             return;
 
@@ -250,8 +253,17 @@ void Mixer::showEvent(QShowEvent* e)
       {
       enablePlay->showEvent(e);
       QWidget::showEvent(e);
-      activateWindow();
-      setFocus();
+      getAction("toggle-mixer")->setChecked(true);
+      }
+
+//---------------------------------------------------------
+//   hideEvent
+//---------------------------------------------------------
+
+void Mixer::hideEvent(QHideEvent* e)
+      {
+      QWidget::hideEvent(e);
+      getAction("toggle-mixer")->setChecked(false);
       }
 
 //---------------------------------------------------------
@@ -464,47 +476,28 @@ void Mixer::notifyTrackSelected(MixerTrack* track)
       mixerDetails->setTrack(track->mti());
       }
 
-
-//---------------------------------------------------------
-//   writeSettings
-//---------------------------------------------------------
-
-void Mixer::writeSettings()
-      {
-      MuseScore::saveGeometry(this);
-      }
-
-//---------------------------------------------------------
-//   readSettings
-//---------------------------------------------------------
-
-void Mixer::readSettings()
-      {
-      resize(QSize(480, 600)); //ensure default size if no geometry in settings
-      MuseScore::restoreGeometry(this);
-      }
-
-
 //---------------------------------------------------------
 //   showMixer
 //---------------------------------------------------------
 
-void MuseScore::showMixer(bool val)
+void MuseScore::showMixer(bool visible)
       {
-      if (!cs)
-            return;
 
-      QAction* a = getAction("toggle-mixer");
+      QAction* toggleMixerAction = getAction("toggle-mixer");
       if (mixer == 0) {
             mixer = new Mixer(this);
             mscore->stackUnder(mixer);
             if (synthControl)
                   connect(synthControl, SIGNAL(soundFontChanged()), mixer, SLOT(updateTrack()));
             connect(synti, SIGNAL(soundFontChanged()), mixer, SLOT(updateTracks()));
-            connect(mixer, SIGNAL(closed(bool)), a, SLOT(setChecked(bool)));
-            }
+            connect(mixer, SIGNAL(closed(bool)), toggleMixerAction, SLOT(setChecked(bool)));
+            mixer->setFloating(false);
+            addDockWidget(Qt::RightDockWidgetArea, mixer);
+      }
+
+      reDisplayDockWidget(mixer, visible);
+      toggleMixerAction->setChecked(visible);
       mixer->setScore(cs);
-      mixer->setVisible(val);
       }
 
 }
