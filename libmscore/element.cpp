@@ -95,6 +95,7 @@
 #include "palmmute.h"
 #include "fermata.h"
 #include "shape.h"
+//#include "musescoreCore.h"
 
 namespace Ms {
 
@@ -2203,35 +2204,44 @@ qreal Element::rebaseOffset(bool nox)
       QPointF p = _changedPos - pos();
       if (nox)
             p.rx() = 0.0;
-      bool changedValue = _offsetChanged; // save to restore later
+      bool saveChangedValue = _offsetChanged;
 
       if (staff() && propertyFlags(Pid::PLACEMENT) != PropertyFlags::NOSTYLE) {
             // check if flipped
             // TODO: elements that support PLACEMENT but not as a styled property
             QRectF r = bbox().translated(_changedPos);
             qreal staffHeight = staff()->height();
-            bool flipped = placeAbove() ? r.top() > staffHeight : r.bottom() < 0.0;
-            if (flipped) {
-                  off.ry() += placeAbove() ? -staffHeight : staffHeight;
+            Element* e = isSpannerSegment() ? toSpannerSegment(this)->spanner() : this;
+            bool multi = e->isSpanner() && toSpanner(e)->spannerSegments().size() > 1;
+            bool above = e->placeAbove();
+            bool flipped = above ? r.top() > staffHeight : r.bottom() < 0.0;
+            if (flipped && !multi) {
+                  off.ry() += above ? -staffHeight : staffHeight;
                   undoChangeProperty(Pid::OFFSET, off + p);
-                  _offsetChanged = changedValue;
-                  rypos() += placeAbove() ? staffHeight : -staffHeight;
-                  PropertyFlags pf = propertyFlags(Pid::PLACEMENT);
+                  _offsetChanged = saveChangedValue;
+                  rypos() += above ? staffHeight : -staffHeight;
+                  PropertyFlags pf = e->propertyFlags(Pid::PLACEMENT);
                   if (pf == PropertyFlags::STYLED)
                         pf = PropertyFlags::UNSTYLED;
-                  Placement place = placeAbove() ? Placement::BELOW : Placement::ABOVE;
-                  undoChangeProperty(Pid::PLACEMENT, int(place), pf);
+                  Placement place = above ? Placement::BELOW : Placement::ABOVE;
+                  e->undoChangeProperty(Pid::PLACEMENT, int(place), pf);
                   undoResetProperty(Pid::MIN_DISTANCE);
+                  // TODO
+                  //MuseScoreCore::mscoreCore->updateInspector();
                   return 0.0;
                   }
             }
 
       if (offsetChanged() > 0) {
             undoChangeProperty(Pid::OFFSET, off + p);
-            _offsetChanged = changedValue;
+            _offsetChanged = saveChangedValue;
+            // allow autoplace to manage min distance even when not needed?
+            //undoResetProperty(Pid::MIN_DISTANCE);
             return 0.0;
             }
 
+      // allow autoplace to manage min distance even when not needed?
+      //undoResetProperty(Pid::MIN_DISTANCE);
       return p.y();
       }
 
@@ -2285,6 +2295,8 @@ bool Element::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bo
                   yd = 0.0;
                   }
             }
+      // TODO
+      //MuseScoreCore::mscoreCore->updateInspector();
       return rc;
       }
 
