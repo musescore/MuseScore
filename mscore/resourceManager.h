@@ -42,7 +42,11 @@ class ResourceManager : public QDialog, public Ui::Resource
         Returns true on success.
      */
     bool installPluginPackage(QString& download_pkg, PluginPackageDescription& desc);
-    void refreshPluginButton(QWidget* button_group);
+    /*  Check update for one single plugin.
+    
+     */
+    void checkPluginUpdate(QWidget * button_group);
+    void refreshPluginButton(QWidget* button_group, bool updated = true);
     void writePluginPackages();
     bool readPluginPackages();
     bool isPluginLocal(PluginDescription& desc);
@@ -59,13 +63,16 @@ public:
 private:
     QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
     QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
-    QMap <QPushButton *, PluginPackageMeta> pluginButtonURLMap;// QPushButton -> plugin page url
+    QMap <QPushButton *, PluginPackageMeta> pluginButtonURLMap;// `Install` button -> plugin page url
     QMap <QString, PluginPackageDescription> pluginDescriptionMap; // plugin page url -> description of installed plugin
 
 private slots:
     void downloadLanguage();
+    void scanPluginUpdate();
+    void updatePlugin();
     void downloadExtension();
-    void downloadPluginPackage();
+    QString downloadPluginPackage(PluginPackageDescription & desc, QString & page_url);
+    void downloadInstallPlugin();
     void uninstallPluginPackage();
     void uninstallExtension();
    };

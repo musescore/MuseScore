@@ -29,6 +29,13 @@ ResourceManager::ResourceManager(QWidget *parent) :
       {
       setObjectName("ResourceManager");
       setupUi(this);
+#ifndef NDEBUG
+      QPushButton* check_update = new QPushButton();
+      check_update->setText("Check Update");
+      bottom_layout->addWidget(check_update);
+      connect(check_update, SIGNAL(clicked()), this, SLOT(scanPluginUpdate()));
+#endif // !NDEBUG
+
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       QDir dir;
       dir.mkpath(dataPath + "/locale");
@@ -349,7 +356,7 @@ void ResourceManager::displayPluginRepo() {
                   }
             else {
                   install_button->setText(tr("Install"));
-                  connect(install_button, SIGNAL(clicked()), this, SLOT(downloadPluginPackage()));
+                  connect(install_button, SIGNAL(clicked()), this, SLOT(downloadInstallPlugin()));
                   }
             pluginButtonURLMap[install_button] = { name, compat, page_url };
             pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col), button_group);
@@ -474,6 +481,7 @@ static inline bool isNotFoundMessage(const QJsonObject& json_obj) {
 //---------------------------------------------------------
 bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& desc)
       {
+      bool should_update = false;
       QString direct_link;
       DownloadUtils page(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
       page.setTarget(url);
@@ -492,35 +500,100 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
             QJsonDocument result = QJsonDocument::fromJson(release_json.returnData());
             if (!result.array().isEmpty()) {
                   // there is a GitHub release
+                  should_update = desc.source != GITHUB_RELEASE;
                   desc.source = GITHUB_RELEASE;
                   int release_id;
                   QString direct_link;
                   if (getLatestRelease(result, release_id, direct_link)) {
-                        if (desc.release_id != release_id && release_id > 0) {
+                        if (should_update || (desc.release_id != release_id && release_id > 0)) {
                               desc.release_id = release_id;
                               desc.direct_link = direct_link;
                               return true;
                               }
-                        if (desc.release_id == release_id && release_id > 0)
-                              return false; //analyzing is successful and the plugin is up-to-date
+                        else return false;
                         }
                   }
-            // else, fetch latest commit sha on master(usually for 3.x), as info for update
+                  // else, fetch latest commit sha on master(usually for 3.x), as info for update
+            should_update = desc.source != GITHUB;
             desc.source = GITHUB;
             QString sha = getLatestCommitSha(user, repo, "master");
             // TODO: compare the sha with previous stored sha. If the same, don't update.
-            desc.latest_commit = sha;
-            desc.direct_link = githubLatestArchiveURL(user, repo, "master");
-
-            return true;
+            if (should_update || desc.latest_commit != sha) {
+                  desc.latest_commit = sha;
+                  desc.direct_link = githubLatestArchiveURL(user, repo, "master");
+                  return true;
+            }
+            else return false;
       }
       else {
             // no github repo links exist
             // TODO: fetch direct links in page
+            desc.source = UNKNOWN;
             return false;
             }
+      }
 
+void ResourceManager::updatePlugin()
+      {
+      // relocate to `Install` button
+      QPushButton* update = static_cast<QPushButton*>(sender());
+      QWidget* button_group = update->parentWidget();
+      QPushButton* install = button_group->findChildren<QPushButton*>()[0];
 
+      QString& page_url = pluginButtonURLMap[install].page_url;
+      PluginPackageDescription& desc = pluginDescriptionMap[page_url];
+      Q_ASSERT(desc.update != nullptr);
+      if (desc.update->source == UNKNOWN) {
+            // TODO: report errors: cannot get download links for this plugin
+            update->setText("Failed Try again.");
+            update->setEnabled(true);
+            return;
+            }
+      update->setText(tr("Downloading..."));
+      QString localPath = downloadPluginPackage(*desc.update, page_url);
+      if (installPluginPackage(localPath, *desc.update)) {
+            PluginPackageDescription* p_update = desc.update;
+            desc = *desc.update;
+            delete(p_update);
+            desc.update = nullptr;
+            refreshPluginButton(button_group, true);
+            writePluginPackages();
+            }
+      }
+
+void ResourceManager::checkPluginUpdate(QWidget* button_group)
+      {
+      const QList<QPushButton*>& buttons = button_group->findChildren<QPushButton*>();
+      int n = buttons.size();
+      QPushButton* install = (QPushButton*)buttons.first();
+      QString& page_url = pluginButtonURLMap[install].page_url;
+      if (pluginDescriptionMap.contains(page_url)) {
+            auto& desc = pluginDescriptionMap[page_url];
+            PluginPackageDescription* desc_tmp = new PluginPackageDescription(desc);
+            bool should_update = analyzePluginPage("https://musescore.org" + page_url, *desc_tmp);
+            if (should_update)
+                  desc.update = desc_tmp;
+            else {
+                  if (desc_tmp->source == UNKNOWN)
+                        ;// TODO: report errors
+                  delete desc_tmp;
+            }
+            refreshPluginButton(button_group, !should_update);
+            }
+      }
+
+void ResourceManager::scanPluginUpdate()
+      {
+      
+      for (auto& button : pluginButtonURLMap.keys()) {
+            // if installed
+            
+            if (pluginDescriptionMap.contains(pluginButtonURLMap[button].page_url)) {
+                  checkPluginUpdate(button->parentWidget());
+                  break; // only check update for the first installed plugin for now to save time
+            }
+      }
+      ;
       }
 
 //---------------------------------------------------------
@@ -706,11 +779,29 @@ static inline QString getExtFromURL(QString& direct_link) {
       return possible_ext;
       }
 
+QString ResourceManager::downloadPluginPackage(PluginPackageDescription& desc, QString& page_url)
+      {
+      DownloadUtils package(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
+      package.setTarget(desc.direct_link);
+      // TODO: try to get extension name from direct_link, and add it to localPath
+      QString localPath = dataPath + "/plugins/" + filenameBaseFromPageURL(page_url);
+      if (desc.source == GITHUB || desc.source == GITHUB_RELEASE) {
+            localPath += ".zip";
+      }
+      QDir().mkpath(dataPath + "/plugins");
+      package.setLocalFile(localPath);
+      package.download();
+      // TODO: if extension hasn't been known yet, get file type from http response
+      // for now, use zip for GITHUB; and get ext name from direct_link for musescore.org
+      package.saveFile();
+      return localPath;
+      }
+
 //---------------------------------------------------------
-//   downloadPluginPackage
+//   downloadInstallPlugin
 //---------------------------------------------------------
 
-void ResourceManager::downloadPluginPackage()
+void ResourceManager::downloadInstallPlugin()
       {
       // TODO: find corresponding PluginPackageDescription or create a new one
       QPushButton* button = static_cast<QPushButton*>(sender());
@@ -728,22 +819,10 @@ void ResourceManager::downloadPluginPackage()
             return;
             }
       button->setText(tr("Downloading..."));
-      DownloadUtils package(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
-      package.setTarget(new_package.direct_link);
-      // TODO: try to get extension name from direct_link, and add it to localPath
-      QString localPath = dataPath + "/plugins/" + filenameBaseFromPageURL(page_url);
-      if (new_package.source == GITHUB || new_package.source == GITHUB_RELEASE) {
-            localPath += ".zip";
-      }
-      QDir().mkpath(dataPath + "/plugins");
-      package.setLocalFile(localPath);
-      package.download();
-      // TODO: if extension hasn't been known yet, get file type from http response
-      // for now, use zip for GITHUB; and get ext name from direct_link for musescore.org
-      package.saveFile();
+      QString localPath = downloadPluginPackage(new_package, page_url);
       if (new_package.source == GITHUB || new_package.source == GITHUB_RELEASE) {
             // the extension is always zip for github
-            if (installPluginPackage(localPath, new_package) == true) {
+            if (installPluginPackage(localPath, new_package)) {
                   // add the new description item to the map
                   pluginDescriptionMap[page_url] = new_package;
                   refreshPluginButton((QWidget*)button->parent());
@@ -777,7 +856,7 @@ void ResourceManager::uninstallPluginPackage() {
       displayPlugins();
 }
 
-void ResourceManager::refreshPluginButton(QWidget* button_group) {
+void ResourceManager::refreshPluginButton(QWidget* button_group, bool updated/* = true*/) {
       const QList<QPushButton*>& buttons = button_group->findChildren<QPushButton*>();
       int n = buttons.size();
       QPushButton* install = (QPushButton*)buttons.first();
@@ -796,15 +875,17 @@ void ResourceManager::refreshPluginButton(QWidget* button_group) {
                   update = new QPushButton(button_group);
                   button_group->layout()->addWidget(update);
                   }
-            update->setText("Updated");
+            update->setText(updated?"Updated":"Update");
             update->setHidden(false);
-            update->setEnabled(false);
+            update->setEnabled(!updated);
+            if (!updated)
+                  connect(update, SIGNAL(clicked()), this, SLOT(updatePlugin()));
             // TODO: check update sometime
             }
       else {
             // removed
             install->setText("Install");
-            connect(install, SIGNAL(clicked()), this, SLOT(downloadPluginPackage()));
+            connect(install, SIGNAL(clicked()), this, SLOT(downloadInstallPlugin()));
             if (buttons.size() > 1)
                   for (int i = 1; i <= buttons.size() - 1; i++)
                         ((QPushButton*)buttons.at(i))->setHidden(true);

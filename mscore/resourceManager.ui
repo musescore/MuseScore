@@ -191,7 +191,7 @@
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="plugin_store">
           <property name="sizePolicy">
@@ -312,7 +312,7 @@
             </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <layout class="QHBoxLayout" name="bottom_layout">
              <item>
               <widget class="QLineEdit" name="lineEdit">
                <property name="placeholderText">
@@ -449,7 +449,13 @@
             </widget>
            </item>
            <item row="1" column="0" rowspan="9" colspan="2">
-            <widget class="QTreeWidget" name="pluginTreeWidget"/>
+            <widget class="QTreeWidget" name="pluginTreeWidget">
+             <column>
+              <property name="text">
+               <string notr="true">1</string>
+              </property>
+             </column>
+            </widget>
            </item>
           </layout>
          </widget>
