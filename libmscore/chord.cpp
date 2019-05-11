@@ -1418,7 +1418,10 @@ qreal Chord::defaultStemLength()
             int n = tab1[hookIdx ? 1 : 0][up() ? 1 : 0][odd][_tremolo->lines()-1];
             stemLen += n * .5;
             }
-      return stemLen * _spatium * lineDistance;
+
+      if (tab)
+            stemLen *= lineDistance;
+      return stemLen * _spatium;
       }
 
 //---------------------------------------------------------
