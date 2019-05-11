@@ -3157,8 +3157,11 @@ Shape Chord::shape() const
       Shape shape;
       if (_hook && _hook->addToSkyline())
             shape.add(_hook->shape().translated(_hook->pos()));
-      if (_stem && _stem->addToSkyline())
-            shape.add(_stem->shape().translated(_stem->pos()));
+      if (_stem && _stem->addToSkyline()) {
+            // stem direction is not known soon enough for cross staff beamed notes
+            if (!(beam() && (staffMove() || beam()->cross())))
+                  shape.add(_stem->shape().translated(_stem->pos()));
+            }
       if (_stemSlash && _stemSlash->addToSkyline())
             shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
       if (_arpeggio && _arpeggio->addToSkyline())
@@ -3391,7 +3394,7 @@ void Chord::layoutArticulations2()
                   QRectF r = a->bbox().translated(a->pos() + pos());
                   s->staffShape(staffIdx()).add(r);
                   r = a->bbox().translated(a->pos() + pos() + s->pos() + m->pos());
-                  m->system()->staff(staffIdx())->skyline().add(r);
+                  m->system()->staff(vStaffIdx())->skyline().add(r);
                   }
             }
       }
@@ -3413,7 +3416,7 @@ void Chord::layoutArticulations3(Slur* slur)
             return;
       Segment* s = segment();
       Measure* m = measure();
-      SysStaff* sstaff = m->system() ? m->system()->staff(staffIdx()) : nullptr;
+      SysStaff* sstaff = m->system() ? m->system()->staff(vStaffIdx()) : nullptr;
       for (Articulation* a : _articulations) {
             if (a->layoutCloseToNote() || !a->autoplace() || !slur->addToSkyline())
                   continue;
