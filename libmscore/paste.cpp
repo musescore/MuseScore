@@ -967,7 +967,6 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             else
                   els.append(_selection.elements());
 
-            deselectAll();
             if (type != ElementType::INVALID) {
                   Element* el = Element::create(type, this);
                   if (el) {
@@ -981,7 +980,14 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                               ddata.dropElement = nel;
                               ddata.duration    = duration;
                               if (target->acceptDrop(ddata)) {
+                                    // dropping an element of the same type is likely to replace it
+                                    // thus invaldiating the selection
+                                    ElementType targetType = target->type();
+                                    if (targetType == type)
+                                          deselect(target);
                                     target->drop(ddata);
+                                    if (targetType == type)
+                                          select(nel);
                                     if (_selection.element())
                                           addRefresh(_selection.element()->abbox());
                                     }
