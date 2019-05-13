@@ -2394,6 +2394,8 @@ static void breakCrossMeasureBeams(Measure* measure)
       Score* score = measure->score();
       const int ntracks = score->ntracks();
       Segment* fstSeg = next->first(SegmentType::ChordRest);
+      if (!fstSeg)
+            return;
 
       for (int track = 0; track < ntracks; ++track) {
             Staff* stf = score->staff(track2staff(track));
