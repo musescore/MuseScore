@@ -83,6 +83,7 @@ static Dyn dynList[] = {
 
 static const ElementStyle dynamicsStyle {
       { Sid::dynamicsPlacement, Pid::PLACEMENT },
+      { Sid::dynamicsMinDistance, Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------
@@ -266,6 +267,9 @@ void Dynamic::doAutoplace()
 
       qreal minDistance = score()->styleS(Sid::dynamicsMinDistance).val() * spatium();
       QRectF r          = bbox().translated(pos() + s->pos() + s->measure()->pos());
+      qreal yOff = offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+      r.translate(0.0, -yOff);
+
       Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
       SkylineLine sk(!placeAbove());
       sk.add(r);

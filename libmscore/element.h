@@ -153,8 +153,11 @@ class Element : public ScoreElement {
       Element* _parent { 0 };
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _offset
       qreal _mag;                 ///< standard magnification (derived value)
-      QPointF _pos;               ///< Reference position, relative to _parent.
+      QPointF _pos;               ///< Reference position, relative to _parent, set by autoplace
       QPointF _offset;            ///< offset from reference position, set by autoplace or user
+      int _offsetChanged;         ///< set by user actions that change offset, used by autoplace
+      QPointF _changedPos;        ///< position set when changing offset (valid when _offsetChanged)
+      Spatium _minDistance;       ///< autoplace min distance
       int _track;                 ///< staffIdx * VOICES + voice
       mutable ElementFlags _flags;
                                   ///< valid after call to layout()
@@ -205,6 +208,11 @@ class Element : public ScoreElement {
 
       bool generated() const                  { return flag(ElementFlag::GENERATED);  }
       void setGenerated(bool val)             { setFlag(ElementFlag::GENERATED, val);   }
+
+      Spatium minDistance() const             { return _minDistance;    }
+      void setMinDistance(Spatium v)          { _minDistance = v;       }
+      int offsetChanged() const               { return _offsetChanged;  }
+      void setOffsetChanged(bool v, bool absolute = true, const QPointF& diff = QPointF());
 
       const QPointF& ipos() const             { return _pos;                    }
       virtual const QPointF pos() const       { return _pos + _offset;          }
@@ -454,8 +462,12 @@ class Element : public ScoreElement {
       virtual void triggerLayout() const;
       virtual void drawEditMode(QPainter*, EditData&);
 
-      void autoplaceSegmentElement(qreal minDistance);      // helper function
-      void autoplaceMeasureElement(qreal minDistance);
+      void autoplaceSegmentElement(bool add = true);        // helper functions
+      void autoplaceMeasureElement(bool add = true);
+      void autoplaceCalculateOffset(QRectF& r, qreal minDistance);
+      qreal rebaseOffset(bool nox = true);
+      bool rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool fix);
+
       qreal styleP(Sid idx) const;
       };
 

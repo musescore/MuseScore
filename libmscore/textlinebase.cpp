@@ -149,7 +149,7 @@ Shape TextLineBaseSegment::shape() const
             shape.add(QRectF(points[2].x(), points[2].y() - lw2,
                points[3].x() - points[2].x(), points[3].y() - points[2].y() + lw));
             }
-      else {
+      else if (textLineBase()->lineVisible()) {
             for (int i = 0; i < npoints; ++i) {
                   shape.add(QRectF(points[i].x() - lw2, points[i].y() - lw2,
                      points[i+1].x() - points[i].x() + lw, points[i+1].y() - points[i].y() + lw));

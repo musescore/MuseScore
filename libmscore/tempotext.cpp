@@ -34,6 +34,7 @@ namespace Ms {
 static const ElementStyle tempoStyle {
       { Sid::tempoSystemFlag,                    Pid::SYSTEM_FLAG            },
       { Sid::tempoPlacement,                     Pid::PLACEMENT              },
+      { Sid::tempoMinDistance,                   Pid::MIN_DISTANCE           },
       };
 
 //---------------------------------------------------------
@@ -414,7 +415,7 @@ void TempoText::layout()
                         rxpos() += e->x();
                   }
             }
-      autoplaceSegmentElement(styleP(Sid::tempoMinDistance));
+      autoplaceSegmentElement();
       }
 
 //---------------------------------------------------------

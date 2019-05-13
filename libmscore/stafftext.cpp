@@ -25,6 +25,7 @@ namespace Ms {
 
 static const ElementStyle staffStyle {
       { Sid::staffTextPlacement, Pid::PLACEMENT },
+      { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------
@@ -44,7 +45,7 @@ StaffText::StaffText(Score* s, Tid tid)
 void StaffText::layout()
       {
       TextBase::layout();
-      autoplaceSegmentElement(styleP(Sid::staffTextMinDistance));
+      autoplaceSegmentElement();
       }
 
 //---------------------------------------------------------

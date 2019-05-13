@@ -40,6 +40,8 @@ static const ElementStyle letRingStyle {
       { Sid::letRingBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET      },
       { Sid::letRingEndHookType,                   Pid::END_HOOK_TYPE          },
       { Sid::letRingLineWidth,                     Pid::LINE_WIDTH             },
+      { Sid::letRingPlacement,                     Pid::PLACEMENT              },
+      //{ Sid::letRingPosBelow,                      Pid::OFFSET                 },
       };
 
 //---------------------------------------------------------
@@ -49,7 +51,7 @@ static const ElementStyle letRingStyle {
 void LetRingSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(styleP(Sid::letRingMinDistance));
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -113,6 +115,11 @@ void LetRing::write(XmlWriter& xml) const
       }
 */
 
+static const ElementStyle letRingSegmentStyle {
+      //{ Sid::letRingPosBelow,       Pid::OFFSET       },
+      { Sid::letRingMinDistance,    Pid::MIN_DISTANCE },
+      };
+
 //---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
@@ -121,6 +128,7 @@ LineSegment* LetRing::createLineSegment()
       {
       LetRingSegment* lr = new LetRingSegment(this, score());
       lr->setTrack(track());
+      lr->initElementStyle(&letRingSegmentStyle);
       return lr;
       }
 

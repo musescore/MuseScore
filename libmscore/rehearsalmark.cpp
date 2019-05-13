@@ -23,6 +23,7 @@ namespace Ms {
 
 static const ElementStyle rehearsalMarkStyle {
       { Sid::rehearsalMarkPlacement, Pid::PLACEMENT },
+      { Sid::rehearsalMarkMinDistance, Pid::MIN_DISTANCE },
       };
 
 //---------------------------------------------------------
@@ -60,7 +61,7 @@ void RehearsalMark::layout()
                         rxpos() += qMin(leftX, barlineX) + width();
                         }
                   }
-            autoplaceSegmentElement(styleP(Sid::rehearsalMarkMinDistance));
+            autoplaceSegmentElement();
             }
       }
 

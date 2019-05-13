@@ -304,6 +304,8 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
                   else
                         sp = score()->spatium();
                   ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * sp);
+                  Element* e = toElement(this);
+                  e->setOffsetChanged(false);
                   }
             doUpdateInspector = true;
             }
@@ -317,6 +319,14 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
                   if (p.sid == Sid::NOSTYLE)
                         break;
                   changeProperties(this, p.pid, score()->styleV(p.sid), PropertyFlags::STYLED);
+                  }
+            }
+      else if (id == Pid::OFFSET) {
+            // TODO: do this in caller?
+            if (isElement()) {
+                  Element* e = toElement(this);
+                  if (e->offset().y() != v.toPointF().y())
+                        e->setOffsetChanged(true, false, v.toPointF() - e->offset());
                   }
             }
       changeProperties(this, id, v, ps);
