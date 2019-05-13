@@ -1,12 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>sound-while-editing</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="sound-while-editing" fill="#3B3F45">
-            <path d="M3,9 L3,15 L7,15 L12,20 L12,4 L7,9 L3,9 Z M16.5,12 C16.5,10.23 15.48,8.71 14,7.97 L14,16.02 C15.48,15.29 16.5,13.77 16.5,12 Z M14,3.23 L14,5.29 C16.89,6.15 19,8.83 19,12 C19,15.17 16.89,17.85 14,18.71 L14,20.77 C18.01,19.86 21,16.28 21,12 C21,7.72 18.01,4.14 14,3.23 L14,3.23 Z" id="Shape"></path>
-        </g>
-    </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg11"
+   version="1.1"
+   viewBox="0 0 24 24"
+   height="24px"
+   width="24px">
+  <metadata
+     id="metadata15">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>sound-while-editing</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title2">sound-while-editing</title>
+  <desc
+     id="desc4">Created with Sketch.</desc>
+  <defs
+     id="defs6" />
+  <path
+     id="Shape"
+     d="m 3,9 v 6 h 4 l 5,5 V 4 L 7,9 Z m 13.5,3 C 16.5,10.23 15.48,8.71 14,7.97 v 8.05 C 15.48,15.29 16.5,13.77 16.5,12 Z M 14,3.23 v 2.06 c 2.89,0.86 5,3.54 5,6.71 0,3.17 -2.11,5.85 -5,6.71 v 2.06 C 18.01,19.86 21,16.28 21,12 21,7.72 18.01,4.14 14,3.23 Z"
+     style="fill:#3b3f45;fill-rule:evenodd;stroke:none;stroke-width:1" />
 </svg>
