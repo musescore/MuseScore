@@ -3152,7 +3152,7 @@ QString Chord::accessibleExtraInfo() const
 
 //---------------------------------------------------------
 //   shape
-//    does not contain ledger lines and articulations
+//    does not contain articulations
 //---------------------------------------------------------
 
 Shape Chord::shape() const
@@ -3171,8 +3171,13 @@ Shape Chord::shape() const
             shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
 //      if (_tremolo)
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
-      for (Note* note : _notes)
+      for (Note* note : _notes) {
             shape.add(note->shape().translated(note->pos()));
+            for (Element* e : note->el()) {
+                  if (e->isFingering() && toFingering(e)->layoutType() == ElementType::CHORD && e->bbox().isValid())
+                        shape.add(e->bbox().translated(e->pos() + note->pos()));
+                  }
+            }
       for (Element* e : el()) {
             if (e->addToSkyline())
                   shape.add(e->shape().translated(e->pos()));

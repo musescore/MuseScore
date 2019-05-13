@@ -29,6 +29,7 @@ namespace Ms {
 
 static const ElementStyle instrumentChangeStyle {
       { Sid::instrumentChangePlacement,          Pid::PLACEMENT              },
+      { Sid::instrumentChangeMinDistance,        Pid::MIN_DISTANCE           },
       };
 
 //---------------------------------------------------------
@@ -129,7 +130,7 @@ QVariant InstrumentChange::propertyDefault(Pid propertyId) const
 void InstrumentChange::layout()
       {
       TextBase::layout();
-      autoplaceSegmentElement(styleP(Sid::instrumentChangeMinDistance));
+      autoplaceSegmentElement();
       }
 
 }

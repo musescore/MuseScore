@@ -1470,19 +1470,28 @@ void Score::cmdFlip()
                   note->undoChangeProperty(Pid::DOT_POSITION, QVariant::fromValue<Direction>(d));
                   }
             else if (e->isTempoText()
+               || e->isSystemText()
+               || e->isJump()
+               || e->isMarker()
                || e->isStaffText()
                || e->isFingering()
                || e->isDynamic()
+               || e->isHarmony()
+               || e->isInstrumentChange()
+               || e->isRehearsalMark()
+               || e->isFretDiagram()
                || e->isHairpin()
                || e->isHairpinSegment()
                || e->isOttavaSegment()
                || e->isTextLineSegment()
                || e->isPedalSegment()
+               || e->isLetRingSegment()
+               || e->isPalmMuteSegment()
                || e->isFermata()
                || e->isLyrics()
                || e->isTrillSegment()) {
                   e->undoChangeProperty(Pid::AUTOPLACE, true);
-                  // getProperty() delegates call from spannerSegment to Spanner:
+                  // getProperty() delegates call from spannerSegment to Spanner
                   Placement p = Placement(e->getProperty(Pid::PLACEMENT).toInt());
                   p = (p == Placement::ABOVE) ? Placement::BELOW : Placement::ABOVE;
                   // TODO: undoChangeProperty() should probably do this directly
@@ -1493,7 +1502,29 @@ void Score::cmdFlip()
                   PropertyFlags pf = ee->propertyFlags(Pid::PLACEMENT);
                   if (pf == PropertyFlags::STYLED)
                         pf = PropertyFlags::UNSTYLED;
+                  qreal oldDefaultY = ee->propertyDefault(Pid::OFFSET).toPointF().y();
                   ee->undoChangeProperty(Pid::PLACEMENT, int(p), pf);
+                  // flip and rebase user offset to new default now that placement has changed
+                  qreal newDefaultY = ee->propertyDefault(Pid::OFFSET).toPointF().y();
+                  if (ee->isSpanner()) {
+                        Spanner* spanner = toSpanner(ee);
+                        for (SpannerSegment* ss : spanner->spannerSegments()) {
+                              if (!ss->isStyled(Pid::OFFSET)) {
+                                    QPointF off = ss->getProperty(Pid::OFFSET).toPointF();
+                                    qreal oldY = off.y() - oldDefaultY;
+                                    off.ry() = newDefaultY - oldY;
+                                    ss->undoChangeProperty(Pid::OFFSET, off);
+                                    ss->setOffsetChanged(false);
+                                    }
+                              }
+                        }
+                  else if (!ee->isStyled(Pid::OFFSET)) {
+                        QPointF off = ee->getProperty(Pid::OFFSET).toPointF();
+                        qreal oldY = off.y() - oldDefaultY;
+                        off.ry() = newDefaultY - oldY;
+                        ee->undoChangeProperty(Pid::OFFSET, off);
+                        ee->setOffsetChanged(false);
+                        }
                   }
             }
       }

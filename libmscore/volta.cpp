@@ -62,7 +62,7 @@ VoltaSegment::VoltaSegment(Spanner* sp, Score* s) : TextLineBaseSegment(sp, s, E
 void VoltaSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(styleP(Sid::voltaMinDistance));
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -167,6 +167,7 @@ void Volta::write(XmlWriter& xml) const
 
 static const ElementStyle voltaSegmentStyle {
       { Sid::voltaPosAbove,                      Pid::OFFSET                  },
+      { Sid::voltaMinDistance,                   Pid::MIN_DISTANCE            },
       };
 
 LineSegment* Volta::createLineSegment()

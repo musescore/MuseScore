@@ -122,7 +122,7 @@ void VibratoSegment::layout()
       else
             symbolLine(SymId::wiggleVibrato, SymId::wiggleVibrato);
 
-      autoplaceSpannerSegment(styleP(Sid::vibratoMinDistance));
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -176,6 +176,11 @@ void Vibrato::layout()
             }
       }
 
+static const ElementStyle vibratoSegmentStyle {
+      { Sid::vibratoPosAbove,       Pid::OFFSET       },
+      { Sid::vibratoMinDistance,    Pid::MIN_DISTANCE },
+      };
+
 //---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
@@ -185,6 +190,7 @@ LineSegment* Vibrato::createLineSegment()
       VibratoSegment* seg = new VibratoSegment(this, score());
       seg->setTrack(track());
       seg->setColor(color());
+      seg->initElementStyle(&vibratoSegmentStyle);
       return seg;
       }
 

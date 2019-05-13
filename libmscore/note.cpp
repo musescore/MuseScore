@@ -2312,7 +2312,7 @@ void Note::setSmall(bool val)
 
 int Note::line() const
       {
-      return _fixed ? _fixedLine : _line;
+      return fixed() ? _fixedLine : _line;
       }
 
 //---------------------------------------------------------
@@ -3217,8 +3217,11 @@ Shape Note::shape() const
       if (_accidental)
             shape.add(_accidental->bbox().translated(_accidental->pos()), _accidental->name());
       for (auto e : _el) {
-            if (e->autoplace() && e->visible())
+            if (e->autoplace() && e->visible()) {
+                  if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE)
+                        continue;
                   shape.add(e->bbox().translated(e->pos()), e->name());
+                  }
             }
 #else
       Shape shape(r);
@@ -3227,8 +3230,11 @@ Shape Note::shape() const
       if (_accidental)
             shape.add(_accidental->bbox().translated(_accidental->pos()));
       for (auto e : _el) {
-            if (e->autoplace() && e->visible())
+            if (e->autoplace() && e->visible()) {
+                  if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE)
+                        continue;
                   shape.add(e->bbox().translated(e->pos()));
+                  }
             }
 #endif
       return shape;

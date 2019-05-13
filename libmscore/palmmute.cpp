@@ -41,6 +41,8 @@ static const ElementStyle palmMuteStyle {
       { Sid::palmMuteBeginTextOffset,               Pid::BEGIN_TEXT_OFFSET      },
       { Sid::palmMuteEndHookType,                   Pid::END_HOOK_TYPE          },
       { Sid::palmMuteLineWidth,                     Pid::LINE_WIDTH             },
+      { Sid::palmMutePlacement,                     Pid::PLACEMENT              },
+      { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
       };
 
 //---------------------------------------------------------
@@ -50,7 +52,7 @@ static const ElementStyle palmMuteStyle {
 void PalmMuteSegment::layout()
       {
       TextLineBaseSegment::layout();
-      autoplaceSpannerSegment(styleP(Sid::palmMuteMinDistance));
+      autoplaceSpannerSegment();
       }
 
 //---------------------------------------------------------
@@ -138,6 +140,7 @@ void PalmMute::write(XmlWriter& xml) const
 
 static const ElementStyle palmMuteSegmentStyle {
       { Sid::palmMutePosBelow,                      Pid::OFFSET                 },
+      { Sid::palmMuteMinDistance,                   Pid::MIN_DISTANCE           },
       };
 
 LineSegment* PalmMute::createLineSegment()
