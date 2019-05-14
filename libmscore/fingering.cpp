@@ -112,7 +112,7 @@ void Fingering::layout()
 
             // update offset after drag
             qreal rebase = 0.0;
-            if (offsetChanged())
+            if (offsetChanged() != OffsetChange::NONE)
                   rebase = rebaseOffset();
 
             // temporarily exclude self from chord shape
@@ -157,7 +157,7 @@ void Fingering::layout()
                               qreal diff = (bbox().bottom() + ipos().y() + yd + n->y()) - top;
                               if (diff > 0.0)
                                     yd -= diff;
-                              if (offsetChanged()) {
+                              if (offsetChanged() != OffsetChange::NONE) {
                                     // user moved element within the skyline
                                     // we may need to adjust minDistance, yd, and/or offset
                                     bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
@@ -193,7 +193,7 @@ void Fingering::layout()
                               qreal diff = bottom - (bbox().top() + ipos().y() + yd + n->y());
                               if (diff > 0.0)
                                     yd += diff;
-                              if (offsetChanged()) {
+                              if (offsetChanged() != OffsetChange::NONE) {
                                     // user moved element within the skyline
                                     // we may need to adjust minDistance, yd, and/or offset
                                     bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
@@ -216,7 +216,7 @@ void Fingering::layout()
             // restore autoplace
             setAutoplace(true);
             }
-      else if (offsetChanged()) {
+      else if (offsetChanged() != OffsetChange::NONE) {
             // rebase horizontally too, as autoplace may have adjusted it
             rebaseOffset(false);
             }

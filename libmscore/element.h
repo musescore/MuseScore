@@ -52,6 +52,16 @@ enum class Grip {
       };
 
 //---------------------------------------------------------
+//   OffsetChange
+//---------------------------------------------------------
+
+enum class OffsetChange {
+      RELATIVE_OFFSET   = -1,
+      NONE              =  0,
+      ABSOLUTE_OFFSET   =  1
+      };
+
+//---------------------------------------------------------
 //   ElementFlag
 //---------------------------------------------------------
 
@@ -155,8 +165,8 @@ class Element : public ScoreElement {
       qreal _mag;                 ///< standard magnification (derived value)
       QPointF _pos;               ///< Reference position, relative to _parent, set by autoplace
       QPointF _offset;            ///< offset from reference position, set by autoplace or user
-      int _offsetChanged;         ///< set by user actions that change offset, used by autoplace
-      QPointF _changedPos;        ///< position set when changing offset (valid when _offsetChanged)
+      OffsetChange  _offsetChanged; ///< set by user actions that change offset, used by autoplace
+      QPointF _changedPos;        ///< position set when changing offset
       Spatium _minDistance;       ///< autoplace min distance
       int _track;                 ///< staffIdx * VOICES + voice
       mutable ElementFlags _flags;
@@ -211,7 +221,7 @@ class Element : public ScoreElement {
 
       Spatium minDistance() const             { return _minDistance;    }
       void setMinDistance(Spatium v)          { _minDistance = v;       }
-      int offsetChanged() const               { return _offsetChanged;  }
+      OffsetChange offsetChanged() const      { return _offsetChanged;  }
       void setOffsetChanged(bool v, bool absolute = true, const QPointF& diff = QPointF());
 
       const QPointF& ipos() const             { return _pos;                    }
