@@ -35,7 +35,7 @@
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
-     bordercolor="#666666"
+     bordercolor="#3b3f45"
      pagecolor="#ffffff"
      id="base"
      showguides="true"
@@ -51,7 +51,7 @@
      showgrid="false"
      inkscape:window-maximized="0" />
   <g
-     style="font-size:312.5px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     style="font-size:312.5px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#3b3f45;fill-opacity:1;stroke:none;font-family:Sans"
      id="text2985">
     <path
        d="M 429.46129,-49.728333 C 395.38312,8.7642265 370.07898,66.620411 353.54881,123.84039 c -16.5305,57.22082 -24.79567,115.20416 -24.79553,173.9502 -1.4e-4,58.74652 8.26503,116.98418 24.79553,174.71313 16.78449,57.47479 42.08862,115.33097 75.91248,173.56873 l -61.03516,0 C 330.27902,586.30882 301.66882,527.56254 282.59544,469.83344 263.77619,412.10448 254.36662,354.75692 254.36668,297.79059 c -6e-5,-56.71153 9.40951,-113.80478 28.22876,-171.27991 C 301.4145,69.036383 330.0247,10.290104 368.42613,-49.728333 l 61.03516,0"

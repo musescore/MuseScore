@@ -35,7 +35,7 @@
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
-     bordercolor="#666666"
+     bordercolor="#3b3f45"
      pagecolor="#ffffff"
      id="base"
      showguides="true"
@@ -51,12 +51,12 @@
      showgrid="false"
      inkscape:window-maximized="0" />
   <g
-     style="font-size:312.5px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     style="font-size:312.5px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#3b3f45;fill-opacity:1;stroke:none;font-family:Sans"
      id="text2985">
     <flowRoot
        xml:space="preserve"
        id="flowRoot3351"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1000%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1000%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#3b3f45;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        transform="matrix(7.8124996,0,0,7.8124996,-1,-200)"><flowRegion
          id="flowRegion3353"><rect
            id="rect3355"
@@ -67,7 +67,7 @@
          id="flowPara3357">[] </flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot3359"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1000%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1000%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#3b3f45;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        transform="matrix(7.8124996,0,0,7.8124996,-1,-200)"><flowRegion
          id="flowRegion3361"><rect
            id="rect3363"
@@ -77,7 +77,7 @@
            y="6.3820968" /></flowRegion><flowPara
          id="flowPara3365">[] </flowPara></flowRoot>    <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:837.60516357px;line-height:1000%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;font-size:837.60516357px;line-height:1000%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#3b3f45;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="150.85143"
        y="577.39801"
        id="text3367"
