@@ -90,6 +90,7 @@ public:
     void read(XmlReader&);
     void read();
     bool readOnly() const { return _readOnly; }
+    bool canCustomizeToolbars();
     void setReadOnly(bool val) { _readOnly = val; }
     void reset();
 

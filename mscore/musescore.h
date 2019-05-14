@@ -835,6 +835,8 @@ public:
     std::list<const char*>* fileOperationEntries() { return &_fileOperationEntries; }
     void setFileOperationEntries(std::list<const char*> l) { _fileOperationEntries = l; }
     void populateFileOperations();
+    void addViewModeWidget();
+    void addZoomOptionsWidget();
 
     static const std::list<const char*>& allPlaybackControlEntries() { return _allPlaybackControlEntries; }
     std::list<const char*>* playbackControlEntries() { return &_playbackControlEntries; }

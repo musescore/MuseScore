@@ -13,6 +13,7 @@
 #include "toolbarEditor.h"
 #include "musescore.h"
 #include "workspace.h"
+#include "shortcut.h"
 #include "icons.h"
 
 namespace Ms {
@@ -64,8 +65,8 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
 
     up->setIcon(*icons[int(Icons::arrowUp_ICON)]);
     down->setIcon(*icons[int(Icons::arrowDown_ICON)]);
-    add->setIcon(*icons[int(Icons::goPrevious_ICON)]);
-    remove->setIcon(*icons[int(Icons::goNext_ICON)]);
+    add->setIcon(*icons[int(Icons::goNext_ICON)]);
+    remove->setIcon(*icons[int(Icons::goPrevious_ICON)]);
 
     MuseScore::restoreGeometry(this);
 }
@@ -76,16 +77,18 @@ ToolbarEditor::ToolbarEditor(QWidget* parent)
 
 void ToolbarEditor::init()
 {
-    QString name = WorkspacesManager::currentWorkspace()->name();
-    bool writable = !WorkspacesManager::currentWorkspace()->readOnly();
-    if (!writable) {
-        name += " " + tr("(not changeable)");
-    }
-    add->setEnabled(writable);
-    remove->setEnabled(writable);
-    up->setEnabled(writable);
-    down->setEnabled(writable);
-    workspaceName->setText(name);
+    Workspace* currentWorkspace = WorkspacesManager::currentWorkspace();
+    QString name = currentWorkspace->name();
+    QString mainTitle = tr("Customize Toolbars");
+    setWindowTitle(mainTitle + " (" + name + ")");
+
+    // defensive - don't expect to be here if workspace is not customizable
+    bool canBeCustomized = currentWorkspace->canCustomizeToolbars();
+
+    add->setEnabled(canBeCustomized);
+    remove->setEnabled(canBeCustomized);
+    up->setEnabled(canBeCustomized);
+    down->setEnabled(canBeCustomized);
 
     // Syncs the editor with the current toolbars
     new_toolbars->at(0) = mscore->noteInputMenuEntries();
@@ -100,7 +103,7 @@ void ToolbarEditor::init()
 
 void ToolbarEditor::accepted()
 {
-    if (WorkspacesManager::currentWorkspace()->readOnly()) {
+    if (!WorkspacesManager::currentWorkspace()->canCustomizeToolbars()) {
         return;
     }
     // Updates the toolbars
@@ -114,53 +117,108 @@ void ToolbarEditor::accepted()
 }
 
 //---------------------------------------------------------
+//   listItem
+//---------------------------------------------------------
+QListWidgetItem* ToolbarEditor::listItem(const char* id)
+{
+    QListWidgetItem* item = _listItem(id);
+
+    if (!item) {
+        return nullptr;
+    }
+
+    // add a sensible height for cases where there is no icon
+    // to avoid row looking squashed
+    item->setSizeHint(QSize(item->sizeHint().width(), 26));
+
+    item->setData(Qt::UserRole, QVariant::fromValue((void*)id));
+    return item;
+}
+
+QListWidgetItem* ToolbarEditor::_listItem(const char* id)
+{
+    if (QString(id).isEmpty()) {
+        return new QListWidgetItem(tr("Separator"));
+    }
+
+    if (!strcmp("view-mode", id)) {
+        return new QListWidgetItem(tr("View mode"));
+    }
+
+    if (!strcmp("zoom-options", id)) {
+        return new QListWidgetItem(tr("Zoom options"));
+    }
+
+    QAction* action = getAction(id);
+
+    if (action) {
+        QString itemName = Shortcut::getShortcut(id)->text();
+
+        // in this case we can't use the menu name (it's too short
+        // as it's used for the button label). So use the shortcut
+        // description instead
+        if (strncmp(id, "voice-", 6) == 0) {
+            itemName = Shortcut::getShortcut(id)->descr();
+        }
+
+        return new QListWidgetItem(action->icon(), itemName);
+    }
+
+    qDebug() << "ToolbarEditor does not recognize id for toolbar item: " << QString(id);
+    return nullptr;
+}
+
+//---------------------------------------------------------
 //   populateLists
 //---------------------------------------------------------
 
 void ToolbarEditor::populateLists(const std::list<const char*>& all, std::list<const char*>* current)
 {
     actionList->clear();
-    availableList->clear();
-    for (auto i : *current) {
-        QAction* a = getAction(i);
-        QListWidgetItem* item;
-        QString actionName = QString(i);
-        if (a) {
-            item = new QListWidgetItem(a->icon(), actionName);
-        } else if (actionName.isEmpty()) {
-            item = new QListWidgetItem(tr("Separator"));
-        } else {
-            item = new QListWidgetItem(actionName);
+    for (auto currentId : *current) {
+        QListWidgetItem* item = listItem(currentId);
+        if (!item) {
+            continue;
         }
-        item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
+
         actionList->addItem(item);
     }
-    for (auto i : all) {
+
+    refreshAvailableList(all, current);
+}
+
+void ToolbarEditor::refreshAvailableList(const std::list<const char*>& all, std::list<const char*>* current)
+{
+    availableList->clear();
+
+    for (auto id : all) {
         bool found = false;
-        for (auto k : *current) {
-            if (strcmp(k, i) == 0) {
+
+        for (auto allId : *current) {
+            if (strcmp(allId, id) == 0) {
                 found = true;
                 break;
             }
         }
-        if (!found) {
-            QAction* a = getAction(i);
-            QListWidgetItem* item = 0;
-            QString actionName = QString(i);
-            if (a) {
-                item = new QListWidgetItem(a->icon(), actionName);
-            } else if (!actionName.isEmpty()) {
-                item = new QListWidgetItem(QString(i));
-            }
-            if (item) {
-                item->setData(Qt::UserRole, QVariant::fromValue((void*)i));
-                availableList->addItem(item);
-            }
+
+        if (found) {
+            continue;
         }
+
+        if (QString(id).isEmpty()) {
+            continue;
+        }
+
+        QListWidgetItem* item = listItem(id);
+        if (!item) {
+            continue;
+        }
+
+        availableList->addItem(item);
     }
-    QListWidgetItem* item = new QListWidgetItem(tr("Separator"));
-    item->setData(Qt::UserRole, QVariant::fromValue((void*)""));
-    availableList->addItem(item);
+
+    // add the Separator item
+    availableList->addItem(listItem(""));
 }
 
 //---------------------------------------------------------
@@ -178,25 +236,28 @@ bool ToolbarEditor::isSpacer(QListWidgetItem* item) const
 
 void ToolbarEditor::addAction()
 {
-    int cr = availableList->currentRow();
-    if (cr == -1) {
+    int currentRow = availableList->currentRow();
+
+    if (currentRow == -1) {
         return;
     }
-    QListWidgetItem* item = availableList->item(cr);
+
+    QListWidgetItem* item = availableList->item(currentRow);
 
     if (isSpacer(item)) {
-        QListWidgetItem* nitem = new QListWidgetItem(item->text());
-        nitem->setData(Qt::UserRole, QVariant::fromValue((void*)""));
-        item = nitem;
+        item = listItem("");
     } else {
-        item = availableList->takeItem(cr);
+        item = availableList->takeItem(currentRow);
     }
-    cr = actionList->currentRow();
-    if (cr == -1) {
+
+    currentRow = actionList->currentRow();
+
+    if (currentRow == -1) {
         actionList->addItem(item);
     } else {
-        actionList->insertItem(cr, item);
+        actionList->insertItem(currentRow, item);
     }
+
     updateNewToolbar(toolbarList->currentRow());
 }
 
@@ -206,15 +267,30 @@ void ToolbarEditor::addAction()
 
 void ToolbarEditor::removeAction()
 {
-    int cr = actionList->currentRow();
-    if (cr == -1) {
+    int actionListRow = actionList->currentRow();
+
+    if (actionListRow == -1) {
         return;
     }
-    QListWidgetItem* item = actionList->takeItem(cr);
-    if (!isSpacer(item)) {
-        availableList->addItem(item);
-    }
+
+    QListWidgetItem* item = actionList->takeItem(actionListRow);
     updateNewToolbar(toolbarList->currentRow());
+
+    if (isSpacer(item)) {
+        return;
+    }
+
+    int toolbarListRow = toolbarList->currentRow();
+    switch (toolbarListRow) {
+    case 0:
+        refreshAvailableList(MuseScore::allNoteInputMenuEntries(), new_toolbars->at(toolbarListRow));
+        break;
+    case 1:
+        refreshAvailableList(MuseScore::allFileOperationEntries(), new_toolbars->at(toolbarListRow));
+        break;
+    case 2:
+        refreshAvailableList(MuseScore::allPlaybackControlEntries(), new_toolbars->at(toolbarListRow));
+    }
 }
 
 //---------------------------------------------------------

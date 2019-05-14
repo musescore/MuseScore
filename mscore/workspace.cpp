@@ -240,6 +240,8 @@ void MuseScore::changeWorkspace(Workspace* p, bool first)
         preferencesChanged(true);
     }
 
+    getAction("edit-toolbars")->setEnabled(WorkspacesManager::currentWorkspace()->canCustomizeToolbars());
+
     connect(getPaletteWorkspace(), &PaletteWorkspace::userPaletteChanged,
             WorkspacesManager::currentWorkspace(), QOverload<>::of(&Workspace::setDirty), Qt::UniqueConnection);
 
@@ -1137,6 +1139,11 @@ void Workspace::setDirty(bool val)
 {
     _dirty = val;
     _saveTimer.start();
+}
+
+bool Workspace::canCustomizeToolbars()
+{
+    return saveToolbars && !_readOnly;
 }
 
 //---------------------------------------------------------

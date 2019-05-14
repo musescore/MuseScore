@@ -149,6 +149,9 @@ void WorkspaceDialog::accepted()
     newWorkspace->setSaveMenuBar(menubarCheck->isChecked());
     preferences.setUseLocalPreferences(prefsCheck->isChecked());
 
+    //enable or disable customize toolbars menu to reflect current status
+    getAction("edit-toolbars")->setEnabled(newWorkspace->canCustomizeToolbars());
+
     //save newly created/edited workspace
     newWorkspace->save();
 

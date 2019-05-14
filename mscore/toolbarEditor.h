@@ -28,6 +28,9 @@ class ToolbarEditor : public QDialog, public Ui::ToolbarEditor
     void updateNewToolbar(int toolbar_to_update);
 
     void populateLists(const std::list<const char*>&, std::list<const char*>*);
+    void refreshAvailableList(const std::list<const char*>&, std::list<const char*>*);
+    QListWidgetItem* listItem(const char* id);
+    QListWidgetItem* _listItem(const char* id);
     bool isSpacer(QListWidgetItem*) const;
 
     virtual void hideEvent(QHideEvent*);

@@ -288,7 +288,10 @@ const std::list<const char*> MuseScore::_allFileOperationEntries {
     "file-save-online",
     "print",
     "undo",
-    "redo"
+    "redo",
+    "",
+    "zoom-options",
+    "view-mode"
 };
 
 const std::list<const char*> MuseScore::_allPlaybackControlEntries {
@@ -1006,34 +1009,41 @@ bool MuseScore::isInstalledExtension(QString extensionId)
 
 void MuseScore::populateFileOperations()
 {
-    // Save the current zoom and view-mode combobox states. if any.
-    const auto magState = mag ? std::make_pair(mag->currentIndex(), mag->currentText()) : std::make_pair(-1, QString());
-    const auto viewModeComboIndex = viewModeCombo ? viewModeCombo->currentIndex() : -1;
-
     fileTools->clear();
 
-    if (qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight) {
-        for (auto s : _fileOperationEntries) {
-            if (!*s) {
-                fileTools->addSeparator();
-            } else {
-                fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(s)));
-            }
-        }
-    } else {
-        _fileOperationEntries.reverse();
-        for (auto s : _fileOperationEntries) {
-            if (!*s) {
-                fileTools->addSeparator();
-            } else {
-                fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(s)));
-            }
-        }
+    bool leftToRightLayout = qApp->layoutDirection() == Qt::LayoutDirection::LeftToRight;
+
+    if (!leftToRightLayout) {
         _fileOperationEntries.reverse();
     }
 
-    // Currently not customizable in ToolbarEditor
-    fileTools->addSeparator();
+    for (auto s : _fileOperationEntries) {
+        if (!*s) {
+            fileTools->addSeparator();
+        } else if (!strcmp("view-mode", s)) {
+            addViewModeWidget();
+        } else if (!strcmp("zoom-options", s)) {
+            addZoomOptionsWidget();
+        } else {
+            fileTools->addWidget(new AccessibleToolButton(fileTools, getAction(s)));
+        }
+    }
+
+    if (!leftToRightLayout) {
+        _fileOperationEntries.reverse();
+    }
+}
+
+// zoom-options is treated as a special case as it's not a QToolButton
+// but, rather, a MagBox (a sub-class of QComboBox)
+void MuseScore::addZoomOptionsWidget()
+{
+    // Save the current zoom state, if any.
+    const auto magState = mag ? std::make_pair(mag->currentIndex(), mag->currentText()) : std::make_pair(-1, QString());
+    QWidget* spacer1 = new QWidget();
+    spacer1->setMinimumWidth(1);
+    spacer1->setMaximumWidth(1);
+    fileTools->addWidget(spacer1);
     mag = new MagBox;
 
     // Restore the saved zoom combobox index and text, if any.
@@ -1044,7 +1054,18 @@ void MuseScore::populateFileOperations()
 
     connect(mag, SIGNAL(magChanged(MagIdx)), SLOT(magChanged(MagIdx)));
     fileTools->addWidget(mag);
+    QWidget* spacer2 = new QWidget();
+    spacer2->setMinimumWidth(1);
+    spacer2->setMaximumWidth(1);
+    fileTools->addWidget(spacer2);
+}
 
+// view-mode is treated as a special case as it's not a QToolButton
+// but, rather, a QComboBox
+void MuseScore::addViewModeWidget()
+{
+    // Save the current view-mode combobox state, if any.
+    const auto viewModeComboIndex = viewModeCombo ? viewModeCombo->currentIndex() : -1;
     viewModeCombo = new QComboBox(this);
 #if defined(Q_OS_MAC)
     viewModeCombo->setFocusPolicy(Qt::StrongFocus);
@@ -4688,6 +4709,12 @@ void MuseScore::changeState(ScoreState val)
     }
     if (getAction("split-measure")->isEnabled()) {
         getAction("split-measure")->setEnabled(cs && cs->masterScore()->excerpts().size() == 0);
+    }
+
+    // currentWorkspace can be nullptr in some contexts, so check to avoid crash
+    Workspace* currentWorkspace = WorkspacesManager::currentWorkspace();
+    if (currentWorkspace) {
+        getAction("edit-toolbars")->setEnabled(currentWorkspace->canCustomizeToolbars());
     }
 
     // disabling top level menu entries does not

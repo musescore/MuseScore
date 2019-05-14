@@ -3334,6 +3334,9 @@
       <action>print</action>
       <action>undo</action>
       <action>redo</action>
+      <action></action>
+      <action>zoom-options</action>
+      <action>view-mode</action>
       </Toolbar>
     <Toolbar name="playbackControl">
       <action>midi-on</action>

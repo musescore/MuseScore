@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Edit Toolbar</string>
+   <string>Customize Toolbars</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QLabel" name="toolbarLabel">
+   <item row="0" column="2">
+    <widget class="QLabel" name="availableActionsLabel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -23,11 +23,21 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Toolbar</string>
+      <string>Available actions</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item row="3" column="0" colspan="5">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
     <widget class="QLabel" name="actionsLabel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -40,71 +50,20 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="4">
-    <widget class="QLabel" name="availableActionsLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Available Actions</string>
+   <item row="1" column="2" rowspan="2">
+    <widget class="QListWidget" name="availableList">
+     <property name="toolTip">
+      <string>Actions available to show on toolbar</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" rowspan="2" colspan="2">
-    <widget class="QListWidget" name="toolbarList">
-     <property name="currentRow">
-      <number>-1</number>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2" rowspan="2">
-    <widget class="QListWidget" name="actionList"/>
-   </item>
-   <item row="2" column="4" rowspan="2">
-    <widget class="QListWidget" name="availableList"/>
-   </item>
-   <item row="0" column="0" colspan="5">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="workspaceLabel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Workspace:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="workspaceName">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="3">
+   <item row="1" column="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QToolButton" name="add">
-       <property name="text">
-        <string notr="true"/>
+       <property name="toolTip">
+        <string>Add action to toolbar</string>
        </property>
-       <property name="icon">
-        <iconset resource="musescore.qrc">
-         <normaloff>:/data/icons/go-previous.svg</normaloff>:/data/icons/go-previous.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="remove">
        <property name="text">
         <string notr="true"/>
        </property>
@@ -115,7 +74,24 @@
       </widget>
      </item>
      <item>
+      <widget class="QToolButton" name="remove">
+       <property name="toolTip">
+        <string>Remove action from toolbar</string>
+       </property>
+       <property name="text">
+        <string notr="true"/>
+       </property>
+       <property name="icon">
+        <iconset resource="musescore.qrc">
+         <normaloff>:/data/icons/go-previous.svg</normaloff>:/data/icons/go-previous.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="up">
+       <property name="toolTip">
+        <string>Move action up</string>
+       </property>
        <property name="text">
         <string notr="true"/>
        </property>
@@ -127,6 +103,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="down">
+       <property name="toolTip">
+        <string>Move action down</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -138,20 +117,39 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0" colspan="5">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="1" column="0" rowspan="2" colspan="2">
+    <widget class="QListWidget" name="toolbarList">
+     <property name="toolTip">
+      <string>Toolbar to customize</string>
      </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     <property name="currentRow">
+      <number>-1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="toolbarLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Toolbar</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4" rowspan="2">
+    <widget class="QListWidget" name="actionList">
+     <property name="toolTip">
+      <string>Actions shown on toolbar</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>workspaceName</tabstop>
   <tabstop>toolbarList</tabstop>
   <tabstop>actionList</tabstop>
   <tabstop>add</tabstop>
