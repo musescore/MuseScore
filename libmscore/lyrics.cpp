@@ -110,6 +110,14 @@ void Lyrics::read(XmlReader& e)
             if (!readProperties(e))
                   e.unknown();
             }
+      if (!isStyled(Pid::OFFSET) && !e.pasteMode()) {
+            // fix offset for pre-3.1 scores
+            // 3.0: y offset was meaningless if autoplace is set
+            if (autoplace() && score()->mscoreVersion() < "3.1") {
+                  QPointF off = propertyDefault(Pid::OFFSET).toPointF();
+                  ryoffset() = off.y();
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -600,6 +608,23 @@ void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
                         TextBase::undoChangeProperty(Pid::PLACEMENT, int(p), ps);
                         break;
                         }
+                  }
+            TextBase::undoChangeProperty(id, v, ps);
+            return;
+            }
+      else if (id == Pid::AUTOPLACE && v.toBool() != autoplace()) {
+            if (v.toBool()) {
+                  // setting autoplace
+                  // reset offset
+                  undoResetProperty(Pid::OFFSET);
+                  }
+            else {
+                  // unsetting autoplace
+                  // rebase offset
+                  QPointF off = offset();
+                  qreal y = pos().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+                  off.ry() = placeAbove() ? y : y - staff()->height();
+                  undoChangeProperty(Pid::OFFSET, off, PropertyFlags::UNSTYLED);
                   }
             TextBase::undoChangeProperty(id, v, ps);
             return;
