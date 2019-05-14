@@ -30,6 +30,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 static const ElementStyle articulationStyle {
+      { Sid::articulationMinDistance, Pid::MIN_DISTANCE },
 //      { Sid::articulationOffset, Pid::OFFSET },
       };
 
@@ -496,9 +497,14 @@ const char* Articulation::articulationName() const
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid Articulation::getPropertyStyle(Pid /*id*/) const
+Sid Articulation::getPropertyStyle(Pid id) const
       {
-      return Sid::NOSTYLE;
+      switch (id) {
+            case Pid::MIN_DISTANCE:
+                  return Element::getPropertyStyle(id);
+            default:
+                  return Sid::NOSTYLE;
+            }
       }
 
 //---------------------------------------------------------
@@ -591,11 +597,18 @@ QString Articulation::accessibleInfo() const
 
 void Articulation::doAutoplace()
       {
-      qreal minDistance = score()->styleS(Sid::articulationMinDistance).val() * spatium();
+      // rebase vertical offset on drag
+      qreal rebase = 0.0;
+      if (offsetChanged() != OffsetChange::NONE)
+            rebase = rebaseOffset();
+
       if (autoplace() && parent()) {
             Segment* s = segment();
             Measure* m = measure();
             int si     = staffIdx();
+
+            qreal sp = score()->spatium();
+            qreal md = minDistance().val() * sp;
 
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(chordRest()->pos() + m->pos() + s->pos() + pos());
@@ -612,14 +625,22 @@ void Articulation::doAutoplace()
                   d = ss->skyline().south().minDistance(sk);
                   }
 
-            if (d > -minDistance) {
-                  qreal yd = d + minDistance;
+            if (d > -md) {
+                  qreal yd = d + md;
                   if (above)
                         yd *= -1.0;
+                  if (offsetChanged() != OffsetChange::NONE) {
+                        // user moved element within the skyline
+                        // we may need to adjust minDistance, yd, and/or offset
+                        //bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
+                        if (rebaseMinDistance(md, yd, sp, rebase, true))
+                              r.translate(0.0, rebase);
+                        }
                   rypos() += yd;
                   r.translate(QPointF(0.0, yd));
                   }
             }
+      setOffsetChanged(false);
       }
 
 }
