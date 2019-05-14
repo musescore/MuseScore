@@ -1,17 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>help-contents</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="help-contents">
-            <g id="ic_help_24px">
-                <g id="Group">
-                    <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-                    <path d="M12,2 C6.48,2 2,6.48 2,12 C2,17.52 6.48,22 12,22 C17.52,22 22,17.52 22,12 C22,6.48 17.52,2 12,2 Z M13,19 L11,19 L11,17 L13,17 L13,19 Z M15.07,11.25 L14.17,12.17 C13.45,12.9 13,13.5 13,15 L11,15 L11,14.5 C11,13.4 11.45,12.4 12.17,11.67 L13.41,10.41 C13.78,10.05 14,9.55 14,9 C14,7.9 13.1,7 12,7 C10.9,7 10,7.9 10,9 L8,9 C8,6.79 9.79,5 12,5 C14.21,5 16,6.79 16,9 C16,9.88 15.64,10.68 15.07,11.25 Z" id="Shape" fill="#3B3F45"></path>
-                </g>
-            </g>
-        </g>
-    </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg15"
+   version="1.1"
+   viewBox="0 0 24 24"
+   height="24px"
+   width="24px">
+  <metadata
+     id="metadata19">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>help-contents</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title2">help-contents</title>
+  <desc
+     id="desc4">Created with Sketch.</desc>
+  <defs
+     id="defs6" />
+  <polygon
+     points="0,0 24,0 24,24 0,24 "
+     id="Shape"
+     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1" />
+  <path
+     id="path9"
+     d="m 15.07,11.25 -0.9,0.92 c -0.642194,0.651113 -1.06959,1.198805 -1.154462,2.373943 l -0.01554,1.03133 c -1.292606,0.765357 -1.983963,0.604156 -2,0 V 14.5 c 0,-1.1 0.45,-2.1 1.17,-2.83 l 1.24,-1.26 C 13.78,10.05 14,9.55 14,9 14,7.9 13.1,7 12,7 10.9,7 10,7.9 10,9 8.7806096,9.6448444 8.0692035,9.6970404 8,9 8,6.79 9.79,5 12,5 c 2.21,0 4,1.79 4,4 0,0.88 -0.36,1.68 -0.93,2.25 z"
+     style="fill:#3b3f45;fill-rule:evenodd;stroke:none;stroke-width:1" />
+  <circle
+     r="10"
+     cy="12"
+     cx="12"
+     id="path826"
+     style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#3b3f45;stroke-width:2.00000024;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+  <path
+     d="m 10.999998,17.838373 c 1.292606,-0.765357 1.983963,-0.604156 2,0 v 0.93393 c -1.292606,0.765357 -1.983963,0.604156 -2,0 z"
+     style="fill:#3b3f45;fill-rule:evenodd;stroke:none;stroke-width:1"
+     id="path848" />
 </svg>
