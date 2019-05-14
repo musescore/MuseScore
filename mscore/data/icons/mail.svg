@@ -5,12 +5,12 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   id="svg13"
-   version="1.1"
-   height="24"
-   width="24"
+   style="isolation:isolate"
    viewBox="0 0 24 24"
-   style="isolation:isolate">
+   width="24"
+   height="24"
+   version="1.1"
+   id="svg13">
   <metadata
      id="metadata17">
     <rdf:RDF>
@@ -28,15 +28,15 @@
     <clipPath
        id="_clipPath_Jh13zPQGeublarQxBMLzSn7xLzGXUOL4">
       <rect
-         y="0"
-         x="0"
-         id="rect2"
+         width="60"
          height="60"
-         width="60" />
+         id="rect2"
+         x="0"
+         y="0" />
     </clipPath>
   </defs>
   <path
-     id="rect824"
-     d="m 2,4.0047655 a 1.0001,1.0001 0 0 0 -1,1 V 18.995 a 1.0001,1.0001 0 0 0 1,1 h 20 a 1.0001,1.0001 0 0 0 1,-1 V 5.0047655 a 1.0001,1.0001 0 0 0 -1,-1 z m 2.8515625,2 H 19.148438 L 12,11.723516 Z M 3,7.0867968 9.1425781,12.000859 3,16.914922 Z m 18,0 V 16.914922 L 14.857422,12.000859 Z M 10.742188,13.280156 11.375,13.786016 a 1.0001,1.0001 0 0 0 1.25,0 l 0.630859,-0.50586 5.892579,4.714844 H 4.8515625 Z"
-     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#3b3f45;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#3b3f45;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     d="m 2,4.0047655 c -0.5522619,5.52e-5 -0.9999448,0.4477381 -1,1 V 18.995 c 5.52e-5,0.552262 0.4477381,0.999945 1,1 h 20 c 0.552262,-5.5e-5 0.999945,-0.447738 1,-1 V 5.0047655 c -5.5e-5,-0.5522619 -0.447738,-0.9999448 -1,-1 z m 2.8515625,2 H 19.148438 L 12,11.723516 Z M 14.857422,12.000859 21,7.0867968 V 16.914922 L 15.625244,12.615117 13.992431,13.869512 19.148438,17.995 H 4.8515625 L 10.00586,13.869512 8.3747558,12.615117 3,16.914922 V 7.0867968 l 6.1425781,4.9140622 1.5996099,1.279297 0.632812,0.50586 c 0.365346,0.292463 0.884654,0.292463 1.25,0 l 0.630859,-0.50586 z"
+     id="rect824" />
 </svg>

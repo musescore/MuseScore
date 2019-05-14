@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   id="svg11"
-   version="1.1"
-   viewBox="0 0 24 24"
+   width="24px"
    height="24px"
-   width="24px">
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg11">
   <metadata
      id="metadata15">
     <rdf:RDF>
@@ -30,12 +30,12 @@
   <defs
      id="defs6" />
   <g
-     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:0.55000001"
+     transform="matrix(1.8181818,0,0,1.8181818,-8.9090908,-9.8865368)"
      id="Original-24"
-     transform="matrix(1.8181818,0,0,1.8181818,-8.9090908,-9.8865368)">
+     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:0.55000001">
     <path
-       style="fill:#3b3f45;stroke-width:0.55000001"
-       d="M 15.16188,7 C 14.835103,7.4825532 14.616202,8.0621406 14.44385,8.55091 14.33451,8.85788 14.22262,9.24679 14.0992,9.61358 13.79085,9.13114 13.51243,8.62238 13.09399,8.2637 12.43982,7.70299 11.62368,7.34464 10.68146,7.34464 8.04258,7.34464 6,9.61354 6,12.2846 c 0,2.53918 2.13105,4.53785 4.68146,4.53785 1.48252,0 2.5631,-0.92577 3.38903,-2.06789 0.311058,0.904478 0.628487,1.647843 1.12011,2.41253 0.621201,0.17395 1.358673,-0.615341 1.80222,-1.20985 -0.802028,-1.134131 -1.241978,-2.5397 -1.60117,-3.67264 0.21845,-0.66927 0.46849,-1.45611 0.71801,-2.15406 C 16.342033,9.4495283 16.592249,8.795237 17,8.20627 16.817494,7.4435491 16.015919,7.1953734 15.16188,7 Z m -4.48041,2.44125 c 0.647,0 1.12425,0.31405 1.55091,0.86162 0.39641,0.50875 0.66953,1.24654 0.91906,1.98173 -0.23945,0.64448 -0.52017,1.2642 -0.91906,1.69451 -0.43352,0.46764 -0.93369,0.74673 -1.55091,0.74673 -1.36539,0 -2.4987,-1.08778 -2.4987,-2.44124 0,-1.54593 1.08929,-2.84335 2.4987,-2.84335 z"
-       id="Combined-Shape" />
+       id="Combined-Shape"
+       d="m 15.42615,7.0510808 c 0.371668,0.090638 0.736033,0.1845743 1.002774,0.3315458 0.293513,0.1617225 0.471987,0.3714092 0.559356,0.6752959 -0.393561,0.6061403 -0.663204,1.2548435 -0.890902,1.9221522 -0.261269,0.7311593 -0.52186,1.5511393 -0.748521,2.2455623 l -0.02034,0.06509 0.02034,0.06712 c 0.357636,1.128033 0.8312,2.526805 1.623151,3.714127 -0.215429,0.279228 -0.475413,0.587293 -0.752588,0.805474 -0.279948,0.220363 -0.535834,0.298414 -0.748521,0.26849 -0.462024,-0.740755 -0.783979,-1.460809 -1.090237,-2.35133 l -0.134245,-0.390533 -0.242049,0.333579 c -0.840308,1.162003 -1.901632,2.064535 -3.356139,2.064535 -2.543831,0 -4.6599482,-1.985256 -4.6599483,-4.509431 0,-2.6721925 2.0348844,-4.9304727 4.6599483,-4.9304728 0.926786,0 1.723095,0.3492251 2.371671,0.9051406 0.395318,0.3388598 0.680414,0.8480037 1.006842,1.3587278 L 14.268791,10.00448 14.411173,9.579369 C 14.541826,9.1910802 14.658992,8.7841918 14.769161,8.4748942 14.931214,8.0153306 15.150238,7.4987784 15.42615,7.0510776 Z m -4.777921,2.064534 c -1.5996051,0 -2.8171228,1.4662842 -2.8171228,3.1771442 0,1.529425 1.2810972,2.756103 2.8171228,2.756103 0.707534,0 1.293126,-0.329985 1.771634,-0.846154 0.451155,-0.486691 0.749975,-1.156312 1.002774,-1.836723 l 0.02644,-0.07119 -0.02441,-0.07119 C 13.163531,11.454206 12.877379,10.667523 12.432067,10.096014 11.964478,9.4959155 11.391534,9.1156148 10.648229,9.1156148 Z"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#3b3f45;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.41249996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
   </g>
 </svg>
