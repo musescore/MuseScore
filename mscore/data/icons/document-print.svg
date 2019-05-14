@@ -1,12 +1,44 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>document-print</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Derived-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="document-print" fill="#3B3F45">
-            <path d="M19,8 L5,8 C3.34,8 2,9.34 2,11 L2,17 L6,17 L6,21 L18,21 L18,17 L22,17 L22,11 C22,9.34 20.66,8 19,8 Z M16,19 L8,19 L8,14 L16,14 L16,19 Z M19,12 C18.45,12 18,11.55 18,11 C18,10.45 18.45,10 19,10 C19.55,10 20,10.45 20,11 C20,11.55 19.55,12 19,12 Z M18,3 L6,3 L6,7 L18,7 L18,3 Z" id="Shape"></path>
-        </g>
-    </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="24px"
+   height="24px"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg12">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>document-new</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title2">document-new</title>
+  <desc
+     id="desc4">Created with Sketch.</desc>
+  <defs
+     id="defs6" />
+  <g
+     id="Derived-24"
+     transform="translate(2,-2)"
+     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1">
+    <g
+       id="document-new"
+       style="fill:#3b3f45" />
+  </g>
+  <path
+     id="path4-6"
+     d="M 8.0058594 1.2050781 C 7.1500074 1.2050781 6.3293688 1.9102519 6.1054688 2.1171875 L 16.912109 2.1171875 L 16 1.2050781 L 8.0058594 1.2050781 z M 6.0097656 5.25 L 6.0097656 7.25 L 8.0097656 7.25 L 8.0097656 5.25 L 6.0097656 5.25 z M 17.216797 5.25 L 19.214844 7.25 L 22 7.25 L 22 7.2050781 L 20.044922 5.25 L 17.216797 5.25 z M 6.0097656 9.25 L 6.0097656 11.25 L 8.0097656 11.25 L 8.0097656 9.25 L 6.0097656 9.25 z M 20 9.25 L 20 11.25 L 22 11.25 L 22 9.25 L 20 9.25 z M 15 10.025391 C 14.169734 10.025391 13.456875 10.530012 13.154297 11.25 L 15 11.25 L 15 10.025391 z M 6.0097656 13.001953 L 6.0097656 17.001953 L 8.0097656 17.001953 L 8.0097656 13.001953 L 6.0097656 13.001953 z M 13 13.001953 L 13 17.001953 L 14.998047 17.001953 L 15 13.001953 L 13 13.001953 z M 20 13.001953 L 20 17.001953 L 22 17.001953 L 22 13.001953 L 20 13.001953 z M 3.9726562 17.998047 C 3.3382284 18.218676 2.7252957 18.562084 2.1386719 19.054688 C 1.0774919 19.945788 0.546865 20.902964 0.546875 21.927734 C 0.546875 22.551504 0.77623814 23.052921 1.2363281 23.431641 C 1.6964281 23.810361 2.2989256 24 3.0410156 24 C 4.2580356 24 5.3958414 23.555162 6.4570312 22.664062 C 7.5182214 21.772962 8.0488281 20.813833 8.0488281 19.789062 C 8.0488281 19.647482 8.0334686 19.513722 8.0097656 19.384766 L 8.0097656 17.998047 L 3.9726562 17.998047 z M 10.121094 17.998047 L 14 22.736328 L 17.876953 17.998047 L 10.121094 17.998047 z M 20 17.998047 L 20 19.869141 C 21.060728 19.869141 21.91854 19.041566 21.986328 17.998047 L 20 17.998047 z "
+     style="fill:#3b3f45;stroke-width:1.50800002" />
 </svg>
