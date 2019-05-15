@@ -198,9 +198,11 @@ void Clef::layout()
             default:
                   break;
             }
-      // clefs are right aligned to Segment
+      // clefs on palette or at start of system/measure are left aligned
+      // other clefs are right aligned
       QRectF r(symBbox(symId));
-      setPos(0.0, yoff * _spatium + (stepOffset * -_spatium));
+      qreal x = segment() && segment()->rtick().isNotZero() ? -r.right() : 0.0;
+      setPos(x, yoff * _spatium + (stepOffset * -_spatium));
 
       setbbox(r);
       }
