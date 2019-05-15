@@ -136,6 +136,7 @@ enum class Sid {
       timesigLeftMargin,
       timesigScale,
 
+      midClefKeyRightMargin,
       clefKeyRightMargin,
       clefKeyDistance,
       clefTimesigDistance,
