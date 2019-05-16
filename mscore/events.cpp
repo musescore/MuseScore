@@ -39,25 +39,18 @@ namespace Ms {
 
 bool ScoreView::event(QEvent* event)
       {
-      if (event->type() == QEvent::KeyPress && editData.element) {
+      if (event->type() == QEvent::KeyPress && editMode()) {
             QKeyEvent* ke = static_cast<QKeyEvent*>(event);
             if (ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Backtab) {
                   if (editData.element->isTextBase())
                         return true;
-                  bool rv = true;
-                  if (ke->key() == Qt::Key_Tab) {
-                        rv = editData.element->nextGrip(editData);
-                        updateGrips();
-                        _score->update();
-                        if (rv)
-                              return true;
-                        }
-                  else if (ke->key() == Qt::Key_Backtab)
-                        rv = editData.element->prevGrip(editData);
+                  if (ke->key() == Qt::Key_Tab)
+                        editData.element->nextGrip(editData);
+                  else
+                        editData.element->prevGrip(editData);
                   updateGrips();
                   _score->update();
-                  if (rv)
-                        return true;
+                  return true;
                   }
             }
 //      else if (event->type() == CloneDrag) {
