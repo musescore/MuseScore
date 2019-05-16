@@ -101,6 +101,7 @@ class Lyrics final : public TextBase {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid id) const override;
+      virtual Sid getPropertyStyle(Pid) const override;
       };
 
 //---------------------------------------------------------

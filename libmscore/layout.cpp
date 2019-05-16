@@ -3130,6 +3130,17 @@ void Score::layoutLyrics(System* system)
                                     if (cr) {
                                           int nA = 0;
                                           for (Lyrics* l : cr->lyrics()) {
+                                                // user adjusted offset can possibly change placement
+                                                if (l->offsetChanged() != OffsetChange::NONE) {
+                                                      Placement p = l->placement();
+                                                      l->rebaseOffset();
+                                                      if (l->placement() != p) {
+                                                            l->undoResetProperty(Pid::AUTOPLACE);
+                                                            //l->undoResetProperty(Pid::OFFSET);
+                                                            //l->layout();
+                                                            }
+                                                      }
+                                                l->setOffsetChanged(false);
                                                 if (l->placeAbove())
                                                       ++nA;
                                                 }
