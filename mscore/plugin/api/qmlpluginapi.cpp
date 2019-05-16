@@ -106,12 +106,27 @@ QQmlListProperty<Score> PluginAPI::scores()
       }
 
 //---------------------------------------------------------
+//   toLocalFile
+//---------------------------------------------------------
+
+static QString toLocalFile(const QString& file)
+      {
+      const QUrl url(file);
+      if (url.isLocalFile())
+            return url.toLocalFile();
+      return file;
+      }
+
+//---------------------------------------------------------
 //   writeScore
 ///   Writes a score to a file.
 ///   \param s The score which should be saved.
 ///   \param name Path where to save the score, with or
 ///   without the filename extension (the extension is
 ///   determined by \p ext parameter).
+///   \n Since MuseScore 3.1 also accepts [url](https://doc.qt.io/qt-5/qml-url.html)
+///   values which can be helpful for usage with Qt Quick
+///   [FileDialog](https://doc.qt.io/qt-5/qml-qtquick-dialogs-filedialog.html).
 ///   \param ext Filename extension \b without the dot,
 ///   e.g. \p "mscz" or \p "pdf". Determines the file
 ///   format to be used.
@@ -121,13 +136,16 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
       {
       if (!s || !s->score())
             return false;
-      return msc()->saveAs(s->score(), true, name, ext);
+      return msc()->saveAs(s->score(), true, toLocalFile(name), ext);
       }
 
 //---------------------------------------------------------
 //   readScore
 ///   Reads the score from a file and opens it in a new tab
 ///   \param name Path to the file to be opened.
+///   \n Since MuseScore 3.1 also accepts [url](https://doc.qt.io/qt-5/qml-url.html)
+///   values which can be helpful for usage with Qt Quick
+///   [FileDialog](https://doc.qt.io/qt-5/qml-qtquick-dialogs-filedialog.html).
 ///   \param noninteractive Can be used to avoid a "save
 ///   changes" dialog on closing a score that is either
 ///   imported or was created with an older version of
@@ -136,7 +154,7 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 
 Score* PluginAPI::readScore(const QString& name, bool noninteractive)
       {
-      Ms::Score* score = msc()->openScore(name, !noninteractive);
+      Ms::Score* score = msc()->openScore(toLocalFile(name), !noninteractive);
       if (score) {
             if (noninteractive)
                   score->setCreated(false);
