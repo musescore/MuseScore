@@ -115,7 +115,7 @@ class PluginAPI : public Ms::QmlPlugin {
       DECLARE_API_ENUM( OrnamentStyle,    ornamentStyleEnum       )
       /// Contains Ms::GlissandoStyle enumeration values
       /// \note In MuseScore 2.X this enumeration was available as
-      /// MScoreCHROMATIC, MScore.WHITE_KEYS, MScore.BLACK_KEYS,
+      /// MScore.CHROMATIC, MScore.WHITE_KEYS, MScore.BLACK_KEYS,
       /// MScore.DIATONIC.
       DECLARE_API_ENUM( GlissandoStyle,   glissandoStyleEnum      )
       /// Contains Ms::Tid enumeration values
