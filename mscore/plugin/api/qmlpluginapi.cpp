@@ -312,6 +312,19 @@ FractionWrapper* PluginAPI::fraction(int num, int den) const
       }
 
 //---------------------------------------------------------
+//   PluginAPI::recentScores
+//---------------------------------------------------------
+
+QStringList PluginAPI::recentScores() const
+      {
+      const QFileInfoList fiList(msc()->recentScores());
+      QStringList scoresList;
+      for (const QFileInfo& fi : fiList)
+            scoresList.push_back(fi.absoluteFilePath());
+      return scoresList;
+      }
+
+//---------------------------------------------------------
 //   PluginAPI::registerQmlTypes
 //---------------------------------------------------------
 

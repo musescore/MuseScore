@@ -83,6 +83,11 @@ class PluginAPI : public Ms::QmlPlugin {
       /** current score, if any (read only) */
       Q_PROPERTY(Ms::PluginAPI::Score* curScore     READ curScore)
 //TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
+      /**
+       * List of the most recently opened scores.
+       * \since MuseScore 3.1
+       */
+      Q_PROPERTY(QStringList recentScores READ recentScores);
 
       // Should be initialized in qmlpluginapi.cpp
       /// Contains Ms::ElementType enumeration values
@@ -157,6 +162,7 @@ class PluginAPI : public Ms::QmlPlugin {
 
       Score* curScore() const;
       QQmlListProperty<Score> scores();
+      QStringList recentScores() const;
       /// \endcond
 
       Q_INVOKABLE Ms::PluginAPI::Score* newScore(const QString& name, const QString& part, int measures);

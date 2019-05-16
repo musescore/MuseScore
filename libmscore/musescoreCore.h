@@ -43,6 +43,7 @@ class MuseScoreCore
       virtual void endCmd() {}
       virtual Score* openScore(const QString& /*fn*/, bool /*switchTab*/) { return 0;}
       QList<MasterScore*>& scores()                         { return scoreList; }
+      virtual QFileInfoList recentScores() const { return QFileInfoList(); }
       virtual void updateInspector() {}
       };
 
