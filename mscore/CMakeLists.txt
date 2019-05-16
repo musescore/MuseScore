@@ -63,6 +63,7 @@ if (SCRIPT_INTERFACE)
             plugin/mscorePlugins.cpp plugin/pluginCreator.cpp plugin/pluginManager.cpp plugin/qmledit.cpp
             plugin/qmlimageprovider.cpp
             plugin/qmlplugin.cpp plugin/qmlpluginengine.cpp
+            plugin/api/qmlprivateapi.cpp
             plugin/api/qmlpluginapi.cpp plugin/api/cursor.cpp plugin/api/scoreelement.cpp plugin/api/elements.cpp
             plugin/api/score.cpp
             plugin/api/excerpt.cpp

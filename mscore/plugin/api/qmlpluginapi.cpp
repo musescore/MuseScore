@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "qmlpluginapi.h"
+#include "qmlprivateapi.h"
 #include "cursor.h"
 #include "elements.h"
 #include "fraction.h"
@@ -392,6 +393,18 @@ void PluginAPI::registerQmlTypes()
 #endif
       qmlRegisterType<FractionWrapper>();
       qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
+
+#ifndef TESTROOT
+// TODO: currently it is not possible to compile QmlPrivateAPI
+// in mtest because of its dependency on MuseScore class
+      qmlRegisterSingletonType<QmlPrivateAPI>(
+         "MuseScore.Private", 3, 1, "MsPrivate",
+         [] (QQmlEngine* /*engine*/, QJSEngine* /*scriptEngine*/) -> QObject*
+            {
+            return new QmlPrivateAPI();
+            }
+         );
+#endif
 
       qmlTypesRegistered = true;
       }

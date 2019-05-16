@@ -268,18 +268,12 @@ bool MuseScore::checkDirty(MasterScore* s)
       }
 
 //---------------------------------------------------------
-//   loadFile
+//   getOpenScoreNames
 //---------------------------------------------------------
 
-/**
- Create a modal file open dialog.
- If a file is selected, load it.
- Handles the GUI's file-open action.
- */
-
-void MuseScore::loadFiles(bool switchTab, bool singleFile)
+QStringList MuseScore::getOpenScoreNames(bool singleFile)
       {
-      QStringList files = getOpenScoreNames(
+      return getOpenScoreNames(
 #ifdef OMR
          tr("All Supported Files") + " (*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx *.pdf *.ove *.scw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx);;" +
 #else
@@ -300,6 +294,18 @@ void MuseScore::loadFiles(bool switchTab, bool singleFile)
          tr("Load Score"),
          singleFile
          );
+      }
+
+//---------------------------------------------------------
+//   loadFile
+///   Create a modal file open dialog.
+///   If a file is selected, load it.
+///   Handles the GUI's file-open action.
+//---------------------------------------------------------
+
+void MuseScore::loadFiles(bool switchTab, bool singleFile)
+      {
+      QStringList files = getOpenScoreNames(singleFile);
       for (const QString& s : files)
             openScore(s, switchTab);
       mscore->tourHandler()->showDelayedWelcomeTour();
