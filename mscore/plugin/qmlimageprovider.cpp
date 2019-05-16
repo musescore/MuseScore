@@ -17,36 +17,25 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "qmlpluginengine.h"
 #include "qmlimageprovider.h"
-#include "api/qmlpluginapi.h"
+
+#include "musescore.h"
+#include "icons.h"
 
 namespace Ms {
 
-extern QString mscoreGlobalShare;
-
-//---------------------------------------------------------
-//   QmlPluginEngine
-//---------------------------------------------------------
-
-QmlPluginEngine::QmlPluginEngine(QObject* parent)
-   : QQmlEngine(parent)
+QPixmap ScoreThumbnailProvider::requestPixmap(const QString& id, QSize* size, const QSize& requestedSize)
       {
-#ifdef Q_OS_WIN
-      QStringList importPaths;
-      QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-      importPaths.append(dir.absolutePath());
-      setImportPathList(importPaths);
-#endif
-#ifdef Q_OS_MAC
-      QStringList importPaths;
-      QDir dir(mscoreGlobalShare + QString("/qml"));
-      importPaths.append(dir.absolutePath());
-      setImportPathList(importPaths);
-#endif
+      QPixmap pixmap = mscore->extractThumbnail(id);
 
-      addImageProvider("score-thumbnail", new ScoreThumbnailProvider());
+      if (pixmap.isNull())
+            pixmap = icons[int(Icons::file_ICON)]->pixmap(QSize(50,60));
 
-      PluginAPI::PluginAPI::registerQmlTypes();
+      if (requestedSize.isValid())
+            pixmap = pixmap.scaled(requestedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+      (*size) = pixmap.size();
+      return pixmap;
       }
-}
+
+} // namespace Ms

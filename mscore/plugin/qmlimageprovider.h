@@ -17,36 +17,20 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "qmlpluginengine.h"
-#include "qmlimageprovider.h"
-#include "api/qmlpluginapi.h"
+#ifndef __QML_IMAGE_PROVIDER_H__
+#define __QML_IMAGE_PROVIDER_H__
+
+#include <QQuickImageProvider>
 
 namespace Ms {
 
-extern QString mscoreGlobalShare;
+class ScoreThumbnailProvider : public QQuickImageProvider {
+   public:
+      ScoreThumbnailProvider()
+         : QQuickImageProvider(QQuickImageProvider::Pixmap) {}
 
-//---------------------------------------------------------
-//   QmlPluginEngine
-//---------------------------------------------------------
+      QPixmap requestPixmap(const QString& id, QSize* size, const QSize& requestedSize) override;
+      };
 
-QmlPluginEngine::QmlPluginEngine(QObject* parent)
-   : QQmlEngine(parent)
-      {
-#ifdef Q_OS_WIN
-      QStringList importPaths;
-      QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-      importPaths.append(dir.absolutePath());
-      setImportPathList(importPaths);
+} // namespace Ms
 #endif
-#ifdef Q_OS_MAC
-      QStringList importPaths;
-      QDir dir(mscoreGlobalShare + QString("/qml"));
-      importPaths.append(dir.absolutePath());
-      setImportPathList(importPaths);
-#endif
-
-      addImageProvider("score-thumbnail", new ScoreThumbnailProvider());
-
-      PluginAPI::PluginAPI::registerQmlTypes();
-      }
-}

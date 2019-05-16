@@ -61,6 +61,7 @@ if (SCRIPT_INTERFACE)
 
             plugin/api/enums.cpp
             plugin/mscorePlugins.cpp plugin/pluginCreator.cpp plugin/pluginManager.cpp plugin/qmledit.cpp
+            plugin/qmlimageprovider.cpp
             plugin/qmlplugin.cpp plugin/qmlpluginengine.cpp
             plugin/api/qmlpluginapi.cpp plugin/api/cursor.cpp plugin/api/scoreelement.cpp plugin/api/elements.cpp
             plugin/api/score.cpp
