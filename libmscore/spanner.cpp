@@ -1354,7 +1354,7 @@ void SpannerSegment::autoplaceSpannerSegment()
 
       // rebase vertical offset on drag
       qreal rebase = 0.0;
-      if (offsetChanged())
+      if (offsetChanged() != OffsetChange::NONE)
             rebase = rebaseOffset();
 
       if (autoplace()) {
@@ -1377,7 +1377,7 @@ void SpannerSegment::autoplaceSpannerSegment()
                         yd = d + md;
                   }
             if (yd != 0.0) {
-                  if (offsetChanged()) {
+                  if (offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
                         qreal adj = pos().y() + rebase;
