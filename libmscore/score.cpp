@@ -56,6 +56,7 @@
 #include "tempotext.h"
 #include "articulation.h"
 #include "revisions.h"
+#include "tie.h"
 #include "tiemap.h"
 #include "layoutbreak.h"
 #include "harmony.h"
@@ -4196,10 +4197,6 @@ void Score::changeVoice(int voice)
                   Note* note   = toNote(e);
                   Chord* chord = note->chord();
 
-                  // TODO - handle ties; for now we skip tied notes
-                  if (note->tieFor() || note->tieBack())
-                        continue;
-
                   // move grace notes with main chord only
                   if (chord->isGrace())
                         continue;
@@ -4284,6 +4281,14 @@ void Score::changeVoice(int voice)
                               // add new chord if one was created
                               if (dstChord != dstCR)
                                     undoAddCR(dstChord, m, s->tick());
+                              // reconnect the tie to this note, if any
+                              Tie* tie = note->tieBack();
+                              if (tie)
+                                    undoChangeSpannerElements(tie, tie->startNote(), newNote);
+                              // reconnect the tie from this note, if any
+                              tie = note->tieFor();
+                              if (tie)
+                                    undoChangeSpannerElements(tie, newNote, tie->endNote());
                               // remove original note
                               if (notes > 1) {
                                     undoRemoveElement(note);
