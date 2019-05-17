@@ -2113,56 +2113,20 @@ void ChangeSpannerElements::flip(EditData*)
             // be sure new spanner elements are of the right type
             if (!startElement->isNote() || !endElement->isNote())
                   return;
-            Note* newStartNote;
-            Note* newEndNote;
-            Note* oldStartNote;
-            Note* oldEndNote;
-            int   startDeltaTrack   = oldStartElement->track() - startElement->track();
-            int   endDeltaTrack     = oldEndElement->track() - endElement->track();
-            // scan all spanners linked to this one
-            for (ScoreElement* el : spanner->linkList()) {
-                  Spanner*    sp    = static_cast<Spanner*>(el);
-                  newStartNote      = newEndNote = nullptr;
-                  oldStartNote      = toNote(sp->startElement());
-                  oldEndNote        = toNote(sp->endElement());
-                  // if not the current spanner, but one linked to it, determine its new start and end notes
-                  // as modifications 'parallel' to the modifications of the current spanner's start and end notes
-                  if (sp != spanner) {
-                        // determine the track where to expect the 'parallel' start element
-                        int   newTrack    = sp->startElement()->track() + startDeltaTrack;
-                        // look in notes linked to new start note for a note with
-                        // same score as linked spanner and appropriate track
-                        for (ScoreElement* newEl : startElement->linkList())
-                              if (static_cast<Note*>(newEl)->score() == sp->score()
-                                          && static_cast<Note*>(newEl)->track() == newTrack) {
-                                    newStartNote = static_cast<Note*>(newEl);
-                                    break;
-                                    }
-                        // similarly to determine the 'parallel' end element
-                        newTrack    = sp->endElement()->track() + endDeltaTrack;
-                        for (ScoreElement* newEl : endElement->linkList())
-                              if (static_cast<Note*>(newEl)->score() == sp->score()
-                                          && static_cast<Note*>(newEl)->track() == newTrack) {
-                                    newEndNote = static_cast<Note*>(newEl);
-                                    break;
-                                    }
-                        }
-                  // if current spanner, just use stored start and end elements
-                  else {
-                        newStartNote = toNote(startElement);
-                        newEndNote   = toNote(endElement);
-                        }
-                  // update spanner's start and end notes
-                  if (newStartNote && newEndNote) {
-                        oldStartNote->removeSpannerFor(sp);
-                        oldEndNote->removeSpannerBack(sp);
-                        sp->setNoteSpan(newStartNote, newEndNote);
-                        newStartNote->addSpannerFor(sp);
-                        newEndNote->addSpannerBack(sp);
+            Note* oldStartNote = toNote(oldStartElement);
+            Note* oldEndNote = toNote(oldEndElement);
+            Note* newStartNote = toNote(startElement);
+            Note* newEndNote = toNote(endElement);
+            // update spanner's start and end notes
+            if (newStartNote && newEndNote) {
+                  oldStartNote->removeSpannerFor(spanner);
+                  oldEndNote->removeSpannerBack(spanner);
+                  spanner->setNoteSpan(newStartNote, newEndNote);
+                  newStartNote->addSpannerFor(spanner);
+                  newEndNote->addSpannerBack(spanner);
 
-                        if (sp->isGlissando())
-                              oldEndNote->chord()->updateEndsGlissando();
-                        }
+                  if (spanner->isGlissando())
+                        oldEndNote->chord()->updateEndsGlissando();
                   }
             }
       else {
