@@ -28,10 +28,18 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   figuredBassStyle
+//---------------------------------------------------------
+
+static const ElementStyle figuredBassStyle {
+      { Sid::figuredBassMinDistance,             Pid::MIN_DISTANCE           },
+      };
+
+//---------------------------------------------------------
 //   figuredBassTextStyle
 //---------------------------------------------------------
 
-static const std::vector<StyledProperty> figuredBassTextStyle {
+static const ElementStyle figuredBassTextStyle {
       { Sid::figuredBassFontFace,                Pid::FONT_FACE              },
       { Sid::figuredBassFontSize,                Pid::FONT_SIZE              },
       { Sid::figuredBassFontStyle,               Pid::FONT_STYLE             },
@@ -968,7 +976,17 @@ bool FiguredBassItem::startsWithParenthesis() const
 FiguredBass::FiguredBass(Score* s)
    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
       {
-      initElementStyle(&figuredBassTextStyle);
+      initElementStyle(&figuredBassStyle);
+      // figured bass inherits from TextBase for layout purposes
+      // but there is no specific text style to use as a basis for styled properties
+      // (this is true for historical reasons due to the special layout of figured bass)
+      // override the styled property definitions
+      for (const StyledProperty& p : *textStyle(tid()))
+            setPropertyFlags(p.pid, PropertyFlags::NOSTYLE);
+      for (const StyledProperty& p : figuredBassTextStyle) {
+            setPropertyFlags(p.pid, PropertyFlags::STYLED);
+            setProperty(p.pid, styleValue(p.pid, p.sid));
+            }
       setOnNote(true);
 #if 0  // TODO
       TextStyle st(
@@ -1008,6 +1026,21 @@ FiguredBass::~FiguredBass()
       }
 
 //---------------------------------------------------------
+//   getPropertyStyle
+//---------------------------------------------------------
+
+Sid FiguredBass::getPropertyStyle(Pid id) const
+      {
+      // do not use TextBase::getPropertyStyle
+      // as most text style properties do not apply
+      for (const StyledProperty& p : figuredBassTextStyle) {
+            if (p.pid == id)
+                  return p.sid;
+            }
+      return Element::getPropertyStyle(id);
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -1016,7 +1049,7 @@ void FiguredBass::write(XmlWriter& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag(this);
-      if(!onNote())
+      if (!onNote())
             xml.tag("onNote", onNote());
       if (ticks().isNotZero())
             xml.tag("ticks", ticks());
@@ -1027,8 +1060,10 @@ void FiguredBass::write(XmlWriter& xml) const
 //            if (textStyleType() != StyledPropertyListIdx::FIGURED_BASS)
 //                  // if all items parsed and not unstiled, we simply have a special style: write it
 //                  xml.tag("style", textStyle().name());
-            for(FiguredBassItem* item : items)
+            for (FiguredBassItem* item : items)
                   item->write(xml);
+            for (const StyledProperty& spp : *_elementStyle)
+                  writeProperty(xml, spp.pid);
             Element::writeProperties(xml);
             }
       xml.etag();
@@ -1247,7 +1282,7 @@ void FiguredBass::startEdit(EditData& ed)
       {
       qDeleteAll(items);
       items.clear();
-      layout(); // re-layout without F.B.-specific formatting.
+      layout1(); // re-layout without F.B.-specific formatting.
       TextBase::startEdit(ed);
       }
 
@@ -1270,12 +1305,14 @@ void FiguredBass::endEdit(EditData& ed)
       items.clear();
       QString normalizedText = QString();
       idx = 0;
-      foreach(QString str, list) {
+      for (QString str : list) {
             FiguredBassItem* pItem = new FiguredBassItem(score(), idx++);
             if(!pItem->parse(str)) {            // if any item fails parsing
                   qDeleteAll(items);
                   items.clear();                // clear item list
-                  layout();
+                  score()->startCmd();
+                  triggerLayout();
+                  score()->endCmd();
                   return;
                   }
             pItem->setTrack(track());
@@ -1288,10 +1325,12 @@ void FiguredBass::endEdit(EditData& ed)
             normalizedText.append(pItem->normalizedText());
             }
       // if all items parsed and text is styled, replaced entered text with normalized text
-      if (items.size()) {
+      if (items.size())
             setXmlText(normalizedText);
-            layout();
-            }
+
+      score()->startCmd();
+      triggerLayout();
+      score()->endCmd();
       }
 
 //---------------------------------------------------------
