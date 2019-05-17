@@ -115,9 +115,6 @@ MuseScore {
    }
 
    onRun: {
-      if (typeof curScore === 'undefined')
-         Qt.quit();
-
       var cursor = curScore.newCursor();
       var startStaff;
       var endStaff;

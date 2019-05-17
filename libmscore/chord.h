@@ -48,14 +48,14 @@ enum class PlayEventType : char    {
 ///    Graphic representation of a chord.
 ///    Single notes are handled as degenerated chords.
 //
-//   @P beam        Beam            the beam of the chord if any (read only)
-//   @P graceNotes  array[Chord]    the list of grace note chords (read only)
-//   @P hook        Hook            the hook of the chord if any (read only)
-//   @P lyrics      array[Lyrics]   the list of lyrics (read only)
-//   @P notes       array[Note]     the list of notes (read only)
-//   @P stem        Stem            the stem of the chord if any (read only)
-//   @P stemSlash   StemSlash       the stem slash of the chord (acciaccatura) if any (read only)
-//   @P stemDirection Direction       the stem slash of the chord (acciaccatura) if any (read only)
+//   @P beam          Beam          the beam of the chord, if any (read only)
+//   @P graceNotes    array[Chord]  the list of grace note chords (read only)
+//   @P hook          Hook          the hook of the chord, if any (read only)
+//   @P lyrics        array[Lyrics] the list of lyrics (read only)
+//   @P notes         array[Note]   the list of notes (read only)
+//   @P stem          Stem          the stem of the chord, if any (read only)
+//   @P stemSlash     StemSlash     the stem slash of the chord (acciaccatura), if any (read only)
+//   @P stemDirection Direction     the stem direction of the chord: AUTO, UP, DOWN (read only)
 //---------------------------------------------------------
 
 class Chord final : public ChordRest {
