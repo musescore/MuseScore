@@ -121,9 +121,6 @@ MuseScore {
       onRun: {
             console.log("hello colornotes");
 
-            if (typeof curScore === 'undefined')
-                  Qt.quit();
-
             applyToNotesInSelection(colorNote)
 
             Qt.quit();

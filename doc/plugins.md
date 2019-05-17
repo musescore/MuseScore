@@ -58,13 +58,13 @@ MuseScore {
 Here is what happens here.
 
 - `import MuseScore 3.0` is necessary to use MuseScore API in QML code.
-- The `MuseScore { ... }` statement delares an object of `MuseScore` type (\ref
+- The `MuseScore { ... }` statement declares an object of `MuseScore` type (\ref
 Ms::PluginAPI::PluginAPI is exposed to QML as `MuseScore`). This should be
 the root object of any QML plugin for MuseScore.
 - Statements like `menuPath: "Plugins.pluginName"` assign properties to that
 object, see \ref
 Ms::PluginAPI::PluginAPI "the class reference" for the meaning of those
-properties. Apart those properties listed in that page, you can assign any
+properties. Apart from the properties listed in that page, you can assign any
 other properties and/or declare other QML objects too.
 - `onRun()` is the function that is invoked when the plugin is executed (via a
 menu entry or via a shortcut). This is the entry point of your plugin.

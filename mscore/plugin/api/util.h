@@ -82,11 +82,11 @@ class FileIO : public QObject {
       Q_INVOKABLE QString homePath() {QDir dir; return dir.homePath();}
       /** Returns a path suitable for a temporary file */
       Q_INVOKABLE QString tempPath() {QDir dir; return dir.tempPath();}
-      /** Returns the file modification time */
+      /** Returns the file's last modification time */
       Q_INVOKABLE int modifiedTime();
 
       /// \cond MS_INTERNAL
-      QString source() { return mSource; };
+      QString source() { return mSource; }
 
    public slots:
       void setSource(const QString& source) { mSource = source; }

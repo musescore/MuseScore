@@ -2602,7 +2602,7 @@ void Score::cmdExplode()
             int full = 0;
 
             for (Segment* seg = startSegment; seg && seg->tick() < lTick; seg = seg->next1()) {
-                  for (int i = srcTrack; i < srcTrack + VOICES && full != VOICES; i ++) {
+                  for (int i = srcTrack; i < srcTrack + VOICES && full != VOICES; i++) {
                         bool t = true;
                         for (int j = 0; j < VOICES; j++) {
                               if (i == sTracks[j]) {
