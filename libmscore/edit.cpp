@@ -4405,7 +4405,7 @@ void Score::undoAddElement(Element* element)
                      || element->isFretDiagram()
                      || element->isFermata()
                      || element->isHarmony()) {
-                        Segment* segment = toSegment(element->parent());
+                        Segment* segment = element->parent()->isFretDiagram() ? toSegment(element->parent()->parent()) : toSegment(element->parent());
                         Fraction tick    = segment->tick();
                         Measure* m       = score->tick2measure(tick);
                         if ((segment->segmentType() == SegmentType::EndBarLine) && (m->tick() == tick))
@@ -4413,6 +4413,18 @@ void Score::undoAddElement(Element* element)
                         Segment* seg     = m->undoGetSegment(segment->segmentType(), tick);
                         ne->setTrack(ntrack);
                         ne->setParent(seg);
+
+                        // make harmony child of fret diagram if possible
+                        if (ne->isHarmony()) {
+                              for (Element* segel : segment->annotations()) {
+                                    if (segel->isFretDiagram()) {
+                                          ne->setTrack(segel->track());
+                                          ne->setParent(segel);
+                                          break;
+                                          }
+                                    }
+                              }
+
                         undo(new AddElement(ne));
                         // transpose harmony if necessary
                         if (element->isHarmony() && ne != element) {

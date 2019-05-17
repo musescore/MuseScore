@@ -222,8 +222,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FRET_FRETS,              true,  "frets",                 P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "frets")            },
       { Pid::FRET_NUT,                true,  "showNut",               P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "show nut")         },
       { Pid::FRET_OFFSET,             true,  "fretOffset",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "fret offset")      },
+      { Pid::FRET_NUM_POS,            true,  "fretNumPos",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "fret number position") },
 
-      { Pid::FRET_NUM_POS,            false, "fretNumPos",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "fret number position") },
       { Pid::SYSTEM_BRACKET,          false, "type",                  P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "type")             },
       { Pid::GAP,                     false, 0,                       P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "gap")              },
       { Pid::AUTOPLACE,               false, "autoplace",             P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "autoplace")        },
