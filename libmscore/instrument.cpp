@@ -655,6 +655,9 @@ void Channel::write(XmlWriter& xml, const Part* part) const
             if (e.type() == ME_INVALID)
                   continue;
             if (e.type() == ME_CONTROLLER) {
+                  // don't write if automatically switched
+                  if ((e.dataA() == CTRL_HBANK || e.dataA() == CTRL_LBANK) &&  !_userBankController)
+                        continue;
                   if (e.dataA() == CTRL_HBANK && e.dataB() == 0)
                         continue;
                   if (e.dataA() == CTRL_LBANK && e.dataB() == 0)
@@ -678,10 +681,6 @@ void Channel::write(XmlWriter& xml, const Part* part) const
             xml.tag("mute", _mute);
       if (_solo)
             xml.tag("solo", _solo);
-
-      // This way we know not to change channel to expr automatically
-      if (_userBankController)
-            xml.tag("userSelectedBank", _userBankController);
 
       if (part && part->masterScore()->exportMidiMapping() && part->score() == part->masterScore()) {
             xml.tag("midiPort",    part->masterScore()->midiMapping(_channel)->port());
@@ -723,9 +722,11 @@ void Channel::read(XmlReader& e, Part* part)
                   switch (ctrl) {
                         case CTRL_HBANK:
                               _bank = (value << 7) + (_bank & 0x7f);
+                              _userBankController = true;
                               break;
                         case CTRL_LBANK:
                               _bank = (_bank & ~0x7f) + (value & 0x7f);
+                              _userBankController = true;
                               break;
                         case CTRL_VOLUME:
                               _volume = value;
@@ -772,8 +773,6 @@ void Channel::read(XmlReader& e, Part* part)
                   _mute = e.readInt();
             else if (tag == "solo")
                   _solo = e.readInt();
-            else if (tag == "userSelectedBank")
-                  _userBankController = e.readBool();
             else if (tag == "midiPort") {
                   midiPort = e.readInt();
                   }
