@@ -39,6 +39,7 @@ static const ElementStyle fretStyle {
       { Sid::fretStrings,                        Pid::FRET_STRINGS            },
       { Sid::fretFrets,                          Pid::FRET_FRETS              },
       { Sid::fretNut,                            Pid::FRET_NUT                },
+      { Sid::fretMinDistance,                    Pid::MIN_DISTANCE            },
       };
 
 //---------------------------------------------------------
@@ -68,8 +69,16 @@ FretDiagram::FretDiagram(const FretDiagram& f)
       _barres     = f._barres;
       _showNut    = f._showNut;
 
-      if (f._harmony)
-            _harmony = new Harmony(*f._harmony);
+      if (f._harmony) {
+            Harmony* h = new Harmony(*f._harmony);
+            add(h);
+            }
+      }
+
+FretDiagram::~FretDiagram()
+      {
+      if (_harmony)
+            delete _harmony;
       }
 
 //---------------------------------------------------------
@@ -85,6 +94,8 @@ FretDiagram* FretDiagram::fromString(Score* score, const QString &s)
 
       fd->setStrings(strings);
       fd->setFrets(4);
+      fd->setPropertyFlags(Pid::FRET_STRINGS, PropertyFlags::UNSTYLED);
+      fd->setPropertyFlags(Pid::FRET_FRETS,   PropertyFlags::UNSTYLED);
       int offset = 0;
       int barreString = -1;
       std::vector<std::pair<int, int>> dotsToAdd;
@@ -305,7 +316,7 @@ void FretDiagram::draw(QPainter* painter) const
       painter->setFont(scaledFont);
 
       // dotd is the diameter of a dot
-      qreal dotd = stringDist * .7;
+      qreal dotd = _spatium * .49 * score()->styleD(Sid::fretDotSize);
 
       // Draw dots, sym pen is used to draw them
       QPen symPen(pen);
@@ -414,13 +425,13 @@ void FretDiagram::layout()
       qreal _spatium  = spatium() * _userMag;
       stringLw        = _spatium * 0.08;
       nutLw           = (_fretOffset || !_showNut) ? stringLw : _spatium * 0.2;
-      stringDist      = _spatium * .7;
-      fretDist        = _spatium * .8;
+      stringDist      = score()->styleP(Sid::fretStringSpacing) * _userMag;
+      fretDist        = score()->styleP(Sid::fretFretSpacing) * _userMag;
 
       qreal w    = stringDist * (_strings - 1);
       qreal h    = _frets * fretDist + fretDist * .5;
       qreal y    = 0.0;
-      qreal dotd = stringDist * .7;
+      qreal dotd = _spatium * .49 * score()->styleD(Sid::fretDotSize);
       qreal x    = -((dotd+stringLw) * .5);
       w         += dotd + stringLw;
 
@@ -436,7 +447,6 @@ void FretDiagram::layout()
             scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
             QFontMetricsF fm2(scaledFont, MScore::paintDevice());
             qreal numw = fm2.width(QString("%1").arg(_fretOffset+1));
-
             qreal xdiff = numw + stringDist * .4;
             w += xdiff;
             x += _numPos == 0 ? -xdiff : 0;
@@ -451,6 +461,11 @@ void FretDiagram::layout()
             return;
             }
       autoplaceSegmentElement();
+
+      // don't display harmony in palette
+      if (!parent())
+            return;
+
       if (_harmony)
             _harmony->layout();
       if (_harmony && _harmony->autoplace() && _harmony->parent()) {
@@ -461,11 +476,10 @@ void FretDiagram::layout()
             SysStaff* ss = m->system()->staff(si);
             QRectF r     = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos());
 
-            qreal minDistance = styleP(Sid::fretMinDistance);
+            qreal minDistance = _harmony->minDistance().val() * spatium();
             SkylineLine sk(false);
             sk.add(r.x(), r.bottom(), r.width());
             qreal d = sk.minDistance(ss->skyline().north());
-            minDistance *= staff()->mag(tick());
             if (d > -minDistance) {
                   qreal yd = d + minDistance;
                   yd *= -1.0;
@@ -478,10 +492,32 @@ void FretDiagram::layout()
       }
 
 //---------------------------------------------------------
+//   centerX
+///   used by harmony for layout. Keep in sync with layout, same dotd and x as above
+//---------------------------------------------------------
+
+qreal FretDiagram::centerX() const
+      {
+      qreal dotd = spatium() * _userMag * .49 * score()->styleD(Sid::fretDotSize);
+      qreal x    = -((dotd+stringLw) * .5);
+      return bbox().right() * .5 + x;
+      }
+
+//---------------------------------------------------------
 //   write
 //    NOTICE: if you are looking to change how fret diagrams are
 //    written, edit the writeNew function. writeOld is purely compatability.
 //---------------------------------------------------------
+
+static const std::array<Pid, 7> pids { {
+      Pid::MIN_DISTANCE,
+      Pid::FRET_OFFSET,
+      Pid::FRET_FRETS,
+      Pid::FRET_STRINGS,
+      Pid::FRET_NUT,
+      Pid::MAG,
+      Pid::FRET_NUM_POS
+      } };
 
 void FretDiagram::write(XmlWriter& xml) const
       {
@@ -490,18 +526,16 @@ void FretDiagram::write(XmlWriter& xml) const
       xml.stag(this);
 
       // Write properties first and only once
+      for (Pid p : pids) {
+            writeProperty(xml, p);
+            }
       Element::writeProperties(xml);
-      writeProperty(xml, Pid::FRET_STRINGS);
-      writeProperty(xml, Pid::FRET_FRETS);
-      writeProperty(xml, Pid::FRET_OFFSET);
-      writeProperty(xml, Pid::FRET_NUT);
-      writeProperty(xml, Pid::MAG);
 
       if (_harmony)
             _harmony->write(xml);
 
       // Lowercase f indicates new writing format
-      // TODO: in the next score format version (4) use only write new and discard
+      // TODO: in the next score format version (4) use only write new + props and discard
       // the compatability writing.
       xml.stag("fretDiagram");
       writeNew(xml);
@@ -520,7 +554,7 @@ void FretDiagram::write(XmlWriter& xml) const
 void FretDiagram::writeOld(XmlWriter& xml) const
       {
       int lowestDotFret = -1;
-      bool multipleDotsOnFret = false;
+      int furthestLeftLowestDot = -1;
 
       // Do some checks for details needed for checking whether to add barres
       for (int i = 0; i < _strings; ++i) {
@@ -539,10 +573,13 @@ void FretDiagram::writeOld(XmlWriter& xml) const
 
             for (auto const& d : allDots) {
                   if (d.exists()) {
-                        if (d.fret < lowestDotFret || lowestDotFret == -1)
+                        if (d.fret < lowestDotFret || lowestDotFret == -1) {
                               lowestDotFret = d.fret;
-                        else if (d.fret == lowestDotFret)
-                              multipleDotsOnFret = true; 
+                              furthestLeftLowestDot = i;
+                              }
+                        else if (d.fret == lowestDotFret && (i < furthestLeftLowestDot || furthestLeftLowestDot == -1)) {
+                              furthestLeftLowestDot = i;
+                              }
                         }
                   }
             }
@@ -556,7 +593,7 @@ void FretDiagram::writeOld(XmlWriter& xml) const
             FretItem::Barre b = i.second;
             if (b.exists()) {
                   int fret = i.first;
-                  if (fret <= lowestDotFret && !multipleDotsOnFret && b.endString == -1) {
+                  if (fret <= lowestDotFret && b.endString == -1 && !(fret == lowestDotFret && b.startString > furthestLeftLowestDot)) {
                         barreStartString = b.startString;
                         barreFret = fret;
                         break;
@@ -674,6 +711,10 @@ void FretDiagram::read(XmlReader& e)
                   readNew(e);
                   haveReadNew = true;       
                   }
+            
+            // Check for new properties
+            else if (tag == "showNut")
+                  readProperty(e, Pid::FRET_NUT);
 
             // Then read the rest if there is no new format diagram (compatability read)
             else if (tag == "strings")
@@ -724,6 +765,7 @@ void FretDiagram::read(XmlReader& e)
 
 //---------------------------------------------------------
 //   readNew
+//    read the new 'fretDiagram' tag
 //---------------------------------------------------------
 
 void FretDiagram::readNew(XmlReader& e)
@@ -731,15 +773,7 @@ void FretDiagram::readNew(XmlReader& e)
       while (e.readNextStartElement()) {
             const QStringRef& tag(e.name());
 
-            if (tag == "strings")
-                  readProperty(e, Pid::FRET_STRINGS);
-            else if (tag == "frets")
-                  readProperty(e, Pid::FRET_FRETS);
-            else if (tag == "fretOffset")
-                  readProperty(e, Pid::FRET_OFFSET);
-            else if (tag == "showNut")
-                  readProperty(e, Pid::FRET_NUT);
-            else if (tag == "string") {
+            if (tag == "string") {
                   int no = e.intAttribute("no");
                   while (e.readNextStartElement()) {
                         const QStringRef& t(e.name());
@@ -766,13 +800,6 @@ void FretDiagram::readNew(XmlReader& e)
                   int fret = e.readInt();
 
                   setBarre(start, end, fret);
-                  }
-            else if (tag == "mag")
-                  readProperty(e, Pid::MAG);
-            else if (tag == "Harmony") {
-                  Harmony* h = new Harmony(score());
-                  h->read(e);
-                  add(h);
                   }
             else if (!Element::readProperties(e))
                   e.unknown();
@@ -1072,6 +1099,23 @@ FretItem::Barre FretDiagram::barre(int f) const
       }
 
 //---------------------------------------------------------
+//   setHarmony
+///   if this is being done by the user, use undoSetHarmony instead
+//---------------------------------------------------------
+
+void FretDiagram::setHarmony(QString harmonyText)
+      {
+      if (!_harmony) {
+            Harmony* h = new Harmony(score());
+            add(h);
+            }
+
+      _harmony->setHarmony(harmonyText);
+      _harmony->setXmlText(_harmony->harmonyName());
+      triggerLayout();
+      }
+
+//---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
@@ -1081,6 +1125,7 @@ void FretDiagram::add(Element* e)
       if (e->isHarmony()) {
             _harmony = toHarmony(e);
             _harmony->setTrack(track());
+            _harmony->resetProperty(Pid::OFFSET);
             }
       else
             qWarning("FretDiagram: cannot add <%s>\n", e->name());
@@ -1136,7 +1181,8 @@ void FretDiagram::scanElements(void* data, void (*func)(void*, Element*), bool a
       {
       Q_UNUSED(all);
       func(data, this);
-      if (_harmony)
+      // don't display harmony in palette
+      if (_harmony && !!parent())
             func(data, _harmony);
       }
 

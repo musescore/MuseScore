@@ -14,12 +14,12 @@
 #define __FRET_H__
 
 #include "element.h"
+#include "harmony.h"
 
 namespace Ms {
 
 class StringData;
 class Chord;
-class Harmony;
 
 // Keep this in order - not used directly for comparisons, but the dots will appear in
 // this order in fret multidot mode. See fretproperties.cpp.
@@ -154,6 +154,7 @@ class FretDiagram final : public Element {
    public:
       FretDiagram(Score* s);
       FretDiagram(const FretDiagram&);
+      ~FretDiagram();
       virtual void draw(QPainter*) const override;
       virtual FretDiagram* clone() const override { return new FretDiagram(*this); }
 
@@ -196,6 +197,10 @@ class FretDiagram final : public Element {
       void setMaxFrets(int val)   { _maxFrets = val;    }
       bool showNut() const        { return _showNut;    }
       void setShowNut(bool val)   { _showNut = val;     }
+
+      QString harmonyText() const { return _harmony ? _harmony->plainText() : QString(); }
+      qreal centerX() const;
+      void setHarmony(QString harmonyText);
 
       std::vector<FretItem::Dot> dot(int s, int f = 0) const;
       FretItem::Marker marker(int s) const;

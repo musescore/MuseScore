@@ -330,6 +330,9 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::fretY,                    false, fretY,                        0 },
       { Sid::barreLineWidth,           false, barreLineWidth,               0 },
       { Sid::fretMag,                  false, fretMag,                      0 },
+      { Sid::fretDotSize,              false, fretDotSize,                  0 },
+      { Sid::fretStringSpacing,        false, fretStringSpacing,            0 },
+      { Sid::fretFretSpacing,          false, fretFretSpacing,              0 },
       { Sid::scaleBarlines,            false, scaleBarlines,                resetScaleBarlines},
       { Sid::crossMeasureValues,       false, crossMeasureValues,           0 },
 
