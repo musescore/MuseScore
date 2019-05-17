@@ -4771,6 +4771,54 @@ void Score::undoRemoveElement(Element* element)
       }
 
 //---------------------------------------------------------
+//   undoChangeSpannerElements
+//---------------------------------------------------------
+
+void Score::undoChangeSpannerElements(Spanner* spanner, Element* startElement, Element* endElement)
+      {
+      Element* oldStartElement = spanner->startElement();
+      Element* oldEndElement = spanner->endElement();
+      int startDeltaTrack = startElement->track() - oldStartElement->track();
+      int endDeltaTrack = endElement->track() - oldEndElement->track();
+      // scan all spanners linked to this one
+      for (ScoreElement* el : spanner->linkList()) {
+            Spanner* sp = toSpanner(el);
+            Element* newStartElement = nullptr;
+            Element* newEndElement = nullptr;
+            // if not the current spanner, but one linked to it, determine its new start and end elements
+            // as modifications 'parallel' to the modifications of the current spanner's start and end elements
+            if (sp != spanner) {
+                  // determine the track where to expect the 'parallel' start element
+                  int newTrack = sp->startElement()->track() + startDeltaTrack;
+                  // look in elements linked to new start element for an element with
+                  // same score as linked spanner and appropriate track
+                  for (ScoreElement* ee : startElement->linkList()) {
+                        Element* e = toElement(ee);
+                        if (e->score() == sp->score() && e->track() == newTrack) {
+                              newStartElement = e;
+                              break;
+                              }
+                        }
+                  // similarly to determine the 'parallel' end element
+                  newTrack = sp->endElement()->track() + endDeltaTrack;
+                  for (ScoreElement* ee : endElement->linkList()) {
+                        Element* e = toNote(ee);
+                        if (e->score() == sp->score() && e->track() == newTrack) {
+                              newEndElement = e;
+                              break;
+                              }
+                        }
+                  }
+            // if current spanner, just use stored start and end elements
+            else {
+                  newStartElement = startElement;
+                  newEndElement = endElement;
+                  }
+            sp->score()->undo(new ChangeSpannerElements(sp, newStartElement, newEndElement));
+            }
+      }
+
+//---------------------------------------------------------
 //   undoChangeTuning
 //---------------------------------------------------------
 
