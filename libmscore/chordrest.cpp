@@ -745,6 +745,8 @@ void ChordRest::add(Element* e)
                   qDebug("ChordRest::add: unknown element %s", e->name());
                   break;
             case ElementType::LYRICS:
+                  if (e->isStyled(Pid::OFFSET))
+                        e->setOffset(e->propertyDefault(Pid::OFFSET).toPointF());
                   _lyrics.push_back(toLyrics(e));
                   break;
             default:
