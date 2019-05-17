@@ -122,6 +122,7 @@ class Channel {
       bool _mute;
       bool _solo;
 
+      // flags whether the user has changed the bank controller as opposed to switchExpressive
       bool _userBankController = false;
 
       mutable std::vector<MidiCoreEvent> _init;
