@@ -1430,26 +1430,13 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                               _tieFor = tie;
                               }
                         else {
-                              // DISABLE pasting of glissandi into staves with other lionked staves
-                              // because the glissando is not properly cloned into the linked staves
-                              if (pasteMode && staff() && staff()->links() && !staff()->links()->empty()) {
-                                    // Do nothing. The spanner is no longer needed.
-                                    info->releaseConnector();
-                                    delete sp;
-                                    }
-                              else {
-                                    sp->setAnchor(Spanner::Anchor::NOTE);
-                                    sp->setStartElement(this);
-                                    addSpannerFor(sp);
-                                    sp->setParent(this);
-                                    }
+                              sp->setAnchor(Spanner::Anchor::NOTE);
+                              sp->setStartElement(this);
+                              addSpannerFor(sp);
+                              sp->setParent(this);
                               }
                         }
                   else if (info->isEnd()) {
-                        // We might have deleted a spanner (see "DISABLE pasting
-                        // of glissandi..." note above)
-                        if (!sp)
-                              break;
                         sp->setTrack2(l.track());
                         sp->setTick2(tick());
                         sp->setEndElement(this);
