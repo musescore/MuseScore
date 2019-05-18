@@ -50,7 +50,7 @@
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
-     bordercolor="#3b3f45"
+     bordercolor="#000000"
      pagecolor="#ffffff"
      id="base"
      showguides="true"
@@ -67,15 +67,15 @@
      inkscape:window-maximized="1"
      inkscape:snap-grids="true" />
   <path
-     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#3b3f45;stroke-width:117.84955597;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:117.84955597;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 132.60196,-121.57405 L 939.80902,-120.86218"
      id="path2158" />
   <path
-     style="line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#3b3f45;fill:#3b3f45;fill-opacity:1;stroke:none;stroke-width:117.85194397;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:117.85194397;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      d="m 128.52803,240.09265 -0.0937,117.89243 809.9375,-420.049694 0.125,-117.939916 -809.96875,420.09714 z"
      id="path3136" />
   <path
-     style="line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#3b3f45;fill:#3b3f45;fill-opacity:1;stroke:none;stroke-width:117.8515625;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:117.8515625;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      d="m 129.90839,28.403098 -0.0937,117.899352 809.9375,-209.696712 0.0937,-117.868098 -809.9375,209.665458 z"
      id="path3136-5" />
 </svg>

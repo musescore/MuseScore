@@ -36,7 +36,7 @@
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
-     bordercolor="#3b3f45"
+     bordercolor="#000000"
      pagecolor="#ffffff"
      id="base"
      showguides="true"
@@ -53,17 +53,17 @@
      id="g8293"
      transform="matrix(6.0558956,0,0,5.9415537,-53.624698,-5180.1091)">
     <path
-       style="fill:#3b3f45;fill-opacity:1"
+       style="fill:#000000;fill-opacity:1"
        d="M 97.93631,842.17676 C 95.232873,843.23895 96.281494,847.05873 95.851967,851.34403 C 96.022123,859.2729 95.851967,926.39931 95.851967,963.92694 C 93.528603,959.1665 87.366534,959.22311 82.802017,958.87468 C 70.626302,959.15944 59.03273,966.2987 52.322637,976.3127 C 47.65094,983.09794 46.182759,993.47228 52.636283,999.6592 C 60.610441,1006.8854 72.827449,1005.5792 81.87426,1001.2141 C 91.996832,996.35577 101.21318,987.40929 102.31956,975.39232 C 102.35004,961.783 102.37329,865.53058 102.3377,851.67791 C 102.26425,845.23046 102.47368,846.68787 102.13954,842.62203 C 100.67726,841.59533 99.487856,841.78298 97.93631,842.17676 z "
        id="path37431"
        sodipodi:nodetypes="ccccccccccc" />
   </g>
   <path
-     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#3b3f45;stroke-width:117.84955597;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:117.84955597;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 132.60196,-121.57405 L 939.80902,-120.86218"
      id="path2158" />
   <path
      id="path3136"
      d="M 530.70978,78.688274 L 944.26183,80.062204"
-     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#3b3f45;stroke-width:117.1875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:117.1875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 </svg>
