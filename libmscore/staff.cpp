@@ -1413,8 +1413,10 @@ void Staff::localSpatiumChanged(double oldVal, double newVal, Fraction tick)
       int startTrack = staffIdx * VOICES;
       int endTrack = startTrack + VOICES;
       for (Segment* s = score()->tick2rightSegment(tick); s && s->tick() < etick; s = s->next1()) {
-            for (Element* e : s->annotations())
-                  e->localSpatiumChanged(oldVal, newVal);
+            for (Element* e : s->annotations()) {
+                  if (e->track() >= startTrack && e->track() < endTrack)
+                        e->localSpatiumChanged(oldVal, newVal);
+                  }
             for (int track = startTrack; track < endTrack; ++track) {
                   if (s->element(track))
                         s->element(track)->localSpatiumChanged(oldVal, newVal);
