@@ -126,6 +126,8 @@ class LyricsLine final : public SLine {
 
       Lyrics* lyrics() const                          { return toLyrics(parent());   }
       Lyrics* nextLyrics() const                      { return _nextLyrics;         }
+      bool isEndMelisma() const                       { return lyrics()->ticks().isNotZero(); }
+      bool isDash() const                             { return !isEndMelisma(); }
       virtual bool setProperty(Pid propertyId, const QVariant& v) override;
       virtual SpannerSegment* layoutSystem(System*) override;
       };
