@@ -907,6 +907,19 @@ void Rest::read(XmlReader& e)
       }
 
 //---------------------------------------------------------
+//   localSpatiumChanged
+//---------------------------------------------------------
+
+void Rest::localSpatiumChanged(qreal oldValue, qreal newValue)
+      {
+      ChordRest::localSpatiumChanged(oldValue, newValue);
+      for (Element* e : _dots)
+            e->localSpatiumChanged(oldValue, newValue);
+      for (Element* e : el())
+            e->localSpatiumChanged(oldValue, newValue);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

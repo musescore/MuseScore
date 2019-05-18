@@ -745,6 +745,8 @@ void ChordRest::add(Element* e)
                   qDebug("ChordRest::add: unknown element %s", e->name());
                   break;
             case ElementType::LYRICS:
+                  if (e->isStyled(Pid::OFFSET))
+                        e->setOffset(e->propertyDefault(Pid::OFFSET).toPointF());
                   _lyrics.push_back(toLyrics(e));
                   break;
             default:
@@ -800,6 +802,19 @@ void ChordRest::removeDeleteBeam(bool beamed)
 void ChordRest::undoSetBeamMode(Beam::Mode mode)
       {
       undoChangeProperty(Pid::BEAM_MODE, int(mode));
+      }
+
+//---------------------------------------------------------
+//   localSpatiumChanged
+//---------------------------------------------------------
+
+void ChordRest::localSpatiumChanged(qreal oldValue, qreal newValue)
+      {
+      DurationElement::localSpatiumChanged(oldValue, newValue);
+      for (Element* e : lyrics())
+            e->localSpatiumChanged(oldValue, newValue);
+      for (Element* e : el())
+            e->localSpatiumChanged(oldValue, newValue);
       }
 
 //---------------------------------------------------------

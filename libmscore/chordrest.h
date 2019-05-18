@@ -151,6 +151,7 @@ class ChordRest : public DurationElement {
       TDuration crossMeasureDurationType() const      { return _crossMeasureTDur;   }
       void setCrossMeasureDurationType(TDuration v)   { _crossMeasureTDur = v;      }
 
+      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
