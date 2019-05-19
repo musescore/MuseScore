@@ -328,20 +328,10 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBox">
+              <widget class="QComboBox" name="categories">
                <item>
                 <property name="text">
                  <string>Any</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Accidentals</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Analysis</string>
                 </property>
                </item>
               </widget>

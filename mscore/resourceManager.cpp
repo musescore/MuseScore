@@ -29,6 +29,7 @@ ResourceManager::ResourceManager(QWidget *parent) :
       {
       setObjectName("ResourceManager");
       setupUi(this);
+      
 #ifndef NDEBUG
       QPushButton* check_update = new QPushButton();
       check_update->setText("Check Update");
@@ -43,6 +44,8 @@ ResourceManager::ResourceManager(QWidget *parent) :
       displayLanguages();
       displayPluginRepo();
       displayPlugins();
+      QObject::connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(filterPluginList()));
+      QObject::connect(categories, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ResourceManager::filterPluginList);
       languagesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
       languagesTable->verticalHeader()->hide();
       extensionsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -323,7 +326,7 @@ void ResourceManager::displayPluginRepo() {
       QDomElement body = table_xml.elementsByTagName("tbody").item(0).toElement();
       QDomNodeList tr_list = body.elementsByTagName("tr");
       pluginsTable->setRowCount(tr_list.length());
-
+      QStringList all_categories;
       for (int row=0; row<tr_list.length();row++) {
             int col = 0;
             QDomElement tr_node = tr_list.item(row).toElement();
@@ -332,14 +335,21 @@ void ResourceManager::displayPluginRepo() {
             QString page_url = td_list.item(0).toElement().firstChildElement("a").attribute("href");
             QString name = td_list.item(0).toElement().text();
             std::tuple<bool,bool,bool> compat = compatFromString(td_list.item(1).toElement().text());
-            
+            QString category_raw = td_list.item(2).toElement().text();
+            QStringList category_list = category_raw.split(", ");
+            for (QString& c : category_list) {
+                  QString c2 = c.simplified();
+                  if (c2.isEmpty()) { category_list.removeOne(c); continue; }
+                  c = c2;
+                  if (!all_categories.contains(c2))
+                        all_categories << c2;
+                  }
             for (; col < 3; col++)
                   pluginsTable->setItem(row, col, new QTableWidgetItem(td_list.item(col).toElement().text()));
             if (page_url.isNull()) {
                   pluginsTable->setItem(row,col,new QTableWidgetItem("No page URL found."));
                   continue;
                   }
-
             QWidget* button_group = new QWidget();
             QPushButton* install_button = new QPushButton(button_group);
             QHBoxLayout* button_layout = new QHBoxLayout();
@@ -358,8 +368,23 @@ void ResourceManager::displayPluginRepo() {
                   install_button->setText(tr("Install"));
                   connect(install_button, SIGNAL(clicked()), this, SLOT(downloadInstallPlugin()));
                   }
-            pluginButtonURLMap[install_button] = { name, compat, page_url };
+            pluginButtonURLMap[install_button] = { name, compat, category_list, page_url };
             pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col), button_group);
+            }
+      categories->insertItems(0,all_categories);
+      }
+
+void ResourceManager::filterPluginList()
+      {
+      const QString category = categories->currentText();
+      const QString& search = lineEdit->text();
+      for (int i = 0; i < pluginsTable->rowCount(); i++) {
+            // locate the "Install" button
+            QPushButton* install = pluginsTable->indexWidget(pluginsTable->model()->index(i, 3))->findChildren<QPushButton*>().first();
+            PluginPackageMeta& meta = pluginButtonURLMap[install];
+            if (meta.name.contains(search, Qt::CaseInsensitive) && (category == "Any" || meta.categories.contains(category)))
+                  pluginsTable->showRow(i);
+            else pluginsTable->hideRow(i);
             }
       }
 
@@ -590,7 +615,7 @@ void ResourceManager::scanPluginUpdate()
             
             if (pluginDescriptionMap.contains(pluginButtonURLMap[button].page_url)) {
                   checkPluginUpdate(button->parentWidget());
-                  break; // only check update for the first installed plugin for now to save time
+                 // break; // only check update for the first installed plugin for now to save time
             }
       }
       ;

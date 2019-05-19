@@ -48,6 +48,9 @@ class ResourceManager : public QDialog, public Ui::Resource
     void checkPluginUpdate(QWidget * button_group);
     void refreshPluginButton(QWidget* button_group, bool updated = true);
     void writePluginPackages();
+    /*  Reads plugin descriptions from xml. `pluginDescriptionMap` would be flushed.
+        Should only be called at the beginning
+     */
     bool readPluginPackages();
     bool isPluginLocal(PluginDescription& desc);
 
@@ -63,10 +66,11 @@ public:
 private:
     QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
     QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
-    QMap <QPushButton *, PluginPackageMeta> pluginButtonURLMap;// `Install` button -> plugin page url
+    QMap <QPushButton *, PluginPackageMeta> pluginButtonURLMap;// `Install` button -> plugin metadata
     QMap <QString, PluginPackageDescription> pluginDescriptionMap; // plugin page url -> description of installed plugin
 
 private slots:
+    void filterPluginList();
     void downloadLanguage();
     void scanPluginUpdate();
     void updatePlugin();
