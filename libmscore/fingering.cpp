@@ -100,13 +100,23 @@ void Fingering::layout()
             }
 
       TextBase::layout();
-      rypos() = 0.0;    // handle placement below
+
+      bool stack = align() & Align::VCENTER;
+      bool alignStaff = layoutType() == ElementType::CHORD && !stack;
+      if (alignStaff && note()) {
+            // origin is top/bottom of staff, not note
+            qreal yBase = note()->pos().y() + note()->chord()->pos().y();
+            rypos() = placeAbove() ? -yBase : -yBase + note()->chord()->staff()->height();
+            }
+      else {
+            rypos() = 0.0;    // handle placement below
+            }
 
       if (autoplace() && note()) {
             Note* n      = note();
             Chord* chord = n->chord();
             bool voices  = chord->measure()->hasVoices(chord->staffIdx());
-            bool tight   = voices && chord->notes().size() == 1 && !chord->beam() && tid() != Tid::STRING_NUMBER;
+            bool tight   = voices && chord->notes().size() == 1 && !chord->beam() && tid() != Tid::STRING_NUMBER && !alignStaff;
 
             qreal headWidth = n->bboxRightPos();
 
@@ -142,21 +152,27 @@ void Fingering::layout()
                               sk.add(r.x(), r.bottom(), r.width());
                               qreal d = sk.minDistance(ss->skyline().north());
                               qreal yd = 0.0;
-                              if (d > 0.0 && isStyled(Pid::MIN_DISTANCE))
-                                    yd -= d + height() * .25;
-                              // force extra space above staff & chord (but not other fingerings)
-                              qreal top;
-                              if (chord->up() && chord->beam() && stem) {
-                                    top = stem->y() + stem->bbox().top();
+                              if (stack) {
+                                    // space between fingerings
+                                    if (d > 0.0 && isStyled(Pid::MIN_DISTANCE))
+                                          yd -= d + height() * .25;
+                                    // force extra space above staff & chord (but not other fingerings)
+                                    qreal top;
+                                    if (chord->up() && chord->beam() && stem) {
+                                          top = stem->y() + stem->bbox().top();
+                                          }
+                                    else {
+                                          Note* un = chord->upNote();
+                                          top = qMin(0.0, un->y() + un->bbox().top());
+                                          }
+                                    top -= md;
+                                    qreal diff = (bbox().bottom() + ipos().y() + yd + n->y()) - top;
+                                    if (diff > 0.0)
+                                          yd -= diff;
                                     }
-                              else {
-                                    Note* un = chord->upNote();
-                                    top = qMin(0.0, un->y() + un->bbox().top());
+                              else if (d > -md) {
+                                    yd -= d + md;
                                     }
-                              top -= md;
-                              qreal diff = (bbox().bottom() + ipos().y() + yd + n->y()) - top;
-                              if (diff > 0.0)
-                                    yd -= diff;
                               if (offsetChanged() != OffsetChange::NONE) {
                                     // user moved element within the skyline
                                     // we may need to adjust minDistance, yd, and/or offset
@@ -178,21 +194,27 @@ void Fingering::layout()
                               sk.add(r.x(), r.top(), r.width());
                               qreal d = ss->skyline().south().minDistance(sk);
                               qreal yd = 0.0;
-                              if (d > 0.0 && isStyled(Pid::MIN_DISTANCE))
-                                    yd += d + height() * .25;
-                              // force extra space below staff & chord (but not other fingerings)
-                              qreal bottom;
-                              if (!chord->up() && chord->beam() && stem) {
-                                    bottom = stem->y() + stem->bbox().bottom();
+                              if (stack) {
+                                    // space between fingerings
+                                    if (d > 0.0 && isStyled(Pid::MIN_DISTANCE))
+                                          yd += d + height() * .25;
+                                    // force extra space below staff & chord (but not other fingerings)
+                                    qreal bottom;
+                                    if (!chord->up() && chord->beam() && stem) {
+                                          bottom = stem->y() + stem->bbox().bottom();
+                                          }
+                                    else {
+                                          Note* dn = chord->downNote();
+                                          bottom = qMax(vStaff->height(), dn->y() + dn->bbox().bottom());
+                                          }
+                                    bottom += md;
+                                    qreal diff = bottom - (bbox().top() + ipos().y() + yd + n->y());
+                                    if (diff > 0.0)
+                                          yd += diff;
                                     }
-                              else {
-                                    Note* dn = chord->downNote();
-                                    bottom = qMax(vStaff->height(), dn->y() + dn->bbox().bottom());
+                              else if (d > -md) {
+                                    yd += d + md;
                                     }
-                              bottom += md;
-                              qreal diff = bottom - (bbox().top() + ipos().y() + yd + n->y());
-                              if (diff > 0.0)
-                                    yd += diff;
                               if (offsetChanged() != OffsetChange::NONE) {
                                     // user moved element within the skyline
                                     // we may need to adjust minDistance, yd, and/or offset
