@@ -1749,7 +1749,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
                   _number->setVisible(tuplet->visible());     //?? override saved property
                   _number->setTrack(tuplet->track());
                   // move property flags from _number
-                  for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN })
+                  for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT })
                         tuplet->setPropertyFlags(p, _number->propertyFlags(p));
                   }
             else if (!readTupletProperties206(e, tuplet))

@@ -41,6 +41,7 @@ static const ElementStyle tupletStyle {
       { Sid::tupletFontStyle,                    Pid::FONT_STYLE              },
       { Sid::tupletAlign,                        Pid::ALIGN                   },
       { Sid::tupletMinDistance,                  Pid::MIN_DISTANCE            },
+      { Sid::tupletFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT  },
       };
 
 //---------------------------------------------------------
@@ -150,7 +151,7 @@ Fraction Tuplet::rtick() const
 
 void Tuplet::resetNumberProperty()
       {
-      for (auto p : { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN })
+      for (auto p : { Pid::FONT_FACE, Pid::FONT_STYLE, Pid::FONT_SIZE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT })
             _number->resetProperty(p);
       }
 
@@ -1064,6 +1065,7 @@ QVariant Tuplet::getProperty(Pid propertyId) const
             case Pid::FONT_FACE:
             case Pid::FONT_STYLE:
             case Pid::ALIGN:
+            case Pid::SIZE_SPATIUM_DEPENDENT:
                   return _number ? _number->getProperty(propertyId) : QVariant();
             default:
                   break;
@@ -1106,6 +1108,7 @@ bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
             case Pid::FONT_FACE:
             case Pid::FONT_STYLE:
             case Pid::ALIGN:
+            case Pid::SIZE_SPATIUM_DEPENDENT:
                   if (_number)
                         _number->setProperty(propertyId, v);
                   break;
@@ -1146,6 +1149,8 @@ QVariant Tuplet::propertyDefault(Pid id) const
                   return score()->styleV(Sid::tupletFontSize);
             case Pid::FONT_STYLE:
                   return score()->styleV(Sid::tupletFontStyle);
+            case Pid::SIZE_SPATIUM_DEPENDENT:
+                  return score()->styleV(Sid::tupletFontSpatiumDependent);
             default:
                   {
                   QVariant v = ScoreElement::propertyDefault(id, Tid::DEFAULT);
