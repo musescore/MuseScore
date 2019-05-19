@@ -1,13 +1,48 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
-    <title>mode-notes</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Original-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="mode-notes" fill="#3B3F45">
-            <path d="M7.5064717,14.7176803 C6.2894301,14.7176803 5.15034569,15.1632422 4.0891665,16.0543442 C3.02798731,16.9454489 2.49739763,17.9033838 2.49739897,18.9281513 C2.49739829,19.5519238 2.72744394,20.0531686 3.18753748,20.4318886 C3.64762883,20.8106031 4.24871393,20.9999699 4.99079826,20.9999699 C6.20782344,20.9999699 7.34689691,20.5544135 8.40808431,19.6633115 C9.4692717,18.7722095 9.9998654,17.8142736 9.9998654,16.7895044 C9.9998654,16.1657319 9.76981836,15.6644871 9.30972427,15.2857699 C8.84963018,14.9070472 8.24853687,14.7176803 7.5064717,14.7176803" id="path44-6-7"></path>
-            <polyline id="path4374" points="10.0356215 9.98997 9.9996215 16.789035 6.9996215 16.789035 6.9996215 4.37997 9.3536315 4.37997 16.9996115 14.631975 16.9996115 4.401975 19.9996115 4.401975 19.9996115 19.999965 17.5656215 19.999965"></polyline>
-        </g>
-    </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg12"
+   version="1.1"
+   viewBox="0 0 24 24"
+   height="24px"
+   width="24px">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>mode-notes</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title2">mode-notes</title>
+  <desc
+     id="desc4">Created with Sketch.</desc>
+  <defs
+     id="defs6" />
+  <g
+     id="Derived-24"
+     transform="translate(2.0001143,-2.602895)"
+     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1">
+    <g
+       id="document-new"
+       style="fill:#3b3f45" />
+  </g>
+  <path
+     id="path2"
+     style="fill:#3b3f45"
+     d="m 6.00607,17.71771 c -1.21704,0 -2.35613,0.44556 -3.41731,1.33666 -1.06118,0.8911 -1.59177,1.84904 -1.59176,2.87381 0,0.62377 0.23004,1.12501 0.69013,1.50373 C 2.14723,23.81063 2.74831,24 3.4904,24 4.70742,24 5.84649,23.55444 6.90768,22.66334 7.96887,21.77224 8.49946,20.8143 8.49946,19.78953 8.49946,19.16576 8.26942,18.66451 7.80932,18.2858 7.34923,17.90707 6.74813,17.71771 6.00607,17.71771" />
+  <path
+     id="path4"
+     d="M 8.5189844,1.2050781 C 6.8837624,1.2050781 5.56,2.5307937 5.56,4.1660156 V 19.869141 H 8.5189844 V 6.1777344 L 18.620546,19.869141 c 1.635222,0 2.960938,-1.323763 2.960938,-2.958985 V 1.2050781 H 18.620546 V 14.845703 L 8.5189844,1.2148438 Z"
+     style="fill:#3b3f45;stroke-width:1.50800002" />
 </svg>
