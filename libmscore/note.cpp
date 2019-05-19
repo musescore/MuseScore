@@ -2808,6 +2808,13 @@ QString Note::accessibleInfo() const
             pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
       else if (staff()->isDrumStaff(tick()) && drumset)
             pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
+      else if (!concertPitch()) {
+            pitchName = tpcUserName(false);
+            // tpcUserName equivalent for getting the sounding pitch
+            QString soundingPitch = propertyUserValue(Pid::TPC1) + QString::number((_pitch / 12) - 1);
+            // almost the same string as below
+            return QObject::tr("%1; Pitch: %2 (sounding as %3); Duration: %4%5").arg(noteTypeUserName()).arg(pitchName).arg(soundingPitch).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+            }
       else
             pitchName = tpcUserName(false);
       return QObject::tr("%1; Pitch: %2; Duration: %3%4").arg(noteTypeUserName()).arg(pitchName).arg(duration).arg((chord()->isGrace() ? "" : QString("; %1").arg(voice)));
