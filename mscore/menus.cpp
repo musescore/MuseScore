@@ -492,6 +492,14 @@ Palette* MuseScore::newFingeringPalette()
             f->setXmlText(QString(finger[i]));
             sp->append(f, tr("String number %1").arg(finger[i]));
             }
+      finger = "RLrl";
+      for (unsigned i = 0; i < strlen(finger); ++i) {
+            Fingering* f = new Fingering(gscore, Tid::FINGERING);
+            f->setXmlText(QString(finger[i]));
+            f->setAlign(Align::HCENTER|Align::BASELINE);
+            f->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
+            sp->append(f, tr("Sticking %1").arg(finger[i]));
+            }
 
       static const std::vector<SymId> lute {
             SymId::stringsThumbPosition,

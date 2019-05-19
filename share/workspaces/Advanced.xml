@@ -2039,6 +2039,30 @@
             <text>6</text>
             </Fingering>
           </Cell>
+        <Cell name="Sticking R">
+          <Fingering>
+            <align>center,baseline</align>
+            <text>R</text>
+            </Fingering>
+          </Cell>
+        <Cell name="Sticking L">
+          <Fingering>
+            <align>center,baseline</align>
+            <text>L</text>
+            </Fingering>
+          </Cell>
+        <Cell name="Sticking r">
+          <Fingering>
+            <align>center,baseline</align>
+            <text>r</text>
+            </Fingering>
+          </Cell>
+        <Cell name="Sticking l">
+          <Fingering>
+            <align>center,baseline</align>
+            <text>l</text>
+            </Fingering>
+          </Cell>
         <Cell name="Thumb position">
           <Articulation>
             <subtype>stringsThumbPosition</subtype>
