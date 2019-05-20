@@ -4003,7 +4003,11 @@ void Measure::setStretchedWidth(qreal w)
 
 static bool hasAccidental(Segment* s)
       {
+      Score* score = s->score();
       for (int track = 0; track < s->score()->ntracks(); ++track) {
+            Staff* staff = score->staff(track2staff(track));
+            if (!staff->show())
+                  continue;
             Element* e = s->element(track);
             if (!e || !e->isChord())
                   continue;
@@ -4052,6 +4056,10 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
                   continue;
                   }
             Segment* ns = s->nextActive();
+            // end barline might be disabled
+            // but still consider it for spacing of previous segment
+            if (!ns)
+                  ns = s->next(SegmentType::BarLineType);
             qreal w;
 
             if (ns) {
