@@ -1173,6 +1173,55 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
       }
 
 //---------------------------------------------------------
+//   layoutRect
+//---------------------------------------------------------
+
+QRectF BarLine::layoutRect() const
+      {
+      QRectF bb = bbox();
+      if (staff()) {
+            // actual height may include span to next staff
+            // but this should not be included in shapes or skylines
+            qreal sp = spatium();
+            int span = staff()->lines(tick()) - 1;
+            int sFrom;
+            int sTo;
+            if (span == 0 && _spanTo == 0) {
+                  sFrom = BARLINE_SPAN_1LINESTAFF_FROM;
+                  sTo = _spanStaff ? 0 : BARLINE_SPAN_1LINESTAFF_TO;
+                  }
+            else {
+                  sFrom = _spanFrom;
+                  sTo = _spanStaff ? 0 : _spanTo;
+                  }
+            qreal y = sp * sFrom * 0.5;
+            qreal h = sp * (span + (sTo - sFrom) * 0.5);
+            if (score()->styleB(Sid::repeatBarTips)) {
+                  switch (barLineType()) {
+                        case BarLineType::START_REPEAT:
+                        case BarLineType::END_REPEAT:
+                        case BarLineType::END_START_REPEAT: {
+                              if (isTop()) {
+                                    qreal top = symBbox(SymId::bracketTop).height();
+                                    y -= top;
+                                    h += top;
+                                    }
+                              if (isBottom()) {
+                                    qreal bottom = symBbox(SymId::bracketBottom).height();
+                                    h += bottom;
+                                    }
+                              }
+                        default:
+                              break;
+                        }
+                  }
+            bb.setY(y);
+            bb.setHeight(h);
+            }
+      return bb;
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 

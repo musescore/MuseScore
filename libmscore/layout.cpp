@@ -3679,11 +3679,10 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                               continue;
                         QPointF p(s.pos() + m->pos());
                         if (s.segmentType() & (SegmentType::BarLine | SegmentType::EndBarLine | SegmentType::StartRepeatBarLine | SegmentType::BeginBarLine)) {
-                              BarLine* bl = toBarLine(s.element(0));
+                              BarLine* bl = toBarLine(s.element(staffIdx * VOICES));
                               if (bl && bl->addToSkyline()) {
-                                    qreal w = BarLine::layoutWidth(score(), bl->barLineType());
-                                    // TODO: actual vertical position and height for staff?
-                                    skyline.add(QRectF(0.0, 0.0, w, spatium() * 4.0).translated(bl->pos() + p));
+                                    QRectF r = bl->layoutRect();
+                                    skyline.add(r.translated(bl->pos() + p));
                                     }
                               }
                         else {
