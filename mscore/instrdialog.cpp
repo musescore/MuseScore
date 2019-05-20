@@ -303,6 +303,8 @@ void MuseScore::editInstrList()
 
                         staff->init(t, sli->staffType(), cidx);
                         staff->setDefaultClefType(sli->defaultClefType());
+                        if (staffIdx > 0)
+                              staff->setBarLineSpan(masterScore->staff(staffIdx - 1)->barLineSpan());
 
                         masterScore->undoInsertStaff(staff, cidx);
                         ++staffIdx;
@@ -337,6 +339,8 @@ void MuseScore::editInstrList()
                               staff->initFromStaffType(sli->staffType());
                               sli->setStaff(staff);
                               staff->setDefaultClefType(sli->defaultClefType());
+                              if (staffIdx > 0)
+                                    staff->setBarLineSpan(masterScore->staff(staffIdx - 1)->barLineSpan());
 
                               KeySigEvent ke;
                               if (part->staves()->empty())
