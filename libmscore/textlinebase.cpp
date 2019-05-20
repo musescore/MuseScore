@@ -223,8 +223,9 @@ void TextLineBaseSegment::layout()
       QPointF pp1;
       QPointF pp2(pos2());
 
-      // diagonal line with no text - just use the basic rectangle for line (ignore hooks)
-      if (_text->empty() && _endText->empty() && pp2.y() != 0) {
+      // diagonal line with no text or hooks - just use the basic rectangle for line
+      if (_text->empty() && _endText->empty() && pp2.y() != 0
+          && textLineBase()->beginHookType() == HookType::NONE && textLineBase()->beginHookType() == HookType::NONE) {
             npoints = 2;
             points[0] = pp1;
             points[1] = pp2;
@@ -232,7 +233,7 @@ void TextLineBaseSegment::layout()
             return;
             }
 
-      // line has text or is not diagonal - calculate reasonable bbox
+      // line has text or hooks or is not diagonal - calculate reasonable bbox
 
       qreal x1 = qMin(0.0, pp2.x());
       qreal x2 = qMax(0.0, pp2.x());
