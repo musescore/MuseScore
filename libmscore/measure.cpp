@@ -1246,6 +1246,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                         }
                   if (obl) {
                         BarLine* barline = new BarLine(*obl);
+                        barline->setSpanStaff(score()->staff(staffIdx)->barLineSpan());
                         barline->setTrack(staffIdx * VOICES);
                         barline->setParent(bs);
                         barline->setGenerated(false);
