@@ -667,8 +667,8 @@ class Score : public QObject, public ScoreElement {
       ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
       Rest* setRest(const Fraction& tick,  int track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
 
-      void upDown(bool up, UpDownMode, bool updateSelection = true);
-      void upDownDelta(int pitchDelta, bool updateSelection);
+      void upDown(bool up, UpDownMode);
+      void upDownDelta(int pitchDelta);
       ChordRest* searchNote(const Fraction& tick, int track) const;
 
       // undo/redo ops
