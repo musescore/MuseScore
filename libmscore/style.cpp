@@ -2375,7 +2375,7 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
 //   load
 //---------------------------------------------------------
 
-bool MStyle::load(QFile* qf)
+bool MStyle::load(QFile* qf, bool ignore)
       {
       XmlReader e(qf);
       while (e.readNextStartElement()) {
@@ -2383,7 +2383,7 @@ bool MStyle::load(QFile* qf)
                   QString version = e.attribute("version");
                   QStringList sl  = version.split('.');
                   int mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
-                  if (mscVersion != MSCVERSION)
+                  if (mscVersion != MSCVERSION && !ignore)
                         return false;
                   while (e.readNextStartElement()) {
                         if (e.name() == "Style")
