@@ -107,8 +107,9 @@ void SlurTieSegment::startEdit(EditData& ed)
 //   endEdit
 //---------------------------------------------------------
 
-void SlurTieSegment::endEdit(EditData&)
+void SlurTieSegment::endEdit(EditData& ed)
       {
+      Element::endEdit(ed);
       }
 
 //---------------------------------------------------------
