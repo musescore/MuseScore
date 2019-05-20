@@ -1795,8 +1795,16 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e)
             delete _verseNumber;
             }
       lyrics->setAutoplace(true);
-      lyrics->setOffset(QPointF());
-//TODO-offset      lyrics->setOffset(QPointF());
+      if (!lyrics->isStyled(Pid::OFFSET) && !e.pasteMode()) {
+            // fix offset for pre-3.1 scores
+            // 2.x and earlier: y offset was relative to staff; x offset was relative to center of notehead
+            lyrics->rxoffset() -= lyrics->symWidth(SymId::noteheadBlack) * 0.5;
+            //lyrics->ryoffset() -= lyrics->placeBelow() && lyrics->staff() ? lyrics->staff()->height() : 0.0;
+            // temporarily set placement to above, since the original offset is relative to top of staff
+            // depend on adjustPlacement() to change the placement if appropriate
+            lyrics->setPlacement(Placement::ABOVE);
+            adjustPlacement(lyrics);
+            }
       }
 
 //---------------------------------------------------------
