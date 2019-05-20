@@ -330,6 +330,12 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
                   }
             }
       changeProperties(this, id, v, ps);
+      if (id == Pid::VISIBLE) {
+            if (isNote())
+                  toNote(this)->undoChangeDotsVisible(v.toBool());
+            else if (isRest())
+                  toRest(this)->undoChangeDotsVisible(v.toBool());
+            }
       if (id != Pid::GENERATED)
             changeProperties(this, Pid::GENERATED, QVariant(false), PropertyFlags::NOSTYLE);
       if (doUpdateInspector)
