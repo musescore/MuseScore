@@ -24,6 +24,15 @@ QTabBar::close-button:hover {
  image: url(:/data/icons/png/window-close-hover.png);
 }
 
+/* Inspector buttons */
+QPushButton:flat:hover {
+ border: 1px solid darkgray;
+ border-radius: 3px;
+}
+QPushButton:flat:hover:checked {
+ background: darkgray;
+}
+
 QToolButton#palette {
  border: none;
 }
@@ -54,4 +63,3 @@ QMainWindow::separator {
 QMainWindow::separator:hover {
     background: gray;
 }
-
