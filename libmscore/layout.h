@@ -45,6 +45,7 @@ struct LayoutContext {
       MeasureBase* curMeasure  { 0 };
       MeasureBase* nextMeasure { 0 };
       int measureNo            { 0 };
+      Fraction startTick;
       Fraction endTick;
 
       LayoutContext() = default;
