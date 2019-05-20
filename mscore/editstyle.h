@@ -53,8 +53,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
       QVector<StyleWidget> styleWidgets;
       QButtonGroup* keySigNatGroup;
       QButtonGroup* clefTypeGroup;
-      bool isTooWide;
-      bool isTooHigh;
+      bool isTooBig;
       bool hasShown;
 
       virtual void showEvent(QShowEvent*);
