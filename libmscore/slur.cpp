@@ -24,10 +24,6 @@
 
 namespace Ms {
 
-Element* SlurTie::editEndElement;
-Element* SlurTie::editStartElement;
-QList<SlurOffsets> SlurTie::editUps;
-
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -103,6 +99,15 @@ static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
       }
 
 //---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void SlurSegment::startEdit(EditData& ed)
+      {
+      SlurTieSegment::startEdit(ed);
+      }
+
+//---------------------------------------------------------
 //   edit
 //    return true if event is accepted
 //---------------------------------------------------------
@@ -164,25 +169,71 @@ bool SlurSegment::edit(EditData& ed)
 
 void SlurSegment::changeAnchor(EditData& ed, Element* element)
       {
+      ChordRest* cr = element->isChordRest() ? toChordRest(element) : nullptr;
+      ChordRest* scr = spanner()->startCR();
+      ChordRest* ecr = spanner()->endCR();
+      if (!cr || !scr || !ecr)
+            return;
+
+      // save current start/end elements
+      for (ScoreElement* e : spanner()->linkList()) {
+            Spanner* sp = toSpanner(e);
+            score()->undoStack()->push1(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
+            }
+
       if (ed.curGrip == Grip::START) {
-            Fraction ticks = spanner()->endElement()->tick() - element->tick();
-            spanner()->undoChangeProperty(Pid::SPANNER_TICK, element->tick());
+            spanner()->undoChangeProperty(Pid::SPANNER_TICK, cr->tick());
+            Fraction ticks = ecr->tick() - cr->tick();
             spanner()->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
-            int diff = element->track() - spanner()->track();
+            int diff = cr->track() - spanner()->track();
             for (auto e : spanner()->linkList()) {
                   Spanner* s = toSpanner(e);
                   s->undoChangeProperty(Pid::TRACK, s->track() + diff);
                   }
-
-            if (score()->spannerMap().removeSpanner(spanner()))
-                  score()->addSpanner(spanner());
+            scr = cr;
             }
       else {
-            spanner()->undoChangeProperty(Pid::SPANNER_TICKS,  element->tick() - spanner()->startElement()->tick());
-            int diff = element->track() - spanner()->track();
+            Fraction ticks = cr->tick() - scr->tick();
+            spanner()->undoChangeProperty(Pid::SPANNER_TICKS, ticks);
+            int diff = cr->track() - spanner()->track();
             for (auto e : spanner()->linkList()) {
                   Spanner* s = toSpanner(e);
                   s->undoChangeProperty(Pid::SPANNER_TRACK2, s->track() + diff);
+                  }
+            ecr = cr;
+            }
+
+      // update start/end elements (which could be grace notes)
+      for (ScoreElement* lsp : spanner()->linkList()) {
+            Spanner* sp = static_cast<Spanner*>(lsp);
+            if (sp == spanner()) {
+                  score()->undo(new ChangeSpannerElements(sp, scr, ecr));
+                  }
+            else {
+                  Element* se = 0;
+                  Element* ee = 0;
+                  if (scr) {
+                        QList<ScoreElement*> sel = scr->linkList();
+                        for (ScoreElement* lcr : sel) {
+                              Element* le = toElement(lcr);
+                              if (le->score() == sp->score() && le->track() == sp->track()) {
+                                    se = le;
+                                    break;
+                                    }
+                              }
+                        }
+                  if (ecr) {
+                        QList<ScoreElement*> sel = ecr->linkList();
+                        for (ScoreElement* lcr : sel) {
+                              Element* le = toElement(lcr);
+                              if (le->score() == sp->score() && le->track() == sp->track2()) {
+                                    ee = le;
+                                    break;
+                                    }
+                              }
+                        }
+                  score()->undo(new ChangeStartEndSpanner(sp, se, ee));
+                  sp->layout();
                   }
             }
 
@@ -195,6 +246,15 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
             ed.view->startEdit(newSegment, ed.curGrip);
             triggerLayout();
             }
+      }
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void SlurSegment::endEdit(EditData& ed)
+      {
+      SlurTieSegment::endEdit(ed);
       }
 
 //---------------------------------------------------------
