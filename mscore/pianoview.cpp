@@ -826,7 +826,7 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                               }
 
                         score->startCmd();
-                        score->upDownDelta(pitchDelta, false);
+                        score->upDownDelta(pitchDelta);
                         score->endCmd();
 
                         inProgressUndoEvent = true;
