@@ -133,15 +133,23 @@ LineSegment* TextLine::createLineSegment()
 
 Sid TextLineSegment::getPropertyStyle(Pid pid) const
       {
-      if (pid == Pid::OFFSET)
-            return spanner()->placeAbove() ? Sid::textLinePosAbove : Sid::textLinePosBelow;
+      if (pid == Pid::OFFSET) {
+            if (spanner()->anchor() == Spanner::Anchor::NOTE)
+                  return Sid::NOSTYLE;
+            else
+                  return spanner()->placeAbove() ? Sid::textLinePosAbove : Sid::textLinePosBelow;
+            }
       return TextLineBaseSegment::getPropertyStyle(pid);
       }
 
 Sid TextLine::getPropertyStyle(Pid pid) const
       {
-      if (pid == Pid::OFFSET)
-            return placeAbove() ? Sid::textLinePosAbove : Sid::textLinePosBelow;
+      if (pid == Pid::OFFSET) {
+            if (anchor() == Spanner::Anchor::NOTE)
+                  return Sid::NOSTYLE;
+            else
+                  return placeAbove() ? Sid::textLinePosAbove : Sid::textLinePosBelow;
+            }
       return TextLineBase::getPropertyStyle(pid);
       }
 
