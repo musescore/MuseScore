@@ -2382,8 +2382,15 @@ void Score::createBeams(Measure* measure)
             if (beam)
                   beam->layout1();
             else if (a1) {
-                  // if a1 is the last chord/rest in current measure
-                  if (a1->segment()->next(SegmentType::ChordRest) == nullptr) {
+                  // is a1 the last chord/rest in the measure for its track?
+                  bool lastCR = true;
+                  for (Segment* s = a1->segment()->next(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                        if (s->element(track)) {
+                              lastCR = false;
+                              break;
+                              }
+                        }
+                  if (lastCR) {
                         const auto b = a1->beam();
                         // if the second chord/rest in a1's beam (it must be in next measure) has forced MID beam mode
                         if (b && b->elements().startsWith(a1) && b->elements().size()>=2 && b->elements()[1]->beamMode() == Beam::Mode::MID)
