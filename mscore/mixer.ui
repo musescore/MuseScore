@@ -115,7 +115,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="masterSpin"/>
+          <widget class="QDoubleSpinBox" name="masterSpin">
+           <property name="suffix">
+            <string extracomment="decibel">dB</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
