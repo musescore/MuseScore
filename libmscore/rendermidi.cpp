@@ -535,7 +535,7 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
 //    since we're adding events, pass ticks as ints rather than fractions
 //---------------------------------------------------------
 
-static void changeCCBetween(std::map<int, NPlayEvent>& tempEvents, int stick, int etick, int startExpr, int endExpr, int channel, int controller, VeloChangeMethod changeMethod, int tickOffset)
+static void changeCCBetween(std::map<int, NPlayEvent>& tempEvents, int stick, int etick, int startExpr, int endExpr, int channel, int controller, VeloChangeMethod changeMethod, int tickOffset, int originatingStaff)
       {
       // Prevent zero-division error, but add single event
       if (startExpr == endExpr || stick == etick) {
@@ -662,7 +662,9 @@ static void changeCCBetween(std::map<int, NPlayEvent>& tempEvents, int stick, in
                   }
 
             lastVal = valueToAdd;
-            tempEvents[i + tickOffset] = NPlayEvent(ME_CONTROLLER, channel, controller, abs(exprVal));
+            NPlayEvent event = NPlayEvent(ME_CONTROLLER, channel, controller, abs(exprVal));
+            event.setOriginatingStaff(originatingStaff);
+            tempEvents[i + tickOffset] = event;
             }
       }
 
@@ -908,12 +910,12 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
 
                                     // First, add an initial accent velocity
                                     // stick is the seg start tick, stickToUse is where we should dim to the rest velocity
-                                    changeCCBetween(renderData.tempPlayEvents, stick.ticks(), stickToUse, startExpr, startExpr, channel, controller, defaultChangeMethod, tickOffset);
+                                    changeCCBetween(renderData.tempPlayEvents, stick.ticks(), stickToUse, startExpr, startExpr, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
 
                                     // Then dimenuendo back down to normal
                                     // eticktouse is the end of the dim back to normal for an accent,
                                     // but etick is the segment end tick.
-                                    changeCCBetween(renderData.tempPlayEvents, stickToUse, etickToUse, startExpr, endExpr, channel, controller, defaultChangeMethod, tickOffset);
+                                    changeCCBetween(renderData.tempPlayEvents, stickToUse, etickToUse, startExpr, endExpr, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
 
                                     // if there's a cresc or dim after the dynamic, apply it
                                     if (singleNoteDynamics && hasHairpin) {
@@ -922,20 +924,20 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
 
                                           stickToUse = qMin(stick.ticks() + accentTicks.ticks() + 1, etick.ticks());
 
-                                          changeCCBetween(renderData.tempPlayEvents, stickToUse, etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset);
+                                          changeCCBetween(renderData.tempPlayEvents, stickToUse, etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset, staffIdx);
                                           }
                                     }
                               else {
                                     int startExpr = velocityStart;
                                     int endExpr = velocityEnd;
-                                    changeCCBetween(renderData.tempPlayEvents, stick.ticks(), etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset);
+                                    changeCCBetween(renderData.tempPlayEvents, stick.ticks(), etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset, staffIdx);
                                     }
                               }
                         else if (doAddStaticVel) {
                               // Add a single expression value to match the velocity, since there is no hairpin
                               int exprVal = velocityStart;
                               int staticTick = seg->tick().ticks();
-                              changeCCBetween(renderData.tempPlayEvents, staticTick, staticTick, exprVal, exprVal, channel, controller, defaultChangeMethod, tickOffset);
+                              changeCCBetween(renderData.tempPlayEvents, staticTick, staticTick, exprVal, exprVal, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
                               }
                         } // if instr->singleNoteDynamics()
                   else {
@@ -946,7 +948,7 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                         // Add a single expression value to match the velocity, since this instrument should
                         // not use single note dynamics.
                         int staticTick = seg->tick().ticks();
-                        changeCCBetween(renderData.tempPlayEvents, staticTick, staticTick, velocity, velocity, channel, controller, defaultChangeMethod, tickOffset);
+                        changeCCBetween(renderData.tempPlayEvents, staticTick, staticTick, velocity, velocity, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
                         }
 
                   //
