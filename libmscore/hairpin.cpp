@@ -101,7 +101,7 @@ void HairpinSegment::layout()
       const int _trck = track();
       Dynamic* sd = nullptr;
       Dynamic* ed = nullptr;
-      qreal dymax = 0.0;
+      qreal dymax = hairpin()->placeBelow() ? -10000.0 : 10000.0;
       if (autoplace() && !score()->isPalette()) {
             // Try to fit between adjacent dynamics
             qreal minDynamicsDistance = score()->styleP(Sid::autoplaceHairpinDynamicsDistance) * staff()->mag(tick());
@@ -123,7 +123,7 @@ void HairpinSegment::layout()
             if (isSingleType() || isEndType()) {
                   Segment* end = hairpin()->endSegment();
                   if (end && end->tick() < sys->endTick()) {
-                        // checking ticks rather than systems since latter
+                        // checking ticks rather than systems
                         // systems may be unknown at layout stage.
                         ed = toDynamic(end->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
                         }
@@ -271,7 +271,8 @@ void HairpinSegment::layout()
                   if (d > -md)
                         ymax -= d + md;
                   // align hairpin with dynamics
-                  ymax = qMin(ymax, dymax - ddiff);
+                  if (!hairpin()->diagonal())
+                        ymax = qMin(ymax, dymax - ddiff);
                   }
             else {
                   d  = system()->bottomDistance(staffIdx(), sl);
