@@ -163,6 +163,8 @@ void Articulation::write(XmlWriter& xml) const
       xml.tag("subtype", Sym::id2name(_symId));
       writeProperty(xml, Pid::PLAY);
       writeProperty(xml, Pid::ORNAMENT_STYLE);
+      for (const StyledProperty& spp : *styledProperties())
+            writeProperty(xml, spp.pid);
       Element::writeProperties(xml);
       writeProperty(xml, Pid::ARTICULATION_ANCHOR);
       xml.etag();
