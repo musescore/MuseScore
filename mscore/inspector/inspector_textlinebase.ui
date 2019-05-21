@@ -54,7 +54,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Text Line Core</string>
+      <string>Text Line Details</string>
      </property>
     </widget>
    </item>
@@ -386,7 +386,7 @@
          </font>
         </property>
         <property name="text">
-         <string>End Text</string>
+         <string>End text</string>
         </property>
        </widget>
       </item>
@@ -425,7 +425,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Begin Text</string>
+         <string>Begin text</string>
         </property>
        </widget>
       </item>
@@ -454,7 +454,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Continue Text</string>
+         <string>Continue text</string>
         </property>
        </widget>
       </item>

@@ -815,7 +815,7 @@ Palette* MuseScore::newBreathPalette()
 Palette* MuseScore::newArpeggioPalette()
       {
       Palette* sp = new Palette();
-      sp->setName(QT_TRANSLATE_NOOP("Palette", "Arpeggios && Glissandos"));
+      sp->setName(QT_TRANSLATE_NOOP("Palette", "Arpeggios && Glissandi"));
       sp->setGrid(27, 50);
       sp->setDrawGrid(true);
 

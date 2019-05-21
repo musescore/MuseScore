@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>265</width>
-    <height>265</height>
+    <height>279</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>265</width>
-    <height>265</height>
+    <height>279</height>
    </size>
   </property>
   <property name="floating">
@@ -86,7 +86,7 @@
            </size>
           </property>
           <property name="text">
-           <string>1212</string>
+           <string notr="true" extracomment="placeholder">1212</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -117,7 +117,7 @@
            </size>
           </property>
           <property name="text">
-           <string>.</string>
+           <string notr="true">.</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -145,7 +145,7 @@
            </size>
           </property>
           <property name="text">
-           <string>01</string>
+           <string notr="true" extracomment="placeholder">01</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -215,7 +215,7 @@
            </size>
           </property>
           <property name="text">
-           <string>55</string>
+           <string notr="true" extracomment="placeholder">55</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -243,7 +243,7 @@
            </size>
           </property>
           <property name="text">
-           <string>:</string>
+           <string notr="true">:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -271,7 +271,7 @@
            </size>
           </property>
           <property name="text">
-           <string>00</string>
+           <string notr="true" extracomment="placeholder">00</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -299,7 +299,7 @@
            </size>
           </property>
           <property name="text">
-           <string>:</string>
+           <string notr="true">:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -327,7 +327,7 @@
            </size>
           </property>
           <property name="text">
-           <string>00</string>
+           <string notr="true" extracomment="placeholder">00</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -509,16 +509,19 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Master volume (decibels)</string>
+           <string>Master volume (decibel)</string>
           </property>
-          <property name="accessibleDescription">
-           <string>Master volume (decibels)</string>
+          <property name="accessibleName">
+           <string>Master volume (decibel)</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
           <property name="buttonSymbols">
            <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
+          <property name="suffix">
+           <string extracomment="decibel">dB</string>
           </property>
           <property name="decimals">
            <number>1</number>
