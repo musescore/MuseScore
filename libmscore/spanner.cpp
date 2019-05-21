@@ -598,7 +598,7 @@ void Spanner::computeEndElement()
                   if (ticks().isZero() && isTextLine() && parent())   // special case palette
                         setTicks(score()->lastSegment()->tick() - _tick);
 
-                  if (isLyricsLine()) {
+                  if (isLyricsLine() && toLyricsLine(this)->isEndMelisma()) {
                         // lyrics endTick should already indicate the segment we want
                         // except for TEMP_MELISMA_TICKS case
                         Lyrics* l = toLyricsLine(this)->lyrics();
