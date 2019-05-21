@@ -264,6 +264,10 @@ bool Score::read(XmlReader& e)
       fixTicks();
       masterScore()->rebuildMidiMapping();
       masterScore()->updateChannel();
+
+      for (Part* p : _parts) {
+            p->updateHarmonyChannels();
+            }
 //      createPlayEvents();
       return true;
       }

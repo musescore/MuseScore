@@ -3903,6 +3903,11 @@ static bool readScore(Score* score, XmlReader& e)
             ms->updateChannel();
  //           ms->createPlayEvents();
             }
+
+      for (Part* p : score->parts()) {
+            p->updateHarmonyChannels();
+            }
+
       return true;
       }
 

@@ -3269,6 +3269,10 @@ Score::FileError MasterScore::read114(XmlReader& e)
       rebuildMidiMapping();
       updateChannel();
 
+      for (Part* p : parts()) {
+            p->updateHarmonyChannels();
+            }
+
       // treat reading a 1.14 file as import
       // on save warn if old file will be overwritten
       setCreated(true);

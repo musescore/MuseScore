@@ -53,6 +53,8 @@
           </Articulation>
         <Channel>
           </Channel>
+        <Channel name="harmony">
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">

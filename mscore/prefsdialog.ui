@@ -1278,6 +1278,26 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="playChordOnAddNote">
+            <property name="text">
+             <string>Play whole chord when editing</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_37">
             <property name="text">
@@ -1307,25 +1327,12 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="playChordOnAddNote">
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="playHarmonyWhenEditing">
             <property name="text">
-             <string>Play whole chord when editing</string>
+             <string>Play harmony when editing</string>
             </property>
            </widget>
-          </item>
-          <item row="0" column="2">
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </widget>
@@ -4291,6 +4298,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>playNotes</tabstop>
   <tabstop>defaultPlayDuration</tabstop>
   <tabstop>playChordOnAddNote</tabstop>
+  <tabstop>playHarmonyWhenEditing</tabstop>
   <tabstop>rcGroup</tabstop>
   <tabstop>rewindActive</tabstop>
   <tabstop>recordRewind</tabstop>

@@ -552,6 +552,60 @@ int Part::harmonyCount() const
       }
 
 //---------------------------------------------------------
+//   updateHarmonyChannels
+///   update the harmony channel by creating a new channel
+///   when appropriate or using the existing one
+///
+///   checkRemoval can be set to true to check to see if we
+///   can remove the harmony channel
+//---------------------------------------------------------
+void Part::updateHarmonyChannels(bool checkRemoval)
+      {
+      // usage of harmony count is okay even if expensive since checking harmony channel will shortcircuit if existent
+      // harmonyCount will only be called on loading of a score (where it will need to be scanned for harmony anyway)
+      // or when the first harmony of a score is just added
+      if (checkRemoval) {
+            //may be a bit expensive since it gets called after every single delete or undo, but it should be okay for now
+            //~OPTIM~
+            if (harmonyCount() == 0) {
+                  Instrument* instr = instrument();
+                  int hChannel = instr->channelIdx("harmony");
+                  if (hChannel != -1) {
+                        instr->removeChannel(instr->channel(hChannel));
+                        _harmonyChannel = 0;
+
+                        masterScore()->rebuildMidiMapping();
+                        masterScore()->updateChannel();
+                        score()->setInstrumentsChanged(true);
+                        score()->setLayoutAll(); //do we need this?
+                        return;
+                        }
+                  }
+            }
+      if (!_harmonyChannel) {
+            Instrument* instr = instrument();
+            int hChannel = instr->channelIdx("harmony");
+            if (hChannel != -1) {
+                  //we already have a channel, but it's just not properly set yet
+                  //so we just need to set it
+                  _harmonyChannel = instr->channel(hChannel);
+                  return;
+                  }
+            if (harmonyCount() > 0) {
+                  Channel* c = new Channel(*instr->channel(0));
+                  c->setName("harmony");
+                  instr->appendChannel(c);
+                  _harmonyChannel = c;
+
+                  masterScore()->rebuildMidiMapping();
+                  masterScore()->updateChannel();
+                  score()->setInstrumentsChanged(true);
+                  score()->setLayoutAll(); //do we need this?
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   hasPitchedStaff
 //---------------------------------------------------------
 
