@@ -525,6 +525,47 @@ static int getControllerFromCC(int cc)
       }
 
 //---------------------------------------------------------
+//    renderHarmony
+///    renders chord symbols
+//---------------------------------------------------------
+static void renderHarmony(EventMap* events, Measure* m, Harmony* h, int tickOffset)
+      {
+      if (!h->isRealizable())
+            return;
+      Staff* staff = m->score()->staff(h->track() / VOICES);
+      const Channel* channel = staff->part()->harmonyChannel();
+      Q_ASSERT(channel);
+
+      events->registerChannel(channel->channel());
+      if (!staff->primaryStaff())
+            return;
+
+      int staffIdx = staff->idx();
+      int velocity = staff->velocities().val(h->tick());
+
+      RealizedHarmony r = h->getRealizedHarmony();
+      QList<int> pitches = r.pitches();
+
+      NPlayEvent ev(ME_NOTEON, channel->channel(), 0, velocity);
+      Fraction duration = r.getActualDuration();
+
+      int onTime = h->tick().ticks() + tickOffset;
+      int offTime = onTime + duration.ticks();
+
+      ev.setOriginatingStaff(staffIdx);
+      ev.setTuning(0.0);
+
+      //add play events
+      for (int p : pitches) {
+            ev.setPitch(p);
+            ev.setVelo(velocity);
+            events->insert(std::pair<int, NPlayEvent>(onTime, ev));
+            ev.setVelo(0);
+            events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+            }
+      }
+
+//---------------------------------------------------------
 //   collectMeasureEventsSimple
 //    the original, velocity-only method of collecting events.
 //---------------------------------------------------------
@@ -540,6 +581,17 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
 
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
             int tick = seg->tick().ticks();
+
+            //render harmony
+            for (Element* e : seg->annotations()) {
+                  if (!e->isHarmony() || (e->track() < strack) || (e->track() >= etrack))
+                        continue;
+                  Harmony* h = toHarmony(e);
+                  if (!h->play())
+                        continue;
+                  renderHarmony(events, m, h, tickOffset);
+                  }
+
             for (int track = strack; track < etrack; ++track) {
                   // skip linked staves, except primary
                   if (!m->score()->staff(track / VOICES)->primaryStaff()) {
@@ -608,6 +660,17 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
       int etrack = nextStaffIdx * VOICES;
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
             Fraction tick = seg->tick();
+
+            //render harmony
+            for (Element* e : seg->annotations()) {
+                  if (!e->isHarmony() || (e->track() < strack) || (e->track() >= etrack))
+                        continue;
+                  Harmony* h = toHarmony(e);
+                  if (!h->play())
+                        continue;
+                  renderHarmony(events, m, h, tickOffset);
+                  }
+
             for (int track = strack; track < etrack; ++track) {
                   // Skip linked staves, except primary
                   Staff* st1 = m->score()->staff(track / VOICES);

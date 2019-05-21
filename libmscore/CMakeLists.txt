@@ -50,7 +50,7 @@ add_library (
       jump.h key.h keylist.h keysig.h lasso.h layout.h layoutbreak.h ledgerline.h letring.h line.h location.h
       lyrics.h marker.h mcursor.h measure.h measurebase.h mscore.h mscoreview.h musescoreCore.h navigate.h note.h notedot.h
       noteevent.h noteline.h ossia.h ottava.h page.h palmmute.h part.h pedal.h pitch.h pitchspelling.h pitchvalue.h
-      pos.h property.h range.h read206.h rehearsalmark.h repeat.h repeatlist.h rest.h revisions.h score.h scoreElement.h segment.h
+      pos.h property.h range.h read206.h realizedharmony.h rehearsalmark.h repeat.h repeatlist.h rest.h revisions.h score.h scoreElement.h segment.h
       segmentlist.h select.h sequencer.h shadownote.h shape.h sig.h slur.h slurtie.h spacer.h spanner.h spannermap.h spatium.h
       staff.h stafflines.h staffstate.h stafftext.h stafftextbase.h stafftype.h stafftypechange.h stafftypelist.h stem.h
       stemslash.h stringdata.h style.h sym.h symbol.h synthesizerstate.h system.h systemdivider.h systemtext.h tempo.h
@@ -93,7 +93,7 @@ add_library (
       sticking.cpp
       read114.cpp
       read206.cpp
-      read301.cpp stafftypelist.cpp stafftypechange.cpp
+      read301.cpp realizedharmony.cpp stafftypelist.cpp stafftypechange.cpp
       bracketItem.cpp
       lyricsline.cpp
       layoutlinear.cpp

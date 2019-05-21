@@ -15,6 +15,7 @@
 
 #include "text.h"
 #include "pitchspelling.h"
+#include "realizedharmony.h"
 
 namespace Ms {
 
@@ -83,11 +84,14 @@ class Harmony final : public TextBase {
       bool showSpell = false;             // show spell check warning
       HarmonyType _harmonyType;           // used to control rendering, transposition, export, etc.
 
+      RealizedHarmony _realizedHarmony;    //the realized harmony used for playback
+
       QList<HDegree> _degreeList;
       QList<QFont> fontList;              // temp values used in render()
       QList<TextSegment*> textList;       // rendered chord
 
       bool _leftParen, _rightParen;       // include opening and/or closing parenthesis
+      bool _play;                         // whether or not to play back the harmony
 
       mutable QRectF _tbbox;
 
@@ -112,6 +116,9 @@ class Harmony final : public TextBase {
       void setId(int d)                        { _id = d;       }
       int id() const                           { return _id;    }
 
+      void setPlay(bool p)                     { _play = p; }
+      bool play() const                        { return _play; }
+
       void setBaseCase(NoteCaseType c)         { _baseCase = c; }
       void setRootCase(NoteCaseType c)         { _rootCase = c; }
 
@@ -120,11 +127,18 @@ class Harmony final : public TextBase {
       void setLeftParen(bool leftParen)        { _leftParen = leftParen; }
       void setRightParen(bool rightParen)      { _rightParen = rightParen; }
 
+      Harmony* findNext() const;
+      Harmony* findPrev() const;
+      Fraction ticksTilNext(bool stopAtMeasureEnd = false) const;
+
       const ChordDescription* descr() const;
       const ChordDescription* descr(const QString&, const ParsedChord* pc = 0) const;
       const ChordDescription* getDescription();
       const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
       const ChordDescription* generateDescription();
+
+      RealizedHarmony& realizedHarmony();
+      const RealizedHarmony& getRealizedHarmony();
 
       void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
          NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
@@ -138,6 +152,11 @@ class Harmony final : public TextBase {
       virtual bool edit(EditData&) override;
       virtual void endEdit(EditData&) override;
 
+      bool isRealizable() const
+            {
+            return (_rootTpc != Tpc::TPC_INVALID)
+                        || (_harmonyType == HarmonyType::NASHVILLE); // unable to fully check at for nashville at the moment
+            }
       QString hFunction() const                { return _function;     }
       QString hUserName() const                { return _userName;     }
       QString hTextName() const                { return _textName;     }

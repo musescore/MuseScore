@@ -1341,6 +1341,7 @@ TransposeHarmony::TransposeHarmony(Harmony* h, int rtpc, int btpc)
 
 void TransposeHarmony::flip(EditData*)
       {
+      harmony->realizedHarmony().setDirty(true); //harmony should be re-realized after transposition
       int baseTpc1 = harmony->baseTpc();
       int rootTpc1 = harmony->rootTpc();
       harmony->setBaseTpc(baseTpc);

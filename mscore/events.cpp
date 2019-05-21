@@ -413,11 +413,11 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
                               }
                         }
                   }
-            if (e && e->isNote()) {
-                  e->score()->updateCapo();
-                  mscore->play(e);
-                  }
             if (e) {
+                  if (e->isNote() || e->isHarmony()) {
+                        e->score()->updateCapo();
+                        mscore->play(e);
+                        }
                   _score = e->score();
                   _score->setUpdateAll();
                   }
@@ -809,6 +809,10 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
       else if (editData.element->isHarmony()) {
             if (editData.key == Qt::Key_Space && !(editData.modifiers & CONTROL_MODIFIER)) {
                   harmonyBeatsTab(true, editData.modifiers & Qt::ShiftModifier);
+                  return;
+                  }
+            else if (editData.key == Qt::Key_Return) {
+                  changeState(ViewState::NORMAL);
                   return;
                   }
             }

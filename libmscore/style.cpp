@@ -275,6 +275,10 @@ static const StyleType styleTypes[] {
       { Sid::harmonyPlacement,         "harmonyPlacement",           int(Placement::ABOVE) },
       { Sid::romanNumeralPlacement,    "romanNumeralPlacement",      int(Placement::BELOW) },
       { Sid::nashvilleNumberPlacement, "nashvilleNumberPlacement",   int(Placement::ABOVE) },
+      { Sid::harmonyPlay,              "harmonyPlay",                true },
+      { Sid::harmonyVoiceLiteral,      "harmonyVoiceLiteral",        true },
+      { Sid::harmonyVoicing,           "harmonyVoicing",             int(Voicing::AUTO) },
+      { Sid::harmonyDuration,          "harmonyDuration",            int(HDuration::UNTIL_NEXT_CHORD_SYMBOL) },
 
       { Sid::chordSymbolAPosAbove,      "chordSymbolPosAbove",       QPointF(.0, -2.5) },
       { Sid::chordSymbolAPosBelow,      "chordSymbolPosBelow",       QPointF(.0, 3.5) },
