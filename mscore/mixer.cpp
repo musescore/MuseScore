@@ -102,7 +102,6 @@ Mixer::Mixer(QWidget* parent)
       masterSlider->setHilightColor(QColor(51, 153, 255));
       float decibels = qBound(minDecibels, log10(synti->gain()), 0.0f);
       masterSlider->setValue(decibels);
-      masterSlider->setToolTip(tr("Decibels: %1").arg(decibels));
 
       masterSpin->setMaximum(0);
       masterSpin->setMinimum(minDecibels);
@@ -149,7 +148,6 @@ void Mixer::synthGainChanged(float)
 
       masterSlider->blockSignals(true);
       masterSlider->setValue(decibels);
-      masterSlider->setToolTip(tr("Decibels: %1").arg(decibels));
       masterSlider->blockSignals(false);
 
       masterSpin->blockSignals(true);
@@ -189,7 +187,6 @@ void Mixer::masterVolumeChanged(double decibels)
 
       masterSlider->blockSignals(true);
       masterSlider->setValue(decibels);
-      masterSlider->setToolTip(tr("Decibels: %1").arg(decibels));
       masterSlider->blockSignals(false);
 
       masterSpin->blockSignals(true);

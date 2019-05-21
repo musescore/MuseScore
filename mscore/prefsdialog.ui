@@ -1109,9 +1109,6 @@
           <item row="0" column="0">
            <widget class="QCheckBox" name="drawAntialiased">
             <property name="toolTip">
-             <string>Disable antialiased drawing</string>
-            </property>
-            <property name="whatsThis">
              <string>Uncheck this to speed up drawing</string>
             </property>
             <property name="accessibleDescription">

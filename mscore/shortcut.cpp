@@ -267,7 +267,7 @@ Shortcut Shortcut::_sc[] = {
          "note-input",
          QT_TRANSLATE_NOOP("action","Note Input"),
          QT_TRANSLATE_NOOP("action","Note input"),
-         0,
+         QT_TRANSLATE_NOOP("action","Enter notes with a mouse or keyboard"),
          Icons::noteEntry_ICON,
          Qt::WindowShortcut,
          ShortcutFlags::A_CHECKABLE
@@ -277,7 +277,7 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "note-input-steptime",
          QT_TRANSLATE_NOOP("action","Step-Time (Default)"),
-         QT_TRANSLATE_NOOP("action","Enter notes with a mouse or keyboard"),
+         QT_TRANSLATE_NOOP("action","Enter notes in step-time"),
          0,
          Icons::noteEntry_ICON, // Icons::noteEntrySteptime_ICON (using normal icon for the time being.)
          Qt::WindowShortcut,
@@ -2309,8 +2309,8 @@ Shortcut Shortcut::_sc[] = {
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "concert-pitch",
          QT_TRANSLATE_NOOP("action","Concert Pitch"),
-         QT_TRANSLATE_NOOP("action","Display in concert pitch"),
-         0,
+         QT_TRANSLATE_NOOP("action","Toggle 'Concert Pitch'"),
+         QT_TRANSLATE_NOOP("action","Switch between concert/sounding pitch and transposing/written pitch"),
          Icons::Invalid_ICON,
          Qt::WindowShortcut
          },
