@@ -101,6 +101,8 @@ QString Harmony::rootName()
 QString Harmony::baseName()
       {
       determineRootBaseSpelling();
+      if (_baseTpc == Tpc::TPC_INVALID)
+            return rootName();
       return tpc2name(_baseTpc, _baseSpelling, _baseCase);
       }
 
@@ -125,7 +127,7 @@ void Harmony::resolveDegreeList()
 
       // try to find the chord in chordList
       const ChordList* cl = score()->style().chordList();
-      foreach(const ChordDescription& cd, *cl) {
+      for (const ChordDescription& cd : *cl) {
             if ((cd.chord == hc) && !cd.names.empty()) {
 qDebug("ResolveDegreeList: found in table as %s", qPrintable(cd.names.front()));
                   _id = cd.id;
@@ -193,7 +195,7 @@ Harmony::Harmony(const Harmony& h)
 
 Harmony::~Harmony()
       {
-      foreach(const TextSegment* ts, textList)
+      for (const TextSegment* ts : textList)
             delete ts;
       if (_parsedForm)
             delete _parsedForm;
@@ -941,12 +943,12 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const QList<HDegre
       {
       QStringList degrees;
 
-      foreach(const HDegree& d, dl)
+      for (const HDegree& d : dl)
             degrees.append(d.text());
 
       QString lowerCaseKind = kind.toLower();
       const ChordList* cl = score()->style().chordList();
-      foreach(const ChordDescription& cd, *cl) {
+      for (const ChordDescription& cd : *cl) {
             QString k     = cd.xmlKind;
             QString lowerCaseK = k.toLower(); // required for xmlKind Tristan
             QStringList d = cd.xmlDegrees;
@@ -968,7 +970,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind)
       {
       QString lowerCaseKind = kind.toLower();
       const ChordList* cl = score()->style().chordList();
-      foreach(const ChordDescription& cd, *cl) {
+      for (const ChordDescription& cd : *cl) {
             if (lowerCaseKind == cd.xmlKind)
                   return &cd;
             }
@@ -1014,7 +1016,7 @@ const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* p
       const ChordList* cl = score()->style().chordList();
       const ChordDescription* match = 0;
       if (cl) {
-            foreach (const ChordDescription& cd, *cl) {
+            for (const ChordDescription& cd : *cl) {
                   for (const QString& s : cd.names) {
                         if (s == name)
                               return &cd;
@@ -1786,7 +1788,7 @@ QString Harmony::screenReaderInfo() const
             aux = aux.replace("#", QObject::tr("♯")).replace("<", "");
             QString extension = "";
 
-            foreach (QString s, aux.split(">", QString::SkipEmptyParts)) {
+            for (QString s : aux.split(">", QString::SkipEmptyParts)) {
                   if (!s.contains("blues"))
                         s.replace("b", QObject::tr("♭"));
                   extension += s + " ";

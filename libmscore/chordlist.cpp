@@ -31,7 +31,7 @@ HChord::HChord(const QString& str)
             };
       keys = 0;
       QStringList sl = str.split(" ", QString::SkipEmptyParts);
-      foreach(const QString& s, sl) {
+      for (const QString& s : sl) {
             for (int i = 0; i < 12; ++i) {
                   if (s == scaleNames[0][i] || s == scaleNames[1][i]) {
                         operator+=(i);
@@ -248,7 +248,7 @@ void HChord::add(const QList<HDegree>& degreeList)
                0, 2, 4, 5, 7, 9, 11
             };
       // factor in the degrees
-      foreach(const HDegree& d, degreeList) {
+      for (const HDegree& d : degreeList) {
             int dv  = degreeTable[(d.value() - 1) % 7] + d.alter();
             int dv1 = degreeTable[(d.value() - 1) % 7];
 
@@ -414,7 +414,7 @@ void ChordToken::write(XmlWriter& xml) const
                   break;
       }
       xml.stag(t);
-      foreach(const QString& s, names)
+      for (const QString& s : names)
             xml.tag("name", s);
       writeRenderList(xml, &renderList, "render");
       xml.etag();
@@ -767,7 +767,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                   chord += 9;
                   chord += 2;
                   }
-            foreach (QString e, extl) {
+            for (QString e : extl) {
                   QString d = "add" + e;
                   _xmlDegrees += d;
                   }
@@ -1111,7 +1111,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             // fix "add" / "alt" conflicts
             // so add9,altb9 -> addb9
             QStringList altList = _xmlDegrees.filter("alt");
-            foreach (const QString& d, altList) {
+            for (const QString& d : altList) {
                   QString unalt(d);
                   unalt.replace(QRegExp("alt[b#]"),"add");
                   if (_xmlDegrees.removeAll(unalt) > 0) {
@@ -1233,7 +1233,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             extension = 6;
 
       // get modifier info from degree list
-      foreach (const HDegree& d, dl) {
+      for (const HDegree& d : dl) {
             QString mod;
             int v = d.value();
             switch (d.type()) {
@@ -1351,7 +1351,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
             }
       if (parens)
             _name += "(";
-      foreach (QString mod, _modifierList) {
+      for (QString mod : _modifierList) {
             mod.replace("major","maj");
             if (kindText != "" && kind.contains("suspended") && mod.startsWith("sus"))
                   continue;
@@ -1370,7 +1370,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
       _xmlText = kindText;
       _xmlSymbols = useSymbols;
       _xmlParens = useParens;
-      foreach (const HDegree& d, dl) {
+      for (const HDegree& d : dl) {
             if (kind == "half-diminished" && d.type() == HDegreeType::ALTER && d.alter() == -1 && d.value() == 5)
                   continue;
             _xmlDegrees += d.text();
@@ -1599,11 +1599,11 @@ void ChordDescription::write(XmlWriter& xml) const
             xml.stag(QString("chord id=\"%1\"").arg(id));
       else
             xml.stag(QString("chord"));
-      foreach(const QString& s, names)
+      for (const QString& s : names)
             xml.tag("name", s);
       xml.tag("xml", xmlKind);
       xml.tag("voicing", chord.voicing());
-      foreach(const QString& s, xmlDegrees)
+      for (const QString& s : xmlDegrees)
             xml.tag("degree", s);
       writeRenderList(xml, &renderList, "render");
       xml.etag();
@@ -1773,7 +1773,7 @@ void ChordList::write(XmlWriter& xml) const
             }
       if (_autoAdjust)
             xml.tagE(QString("autoAdjust mag=\"%1\" adjust=\"%2\"").arg(_nmag).arg(_nadjust));
-      foreach (ChordToken t, chordTokenList)
+      for (ChordToken t : chordTokenList)
             t.write(xml);
       if (!renderListRoot.empty())
             writeRenderList(xml, &renderListRoot, "renderRoot");
