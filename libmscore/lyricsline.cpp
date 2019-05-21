@@ -91,7 +91,7 @@ void LyricsLine::styleChanged()
 void LyricsLine::layout()
       {
       bool tempMelismaTicks = (lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
-      if (lyrics()->ticks().isNotZero()) {              // melisma
+      if (isEndMelisma()) {         // melisma
             setLineWidth(score()->styleP(Sid::lyricsLineThickness));
             // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
             if (tempMelismaTicks)
@@ -304,7 +304,7 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
                   {
                   // if parent lyrics has a melisma, change its length too
                   if (parent() && parent()->type() == ElementType::LYRICS
-                              && toLyrics(parent())->ticks() > Fraction(0,1)) {
+                              && isEndMelisma()) {
                         Fraction newTicks   = toLyrics(parent())->ticks() + v.value<Fraction>() - ticks();
                         parent()->undoChangeProperty(Pid::LYRIC_TICKS, newTicks);
                         }
@@ -339,7 +339,7 @@ void LyricsLineSegment::layout()
       ryoffset() = 0.0;
 
       bool        endOfSystem       = false;
-      bool        isEndMelisma      = lyricsLine()->lyrics()->ticks() > Fraction(0,1);
+      bool        isEndMelisma      = lyricsLine()->isEndMelisma();
       Lyrics*     lyr               = 0;
       Lyrics*     nextLyr           = 0;
       qreal       fromX             = 0;
@@ -464,7 +464,7 @@ void LyricsLineSegment::draw(QPainter* painter) const
       pen.setWidthF(lyricsLine()->lineWidth());
       pen.setCapStyle(Qt::FlatCap);
       painter->setPen(pen);
-      if (lyricsLine()->lyrics()->ticks() > Fraction(0,1))           // melisma
+      if (lyricsLine()->isEndMelisma())               // melisma
             painter->drawLine(QPointF(), pos2());
       else {                                          // dash(es)
             qreal step  = pos2().x() / _numOfDashes;
