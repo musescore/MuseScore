@@ -121,7 +121,7 @@ void Tremolo::setTremoloType(TremoloType t)
 
 void Tremolo::layout()
       {
-      qreal _spatium  = spatium() * mag();
+      qreal _spatium  = score()->spatium() * mag();
 
       qreal w2  = _spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
       qreal lw  = _spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
@@ -228,7 +228,7 @@ void Tremolo::layout()
                      },
                   };
             int idx = _chord1->hook() ? 1 : (_chord1->beam() ? 2 : 0);
-            y = (line + t[idx][up][_lines-1][line & 1]) * spatium() * .5 / mag();
+            y = (line + t[idx][up][_lines-1][line & 1]) * .5 * _spatium;
 
             QTransform shearTransform;
             shearTransform.shear(0.0, -(lw / 2.0) / w2);

@@ -2534,6 +2534,23 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
       }
 
 //---------------------------------------------------------
+//   localSpatiumChanged
+//---------------------------------------------------------
+
+void Note::localSpatiumChanged(qreal oldValue, qreal newValue)
+      {
+      Element::localSpatiumChanged(oldValue, newValue);
+      for (Element* e : dots())
+            e->localSpatiumChanged(oldValue, newValue);
+      for (Element* e : el())
+            e->localSpatiumChanged(oldValue, newValue);
+      for (Spanner* spanner : spannerBack()) {
+            for (auto k : spanner->spannerSegments())
+                  k->localSpatiumChanged(oldValue, newValue);
+            }
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

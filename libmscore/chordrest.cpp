@@ -805,6 +805,19 @@ void ChordRest::undoSetBeamMode(Beam::Mode mode)
       }
 
 //---------------------------------------------------------
+//   localSpatiumChanged
+//---------------------------------------------------------
+
+void ChordRest::localSpatiumChanged(qreal oldValue, qreal newValue)
+      {
+      DurationElement::localSpatiumChanged(oldValue, newValue);
+      for (Element* e : lyrics())
+            e->localSpatiumChanged(oldValue, newValue);
+      for (Element* e : el())
+            e->localSpatiumChanged(oldValue, newValue);
+      }
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
