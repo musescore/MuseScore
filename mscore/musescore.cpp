@@ -1213,7 +1213,9 @@ MuseScore::MuseScore()
       cpitchTools->setObjectName("pitch-tools");
       a = getAction("concert-pitch");
       a->setCheckable(true);
-      cpitchTools->addWidget(new AccessibleToolButton(cpitchTools, a));
+      AccessibleToolButton* concertPitchButton = new AccessibleToolButton(cpitchTools, a);
+      concertPitchButton->setProperty("iconic-text", true);
+      cpitchTools->addWidget(concertPitchButton);
 
       //-------------------------------
       //    Image Capture Tool Bar
@@ -7043,6 +7045,19 @@ void MuseScore::updateUiStyleAndTheme()
       css.replace("$voice2-bgcolor", MScore::selectColor[1].name(QColor::HexRgb));
       css.replace("$voice3-bgcolor", MScore::selectColor[2].name(QColor::HexRgb));
       css.replace("$voice4-bgcolor", MScore::selectColor[3].name(QColor::HexRgb));
+
+      if (preferences.isThemeDark()) {
+            css.replace("$buttonHighlightDisabledOff", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_OFF).name().toLatin1());
+            css.replace("$buttonHighlightDisabledOn", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_ON).name().toLatin1());
+            css.replace("$buttonHighlightEnabledOff", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_OFF).name().toLatin1());
+            css.replace("$buttonHighlightEnabledOn", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON).name().toLatin1());
+      } else {
+            css.replace("$buttonHighlightDisabledOff", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_OFF).name().toLatin1());
+            css.replace("$buttonHighlightDisabledOn", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_ON).name().toLatin1());
+            css.replace("$buttonHighlightEnabledOff", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF).name().toLatin1());
+            css.replace("$buttonHighlightEnabledOn", Ms::preferences.getColor(PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON).name().toLatin1());
+      }
+
       qApp->setStyleSheet(css);
 
       QString style = QString("*, QSpinBox { font: %1pt \"%2\" } ")

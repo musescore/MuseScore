@@ -50,5 +50,11 @@ QToolButton[voice4="true"]:checked, QToolButton[voice4="true"]:pressed { color: 
 /* Toolbar voice selector */
 QToolButton#voice:checked, QToolButton#voice:pressed { color: white; }
 
+/* ToolbarButton text to match ToolbarButton icons */
+QToolButton[iconic-text="true"] { color: $buttonHighlightEnabledOff; }
+QToolButton[iconic-text="true"]:enabled:checked { color: $buttonHighlightEnabledOn; }
+QToolButton[iconic-text="true"]:disabled { color: $buttonHighlightDisabledOff; }
+QToolButton[iconic-text="true"]:disabled:checked { color: $buttonHighlightDisabledOn; }
+
 /* Mainly in midi import */
 QTableView { border: none; }

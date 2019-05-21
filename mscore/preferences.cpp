@@ -209,7 +209,8 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_OFF,    new ColorPreference(QColor("#a0a0a0"))},
             {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON,       new ColorPreference(QColor("#43C1F7"))},
             {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_OFF,      new ColorPreference(QColor("#eff0f1"))},
-            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON,      new ColorPreference(QColor("#205E78"))}
+            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON,      new ColorPreference(QColor("#205E78"))},
+            {PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF,     new ColorPreference(QColor("#3b3f45"))}
       });
 
       _initialized = true;
