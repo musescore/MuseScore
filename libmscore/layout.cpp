@@ -3908,8 +3908,10 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                               dynamics.push_back(d);
                               }
                         }
-                  else if (e->isFiguredBass())
+                  else if (e->isFiguredBass()) {
                         e->layout();
+                        e->autoplaceSegmentElement();
+                        }
                   }
             }
 
