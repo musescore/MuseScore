@@ -339,7 +339,10 @@ void ResourceManager::displayPluginRepo() {
             QStringList category_list = category_raw.split(", ");
             for (QString& c : category_list) {
                   QString c2 = c.simplified();
-                  if (c2.isEmpty()) { category_list.removeOne(c); continue; }
+                  if (c2.isEmpty()) { 
+                        category_list.removeOne(c);
+                        continue; 
+                        }
                   c = c2;
                   if (!all_categories.contains(c2))
                         all_categories << c2;
@@ -384,7 +387,8 @@ void ResourceManager::filterPluginList()
             PluginPackageMeta& meta = pluginButtonURLMap[install];
             if (meta.name.contains(search, Qt::CaseInsensitive) && (category == "Any" || meta.categories.contains(category)))
                   pluginsTable->showRow(i);
-            else pluginsTable->hideRow(i);
+            else
+                  pluginsTable->hideRow(i);
             }
       }
 
