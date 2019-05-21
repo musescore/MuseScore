@@ -2210,9 +2210,12 @@ qreal Element::rebaseOffset(bool nox)
             p.rx() = 0.0;
       //OffsetChange saveChangedValue = _offsetChanged;
 
-      if (staff() && propertyFlags(Pid::PLACEMENT) != PropertyFlags::NOSTYLE) {
+      bool staffRelative = staff() && parent() && !(parent()->isNote() || parent()->isRest());
+      if (staffRelative && propertyFlags(Pid::PLACEMENT) != PropertyFlags::NOSTYLE) {
             // check if flipped
-            // TODO: elements that support PLACEMENT but not as a styled property
+            // TODO: elements that support PLACEMENT but not as a styled property (add supportsPlacement() method?)
+            // TODO: refactor to take advantage of existing cmdFlip() algorithms
+            // TODO: adjustPlacement() (from read206.cpp) on read for 3.0 as well
             QRectF r = bbox().translated(_changedPos);
             qreal staffHeight = staff()->height();
             Element* e = isSpannerSegment() ? toSpannerSegment(this)->spanner() : this;
