@@ -2080,9 +2080,9 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
             // w = qMax(w, minRight()) + d;
             }
       else if (st & (SegmentType::Clef | SegmentType::HeaderClef)) {
-            if (nst == SegmentType::KeySig)
+            if (nst == SegmentType::KeySig || nst == SegmentType::KeySigAnnounce)
                   w += score()->styleP(Sid::clefKeyDistance);
-            else if (nst == SegmentType::TimeSig)
+            else if (nst == SegmentType::TimeSig || nst == SegmentType::TimeSigAnnounce)
                   w += score()->styleP(Sid::clefTimesigDistance);
             else if (nst & (SegmentType::EndBarLine | SegmentType::StartRepeatBarLine))
                   w += score()->styleP(Sid::clefBarlineDistance);
@@ -2106,6 +2106,8 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   w += score()->styleP(Sid::keysigLeftMargin);
             else if (nst == SegmentType::TimeSigAnnounce)
                   w += score()->styleP(Sid::timesigLeftMargin);
+            else if (nst == SegmentType::Clef)
+                  w += score()->styleP(Sid::clefLeftMargin);
             }
       else if (st == SegmentType::TimeSig && nst == SegmentType::StartRepeatBarLine)
             w += score()->styleP(Sid::timesigBarlineDistance);
