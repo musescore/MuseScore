@@ -175,7 +175,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::clefLeftMargin,          false, clefLeftMargin,          resetClefLeftMargin },
       { Sid::keysigLeftMargin,        false, keysigLeftMargin,        resetKeysigLeftMargin },
       { Sid::timesigLeftMargin,       false, timesigLeftMargin,       resetTimesigLeftMargin },
-      { Sid::clefKeyRightMargin,      false, clefKeyRightMargin,      resetClefKeyRightMargin },
+      { Sid::midClefKeyRightMargin,   false, clefKeyRightMargin,      resetClefKeyRightMargin },
       { Sid::clefKeyDistance,         false, clefKeyDistance,         resetClefKeyDistance },
       { Sid::clefTimesigDistance,     false, clefTimesigDistance,     resetClefTimesigDistance },
       { Sid::keyTimesigDistance,      false, keyTimesigDistance,      resetKeyTimesigDistance },

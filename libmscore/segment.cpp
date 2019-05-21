@@ -2006,11 +2006,12 @@ qreal Segment::minHorizontalCollidingDistance(Segment* ns) const
 
 qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       {
-      qreal w = 0.0;
+      qreal ww = -1000000.0;        // can remain negative
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
             qreal d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
-            w       = qMax(w, d);
+            ww      = qMax(ww, d);
             }
+      qreal w = qMax(ww, 0.0);      // non-negative
 
       SegmentType st  = segmentType();
       SegmentType nst = ns ? ns->segmentType() : SegmentType::Invalid;
@@ -2021,7 +2022,10 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   w += score()->styleP(Sid::noteBarDistance);
                   }
             else if (nst == SegmentType::Clef) {
-                  w = qMax(w, score()->styleP(Sid::clefLeftMargin));
+                  // clef likely does not exist on all staves
+                  // and can cause very uneven spacing
+                  // so use ww to avoid forcing margin except as necessary
+                  w = ww + score()->styleP(Sid::clefLeftMargin);
                   }
             else {
                   bool isGap = false;
@@ -2054,7 +2058,13 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
 //                  qreal d = score()->styleP(Sid::barNoteDistance);
 //                  qreal dd = minRight() + ns->minLeft() + spatium();
 //                  w = qMax(d, dd);
-                  w += score()->styleP(Sid::barNoteDistance);
+                  // not header
+                  if (st == SegmentType::Clef)
+                        w = ww + score()->styleP(Sid::midClefKeyRightMargin);
+                  else if (st == SegmentType::KeySig)
+                        w += score()->styleP(Sid::midClefKeyRightMargin);
+                  else
+                        w += score()->styleP(Sid::barNoteDistance);
 
                   if (st == SegmentType::StartRepeatBarLine) {
                         if (Element* barLine = element(0)) {
