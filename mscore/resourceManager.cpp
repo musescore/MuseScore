@@ -650,14 +650,13 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
             if (allFiles.size() > 1) // the element in dirs must be a dir then
                   has_no_dir = false;
             }
+      int stripped_len = 0;
       if (!has_no_dir) {
-            int stripped_len = allFiles.first().filePath.length() + 1;
+            stripped_len = allFiles.first().filePath.length() + 1;
             // the directory in the archive is not to be added
             allFiles.pop_front();
-            // strip the top directory in fi.filePath
-            for (auto& fi : allFiles)
-                  fi.filePath = fi.filePath.right(fi.filePath.size() - stripped_len);
             }
+      auto filePathStripper = [&](QString& filePath) {return filePath.right(filePath.size() - stripped_len); };
 
       QString destination_prefix = dataPath + "/plugins";
       destination_prefix += "/" + f_pkg.completeBaseName();
@@ -666,11 +665,11 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
       // extract and copy
       foreach(MQZipReader::FileInfo fi, allFiles) {
             if (fi.isDir)
-                  QDir().mkdir(destination_prefix + "/" + fi.filePath);
+                  QDir().mkdir(destination_prefix + "/" + filePathStripper(fi.filePath));
             else if (fi.isFile) {
                   if (QFileInfo(fi.filePath).suffix().toLower() == "qml")
-                        desc.qml_paths.push_back(destination_prefix + "/" + fi.filePath);
-                  QFile new_f(destination_prefix + "/" + fi.filePath);
+                        desc.qml_paths.push_back(destination_prefix + "/" + filePathStripper(fi.filePath));
+                  QFile new_f(destination_prefix + "/" + filePathStripper(fi.filePath));
                   if (!new_f.open(QIODevice::WriteOnly)) {
                         // TODO: report errors
                         return false;
