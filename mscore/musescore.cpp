@@ -4981,7 +4981,7 @@ void MuseScore::autoSaveTimerTimeout()
 
       for (MasterScore* s : scoreList) {
             if (s->autosaveDirty()) {
-                  qDebug("<%s>", qPrintable(s->fileInfo()->baseName()));
+                  qDebug("<%s>", qPrintable(s->fileInfo()->completeBaseName()));
                   QString tmp = s->tmpName();
                   if (!tmp.isEmpty()) {
                         QFileInfo fi(tmp);
@@ -7682,7 +7682,7 @@ bool MuseScore::exportPartsPdfsToJSON(const QString& inFilePath, const QString& 
       QString outPath = QFileInfo(inFilePath).path() + "/";
 
       QJsonObject jsonForPdfs;
-      QString outName = outPath + QFileInfo(inFilePath).baseName() + ".pdf";
+      QString outName = outPath + QFileInfo(inFilePath).completeBaseName() + ".pdf";
       jsonForPdfs["score"] = outName;
 
       //save score pdf
