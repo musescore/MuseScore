@@ -239,6 +239,8 @@ class FiguredBass final : public TextBase {
       void              layoutLines();
       bool              hasParentheses() const; // read / write MusicXML support
 
+      virtual Sid getPropertyStyle(Pid) const override;
+
    public:
       FiguredBass(Score* s = 0);
       FiguredBass(const FiguredBass&);
