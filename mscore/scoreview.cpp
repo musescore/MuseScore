@@ -3366,7 +3366,7 @@ void ScoreView::cmdAddSlur(ChordRest* cr1, ChordRest* cr2)
       if (cr2 == 0) {
             cr2 = nextChordRest(cr1);
             if (cr2 == 0)
-                  return;
+                  cr2 = cr1;
             startEditMode = true;      // start slur in edit mode if last chord is not given
             }
 
