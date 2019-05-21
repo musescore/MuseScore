@@ -221,7 +221,7 @@ void PlayPanel::setEndpos(int val)
 void PlayPanel::setTempo(double val)
       {
       int tempo = lrint(val * 60.0);
-      tempoLabel->setText(QString("%1 BPM").arg(tempo, 3, 10, QLatin1Char(' ')));
+      tempoLabel->setText(tr("Tempo\n%1 BPM").arg(tempo, 3, 10, QLatin1Char(' ')));
       }
 
 //---------------------------------------------------------
@@ -306,9 +306,23 @@ void PlayPanel::updateTimeLabel(int sec)
       sec                = sec % 60;
       int h              = m / 60;
       m                  = m % 60;
-      char buffer[32];
-      sprintf(buffer, "%d:%02d:%02d", h, m, sec);
-      timeLabel->setText(QString(buffer));
+      
+      // time is displayed in three separate labels
+      // this prevents jitter as width of time grows and shrinks
+      // alternative would be to use a monospaced font and a
+      // single label
+      char hourBuffer[8];
+      sprintf(hourBuffer, "%d", h);
+      hourLabel->setText(QString(hourBuffer));
+
+      char minBuffer[8];
+      sprintf(minBuffer, "%02d", m);
+      minuteLabel->setText(QString(minBuffer));
+      
+      char secondBuffer[8];
+      sprintf(secondBuffer, "%02d", sec);
+      secondLabel->setText(QString(secondBuffer));
+          
       }
 
 //---------------------------------------------------------
@@ -328,9 +342,19 @@ void PlayPanel::updatePosLabel(int utick)
             double tpo = cs->tempomap()->tempo(tick) * cs->tempomap()->relTempo();
             setTempo(tpo);
             }
-      char buffer[32];
-      sprintf(buffer, "%03d.%02d", bar+1, beat+1);
-      posLabel->setText(QString(buffer));
+     
+      // position is displayed in two separate labels
+      // this prevents jitter as width of time grows and shrinks
+      // alternative would be to use a monospaced font and a
+      // single label
+          
+      char barBuffer[8];
+      sprintf(barBuffer, "%d", bar+1);// sprintf(barBuffer, "%03d", bar+1);
+      measureLabel->setText(QString(barBuffer));
+      
+      char beatBuffer[8];
+      sprintf(beatBuffer, "%02d", beat+1);
+      beatLabel->setText(QString(beatBuffer));
       }
 
 //---------------------------------------------------------
