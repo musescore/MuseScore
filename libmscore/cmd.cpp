@@ -3097,6 +3097,56 @@ void Score::cmdSlashRhythm()
       }
 
 //---------------------------------------------------------
+//   cmdRealizeChordSymbols
+///   Realize selected chord symbols into notes on the staff.
+///   Currently just pops up a dialog to list TPCs,
+///   Intervals, and pitches.
+//---------------------------------------------------------
+
+void Score::cmdRealizeChordSymbols()
+      {
+      if (!selection().isList()) {
+            QErrorMessage err;
+            err.showMessage("Invalid Selection. Cannot Realize Chord");
+            err.exec();
+            return;
+            }
+      Element *e = selection().element();
+      QMessageBox msgBox;
+      if (e && e->isHarmony()) {
+            Harmony* h = toHarmony(e);
+            msgBox.setText("Chord Symbol: " + h->harmonyName());
+
+            QString intervals;
+            //build up message for informative text section
+            QString s = QString("ID: %1\nIntervals: %2\nNotes: %3")
+                        .arg(h->id());
+            msgBox.setInformativeText(s);
+
+            //Build string containing degree list and number of degrees
+            //I don't think this is used at all anymore
+            QString degrees = "";
+            for (HDegree d : h->degreeList())
+                  degrees += d.text() + ", ";
+            degrees += QString(h->numberOfDegrees());
+            //build up message for detailed information section
+            QString d = QString("User Name: %1\nText Name: %2\nRoot: %3\nBass: %4\n"
+                                "Root TPC: %5\nBass TPC: %6\nDegrees: %7\n"
+                                "Extension Name: %8\nCL Size: %9")
+                        .arg(h->hUserName()).arg(h->hTextName())
+                        .arg(h->rootName()).arg(h->baseName())
+                        .arg(h->rootTpc()).arg(h->baseTpc())
+                        .arg(degrees).arg(h->extensionName())
+                        .arg(score()->style().chordList()->size());
+            msgBox.setDetailedText(s);
+            }
+      else {
+            msgBox.setText("No Chord Selected. Cannot Realize Chord");
+            }
+      msgBox.exec();
+      }
+
+//---------------------------------------------------------
 //   cmdResequenceRehearsalMarks
 ///   resequences rehearsal marks within a range selection
 ///   or, if nothing is selected, the entire score
@@ -3887,7 +3937,8 @@ void Score::cmd(const QAction* a, EditData& ed)
             { "grace16after",               [](Score* cs, EditData&){ cs->cmdAddGrace(NoteType::GRACE16_AFTER, MScore::division / 4); }},
             { "grace32after",               [](Score* cs, EditData&){ cs->cmdAddGrace(NoteType::GRACE32_AFTER, MScore::division / 8); }},
             { "explode",                    [](Score* cs, EditData&){ cs->cmdExplode();                                               }},
-            { "implode",                    [](Score* cs, EditData&){ cs-> cmdImplode();                                               }},
+            { "implode",                    [](Score* cs, EditData&){ cs->cmdImplode();                                               }},
+            { "realize-chord-symbols",      [](Score* cs, EditData&){ cs->cmdRealizeChordSymbols();                                   }},
             { "slash-fill",                 [](Score* cs, EditData&){ cs->cmdSlashFill();                                             }},
             { "slash-rhythm",               [](Score* cs, EditData&){ cs->cmdSlashRhythm();                                           }},
             { "resequence-rehearsal-marks", [](Score* cs, EditData&){ cs->cmdResequenceRehearsalMarks();                              }},

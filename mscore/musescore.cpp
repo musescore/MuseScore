@@ -1689,6 +1689,8 @@ MuseScore::MuseScore()
       menuTools->addAction(getAction("explode"));
       menuTools->addAction(getAction("implode"));
 
+      menuTools->addAction(getAction("realize-chord-symbols"));
+
       menuVoices = new QMenu("");
       for (auto i : { "voice-x12", "voice-x13", "voice-x14", "voice-x23", "voice-x24", "voice-x34" })
             menuVoices->addAction(getAction(i));
