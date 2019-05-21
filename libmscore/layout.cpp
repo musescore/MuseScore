@@ -4264,11 +4264,9 @@ void LayoutContext::collectPage()
                   }
             }
 
-      qreal height = 0;
       Fraction stick = Fraction(-1,1);
       for (System* s : page->systems()) {
             Score* currentScore = s->score();
-            height += s->rypos();
             for (MeasureBase* mb : s->measures()) {
                   if (!mb->isMeasure())
                         continue;
@@ -4339,8 +4337,11 @@ void LayoutContext::collectPage()
                   }
             }
 
-      if (score->systemMode())
-            page->bbox().setRect(0.0, 0.0, score->loWidth(), height);
+      if (score->systemMode()) {
+            System* s = page->systems().last();
+            qreal height = s ? s->pos().y() + s->height() + s->minBottom() : page->tm();
+            page->bbox().setRect(0.0, 0.0, score->loWidth(), height + page->bm());
+            }
 
       page->rebuildBspTree();
       }
