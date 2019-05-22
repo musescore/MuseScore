@@ -727,7 +727,8 @@ QPointF SLine::linePos(Grip grip, System** sys) const
 //                  QPointF     systPagePos = s->pagePos();
 //                  qreal       staffYPage  = s->staffYpage(e->staffIdx());
                   QPointF p = n->pagePos() - s->pagePos();
-                  p.rx() += n->width() * 0.5;
+                  if (!isGlissando())
+                        p.rx() += n->headWidth() * 0.5;
                   return p;
                   }
 
