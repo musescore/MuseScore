@@ -81,9 +81,9 @@ class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
 
       virtual void closeEvent(QCloseEvent*) override;
       virtual void showEvent(QShowEvent*) override;
-      virtual void hideEvent(QHideEvent*) override;
       virtual bool eventFilter(QObject*, QEvent*) override;
       virtual void keyPressEvent(QKeyEvent*) override;
+      void readSettings();
       void keepScrollPosition();
       void setPlaybackScore(Score*);
 
@@ -109,6 +109,7 @@ class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
       Mixer(QWidget* parent);
       void setScore(Score*);
       PartEdit* getPartAtIndex(int index);
+      void writeSettings();
       void expandToggled(Part* part, bool expanded) override;
       void notifyTrackSelected(MixerTrack* track) override;
       void showDetailsToggled(bool shown);
