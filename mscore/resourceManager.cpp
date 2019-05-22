@@ -322,7 +322,8 @@ void ResourceManager::displayPluginRepo() {
       int table_end_idx = html_raw.indexOf(table_end) + 6;
       QByteArray table_raw = html_raw.mid(table_start_idx, table_end_idx - table_start_idx);
       QDomDocument table_xml;
-      table_xml.setContent(table_raw); // TODO: if returns false?
+      if (!table_xml.setContent(table_raw))
+            qDebug("Fail to parse the HTML table from the repo page.");
       QDomElement body = table_xml.elementsByTagName("tbody").item(0).toElement();
       QDomNodeList tr_list = body.elementsByTagName("tr");
       pluginsTable->setRowCount(tr_list.length());
@@ -553,7 +554,7 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
             should_update = desc.source != GITHUB;
             desc.source = GITHUB;
             QString sha = getLatestCommitSha(user, repo, "master");
-            // TODO: compare the sha with previous stored sha. If the same, don't update.
+            // compare the sha with previous stored sha. If the same, don't update.
             if (should_update || desc.latest_commit != sha) {
                   desc.latest_commit = sha;
                   desc.direct_link = githubLatestArchiveURL(user, repo, "master");
@@ -564,6 +565,7 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
       else {
             // no github repo links exist
             // TODO: fetch direct links in page
+            qDebug("Unknown plugin source");
             desc.source = UNKNOWN;
             return false;
             }
@@ -580,7 +582,6 @@ void ResourceManager::updatePlugin()
       PluginPackageDescription& desc = pluginDescriptionMap[page_url];
       Q_ASSERT(desc.update != nullptr);
       if (desc.update->source == UNKNOWN) {
-            // TODO: report errors: cannot get download links for this plugin
             update->setText("Failed Try again.");
             update->setEnabled(true);
             return;
@@ -610,8 +611,7 @@ void ResourceManager::checkPluginUpdate(QWidget* button_group)
             if (should_update)
                   desc.update = desc_tmp;
             else {
-                  if (desc_tmp->source == UNKNOWN)
-                        ;// TODO: report errors
+                        
                   delete desc_tmp;
             }
             refreshPluginButton(button_group, !should_update);
@@ -623,13 +623,10 @@ void ResourceManager::scanPluginUpdate()
       
       for (auto& button : pluginButtonURLMap.keys()) {
             // if installed
-            
             if (pluginDescriptionMap.contains(pluginButtonURLMap[button].page_url)) {
                   checkPluginUpdate(button->parentWidget());
-                 // break; // only check update for the first installed plugin for now to save time
+                  }
             }
-      }
-      ;
       }
 
 //---------------------------------------------------------
@@ -678,7 +675,7 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
                         desc.qml_paths.push_back(destination_prefix + "/" + filePathStripper(fi.filePath));
                   QFile new_f(destination_prefix + "/" + filePathStripper(fi.filePath));
                   if (!new_f.open(QIODevice::WriteOnly)) {
-                        // TODO: report errors
+                        qDebug("Cannot write the file.");
                         return false;
                         }
                   new_f.write(zipFile.fileData(fi.filePath));
@@ -838,7 +835,6 @@ QString ResourceManager::downloadPluginPackage(PluginPackageDescription& desc, Q
 
 void ResourceManager::downloadInstallPlugin()
       {
-      // TODO: find corresponding PluginPackageDescription or create a new one
       QPushButton* button = static_cast<QPushButton*>(sender());
       button->setEnabled(false);
       button->setText(tr("Analyzing..."));
@@ -848,7 +844,6 @@ void ResourceManager::downloadInstallPlugin()
       QObject* p = button->parent();
       analyzePluginPage("https://musescore.org" + page_url, new_package);
       if (new_package.source == UNKNOWN) {
-            // TODO: report errors: cannot get download links for this plugin
             button->setText("Failed Try again.");
             button->setEnabled(true);
             return;
@@ -874,17 +869,20 @@ void ResourceManager::downloadInstallPlugin()
       }
 
 void ResourceManager::uninstallPluginPackage() {
-      // TODO: some qml files may be outside the folder of this plugin, 
-      //       so remove all qml files in qml_paths in description.
-      // Only remove the entire folder for now
       QPushButton* button = static_cast<QPushButton*>(sender());
-      QString url = pluginButtonURLMap[button].page_url;
+      const QString& url = pluginButtonURLMap[button].page_url;
       if (!pluginDescriptionMap.contains(url))
             return;
       PluginPackageDescription& desc = pluginDescriptionMap[url];
+      // remove qml files first(which may be outside the folder of this plugin)
+      for (QString& path : desc.qml_paths)
+            QFile::remove(path);
+      // then remove the folder
       QDir d(desc.dir);
-      d.removeRecursively();
-      // TODO: check errors, and if OK, execute the following
+      if (!d.removeRecursively()) {
+            button->setText("Failed, try again");
+            return;
+            }
       pluginDescriptionMap.remove(url);
       refreshPluginButton((QWidget*)button->parent());
       writePluginPackages();

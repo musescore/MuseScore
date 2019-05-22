@@ -53,7 +53,7 @@ enum PluginPackageSource {
 //   Info about how the package was fetched
 //---------------------------------------------------------
 struct PluginPackageDescription {
-      // valid when there's an update. Not serialized to xml for now
+      // contains update info when there's an update. Not serialized to xml for now
       PluginPackageDescription* update = nullptr; 
       QString package_name;
       PluginPackageSource source = UNKNOWN;
