@@ -5,28 +5,25 @@
   <property name="enabled">
    <bool>true</bool>
   </property>
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>648</width>
-    <height>495</height>
-   </rect>
-  </property>
-  <property name="focusPolicy">
-   <enum>Qt::ClickFocus</enum>
-  </property>
   <property name="floating">
    <bool>false</bool>
   </property>
   <property name="features">
    <set>QDockWidget::AllDockWidgetFeatures</set>
   </property>
-  <property name="allowedAreas">
-   <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>648</width>
+    <height>431</height>
+   </rect>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>Mixer</string>
+   <string/>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -149,8 +146,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>528</width>
-           <height>368</height>
+           <width>554</width>
+           <height>371</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">

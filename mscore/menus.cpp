@@ -1173,7 +1173,7 @@ void MuseScore::showPalette(bool visible)
             updateIcons();
             }
       if (paletteBox)   // read failed?
-            reDisplayDockWidget(paletteBox, visible);
+            paletteBox->setVisible(visible);
       a->setChecked(visible);
       }
 

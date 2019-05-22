@@ -86,7 +86,7 @@ void MuseScore::showInspector(bool visible)
             addDockWidget(Qt::RightDockWidgetArea, _inspector);
             }
       if (_inspector)
-            reDisplayDockWidget(_inspector, visible);
+            _inspector->setVisible(visible);
       if (visible)
             updateInspector();
       }
