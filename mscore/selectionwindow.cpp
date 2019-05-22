@@ -178,7 +178,7 @@ void SelectionWindow::changeCheckbox(QListWidgetItem* item)
 //   showSelectionWindow
 //---------------------------------------------------------
 
-void MuseScore::showSelectionWindow(bool val)
+void MuseScore::showSelectionWindow(bool visible)
       {
       QAction* a = getAction("toggle-selection-window");
       if (selectionWindow == 0) {
@@ -189,8 +189,8 @@ void MuseScore::showSelectionWindow(bool val)
                   tabifyDockWidget(paletteBox, selectionWindow);
                   }
             }
-      selectionWindow->setVisible(val);
-      if (val) {
+      reDisplayDockWidget(selectionWindow, visible);
+      if (visible) {
             selectionWindow->raise();
             }
       }
