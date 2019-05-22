@@ -1015,36 +1015,38 @@ void Score::updateHairpin(Hairpin* h)
       {
       Staff* st = h->staff();
       Fraction tick  = h->tick();
-      Segment* seg   = h->startSegment();
 
       // Find any changing dynamics
       // If there are any, then start the hairpin from after them
-      for (Element* e : seg->annotations()) {
-            if (!e)
-                  continue;
-            if (!e->isDynamic())
-                  continue;
-            Dynamic* d = toDynamic(e);
-            if (d->changeInVelocity() == 0)
-                  continue;
+      Segment* seg   = h->startSegment();
+      if (seg) {
+            for (Element* e : seg->annotations()) {
+                  if (!e)
+                        continue;
+                  if (!e->isDynamic())
+                        continue;
+                  Dynamic* d = toDynamic(e);
+                  if (d->changeInVelocity() == 0)
+                        continue;
 
-            switch (d->dynRange()) {
-                  case Dynamic::Range::STAFF:
-                        if (d->staff()->idx() != st->idx())
-                              continue;
-                        break;
-                  case Dynamic::Range::PART:
-                        if (d->part() != h->part())
-                              continue;
-                        break;
-                  case Dynamic::Range::SYSTEM:
-                  default:
-                        break;
+                  switch (d->dynRange()) {
+                        case Dynamic::Range::STAFF:
+                              if (d->staff()->idx() != st->idx())
+                                    continue;
+                              break;
+                        case Dynamic::Range::PART:
+                              if (d->part() != h->part())
+                                    continue;
+                              break;
+                        case Dynamic::Range::SYSTEM:
+                        default:
+                              break;
+                        }
+
+                  // start hairpin after the dynamic stops
+                  tick = seg->tick() + d->velocityChangeLength();
+                  break;
                   }
-
-            // start hairpin after the dynamic stops
-            tick = seg->tick() + d->velocityChangeLength();
-            break;
             }
 
       int velo  = st->velocities().velo(tick.ticks());
