@@ -73,7 +73,7 @@ void GlissandoSegment::draw(QPainter* painter) const
       painter->save();
       qreal _spatium = spatium();
 
-      QPen pen(glissando()->curColor());
+      QPen pen(curColor(visible(), glissando()->lineColor()));
       pen.setWidthF(glissando()->lineWidth());
       pen.setCapStyle(Qt::RoundCap);
       painter->setPen(pen);
