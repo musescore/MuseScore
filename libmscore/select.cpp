@@ -444,6 +444,14 @@ void Selection::appendChord(Chord* chord)
                               _el.append(note->tieFor());
                         }
                   }
+            for (Spanner* sp : note->spannerFor()) {
+                  if (sp->endElement()->isNote()) {
+                        Note* endNote = toNote(sp->endElement());
+                        Segment* s = endNote->chord()->segment();
+                        if (s->tick() < tickEnd())
+                              _el.append(sp);
+                        }
+                  }
             }
       }
 
