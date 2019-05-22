@@ -284,6 +284,9 @@ enum class Sid {
       fretStrings,
       fretFrets,
       fretNut,
+      fretDotSize,
+      fretStringSpacing,
+      fretFretSpacing,
 
       showPageNumber,
       showPageNumberOne,

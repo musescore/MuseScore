@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>220</width>
-    <height>500</height>
+    <height>550</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -91,10 +91,22 @@
       <property name="spacing">
        <number>3</number>
       </property>
-      <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetStrings" native="true">
-        <property name="accessibleName">
-         <string>Reset 'Strings' value</string>
+      <item row="12" column="0" colspan="3">
+       <widget class="Ms::FretCanvas" name="diagram">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>10</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>250</height>
+         </size>
+        </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -105,6 +117,40 @@
         </property>
         <property name="minimum">
          <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Scale:</string>
+        </property>
+        <property name="buddy">
+         <cstring>mag</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Fret number:</string>
+        </property>
+        <property name="buddy">
+         <cstring>fretNumber</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="Ms::ResetButton" name="resetFretNumber" native="true">
+        <property name="accessibleName">
+         <string>Reset 'Fret number' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="Ms::ResetButton" name="resetPlacement" native="true">
+        <property name="accessibleName">
+         <string>Reset 'Placement' value</string>
         </property>
        </widget>
       </item>
@@ -121,6 +167,50 @@
         </property>
         <property name="minimum">
          <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="Ms::ResetButton" name="resetFrets" native="true">
+        <property name="accessibleName">
+         <string>Reset 'Frets' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="Ms::ResetButton" name="resetShowNut" native="true">
+        <property name="accessibleName">
+         <string>Reset 'Show nut' value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0" colspan="2">
+       <widget class="QCheckBox" name="showNut">
+        <property name="text">
+         <string>Show nut</string>
+        </property>
+        <property name="minimum" stdset="0">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Placement:</string>
+        </property>
+        <property name="buddy">
+         <cstring>placement</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Frets:</string>
+        </property>
+        <property name="buddy">
+         <cstring>frets</cstring>
         </property>
        </widget>
       </item>
@@ -147,59 +237,6 @@
         </item>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Fret number:</string>
-        </property>
-        <property name="buddy">
-         <cstring>fretNumber</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetMag" native="true">
-        <property name="accessibleName">
-         <string>Reset 'Scale' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="12" column="0" colspan="3">
-       <widget class="Ms::FretCanvas" name="diagram">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>10</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>250</height>
-         </size>
-        </property>
-        <property name="mouseTracking">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="Ms::ResetButton" name="resetFretNumber" native="true">
-        <property name="accessibleName">
-         <string>Reset 'Fret number' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Frets:</string>
-        </property>
-        <property name="buddy">
-         <cstring>frets</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -207,23 +244,27 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QSpinBox" name="barre">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+      <item row="2" column="2">
+       <widget class="Ms::ResetButton" name="resetStrings" native="true">
         <property name="accessibleName">
-         <string>Barré</string>
+         <string>Reset 'Strings' value</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetPlacement" native="true">
+      <item row="5" column="1">
+       <widget class="QSpinBox" name="fretNumber">
         <property name="accessibleName">
-         <string>Reset 'Placement' value</string>
+         <string>Fret number</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="Ms::ResetButton" name="resetMag" native="true">
+        <property name="accessibleName">
+         <string>Reset 'Scale' value</string>
         </property>
        </widget>
       </item>
@@ -249,50 +290,6 @@
         </property>
         <property name="value">
          <double>1.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="2">
-       <widget class="Ms::ResetButton" name="resetShowNut" native="true">
-        <property name="accessibleName">
-         <string>Reset 'Show nut' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="Ms::ResetButton" name="resetFrets" native="true">
-        <property name="accessibleName">
-         <string>Reset 'Frets' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QSpinBox" name="fretNumber">
-        <property name="accessibleName">
-         <string>Fret number</string>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Placement:</string>
-        </property>
-        <property name="buddy">
-         <cstring>placement</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Scale:</string>
-        </property>
-        <property name="buddy">
-         <cstring>mag</cstring>
         </property>
        </widget>
       </item>
@@ -480,16 +477,6 @@
          </widget>
         </item>
        </layout>
-      </item>
-      <item row="6" column="0" colspan="2">
-       <widget class="QCheckBox" name="showNut">
-        <property name="text">
-         <string>Show nut</string>
-        </property>
-        <property name="minimum" stdset="0">
-         <number>1</number>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>

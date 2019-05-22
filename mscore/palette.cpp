@@ -47,6 +47,7 @@
 #include "shortcut.h"
 #include "tourhandler.h"
 #include "script/recorderwidget.h"
+#include "libmscore/fret.h"
 
 namespace Ms {
 
@@ -1907,6 +1908,11 @@ void Palette::dropEvent(QDropEvent* event)
             event->ignore();
             return;
             }
+      
+      if (e->isFretDiagram()) {
+            name = toFretDiagram(e)->harmonyText();
+            }
+
       e->setSelected(false);
       int i = idx(event->pos());
       if (i == -1 || cells[i])

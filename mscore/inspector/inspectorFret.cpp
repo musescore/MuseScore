@@ -50,9 +50,12 @@ InspectorFretDiagram::InspectorFretDiagram(QWidget* parent)
             };
 
       mapSignals(iiList, ppList);
-      int fretNumber = toFretDiagram(inspector->element())->fretOffset() + 1;
+
+      FretDiagram* diagram = toFretDiagram(inspector->element());
+      int fretNumber = diagram->fretOffset() + 1;
       f.fretNumber->setValue(fretNumber);
       f.resetFretNumber->setEnabled(fretNumber != 1);
+
       connect(f.fretNumber,      SIGNAL(valueChanged(int)), SLOT(fretNumberChanged(int)));
       connect(f.resetFretNumber, SIGNAL(resetClicked()),    SLOT(resetFretNumber()));
 

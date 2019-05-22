@@ -1037,8 +1037,11 @@ void Harmony::layout()
       qreal yy = ipos().y();
       qreal xx = 0.0;
 
-      if (parent()->isFretDiagram())
+      if (parent()->isFretDiagram()) {
+            if (isStyled(Pid::ALIGN))
+                  setAlign(Align::HCENTER | Align::BASELINE);
             yy = -score()->styleP(Sid::harmonyFretDist);
+            }
 
       qreal hb = lineHeight() - TextBase::baseLine();
       if (align() & Align::BOTTOM)
@@ -1059,9 +1062,16 @@ void Harmony::layout()
             xx += cw;
             xx -= width();
             }
-      else if ((align() & Align::HCENTER) || parent()->isFretDiagram()) {
-            xx += (cw * .5);
-            xx -= (width() * .5);
+      else if (align() & Align::HCENTER) {
+            if (parent()->isFretDiagram()) {
+                  FretDiagram* fd = toFretDiagram(parent());
+                  xx += fd->centerX();
+                  xx -= width() * .5;
+                  }
+            else {
+                  xx += (cw * .5);
+                  xx -= (width() * .5);
+                  }
             }
 
       setPos(xx, yy);
@@ -1674,6 +1684,12 @@ QVariant Harmony::propertyDefault(Pid id) const
             case Pid::SUB_STYLE:
                   v = int(Tid::HARMONY_A);
                   break;
+            case Pid::OFFSET:
+                  if (parent() && parent()->isFretDiagram()) {
+                        v = QVariant(QPointF(0.0, 0.0));
+                        break;
+                        }
+                  // fall-through
             default:
                   v = TextBase::propertyDefault(id);
                   break;
@@ -1688,7 +1704,9 @@ QVariant Harmony::propertyDefault(Pid id) const
 Sid Harmony::getPropertyStyle(Pid pid) const
       {
       if (pid == Pid::OFFSET) {
-            if (tid() == Tid::HARMONY_A)
+            if (parent() && parent()->isFretDiagram())
+                  return Sid::NOSTYLE;
+            else if (tid() == Tid::HARMONY_A)
                   return placeAbove() ? Sid::chordSymbolAPosAbove : Sid::chordSymbolAPosBelow;
             else
                   return placeAbove() ? Sid::chordSymbolBPosAbove : Sid::chordSymbolBPosBelow;

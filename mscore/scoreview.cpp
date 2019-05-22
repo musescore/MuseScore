@@ -3878,30 +3878,27 @@ void ScoreView::cmdAddChordName()
             return;
 
       int track = -1;
-      Segment* segment = nullptr;
+      Element* newParent = nullptr;
       Element* el = _score->selection().element();
-      if (el && el->type() == ElementType::FRET_DIAGRAM) {
+      if (el && el->isFretDiagram()) {
             FretDiagram* fd = toFretDiagram(el);
             track = fd->track();
-            while (el && !el->isSegment())
-                  el = el->parent();
-            if (el)
-                  segment = toSegment(el);
+            newParent = fd;
             }
       else {
             ChordRest* cr = _score->getSelectedChordRest();
             if (cr) {
                   track = cr->track();
-                  segment = cr->segment();
+                  newParent = toElement(cr->segment());
                   }
             }
-      if (track == -1 || !segment)
+      if (track == -1 || !newParent)
             return;
 
       _score->startCmd();
       Harmony* harmony = new Harmony(_score);
       harmony->setTrack(track);
-      harmony->setParent(segment);
+      harmony->setParent(newParent);
       _score->undoAddElement(harmony);
       _score->endCmd();
 
