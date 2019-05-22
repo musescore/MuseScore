@@ -701,7 +701,7 @@ void Slur::slurPos(SlurPos* sp)
       if (scr->up() == _up && stem1 && sc->hook()) {
             sa1 = SlurAnchor::STEM;
             // if end chord is in same direction, link end of slur to stem too
-            if (ecr->up() == scr->up() && stem2)
+            if (ecr->up() == scr->up() && stem2 && (!ecr->beam() || !ecr->beam()->cross()))
                   sa2 = SlurAnchor::STEM;
             }
 
@@ -773,7 +773,11 @@ void Slur::slurPos(SlurPos* sp)
 
             if (stem1) { //sc not null
                   Beam* beam1 = sc->beam();
-                  if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
+                  if (beam1 && beam1->cross()) {
+                        // TODO: stem direction is not finalized, so we cannot use it here
+                        yo = fixArticulations(yo, sc, __up, false);
+                        }
+                  else if (beam1 && (beam1->elements().back() != sc) && (sc->up() == _up)) {
                         // start chord is beamed but not the last chord of beam group
                         // and slur direction is same as start chord (stem side)
 
@@ -873,7 +877,11 @@ void Slur::slurPos(SlurPos* sp)
 
                   if (stem2) { //ec can't be null
                         Beam* beam2 = ec->beam();
-                        if ((stemPos && (scr->up() == ec->up()))
+                        if (beam2 && beam2->cross()) {
+                              // TODO: stem direction is not finalized, so we cannot use it here
+                              yo = fixArticulations(yo, ec, __up, false);
+                              }
+                        else if ((stemPos && (scr->up() == ec->up()))
                            || (beam2
                              && (!beam2->elements().empty())
                              && (beam2->elements().front() != ec)
@@ -1072,6 +1080,12 @@ SpannerSegment* Slur::layoutSystem(System* system)
                               }
                         Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
                         Chord* c2 = endCR()->isChord()   ? toChord(endCR())   : 0;
+
+                        if (c1 && c1->beam() && c1->beam()->cross()) {
+                              // TODO: stem direction is not finalized, so we cannot use it here
+                              _up = true;
+                              break;
+                              }
 
                         _up = !(startCR()->up());
 
