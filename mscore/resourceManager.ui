@@ -266,47 +266,47 @@
              </column>
              <item row="0" column="0">
               <property name="text">
-               <string>Batch Convert</string>
+               <string/>
               </property>
              </item>
              <item row="0" column="1">
               <property name="text">
-               <string>1.x, 2.x, 3.x</string>
+               <string/>
               </property>
              </item>
              <item row="0" column="2">
               <property name="text">
-               <string>Batch processing, Export, Convertor, Import</string>
+               <string/>
               </property>
              </item>
              <item row="1" column="0">
               <property name="text">
-               <string>Check for parallel fifths and octaves</string>
+               <string/>
               </property>
              </item>
              <item row="1" column="1">
               <property name="text">
-               <string>2.x, 3.x</string>
+               <string/>
               </property>
              </item>
              <item row="1" column="2">
               <property name="text">
-               <string>Proof reading</string>
+               <string/>
               </property>
              </item>
              <item row="2" column="0">
               <property name="text">
-               <string>Check Harmony Rules</string>
+               <string/>
               </property>
              </item>
              <item row="2" column="1">
               <property name="text">
-               <string>1.x, 2.x, 3.x</string>
+               <string/>
               </property>
              </item>
              <item row="2" column="2">
               <property name="text">
-               <string>Analysis, Proof reading</string>
+               <string/>
               </property>
              </item>
             </widget>

@@ -347,6 +347,13 @@ void ResourceManager::displayPluginRepo() {
                   if (!all_categories.contains(c2))
                         all_categories << c2;
                   }
+            QString url_text = "<a href=\"https://musescore.org" + page_url + "\">" + td_list.item(col).toElement().text() + "</a>";
+            // display a clickable hyperlink for each item
+            QLabel* plugin_name = new QLabel(url_text);
+            plugin_name->setTextFormat(Qt::RichText);
+            plugin_name->setTextInteractionFlags(Qt::TextBrowserInteraction);
+            plugin_name->setOpenExternalLinks(true);
+            pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col++), plugin_name);
             for (; col < 3; col++)
                   pluginsTable->setItem(row, col, new QTableWidgetItem(td_list.item(col).toElement().text()));
             if (page_url.isNull()) {
