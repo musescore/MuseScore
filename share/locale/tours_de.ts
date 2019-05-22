@@ -2,11 +2,6 @@
 <context>
     <name>TourXML</name>
     <message>
-        <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
-        <comment>note-input</comment>
-        <translation>Um eine Note zu einem Akkord hinzuzufügen, drücken Sie gleichzeitig &quot;Umschalt&quot; und den Notennamen oder klicken Sie auf die Notenzeile.</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>Willkommen bei MuseScore! Diese kurze Tour soll Ihnen einen Überblick über die Benutzeroberfläche von MuseScore verschaffen.</translation>
@@ -37,20 +32,6 @@
         <translation>Willkommen bei den Paletten. Mit diesen lassen sich verschiedene Elemente zu Ihrer Partitur hinzufügen. Klicken Sie auf &quot;Weiter&quot;, um mehr zu erfahren.</translation>
     </message>
     <message>
-        <source>To enter a note of the selected duration, type its letter name or click on the staff.
-    Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
-        <comment>note-input</comment>
-        <translation>Um eine Note mit der gewählten Dauer einzugeben, drücken Sie den Notennamen oder klicken auf die Notenzeile.
-Zum Ändern der Oktave drücken Sie &quot;Strg&quot;+&quot;Pfeil hoch/runter&quot; (macOS: &quot;Cmd&quot;+&quot;Pfeil hoch/runter&quot;).</translation>
-    </message>
-    <message>
-        <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
-    or click one of these icons.</source>
-        <comment>note-input</comment>
-        <translation>Um ein Vorzeichen zu einer Note hinzuzufügen, drücken Sie die &quot;Pfeil Hoch&quot; , um die Tonhöhe zu erhöhen, bzw. &quot;Pfeil runter&quot;, um die Tonhöhe zu senken
-oder klicken auf eines der Symbole.</translation>
-    </message>
-    <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
     Each staff can have up to four voices.
     The default is voice 1, and it should be used first for each staff.
@@ -62,27 +43,11 @@ Voreingestellt ist die Stimme 1, die auch als erstes für jede Notenzeile eingeg
 Um Noten in eine andere Stimme einzugeben, klicken Sie auf eines dieser Symbole.</translation>
     </message>
     <message>
-        <source>This is the score view, where you can view and edit your score.
-    Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
-    If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
-        <comment>welcome</comment>
-        <translation>Das ist die &quot;Partituransicht&quot;. In dieser kann die Partitur angesehen und bearbeitet werden.
-Zum Scrollen verwenden Sie Touchpad oder Mausrad (für horizontal mit &quot;Umschalt&quot;).
-Wenn Sie mehrere Partituren geöffnet haben, können Sie zwischen diesen wechseln, indem Sie in der Partituransicht in der oberen Hälfte des Fensters &quot;Tab&quot; drücken.</translation>
-    </message>
-    <message>
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
         <translation>Dies sind die Werkzeugleisten.
     Die drei wichtigsten sind &quot;Dateibefehle&quot;, &quot;Wiedergabe-Werkzeuge&quot; und &quot;Noteneingabe&quot;.</translation>
-    </message>
-    <message>
-        <source>The main menu contains most other commands.
-    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
-        <comment>welcome</comment>
-        <translation>Das Hauptmenü enthält die meisten anderen Befehle.
-Außerdem können viele Befehle mittels Tastenkürzel oder durch Rechtsklick (macOS: &quot;Strg&quot;+Klick) direkt innerhalb der Partituransicht getätigt werden.</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
@@ -142,13 +107,6 @@ Für eine Punktierung der Note klicken Sie auf das entsprechende Symbol oder dr�
  Klicken Sie auf &quot;Weiter&quot;, um mehr zu erfahren.</translation>
     </message>
     <message>
-        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
-    To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</source>
-        <comment>navigate-tour</comment>
-        <translation>Die schnellste Art nach oben oder und zu scrollen, ist es das Mausrad oder die entsprechende Geste zu verwenden (zum Beispiel 2-Finger wischen).
-    Um horizontal zu scrollen, zusätzlich zum Mausrad bzw. der Geste &quot;Umschalt&quot; drücken.</translation>
-    </message>
-    <message>
         <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as Fn+Up/Down/Left/Right.</source>
@@ -156,13 +114,6 @@ Für eine Punktierung der Note klicken Sie auf das entsprechende Symbol oder dr�
         <translation>Die Navigationstasten auf Ihrer Tastatur wie Bild rauf, Bild runter, Pos 1 und Ende funktionieren so wie in anderen Anwendungen auch,
     um sich zwischen Seiten zu bewegen.
     Tastaturen, denen diese Tasten fehlen, bieten meistens Alternativen wie &quot;Fn&quot;+&quot;Hoch/Runter/Links/Rechts&quot;.</translation>
-    </message>
-    <message>
-        <source>You can move the score short distances by clicking an empty area of the page and dragging.
-    By the way, you can also select regions by holding Shift while dragging.</source>
-        <comment>navigate-tour</comment>
-        <translation>Sie können die Partitur über kurze Entfernungen verschieben, indem Sie in einen leeren Bereich der Seite klicken und ziehen.
-    Übrigens, Sie können Regionen auswählen indem Sie beim ziehen &quot;Umschalt&quot; gedrückt halten.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -249,9 +200,9 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
     If the box is highlighted, then there are notes in that measure.
     Boxes with a thin blue outline represent measures that are currently in view.</source>
         <comment>timeline-tour</comment>
-        <translation>Der Bereich unten enthält eine Zeile für jedes Instrument.
-    Jeder Kasten in der Zeile entspricht einem Takt für dieses Instrument.
-    Wen der Kasten hervorgehoben ist, enthält der Takt Noten.
+        <translation>Der Bereich unten enthält eine Zeile pro Instrument.
+    Jeder Kasten in der Zeile entspricht je einem Takt für dieses Instrument.
+    Wenn der Kasten hervorgehoben ist, enthält der Takt Noten.
     Kästen mit einer dünnen blauen Umrandung repräsentieren Takte, die zur Zeit sichtbar sind.</translation>
     </message>
     <message>
@@ -272,18 +223,7 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
     Es wird hervorgehoben, um anzuzeigen, dass es aus ausgewählt ist.
     Sie können die &quot;Links&quot; und &quot;Rechts&quot; Pfeiltasten verwenden, um eine andere Note oder Pause Ihrer Partitur auszuwählen.
     Tipp: Wenn Sie die &quot;Alt&quot; Taste (&quot;Option&quot; bei macOS) zusammen mit den Pfeiltasten drücken können Sie ebenfalls andere Elemente auswählen,
-    und auch auf und ab von Notenzeile zu Notenzeile gehen.</translation>
-    </message>
-    <message>
-        <source>A list selection is a combination of single selections.
-    Press Ctrl (macOS: Cmd) while clicking to add or remove elements to the list selection.
-    You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
-    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
-        <comment>select-tour</comment>
-        <translation>Eine Listenauswahl ist eine Kombination einzelner Auswahlen.
-    Drücken Sie &quot;Strg&quot; (macOS: &quot;Cmd&quot;) während des klickens, um Elemente zur Liste hinzuzufügen oder zu entfernen.
-    Sie können auch schell gleichartige Elemente auswählen, durch per rechstklick (macOS: Strg+klick) auf eines
-    und dann auf eine der &quot;Auswahl&quot; Optionen des Kontextmenüs.</translation>
+    und dabei auch auf und ab von Notenzeile zu Notenzeile gehen.</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -301,37 +241,119 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation>Eine andere Art der Auswahl ist es bei gedrückter &quot;Umschalt&quot; Taste die Maus zu ziehen.
-    Wenn diese Aushalt Noten enthält, wird es eine Bereichsauswahl,
+        <translation>Eine andere Art der Auswahl ist es bei gedrückter &quot;Umschalt&quot; Taste zu ziehen.
+    Wenn diese Auswahl Noten enthält, wird es eine Bereichsauswahl,
     sonst eine Listenauswahl.</translation>
     </message>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation>Schließlich erlaubt der Auswahlfilter (zu finden im &quot;Ansicht&quot; Menü) es, bestimmte Elemente von der Bereichsauswahl auszuschießen.</translation>
+        <translation>Schließlich erlaubt der Auswahlfilter (zu finden im Menü &quot;Ansicht&quot;) es, bestimmte Elemente von der Bereichsauswahl auszuschießen.</translation>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
         <translation>Wenn Sie einen Wert verändert haben, können Sie ihn durch klick auf den &quot;Zurücksetzen&quot; Knopf auf seine Voreinstellung zurücksetzen.
     Wenn dieser Wert mit einen Stil verknüpft ist, können Sie ihn durch klick auf den &quot;Als Stil verwenden&quot; Knopf als neue Voreinstellung dieses Stils setzen.
     Sie können Stil Voreinstellungen auch über Format &gt; Stil… verändern.</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
+    To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation>Die schnellste Art nach oben oder und zu scrollen, ist es das Mausrad oder die entsprechende Geste zu verwenden (zum Beispiel 2-Finger wischen).
+    Um horizontal zu scrollen, zusätzlich zum Mausrad bzw. der Geste &quot;Umschalt&quot; drücken.</translation>
+    </message>
+    <message>
+        <source>You can move the score short distances by clicking an empty area of the page and dragging.
+    By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
+        <comment>navigate-tour</comment>
+        <translation>Sie können die Partitur über kurze Entfernungen verschieben, indem Sie in einen leeren Bereich der Seite klicken und ziehen.
+    Übrigens, Sie können Regionen auswählen, indem Sie beim ziehen &quot;Umschalt&quot; gedrückt halten.</translation>
+    </message>
+    <message>
+        <source>To enter a note of the selected duration, type its letter name or click on the staff.
+    Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
+        <comment>note-input</comment>
+        <translation>Um eine Note mit der gewählten Dauer einzugeben, drücken Sie den Notennamen oder klicken auf die Notenzeile.
+Zum Ändern der Oktave drücken Sie &quot;Strg&quot;+&quot;Pfeil hoch/runter&quot; (macOS: &quot;Cmd&quot;+&quot;Pfeil hoch/runter&quot;).</translation>
+    </message>
+    <message>
+        <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
+    or click one of these icons.</source>
+        <comment>note-input</comment>
+        <translation>Um ein Versetzungszeichen zu einer Note hinzuzufügen, drücken Sie die &quot;Pfeil Hoch&quot;, um die Tonhöhe zu erhöhen, bzw. &quot;Pfeil runter&quot;, um die Tonhöhe zu senken
+oder klicken auf eines der Symbole.</translation>
+    </message>
+    <message>
+        <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
+        <comment>note-input</comment>
+        <translation>Um eine Note zu einem Akkord hinzuzufügen, drücken Sie gleichzeitig &quot;Umschalt&quot; und den Notennamen oder klicken Sie auf die Notenzeile.</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
         <translation>Um eine Triole oder andere N-Tole zu erstellen, wählen Sie den Notenwert der Gesamtdauer und drücken anschließend &quot;Strg&quot;+Zahl oder das Menü &quot;Hinzufügen &gt; N-Tole&quot;.</translation>
+    </message>
+    <message>
+        <source>A list selection is a combination of single selections.
+    Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
+    You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
+    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
+        <comment>select-tour</comment>
+        <translation>Eine Listenauswahl ist eine Kombination einzelner Auswahlen.
+    Drücken Sie &quot;Strg&quot; (macOS: &quot;Cmd&quot;) während des Klickens, um Elemente zur Liste hinzuzufügen oder zu entfernen.
+    Sie können auch schell gleichartige Elemente auswählen, durch per rechstklick (macOS: Strg+klick) auf eines
+    und dann auf eine der &quot;Auswahl&quot; Optionen des Kontextmenüs.</translation>
+    </message>
+    <message>
+        <source>Most elements on the lines palette span a range from a start element to an end element.
+
+    To edit its range, double-click the line (which automatically selects its end handle) and:
+
+    - Press Shift-Right to move that handle forward.
+
+    - Press Shift-Left to move that handle backward.</source>
+        <comment>spanner-drop-apply</comment>
+        <translation>Die meisten Elemente der Linienpalette überspannen einen Bereich von einen Startelement zu einem Endelement.
+
+    Um diesen Bereich zu verändern, klicken Sie doppelt auf die Linie (was automatisch dessen End-Anfasser auswählt) und:
+
+    - Drücken &quot;Umschalt&quot;+&quot;Rechts&quot; um diesen Anfasser vorwärts zu verschieben.
+
+    - Drücken &quot;Umschalt&quot;+&quot;Links&quot; um diesen Anfasser rückwärts zu verschieben.</translation>
+    </message>
+    <message>
+        <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
+        <comment>spanner-drop-apply</comment>
+        <translation>Statt dessen können Sie auch zuerst den Bereich markieren und dann per Doppelklick auf die gewünschte Linie in der Palette diese auf den ausgewählten Bereich anwenden.</translation>
+    </message>
+    <message>
+        <source>This is the score view, where you can view and edit your score.
+    Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
+    If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
+        <comment>welcome</comment>
+        <translation>Das ist die Partituransicht. In dieser kann die Partitur angesehen und bearbeitet werden.
+  Zum Scrollen verwenden Sie Touchpad oder Mausrad (für horizontal mit &quot;Umschalt&quot;).
+  Wenn Sie mehrere Partituren geöffnet haben, können Sie zwischen diesen wechseln, indem Sie in der Partituransicht in der oberen Hälfte des Fensters die Tabs auswählen.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation>Mit der Werkzeugleiste &quot;Dateibefehle&quot; kann man Partituren erstellen, speichern, öffnen und ausdrucken sowie Änderungen an der Partitur vornehmen oder diese rückgängig machen.
+        <translation>Mittels der Werkzeugleiste &quot;Dateibefehle&quot; kann man Partituren erstellen, speichern, öffnen und ausdrucken, sowie Änderungen an der Partitur vornehmen oder diese rückgängig machen.
     Man kann Partituren auch in seinem &quot;musescore.com&quot;-Konto speichern, gehen Sie dafür auf &quot;Datei &gt; Online Speichern&quot;.
-    Die Werkzeuge rechts in dieser Leiste regeln die Anzeige der Noten.</translation>
+    Die Bedienelemente rechts in dieser Leiste steuern die Anzeige der Noten.</translation>
+    </message>
+    <message>
+        <source>The main menu contains most other commands.
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
+        <comment>welcome</comment>
+        <translation>Das Hauptmenü enthält die meisten anderen Befehle.
+Außerdem können viele Befehle mittels Tastenkürzel oder durch Rechtsklick (macOS: &quot;Strg&quot;+Klick) direkt innerhalb der Partituransicht getätigt werden.</translation>
     </message>
     <message>
         <source>That's the end of this tour!
