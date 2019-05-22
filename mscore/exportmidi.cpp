@@ -258,7 +258,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                                     // set pitch bend sensitivity to 12 semitones:
                                     track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 0));
                                     track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HRPN, 0));
-                                    track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, PITCH_BEND_SENSITIVITY));
+                                    track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_HDATA, 12));
 
                                     // reset fine tuning
                                     /*track.insert(0, MidiEvent(ME_CONTROLLER, channel, CTRL_LRPN, 1));
