@@ -22,9 +22,6 @@ class XmlWriter;
 
 enum class BeatType : char;
 
-// 4 is the default for the majority of synthesisers, aka VSTis
-const int PITCH_BEND_SENSITIVITY = 4;
-
 //---------------------------------------------------------
 //   Event types
 //---------------------------------------------------------
@@ -336,7 +333,6 @@ typedef EventList::const_iterator ciEvent;
 
 extern QString midiMetaName(int meta);
 
-extern int midiBendPitch(int pitch);
 }
 #endif
 

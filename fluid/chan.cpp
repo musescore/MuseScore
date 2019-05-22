@@ -21,7 +21,6 @@
 #include "fluid.h"
 #include "sfont.h"
 #include "gen.h"
-#include "synthesizer/event.h"
 
 namespace FluidS {
 
@@ -70,7 +69,7 @@ void Channel::initCtrl()
       key_pressure     = 0;
       channel_pressure = 0;
       pitch_bend       = 0x2000; // Range is 0x4000, pitch bend wheel starts in centered position
-      pitch_wheel_sensitivity = PITCH_BEND_SENSITIVITY; /* four semi-tones, default for many DAWs */
+      pitch_wheel_sensitivity = 12; /* twelve semi-tones */
       bank_msb         = 0;
 
       for (int i = 0; i < GEN_LAST; i++) {
