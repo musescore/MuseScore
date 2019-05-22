@@ -204,8 +204,6 @@ bool MidiCoreEvent::isChannelEvent() const
       // return false;
       }
 
-
-
 //---------------------------------------------------------
 //   Event::write
 //---------------------------------------------------------
@@ -354,10 +352,6 @@ QString midiMetaName(int meta)
                   break;
             }
       return QString(s);
-      }
-
-int midiBendPitch(int pitch) {
-      return (pitch * 8192) / (PITCH_BEND_SENSITIVITY * 100) + 8192;
       }
 
 //---------------------------------------------------------
