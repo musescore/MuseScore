@@ -1624,6 +1624,7 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               // we should relayout entire measure
                               // this probably means starting over for beam as well
                               // see https://musescore.org/en/node/71901
+                              // also see https://musescore.org/en/node/289492
                               }
                         }
 

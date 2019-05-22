@@ -96,6 +96,45 @@ static void layoutSegmentElements(Segment* segment, int startTrack, int endTrack
             }
       }
 
+#if 0
+//---------------------------------------------------------
+//   vUp
+//    reurns true if chord should be treated as up
+//    for purpose of setting horizontal position
+//    for most chords, this is just chord->up()
+//    but for notes on cross-staff beams, we take care to produce more consistent results
+//    since the initial guess for up() may change during layout
+//---------------------------------------------------------
+static bool vUp(Chord* chord)
+      {
+      if (!chord)
+            return true;
+      else if (!chord->beam() || !chord->beam()->cross()) {
+            return chord->up();
+            }
+      else {
+            // cross-staff beam: we cannot know the actual direction of this chord until the beam layout,
+            // but that's too late - it won't work to lay out as if the chord is up on pass one but then down on pass two
+            // so just assign a logical direction based on attributes that won't change
+            // so chords can be laid out consistently on both passes
+            bool up;
+            if (chord->stemDirection() != Direction::AUTO)
+                  up = chord->stemDirection() == Direction::UP;
+            else if (chord->staffMove())
+                  up = chord->staffMove() > 0;
+            else if (chord->track() < chord->beam()->track())
+                  up = false;
+            else if (chord->track() > chord->beam()->track())
+                  up = true;
+            else if (chord->measure()->hasVoices(chord->staffIdx()))
+                  up = !(chord->track() % 2);
+            else
+                  up = !chord->staff()->isTop();
+            return up;
+            }
+      }
+#endif
+
 //---------------------------------------------------------
 //   layoutChords1
 //    - layout upstem and downstem chords
@@ -113,6 +152,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             return;
             }
 
+      bool crossBeamFound = false;
       std::vector<Note*> upStemNotes;
       std::vector<Note*> downStemNotes;
       int upVoices       = 0;
@@ -137,6 +177,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
             Element* e = segment->element(track);
             if (e && e->isChord()) {
                   Chord* chord = toChord(e);
+                  if (chord->beam() && chord->beam()->cross())
+                        crossBeamFound = true;
                   bool hasGraceBefore = false;
                   for (Chord* c : chord->graceNotes()) {
                         if (c->isGraceBefore())
@@ -268,7 +310,9 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   Note* bottomUpNote = upStemNotes.front();
                   Note* topDownNote  = downStemNotes.back();
                   int separation;
-                  if (bottomUpNote->chord()->staffMove() == topDownNote->chord()->staffMove())
+                  // TODO: handle conflicts for cross-staff notes and notes on cross-staff beams
+                  // for now we simply treat these as though there is no conflict
+                  if (bottomUpNote->chord()->staffMove() == topDownNote->chord()->staffMove() && !crossBeamFound)
                         separation = topDownNote->line() - bottomUpNote->line();
                   else
                         separation = 2;   // no conflict
