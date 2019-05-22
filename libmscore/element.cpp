@@ -514,7 +514,16 @@ bool Element::intersects(const QRectF& rr) const
 
 void Element::writeProperties(XmlWriter& xml) const
       {
-      writeProperty(xml, Pid::AUTOPLACE);
+      bool autoplaceEnabled = score()->styleB(Sid::autoplaceEnabled);
+      if (!autoplaceEnabled) {
+            score()->setStyleValue(Sid::autoplaceEnabled, true);
+            writeProperty(xml, Pid::AUTOPLACE);
+            score()->setStyleValue(Sid::autoplaceEnabled, autoplaceEnabled);
+            }
+      else {
+            writeProperty(xml, Pid::AUTOPLACE);
+            }
+
       // copy paste should not keep links
       if (_links && (_links->size() > 1) && !xml.clipboardmode()) {
             if (MScore::debugMode)
