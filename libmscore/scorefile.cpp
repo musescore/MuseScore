@@ -209,6 +209,11 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
       xml.setCurTrack(0);
       xml.setTrackDiff(-staffStart * VOICES);
       if (measureStart) {
+            // don't write with autoplace disabled, or all elements will have it disabled individually
+            bool autoplaceEnabled = score()->styleB(Sid::autoplaceEnabled);
+            if (!autoplaceEnabled)
+                  score()->setStyleValue(Sid::autoplaceEnabled, true);
+
             for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
                   xml.stag(staff(staffIdx), QString("id=\"%1\"").arg(staffIdx + 1 - staffStart));
                   xml.setCurTick(measureStart->tick());
@@ -231,6 +236,8 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
                         }
                   xml.etag();
                   }
+            if (!autoplaceEnabled)
+                  score()->setStyleValue(Sid::autoplaceEnabled, false);
             }
       xml.setCurTrack(-1);
       if (isMaster()) {

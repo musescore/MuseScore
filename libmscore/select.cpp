@@ -675,6 +675,11 @@ QString Selection::mimeType() const
 
 QByteArray Selection::mimeData() const
       {
+      // don't write with autoplace disabled, or all elements will have it disabled individually
+      bool autoplaceEnabled = score()->styleB(Sid::autoplaceEnabled);
+      if (!autoplaceEnabled)
+            score()->setStyleValue(Sid::autoplaceEnabled, true);
+
       QByteArray a;
       switch (_state) {
             case SelState::LIST:
@@ -689,6 +694,8 @@ QByteArray Selection::mimeData() const
                   a = staffMimeData();
                   break;
             }
+      if (!autoplaceEnabled)
+            score()->setStyleValue(Sid::autoplaceEnabled, false);
       return a;
       }
 
