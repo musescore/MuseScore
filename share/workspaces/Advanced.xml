@@ -2197,6 +2197,29 @@
         <Cell name="C">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>14</root>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <marker>circle</marker>
+                </string>
+              <string no="4">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
               </string>
@@ -2219,13 +2242,29 @@
           </Cell>
         <Cell name="Cm">
           <FretDiagram>
-            <frets>4</frets>
             <fretOffset>2</fretOffset>
+            <frets>4</frets>
+            <Harmony>
+              <root>14</root>
+              <name>m</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="2">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="2">normal</dot>
+                </string>
+              <barre start="1" end="-1">1</barre>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
-              </string>
-            <string no="1">
-              <dot>1</dot>
               </string>
             <string no="2">
               <dot>3</dot>
@@ -2236,12 +2275,35 @@
             <string no="4">
               <dot>2</dot>
               </string>
-            <barre>1</barre>
             </FretDiagram>
           </Cell>
         <Cell name="C7">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>14</root>
+              <name>7</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
               </string>
@@ -2265,6 +2327,29 @@
         <Cell name="D">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>16</root>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <marker>cross</marker>
+                </string>
+              <string no="2">
+                <marker>circle</marker>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="5">
+                <dot fret="2">normal</dot>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
               </string>
@@ -2288,6 +2373,30 @@
         <Cell name="Dm">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>16</root>
+              <name>m</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <marker>cross</marker>
+                </string>
+              <string no="2">
+                <marker>circle</marker>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="5">
+                <dot fret="1">normal</dot>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
               </string>
@@ -2311,6 +2420,30 @@
         <Cell name="D7">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>16</root>
+              <name>7</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <marker>cross</marker>
+                </string>
+              <string no="2">
+                <marker>circle</marker>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="5">
+                <dot fret="2">normal</dot>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
               </string>
@@ -2334,6 +2467,29 @@
         <Cell name="E">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>18</root>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>circle</marker>
+                </string>
+              <string no="1">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="4">
+                <marker>circle</marker>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>79</marker>
               </string>
@@ -2357,6 +2513,30 @@
         <Cell name="Em">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>18</root>
+              <name>m</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>circle</marker>
+                </string>
+              <string no="1">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <marker>circle</marker>
+                </string>
+              <string no="4">
+                <marker>circle</marker>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>79</marker>
               </string>
@@ -2380,6 +2560,30 @@
         <Cell name="E7">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>18</root>
+              <name>7</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>circle</marker>
+                </string>
+              <string no="1">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="2">
+                <marker>circle</marker>
+                </string>
+              <string no="3">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="4">
+                <marker>circle</marker>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>79</marker>
               </string>
@@ -2403,9 +2607,21 @@
         <Cell name="F">
           <FretDiagram>
             <frets>4</frets>
-            <string no="0">
-              <dot>1</dot>
-              </string>
+            <Harmony>
+              <root>13</root>
+              </Harmony>
+            <fretDiagram>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <barre start="0" end="-1">1</barre>
+              </fretDiagram>
             <string no="1">
               <dot>3</dot>
               </string>
@@ -2415,27 +2631,48 @@
             <string no="3">
               <dot>2</dot>
               </string>
-            <barre>1</barre>
             </FretDiagram>
           </Cell>
         <Cell name="Fm">
           <FretDiagram>
             <frets>4</frets>
-            <string no="0">
-              <dot>1</dot>
-              </string>
+            <Harmony>
+              <root>13</root>
+              <name>m</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="3">normal</dot>
+                </string>
+              <barre start="0" end="-1">1</barre>
+              </fretDiagram>
             <string no="1">
               <dot>3</dot>
               </string>
             <string no="2">
               <dot>3</dot>
               </string>
-            <barre>1</barre>
             </FretDiagram>
           </Cell>
         <Cell name="F7">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>13</root>
+              <name>7</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <barre start="0" end="-1">1</barre>
+              </fretDiagram>
             <string no="0">
               <dot>1</dot>
               </string>
@@ -2451,6 +2688,29 @@
         <Cell name="G">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>15</root>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="1">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="2">
+                <marker>circle</marker>
+                </string>
+              <string no="3">
+                <marker>circle</marker>
+                </string>
+              <string no="4">
+                <marker>circle</marker>
+                </string>
+              <string no="5">
+                <dot fret="3">normal</dot>
+                </string>
+              </fretDiagram>
             <string no="0">
               <dot>3</dot>
               </string>
@@ -2473,23 +2733,56 @@
           </Cell>
         <Cell name="Gm">
           <FretDiagram>
-            <frets>4</frets>
             <fretOffset>2</fretOffset>
-            <string no="0">
-              <dot>1</dot>
-              </string>
+            <frets>4</frets>
+            <Harmony>
+              <root>15</root>
+              <name>m</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="1">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="3">normal</dot>
+                </string>
+              <barre start="0" end="-1">1</barre>
+              </fretDiagram>
             <string no="1">
               <dot>3</dot>
               </string>
             <string no="2">
               <dot>3</dot>
               </string>
-            <barre>1</barre>
             </FretDiagram>
           </Cell>
         <Cell name="G7">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>15</root>
+              <name>7</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="1">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="2">
+                <marker>circle</marker>
+                </string>
+              <string no="3">
+                <marker>circle</marker>
+                </string>
+              <string no="4">
+                <marker>circle</marker>
+                </string>
+              <string no="5">
+                <dot fret="1">normal</dot>
+                </string>
+              </fretDiagram>
             <string no="0">
               <dot>3</dot>
               </string>
@@ -2513,6 +2806,29 @@
         <Cell name="A">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>17</root>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <marker>circle</marker>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
               </string>
@@ -2536,6 +2852,30 @@
         <Cell name="Am">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>17</root>
+              <name>m</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <marker>circle</marker>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
               </string>
@@ -2559,6 +2899,30 @@
         <Cell name="A7">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>17</root>
+              <name>7</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <marker>circle</marker>
+                </string>
+              <string no="2">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="3">
+                <marker>circle</marker>
+                </string>
+              <string no="4">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="5">
+                <marker>circle</marker>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
               </string>
@@ -2581,13 +2945,28 @@
           </Cell>
         <Cell name="B">
           <FretDiagram>
-            <frets>4</frets>
             <fretOffset>1</fretOffset>
+            <frets>4</frets>
+            <Harmony>
+              <root>19</root>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="2">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="3">normal</dot>
+                </string>
+              <barre start="1" end="-1">1</barre>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
-              </string>
-            <string no="1">
-              <dot>1</dot>
               </string>
             <string no="2">
               <dot>3</dot>
@@ -2598,18 +2977,33 @@
             <string no="4">
               <dot>3</dot>
               </string>
-            <barre>1</barre>
             </FretDiagram>
           </Cell>
         <Cell name="Bm">
           <FretDiagram>
-            <frets>4</frets>
             <fretOffset>1</fretOffset>
+            <frets>4</frets>
+            <Harmony>
+              <root>19</root>
+              <name>m</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="2">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="3">normal</dot>
+                </string>
+              <string no="4">
+                <dot fret="2">normal</dot>
+                </string>
+              <barre start="1" end="-1">1</barre>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
-              </string>
-            <string no="1">
-              <dot>1</dot>
               </string>
             <string no="2">
               <dot>3</dot>
@@ -2620,12 +3014,35 @@
             <string no="4">
               <dot>2</dot>
               </string>
-            <barre>1</barre>
             </FretDiagram>
           </Cell>
         <Cell name="B7">
           <FretDiagram>
             <frets>4</frets>
+            <Harmony>
+              <root>19</root>
+              <name>7</name>
+              </Harmony>
+            <fretDiagram>
+              <string no="0">
+                <marker>cross</marker>
+                </string>
+              <string no="1">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="2">
+                <dot fret="1">normal</dot>
+                </string>
+              <string no="3">
+                <dot fret="2">normal</dot>
+                </string>
+              <string no="4">
+                <marker>circle</marker>
+                </string>
+              <string no="5">
+                <dot fret="2">normal</dot>
+                </string>
+              </fretDiagram>
             <string no="0">
               <marker>88</marker>
               </string>

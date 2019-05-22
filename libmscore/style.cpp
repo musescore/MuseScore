@@ -265,7 +265,7 @@ static const StyleType styleTypes[] {
       { Sid::vibratoPosAbove,         "vibratoPosAbove",         QPointF(.0, -1) },
       { Sid::vibratoPosBelow,         "vibratoPosBelow",         QPointF(.0, 1) },
 
-      { Sid::harmonyFretDist,          "harmonyFretDist",        Spatium(0.5) },
+      { Sid::harmonyFretDist,          "harmonyFretDist",        Spatium(1.0) },
       { Sid::minHarmonyDistance,       "minHarmonyDistance",     Spatium(0.5) },
       { Sid::maxHarmonyBarDistance,    "maxHarmonyBarDistance",  Spatium(3.0) },
       { Sid::harmonyPlacement,         "harmonyPlacement",       int(Placement::ABOVE) },
@@ -312,6 +312,9 @@ static const StyleType styleTypes[] {
       { Sid::fretStrings,             "fretStrings",             6 },
       { Sid::fretFrets,               "fretFrets",               5 },
       { Sid::fretNut,                 "fretNut",                 QVariant(true) },
+      { Sid::fretDotSize,             "fretDotSize",             QVariant(1.0) },
+      { Sid::fretStringSpacing,       "fretStringSpacing",       Spatium(0.7) },
+      { Sid::fretFretSpacing,         "fretFretSpacing",         Spatium(0.8) },
 
       { Sid::showPageNumber,          "showPageNumber",          QVariant(true) },
       { Sid::showPageNumberOne,       "showPageNumberOne",       QVariant(false) },
