@@ -57,7 +57,7 @@ void MuseScore::showTimeline(bool visible)
             }
       connect(_timeline, SIGNAL(visibilityChanged(bool)), act, SLOT(setChecked(bool)));
       connect(_timeline, SIGNAL(closed(bool)), act, SLOT(setChecked(bool)));
-      reDisplayDockWidget(_timeline, visible);
+      _timeline->setVisible(visible);
 
       getAction("toggle-timeline")->setChecked(visible);
       if (visible)
