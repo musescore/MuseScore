@@ -1963,8 +1963,10 @@ void Chord::layoutPitched()
                   }
             }
 
+#if 0
       if (!_articulations.isEmpty()) {
             // TODO: allocate space to avoid "staircase" effect
+            // but we would need to determine direction in order to get correct symid & bbox
             // another alternative is to limit the width contribution of the articulation in layoutArticulations2()
             //qreal aWidth = 0.0;
             for (Articulation* a : articulations())
@@ -1974,6 +1976,7 @@ void Chord::layoutPitched()
             //lll = qMax(lll, aExtra);
             //rrr = qMax(rrr, aExtra);
             }
+#endif
 
       _spaceLw = lll;
       _spaceRw = rrr;
@@ -2321,11 +2324,13 @@ void Chord::layoutTablature()
             rrr = qMax(rrr, x);
             }
 
+#if 0
       if (!_articulations.isEmpty()) {
             // TODO: allocate space? see layoutPitched()
             for (Articulation* a : articulations())
                   a->layout();
             }
+#endif
 
       _spaceLw = lll;
       _spaceRw = rrr;
@@ -3278,6 +3283,7 @@ void Chord::layoutArticulations()
                   continue;
 
             bool bottom = !a->up();  // true: articulation is below chord;  false: articulation is above chord
+            a->layout();             // must be done after assigning direction, or else symId is not reliable
 
             bool headSide = bottom == up();
             qreal x = centerX();
@@ -3401,6 +3407,7 @@ void Chord::layoutArticulations2()
 
             if (a->up()) {
                   if (!a->layoutCloseToNote()) {
+                        a->layout();
                         a->setPos(x, chordTopY);
                         a->doAutoplace();
                         }
@@ -3408,6 +3415,7 @@ void Chord::layoutArticulations2()
                   }
             else {
                   if (!a->layoutCloseToNote()) {
+                        a->layout();
                         a->setPos(x, chordBotY);
                         a->doAutoplace();
                         }
@@ -3423,6 +3431,7 @@ void Chord::layoutArticulations2()
       for (Articulation* a : _articulations) {
             ArticulationAnchor aa = a->anchor();
             if (aa == ArticulationAnchor::TOP_STAFF || aa == ArticulationAnchor::BOTTOM_STAFF) {
+                  a->layout();
                   if (a->up()) {
                         a->setPos(x, staffTopY);
                         staffTopY -= distance0;
