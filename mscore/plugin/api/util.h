@@ -124,9 +124,6 @@ class MsProcess : public QProcess {
       Q_INVOKABLE QByteArray readAllStandardOutput()      { return QProcess::readAllStandardOutput(); }
       };
 
-// These classes usage in plugins is anyway disabled
-// so exclude them from documentation too
-///   \cond MS_INTERNAL
 /// //---------------------------------------------------------
 //   @@ ScoreView
 ///    This is an GUI element to show a score.
@@ -177,7 +174,6 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       virtual const QRect geometry() const override { return QRect(QQuickPaintedItem::x(), y(), width(), height()); }
       /// \endcond
       };
-/// \endcond //MS_INTERNAL
 } // namespace PluginAPI
 } // namespace Ms
 #endif
