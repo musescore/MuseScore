@@ -2324,11 +2324,13 @@ void Chord::layoutTablature()
             rrr = qMax(rrr, x);
             }
 
+#if 0
       if (!_articulations.isEmpty()) {
             // TODO: allocate space? see layoutPitched()
             for (Articulation* a : articulations())
                   a->layout();
             }
+#endif
 
       _spaceLw = lll;
       _spaceRw = rrr;
