@@ -428,7 +428,6 @@ class Score : public QObject, public ScoreElement {
       bool _showInstrumentNames   { true  };
       bool _showVBox              { true  };
       bool _printing              { false };      ///< True if we are drawing to a printer
-      bool _playlistDirty         { true  };
       bool _autosaveDirty         { true  };
       bool _savedCapture          { false };      ///< True if we saved an image capture
       bool _saved                 { false };    ///< True if project was already saved; only on first
@@ -819,7 +818,7 @@ class Score : public QObject, public ScoreElement {
       void setPrinting(bool val)     { _printing = val;      }
       void setAutosaveDirty(bool v)  { _autosaveDirty = v;    }
       bool autosaveDirty() const     { return _autosaveDirty; }
-      bool playlistDirty()           { return _playlistDirty; }
+      virtual bool playlistDirty() const;
       virtual void setPlaylistDirty();
 
       void spell();
@@ -1204,7 +1203,8 @@ class MasterScore : public Score {
       TimeSigMap* _sigmap;
       TempoMap* _tempomap;
       RepeatList* _repeatList;
-      bool _expandRepeats = true;
+      bool _expandRepeats     { true };
+      bool _playlistDirty     { true };
       QList<Excerpt*> _excerpts;
       std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
       Score* _playbackScore = nullptr;
@@ -1255,10 +1255,13 @@ class MasterScore : public Score {
       virtual TimeSigMap* sigmap() const override                     { return _sigmap;     }
       virtual TempoMap* tempomap() const override                     { return _tempomap;   }
 
+      virtual bool playlistDirty() const override                     { return _playlistDirty; }
+      virtual void setPlaylistDirty() override;
+      void setPlaylistClean()                                         { _playlistDirty = false; }
+
       void setExpandRepeats(bool expandRepeats);
       void updateRepeatListTempo();
       virtual const RepeatList& repeatList() const override;
-      void setPlaylistDirty() override;
 
       virtual QList<Excerpt*>& excerpts() override                    { return _excerpts;   }
       virtual const QList<Excerpt*>& excerpts() const override        { return _excerpts;   }
