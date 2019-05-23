@@ -304,7 +304,7 @@ void PluginAPI::registerQmlTypes()
             return;
 
       const char* enumErr = "You can't create an enumeration";
-//TODO-ws            qmlRegisterType<MsProcess>  ("MuseScore", 3, 0, "QProcess");
+      qmlRegisterType<MsProcess>  ("MuseScore", 3, 0, "QProcess");
       qmlRegisterType<FileIO, 1>  ("FileIO",    3, 0, "FileIO");
       //-----------mscore bindings
       qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);

@@ -104,9 +104,6 @@ class FileIO : public QObject {
       QString mSource;
       };
 
-// These classes usage in plugins is anyway disabled
-// so exclude them from documentation too
-///   \cond MS_INTERNAL
 //---------------------------------------------------------
 //   MsProcess
 //   @@ QProcess
@@ -127,7 +124,10 @@ class MsProcess : public QProcess {
       Q_INVOKABLE QByteArray readAllStandardOutput()      { return QProcess::readAllStandardOutput(); }
       };
 
-//---------------------------------------------------------
+// These classes usage in plugins is anyway disabled
+// so exclude them from documentation too
+///   \cond MS_INTERNAL
+/// //---------------------------------------------------------
 //   @@ ScoreView
 ///    This is an GUI element to show a score.
 //---------------------------------------------------------
