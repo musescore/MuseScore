@@ -181,7 +181,7 @@ class Shortcut {
       static QActionGroup* getActionGroupForWidget(MsWidget w);
       static QActionGroup* getActionGroupForWidget(MsWidget w, Qt::ShortcutContext newShortcutContext);
 
-      static QString keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt);
+      static QString keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt, bool escapeKeyStr = false);
       static QKeySequence keySeqFromString(const QString& str, QKeySequence::SequenceFormat fmt);
       };
 
