@@ -2859,10 +2859,11 @@ void Score::padToggle(Pad n)
             if (cr && cr->isRest() && cr->measure()->isMMRest()) {
                   Measure* m = cr->measure()->mmRestFirst();
                   if (m)
-                        cr = m->findChordRest(Fraction(0,1), 0);
+                        cr = m->findChordRest(m->tick(), 0);
                   }
 
-            crs.push_back(cr);
+            if (cr)
+                  crs.push_back(cr);
             }
       else {
             const auto elements = selection().uniqueElements();
