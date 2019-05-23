@@ -314,7 +314,7 @@ void PluginAPI::registerQmlTypes()
             qWarning("qmlRegisterType failed: MuseScore");
 
 //             qmlRegisterType<MScore>     ("MuseScore", 3, 0, "MScore");
-//TODO-ws            qmlRegisterType<MsScoreView>("MuseScore", 3, 0, "ScoreView");
+      qmlRegisterType<MsScoreView>("MuseScore", 3, 0, "ScoreView");
 
       qmlRegisterType<Cursor>("MuseScore", 3, 0, "Cursor");
       qmlRegisterType<ScoreElement>();
