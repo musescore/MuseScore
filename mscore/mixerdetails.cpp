@@ -224,6 +224,9 @@ void MixerDetails::updateFromTrack()
       chorusSlider->blockSignals(true);
       chorusSpinBox->blockSignals(true);
 
+      portSpinBox->blockSignals(true);
+      channelSpinBox->blockSignals(true);
+
       trackColorLabel->setColor(QColor(_mti->color() | 0xff000000));
 
       volumeSlider->setValue((int)chan->volume());
@@ -247,6 +250,9 @@ void MixerDetails::updateFromTrack()
       reverbSpinBox->blockSignals(false);
       chorusSlider->blockSignals(false);
       chorusSpinBox->blockSignals(false);
+
+      portSpinBox->blockSignals(false);
+      channelSpinBox->blockSignals(false);
 
       //Set up mute per voice buttons
       mutePerVoiceHolder = new QWidget();
