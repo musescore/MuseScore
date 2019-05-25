@@ -142,6 +142,8 @@ void ScoreView::figuredBassTicksTab(const Fraction& ticks)
                   }
             }
 
+      changeState(ViewState::NORMAL);
+
       // look for a segment at this tick; if none, create one
       Segment * nextSegm = segm;
       while (nextSegm && nextSegm->tick() < nextSegTick)
@@ -156,8 +158,6 @@ void ScoreView::figuredBassTicksTab(const Fraction& ticks)
             _score->undoAddElement(nextSegm);
             _score->endCmd();
             }
-
-      changeState(ViewState::NORMAL);
 
       bool bNew;
       FiguredBass * fbNew = FiguredBass::addFiguredBassToSegment(nextSegm, track, ticks, &bNew);
