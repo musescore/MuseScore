@@ -681,7 +681,7 @@ TieSegment* Tie::layoutBack(System* system)
       segment->setSystem(system);
 
       qreal x;
-      Segment* seg = endNote()->chord()->segment()->prevEnabled();
+      Segment* seg = endNote()->chord()->segment()->prevActive();
       if (seg) {
             // find maximum width
             qreal width = 0.0;
@@ -690,8 +690,8 @@ TieSegment* Tie::layoutBack(System* system)
                   if (!system->staff(i)->show())
                         continue;
                   Element* e = seg->element(i * VOICES);
-                  if (e)
-                        width = qMax(width, e->width());
+                  if (e && e->addToSkyline())
+                        width = qMax(width, e->pos().x() + e->bbox().right());
                   }
             x = seg->measure()->pos().x() + seg->pos().x() + width;
             }
