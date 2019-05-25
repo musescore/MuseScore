@@ -490,8 +490,8 @@ void Tie::slurPos(SlurPos* sp)
       sp->p2    = ec->pos() + ec->segment()->pos() + ec->measure()->pos();
       sp->system2 = ec->measure()->system();
 
-      // force tie to be horizontal except for cross-staff or if there is a difference of enharmonic spelling
-      bool horizontal = startNote()->tpc() == endNote()->tpc() && sc->vStaffIdx() == ec->vStaffIdx();
+      // force tie to be horizontal except for cross-staff or if there is a difference of line (tpc, clef, tpc)
+      bool horizontal = startNote()->line() == endNote()->line() && sc->vStaffIdx() == ec->vStaffIdx();
 
       hw = endNote()->tabHeadWidth(stt);
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up)) {
