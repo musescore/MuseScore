@@ -225,6 +225,8 @@ void ScoreView::harmonyTicksTab(const Fraction& ticks)
                   }
             }
 
+      changeState(ViewState::NORMAL);
+
       // look for a segment at this tick; if none, create one
       while (segment && segment->tick() < newTick)
             segment = segment->next1(SegmentType::ChordRest);
@@ -234,8 +236,6 @@ void ScoreView::harmonyTicksTab(const Fraction& ticks)
             _score->undoAddElement(segment);
             _score->endCmd();
             }
-
-      changeState(ViewState::NORMAL);
 
       // search for next chord name
       harmony = 0;
