@@ -1557,27 +1557,19 @@ static void layoutPage(Page* page, qreal restHeight)
 
       qreal maxDist = score->styleP(Sid::maxSystemDistance);
 
-#if 0
-      // TODO: this code allows a portion of restHeight to be used to normalize system distances (top-to-top)
-      // when enabled, shorter systems (e.g., systems with few staves) will get larger gaps
-      // the code works well enough, but the results seem surprising perhaps more often than they seem desirable
-      // consider providing settings to allow user control of this normalization
-      // or, devise a better algorithm for determining restNormal
-
-      // allocate space as needed to normalize system distance (shorter systems taking larger shares)
-      std::sort(sList.begin(), sList.end(), [](System* a, System* b) { return a->distance() < b->distance(); });
-      const qreal normalize = 0.5;                          // 1.0 = aim for equal heights; 0.0 = aim for equal gaps
-      qreal restNormal = restHeight * normalize;            // reserve a portion of restHeight for normalizaion
-      restHeight -= restNormal;
-      qreal dist = sList[0]->distance();                    // distance for shortest system
+      // allocate space as needed to normalize system distance (bottom of one system to top of next)
+      std::sort(sList.begin(), sList.end(), [](System* a, System* b) { return a->distance() - a->height() < b->distance() - b->height(); });
+      System* s0 = sList[0];
+      qreal dist = s0->distance() - s0->height();           // distance for shortest system
       for (int i = 1; i < sList.size(); ++i) {
-            qreal ndist = sList[i]->distance();             // next taller system
+            System* si = sList[i];
+            qreal ndist = si->distance() - si->height();    // next taller system
             qreal fill  = ndist - dist;                     // amount by which this system distance exceeds next shorter
             if (fill > 0.0) {
                   qreal totalFill = fill * i;               // space required to add this amount to all shorter systems
-                  if (totalFill > restNormal) {
-                        totalFill = restNormal;             // too much; adjust amount
-                        fill = restNormal / i;
+                  if (totalFill > restHeight) {
+                        totalFill = restHeight;             // too much; adjust amount
+                        fill = restHeight / i;
                         }
                   for (int k = 0; k < i; ++k) {             // add amount to all shorter systems
                         System* s = sList[k];
@@ -1586,14 +1578,12 @@ static void layoutPage(Page* page, qreal restHeight)
                               d = qMax(maxDist + s->height(), s->distance());
                         s->setDistance(d);
                         }
-                  restNormal -= totalFill;                  // reduce available space for next iteration
-                  if (restNormal <= 0)
+                  restHeight -= totalFill;                  // reduce available space for next iteration
+                  if (restHeight <= 0)
                         break;                              // no space left
                   }
             dist = ndist;                                   // set up for next iteration
             }
-      restHeight += restNormal;
-#endif
 
       if (restHeight > 0.0) {                               // space left?
             qreal fill = restHeight / sList.size();
