@@ -555,9 +555,10 @@ void Measure::layout2()
             Spacer* sp = ms->vspacerDown();
             if (sp) {
                   sp->layout();
-                  int n = score()->staff(staffIdx)->lines(tick()) - 1;
+                  Staff* staff = score()->staff(staffIdx);
+                  int n = staff->lines(tick()) - 1;
                   qreal y = system()->staff(staffIdx)->y();
-                  sp->setPos(_spatium * .5, y + n * _spatium);
+                  sp->setPos(_spatium * .5, y + n * _spatium * staff->mag(tick()));
                   }
             sp = ms->vspacerUp();
             if (sp) {
@@ -864,6 +865,7 @@ void Measure::add(Element* e)
                               _mstaves[e->staffIdx()]->setVspacerDown(sp);
                               break;
                         }
+                  sp->setGap(sp->gap());  // trigger relayout
                   }
                   break;
             case ElementType::JUMP:
