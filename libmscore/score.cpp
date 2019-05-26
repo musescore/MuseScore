@@ -803,12 +803,21 @@ ScoreContentState Score::state() const
       }
 
 //---------------------------------------------------------
+//   playlistDirty
+//---------------------------------------------------------
+
+bool Score::playlistDirty() const
+      {
+      return masterScore()->playlistDirty();
+      }
+
+//---------------------------------------------------------
 //   setPlaylistDirty
 //---------------------------------------------------------
 
 void Score::setPlaylistDirty()
       {
-      _playlistDirty = true;
+      masterScore()->setPlaylistDirty();
       }
 
 //---------------------------------------------------------
@@ -817,7 +826,7 @@ void Score::setPlaylistDirty()
 
 void MasterScore::setPlaylistDirty()
       {
-      Score::setPlaylistDirty();
+      _playlistDirty = true;
       _repeatList->setScoreChanged();
       }
 
@@ -1412,13 +1421,13 @@ void Score::addElement(Element* element)
                         }
                   cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
                   o->staff()->updateOttava();
-                  _playlistDirty = true;
+                  setPlaylistDirty();
                   }
                   break;
 
             case ElementType::DYNAMIC:
                   cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
-                  _playlistDirty = true;
+                  setPlaylistDirty();
                   break;
 
             case ElementType::TEMPO_TEXT:
@@ -1575,13 +1584,13 @@ void Score::removeElement(Element* element)
                   removeSpanner(o);
                   o->staff()->updateOttava();
                   cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
-                  _playlistDirty = true;
+                  setPlaylistDirty();
                   }
                   break;
 
             case ElementType::DYNAMIC:
                   cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
-                  _playlistDirty = true;
+                  setPlaylistDirty();
                   break;
 
             case ElementType::CHORD:
@@ -3423,7 +3432,7 @@ void Score::setTempo(Segment* segment, qreal tempo)
 void Score::setTempo(const Fraction& tick, qreal tempo)
       {
       tempomap()->setTempo(tick.ticks(), tempo);
-      _playlistDirty = true;
+      setPlaylistDirty();
       }
 
 //---------------------------------------------------------
@@ -3433,7 +3442,7 @@ void Score::setTempo(const Fraction& tick, qreal tempo)
 void Score::removeTempo(const Fraction& tick)
       {
       tempomap()->delTempo(tick.ticks());
-      _playlistDirty = true;
+      setPlaylistDirty();
       }
 
 //---------------------------------------------------------
@@ -3472,7 +3481,7 @@ void Score::resetTempoRange(const Fraction& tick1, const Fraction& tick2)
 void Score::setPause(const Fraction& tick, qreal seconds)
       {
       tempomap()->setPause(tick.ticks(), seconds);
-      _playlistDirty = true;
+      setPlaylistDirty();
       }
 
 //---------------------------------------------------------
