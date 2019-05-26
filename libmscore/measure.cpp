@@ -3711,7 +3711,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         clef->parent()->remove(clef);
                         delete clef;
                         }
-                  cSegment->createShape(staffIdx);
+                  //cSegment->createShape(staffIdx);
                   cSegment->setEnabled(true);
                   }
             else {
@@ -3769,7 +3769,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         }
                   keysig->setKeySigEvent(keyIdx);
                   keysig->layout();
-                  kSegment->createShape(staffIdx);
+                  //kSegment->createShape(staffIdx);
                   kSegment->setEnabled(true);
                   }
             else {
@@ -3805,6 +3805,11 @@ void Measure::addSystemHeader(bool isFirstSystem)
 
             ++staffIdx;
             }
+      if (cSegment)
+            cSegment->createShapes();
+      if (kSegment)
+            kSegment->createShapes();
+
       //
       // create systemic barline
       //
@@ -3826,9 +3831,9 @@ void Measure::addSystemHeader(bool isFirstSystem)
                         bl->setSpanStaff(true);
                         bl->layout();
                         s->add(bl);
-                        s->createShapes();
                         }
                   }
+            s->createShapes();
             s->setEnabled(true);
             s->setHeader(true);
             setHeader(true);
@@ -3880,8 +3885,9 @@ void Measure::addSystemTrailer(Measure* nm)
                                     }
                               ts->setFrom(nts);
                               ts->layout();
-                              s->createShape(track / VOICES);
+                              //s->createShape(track / VOICES);
                               }
+                        s->createShapes();
                         }
                   }
             }
@@ -3923,7 +3929,7 @@ void Measure::addSystemTrailer(Measure* nm)
                   //      }
                   ks->setKeySigEvent(key2);
                   ks->layout();
-                  s->createShape(track / VOICES);
+                  //s->createShape(track / VOICES);
                   s->setEnabled(true);
                   }
             else {
@@ -3940,6 +3946,10 @@ void Measure::addSystemTrailer(Measure* nm)
                         }
                   }
             }
+      if (s)
+            s->createShapes();
+      if (clefSegment)
+            clefSegment->createShapes();
 
       checkTrailer();
       }
