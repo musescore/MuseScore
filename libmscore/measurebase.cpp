@@ -369,6 +369,7 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
                   break;
             }
       score()->setLayoutAll();
+      score()->setPlaylistDirty();
       return true;
       }
 
