@@ -488,13 +488,10 @@ void Tie::slurPos(SlurPos* sp)
             }
       Chord* ec = endNote()->chord();
       sp->p2    = ec->pos() + ec->segment()->pos() + ec->measure()->pos();
-      if (sp->system1 && (sc->measure() == sp->system1->lastMeasure()) && (ec->measure() != sc->measure()))
-            sp->system2 = nullptr;
-      else
-            sp->system2 = ec->measure()->system();
+      sp->system2 = ec->measure()->system();
 
-      // force tie to be horizontal except for cross-staff or if there is a difference of enharmonic spelling
-      bool horizontal = startNote()->tpc() == endNote()->tpc() && sc->vStaffIdx() == ec->vStaffIdx();
+      // force tie to be horizontal except for cross-staff or if there is a difference of line (tpc, clef, tpc)
+      bool horizontal = startNote()->line() == endNote()->line() && sc->vStaffIdx() == ec->vStaffIdx();
 
       hw = endNote()->tabHeadWidth(stt);
       if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up)) {
@@ -684,7 +681,7 @@ TieSegment* Tie::layoutBack(System* system)
       segment->setSystem(system);
 
       qreal x;
-      Segment* seg = endNote()->chord()->segment()->prevEnabled();
+      Segment* seg = endNote()->chord()->segment()->prevActive();
       if (seg) {
             // find maximum width
             qreal width = 0.0;
@@ -693,8 +690,8 @@ TieSegment* Tie::layoutBack(System* system)
                   if (!system->staff(i)->show())
                         continue;
                   Element* e = seg->element(i * VOICES);
-                  if (e)
-                        width = qMax(width, e->width());
+                  if (e && e->addToSkyline())
+                        width = qMax(width, e->pos().x() + e->bbox().right());
                   }
             x = seg->measure()->pos().x() + seg->pos().x() + width;
             }
