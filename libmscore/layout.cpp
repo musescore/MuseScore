@@ -3712,8 +3712,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             m->layoutMeasureNumber();
             // in continuous view, entire score is one system
             // but we only need to process the range
-            if (lineMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick))
-                  continue;
+            //if (lineMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick))
+            //      continue;
             for (Segment* s = m->first(); s; s = s->next()) {
                   if (s->isChordRestType() || !s->annotations().empty())
                         sl.push_back(s);
@@ -3734,8 +3734,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   Measure* m = toMeasure(mb);
                   MeasureNumber* mno = m->noText(staffIdx);
                   // no need to build skyline outside of range in continuous view
-                  if (lineMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick))
-                        continue;
+                  //if (lineMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick))
+                  //      continue;
                   if (mno && mno->addToSkyline())
                         ss->skyline().add(mno->bbox().translated(m->pos() + mno->pos()));
                   if (m->staffLines(staffIdx)->addToSkyline())
@@ -3823,6 +3823,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   // layout beam
                   if (isTopBeam(cr)) {
                         Beam* b = cr->beam();
+                        //if (!lineMode() || (s->tick() >= lc.startTick && s->tick() <= lc.endTick))
                         b->layout();
                         b->addSkyline(system->staff(b->staffIdx())->skyline());
                         }

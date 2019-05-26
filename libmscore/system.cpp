@@ -582,7 +582,7 @@ void System::layout2()
                         dist = qMax(dist, sp->gap() + h);
                   }
             if (!fixedSpace) {
-                  qreal d = score()->lineMode() ? 0.0 : ss->skyline().minDistance(System::staff(si2)->skyline());
+                  qreal d = /*score()->lineMode() ? 0.0 :*/ ss->skyline().minDistance(System::staff(si2)->skyline());
                   dist = qMax(dist, d + minVerticalDistance);
                   }
 #endif
@@ -1250,8 +1250,8 @@ qreal System::topDistance(int staffIdx, const SkylineLine& s) const
       {
       Q_ASSERT(!vbox());
       Q_ASSERT(!s.isNorth());
-      if (score()->lineMode())
-            return 0.0;
+      //if (score()->lineMode())
+      //      return 0.0;
       return s.minDistance(staff(staffIdx)->skyline().north());
       }
 
@@ -1263,8 +1263,8 @@ qreal System::bottomDistance(int staffIdx, const SkylineLine& s) const
       {
       Q_ASSERT(!vbox());
       Q_ASSERT(s.isNorth());
-      if (score()->lineMode())
-            return 0.0;
+      //if (score()->lineMode())
+      //      return 0.0;
       return staff(staffIdx)->skyline().south().minDistance(s);
       }
 
