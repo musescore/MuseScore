@@ -374,22 +374,9 @@ void ResourceManager::displayPluginRepo() {
             uninstall_button->setEnabled(false);
             connect(uninstall_button, SIGNAL(clicked()), this, SLOT(uninstallPluginPackage()));
 
-            if (pluginDescriptionMap.contains(page_url)) {
-                  install_button->setText(tr("Updated"));
-                  install_button->setEnabled(false);
-                  connect(install_button, SIGNAL(clicked()), this, SLOT(updatePlugin()));
-                  // TODO: check update in another thread
-                  uninstall_button->setEnabled(true);
-                  }
-            else {
-                  install_button->setText(tr("Install"));
-                  connect(install_button, SIGNAL(clicked()), this, SLOT(downloadInstallPlugin()));
-                  install_button->setEnabled(true);
-                  }
-            //pluginButtonURLMap[install_button] = { name, compat, category_list, page_url };
             pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col++), install_button);
             pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col), uninstall_button);
-
+            refreshPluginButton(row);
             }
       categories->insertItems(0,all_categories);
       }
