@@ -2722,7 +2722,7 @@ bool Measure::isFullMeasureRest() const
 //   isRepeatMeasure
 //---------------------------------------------------------
 
-bool Measure::isRepeatMeasure(Staff* staff) const
+bool Measure::isRepeatMeasure(const Staff* staff) const
       {
       int staffIdx = staff->idx();
       int strack   = staffIdx * VOICES;
