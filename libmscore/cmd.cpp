@@ -153,6 +153,7 @@ void Score::undoRedo(bool undo, EditData* ed)
       else
             undoStack()->redo(ed);
       update();
+      masterScore()->setPlaylistDirty();  // TODO: flag all individual operations
       updateSelection();
       }
 
