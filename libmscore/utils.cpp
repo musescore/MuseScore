@@ -245,7 +245,7 @@ Segment* Score::tick2rightSegment(const Fraction& tick) const
             return 0;
             }
       // loop over all segments
-      for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+      for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             if (tick <= s->tick())
                   return s;
             }
