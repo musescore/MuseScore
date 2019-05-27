@@ -45,8 +45,9 @@ class ResourceManager : public QDialog, public Ui::Resource
     /*  Check update for one single plugin.
     
      */
-    void checkPluginUpdate(QWidget * button_group);
-    void refreshPluginButton(QWidget* button_group, bool updated = true);
+    void checkPluginUpdate(QPushButton* install);
+    //void refreshPluginButton(QWidget* button_group, bool updated = true);
+    void refreshPluginButton(int row, bool updated = true);
     void writePluginPackages();
     /*  Reads plugin descriptions from xml. `pluginDescriptionMap` would be flushed.
         Should only be called at the beginning
@@ -66,7 +67,7 @@ public:
 private:
     QMap <QPushButton *, QString> languageButtonMap; 	// QPushButton -> filename
     QMap <QPushButton *, QString> languageButtonHashMap;// QPushButton -> hash of the file
-    QMap <QPushButton *, PluginPackageMeta> pluginButtonURLMap;// `Install` button -> plugin metadata
+
     QMap <QString, PluginPackageDescription> pluginDescriptionMap; // plugin page url -> description of installed plugin
 
 private slots:
@@ -75,7 +76,7 @@ private slots:
     void scanPluginUpdate();
     void updatePlugin();
     void downloadExtension();
-    QString downloadPluginPackage(PluginPackageDescription & desc, QString & page_url);
+    QString downloadPluginPackage(PluginPackageDescription & desc, const QString & page_url);
     void downloadInstallPlugin();
     void uninstallPluginPackage();
     void uninstallExtension();

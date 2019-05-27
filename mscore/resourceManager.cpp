@@ -361,26 +361,35 @@ void ResourceManager::displayPluginRepo() {
                   pluginsTable->setItem(row,col,new QTableWidgetItem("No page URL found."));
                   continue;
                   }
-            QWidget* button_group = new QWidget();
-            QPushButton* install_button = new QPushButton(button_group);
-            QHBoxLayout* button_layout = new QHBoxLayout();
-            button_group->setLayout(button_layout);
-            button_layout->addWidget(install_button);
+
+            QPushButton* install_button = new QPushButton(tr("Install"));
+            // add categories, name and page_url to properties
+            install_button->setProperty("page_url", page_url);
+            install_button->setProperty("categories", category_list);
+            install_button->setProperty("name", name);
+            install_button->setProperty("row", row);
+            QPushButton* uninstall_button = new QPushButton(tr("Uninstall"));
+            uninstall_button->setProperty("page_url", page_url);
+            uninstall_button->setProperty("row", row);
+            uninstall_button->setEnabled(false);
+            connect(uninstall_button, SIGNAL(clicked()), this, SLOT(uninstallPluginPackage()));
+
             if (pluginDescriptionMap.contains(page_url)) {
-                  install_button->setText(tr("Uninstall"));
-                  connect(install_button, SIGNAL(clicked()), this, SLOT(uninstallPluginPackage()));
-                  QPushButton* update_button = new QPushButton(button_group);
-                  update_button->setText("Updated");
-                  update_button->setEnabled(false);
+                  install_button->setText(tr("Updated"));
+                  install_button->setEnabled(false);
+                  connect(install_button, SIGNAL(clicked()), this, SLOT(updatePlugin()));
                   // TODO: check update in another thread
-                  button_layout->addWidget(update_button);
+                  uninstall_button->setEnabled(true);
                   }
             else {
                   install_button->setText(tr("Install"));
                   connect(install_button, SIGNAL(clicked()), this, SLOT(downloadInstallPlugin()));
+                  install_button->setEnabled(true);
                   }
-            pluginButtonURLMap[install_button] = { name, compat, category_list, page_url };
-            pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col), button_group);
+            //pluginButtonURLMap[install_button] = { name, compat, category_list, page_url };
+            pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col++), install_button);
+            pluginsTable->setIndexWidget(pluginsTable->model()->index(row, col), uninstall_button);
+
             }
       categories->insertItems(0,all_categories);
       }
@@ -391,9 +400,10 @@ void ResourceManager::filterPluginList()
       const QString& search = lineEdit->text();
       for (int i = 0; i < pluginsTable->rowCount(); i++) {
             // locate the "Install" button
-            QPushButton* install = pluginsTable->indexWidget(pluginsTable->model()->index(i, 3))->findChildren<QPushButton*>().first();
-            PluginPackageMeta& meta = pluginButtonURLMap[install];
-            if (meta.name.contains(search, Qt::CaseInsensitive) && (category == "Any" || meta.categories.contains(category)))
+            QPushButton* install = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(i, 3)));
+            const QString& plugin_name = install->property("name").toString();
+            const QStringList& categories = install->property("categories").toStringList();
+            if (plugin_name.contains(search, Qt::CaseInsensitive) && (category == "Any" || categories.contains(category)))
                   pluginsTable->showRow(i);
             else
                   pluginsTable->hideRow(i);
@@ -573,37 +583,31 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
 
 void ResourceManager::updatePlugin()
       {
-      // relocate to `Install` button
-      QPushButton* update = static_cast<QPushButton*>(sender());
-      QWidget* button_group = update->parentWidget();
-      QPushButton* install = button_group->findChildren<QPushButton*>()[0];
+      QPushButton* install = static_cast<QPushButton*>(sender());
 
-      QString& page_url = pluginButtonURLMap[install].page_url;
+      const QString& page_url = install->property("page_url").toString();
       PluginPackageDescription& desc = pluginDescriptionMap[page_url];
       Q_ASSERT(desc.update != nullptr);
       if (desc.update->source == UNKNOWN) {
-            update->setText("Failed Try again.");
-            update->setEnabled(true);
+            install->setText("Failed Try again.");
+            install->setEnabled(true);
             return;
             }
-      update->setText(tr("Downloading..."));
+      install->setText(tr("Downloading..."));
       QString localPath = downloadPluginPackage(*desc.update, page_url);
       if (installPluginPackage(localPath, *desc.update)) {
             PluginPackageDescription* p_update = desc.update;
             desc = *desc.update;
             delete(p_update);
             desc.update = nullptr;
-            refreshPluginButton(button_group, true);
+            refreshPluginButton(install->property("row").toInt(), true);
             writePluginPackages();
             }
       }
 
-void ResourceManager::checkPluginUpdate(QWidget* button_group)
+void ResourceManager::checkPluginUpdate(QPushButton* install)
       {
-      const QList<QPushButton*>& buttons = button_group->findChildren<QPushButton*>();
-      int n = buttons.size();
-      QPushButton* install = (QPushButton*)buttons.first();
-      QString& page_url = pluginButtonURLMap[install].page_url;
+      const QString& page_url = install->property("page_url").toString();
       if (pluginDescriptionMap.contains(page_url)) {
             auto& desc = pluginDescriptionMap[page_url];
             PluginPackageDescription* desc_tmp = new PluginPackageDescription(desc);
@@ -614,18 +618,18 @@ void ResourceManager::checkPluginUpdate(QWidget* button_group)
                         
                   delete desc_tmp;
             }
-            refreshPluginButton(button_group, !should_update);
+            refreshPluginButton(install->property("row").toInt(), !should_update);
             }
       }
 
 void ResourceManager::scanPluginUpdate()
       {
-      
-      for (auto& button : pluginButtonURLMap.keys()) {
+      for (int row = 0; row < pluginsTable->rowCount(); row++) {
+            QPushButton* install = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 3)));
+            const QString& page_url = install->property("page_url").toString();
             // if installed
-            if (pluginDescriptionMap.contains(pluginButtonURLMap[button].page_url)) {
-                  checkPluginUpdate(button->parentWidget());
-                  }
+            if (pluginDescriptionMap.contains(page_url))
+                  checkPluginUpdate(install);
             }
       }
 
@@ -811,7 +815,7 @@ static inline QString getExtFromURL(QString& direct_link) {
       return possible_ext;
       }
 
-QString ResourceManager::downloadPluginPackage(PluginPackageDescription& desc, QString& page_url)
+QString ResourceManager::downloadPluginPackage(PluginPackageDescription& desc, const QString& page_url)
       {
       DownloadUtils package(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
       package.setTarget(desc.direct_link);
@@ -838,9 +842,9 @@ void ResourceManager::downloadInstallPlugin()
       QPushButton* button = static_cast<QPushButton*>(sender());
       button->setEnabled(false);
       button->setText(tr("Analyzing..."));
-      QString page_url = pluginButtonURLMap[button].page_url;
+      QString page_url = button->property("page_url").toString();
       PluginPackageDescription new_package;
-      new_package.package_name = pluginButtonURLMap[button].name;
+      new_package.package_name = button->property("name").toString();
       QObject* p = button->parent();
       analyzePluginPage("https://musescore.org" + page_url, new_package);
       if (new_package.source == UNKNOWN) {
@@ -855,7 +859,7 @@ void ResourceManager::downloadInstallPlugin()
             if (installPluginPackage(localPath, new_package)) {
                   // add the new description item to the map
                   pluginDescriptionMap[page_url] = new_package;
-                  refreshPluginButton((QWidget*)button->parent());
+                  refreshPluginButton(button->property("row").toInt());
                   writePluginPackages();
                   displayPlugins();
                   }
@@ -870,7 +874,7 @@ void ResourceManager::downloadInstallPlugin()
 
 void ResourceManager::uninstallPluginPackage() {
       QPushButton* button = static_cast<QPushButton*>(sender());
-      const QString& url = pluginButtonURLMap[button].page_url;
+      const QString& url = button->property("page_url").toString();
       if (!pluginDescriptionMap.contains(url))
             return;
       PluginPackageDescription& desc = pluginDescriptionMap[url];
@@ -884,45 +888,38 @@ void ResourceManager::uninstallPluginPackage() {
             return;
             }
       pluginDescriptionMap.remove(url);
-      refreshPluginButton((QWidget*)button->parent());
+      refreshPluginButton(button->property("row").toInt());
       writePluginPackages();
       displayPlugins();
 }
 
-void ResourceManager::refreshPluginButton(QWidget* button_group, bool updated/* = true*/) {
-      const QList<QPushButton*>& buttons = button_group->findChildren<QPushButton*>();
-      int n = buttons.size();
-      QPushButton* install = (QPushButton*)buttons.first();
-      QString& page_url = pluginButtonURLMap[install].page_url;
-      if (pluginDescriptionMap.contains(page_url)) {
-            // installed
-            install->setText("Uninstall");
-            install->setEnabled(true);
-            install->disconnect();
-            connect(install, SIGNAL(clicked()), this, SLOT(uninstallPluginPackage()));
-            QPushButton* update;
-            if (buttons.size() > 1) {
-                  update = (QPushButton*)buttons.at(1);
+
+void ResourceManager::refreshPluginButton(int row, bool updated/* = true*/)
+      {
+      // TODO: get button, then plugin url, then update status
+      // install button
+      QPushButton* install = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 3)));
+      QPushButton* uninstall = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 4)));
+      const QString& page_url = install->property("page_url").toString();
+      bool installed = pluginDescriptionMap.contains(page_url);
+      uninstall->setEnabled(installed);
+      if (installed) {
+            if (updated) {
+                  install->setText("Updated");
+                  install->setEnabled(false);
                   }
             else {
-                  update = new QPushButton(button_group);
-                  button_group->layout()->addWidget(update);
+                  install->setText("Update");
+                  install->setEnabled(true);
+                  connect(install, SIGNAL(clicked()), this, SLOT(updatePlugin()));
                   }
-            update->setText(updated?"Updated":"Update");
-            update->setHidden(false);
-            update->setEnabled(!updated);
-            if (!updated)
-                  connect(update, SIGNAL(clicked()), this, SLOT(updatePlugin()));
-            // TODO: check update sometime
             }
       else {
-            // removed
             install->setText("Install");
+            install->setEnabled(true);
             connect(install, SIGNAL(clicked()), this, SLOT(downloadInstallPlugin()));
-            if (buttons.size() > 1)
-                  for (int i = 1; i <= buttons.size() - 1; i++)
-                        ((QPushButton*)buttons.at(i))->setHidden(true);
             }
+
       }
 
 //---------------------------------------------------------
