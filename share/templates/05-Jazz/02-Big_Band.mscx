@@ -450,7 +450,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="56"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -510,7 +510,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="56"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -570,7 +570,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="56"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
@@ -630,7 +630,7 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="open">
           <program value="56"/>
           <synti>Fluid</synti>
           <midiPort>0</midiPort>
