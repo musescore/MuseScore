@@ -2572,6 +2572,39 @@ void MidiRenderer::updateState()
       }
 
 //---------------------------------------------------------
+//   MidiRenderer::canBreakChunk
+///   Helper function for updateChunksPartition
+///   Determines whether it is allowed to break MIDI
+///   rendering chunk at given measure.
+//---------------------------------------------------------
+
+bool MidiRenderer::canBreakChunk(const Measure* last)
+      {
+      Score* score = last->score();
+
+      // Check for hairpins that overlap measure end:
+      // hairpins should be inside one chunk, if possible
+      const int endTick = last->endTick().ticks();
+      const auto& spanners = score->spannerMap().findOverlapping(endTick - 1, endTick);
+      for (const auto& interval : spanners) {
+            const Spanner* sp = interval.value;
+            if (sp->isHairpin() && sp->tick2().ticks() > endTick)
+                  return false;
+            }
+
+      // Repeat measures rely on the previous measure
+      // being properly rendered, disallow breaking
+      // chunk at repeat measure.
+      if (const Measure* next = last->nextMeasure())
+            for (const Staff* staff : score->staves()) {
+                  if (next->isRepeatMeasure(staff))
+                        return false;
+            }
+
+      return true;
+      }
+
+//---------------------------------------------------------
 //   MidiRenderer::updateChunksPartition
 //---------------------------------------------------------
 
@@ -2597,26 +2630,11 @@ void MidiRenderer::updateChunksPartition()
                         chunkStart = m;
                   if ((++count) >= minChunkSize)
                         needBreak = true;
-                  if (needBreak) {
-                        // Check for hairpins that overlap measure end:
-                        // hairpins should be inside one chunk, if possible
-                        const int endTick = m->endTick().ticks();
-                        const auto& spanners = score->spannerMap().findOverlapping(endTick - 1, endTick);
-                        bool canBreak = true;
-                        for (const auto& interval : spanners) {
-                              const Spanner* sp = interval.value;
-                              if (sp->isHairpin() && sp->tick2().ticks() > endTick) {
-                                    canBreak = false;
-                                    break;
-                                    }
-                              }
-
-                        if (canBreak) {
-                              chunks.emplace_back(tickOffset, chunkStart, m);
-                              chunkStart = nullptr;
-                              needBreak = false;
-                              count = 0;
-                              }
+                  if (needBreak && canBreakChunk(m)) {
+                        chunks.emplace_back(tickOffset, chunkStart, m);
+                        chunkStart = nullptr;
+                        needBreak = false;
+                        count = 0;
                         }
                   }
             if (chunkStart) // last measures did not get added to chunk list
