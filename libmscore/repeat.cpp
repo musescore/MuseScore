@@ -48,6 +48,7 @@ void RepeatMeasure::layout()
       for (Element* e : el())
             e->layout();
 
+      rxpos() = 0.0;
       qreal sp  = spatium();
 
       qreal y   = sp;
