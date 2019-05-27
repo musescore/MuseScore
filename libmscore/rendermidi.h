@@ -92,6 +92,7 @@ class MidiRenderer {
       std::vector<Chunk> chunks;
 
       void updateChunksPartition();
+      static bool canBreakChunk(const Measure* last);
       void updateState();
 
       void renderStaffChunk(const Chunk&, EventMap* events, Staff*, DynamicsRenderMethod method, int cc);

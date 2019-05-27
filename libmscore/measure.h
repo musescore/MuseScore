@@ -212,7 +212,7 @@ class Measure final : public MeasureBase {
       bool hasVoice(int track) const;
       bool isEmpty(int staffIdx) const;
       bool isFullMeasureRest() const;
-      bool isRepeatMeasure(Staff* staff) const;
+      bool isRepeatMeasure(const Staff* staff) const;
       bool visible(int staffIdx) const;
       bool slashStyle(int staffIdx) const;
       bool isFinalMeasureOfSection() const;
