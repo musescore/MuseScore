@@ -3882,7 +3882,7 @@ bool MuseScore::hasToCheckForExtensionsUpdate()
       }
 
 //---------------------------------------------------------
-//   checkForUpdate
+//   checkForUpdatesNoUI
 //         Doesn't show any messages if software is up to date
 //---------------------------------------------------------
 
@@ -3891,11 +3891,11 @@ void MuseScore::checkForUpdatesNoUI()
       if (autoUpdater)
             autoUpdater->checkUpdates();
       else if (ucheck)
-            ucheck->check(version(), sender() != 0);
+            ucheck->check(version(), false);
       }
 
 //---------------------------------------------------------
-//   checkForUpdateNow
+//   checkForUpdatesUI
 //          Show message like "Software is up to date" if software is up to date
 //---------------------------------------------------------
 void MuseScore::checkForUpdatesUI()
@@ -3903,7 +3903,7 @@ void MuseScore::checkForUpdatesUI()
       if (autoUpdater)
             autoUpdater->checkForUpdatesNow();
       else if (ucheck)
-            ucheck->check(version(), sender() != 0);
+            ucheck->check(version(), true);
       }
 
 //---------------------------------------------------------
