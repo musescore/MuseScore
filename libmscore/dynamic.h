@@ -29,6 +29,7 @@ class Segment;
 //-----------------------------------------------------------------------------
 
 class Dynamic final : public TextBase {
+   Q_GADGET
    public:
       enum class Type : char {
             OTHER,
