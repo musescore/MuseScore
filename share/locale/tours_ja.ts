@@ -2,11 +2,6 @@
 <context>
     <name>TourXML</name>
     <message>
-        <source>To add a note to a chord, press Shift while typing its letter name, or click on the staff.</source>
-        <comment>note-input</comment>
-        <translation>音符を入力したあと、さらに音を追加するには、Shiftキーを押しながらキーボードで追加する音を入力するか、譜表に直接クリックしてください。</translation>
-    </message>
-    <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
         <translation>MuseScoreへようこそ！
@@ -15,7 +10,7 @@
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation>再生ツールバーは左から順に、/ MIDI入力 / 開始位置に戻る / 再生・停止 / 繰り返し再生 / 反復再生 / 自動でスコアを動かす / メトロノーム / の操作を行います。</translation>
+        <translation>再生ツールバーは左から順に、/ MIDI入力 / 開始位置に戻る / 再生・停止 / 繰り返し再生 / 反復再生 / 自動で楽譜を動かす / メトロノーム / の操作を行います。</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
@@ -25,30 +20,17 @@
     <message>
         <source>The Palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation>パレットを使用すると、ほとんどの音楽記号をスコアに追加できます。</translation>
+        <translation>パレットを使用すると、ほとんどの音楽記号を楽譜に追加できます。</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation>それぞれの欄には、スコアに追加できる音楽記号が含まれています。</translation>
+        <translation>それぞれの欄には、楽譜に追加できる音楽記号が含まれています。</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>パレットへようこそ。パレットを使って様々な要素を加えることができます。詳細は &quot; 次へ &quot; をクリックしてください。</translation>
-    </message>
-    <message>
-        <source>To enter a note of the selected duration, type its letter name or click on the staff.
-    Press Ctrl+Up/Down (macOS: Cmd+Up/Down) to change octave.</source>
-        <comment>note-input</comment>
-        <translation>選択した長さの音符を入力するには、キーボードで音名を押すか、譜表に直接クリックすることで入力します。
- オクターブを変更するには、Ctrl +上/下（macOS：Cmd +上/下）を押します。</translation>
-    </message>
-    <message>
-        <source>To add an accidental to a note, press the shortcut Up or Down to raise or lower its pitch,
-    or click one of these icons.</source>
-        <comment>note-input</comment>
-        <translation>臨時記号は入力した音符に対して、アイコンを押すか 上/下キーを押すことで半音ずつ変化させることができます。</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -62,27 +44,11 @@
 他の声部に音符を入力する場合はこのアイコンをクリックします。</translation>
     </message>
     <message>
-        <source>This is the score view, where you can view and edit your score.
-    Use your mouse wheel or touchpad to scroll (with Shift to scroll horizontally).
-    If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
-        <comment>welcome</comment>
-        <translation>スコアビューではスコアを閲覧したり編集したりできます。
-タッチパッドやマウスホイールで上下（Shiftキーも押すことで左右）に動かすことができます。
-複数のスコアを開いている場合は、スコア上部にあるタブで切り替えることができます。</translation>
-    </message>
-    <message>
         <source>These are the toolbars.
     The main three are File Operations, Playback Controls, and Note Input.</source>
         <comment>welcome</comment>
         <translation>これらはツールバーです。
 基本は3種類。これによってファイル操作、再生、音符入力などができます。</translation>
-    </message>
-    <message>
-        <source>The main menu contains most other commands.
-    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: Ctrl+clicking) within the score view.</source>
-        <comment>welcome</comment>
-        <translation>画面上のメインメニューには、ほとんどのショートカットキーを含んでいます。
-さらに、ショートカットキーやスコアビュー内での右クリック（macOS：Ctrl +クリック）することで、多くのコマンドを選択できます。</translation>
     </message>
     <message>
         <source>There are different workspaces available with different sets of palettes.
@@ -95,7 +61,7 @@
         <source>To add a palette item to your score, first select an element or range in your score, then double-click on the palette item to add it to the selected elements.
     You can also drag an item from the palette and drop it on a specific element in your score.</source>
         <comment>show-palette</comment>
-        <translation>音楽記号などをスコアに追加するには、先にスコア内から音符や複数選択の範囲を選んでおき、パレットの記号をダブルクリックします。
+        <translation>音楽記号などを楽譜に追加するには、先に楽譜内から音符や複数選択の範囲を選んでおき、パレットの記号をダブルクリックします。
 他にも、音楽記号を追加したい音符にドラッグアンドドロップすることでも追加することもできます。</translation>
     </message>
     <message>
@@ -111,7 +77,7 @@
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
-        <translation>音符入力へようこそ。音符と休符をスコアに入力しましょう。
+        <translation>音符入力へようこそ。音符と休符を楽譜に入力しましょう。
 詳細は &quot; 次へ &quot; をクリックしてください。</translation>
     </message>
     <message>
@@ -140,15 +106,8 @@
         <source>MuseScore provides many ways to navigate through your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
-        <translation>MuseScoreではスコアを見渡すための様々な方法を用意しています。
+        <translation>MuseScoreでは楽譜を見渡すための様々な方法を用意しています。
 詳細は &quot; 次へ &quot; をクリックしてください。</translation>
-    </message>
-    <message>
-        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
-    To scroll horizontally, hold Shift while using the mouse wheel or touch gesture.</source>
-        <comment>navigate-tour</comment>
-        <translation>上下にスクロールする最も簡単な方法は、マウスホイールまたは同等のタッチジェスチャ（2本指のスワイプなど）を使用することです。
- 水平スクロールは、Shiftキーを押しながらマウスホイールを使うか、タッチジェスチャでできます。</translation>
     </message>
     <message>
         <source>The navigation keys on your keyboard such as PgUp, PgDn, Home, and End function as in other applications
@@ -157,15 +116,7 @@
         <comment>navigate-tour</comment>
         <translation>キーボードのPgUp、PgDn、Home、Endなどのナビゲーションキーは、他のアプリケーションと同じように機能します。
 ページ間の移動などで使えます。
-キーボードの種類によってはFnキーを押しながら上/下/左/右キーを押すことで同様の機能を持つものがあります。
-</translation>
-    </message>
-    <message>
-        <source>You can move the score short distances by clicking an empty area of the page and dragging.
-    By the way, you can also select regions by holding Shift while dragging.</source>
-        <comment>navigate-tour</comment>
-        <translation>スコアを直感的に動かしたい場合は、ページ内の何もない部分をドラッグすることで移動できます。
-このとき、Shiftキーを押しながらドラッグすると範囲選択モード利用できます。</translation>
+キーボードの種類によってはFnキーを押しながら上/下/左/右キーを押すことで同様の機能を持つものがあります。</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -183,7 +134,7 @@
         <source>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
     The set of properties available will differ according to the type of selected elements or elements.</source>
         <comment>inspector-tour</comment>
-        <translation>まず、スコア内の1つ以上の要素を選択します。選択した要素に対して、チェックボックス、スピンボックス、プルダウンメニューなどを編集して、さまざまなプロパティを変更します。
+        <translation>まず、楽譜内の1つ以上の要素を選択します。選択した要素に対して、チェックボックス、スピンボックス、プルダウンメニューなどを編集して、さまざまなプロパティを変更します。
  変更ができる項目は選択された要素、または要素の種類によって異なります。</translation>
     </message>
     <message>
@@ -196,7 +147,7 @@
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
-        <translation>インスペクタを使用すると、スコア内の要素のさまざまなプロパティを編集できます。</translation>
+        <translation>インスペクタを使用すると、楽譜内の要素のさまざまなプロパティを編集できます。</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -236,7 +187,7 @@
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
     Click &quot;Next&quot; to learn more.</source>
         <comment>timeline-tour</comment>
-        <translation>タイムラインへようこそ。スコアを大幅に縮小表示して全体を簡単に把握することができます。
+        <translation>タイムラインへようこそ。楽譜を大幅に縮小表示して全体を簡単に把握することができます。
 詳細は &quot; 次へ &quot; をクリックしてください。</translation>
     </message>
     <message>
@@ -244,7 +195,7 @@
     You can click anywhere to jump to the corresponding location in your score.</source>
         <comment>timeline-tour</comment>
         <translation>タイムラインには、リハーサルマーク、テンポ、調、拍子の変化、その他特定の地点などが表示されます。
-タイムラインをクリックするとスコアの中の対応する場所に移動することができます。</translation>
+タイムラインをクリックすると楽譜の中の対応する場所に移動することができます。</translation>
     </message>
     <message>
         <source>The section below contains a row for each instrument.
@@ -255,7 +206,7 @@
         <translation>下のセクションには各楽器の欄があります。
 各欄には主要楽器などが書かれています。
 四角が強調表示されているときはその小節に音符が存在しています。
-この四角の中で、細い青線で囲まれているところが現在スコアビューに見えている小節です。</translation>
+この四角の中で、細い青線で囲まれているところが現在楽譜ビューに見えている小節です。</translation>
     </message>
     <message>
         <source>MuseScore supports different types of selections: single, list, and range.
@@ -276,17 +227,6 @@
 左右の方向キーを使うと選択状態を次や前の音符と休符に移動できます。
  備考：方向キーと一緒にAltキー（MacではOption）を押すと、他の要素も移動できます。
 このモードでは上下にある音符であっても順番に選択状態が移動します。</translation>
-    </message>
-    <message>
-        <source>A list selection is a combination of single selections.
-    Press Ctrl (macOS: Cmd) while clicking to add or remove elements to the list selection.
-    You can also quickly select similar elements by right-clicking (macOS: Ctrl+clicking) one
-    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
-        <comment>select-tour</comment>
-        <translation>リスト選択は、単一選択の組み合わせです。
-Ctrlキー（macOS：Cmd）を押しながら、未選択部分をクリックすると追加で選択になり、すでに選択されている部分をクリックすると選択解除にできます。
-また、右クリック（macOS：Ctrl +クリック）のメニューからも同様の要素を素早く選択できます。
-右クリックメニューから &quot; 選択 &quot;を選び、用途に合ったものを選びます。</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -316,21 +256,104 @@ Ctrlキー（macOS：Cmd）を押しながら、未選択部分をクリック�
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
-    You can also set style defaults using Format &gt; Style.</source>
+    You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>値を変更したのであれば、&quot;リセット&quot; ボタンをクリックすればデフォルトに戻せます。値がスタイル設定に依るのであれば、&quot;スタイルに設定&quot;ボタンをクリックすればその値を新たなデフォルトとしてスタイルに設定できます。フォーマット＞スタイル...を使ってもスタイルのデフォルトを設定できます。</translation>
     </message>
     <message>
-        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press Ctrl+number or use Add &gt; Tuplets.</source>
+        <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
+    To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
+        <comment>navigate-tour</comment>
+        <translation>一番手早い上下スクロールの方法は、マウス・ホイールやそれと同等の例えば2本指スワイプなどタッチ・ジェスチャーです。左右スクロールには、&quot;Shift&quot;キーを押しながらマウス・ホイールやタッチ・ジェスチャーを使います。</translation>
+    </message>
+    <message>
+        <source>You can move the score short distances by clicking an empty area of the page and dragging.
+    By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
+        <comment>navigate-tour</comment>
+        <translation>楽譜をちょっとだけ動かすには、ページの空白部分をクリックしてドラグします。
+また、&quot;Shift&quot; を押したままドラグすると範囲の選択ができます。</translation>
+    </message>
+    <message>
+        <source>To enter a note of the selected duration, type its letter name or click on the staff.
+    Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>選んだ長さの音符を入力するには、その音名のキーをタイプするか、譜表の上をクリックします。
+オクターブを変えるには &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;)&quot; を押します。</translation>
+    </message>
+    <message>
+        <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
+    or click one of these icons.</source>
+        <comment>note-input</comment>
+        <translation>音符に臨時記号を加えるには、キーボードショートカットの &quot;Up&quot; か &quot;Down&quot; を押して音高を変えるか、
+これらアイコンをクリックします。</translation>
+    </message>
+    <message>
+        <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
+        <comment>note-input</comment>
+        <translation>コードに音符を加えるには、 &quot;Shift&quot; を押したまま、音名をタイプするか譜表の上をクリックします。</translation>
+    </message>
+    <message>
+        <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
+        <comment>note-input</comment>
+        <translation>3連符など連符を作るには、その連符全体の長さを選択してから、&quot;Ctrl+（連符の）数字&quot; キーを押すか、メニューの 追加 &gt; 連符 を利用します。</translation>
+    </message>
+    <message>
+        <source>A list selection is a combination of single selections.
+    Press &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) while clicking to add or remove elements to the list selection.
+    You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
+    and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
+        <comment>select-tour</comment>
+        <translation>リスト選択とは一つづつの選択を組み合わせたものです。
+リスト選択に加えたり削除したりするには、&quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) を押しながらクリックします。
+類似の要素を素早く選択するには、最初の一つを右クリック (macOS: &quot;Ctrl&quot;+クリック) し、
+表示されるポップアップ・メニューの &quot;選択&quot; オプションの中で選んでゆきます。</translation>
+    </message>
+    <message>
+        <source>Most elements on the lines palette span a range from a start element to an end element.
+
+    To edit its range, double-click the line (which automatically selects its end handle) and:
+
+    - Press Shift-Right to move that handle forward.
+
+    - Press Shift-Left to move that handle backward.</source>
+        <comment>spanner-drop-apply</comment>
+        <translation>線パレットの大部分の要素は開始エレメントから終了エレメントまでの範囲に渡ります。
+
+範囲を編集するには，線をダブルクリックし (すると自動的に終了部分のハンドルを選択します）、そして:
+
+- ハンドルを前に移動するには Shift-Right を押します。
+
+- ハンドルを後ろに移動するには Shift-Left を押します。</translation>
+    </message>
+    <message>
+        <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
+        <comment>spanner-drop-apply</comment>
+        <translation>別の方法では、スコアの要素の範囲を先に選択しておき、パレット中の線要素をダブルクリックすると、選択範囲に渡って新しい要素が追加されます。</translation>
+    </message>
+    <message>
+        <source>This is the score view, where you can view and edit your score.
+    Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
+    If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
+        <comment>welcome</comment>
+        <translation>スコアビューではスコアを閲覧したり編集したりできます。
+マウスホイールやタッチパッドで上下（Shiftキーも押すことで左右）に動かすことができます。
+複数のスコアを開いている場合は、スコア上部にあるタブで切り替えることができます。</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>ファイル操作ツールバーは、/ 作成 / 開く / 保存 / 印刷 / 元に戻す / やり直し / を行います。
+musescore.com のアカウントを持っている場合、 &quot; ファイル(F) &quot; → &quot; オンライン上にアップロード &quot; からオンライン上に保存することもできます。
+このツールバーの右隣にあるプルダウンメニューは、楽譜の拡大率や表示方法を操作することができます。</translation>
+    </message>
+    <message>
+        <source>The main menu contains most other commands.
+    In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
+        <comment>welcome</comment>
+        <translation>メインメニューには他にもたくさんのコマンドがあります。
+さらに、キーボードショートカットや、楽譜の中を右クリックすることで多くのコマンドにアクセスすることができます。</translation>
     </message>
     <message>
         <source>That's the end of this tour!
@@ -338,7 +361,10 @@ Ctrlキー（macOS：Cmd）を押しながら、未選択部分をクリック�
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>以上でツアーを終わります。
+MuseScoreで初めて機能を使う際、さらに機能を説明するためのツアーが表示されます。
+これらを無効にするには、このウィンドウを閉じる前に「今後もツアーを表示する」の選択を解除してください。
+ &quot; ヘルプ &quot;→ &quot; ツアー &quot; でツアーを有効/無効にしたりリセットしたりすることもできます。</translation>
     </message>
 </context>
 </TS>
