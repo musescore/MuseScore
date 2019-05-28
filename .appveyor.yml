@@ -69,7 +69,6 @@ on_success:
             Push-AppveyorArtifact appcast.xml
         }
 
- uncomment in stable release
   - provider: S3
     access_key_id:
       secure: k68f3wMKIC5AzrfNMuC4kdPaxzvKdFVkRsietUKqc+E=
