@@ -3510,9 +3510,15 @@ System* Score::collectSystem(LayoutContext& lc)
 
             // preserve state of next measure (which is about to become current measure)
             if (lc.nextMeasure) {
-                  curWidth = lc.nextMeasure->width();
-                  curHeader = lc.nextMeasure->header();
-                  curTrailer = lc.nextMeasure->trailer();
+                  MeasureBase* nmb = lc.nextMeasure;
+                  if (nmb->isMeasure() && styleB(Sid::createMultiMeasureRests)) {
+                        Measure* nm = toMeasure(nmb);
+                        if (nm->hasMMRest())
+                              nmb = nm->mmRest();
+                        }
+                  curWidth = nmb->width();
+                  curHeader = nmb->header();
+                  curTrailer = nmb->trailer();
                   }
 
             getNextMeasure(lc);
