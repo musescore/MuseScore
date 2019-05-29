@@ -194,6 +194,8 @@ struct ChordDescription {
       ChordDescription(int);
       ChordDescription(const QString&);
       QString quality() const       { return _quality; }
+      QList<int> intervals() const;
+      QString noteNames(int rootTpc) const;
       void complete(ParsedChord* pc, const ChordList*);
       void read(XmlReader&);
       void write(XmlWriter&) const;

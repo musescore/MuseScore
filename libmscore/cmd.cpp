@@ -3117,28 +3117,31 @@ void Score::cmdRealizeChordSymbols()
             Harmony* h = toHarmony(e);
             msgBox.setText("Chord Symbol: " + h->harmonyName());
 
+            QString degrees;
+            for (QString deg : h->xmlDegrees())
+                  degrees += deg;
             QString intervals;
+            for (int interval : h->descr()->intervals())
+                  intervals += QString::number(interval) + " ";
+
             //build up message for informative text section
-            QString s = QString("ID: %1\nIntervals: %2\nNotes: %3")
-                        .arg(h->id());
+            QString s = QString("ID: %1\nDegrees: %2\nIntervals: %3\nNotes: %4")
+                        .arg(h->id())
+                        .arg(degrees)
+                        .arg(intervals)
+                        .arg(h->descr()->noteNames(h->rootTpc()));
             msgBox.setInformativeText(s);
 
-            //Build string containing degree list and number of degrees
-            //I don't think this is used at all anymore
-            QString degrees = "";
-            for (HDegree d : h->degreeList())
-                  degrees += d.text() + ", ";
-            degrees += QString(h->numberOfDegrees());
             //build up message for detailed information section
             QString d = QString("User Name: %1\nText Name: %2\nRoot: %3\nBass: %4\n"
-                                "Root TPC: %5\nBass TPC: %6\nDegrees: %7\n"
+                                "Root TPC: %5\nBass TPC: %6\n"
                                 "Extension Name: %8\nCL Size: %9")
                         .arg(h->hUserName()).arg(h->hTextName())
                         .arg(h->rootName()).arg(h->baseName())
                         .arg(h->rootTpc()).arg(h->baseTpc())
-                        .arg(degrees).arg(h->extensionName())
+                        .arg(h->extensionName())
                         .arg(score()->style().chordList()->size());
-            msgBox.setDetailedText(s);
+            msgBox.setDetailedText(d);
             }
       else {
             msgBox.setText("No Chord Selected. Cannot Realize Chord");
