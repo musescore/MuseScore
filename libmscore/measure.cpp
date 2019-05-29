@@ -4221,6 +4221,4 @@ void Measure::computeMinWidth()
 
       computeMinWidth(s, x, isSystemHeader);
       }
-
 }
-

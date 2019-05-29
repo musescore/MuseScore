@@ -39,7 +39,7 @@ class ScoreAccessibility : public QObject {
       QMainWindow* mainWindow;
       QLabel* statusBarLabel;
       ScoreAccessibility(QMainWindow* statusBar);
-      std::pair<int, float>barbeat(Element* e);
+      std::tuple<int, int, float> barbeat(Element* e);
 
    public:
       ~ScoreAccessibility();

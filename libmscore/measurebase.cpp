@@ -604,5 +604,22 @@ LayoutBreak* MeasureBase::sectionBreakElement() const
             }
       return 0;
       }
+
+//---------------------------------------------------------
+//   calculateAdjustedNo
+//    calculates the adjusted bar number, taking into
+//    account section breaks and manual adjustments.
+//---------------------------------------------------------
+
+int MeasureBase::calculateAdjustedNo()
+      {
+      int no = 0;
+      Measure* prev = this->findMeasure();
+      do {
+            no += prev->noOffset() + 1;
+            prev = prev->prevMeasure();
+            } while (prev != 0 && !prev->sectionBreak());
+      return no;
+      }
 }
 

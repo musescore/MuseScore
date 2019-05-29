@@ -112,6 +112,13 @@ void ScoreAccessibility::clearAccessibilityInfo()
 
 void ScoreAccessibility::currentInfoChanged()
       {
+      const QString startMeasure = tr("Start Measure");
+      const QString startBeat = tr("Start Beat");
+      const QString endMeasure = tr("End Measure");
+      const QString endBeat = tr("End Beat");
+      const QString measure = tr("Measure");
+      const QString beat = tr("Beat");
+
       clearAccessibilityInfo();
       ScoreView* scoreView =  static_cast<MuseScore*>(mainWindow)->currentScoreView();
       Score* score = scoreView->score();
@@ -124,8 +131,15 @@ void ScoreAccessibility::currentInfoChanged()
             QString barsAndBeats = "";
             if (el->isSpanner()){
                   Spanner* s = static_cast<Spanner*>(el);
-                  std::pair<int, float> bar_beat = barbeat(s->startSegment());
-                  barsAndBeats += tr("Start Measure: %1; Start Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
+                  std::tuple<int, int, float> bar_beat = barbeat(s->startSegment());
+                  int adjusted = std::get<0>(bar_beat);
+                  int barNumber = std::get<1>(bar_beat);
+                  int beat = std::get<2>(bar_beat);
+                  if (adjusted == barNumber)
+                        barsAndBeats += QString("%1: %2; %3: %4").arg(startMeasure).arg(QString::number(barNumber)).arg(startBeat).arg(QString::number(beat));
+                  else
+                        barsAndBeats += QString("%1: %2 (%3); %4: %5").arg(startMeasure).arg(QString::number(adjusted)).arg(QString::number(barNumber)).arg(startBeat).arg(QString::number(beat));
+
                   Segment* seg = s->endSegment();
                   if(!seg)
                         seg = score->lastSegment()->prev1MM(SegmentType::ChordRest);
@@ -136,14 +150,29 @@ void ScoreAccessibility::currentInfoChanged()
                         seg = seg->prev1MM(SegmentType::ChordRest);
 
                   bar_beat = barbeat(seg);
-                  barsAndBeats += "; " + tr("End Measure: %1; End Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
-                  }
+                  adjusted = std::get<0>(bar_beat);
+                  barNumber = std::get<1>(bar_beat);
+                  beat = std::get<2>(bar_beat);
+                  if (adjusted == barNumber)
+                        barsAndBeats += QString("; %1: %2; %3: %4").arg(endMeasure).arg(QString::number(barNumber)).arg(endBeat).arg(QString::number(beat));
+                  else
+                        barsAndBeats += QString("; %1: %2 (%3); %4: %5").arg(endMeasure).arg(QString::number(adjusted)).arg(QString::number(barNumber)).arg(endBeat).arg(QString::number(beat));
+
+            }
             else {
-                  std::pair<int, float>bar_beat = barbeat(el);
-                  if (bar_beat.first) {
-                        barsAndBeats += " " + tr("Measure: %1").arg(QString::number(bar_beat.first));
-                        if (bar_beat.second)
-                              barsAndBeats += "; " + tr("Beat: %1").arg(QString::number(bar_beat.second));
+                  std::tuple<int, int, float> bar_beat = barbeat(el);
+                  int adjusted = std::get<0>(bar_beat);
+                  int barNumber = std::get<1>(bar_beat);
+                  int beat = std::get<2>(bar_beat);
+                  if (adjusted || barNumber) {
+                        if (adjusted == barNumber)
+                              barsAndBeats += QString(" %1: %2").arg(measure).arg(QString::number(barNumber));
+                        else
+                              barsAndBeats += QString(" %1: %2 (%3)").arg(measure).arg(QString::number(adjusted)).arg(QString::number(barNumber));
+
+                        if (beat)
+                              barsAndBeats += QString("; %1: %2").arg(beat).arg(QString::number(beat));
+
                         }
                   }
 
@@ -163,10 +192,15 @@ void ScoreAccessibility::currentInfoChanged()
             }
       else if (score->selection().isRange()) {
             QString barsAndBeats = "";
-            std::pair<int, float> bar_beat;
+            std::tuple<int, int, float> bar_beat = barbeat(score->selection().startSegment());
+            int adjusted = std::get<0>(bar_beat);
+            int barNumber = std::get<1>(bar_beat);
+            int beat = std::get<2>(bar_beat);
+            if (adjusted == barNumber)
+                  barsAndBeats += QString(" %1: %2; %3: %4").arg(startMeasure).arg(QString::number(barNumber)).arg(startBeat).arg(QString::number(beat));
+            else
+                  barsAndBeats += QString(" %1: %2 (%3); %4: %5").arg(startMeasure).arg(QString::number(adjusted)).arg(QString::number(barNumber)).arg(startBeat).arg(QString::number(beat));
 
-            bar_beat = barbeat(score->selection().startSegment());
-            barsAndBeats += " " + tr("Start Measure: %1; Start Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
             Segment* endSegment = score->selection().endSegment();
 
             if (!endSegment)
@@ -175,7 +209,14 @@ void ScoreAccessibility::currentInfoChanged()
                   endSegment = endSegment->prev1MM();
 
             bar_beat = barbeat(endSegment);
-            barsAndBeats += " " + tr("End Measure: %1; End Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
+            adjusted = std::get<0>(bar_beat);
+            barNumber = std::get<1>(bar_beat);
+            beat = std::get<2>(bar_beat);
+            if (adjusted == barNumber)
+                  barsAndBeats += QString(" %1: %2; %3: %4").arg(endMeasure).arg(QString::number(barNumber)).arg(endBeat).arg(QString::number(beat));
+            else
+                  barsAndBeats += QString(" %1: %2 (%3); %4: %5").arg(endMeasure).arg(QString::number(adjusted)).arg(QString::number(barNumber)).arg(endBeat).arg(QString::number(beat));
+
             statusBarLabel->setText(tr("Range Selection") + barsAndBeats);
             score->setAccessibleInfo(tr("Range Selection") + barsAndBeats);
             }
@@ -218,13 +259,14 @@ void ScoreAccessibility::updateAccessibilityInfo()
       QAccessible::updateAccessibility(&ev);
       }
 
-std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
+std::tuple<int, int, float> ScoreAccessibility::barbeat(Element* e)
       {
       if (!e) {
-            return std::pair<int, float>(0, 0.0F);
+            return std::tuple<int, int, float>(0, 0, 0.0F);
             }
 
       int bar = 0;
+      int adjusted = 0;
       int beat = 0;
       int ticks = 0;
       TimeSigMap* tsm = e->score()->sigmap();
@@ -234,19 +276,22 @@ std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
             p = p->parent();
 
       if (!p) {
-            return std::pair<int, float>(0, 0.0F);
+            return std::tuple<int, int, float>(0, 0, 0.0F);
             }
       else if (p->type() == ElementType::SEGMENT) {
             Segment* seg = static_cast<Segment*>(p);
             tsm->tickValues(seg->tick().ticks(), &bar, &beat, &ticks);
             ticksB = ticks_beat(tsm->timesig(seg->tick().ticks()).timesig().denominator());
+            adjusted = seg->measure()->calculateAdjustedNo();
             }
       else if (p->type() == ElementType::MEASURE) {
             Measure* m = static_cast<Measure*>(p);
             bar = m->no();
+            adjusted = m->calculateAdjustedNo();
+            m->prevMeasure();
             beat = -1;
             ticks = 0;
             }
-      return pair<int,float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
+      return std::tuple<int, int, float>(adjusted, bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
       }
 }

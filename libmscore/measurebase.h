@@ -172,6 +172,8 @@ class MeasureBase : public Element {
 
       int index() const;
       int measureIndex() const;
+
+      int calculateAdjustedNo();
       };
 
 
