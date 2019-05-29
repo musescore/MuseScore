@@ -1522,6 +1522,38 @@ ChordDescription::ChordDescription(const QString& name)
       }
 
 //---------------------------------------------------------
+//   intervals
+//    returns a QList of integers holding the intervals
+//    from the root note
+//---------------------------------------------------------
+QList<int> ChordDescription::intervals() const {
+      //TODO - PHV take a look again later, this might be uneeded
+      QList<int> ret;
+      int k = chord.getKeys();
+      int n = 1;
+      k >>= 1;
+      while (k > 0) {
+            if (k & 1)
+                  ret << n;
+            n++;
+            k >>= 1;
+            }
+      return ret;
+      }
+
+//---------------------------------------------------------
+//   noteNames
+//    returns a QList of note names in the chord
+//---------------------------------------------------------
+QString ChordDescription::noteNames(int rootNote) const {
+      //TODO - PHV take a look again later, this might be uneeded
+      QStringList ret;
+      HChord c(chord);
+
+      c.rotate(tpc2pitch(rootNote));
+      return c.voicing();
+      }
+//---------------------------------------------------------
 //   complete
 //    generate missing renderList and semantic (Xml) info
 //---------------------------------------------------------
