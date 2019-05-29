@@ -510,6 +510,29 @@ static bool getLatestRelease(QJsonDocument& releases, int& release_id, QString& 
 static inline bool isNotFoundMessage(const QJsonObject& json_obj) {
       return json_obj["message"].toString() == "Not Found";
       }
+
+static std::vector<std::pair<QString, QString>> getAttachments(const QByteArray& html_raw)
+      {
+      int start_idx = html_raw.indexOf("<div class=\"field field--name-upload field--type-file field--label-above\">");
+      if (start_idx == -1)
+            ; // TODO: no attachments found
+      std::vector<std::pair<QString, QString>> file_urls;
+      QByteArray attachments_raw = html_raw.mid(start_idx, -1);
+      XmlReader xml(attachments_raw);
+      while (!xml.atEnd() && xml.name() != "table") xml.readNextStartElement();
+      while (!xml.atEnd() && xml.name() != "tbody") xml.readNextStartElement();
+      while (!xml.atEnd() && xml.name() != "tr") xml.readNextStartElement();
+      // now we've arrived at the first <tr>
+      while (!xml.atEnd() && xml.name() == "tr") {
+            for (int i = 0; i < 3; i++) // enter <td>, <span>, <a>
+                  xml.readNextStartElement();
+            file_urls.push_back(make_pair(xml.readElementText(), xml.attributes().value("href").toString()));
+            for (int i = 0; i < 3; i++) // exit <a>, <span>, <td>
+                  xml.skipCurrentElement();
+            xml.readNextStartElement();
+            }
+      return file_urls;
+      }
 //---------------------------------------------------------
 //   analyzePluginPage
 //---------------------------------------------------------
@@ -561,7 +584,8 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
       }
       else {
             // no github repo links exist
-            // TODO: fetch direct links in page
+            // first fetch links in attachments
+            std::vector<std::pair<QString, QString>> file_urls = getAttachments(html_raw);
             qDebug("Unknown plugin source");
             desc.source = UNKNOWN;
             return false;
