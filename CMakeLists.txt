@@ -327,10 +327,17 @@ if (DOWNLOAD_SOUNDFONT)
   set (SOUND_DIRECTORY ${PROJECT_SOURCE_DIR}/share/sound)
 
   if (CUSTOM_SOUNDFONT_URL)
+
     if (NOT EXISTS "${SOUND_DIRECTORY}/MuseScore_General.sf3")
       message("Downloading the soundfont from ${CUSTOM_SOUNDFONT_URL}...")
       file(DOWNLOAD "${CUSTOM_SOUNDFONT_URL}" ${SOUND_DIRECTORY}/MuseScore_General.sf3 SHOW_PROGRESS STATUS SF_DL_STATUS)
+      list(GET SF_DL_STATUS 0 HTTP_STATUS)
+      if (NOT HTTP_STATUS EQUAL 0)
+        list(GET SF_DL_STATUS 1 HTTP_STATUS_TEXT)
+        message(FATAL_ERROR "Cannot download the custom soundfont. Error: ${HTTP_STATUS_TEXT}")
+      endif()
     endif (NOT EXISTS "${SOUND_DIRECTORY}/MuseScore_General.sf3")
+
   else(CUSTOM_SOUNDFONT_URL)
 
     file(DOWNLOAD ${DOWNLOAD_URL_ROOT}/VERSION ${SF_VERSION_REMOTE_FILE} STATUS SF_VERSION_DL_STATUS_LIST)
