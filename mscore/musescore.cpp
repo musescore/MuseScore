@@ -6746,11 +6746,6 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
       Q_UNUSED(wasCanceled);
       return false;
 #else
-      EventMap events;
-      score->renderMidi(&events, synthesizerState());
-      if(events.size() == 0)
-            return false;
-
       MP3Exporter exporter;
       if (!exporter.loadLibrary(MP3Exporter::AskUser::MAYBE)) {
             QSettings set;
@@ -6820,6 +6815,16 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
             }
 
       MScore::sampleRate = sampleRate;
+
+      EventMap events;
+
+      score->masterScore()->rebuildAndUpdateExpressive(synth->synthesizer("Fluid"));
+      score->renderMidi(&events, score->synthesizerState());
+      if (synti)
+            score->masterScore()->rebuildAndUpdateExpressive(synti->synthesizer("Fluid"));
+
+      if (events.empty())
+            return false;
 
       QProgressDialog progress(this);
       progress.setWindowFlags(Qt::WindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowTitleHint));

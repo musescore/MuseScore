@@ -52,11 +52,6 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
         return false;
     }
 
-    EventMap events;
-    score->renderMidi(&events, synthesizerState());
-    if(events.size() == 0)
-          return false;
-
     MasterSynthesizer* synth = synthesizerFactory();
     synth->init();
     int sampleRate = preferences.getInt(PREF_EXPORT_AUDIO_SAMPLERATE);
@@ -71,6 +66,16 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
           if (!r)
                 synth->init();
           }
+
+    EventMap events;
+
+    score->masterScore()->rebuildAndUpdateExpressive(synth->synthesizer("Fluid"));
+    score->renderMidi(&events, score->synthesizerState());
+    if (synti)
+          score->masterScore()->rebuildAndUpdateExpressive(synti->synthesizer("Fluid"));
+
+    if (events.empty())
+          return false;
 
     int oldSampleRate  = MScore::sampleRate;
     MScore::sampleRate = sampleRate;
