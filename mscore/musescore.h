@@ -820,6 +820,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void unregisterPlugin(PluginDescription*);
 
       Q_INVOKABLE void showStartcenter(bool);
+      void reDisplayDockWidget(QDockWidget* widget, bool visible);
       void showPlayPanel(bool);
 
       QFileInfoList recentScores() const;
