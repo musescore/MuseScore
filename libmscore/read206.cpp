@@ -1934,7 +1934,7 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
             ch->setBeamMode(bm);
             }
       else if (tag == "Articulation") {
-            Element* el = readArticulation(ch->score(), e);
+            Element* el = readArticulation(ch, e);
             if (el->isFermata())
                   ch->segment()->add(el);
             else
@@ -2538,13 +2538,14 @@ static void setFermataPlacement(Element* el, ArticulationAnchor anchor, Directio
 //   readArticulation
 //---------------------------------------------------------
 
-Element* readArticulation(Score* score, XmlReader& e)
+Element* readArticulation(Element* parent, XmlReader& e)
       {
       Element* el = 0;
       SymId sym = SymId::fermataAbove;          // default -- backward compatibility (no type = ufermata in 1.2)
       ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
       Direction direction = Direction::AUTO;
-      int track = e.track();
+      Score* score = parent->score();
+      int track = parent->track();
       double timeStretch = 0.0;
       bool useDefaultPlacement = true;
 
@@ -2811,7 +2812,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         else if (t == "spanToOffset")
                               bl->setSpanTo(e.readInt());
                         else if (t == "Articulation") {
-                              Element* el = readArticulation(score, e);
+                              Element* el = readArticulation(bl, e);
                               if (el->isFermata()) {
                                     if (el->placement() == Placement::ABOVE)
                                           fermataAbove = toFermata(el);
