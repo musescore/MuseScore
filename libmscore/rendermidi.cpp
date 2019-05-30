@@ -77,6 +77,7 @@ struct StaffRenderData {
       Fraction lastHairpinStart = Fraction(-1, 1);
       Fraction lastDynamicEnd   = Fraction(-1, 1);
       std::map<int, NPlayEvent> tempPlayEvents;
+      std::map<int, NPlayEvent> tempAllVelEvents;
       };
 
 bool graceNotesMerged(Chord *chord);
@@ -242,7 +243,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
 //   collectNote
 //---------------------------------------------------------
 
-static void collectNote(EventMap* events, int channel, const Note* note, int velo, int tickOffset, int staffIdx)
+static void collectNote(EventMap* events, int channel, const Note* note, int velo, int tickOffset, int staffIdx, const std::map<int, NPlayEvent>& tempVelEvents)
       {
       if (!note->play() || note->hidden())      // do not play overlapping notes
             return;
@@ -274,7 +275,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
                               }
                         else {
                               // recurse
-                              collectNote(events, channel, n, velo, tickOffset, staffIdx);
+                              collectNote(events, channel, n, velo, tickOffset, staffIdx, tempVelEvents);
                               break;
                               }
                         if (n->tieFor() && n != n->tieFor()->endNote())
@@ -309,6 +310,14 @@ static void collectNote(EventMap* events, int channel, const Note* note, int vel
             int off = on + (ticks * e.len())/1000 - 1;
             if (tieFor && i == nels - 1)
                   off += tieLen;
+
+            // take note-on velocity from single-note dynamics CC events list, if possible
+            if (int(tempVelEvents.size()) > 0) {
+                  auto vEvent = tempVelEvents.upper_bound(on);
+                  vEvent--;
+                  velo = vEvent->second.velo();
+                  }
+
             playNote(events, note, channel, p, velo, on, off, staffIdx);
             }
 
@@ -514,18 +523,21 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
                   for (Articulation* a : chord->articulations())
                         instr->updateVelocity(&velocity,channel, a->articulationName());
 
+                  // create a temporary map for collectNote
+                  std::map<int, NPlayEvent> tempMap;
+
                   if ( !graceNotesMerged(chord))
                       for (Chord* c : chord->graceNotesBefore())
                           for (const Note* note : c->notes())
-                              collectNote(events, channel, note, velocity, tickOffset, staffIdx);
+                              collectNote(events, channel, note, velocity, tickOffset, staffIdx, tempMap);
 
                   for (const Note* note : chord->notes())
-                        collectNote(events, channel, note, velocity, tickOffset, staffIdx);
+                        collectNote(events, channel, note, velocity, tickOffset, staffIdx, tempMap);
 
                   if ( !graceNotesMerged(chord))
                       for (Chord* c : chord->graceNotesAfter())
                           for (const Note* note : c->notes())
-                              collectNote(events, channel, note, velocity, tickOffset, staffIdx);
+                              collectNote(events, channel, note, velocity, tickOffset, staffIdx, tempMap);
                  }
             }
       }
@@ -741,205 +753,218 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                   events->registerChannel(channel);
 
                   // 
-                  // Decide whether to add CC events or not
+                  // Decide which CC events to add - create them even if the instrument doesn't use SND,
+                  // for the purpose of rendering tremolos, ornaments etc. When rendering, always create
+                  // events only after the start tick of the segment, never before. Rendering past the segment
+                  // end tick is allowed.
                   //
 
-                  if (instr->singleNoteDynamics()) {
-                        Fraction hairpinStartTick;
-                        Fraction hairpinStopTick;
-                        bool hasHairpin = false;
-                        
-                        bool singleNoteDynamics = false;
-                        Hairpin* h = nullptr;
-                        VeloChangeMethod changeMethod = VeloChangeMethod::NORMAL;
+                  Fraction hairpinStartTick;
+                  Fraction hairpinStopTick;
+                  bool hasHairpin = false;
+                  
+                  bool singleNoteDynamics = false;
+                  Hairpin* h = nullptr;
+                  VeloChangeMethod changeMethod = VeloChangeMethod::NORMAL;
 
-                        // This flag is used to decide whether to add a static velocity event or none at all,
-                        // depending on whether we're in a hairpin/changing dynamic or not.
-                        bool doAddStaticVel = true;
+                  // This flag is used to decide whether to add a static velocity event or none at all,
+                  // depending on whether we're in a hairpin/changing dynamic or not.
+                  bool doAddStaticVel = true;
 
-                        // Check for hairpin crossing segment
-                        for (auto it : staff->score()->spannerMap().findOverlapping(tick.ticks(), tick2.ticks()-1)) {
-                              Spanner* s = it.value;
-                              if (it.stop == tick.ticks())
-                                    continue;
+                  // Check for hairpin crossing segment
+                  for (auto it : staff->score()->spannerMap().findOverlapping(tick.ticks(), tick2.ticks()-1)) {
+                        Spanner* s = it.value;
+                        if (it.stop == tick.ticks())
+                              continue;
 
-                              // Don't playback dynamic if this hairpin started before or at the same time as the last one
-                              // processed (i.e. if it is the same hairpin)
-                              if (it.start + tickOffset <= renderData.lastHairpinStart.ticks()) {
-                                    doAddStaticVel = false;
-                                    continue;
+                        // Don't playback dynamic if this hairpin started before or at the same time as the last one
+                        // processed (i.e. if it is the same hairpin)
+                        if (it.start + tickOffset <= renderData.lastHairpinStart.ticks()) {
+                              doAddStaticVel = false;
+                              continue;
+                              }
+
+                        if (s->isHairpin()) {
+                              h = toHairpin(s);
+                              switch (h->dynRange()) {
+                                    case Dynamic::Range::STAFF:
+                                          if (h->staff() != st1)
+                                                continue;
+                                          break;
+                                    case Dynamic::Range::PART:
+                                          if (h->part() != st1->part())
+                                                continue;
+                                          break;
+                                    case Dynamic::Range::SYSTEM:
+                                    default:
+                                          break;
                                     }
 
-                              if (s->isHairpin()) {
-                                    h = toHairpin(s);
-                                    switch (h->dynRange()) {
-                                          case Dynamic::Range::STAFF:
-                                                if (h->staff() != st1)
-                                                      continue;
-                                                break;
-                                          case Dynamic::Range::PART:
-                                                if (h->part() != st1->part())
-                                                      continue;
-                                                break;
-                                          case Dynamic::Range::SYSTEM:
-                                          default:
-                                                break;
-                                          }
+                              singleNoteDynamics = h->singleNoteDynamics() || singleNoteDynamics;
+                              if (singleNoteDynamics) {
+                                    hairpinStartTick = Fraction::fromTicks(it.start);
+                                    hairpinStopTick = Fraction::fromTicks(it.stop);
+                                    hasHairpin = true;
+                                    changeMethod = h->veloChangeMethod();
+                                    break;
+                                    }
+                              }
+                        }
 
-                                    singleNoteDynamics = h->singleNoteDynamics() || singleNoteDynamics;
-                                    if (singleNoteDynamics) {
-                                          hairpinStartTick = Fraction::fromTicks(it.start);
-                                          hairpinStopTick = Fraction::fromTicks(it.stop);
-                                          hasHairpin = true;
-                                          changeMethod = h->veloChangeMethod();
+                  // From this, work out a start and end tick to apply CC events for
+                  Fraction stick;
+                  Fraction etick;
+                  Fraction fracTickOffset = Fraction::fromTicks(tickOffset);
+                  if (hasHairpin) {
+                        stick = hairpinStartTick;
+                        etick = hairpinStopTick;
+
+                        // Correct for a changing dynamic that may still be finishing
+                        if (renderData.lastDynamicEnd >= etick + fracTickOffset) {
+                              singleNoteDynamics = false;
+                              }
+                        else if (renderData.lastDynamicEnd > stick + fracTickOffset) {
+                              stick = renderData.lastDynamicEnd;
+                              }
+                        }
+                  else {
+                        stick = Fraction(0, 1);
+                        etick = seg->tick() + seg->ticks();
+                        }
+
+                  if (stick < seg->tick())
+                        stick = seg->tick();
+
+                  // Make sure we don't add a static dynamic event in the middle of a changing dynamic
+                  if (renderData.lastDynamicEnd >= stick + fracTickOffset)
+                        doAddStaticVel = false;
+
+                  // Check if there is a fortepiano / similar dynamic
+                  bool hasChangingDynamic = false;
+                  Dynamic* changingDyn = nullptr;
+                  if (chord != 0) {
+                        for (Element* e : seg->annotations()) {
+                              if (!e)
+                                    continue;
+                              if (!e->isDynamic())
+                                    continue;
+                              Dynamic* d = toDynamic(e);
+                              if (d->changeInVelocity() == 0)
+                                    continue;
+
+                              switch (d->dynRange()) {
+                                    case Dynamic::Range::STAFF:
+                                          if (d->staff()->idx() != staffIdx)
+                                                continue;
                                           break;
-                                          }
+                                    case Dynamic::Range::PART:
+                                          if (d->part() != chord->part())
+                                                continue;
+                                          break;
+                                    case Dynamic::Range::SYSTEM:
+                                    default:
+                                          break;
+                                    }
+
+                              hasChangingDynamic = true;
+                              changingDyn = d;
+                              }
+                        }
+
+                  // We have a start and end tick, so get the velocities at these points
+                  int velocityStart = staff->velocities().velo(stick.ticks());
+                  int velocityMiddle = hasChangingDynamic ? velocityStart + changingDyn->changeInVelocity() : -1;
+                  int velocityEnd = staff->velocities().velo(etick.ticks() - 1);
+
+                  // Attempt to fix invalid hairpin
+                  if (hasHairpin) {
+                        int hairpinStartVel = (velocityMiddle == -1) ? velocityStart : velocityMiddle;
+                        if (h->isCrescendo() && hairpinStartVel > velocityEnd)
+                              singleNoteDynamics = false;
+                        else if (h->isDecrescendo() && hairpinStartVel < velocityEnd)
+                              singleNoteDynamics = false;
+                        }
+
+                  // Check for articulations
+                  bool hasArticulations = false;
+                  if (chord)
+                        hasArticulations = chord->articulations().count() > 0;
+
+                  //
+                  // Add CC events
+                  //
+
+                  if (singleNoteDynamics || hasArticulations || hasChangingDynamic) {
+                        if (chord != 0 && hasArticulations) {
+                              for (Articulation* a : chord->articulations()) {
+                                    if (velocityMiddle == -1)
+                                          velocityMiddle = velocityStart;
+                                    instr->updateVelocity(&velocityStart, channel, a->articulationName());
                                     }
                               }
 
-                        // From this, work out a start and end tick to apply CC events for
-                        Fraction stick;
-                        Fraction etick;
-                        Fraction fracTickOffset = Fraction::fromTicks(tickOffset);
-                        if (hasHairpin) {
-                              stick = hairpinStartTick;
-                              etick = hairpinStopTick;
+                        if (hasHairpin && singleNoteDynamics)
+                              renderData.lastHairpinStart = hairpinStartTick + Fraction::fromTicks(tickOffset);
 
-                              // Correct for a changing dynamic that may still be finishing
-                              if (renderData.lastDynamicEnd >= etick + fracTickOffset) {
-                                    singleNoteDynamics = false;
+                        if (hasArticulations || hasChangingDynamic) {
+                              int startExpr = velocityStart;
+                              int endExpr = velocityMiddle;
+
+                              Fraction accentTicks = Fraction(1, 16);
+                              if (hasChangingDynamic) {
+                                    accentTicks = changingDyn->velocityChangeLength();
+                                    renderData.lastDynamicEnd = stick + accentTicks + fracTickOffset;
                                     }
-                              else if (renderData.lastDynamicEnd > stick + fracTickOffset) {
-                                    stick = renderData.lastDynamicEnd;
+
+                              // Determine how long to 'hold' the initial velocity
+                              // This is shorter with a dynamic than an articulation
+                              // Also, since we're about to add CC events, we can use int ticks instead of fractions
+                              int stickToUse = stick.ticks() + accentTicks.ticks() / (hasChangingDynamic ? 4 : 2);
+                              int etickToUse = stick.ticks() + accentTicks.ticks();
+
+                              // First, add an initial accent velocity
+                              // stick is the seg start tick, stickToUse is where we should dim to the rest velocity
+                              changeCCBetween(renderData.tempAllVelEvents, stick.ticks(), stickToUse, startExpr, startExpr, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
+
+                              // Then dimenuendo back down to normal
+                              // eticktouse is the end of the dim back to normal for an accent,
+                              // but etick is the segment end tick.
+                              changeCCBetween(renderData.tempAllVelEvents, stickToUse, etickToUse, startExpr, endExpr, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
+
+                              // if there's a cresc or dim after the dynamic, apply it
+                              if (singleNoteDynamics && hasHairpin) {
+                                    startExpr = velocityMiddle;
+                                    endExpr = velocityEnd;
+
+                                    stickToUse = qMin(stick.ticks() + accentTicks.ticks() + 1, etick.ticks());
+
+                                    changeCCBetween(renderData.tempAllVelEvents, stickToUse, etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset, staffIdx);
                                     }
                               }
                         else {
-                              stick = Fraction(0, 1);
-                              etick = seg->tick() + seg->ticks();
+                              int startExpr = velocityStart;
+                              int endExpr = velocityEnd;
+                              changeCCBetween(renderData.tempAllVelEvents, stick.ticks(), etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset, staffIdx);
                               }
+                        }
+                  else if (doAddStaticVel) {
+                        // Add a single expression value to match the velocity, since there is no hairpin
+                        int exprVal = velocityStart;
+                        int staticTick = seg->tick().ticks();
+                        changeCCBetween(renderData.tempAllVelEvents, staticTick, staticTick, exprVal, exprVal, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
+                        }
 
-                        if (stick < seg->tick())
-                              stick = seg->tick();
+                  //
+                  // End SND CC event adding
+                  //
 
-                        // Make sure we don't add a static dynamic event in the middle of a changing dynamic
-                        if (renderData.lastDynamicEnd >= stick + fracTickOffset)
-                              doAddStaticVel = false;
-
-                        // Check if there is a fortepiano / similar dynamic
-                        bool hasChangingDynamic = false;
-                        Dynamic* changingDyn = nullptr;
-                        if (chord != 0) {
-                              for (Element* e : seg->annotations()) {
-                                    if (!e)
-                                          continue;
-                                    if (!e->isDynamic())
-                                          continue;
-                                    Dynamic* d = toDynamic(e);
-                                    if (d->changeInVelocity() == 0)
-                                          continue;
-
-                                    switch (d->dynRange()) {
-                                          case Dynamic::Range::STAFF:
-                                                if (d->staff()->idx() != staffIdx)
-                                                      continue;
-                                                break;
-                                          case Dynamic::Range::PART:
-                                                if (d->part() != chord->part())
-                                                      continue;
-                                                break;
-                                          case Dynamic::Range::SYSTEM:
-                                          default:
-                                                break;
-                                          }
-
-                                    hasChangingDynamic = true;
-                                    changingDyn = d;
-                                    }
+                  if (instr->singleNoteDynamics()) {
+                        // Copy across any new events, since we've been rendering to tempAllVelEvents
+                        auto eventsStart = renderData.tempAllVelEvents.lower_bound(stick.ticks() + tickOffset);
+                        for (auto i = eventsStart; i != renderData.tempAllVelEvents.end(); i++) {
+                              renderData.tempPlayEvents[i->first] = i->second;
                               }
-
-                        // We have a start and end tick, so get the velocities at these points
-                        int velocityStart = staff->velocities().velo(stick.ticks());
-                        int velocityMiddle = hasChangingDynamic ? velocityStart + changingDyn->changeInVelocity() : -1;
-                        int velocityEnd = staff->velocities().velo(etick.ticks() - 1);
-
-                        // Attempt to fix invalid hairpin
-                        if (hasHairpin) {
-                              int hairpinStartVel = (velocityMiddle == -1) ? velocityStart : velocityMiddle;
-                              if (h->isCrescendo() && hairpinStartVel > velocityEnd)
-                                    singleNoteDynamics = false;
-                              else if (h->isDecrescendo() && hairpinStartVel < velocityEnd)
-                                    singleNoteDynamics = false;
-                              }
-
-                        // Check for articulations
-                        bool hasArticulations = false;
-                        if (chord)
-                              hasArticulations = chord->articulations().count() > 0;
-
-                        //
-                        // Add CC events
-                        //
-
-                        if (singleNoteDynamics || hasArticulations || hasChangingDynamic) {
-                              if (chord != 0 && hasArticulations) {
-                                    for (Articulation* a : chord->articulations()) {
-                                          if (velocityMiddle == -1)
-                                                velocityMiddle = velocityStart;
-                                          instr->updateVelocity(&velocityStart, channel, a->articulationName());
-                                          }
-                                    }
-
-                              if (hasHairpin && singleNoteDynamics)
-                                    renderData.lastHairpinStart = hairpinStartTick + Fraction::fromTicks(tickOffset);
-
-                              if (hasArticulations || hasChangingDynamic) {
-                                    int startExpr = velocityStart;
-                                    int endExpr = velocityMiddle;
-
-                                    Fraction accentTicks = Fraction(1, 16);
-                                    if (hasChangingDynamic) {
-                                          accentTicks = changingDyn->velocityChangeLength();
-                                          renderData.lastDynamicEnd = stick + accentTicks + fracTickOffset;
-                                          }
-
-                                    // Determine how long to 'hold' the initial velocity
-                                    // This is shorter with a dynamic than an articulation
-                                    // Also, since we're about to add CC events, we can use int ticks instead of fractions
-                                    int stickToUse = stick.ticks() + accentTicks.ticks() / (hasChangingDynamic ? 4 : 2);
-                                    int etickToUse = stick.ticks() + accentTicks.ticks();
-
-                                    // First, add an initial accent velocity
-                                    // stick is the seg start tick, stickToUse is where we should dim to the rest velocity
-                                    changeCCBetween(renderData.tempPlayEvents, stick.ticks(), stickToUse, startExpr, startExpr, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
-
-                                    // Then dimenuendo back down to normal
-                                    // eticktouse is the end of the dim back to normal for an accent,
-                                    // but etick is the segment end tick.
-                                    changeCCBetween(renderData.tempPlayEvents, stickToUse, etickToUse, startExpr, endExpr, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
-
-                                    // if there's a cresc or dim after the dynamic, apply it
-                                    if (singleNoteDynamics && hasHairpin) {
-                                          startExpr = velocityMiddle;
-                                          endExpr = velocityEnd;
-
-                                          stickToUse = qMin(stick.ticks() + accentTicks.ticks() + 1, etick.ticks());
-
-                                          changeCCBetween(renderData.tempPlayEvents, stickToUse, etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset, staffIdx);
-                                          }
-                                    }
-                              else {
-                                    int startExpr = velocityStart;
-                                    int endExpr = velocityEnd;
-                                    changeCCBetween(renderData.tempPlayEvents, stick.ticks(), etick.ticks(), startExpr, endExpr, channel, controller, changeMethod, tickOffset, staffIdx);
-                                    }
-                              }
-                        else if (doAddStaticVel) {
-                              // Add a single expression value to match the velocity, since there is no hairpin
-                              int exprVal = velocityStart;
-                              int staticTick = seg->tick().ticks();
-                              changeCCBetween(renderData.tempPlayEvents, staticTick, staticTick, exprVal, exprVal, channel, controller, defaultChangeMethod, tickOffset, staffIdx);
-                              }
-                        } // if instr->singleNoteDynamics()
+                        }
                   else {
                         if (chord != 0) {
                               for (Articulation* a : chord->articulations())
@@ -970,15 +995,15 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                         if (!graceNotesMerged(chord))
                               for (Chord* c : chord->graceNotesBefore())
                                     for (const Note* note : c->notes())
-                                          collectNote(events, channel, note, velocityToUse, tickOffset, staffIdx);
+                                          collectNote(events, channel, note, velocityToUse, tickOffset, staffIdx, renderData.tempAllVelEvents);
 
                         for (const Note* note : chord->notes())
-                              collectNote(events, channel, note, velocityToUse, tickOffset, staffIdx);
+                              collectNote(events, channel, note, velocityToUse, tickOffset, staffIdx, renderData.tempAllVelEvents);
 
                         if (!graceNotesMerged(chord))
                               for (Chord* c : chord->graceNotesAfter())
                                     for (const Note* note : c->notes())
-                                          collectNote(events, channel, note, velocityToUse, tickOffset, staffIdx);
+                                          collectNote(events, channel, note, velocityToUse, tickOffset, staffIdx, renderData.tempAllVelEvents);
                         }
                   }
             }
