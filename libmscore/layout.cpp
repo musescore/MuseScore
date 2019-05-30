@@ -2658,6 +2658,9 @@ void Score::getNextMeasure(LayoutContext& lc)
             as.init(staff->keySigEvent(measure->tick()), staff->clef(measure->tick()));
 
             for (Segment& segment : measure->segments()) {
+                  // TODO? maybe we do need to process it here to make it possible to enable later
+                  //if (!segment.enabled())
+                  //      continue;
                   if (segment.isKeySigType()) {
                         KeySig* ks = toKeySig(segment.element(staffIdx * VOICES));
                         if (!ks)
@@ -2867,6 +2870,9 @@ void Score::getNextMeasure(LayoutContext& lc)
             score()->undoRemoveElement(seg);
 
       for (Segment& s : measure->segments()) {
+            // TODO? maybe we do need to process it here to make it possible to enable later
+            //if (!s.enabled())
+            //      continue;
             // DEBUG: relayout grace notes as beaming/flags may have changed
             if (s.isChordRestType()) {
                   for (Element* e : s.elist()) {
@@ -4237,7 +4243,6 @@ void LayoutContext::collectPage()
             //
             //  check for page break or if next system will fit on page
             //
-            const bool rangeWasDone = rangeDone;
             if (rangeDone) {
                   // take next system unchanged
                   if (systemIdx > 0) {
@@ -4312,9 +4317,6 @@ void LayoutContext::collectPage()
                   qreal dist = qMax(prevSystem->minBottom(), prevSystem->spacerDistance(false));
                   dist = qMax(dist, slb);
                   layoutPage(page, ey - (y + dist));
-                  // We don't accept current system to this page
-                  // so rollback rangeDone variable as well.
-                  rangeDone = rangeWasDone;
                   break;
                   }
             }
