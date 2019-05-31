@@ -997,7 +997,7 @@ void SLine::writeProperties(XmlWriter& xml) const
             return;
 
       //
-      // write user modified layout
+      // write user modified layout and other segment properties
       //
       qreal _spatium = score()->spatium();
       for (const SpannerSegment* seg : spannerSegments()) {
@@ -1010,6 +1010,7 @@ void SLine::writeProperties(XmlWriter& xml) const
             //if (seg->propertyFlags(Pid::OFFSET) & PropertyFlags::UNSTYLED)
             xml.tag("offset", seg->offset() / _spatium);
             xml.tag("off2", seg->userOff2() / _spatium);
+            seg->writeProperty(xml, Pid::MIN_DISTANCE);
             seg->Element::writeProperties(xml);
             xml.etag();
             }
