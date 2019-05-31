@@ -208,8 +208,8 @@ void ChordLine::read(XmlReader& e)
 void ChordLine::write(XmlWriter& xml) const
       {
       xml.stag(this);
-      xml.tag("subtype", int(_chordLineType));
-      xml.tag("straight", _straight, false);
+      writeProperty(xml, Pid::CHORD_LINE_TYPE);
+      writeProperty(xml, Pid::CHORD_LINE_STRAIGHT);
       xml.tag("lengthX", _lengthX, 0.0);
       xml.tag("lengthY", _lengthY, 0.0);
       Element::writeProperties(xml);
@@ -401,5 +401,68 @@ QString ChordLine::accessibleInfo() const
       return rez;
       }
 
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant ChordLine::getProperty(Pid propertyId) const
+      {
+      switch(propertyId) {
+            case Pid::CHORD_LINE_TYPE:
+                  return int(_chordLineType);
+            case Pid::CHORD_LINE_STRAIGHT:
+                  return _straight;
+            default:
+                  break;
+            }
+      return Element::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool ChordLine::setProperty(Pid propertyId, const QVariant& val)
+      {
+      switch(propertyId) {
+            case Pid::CHORD_LINE_TYPE:
+                  setChordLineType(ChordLineType(val.toInt()));
+                  break;
+            case Pid::CHORD_LINE_STRAIGHT:
+                  setStraight(val.toBool());
+                  break;
+            default:
+                  break;
+            }
+      return Element::setProperty(propertyId, val);
+      }
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+QVariant ChordLine::propertyDefault(Pid pid) const
+      {
+      switch (pid) {
+            case Pid::CHORD_LINE_STRAIGHT:
+                  return false;
+            default:
+                  break;
+            }
+      return Element::propertyDefault(pid);
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid ChordLine::propertyId(const QStringRef& name) const
+      {
+      if (name == "subtype")
+            return Pid::CHORD_LINE_TYPE;
+      else if (name == "straight")
+            return Pid::CHORD_LINE_STRAIGHT;
+      return Element::propertyId(name);
+      }
 }
 

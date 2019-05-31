@@ -65,6 +65,11 @@ class ChordLine final : public Element {
       virtual void updateGrips(EditData&) const override;
 
       virtual QString accessibleInfo() const override;
+
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual QVariant propertyDefault(Pid) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
       };
 
 extern const char* scorelineNames[];

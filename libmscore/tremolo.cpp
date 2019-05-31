@@ -356,7 +356,7 @@ void Tremolo::write(XmlWriter& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag(this);
-      xml.tag("subtype", tremoloTypeName());
+      writeProperty(xml, Pid::TREMOLO_TYPE);
       Element::writeProperties(xml);
       xml.etag();
       }
@@ -479,4 +479,60 @@ QString Tremolo::accessibleInfo() const
       return QString("%1: %2").arg(Element::accessibleInfo()).arg(subtypeName());
       }
 
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+QVariant Tremolo::getProperty(Pid propertyId) const
+      {
+      switch(propertyId) {
+            case Pid::TREMOLO_TYPE:
+                  return int(_tremoloType);
+            default:
+                  break;
+            }
+      return Element::getProperty(propertyId);
+      }
+
+//---------------------------------------------------------
+//   setProperty
+//---------------------------------------------------------
+
+bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
+      {
+      switch(propertyId) {
+            case Pid::TREMOLO_TYPE:
+                  setTremoloType(TremoloType(val.toInt()));
+                  break;
+            default:
+                  break;
+            }
+      return Element::setProperty(propertyId, val);
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Tremolo::propertyId(const QStringRef& name) const
+      {
+      if (name == "subtype")
+            return Pid::TREMOLO_TYPE;
+      return Element::propertyId(name);
+      }
+
+//---------------------------------------------------------
+//   propertyUserValue
+//---------------------------------------------------------
+
+QString Tremolo::propertyUserValue(Pid pid) const
+      {
+      switch(pid) {
+            case Pid::TREMOLO_TYPE:
+                  return subtypeName();
+            default:
+                  break;
+            }
+      return Element::propertyUserValue(pid);
+      }
 }

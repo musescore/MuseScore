@@ -333,6 +333,11 @@ enum class Pid {
       ACTION, // for Icon
       MIN_DISTANCE,
 
+      ARPEGGIO_TYPE,
+      CHORD_LINE_TYPE,
+      CHORD_LINE_STRAIGHT,
+      TREMOLO_TYPE,
+
       END
       };
 
