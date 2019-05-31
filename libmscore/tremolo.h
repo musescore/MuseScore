@@ -81,6 +81,11 @@ class Tremolo final : public Element {
       int lines() const { return _lines; }
 
       virtual QString accessibleInfo() const override;
+
+      virtual QVariant getProperty(Pid propertyId) const override;
+      virtual bool setProperty(Pid propertyId, const QVariant&) override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
+      virtual QString propertyUserValue(Pid) const override;
       };
 
 

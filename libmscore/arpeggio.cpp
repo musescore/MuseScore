@@ -58,7 +58,7 @@ void Arpeggio::write(XmlWriter& xml) const
             return;
       xml.stag(this);
       Element::writeProperties(xml);
-      xml.tag("subtype", int(_arpeggioType));
+      writeProperty(xml, Pid::ARPEGGIO_TYPE);
       if (_userLen1 != 0.0)
             xml.tag("userLen1", _userLen1 / spatium());
       if (_userLen2 != 0.0)
@@ -431,6 +431,8 @@ void Arpeggio::reset()
 QVariant Arpeggio::getProperty(Pid propertyId) const
       {
       switch(propertyId) {
+            case Pid::ARPEGGIO_TYPE:
+                  return int(_arpeggioType);
             case Pid::TIME_STRETCH:
                   return Stretch();
             case Pid::ARP_USER_LEN1:
@@ -452,6 +454,9 @@ QVariant Arpeggio::getProperty(Pid propertyId) const
 bool Arpeggio::setProperty(Pid propertyId, const QVariant& val)
       {
       switch(propertyId) {
+            case Pid::ARPEGGIO_TYPE:
+                  setArpeggioType(ArpeggioType(val.toInt()));
+                  break;
             case Pid::TIME_STRETCH:
                   setStretch(val.toDouble());
                   break;
@@ -492,6 +497,17 @@ QVariant Arpeggio::propertyDefault(Pid propertyId) const
                   break;
             }
       return Element::propertyDefault(propertyId);
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Arpeggio::propertyId(const QStringRef& name) const
+      {
+      if (name == "subtype")
+            return Pid::ARPEGGIO_TYPE;
+      return Element::propertyId(name);
       }
 }
 

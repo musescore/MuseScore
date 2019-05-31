@@ -178,6 +178,8 @@ const std::initializer_list<Pid> PaletteElementScriptEntry::_pids {
       Pid::SUB_STYLE,
       Pid::ACTION, // Icons, e.g. grace notes, beam mode etc.
       Pid::BARLINE_TYPE,
+      Pid::BARLINE_SPAN_FROM,
+      Pid::BARLINE_SPAN_TO,
       Pid::LAYOUT_BREAK,
       Pid::ACCIDENTAL_TYPE,
       Pid::GLISS_TYPE,
@@ -190,6 +192,19 @@ const std::initializer_list<Pid> PaletteElementScriptEntry::_pids {
       Pid::OTTAVA_TYPE,
       Pid::CLEF_TYPE_CONCERT,
       Pid::KEY,
+      Pid::TRILL_TYPE,
+      Pid::VIBRATO_TYPE,
+      Pid::ARPEGGIO_TYPE,
+      Pid::CHORD_LINE_TYPE,
+      Pid::CHORD_LINE_STRAIGHT,
+      Pid::TREMOLO_TYPE,
+
+      // TextLineBase descendants
+      Pid::BEGIN_HOOK_TYPE,
+      Pid::END_HOOK_TYPE,
+      Pid::BEGIN_TEXT,
+      Pid::END_TEXT,
+      Pid::CONTINUE_TEXT,
 
       Pid::TEXT,
       };

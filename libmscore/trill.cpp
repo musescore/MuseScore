@@ -406,17 +406,26 @@ void Trill::setTrillType(const QString& s)
       }
 
 //---------------------------------------------------------
+//   type2name
+//---------------------------------------------------------
+
+QString Trill::type2name(Trill::Type t)
+      {
+      for (TrillTableItem i : trillTable) {
+            if (i.type == t)
+                  return i.name;
+            }
+      qDebug("unknown Trill subtype %d", int(t));
+            return "?";
+      }
+
+//---------------------------------------------------------
 //   trillTypeName
 //---------------------------------------------------------
 
 QString Trill::trillTypeName() const
       {
-      for (TrillTableItem i : trillTable) {
-            if (i.type == trillType())
-                  return i.name;
-            }
-      qDebug("unknown Trill subtype %d", int(trillType()));
-            return "?";
+      return type2name(trillType());
       }
 
 //---------------------------------------------------------
@@ -504,6 +513,17 @@ QVariant Trill::propertyDefault(Pid propertyId) const
             default:
                   return SLine::propertyDefault(propertyId);
             }
+      }
+
+//---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid Trill::propertyId(const QStringRef& name) const
+      {
+      if (name == "subtype")
+            return Pid::TRILL_TYPE;
+      return SLine::propertyId(name);
       }
 
 //---------------------------------------------------------

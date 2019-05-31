@@ -80,6 +80,7 @@ class Vibrato final : public SLine {
       Type vibratoType() const              { return _vibratoType; }
       void setPlayArticulation(bool val)  { _playArticulation = val;}
       bool playArticulation() const       { return _playArticulation; }
+      static QString type2name(Vibrato::Type t);
       QString vibratoTypeName() const;
       QString vibratoTypeUserName() const;
 
@@ -88,6 +89,7 @@ class Vibrato final : public SLine {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
       virtual QString accessibleInfo() const override;
       };
 

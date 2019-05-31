@@ -93,6 +93,7 @@ class Trill final : public SLine {
       MScore::OrnamentStyle ornamentStyle() const { return _ornamentStyle;}
       void setPlayArticulation(bool val)  { _playArticulation = val;}
       bool playArticulation() const       { return _playArticulation; }
+      static QString type2name(Trill::Type t);
       QString trillTypeName() const;
       QString trillTypeUserName() const;
       Accidental* accidental() const      { return _accidental; }
@@ -104,6 +105,7 @@ class Trill final : public SLine {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
 
       virtual QString accessibleInfo() const override;
       };
