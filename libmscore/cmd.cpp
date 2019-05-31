@@ -3115,7 +3115,9 @@ void Score::cmdRealizeChordSymbols()
       QMessageBox msgBox;
       if (e && e->isHarmony()) {
             Harmony* h = toHarmony(e);
-            msgBox.setText("Chord Symbol: " + h->harmonyName());
+            msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Yes);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            msgBox.setText("Realize Chord Symbol: " + h->harmonyName() + "?");
 
             QString degrees;
             for (QString deg : h->xmlDegrees())
@@ -3146,7 +3148,19 @@ void Score::cmdRealizeChordSymbols()
       else {
             msgBox.setText("No Chord Selected. Cannot Realize Chord");
             }
-      msgBox.exec();
+
+      //TODO - PHV: Separate this out, we have this here for now
+      //just to do some elementary experimentation, it will be
+      //important to abstract this away a bit so that it's cleaner
+      //and more extensible
+      if (msgBox.exec() == QMessageBox::Yes) {
+            NoteVal nval;
+            int tpc = toHarmony(e)->rootTpc();
+            nval.pitch = tpc2pitch(tpc) + 48;
+            nval.tpc1 = tpc;
+            score()->setNoteRest(inputState().segment(), inputState().track(),
+                                 nval, inputState().segment()->ticks(), Direction::AUTO);
+            }
       }
 
 //---------------------------------------------------------
