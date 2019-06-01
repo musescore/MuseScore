@@ -36,6 +36,7 @@ class ImageStoreItem {
 
       const QString& path() const      { return _path;     }
       QByteArray& buffer()             { return _buffer;   }
+      const QByteArray& buffer() const { return _buffer;   }
       bool loaded() const              { return !_buffer.isEmpty();   }
       void setPath(const QString& val);
       bool isUsed(Score*) const;

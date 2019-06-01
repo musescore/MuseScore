@@ -85,6 +85,7 @@ class Image final : public BSymbol {
       QSizeF imageSize() const;
 
       void setImageType(ImageType);
+      ImageType getImageType() const { return imageType; }
       bool isValid() const           { return rasterDoc || svgDoc; }
       };
 
