@@ -26,58 +26,73 @@
 #include "mixertrackitem.h"
 #include "libmscore/instrument.h"
 
+// obq-note
+// This class has been re-purposed for the new mixer design.
+// This is the Widget that is included in the TreeView
+// It shows volume, mute, and solo controls.
+//
+// It is a ChannelListener for the channel represented by the
+// mixerTrackItem. So when the underlying channel changes this
+// object will receive a propertyChanged call.
+
 namespace Ms {
 
-class MidiMapping;
 class MixerTrackItem;
+class MixerOptions;
 
 //---------------------------------------------------------
 //   MixerTrack
 //---------------------------------------------------------
 
-class MixerTrackChannel : public QWidget, public Ui::MixerTrackChannel, public ChannelListener, public MixerTrack
+class MixerTrackChannel : public QWidget, public Ui::MixerTrackChannel, public ChannelListener
       {
       Q_OBJECT
 
-      MixerTrackItemPtr _mti;
+      QTreeWidgetItem * treeWidgetItem;   // to enable selecting item when user interacts with controls
+      MixerTrackItem* mixerTrackItem;
 
-      bool _selected;
-      static const QString unselStyleLight;
-      static const QString selStyleLight;
-      static const QString unselStyleDark;
-      static const QString selStyleDark;
-      static const QString sliderStyle;
-
-      MixerTrackGroup* _group;
-
-      void updateNameLabel();
-
-signals:
-      void selectedChanged(bool);
+      void setupAdditionalUi();
+      void setupSlotsAndSignals();
+      void update();
 
 public slots:
-      void updateSolo(bool);
-      void updateMute(bool);
-      void setSelected(bool) override;
-      void volumeChanged(double);
-      void panChanged(double);
-      void controlSelected();
-      void applyStyle();
+      void stripMuteToggled(bool);
+      void stripSoloToggled(bool);
+      void stripVolumeSliderMoved(int);
+      void takeSelection();
+
+      void updateUiControls(MixerOptions* options); // for showing/hiding color and panning
+
+      signals:
+      void userInteraction(QTreeWidgetItem*);
 
 protected:
-      void mouseReleaseEvent(QMouseEvent * event) override;
-      void propertyChanged(Channel::Prop property) override;
-
+      void propertyChanged(Channel::Prop property) override;      // ChannelListener method
+            
 public:
-      explicit MixerTrackChannel(QWidget *parent, MixerTrackItemPtr trackItem);
+      explicit MixerTrackChannel(QTreeWidgetItem*, MixerTrackItem*, MixerOptions*);
+      MixerTrackItem* getMixerTrackItem() { return mixerTrackItem; }
+      };
 
-      bool selected() override { return _selected; }
-      QWidget* getWidget() override { return this; }
-      MixerTrackGroup* group() override { return _group; }
-      MixerTrackItemPtr mti() override { return _mti; }
-      void setGroup(MixerTrackGroup* group) { _group = group; }
-      void paintEvent(QPaintEvent* evt) override;
+
+// Class for the "master volume" control - borrows the UI from MixerTrackChannel
+class MixerMasterChannel : public QWidget, public Ui::MixerTrackChannel
+      {
+      Q_OBJECT
+
+      void setupAdditionalUi();
+      void setupSlotsAndSignals();
+      void update();
+
+      public slots:
+      void masterVolumeSliderMoved(int);
+      void updateUiControls(MixerOptions* options); // for showing/hiding color and panning
+
+      public:
+      explicit MixerMasterChannel();
+      void volumeChanged(float);
       };
 }
+
 
 #endif // __MIXERTRACKCHANNEL_H__

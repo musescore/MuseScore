@@ -27,7 +27,7 @@ class MixerTrackGroup;
 
 namespace Ms {
 
-class MixerTrack {
+class MixerTrack { /*
 public:
       virtual ~MixerTrack() {}
       virtual QWidget* getWidget() = 0;
@@ -35,7 +35,7 @@ public:
       virtual MixerTrackItemPtr mti() = 0;
       virtual bool selected() = 0;
       virtual void setSelected(bool) = 0;
-      };
+   */   };
 
 }
 

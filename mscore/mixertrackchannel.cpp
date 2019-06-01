@@ -33,128 +33,68 @@
 
 namespace Ms {
 
-const QString MixerTrackChannel::unselStyleLight = "#controlWidget {"
-                                       "      background: #aaa;"
-                                       "      border-left: 2px solid #ddd;"
-                                       "      border-top: 2px solid #ddd;"
-                                       "      border-right: 2px solid #777;"
-                                       "      border-bottom: 2px solid #777;"
-                                       "}";
-
-const QString MixerTrackChannel::selStyleLight = "#controlWidget {"
-                                     "      background: #ccc;"
-                                     "      border-left: 2px solid #eee;"
-                                     "      border-top: 2px solid #eee;"
-                                     "      border-right: 2px solid #777;"
-                                     "      border-bottom: 2px solid #777;"
-                                     "}";
-
-
-const QString MixerTrackChannel::unselStyleDark = "#controlWidget {"
-                                       "      background: #444;"
-                                       "      border-left: 2px solid #888;"
-                                       "      border-top: 2px solid #888;"
-                                       "      border-right: 2px solid #000;"
-                                       "      border-bottom: 2px solid #000;"
-                                       "}"
-                                       ".expandBn {"
-                                       "     background-color: #aaa;"
-                                       "}";
-
-const QString MixerTrackChannel::selStyleDark = "#controlWidget {"
-                                     "      background: #666;"
-                                     "      border-left: 2px solid #888;"
-                                     "      border-top: 2px solid #888;"
-                                     "      border-right: 2px solid #000;"
-                                     "      border-bottom: 2px solid #000;"
-                                     "}"
-                                     ".expandBn {"
-                                     "     background-color: #aaa;"
-                                     "}";
-
-
-//---------------------------------------------------------
-//   MixerTrack
-//---------------------------------------------------------
-
-MixerTrackChannel::MixerTrackChannel(QWidget *parent, MixerTrackItemPtr mti) :
-      QWidget(parent), _mti(mti), _selected(false), _group(0)
+MixerTrackChannel::MixerTrackChannel(QTreeWidgetItem* treeWidgetItem, MixerTrackItem* mixerTrackItem, MixerOptions* options) :
+      treeWidgetItem(treeWidgetItem), mixerTrackItem(mixerTrackItem)
       {
       setupUi(this);
+      setupAdditionalUi();
+      updateUiControls(options);
+      setupSlotsAndSignals();
+      update();
 
-      connect(soloBn, SIGNAL(toggled(bool)), SLOT(updateSolo(bool)));
-      connect(muteBn, SIGNAL(toggled(bool)), SLOT(updateMute(bool)));
-
-      updateNameLabel();
-
-      //set up rest
-      Channel* chan = mti->chan();
-      soloBn->setChecked(chan->solo());
-      muteBn->setChecked(chan->mute());
-
-      chan->addListener(this);
-      volumeSlider->setValue(chan->volume());
-      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
-      volumeSlider->setMaxValue(127);
-      volumeSlider->setNumMajorTicks(10);
-      volumeSlider->setNumMinorTicks(5);
-
-      QIcon iconSliderHead;
-      iconSliderHead.addFile(QStringLiteral(":/data/icons/mixer-slider-handle-vertical.svg"), QSize(), QIcon::Normal, QIcon::Off);
-      volumeSlider->setSliderHeadIcon(iconSliderHead);
-
-      panSlider->setValue(chan->pan());
-      panSlider->setToolTip(tr("Pan: %1").arg(QString::number(chan->pan())));
-      panSlider->setMaxValue(127);
-      panSlider->setMinValue(0);
-
-      connect(volumeSlider, SIGNAL(valueChanged(double)),      SLOT(volumeChanged(double)));
-      connect(panSlider,    SIGNAL(valueChanged(double, int)), SLOT(panChanged(double)));
-
-      connect(volumeSlider, SIGNAL(sliderPressed()),    SLOT(controlSelected()));
-      connect(panSlider,    SIGNAL(sliderPressed(int)), SLOT(controlSelected()));
-
-      applyStyle();
+      Channel* channel = mixerTrackItem->chan();
+      channel->addListener(this);
       }
 
-//---------------------------------------------------------
-//   expandToggled
-//---------------------------------------------------------
 
-void MixerTrackChannel::applyStyle()
+void MixerTrackChannel::setupSlotsAndSignals()
       {
-      QString style;
-      switch (preferences.globalStyle()){
-            case MuseScoreStyleType::DARK_FUSION:
-                  style = _selected ? selStyleDark : unselStyleDark;
-                  break;
-            case MuseScoreStyleType::LIGHT_FUSION:
-                  style = _selected ? selStyleLight : unselStyleLight;
-                  break;
-            }
-
-      setStyleSheet(style);
+      connect(muteButton,     SIGNAL(toggled(bool)),        SLOT(stripMuteToggled(bool)));
+      connect(soloButton,     SIGNAL(toggled(bool)),        SLOT(stripSoloToggled(bool)));
+      connect(volumeSlider,   SIGNAL(valueChanged(int)),    SLOT(stripVolumeSliderMoved(int)));
+      connect(volumeSlider,   SIGNAL(sliderPressed()),      SLOT(takeSelection()));
       }
 
-//---------------------------------------------------------
-//   updateNameLabel
-//---------------------------------------------------------
-
-void MixerTrackChannel::updateNameLabel()
+void MixerTrackChannel::takeSelection()
       {
-      Part* part = _mti->part();
-      Instrument* instr = _mti->instrument();
-      Channel* chan = _mti->chan();
+      treeWidgetItem->treeWidget()->setCurrentItem(treeWidgetItem);
+      }
 
-      QString shortName;
-      if (instr->shortNames().count())
-            shortName = instr->shortNames().first().name() + "-";
-      else
-            shortName = "";
-      QString text = QString("%1%2").arg(shortName, qApp->translate("InstrumentsXML", chan->name().toUtf8().data()));
-      trackLabel->setText(text);
+void MixerTrackChannel::setupAdditionalUi()
+      {
+      //TODO: a more responsible approach to styling that's also light/dark theme respectful
+      QString basicButton = "QToolButton{background: white; color: black; font-weight: bold; border: 1px solid gray;}";
+      QString colorTemplate = "QToolButton:checked, QToolButton:pressed { color: white; background: %1;}";
+      muteButton->setStyleSheet(basicButton + colorTemplate.arg("red"));
+      soloButton->setStyleSheet(basicButton + colorTemplate.arg("green"));
+      }
 
-      MidiPatch* mp = synti->getPatchInfo(chan->synti(), chan->bank(), chan->program());
+void MixerTrackChannel::updateUiControls(MixerOptions* options)
+      {
+      bool showTrackColors = options->showTrackColors();
+      colorLabel->setVisible(showTrackColors);
+      }
+
+void MixerTrackChannel::update()
+      {
+      const QSignalBlocker blockVolumeSignals(volumeSlider);
+      const QSignalBlocker blockMuteSignals(muteButton);
+      const QSignalBlocker blockSoloSignals(soloButton);
+
+      volumeSlider->setValue(mixerTrackItem->getVolume());
+      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(mixerTrackItem->getVolume())));
+      
+      muteButton->setChecked(mixerTrackItem->getMute());
+      soloButton->setChecked(mixerTrackItem->getSolo());
+
+      Channel* channel = mixerTrackItem->chan();
+      MidiPatch* midiPatch = synti->getPatchInfo(channel->synti(), channel->bank(), channel->program());
+      Part* part = mixerTrackItem->part();
+      Instrument* instrument = mixerTrackItem->instrument();
+
+      QColor channelColor = channel->color();
+      if (colorLabel)
+            colorLabel->setStyleSheet(QString("QLabel{background: %1;padding-top: 2px; padding-bottom: 2px; border-radius: 3px;}").arg(channelColor.name()));
 
       QString tooltip = tr("Part Name: %1\n"
                            "Instrument: %2\n"
@@ -163,181 +103,124 @@ void MixerTrackChannel::updateNameLabel()
                            "Program: %5\n"
                            "Patch: %6")
                   .arg(part->partName(),
-                       instr->trackName(),
-                       qApp->translate("InstrumentsXML", chan->name().toUtf8().data()),
-                       QString::number(chan->bank()),
-                       QString::number(chan->program()),
-                       mp ? mp->name : tr("~no patch~"));
-
-      trackLabel->setToolTip(tooltip);
-
-      QColor bgCol((QRgb)chan->color());
-      QString trackColorName = bgCol.name();
-      int val = bgCol.value();
-
-      QString trackStyle = QString(".QLabel {"
-                 "border: 2px solid black;"
-                 "background: %1;"
-                 "color: %2;"
-                 "padding: 6px 0px;"
-             "}").arg(trackColorName, val > 128 ? "black" : "white");
-
-      trackLabel->setStyleSheet(trackStyle);
-
-      QColor bgPartCol((QRgb)part->color());
-      QString partColorName = bgPartCol.name();
-      val = bgPartCol.value();
-
-      //Part header
-      partLabel->setText(part->partName());
-
-      QString partStyle = QString(".QLabel {"
-                 "border: 2px solid black;"
-                 "background: %1;"
-                 "color: %2;"
-                 "padding: 6px 0px;"
-             "}").arg(partColorName, val > 128 ? "black" : "white");
-
-      partLabel->setStyleSheet(partStyle);
-      partLabel->setToolTip(tr("This channel is a child of part %1").arg(part->partName()));
-
-
-
-      //Update component colors
-      qreal h, s, v;
-      bgCol.getHsvF(&h, &s, &v);
-      QColor brightCol = QColor::fromHsvF(h, s, 1);
-      panSlider->setScaleValueColor(brightCol);
-      volumeSlider->setHilightColor(brightCol);
+                       instrument->trackName(),
+                       qApp->translate("InstrumentsXML", channel->name().toUtf8().data()),
+                       QString::number(channel->bank()),
+                       QString::number(channel->program()),
+                       midiPatch ? midiPatch->name : tr("~no patch~"));
+      setToolTip(tooltip);
       }
 
-//---------------------------------------------------------
-//   paintEvent
-//---------------------------------------------------------
-
-void MixerTrackChannel::paintEvent(QPaintEvent*)
-      {
-      applyStyle();
-      }
-
-//---------------------------------------------------------
-//   propertyChanged
-//---------------------------------------------------------
 
 void MixerTrackChannel::propertyChanged(Channel::Prop property)
       {
-      Channel* chan = _mti->chan();
-
-      switch (property) {
-            case Channel::Prop::VOLUME: {
-                  volumeSlider->blockSignals(true);
-                  volumeSlider->setValue(chan->volume());
-                  volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(chan->volume())));
-                  volumeSlider->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::PAN: {
-                  panSlider->blockSignals(true);
-                  panSlider->setValue(chan->pan());
-                  panSlider->setToolTip(tr("Pan: %1").arg(QString::number(chan->pan())));
-                  panSlider->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::MUTE: {
-                  muteBn->blockSignals(true);
-                  muteBn->setChecked(chan->mute());
-                  muteBn->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::SOLO: {
-                  soloBn->blockSignals(true);
-                  soloBn->setChecked(chan->solo());
-                  soloBn->blockSignals(false);
-                  break;
-                  }
-            case Channel::Prop::COLOR: {
-                  updateNameLabel();
-                  break;
-                  }
-            default:
-                  break;
-            }
+      update();
       }
 
-//---------------------------------------------------------
-//   volumeChanged
-//---------------------------------------------------------
 
-void MixerTrackChannel::volumeChanged(double value)
+void MixerTrackChannel::stripVolumeSliderMoved(int value)
       {
-      _mti->setVolume(value);
+      mixerTrackItem->setVolume(value);
       volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));
+      takeSelection();
       }
 
-//---------------------------------------------------------
-//   panChanged
-//---------------------------------------------------------
 
-void MixerTrackChannel::panChanged(double value)
+void MixerTrackChannel::stripSoloToggled(bool val)
       {
-      _mti->setPan(value);
-      panSlider->setToolTip(tr("Pan: %1").arg(QString::number(value)));
+      mixerTrackItem->setSolo(val);
+      takeSelection();
       }
 
-//---------------------------------------------------------
-//   updateSolo
-//---------------------------------------------------------
 
-void MixerTrackChannel::updateSolo(bool val)
+void MixerTrackChannel::stripMuteToggled(bool val)
       {
-      _mti->setSolo(val);
+      mixerTrackItem->setMute(val);
+      takeSelection();
       }
 
-//---------------------------------------------------------
-//   udpateMute
-//---------------------------------------------------------
 
-void MixerTrackChannel::updateMute(bool val)
+//-----------------------------------------
+//  MixerMasterChannel class
+//-----------------------------------------
+
+MixerMasterChannel::MixerMasterChannel()
       {
-      _mti->setMute(val);
+      setupUi(this);
+      setupAdditionalUi();
+      setupSlotsAndSignals();
+      update();
+
+      //channel->addListener(this);
       }
 
-//---------------------------------------------------------
-//   controlSelected
-//---------------------------------------------------------
 
-void MixerTrackChannel::controlSelected()
+void MixerMasterChannel::setupSlotsAndSignals()
       {
-      setSelected(true);
+      connect(volumeSlider,   SIGNAL(valueChanged(int)),    SLOT(masterVolumeSliderMoved(int)));
       }
 
-//---------------------------------------------------------
-//   mouseReleaseEvent
-//---------------------------------------------------------
 
-void MixerTrackChannel::mouseReleaseEvent(QMouseEvent*)
+
+void MixerMasterChannel::setupAdditionalUi()
       {
-      setSelected(true);
+      muteButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+      soloButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
+      QIcon playIcon;
+      playIcon.addFile(QString::fromUtf8(":/data/icons/media-playback-start.svg"), QSize(), QIcon::Normal, QIcon::Off);
+
+      QIcon loopIcon;
+      loopIcon.addFile(QString::fromUtf8(":/data/icons/media-playback-loop.svg"), QSize(), QIcon::Normal, QIcon::Off);
+
+      soloButton->setDefaultAction(getAction("play"));
+      muteButton->setDefaultAction(getAction("loop"));
+
+
+      soloButton->setText("");
+      muteButton->setText("");
+
+      soloButton->setIcon(playIcon);
+      muteButton->setIcon(loopIcon);
+
+      QString transparentColorLabelStyle = "QToolButton { background: none;}";
+      colorLabel->setStyleSheet(transparentColorLabelStyle);
       }
 
-//---------------------------------------------------------
-//   setSelected
-//---------------------------------------------------------
-
-void MixerTrackChannel::setSelected(bool sel)
+void MixerMasterChannel::updateUiControls(MixerOptions* options)
       {
-      if (_selected == sel)
-            return;
-
-      _selected = sel;
-      applyStyle();
-
-      emit(selectedChanged(sel));
-
-      if (_selected && _group)
-            _group->notifyTrackSelected(this);
-
-      applyStyle();
+      colorLabel->setVisible(false);
       }
+
+void MixerMasterChannel::update()
+      {
+      const QSignalBlocker blockVolumeSignals(volumeSlider);
+      const QSignalBlocker blockMuteSignals(muteButton);
+      const QSignalBlocker blockSoloSignals(soloButton);
+
+      volumeSlider->setValue(50);
+      volumeSlider->setToolTip(tr("Master Volume: %1").arg(QString::number(volumeSlider->value())));
+
+      muteButton->setChecked(true);
+      soloButton->setChecked(true);
+      }
+
+
+void MixerMasterChannel::volumeChanged(float synthGain)
+      {
+      const QSignalBlocker blockSignals(volumeSlider);     // block during this method
+      float gainInSliderRange = int (synthGain*12.7); //TODO: fix the maths (decibels etc.)
+      volumeSlider->setValue(int(gainInSliderRange));
+      }
+
+
+void MixerMasterChannel::masterVolumeSliderMoved(int value)
+      {
+      const QSignalBlocker blockSignals(volumeSlider);     // block during this method
+      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));
+      synti->setGain(float(value) / 12.7); //TODO: fix the maths (decibels etc.)
+      }
+
+
 
 }

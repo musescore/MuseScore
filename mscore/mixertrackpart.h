@@ -35,11 +35,11 @@ class MixerTrackItem;
 //   MixerTrackPart
 //---------------------------------------------------------
 
-class MixerTrackPart : public QWidget, public Ui::MixerTrackPart, public ChannelListener, public MixerTrack
+class MixerTrackPart : public QWidget, public Ui::MixerTrackPart, public ChannelListener
       {
       Q_OBJECT
 
-      MixerTrackItemPtr _mti;
+      MixerTrackItem* mixerTrackItem;
 
       bool _selected;
       static const QString unselStyleDark;
@@ -58,10 +58,8 @@ signals:
 public slots:
       void updateSolo(bool);
       void updateMute(bool);
-      void setSelected(bool) override;
-      void volumeChanged(double);
-      void panChanged(double);
-      void expandToggled(bool);
+      void stripVolumeSliderMoved(double);
+      void stripPanSliderMoved(double);
       void controlSelected();
       void applyStyle();
 
@@ -70,14 +68,9 @@ protected:
       void propertyChanged(Channel::Prop property) override;
 
 public:
-      explicit MixerTrackPart(QWidget *parent, MixerTrackItemPtr trackItem, bool expanded);
+      explicit MixerTrackPart(QWidget *parent, MixerTrackItem* trackItem, bool expanded);
 
-      bool selected() override { return _selected; }
-      QWidget* getWidget() override { return this; }
-      MixerTrackGroup* group() override { return _group; }
-      MixerTrackItemPtr mti() override { return _mti; }
       void setGroup(MixerTrackGroup* group) { _group = group; }
-      void showEvent(QShowEvent*) override;
       };
 
 }

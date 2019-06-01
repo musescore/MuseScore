@@ -20,11 +20,13 @@
 #ifndef __ILEDIT_H__
 #define __ILEDIT_H__
 
-#include "ui_parteditbase.h"
+//#include "ui_parteditbase.h"
 #include "ui_mixer.h"
 #include "libmscore/instrument.h"
 #include "enableplayforwidget.h"
 #include "mixertrackgroup.h"
+#include "mixertrackchannel.h"
+#include "mixerdetails.h"
 #include <QWidget>
 #include <QDockWidget>
 #include <QScrollArea>
@@ -35,10 +37,14 @@ namespace Ms {
 class Score;
 class Channel;
 class Part;
-class PartEdit;
-class MixerDetails;
+//class PartEdit;
 class MixerTrack;
+class MixerDetails;
 class MidiMapping;
+class MixerKeyboardControlFilter;
+//class MixerOptions;
+class MixerContextMenu;
+class MixerOptions;
 
 double volumeToUserRange(char v);
 double panToUserRange(char v);
@@ -59,33 +65,54 @@ char userRangeToReverb(double v);
 //   Mixer
 //---------------------------------------------------------
 
-class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
+/* obq-notes
+      MixerTrackGroup provides,
+      mmm, a sort of PROTOCOL allowing things other than the Mixer to be the
+      target for cetain signals??
+
+      Not very clear when/how GROUP is used. Maybe the mixer IS the only group?
+      Might have something to do with PARTS etc.
+ */
+
+enum class MixerVolumeMode : int
+      {
+            Override,
+            Ratio,
+            PrimaryInstrument
+      };
+
+class Mixer : public QDockWidget, public Ui::Mixer
       {
       Q_OBJECT
 
-      Score* _score = nullptr; // playback score
-      Score* _activeScore = nullptr; // may be a _score itself or its excerpt;
-      QHBoxLayout* trackAreaLayout;
+      Score* _score = nullptr;                        // playback score
+      Score* _activeScore = nullptr;                  // may be a _score itself or its excerpt;
+      MixerContextMenu* contextMenu;                  // context menu
+      QGridLayout* gridLayout;                        // main layout - used to show/hide & position details panel
+      MixerOptions* options;                          // UI options, e.g. show/hide track colors
+      MixerMasterChannel* masterChannelWidget;        // master volume + play / loop widget
+
       EnablePlayForWidget* enablePlay;
 
-      MixerDetails* mixerDetails;
-      QGridLayout* detailsLayout;
+      QSet<Part*> expandedParts;                      //TOD: expandedParts - from old mixer code - re-implement
+      QList<MixerTrack*> trackList;                   //TO:  trackLIst - from old mixer code - may re-use
+      int savedSelectionTopLevelIndex;
+      int savedSelectionChildIndex;
 
-      bool showDetails;
-      QSet<Part*> expandedParts;
-      QWidget* trackHolder;
-      QList<MixerTrack*> trackList;
-
-      int _scrollPosition = 0;
-      bool _needToKeepScrollPosition = false;
-
+      MixerKeyboardControlFilter* keyboardFilter;     // process key presses for the mixer AND the details panel
       virtual void closeEvent(QCloseEvent*) override;
       virtual void showEvent(QShowEvent*) override;
       virtual void hideEvent(QHideEvent*) override;
       virtual bool eventFilter(QObject*, QEvent*) override;
       virtual void keyPressEvent(QKeyEvent*) override;
-      void keepScrollPosition();
+
+      void setupSlotsAndSignals();
+      void setupAdditionalUi();
+      void disableMixer();                            // gray out everything when no score or part is open
+
       void setPlaybackScore(Score*);
+
+      MixerTrackItem* mixerTrackItemFromPart(Part* part);
 
    private slots:
       void on_partOnlyCheckBox_toggled(bool checked);
@@ -94,10 +121,17 @@ class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
       void updateTracks();
       void midiPrefsChanged(bool showMidiControls);
       void masterVolumeChanged(double val);
+      void currentMixerTreeItemChanged();
       void synthGainChanged(float val);
-      void adjustScrollPosition(int, int);
-      void checkKeptScrollValue(int);
+      void showDetailsClicked();
+      void showDetailsBelow();
+      void showMidiOptions();
+      void showTrackColors();
+      void showMasterVolume();
 
+      void saveTreeSelection();
+      void restoreTreeSelection();
+            
    signals:
       void closed(bool);
 
@@ -108,13 +142,77 @@ class Mixer : public QDockWidget, public Ui::Mixer, public MixerTrackGroup
    public:
       Mixer(QWidget* parent);
       void setScore(Score*);
-      PartEdit* getPartAtIndex(int index);
-      void expandToggled(Part* part, bool expanded) override;
-      void notifyTrackSelected(MixerTrack* track) override;
-      void showDetailsToggled(bool shown);
+
+      //PartEdit* getPartAtIndex(int index);                      // from old mixer code (appears redundant)
+      void contextMenuEvent(QContextMenuEvent *event) override;   // TODO: contextMenuEvent - does it need to be public?
+      MixerDetails* mixerDetails;                                 // TODO: mixerDetails - does it NEED to be public?
+      void updateUiOptions();
+      MixerOptions* getOptions() { return options; };
+            
       };
 
+class MixerKeyboardControlFilter : public QObject
+      {
+      Q_OBJECT
+      Mixer* mixer;
+   protected:
+      bool eventFilter(QObject *obj, QEvent *event) override;
+      
+   public:
+      MixerKeyboardControlFilter(Mixer* mixer);
+      };
 
+class MixerContextMenu : public QObject
+      {
+      Q_OBJECT
+      Mixer* mixer;
+
+public:
+      MixerContextMenu(Mixer* mixer);
+      void contextMenuEvent(QContextMenuEvent *event);
+      
+      QAction* detailToSide;
+      QAction* detailBelow;
+      QAction* showMidiOptions;
+      QAction* panSliderInMixer;
+      QAction* overallVolumeOverrideMode;
+      QAction* overallVolumeRatioMode;
+      QAction* overallVolumeFirstMode;
+      QAction* showTrackColors;
+      QAction* showMasterVolume;
+      };
+
+      
+class MixerOptions
+      {
+
+      bool _showTrackColors;
+      bool _detailsOnTheSide;
+      bool _showMidiOptions;
+      bool _showingDetails;
+      bool _showMasterVolume;
+      MixerVolumeMode _mode;
+
+   public:
+      MixerOptions();
+      bool showTrackColors() { return _showTrackColors; };
+      bool showDetailsOnTheSide() { return _detailsOnTheSide; };
+      bool showMidiOptions() { return _showMidiOptions; };
+      bool showingDetails() { return _showingDetails; };
+      bool showMasterVolume() { return _showMasterVolume; };
+      MixerVolumeMode mode() { return _mode; };
+
+      void setTrackColors(bool show) { _showTrackColors = show; writeSettings(); };
+      void setDetailsOnTheSide(bool show) { _detailsOnTheSide = show; writeSettings(); };
+      void setMidiOptions(bool show) { _showMidiOptions = show; writeSettings(); };
+      void setShowingDetails(bool show) { _showingDetails = show; writeSettings(); }
+      void setMode(MixerVolumeMode mode) { _mode = mode; writeSettings(); };
+      void setShowMasterVolume(bool show) { _showMasterVolume = show; writeSettings(); };
+      void readSettings();
+      void writeSettings();
+
+      };
+      
 } // namespace Ms
 #endif
 

@@ -23,6 +23,27 @@
 #include "libmscore/part.h"
 #include "seq.h"
 
+/* obq-note
+ MixerTrackItem objects
+ 1) represent a channel that is one the sound source for an instrument that
+ in turn belongs to a part. Provides a uniform / clean interface for interacting with
+ the sound source in the mixer.
+ 
+ 2) represents a collection of channels that form the variant sound sources for an
+ instrument. Implements rules whereby changes to the top level (the collection level)
+ are trickled down to the sub-levels (indidvidual channels).
+ 
+ TODO: clarify my understanding - the enum cases are {PART, CHANNEL}, but, I think, that's
+ at odds with how the terminology is used elsewhere. The TrackTypes are, I think, better
+ described as:
+ - Instrument (one or more channels as a sound source)
+ - Channel (a sound source that belongs to an instrument)
+ 
+ The set methods, e.g. setVolume, setReverb etc. apply changes to the underlying channel.
+ When thes changes are applied to the underlying channel, any listeners to that channel
+ are notified by a propertyChanged() call.
+ */
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -40,16 +61,7 @@ MixerTrackItem::MixerTrackItem(TrackType tt, Part* part, Instrument* instr, Chan
 
 MidiMapping *MixerTrackItem::midiMap()
       {
-      return _part->masterScore()->midiMapping(focusedChan()->channel());
-      }
-
-//---------------------------------------------------------
-//   partChan
-//---------------------------------------------------------
-
-Channel *MixerTrackItem::focusedChan()
-      {
-      return _chan;
+      return _part->masterScore()->midiMapping(chan()->channel());
       }
 
 //---------------------------------------------------------
@@ -67,17 +79,48 @@ Channel* MixerTrackItem::playbackChannel(const Channel* channel)
 
 int MixerTrackItem::color()
       {
-            return _trackType ==TrackType::PART ? _part->color()
-                                                : _chan->color();
+      return _trackType ==TrackType::PART ? _part->color() : _chan->color();
       }
 
-//---------------------------------------------------------
-//   setVolume
-//---------------------------------------------------------
+
+char MixerTrackItem::getVolume()
+      {
+      return chan()->volume();
+      }
+
+char MixerTrackItem::getPan()
+      {
+      return chan()->pan();
+      }
+
+bool MixerTrackItem::getMute()
+      {
+      return chan()->mute();
+      }
+
+bool MixerTrackItem::getSolo()
+      {
+      return chan()->solo();
+      }
+
+// MixerTrackItem settters - when a change is made to underlying channel a propertyChange()
+// will be sent to any registered listeners
 
 void MixerTrackItem::setVolume(char value)
       {
-//      char v = (char)qBound(0, (int)(value * 128.0 / 100.0), 127);
+      //      char v = (char)qBound(0, (int)(value * 128.0 / 100.0), 127);
+
+      /* obq-note
+
+       repeated code in lots of this functions
+
+       if SOMETHING is a PART then it seeks to apply the changes to all the sub-parts (i.e. channels)
+       otherwise it just applies it once.
+
+       must be a more efficient way to do this, e.g. get a LIST and then apply the operation to all the
+       items on the list! the repeated code is CRAZY... it makes the code harder to follow and the
+       overall code length much longer...
+       */
 
       if (_trackType == TrackType::PART) {
             const InstrumentList* il = _part->instruments();
@@ -106,7 +149,7 @@ void MixerTrackItem::setVolume(char value)
 
 void MixerTrackItem::setPan(char value)
       {
-//      char v = (char)qBound(0, (int)((value + 180.0) / 360.0 * 128.0), 127);
+      //      char v = (char)qBound(0, (int)((value + 180.0) / 360.0 * 128.0), 127);
 
       if (_trackType == TrackType::PART) {
             const InstrumentList* il = _part->instruments();
@@ -135,7 +178,7 @@ void MixerTrackItem::setPan(char value)
 
 void MixerTrackItem::setChorus(char value)
       {
-//      char v = (char)qBound(0, (int)(value * 128.0 / 100.0), 127);
+      //      char v = (char)qBound(0, (int)(value * 128.0 / 100.0), 127);
 
       if (_trackType == TrackType::PART) {
             const InstrumentList* il = _part->instruments();
@@ -164,7 +207,7 @@ void MixerTrackItem::setChorus(char value)
 
 void MixerTrackItem::setReverb(char value)
       {
-//      char v = (char)qBound(0, (int)(value * 128.0 / 100.0), 127);
+      //      char v = (char)qBound(0, (int)(value * 128.0 / 100.0), 127);
 
       if (_trackType == TrackType::PART) {
             const InstrumentList* il = _part->instruments();
@@ -289,6 +332,5 @@ void MixerTrackItem::setSolo(bool value)
                   }
             }
       }
-
 }
 

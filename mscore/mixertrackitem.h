@@ -31,9 +31,6 @@ class Channel;
 class MidiMapping;
 class MixerTrackItem;
 
-typedef std::shared_ptr<MixerTrackItem> MixerTrackItemPtr;
-//typedef MixerTrackItem* MixerTrackItemPtr;
-
 //---------------------------------------------------------
 //   MixerTrackItem
 //---------------------------------------------------------
@@ -59,7 +56,6 @@ public:
       Part* part() { return _part; }
       Instrument* instrument() { return _instr; }
       Channel* chan() { return _chan; }
-      Channel* focusedChan();
       MidiMapping *midiMap();
       int color();
 
@@ -71,6 +67,11 @@ public:
 
       void setMute(bool value);
       void setSolo(bool value);
+
+      char getVolume();
+      bool getMute();
+      bool getSolo();
+      char getPan();
       };
 }
 
