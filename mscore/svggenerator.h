@@ -49,7 +49,9 @@
 #include <QtCore/qobjectdefs.h>
 #include <QtCore/qscopedpointer.h>
 
-#include "libmscore/element.h" // for Element class
+namespace Ms {
+      class Element;
+};
 
 class SvgGeneratorPrivate;
 
