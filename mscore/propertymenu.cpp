@@ -463,9 +463,12 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             mscore->editInPianoroll(note->staff());
             }
       else if (cmd == "style") {
-            EditStyle es(e->score(), 0);
-            es.setPage(EditStyle::PAGE_NOTE);
-            es.exec();
+            if (!mscore->styleDlg())
+                  mscore->setStyleDlg(new EditStyle { _score, mscore });
+            else
+                  mscore->styleDlg()->setScore(mscore->currentScore());
+            mscore->styleDlg()->setPage(EditStyle::PAGE_NOTE);
+            mscore->styleDlg()->exec();
             }
       else if (cmd == "break-props") {
             LayoutBreak* lb = static_cast<LayoutBreak*>(e);

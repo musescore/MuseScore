@@ -38,12 +38,11 @@ namespace Ms {
 //---------------------------------------------------------
 
 EditStyle::EditStyle(Score* s, QWidget* parent)
-   : QDialog(parent)
+   : cs(s), QDialog(parent)
       {
       setObjectName("EditStyle");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      cs = s;
       buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
       buttonApplyToAllParts->setEnabled(!cs->isMaster());
       buttonTogglePagelist->setIcon(QIcon(*icons[int(Icons::goNext_ICON)]));
@@ -417,8 +416,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       comboFBFont->setCurrentIndex(0);
       connect(comboFBFont, SIGNAL(currentIndexChanged(int)), SLOT(on_comboFBFont_currentIndexChanged(int)));
 
-      setValues();
-
       // keep in sync with implementation in Page::replaceTextMacros (page.cpp)
       // jumping thru hoops here to make the job of translators easier, yet have a nice display
       QString toolTipHeaderFooter
@@ -673,8 +670,6 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
             this->setMinimumSize(scr.width() / 2, scr.height() / 2);
       hasShown = false;
       MuseScore::restoreGeometry(this);
-
-      cs->startCmd();
       }
 
 //---------------------------------------------------------
@@ -690,6 +685,9 @@ void EditStyle::showEvent(QShowEvent* ev)
             scrollArea->setWidget(pageStack);
             hasShown = true; // so that it only happens once
             }
+      setValues();
+      pageList->setFocus();
+      cs->startCmd();
       QWidget::showEvent(ev);
       }
 
@@ -888,6 +886,8 @@ void EditStyle::setValues()
             else if (!strcmp("bool", type)) {
                   if (!sw.widget->setProperty("checked", val))
                         unhandledType(&sw);
+                  if (sw.idx == Sid::measureNumberSystem && !val.toBool())
+                        showIntervalMeasureNumber->setChecked(true);
                   }
             else if (!strcmp("int", type)) {
                   if (qobject_cast<QComboBox*>(sw.widget)) {
