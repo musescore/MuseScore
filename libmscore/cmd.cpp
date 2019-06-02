@@ -3111,38 +3111,35 @@ void Score::cmdRealizeChordSymbols()
             err.exec();
             return;
             }
-      Element *e = selection().element();
+      QList<Harmony*> hlist;
+      for (Element* e : selection().elements()) {
+            if (e->isHarmony())
+                  hlist << toHarmony(e);
+            }
+
       QMessageBox msgBox;
-      if (e && e->isHarmony()) {
-            Harmony* h = toHarmony(e);
+      if (!hlist.empty()) {
             msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Yes);
             msgBox.setDefaultButton(QMessageBox::Yes);
-            msgBox.setText("Realize Chord Symbol: " + h->harmonyName() + "?");
+            msgBox.setText("Realize Chord Symbols?");
 
-            QString degrees;
-            for (QString deg : h->xmlDegrees())
-                  degrees += deg;
-            QString intervals;
-            for (int interval : h->descr()->intervals())
-                  intervals += QString::number(interval) + " ";
+            QString s = "Chords to be realized: ";
+            QString d;
 
-            //build up message for informative text section
-            QString s = QString("ID: %1\nDegrees: %2\nIntervals: %3\nNotes: %4")
-                        .arg(h->id())
-                        .arg(degrees)
-                        .arg(intervals)
-                        .arg(h->descr()->noteNames(h->rootTpc()));
+            for (Harmony* h : hlist) {
+                  s += h->harmonyName() + " ";
+                  QString intervals;
+                  for (int interval : h->descr()->intervals())
+                        intervals += QString::number(interval) + " ";
+                  QString line = QString("(ID: %1) Chord: %2  Intervals: %3  Notes: %4\n")
+                                    .arg(h->id())
+                                    .arg(h->harmonyName())
+                                    .arg(intervals)
+                                    .arg(h->descr()->noteNames(h->rootTpc()));
+                  d += line;
+                  }
+
             msgBox.setInformativeText(s);
-
-            //build up message for detailed information section
-            QString d = QString("User Name: %1\nText Name: %2\nRoot: %3\nBass: %4\n"
-                                "Root TPC: %5\nBass TPC: %6\n"
-                                "Extension Name: %8\nCL Size: %9")
-                        .arg(h->hUserName()).arg(h->hTextName())
-                        .arg(h->rootName()).arg(h->baseName())
-                        .arg(h->rootTpc()).arg(h->baseTpc())
-                        .arg(h->extensionName())
-                        .arg(score()->style().chordList()->size());
             msgBox.setDetailedText(d);
             }
       else {
@@ -3154,12 +3151,15 @@ void Score::cmdRealizeChordSymbols()
       //important to abstract this away a bit so that it's cleaner
       //and more extensible
       if (msgBox.exec() == QMessageBox::Yes) {
-            NoteVal nval;
-            int tpc = toHarmony(e)->rootTpc();
-            nval.pitch = tpc2pitch(tpc) + 48;
-            nval.tpc1 = tpc;
-            score()->setNoteRest(inputState().segment(), inputState().track(),
-                                 nval, inputState().segment()->ticks(), Direction::AUTO);
+            for (Harmony* h : hlist) {
+                  NoteVal nval;
+                  Segment* seg = toSegment(h->parent());
+                  int tpc = h->rootTpc();
+                  nval.pitch = tpc2pitch(tpc) + 48;
+                  nval.tpc1 = tpc;
+                  score()->setNoteRest(seg, h->track(),
+                                       nval, seg->ticks(), Direction::AUTO);
+                  }
             }
       }
 
