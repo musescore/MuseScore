@@ -91,6 +91,7 @@ public:
       static const int PAGE_NOTE = 10;
       EditStyle(Score*, QWidget*);
       void setPage(int no);
+      void setScore(Score* s) { cs = s; }
       };
 
 
