@@ -213,6 +213,7 @@ class Element : public ScoreElement {
       void setPlacement(Placement val)        { setFlag(ElementFlag::PLACE_ABOVE, !bool(val)); }
       bool placeAbove() const                 { return placement() == Placement::ABOVE; }
       bool placeBelow() const                 { return placement() == Placement::BELOW; }
+      virtual bool placeMultiple() const      { return true; }
 
       bool generated() const                  { return flag(ElementFlag::GENERATED);  }
       void setGenerated(bool val)             { setFlag(ElementFlag::GENERATED, val);   }

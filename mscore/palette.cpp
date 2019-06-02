@@ -445,6 +445,9 @@ static void applyDrop(Score* score, ScoreView* viewer, Element* target, Element*
             dropData.dropElement->styleChanged();   // update to local style
 
             Element* el = target->drop(dropData);
+            if (el->isInstrumentChange()) {
+                  mscore->currentScoreView()->selectInstrument(toInstrumentChange(el));
+                  }
             if (el && !viewer->noteEntryMode())
                   score->select(el, SelectType::SINGLE, 0);
             dropData.dropElement = 0;
@@ -693,21 +696,34 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
                   int track2 = sel.staffEnd() * VOICES;
                   Segment* startSegment = sel.startSegment();
                   Segment* endSegment = sel.endSegment(); //keep it, it could change during the loop
-                  for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
-                        for (int track = track1; track < track2; ++track) {
-                              Element* e = s->element(track);
-                              if (e == 0 || !score->selectionFilter().canSelect(e) || !score->selectionFilter().canSelectVoice(track))
-                                    continue;
-                              if (e->isChord()) {
-                                    Chord* chord = toChord(e);
-                                    for (Note* n : chord->notes())
-                                          applyDrop(score, viewer, n, element, modifiers);
+
+                  if (element->placeMultiple()) {
+                        for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
+                              for (int track = track1; track < track2; ++track) {
+                                    Element* e = s->element(track);
+                                    if (e == 0 || !score->selectionFilter().canSelect(e) || !score->selectionFilter().canSelectVoice(track))
+                                          continue;
+                                    if (e->isChord()) {
+                                          Chord* chord = toChord(e);
+                                          for (Note* n : chord->notes())
+                                                applyDrop(score, viewer, n, element, modifiers);
+                                          }
+                                    else {
+                                          // do not apply articulation to barline in a range selection
+                                          if (!e->isBarLine() || !element->isArticulation())
+                                                applyDrop(score, viewer, e, element, modifiers);
+                                          }
                                     }
-                              else {
-                                    // do not apply articulation to barline in a range selection
-                                    if (!e->isBarLine() || !element->isArticulation())
-                                          applyDrop(score, viewer, e, element, modifiers);
-                                    }
+                              }
+                        }
+                  else {
+                        Element* e = startSegment->element(track1);
+                        if (e->isChord()) {
+                              Chord* chord = toChord(e);
+                              applyDrop(score, viewer, chord->notes().at(0), element, modifiers);
+                              }
+                        else {
+                              applyDrop(score, viewer, e, element, modifiers);
                               }
                         }
                   }
