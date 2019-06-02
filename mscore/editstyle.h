@@ -101,9 +101,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase {
    public:
       EditStyle(Score*, QWidget*);
       void setPage(int no);
-
-      void gotoElement(Element* e);
-      static bool elementHasPage(Element* e);
+      void setScore(Score* s) { cs = s; }
       };
 
 

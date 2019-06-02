@@ -6148,8 +6148,11 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
                   }
             }
       else if (cmd == "edit-style") {
-            EditStyle es(cs, this);
-            es.exec();
+            if (!_styleDlg)
+                  _styleDlg = new EditStyle { cs, this };
+            else
+                  _styleDlg->setScore(cs);
+            _styleDlg->exec();
             }
       else if (cmd == "edit-info") {
             MetaEditDialog med(cs, 0);

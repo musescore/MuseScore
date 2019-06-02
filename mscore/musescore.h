@@ -103,6 +103,7 @@ class HelpBrowser;
 class ToolbarEditor;
 class TourHandler;
 class GeneralAutoUpdater;
+class EditStyle;
 
 class PalettePanel;
 struct PaletteTree;
@@ -359,7 +360,9 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QFileDialog* saveDrumsetDialog     { 0 };
       QFileDialog* savePluginDialog      { 0 };
 
-      WorkspaceDialog* _workspaceDialog   { 0 };
+      WorkspaceDialog* _workspaceDialog  { 0 };
+
+      EditStyle* _styleDlg                { nullptr };
 
       QDialog* editRasterDialog          { 0 };
 
@@ -601,6 +604,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void addRecentScore(Score*);
       QFileDialog* saveAsDialog();
       QFileDialog* saveCopyDialog();
+      EditStyle* styleDlg() { return _styleDlg; }
+      void setStyleDlg(EditStyle* es) { _styleDlg = es; }
 
       QString lastSaveCopyDirectory;
       QString lastSaveCopyFormat;
