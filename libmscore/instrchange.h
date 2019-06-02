@@ -45,6 +45,8 @@ class InstrumentChange final : public TextBase  {
       Segment* segment() const              { return toSegment(parent()); }
 
       virtual QVariant propertyDefault(Pid) const override;
+
+      virtual bool placeMultiple() const override      { return false; }
       };
 
 
