@@ -138,7 +138,7 @@ public:
 
       enum class Prop : char {
             VOLUME, PAN, CHORUS, REVERB, NAME, DESCR, PROGRAM, BANK, COLOR,
-            SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL
+            SOLOMUTE, SOLO, MUTE, SYNTI, CHANNEL, USER_BANK_CONTROL
             };
 
 private:
@@ -182,7 +182,7 @@ public:
 
       // If the bank controller is set by the user or not
       bool userBankController() const           { return _userBankController; }
-      void setUserBankController(bool val)      { _userBankController = val; }
+      void setUserBankController(bool val);
 
       QList<NamedEventList> midiActions;
       QList<MidiArticulation> articulation;

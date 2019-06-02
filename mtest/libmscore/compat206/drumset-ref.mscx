@@ -301,6 +301,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="0"/>
           </Channel>
         </Instrument>
@@ -433,6 +434,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="56"/>
           </Channel>
         </Instrument>
@@ -641,6 +643,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="95"/>
           </Channel>
         </Instrument>
@@ -765,6 +768,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="57"/>
           </Channel>
         </Instrument>

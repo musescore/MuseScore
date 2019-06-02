@@ -252,6 +252,7 @@
           </Articulation>
         <Channel>
           <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
           <program value="0"/>
           <controller ctrl="93" value="30"/>
           <controller ctrl="91" value="30"/>
