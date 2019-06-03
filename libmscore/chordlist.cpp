@@ -1542,17 +1542,103 @@ QList<int> ChordDescription::intervals() const {
       }
 
 //---------------------------------------------------------
+//   noteTpcs
+//    returns a QList of note tpcs in the chord
+//---------------------------------------------------------
+QList<int> ChordDescription::noteTpcs(int rootTpc) const {
+      //TODO - PHV take a look again later, this isn't super efficient
+      QList<int> ret;
+
+      static const HChord dimChord(0,3,6,9);
+
+      //make sure diminished chord has a diminished 7th
+      if (chord == dimChord) {
+            ret << tpcInterval(rootTpc, 3, -1) << tpcInterval(rootTpc, 5, -1)
+                << tpcInterval(rootTpc, 7, -2);
+            return ret;
+            }
+
+      bool seven = false;
+
+      if (chord.contains(3)) {
+            if (!chord.contains(4))
+                  //minor 3rd
+                  ret << tpcInterval(rootTpc, 3, -1);
+            else
+                  //sharp 9
+                  ret << tpcInterval(rootTpc, 2, 1);
+            }
+      else if (chord.contains(4))
+            ret << tpcInterval(rootTpc, 3, 0);
+      //above is bad, fix soon
+
+      // 7
+      if (chord.contains(11)) {
+            //maj7
+            ret << tpcInterval(rootTpc, 7, 0);
+            seven = true;
+            }
+      else if (chord.contains(10)) {
+            //7
+            ret << tpcInterval(rootTpc, 7, -1);
+            seven = true;
+            }
+
+      // 4 or 11
+      if (chord.contains(5)) {
+            ret << tpcInterval(rootTpc, 4, 0);
+            }
+
+      // 5
+      if (chord.contains(7)) {
+            //natural 5
+            ret << tpcInterval(rootTpc, 5, 0);
+            if (chord.contains(6))
+                  //#11
+                  ret << tpcInterval(rootTpc, 4, 1);
+            if (chord.contains(8))
+                  //b13
+                  ret << tpcInterval(rootTpc, 6, -1);
+            }
+      else {
+            if (chord.contains(6))
+                  //b5
+                  ret << tpcInterval(rootTpc, 5, -1);
+            if (chord.contains(8))
+                  //#5
+                  ret << tpcInterval(rootTpc, 5, 1);
+            }
+
+      // 6
+      if (chord.contains(9)) {
+            ret << tpcInterval(rootTpc, 6, 0);
+            }
+
+      // b9
+      if (chord.contains(1))
+            ret << tpcInterval(rootTpc, 2, -1);
+
+      // 9
+      if (chord.contains(2))
+            ret << tpcInterval(rootTpc, 2, 0);
+
+      return ret;
+      }
+
+//---------------------------------------------------------
 //   noteNames
 //    returns a QList of note names in the chord
 //---------------------------------------------------------
-QString ChordDescription::noteNames(int rootNote) const {
+QString ChordDescription::noteNames(int rootTpc) const {
       //TODO - PHV take a look again later, this might be uneeded
-      QStringList ret;
-      HChord c(chord);
+      QString ret;
+      QList<int> tpcs = noteTpcs(rootTpc);
 
-      c.rotate(tpc2pitch(rootNote));
-      return c.voicing();
+      for (int tpc : tpcs)
+            ret += tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO);
+      return ret;
       }
+
 //---------------------------------------------------------
 //   complete
 //    generate missing renderList and semantic (Xml) info
