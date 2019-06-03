@@ -1784,7 +1784,8 @@ bool Element::isUserModified() const
 
 void Element::triggerLayout() const
       {
-      score()->setLayout(tick());
+      if (parent())
+            score()->setLayout(tick());
       }
 
 //---------------------------------------------------------
