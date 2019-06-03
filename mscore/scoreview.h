@@ -266,7 +266,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void normalCut();
       void normalCopy();
-      void fotoModeCopy();
+      void fotoModeCopy(bool includeLink = false);
       bool normalPaste(Fraction scale = Fraction(1, 1));
       void normalSwap();
 
