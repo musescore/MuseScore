@@ -805,5 +805,31 @@ int tpc2degree(int tpc, Key key)
       return (names.indexOf(stepName) - names.indexOf(scale) +28) % 7;
       }
 
+//---------------------------------------------------------
+//   tpcInterval
+//    Finds tpc of a note based on an altered interval
+//    from a starting note
+//---------------------------------------------------------
+
+int tpcInterval(int startTpc, int interval, int alter)
+      {
+      //TODO - PHV: doesn't cover all edge cases;
+      //consider intervals from notes like Fbb
+      static const int intervals[7] = {
+//          2  3   4  5  6  7
+            2, 4, -1, 1, 3, 5
+      };
+
+      int result = startTpc + intervals[interval - 2] + alter * TPC_DELTA_SEMITONE;
+      //ensure that we don't have anything more than double sharp or double flat
+      //(I know, breaking some convention, but it's the best we can do for now)
+      while (startTpc > Tpc::TPC_B_S)
+            startTpc -= TPC_DELTA_ENHARMONIC;
+      while (startTpc < Tpc::TPC_F_B)
+            startTpc += TPC_DELTA_ENHARMONIC;
+
+      return result;
+      }
+
 }
 
