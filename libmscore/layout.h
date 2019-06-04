@@ -39,6 +39,7 @@ struct LayoutContext {
       System* curSystem        { 0 };
 
       MeasureBase* systemOldMeasure;
+      MeasureBase* pageOldMeasure;
       bool rangeDone           { false };
 
       MeasureBase* prevMeasure { 0 };

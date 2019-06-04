@@ -1726,10 +1726,12 @@ void LayoutContext::getNextPage()
             page = new Page(score);
             score->pages().push_back(page);
             prevSystem = nullptr;
+            pageOldMeasure = nullptr;
             }
       else {
             page = score->pages()[curPage];
             QList<System*>& systems = page->systems();
+            pageOldMeasure = systems.isEmpty() ? nullptr : systems.back()->measures().back();
             const int i = systems.indexOf(curSystem);
             if (i > 0 && systems[i-1]->page() == page) {
                   // Current and previous systems are on the current page.
@@ -4243,6 +4245,7 @@ void LayoutContext::collectPage()
             //
             //  check for page break or if next system will fit on page
             //
+            bool collected = false;
             if (rangeDone) {
                   // take next system unchanged
                   if (systemIdx > 0) {
@@ -4267,6 +4270,8 @@ void LayoutContext::collectPage()
                   }
             else {
                   nextSystem = score->collectSystem(*this);
+                  if (nextSystem)
+                        collected = true;
                   if (!nextSystem && score->isMaster()) {
                         MasterScore* ms = static_cast<MasterScore*>(score)->next();
                         if (ms) {
@@ -4317,6 +4322,10 @@ void LayoutContext::collectPage()
                   qreal dist = qMax(prevSystem->minBottom(), prevSystem->spacerDistance(false));
                   dist = qMax(dist, slb);
                   layoutPage(page, ey - (y + dist));
+                  // if we collected a system we cannot fit onto this page,
+                  // we need to collect next page in order to correctly set system positions
+                  if (collected)
+                        pageOldMeasure = nullptr;
                   break;
                   }
             }
@@ -4567,10 +4576,28 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 
 void LayoutContext::layout()
       {
+      MeasureBase* lmb;
       do {
             getNextPage();
             collectPage();
-            } while (curSystem && !(rangeDone && page->system(0)->measures().back()->tick() > endTick)); // FIXME: perhaps the first measure was meant? Or last system?
+
+            if (page && !page->systems().isEmpty())
+                  lmb = page->systems().back()->measures().back();
+            else
+                  lmb = nullptr;
+
+            // we can stop collecting pages when:
+            // 1) we reach the end of score (curSystem is nullptr)
+            // or
+            // 2) we have fully processed the range and reached a point of stability:
+            //    a) we have completed layout for the range (rangeDone is true)
+            //    b) we haven't collected a system that will need to go on the next page
+            //    c) this page ends with the same measure as the previous layout
+            //    pageOldMeasure will be last measure from previous layout if range was completed on or before this page
+            //    it will be nullptr if this page was never laid out or if we collected a system for next page
+            } while (curSystem && !(rangeDone && lmb == pageOldMeasure));
+            // && page->system(0)->measures().back()->tick() > endTick // FIXME: perhaps the first measure was meant? Or last system?
+
       if (!curSystem) {
             // The end of the score. The remaining systems are not needed...
             qDeleteAll(systemList);
