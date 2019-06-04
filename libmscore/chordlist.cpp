@@ -1558,8 +1558,6 @@ QList<int> ChordDescription::noteTpcs(int rootTpc) const {
             return ret;
             }
 
-      bool seven = false;
-
       if (chord.contains(3)) {
             if (!chord.contains(4))
                   //minor 3rd
@@ -1568,7 +1566,7 @@ QList<int> ChordDescription::noteTpcs(int rootTpc) const {
                   //sharp 9
                   ret << tpcInterval(rootTpc, 2, 1);
             }
-      else if (chord.contains(4))
+      if (chord.contains(4))
             ret << tpcInterval(rootTpc, 3, 0);
       //above is bad, fix soon
 
@@ -1576,12 +1574,10 @@ QList<int> ChordDescription::noteTpcs(int rootTpc) const {
       if (chord.contains(11)) {
             //maj7
             ret << tpcInterval(rootTpc, 7, 0);
-            seven = true;
             }
       else if (chord.contains(10)) {
             //7
             ret << tpcInterval(rootTpc, 7, -1);
-            seven = true;
             }
 
       // 4 or 11
@@ -1632,10 +1628,11 @@ QList<int> ChordDescription::noteTpcs(int rootTpc) const {
 QString ChordDescription::noteNames(int rootTpc) const {
       //TODO - PHV take a look again later, this might be uneeded
       QString ret;
+      ret += tpc2name(rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO);
       QList<int> tpcs = noteTpcs(rootTpc);
 
       for (int tpc : tpcs)
-            ret += tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO);
+            ret += ", " + tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO);
       return ret;
       }
 
