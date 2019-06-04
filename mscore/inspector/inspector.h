@@ -373,6 +373,7 @@ class Inspector : public QDockWidget {
                               // within the inspector itself
       Element* oe;
       bool oSameTypes;
+      bool oMeasureSelected;
 
    public slots:
       void update();

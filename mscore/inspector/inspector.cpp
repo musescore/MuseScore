@@ -40,6 +40,7 @@
 #include "inspectorNoteDot.h"
 #include "inspectorInstrchange.h"
 #include "inspectorMeasureNumber.h"
+#include "inspectorMeasure.h"
 #include "musescore.h"
 #include "scoreview.h"
 #include "bendproperties.h"
@@ -185,13 +186,28 @@ void Inspector::update(Score* s)
                         }
                   }
             }
-      if (oe != element() || oSameTypes != sameTypes) {
+
+      // Check if a full measure is selected
+      bool measureSelected = false;
+      if (_score) {
+            const Selection& sel = _score->selection();
+            if (sel.isRange() && sel.startSegment()->measure() == sel.endSegment()->measure()) {
+                  Measure* selMeasure = sel.startSegment()->measure();
+                  measureSelected = (sel.startSegment()->tick() == selMeasure->tick()
+                                     && (sel.endSegment()->tick() + sel.endSegment()->ticks() == selMeasure->endTick()));
+                  }
+            }
+
+      if (oe != element() || oSameTypes != sameTypes || oMeasureSelected != measureSelected) {
             delete ie;
             ie  = 0;
             oe  = element();
             oSameTypes = sameTypes;
+            oMeasureSelected = measureSelected;
             if (!element())
                   ie = new InspectorEmpty(this);
+            else if (measureSelected)
+                  ie = new InspectorMeasure(this);
             else if (!sameTypes)
                   ie = new InspectorGroupElement(this);
             else {

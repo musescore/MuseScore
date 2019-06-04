@@ -25,9 +25,7 @@ namespace Ms {
 InspectorGroupElement::InspectorGroupElement(QWidget* parent)
    : InspectorBase(parent)
       {
-      QWidget* w = new QWidget;
-      ge.setupUi(w);
-      _layout->insertWidget(_layout->count()-1, w);
+      ge.setupUi(addWidget());
       ge.color->setColor(Qt::black);
       connect(ge.setColor, SIGNAL(clicked()), SLOT(setColor()));
       connect(ge.setVisible, SIGNAL(clicked()), SLOT(setVisible()));
@@ -38,40 +36,16 @@ InspectorGroupElement::InspectorGroupElement(QWidget* parent)
       //
       // Select
       //
-      QLabel* l = new QLabel;
-      l->setText(tr("Select"));
-      QFont font(l->font());
-      font.setBold(true);
-      l->setFont(font);
-      l->setAlignment(Qt::AlignHCenter);
-      _layout->addWidget(l);
+      connect(ge.notes, SIGNAL(clicked()), SLOT(notesClicked()));
+      connect(ge.graceNotes, SIGNAL(clicked()), SLOT(graceNotesClicked()));
+      connect(ge.rests, SIGNAL(clicked()), SLOT(restsClicked()));
 
-      QHBoxLayout* hbox = new QHBoxLayout;
-      hbox->setSpacing(3);
-      hbox->setContentsMargins(3,3,3,3);
+      const std::vector<InspectorItem> iiList;  // dummy
+      const std::vector<InspectorPanel> ppList = {
+            { ge.title, ge.panel }
+            };
 
-      notes = new QPushButton(this);
-      notes->setText(tr("Notes"));
-      notes->setEnabled(true);
-      notes->setObjectName("notes");
-      hbox->addWidget(notes);
-
-      graceNotes = new QPushButton(this);
-      graceNotes->setText(tr("Grace Notes"));
-      graceNotes->setEnabled(true);
-      graceNotes->setObjectName("graceNotes");
-      hbox->addWidget(graceNotes);
-
-      rests = new QPushButton(this);
-      rests->setText(tr("Rests"));
-      rests->setEnabled(true);
-      rests->setObjectName("rests");
-      hbox->addWidget(rests);
-
-      _layout->addLayout(hbox);
-      connect(notes, SIGNAL(clicked()), SLOT(notesClicked()));
-      connect(graceNotes, SIGNAL(clicked()), SLOT(graceNotesClicked()));
-      connect(rests, SIGNAL(clicked()), SLOT(restsClicked()));
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------

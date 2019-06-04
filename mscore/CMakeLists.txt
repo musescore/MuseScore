@@ -189,6 +189,7 @@ QT5_WRAP_UI (ui_headers
       inspector/inspector_fingering.ui
       inspector/inspector_frametext.ui
       inspector/inspector_fermata.ui
+      inspector/inspector_measure.ui
       inspector/align_select.ui
       inspector/font_style_select.ui
       inspector/offset_select.ui
@@ -426,6 +427,7 @@ add_executable ( ${ExecutableName}
       inspector/inspectorDynamic.cpp
       inspector/inspectorInstrchange.cpp
       inspector/inspectorElementBase.cpp
+      inspector/inspectorMeasure.cpp
       inspector/resetButton.cpp
       enableplayforwidget.cpp
       editelement.cpp

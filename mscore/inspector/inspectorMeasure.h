@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2012 Werner Schweer and others
+//  Copyright (C) 2019 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2
@@ -10,37 +10,35 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#ifndef __INSPECTOR_GROUP_ELEMENT_H__
-#define __INSPECTOR_GROUP_ELEMENT_H__
+#ifndef __INSPECTOR_MEASURE_H__
+#define __INSPECTOR_MEASURE_H__
 
-#include "inspectorBase.h"
-#include "ui_inspector_group_element.h"
+#include "inspectorGroupElement.h"
+#include "ui_inspector_measure.h"
 
 namespace Ms {
 
+class Fraction;
+class Measure;
+
 //---------------------------------------------------------
-//   InspectorGroupElement
+//    InspectorMeasure
 //---------------------------------------------------------
 
-class InspectorGroupElement : public InspectorBase {
+class InspectorMeasure : public InspectorGroupElement {
       Q_OBJECT
 
-      Ui::InspectorGroupElement ge;
+      Ui::InspectorMeasure me;
+
+      Fraction getInputTimesig() const;
+      Measure* measure() const;
 
    private slots:
-      void setColor();
-      void setVisible();
-      void setInvisible();
-      void enableAutoplace();
-      void disableAutoplace();
-      void notesClicked();
-      void graceNotesClicked();
-      void restsClicked();
+      void timesigValueChanged(int);
 
    public:
-      InspectorGroupElement(QWidget* parent);
+      InspectorMeasure(QWidget* parent);
       };
-
 
 } // namespace Ms
 #endif
