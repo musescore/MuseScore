@@ -3129,13 +3129,13 @@ void Score::cmdRealizeChordSymbols()
             for (Harmony* h : hlist) {
                   s += h->harmonyName() + " ";
                   QString intervals;
-                  for (int interval : h->descr()->intervals())
+                  for (int interval : h->getDescription()->intervals())
                         intervals += QString::number(interval) + " ";
                   QString line = QString("(ID: %1) Chord: %2  Intervals: %3  Notes: %4\n")
                                     .arg(h->id())
                                     .arg(h->harmonyName())
                                     .arg(intervals)
-                                    .arg(h->descr()->noteNames(h->rootTpc()));
+                                    .arg(h->getDescription()->noteNames(h->rootTpc()));
                   d += line;
                   }
 
