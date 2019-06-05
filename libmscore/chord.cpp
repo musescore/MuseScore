@@ -1290,7 +1290,7 @@ qreal hookAdjustment(QString font, int hooks, bool up, bool small)
 ///   Get the default stem length for this chord
 //-----------------------------------------------------------------------------
 
-qreal Chord::defaultStemLength()
+qreal Chord::defaultStemLength() const
       {
       Note* downnote;
       qreal stemLen;
@@ -1396,7 +1396,12 @@ qreal Chord::defaultStemLength()
             }
 
       // adjust stem len for tremolo
-      if (_tremolo && !_tremolo->twoNotes()) {
+      if (_tremolo && !_tremolo->twoNotes() && !_tremolo->placeMidStem()) {
+            // Use the old algorithm for stem lengthening. It not always
+            // optimal but still performs better when not placing the tremolo
+            // at stem middle. TODO: rework minAbsStemLen() to perform
+            // correctly in this case too.
+
             // hook up odd lines
             static const int tab1[2][2][2][4] = {
                   { { { 0, 0, 0,  1 },  // stem - down - even - lines
@@ -1421,7 +1426,33 @@ qreal Chord::defaultStemLength()
 
       if (tab)
             stemLen *= lineDistance;
-      return stemLen * _spatium;
+
+      const qreal sgn = up() ? -1.0 : 1.0;
+      qreal stemLenPoints = stemLen * _spatium;
+      const qreal minAbsStemLen = minAbsStemLength();
+      if (sgn * stemLenPoints < minAbsStemLen)
+            stemLenPoints = sgn * minAbsStemLen;
+
+      return stemLenPoints;
+      }
+
+//---------------------------------------------------------
+//   minAbsStemLength
+//---------------------------------------------------------
+
+qreal Chord::minAbsStemLength() const
+      {
+      if (!_tremolo || _tremolo->twoNotes() || !_tremolo->placeMidStem())
+            return 0.0;
+
+      int beamLvl = beams();
+      const bool hasHook = (beamLvl > 0) && !beam();
+      if (hasHook)
+            ++beamLvl; // reserve more space for stem with both hook and tremolo
+      const qreal beamDist = beam() ? beam()->beamDist() : (0.5 * spatium());
+      const qreal tremoloSpacing = 0.5 * spatium(); // TODO: style setting
+
+      return beamLvl * beamDist + _tremolo->height() + 2 * tremoloSpacing;
       }
 
 //---------------------------------------------------------
