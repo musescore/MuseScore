@@ -1543,7 +1543,8 @@ QList<int> ChordDescription::intervals() const {
 
 //---------------------------------------------------------
 //   noteTpcs
-//    returns a QList of note tpcs in the chord
+//    returns a QList of note tpcs in the chord ordered by
+//    pitch
 //---------------------------------------------------------
 QList<int> ChordDescription::noteTpcs(int rootTpc) const {
       //TODO - PHV take a look again later, this isn't super efficient
