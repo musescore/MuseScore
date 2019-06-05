@@ -40,6 +40,11 @@ class Tremolo final : public Element {
 
       int _lines;       // derived from _subtype
 
+      QPainterPath basePath() const;
+      void computeShape();
+      void layoutOneNoteTremolo(qreal x, qreal y, qreal spatium);
+      void layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium);
+
    public:
       Tremolo(Score*);
       Tremolo(const Tremolo&);
@@ -79,6 +84,12 @@ class Tremolo final : public Element {
       Fraction tremoloLen() const;
       bool twoNotes() const { return tremoloType() >= TremoloType::C8; } // is it a two note tremolo?
       int lines() const { return _lines; }
+
+      bool placeMidStem() const;
+
+      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
+      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+      virtual void styleChanged() override;
 
       virtual QString accessibleInfo() const override;
 

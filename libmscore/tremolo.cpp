@@ -84,8 +84,11 @@ void Tremolo::draw(QPainter* painter) const
             qreal x = 0.0; // bbox().width() * .25;
             QPen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
             painter->setPen(pen);
-            qreal _spatium = spatium() * mag();
-            painter->drawLine(QLineF(x, -_spatium*.5, x, path.boundingRect().height() + _spatium));
+            const qreal _spatium = spatium();
+            if (_tremoloType == TremoloType::BUZZ_ROLL)
+                  painter->drawLine(QLineF(x, -_spatium, x, bbox().bottom() + _spatium));
+            else
+                  painter->drawLine(QLineF(x, -_spatium*.5, x, path.boundingRect().height() + _spatium));
             }
       }
 
@@ -113,21 +116,69 @@ void Tremolo::setTremoloType(TremoloType t)
                   _lines = 1;
                   break;
             }
+      computeShape();
       }
 
 //---------------------------------------------------------
-//   layout
+//   placeMidStem
+///   For one-note tremolo, whether the tremolo should be
+///   placed at stem middle.
 //---------------------------------------------------------
 
-void Tremolo::layout()
+bool Tremolo::placeMidStem() const
       {
-      qreal _spatium  = score()->spatium() * mag();
+      const bool placeAllTremoloMidStem = true; // TODO: style setting
+      return tremoloType() == TremoloType::BUZZ_ROLL || placeAllTremoloMidStem;
+      }
+
+//---------------------------------------------------------
+//   spatiumChanged
+//---------------------------------------------------------
+
+void Tremolo::spatiumChanged(qreal oldValue, qreal newValue)
+      {
+      Element::spatiumChanged(oldValue, newValue);
+      computeShape();
+      }
+
+//---------------------------------------------------------
+//   localSpatiumChanged
+//    the scale of a staff changed
+//---------------------------------------------------------
+
+void Tremolo::localSpatiumChanged(qreal oldValue, qreal newValue)
+      {
+      Element::localSpatiumChanged(oldValue, newValue);
+      computeShape();
+      }
+
+//---------------------------------------------------------
+//   styleChanged
+//    the scale of a staff changed
+//---------------------------------------------------------
+
+void Tremolo::styleChanged()
+      {
+      Element::styleChanged();
+      computeShape();
+      }
+
+//---------------------------------------------------------
+//   basePath
+//---------------------------------------------------------
+
+QPainterPath Tremolo::basePath() const
+      {
+      if (_tremoloType == TremoloType::BUZZ_ROLL)
+            return QPainterPath();
+
+      const qreal _spatium  = spatium();
 
       qreal w2  = _spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
       qreal lw  = _spatium * score()->styleS(Sid::tremoloStrokeWidth).val();
       qreal td  = _spatium * score()->styleS(Sid::tremoloDistance).val();
 
-      path      = QPainterPath();
+      QPainterPath path;
       qreal ty  = 0.0;
 
       for (int i = 0; i < _lines; i++) {
@@ -135,39 +186,50 @@ void Tremolo::layout()
             ty += td;
             }
 
-      _chord1 = toChord(parent());
-      if (_chord1 == 0) {
+      if (!parent()) {
             // just for the palette
             QTransform shearTransform;
             shearTransform.shear(0.0, -(lw / 2.0) / w2);
             path = shearTransform.map(path);
-            setbbox(path.boundingRect());
-            addbbox(QRectF(bbox().x(), bbox().bottom(), bbox().width(), _spatium));
-            return;
+            }
+      else if (!twoNotes()) {
+            QTransform shearTransform;
+            shearTransform.shear(0.0, -(lw / 2.0) / w2);
+            path = shearTransform.map(path);
             }
 
-      Note* anchor1 = _chord1->upNote();
-      Stem* stem    = _chord1->stem();
-      qreal x, y, h;
-      if (stem) {
-            x  = stem->pos().x();
-            y  = stem->pos().y();
-            h  = stem->stemLen();
-            }
+      return path;
+      }
+
+//---------------------------------------------------------
+//   computeShape
+//---------------------------------------------------------
+
+void Tremolo::computeShape()
+      {
+      if (parent() && twoNotes())
+            return; // cannot compute shape here, should be done at layout stage
+
+      if (_tremoloType == TremoloType::BUZZ_ROLL)
+            setbbox(symBbox(SymId::buzzRoll));
       else {
-            // center tremolo above note
-            x = anchor1->x() + anchor1->headWidth() * .5;
-            y = anchor1->y();
-            h = 2.0 * _spatium + bbox().height();
-            if (anchor1->line() > 4)
-                  h *= -1;
+            path = basePath();
+            setbbox(path.boundingRect());
             }
-      if (!twoNotes()) {
-            //
-            // single note tremolos
-            //
-            bool up = _chord1->up();
-            int line = up ? _chord1->upLine() : _chord1->downLine();
+      }
+
+//---------------------------------------------------------
+//   layoutOneNoteTremolo
+//---------------------------------------------------------
+
+void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal _spatium)
+      {
+      Q_ASSERT(!twoNotes());
+
+      bool up = _chord1->up();
+      int line = up ? _chord1->upLine() : _chord1->downLine();
+
+      if (!placeMidStem()) {
             static const qreal t[3][2][4][2] = {
                   // normal stem
                   {
@@ -229,15 +291,101 @@ void Tremolo::layout()
                   };
             int idx = _chord1->hook() ? 1 : (_chord1->beam() ? 2 : 0);
             y = (line + t[idx][up][_lines-1][line & 1]) * .5 * _spatium;
+            }
+      else {
+            const Note* n = up ? chord()->downNote() : chord()->upNote();
+            const qreal noteBorder = n->y() + (up ? n->bbox().top() : n->bbox().bottom());
 
-            QTransform shearTransform;
-            shearTransform.shear(0.0, -(lw / 2.0) / w2);
-            path = shearTransform.map(path);
+            const Stem* stem = chord()->stem();
+            const qreal stemLen = stem ? stem->height() : (3 * _spatium);
+            const qreal stemY = stem ? (stem->y() + (up ? stem->bbox().bottom() : stem->bbox().top())) : noteBorder;
+            const qreal stemNoteOverlap = std::max(0.0, (up ? 1.0 : -1.0) * (stemY - noteBorder));
 
-            setbbox(path.boundingRect());
-            setPos(x, y);
+            y = stemY
+                  + (up ? -1 : 1) * (
+                     stemNoteOverlap // calculate offset from note top or bottom rather than stem anchor point
+                     + 0.5 * (stemLen - stemNoteOverlap) // divide stem by 2, excluding the area overlapping with the note
+                     )
+                  - 0.5 * height() - bbox().top(); // center the tremolo at the given position
+
+            if (const Beam* b = chord()->beam()) {
+                  // apply a correction for beam overlapping with the stem
+                  const qreal beamHalfLineWidth = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
+                  const qreal beamSpace = b->beamDist() - 2 * beamHalfLineWidth;
+
+                  int beamLvl = 1;
+                  for (const ChordRest* cr : chord()->beam()->elements()) {
+                        if (cr->isChord()) {
+                              const int crBeamLvl = toChord(cr)->beams();
+                              if (crBeamLvl > beamLvl)
+                                    beamLvl = crBeamLvl;
+                              }
+                        }
+
+                  const qreal stemBeamOverlap = beamLvl * b->beamDist() // initial guess
+                                                   - beamHalfLineWidth // exclude the part of the beam line that does not overlap with the stem
+                                                   - beamSpace; // exclude an extra spacing between beams that was included in the initial guess
+
+                  y += (up ? 1 : -1) * stemBeamOverlap / 2;
+                  }
+            else if (chord()->hook()) {
+                  const qreal hookLvlHeight = 0.5 * _spatium; // TODO: avoid hardcoding this (how?)
+                  y += (up ? 1 : -1) * (chord()->beams() + 0.5) * hookLvlHeight;
+                  }
+            }
+
+      setPos(x, y);
+      }
+
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void Tremolo::layout()
+      {
+      const qreal _spatium  = spatium();
+
+      path = basePath();
+
+      _chord1 = toChord(parent());
+      if (!_chord1) {
+            // palette
+            if (_tremoloType != TremoloType::BUZZ_ROLL) {
+                  const QRectF box = path.boundingRect();
+                  addbbox(QRectF(box.x(), box.bottom(), box.width(), _spatium));
+                  }
             return;
             }
+
+      Note* anchor1 = _chord1->upNote();
+      Stem* stem    = _chord1->stem();
+      qreal x, y, h;
+      if (stem) {
+            x  = stem->pos().x();
+            y  = stem->pos().y();
+            h  = stem->stemLen();
+            }
+      else {
+            // center tremolo above note
+            x = anchor1->x() + anchor1->headWidth() * .5;
+            y = anchor1->y();
+            h = 2.0 * _spatium + bbox().height();
+            if (anchor1->line() > 4)
+                  h *= -1;
+            }
+
+      if (twoNotes())
+            layoutTwoNotesTremolo(x, y, h, _spatium);
+      else
+            layoutOneNoteTremolo(x, y, _spatium);
+      }
+
+//---------------------------------------------------------
+//   layoutTwoNotesTremolo
+//---------------------------------------------------------
+
+void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal _spatium)
+      {
       y += (h - bbox().height()) * .5;
       //
       // two chord tremolo
@@ -312,6 +460,7 @@ void Tremolo::layout()
       const qreal MAX_H_LENGTH = _spatium * 12.0;
 
       qreal xScaleFactor = qMin(H_MULTIPLIER * (x2 - x1), MAX_H_LENGTH);
+      const qreal w2  = _spatium * score()->styleS(Sid::tremoloWidth).val() * .5;
       xScaleFactor /= (2.0 * w2);
 
       xScaleTransform.scale(xScaleFactor, 1.0);
