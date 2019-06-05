@@ -3711,6 +3711,31 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             }
 
       //-------------------------------------------------------------
+      // layout beams
+      //  Needs to be done before creating skylines as stem lengths
+      //  may change.
+      //-------------------------------------------------------------
+
+      for (Segment* s : sl) {
+            for (Element* e : s->elist()) {
+                  if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show()) {
+                        // the beam and its system may still be referenced when selecting all,
+                        // even if the staff is invisible. The old system is invalid and does cause problems in #284012
+                        if (e && e->isChordRest() && !score()->staff(e->staffIdx())->show() && toChordRest(e)->beam())
+                              toChordRest(e)->beam()->setParent(nullptr);
+                        continue;
+                        }
+                  ChordRest* cr = toChordRest(e);
+
+                  // layout beam
+                  if (isTopBeam(cr)) {
+                        Beam* b = cr->beam();
+                        b->layout();
+                        }
+                  }
+            }
+
+      //-------------------------------------------------------------
       //    create skylines
       //-------------------------------------------------------------
 
@@ -3796,24 +3821,18 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             }
 
       //-------------------------------------------------------------
-      // layout beams + fingering
+      // layout fingerings, add beams to skylines
       //-------------------------------------------------------------
 
       for (Segment* s : sl) {
             for (Element* e : s->elist()) {
-                  if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show()) {
-                        // the beam and its system may still be referenced when selecting all,
-                        // even if the staff is invisible. The old system is invalid and does cause problems in #284012
-                        if (e && e->isChordRest() && !score()->staff(e->staffIdx())->show() && toChordRest(e)->beam())
-                              toChordRest(e)->beam()->setParent(nullptr);
+                  if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show())
                         continue;
-                        }
                   ChordRest* cr = toChordRest(e);
 
-                  // layout beam
+                  // add beam to skyline
                   if (isTopBeam(cr)) {
                         Beam* b = cr->beam();
-                        b->layout();
                         b->addSkyline(system->staff(b->staffIdx())->skyline());
                         }
 
