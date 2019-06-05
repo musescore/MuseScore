@@ -40,6 +40,7 @@ static const ElementStyle tupletStyle {
       { Sid::tupletFontSize,                     Pid::FONT_SIZE               },
       { Sid::tupletFontStyle,                    Pid::FONT_STYLE              },
       { Sid::tupletAlign,                        Pid::ALIGN                   },
+      { Sid::tupletMinDistance,                  Pid::MIN_DISTANCE            },
       };
 
 //---------------------------------------------------------
@@ -654,6 +655,9 @@ void Tuplet::layout()
             r |= b;
             }
       setbbox(r);
+
+      if (!cross())
+            autoplaceMeasureElement(_isUp, /* add to skyline */ true);
       }
 
 //---------------------------------------------------------
