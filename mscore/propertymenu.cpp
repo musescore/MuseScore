@@ -606,6 +606,7 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
                               tickEnd = Fraction::fromTicks(i->first);
                         ic->score()->transpositionChanged(part, oldV, tickStart, tickEnd);
                         }
+                  ic->setPlainText(Instrument::fromTemplate(it).trackName());
                   }
             else
                   qDebug("no template selected?");
