@@ -309,8 +309,8 @@ enum class SegmentType {
       KeySig             = 0x4,
       Ambitus            = 0x8,
       TimeSig            = 0x10,
-      Clef               = 0x20,
-      StartRepeatBarLine = 0x40,
+      StartRepeatBarLine = 0x20,
+      Clef               = 0x40,
       BarLine            = 0x80,
       Breath             = 0x100,
       //--
