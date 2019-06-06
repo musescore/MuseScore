@@ -10,10 +10,12 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
+#include "libmscore/barline.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/repeatlist.h"
+#include "libmscore/staff.h"
 #include "libmscore/system.h"
 #include "libmscore/xml.h"
 #include "mscore/globals.h"
@@ -57,6 +59,8 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments)
       xml.stag("elements");
       int id = 0;
 
+      const bool oneStaff = (score->nstaves() == 1);
+
       qreal ndpi = ((qreal) preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION) / DPI) * 12.0;
       if (segments) {
             for (Segment* s = score->firstMeasureMM()->first(SegmentType::ChordRest);
@@ -99,6 +103,13 @@ bool MuseScore::savePositions(Score* score, QIODevice* device, bool segments)
 
                   Page* p  = m->system()->page();
                   int page = score->pageIdx(p);
+
+                  if (oneStaff && score->staff(0)->lines(m->tick()) == 1) {
+                        // Use the same rule as for barlines to get a non-zero measure height
+                        const qreal sp = score->staff(0)->spatium(m->tick());
+                        y -= 0.5 * BARLINE_SPAN_1LINESTAFF_FROM * sp * ndpi;
+                        sy += 0.5 * BARLINE_SPAN_1LINESTAFF_TO * sp * ndpi;
+                        }
 
                   xml.tagE(QString("element id=\"%1\" x=\"%2\" y=\"%3\" sx=\"%4\""
                   " sy=\"%5\" page=\"%6\"")
