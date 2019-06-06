@@ -485,10 +485,18 @@ static QString getLatestCommitSha(const QString& user, const QString &repo, cons
       }
 static inline bool isCompatibleRelease(const QString& branch) {
       if (branch == "master" || branch=="3.x") return true;
-      if (branch.contains("2.x") || branch.contains("version2")) return false;
-      if (branch.contains("3.x")) return true;
-      if (branch.contains("2")) return false;
+      if (branch.contains("2.x") || branch.contains("version2") || branch.contains("musescore2") || branch.contains("musescore 2")) return false;
+      if (branch.contains("3.x") || branch.contains("version3") || branch.contains("musescore3") || branch.contains("musescore 3")) return true;
+      if (branch.contains("2") && !branch.contains("3")) return false;
       return true;
+}
+static inline int CompatEstimate(QString branch) {
+      branch = branch.toLower();
+      if (branch.contains("2.x") || branch.contains("version2") || branch.contains("musescore2") || branch.contains("musescore 2")) return -2;
+      if (branch.contains("3.x") || branch.contains("version3") || branch.contains("musescore3") || branch.contains("musescore 3")) return 2;
+      if (branch.contains("2") && !branch.contains("3")) return -1;
+      if (branch.contains("3") && !branch.contains("2")) return 1;
+      return 0;
 }
 static bool getLatestRelease(QJsonDocument& releases, int& release_id, QString& link) {
       // By default, releases returned from GitHub are sorted from the latest commit to the oldest
@@ -511,28 +519,53 @@ static inline bool isNotFoundMessage(const QJsonObject& json_obj) {
       return json_obj["message"].toString() == "Not Found";
       }
 
-static std::vector<std::pair<QString, QString>> getAttachments(const QByteArray& html_raw)
+static std::vector<std::pair<QString, QString>> getAttachments(const QByteArray& html_raw, bool all = false)
       {
-      int start_idx = html_raw.indexOf("<div class=\"field field--name-upload field--type-file field--label-above\">");
-      if (start_idx == -1)
-            ; // TODO: no attachments found
       std::vector<std::pair<QString, QString>> file_urls;
-      QByteArray attachments_raw = html_raw.mid(start_idx, -1);
-      XmlReader xml(attachments_raw);
-      while (!xml.atEnd() && xml.name() != "table") xml.readNextStartElement();
-      while (!xml.atEnd() && xml.name() != "tbody") xml.readNextStartElement();
-      while (!xml.atEnd() && xml.name() != "tr") xml.readNextStartElement();
-      // now we've arrived at the first <tr>
-      while (!xml.atEnd() && xml.name() == "tr") {
-            for (int i = 0; i < 3; i++) // enter <td>, <span>, <a>
+      if (!all) {
+            int start_idx = html_raw.indexOf("<div class=\"field field--name-upload field--type-file field--label-above\">");
+            if (start_idx == -1)
+                  ; // TODO: no attachments found
+            QByteArray attachments_raw = html_raw.mid(start_idx, -1);
+            XmlReader xml(attachments_raw);
+            while (!xml.atEnd() && xml.name() != "table") xml.readNextStartElement();
+            while (!xml.atEnd() && xml.name() != "tbody") xml.readNextStartElement();
+            while (!xml.atEnd() && xml.name() != "tr") xml.readNextStartElement();
+            // now we've arrived at the first <tr>
+            while (!xml.atEnd() && xml.name() == "tr") {
+                  for (int i = 0; i < 3; i++) // enter <td>, <span>, <a>
+                        xml.readNextStartElement();
+                  file_urls.push_back(make_pair(xml.readElementText(), xml.attributes().value("href").toString()));
+                  for (int i = 0; i < 3; i++) // exit <a>, <span>, <td>
+                        xml.skipCurrentElement();
                   xml.readNextStartElement();
-            file_urls.push_back(make_pair(xml.readElementText(), xml.attributes().value("href").toString()));
-            for (int i = 0; i < 3; i++) // exit <a>, <span>, <td>
-                  xml.skipCurrentElement();
-            xml.readNextStartElement();
             }
+      }
+      else {
+            // search for all links from musescore.org
+            QRegularExpression musescore_link_patt("https://musescore.org/sites/musescore.org/files/\\d+\\-\\d+/([\\w\\-]+)");
+            auto it = musescore_link_patt.globalMatch(html_raw);
+            while (it.hasNext()) {
+                  QRegularExpressionMatch match = it.next();
+                  file_urls.push_back(make_pair(match.captured(1), match.captured(0)));
+            }
+      }
       return file_urls;
       }
+
+static QDateTime GetLastModified(QString& url) {
+      QNetworkAccessManager nmg;
+      QEventLoop loop;
+      QNetworkReply* reply = nmg.head(QNetworkRequest(url));
+      QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+      loop.exec();
+      QVariant last_modified = reply->header(QNetworkRequest::LastModifiedHeader);
+      if (last_modified.isValid())
+            return last_modified.toDateTime();
+      else
+            return QDateTime();
+}
+
 //---------------------------------------------------------
 //   analyzePluginPage
 //---------------------------------------------------------
@@ -567,7 +600,8 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
                               desc.direct_link = direct_link;
                               return true;
                               }
-                        else return false;
+                        else
+                              return false;
                         }
                   }
                   // else, fetch latest commit sha on master(usually for 3.x), as info for update
@@ -580,14 +614,49 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
                   desc.direct_link = githubLatestArchiveURL(user, repo, "master");
                   return true;
             }
-            else return false;
+            else
+                  return false;
       }
       else {
             // no github repo links exist
             // first fetch links in attachments
-            std::vector<std::pair<QString, QString>> file_urls = getAttachments(html_raw);
+            std::vector<std::pair<QString, QString>> attachment_urls = getAttachments(html_raw, false);
+            if (attachment_urls.empty())
+                  attachment_urls = getAttachments(html_raw, true);
+            std::vector<std::pair<QString, QString>> archives, qmls, selected;
+            //std::pair<QString, QString> selected; // the finally selected qml file or archive
+            QStringList suffixes = { "qml","zip","rar","7z" };
+            std::pair<QString, QString> target;
+            int score = -2;
+            for (auto& item : attachment_urls) {
+                  QFileInfo f(item.first);
+                  if (suffixes.contains(f.suffix().toLower())) {
+                        int curr_score = CompatEstimate(item.first); // add other text in that line
+                        if (curr_score > score) {
+                              target = item;
+                              score = curr_score;
+                        }
+                  }
+            }
+            if (score >= 0) {
+                  should_update = desc.source != ATTACHMENT;
+                  QDateTime date_time;
+                  if (desc.source != ATTACHMENT || desc.direct_link != target.second || (date_time = GetLastModified(target.second)) != desc.last_modified) {
+                        desc.source = ATTACHMENT;
+                        desc.direct_link = target.second;
+                        if (!date_time.isValid())
+                              // TODO: we didn't download the file before, optimize: fill desc.last_modified when downloading the file.
+                              date_time = GetLastModified(target.second);
+                        desc.last_modified = date_time;
+                        return true;
+                  }
+                  else
+                        return false;
+            }
+
             qDebug("Unknown plugin source");
             desc.source = UNKNOWN;
+
             return false;
             }
       }
@@ -651,54 +720,73 @@ void ResourceManager::scanPluginUpdate()
 bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageDescription& desc)
       {
       QFileInfo f_pkg(download_pkg);
-      MQZipReader zipFile(download_pkg);
-      QVector<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
-      if (allFiles.size() == 0) {
-            return false;
-            }
-      // If zip contains multiple files in root, or a single qml, create a
-      // root folder in plugin dir for them.
-      // If zip contains a single directory, don't use that directory's name
-      bool has_no_dir = true;
-      std::set<QString> dirs;
-      foreach(MQZipReader::FileInfo fi, allFiles) {
-            QString dir_root = fi.filePath.split('/').first();
-            dirs.insert(dir_root);
-            }
-      if (dirs.size() == 1) {
-            if (allFiles.size() > 1) // the element in dirs must be a dir then
-                  has_no_dir = false;
-            }
-      int stripped_len = 0;
-      if (!has_no_dir) {
-            stripped_len = allFiles.first().filePath.length() + 1;
-            // the directory in the archive is not to be added
-            allFiles.pop_front();
-            }
-      auto filePathStripper = [&](QString& filePath) {return filePath.right(filePath.size() - stripped_len); };
-
-      QString destination_prefix = dataPath + "/plugins";
-      destination_prefix += "/" + f_pkg.completeBaseName();
+      QString suffix = f_pkg.suffix().toLower();
+      QString destination_prefix = dataPath + "/plugins" + "/" + f_pkg.completeBaseName();
       QDir().mkdir(destination_prefix);
       desc.dir = destination_prefix;
-      // extract and copy
-      foreach(MQZipReader::FileInfo fi, allFiles) {
-            if (fi.isDir)
-                  QDir().mkdir(destination_prefix + "/" + filePathStripper(fi.filePath));
-            else if (fi.isFile) {
-                  if (QFileInfo(fi.filePath).suffix().toLower() == "qml")
-                        desc.qml_paths.push_back(destination_prefix + "/" + filePathStripper(fi.filePath));
-                  QFile new_f(destination_prefix + "/" + filePathStripper(fi.filePath));
-                  if (!new_f.open(QIODevice::WriteOnly)) {
-                        qDebug("Cannot write the file.");
-                        return false;
+      if (suffix == "zip") {
+            MQZipReader zipFile(download_pkg);
+            QVector<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
+            if (allFiles.size() == 0) {
+                  return false;
+            }
+            // If zip contains multiple files in root, or a single qml, create a
+            // root folder in plugin dir for them.
+            // If zip contains a single directory, don't use that directory's name
+            bool has_no_dir = true;
+            std::set<QString> dirs;
+            foreach(MQZipReader::FileInfo fi, allFiles) {
+                  QString dir_root = fi.filePath.split('/').first();
+                  dirs.insert(dir_root);
+            }
+            if (dirs.size() == 1) {
+                  if (allFiles.size() > 1) // the element in dirs must be a dir then
+                        has_no_dir = false;
+            }
+            int stripped_len = 0;
+            if (!has_no_dir) {
+                  stripped_len = allFiles.first().filePath.length() + 1;
+                  // the directory in the archive is not to be added
+                  allFiles.pop_front();
+            }
+            auto filePathStripper = [&](QString& filePath) {return filePath.right(filePath.size() - stripped_len); };
+
+            // extract and copy
+            foreach(MQZipReader::FileInfo fi, allFiles) {
+                  if (fi.isDir)
+                        QDir().mkdir(destination_prefix + "/" + filePathStripper(fi.filePath));
+                  else if (fi.isFile) {
+                        if (QFileInfo(fi.filePath).suffix().toLower() == "qml")
+                              desc.qml_paths.push_back(destination_prefix + "/" + filePathStripper(fi.filePath));
+                        QFile new_f(destination_prefix + "/" + filePathStripper(fi.filePath));
+                        if (!new_f.open(QIODevice::WriteOnly)) {
+                              qDebug("Cannot write the file.");
+                              return false;
                         }
-                  new_f.write(zipFile.fileData(fi.filePath));
-                  new_f.setPermissions(fi.permissions);
-                  new_f.close();
+                        new_f.write(zipFile.fileData(fi.filePath));
+                        new_f.setPermissions(fi.permissions);
+                        new_f.close();
                   }
             }
-      zipFile.close();
+            zipFile.close();
+      }
+      else if (suffix == "qml") {
+            QString destination = destination_prefix + "/" + f_pkg.fileName();
+            QFileInfo check(destination);
+            if (check.exists()) {
+                  if (check.isDir())
+                        QDir(check.absoluteFilePath()).removeRecursively();
+                  if (check.isFile())
+                        QFile::remove(check.absoluteFilePath());
+            }
+            QFile(f_pkg.absoluteFilePath()).copy(destination);
+            desc.qml_paths.push_back(destination);
+      }
+      else {
+            qDebug("Unknown plugin suffix %s.",suffix);
+            return false;
+      }
+      
       QFile::remove(download_pkg);
       return true;
       }
@@ -835,6 +923,9 @@ QString ResourceManager::downloadPluginPackage(PluginPackageDescription& desc, c
       if (desc.source == GITHUB || desc.source == GITHUB_RELEASE) {
             localPath += ".zip";
       }
+      else if (desc.source == ATTACHMENT) {
+            localPath += "."+QFileInfo(desc.direct_link).suffix();
+      }
       QDir().mkpath(dataPath + "/plugins");
       package.setLocalFile(localPath);
       package.download();
@@ -865,8 +956,7 @@ void ResourceManager::downloadInstallPlugin()
             }
       button->setText(tr("Downloading..."));
       QString localPath = downloadPluginPackage(new_package, page_url);
-      if (new_package.source == GITHUB || new_package.source == GITHUB_RELEASE) {
-            // the extension is always zip for github
+
             if (installPluginPackage(localPath, new_package)) {
                   // add the new description item to the map
                   pluginDescriptionMap[page_url] = new_package;
@@ -879,7 +969,6 @@ void ResourceManager::downloadInstallPlugin()
                   button->setEnabled(true);
                   return;
                   }
-            }
 
       }
 

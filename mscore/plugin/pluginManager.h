@@ -62,7 +62,7 @@ struct PluginPackageDescription {
       std::vector<QString> qml_paths;
       QString latest_commit; // valid when source set to GITHUB
       int release_id; // valid when source set to GITHUB_RELEASE
-      // TODO: add last modified field for source set to ATTACHMENT
+      QDateTime last_modified;
 
       };
 
