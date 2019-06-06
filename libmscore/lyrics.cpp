@@ -261,8 +261,8 @@ void Lyrics::layout()
                         Lyrics trailing(*this);
                         trailing.setPlainText(tp);
                         trailing.layout1();
-                        leftAdjust = leading.width();
-                        centerAdjust = leading.width() - trailing.width();
+                        leftAdjust = leading.width() + symWidth(SymId::noteheadBlack) * 0.5;
+                        centerAdjust = leftAdjust - trailing.width();
                         if (!lp.isEmpty() && lp[0].isDigit())
                               hasNumber = true;
                         }
