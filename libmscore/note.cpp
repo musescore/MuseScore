@@ -3108,9 +3108,10 @@ std::vector<Note*> Note::tiedNotes() const
 
       notes.push_back(note);
       while (note->tieFor()) {
-            if (std::find(notes.begin(), notes.end(), note->tieFor()->endNote()) != notes.end())
+            Note* endNote = note->tieFor()->endNote();
+            if (!endNote || std::find(notes.begin(), notes.end(), endNote) != notes.end())
                   break;
-            note = note->tieFor()->endNote();
+            note = endNote;
             notes.push_back(note);
             }
       return notes;
