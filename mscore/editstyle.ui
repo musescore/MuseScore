@@ -247,7 +247,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>32</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
@@ -633,9 +633,6 @@
               <string>Autoplace</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_11">
-              <item row="0" column="1">
-               <widget class="QComboBox" name="autoplaceVerticalAlignRange"/>
-              </item>
               <item row="0" column="0">
                <widget class="QLabel" name="label_36">
                 <property name="text">
@@ -646,18 +643,8 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="3">
-               <spacer name="horizontalSpacer_23">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="autoplaceVerticalAlignRange"/>
               </item>
               <item row="0" column="2">
                <widget class="QToolButton" name="resetAutoplaceVerticalAlignRange">
@@ -675,6 +662,68 @@
                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                 </property>
                </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="minVerticalDistance_labe">
+                <property name="text">
+                 <string>Min. vertical distance:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>minVerticalDistance</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="QDoubleSpinBox" name="minVerticalDistance">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="minimum">
+                 <double>-999.990000000000009</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="value">
+                 <double>0.500000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QToolButton" name="resetMinVerticalDistance">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Min. vertical distance' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="6">
+               <spacer name="horizontalSpacer_23">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </widget>
@@ -10292,6 +10341,7 @@
   <tabstop>multiMeasureRests</tabstop>
   <tabstop>minEmptyMeasures</tabstop>
   <tabstop>minMeasureWidth</tabstop>
+  <tabstop>resetMinMMRestWidth</tabstop>
   <tabstop>hideEmptyStaves</tabstop>
   <tabstop>dontHideStavesInFirstSystem</tabstop>
   <tabstop>crossMeasureValues</tabstop>
@@ -10302,6 +10352,8 @@
   <tabstop>swingBox</tabstop>
   <tabstop>autoplaceVerticalAlignRange</tabstop>
   <tabstop>resetAutoplaceVerticalAlignRange</tabstop>
+  <tabstop>minVerticalDistance</tabstop>
+  <tabstop>resetMinVerticalDistance</tabstop>
   <tabstop>staffLowerBorder</tabstop>
   <tabstop>akkoladeDistance</tabstop>
   <tabstop>maxSystemDistance</tabstop>
