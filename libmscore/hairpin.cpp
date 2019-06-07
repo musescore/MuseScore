@@ -108,8 +108,17 @@ void HairpinSegment::layout()
             const System* sys = system();
             if (isSingleType() || isBeginType()) {
                   Segment* start = hairpin()->startSegment();
-                  if (start && start->system() == sys)
+                  if (start && start->system() == sys) {
                         sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
+                        if (!sd) {
+                              // Dynamics might have been added to the previous
+                              // segment rather than exactly to hairpin start,
+                              // search in that segment too.
+                              start = start->prev(SegmentType::ChordRest);
+                              if (start && start->system() == sys)
+                                    sd = toDynamic(start->findAnnotation(ElementType::DYNAMIC, _trck, _trck));
+                              }
+                        }
                   if (sd && sd->addToSkyline() && sd->placement() == hairpin()->placement()) {
                         const qreal sdRight = sd->bbox().right() + sd->pos().x()
                                               + sd->segment()->pos().x() + sd->measure()->pos().x();
