@@ -20,13 +20,13 @@
 #ifndef __REALIZEDHARMONY_H__
 #define __REALIZEDHARMONY_H__
 
-#include "chordlist.h"
-
 namespace Ms {
+
+class Harmony;
 
 //voicing modes to use
 enum class Voicing : char {
-      AUTO
+      AUTO, ROOT_ONLY
       };
 
 //rhythm mode to use
@@ -42,31 +42,36 @@ enum class Rhythm : char {
 ///     allow for chord symbol playback
 //-----------------------------------------
 class RealizedHarmony {
-      QMap<int, int> notes;
+      Harmony* _harmony;
 
-      Voicing voicing;
-      Rhythm rhythm;
+      QMap<int, int> _notes; //map from pitch to tpc
+
+      Voicing _voicing;
+      Rhythm _rhythm;
 
       //whether or not the current notes QMap is up to date
-      bool dirty;
-
-      ChordDescription* description;
+      bool _dirty;
 
    public:
-      RealizedHarmony(ChordDescription* cd,
-                      Voicing v = Voicing::AUTO, Rhythm r = Rhythm::AUTO)
-                      : description(cd), voicing(v), rhythm(r), dirty(1) {}
+      RealizedHarmony() : _harmony(0), _notes(QMap<int, int>()), _voicing(Voicing::AUTO),
+            _rhythm(Rhythm::AUTO), _dirty(1) {}
+      RealizedHarmony(Harmony*);
 
-      void setDescription(ChordDescription* cd);
-      void setVoicing(Voicing v);
-      void setRhythm(Rhythm r);
+      void setDescription(int);
+      void setVoicing(Voicing);
+      void setRhythm(Rhythm);
 
-      const ChordDescription* description() const { return description; }
-      Voicing voicing() const { return voicing; }
-      Rhythm rhythm() const { return rhythm; }
+      Voicing voicing() const { return _voicing; }
+      Rhythm rhythm() const { return _rhythm; }
+
+      bool valid() const { return !_dirty && _harmony; }
+
+      const QList<int> pitches() const { return _notes.values(); }
 
       //TODO - PHV: consider what to do here, we might want to keep bass and root
-      const QMap<int, int>& notes() const { return dirty ? notes : 0; }
+      //also consider if we should update or do any checks for if we call notes
+      //without updating first
+      const QMap<int, int>& notes() const;
 
       void update(int rootTpc, int bassTpc); //updates the notes map
 

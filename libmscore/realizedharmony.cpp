@@ -18,21 +18,20 @@
 //=============================================================================
 
 #include "realizedharmony.h"
+#include "pitchspelling.h"
+#include "chordlist.h"
+#include "harmony.h"
 
 namespace Ms {
 
-
 //---------------------------------------------------
-//   setDescription
-///   sets the description and dirty flag if the passed
-///   chord description is different than current
+//   RealizedHarmony
+///   creates empty realized harmony
 //---------------------------------------------------
-void RealizedHarmony::setDescription(ChordDescription* cd)
+RealizedHarmony::RealizedHarmony(Harmony* h) : _harmony(h), _notes(QMap<int, int>()),
+      _voicing(Voicing::AUTO), _rhythm(Rhythm::AUTO), _dirty(1)
       {
-            if (description == cd)
-                  return;
-            description = cd;
-            dirty = 1;
+      //TODO - PHV
       }
 
 //---------------------------------------------------
@@ -42,10 +41,10 @@ void RealizedHarmony::setDescription(ChordDescription* cd)
 //---------------------------------------------------
 void RealizedHarmony::setVoicing(Voicing v)
       {
-            if (voicing == v)
-                  return;
-            voicing = v;
-            dirty = 1;
+      if (_voicing == v)
+            return;
+      _voicing = v;
+      _dirty = 1;
       }
 
 //---------------------------------------------------
@@ -55,10 +54,20 @@ void RealizedHarmony::setVoicing(Voicing v)
 //---------------------------------------------------
 void RealizedHarmony::setRhythm(Rhythm r)
       {
-            if (rhythm == r)
-                  return;
-            rhythm = r;
-            dirty = 1;
+      if (_rhythm == r)
+            return;
+      _rhythm = r;
+      _dirty = 1;
+      }
+
+//---------------------------------------------------
+//   notes
+///   returns the list of notes
+//---------------------------------------------------
+const QMap<int, int>& RealizedHarmony::notes() const
+      {
+      //TODO - PHV: do something when dirty?
+      return _notes;
       }
 
 //---------------------------------------------------
@@ -69,10 +78,15 @@ void RealizedHarmony::setRhythm(Rhythm r)
 //---------------------------------------------------
 void RealizedHarmony::update(int rootTpc, int bassTpc)
       {
-      switch (voicing) {
+      if (!_dirty)
+            return;
+
+      _notes.clear();
+      switch (_voicing) {
+            case Voicing::ROOT_ONLY:
             case Voicing::AUTO:
             default:
-                  //TODO - PHV: fill out
+                  _notes.insert(tpc2pitch(rootTpc) + 48, rootTpc);
                   break;
             }
       }
