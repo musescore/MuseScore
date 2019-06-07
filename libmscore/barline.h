@@ -128,6 +128,7 @@ class BarLine final : public Element {
       virtual QVariant getProperty(Pid propertyId) const override;
       virtual bool setProperty(Pid propertyId, const QVariant&) override;
       virtual QVariant propertyDefault(Pid propertyId) const override;
+      virtual Pid propertyId(const QStringRef& xmlName) const override;
       virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps);
       using ScoreElement::undoChangeProperty;
 

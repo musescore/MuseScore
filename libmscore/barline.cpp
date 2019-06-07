@@ -1502,6 +1502,17 @@ QVariant BarLine::propertyDefault(Pid propertyId) const
       }
 
 //---------------------------------------------------------
+//   propertyId
+//---------------------------------------------------------
+
+Pid BarLine::propertyId(const QStringRef& name) const
+      {
+      if (name == "subtype")
+            return Pid::BARLINE_TYPE;
+      return Element::propertyId(name);
+      }
+
+//---------------------------------------------------------
 //   nextSegmentElement
 //---------------------------------------------------------
 
