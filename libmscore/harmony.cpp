@@ -182,6 +182,7 @@ Harmony::Harmony(const Harmony& h)
       _textName   = h._textName;
       _userName   = h._userName;
       _function   = h._function;
+      _realizedHarmony = h._realizedHarmony;
       for (const TextSegment* s : h.textList) {
             TextSegment* ns = new TextSegment();
             ns->set(s->text, s->font, s->x, s->y);
@@ -1069,6 +1070,21 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
             _id = cd->id;
             }
       return cd;
+      }
+
+//---------------------------------------------------------
+//   realizedHarmony
+//    get realized harmony or create one for the current symbol
+//    TODO - PHV: cache this so that chords only need to be
+//    realized once each
+//---------------------------------------------------------
+
+const RealizedHarmony Harmony::realizedHarmony()
+      {
+      if (!_realizedHarmony.valid())
+            _realizedHarmony = RealizedHarmony(this);
+      _realizedHarmony.update(_rootTpc, _baseTpc);
+      return _realizedHarmony;
       }
 
 //---------------------------------------------------------

@@ -3152,11 +3152,13 @@ void Score::cmdRealizeChordSymbols()
       //and more extensible
       if (msgBox.exec() == QMessageBox::Yes) {
             for (Harmony* h : hlist) {
+                  RealizedHarmony r = h->realizedHarmony();
                   NoteVal nval;
                   Segment* seg = toSegment(h->parent());
-                  int tpc = h->rootTpc();
-                  nval.pitch = tpc2pitch(tpc) + 48;
-                  nval.tpc1 = tpc;
+                  QMapIterator<int, int> i(r.notes());
+                  i.next();
+                  nval.pitch = i.key();
+                  nval.tpc1 = i.value();
                   score()->setNoteRest(seg, h->track(),
                                        nval, seg->ticks(), Direction::AUTO);
                   }
