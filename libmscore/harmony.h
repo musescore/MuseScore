@@ -15,6 +15,7 @@
 
 #include "text.h"
 #include "pitchspelling.h"
+#include "realizedharmony.h"
 
 namespace Ms {
 
@@ -83,6 +84,8 @@ class Harmony final : public TextBase {
       bool showSpell = false;             // show spell check warning
       HarmonyType _harmonyType;           // used to control rendering, transposition, export, etc.
 
+      RealizedHarmony _realizedHarmony;    //the realized harmony used for playback
+
       QList<HDegree> _degreeList;
       QList<QFont> fontList;              // temp values used in render()
       QList<TextSegment*> textList;       // rendered chord
@@ -125,6 +128,8 @@ class Harmony final : public TextBase {
       const ChordDescription* getDescription();
       const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
       const ChordDescription* generateDescription();
+
+      const RealizedHarmony realizedHarmony();
 
       void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
          NoteSpellingType& baseSpelling, NoteCaseType& baseCase);
