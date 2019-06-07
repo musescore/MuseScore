@@ -18,6 +18,9 @@
 #include "hairpin.h"
 #include "mscore.h"
 #include "ottava.h"
+#include "tremolo.h"
+#include "trill.h"
+#include "vibrato.h"
 #include "layoutbreak.h"
 #include "groups.h"
 #include "xml.h"
@@ -144,8 +147,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::FBPARENTHESIS5,          false, "",                      P_TYPE::INT,                 ""                                                    },
       { Pid::OTTAVA_TYPE,             true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "ottava type")      },
       { Pid::NUMBERS_ONLY,            false, "numbersOnly",           P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "numbers only")     },
-      { Pid::TRILL_TYPE,              false, "",                      P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "trill type")       },
-      { Pid::VIBRATO_TYPE,            false, "",                      P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "vibrato type")     },
+      { Pid::TRILL_TYPE,              false, "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "trill type")       },
+      { Pid::VIBRATO_TYPE,            false, "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "vibrato type")     },
       { Pid::HAIRPIN_CIRCLEDTIP,      false, "hairpinCircledTip",     P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin with circled tip") },
 
       { Pid::HAIRPIN_TYPE,            true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "hairpin type")     },
@@ -319,6 +322,11 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::KEY,                     true,  "accidental",            P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "key")              },
       { Pid::ACTION,                  false, "action",                P_TYPE::STRING,              0                                                           },
       { Pid::MIN_DISTANCE,            false, "minDistance",           P_TYPE::SPATIUM,             DUMMY_QT_TRANSLATE_NOOP("propertyName", "autoplace minimum distance") },
+
+      { Pid::ARPEGGIO_TYPE,           true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "arpeggio type")    },
+      { Pid::CHORD_LINE_TYPE,         true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "chord line type")  },
+      { Pid::CHORD_LINE_STRAIGHT,     true,  "straight",              P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "straight chord line") },
+      { Pid::TREMOLO_TYPE,            true,  "subtype",               P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "tremolo type")     },
 
       { Pid::END, false, "++end++", P_TYPE::INT, DUMMY_QT_TRANSLATE_NOOP("propertyName", "<invalid property>") }
       };
@@ -642,6 +650,12 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
                   return Accidental::subtype2name(AccidentalType(value.toInt()));
             case Pid::OTTAVA_TYPE:
                   return Ottava::ottavaTypeName(OttavaType(value.toInt()));
+            case Pid::TREMOLO_TYPE:
+                  return Tremolo::type2name(TremoloType(value.toInt()));
+            case Pid::TRILL_TYPE:
+                  return Trill::type2name(Trill::Type(value.toInt()));
+            case Pid::VIBRATO_TYPE:
+                  return Vibrato::type2name(Vibrato::Type(value.toInt()));
             default:
                   break;
             }
