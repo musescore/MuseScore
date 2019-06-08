@@ -313,6 +313,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void zoom(qreal _mag, const QPointF& pos);
       void contextPopup(QContextMenuEvent* ev);
       bool editKeyLyrics();
+      bool editKeySticking();
       void dragScoreView(QMouseEvent* ev);
       void doDragElement(QMouseEvent* ev);
       void doDragLasso(QMouseEvent* ev);
