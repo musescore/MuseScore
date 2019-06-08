@@ -188,25 +188,34 @@ void Inspector::update(Score* s)
             }
 
       // Check if a full measure is selected
-      bool measureSelected = false;
+      Measure* selectedMeasure = nullptr;
       if (_score) {
             const Selection& sel = _score->selection();
-            if (sel.isRange() && sel.startSegment()->measure() == sel.endSegment()->measure()) {
-                  Measure* selMeasure = sel.startSegment()->measure();
-                  measureSelected = (sel.startSegment()->tick() == selMeasure->tick()
-                                     && (sel.endSegment()->tick() + sel.endSegment()->ticks() == selMeasure->endTick()));
+            if (sel.isRange()) { 
+                  if (sel.endSegment() && sel.startSegment()->measure() == sel.endSegment()->measure()) {
+                        Measure* selMeasure = sel.startSegment()->measure();
+                        if (sel.startSegment()->tick() == selMeasure->tick()
+                            && (sel.endSegment()->tick() + sel.endSegment()->ticks() == selMeasure->endTick())) {
+                              selectedMeasure = selMeasure;    
+                              }
+                        }
+                  else if (!sel.endSegment() && sel.startSegment()->measure() == _score->lastMeasure()) {
+                        Measure* selMeasure = sel.startSegment()->measure();
+                        if (sel.startSegment()->tick() == selMeasure->tick())
+                              selectedMeasure = selMeasure;
+                        }
                   }
             }
 
-      if (oe != element() || oSameTypes != sameTypes || oMeasureSelected != measureSelected) {
+      if (oe != element() || oSameTypes != sameTypes || oSelectedMeasure != selectedMeasure) {
             delete ie;
             ie  = 0;
             oe  = element();
             oSameTypes = sameTypes;
-            oMeasureSelected = measureSelected;
+            oSelectedMeasure = selectedMeasure;
             if (!element())
                   ie = new InspectorEmpty(this);
-            else if (measureSelected)
+            else if (selectedMeasure)
                   ie = new InspectorMeasure(this);
             else if (!sameTypes)
                   ie = new InspectorGroupElement(this);

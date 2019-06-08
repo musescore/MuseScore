@@ -36,9 +36,6 @@ class MeasureProperties : public QDialog, private Ui::MeasurePropertiesBase {
       Measure* m;
 
       void apply();
-      Fraction len() const;
-      bool isIrregular() const;
-      int repeatCount() const;
       bool visible(int staffIdx);
       bool slashStyle(int staffIdx);
       void setMeasure(Measure* _m);

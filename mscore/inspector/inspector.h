@@ -57,6 +57,7 @@ class Inspector;
 class Segment;
 class Chord;
 class Clef;
+class Measure;
 
 //---------------------------------------------------------
 //   InspectorElement
@@ -373,7 +374,7 @@ class Inspector : public QDockWidget {
                               // within the inspector itself
       Element* oe;
       bool oSameTypes;
-      bool oMeasureSelected;
+      Measure* oSelectedMeasure;
 
    public slots:
       void update();

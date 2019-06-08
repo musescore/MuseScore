@@ -20,6 +20,7 @@ namespace Ms {
 
 class Fraction;
 class Measure;
+enum class Pid;
 
 //---------------------------------------------------------
 //    InspectorMeasure
@@ -32,9 +33,16 @@ class InspectorMeasure : public InspectorGroupElement {
 
       Fraction getInputTimesig() const;
       Measure* measure() const;
+      void setProperty(Pid p, QVariant v);
 
    private slots:
-      void timesigValueChanged(int);
+      void timesigValueChanged(int val);
+      void excludeToggled(bool val);
+      void numberModeChanged(int val);
+      void offsetChanged(int val);
+      void breakMMRToggled(bool val);
+      void layoutStretchChanged(qreal val);
+      void playCountChanged(int val);
 
    public:
       InspectorMeasure(QWidget* parent);

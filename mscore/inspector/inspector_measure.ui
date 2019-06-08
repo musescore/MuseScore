@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>257</width>
-    <height>254</height>
+    <height>456</height>
    </rect>
   </property>
   <property name="accessibleName">
@@ -76,8 +76,105 @@
       <property name="spacing">
        <number>3</number>
       </property>
+      <item row="1" column="0">
+       <widget class="QGroupBox" name="otherBox">
+        <property name="title">
+         <string>Other</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="1" column="1">
+          <widget class="QComboBox" name="numberMode">
+           <item>
+            <property name="text">
+             <string>Auto</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Always Show</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Always Hide</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="4" column="0" colspan="2">
+          <widget class="QCheckBox" name="breakMMR">
+           <property name="text">
+            <string>Break multimeasure rest</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Layout stretch:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QSpinBox" name="playCount">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>9999</number>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QDoubleSpinBox" name="layoutStretch">
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Number mode:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Add to number:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="offset">
+           <property name="minimum">
+            <number>-9999</number>
+           </property>
+           <property name="maximum">
+            <number>9999</number>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="playCountLabel">
+           <property name="text">
+            <string>Play count:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="2">
+          <widget class="QCheckBox" name="exclude">
+           <property name="text">
+            <string>Exclude from measure count</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
       <item row="0" column="0">
-       <widget class="QGroupBox" name="groupBox">
+       <widget class="QGroupBox" name="durationBox">
         <property name="title">
          <string>Duration</string>
         </property>
@@ -96,6 +193,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="accessibleName">
+            <string>Nominal measure duration denominator</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
@@ -120,6 +220,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Nominal measure duration numerator</string>
+           </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -136,6 +239,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Actual measure duration numerator</string>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>
@@ -149,6 +255,9 @@
          </item>
          <item row="1" column="4">
           <widget class="QComboBox" name="actualN">
+           <property name="accessibleName">
+            <string>Actual measure duration denominator</string>
+           </property>
            <property name="currentIndex">
             <number>2</number>
            </property>

@@ -120,26 +120,6 @@ void MeasureProperties::setMeasure(Measure* _m)
       m->score()->deselectAll();
       m->score()->select(m, SelectType::ADD, 0);
 
-      actualZ->setValue(m->ticks().numerator());
-      int index = actualN->findText(QString::number(m->ticks().denominator()));
-      if (index == -1)
-            index = 2;
-      actualN->setCurrentIndex(index);
-      nominalZ->setNum(m->timesig().numerator());
-      nominalN->setNum(m->timesig().denominator());
-
-      irregular->setChecked(m->irregular());
-      breakMultiMeasureRest->setChecked(m->breakMultiMeasureRest());
-      int n  = m->repeatCount();
-      count->setValue(n);
-      bool enableCount = m->repeatEnd();
-      count->setEnabled(enableCount);
-      count->setVisible(enableCount);
-      labelCount->setVisible(enableCount);
-      layoutStretch->setValue(m->userStretch());
-      measureNumberMode->setCurrentIndex(int(m->measureNumberMode()));
-      measureNumberOffset->setValue(m->noOffset());
-
       Score* score = m->score();
       int rows = score->nstaves();
       staves->setRowCount(rows);
@@ -210,33 +190,6 @@ bool MeasureProperties::slashStyle(int staffIdx)
       }
 
 //---------------------------------------------------------
-//   sig
-//---------------------------------------------------------
-
-Fraction MeasureProperties::len() const
-      {
-      return Fraction(actualZ->value(), 1 << actualN->currentIndex());
-      }
-
-//---------------------------------------------------------
-//   isIrregular
-//---------------------------------------------------------
-
-bool MeasureProperties::isIrregular() const
-      {
-      return irregular->isChecked();
-      }
-
-//---------------------------------------------------------
-//   repeatCount
-//---------------------------------------------------------
-
-int MeasureProperties::repeatCount() const
-      {
-      return count->value();
-      }
-
-//---------------------------------------------------------
 //   apply
 //---------------------------------------------------------
 
@@ -252,29 +205,6 @@ void MeasureProperties::apply()
                   score->undo(new ChangeMStaffProperties(m, staffIdx, v, s));
                   propertiesChanged = true;
                   }
-            }
-
-      m->undoChangeProperty(Pid::REPEAT_COUNT, repeatCount());
-      m->undoChangeProperty(Pid::BREAK_MMR, breakMultiMeasureRest->isChecked());
-      m->undoChangeProperty(Pid::USER_STRETCH, layoutStretch->value());
-      m->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, measureNumberMode->currentIndex());
-      m->undoChangeProperty(Pid::NO_OFFSET, measureNumberOffset->value());
-      m->undoChangeProperty(Pid::IRREGULAR, isIrregular());
-
-      if (m->ticks() != len()) {
-            ScoreRange range;
-            range.read(m->first(), m->last());
-            m->adjustToLen(len());
-#if 0
-            // handled by endCmd():
-            else if (!MScore::noGui) {
-                  QMessageBox::warning(0,
-                     QT_TRANSLATE_NOOP("MeasureProperties", "MuseScore"),
-                     QT_TRANSLATE_NOOP("MeasureProperties", "Cannot change measure length:\n"
-                     "tuplet would cross measure")
-                     );
-                  }
-#endif
             }
 
       if (propertiesChanged) {
