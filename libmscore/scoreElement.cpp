@@ -131,7 +131,8 @@ static const ElementName elementNames[] = {
       { ElementType::FBOX,                 "FBox",                 QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram Frame") },
       { ElementType::ICON,                 "Icon",                 QT_TRANSLATE_NOOP("elementName", "Icon") },
       { ElementType::OSSIA,                "Ossia",                QT_TRANSLATE_NOOP("elementName", "Ossia") },
-      { ElementType::BAGPIPE_EMBELLISHMENT,"BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName", "Bagpipe Embellishment") }
+      { ElementType::BAGPIPE_EMBELLISHMENT,"BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName", "Bagpipe Embellishment") },
+      { ElementType::STICKING,             "Sticking",             QT_TRANSLATE_NOOP("elementName", "Sticking") }
       };
 
 //---------------------------------------------------------
@@ -814,6 +815,7 @@ bool ScoreElement::isTextBase() const
          || type() == ElementType::TEMPO_TEXT
          || type() == ElementType::INSTRUMENT_NAME
          || type() == ElementType::MEASURE_NUMBER
+         || type() == ElementType::STICKING
          ;
       }
 

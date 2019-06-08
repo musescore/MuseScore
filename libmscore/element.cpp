@@ -69,6 +69,7 @@
 #include "systemtext.h"
 #include "stafftype.h"
 #include "stem.h"
+#include "sticking.h"
 #include "style.h"
 #include "symbol.h"
 #include "sym.h"
@@ -1041,6 +1042,7 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::IMAGE:             return new Image(score);
             case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(score);
             case ElementType::AMBITUS:           return new Ambitus(score);
+            case ElementType::STICKING:          return new Sticking(score);
 
             case ElementType::LYRICSLINE:
             case ElementType::TEXTLINE_BASE:

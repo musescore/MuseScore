@@ -614,6 +614,10 @@ void ScoreView::keyPressEvent(QKeyEvent* ev)
                   return;
                   }
             }
+      else if (editData.element->isSticking()) {
+            if (editKeySticking())
+                  return;
+            }
 
       CmdContext cc(_score);
 

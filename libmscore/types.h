@@ -138,6 +138,7 @@ enum class ElementType {
       ICON,
       OSSIA,
       BAGPIPE_EMBELLISHMENT,
+      STICKING,
 
       MAXTYPE
       ///\}
@@ -382,6 +383,7 @@ enum class Tid {
       HEADER,
       FOOTER,
       INSTRUMENT_CHANGE,
+      STICKING,
       USER1,
       USER2,
       USER3,
