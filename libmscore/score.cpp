@@ -1492,7 +1492,7 @@ void Score::addElement(Element* element)
 void Score::removeElement(Element* element)
       {
       Element* parent = element->parent();
-      setLayout(element->tick());
+      element->triggerLayout();
 
 //      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
 //         this, element, element->name(), parent, parent ? parent->name() : "");
