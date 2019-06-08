@@ -1140,6 +1140,14 @@
           <program value="46"/>
           <synti>Fluid</synti>
           </Channel>
+        <Channel name ="staccato">
+          <program value="45"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="flageoletti">
+          <program value="11"/>
+          <synti>Fluid</synti>
+          </Channel>
         </Instrument>
       </Part>
     <Part>
