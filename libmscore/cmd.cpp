@@ -3153,14 +3153,47 @@ void Score::cmdRealizeChordSymbols()
       if (msgBox.exec() == QMessageBox::Yes) {
             for (Harmony* h : hlist) {
                   RealizedHarmony r = h->realizedHarmony();
-                  NoteVal nval;
                   Segment* seg = toSegment(h->parent());
+                  ChordRest* cr = toChordRest(seg->element(h->track()));
                   QMapIterator<int, int> i(r.notes());
-                  i.next();
-                  nval.pitch = i.key();
-                  nval.tpc1 = i.value();
-                  score()->setNoteRest(seg, h->track(),
-                                       nval, seg->ticks(), Direction::AUTO);
+
+                  //this is a bit inefficient, but it works for now
+                  Chord* chord = new Chord(this);
+                  //set chord attributes based on current chordrest
+                  chord->setTuplet(cr->tuplet());
+                  chord->setTrack(cr->track());
+                  chord->setDurationType(cr->durationType());
+                  chord->setTicks(cr->durationTypeTicks());
+                  //create chord from notes
+                  while (i.hasNext()) {
+                        i.next();
+                        Note* note = new Note(this);
+                        note->setPitch(i.key());
+                        note->setTpc(i.value());
+                        chord->add(note);
+                        }
+                  //score()->setNoteRest(seg, h->track(),
+                  //                     nval, seg->ticks(), Direction::AUTO);
+                  //TODO - PHV: make sure we cover edge cases and move into
+                  //separate function when we do so
+
+                  //Measure* measure = seg->measure();
+                  Fraction tick = seg->tick();
+
+                  //get list of durations based on full duration
+                  Fraction fullDuration = seg->ticks();
+                  Fraction sDur = makeGap(seg, h->track(), fullDuration, cr->tuplet());
+                  std::vector<TDuration> dl = toDurationList(sDur, true);
+
+                  for (TDuration d : dl) {
+                        addChord(tick, d, chord, false, cr->tuplet());
+                        //WARNING - PHV: we are basically relying on the fact that
+                        //there will only be one element of dl
+                        }
+
+                  delete chord;
+                  //ADD CHORD
+                  //undoAddCR(chord, measure, tick);
                   }
             }
       }
