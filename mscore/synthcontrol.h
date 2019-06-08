@@ -36,6 +36,7 @@ class SynthControl : public QWidget, Ui::SynthControl {
 
       Score* _score;
       EnablePlayForWidget* enablePlay;
+      bool _dirty    { false };
 
       virtual void closeEvent(QCloseEvent*);
       virtual void showEvent(QShowEvent*);

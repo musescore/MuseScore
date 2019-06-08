@@ -19,8 +19,11 @@ namespace Ms {
 //   write
 //---------------------------------------------------------
 
-void SynthesizerState::write(XmlWriter& xml) const
+void SynthesizerState::write(XmlWriter& xml, bool force /* = false */) const
       {
+      if (isDefault() && !force)
+            return;
+
       xml.stag("Synthesizer");
       for (const SynthesizerGroup& g : *this) {
             if (!g.name().isEmpty()) {
@@ -52,6 +55,7 @@ void SynthesizerState::read(XmlReader& e)
                         e.unknown();
                   }
             push_back(group);
+            setIsDefault(false);
             }
       }
 

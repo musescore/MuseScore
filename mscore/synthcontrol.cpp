@@ -355,7 +355,10 @@ void SynthControl::saveButtonClicked()
       if (!_score)
             return;
       _score->startCmd();
-      _score->undo(new ChangeSynthesizerState(_score, synti->state()));
+      SynthesizerState ss = synti->state();
+      if (_dirty || !_score->synthesizerState().isDefault())
+            ss.setIsDefault(false);
+      _score->undo(new ChangeSynthesizerState(_score, ss));
       _score->endCmd();
 
       updateExpressivePatches();
@@ -363,6 +366,7 @@ void SynthControl::saveButtonClicked()
       saveButton->setEnabled(false);
       storeButton->setEnabled(true);
       recallButton->setEnabled(true);
+      _dirty = false;
       }
 
 //---------------------------------------------------------
@@ -391,6 +395,7 @@ void SynthControl::recallButtonClicked()
             else
                   e.unknown();
             }
+      state.setIsDefault(true);
       synti->setState(state);
       updateGui();
 
@@ -417,6 +422,7 @@ void SynthControl::storeButtonClicked()
       updateExpressivePatches();
       storeButton->setEnabled(false);
       recallButton->setEnabled(false);
+      _dirty = false;
       }
 
 //---------------------------------------------------------
@@ -479,6 +485,7 @@ void SynthControl::updateMixer()
 
 void SynthControl::setDirty()
       {
+      _dirty = true;
       loadButton->setEnabled(true);
       saveButton->setEnabled(true);
       storeButton->setEnabled(true);
