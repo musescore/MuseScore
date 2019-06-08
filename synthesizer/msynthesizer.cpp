@@ -408,7 +408,9 @@ bool MasterSynthesizer::storeState()
             }
       XmlWriter xml(0, &f);
       xml.header();
-      state().write(xml);
+      // force the write, since the msynth state is created when state() is called and so will
+      // automatically have _isDefault = true, when in fact we need to write the state here, default or not
+      state().write(xml, true);
       return true;
       }
 
