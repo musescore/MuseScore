@@ -206,9 +206,12 @@ void Inspector::update(Score* s)
                         }
                   }
             }
+      
+      qDebug("update");
+      if (selectedMeasure) qDebug("measure selected");
 
       if (oe != element() || oSameTypes != sameTypes || oSelectedMeasure != selectedMeasure) {
-            delete ie;
+            ie->deleteLater();
             ie  = 0;
             oe  = element();
             oSameTypes = sameTypes;

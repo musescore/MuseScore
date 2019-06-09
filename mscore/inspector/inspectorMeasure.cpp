@@ -77,6 +77,13 @@ InspectorMeasure::InspectorMeasure(QWidget* parent)
       connect(me.breakMMR,    SIGNAL(toggled(bool)),              SLOT(breakMMRToggled(bool)));
       connect(me.layoutStretch, SIGNAL(valueChanged(qreal)),      SLOT(layoutStretchChanged(qreal)));
       connect(me.playCount,   SIGNAL(valueChanged(int)),          SLOT(playCountChanged(int)));
+
+      qDebug("created inspector measure at %p", this);
+      }
+
+InspectorMeasure::~InspectorMeasure()
+      {
+      qDebug("deleting inspector measure at %p", this);
       }
 
 //---------------------------------------------------------
@@ -104,46 +111,30 @@ Fraction InspectorMeasure::getInputTimesig() const
 
 void InspectorMeasure::timesigValueChanged(int)
       {
-      qDebug("timesig changed");
-      if (inspector) qDebug("inspector exists");
       Measure* m = measure();
       Score* s = m->score();
       Fraction timesig = getInputTimesig();
 
+      // This is needed to be able to restore selection after measure resize
       int staffStart = s->selection().staffStart();
       int staffEnd   = s->selection().staffEnd();
 
       s->deselectAll();
-      s->setSelectionChanged(true);
 
+      // Adjust measure length
+      inspector->setInspectorEdit(true);
       m->score()->startCmd();
-
-      qDebug() << "adjust to" << timesig;
       m->adjustToLen(timesig);
-
       m->score()->endCmd();
+      inspector->setInspectorEdit(false);
 
       mscore->timeline()->updateGrid();
 
-#if 0
-      if (inspector) qDebug("inspector exists");
-
-      qDebug("update");
-      s->update();
-      mscore->timeline()->updateGrid();
-
-      // Update selection
-      qDebug("update selection: %d to %d", m->first()->tick(), m->last()->tick());
       s->selection().setRange(m->first(), m->last(), staffStart, staffEnd);
       s->selection().updateSelectedElements();
       s->setSelectionChanged(true);
-      
-      qDebug("done");
-      if (inspector) {
-            inspector->update();
-            qDebug("update inspector");
-            }
-#endif
+
+      inspector->update();
       }
 
 //---------------------------------------------------------

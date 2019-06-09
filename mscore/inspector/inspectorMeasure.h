@@ -32,11 +32,11 @@ class InspectorMeasure : public InspectorGroupElement {
       Ui::InspectorMeasure me;
 
       Fraction getInputTimesig() const;
-      Measure* measure() const;
       void setProperty(Pid p, QVariant v);
+      Measure* measure() const;
 
    private slots:
-      void timesigValueChanged(int val);
+      void timesigValueChanged(int);
       void excludeToggled(bool val);
       void numberModeChanged(int val);
       void offsetChanged(int val);
@@ -46,6 +46,7 @@ class InspectorMeasure : public InspectorGroupElement {
 
    public:
       InspectorMeasure(QWidget* parent);
+      ~InspectorMeasure();
       };
 
 } // namespace Ms
