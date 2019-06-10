@@ -89,8 +89,8 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>guitarFadeIn</subtype>
-              <linkedMain/>
               <anchor>0</anchor>
+              <linkedMain/>
               </Articulation>
             <Note>
               <linkedMain/>
@@ -241,9 +241,9 @@
               <durationType>quarter</durationType>
               <Articulation>
                 <subtype>guitarFadeIn</subtype>
+                <anchor>0</anchor>
                 <linked>
                   </linked>
-                <anchor>0</anchor>
                 </Articulation>
               <Note>
                 <linked>
@@ -311,10 +311,10 @@
               <durationType>quarter</durationType>
               <Articulation>
                 <subtype>guitarFadeIn</subtype>
+                <anchor>0</anchor>
                 <linked>
                   <indexDiff>1</indexDiff>
                   </linked>
-                <anchor>0</anchor>
                 </Articulation>
               <Note>
                 <linked>
