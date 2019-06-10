@@ -337,6 +337,7 @@ enum class Pid {
       CHORD_LINE_TYPE,
       CHORD_LINE_STRAIGHT,
       TREMOLO_TYPE,
+      TREMOLO_PLACEMENT,
 
       END
       };

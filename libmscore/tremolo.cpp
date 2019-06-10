@@ -24,6 +24,14 @@
 namespace Ms {
 
 //---------------------------------------------------------
+//   tremoloStyle
+//---------------------------------------------------------
+
+static const ElementStyle tremoloStyle {
+      { Sid::tremoloPlacement, Pid::TREMOLO_PLACEMENT },
+      };
+
+//---------------------------------------------------------
 //   Tremolo
 //---------------------------------------------------------
 
@@ -42,6 +50,7 @@ static const char* tremoloName[] = {
 Tremolo::Tremolo(Score* score)
    : Element(score, ElementFlag::MOVABLE)
       {
+      initElementStyle(&tremoloStyle);
       setTremoloType(TremoloType::R8);
       _chord1  = 0;
       _chord2  = 0;
@@ -127,8 +136,7 @@ void Tremolo::setTremoloType(TremoloType t)
 
 bool Tremolo::placeMidStem() const
       {
-      const bool placeAllTremoloMidStem = true; // TODO: style setting
-      return tremoloType() == TremoloType::BUZZ_ROLL || placeAllTremoloMidStem;
+      return _tremoloPlacement == TremoloPlacement::STEM_CENTER;
       }
 
 //---------------------------------------------------------
@@ -637,6 +645,8 @@ QVariant Tremolo::getProperty(Pid propertyId) const
       switch(propertyId) {
             case Pid::TREMOLO_TYPE:
                   return int(_tremoloType);
+            case Pid::TREMOLO_PLACEMENT:
+                  return int (_tremoloPlacement);
             default:
                   break;
             }
@@ -653,10 +663,14 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
             case Pid::TREMOLO_TYPE:
                   setTremoloType(TremoloType(val.toInt()));
                   break;
-            default:
+            case Pid::TREMOLO_PLACEMENT:
+                  _tremoloPlacement = TremoloPlacement(val.toInt());
                   break;
+            default:
+                  return Element::setProperty(propertyId, val);
             }
-      return Element::setProperty(propertyId, val);
+      triggerLayout();
+      return true;
       }
 
 //---------------------------------------------------------
