@@ -1982,43 +1982,61 @@ static QString symIdToArtic(const SymId sid)
       {
       switch (sid) {
             case SymId::articAccentAbove:
+                  return "accent placement=\"above\"";
+                  break;
+
             case SymId::articAccentBelow:
-                  return "accent";
+                  return "accent placement=\"below\"";
                   break;
 
             case SymId::articStaccatoAbove:
-            case SymId::articStaccatoBelow:
             case SymId::articAccentStaccatoAbove:
-            case SymId::articAccentStaccatoBelow:
             case SymId::articMarcatoStaccatoAbove:
+                  return "staccato placement=\"above\"";
+                  break;
+
+            case SymId::articStaccatoBelow:
+            case SymId::articAccentStaccatoBelow:
             case SymId::articMarcatoStaccatoBelow:
-                  return "staccato";
+                  return "staccato placement=\"below\"";
                   break;
 
             case SymId::articStaccatissimoAbove:
-            case SymId::articStaccatissimoBelow:
             case SymId::articStaccatissimoStrokeAbove:
-            case SymId::articStaccatissimoStrokeBelow:
             case SymId::articStaccatissimoWedgeAbove:
+                  return "staccatissimo placement=\"above\"";
+                  break;
+
+            case SymId::articStaccatissimoBelow:
+            case SymId::articStaccatissimoStrokeBelow:
             case SymId::articStaccatissimoWedgeBelow:
-                  return "staccatissimo";
+                  return "staccatissimo placement=\"below\"";
                   break;
 
             case SymId::articTenutoAbove:
-            case SymId::articTenutoBelow:
             case SymId::articMarcatoTenutoAbove:
+                  return "tenuto placement=\"above\"";
+                  break;
+
+            case SymId::articTenutoBelow:
             case SymId::articMarcatoTenutoBelow:
-                  return "tenuto";
+                  return "tenuto placement=\"below\"";
                   break;
 
             case SymId::articMarcatoAbove:
+                  return "strong-accent placement=\"above\"";
+                  break;
+
             case SymId::articMarcatoBelow:
-                  return "strong-accent";
+                  return "strong-accent placement=\"below\"";
                   break;
 
             case SymId::articTenutoStaccatoAbove:
+                  return "detached-legato placement=\"above\"";
+                  break;
+
             case SymId::articTenutoStaccatoBelow:
-                  return "detached-legato";
+                  return "detached-legato placement=\"below\"";
                   break;
 
             default:
