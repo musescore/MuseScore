@@ -2006,6 +2006,8 @@ static QString symIdToArtic(const SymId sid)
 
             case SymId::articTenutoAbove:
             case SymId::articTenutoBelow:
+            case SymId::articMarcatoTenutoAbove:
+            case SymId::articMarcatoTenutoBelow:
                   return "tenuto";
                   break;
 
@@ -5781,4 +5783,3 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
       }
 
 }
-
