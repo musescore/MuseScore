@@ -44,6 +44,8 @@ enum class Rhythm : char {
 class RealizedHarmony {
       Harmony* _harmony;
 
+      int _rootTpc; //this is kind of redundant information but we can do with this for now
+
       QMap<int, int> _notes; //map from pitch to tpc
 
       Voicing _voicing;
@@ -57,16 +59,18 @@ class RealizedHarmony {
             _rhythm(Rhythm::AUTO), _dirty(1) {}
       RealizedHarmony(Harmony*);
 
-      void setDescription(int);
       void setVoicing(Voicing);
       void setRhythm(Rhythm);
+      void setRoot(int);
 
       Voicing voicing() const { return _voicing; }
       Rhythm rhythm() const { return _rhythm; }
+      int root() const { return _rootTpc; }
 
       bool valid() const { return !_dirty && _harmony; }
 
-      const QList<int> pitches() const { return _notes.values(); }
+      const QList<int> pitches() const { return _notes.keys(); }
+      const QList<int> tpcs() const { return _notes.values(); }
 
       //TODO - PHV: consider what to do here, we might want to keep bass and root
       //also consider if we should update or do any checks for if we call notes
@@ -75,8 +79,10 @@ class RealizedHarmony {
 
       void update(int rootTpc, int bassTpc); //updates the notes map
 
+   private:
+      //PHV: temp?
+      QMap<int, int> getIntervals() const;
       };
-
 }
 
 
