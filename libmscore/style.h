@@ -179,6 +179,9 @@ enum class Sid {
       propertyDistance,
       articulationMag,
       articulationPosAbove,
+      articulationAnchorDefault,
+      articulationAnchorLuteFingering,
+      articulationAnchorOther,
       lastSystemFillLimit,
 
       hairpinPlacement,
