@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>InspectorTremoloBar</class>
- <widget class="QWidget" name="InspectorTremoloBar">
+ <class>InspectorTremolo</class>
+ <widget class="QWidget" name="InspectorTremolo">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>188</width>
-    <height>155</height>
+    <width>229</width>
+    <height>221</height>
    </rect>
   </property>
   <property name="accessibleName">
-   <string>Tremolo Bar Inspector</string>
+   <string>Tremolo Inspector</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
-   </property>
-   <property name="sizeConstraint">
-    <enum>QLayout::SetNoConstraint</enum>
    </property>
    <property name="leftMargin">
     <number>0</number>
@@ -57,7 +54,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Tremolo Bar</string>
+      <string>Tremolo</string>
      </property>
     </widget>
    </item>
@@ -80,112 +77,37 @@
        <number>3</number>
       </property>
       <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="lineWidth">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+       <widget class="QComboBox" name="tremoloPlacement">
         <property name="accessibleName">
-         <string>Line thickness</string>
+         <string>Tremolo range</string>
         </property>
-        <property name="suffix">
-         <string>sp</string>
-        </property>
-        <property name="minimum">
-         <double>0.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>5.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
-        </property>
-        <property name="value">
-         <double>1.000000000000000</double>
-        </property>
+        <item>
+         <property name="text">
+          <string>Default</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Stem center</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Line thickness:</string>
+         <string>Placement:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>lineWidth</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="play">
-        <property name="focusPolicy">
-         <enum>Qt::TabFocus</enum>
-        </property>
-        <property name="text">
-         <string>Play</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Scale:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>mag</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="mag">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Scale</string>
-        </property>
-        <property name="minimum">
-         <double>0.200000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>50.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.200000000000000</double>
-        </property>
-        <property name="value">
-         <double>1.000000000000000</double>
+         <cstring>tremoloPlacement</cstring>
         </property>
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="Ms::ResetButton" name="resetLineWidth" native="true">
+       <widget class="Ms::ResetButton" name="resetTremoloPlacement" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -193,40 +115,7 @@
          </sizepolicy>
         </property>
         <property name="accessibleName">
-         <string>Reset 'Line thickness' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="Ms::ResetButton" name="resetMag" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Scale' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="Ms::ResetButton" name="resetPlay" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="accessibleName">
-         <string>Reset 'Play' value</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="3">
-       <widget class="QPushButton" name="properties">
-        <property name="text">
-         <string>Properties</string>
+         <string>Reset 'Tremolo range' value</string>
         </property>
        </widget>
       </item>
@@ -245,10 +134,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
-  <tabstop>lineWidth</tabstop>
-  <tabstop>mag</tabstop>
-  <tabstop>play</tabstop>
-  <tabstop>properties</tabstop>
+  <tabstop>tremoloPlacement</tabstop>
  </tabstops>
  <resources/>
  <connections/>

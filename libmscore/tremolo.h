@@ -27,6 +27,11 @@ enum class TremoloType : signed char {
       C8, C16, C32, C64     // two note tremolo (change)
       };
 
+enum class TremoloPlacement : signed char {
+      DEFAULT = 0,
+      STEM_CENTER
+      };
+
 //---------------------------------------------------------
 //   @@ Tremolo
 //---------------------------------------------------------
@@ -39,6 +44,7 @@ class Tremolo final : public Element {
       QPainterPath path;
 
       int _lines;       // derived from _subtype
+      TremoloPlacement _tremoloPlacement = TremoloPlacement::DEFAULT;
 
       QPainterPath basePath() const;
       void computeShape();
