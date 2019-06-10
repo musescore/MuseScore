@@ -2321,7 +2321,7 @@ bool Element::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bo
 //   autoplaceSegmentElement
 //---------------------------------------------------------
 
-void Element::autoplaceSegmentElement(bool add)
+void Element::autoplaceSegmentElement(bool above, bool add)
       {
       // rebase vertical offset on drag
       qreal rebase = 0.0;
@@ -2348,9 +2348,9 @@ void Element::autoplaceSegmentElement(bool add)
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + s->pos() + pos());
 
-            SkylineLine sk(!placeAbove());
+            SkylineLine sk(!above);
             qreal d;
-            if (placeAbove()) {
+            if (above) {
                   sk.add(r.x(), r.bottom(), r.width());
                   d = sk.minDistance(ss->skyline().north());
                   }
@@ -2361,12 +2361,12 @@ void Element::autoplaceSegmentElement(bool add)
 
             if (d > -minDistance) {
                   qreal yd = d + minDistance;
-                  if (placeAbove())
+                  if (above)
                         yd *= -1.0;
                   if (offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
+                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
                         if (rebaseMinDistance(minDistance, yd, sp, rebase, inStaff))
                               r.translate(0.0, rebase);
                         }
@@ -2383,7 +2383,7 @@ void Element::autoplaceSegmentElement(bool add)
 //   autoplaceMeasureElement
 //---------------------------------------------------------
 
-void Element::autoplaceMeasureElement(bool add)
+void Element::autoplaceMeasureElement(bool above, bool add)
       {
       // rebase vertical offset on drag
       qreal rebase = 0.0;
@@ -2400,9 +2400,9 @@ void Element::autoplaceMeasureElement(bool add)
             SysStaff* ss = m->system()->staff(si);
             QRectF r = bbox().translated(m->pos() + pos());
 
-            SkylineLine sk(!placeAbove());
+            SkylineLine sk(!above);
             qreal d;
-            if (placeAbove()) {
+            if (above) {
                   sk.add(r.x(), r.bottom(), r.width());
                   d = sk.minDistance(ss->skyline().north());
                   }
@@ -2412,12 +2412,12 @@ void Element::autoplaceMeasureElement(bool add)
                   }
             if (d > -minDistance) {
                   qreal yd = d + minDistance;
-                  if (placeAbove())
+                  if (above)
                         yd *= -1.0;
                   if (offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
+                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
                         if (rebaseMinDistance(minDistance, yd, sp, rebase, inStaff))
                               r.translate(0.0, rebase);
                         }
