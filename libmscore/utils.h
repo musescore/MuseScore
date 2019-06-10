@@ -36,12 +36,12 @@ enum class SymId;
 class Measure;
 class Segment;
 class System;
-class Element;
 class Note;
 class Tuplet;
 class BarLine;
 
 enum class ClefType : signed char;
+enum class ElementScope;
 
 extern QRectF handleRect(const QPointF& pos);
 
@@ -69,8 +69,10 @@ extern bool compareVersion(QString v1, QString v2);
 
 extern Note* nextChordNote(Note* note);
 extern Note* prevChordNote(Note* note);
-extern Segment* nextSeg1(Segment* s, int& track);
-extern Segment* prevSeg1(Segment* seg, int& track);
+extern int computeStartTrack(int track, ElementScope scope, const Score* const score);
+extern int computeEndTrack(int track, ElementScope scope, const Score* const score);
+extern Segment* nextSeg1(Segment* seg, int& track, int startTrack, int endTrack);
+extern Segment* prevSeg1(Segment* seg, int& track, int startTrack, int endTrack);
 
 extern Note* searchTieNote(Note* note);
 extern Note* searchTieNote114(Note* note);

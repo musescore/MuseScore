@@ -159,7 +159,10 @@ class EditData {
 ///     score layout elements.
 //-------------------------------------------------------------------
 
+enum class ElementScope { VOICE, STAFF, PART, SYSTEM };
+
 class Element : public ScoreElement {
+      ElementScope _scope { ElementScope::STAFF };
       Element* _parent { 0 };
       mutable QRectF _bbox;       ///< Bounding box relative to _pos + _offset
       qreal _mag;                 ///< standard magnification (derived value)
@@ -187,6 +190,8 @@ class Element : public ScoreElement {
       Q_INVOKABLE virtual Ms::Element* clone() const = 0;
       virtual Element* linkedClone();
 
+      ElementScope scope() const              { return _scope; }
+      void setScope(ElementScope s)           { _scope = s; }
       Element* parent() const                 { return _parent;     }
       void setParent(Element* e)              { _parent = e;        }
       Measure* findMeasure();

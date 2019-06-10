@@ -1094,7 +1094,7 @@ class Score : public QObject, public ScoreElement {
       Hairpin* addHairpin(HairpinType, ChordRest* cr1, ChordRest* cr2 = nullptr, bool toCr2End = true);
 
       ChordRest* findCR(Fraction tick, int track) const;
-      ChordRest* findCRinStaff(const Fraction& tick, int staffIdx) const;
+      ChordRest* findCRinScope(const Fraction& tick, int track, ElementScope scope) const;
       void insertTime(const Fraction& tickPos, const Fraction&tickLen);
 
       ScoreFont* scoreFont() const            { return _scoreFont;     }

@@ -25,6 +25,9 @@
 
 namespace Ms {
 
+extern int computeStartTrack(int track, ElementScope scope, const Score* const score);
+extern int computeEndTrack(int track, ElementScope scope, const Score* const score);
+
 //-----------------------------------------------------------------------------
 //   @@ SpannerWriter
 ///   Helper class for writing Spanners
@@ -48,6 +51,7 @@ SpannerSegment::SpannerSegment(Spanner* sp, Score* s, ElementFlags f)
       {
       _spanner = sp;
       setSpannerSegmentType(SpannerSegmentType::SINGLE);
+      setScope(sp->scope());
       }
 
 SpannerSegment::SpannerSegment(Score* s, ElementFlags f)
@@ -561,8 +565,8 @@ void Spanner::computeStartElement()
       switch (_anchor) {
             case Anchor::SEGMENT: {
                   Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
-                  int strack = (track() / VOICES) * VOICES;
-                  int etrack = strack + VOICES;
+                  int strack { computeStartTrack(track(), scope(), score()) };
+                  int etrack { computeEndTrack(track2(), scope(), score()) };
                   _startElement = 0;
                   if (seg) {
                         for (int t = strack; t < etrack; ++t) {
@@ -618,8 +622,8 @@ void Spanner::computeEndElement()
                               }
                         }
                   else {
-                        // find last cr on this staff that ends before tick2
-                        _endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
+                        // find last cr in this scope that ends before tick2
+                        _endElement = score()->findCRinScope(tick2(), track2(), scope());
                         }
                   if (!_endElement) {
                         qDebug("%s no end element for tick %d", name(), tick2().ticks());

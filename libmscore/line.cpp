@@ -185,17 +185,21 @@ bool LineSegment::edit(EditData& ed)
                         qDebug("LineSegment::edit: no start/end segment");
                         return true;
                         }
+
+                  int startTrack { computeStartTrack(track, scope(), score()) };
+                  int endTrack { computeEndTrack(track2, scope(), score()) };
+
                   if (ed.key == Qt::Key_Left) {
                         if (ed.curGrip == Grip::START)
-                              s1 = prevSeg1(s1, track);
+                              s1 = prevSeg1(s1, track, startTrack, endTrack);
                         else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE)
-                              s2 = prevSeg1(s2, track2);
+                              s2 = prevSeg1(s2, track2, startTrack, endTrack);
                         }
                   else if (ed.key == Qt::Key_Right) {
                         if (ed.curGrip == Grip::START)
-                              s1 = nextSeg1(s1, track);
+                              s1 = nextSeg1(s1, track, startTrack, endTrack);
                         else if (ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE) {
-                              Segment* ns2 = nextSeg1(s2, track2);
+                              Segment* ns2{ nextSeg1(s2, track2, startTrack, endTrack) };
                               if (ns2)
                                     s2 = ns2;
                               else
@@ -489,12 +493,12 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     x = cr->x() + cr->width() + sp;
                                     }
                               else if (cr) {
-                                    // lay out just past right edge of all notes for this segment on this staff
+                                    // lay out just past right edge of all notes for this segment in this scope
 
                                     Segment* s = cr->segment();
 
-                                    int startTrack = staffIdx() * VOICES;
-                                    int endTrack   = startTrack + VOICES;
+                                    int startTrack = computeStartTrack(track(), scope(), score());
+                                    int endTrack   = computeEndTrack(track2(), scope(), score());
                                     qreal width    = 0.0;
 
                                     // don’t consider full measure rests, which are centered
@@ -518,11 +522,10 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                     // but don't overlap next chord/rest
 
                                     bool crFound = false;
-                                    int n = staffIdx() * VOICES;
                                     Segment* ns = s->next();
                                     while (ns) {
-                                          for (int i = 0; i < VOICES; ++i) {
-                                                if (ns->element(n + i)) {
+                                          for (int i = startTrack; i < endTrack; ++i) {
+                                                if (ns->element(i)) {
                                                       crFound = true;
                                                       break;
                                                       }

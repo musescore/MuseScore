@@ -22,6 +22,9 @@
 
 namespace Ms {
 
+extern int computeStartTrack(int track, ElementScope scope, const Score* const score);
+extern int computeEndTrack(int track, ElementScope scope, const Score* const score);
+
 static const ElementStyle pedalStyle {
       { Sid::pedalFontFace,                      Pid::BEGIN_FONT_FACE         },
       { Sid::pedalFontFace,                      Pid::CONTINUE_FONT_FACE      },
@@ -94,6 +97,8 @@ Pedal::Pedal(Score* s)
 
       resetProperty(Pid::BEGIN_TEXT_PLACE);
       resetProperty(Pid::LINE_VISIBLE);
+
+      setScope(ElementScope::PART);
       }
 
 //---------------------------------------------------------
@@ -230,9 +235,10 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
                               if (seg->segmentType() == SegmentType::ChordRest) {
                                     // look for a chord/rest in any voice on this staff
                                     bool crFound = false;
-                                    int track = staffIdx() * VOICES;
-                                    for (int i = 0; i < VOICES; ++i) {
-                                          if (seg->element(track + i)) {
+                                    int strack { computeStartTrack(track(), scope(), score()) };
+                                    int etrack { computeEndTrack(track2(), scope(), score()) };
+                                    for (int i = strack; i < etrack; ++i) {
+                                          if (seg->element(i)) {
                                                 crFound = true;
                                                 break;
                                                 }

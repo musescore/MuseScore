@@ -304,14 +304,52 @@ Fraction Score::nextSeg(const Fraction& tick, int track)
       }
 
 //---------------------------------------------------------
+//   computeStartTrack()
+//---------------------------------------------------------
+
+int computeStartTrack(int track, ElementScope scope, const Score* const score)
+      {
+      switch (scope) {
+            case ElementScope::VOICE: return track;
+            case ElementScope::STAFF: return (track / VOICES) * VOICES;
+            case ElementScope::SYSTEM: return 0;
+            case ElementScope::PART:
+                  for (auto part : score->parts()) {
+                        if (part->endTrack() > track)
+                              return part->startTrack();
+                        }
+            default: return -1;
+            }
+      }
+
+//---------------------------------------------------------
+//   computeEndTrack()
+//---------------------------------------------------------
+
+int computeEndTrack(int track, ElementScope scope, const Score* const score)
+      {
+      switch (scope) {
+            case ElementScope::VOICE: return track + 1;
+            case ElementScope::STAFF: return (track / VOICES + 1) * VOICES;
+            case ElementScope::SYSTEM: return score->ntracks();
+            case ElementScope::PART:
+                  for (auto part : score->parts()) {
+                        if (part->endTrack() > track)
+                              return part->endTrack();
+                  }
+            default: return -1;
+            }
+      }
+
+//---------------------------------------------------------
 //   nextSeg1
 //---------------------------------------------------------
 
-Segment* nextSeg1(Segment* seg, int& track)
+Segment* nextSeg1(Segment* seg, int& track, int startTrack, int endTrack)
       {
-      int staffIdx   = track / VOICES;
-      int startTrack = staffIdx * VOICES;
-      int endTrack   = startTrack + VOICES;
+      if (startTrack == -1 || endTrack == -1)
+            return nullptr;
+
       while ((seg = seg->next1(SegmentType::ChordRest))) {
             for (int t = startTrack; t < endTrack; ++t) {
                   if (seg->element(t)) {
@@ -327,11 +365,11 @@ Segment* nextSeg1(Segment* seg, int& track)
 //   prevSeg1
 //---------------------------------------------------------
 
-Segment* prevSeg1(Segment* seg, int& track)
+Segment* prevSeg1(Segment* seg, int& track, int startTrack, int endTrack)
       {
-      int staffIdx   = track / VOICES;
-      int startTrack = staffIdx * VOICES;
-      int endTrack   = startTrack + VOICES;
+      if (startTrack == -1 || endTrack == -1)
+            return nullptr;
+
       while ((seg = seg->prev1(SegmentType::ChordRest))) {
             for (int t = startTrack; t < endTrack; ++t) {
                   if (seg->element(t)) {

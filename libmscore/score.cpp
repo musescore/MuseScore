@@ -3819,7 +3819,7 @@ ChordRest* Score::findCR(Fraction tick, int track) const
 //    find last chord/rest on staff that ends before tick
 //---------------------------------------------------------
 
-ChordRest* Score::findCRinStaff(const Fraction& tick, int staffIdx) const
+ChordRest* Score::findCRinScope(const Fraction& tick, int track, ElementScope scope) const
       {
       Fraction ptick = tick - Fraction::fromTicks(1);
       Measure* m = tick2measureMM(ptick);
@@ -3832,8 +3832,8 @@ ChordRest* Score::findCRinStaff(const Fraction& tick, int staffIdx) const
             ptick = m->tick();
 
       Segment* s      = m->first(SegmentType::ChordRest);
-      int strack      = staffIdx * VOICES;
-      int etrack      = strack + VOICES;
+      int strack      = computeStartTrack(track, scope, this);
+      int etrack      = computeEndTrack(track, scope, this);
       int actualTrack = strack;
 
       Fraction lastTick = Fraction(-1,1);
