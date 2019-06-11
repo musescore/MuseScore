@@ -201,6 +201,14 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_UI_PIANOROLL_LIGHT_BG_KEY_BLACK_COLOR          "ui/pianoroll/light/background/keys/black/color"
 #define PREF_UI_PIANOROLL_LIGHT_BG_GRIDLINE_COLOR           "ui/pianoroll/light/background/gridLine/color"
 #define PREF_UI_PIANOROLL_LIGHT_BG_TEXT_COLOR               "ui/pianoroll/light/background/text/color"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_ON     "ui/button/highlight/color/disabled/dark/on"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_DARK_OFF    "ui/button/highlight/color/disabled/dark/off"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_ON    "ui/button/highlight/color/disabled/light/on"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_DISABLED_LIGHT_OFF   "ui/button/highlight/color/disabled/light/off"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON      "ui/button/highlight/color/enabled/dark/on"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_OFF     "ui/button/highlight/color/enabled/dark/off"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON     "ui/button/highlight/color/enabled/light/on"
+
 
 
 class PreferenceVisitor;
