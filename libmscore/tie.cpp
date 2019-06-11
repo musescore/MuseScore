@@ -615,6 +615,13 @@ void Tie::calculateDirection()
 
 TieSegment* Tie::layoutFor(System* system)
       {
+      // do not layout ties in tablature if not showing back-tied fret marks
+      StaffType* st = staff()->staffType(startNote() ? startNote()->tick() : Fraction(0, 1));
+      if (st && st->isTabStaff() && !st->showBackTied()) {
+            if (!segmentsEmpty())
+                  eraseSpannerSegments();
+            return nullptr;
+            }
       //
       //    show short bow
       //
@@ -673,6 +680,14 @@ TieSegment* Tie::layoutFor(System* system)
 
 TieSegment* Tie::layoutBack(System* system)
       {
+      // do not layout ties in tablature if not showing back-tied fret marks
+      StaffType* st = staff()->staffType(startNote() ? startNote()->tick() : Fraction(0, 1));
+      if (st->isTabStaff() && !st->showBackTied()) {
+            if (!segmentsEmpty())
+                  eraseSpannerSegments();
+            return nullptr;
+            }
+
       SlurPos sPos;
       slurPos(&sPos);
 
