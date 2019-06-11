@@ -347,6 +347,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       { Sid::rehearsalMarkMinDistance, false, rehearsalMarkMinDistance,   resetRehearsalMarkMinDistance },
 
       { Sid::autoplaceVerticalAlignRange, false, autoplaceVerticalAlignRange, resetAutoplaceVerticalAlignRange },
+      { Sid::minVerticalDistance,         false, minVerticalDistance,         resetMinVerticalDistance },
       { Sid::textLinePlacement,           false, textLinePlacement,           resetTextLinePlacement },
       { Sid::textLinePosAbove,            false, textLinePosAbove,            resetTextLinePosAbove },
       { Sid::textLinePosBelow,            false, textLinePosBelow,            resetTextLinePosBelow },
