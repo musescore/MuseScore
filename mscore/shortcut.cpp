@@ -3667,7 +3667,7 @@ Shortcut Shortcut::_sc[] = {
          MsWidget::MAIN_WINDOW,
          STATE_ALL,
          "leave-feedback",
-         QT_TRANSLATE_NOOP("action", "Leave Feedback"),
+         QT_TRANSLATE_NOOP("action", "Feedback"),
          QT_TRANSLATE_NOOP("action", "Leave feedback"),
          0,
          Icons::mail_ICON,

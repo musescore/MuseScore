@@ -144,7 +144,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_SCORE_STYLE_PARTSTYLEFILE,                       new StringPreference("", false)},
             {PREF_UI_CANVAS_BG_USECOLOR,                           new BoolPreference(true, false)},
             {PREF_UI_CANVAS_FG_USECOLOR,                           new BoolPreference(true, false)},
-            {PREF_UI_CANVAS_BG_COLOR,                              new ColorPreference(QColor("#dddddd"), false)},
+            {PREF_UI_CANVAS_BG_COLOR,                              new ColorPreference(QColor("#142433"), false)},
             {PREF_UI_CANVAS_FG_COLOR,                              new ColorPreference(QColor("#f9f9f9"), false)},
             {PREF_UI_CANVAS_BG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/background1.png")).absoluteFilePath(), false)},
             {PREF_UI_CANVAS_FG_WALLPAPER,                          new StringPreference(QFileInfo(QString("%1%2").arg(mscoreGlobalShare).arg("wallpaper/paper5.png")).absoluteFilePath(), false)},
@@ -167,12 +167,12 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_PIANO_HIGHLIGHTCOLOR,                         new ColorPreference(QColor("#1259d0"))},
             {PREF_UI_SCORE_NOTE_DROPCOLOR,                         new ColorPreference(QColor("#1778db"))},
             {PREF_UI_SCORE_DEFAULTCOLOR,                           new ColorPreference(QColor("#000000"))},
-            {PREF_UI_SCORE_FRAMEMARGINCOLOR,                       new ColorPreference(QColor("#5999db"))},
-            {PREF_UI_SCORE_LAYOUTBREAKCOLOR,                       new ColorPreference(QColor("#5999db"))},
-            {PREF_UI_SCORE_VOICE1_COLOR,                           new ColorPreference(QColor("#1259d0"))},    // blue
-            {PREF_UI_SCORE_VOICE2_COLOR,                           new ColorPreference(QColor("#009234"))},    // green
-            {PREF_UI_SCORE_VOICE3_COLOR,                           new ColorPreference(QColor("#c04400"))},    // orange
-            {PREF_UI_SCORE_VOICE4_COLOR,                           new ColorPreference(QColor("#70167a"))},    // purple
+            {PREF_UI_SCORE_FRAMEMARGINCOLOR,                       new ColorPreference(QColor("#A0A0A4"))},
+            {PREF_UI_SCORE_LAYOUTBREAKCOLOR,                       new ColorPreference(QColor("#A0A0A4"))},
+            {PREF_UI_SCORE_VOICE1_COLOR,                           new ColorPreference(QColor("#2E86AB"))},
+            {PREF_UI_SCORE_VOICE2_COLOR,                           new ColorPreference(QColor("#306B34"))},
+            {PREF_UI_SCORE_VOICE3_COLOR,                           new ColorPreference(QColor("#C73E1D"))},
+            {PREF_UI_SCORE_VOICE4_COLOR,                           new ColorPreference(QColor("#8D1E4B"))},
             {PREF_UI_THEME_ICONWIDTH,                              new IntPreference(28, false)},
             {PREF_UI_THEME_ICONHEIGHT,                             new IntPreference(24, false)},
             {PREF_UI_THEME_FONTFAMILY,                             new StringPreference(QApplication::font().family(), false) },
