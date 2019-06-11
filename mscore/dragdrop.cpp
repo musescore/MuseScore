@@ -568,7 +568,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                               }
 
                         Element* dropElement = el->drop(editData);
-                        if (dropElement->isInstrumentChange()) {
+                        if (dropElement && dropElement->isInstrumentChange()) {
                               mscore->currentScoreView()->selectInstrument(toInstrumentChange(dropElement));
                               }
                         _score->addRefresh(el->canvasBoundingRect());
