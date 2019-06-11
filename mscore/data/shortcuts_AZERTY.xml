@@ -633,9 +633,9 @@
     <key>clef-bass</key>
     <seq>Ctrl+Y,Ctrl+2</seq>
     </SC>
-   <SC>
+  <SC>
     <key>system-break</key>
-   <seq>Return</seq>
+    <seq>Return</seq>
     </SC>
   <SC>
     <key>page-break</key>
@@ -1030,6 +1030,4 @@
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
     </SC>
-
   </Shortcuts>
-

@@ -1014,8 +1014,8 @@
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
     </SC>
-    <SC>
-      <key>toggle-autoplace</key>
-      <seq>=</seq>
-      </SC>
+  <SC>
+    <key>toggle-autoplace</key>
+    <seq>=</seq>
+    </SC>
   </Shortcuts>
