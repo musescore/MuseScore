@@ -154,7 +154,7 @@
             <string>Generate new part for each instrument</string>
            </property>
            <property name="text">
-            <string>New All</string>
+            <string>Generate</string>
            </property>
           </widget>
          </item>

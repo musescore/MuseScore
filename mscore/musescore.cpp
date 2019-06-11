@@ -1971,7 +1971,7 @@ void MuseScore::retranslate()
             checkForUpdateAction->setText(tr("Check for &Update"));
       askForHelpAction->setText(tr("Ask for Help"));
       reportBugAction->setText(tr("Report a Bug"));
-      leaveFeedbackAction->setText(tr("Leave feedback"));
+      leaveFeedbackAction->setText(tr("Feedback"));
       revertToFactoryAction->setText(tr("Revert to Factory Settings"));
 
       fileTools->setWindowTitle(tr("File Operations"));

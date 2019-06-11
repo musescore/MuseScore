@@ -293,10 +293,10 @@ void MScore::init()
             _globalShare = QString( INSTPREFIX "/share/" INSTALL_NAME);
 #endif
 
-      selectColor[0].setNamedColor("#1259d0");   //blue
-      selectColor[1].setNamedColor("#009234");   //green
-      selectColor[2].setNamedColor("#c04400");   //orange
-      selectColor[3].setNamedColor("#70167a");   //purple
+      selectColor[1].setNamedColor("#2E86AB");   
+      selectColor[1].setNamedColor("#306B34");   
+      selectColor[2].setNamedColor("#C73E1D");   
+      selectColor[3].setNamedColor("#8D1E4B");   
 
       defaultColor        = Qt::black;
       dropColor           = QColor("#1778db");
@@ -307,8 +307,8 @@ void MScore::init()
 
       lastError           = "";
 
-      layoutBreakColor    = QColor("#5999db");
-      frameMarginColor    = QColor("#5999db");
+      layoutBreakColor    = QColor("#A0A0A4");
+      frameMarginColor    = QColor("#A0A0A4");
       bgColor.setNamedColor("#dddddd");
 
       //
