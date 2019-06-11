@@ -53,6 +53,7 @@
 #include "libmscore/glissando.h"
 #include "libmscore/fret.h"
 #include "libmscore/instrchange.h"
+#include "libmscore/instrtemplate.h"
 #include "libmscore/slur.h"
 #include "libmscore/jump.h"
 #include "libmscore/marker.h"
@@ -508,6 +509,15 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
                   Interval oldV = part->instrument(tickStart)->transpose();
                   //Instrument* oi = ic->instrument();  //part->instrument(tickStart);
                   //Instrument* instrument = new Instrument(Instrument::fromTemplate(it));
+                  // change the clef for each staff
+                  for (int i = 0; i < part->nstaves(); i++) {
+                        if (part->instrument(tickStart)->clefType(i) != it->clefType(i)) {
+                              ClefType clefType = score()->styleB(Sid::concertPitch) ? it->clefType(i)._concertClef : it->clefType(i)._transposingClef;
+                              // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
+                              Element* element = ic->rtick().isZero() ? toElement(ic->findMeasure()) : toElement(ic);
+                              score()->undoChangeClef(part->staff(i), element, clefType);
+                              }
+                        }
                   // change instrument in all linked scores
                   for (ScoreElement* se : ic->linkList()) {
                         InstrumentChange* lic = toInstrumentChange(se);
