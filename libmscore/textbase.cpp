@@ -127,7 +127,7 @@ QRectF TextCursor::cursorRect() const
       qreal h = ascent;
       qreal x = tline.xpos(column(), _text);
       qreal y = tline.y() - ascent * .9;
-      return QRectF(x, y, 4.0, h);
+      return QRectF(x, y, 2.0, h);
       }
 
 //---------------------------------------------------------
@@ -1121,12 +1121,10 @@ TextBase::TextBase(const TextBase& st)
 
 void TextBase::drawSelection(QPainter* p, const QRectF& r) const
       {
-      QBrush bg(QColor("steelblue"));
-      p->setCompositionMode(QPainter::CompositionMode_HardLight);
+      QBrush bg = QBrush(QPalette(QApplication::palette()).color(QPalette::Active, QPalette::Highlight));
       p->setBrush(bg);
       p->setPen(Qt::NoPen);
-      p->drawRect(r);
-      p->setCompositionMode(QPainter::CompositionMode_SourceOver);
+      p->drawRect(r.marginsAdded(QMargins(6, 10, 10, 6)));
       p->setPen(textColor());
       }
 

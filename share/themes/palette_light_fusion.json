@@ -7,6 +7,7 @@
 "Button":        "#c9c9c9",
 "ButtonText":    "#333333",
 "BrightText":    "#000000",
+"Highlight":     "#b3d7ff",
 "ToolTipBase":   "#fefac2",
 "ToolTipText":   "#000000",
 "Link":          "#3a80c6",
