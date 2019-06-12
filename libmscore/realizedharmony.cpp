@@ -97,17 +97,26 @@ void RealizedHarmony::update(int rootTpc, int bassTpc)
       _notes.clear();
       //fix magic values
       int rootPitch = tpc2pitch(rootTpc);
-      _notes.insert(rootPitch + 48, rootTpc);
+      if (_voicing != Voicing::ROOT_ONLY) {
+            if (bassTpc != Tpc::TPC_INVALID)
+                  _notes.insert(tpc2pitch(bassTpc) + 4*12, bassTpc);
+            else
+                  _notes.insert(rootPitch + 4*12, rootTpc);
+            }
+
       switch (_voicing) {
             case Voicing::ROOT_ONLY:
                   break;
             case Voicing::AUTO:
                   {
+                  _notes.insert(rootPitch + 5*12, rootTpc);
+                  //ensure that notes fall under a specific range
+                  //for now this range is between 5*12 and 6*12
                   QMap<int, int> intervals = getIntervals();
                   QMapIterator<int, int> i(intervals);
                   while (i.hasNext()) {
                         i.next();
-                        _notes.insert(rootPitch + i.key() + 5*12, i.value());
+                        _notes.insert((rootPitch + i.key()) % 12 + 5*12, i.value());
                         }
                   }
                   break;

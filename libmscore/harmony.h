@@ -129,7 +129,7 @@ class Harmony final : public TextBase {
       const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
       const ChordDescription* generateDescription();
 
-      const RealizedHarmony realizedHarmony();
+      const RealizedHarmony& realizedHarmony();
 
       void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
          NoteSpellingType& baseSpelling, NoteCaseType& baseCase);

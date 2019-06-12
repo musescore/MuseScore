@@ -1079,7 +1079,7 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 //    realized once each
 //---------------------------------------------------------
 
-const RealizedHarmony Harmony::realizedHarmony()
+const RealizedHarmony& Harmony::realizedHarmony()
       {
       if (!_realizedHarmony.valid())
             _realizedHarmony = RealizedHarmony(this);
