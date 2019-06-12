@@ -81,7 +81,6 @@ class Startcenter : public AbstractDialog, public Ui::Startcenter {
       void loadScore(QString);
       void newScore();
       void openScoreClicked();
-
     protected:
       virtual void retranslate() { retranslateUi(this); }
 
@@ -92,10 +91,14 @@ class Startcenter : public AbstractDialog, public Ui::Startcenter {
       Startcenter(QWidget* parent);
       ~Startcenter();
       void updateRecentScores();
+      void updateShowStartCenterCheckBox();
       void writeSettings();
       void readSettings();
       void keyPressEvent(QKeyEvent*) override;
       void keyReleaseEvent(QKeyEvent*) override;
+
+    public slots:
+      void showStartCenterStateChanged();
       };
 }
 #endif //__STARTCENTER_H__

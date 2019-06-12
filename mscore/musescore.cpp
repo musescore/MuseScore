@@ -460,6 +460,9 @@ void MuseScore::preferencesChanged(bool fromWorkspace)
       {
       updateExternalValuesFromPreferences();
 
+      if (startcenter)
+            startcenter->updateShowStartCenterCheckBox();
+            
       setPlayRepeats(MScore::playRepeats);
       getAction("pan")->setChecked(MScore::panPlayback);
       getAction("follow")->setChecked(preferences.getBool(PREF_APP_PLAYBACK_FOLLOWSONG));

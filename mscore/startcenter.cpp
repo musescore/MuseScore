@@ -16,6 +16,7 @@
 #include "startcenter.h"
 #include "scoreBrowser.h"
 #include "tourhandler.h"
+#include "preferences.h"
 
 namespace Ms {
 
@@ -35,6 +36,8 @@ void MuseScore::showStartcenter(bool show)
             }
       if (!startcenter)
             return;
+
+      startcenter->updateShowStartCenterCheckBox();
       if (show)
             startcenter->setVisible(true);
       else
@@ -56,6 +59,7 @@ Startcenter::Startcenter(QWidget* parent)
       connect(recentPage,  &ScoreBrowser::scoreActivated, this, &Startcenter::loadScore);
       connect(openScore, SIGNAL(clicked()), this, SLOT(openScoreClicked()));
       connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+      connect(showStartCenterCheckBox, SIGNAL(stateChanged(int)), this, SLOT(showStartCenterStateChanged()));
       setStyleSheet(QString("QPushButton { background-color: %1 }").arg(openScore->palette().color(QPalette::Base).name()));
 
 #ifdef USE_WEBENGINE
@@ -129,6 +133,25 @@ void Startcenter::newScore()
       mscore->tourHandler()->delayWelcomeTour();
       close();
       getAction("file-new")->trigger();
+      }
+
+//---------------------------------------------------------
+//   showStartCenterStateChanged
+//---------------------------------------------------------
+
+void Startcenter::showStartCenterStateChanged()
+      {
+      preferences.setPreference(PREF_UI_APP_STARTUP_SHOWSTARTCENTER, showStartCenterCheckBox->isChecked());
+      preferences.save();
+      }
+
+//---------------------------------------------------------
+//   updateShowStartCenterCheckBox
+//---------------------------------------------------------
+
+void Startcenter::updateShowStartCenterCheckBox()
+      {
+      showStartCenterCheckBox->setChecked(preferences.getBool(PREF_UI_APP_STARTUP_SHOWSTARTCENTER));
       }
 
 //---------------------------------------------------------
