@@ -3157,7 +3157,7 @@ void Score::cmdRealizeChordSymbols()
                   ChordRest* cr = toChordRest(seg->element(h->track()));
                   QMapIterator<int, int> i(r.notes());
 
-                  //this is a bit inefficient, but it works for now
+                  //this may be a bit inefficient, but it works for now
                   Chord* chord = new Chord(this);
                   //set chord attributes based on current chordrest
                   chord->setTuplet(cr->tuplet());
@@ -3184,11 +3184,12 @@ void Score::cmdRealizeChordSymbols()
                   Fraction fullDuration = seg->ticks();
                   Fraction sDur = makeGap(seg, h->track(), fullDuration, cr->tuplet());
                   std::vector<TDuration> dl = toDurationList(sDur, true);
-
                   for (TDuration d : dl) {
+                        //TODO - PHV: we need a better way to do this
+                        //maybe just look for next symbol or end of
+                        //score?
                         addChord(tick, d, chord, false, cr->tuplet());
-                        //WARNING - PHV: we are basically relying on the fact that
-                        //there will only be one element of dl
+                        tick += d.ticks();
                         }
 
                   delete chord;
