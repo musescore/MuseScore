@@ -400,7 +400,7 @@ void ResourceManager::filterPluginList()
 void ResourceManager::displayPlugins()
       {
       pluginTreeWidget->clear();
-      foreach(const QString &pkg, pluginDescriptionMap.keys()) {
+      for (const QString &pkg : pluginDescriptionMap.keys()) {
             auto& desc = pluginDescriptionMap[pkg];
             auto* package_item = new QTreeWidgetItem(pluginTreeWidget);
             package_item->setData(0, Qt::DisplayRole, desc.package_name);
@@ -430,7 +430,7 @@ void ResourceManager::displayPlugins()
 bool ResourceManager::isPluginLocal(PluginDescription& desc)
       {
       desc.path;
-      foreach(const auto& item, pluginDescriptionMap.values())
+      for (const auto& item : pluginDescriptionMap.values())
             for (auto& p : item.qml_paths)
                   if (p == desc.path)
                         return false;
@@ -447,7 +447,7 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
       QString global = mscoreGlobalShare + "locale/" + filename;
       QFileInfo fileLocal(local);
       QFileInfo fileGlobal(global);
-      if(!fileLocal.exists() || (fileLocal.lastModified() <= fileGlobal.lastModified()) )
+      if (!fileLocal.exists() || (fileLocal.lastModified() <= fileGlobal.lastModified()))
             local = mscoreGlobalShare + "locale/" + filename;
 
       return verifyFile(local, hash);
@@ -479,7 +479,7 @@ static QString getLatestCommitSha(const QString& user, const QString &repo, cons
             latest_commit = json_doc.array().first().toObject();
       else
             latest_commit = json_doc.object();
-      if(latest_commit.contains("sha"))
+      if (latest_commit.contains("sha"))
             return latest_commit["sha"].toString();
       else return {};
       }
@@ -502,7 +502,7 @@ static inline int CompatEstimate(QString branch)
       }
 static bool getLatestRelease(QJsonDocument& releases, int& release_id, QString& link) {
       // By default, releases returned from GitHub are sorted from the latest commit to the oldest
-      foreach(const auto&release, releases.array()) {
+      for (const auto& release : releases.array()) {
             if (release.isObject()) {
                   const auto& release_obj = release.toObject();
                   if (isCompatibleRelease(release_obj.value("target_commitish").toString())) {
@@ -736,7 +736,7 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
             // If zip contains a single directory, don't use that directory's name
             bool has_no_dir = true;
             std::set<QString> dirs;
-            foreach(MQZipReader::FileInfo fi, allFiles) {
+            for (MQZipReader::FileInfo fi : allFiles) {
                   QString dir_root = fi.filePath.split('/').first();
                   dirs.insert(dir_root);
                   }
@@ -752,7 +752,7 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
             auto filePathStripper = [&](QString& filePath) {return filePath.right(filePath.size() - stripped_len); };
 
             // extract and copy
-            foreach(MQZipReader::FileInfo fi, allFiles) {
+            for (MQZipReader::FileInfo fi : allFiles) {
                   if (fi.isDir)
                         QDir().mkdir(destination_prefix + "/" + filePathStripper(fi.filePath));
                   else if (fi.isFile) {
@@ -1037,7 +1037,7 @@ void ResourceManager::writePluginPackages()
       XmlWriter xml(0, &f);
       xml.header();
       xml.stag("museScore version=\"" MSC_VERSION "\"");
-      foreach(const QString &pkg, pluginDescriptionMap.keys()) {
+      for (const QString &pkg : pluginDescriptionMap.keys()) {
             auto& v = pluginDescriptionMap.value(pkg);
             xml.stag("PluginPackage");
             xml.tag("pageURL", pkg);
