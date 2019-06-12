@@ -2978,6 +2978,10 @@ QVariant Measure::getProperty(Pid propertyId) const
                   return QVariant::fromValue(_timesig);
             case Pid::TIMESIG_ACTUAL:
                   return QVariant::fromValue(_len);
+            case Pid::TIMESIG_ACTUAL_NUMERATOR:
+                  return _len.numerator();
+            case Pid::TIMESIG_ACTUAL_DENOMINATOR:
+                  return _len.denominator();
             case Pid::MEASURE_NUMBER_MODE:
                   return int(measureNumberMode());
             case Pid::BREAK_MMR:
@@ -3003,6 +3007,14 @@ bool Measure::setProperty(Pid propertyId, const QVariant& value)
                   break;
             case Pid::TIMESIG_ACTUAL:
                   _len = value.value<Fraction>();
+                  break;
+            case Pid::TIMESIG_ACTUAL_NUMERATOR:
+                  int num = value.toInt();
+                  _len.setNumerator(num);
+                  break;
+            case Pid::TIMESIG_ACTUAL_DENOMINATOR:
+                  int den = value.toInt();
+                  _len.setDenominator(den);
                   break;
             case Pid::MEASURE_NUMBER_MODE:
                   setMeasureNumberMode(MeasureNumberMode(value.toInt()));
@@ -3033,6 +3045,10 @@ QVariant Measure::propertyDefault(Pid propertyId) const
             case Pid::TIMESIG_NOMINAL:
             case Pid::TIMESIG_ACTUAL:
                   return QVariant();
+            case Pid::TIMESIG_ACTUAL_NUMERATOR:
+                  return -1;
+            case Pid::TIMESIG_ACTUAL_DENOMINATOR:
+                  return 1;
             case Pid::MEASURE_NUMBER_MODE:
                   return int(MeasureNumberMode::AUTO);
             case Pid::BREAK_MMR:

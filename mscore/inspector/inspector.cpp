@@ -140,7 +140,7 @@ void Inspector::retranslate()
 
 Element* Inspector::element() const
       {
-      return el() && !el()->empty() ? (*el())[0] : 0;
+      return el() && !el().empty() ? (*el())[0] : 0;
       }
 
 //---------------------------------------------------------
@@ -156,9 +156,20 @@ void Inspector::update()
 //   el
 //---------------------------------------------------------
 
-const QList<Element*>* Inspector::el() const
+QList<Element*> Inspector::el() const
       {
-      return _score ? &_score->selection().elements() : 0;
+      if (!_score)
+            return QList<Element*>();
+
+      switch (_selectionType) {
+            case InspectorSelection::MEASURE:
+                  // Here, we can use oSelectedMeasure as a kind of cached pointer to the measure
+                  QList<Element*> l = { oSelectedMeasure };
+                  return l;
+            case InspectorSelection::DEFAULT:
+            default:
+                  return _score->selection().elements();
+            }
       }
 
 //---------------------------------------------------------
@@ -170,32 +181,34 @@ void Inspector::update(Score* s)
       if (_inspectorEdit)     // if within an inspector-originated edit
             return;
       _score = s;
-      bool sameTypes = true;
-      if (el()) {
-            for (Element* ee : *el()) {
-                  if (((element()->type() != ee->type()) && // different and
-                      (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
-                      (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
-                      (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
-                      (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
-                      (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
-                      (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
-                        {
-                        sameTypes = false;
-                        break;
-                        }
-                  }
-            }
 
-      // Check if a full measure is selected
+      bool sameTypes = true;
       Measure* selectedMeasure = nullptr;
+
       if (_score) {
             const Selection& sel = _score->selection();
+            if (sel.elements()) {
+                  for (Element* ee : sel.elements()) {
+                        if (((element()->type() != ee->type()) && // different and
+                        (!element()->isSystemText()     || !ee->isStaffText())  && // neither system text nor
+                        (!element()->isStaffText()      || !ee->isSystemText()) && // staff text either side and
+                        (!element()->isPedalSegment()   || !ee->isTextLineSegment()) && // neither pedal nor
+                        (!element()->isTextLineSegment()|| !ee->isPedalSegment())    && // text line either side and
+                        (!element()->isSlurTieSegment() || !ee->isSlurTieSegment())) || // neither Slur nor Tie either side, or
+                        (ee->isNote() && toNote(ee)->chord()->isGrace() != toNote(element())->chord()->isGrace())) // HACK
+                              {
+                              sameTypes = false;
+                              break;
+                              }
+                        }
+                  }
+
+            // Check if a full measure is selected
             if (sel.isRange()) { 
                   if (sel.endSegment() && sel.startSegment()->measure() == sel.endSegment()->measure()) {
                         Measure* selMeasure = sel.startSegment()->measure();
                         if (sel.startSegment()->tick() == selMeasure->tick()
-                            && (sel.endSegment()->tick() + sel.endSegment()->ticks() == selMeasure->endTick())) {
+                        && (sel.endSegment()->tick() + sel.endSegment()->ticks() == selMeasure->endTick())) {
                               selectedMeasure = selMeasure;    
                               }
                         }
@@ -208,10 +221,15 @@ void Inspector::update(Score* s)
             }
       
       qDebug("update");
-      if (selectedMeasure) qDebug("measure selected");
+      if (selectedMeasure) {
+            qDebug("measure selected");
+            _selectionType = InspectorSelection::MEASURE;
+            }
+      else
+            _selectionType = InspectorSelection::DEFAULT;
 
       if (oe != element() || oSameTypes != sameTypes || oSelectedMeasure != selectedMeasure) {
-            ie->deleteLater();
+            delete ie;
             ie  = 0;
             oe  = element();
             oSameTypes = sameTypes;

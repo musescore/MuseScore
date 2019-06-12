@@ -330,7 +330,7 @@ void InspectorBase::checkDifferentValues(const InspectorItem& ii)
       bool valuesAreDifferent = false;
       QColor c(preferences.isThemeDark() ? Qt::yellow : Qt::darkCyan);
 
-      if (inspector->el()->size() > 1) {
+      if (inspector->el().size() > 1) {
             Pid id      = ii.t;
             QVariant val = getValue(ii);
 

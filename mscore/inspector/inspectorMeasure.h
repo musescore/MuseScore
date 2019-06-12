@@ -47,6 +47,8 @@ class InspectorMeasure : public InspectorGroupElement {
    public:
       InspectorMeasure(QWidget* parent);
       ~InspectorMeasure();
+
+      virtual void valueChanged(int idx) override;
       };
 
 } // namespace Ms

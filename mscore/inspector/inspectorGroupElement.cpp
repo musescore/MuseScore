@@ -54,9 +54,9 @@ InspectorGroupElement::InspectorGroupElement(QWidget* parent)
 
 void InspectorGroupElement::setColor()
       {
-      if (inspector->el()->isEmpty())
+      if (inspector->el().isEmpty())
             return;
-      Score* score = inspector->el()->front()->score();
+      Score* score = inspector->el().front()->score();
       score->startCmd();
       for (Element* e : *inspector->el()) {
             if (e->getProperty(Pid::COLOR) != QVariant(ge.color->color()))
@@ -71,9 +71,9 @@ void InspectorGroupElement::setColor()
 
 void InspectorGroupElement::setVisible()
       {
-      if (inspector->el()->isEmpty())
+      if (inspector->el().isEmpty())
             return;
-      Score* score = inspector->el()->front()->score();
+      Score* score = inspector->el().front()->score();
       score->startCmd();
       for (Element* e : *inspector->el()) {
             if (!e->getProperty(Pid::VISIBLE).toBool())
@@ -88,9 +88,9 @@ void InspectorGroupElement::setVisible()
 
 void InspectorGroupElement::setInvisible()
       {
-      if (inspector->el()->isEmpty())
+      if (inspector->el().isEmpty())
             return;
-      Score* score = inspector->el()->front()->score();
+      Score* score = inspector->el().front()->score();
       score->startCmd();
       for (Element* e : *inspector->el()) {
             if (e->getProperty(Pid::VISIBLE).toBool())
@@ -105,9 +105,9 @@ void InspectorGroupElement::setInvisible()
 
 void InspectorGroupElement::enableAutoplace()
       {
-      if (inspector->el()->isEmpty())
+      if (inspector->el().isEmpty())
             return;
-      Score* score = inspector->el()->front()->score();
+      Score* score = inspector->el().front()->score();
       score->startCmd();
       for (Element* e : *inspector->el()) {
             if (!e->getProperty(Pid::AUTOPLACE).toBool())
@@ -122,9 +122,9 @@ void InspectorGroupElement::enableAutoplace()
 
 void InspectorGroupElement::disableAutoplace()
       {
-      if (inspector->el()->isEmpty())
+      if (inspector->el().isEmpty())
             return;
-      Score* score = inspector->el()->front()->score();
+      Score* score = inspector->el().front()->score();
       score->startCmd();
       for (Element* e : *inspector->el()) {
             if (e->getProperty(Pid::AUTOPLACE).toBool())
@@ -139,7 +139,7 @@ void InspectorGroupElement::disableAutoplace()
 
 void InspectorGroupElement::notesClicked()
       {
-      Score* score = inspector->el()->front()->score();
+      Score* score = inspector->el().front()->score();
       QList<Element*> el = score->selection().elements();
       QList<Element*> nel;
       score->deselectAll();
@@ -163,7 +163,7 @@ void InspectorGroupElement::notesClicked()
 
 void InspectorGroupElement::graceNotesClicked()
       {
-      Score* score = inspector->el()->front()->score();
+      Score* score = inspector->el().front()->score();
       QList<Element*> el = score->selection().elements();
       QList<Element*> nel;
       score->deselectAll();
@@ -187,7 +187,7 @@ void InspectorGroupElement::graceNotesClicked()
 
 void InspectorGroupElement::restsClicked()
       {
-      Score* score = inspector->el()->front()->score();
+      Score* score = inspector->el().front()->score();
       QList<Element*> el = score->selection().elements();
       QList<Element*> nel;
       score->deselectAll();

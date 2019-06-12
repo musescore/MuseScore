@@ -38,20 +38,30 @@ InspectorMeasure::InspectorMeasure(QWidget* parent)
       me.nominalZ->setText(QString::number(nominalTs.numerator()));
       me.nominalN->setText(QString::number(nominalTs.denominator()));
 
-      Fraction actualTs = m->ticks();
-      me.actualZ->setValue(actualTs.numerator());
-      int index = me.actualN->findText(QString::number(actualTs.denominator()));
-      if (index == -1)
-            index = 2;
-      me.actualN->setCurrentIndex(index);
-
-      // iiList is a dummy, we can't use the built-in system for this
-      const std::vector<InspectorItem> iiList;
+      const std::vector<InspectorItem> iiList {
+            { Pid::IRREGULAR,             0,    me.exclude,       0 },
+            { Pid::MEASURE_NUMBER_MODE,   0,    me.numberMode,    0 },
+            { Pid::NO_OFFSET,             0,    me.offset,        0 },
+            { Pid::BREAK_MMR,             0,    me.breakMMR,      0 },
+            { Pid::USER_STRETCH,          0,    me.layoutStretch, 0 },
+            { Pid::REPEAT_COUNT,          0,    me.playCount,     0 },
+            { Pid::USER_STRETCH,          0,    me.layoutStretch, 0 },
+            { Pid::TIMESIG_ACTUAL_NUMERATOR,   0, me.actualZ,     0 },
+            { Pid::TIMESIG_ACTUAL_DENOMINATOR, 0, me.actualN,     0 },
+            };
       const std::vector<InspectorPanel> ppList = {
             { me.title, me.panel }
             };
 
       mapSignals(iiList, ppList);
+
+      me.actualN->blockSignals(true);
+      Fraction actualTs = m->ticks();
+      int index = me.actualN->findText(QString::number(actualTs.denominator()));
+      if (index == -1)
+            index = 2;
+      me.actualN->setCurrentIndex(index);
+      me.actualN->blockSignals(false);
 
       // Disable play count if not a repeat measure
       bool enableCount = m->repeatEnd();
@@ -59,6 +69,7 @@ InspectorMeasure::InspectorMeasure(QWidget* parent)
       me.playCount->setVisible(enableCount);
       me.playCountLabel->setVisible(enableCount);
 
+#if 0
       // Init properties
       me.exclude->setChecked(m->isIrregular());
       me.numberMode->setCurrentIndex(int(m->measureNumberMode()));
@@ -77,6 +88,7 @@ InspectorMeasure::InspectorMeasure(QWidget* parent)
       connect(me.breakMMR,    SIGNAL(toggled(bool)),              SLOT(breakMMRToggled(bool)));
       connect(me.layoutStretch, SIGNAL(valueChanged(qreal)),      SLOT(layoutStretchChanged(qreal)));
       connect(me.playCount,   SIGNAL(valueChanged(int)),          SLOT(playCountChanged(int)));
+#endif
 
       qDebug("created inspector measure at %p", this);
       }
@@ -92,8 +104,28 @@ InspectorMeasure::~InspectorMeasure()
 
 Measure* InspectorMeasure::measure() const
       {
-      Element* e = inspector->element();
-      return e->score()->tick2measure(e->tick());
+      return toMeasure(inspector->element());
+      }
+
+//---------------------------------------------------------
+//   valueChanged
+//---------------------------------------------------------
+
+void InspectorMeasure::valueChanged(int idx)
+      {
+      if (iList[idx].t == Pid::TIMESIG_ACTUAL_DENOMINATOR || iList[idx].t == Pid::TIMESIG_ACTUAL_NUMERATOR) {
+            Measure* m = measure();
+            Score* s = m->score();
+            int staffStart = s->selection().staffStart();
+            int staffEnd   = s->selection().staffEnd();
+            }
+
+      InspectorBase::valueChanged(idx);
+
+      if ()
+      s->selection().setRange(m->first(), m->last(), staffStart, staffEnd);
+      s->setSelectionChanged(true);
+      s->selection().updateSelectedElements();
       }
 
 //---------------------------------------------------------

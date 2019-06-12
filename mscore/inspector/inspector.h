@@ -360,6 +360,11 @@ class InspectorStaffText : public InspectorTextBase {
       InspectorStaffText(QWidget* parent);
       };
 
+enum class InspectorSelection : signed char {
+      DEFAULT,
+      MEASURE
+      };
+
 //---------------------------------------------------------
 //   Inspector
 //---------------------------------------------------------
@@ -375,6 +380,7 @@ class Inspector : public QDockWidget {
       Element* oe;
       bool oSameTypes;
       Measure* oSelectedMeasure;
+      InspectorSelection _selectionType;
 
    public slots:
       void update();
@@ -388,7 +394,7 @@ class Inspector : public QDockWidget {
       void update(Score* s);
 
       Element* element() const;
-      const QList<Element*>* el() const;
+      QList<Element*> el() const;
       void setInspectorEdit(bool val)     { _inspectorEdit = val;  }
 
       friend class InspectorScriptEntry;
