@@ -3750,7 +3750,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                     int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
                                     if (effectiveTrack < strack || effectiveTrack >= etrack)
                                           continue;
-
+#if 0
                                     // clear layout for chord-based fingerings
                                     // do this before adding chord to skyline
                                     if (e->isChord()) {
@@ -3774,7 +3774,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                                       }
                                                 }
                                           }
-
+#endif
                                     // add element to skyline
                                     if (e->addToSkyline())
                                           skyline.add(e->shape().translated(e->pos() + p));

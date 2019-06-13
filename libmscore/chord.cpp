@@ -3221,12 +3221,14 @@ Shape Chord::shape() const
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
       for (Note* note : _notes) {
             shape.add(note->shape().translated(note->pos()));
+#if 0
             for (Element* e : note->el()) {
                   if (!e->addToSkyline())
                         continue;
                   if (e->isFingering() && toFingering(e)->layoutType() == ElementType::CHORD && e->bbox().isValid())
                         shape.add(e->bbox().translated(e->pos() + note->pos()));
                   }
+#endif
             }
       for (Element* e : el()) {
             if (e->addToSkyline())
