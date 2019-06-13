@@ -131,8 +131,11 @@ void HairpinSegment::layout()
                         const qreal edLeft  = ed->bbox().left() + ed->pos().x()
                                               + ed->segment()->pos().x() + ed->measure()->pos().x();
                         const qreal dist    = edLeft - pos2().x() - pos().x() - minDynamicsDistance;
-                        if (dist < 0.0 || (dist >= 3.0 * _spatium && minDynamicsDistance > 0.0))
-                              rxpos2() += dist;
+                        const qreal extendThreshold = 3.0 * _spatium;   // TODO: style setting
+                        if (dist < 0.0)
+                              rxpos2() += dist;       // always shorten
+                        else if (dist >= extendThreshold && hairpin()->endText().isEmpty() && minDynamicsDistance > 0.0)
+                              rxpos2() += dist;       // lengthen only if appropriate
                         // prepare to align vertically
                         if (hairpin()->placeBelow())
                               dymax = qMax(dymax, ed->pos().y());
