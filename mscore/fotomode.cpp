@@ -325,6 +325,9 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
 
       a = getAction("copy");
       popup->addAction(a);
+      a = new QAction(tr("Copy with Link to Score"), this);
+      a->setData("copy-link");
+      popup->addAction(a);
 
       popup->addSeparator();
       a = popup->addAction(tr("Resolution (%1 DPI)…").arg(preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION)));
@@ -369,6 +372,8 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
             saveFotoAs(false, _foto->canvasBoundingRect());
       else if (cmd == "copy")
             ;
+      else if (cmd == "copy-link")
+            fotoModeCopy(true);
       else if (cmd == "set-res") {
             bool ok;
             double resolution = QInputDialog::getDouble(this,
@@ -438,7 +443,7 @@ QImage ScoreView::getRectImage(const QRectF& rect, double dpi, bool transparent,
 //   fotoModeCopy
 //---------------------------------------------------------
 
-void ScoreView::fotoModeCopy()
+void ScoreView::fotoModeCopy(bool includeLink)
       {
 #if defined(Q_OS_WIN)
       // See https://bugreports.qt.io/browse/QTBUG-11463
@@ -452,7 +457,25 @@ void ScoreView::fotoModeCopy()
       QRectF r(_foto->canvasBoundingRect());
 
       QImage printer(getRectImage(r, convDpi, transparent, /* printMode */ true));
-      QApplication::clipboard()->setImage(printer);
+      QApplication::clipboard()->clear();
+
+      if (includeLink) {
+            QUrl url = QUrl::fromLocalFile(score()->masterScore()->fileInfo()->canonicalFilePath());
+            QByteArray imageData;
+            QBuffer buffer(&imageData);
+            buffer.open(QIODevice::WriteOnly);
+            printer.save(&buffer, "PNG");
+            buffer.close();
+            QString html = "<a href=\"" + url.toString() + "\"><img src=\"data:image/png," + imageData.toPercentEncoding() + "\" /></a>";
+            QMimeData *data = new QMimeData;
+            data->setHtml(html);
+            QApplication::clipboard()->setMimeData(data);
+            // TODO: add both, with priority to html
+            //QApplication::clipboard()->setImage(printer);
+            }
+      else {
+            QApplication::clipboard()->setImage(printer);
+            }
       }
 
 //---------------------------------------------------------
