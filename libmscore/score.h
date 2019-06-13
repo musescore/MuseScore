@@ -894,6 +894,7 @@ class Score : public QObject, public ScoreElement {
 
       void updateCapo();
       void updateVelo();
+      void updateChannel();
 
       void cmdConcertPitchChanged(bool, bool /*useSharpsFlats*/);
 
@@ -1323,7 +1324,6 @@ class MasterScore : public Score {
       int getNextFreeMidiMapping(int p = -1, int ch = -1);
       int getNextFreeDrumMidiMapping();
       void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
-      void updateChannel();
       void rebuildAndUpdateExpressive(Synthesizer* synth);
       void updateExpressive(Synthesizer* synth);
       void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);

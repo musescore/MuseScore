@@ -78,6 +78,7 @@ class RepeatList: public QList<RepeatSegment*>
       ~RepeatList();
       void update(bool expand);
       void setScoreChanged() { _scoreChanged = true; }
+      const Score* score() const { return _score; }
       int utick2tick(int tick) const;
       int tick2utick(int tick) const;
       void dump() const;

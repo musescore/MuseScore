@@ -61,7 +61,7 @@ class RangeMap {
 //---------------------------------------------------------
 
 class MidiRenderer {
-      MasterScore* score;
+      Score* score;
       bool needUpdate = true;
       int minChunkSize = 0;
 
@@ -82,6 +82,7 @@ class MidiRenderer {
             int tickOffset() const { return _tickOffset; }
             Measure* startMeasure() const { return first; }
             Measure* endMeasure() const { return last ? last->nextMeasure() : nullptr; }
+            Measure* lastMeasure() const { return last; }
             int tick1() const { return first->tick().ticks(); }
             int tick2() const { return last ? last->endTick().ticks() : tick1(); }
             int utick1() const { return tick1() + tickOffset(); }
@@ -101,7 +102,7 @@ class MidiRenderer {
       void renderMetronome(EventMap* events, Measure* m, const Fraction& tickOffset);
 
    public:
-      explicit MidiRenderer(MasterScore* s) : score(s) {}
+      explicit MidiRenderer(Score* s) : score(s) {}
 
       void renderScore(EventMap* events, const SynthesizerState& synthState, bool metronome = true);
       void renderChunk(const Chunk&, EventMap* events, const SynthesizerState& synthState, bool metronome = true);
