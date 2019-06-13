@@ -1164,6 +1164,11 @@ void Score::updateVelo()
                               continue;
                         const Dynamic* d = toDynamic(e);
                         int v            = d->velocity();
+
+                        // treat an invalid dynamic as no change, i.e. a dynamic set to 0
+                        if (v < 1)
+                              continue;
+
                         v = qBound(1, v, 127);     //  illegal values
 
                         // If a dynamic has 'velocity change' update its ending
