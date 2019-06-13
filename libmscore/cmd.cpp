@@ -3155,9 +3155,10 @@ void Score::cmdRealizeChordSymbols()
                   RealizedHarmony r = h->realizedHarmony();
                   Segment* seg = toSegment(h->parent());
                   ChordRest* cr = toChordRest(seg->element(h->track()));
-                  QMapIterator<int, int> i(r.notes());
+                  Fraction duration = cr->ticks();
 
-                  //this may be a bit inefficient, but it works for now
+                  //we should calculate a proper duration here
+
                   Chord* chord = new Chord(this);
                   //set chord attributes based on current chordrest
                   chord->setTuplet(cr->tuplet());
@@ -3165,6 +3166,7 @@ void Score::cmdRealizeChordSymbols()
                   chord->setDurationType(cr->durationType());
                   chord->setTicks(cr->durationTypeTicks());
                   //create chord from notes
+                  QMapIterator<int, int> i(r.notes());
                   while (i.hasNext()) {
                         i.next();
                         Note* note = new Note(this);
@@ -3172,31 +3174,119 @@ void Score::cmdRealizeChordSymbols()
                         note->setTpc(i.value());
                         chord->add(note);
                         }
-                  //score()->setNoteRest(seg, h->track(),
-                  //                     nval, seg->ticks(), Direction::AUTO);
-                  //TODO - PHV: make sure we cover edge cases and move into
-                  //separate function when we do so
 
-                  //Measure* measure = seg->measure();
-                  Fraction tick = seg->tick();
-
-                  //get list of durations based on full duration
-                  Fraction fullDuration = seg->ticks();
-                  Fraction sDur = makeGap(seg, h->track(), fullDuration, cr->tuplet());
-                  std::vector<TDuration> dl = toDurationList(sDur, true);
-                  for (TDuration d : dl) {
-                        //TODO - PHV: we need a better way to do this
-                        //maybe just look for next symbol or end of
-                        //score?
-                        addChord(tick, d, chord, false, cr->tuplet());
-                        tick += d.ticks();
-                        }
-
+                  setChord(seg, h->track(), chord, duration);
                   delete chord;
-                  //ADD CHORD
-                  //undoAddCR(chord, measure, tick);
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   setChord
+//    return segment of last created chord
+//---------------------------------------------------------
+Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Fraction dur, Direction stemDirection)
+      {
+      Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
+
+      Fraction tick = segment->tick();
+      Chord* nr     = 0;
+      std::vector<Tie*> tie;
+      ChordRest* cr = toChordRest(segment->element(track));
+
+      Measure* measure = 0;
+      for (;;) {
+            if (track % VOICES)
+                  expandVoice(segment, track);
+
+            // the returned gap ends at the measure boundary or at tuplet end
+            Fraction dd = makeGap(segment, track, dur, cr ? cr->tuplet() : 0);
+
+            if (dd.isZero()) {
+                  qDebug("cannot get gap at %d type: %d/%d", tick.ticks(), dur.numerator(),
+                     dur.denominator());
+                  break;
+                  }
+
+            measure = segment->measure();
+            std::vector<TDuration> dl = toDurationList(dd, true);
+            size_t n = dl.size();
+            for (size_t i = 0; i < n; ++i) {
+                  const TDuration& d = dl[i];
+
+                  //create new chord from template and add it
+                  Chord* chord = new Chord(*chordTemplate);
+                  nr = chord;
+
+                  chord->setTrack(track);
+                  chord->setDurationType(d);
+                  chord->setTicks(d.fraction());
+                  chord->setStemDirection(stemDirection);
+                  chord->setTuplet(cr ? cr->tuplet() : 0);
+                  undoAddCR(chord, measure, tick);
+                  //if there is something to tie, complete tie backwards
+                  //and add the tie to score
+                  const std::vector<Note*> notes = chord->notes();
+                  if (!tie.empty()) {
+                        for (size_t i = 0; i < notes.size(); ++i) {
+                              tie[i]->setEndNote(notes[i]);
+                              notes[i]->setTieBack(tie[i]);
+                              undoAddElement(tie[i]);
+                              }
+                        }
+                  //if we're not the last element in the duration list,
+                  //set tie forward
+                  if (i+1 < n) {
+                        for (size_t i = 0; i < notes.size(); ++i) {
+                              tie[i] = new Tie(this);
+                              tie[i]->setStartNote(notes[i]);
+                              tie[i]->setTrack(track);
+                              notes[i]->setTieFor(tie[i]);
+                              }
+                        }
+                  //setPlayNote(true);
+                  setPlayChord(true);
+                  segment = chord->segment();
+                  tick += chord->actualTicks();
+                  }
+
+            dur -= dd;
+            if (dur.isZero())
+                  break;
+
+            Segment* nseg = tick2segment(tick, false, SegmentType::ChordRest);
+            if (nseg == 0) {
+                  qDebug("reached end of score");
+                  break;
+                  }
+            segment = nseg;
+
+            cr = toChordRest(segment->element(track));
+
+            if (cr == 0) {
+                  if (track % VOICES)
+                        cr = addRest(segment, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                  else {
+                        qDebug("no rest in voice 0");
+                        break;
+                        }
+                  }
+            //
+            //  Note does not fit on current measure, create Tie to
+            //  next part of note
+            std::vector<Note*> notes = nr->notes();
+            for (size_t i = 0; i < notes.size(); ++i) {
+                  tie[i] = new Tie(this);
+                  tie[i]->setStartNote(notes[i]);
+                  tie[i]->setTrack(notes[i]->track());
+                  notes[i]->setTieFor(tie[i]);
+                  }
+            }
+      if (!tie.empty())
+            connectTies();
+      if (nr)
+            select(nr, SelectType::SINGLE, 0);
+      return segment;
       }
 
 //---------------------------------------------------------
