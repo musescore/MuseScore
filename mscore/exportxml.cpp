@@ -5148,78 +5148,48 @@ static void partList(XmlWriter& xml, Score* score, const QList<Part*>& il, MxmlI
 
 void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset)
       {
-      switch (el->type()) {
-
-            case ElementType::CLEF:
-                  {
-                  // output only clef changes, not generated clefs
-                  // at line beginning
-                  // also ignore clefs at the start of a measure,
-                  // these have already been output
-                  // also ignore clefs at the end of a measure
-                  // these will be output at the start of the next measure
-                  const Clef* cle = static_cast<const Clef*>(el);
-                  Fraction ti = cle->segment()->tick();
-                  clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
-                  if (el->generated()) {
-                        clefDebug("exportxml: generated clef not exported");
-                        break;
-                        }
-                  if (!el->generated() && ti != m->tick() && ti != m->endTick())
-                        clef(sstaff, cle->clefType(), color2xml(cle));
-                  else {
-                        clefDebug("exportxml: clef not exported");
-                        }
+      if (el->isClef()) {
+            // output only clef changes, not generated clefs
+            // at line beginning
+            // also ignore clefs at the start of a measure,
+            // these have already been output
+            // also ignore clefs at the end of a measure
+            // these will be output at the start of the next measure
+            const auto cle = toClef(el);
+            const auto ti = cle->segment()->tick();
+            clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
+            if (el->generated()) {
+                  clefDebug("exportxml: generated clef not exported");
                   }
-                  break;
-
-            case ElementType::KEYSIG:
-                  // ignore
-                  break;
-
-            case ElementType::TIMESIG:
-                  // ignore
-                  break;
-
-            case ElementType::CHORD:
-                  {
-                  Chord* c = static_cast<Chord*>(el);
-                  const auto ll = &c->lyrics();
-                  // ise grace after
-                  if (c) {
-                        for (Chord* g : c->graceNotesBefore()) {
-                              chord(g, sstaff, ll, useDrumset);
-                              }
-                        chord(c, sstaff, ll, useDrumset);
-                        for (Chord* g : c->graceNotesAfter()) {
-                              chord(g, sstaff, ll, useDrumset);
-                              }
-                        }
-                  break;
-                  }
-            case ElementType::REST:
-                  rest((Rest*)el, sstaff);
-                  break;
-
-            case ElementType::BAR_LINE:
-                  // Following must be enforced (ref MusicXML barline.dtd):
-                  // If location is left, it should be the first element in the measure;
-                  // if location is right, it should be the last element.
-                  // implementation note: BarLineType::START_REPEAT already written by barlineLeft()
-                  // any bars left should be "middle"
-                  // TODO: print barline only if middle
-                  // if (el->subtype() != BarLineType::START_REPEAT)
-                  //       bar((BarLine*) el);
-                  break;
-            case ElementType::BREATH:
-                  // ignore, already exported as note articulation
-                  break;
-
-            default:
-                  qDebug("ExportMusicXml::write unknown segment type %s", el->name());
-                  break;
+            else if (!el->generated() && ti != m->tick() && ti != m->endTick())
+                  clef(sstaff, cle->clefType(), color2xml(cle));
+            else
+                  clefDebug("exportxml: clef not exported");
             }
-
+      else if (el->isChord()) {
+            const auto c = toChord(el);
+            const auto ll = &c->lyrics();
+            // ise grace after
+            if (c) {
+                  for (const auto g : c->graceNotesBefore()) {
+                        chord(g, sstaff, ll, useDrumset);
+                        }
+                  chord(c, sstaff, ll, useDrumset);
+                  for (const auto g : c->graceNotesAfter()) {
+                        chord(g, sstaff, ll, useDrumset);
+                        }
+                  }
+            }
+      else if (el->isRest()) {
+            const auto r = toRest(el);
+            if (!(r->isGap()))
+                  rest(r, sstaff);
+            }
+      else if (el->isKeySig() || el->isTimeSig() || el->isBarLine() || el->isBreath()) {
+            // handled elsewhere
+            }
+      else
+            qDebug("ExportMusicXml::write unknown segment type %s", el->name());
       }
 
 //---------------------------------------------------------
