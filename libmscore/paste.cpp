@@ -980,14 +980,24 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                               ddata.dropElement = nel;
                               ddata.duration    = duration;
                               if (target->acceptDrop(ddata)) {
-                                    // dropping an element of the same type is likely to replace it
-                                    // thus invaldiating the selection
-                                    ElementType targetType = target->type();
-                                    if (targetType == type)
+                                    if (type == ElementType::NOTE) {
+                                          // dropping a note replaces and invalidates the target,
+                                          // so we need to deselect it
+                                          ElementType targetType = target->type();
                                           deselect(target);
-                                    target->drop(ddata);
-                                    if (targetType == type)
-                                          select(nel);
+
+                                          // perform the drop
+                                          target->drop(ddata);
+
+                                          // if the target is a rest rather than a note,
+                                          // a new note is generated, and nel becomes invalid as well
+                                          // (ChordRest::drop() will select it for us)
+                                          if (targetType == ElementType::NOTE)
+                                                select(nel);
+                                          }
+                                    else {
+                                          target->drop(ddata);
+                                          }
                                     if (_selection.element())
                                           addRefresh(_selection.element()->abbox());
                                     }
