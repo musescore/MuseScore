@@ -148,7 +148,7 @@ void Score::updateCapo()
 //   updateChannel
 //---------------------------------------------------------
 
-void MasterScore::updateChannel()
+void Score::updateChannel()
       {
       for (Staff* s : staves()) {
             for (int i = 0; i < VOICES; ++i)
@@ -2492,7 +2492,7 @@ void Score::renderMidi(EventMap* events, const SynthesizerState& synthState)
 void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, const SynthesizerState& synthState)
       {
       masterScore()->setExpandRepeats(expandRepeats);
-      MidiRenderer(masterScore()).renderScore(events, synthState, metronome);
+      MidiRenderer(this).renderScore(events, synthState, metronome);
       }
 
 void MidiRenderer::renderScore(EventMap* events, const SynthesizerState& synthState, bool metronome)
@@ -2617,7 +2617,9 @@ void MidiRenderer::updateChunksPartition()
       {
       chunks.clear();
 
-      for (const RepeatSegment* rs : score->repeatList()) {
+      const RepeatList& repeatList = score->repeatList();
+
+      for (const RepeatSegment* rs : repeatList) {
             const int tickOffset = rs->utick - rs->tick;
 
             if (!minChunkSize) {
@@ -2644,6 +2646,17 @@ void MidiRenderer::updateChunksPartition()
                   }
             if (chunkStart) // last measures did not get added to chunk list
                   chunks.emplace_back(tickOffset, chunkStart, rs->lastMeasure());
+            }
+
+      if (score != repeatList.score()) {
+            // Repeat list may belong to another linked score (e.g. MasterScore).
+            // Update chunks to make them contain measures from the currently
+            // rendered score.
+            for (Chunk& ch : chunks) {
+                  Measure* first = score->tick2measure(ch.startMeasure()->tick());
+                  Measure* last = score->tick2measure(ch.lastMeasure()->tick());
+                  ch = Chunk(ch.tickOffset(), first, last);
+                  }
             }
       }
 
