@@ -3673,14 +3673,17 @@ void Measure::addSystemHeader(bool isFirstSystem)
             if (isFirstSystem || score()->styleB(Sid::genClef)) {
                   // find the clef type at the previous tick
                   ClefTypeList cl = staff->clefType(tick() - Fraction::fromTicks(1));
-                  // look for a clef change at the end of the previous measure
-                  if (prevMeasure()) {
-                        Segment* s = prevMeasure()->findSegment(SegmentType::Clef, tick());
-                        if (s) {
-                              Clef* c = toClef(s->element(track));
-                              if (c)
-                                    cl = c->clefTypeList();
-                              }
+                  Segment* s = nullptr;
+                  if (prevMeasure())
+                        // look for a clef change at the end of the previous measure
+                        s = prevMeasure()->findSegment(SegmentType::Clef, tick());
+                  else if (isMMRest())
+                        // look for a header clef at the beginning of the first underlying measure
+                        s = mmRestFirst()->findFirstR(SegmentType::HeaderClef, Fraction(0,1));
+                  if (s) {
+                        Clef* c = toClef(s->element(track));
+                        if (c)
+                              cl = c->clefTypeList();
                         }
                   Clef* clef;
                   if (!cSegment) {
