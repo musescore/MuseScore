@@ -2207,7 +2207,7 @@ bool TextBase::validateText(QString& s)
       for (int i = 0; i < s.size(); ++i) {
             QChar c = s[i];
             if (c == '&') {
-                  const char* ok[] { "amp;", "lt;", "gt;", "quot" };
+                  const char* ok[] { "amp;", "lt;", "gt;", "quot;" };
                   QString t = s.mid(i+1);
                   bool found = false;
                   for (auto k : ok) {
