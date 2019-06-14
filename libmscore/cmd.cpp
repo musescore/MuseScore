@@ -3133,9 +3133,28 @@ void Score::cmdRealizeChordSymbols()
                   RealizedHarmony r = h->realizedHarmony();
                   Segment* seg = toSegment(h->parent());
                   ChordRest* cr = toChordRest(seg->element(h->track()));
-                  Fraction duration = cr->ticks();
+                  Fraction duration = seg->ticks();
 
-                  //we should calculate a proper duration here
+                  //find next chord symbol
+                  Segment* cur = seg->next1();
+                  while (cur) {
+                        Element* e = cur->findAnnotation(ElementType::HARMONY,
+                                                   h->track(), h->track());
+                        if (e) {
+                              //we have found the next chord symbol
+                              //set duration to the difference between
+                              //the two chord symbols
+                              duration = e->tick() - h->tick();
+                              break;
+                              }
+                        //keep adding the duration of the current segment
+                        //in case we are not able to find a next
+                        //chord symbol
+                        //TODO - PHV: is it better to just go from the
+                        //current location to the end of the score?
+                        duration += cur->ticks();
+                        cur = cur->next1();
+                        }
 
                   Chord* chord = new Chord(this);
                   //set chord attributes based on current chordrest
@@ -3169,8 +3188,10 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
 
       Fraction tick = segment->tick();
       Chord* nr     = 0;
-      std::vector<Tie*> tie;
+      std::vector<Tie*> tie(chordTemplate->notes().size());
       ChordRest* cr = toChordRest(segment->element(track));
+
+      bool addTie = false;
 
       Measure* measure = 0;
       for (;;) {
@@ -3205,12 +3226,13 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
                   //if there is something to tie, complete tie backwards
                   //and add the tie to score
                   const std::vector<Note*> notes = chord->notes();
-                  if (!tie.empty()) {
+                  if (addTie) {
                         for (size_t i = 0; i < notes.size(); ++i) {
                               tie[i]->setEndNote(notes[i]);
                               notes[i]->setTieBack(tie[i]);
                               undoAddElement(tie[i]);
                               }
+                        addTie = false;
                         }
                   //if we're not the last element in the duration list,
                   //set tie forward
@@ -3220,6 +3242,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
                               tie[i]->setStartNote(notes[i]);
                               tie[i]->setTrack(track);
                               notes[i]->setTieFor(tie[i]);
+                              addTie = true;
                               }
                         }
                   //setPlayNote(true);
