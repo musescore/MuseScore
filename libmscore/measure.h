@@ -224,6 +224,7 @@ class Measure final : public MeasureBase {
       bool empty() const;
       bool isOnlyRests(int track) const;
       bool isOnlyDeletedRests(int track) const;
+      bool isOnlyDeletedRests(int track, const Fraction& stick, const Fraction& etick) const;
 
       int playbackCount() const      { return _playbackCount; }
       void setPlaybackCount(int val) { _playbackCount = val; }
