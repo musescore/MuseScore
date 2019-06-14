@@ -482,12 +482,14 @@ int Rest::computeLineOffset(int lines)
       if (offsetVoices && voice() == 0) {
             // do not offset voice 1 rest if there exists a matching invisible rest in voice 2;
             Element* e = s->element(track() + 1);
-            if (e && e->isRest() && (!e->visible() || toRest(e)->isGap())) {
+            if (e && e->isRest() && !e->visible() && !toRest(e)->isGap()) {
                   Rest* r = toRest(e);
                   if (r->globalTicks() == globalTicks()) {
                         offsetVoices = false;
                         }
                   }
+            else if (measure()->isOnlyDeletedRests(track() + 1, tick(), tick() + globalTicks()))
+                  offsetVoices = false;
             }
 #if 0
       if (offsetVoices && staff()->mergeMatchingRests()) {
