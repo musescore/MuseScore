@@ -620,6 +620,7 @@ class Score : public QObject, public ScoreElement {
       void undoAddElement(Element* element);
       void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
       void undoRemoveElement(Element* element);
+      void undoChangeSpannerElements(Spanner* spanner, Element* startElement, Element* endElement);
       void undoChangeElement(Element* oldElement, Element* newElement);
       void undoChangePitch(Note* note, int pitch, int tpc1, int tpc2);
       void undoChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2);

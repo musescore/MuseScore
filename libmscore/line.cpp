@@ -260,7 +260,7 @@ bool LineSegment::edit(EditData& ed)
                      != note2->chord()->staff()->part()->instrument(note2->chord()->tick()) )
                         return true;
                   if (note1 != oldNote1 || note2 != oldNote2)
-                        spanner()->setNoteSpan(note1, note2);          // set new spanner span
+                        score()->undoChangeSpannerElements(spanner(), note1, note2);
                   }
                   break;
             case Spanner::Anchor::MEASURE:
@@ -368,9 +368,7 @@ void LineSegment::editDrag(EditData& ed)
                         Note* sNote   = toNote(l->startElement());
                         // do not change anchor if new note is before start note
                         if (sNote && sNote->chord() && noteNew->chord() && sNote->chord()->tick() < noteNew->chord()->tick()) {
-                              noteOld->removeSpannerBack(l);
-                              noteNew->addSpannerBack(l);
-                              l->setEndElement(noteNew);
+                              score()->undoChangeSpannerElements(l, sNote, noteNew);
 
                               _offset2 += noteOld->canvasPos() - noteNew->canvasPos();
                               }
