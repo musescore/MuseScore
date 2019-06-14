@@ -2792,6 +2792,13 @@ void Score::cmdSlashFill()
             return;
 
       Segment* endSegment = selection().endSegment();
+
+      // operate on measures underlying mmrests
+      if (startSegment && startSegment->measure() && startSegment->measure()->isMMRest())
+            startSegment = startSegment->measure()->mmRestFirst()->first();
+      if (endSegment && endSegment->measure() && endSegment->measure()->isMMRest())
+            endSegment = endSegment->measure()->mmRestLast()->last();
+
       Fraction endTick = endSegment ? endSegment->tick() : lastSegment()->tick() + Fraction::fromTicks(1);
       Chord* firstSlash = 0;
       Chord* lastSlash = 0;
