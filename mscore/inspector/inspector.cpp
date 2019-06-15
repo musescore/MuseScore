@@ -304,6 +304,9 @@ void Inspector::update(Score* s)
                         case ElementType::BEND:
                               ie = new InspectorBend(this);
                               break;
+                        case ElementType::TREMOLO:
+                              ie = new InspectorTremolo(this);
+                              break;
                         case ElementType::TREMOLOBAR:
                               ie = new InspectorTremoloBar(this);
                               break;
@@ -918,6 +921,23 @@ void InspectorTremoloBar::propertiesClicked()
       mscore->currentScoreView()->editTremoloBarProperties(b);
       score->setLayoutAll();
       score->endCmd();
+      }
+
+//---------------------------------------------------------
+//   InspectorTremoloBar
+//---------------------------------------------------------
+
+InspectorTremolo::InspectorTremolo(QWidget* parent)
+   : InspectorElementBase(parent)
+      {
+      g.setupUi(addWidget());
+
+      const std::vector<InspectorItem> iiList = {
+            { Pid::TREMOLO_PLACEMENT, 0, g.tremoloPlacement, g.resetTremoloPlacement },
+            };
+      const std::vector<InspectorPanel> ppList = { { g.title, g.panel } };
+
+      mapSignals(iiList, ppList);
       }
 
 //---------------------------------------------------------
