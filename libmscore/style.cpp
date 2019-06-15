@@ -973,6 +973,24 @@ static const StyleType styleTypes[] {
       { Sid::instrumentChangeFrameFgColor,  "instrumentChangeFrameFgColor", QColor(0, 0, 0, 255) },
       { Sid::instrumentChangeFrameBgColor,  "instrumentChangeFrameBgColor", QColor(255, 255, 255, 0) },
 
+      { Sid::stickingFontFace,              "stickingFontFace",     "FreeSerif" },
+      { Sid::stickingFontSize,              "stickingFontSize",     12.0 },
+      { Sid::stickingFontSpatiumDependent,  "stickingFontSpatiumDependent", true },
+      { Sid::stickingFontStyle,             "stickingFontStyle",    int(FontStyle::Normal) },
+      { Sid::stickingColor,                 "stickingColor",        QColor(0, 0, 0, 255) },
+      { Sid::stickingAlign,                 "stickingAlign",        QVariant::fromValue(Align::LEFT | Align::BASELINE) },
+      { Sid::stickingOffset,                "stickingOffset",       QPointF() },
+      { Sid::stickingPlacement,             "stickingPlacement",    int(Placement::BELOW)  },
+      { Sid::stickingPosAbove,              "stickingPosAbove",     QPointF(.0, -2.0) },
+      { Sid::stickingPosBelow,              "stickingPosBelow",     QPointF(.0, 2.0)  },
+      { Sid::stickingMinDistance,           "stickingMinDistance",  Spatium(0.5)  },
+      { Sid::stickingFrameType,             "stickingFrameType",    int(FrameType::NO_FRAME) },
+      { Sid::stickingFramePadding,          "stickingFramePadding", 0.2 },
+      { Sid::stickingFrameWidth,            "stickingFrameWidth",   0.1 },
+      { Sid::stickingFrameRound,            "stickingFrameRound",   0 },
+      { Sid::stickingFrameFgColor,          "stickingFrameFgColor", QColor(0, 0, 0, 255) },
+      { Sid::stickingFrameBgColor,          "stickingFrameBgColor", QColor(255, 255, 255, 0) },
+
       { Sid::figuredBassFontFace,           "figuredBassFontFace",          "MScoreBC" },
       { Sid::figuredBassFontSize,           "figuredBassFontSize",          8.0 },
       { Sid::figuredBassFontSpatiumDependent, "figuredBassFontSpatiumDependent", true },
@@ -1807,6 +1825,22 @@ const TextStyle instrumentChangeTextStyle {{
       { Sid::instrumentChangeFrameBgColor,         Pid::FRAME_BG_COLOR         },
       }};
 
+const TextStyle stickingTextStyle {{
+      { Sid::stickingFontFace,                   Pid::FONT_FACE              },
+      { Sid::stickingFontSize,                   Pid::FONT_SIZE              },
+      { Sid::stickingFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
+      { Sid::stickingFontStyle,                  Pid::FONT_STYLE             },
+      { Sid::stickingColor,                      Pid::COLOR                  },
+      { Sid::stickingAlign,                      Pid::ALIGN                  },
+      { Sid::stickingOffset,                     Pid::OFFSET                 },
+      { Sid::stickingFrameType,                  Pid::FRAME_TYPE             },
+      { Sid::stickingFramePadding,               Pid::FRAME_PADDING          },
+      { Sid::stickingFrameWidth,                 Pid::FRAME_WIDTH            },
+      { Sid::stickingFrameRound,                 Pid::FRAME_ROUND            },
+      { Sid::stickingFrameFgColor,               Pid::FRAME_FG_COLOR         },
+      { Sid::stickingFrameBgColor,               Pid::FRAME_BG_COLOR         },
+      }};
+
 const TextStyle user1TextStyle {{
       { Sid::user1FontFace,                      Pid::FONT_FACE              },
       { Sid::user1FontSize,                      Pid::FONT_SIZE              },
@@ -1963,6 +1997,8 @@ static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
       { QT_TRANSLATE_NOOP("TextStyle", "Footer"),                  &footerTextStyle,            Tid::FOOTER },
       { QT_TRANSLATE_NOOP("TextStyle", "Instrument Change"),       &instrumentChangeTextStyle,  Tid::INSTRUMENT_CHANGE },
 
+      { QT_TRANSLATE_NOOP("TextStyle", "Sticking"),                &stickingTextStyle,          Tid::STICKING },
+
       { QT_TRANSLATE_NOOP("TextStyle", "User-1"),                  &user1TextStyle,             Tid::USER1 },
       { QT_TRANSLATE_NOOP("TextStyle", "User-2"),                  &user2TextStyle,             Tid::USER2 },
       { QT_TRANSLATE_NOOP("TextStyle", "User-3"),                  &user3TextStyle,             Tid::USER3 },
@@ -2056,6 +2092,7 @@ static const std::vector<Tid> _primaryTextStyles = {
       Tid::LYRICS_EVEN,
       Tid::HARMONY_A,
       Tid::HARMONY_B,
+      Tid::STICKING,
       Tid::USER1,
       Tid::USER2,
       Tid::USER3,

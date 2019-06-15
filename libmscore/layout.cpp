@@ -40,6 +40,7 @@
 #include "slur.h"
 #include "staff.h"
 #include "stem.h"
+#include "sticking.h"
 #include "style.h"
 #include "sym.h"
 #include "system.h"
@@ -3928,6 +3929,17 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         t->layout();
                         de = t;
                         }
+                  }
+            }
+
+      //-------------------------------------------------------------
+      // Drumline sticking
+      //-------------------------------------------------------------
+
+      for (const Segment* s : sl) {
+            for (Element* e : s->annotations()) {
+                  if (e->isSticking())
+                        e->layout();
                   }
             }
 

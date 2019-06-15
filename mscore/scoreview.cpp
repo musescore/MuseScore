@@ -73,6 +73,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftype.h"
+#include "libmscore/sticking.h"
 #include "libmscore/stringdata.h"
 #include "libmscore/sym.h"
 #include "libmscore/system.h"
@@ -1896,6 +1897,8 @@ void ScoreView::cmd(const char* s)
             cmdAddText(Tid::INSTRUMENT_CHANGE);
       else if (cmd == "fingering-text")
             cmdAddText(Tid::FINGERING);
+      else if (cmd == "sticking-text")
+            cmdAddText(Tid::STICKING);
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
@@ -2467,6 +2470,32 @@ void ScoreView::textTab(bool back)
             if (type != ElementType::TEMPO_TEXT)
                   cmdAddText(tid);
             }
+      }
+
+//---------------------------------------------------------
+//   editKeySticking
+//---------------------------------------------------------
+
+bool ScoreView::editKeySticking()
+      {
+      Q_ASSERT(editData.element->isSticking());
+
+      switch (editData.key) {
+            case Qt::Key_Space:
+                  textTab(editData.modifiers & Qt::ShiftModifier);
+                  return true;
+            case Qt::Key_Left:
+                  textTab(true);
+                  return true;
+            case Qt::Key_Right:
+            case Qt::Key_Return:
+                  textTab(false);
+                  return true;
+            default:
+                  break;
+            }
+
+      return false;
       }
 
 //---------------------------------------------------------
@@ -3982,6 +4011,15 @@ void ScoreView::cmdAddText(Tid tid)
                   if (!cr)
                         break;
                   s = new InstrumentChange(_score);
+                  cr->undoAddAnnotation(s);
+                  }
+                  break;
+            case Tid::STICKING:
+                  {
+                  ChordRest* cr = _score->getSelectedChordRest();
+                  if (!cr)
+                        break;
+                  s = new Sticking(_score);
                   cr->undoAddAnnotation(s);
                   }
                   break;
