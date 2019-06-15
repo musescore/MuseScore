@@ -1015,6 +1015,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
                   Articulation* a = new Articulation(chord->score());
                   a->setSymId(SymId::guitarFadeIn);
                   a->setAnchor(ArticulationAnchor::TOP_STAFF);
+                  a->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
                   chord->add(a);
                   }
             //TODO-ws		else for (auto n : chord->notes())
@@ -2483,6 +2484,7 @@ bool GuitarPro3::read(QFile* fp)
                                     Articulation* art = new Articulation(score);
                                     art->setSymId(SymId::guitarFadeOut);
                                     art->setAnchor(ArticulationAnchor::TOP_STAFF);
+                                    art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
                                     if (!score->addArticulation(cr, art)) {
                                           delete art;
                                           }
@@ -2637,6 +2639,7 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
             // art->setArticulationType(ArticulationType::FadeOut);
             art->setSym(SymId::guitarFadeOut);
             art->setAnchor(ArticulationAnchor::TOP_STAFF);
+            art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             if (!score->addArticulation(segment->cr(track), art)) {
                   delete art;
                   }

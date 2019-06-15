@@ -1525,6 +1525,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                                 else if (str == "VolumeSwell")
                                                       art->setSymId(SymId::guitarVolumeSwell);
                                                 art->setAnchor(ArticulationAnchor::TOP_STAFF);
+                                                art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
                                                 if (!note->score()->addArticulation(note, art))
                                                       delete art;
                                                 }
@@ -1803,6 +1804,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                               art->setSymId(SymId::fermataLongAbove);
                         art->setUp(true);
                         art->setAnchor(ArticulationAnchor::TOP_STAFF);
+                        art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
                         auto seg = cr->segment()->prev1(SegmentType::ChordRest);
                         if (seg && seg->cr(track)->isChord()) {
                               seg->cr(track)->add(art);
