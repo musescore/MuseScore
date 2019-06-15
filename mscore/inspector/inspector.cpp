@@ -340,6 +340,9 @@ void Inspector::update(Score* s)
                         case ElementType::FINGERING:
                               ie = new InspectorFingering(this);
                               break;
+                        case ElementType::STICKING:
+                              ie = new InspectorText(this); // TODO: add a separate inspector for sticking?
+                              break;
                         case ElementType::STEM:
                               ie = new InspectorStem(this);
                               break;
