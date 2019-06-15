@@ -2808,6 +2808,27 @@ bool Measure::isOnlyDeletedRests(int track) const
       }
 
 //---------------------------------------------------------
+//   isOnlyDeletedRests
+//---------------------------------------------------------
+
+bool Measure::isOnlyDeletedRests(int track, const Fraction& stick, const Fraction& etick) const
+      {
+      static const SegmentType st { SegmentType::ChordRest };
+      for (const Segment* s = first(st); s; s = s->next(st)) {
+            if (s->segmentType() != st || !s->element(track))
+                  continue;
+            ChordRest* cr = toChordRest(s->element(track));
+            if (cr->tick() + cr->globalTicks() <= stick)
+                  continue;
+            if (cr->tick() >= etick)
+                  return true;
+            if (!cr->isRest() || !toRest(cr)->isGap())
+                  return false;
+            }
+      return true;
+      }
+
+//---------------------------------------------------------
 //   stretchedLen
 //---------------------------------------------------------
 
