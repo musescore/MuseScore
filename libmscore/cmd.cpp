@@ -2183,7 +2183,7 @@ Element* Score::move(const QString& cmd)
                   Segment* s = _is.segment()->prev1(SegmentType::ChordRest);
                   int track = _is.track();
                   for (; s; s = s->prev1(SegmentType::ChordRest)) {
-                        if (s->element(track) || s->measure() != m) {
+                        if (s->element(track) || (s->measure() != m && s->rtick().isZero())) {
                               if (s->element(track)) {
                                     if (s->element(track)->isRest() && toRest(s->element(track))->isGap())
                                           continue;
