@@ -637,6 +637,18 @@ void Channel::setSolo(bool value)
       }
 
 //---------------------------------------------------------
+//   setUserBankController
+//---------------------------------------------------------
+
+void Channel::setUserBankController(bool val)
+      {
+      if (_userBankController != val) {
+            _userBankController = val;
+            firePropertyChanged(Prop::USER_BANK_CONTROL);
+            }
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -655,12 +667,10 @@ void Channel::write(XmlWriter& xml, const Part* part) const
             if (e.type() == ME_INVALID)
                   continue;
             if (e.type() == ME_CONTROLLER) {
-                  // don't write if automatically switched
-                  if ((e.dataA() == CTRL_HBANK || e.dataA() == CTRL_LBANK) &&  !_userBankController)
+                  // Don't write bank if automatically switched, but always write if switched by the user
+                  if (e.dataA() == CTRL_HBANK && e.dataB() == 0 && !_userBankController)
                         continue;
-                  if (e.dataA() == CTRL_HBANK && e.dataB() == 0)
-                        continue;
-                  if (e.dataA() == CTRL_LBANK && e.dataB() == 0)
+                  if (e.dataA() == CTRL_LBANK && e.dataB() == 0 && !_userBankController)
                         continue;
                   if (e.dataA() == CTRL_VOLUME && e.dataB() == 100)
                         continue;
@@ -1004,6 +1014,9 @@ void PartChannelSettingsLink::applyProperty(Channel::Prop p, const Channel* from
                   break;
             case Channel::Prop::CHANNEL:
                   to->setChannel(from->channel());
+                  break;
+            case Channel::Prop::USER_BANK_CONTROL:
+                  to->setUserBankController(from->userBankController());
                   break;
             };
       }
