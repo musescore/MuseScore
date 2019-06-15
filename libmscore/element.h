@@ -472,8 +472,10 @@ class Element : public ScoreElement {
       virtual void triggerLayout() const;
       virtual void drawEditMode(QPainter*, EditData&);
 
-      void autoplaceSegmentElement(bool add = true);        // helper functions
-      void autoplaceMeasureElement(bool add = true);
+      void autoplaceSegmentElement(bool above, bool add);        // helper functions
+      void autoplaceMeasureElement(bool above, bool add);
+      void autoplaceSegmentElement(bool add = true) { autoplaceSegmentElement(placeAbove(), add); }
+      void autoplaceMeasureElement(bool add = true) { autoplaceMeasureElement(placeAbove(), add); }
       void autoplaceCalculateOffset(QRectF& r, qreal minDistance);
       qreal rebaseOffset(bool nox = true);
       bool rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool fix);
