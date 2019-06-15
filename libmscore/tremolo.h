@@ -27,6 +27,11 @@ enum class TremoloType : signed char {
       C8, C16, C32, C64     // two note tremolo (change)
       };
 
+enum class TremoloPlacement : signed char {
+      DEFAULT = 0,
+      STEM_CENTER
+      };
+
 //---------------------------------------------------------
 //   @@ Tremolo
 //---------------------------------------------------------
@@ -39,6 +44,12 @@ class Tremolo final : public Element {
       QPainterPath path;
 
       int _lines;       // derived from _subtype
+      TremoloPlacement _tremoloPlacement = TremoloPlacement::DEFAULT;
+
+      QPainterPath basePath() const;
+      void computeShape();
+      void layoutOneNoteTremolo(qreal x, qreal y, qreal spatium);
+      void layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium);
 
    public:
       Tremolo(Score*);
@@ -79,6 +90,12 @@ class Tremolo final : public Element {
       Fraction tremoloLen() const;
       bool twoNotes() const { return tremoloType() >= TremoloType::C8; } // is it a two note tremolo?
       int lines() const { return _lines; }
+
+      bool placeMidStem() const;
+
+      virtual void spatiumChanged(qreal oldValue, qreal newValue) override;
+      virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+      virtual void styleChanged() override;
 
       virtual QString accessibleInfo() const override;
 

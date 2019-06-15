@@ -116,7 +116,8 @@ class Chord final : public ChordRest {
 
       LedgerLine* ledgerLines()                  { return _ledgerLines; }
 
-      qreal defaultStemLength();
+      qreal defaultStemLength() const;
+      qreal minAbsStemLength() const;
 
       virtual void layoutStem1() override;
       void layoutStem();
