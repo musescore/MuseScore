@@ -1109,6 +1109,7 @@ enum class Sid {
       vibratoMinDistance,
       voltaMinDistance,
       figuredBassMinDistance,
+      tupletMinDistance,
 
       autoplaceEnabled,
 
