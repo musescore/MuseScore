@@ -1866,13 +1866,14 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                   if (e && e->isClef()) {
                         Clef* clef = toClef(e);
                         if (!mmrClefSeg->element(track)) {
-                              Clef* mmrClef = clef->clone();
+                              Clef* mmrClef = clef->generated() ? clef->clone() : toClef(clef->linkedClone());
                               mmrClef->setParent(mmrClefSeg);
                               undoAddElement(mmrClef);
                               }
                         else {
                               Clef* mmrClef = toClef(mmrClefSeg->element(track));
                               mmrClef->setClefType(clef->clefType());
+                              mmrClef->setShowCourtesy(clef->showCourtesy());
                               }
                         }
                   }
@@ -1930,6 +1931,8 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       if (cs) {
             if (ns == 0)
                   ns = mmr->undoGetSegmentR(SegmentType::Clef, lm->ticks());
+            ns->setEnabled(cs->enabled());
+            ns->setTrailer(cs->trailer());
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                   int track = staffIdx * VOICES;
                   Clef* clef = toClef(cs->element(track));
@@ -1942,8 +1945,10 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                         }
                   }
             }
-      else if (ns)
+      else if (ns) {
+            // TODO: remove elements from ns?
             undo(new RemoveElement(ns));
+            }
 
       //
       // check for time signature
@@ -1953,13 +1958,15 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       if (cs) {
             if (ns == 0)
                   ns = mmr->undoGetSegmentR(SegmentType::TimeSig, Fraction(0,1));
+            ns->setEnabled(cs->enabled());
+            ns->setHeader(cs->header());
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                   int track = staffIdx * VOICES;
                   TimeSig* ts = toTimeSig(cs->element(track));
                   if (ts) {
                         TimeSig* nts = toTimeSig(ns->element(track));
                         if (!nts) {
-                              nts = ts->clone();
+                              nts = ts->generated() ? ts->clone() : toTimeSig(ts->linkedClone());
                               nts->setParent(ns);
                               undo(new AddElement(nts));
                               }
@@ -1970,8 +1977,10 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                         }
                   }
             }
-      else if (ns)
+      else if (ns) {
+            // TODO: remove elements from ns?
             undo(new RemoveElement(ns));
+            }
 
       //
       // check for ambitus
@@ -1998,8 +2007,10 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                         }
                   }
             }
-      else if (ns)
+      else if (ns) {
+            // TODO: remove elements from ns?
             undo(new RemoveElement(ns));
+            }
 
       //
       // check for key signature
@@ -2009,27 +2020,37 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       if (cs) {
             if (ns == 0)
                   ns = mmr->undoGetSegmentR(SegmentType::KeySig, Fraction(0,1));
+            ns->setEnabled(cs->enabled());
+            ns->setHeader(cs->header());
             for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
                   int track = staffIdx * VOICES;
-                  KeySig* ts  = toKeySig(cs->element(track));
-                  KeySig* nts = toKeySig(ns->element(track));
-                  if (ts) {
-                        if (!nts) {
-                              KeySig* nks = ts->clone();
+                  KeySig* ks  = toKeySig(cs->element(track));
+                  if (ks) {
+                        KeySig* nks = toKeySig(ns->element(track));
+                        if (!nks) {
+                              nks = ks->generated() ? ks->clone() : toKeySig(ks->linkedClone());
                               nks->setParent(ns);
                               undo(new AddElement(nks));
                               }
                         else {
-                              if (!(nts->keySigEvent() == ts->keySigEvent())) {
-                                    bool addKey = ts->isChange();
-                                    undo(new ChangeKeySig(nts, ts->keySigEvent(), nts->showCourtesy(), addKey));
+                              if (!(nks->keySigEvent() == ks->keySigEvent())) {
+                                    bool addKey = ks->isChange();
+                                    undo(new ChangeKeySig(nks, ks->keySigEvent(), nks->showCourtesy(), addKey));
                                     }
                               }
                         }
                   }
             }
-      else if (ns && ns->empty())
-            undo(new RemoveElement(ns));
+      else if (ns) {
+            ns->setEnabled(false);
+            // TODO: remove elements from ns, then delete ns
+            // previously we removed the segment if not empty,
+            // but this resulted in "stale" keysig in mmrest after removed from underlying measure
+            //undo(new RemoveElement(ns));
+            }
+
+      mmr->checkHeader();
+      mmr->checkTrailer();
 
       //
       // check for rehearsal mark etc.
