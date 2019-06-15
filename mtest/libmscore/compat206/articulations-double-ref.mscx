@@ -498,8 +498,8 @@
               <direction>down</direction>
               <subtype>articAccentStaccatoBelow</subtype>
               <ornamentStyle>baroque</ornamentStyle>
-              <linkedMain/>
               <anchor>4</anchor>
+              <linkedMain/>
               </Articulation>
             <Note>
               <linkedMain/>
@@ -2313,9 +2313,9 @@
                 <direction>down</direction>
                 <subtype>articAccentStaccatoBelow</subtype>
                 <ornamentStyle>baroque</ornamentStyle>
+                <anchor>4</anchor>
                 <linked>
                   </linked>
-                <anchor>4</anchor>
                 </Articulation>
               <Note>
                 <linked>

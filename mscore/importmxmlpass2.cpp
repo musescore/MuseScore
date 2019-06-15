@@ -1166,10 +1166,12 @@ static void addArticulationToChord(ChordRest* cr, SymId articSym, QString dir)
       if (dir == "up") {
             na->setUp(true);
             na->setAnchor(ArticulationAnchor::TOP_STAFF);
+            na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             }
       else if (dir == "down") {
             na->setUp(false);
             na->setAnchor(ArticulationAnchor::BOTTOM_STAFF);
+            na->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             }
       cr->add(na);
       }

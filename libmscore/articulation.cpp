@@ -32,6 +32,7 @@ namespace Ms {
 static const ElementStyle articulationStyle {
       { Sid::articulationMinDistance, Pid::MIN_DISTANCE },
 //      { Sid::articulationOffset, Pid::OFFSET },
+      { Sid::articulationAnchorDefault, Pid::ARTICULATION_ANCHOR },
       };
 
 //---------------------------------------------------------
@@ -127,8 +128,8 @@ bool Articulation::readProperties(XmlReader& e)
             _channelName = e.attribute("name");
             e.readNext();
             }
-      else if (tag == "anchor")
-            _anchor = ArticulationAnchor(e.readInt());
+      else if (readProperty(tag, e, Pid::ARTICULATION_ANCHOR))
+            ;
       else if (tag == "direction")
             readProperty(e, Pid::DIRECTION);
       else if ( tag == "ornamentStyle")
@@ -166,7 +167,6 @@ void Articulation::write(XmlWriter& xml) const
       for (const StyledProperty& spp : *styledProperties())
             writeProperty(xml, spp.pid);
       Element::writeProperties(xml);
-      writeProperty(xml, Pid::ARTICULATION_ANCHOR);
       xml.etag();
       }
 
@@ -336,68 +336,6 @@ QVariant Articulation::propertyDefault(Pid propertyId) const
             case Pid::DIRECTION:
                   return QVariant::fromValue<Direction>(Direction::AUTO);
 
-            case Pid::ARTICULATION_ANCHOR:
-                  switch (_symId) {
-                        case SymId::articAccentAbove:
-                        case SymId::articAccentBelow:
-                        case SymId::articStaccatoAbove:
-                        case SymId::articStaccatoBelow:
-                        case SymId::articStaccatissimoAbove:
-                        case SymId::articStaccatissimoBelow:
-                        case SymId::articTenutoAbove:
-                        case SymId::articTenutoBelow:
-                        case SymId::articTenutoStaccatoAbove:
-                        case SymId::articTenutoStaccatoBelow:
-                        case SymId::articMarcatoAbove:
-                        case SymId::articMarcatoBelow:
-
-                        case SymId::articAccentStaccatoAbove:
-                        case SymId::articAccentStaccatoBelow:
-                        case SymId::articLaissezVibrerAbove:
-                        case SymId::articLaissezVibrerBelow:
-                        case SymId::articMarcatoStaccatoAbove:
-                        case SymId::articMarcatoStaccatoBelow:
-                        case SymId::articMarcatoTenutoAbove:
-                        case SymId::articMarcatoTenutoBelow:
-                        case SymId::articStaccatissimoStrokeAbove:
-                        case SymId::articStaccatissimoStrokeBelow:
-                        case SymId::articStaccatissimoWedgeAbove:
-                        case SymId::articStaccatissimoWedgeBelow:
-                        case SymId::articStressAbove:
-                        case SymId::articStressBelow:
-                        case SymId::articTenutoAccentAbove:
-                        case SymId::articTenutoAccentBelow:
-                        case SymId::articUnstressAbove:
-                        case SymId::articUnstressBelow:
-
-                        case SymId::articSoftAccentAbove:
-                        case SymId::articSoftAccentBelow:
-                        case SymId::articSoftAccentStaccatoAbove:
-                        case SymId::articSoftAccentStaccatoBelow:
-                        case SymId::articSoftAccentTenutoAbove:
-                        case SymId::articSoftAccentTenutoBelow:
-                        case SymId::articSoftAccentTenutoStaccatoAbove:
-                        case SymId::articSoftAccentTenutoStaccatoBelow:
-
-                        case SymId::guitarFadeIn:
-                        case SymId::guitarFadeOut:
-                        case SymId::guitarVolumeSwell:
-                        case SymId::wiggleSawtooth:
-                        case SymId::wiggleSawtoothWide:
-                        case SymId::wiggleVibratoLargeFaster:
-                        case SymId::wiggleVibratoLargeSlowest:
-                              return int(ArticulationAnchor::CHORD);
-
-                        case SymId::luteFingeringRHThumb:
-                        case SymId::luteFingeringRHFirst:
-                        case SymId::luteFingeringRHSecond:
-                        case SymId::luteFingeringRHThird:
-                              return int(ArticulationAnchor::BOTTOM_CHORD);
-
-                        default:
-                              return int(ArticulationAnchor::TOP_STAFF);
-                        }
-
             case Pid::ORNAMENT_STYLE:
                   //return int(score()->style()->ornamentStyle(_ornamentStyle));
                   return int(MScore::OrnamentStyle::DEFAULT);
@@ -409,6 +347,75 @@ QVariant Articulation::propertyDefault(Pid propertyId) const
                   break;
             }
       return Element::propertyDefault(propertyId);
+      }
+
+//---------------------------------------------------------
+//   anchorGroup
+//---------------------------------------------------------
+
+Articulation::AnchorGroup Articulation::anchorGroup(SymId symId)
+      {
+      switch (symId) {
+            case SymId::articAccentAbove:
+            case SymId::articAccentBelow:
+            case SymId::articStaccatoAbove:
+            case SymId::articStaccatoBelow:
+            case SymId::articStaccatissimoAbove:
+            case SymId::articStaccatissimoBelow:
+            case SymId::articTenutoAbove:
+            case SymId::articTenutoBelow:
+            case SymId::articTenutoStaccatoAbove:
+            case SymId::articTenutoStaccatoBelow:
+            case SymId::articMarcatoAbove:
+            case SymId::articMarcatoBelow:
+
+            case SymId::articAccentStaccatoAbove:
+            case SymId::articAccentStaccatoBelow:
+            case SymId::articLaissezVibrerAbove:
+            case SymId::articLaissezVibrerBelow:
+            case SymId::articMarcatoStaccatoAbove:
+            case SymId::articMarcatoStaccatoBelow:
+            case SymId::articMarcatoTenutoAbove:
+            case SymId::articMarcatoTenutoBelow:
+            case SymId::articStaccatissimoStrokeAbove:
+            case SymId::articStaccatissimoStrokeBelow:
+            case SymId::articStaccatissimoWedgeAbove:
+            case SymId::articStaccatissimoWedgeBelow:
+            case SymId::articStressAbove:
+            case SymId::articStressBelow:
+            case SymId::articTenutoAccentAbove:
+            case SymId::articTenutoAccentBelow:
+            case SymId::articUnstressAbove:
+            case SymId::articUnstressBelow:
+
+            case SymId::articSoftAccentAbove:
+            case SymId::articSoftAccentBelow:
+            case SymId::articSoftAccentStaccatoAbove:
+            case SymId::articSoftAccentStaccatoBelow:
+            case SymId::articSoftAccentTenutoAbove:
+            case SymId::articSoftAccentTenutoBelow:
+            case SymId::articSoftAccentTenutoStaccatoAbove:
+            case SymId::articSoftAccentTenutoStaccatoBelow:
+
+            case SymId::guitarFadeIn:
+            case SymId::guitarFadeOut:
+            case SymId::guitarVolumeSwell:
+            case SymId::wiggleSawtooth:
+            case SymId::wiggleSawtoothWide:
+            case SymId::wiggleVibratoLargeFaster:
+            case SymId::wiggleVibratoLargeSlowest:
+                  return AnchorGroup::ARTICULATION;
+
+            case SymId::luteFingeringRHThumb:
+            case SymId::luteFingeringRHFirst:
+            case SymId::luteFingeringRHSecond:
+            case SymId::luteFingeringRHThird:
+                  return AnchorGroup::LUTE_FINGERING;
+
+            default:
+                  break;
+            }
+      return AnchorGroup::OTHER;
       }
 
 //---------------------------------------------------------
@@ -504,6 +511,17 @@ Sid Articulation::getPropertyStyle(Pid id) const
       switch (id) {
             case Pid::MIN_DISTANCE:
                   return Element::getPropertyStyle(id);
+
+            case Pid::ARTICULATION_ANCHOR: {
+                  switch (anchorGroup(_symId)) {
+                        case AnchorGroup::ARTICULATION:
+                              return Sid::articulationAnchorDefault;
+                        case AnchorGroup::LUTE_FINGERING:
+                              return Sid::articulationAnchorLuteFingering;
+                        case AnchorGroup::OTHER:
+                              return Sid::articulationAnchorOther;
+                        }
+                  }
             default:
                   return Sid::NOSTYLE;
             }

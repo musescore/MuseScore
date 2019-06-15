@@ -207,6 +207,9 @@ static const StyleType styleTypes[] {
 
       { Sid::articulationMag,         "articulationMag",         QVariant(1.0) },
       { Sid::articulationPosAbove,    "articulationPosAbove",    QPointF(0.0, 0.0) },
+      { Sid::articulationAnchorDefault, "articulationAnchorDefault", int(ArticulationAnchor::CHORD) },
+      { Sid::articulationAnchorLuteFingering, "articulationAnchorLuteFingering", int(ArticulationAnchor::BOTTOM_CHORD) },
+      { Sid::articulationAnchorOther, "articulationAnchorOther", int(ArticulationAnchor::TOP_STAFF) },
       { Sid::lastSystemFillLimit,     "lastSystemFillLimit",     QVariant(0.3) },
 
       { Sid::hairpinPlacement,        "hairpinPlacement",        int(Placement::BELOW)  },
