@@ -2013,6 +2013,10 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       qreal ww = -1000000.0;        // can remain negative
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
             qreal d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
+            // first chordrest of a staff should clear the widest header for any staff
+            // so make sure segment is as wide as it needs to be
+            if (systemHeaderGap)
+                  d = qMax(d, staffShape(staffIdx).right());
             ww      = qMax(ww, d);
             }
       qreal w = qMax(ww, 0.0);      // non-negative
