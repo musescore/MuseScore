@@ -605,7 +605,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                                           // allow lyrics hyphen to extend to barline
                                           // other lines stop 1sp short
                                           qreal gap = (type() == ElementType::LYRICSLINE) ? 0.0 : sp;
-                                          qreal x3 = seg->enabled() ? seg->x() : seg->measure()->x() + seg->measure()->width();
+                                          qreal x3 = seg->enabled() ? seg->x() : seg->measure()->width();
                                           x2 = qMax(x2, x3 - gap);
                                           }
                                     x = x2 - endElement()->parent()->x();
