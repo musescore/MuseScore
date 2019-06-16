@@ -47,6 +47,17 @@ enum PluginPackageSource {
       ATTACHMENT        // from an attachment in corresponding plugin page
       };
 
+//---------------------------------------------------------
+//   PluginPackageLink
+//---------------------------------------------------------
+struct PluginPackageLink {
+      PluginPackageSource source;
+      QString url;
+      int newline_index;
+      QString curr_line;
+      int score = 0;
+      QString hint_above;
+};
 
 //---------------------------------------------------------
 //   PluginPackageDescription
@@ -62,7 +73,7 @@ struct PluginPackageDescription {
       std::vector<QString> qml_paths;
       QString latest_commit; // valid when source set to GITHUB
       int release_id; // valid when source set to GITHUB_RELEASE
-      QDateTime last_modified;
+      QDateTime last_modified; // valid when source set to ATTACHMENT
 
       };
 

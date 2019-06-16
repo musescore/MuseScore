@@ -494,8 +494,8 @@ static inline bool isCompatibleRelease(const QString& branch)
 static inline int CompatEstimate(QString branch)
       {
       branch = branch.toLower();
-      if (branch.contains("2.x") || branch.contains("version2") || branch.contains("musescore2") || branch.contains("musescore 2")) return -2;
-      if (branch.contains("3.x") || branch.contains("version3") || branch.contains("musescore3") || branch.contains("musescore 3")) return 2;
+      if (branch.contains("2.x") || branch.contains("2x") || branch.contains("version2") || branch.contains("musescore2") || branch.contains("musescore 2")) return -2;
+      if (branch.contains("3.x") || branch.contains("3x") || branch.contains("version3") || branch.contains("musescore3") || branch.contains("musescore 3")) return 2;
       if (branch.contains("2") && !branch.contains("3")) return -1;
       if (branch.contains("3") && !branch.contains("2")) return 1;
       return 0;
@@ -522,14 +522,15 @@ static inline bool isNotFoundMessage(const QJsonObject& json_obj)
       return json_obj["message"].toString() == "Not Found";
       }
 
-static std::vector<std::pair<QString, QString>> getAttachments(const QByteArray& html_raw, bool all = false)
+static std::vector<PluginPackageLink> getAttachments(const QByteArray& html_raw_array, bool all = false)
       {
-      std::vector<std::pair<QString, QString>> file_urls;
+      QString html_raw(html_raw_array);
+      std::vector<PluginPackageLink> file_urls;
       if (!all) {
             int start_idx = html_raw.indexOf("<div class=\"field field--name-upload field--type-file field--label-above\">");
             if (start_idx == -1)
                   ; // TODO: no attachments found
-            QByteArray attachments_raw = html_raw.mid(start_idx, -1);
+            QString attachments_raw = html_raw.mid(start_idx, -1);
             XmlReader xml(attachments_raw);
             while (!xml.atEnd() && xml.name() != "table") xml.readNextStartElement();
             while (!xml.atEnd() && xml.name() != "tbody") xml.readNextStartElement();
@@ -538,7 +539,10 @@ static std::vector<std::pair<QString, QString>> getAttachments(const QByteArray&
             while (!xml.atEnd() && xml.name() == "tr") {
                   for (int i = 0; i < 3; i++) // enter <td>, <span>, <a>
                         xml.readNextStartElement();
-                  file_urls.push_back(make_pair(xml.readElementText(), xml.attributes().value("href").toString()));
+                  PluginPackageLink link = { ATTACHMENT,xml.attributes().value("href").toString() };
+                  //link.hint = xml.readElementText();
+                  link.score = CompatEstimate(xml.readElementText());
+                  file_urls.push_back(link);
                   for (int i = 0; i < 3; i++) // exit <a>, <span>, <td>
                         xml.skipCurrentElement();
                   xml.readNextStartElement();
@@ -546,12 +550,41 @@ static std::vector<std::pair<QString, QString>> getAttachments(const QByteArray&
             }
       else {
             // search for all links from musescore.org
-            QRegularExpression musescore_link_patt("https://musescore.org/sites/musescore.org/files/\\d+\\-\\d+/([\\w\\-]+)");
+            QRegularExpression musescore_link_patt("<a href=\"(https://musescore.org/sites/musescore.org/files/(\\d+\\-\\d+/)?[\\w\\-\\.]+)\".*?>(.*?)</a>");
             auto it = musescore_link_patt.globalMatch(html_raw);
             while (it.hasNext()) {
                   QRegularExpressionMatch match = it.next();
-                  file_urls.push_back(make_pair(match.captured(1), match.captured(0)));
+                  QString hint_text = match.captured(2);
+                  QString hint_debug = match.captured(0);
+                  int start_idx = match.capturedStart(0);
+                  int end_idx = match.capturedEnd();
+                  int newline_start = start_idx, newline_end = end_idx;
+                  while (newline_start>0 && html_raw[newline_start-1] != '\n')
+                        newline_start--;
+                  while (newline_end < html_raw.length() && html_raw[newline_end] != '\n')
+                        newline_end++;
+                  QString curr_line = html_raw.mid(newline_start, newline_end - newline_start + 1);
+                  int score = CompatEstimate(curr_line);
+                  PluginPackageLink link = { ATTACHMENT,match.captured(1),newline_start,curr_line,score };
+                  file_urls.push_back(link);
+
                   }
+            // now get more hints from the line above the link
+            for (int i = 0; i < file_urls.size(); i++) {
+                  auto& link = file_urls[i];
+                  if (link.score == 0) {
+                        int last_idx = link.newline_index - 1;
+                        int first_idx = last_idx - 1;
+                        while (first_idx > 0 && html_raw[first_idx - 1] != '\n')
+                              first_idx--;
+                        QString last_line = html_raw.mid(first_idx, last_idx - first_idx + 1);
+                        // is this the content of the last link?
+                        if (i > 0 && file_urls[i - 1].curr_line == last_line)
+                              continue;
+                        link.score = CompatEstimate(last_line);
+                        }
+                  }
+
             }
       return file_urls;
       }
@@ -624,18 +657,17 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
       else {
             // no github repo links exist
             // first fetch links in attachments
-            std::vector<std::pair<QString, QString>> attachment_urls = getAttachments(html_raw, false);
+            std::vector<PluginPackageLink> attachment_urls = getAttachments(html_raw, true);
             if (attachment_urls.empty())
                   attachment_urls = getAttachments(html_raw, true);
-            std::vector<std::pair<QString, QString>> archives, qmls, selected;
-            //std::pair<QString, QString> selected; // the finally selected qml file or archive
+
             QStringList suffixes = { "qml","zip","rar","7z" };
-            std::pair<QString, QString> target;
+            PluginPackageLink target;
             int score = -2;
             for (auto& item : attachment_urls) {
-                  QFileInfo f(item.first);
+                  QFileInfo f(item.url);
                   if (suffixes.contains(f.suffix().toLower())) {
-                        int curr_score = CompatEstimate(item.first); // add other text in that line
+                        int curr_score = item.score; // add other text in that line
                         if (curr_score > score) {
                               target = item;
                               score = curr_score;
@@ -643,14 +675,13 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
                         }
                   }
             if (score >= 0) {
-                  should_update = desc.source != ATTACHMENT;
                   QDateTime date_time;
-                  if (desc.source != ATTACHMENT || desc.direct_link != target.second || (date_time = GetLastModified(target.second)) != desc.last_modified) {
+                  if (desc.source != ATTACHMENT || desc.direct_link != target.url || (date_time = GetLastModified(target.url)) != desc.last_modified) {
                         desc.source = ATTACHMENT;
-                        desc.direct_link = target.second;
+                        desc.direct_link = target.url;
                         if (!date_time.isValid())
                               // TODO: we didn't download the file before, optimize: fill desc.last_modified when downloading the file.
-                              date_time = GetLastModified(target.second);
+                              date_time = GetLastModified(target.url);
                         desc.last_modified = date_time;
                         return true;
                         }
@@ -1054,6 +1085,8 @@ void ResourceManager::writePluginPackages()
                   xml.tag("GitHubReleaseID", v.release_id);
             if (v.source == GITHUB)
                   xml.tag("GitHubLatestSha", v.latest_commit);
+            if (v.source == ATTACHMENT)
+                  xml.tag("LastModified", v.last_modified.toString());
             xml.etag();
             }
       xml.etag();
@@ -1097,12 +1130,14 @@ bool ResourceManager::readPluginPackages()
                                                 if (t_ == "qml")
                                                       desc.qml_paths.push_back(e.readElementText());
                                                 else e.unknown();
-                                                }
                                           }
+                                    }
                                     else if (t == "GitHubReleaseID")
                                           desc.release_id = e.readInt();
                                     else if (t == "GitHubLatestSha")
                                           desc.latest_commit = e.readElementText();
+                                    else if (t == "LastModified")
+                                          desc.last_modified = QDateTime::fromString(e.readElementText());
                                     else
                                           e.unknown();
                                     }
