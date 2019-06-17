@@ -1820,15 +1820,16 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                   if (s)
                         s->setRtick(len);
                   }
+            mmr->removeSystemTrailer();
             }
       else {
             mmr = new Measure(this);
             mmr->setTicks(len);
             mmr->setTick(m->tick());
-            mmr->setPageBreak(lm->pageBreak());
-            mmr->setLineBreak(lm->lineBreak());
             undo(new ChangeMMRest(m, mmr));
             }
+      mmr->setPageBreak(lm->pageBreak());
+      mmr->setLineBreak(lm->lineBreak());
       mmr->setMMRestCount(n);
       mmr->setNo(m->no());
 
