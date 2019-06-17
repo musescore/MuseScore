@@ -2414,15 +2414,20 @@ void Score::cmdRemovePart(Part* part)
 
 void Score::insertPart(Part* part, int idx)
       {
+      bool inserted = false;
       int staff = 0;
       for (QList<Part*>::iterator i = _parts.begin(); i != _parts.end(); ++i) {
             if (staff >= idx) {
                   _parts.insert(i, part);
-                  return;
+                  inserted = true;
+                  break;
                   }
             staff += (*i)->nstaves();
             }
-      _parts.push_back(part);
+      if (!inserted)
+            _parts.push_back(part);
+      masterScore()->rebuildMidiMapping();
+      setInstrumentsChanged(true);
       }
 
 //---------------------------------------------------------
@@ -2432,6 +2437,8 @@ void Score::insertPart(Part* part, int idx)
 void Score::removePart(Part* part)
       {
       _parts.removeAt(_parts.indexOf(part));
+      masterScore()->rebuildMidiMapping();
+      setInstrumentsChanged(true);
       }
 
 //---------------------------------------------------------
