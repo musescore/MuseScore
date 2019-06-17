@@ -4011,7 +4011,7 @@ void Measure::removeSystemTrailer()
             changed = true;
             }
       setTrailer(false);
-      if (changed)
+      if (system() && changed)
             computeMinWidth();
       }
 
