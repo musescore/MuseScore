@@ -667,8 +667,8 @@ class Score : public QObject, public ScoreElement {
       void undoChangeInvisible(Element*, bool);
       void undoChangeTuning(Note*, qreal);
       void undoChangeUserMirror(Note*, MScore::DirectionH);
-      void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
-      void undoChangeClef(Staff* ostaff, Element*, ClefType st);
+      void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent, InstrumentChange* ic = nullptr);
+      void undoChangeClef(Staff* ostaff, Element*, ClefType st, InstrumentChange* ic = nullptr);
       bool undoPropertyChanged(Element* e, Pid t, const QVariant& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
       void undoPropertyChanged(ScoreElement*, Pid, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
       inline virtual UndoStack* undoStack() const;

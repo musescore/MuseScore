@@ -515,18 +515,20 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
                               ClefType clefType = score()->styleB(Sid::concertPitch) ? it->clefType(i)._concertClef : it->clefType(i)._transposingClef;
                               // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
                               Element* element = ic->rtick().isZero() ? toElement(ic->findMeasure()) : toElement(ic);
-                              score()->undoChangeClef(part->staff(i), element, clefType);
+                              score()->undoChangeClef(part->staff(i), element, clefType, ic);
                               }
                         }
                   // Change key signature if necessary
                   if (it->transpose != oldV) {
                         for (int i = 0; i < part->nstaves(); i++) {
-                              KeySigEvent ks;
-                              Key key = part->staff(i)->key(tickStart);
-                              if (!score()->styleB(Sid::concertPitch))
-                                    key = transposeKey(key, oldV);
-                              ks.setKey(key);
-                              score()->undoChangeKeySig(part->staff(i), tickStart, ks);
+                              if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
+                                    KeySigEvent ks;
+                                    Key key = part->staff(i)->key(tickStart);
+                                    if (!score()->styleB(Sid::concertPitch))
+                                          key = transposeKey(key, oldV);
+                                    ks.setKey(key);
+                                    score()->undoChangeKeySig(part->staff(i), tickStart, ks, ic);
+                                    }
                               }
                         }
                   // change instrument in all linked scores
