@@ -1914,6 +1914,10 @@ void Score::deleteItem(Element* el)
                               tickEnd = Fraction::fromTicks(i->first);
                         transpositionChanged(part, oldV, tickStart, tickEnd);
                         }
+                  for (KeySig* keySig : ic->keySigs())
+                        score()->deleteItem(keySig);
+                  for (Clef* clef : ic->clefs())
+                        score()->deleteItem(clef);
                   }
                   break;
 
@@ -3615,7 +3619,7 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
 //   undoChangeKeySig
 //---------------------------------------------------------
 
-void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key)
+void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent key, InstrumentChange* ic)
       {
       KeySig* lks = 0;
 
@@ -3644,6 +3648,8 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
                   }
             if (ks) {
                   ks->undoChangeProperty(Pid::GENERATED, false);
+                  if (ic)
+                        ic->addKeySig(ks);
                   undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
                   }
             else {
@@ -3653,6 +3659,8 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
                         nks->setParent(s);
                         nks->setTrack(track);
                         nks->setKeySigEvent(nkey);
+                        if (ic)
+                              ic->addKeySig(nks);
                         undo(new AddElement(nks));
                         if (lks)
                               undo(new Link(lks, nks));
@@ -3670,7 +3678,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
 //    create a clef before element e
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct)
+void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, InstrumentChange* ic)
       {
       bool moveClef = false;
       SegmentType st = SegmentType::Clef;
@@ -3772,6 +3780,8 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct)
                   score->undo(new AddElement(clef));
                   clef->layout();
                   }
+            if (ic)
+                  ic->addClef(clef);
             clef->setSmall(small);
             }
       }
