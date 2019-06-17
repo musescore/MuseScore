@@ -539,7 +539,7 @@ static std::vector<PluginPackageLink> getAttachments(const QByteArray& html_raw_
             while (!xml.atEnd() && xml.name() == "tr") {
                   for (int i = 0; i < 3; i++) // enter <td>, <span>, <a>
                         xml.readNextStartElement();
-                  PluginPackageLink link = { ATTACHMENT,xml.attributes().value("href").toString() };
+                  PluginPackageLink link = { {ATTACHMENT},{xml.attributes().value("href").toString()} };
                   //link.hint = xml.readElementText();
                   link.score = CompatEstimate(xml.readElementText());
                   file_urls.push_back(link);
@@ -565,7 +565,7 @@ static std::vector<PluginPackageLink> getAttachments(const QByteArray& html_raw_
                         newline_end++;
                   QString curr_line = html_raw.mid(newline_start, newline_end - newline_start + 1);
                   int score = CompatEstimate(curr_line);
-                  PluginPackageLink link = { ATTACHMENT,match.captured(1),newline_start,curr_line,score };
+                  PluginPackageLink link = { {ATTACHMENT},{match.captured(1)},{newline_start},{curr_line},{score} };
                   file_urls.push_back(link);
 
                   }
@@ -616,6 +616,7 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
       QByteArray html_raw = page.returnData();
       // first of all, check if GitHub repo links exist
       QRegularExpression github_repo_patt("https?://github.com/([\\w\\-]+)/([\\w\\-]+)");
+
       QRegularExpressionMatch github_match = github_repo_patt.match(html_raw);
       if (github_match.hasMatch()) {
             QString user = github_match.captured(1);
