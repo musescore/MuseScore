@@ -15,6 +15,7 @@
 
 #include "text.h"
 #include "instrument.h"
+#include "clef.h"
 
 namespace Ms {
 
@@ -24,6 +25,8 @@ namespace Ms {
 
 class InstrumentChange final : public TextBase  {
       Instrument* _instrument;  // Staff holds ownership if part of score
+      std::vector<KeySig*> _keySigs;
+      std::vector<Clef*> _clefs;
 
    public:
       InstrumentChange(Score*);
@@ -41,6 +44,12 @@ class InstrumentChange final : public TextBase  {
       void setInstrument(Instrument* i)     { _instrument = i;     }
       void setInstrument(Instrument&& i)    { *_instrument = i;    }
       void setInstrument(const Instrument& i);
+
+      std::vector<KeySig*> keySigs() const  { return _keySigs;     }
+      void addKeySig(KeySig* keySig)        { _keySigs.push_back(keySig); }
+
+      std::vector<Clef*> clefs()            { return _clefs;       }
+      void addClef(Clef* clef)              { _clefs.push_back(clef); }
 
       Segment* segment() const              { return toSegment(parent()); }
 
