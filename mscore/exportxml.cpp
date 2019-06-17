@@ -320,7 +320,7 @@ public:
       void write(QIODevice* dev);
       void credits(XmlWriter& xml);
       void moveToTick(const Fraction& t);
-      void words(Text const* const text, int staff);
+      void words(TextBase const* const text, int staff);
       void rehearsal(RehearsalMark const* const rmk, int staff);
       void hairpin(Hairpin const* const hp, int staff, const Fraction& tick);
       void ottava(Ottava const* const ot, int staff, const Fraction& tick);
@@ -2470,7 +2470,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
       {
       for (const Element* e : note->el()) {
             if (e->type() == ElementType::FINGERING) {
-                  Text* f = (Text*)e;
+                  const TextBase* f = toTextBase(e);
                   notations.tag(xml);
                   technical.tag(xml);
                   QString t = MScoreTextToMXML::toPlainText(f->xmlText());
@@ -3382,7 +3382,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
 //   words
 //---------------------------------------------------------
 
-void ExportMusicXml::words(Text const* const text, int staff)
+void ExportMusicXml::words(TextBase const* const text, int staff)
       {
       /*
       qDebug("ExportMusicXml::words userOff.x=%f userOff.y=%f xmlText='%s' plainText='%s'",
@@ -4238,8 +4238,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
       else if (e->isTempoText())
             exp->tempoText(toTempoText(e), sstaff);
       else if (e->isStaffText() || e->isSystemText() || e->isText() || e->isInstrumentChange())
-            //exp->words(toText(e), sstaff); TODO
-            exp->words(static_cast<const Text*>(e), sstaff);
+            exp->words(toTextBase(e), sstaff);
       else if (e->isDynamic())
             exp->dynamic(toDynamic(e), sstaff);
       else if (e->isRehearsalMark())

@@ -484,6 +484,10 @@ static inline TextBase* toTextBase(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isTextBase());
       return (TextBase*)e;
       }
+static inline const TextBase* toTextBase(const ScoreElement* e) {
+      Q_ASSERT(e == 0 || e->isTextBase());
+      return (const TextBase*)e;
+      }
 static inline StaffTextBase* toStaffTextBase(ScoreElement* e) {
       Q_ASSERT(e == 0 || e->isStaffTextBase());
       return (StaffTextBase*)e;
