@@ -26,6 +26,7 @@ class CocoaBridge
 
    public:
       static void setAllowsAutomaticWindowTabbing(bool flag);
+      static bool isSystemDarkTheme();
 };
 
 #endif

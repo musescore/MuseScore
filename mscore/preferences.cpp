@@ -21,6 +21,10 @@
 #include "libmscore/mscore.h"
 #include "preferences.h"
 
+#ifdef Q_OS_MAC
+#include "macos/cocoabridge.h"
+#endif
+
 namespace Ms {
 
 Preferences preferences;
@@ -65,6 +69,12 @@ void Preferences::init(bool storeInMemoryOnly)
       defaultUseAlsaAudio = true;
 #elif defined(USE_PORTAUDIO)
       defaultUsePortAudio = true;
+#endif
+
+#ifdef Q_OS_MAC
+      const MuseScoreStyleType defaultAppGlobalStyle = CocoaBridge::isSystemDarkTheme() ? MuseScoreStyleType::DARK_FUSION : MuseScoreStyleType::LIGHT_FUSION;
+#else
+      const MuseScoreStyleType defaultAppGlobalStyle = MuseScoreStyleType::LIGHT_FUSION;
 #endif
 
       QString wd = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
@@ -158,7 +168,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_UI_APP_STARTUP_SHOWPLAYPANEL,                    new BoolPreference(false, false)},
             {PREF_UI_APP_STARTUP_SHOWSPLASHSCREEN,                 new BoolPreference(true, false)},
             {PREF_UI_APP_STARTUP_SHOWSTARTCENTER,                  new BoolPreference(true, false)},
-            {PREF_UI_APP_GLOBALSTYLE,                              new EnumPreference(QVariant::fromValue(MuseScoreStyleType::LIGHT_FUSION), false)},
+            {PREF_UI_APP_GLOBALSTYLE,                              new EnumPreference(QVariant::fromValue(defaultAppGlobalStyle), false)},
             {PREF_UI_APP_LANGUAGE,                                 new StringPreference("system", false)},
             {PREF_UI_APP_RASTER_HORIZONTAL,                        new IntPreference(2)},
             {PREF_UI_APP_RASTER_VERTICAL,                          new IntPreference(2)},
