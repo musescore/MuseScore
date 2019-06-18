@@ -456,7 +456,7 @@ bool ResourceManager::verifyLanguageFile(QString filename, QString hash)
 //---------------------------------------------------------
 //   GitHub utility functions
 //---------------------------------------------------------
-static inline QString githubLatestReleaseAPI(const QString &user, const QString &repo) { return "https://api.github.com/repos/" + user + "/" + repo + "/releases"; }
+static inline QString githubReleaseAPI(const QString &user, const QString &repo) { return "https://api.github.com/repos/" + user + "/" + repo + "/releases"; }
 static inline QString githubCommitAPI(const QString &user, const QString &repo, const QString &ref = "")
       {
       return "https://api.github.com/repos/" + user + "/" + repo + "/commits" + (ref.isEmpty() ? "" : ('/' + ref));
@@ -500,21 +500,35 @@ static inline int CompatEstimate(QString branch)
       if (branch.contains("3") && !branch.contains("2")) return 1;
       return 0;
       }
-static bool getLatestRelease(QJsonDocument& releases, int& release_id, QString& link) {
-      // By default, releases returned from GitHub are sorted from the latest commit to the oldest
-      for (const auto& release : releases.array()) {
-            if (release.isObject()) {
-                  const auto& release_obj = release.toObject();
-                  if (isCompatibleRelease(release_obj.value("target_commitish").toString())) {
-                        // get "id" and "zipball_url"
-                        release_id = release_obj.value("id").toInt();
-                        link = release_obj.value("zipball_url").toString();
-                        return true;
+
+static bool getLatestRelease(const QString& user, const QString& repo, int& release_id, QString& link, const QString filenameBase = "")
+      {
+      DownloadUtils release_json;
+      release_json.setTarget(githubReleaseAPI(user, repo));
+      release_json.download();
+      QJsonDocument releases = QJsonDocument::fromJson(release_json.returnData());
+      if (!releases.array().isEmpty()) {
+            // By default, releases returned from GitHub are sorted from the latest commit to the oldest
+            for (const auto& release : releases.array()) {
+                  if (release.isObject()) {
+                        const auto& release_obj = release.toObject();
+                        QString release_name = release_obj.value("name").toString();
+                        if (!filenameBase.isEmpty() && filenameBase != release_name)
+                              continue;
+                        if (isCompatibleRelease(release_obj.value("target_commitish").toString())) {
+                              // get "id" and "zipball_url"
+                              release_id = release_obj.value("id").toInt();
+                              link = release_obj.value("zipball_url").toString();
+                              return true;
+                              }
+                        else continue;
                         }
-                  else return false;
+                  else continue;
                   }
-            else return false;
             }
+      else
+            return false;
+
       }
 
 static inline bool isNotFoundMessage(const QJsonObject& json_obj)
@@ -522,14 +536,18 @@ static inline bool isNotFoundMessage(const QJsonObject& json_obj)
       return json_obj["message"].toString() == "Not Found";
       }
 
-static std::vector<PluginPackageLink> getAttachments(const QByteArray& html_raw_array, bool all = false)
+static std::vector<PluginPackageLink> getAttachments(const QString& html_raw, void (*localHint)(QRegularExpressionMatch&, PluginPackageLink&, const QString&))
       {
-      QString html_raw(html_raw_array);
       std::vector<PluginPackageLink> file_urls;
-      if (!all) {
+#if 0
+      // This is the code that fetches the attachment table that appears at the bottom of the page.
+      // Now I find it more attracting to search for inline attachment urls instaed.
+            {
             int start_idx = html_raw.indexOf("<div class=\"field field--name-upload field--type-file field--label-above\">");
-            if (start_idx == -1)
-                  ; // TODO: no attachments found
+            if (start_idx == -1) {
+                  qDebug("No attachment found.");
+                  return;
+                  }
             QString attachments_raw = html_raw.mid(start_idx, -1);
             XmlReader xml(attachments_raw);
             while (!xml.atEnd() && xml.name() != "table") xml.readNextStartElement();
@@ -548,45 +566,106 @@ static std::vector<PluginPackageLink> getAttachments(const QByteArray& html_raw_
                   xml.readNextStartElement();
                   }
             }
-      else {
+#endif
+            {
             // search for all links from musescore.org
-            QRegularExpression musescore_link_patt("<a href=\"(https://musescore.org/sites/musescore.org/files/(\\d+\\-\\d+/)?[\\w\\-\\.]+)\".*?>(.*?)</a>");
+            QRegularExpression musescore_link_patt("<a href=\"(https://musescore.org/sites/musescore.org/files/(\\d+\\-\\d+/)?[\\w\\-\\.]+)\".*?>(?<text>.*?)</a>");
             auto it = musescore_link_patt.globalMatch(html_raw);
             while (it.hasNext()) {
                   QRegularExpressionMatch match = it.next();
-                  QString hint_text = match.captured(2);
-                  QString hint_debug = match.captured(0);
-                  int start_idx = match.capturedStart(0);
-                  int end_idx = match.capturedEnd();
-                  int newline_start = start_idx, newline_end = end_idx;
-                  while (newline_start>0 && html_raw[newline_start-1] != '\n')
-                        newline_start--;
-                  while (newline_end < html_raw.length() && html_raw[newline_end] != '\n')
-                        newline_end++;
-                  QString curr_line = html_raw.mid(newline_start, newline_end - newline_start + 1);
-                  int score = CompatEstimate(curr_line);
-                  PluginPackageLink link = { {ATTACHMENT},{match.captured(1)},{newline_start},{curr_line},{score} };
+                  // check suffix
+                  const QStringList suffixes = { "qml","zip","rar","7z" };
+                  if (!suffixes.contains(QFileInfo(match.captured(1)).suffix().toLower()))
+                        continue;
+                  PluginPackageLink link = { {ATTACHMENT},{match.captured(1)}};
+                  link.source = ATTACHMENT;
+                  localHint(match, link, html_raw);
                   file_urls.push_back(link);
-
                   }
-            // now get more hints from the line above the link
-            for (int i = 0; i < file_urls.size(); i++) {
-                  auto& link = file_urls[i];
-                  if (link.score == 0) {
-                        int last_idx = link.newline_index - 1;
-                        int first_idx = last_idx - 1;
-                        while (first_idx > 0 && html_raw[first_idx - 1] != '\n')
-                              first_idx--;
-                        QString last_line = html_raw.mid(first_idx, last_idx - first_idx + 1);
-                        // is this the content of the last link?
-                        if (i > 0 && file_urls[i - 1].curr_line == last_line)
-                              continue;
-                        link.score = CompatEstimate(last_line);
-                        }
-                  }
-
             }
       return file_urls;
+      }
+
+static std::vector<PluginPackageLink> getGitHubLinks(const QString& html_raw, void(*localHint)(QRegularExpressionMatch&, PluginPackageLink&, const QString&))
+      {
+      std::vector<PluginPackageLink> github_urls;
+      QRegularExpression github_repo_patt("<a href=\"(https?://github.com/([\\w\\-]+)/([\\w\\-]+))\".*?>(?<text>.*?)</a>");
+      QRegularExpression github_archive_link("<a href=\"(https?://github.com/([\\w\\-]+)/([\\w\\-]+)/archive/(.+?))\".*?>(?<text>.*?)</a>"); // downloadable link
+      QRegularExpression github_directory_patt("<a href=\"(https?://github.com/([\\w\\-]+)/([\\w\\-]+)/(tree|blob)/([\\w\\-]+).*?)\".*?>(?<text>.*?)</a>"); // with branch info
+      auto it = github_archive_link.globalMatch(html_raw);
+      while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+            PluginPackageLink link = { GITHUB_RELEASE,match.captured(1) };
+            link.user = match.captured(2);
+            link.repo = match.captured(3);
+            localHint(match, link, html_raw);
+            github_urls.push_back(link);
+            }
+      it = github_directory_patt.globalMatch(html_raw);
+      while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+            PluginPackageLink link = { GITHUB,match.captured(1) };
+            link.user = match.captured(2);
+            link.repo = match.captured(3);
+            link.branch = match.captured(5);
+            localHint(match, link, html_raw);
+            github_urls.push_back(link);
+            }
+      it = github_repo_patt.globalMatch(html_raw);
+      while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+            PluginPackageLink link = { GITHUB,match.captured(1) };
+            link.user = match.captured(2);
+            link.repo = match.captured(3);
+            localHint(match, link, html_raw);
+            github_urls.push_back(link);
+            }
+      return github_urls;
+      }
+
+static std::vector<PluginPackageLink> getLinks(const QByteArray& html_raw_array)
+      {
+      QString html_raw(html_raw_array);
+      auto GetLocalHint = [](QRegularExpressionMatch& match, PluginPackageLink& link, const QString& html_raw) {
+            int start_idx = match.capturedStart(0);
+            int end_idx = match.capturedEnd();
+            int newline_start = start_idx, newline_end = end_idx;
+            while (newline_start > 0 && html_raw[newline_start - 1] != '\n')
+                  newline_start--;
+            while (newline_end < html_raw.length() && html_raw[newline_end] != '\n')
+                  newline_end++;
+            // TODO: first use hyper link text as hint, 
+            // and if not strong enough, use the whole line 
+            link.newline_index = newline_start;
+            link.curr_line = html_raw.mid(newline_start, newline_end - newline_start + 1);
+            link.score = CompatEstimate(link.curr_line);
+            };
+      std::vector<PluginPackageLink> attachments = getAttachments(html_raw, GetLocalHint);
+      std::vector<PluginPackageLink> github_links = getGitHubLinks(html_raw, GetLocalHint);
+      std::vector<PluginPackageLink> urls;
+      urls.insert(urls.begin(),attachments.begin(), attachments.end());
+      urls.insert(urls.begin(), github_links.begin(), github_links.end());
+      std::set<int> begin_idx;
+      for (auto& url : urls)
+            begin_idx.insert(url.newline_index);
+      // now, get more hints from the line above each link
+      for (int i = 0; i < urls.size(); i++) {
+            auto& link = urls[i];
+            if (link.score >= 0) {
+                  int last_idx = link.newline_index - 1;
+                  int first_idx = last_idx - 1;
+                  while (first_idx > 0 && html_raw[first_idx - 1] != '\n')
+                        first_idx--;
+                  QString last_line = html_raw.mid(first_idx, last_idx - first_idx + 1);
+                  // if another url is in the last line
+                  if (begin_idx.find(first_idx) != begin_idx.end())
+                        continue;
+                  int newscore = CompatEstimate(last_line);
+                  if (newscore > link.score)
+                        link.score = newscore;
+                  }
+            }
+      return urls;
       }
 
 static QDateTime GetLastModified(QString& url) 
@@ -614,81 +693,77 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
       page.setTarget(url);
       page.download();
       QByteArray html_raw = page.returnData();
-      // first of all, check if GitHub repo links exist
-      QRegularExpression github_repo_patt("https?://github.com/([\\w\\-]+)/([\\w\\-]+)");
-
-      QRegularExpressionMatch github_match = github_repo_patt.match(html_raw);
-      if (github_match.hasMatch()) {
-            QString user = github_match.captured(1);
-            QString repo = github_match.captured(2);
-            // check if there's a GitHub release
-            DownloadUtils release_json(this);
-            release_json.setTarget(githubLatestReleaseAPI(user, repo));
-            release_json.download();
-            QJsonDocument result = QJsonDocument::fromJson(release_json.returnData());
-            if (!result.array().isEmpty()) {
-                  // there is a GitHub release
-                  should_update = desc.source != GITHUB_RELEASE;
-                  desc.source = GITHUB_RELEASE;
-                  int release_id;
-                  QString direct_link;
-                  if (getLatestRelease(result, release_id, direct_link)) {
-                        if (should_update || (desc.release_id != release_id && release_id > 0)) {
-                              desc.release_id = release_id;
-                              desc.direct_link = direct_link;
-                              return true;
-                              }
-                        else
-                              return false;
-                        }
+      std::vector<PluginPackageLink> urls = getLinks(html_raw);
+      // choose a link with the highest score
+      PluginPackageLink target;
+      int score = -2;
+      for (auto& item : urls) {
+            if (item.score > score) {
+                  target = item;
+                  score = item.score;
                   }
-                  // else, fetch latest commit sha on master(usually for 3.x), as info for update
-            should_update = desc.source != GITHUB;
-            desc.source = GITHUB;
-            QString sha = getLatestCommitSha(user, repo, "master");
-            // compare the sha with previous stored sha. If the same, don't update.
-            if (should_update || desc.latest_commit != sha) {
-                  desc.latest_commit = sha;
-                  desc.direct_link = githubLatestArchiveURL(user, repo, "master");
-                  return true;
-                  }
-            else
-                  return false;
             }
-      else {
-            // no github repo links exist
-            // first fetch links in attachments
-            std::vector<PluginPackageLink> attachment_urls = getAttachments(html_raw, true);
-            if (attachment_urls.empty())
-                  attachment_urls = getAttachments(html_raw, true);
-
-            QStringList suffixes = { "qml","zip","rar","7z" };
-            PluginPackageLink target;
-            int score = -2;
-            for (auto& item : attachment_urls) {
-                  QFileInfo f(item.url);
-                  if (suffixes.contains(f.suffix().toLower())) {
-                        int curr_score = item.score; // add other text in that line
-                        if (curr_score > score) {
-                              target = item;
-                              score = curr_score;
-                              }
-                        }
-                  }
-            if (score >= 0) {
-                  QDateTime date_time;
-                  if (desc.source != ATTACHMENT || desc.direct_link != target.url || (date_time = GetLastModified(target.url)) != desc.last_modified) {
-                        desc.source = ATTACHMENT;
-                        desc.direct_link = target.url;
-                        if (!date_time.isValid())
-                              // TODO: we didn't download the file before, optimize: fill desc.last_modified when downloading the file.
-                              date_time = GetLastModified(target.url);
-                        desc.last_modified = date_time;
+      if (score == -2)
+            return false;
+      if (target.source == GITHUB) {
+            int release_id;
+            if (getLatestRelease(target.user, target.repo, release_id, direct_link)) {
+                  // there is a GitHub release, change source to RELEASE
+                  // TODO: the condition could be optimized
+                  if (desc.source != GITHUB_RELEASE || (desc.release_id != release_id && release_id > 0)) {
+                        desc.release_id = release_id;
+                        desc.direct_link = direct_link;
+                        desc.source = GITHUB_RELEASE;
                         return true;
                         }
                   else
                         return false;
                   }
+                  
+            // else, fetch latest commit sha on master(usually for 3.x), as info for update
+            QString branch = target.branch.isNull() ? "master" : target.branch;
+            QString sha = getLatestCommitSha(target.user, target.repo, branch);
+            // compare the sha with previous stored sha. If the same, don't update.
+            // TODO: the condition could be optimized
+            if (desc.source != GITHUB || desc.latest_commit != sha) {
+                  desc.latest_commit = sha;
+                  desc.direct_link = githubLatestArchiveURL(target.user, target.repo, "master");
+                  desc.source = GITHUB;
+                  return true;
+                  }
+            else
+                  return false;
+            }
+      else if (target.source == GITHUB_RELEASE) {
+            // even if the download link is known, we still need to fetch the release id
+            int release_id = 0;
+            getLatestRelease(target.user, target.repo, release_id, direct_link, QFileInfo(target.url).completeBaseName());
+            if (release_id > 0) {
+                  if (desc.source != GITHUB_RELEASE || (desc.release_id != release_id && release_id > 0)) {
+                        desc.release_id = release_id;
+                        desc.direct_link = target.url;
+                        desc.source = GITHUB_RELEASE;
+                        return true;
+                  }
+                  else
+                        return false;
+            }
+            else
+                  qDebug("Invalid release id in the link.");
+            }
+      else if(target.source==ATTACHMENT){
+            QDateTime date_time;
+            if (desc.source != ATTACHMENT || desc.direct_link != target.url || (date_time = GetLastModified(target.url)) != desc.last_modified) {
+                  desc.source = ATTACHMENT;
+                  desc.direct_link = target.url;
+                  if (!date_time.isValid())
+                        // TODO: we didn't download the file before, optimize: fill desc.last_modified when downloading the file.
+                        date_time = GetLastModified(target.url);
+                  desc.last_modified = date_time;
+                  return true;
+                  }
+            else
+                  return false;
 
             qDebug("Unknown plugin source");
             desc.source = UNKNOWN;

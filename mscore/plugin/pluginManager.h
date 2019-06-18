@@ -52,7 +52,10 @@ enum PluginPackageSource {
 //---------------------------------------------------------
 struct PluginPackageLink {
       PluginPackageSource source;
-      QString url;
+      QString url; // valid for GITHUB_RELEASE and ATTACHMENT
+      QString user; // valid for GITHUB
+      QString repo; // valid for GITHUB
+      QString branch; // valid for GITHUB
       int newline_index;
       QString curr_line;
       int score = 0;
