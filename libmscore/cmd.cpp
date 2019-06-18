@@ -3155,28 +3155,7 @@ void Score::cmdRealizeChordSymbols()
                   RealizedHarmony r = h->realizedHarmony();
                   Segment* seg = toSegment(h->parent());
                   ChordRest* cr = toChordRest(seg->element(h->track()));
-                  Fraction duration = seg->ticks();
-
-                  //find next chord symbol
-                  Segment* cur = seg->next1();
-                  while (cur) {
-                        Element* e = cur->findAnnotation(ElementType::HARMONY,
-                                                   h->track(), h->track());
-                        if (e) {
-                              //we have found the next chord symbol
-                              //set duration to the difference between
-                              //the two chord symbols
-                              duration = e->tick() - h->tick();
-                              break;
-                              }
-                        //keep adding the duration of the current segment
-                        //in case we are not able to find a next
-                        //chord symbol
-                        //TODO - PHV: is it better to just go from the
-                        //current location to the end of the score?
-                        duration += cur->ticks();
-                        cur = cur->next1();
-                        }
+                  Fraction duration = h->ticksTilNext();
 
                   Chord* chord = new Chord(this);
                   //set chord attributes based on current chordrest
