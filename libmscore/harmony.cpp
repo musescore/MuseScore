@@ -935,6 +935,37 @@ QString HDegree::text() const
       }
 
 //---------------------------------------------------------
+//   ticksTilNext
+///   finds ticks until the next chord symbol or end of score
+//---------------------------------------------------------
+Fraction Harmony::ticksTilNext() const
+      {
+      Segment* seg = toSegment(parent());
+      Fraction duration = seg->ticks();
+      Segment* cur = seg->next1();
+      while (cur) {
+            //find harmony on same track
+            Element* e = cur->findAnnotation(ElementType::HARMONY,
+                                       track(), track());
+            if (e) {
+                  //we have found the next chord symbol
+                  //set duration to the difference between
+                  //the two chord symbols
+                  duration = e->tick() - tick();
+                  break;
+                  }
+            //keep adding the duration of the current segment
+            //in case we are not able to find a next
+            //chord symbol
+            //TODO - PHV: is it better to just go from the
+            //current location to the end of the score?
+            duration += cur->ticks();
+            cur = cur->next1();
+            }
+      return duration;
+      }
+
+//---------------------------------------------------------
 //   fromXml
 //    lookup harmony in harmony data base
 //    using musicXml "kind" string and degree list
