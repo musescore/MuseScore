@@ -36,7 +36,7 @@ namespace Ms {
 //const int fontSize   = 20;
 
 
-const QPoint rangeInfo[241] = {
+const QPoint rangeInfo[] = {
       { 0x0020, 0x007F },
       { 0x0080, 0x00FF },
       { 0x0100, 0x017F },
