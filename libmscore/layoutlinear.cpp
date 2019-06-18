@@ -126,7 +126,8 @@ void Score::resetSystems(bool layoutAll, LayoutContext& lc)
       system->setInstrumentNames(/* longNames */ true);
       // we need to reset tempo because fermata is setted
       //inside getNextMeasure and it lead to twice timeStretch
-      resetTempo();
+      if (isMaster())
+            resetTempo();
 
       QPointF pos;
       bool firstMeasure = true;     //lc.startTick.isZero();
