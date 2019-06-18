@@ -389,8 +389,8 @@ void ResourceManager::filterPluginList()
             // locate the "Install" button
             QPushButton* install = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(i, 3)));
             const QString& plugin_name = install->property("name").toString();
-            const QStringList& categories = install->property("categories").toStringList();
-            if (plugin_name.contains(search, Qt::CaseInsensitive) && (category == "Any" || categories.contains(category)))
+            const QStringList& category_list = install->property("categories").toStringList();
+            if (plugin_name.contains(search, Qt::CaseInsensitive) && (category == "Any" || category_list.contains(category)))
                   pluginsTable->showRow(i);
             else
                   pluginsTable->hideRow(i);
@@ -521,10 +521,13 @@ static bool getLatestRelease(const QString& user, const QString& repo, int& rele
                               link = release_obj.value("zipball_url").toString();
                               return true;
                               }
-                        else continue;
+                        else
+                              continue;
                         }
-                  else continue;
+                  else
+                        continue;
                   }
+            return false;
             }
       else
             return false;
@@ -694,7 +697,6 @@ static QDateTime GetLastModified(QString& url)
 //---------------------------------------------------------
 bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& desc)
       {
-      bool should_update = false;
       QString direct_link;
       DownloadUtils page(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
       page.setTarget(url);
@@ -751,14 +753,16 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
                         desc.direct_link = target.url;
                         desc.source = GITHUB_RELEASE;
                         return true;
-                  }
+                        }
                   else
                         return false;
-            }
-            else
+                  }
+            else {
                   qDebug("Invalid release id in the link.");
+                  return false;
+                  }
             }
-      else if(target.source==ATTACHMENT){
+      else if(target.source==ATTACHMENT) {
             QDateTime date_time;
             if (desc.source != ATTACHMENT || desc.direct_link != target.url || (date_time = GetLastModified(target.url)) != desc.last_modified) {
                   desc.source = ATTACHMENT;
@@ -771,12 +775,9 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
                   }
             else
                   return false;
-
-            qDebug("Unknown plugin source");
-            desc.source = UNKNOWN;
-
-            return false;
             }
+      else
+            return false;
       }
 
 void ResourceManager::updatePlugin()
@@ -1061,7 +1062,6 @@ void ResourceManager::downloadInstallPlugin()
       QString page_url = button->property("page_url").toString();
       PluginPackageDescription new_package;
       new_package.package_name = button->property("name").toString();
-      QObject* p = button->parent();
       analyzePluginPage("https://musescore.org" + page_url, new_package);
       if (new_package.source == UNKNOWN) {
             button->setText("Failed Try again.");
