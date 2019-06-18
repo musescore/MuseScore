@@ -157,6 +157,7 @@ void Navigator::setScoreView(ScoreView* v)
             connect(_cv,  SIGNAL(viewRectChanged()), this, SLOT(updateViewRect()));
             rescale();
             updateViewRect();
+            update();
             }
       else {
             _score = 0;
@@ -172,7 +173,7 @@ void Navigator::setScoreView(ScoreView* v)
 
 void Navigator::setScore(Score* v)
       {
-      _cv    = 0;
+      setScoreView(nullptr); // ensure all connections to ScoreView get disconnected
       _score = v;
       rescale();
       updateViewRect();

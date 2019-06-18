@@ -2502,7 +2502,6 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
             setWindowTitle(MUSESCORE_NAME_VERSION);
             if (_navigator && _navigator->widget()) {
                   navigator()->setScoreView(cv);
-                  navigator()->setScore(0);
                   }
             if (timeline()) {
                   timeline()->setScoreView(cv);
@@ -2565,7 +2564,6 @@ void MuseScore::setCurrentScoreView(ScoreView* view)
       setPos(cs->inputPos());
       //showMessage(cs->filePath(), 2000);
       if (_navigator && _navigator->widget()) {
-            navigator()->setScore(cs);
             navigator()->setScoreView(view);
             }
       if (timeline()) {
