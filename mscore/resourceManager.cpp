@@ -577,7 +577,7 @@ static std::vector<PluginPackageLink> getAttachments(const QString& html_raw, vo
                   const QStringList suffixes = { "qml","zip","rar","7z" };
                   if (!suffixes.contains(QFileInfo(match.captured(1)).suffix().toLower()))
                         continue;
-                  PluginPackageLink link = { {ATTACHMENT},{match.captured(1)}};
+                  PluginPackageLink link{ {ATTACHMENT},{match.captured(1)}};
                   link.source = ATTACHMENT;
                   localHint(match, link, html_raw);
                   file_urls.push_back(link);
@@ -595,7 +595,7 @@ static std::vector<PluginPackageLink> getGitHubLinks(const QString& html_raw, vo
       auto it = github_archive_link.globalMatch(html_raw);
       while (it.hasNext()) {
             QRegularExpressionMatch match = it.next();
-            PluginPackageLink link = { GITHUB_RELEASE,match.captured(1) };
+            PluginPackageLink link{ GITHUB_RELEASE,match.captured(1) };
             link.user = match.captured(2);
             link.repo = match.captured(3);
             localHint(match, link, html_raw);
@@ -604,7 +604,7 @@ static std::vector<PluginPackageLink> getGitHubLinks(const QString& html_raw, vo
       it = github_directory_patt.globalMatch(html_raw);
       while (it.hasNext()) {
             QRegularExpressionMatch match = it.next();
-            PluginPackageLink link = { GITHUB,match.captured(1) };
+            PluginPackageLink link{ GITHUB,match.captured(1) };
             link.user = match.captured(2);
             link.repo = match.captured(3);
             link.branch = match.captured(5);
@@ -614,7 +614,7 @@ static std::vector<PluginPackageLink> getGitHubLinks(const QString& html_raw, vo
       it = github_repo_patt.globalMatch(html_raw);
       while (it.hasNext()) {
             QRegularExpressionMatch match = it.next();
-            PluginPackageLink link = { GITHUB,match.captured(1) };
+            PluginPackageLink link{ GITHUB,match.captured(1) };
             link.user = match.captured(2);
             link.repo = match.captured(3);
             localHint(match, link, html_raw);
