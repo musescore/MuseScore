@@ -82,6 +82,11 @@
     <content_attribute id="money-purchasing">mild</content_attribute>
   </content_rating>
   <releases>
+    <release date="2019-05-28" version="3.1">
+      <description>
+        <p>MuseScore 3.1, in addition to hundreds of bug fixes, introduces some new features (including single-note dynamics) and significant improvements related to playback, automatic placement and layout, fretboard diagrams, and performance.</p>
+      </description>
+    </release>
     <release date="2019-03-12" version="3.0.5">
       <description>
         <p>The focus of this release was performance and stability. We reached an incredible boost in optimization so MuseScore 3 is now faster than MuseScore 2, but is still powerful with the smart layout feature. The crash reporter facility introduced in MuseScore 3.0.3 lets us concentrate on fixing the most frequent crashes.</p>
