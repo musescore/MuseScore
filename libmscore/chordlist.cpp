@@ -1547,7 +1547,7 @@ QList<int> ChordDescription::intervals() const {
 //    pitch
 //---------------------------------------------------------
 QList<int> ChordDescription::noteTpcs(int rootTpc) const {
-      //TODO - PHV take a look again later, this isn't super efficient
+      //TODO - PHV used parsed chord rather than HChord
       QList<int> ret;
 
       static const HChord dimChord(0,3,6,9);
@@ -1561,24 +1561,19 @@ QList<int> ChordDescription::noteTpcs(int rootTpc) const {
 
       if (chord.contains(3)) {
             if (!chord.contains(4))
-                  //minor 3rd
-                  ret << tpcInterval(rootTpc, 3, -1);
+                  ret << tpcInterval(rootTpc, 3, -1); //minor 3rd
             else
-                  //sharp 9
-                  ret << tpcInterval(rootTpc, 2, 1);
+                  ret << tpcInterval(rootTpc, 2, 1); //#9
             }
       if (chord.contains(4))
             ret << tpcInterval(rootTpc, 3, 0);
-      //above is bad, fix soon
 
       // 7
       if (chord.contains(11)) {
-            //maj7
-            ret << tpcInterval(rootTpc, 7, 0);
+            ret << tpcInterval(rootTpc, 7, 0); //maj7
             }
       else if (chord.contains(10)) {
-            //7
-            ret << tpcInterval(rootTpc, 7, -1);
+            ret << tpcInterval(rootTpc, 7, -1); //dom7
             }
 
       // 4 or 11
@@ -1591,19 +1586,15 @@ QList<int> ChordDescription::noteTpcs(int rootTpc) const {
             //natural 5
             ret << tpcInterval(rootTpc, 5, 0);
             if (chord.contains(6))
-                  //#11
-                  ret << tpcInterval(rootTpc, 4, 1);
+                  ret << tpcInterval(rootTpc, 4, 1); //#11
             if (chord.contains(8))
-                  //b13
-                  ret << tpcInterval(rootTpc, 6, -1);
+                  ret << tpcInterval(rootTpc, 6, -1); //b13
             }
       else {
             if (chord.contains(6))
-                  //b5
-                  ret << tpcInterval(rootTpc, 5, -1);
+                  ret << tpcInterval(rootTpc, 5, -1); //b5
             if (chord.contains(8))
-                  //#5
-                  ret << tpcInterval(rootTpc, 5, 1);
+                  ret << tpcInterval(rootTpc, 5, 1); //#5
             }
 
       // 6
