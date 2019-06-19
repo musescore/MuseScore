@@ -42,6 +42,7 @@ class PageSettings : public AbstractDialog, private Ui::PageSettingsBase {
       void blockSignals(bool);
       void applyToScore(Score*);
       void setMarginsMax(double);
+      QPushButton* buttonApplyToAllParts;
 
    private slots:
       void mmClicked();

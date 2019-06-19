@@ -297,6 +297,8 @@ InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent)
       setObjectName("InsertMeasuresDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+      connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
       setModal(true);
       insmeasures->selectAll();
       }
@@ -2884,6 +2886,8 @@ MeasuresDialog::MeasuresDialog(QWidget* parent)
       {
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+      connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+      connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
       setModal(true);
       measures->selectAll();
       }

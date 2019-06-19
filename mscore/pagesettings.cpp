@@ -53,11 +53,15 @@ PageSettings::PageSettings(QWidget* parent)
       for (int i = 0; i < QPageSize::LastPageSize; ++i)
             pageGroup->addItem(QPageSize::name(QPageSize::PageSizeId(i)), i);
 
+      buttonApplyToAllParts = new QPushButton(tr("Apply to all Parts"));
+      buttonBox->addButton(buttonApplyToAllParts, QDialogButtonBox::ApplyRole);
+      connect(buttonBox->button(QDialogButtonBox::Ok),      SIGNAL(clicked()), SLOT(ok()));
+      connect(buttonBox->button(QDialogButtonBox::Apply),   SIGNAL(clicked()), SLOT(apply()));
+      connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+      connect(buttonApplyToAllParts,SIGNAL(clicked()),            SLOT(applyToAllParts()));
       connect(mmButton,             SIGNAL(clicked()),            SLOT(mmClicked()));
       connect(inchButton,           SIGNAL(clicked()),            SLOT(inchClicked()));
-      connect(buttonApply,          SIGNAL(clicked()),            SLOT(apply()));
-      connect(buttonApplyToAllParts,SIGNAL(clicked()),            SLOT(applyToAllParts()));
-      connect(buttonOk,             SIGNAL(clicked()),            SLOT(ok()));
       connect(portraitButton,       SIGNAL(clicked()),            SLOT(orientationClicked()));
       connect(landscapeButton,      SIGNAL(clicked()),            SLOT(orientationClicked()));
       connect(twosided,             SIGNAL(toggled(bool)),        SLOT(twosidedToggled(bool)));

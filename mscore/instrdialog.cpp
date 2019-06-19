@@ -51,8 +51,17 @@ InstrumentsDialog::InstrumentsDialog(QWidget* parent)
       QAction* a = getAction("instruments");
       connect(a, SIGNAL(triggered()), SLOT(reject()));
       addAction(a);
+      QPushButton* loadButton =  new QPushButton(tr("Load…"));
+      QPushButton* saveButton =  new QPushButton(tr("Save As…"));
+      buttonBox->addButton(loadButton, QDialogButtonBox::ResetRole);
+      buttonBox->addButton(saveButton, QDialogButtonBox::ResetRole);
       saveButton->setVisible(false);
       loadButton->setVisible(false);
+      connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+      connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+      connect(saveButton, SIGNAL(clicked()), SLOT(on_saveButton_clicked()));
+      connect(loadButton, SIGNAL(clicked()), SLOT(on_loadButton_clicked()));
+
       readSettings();
       }
 
