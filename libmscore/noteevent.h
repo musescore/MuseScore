@@ -24,8 +24,8 @@ class XmlReader;
 
 class NoteEvent {
       int _pitch;   // relative pitch to note pitch
-      int _ontime;  // 1/1000 of nominal note len
-      int _len;     // 1/1000 of nominal note len
+      int _ontime;  // one unit is 1/1000 of nominal note len
+      int _len;     // one unit is 1/1000 of nominal note len
 
    public:
       constexpr static int NOTE_LENGTH = 1000;

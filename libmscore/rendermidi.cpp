@@ -699,6 +699,48 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
             Fraction tick = seg->tick();
             Fraction tick2 = tick + seg->ticks();
 
+            //render harmony
+            for (Element* e : seg->annotations()) {
+                  if (!e->isHarmony() || (e->track() < strack) || (e->track() >= etrack))
+                        continue;
+                  Harmony* h = toHarmony(e);
+                  //TODO - PHV: transpose here and account for note event maybe
+                  Staff* staff = m->score()->staff(h->track() / VOICES);
+                  Instrument* instr = staff->part()->instrument(tick);
+                  int channel = instr->channel(0)->channel(); //FIXME - PHV: this is temp
+                  if (!staff->primaryStaff())
+                        continue;
+
+                  int staffIdx = staff->idx();
+                  int velocity = staff->velocities().velo(tick.ticks());
+
+                  RealizedHarmony r = h->realizedHarmony();
+                  QList<int> pitches = r.pitches();
+                  ChordRest* cr = toChordRest(seg->element(h->track()));
+
+                  NPlayEvent ev(ME_NOTEON, channel, 0, velocity);
+                  Fraction duration = h->ticksTilNext();
+
+                  int onTime = h->tick().ticks();
+                  int offTime = onTime + duration.ticks();
+
+                  ev.setOriginatingStaff(staffIdx);
+                  if (cr != 0 && cr->isChord()) {
+                        Chord* chord = toChord(cr);
+                        ev.setTuning(chord->upNote()->tuning());
+                        }
+                  else
+                        ev.setTuning(0.0);
+                  //add play events
+                  for (int p : pitches) {
+                        ev.setPitch(p);
+                        ev.setVelo(velocity);
+                        events->insert(std::pair<int, NPlayEvent>(onTime, ev));
+                        ev.setVelo(0);
+                        events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+                        }
+                  }
+
             for (int track = strack; track < etrack; ++track) {
                   // Skip linked staves, except primary
                   Staff* st1 = m->score()->staff(track / VOICES);
