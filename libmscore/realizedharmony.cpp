@@ -28,7 +28,7 @@ namespace Ms {
 //   RealizedHarmony
 ///   creates empty realized harmony
 //---------------------------------------------------
-RealizedHarmony::RealizedHarmony(Harmony* h) : _harmony(h), _rootTpc(h->rootTpc()),
+RealizedHarmony::RealizedHarmony(Harmony* h) : _harmony(h),
       _notes(QMap<int, int>()), _voicing(Voicing::AUTO), _rhythm(Rhythm::AUTO), _dirty(1)
       {
       //TODO - PHV
@@ -61,19 +61,6 @@ void RealizedHarmony::setRhythm(Rhythm r)
       }
 
 //---------------------------------------------------
-//   setRoot
-///   sets the root and dirty flag if the passed
-///   root is different than current
-//---------------------------------------------------
-void RealizedHarmony::setRoot(int r)
-      {
-      if (_rootTpc == r)
-            return;
-      _rootTpc = r;
-      _dirty = 1;
-      }
-
-//---------------------------------------------------
 //   notes
 ///   returns the list of notes
 //---------------------------------------------------
@@ -88,20 +75,25 @@ const QMap<int, int>& RealizedHarmony::notes() const
 ///   updates the current note map, this is where all
 ///   of the rhythm and voicing choices matter since
 ///   the voicing algorithms depend on this.
+///
+///   transposeOffset -- is the difference between the
+///   written and transposed pitches
 //---------------------------------------------------
-void RealizedHarmony::update(int rootTpc, int bassTpc)
+void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0*/)
       {
       if (!_dirty)
             return;
 
+      int bassPitch = tpc2pitch(bassTpc) + transposeOffset;
+      int rootPitch = tpc2pitch(rootTpc) + transposeOffset;
+
       _notes.clear();
       //fix magic values
-      int rootPitch = tpc2pitch(rootTpc);
       if (_voicing != Voicing::ROOT_ONLY) {
             if (bassTpc != Tpc::TPC_INVALID)
-                  _notes.insert(tpc2pitch(bassTpc) + 4*12, bassTpc);
+                  _notes.insert(bassPitch + 4*PITCH_DELTA_OCTAVE, bassTpc);
             else
-                  _notes.insert(rootPitch + 4*12, rootTpc);
+                  _notes.insert(rootPitch + 4*PITCH_DELTA_OCTAVE, rootTpc);
             }
 
       switch (_voicing) {
@@ -109,14 +101,15 @@ void RealizedHarmony::update(int rootTpc, int bassTpc)
                   break;
             case Voicing::AUTO:
                   {
-                  _notes.insert(rootPitch + 5*12, rootTpc);
+                  _notes.insert(rootPitch + 5*PITCH_DELTA_OCTAVE, rootTpc);
                   //ensure that notes fall under a specific range
                   //for now this range is between 5*12 and 6*12
-                  QMap<int, int> intervals = getIntervals();
+                  QMap<int, int> intervals = getIntervals(rootTpc);
                   QMapIterator<int, int> i(intervals);
                   while (i.hasNext()) {
                         i.next();
-                        _notes.insert((rootPitch + i.key()) % 12 + 5*12, i.value());
+                        _notes.insert((rootPitch + i.key()) % PITCH_DELTA_OCTAVE +
+                                      5*PITCH_DELTA_OCTAVE, i.value());
                         }
                   }
                   break;
@@ -125,8 +118,15 @@ void RealizedHarmony::update(int rootTpc, int bassTpc)
             }
       }
 
-QMap<int, int> RealizedHarmony::getIntervals() const
+//---------------------------------------------------
+//   getIntervals
+///   gets a map from intervals to TPCs based on
+///   a passed root tpc (this allows for us to
+///   keep pitches, but transpose notes on the score)
+//---------------------------------------------------
+QMap<int, int> RealizedHarmony::getIntervals(int rootTpc) const
       {
+      //TODO - PHV: use ParsedChord rather than HChord
       QMap<int, int> ret;
       const HChord chord = _harmony->getDescription()->chord;
 
@@ -134,71 +134,62 @@ QMap<int, int> RealizedHarmony::getIntervals() const
 
       //make sure diminished chord has a diminished 7th
       if (chord == dimChord) {
-            ret.insert(3, tpcInterval(_rootTpc, 3, -1));
-            ret.insert(6, tpcInterval(_rootTpc, 5, -1));
-            ret.insert(9, tpcInterval(_rootTpc, 7, -2));
+            ret.insert(3, tpcInterval(rootTpc, 3, -1));
+            ret.insert(6, tpcInterval(rootTpc, 5, -1));
+            ret.insert(9, tpcInterval(rootTpc, 7, -2));
             return ret;
             }
 
       if (chord.contains(3)) {
             if (!chord.contains(4))
-                  //minor 3rd
-                  ret.insert(3, tpcInterval(_rootTpc, 3, -1));
+                  ret.insert(3, tpcInterval(rootTpc, 3, -1)); //minor 3rd
             else
-                  //sharp 9
-                  ret.insert(3, tpcInterval(_rootTpc, 2, 1));
+                  ret.insert(3, tpcInterval(rootTpc, 2, 1)); //#9
             }
       if (chord.contains(4))
-            ret.insert(4, tpcInterval(_rootTpc, 3, 0));
-      //above is bad, fix soon
+            ret.insert(4, tpcInterval(rootTpc, 3, 0));
 
       // 7
       if (chord.contains(11)) {
-            //maj7
-            ret.insert(11, tpcInterval(_rootTpc, 7, 0));
+            ret.insert(11, tpcInterval(rootTpc, 7, 0)); //maj7
             }
       else if (chord.contains(10)) {
-            //7
-            ret.insert(10, tpcInterval(_rootTpc, 7, -1));
+            ret.insert(10, tpcInterval(rootTpc, 7, -1)); //dom7
             }
 
       // 4 or 11
       if (chord.contains(5)) {
-            ret.insert(5, tpcInterval(_rootTpc, 4, 0));
+            ret.insert(5, tpcInterval(rootTpc, 4, 0));
             }
 
       // 5
       if (chord.contains(7)) {
             //natural 5
-            ret.insert(7, tpcInterval(_rootTpc, 5, 0));
+            ret.insert(7, tpcInterval(rootTpc, 5, 0));
             if (chord.contains(6))
-                  //#11
-                  ret.insert(6, tpcInterval(_rootTpc, 4, 1));
+                  ret.insert(6, tpcInterval(rootTpc, 4, 1)); //#11
             if (chord.contains(8))
-                  //b13
-                  ret.insert(8, tpcInterval(_rootTpc, 6, -1));
+                  ret.insert(8, tpcInterval(rootTpc, 6, -1)); //b13
             }
       else {
             if (chord.contains(6))
-                  //b5
-                  ret.insert(6, tpcInterval(_rootTpc, 5, -1));
+                  ret.insert(6, tpcInterval(rootTpc, 5, -1)); //b5
             if (chord.contains(8))
-                  //#5
-                  ret.insert(8, tpcInterval(_rootTpc, 5, 1));
+                  ret.insert(8, tpcInterval(rootTpc, 5, 1)); //#5
             }
 
       // 6
       if (chord.contains(9)) {
-            ret.insert(9, tpcInterval(_rootTpc, 6, 0));
+            ret.insert(9, tpcInterval(rootTpc, 6, 0));
             }
 
       // b9
       if (chord.contains(1))
-            ret.insert(1, tpcInterval(_rootTpc, 2, -1));
+            ret.insert(1, tpcInterval(rootTpc, 2, -1));
 
       // 9
       if (chord.contains(2))
-            ret.insert(2, tpcInterval(_rootTpc, 2, 0));
+            ret.insert(2, tpcInterval(rootTpc, 2, 0));
 
       return ret;
       }
