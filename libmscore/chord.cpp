@@ -692,7 +692,7 @@ void Chord::addLedgerLines()
 
       // the extra length of a ledger line with respect to notehead (half of it on each side)
       qreal extraLen = score()->styleP(Sid::ledgerLineLength) * mag * 0.5;
-      qreal hw = _notes[0]->headWidth();
+      qreal hw;
       qreal minX, maxX;                         // note extrema in raster units
       int   minLine, maxLine;
       bool  visible = false;
@@ -706,6 +706,7 @@ void Chord::addLedgerLines()
       for (size_t j = 0; j < 2; j++) {             // notes are scanned twice...
             int from, delta;
             vector<LedgerLineData> vecLines;
+            hw = 0.0;
             minX  = maxX = 0;
             minLine = 0;
             maxLine = lineBelow;
@@ -732,6 +733,7 @@ void Chord::addLedgerLines()
 
                   if (note->visible())          // if one note is visible,
                         visible = true;         // all lines between it and the staff are visible
+                  hw = qMax(hw, note->headWidth());
 
                   //
                   // Experimental:
