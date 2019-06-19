@@ -2766,52 +2766,11 @@ void Score::getNextMeasure(LayoutContext& lc)
 
       measure->computeTicks();
 
-      if (isMaster()) {
-            // Reset tempo to set correct time stretch for fermata.
-            const Fraction& startTick = measure->tick();
-            resetTempoRange(startTick, measure->endTick());
-
-            // Implement section break rest
-            for (MeasureBase* mb = measure->prev(); mb && mb->endTick() == startTick; mb = mb->prev()) {
-                  if (mb->pause())
-                        setPause(startTick, mb->pause());
-                  }
-
-            // Add pauses from the end of the previous measure (at measure->tick()):
-            for (Segment* s = measure->first()->prev1(); s && s->tick() == startTick; s = s->prev1()) {
-                  if (!s->isBreathType())
-                        continue;
-                  qreal length = 0.0;
-                  for (Element* e : s->elist()) {
-                        if (e && e->isBreath())
-                              length = qMax(length, toBreath(e)->pause());
-                        }
-                  if (length != 0.0)
-                        setPause(startTick, length);
-                  }
-            }
-
       for (Segment& segment : measure->segments()) {
             if (segment.isBreathType()) {
-                  qreal length = 0.0;
-                  Fraction tick = segment.tick();
-                  // find longest pause
-                  for (int i = 0, n = ntracks(); i < n; ++i) {
-                        Element* e = segment.element(i);
-                        if (e && e->isBreath()) {
-                              Breath* b = toBreath(e);
-                              b->layout();
-                              length = qMax(length, b->pause());
-                              }
-                        }
-                  if (length != 0.0)
-                        setPause(tick, length);
-                  }
-            else if (segment.isTimeSigType()) {
-                  for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
-                        TimeSig* ts = toTimeSig(segment.element(staffIdx * VOICES));
-                        if (ts)
-                              staff(staffIdx)->addTimeSig(ts);
+                  for (Element* e : segment.elist()) {
+                        if (e && e->isBreath())
+                              e->layout();
                         }
                   }
             else if (segment.isChordRestType()) {
@@ -2819,64 +2778,10 @@ void Score::getNextMeasure(LayoutContext& lc)
                         if (e->isSymbol())
                               e->layout();
                         }
-                  if (!isMaster())
-                        continue;
-#if 0 // ws
-                  for (Element* e : segment.annotations()) {
-                        if (!(e->isTempoText()
-                           || e->isDynamic()
-                           || e->isFermata()
-                           || e->isRehearsalMark()
-                           || e->isFretDiagram()
-                           || e->isHarmony()
-                           || e->isStaffText()
-                           || e->isFiguredBass())) {
-                              e->layout();             // system text ?
-                              }
-                        }
-#endif
-                  // TODO, this is not going to work, we just cleaned the tempomap
-                  // it breaks the test midi/testBaroqueOrnaments.mscx where first note has stretch 2
-                  // Also see fixTicks
-                  qreal stretch = 0.0;
-                  for (Element* e : segment.annotations()) {
-                        if (e->isFermata())
-                              stretch = qMax(stretch, toFermata(e)->timeStretch());
-                        else if (e->isTempoText()) {
-                              if (isMaster()) {
-                                    TempoText* tt = toTempoText(e);
-                                    setTempo(tt->segment(), tt->tempo());
-                                    }
-                              }
-                        }
-                  if (stretch != 0.0 && stretch != 1.0) {
-                        qreal otempo = tempomap()->tempo(segment.tick().ticks());
-                        qreal ntempo = otempo / stretch;
-                        setTempo(segment.tick(), ntempo);
-                        Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480*4);
-                        auto e = tempomap()->find(etick.ticks());
-                        if (e == tempomap()->end())
-                              setTempo(etick, otempo);
-                        }
                   }
             }
 
-      // update time signature map
-      // create event if measure len and time signature are different
-      // even if they are equivalent 4/4 vs 2/2
-      // also check if nominal time signature has changed
-
-      if (isMaster() && ((!measure->ticks().identical(lc.sig)
-         && measure->ticks() != lc.sig * measure->mmRestCount())
-         || (lc.prevMeasure && lc.prevMeasure->isMeasure()
-         && !measure->timesig().identical(toMeasure(lc.prevMeasure)->timesig()))))
-            {
-            if (measure->isMMRest())
-                  lc.sig = measure->mmRestFirst()->ticks();
-            else
-                  lc.sig = measure->ticks();
-            sigmap()->add(lc.tick.ticks(), SigEvent(lc.sig, measure->timesig(), measure->no()));
-            }
+      rebuildTempoAndTimeSigMaps(measure);
 
       Segment* seg = measure->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
       if (measure->repeatStart()) {
