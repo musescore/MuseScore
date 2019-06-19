@@ -71,7 +71,7 @@ void Preferences::init(bool storeInMemoryOnly)
       defaultUsePortAudio = true;
 #endif
 
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC) && !defined(TESTROOT)
       const MuseScoreStyleType defaultAppGlobalStyle = CocoaBridge::isSystemDarkTheme() ? MuseScoreStyleType::DARK_FUSION : MuseScoreStyleType::LIGHT_FUSION;
 #else
       const MuseScoreStyleType defaultAppGlobalStyle = MuseScoreStyleType::LIGHT_FUSION;
