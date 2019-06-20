@@ -326,6 +326,11 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Measure>();
       qmlRegisterType<Part>();
       qmlRegisterType<Excerpt>();
+      //qmlRegisterType<Hook>();
+      //qmlRegisterType<Stem>();
+      //qmlRegisterType<StemSlash>();
+      //qmlRegisterType<Beam>();
+
 #if 0
       qmlRegisterType<NoteHead>   ("MuseScore", 1, 0, "NoteHead");
       qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
@@ -343,10 +348,6 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
       qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
       qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
-      qmlRegisterType<Hook>       ("MuseScore", 1, 0, "Hook");
-      qmlRegisterType<Stem>       ("MuseScore", 1, 0, "Stem");
-      qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
-      qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
       qmlRegisterType<BarLine>    ("MuseScore", 1, 0, "BarLine");
 
 

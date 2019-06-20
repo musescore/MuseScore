@@ -84,7 +84,7 @@ class Cursor : public QObject {
             SELECTION_START = 1, ///< Rewind to the start of a selection
             SELECTION_END = 2 ///< Rewind to the end of a selection
             };
-      Q_ENUM(RewindMode)
+      Q_ENUM(RewindMode);
 
    private:
       Ms::Score* _score = nullptr;
