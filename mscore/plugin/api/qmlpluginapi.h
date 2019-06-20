@@ -82,7 +82,7 @@ class PluginAPI : public Ms::QmlPlugin {
       Q_PROPERTY(qreal mscoreDPI         READ mscoreDPI)
       /** Current score, if any (read only) */
       Q_PROPERTY(Ms::PluginAPI::Score* curScore     READ curScore)
-      /** List of currently open scores (read only).\n \since MuseScore 3.1 */
+      /** List of currently open scores (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Score> scores READ scores)
 
       // Should be initialized in qmlpluginapi.cpp

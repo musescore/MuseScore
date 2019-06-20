@@ -418,7 +418,11 @@ class Chord : public Element {
       Q_OBJECT
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Chord>    graceNotes READ graceNotes)
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Note>     notes      READ notes     )
-      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> lyrics     READ lyrics    ) // TODO: move to ChordRest
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  lyrics     READ lyrics    ) // TODO: move to ChordRest
+      //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  stem       READ stem      )
+      //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  stemSlash  READ stemSlash )
+      //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  beam       READ beam      )
+      //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  hook       READ hook      )
 
    public:
       /// \cond MS_INTERNAL
@@ -430,7 +434,11 @@ class Chord : public Element {
 
       QQmlListProperty<Chord> graceNotes()     { return wrapContainerProperty<Chord>(this, chord()->graceNotes()); }
       QQmlListProperty<Note> notes()           { return wrapContainerProperty<Note>(this, chord()->notes());       }
-      QQmlListProperty<Element> lyrics()      { return wrapContainerProperty<Element>(this, chord()->lyrics());  } // TODO: move to ChordRest // TODO: special type for Lyrics?
+      QQmlListProperty<Element> lyrics()       { return wrapContainerProperty<Element>(this, chord()->lyrics());   } // TODO: move to ChordRest // TODO: special type for Lyrics?
+      //QQmlListProperty<Element> stem()         { return wrapContainerProperty<Element>(this, chord()->stem());      }
+      //QQmlListProperty<Element> stemSlash()    { return wrapContainerProperty<Element>(this, chord()->stemSlash()); }
+      //QQmlListProperty<Element> beam()         { return wrapContainerProperty<Element>(this, chord()->beam());      }
+      //QQmlListProperty<Element> hook()         { return wrapContainerProperty<Element>(this, chord()->hook());      }
       /// \endcond
       };
 

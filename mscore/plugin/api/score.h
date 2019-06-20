@@ -31,35 +31,35 @@ class Measure;
 
 class Score : public Ms::PluginAPI::ScoreElement {
       Q_OBJECT
-      /** Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.1 */
+      /** Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(QString                        composer          READ composer)
-      /** Duration of score in seconds (read only).\n \since MuseScore 3.1 */
+      /** Duration of score in seconds (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(int                            duration          READ duration)
       /** List of the excerpts (linked parts) (read only) */
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Excerpt>  excerpts   READ excerpts)
       /** First measure of the score (read only) */
       Q_PROPERTY(Ms::PluginAPI::Measure*        firstMeasure      READ firstMeasure)
-      /** First multimeasure rest measure of the score (read only).\n \since MuseScore 3.1 */
+      /** First multimeasure rest measure of the score (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(Ms::PluginAPI::Measure*        firstMeasureMM    READ firstMeasureMM)
-      /** Number of harmony items (chord symbols) in the score (read only).\n \since MuseScore 3.1 */
+      /** Number of harmony items (chord symbols) in the score (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(int                            harmonyCount      READ harmonyCount)
-      /** Whether score has harmonies (chord symbols) (read only).\n \since MuseScore 3.1 */
+      /** Whether score has harmonies (chord symbols) (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(bool                           hasHarmonies      READ hasHarmonies)
-      /** Whether score has lyrics (read only).\n \since MuseScore 3.1 */
+      /** Whether score has lyrics (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(bool                           hasLyrics         READ hasLyrics)
       /// Key signature at the start of the score, in number of accidentals,
-      /// negative for flats, postitive for sharps (read only).\n \since MuseScore 3.1
+      /// negative for flats, postitive for sharps (read only).\n \since MuseScore 3.2
       Q_PROPERTY(int                            keysig            READ keysig)
       /** Last measure of the score (read only) */
       Q_PROPERTY(Ms::PluginAPI::Measure*        lastMeasure       READ lastMeasure)
-      /** Last multimeasure rest measure of the score (read only).\n \since MuseScore 3.1 */
+      /** Last multimeasure rest measure of the score (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(Ms::PluginAPI::Measure*        lastMeasureMM     READ lastMeasureMM)
       /** Last score segment (read only) */
       Q_PROPERTY(Ms::PluginAPI::Segment*        lastSegment       READ lastSegment) // TODO: make it function? Was property in 2.X, but firstSegment is a function...
-      /** Number of lyrics items (syllables) in the score (read only).\n \since MuseScore 3.1 */
+      /** Number of lyrics items (syllables) in the score (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(int                            lyricCount        READ lyricCount)
-      /** Name of the score, without path leading to it and extension.\n \since MuseScore 3.1 */
-      Q_PROPERTY(QString                        name              READ name           WRITE setName)
+      /** Name of the score, without path leading to it and extension.\n \since MuseScore 3.2 */
+      Q_PROPERTY(QString                        scoreName         READ name           WRITE setName)
       /** Number of measures (read only) */
       Q_PROPERTY(int                            nmeasures         READ nmeasures)
       /** Number of pages (read only) */
@@ -71,10 +71,10 @@ class Score : public Ms::PluginAPI::ScoreElement {
 //      Q_PROPERTY(Ms::PageFormat*                pageFormat        READ pageFormat     WRITE undoChangePageFormat)
       /** The list of parts */
       Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Part>     parts      READ parts)
-      /** Lyricist of score, as taken from the score properties.\n \since MuseScore 3.1 */
-      Q_PROPERTY(QString                        poet              READ poet)
+      /** Lyricist of score, as taken from the score properties.\n \since MuseScore 3.2 */
+      Q_PROPERTY(QString                        lyricist              READ lyricist)
 //      Q_PROPERTY(QString                        subtitle          READ subtitle)
-      /** Title of score, as taken from the score properties' workTitle (read only).\n \since MuseScore 3.1 */
+      /** Title of score, as taken from the score properties' workTitle (read only).\n \since MuseScore 3.2 */
       Q_PROPERTY(QString                        title             READ title)
       /** MuseScore version the score has been last saved with (includes autosave) (read only) */
       Q_PROPERTY(QString                        mscoreVersion     READ mscoreVersion)
@@ -96,7 +96,7 @@ class Score : public Ms::PluginAPI::ScoreElement {
       bool hasLyrics() { return score()->hasLyrics(); }
       int keysig() { return score()->keysig(); }
       int lyricCount() { return score()->lyricCount(); }
-      QString poet() { return score()->metaTag("lyricist"); } // not the meanwhile obsolete "poet"
+      QString lyricist() { return score()->metaTag("lyricist"); } // not the meanwhile obsolete "poet"
       QString title() { return score()->metaTag("workTitle"); }
       /// \endcond
 
@@ -123,7 +123,7 @@ class Score : public Ms::PluginAPI::ScoreElement {
       Measure* lastMeasureMM();
 
       QString name() const { return score()->masterScore()->title(); }
-      void setName(const QString& name) { score()->masterScore()->setName(name); } // TODO: MasterScore
+      void setName(const QString& name) { score()->masterScore()->setName(name); }
       /// \endcond
 
       Q_INVOKABLE QString extractLyrics() { return score()->extractLyrics(); }

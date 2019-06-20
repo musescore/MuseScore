@@ -107,6 +107,8 @@ class FileIO : public QObject {
 //---------------------------------------------------------
 //   MsProcess
 //   @@ QProcess
+///    Start an external program. Using this will most probably
+///    result in the plugin to be platform dependant. \since MuseScore 3.2
 //---------------------------------------------------------
 
 class MsProcess : public QProcess {
@@ -124,9 +126,9 @@ class MsProcess : public QProcess {
       Q_INVOKABLE QByteArray readAllStandardOutput()      { return QProcess::readAllStandardOutput(); }
       };
 
-/// //---------------------------------------------------------
-//   @@ ScoreView
-///    This is an GUI element to show a score.
+//---------------------------------------------------------
+//   @@ ScoreView \since MuseScore 3.2
+///    This is an GUI element to show a score. \since MuseScore 3.2
 //---------------------------------------------------------
 
 class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
