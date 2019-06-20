@@ -27,6 +27,8 @@ class Part : public Ms::PluginAPI::ScoreElement {
       Q_OBJECT
       Q_PROPERTY(int                            startTrack          READ startTrack)
       Q_PROPERTY(int                            endTrack            READ endTrack)
+      /// The string identifier for the current instrument. \since MuseScore 3.2
+      Q_PROPERTY(QString                        instrumentId        READ instrumentId)
 
    public:
       /// \cond MS_INTERNAL
@@ -38,6 +40,7 @@ class Part : public Ms::PluginAPI::ScoreElement {
 
       int startTrack() const { return part()->startTrack(); }
       int endTrack()   const { return part()->endTrack(); }
+      QString instrumentId() const { return part()->instrument()->instrumentId(); }
       /// \endcond
       };
 } // namespace PluginAPI
