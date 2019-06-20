@@ -1897,7 +1897,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
       for (Element* e : newList) {
             bool found = false;
             for (Element* ee : oldList) {
-                  if (ee->type() == e->type()) {
+                  if (ee->type() == e->type() && ee->subtype() == e->subtype()) {
                         mmr->add(ee);
                         auto i = std::find(oldList.begin(), oldList.end(), ee);
                         if (i != oldList.end())
@@ -1906,11 +1906,8 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
                         break;
                         }
                   }
-            if (!found) {
-                  Element* e1 = e->clone();
-                  e1->setParent(mmr);
-                  undo(new AddElement(e1));
-                  }
+            if (!found)
+                  mmr->add(e->clone());
             }
       for (Element* e : oldList)
             delete e;
