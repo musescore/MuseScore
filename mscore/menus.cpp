@@ -1355,6 +1355,7 @@ Palette* MuseScore::newTimePalette()
             { 6,  4, TimeSigType::NORMAL, "6/4" },
             { 3,  8, TimeSigType::NORMAL, "3/8" },
             { 6,  8, TimeSigType::NORMAL, "6/8" },
+            { 7,  8, TimeSigType::NORMAL, "7/8" },
             { 9,  8, TimeSigType::NORMAL, "9/8" },
             { 12, 8, TimeSigType::NORMAL, "12/8" },
             { 4,  4, TimeSigType::FOUR_FOUR,  tr("4/4 common time") },
