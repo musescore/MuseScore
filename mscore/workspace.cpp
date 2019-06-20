@@ -195,6 +195,13 @@ void MuseScore::updateIcons()
                   widget->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
                   // apparently needed for viewModeCombo, see MuseScore::populateFileOperations
             }
+      for (QAction* a : cpitchTools->actions()) {
+            QWidget* widget = cpitchTools->widgetForAction(a);
+            if (widget->property("iconic-text") == true)
+                  widget->setFixedHeight(preferences.getInt(PREF_UI_THEME_ICONHEIGHT) + 8);  // hack
+                  // so that toolbar buttons with text but no icon can match
+                  // the height of other toolbar buttons
+            }
       }
 
 //---------------------------------------------------------

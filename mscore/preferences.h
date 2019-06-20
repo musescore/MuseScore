@@ -208,6 +208,7 @@ enum class MusicxmlExportBreaks : char {
 #define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_ON      "ui/button/highlight/color/enabled/dark/on"
 #define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_DARK_OFF     "ui/button/highlight/color/enabled/dark/off"
 #define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_ON     "ui/button/highlight/color/enabled/light/on"
+#define PREF_UI_BUTTON_HIGHLIGHT_COLOR_ENABLED_LIGHT_OFF    "ui/button/highlight/color/enabled/light/off"
 
 
 
