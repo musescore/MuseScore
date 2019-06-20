@@ -1456,12 +1456,7 @@ void Score::addElement(Element* element)
                   break;
 
             case ElementType::TEMPO_TEXT:
-                  {
-                  TempoText* tt = toTempoText(element);
-                  if (tt->isRelative())
-                        tt->updateRelative();
-                  setTempo(tt->segment(), tt->tempo());
-                  }
+                  fixTicks(); // rebuilds tempomap
                   break;
 
             case ElementType::INSTRUMENT_CHANGE: {
@@ -1630,11 +1625,7 @@ void Score::removeElement(Element* element)
                   }
                   break;
             case ElementType::TEMPO_TEXT:
-                  {
-                  TempoText* tt = toTempoText(element);
-                  Fraction tick = tt->segment()->tick();
-                  tempomap()->delTempo(tick.ticks());
-                  }
+                  fixTicks(); // rebuilds tempomap
                   break;
             case ElementType::INSTRUMENT_CHANGE: {
                   InstrumentChange* ic = toInstrumentChange(element);
