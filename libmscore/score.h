@@ -797,6 +797,7 @@ class Score : public QObject, public ScoreElement {
       Segment* tick2leftSegment(const Fraction& tick) const;
       Segment* tick2rightSegment(const Fraction& tick) const;
       void fixTicks();
+      void rebuildTempoAndTimeSigMaps(Measure* m);
       Element* nextElement();
       Element* prevElement();
 
