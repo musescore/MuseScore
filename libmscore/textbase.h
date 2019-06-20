@@ -50,6 +50,14 @@ enum class FormatId : char {
       };
 
 //---------------------------------------------------------
+//   MultiClick
+//---------------------------------------------------------
+
+enum class MultiClick : char {
+      Double, Triple
+      };
+
+//---------------------------------------------------------
 //   CharFormat
 //---------------------------------------------------------
 
@@ -124,6 +132,7 @@ class TextCursor {
       TextBlock& curLine() const;
       QRectF cursorRect() const;
       bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int count = 1);
+      void doubleClickSelect();
       void moveCursorToEnd()   { movePosition(QTextCursor::End);   }
       void moveCursorToStart() { movePosition(QTextCursor::Start); }
       QChar currentCharacter() const;
@@ -232,6 +241,7 @@ class TextBase : public Element {
       bool _layoutToParentWidth     { false };
 
       int  hexState                 { -1    };
+      bool _primed                  { 0 };
 
       void drawSelection(QPainter*, const QRectF&) const;
       void insert(TextCursor*, uint code);
@@ -288,6 +298,9 @@ class TextBase : public Element {
       bool deleteSelectedText(EditData&);
 
       void selectAll(TextCursor*);
+      void multiClickSelect(EditData&, MultiClick);
+      bool isPrimed() const               { return _primed; }
+      void setPrimed(bool primed)         { _primed = primed; }
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;

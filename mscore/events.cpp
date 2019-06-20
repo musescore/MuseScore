@@ -222,10 +222,43 @@ void ScoreView::focusOutEvent(QFocusEvent* event)
       }
 
 //---------------------------------------------------------
+//   startTextEditingOnMouseRelease
+//---------------------------------------------------------
+
+bool ScoreView::startTextEditingOnMouseRelease(QMouseEvent* mouseEvent)
+      {
+      if (!editData.element)
+            return false;
+
+      if (!(editData.element->isEditable() && editData.element->isTextBase()))
+            return false;
+
+      TextBase* textBase = toTextBase(editData.element);
+
+      if (!editData.element->canvasBoundingRect().contains(toLogical(mouseEvent->pos()))) {
+            // mouse up OUTSIDE textbase - clear any priming
+            textBase->setPrimed(false);
+            return false;
+            }
+
+      if (!textBase->isPrimed()) {
+            // mouse up INSIDE textBase - set priming
+            textBase->setPrimed(true);
+            return false;
+      }
+
+      //mouse up INSIDE primed textBase - start editing
+      startEditMode(textBase);
+      setCursor(QCursor(Qt::IBeamCursor));
+      textBase->setPrimed(false);
+      return true;
+      }
+
+//---------------------------------------------------------
 //   mouseReleaseEvent
 //---------------------------------------------------------
 
-void ScoreView::mouseReleaseEvent(QMouseEvent*)
+void ScoreView::mouseReleaseEvent(QMouseEvent* mouseEvent)
       {
       editData.buttons = Qt::NoButton;
       if (seq)
@@ -245,6 +278,9 @@ void ScoreView::mouseReleaseEvent(QMouseEvent*)
                   changeState(ViewState::FOTO);
                   break;
             case ViewState::NORMAL:
+                  if (startTextEditingOnMouseRelease(mouseEvent))
+                        break;
+
                   if (editData.startMove == editData.pos && clickOffElement) {
                         _score->deselectAll();
                         _score->update();
@@ -368,6 +404,20 @@ void ScoreView::mousePressEventNormal(QMouseEvent* ev)
 
 void ScoreView::mousePressEvent(QMouseEvent* ev)
       {
+
+      if (tripleClickPending) {
+            if (state == ViewState::EDIT
+                && editData.element
+                && editData.element->isTextBase()) {
+                  TextBase* textBase = toTextBase(editData.element);
+                  textBase->multiClickSelect(editData, MultiClick::Triple);
+                  mscore->textTools()->updateTools(editData);
+                  textBase->endHexState(editData);
+                  update();
+                  return;
+                  }
+            }
+
       editData.startMovePixel = ev->pos();
       editData.startMove = toLogical(ev->pos());
       editData.lastPos   = editData.startMove;
@@ -379,6 +429,15 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
             case ViewState::NORMAL:
                   if (ev->button() == Qt::RightButton)   // context menu?
                         break;
+
+                  if (editData.element
+                      && editData.element->isEditable()
+                      && editData.element->isTextBase()
+                      && !editData.element->canvasBoundingRect().contains(toLogical(ev->pos()))) {
+                        // mouse down OUTSIDE of textBase - clear priming -
+                        toTextBase(editData.element)->setPrimed(false);
+                        }
+
                   editData.element = elementNear(editData.startMove);
                   mousePressEventNormal(ev);
                   break;
@@ -483,11 +542,33 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
       }
 
 //---------------------------------------------------------
+//   adjustCursor
+//---------------------------------------------------------
+void ScoreView::adjustCursorForTextEditing(QMouseEvent* mouseEvent)
+      {
+      if (!editData.element)
+            return;
+
+      if (!(state == ViewState::EDIT || state == ViewState::DRAG_EDIT))
+            return;
+
+      if (!editData.element->isTextBase())
+            return;
+
+      if (editData.element->canvasBoundingRect().contains(toLogical(mouseEvent->pos())))
+            setCursor(QCursor(Qt::IBeamCursor));
+      else
+            setCursor(QCursor(Qt::ArrowCursor));
+      }
+
+//---------------------------------------------------------
 //   mouseMoveEvent
 //---------------------------------------------------------
 
 void ScoreView::mouseMoveEvent(QMouseEvent* me)
       {
+      adjustCursorForTextEditing(me);
+
       if (state != ViewState::NOTE_ENTRY && editData.buttons == Qt::NoButton)
             return;
 
@@ -557,17 +638,43 @@ void ScoreView::mouseMoveEvent(QMouseEvent* me)
       update();
       }
 
+void ScoreView:: tripleClickTimeOut()
+      {
+      tripleClickPending = false;
+      }
+
 //---------------------------------------------------------
 //   mouseDoubleClickEvent
 //---------------------------------------------------------
 
-void ScoreView::mouseDoubleClickEvent(QMouseEvent* me)
+void ScoreView::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
       {
-      if (state == ViewState::NORMAL) {
-            QPointF p = toLogical(me->pos());
-            Element* e = elementNear(p);
-            if (e && e->isEditable())
-                  startEditMode(e);
+      QTimer::singleShot(QApplication::doubleClickInterval(), this, SLOT(tripleClickTimeOut()));
+      tripleClickPending = true;
+
+      if (state == ViewState::EDIT && editData.element->isTextBase()) {
+            // double click on a textBase element that is being edited - select word
+            TextBase* textBase = toTextBase(editData.element);
+            textBase->multiClickSelect(editData, MultiClick::Double);
+            mscore->textTools()->updateTools(editData);
+            textBase->endHexState(editData);
+            update();
+            return;
+            }
+
+      if (state != ViewState::NORMAL)
+            return;
+
+      Element* clickedElement = elementNear(toLogical(mouseEvent->pos()));
+
+      if (!(clickedElement && clickedElement->isEditable()))
+            return;
+
+      startEditMode(clickedElement);
+
+      if (clickedElement->isTextBase()) {
+            setCursor(QCursor(Qt::IBeamCursor));
+            toTextBase(clickedElement)->setPrimed(false);
             }
       }
 
@@ -877,6 +984,9 @@ void ScoreView::changeState(ViewState s)
             case ViewState::PLAY:
                   seq->stop();
                   break;
+            case ViewState::EDIT:
+                  setMouseTracking(false);
+                  break;
             default:
                   break;
             }
@@ -918,8 +1028,10 @@ void ScoreView::changeState(ViewState s)
                         startEdit();
                   break;
             case ViewState::EDIT:
-                  if ( !((mscoreState() & STATE_ALLTEXTUAL_EDIT) && state == ViewState::DRAG_EDIT) )
+                  if ( !((mscoreState() & STATE_ALLTEXTUAL_EDIT) && state == ViewState::DRAG_EDIT) ) {
                         startEdit();
+                        setMouseTracking(true);
+                        }
                   break;
             case ViewState::LASSO:
                   break;
