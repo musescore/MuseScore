@@ -541,7 +541,7 @@ void LayoutContext::layoutLinear()
 //---------------------------------------------------------
 //   layoutMeasureLinear
 //---------------------------------------------------------
-
+#if 0 // unused
 void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
       {
       adjustMeasureNo(mb);
@@ -769,6 +769,7 @@ void LayoutContext::layoutMeasureLinear(MeasureBase* mb)
 
       tick += measure->ticks();
       }
+#endif
 
 } // namespace Ms
 
