@@ -335,6 +335,13 @@
             <sigD>8</sigD>
             </TimeSig>
           </Cell>
+        <Cell name="7/8">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>7</sigN>
+            <sigD>8</sigD>
+            </TimeSig>
+          </Cell>
         <Cell name="9/8">
           <staff>1</staff>
           <TimeSig>
