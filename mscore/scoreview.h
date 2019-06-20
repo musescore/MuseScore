@@ -120,6 +120,8 @@ class ScoreView : public QWidget, public MuseScoreView {
       QTimer* extendNoteTimer; // single-shot timer for initial advancement when a note is held
       bool allowRealtimeRests; // Allow entering rests in realtime mode? (See note above)
 
+      bool tripleClickPending = false;
+
       // Loop In/Out marks in the score
       PositionCursor* _curLoopIn;
       PositionCursor* _curLoopOut;
@@ -171,6 +173,8 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void mousePressEventNormal(QMouseEvent*);
       void escapeCmd();
+      bool startTextEditingOnMouseRelease(QMouseEvent*);
+      void adjustCursorForTextEditing(QMouseEvent*);
 
       void constraintCanvas(int *dxx, int *dyy);
       void contextItem(Element*);
@@ -253,6 +257,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void cmdRealtimeAdvance();
       void extendCurrentNote();
       void seqStopped();
+      void tripleClickTimeOut();
 
    public slots:
       void setViewRect(const QRectF&);

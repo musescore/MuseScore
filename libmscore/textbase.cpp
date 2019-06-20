@@ -328,6 +328,39 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
       return true;
       }
 
+
+
+//---------------------------------------------------------
+//   doubleClickSelect
+//---------------------------------------------------------
+
+void TextCursor::doubleClickSelect()
+      {
+      clearSelection();
+
+      // if clicked on a space, select surrounding spaces
+      // otherwise select surround non-spaces
+      const bool selectSpaces = currentCharacter().isSpace();
+
+      //handle double-clicking inside a word
+      int startPosition = _column;
+
+      while (_column > 0 && currentCharacter().isSpace() == selectSpaces)
+            --_column;
+
+      if (currentCharacter().isSpace() != selectSpaces)
+            ++_column;
+
+      _selectColumn = _column;
+
+      _column = startPosition;
+      while (_column  < curLine().columns() && currentCharacter().isSpace() == selectSpaces)
+            ++_column;
+
+      updateCursorFormat();
+      _text->score()->addRefresh(_text->canvasBoundingRect());
+      }
+
 //---------------------------------------------------------
 //   set
 //---------------------------------------------------------
@@ -1646,6 +1679,23 @@ void TextBase::selectAll(TextCursor* _cursor)
       }
 
 //---------------------------------------------------------
+//   multiClickSelect
+//    for double and triple clicks
+//---------------------------------------------------------
+
+void TextBase::multiClickSelect(EditData& editData, MultiClick clicks)
+      {
+      switch (clicks) {
+            case MultiClick::Double:
+                  cursor(editData)->doubleClickSelect();
+                  break;
+            case MultiClick::Triple:
+                  selectAll(cursor(editData));
+                  break;
+            }
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -2651,7 +2701,10 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
       QPen pen(curColor());
       pen.setJoinStyle(Qt::MiterJoin);
       p->setPen(pen);
-      p->drawRect(_cursor->cursorRect());
+
+      // Don't draw cursor if there is a selection
+      if (!_cursor->hasSelection())
+            p->drawRect(_cursor->cursorRect());
 
       QMatrix matrix = p->matrix();
       p->translate(-pos);
