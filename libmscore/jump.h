@@ -53,6 +53,7 @@ class Jump final : public TextBase {
 
       virtual Jump* clone() const override      { return new Jump(*this);   }
       virtual ElementType type() const override { return ElementType::JUMP; }
+      virtual int subtype() const override      { return int(jumpType());   }
 
       Measure* measure() const                  { return toMeasure(parent()); }
 
