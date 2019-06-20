@@ -17,6 +17,7 @@
 
 #include <assert.h>
 #include "score.h"
+#include "fermata.h"
 #include "imageStore.h"
 #include "key.h"
 #include "sig.h"
@@ -449,89 +450,112 @@ void Score::fixTicks()
             if (m->mmRest())
                   m->mmRest()->moveTicks(diff);
 
-            //
-            //  implement section break rest
-            //
-            if (isMaster() && m->sectionBreak() && m->pause() != 0.0)
-                  setPause(m->tick() + m->ticks(), m->pause());
-
-            //
-            // implement fermata as a tempo change
-            //
-
-            for (Segment* s = m->first(); s; s = s->next()) {
-                  if (isMaster() && s->segmentType() == SegmentType::Breath) {
-                        qreal length = 0.0;
-                        Fraction tick1 = s->tick();
-                        // find longest pause
-                        for (int i = 0, n = ntracks(); i < n; ++i) {
-                              Element* e = s->element(i);
-                              if (e && e->type() == ElementType::BREATH) {
-                                    Breath* b = toBreath(e);
-                                    length = qMax(length, b->pause());
-                                    }
-                              }
-                        if (length != 0.0)
-                              setPause(tick1, length);
-                        }
-                  else if (s->segmentType() == SegmentType::TimeSig) {
-                        for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
-                              TimeSig* ts = toTimeSig(s->element(staffIdx * VOICES));
-                              if (ts)
-                                    staff(staffIdx)->addTimeSig(ts);
-                              }
-                        }
-                  // TODO: all done in doLayout, getNextMeasure, collectSystem... Do we keep?
-                  else if (isMaster() && (s->segmentType() == SegmentType::ChordRest)) {
-                        for (Element* e : s->annotations()) {
-                              if (e->type() == ElementType::TEMPO_TEXT) {
-                                    TempoText* tt = toTempoText(e);
-                                    if (tt->isRelative())
-                                          tt->updateRelative();
-                                    setTempo(tt->segment(), tt->tempo());
-                                    }
-                              }
-#if 0 // TODO::fermata
-                        qreal stretch = 0.0;
-                        for (unsigned i = 0; i < s->elist().size(); ++i) {
-                              Element* e = s->elist().at(i);
-                              if (!e)
-                                    continue;
-                              ChordRest* cr = toChordRest(e);
-                              int nn = cr->articulations().size();
-                              for (int ii = 0; ii < nn; ++ii)
-                                    stretch = qMax(cr->articulations().at(ii)->timeStretch(), stretch);
-                              if (stretch != 0.0 && stretch != 1.0) {
-                                    qreal otempo = tempomap()->tempo(cr->tick());
-                                    qreal ntempo = otempo / stretch;
-                                    setTempo(cr->tick(), ntempo);
-                                    int etick = cr->tick() + cr->actualTicks() - 1;
-                                    auto e = tempomap()->find(etick);
-                                    if (e == tempomap()->end())
-                                          setTempo(etick, otempo);
-                                    break;
-                                    }
-                              }
-#endif
-                        }
-                  }
-
-            // update time signature map
-            // create event if measure len and time signature are different
-            // even if they are equivalent 4/4 vs 2/2
-            // also check if nominal time signature has changed
-
-            if (isMaster() && (!sig.identical(m->ticks()) || !nomSig.identical(m->timesig()))) {
-                  sig    = m->ticks();
-                  nomSig = m->timesig();
-                  sigmap()->add(tick.ticks(), SigEvent(sig, nomSig,  m->no()));
-                  }
+            rebuildTempoAndTimeSigMaps(m);
 
             tick += measureTicks;
             }
       // Now done in getNextMeasure(), do we keep?
       if (tempomap()->empty())
             tempomap()->setTempo(0, _defaultTempo);
+      }
+
+//---------------------------------------------------------
+//    fixTicks
+///    updates tempomap and time sig map for a measure
+//---------------------------------------------------------
+
+void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
+      {
+      if (isMaster()) {
+            // Reset tempo to set correct time stretch for fermata.
+            const Fraction& startTick = measure->tick();
+            resetTempoRange(startTick, measure->endTick());
+
+            // Implement section break rest
+            for (MeasureBase* mb = measure->prev(); mb && mb->endTick() == startTick; mb = mb->prev()) {
+                  if (mb->pause())
+                        setPause(startTick, mb->pause());
+                  }
+
+            // Add pauses from the end of the previous measure (at measure->tick()):
+            for (Segment* s = measure->first(); s && s->tick() == startTick; s = s->prev1()) {
+                  if (!s->isBreathType())
+                        continue;
+                  qreal length = 0.0;
+                  for (Element* e : s->elist()) {
+                        if (e && e->isBreath())
+                              length = qMax(length, toBreath(e)->pause());
+                        }
+                  if (length != 0.0)
+                        setPause(startTick, length);
+                  }
+            }
+
+      for (Segment& segment : measure->segments()) {
+            if (segment.isBreathType()) {
+                  if (!isMaster())
+                        continue;
+                  qreal length = 0.0;
+                  Fraction tick = segment.tick();
+                  // find longest pause
+                  for (int i = 0, n = ntracks(); i < n; ++i) {
+                        Element* e = segment.element(i);
+                        if (e && e->isBreath()) {
+                              Breath* b = toBreath(e);
+                              length = qMax(length, b->pause());
+                              }
+                        }
+                  if (length != 0.0)
+                        setPause(tick, length);
+                  }
+            else if (segment.isTimeSigType()) {
+                  for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+                        TimeSig* ts = toTimeSig(segment.element(staffIdx * VOICES));
+                        if (ts)
+                              staff(staffIdx)->addTimeSig(ts);
+                        }
+                  }
+            else if (segment.isChordRestType()) {
+                  if (!isMaster())
+                        continue;
+                  qreal stretch = 0.0;
+                  for (Element* e : segment.annotations()) {
+                        if (e->isFermata())
+                              stretch = qMax(stretch, toFermata(e)->timeStretch());
+                        else if (e->isTempoText()) {
+                              TempoText* tt = toTempoText(e);
+                              if (tt->isRelative())
+                                    tt->updateRelative();
+                              setTempo(tt->segment(), tt->tempo());
+                              }
+                        }
+                  if (stretch != 0.0 && stretch != 1.0) {
+                        qreal otempo = tempomap()->tempo(segment.tick().ticks());
+                        qreal ntempo = otempo / stretch;
+                        setTempo(segment.tick(), ntempo);
+                        Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480*4);
+                        auto e = tempomap()->find(etick.ticks());
+                        if (e == tempomap()->end())
+                              setTempo(etick, otempo);
+                        }
+                  }
+            }
+
+      // update time signature map
+      // create event if measure len and time signature are different
+      // even if they are equivalent 4/4 vs 2/2
+      // also check if nominal time signature has changed
+
+      if (isMaster()) {
+            const Measure* m = measure;
+            const Fraction mTicks = m->isMMRest() ? m->mmRestFirst()->ticks() : m->ticks(); // for time signature the underlying measure length matters for MM rests
+
+            const Measure* pm = measure->prevMeasure();
+            // prevMeasure() doesn't return MM rest so we don't handle it here
+
+            if (pm && (!mTicks.identical(pm->ticks()) || !m->timesig().identical(pm->timesig())))
+                  sigmap()->add(m->tick().ticks(), SigEvent(mTicks, m->timesig(), m->no()));
+            }
       }
 
 //---------------------------------------------------------
@@ -1432,12 +1456,7 @@ void Score::addElement(Element* element)
                   break;
 
             case ElementType::TEMPO_TEXT:
-                  {
-                  TempoText* tt = toTempoText(element);
-                  if (tt->isRelative())
-                        tt->updateRelative();
-                  setTempo(tt->segment(), tt->tempo());
-                  }
+                  fixTicks(); // rebuilds tempomap
                   break;
 
             case ElementType::INSTRUMENT_CHANGE: {
@@ -1606,11 +1625,7 @@ void Score::removeElement(Element* element)
                   }
                   break;
             case ElementType::TEMPO_TEXT:
-                  {
-                  TempoText* tt = toTempoText(element);
-                  Fraction tick = tt->segment()->tick();
-                  tempomap()->delTempo(tick.ticks());
-                  }
+                  fixTicks(); // rebuilds tempomap
                   break;
             case ElementType::INSTRUMENT_CHANGE: {
                   InstrumentChange* ic = toInstrumentChange(element);
