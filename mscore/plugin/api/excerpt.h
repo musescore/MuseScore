@@ -48,7 +48,7 @@ class Excerpt : public QObject {
        : QObject(), e(_e) {}
     Excerpt(const Excerpt&) = delete;
     Excerpt& operator=(const Excerpt&) = delete;
-    virtual ~Excerpt() {};
+    virtual ~Excerpt() {}
 
     Score* partScore();
     QString title() { return e->title(); }

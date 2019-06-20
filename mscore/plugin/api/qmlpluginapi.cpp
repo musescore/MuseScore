@@ -304,7 +304,7 @@ void PluginAPI::registerQmlTypes()
             return;
 
       const char* enumErr = "You can't create an enumeration";
-//TODO-ws            qmlRegisterType<MsProcess>  ("MuseScore", 3, 0, "QProcess");
+      qmlRegisterType<MsProcess>  ("MuseScore", 3, 0, "QProcess");
       qmlRegisterType<FileIO, 1>  ("FileIO",    3, 0, "FileIO");
       //-----------mscore bindings
       qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
@@ -314,7 +314,7 @@ void PluginAPI::registerQmlTypes()
             qWarning("qmlRegisterType failed: MuseScore");
 
 //             qmlRegisterType<MScore>     ("MuseScore", 3, 0, "MScore");
-//TODO-ws            qmlRegisterType<MsScoreView>("MuseScore", 3, 0, "ScoreView");
+      qmlRegisterType<MsScoreView>("MuseScore", 3, 0, "ScoreView");
 
       qmlRegisterType<Cursor>("MuseScore", 3, 0, "Cursor");
       qmlRegisterType<ScoreElement>();
@@ -326,6 +326,11 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Measure>();
       qmlRegisterType<Part>();
       qmlRegisterType<Excerpt>();
+      //qmlRegisterType<Hook>();
+      //qmlRegisterType<Stem>();
+      //qmlRegisterType<StemSlash>();
+      //qmlRegisterType<Beam>();
+
 #if 0
       qmlRegisterType<NoteHead>   ("MuseScore", 1, 0, "NoteHead");
       qmlRegisterType<Accidental> ("MuseScore", 1, 0, "Accidental");
@@ -343,10 +348,6 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Lyrics>     ("MuseScore", 1, 0, "Lyrics");
       qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
       qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
-      qmlRegisterType<Hook>       ("MuseScore", 1, 0, "Hook");
-      qmlRegisterType<Stem>       ("MuseScore", 1, 0, "Stem");
-      qmlRegisterType<StemSlash>  ("MuseScore", 1, 0, "StemSlash");
-      qmlRegisterType<Beam>       ("MuseScore", 1, 0, "Beam");
       qmlRegisterType<BarLine>    ("MuseScore", 1, 0, "BarLine");
 
 

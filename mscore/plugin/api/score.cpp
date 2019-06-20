@@ -93,6 +93,15 @@ Measure* Score::firstMeasure()
       }
 
 //---------------------------------------------------------
+//   Score::firstMeasureMM
+//---------------------------------------------------------
+
+Measure* Score::firstMeasureMM()
+      {
+      return wrap<Measure>(score()->firstMeasureMM(), Ownership::SCORE);
+      }
+
+//---------------------------------------------------------
 //   Score::lastMeasure
 //---------------------------------------------------------
 
@@ -100,5 +109,14 @@ Measure* Score::lastMeasure()
       {
       return wrap<Measure>(score()->lastMeasure(), Ownership::SCORE);
       }
+//---------------------------------------------------------
+//   Score::firstMeasureMM
+//---------------------------------------------------------
+
+Measure* Score::lastMeasureMM()
+      {
+      return wrap<Measure>(score()->lastMeasureMM(), Ownership::SCORE);
+      }
+
 }
 }

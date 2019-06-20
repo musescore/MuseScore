@@ -26,8 +26,8 @@ import MuseScore 3.0
 
 MuseScore {
       menuPath: "Plugins.run"
-      version:  "2.0"
-      description: "This demo plugin runs an external command. Probably this will only work on Linux."
+      version:  "3.0"
+      description: "This demo plugin runs an external command."
       requiresScore: false
 
       QProcess {
@@ -36,7 +36,8 @@ MuseScore {
 
       onRun: {
             console.log("run ls");
-            proc.start("/bin/ls");
+            //proc.start("/bin/ls"); // Linux, Mac(?)
+            proc.start("cmd.exe /c dir"); // Windows
             var val = proc.waitForFinished(30000);
             if (val)
                   console.log(proc.readAllStandardOutput());

@@ -62,11 +62,11 @@ class PluginAPI : public Ms::QmlPlugin {
       Q_PROPERTY(QString version         READ version WRITE setVersion)
       /** Human-readable plugin description, displayed in Plugin Manager */
       Q_PROPERTY(QString description     READ description WRITE setDescription)
-      /** type may be dialog, dock, or not defined */
+      /** Type may be dialog, dock, or not defined */
       Q_PROPERTY(QString pluginType      READ pluginType WRITE setPluginType)
       /** Where to dock on main screen. Possible values: left, top, bottom, right */
       Q_PROPERTY(QString dockArea        READ dockArea WRITE setDockArea)
-      /** Whether the plugin requires an existing score to run */
+      /** Whether the plugin requires an existing score to run, default is `true` */
       Q_PROPERTY(bool requiresScore      READ requiresScore WRITE setRequiresScore)
       /** Number of MIDI ticks for 1/4 note (read only) */
       Q_PROPERTY(int division            READ division)
@@ -80,9 +80,10 @@ class PluginAPI : public Ms::QmlPlugin {
       Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion CONSTANT)
       /** (read-only) */
       Q_PROPERTY(qreal mscoreDPI         READ mscoreDPI)
-      /** current score, if any (read only) */
+      /** Current score, if any (read only) */
       Q_PROPERTY(Ms::PluginAPI::Score* curScore     READ curScore)
-//TODO-ws      Q_PROPERTY(QQmlListProperty<Ms::Score> scores READ scores)
+      /** List of currently open scores (read only).\n \since MuseScore 3.2 */
+      Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Score> scores READ scores)
 
       // Should be initialized in qmlpluginapi.cpp
       /// Contains Ms::ElementType enumeration values
@@ -115,7 +116,7 @@ class PluginAPI : public Ms::QmlPlugin {
       DECLARE_API_ENUM( OrnamentStyle,    ornamentStyleEnum       )
       /// Contains Ms::GlissandoStyle enumeration values
       /// \note In MuseScore 2.X this enumeration was available as
-      /// MScoreCHROMATIC, MScore.WHITE_KEYS, MScore.BLACK_KEYS,
+      /// MScore.CHROMATIC, MScore.WHITE_KEYS, MScore.BLACK_KEYS,
       /// MScore.DIATONIC.
       DECLARE_API_ENUM( GlissandoStyle,   glissandoStyleEnum      )
       /// Contains Ms::Tid enumeration values

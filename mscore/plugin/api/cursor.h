@@ -44,9 +44,9 @@ class Cursor : public QObject {
       Q_OBJECT
       /** Current track */
       Q_PROPERTY(int track      READ track     WRITE setTrack)
-      /** Current staff (track / 4) */
+      /** Current staff (#track / 4) */
       Q_PROPERTY(int staffIdx   READ staffIdx  WRITE setStaffIdx)
-      /** Current voice (track % 4) */
+      /** Current voice (#track % 4) */
       Q_PROPERTY(int voice      READ voice     WRITE setVoice)
       /**
        * Segment type filter, a bitmask from
@@ -84,7 +84,7 @@ class Cursor : public QObject {
             SELECTION_START = 1, ///< Rewind to the start of a selection
             SELECTION_END = 2 ///< Rewind to the end of a selection
             };
-      Q_ENUM(RewindMode)
+      Q_ENUM(RewindMode);
 
    private:
       Ms::Score* _score = nullptr;
