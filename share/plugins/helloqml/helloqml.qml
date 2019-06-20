@@ -1,10 +1,10 @@
 import QtQuick 2.0
-import MuseScore 1.0
+import MuseScore 3.0
 
 
 MuseScore {
     menuPath:    "Plugins.helloQml"
-    version:     "2.0"
+    version:     "3.0"
     description: qsTr("This demo plugin shows some basic tasks.")
     pluginType: "dialog"
 
@@ -12,9 +12,6 @@ MuseScore {
     height: 75
     onRun: {
         console.log(qsTr("hello world"));
-        if (typeof curScore === 'undefined')
-            Qt.quit();
-
         var score = curScore
         console.log(curScore)
         console.log(score.name)

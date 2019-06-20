@@ -51,7 +51,7 @@ Most of enumerations exposed to QML plugins remain the same but some were rename
 →
 **GlissandoStyle.CHROMATIC** etc.
 
-- **TextStyleType** → \ref Ms::PluginAPI::PluginAPI::Tid "**Tid**"
+- **TextStyleType** → \ref Ms::PluginAPI::PluginAPI::Tid "Tid"
 
 - \ref Ms::PluginAPI::PluginAPI::NoteHeadType "NoteHeadType" \par
 **HEAD_AUTO, HEAD_WHOLE, HEAD_HALF, HEAD_QUARTER, HEAD_BREVIS, HEAD_TYPES** are now in **NoteHeadType** enumeration.
