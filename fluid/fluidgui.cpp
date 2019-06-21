@@ -124,6 +124,9 @@ FluidGui::FluidGui(Synthesizer* s)
       connect(_progressTimer, SIGNAL(timeout()), this, SLOT(updateProgress()));
       connect(soundFonts, SIGNAL(itemSelectionChanged()), this, SLOT(updateUpDownButtons()));
       
+      soundFontUp->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      soundFontDown->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      
       //update sfs
       QStringList sfonts = fluid()->soundFonts();
       soundFonts->clear();
