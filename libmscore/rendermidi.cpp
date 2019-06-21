@@ -650,6 +650,8 @@ static void collectMeasureEventsDefault(EventMap* events, Measure* m, Staff* sta
                   if (!e->isHarmony() || (e->track() < strack) || (e->track() >= etrack))
                         continue;
                   Harmony* h = toHarmony(e);
+                  if (!h->play())
+                        continue;
                   //TODO - PHV: account for note event maybe
                   renderHarmony(events, m, h);
                   }

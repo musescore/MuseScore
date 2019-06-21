@@ -145,6 +145,7 @@ qDebug("ResolveDegreeList: not found in table");
 const ElementStyle chordSymbolStyle {
       { Sid::harmonyPlacement, Pid::PLACEMENT  },
       { Sid::minHarmonyDistance, Pid::MIN_DISTANCE },
+      { Sid::harmonyPlay, Pid::PLAY },
       };
 
 //---------------------------------------------------------
@@ -1912,9 +1913,16 @@ Element* Harmony::drop(EditData& data)
 
 QVariant Harmony::getProperty(Pid pid) const
       {
-      if (pid == Pid::HARMONY_TYPE)
-            return QVariant(int(_harmonyType));
-      return TextBase::getProperty(pid);
+      switch (pid) {
+            case Pid::PLAY:
+                  return QVariant(_play);
+                  break;
+            case Pid::HARMONY_TYPE:
+                  return QVariant(int(_harmonyType));
+                  break;
+            default:
+                  return TextBase::getProperty(pid);
+            }
       }
 
 //---------------------------------------------------------
@@ -1923,17 +1931,23 @@ QVariant Harmony::getProperty(Pid pid) const
 
 bool Harmony::setProperty(Pid pid, const QVariant& v)
       {
-      if (pid == Pid::HARMONY_TYPE) {
-            setHarmonyType(HarmonyType(v.toInt()));
-            return true;
+      switch (pid) {
+            case Pid::PLAY:
+                  setPlay(v.toBool());
+                  break;
+            case Pid::HARMONY_TYPE:
+                  setHarmonyType(HarmonyType(v.toInt()));
+                  break;
+            default:
+                  if (TextBase::setProperty(pid, v)) {
+                        if (pid == Pid::TEXT)
+                              setHarmony(v.toString());
+                        render();
+                        break;
+                        }
+                  return false;
             }
-      else if (TextBase::setProperty(pid, v)) {
-            if (pid == Pid::TEXT)
-                  setHarmony(plainText());
-            render();
-            return true;
-            }
-      return false;
+      return true;
       }
 
 //---------------------------------------------------------

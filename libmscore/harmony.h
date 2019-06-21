@@ -91,6 +91,7 @@ class Harmony final : public TextBase {
       QList<TextSegment*> textList;       // rendered chord
 
       bool _leftParen, _rightParen;       // include opening and/or closing parenthesis
+      bool _play;
 
       mutable QRectF _tbbox;
 
@@ -114,6 +115,9 @@ class Harmony final : public TextBase {
 
       void setId(int d)                        { _id = d;       }
       int id() const                           { return _id;    }
+
+      void setPlay(bool p)                     { _play = p; }
+      bool play() const                        { return _play; }
 
       void setBaseCase(NoteCaseType c)         { _baseCase = c; }
       void setRootCase(NoteCaseType c)         { _rootCase = c; }
