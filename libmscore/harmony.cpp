@@ -1106,6 +1106,9 @@ const ChordDescription* Harmony::getDescription(const QString& name, const Parse
 //---------------------------------------------------------
 //   realizedHarmony
 //    get realized harmony or create one for the current symbol
+//    also updates the realized harmony and accounts for
+//    transposition.
+//
 //    TODO - PHV: cache this so that chords only need to be
 //    realized once each
 //---------------------------------------------------------
@@ -1114,7 +1117,12 @@ const RealizedHarmony& Harmony::realizedHarmony()
       {
       if (!_realizedHarmony.valid())
             _realizedHarmony = RealizedHarmony(this);
-      _realizedHarmony.update(_rootTpc, _baseTpc);
+      int offset = 0;
+      Staff* st = staff();
+      Interval interval = st->part()->instrument(tick())->transpose();
+      if (!score()->styleB(Sid::concertPitch))
+            offset = interval.chromatic;
+      _realizedHarmony.update(_rootTpc, _baseTpc, offset);
       return _realizedHarmony;
       }
 
