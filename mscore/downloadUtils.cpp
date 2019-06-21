@@ -55,7 +55,7 @@ void DownloadUtils::download(bool showProgress)
       QUrl url = QUrl::fromEncoded(_target.toLocal8Bit());
       QNetworkRequest request(url);
       QEventLoop loop;
-      QNetworkReply* reply = manager.get(request);
+      reply = manager.get(request);
 
       QObject::connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
       QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
@@ -85,6 +85,13 @@ void DownloadUtils::downloadProgress(qint64 received, qint64 total)
       double curVal = (double(received)/total)*100;
       if (progressDialog && progressDialog->isVisible())
             progressDialog->setValue(curVal);
+      }
+
+QVariant DownloadUtils::getHeader(QNetworkRequest::KnownHeaders header) const
+      {
+      if (!reply)
+            return QVariant();
+      return reply->header(header);
       }
 
 }

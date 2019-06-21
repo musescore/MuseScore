@@ -25,6 +25,7 @@ class DownloadUtils : public QObject
       QString _localFile;
 
       QProgressDialog* progressDialog = nullptr;
+      QNetworkReply* reply = nullptr;
 
    public:
       explicit DownloadUtils(QWidget *parent=0);
@@ -34,6 +35,7 @@ class DownloadUtils : public QObject
       void setLocalFile(const QString& t)   { _localFile = t; }
       bool saveFile();
       QByteArray returnData();
+      QVariant getHeader(QNetworkRequest::KnownHeaders header) const;
 
    signals:
       void done();

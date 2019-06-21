@@ -697,6 +697,7 @@ static QDateTime GetLastModified(QString& url)
 //---------------------------------------------------------
 bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& desc)
       {
+      bool new_plugin = desc.source == UNKNOWN;
       QString direct_link;
       DownloadUtils page(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
       page.setTarget(url);
@@ -718,7 +719,6 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
             int release_id;
             if (getLatestRelease(target.user, target.repo, release_id, direct_link)) {
                   // there is a GitHub release, change source to RELEASE
-                  // TODO: the condition could be optimized
                   if (desc.source != GITHUB_RELEASE || (desc.release_id != release_id && release_id > 0)) {
                         desc.release_id = release_id;
                         desc.direct_link = direct_link;
@@ -733,7 +733,6 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
             QString branch = target.branch.isNull() ? "master" : target.branch;
             QString sha = getLatestCommitSha(target.user, target.repo, branch);
             // compare the sha with previous stored sha. If the same, don't update.
-            // TODO: the condition could be optimized
             if (desc.source != GITHUB || desc.latest_commit != sha) {
                   desc.latest_commit = sha;
                   desc.direct_link = githubLatestArchiveURL(target.user, target.repo, "master");
@@ -762,14 +761,15 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
                   return false;
                   }
             }
-      else if(target.source==ATTACHMENT) {
+      else if (target.source == ATTACHMENT) {
             QDateTime date_time;
             if (desc.source != ATTACHMENT || desc.direct_link != target.url || (date_time = GetLastModified(target.url)) != desc.last_modified) {
                   desc.source = ATTACHMENT;
                   desc.direct_link = target.url;
                   if (!date_time.isValid())
-                        // TODO: we didn't download the file before, optimize: fill desc.last_modified when downloading the file.
-                        date_time = GetLastModified(target.url);
+                        // when it's a new plugin, we can always download and get timestamp later, so skip this step.
+                        if (!new_plugin)
+                              date_time = GetLastModified(target.url);
                   desc.last_modified = date_time;
                   return true;
                   }
@@ -1044,9 +1044,9 @@ QString ResourceManager::downloadPluginPackage(PluginPackageDescription& desc, c
       QDir().mkpath(dataPath + "/plugins");
       package.setLocalFile(localPath);
       package.download();
-      // TODO: if extension hasn't been known yet, get file type from http response
-      // for now, use zip for GITHUB; and get ext name from direct_link for musescore.org
       package.saveFile();
+      // update the timestamp again
+      desc.last_modified = package.getHeader(QNetworkRequest::LastModifiedHeader).toDateTime();
       return localPath;
       }
 
@@ -1064,7 +1064,7 @@ void ResourceManager::downloadInstallPlugin()
       new_package.package_name = button->property("name").toString();
       analyzePluginPage("https://musescore.org" + page_url, new_package);
       if (new_package.source == UNKNOWN) {
-            button->setText("Failed Try again.");
+            button->setText("Unknown plugin source.");
             button->setEnabled(true);
             return;
             }
