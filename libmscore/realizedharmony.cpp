@@ -76,22 +76,24 @@ const QMap<int, int>& RealizedHarmony::notes() const
 ///   of the rhythm and voicing choices matter since
 ///   the voicing algorithms depend on this.
 ///
-///   transposeOffset -- is the difference between the
-///   written and transposed pitches
+///   transposeOffset -- is the necessary adjustment
+///   that is added to the root and bass
+///   to get the correct sounding pitch
 //---------------------------------------------------
 void RealizedHarmony::update(int rootTpc, int bassTpc, int transposeOffset /*= 0*/)
       {
-      if (!_dirty)
-            return;
+      //if (!_dirty)
+      //      return;
+      //FIXME - PHV: temp removal to test offset
 
-      int bassPitch = tpc2pitch(bassTpc) + transposeOffset;
       int rootPitch = tpc2pitch(rootTpc) + transposeOffset;
 
       _notes.clear();
       //fix magic values
       if (_voicing != Voicing::ROOT_ONLY) {
             if (bassTpc != Tpc::TPC_INVALID)
-                  _notes.insert(bassPitch + 4*PITCH_DELTA_OCTAVE, bassTpc);
+                  _notes.insert(tpc2pitch(bassTpc) + transposeOffset
+                                + 4*PITCH_DELTA_OCTAVE, bassTpc);
             else
                   _notes.insert(rootPitch + 4*PITCH_DELTA_OCTAVE, rootTpc);
             }
