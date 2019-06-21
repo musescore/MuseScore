@@ -1030,7 +1030,6 @@ void ScoreView::changeState(ViewState s)
             case ViewState::EDIT:
                   if ( !((mscoreState() & STATE_ALLTEXTUAL_EDIT) && state == ViewState::DRAG_EDIT) ) {
                         startEdit();
-                        setMouseTracking(true);
                         }
                   break;
             case ViewState::LASSO:
@@ -1047,6 +1046,8 @@ void ScoreView::changeState(ViewState s)
 
       state = s;
       mscore->changeState(mscoreState());
+      if (mscoreState() & STATE_ALLTEXTUAL_EDIT)
+            setMouseTracking(true);
       }
 
 //---------------------------------------------------------
