@@ -2119,14 +2119,22 @@ void ChangeSpannerElements::flip(EditData*)
             Note* newEndNote = toNote(endElement);
             // update spanner's start and end notes
             if (newStartNote && newEndNote) {
-                  oldStartNote->removeSpannerFor(spanner);
-                  oldEndNote->removeSpannerBack(spanner);
                   spanner->setNoteSpan(newStartNote, newEndNote);
-                  newStartNote->addSpannerFor(spanner);
-                  newEndNote->addSpannerBack(spanner);
-
-                  if (spanner->isGlissando())
-                        oldEndNote->chord()->updateEndsGlissando();
+                  if (spanner->isTie()) {
+                        Tie* tie = toTie(spanner);
+                        oldStartNote->setTieFor(nullptr);
+                        oldEndNote->setTieBack(nullptr);
+                        newStartNote->setTieFor(tie);
+                        newEndNote->setTieBack(tie);
+                        }
+                  else {
+                        oldStartNote->removeSpannerFor(spanner);
+                        oldEndNote->removeSpannerBack(spanner);
+                        newStartNote->addSpannerFor(spanner);
+                        newEndNote->addSpannerBack(spanner);
+                        if (spanner->isGlissando())
+                              oldEndNote->chord()->updateEndsGlissando();
+                        }
                   }
             }
       else {
@@ -2135,13 +2143,6 @@ void ChangeSpannerElements::flip(EditData*)
             }
       startElement = oldStartElement;
       endElement   = oldEndElement;
-      if (spanner->isTie()) {
-            Tie* tie = toTie(spanner);
-            toNote(endElement)->setTieBack(0);
-            tie->endNote()->setTieBack(tie);
-            toNote(startElement)->setTieFor(0);
-            tie->startNote()->setTieFor(tie);
-            }
       spanner->score()->setLayout(spanner->tick());
       spanner->score()->setLayout(spanner->tick2());
       }
