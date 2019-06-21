@@ -873,7 +873,7 @@ void Palette::leaveEvent(QEvent*)
       if (currentIdx != -1) {
             QRect r = idxRect(currentIdx);
             PaletteBox* pb = mscore->getPaletteBox();
-            if (!pb->getKeyboardNavigation())
+            if (!pb->getKeyboardNavigation() && !(QGuiApplication::keyboardModifiers() & Qt::ShiftModifier))
                   currentIdx = -1;
             update(r);
             }
