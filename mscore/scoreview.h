@@ -121,6 +121,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       bool allowRealtimeRests; // Allow entering rests in realtime mode? (See note above)
 
       bool tripleClickPending = false;
+      bool popupActive = false;
 
       // Loop In/Out marks in the score
       PositionCursor* _curLoopIn;
