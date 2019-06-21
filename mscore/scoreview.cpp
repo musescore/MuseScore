@@ -918,14 +918,15 @@ void ScoreView::paintEvent(QPaintEvent* ev)
       shadowNote->draw(&vp);
 
       if (!dropAnchor.isNull()) {
-            QPen pen(QBrush(QColor(80, 0, 0)), 2.0 / vp.worldTransform().m11(), Qt::DotLine);
+            const auto dropAnchorColor = preferences.getColor(PREF_UI_SCORE_VOICE4_COLOR);
+            QPen pen(QBrush(dropAnchorColor), 2.0 / vp.worldTransform().m11(), Qt::DotLine);
             vp.setPen(pen);
             vp.drawLine(dropAnchor);
 
             qreal d = 4.0 / vp.worldTransform().m11();
             QRectF r(-d, -d, 2 * d, 2 * d);
 
-            vp.setBrush(QBrush(QColor(80, 0, 0)));
+            vp.setBrush(QBrush(dropAnchorColor));
             vp.setPen(Qt::NoPen);
             r.moveCenter(dropAnchor.p1());
             vp.drawEllipse(r);
