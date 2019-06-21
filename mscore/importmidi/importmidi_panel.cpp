@@ -8,7 +8,7 @@
 #include "mscore/preferences.h"
 #include "musescore.h"
 #include "libmscore/score.h"
-
+#include "icons.h"
 
 namespace Ms {
 
@@ -128,6 +128,8 @@ void ImportMidiPanel::setupUi()
       connect(_ui->pushButtonDown, SIGNAL(clicked()), SLOT(moveTrackDown()));
       connect(_ui->toolButtonHideMidiPanel, SIGNAL(clicked()), SLOT(hidePanel()));
 
+      _ui->pushButtonDown->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      
       _updateUiTimer->start(100);
       updateUi();
       _ui->tracksView->setVHeaderDefaultSectionSize(24);

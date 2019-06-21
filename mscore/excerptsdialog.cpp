@@ -134,6 +134,9 @@ ExcerptsDialog::ExcerptsDialog(MasterScore* s, QWidget* parent)
               SLOT(addButtonClicked()));
       connect(title, SIGNAL(textChanged(const QString&)), SLOT(titleChanged(const QString&)));
 
+      moveUpButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      moveDownButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
+      
       for (int i = 1; i <= VOICES; i++) {
             //partList->model()->setHeaderData(i, Qt::Horizontal, MScore::selectColor[i-1], Qt::BackgroundRole);
             partList->header()->resizeSection(i, 30);

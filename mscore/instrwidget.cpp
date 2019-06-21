@@ -385,6 +385,9 @@ InstrumentsWidget::InstrumentsWidget(QWidget* parent)
       downButton->setEnabled(false);
       addStaffButton->setEnabled(false);
       addLinkedStaffButton->setEnabled(false);
+      
+      upButton->setIcon(*icons[int(Icons::arrowUp_ICON)]);
+      downButton->setIcon(*icons[int(Icons::arrowDown_ICON)]);
 
       instrumentSearch->setFilterableView(instrumentList);
       }

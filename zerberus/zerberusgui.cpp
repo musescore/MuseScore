@@ -14,6 +14,7 @@
 
 #include "mscore/preferences.h"
 #include "mscore/extension.h"
+#include "mscore/icons.h"
 
 //---------------------------------------------------------
 //   SfzListDialog
@@ -106,6 +107,10 @@ ZerberusGui::ZerberusGui(Ms::Synthesizer* s)
       _progressTimer = new QTimer(this);
       connect(_progressTimer, SIGNAL(timeout()), this, SLOT(updateProgress()));
       connect(files, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtons()));
+      
+      soundFontUp->setIcon(*Ms::icons[int(Ms::Icons::arrowUp_ICON)]);
+      soundFontDown->setIcon(*Ms::icons[int(Ms::Icons::arrowDown_ICON)]);
+      
       updateButtons();
       }
 
