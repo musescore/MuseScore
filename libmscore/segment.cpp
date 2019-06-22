@@ -1163,7 +1163,7 @@ Element* Segment::getElement(int staff)
                   }
             }
       else
-            return element(staff);
+            return element(staff * VOICES);
       return 0;
       }
 
