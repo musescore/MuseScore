@@ -602,6 +602,30 @@ bool Articulation::isLuteFingering() const
       }
 
 //---------------------------------------------------------
+//   isOrnament
+//---------------------------------------------------------
+
+bool Articulation::isOrnament() const
+      {
+      return _symId == SymId::ornamentTurn
+          || _symId == SymId::ornamentTurnInverted
+          || _symId == SymId::ornamentTrill
+          || _symId == SymId::brassMuteClosed
+          || _symId == SymId::ornamentMordentInverted
+          || _symId == SymId::ornamentMordent
+          || _symId == SymId::ornamentTremblement
+          || _symId == SymId::ornamentPrallMordent
+          || _symId == SymId::ornamentLinePrall
+          || _symId == SymId::ornamentUpPrall
+          || _symId == SymId::ornamentUpMordent
+          || _symId == SymId::ornamentPrecompMordentUpperPrefix
+          || _symId == SymId::ornamentDownMordent
+          || _symId == SymId::ornamentPrallUp
+          || _symId == SymId::ornamentPrallDown
+          || _symId == SymId::ornamentPrecompSlide;
+      }
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
