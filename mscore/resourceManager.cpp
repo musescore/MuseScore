@@ -810,6 +810,7 @@ void ResourceManager::checkPluginUpdate(QPushButton* install)
       if (pluginDescriptionMap.contains(page_url)) {
             auto& desc = pluginDescriptionMap[page_url];
             PluginPackageDescription* desc_tmp = new PluginPackageDescription(desc);
+            install->setText("Checking for update...");
             bool should_update = analyzePluginPage("https://musescore.org" + page_url, *desc_tmp);
             if (should_update)
                   desc.update = desc_tmp;
