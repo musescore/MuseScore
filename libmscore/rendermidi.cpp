@@ -474,6 +474,43 @@ static int getControllerFromCC(int cc)
       }
 
 //---------------------------------------------------------
+//    renderHarmony
+///    renders chord symbols
+//---------------------------------------------------------
+static void renderHarmony(EventMap* events, Measure* m, Harmony* h)
+      {
+      Staff* staff = m->score()->staff(h->track() / VOICES);
+      Instrument* instr = staff->part()->instrument(h->tick());
+      int channel = instr->channel(0)->channel(); //FIXME - PHV: this is temp
+      if (!staff->primaryStaff())
+            return;
+
+      int staffIdx = staff->idx();
+      int velocity = staff->velocities().velo(h->tick().ticks());
+
+      RealizedHarmony r = h->realizedHarmony();
+      QList<int> pitches = r.pitches();
+
+      NPlayEvent ev(ME_NOTEON, channel, 0, velocity);
+      Fraction duration = h->ticksTilNext();
+
+      int onTime = h->tick().ticks();
+      int offTime = onTime + duration.ticks();
+
+      ev.setOriginatingStaff(staffIdx);
+      ev.setTuning(0.0);
+
+      //add play events
+      for (int p : pitches) {
+            ev.setPitch(p);
+            ev.setVelo(velocity);
+            events->insert(std::pair<int, NPlayEvent>(onTime, ev));
+            ev.setVelo(0);
+            events->insert(std::pair<int, NPlayEvent>(offTime, ev));
+            }
+      }
+
+//---------------------------------------------------------
 //   collectMeasureEventsSimple
 //    the original, velocity-only method of collecting events.
 //---------------------------------------------------------
@@ -489,6 +526,18 @@ static void collectMeasureEventsSimple(EventMap* events, Measure* m, Staff* staf
 
       for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
             int tick = seg->tick().ticks();
+
+            //render harmony
+            for (Element* e : seg->annotations()) {
+                  if (!e->isHarmony() || (e->track() < strack) || (e->track() >= etrack))
+                        continue;
+                  Harmony* h = toHarmony(e);
+                  if (!h->play())
+                        continue;
+                  //TODO - PHV: account for note event maybe
+                  renderHarmony(events, m, h);
+                  }
+
             for (int track = strack; track < etrack; ++track) {
                   // skip linked staves, except primary
                   if (!m->score()->staff(track / VOICES)->primaryStaff()) {
@@ -666,42 +715,6 @@ static void changeCCBetween(std::map<int, NPlayEvent>& tempEvents, int stick, in
             }
       }
 
-//---------------------------------------------------------
-//    renderHarmony
-///    renders chord symbols
-//---------------------------------------------------------
-static void renderHarmony(EventMap* events, Measure* m, Harmony* h)
-      {
-      Staff* staff = m->score()->staff(h->track() / VOICES);
-      Instrument* instr = staff->part()->instrument(h->tick());
-      int channel = instr->channel(0)->channel(); //FIXME - PHV: this is temp
-      if (!staff->primaryStaff())
-            return;
-
-      int staffIdx = staff->idx();
-      int velocity = staff->velocities().velo(h->tick().ticks());
-
-      RealizedHarmony r = h->realizedHarmony();
-      QList<int> pitches = r.pitches();
-
-      NPlayEvent ev(ME_NOTEON, channel, 0, velocity);
-      Fraction duration = h->ticksTilNext();
-
-      int onTime = h->tick().ticks();
-      int offTime = onTime + duration.ticks();
-
-      ev.setOriginatingStaff(staffIdx);
-      ev.setTuning(0.0);
-
-      //add play events
-      for (int p : pitches) {
-            ev.setPitch(p);
-            ev.setVelo(velocity);
-            events->insert(std::pair<int, NPlayEvent>(onTime, ev));
-            ev.setVelo(0);
-            events->insert(std::pair<int, NPlayEvent>(offTime, ev));
-            }
-      }
 //---------------------------------------------------------
 //   collectMeasureEventsDefault
 //    this uses only CC events to control note velocity, and sets the
