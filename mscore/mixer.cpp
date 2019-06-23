@@ -820,6 +820,7 @@ MixerContextMenu::MixerContextMenu(Mixer* mixer) : mixer(mixer)
       showTrackColors->setCheckable(true);
       showMasterVolume = new QAction(tr("Show Master Volume"));
       showMasterVolume->setCheckable(true);
+      showMasterVolume->setChecked(mixer->getOptions()->showMasterVolume());
 
       detailToSide->setStatusTip(tr("Detailed options shown below the mixer"));
       connect(detailToSide, SIGNAL(changed()), mixer, SLOT(showDetailsBelow()));
