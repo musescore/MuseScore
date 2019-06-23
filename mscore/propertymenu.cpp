@@ -602,12 +602,14 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
                   // Change key signature if necessary
                   if (it->transpose != oldV) {
                         for (int i = 0; i < part->nstaves(); i++) {
-                              KeySigEvent ks;
-                              Key key = part->staff(i)->key(tickStart);
-                              if (!score()->styleB(Sid::concertPitch))
-                                    key = transposeKey(key, oldV);
-                              ks.setKey(key);
-                              score()->undoChangeKeySig(part->staff(i), tickStart, ks, ic);
+                              if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
+                                    KeySigEvent ks;
+                                    Key key = part->staff(i)->key(tickStart);
+                                    if (!score()->styleB(Sid::concertPitch))
+                                          key = transposeKey(key, oldV);
+                                    ks.setKey(key);
+                                    score()->undoChangeKeySig(part->staff(i), tickStart, ks, ic);
+                                    }
                               }
                         }
                   // change instrument in all linked scores
