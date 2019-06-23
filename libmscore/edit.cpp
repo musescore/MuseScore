@@ -1924,10 +1924,13 @@ void Score::deleteItem(Element* el)
                               tickEnd = Fraction::fromTicks(i->first);
                         transpositionChanged(part, oldV, tickStart, tickEnd);
                         }
-                  for (KeySig* keySig : ic->keySigs())
-                        score()->deleteItem(keySig);
+                  for (KeySig* keySig : ic->keySigs()) {
+                        if (keySig->enabled())
+                              score()->deleteItem(keySig);
+                        }
                   for (Clef* clef : ic->clefs())
-                        score()->deleteItem(clef);
+                        if (clef->enabled())
+                              score()->deleteItem(clef);
                   }
                   break;
 

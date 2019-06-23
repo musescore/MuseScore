@@ -15,6 +15,7 @@
 
 #include "text.h"
 #include "instrument.h"
+#include "clef.h"
 
 namespace Ms {
 
