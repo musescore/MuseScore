@@ -227,7 +227,7 @@ void ScoreView::focusOutEvent(QFocusEvent* event)
 
 bool ScoreView::startTextEditingOnMouseRelease(QMouseEvent* mouseEvent)
       {
-      if (!editData.element)
+      if (!editData.element || mouseEvent->button() != Qt::LeftButton)
             return false;
 
       if (!(editData.element->isEditable() && editData.element->isTextBase()))
