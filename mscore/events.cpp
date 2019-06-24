@@ -222,39 +222,6 @@ void ScoreView::focusOutEvent(QFocusEvent* event)
       }
 
 //---------------------------------------------------------
-//   startTextEditingOnMouseRelease
-//---------------------------------------------------------
-
-bool ScoreView::startTextEditingOnMouseRelease(QMouseEvent* mouseEvent)
-      {
-      if (!editData.element)
-            return false;
-
-      if (!(editData.element->isEditable() && editData.element->isTextBase()))
-            return false;
-
-      TextBase* textBase = toTextBase(editData.element);
-
-      if (!editData.element->canvasBoundingRect().contains(toLogical(mouseEvent->pos()))) {
-            // mouse up OUTSIDE textbase - clear any priming
-            textBase->setPrimed(false);
-            return false;
-            }
-
-      if (!textBase->isPrimed()) {
-            // mouse up INSIDE textBase - set priming
-            textBase->setPrimed(true);
-            return false;
-      }
-
-      //mouse up INSIDE primed textBase - start editing
-      startEditMode(textBase);
-      setCursor(QCursor(Qt::IBeamCursor));
-      textBase->setPrimed(false);
-      return true;
-      }
-
-//---------------------------------------------------------
 //   mouseReleaseEvent
 //---------------------------------------------------------
 
@@ -278,9 +245,6 @@ void ScoreView::mouseReleaseEvent(QMouseEvent* mouseEvent)
                   changeState(ViewState::FOTO);
                   break;
             case ViewState::NORMAL:
-                  if (startTextEditingOnMouseRelease(mouseEvent))
-                        break;
-
                   if (editData.startMove == editData.pos && clickOffElement) {
                         _score->deselectAll();
                         _score->update();
@@ -429,15 +393,6 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
             case ViewState::NORMAL:
                   if (ev->button() == Qt::RightButton)   // context menu?
                         break;
-
-                  if (editData.element
-                      && editData.element->isEditable()
-                      && editData.element->isTextBase()
-                      && !editData.element->canvasBoundingRect().contains(toLogical(ev->pos()))) {
-                        // mouse down OUTSIDE of textBase - clear priming -
-                        toTextBase(editData.element)->setPrimed(false);
-                        }
-
                   editData.element = elementNear(editData.startMove);
                   mousePressEventNormal(ev);
                   break;
@@ -674,7 +629,6 @@ void ScoreView::mouseDoubleClickEvent(QMouseEvent* mouseEvent)
 
       if (clickedElement->isTextBase()) {
             setCursor(QCursor(Qt::IBeamCursor));
-            toTextBase(clickedElement)->setPrimed(false);
             }
       }
 

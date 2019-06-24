@@ -241,7 +241,6 @@ class TextBase : public Element {
       bool _layoutToParentWidth     { false };
 
       int  hexState                 { -1    };
-      bool _primed                  { 0 };
 
       void drawSelection(QPainter*, const QRectF&) const;
       void insert(TextCursor*, uint code);
@@ -299,8 +298,6 @@ class TextBase : public Element {
 
       void selectAll(TextCursor*);
       void multiClickSelect(EditData&, MultiClick);
-      bool isPrimed() const               { return _primed; }
-      void setPrimed(bool primed)         { _primed = primed; }
 
       virtual void write(XmlWriter& xml) const override;
       virtual void read(XmlReader&) override;
