@@ -81,6 +81,24 @@ struct PluginPackageDescription {
       };
 
 //---------------------------------------------------------
+//   PluginWorker
+//   A class that manages blocking procedures including downloading, installing
+//   and checking for update. Each PluginWorker object lives in a separate thread.
+//---------------------------------------------------------
+class PluginWorker : public QObject {
+      Q_OBJECT
+      PluginPackageDescription& desc;
+public:
+      PluginWorker(PluginPackageDescription& desc) : desc(desc) {}
+public slots:
+      // bool checkUpdate(); // may be discarded
+      void update(); // called in ResourceManager::updatePlugin()
+      bool analyzePluginPage(QString page_url); // replace ResourceManager::analyzePluginPage
+      void download(); // replace Resource::downloadPluginPackage
+      
+};
+
+//---------------------------------------------------------
 //   PluginManager
 //---------------------------------------------------------
 
