@@ -10682,12 +10682,15 @@
                   <aPitchRange>55-88</aPitchRange>
                   <pPitchRange>55-103</pPitchRange>
                   <Channel name="arco">
+                        <controller ctrl="32" value="21"/> <!--Violins Fast Expr.-->.
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
+                        <controller ctrl="32" value="21"/> <!--Violins Pizzicato Expr.-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
+                        <controller ctrl="32" value="21"/> <!--Violins Tremolo Expr.-->.
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>orchestra</genre>
@@ -10724,12 +10727,15 @@
                   <aPitchRange>48-79</aPitchRange>
                   <pPitchRange>48-93</pPitchRange>
                   <Channel name="arco">
+                        <controller ctrl="32" value="31"/> <!--Violas Fast Expr.-->.
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
+                        <controller ctrl="32" value="31"/> <!--Violas Pizzicato Expr.-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
+                        <controller ctrl="32" value="31"/> <!--Violas Tremolo Expr.-->.
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>orchestra</genre>
@@ -10767,12 +10773,15 @@
                   <aPitchRange>36-67</aPitchRange>
                   <pPitchRange>36-90</pPitchRange>
                   <Channel name="arco">
+                        <controller ctrl="32" value="41"/> <!--Celli Fast Expr.-->.
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
+                        <controller ctrl="32" value="41"/> <!--Celli Pizzicato Expr.-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
+                        <controller ctrl="32" value="41"/> <!--Celli Tremolo Expr.-->.
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>orchestra</genre>
@@ -10816,12 +10825,15 @@
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
                   <Channel name="arco">
+                        <controller ctrl="32" value="51"/> <!--Basses Fast Expr.-->.
                         <program value="48"/> <!--String Ensemble 1-->
                   </Channel>
                   <Channel name="pizzicato">
+                        <controller ctrl="32" value="51"/> <!--Basses Pisszcato Expr.-->.
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="tremolo">
+                        <controller ctrl="32" value="51"/> <!--Basses Tremolo Expr.-->.
                         <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>orchestra</genre>
