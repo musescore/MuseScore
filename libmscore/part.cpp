@@ -504,7 +504,7 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
 //   lyricCount
 //---------------------------------------------------------
 
-int Part::lyricCount()
+int Part::lyricCount() const
       {
       if (!score())
             return 0;
@@ -524,7 +524,7 @@ int Part::lyricCount()
 //   harmonyCount
 //---------------------------------------------------------
 
-int Part::harmonyCount()
+int Part::harmonyCount() const
       {
       if (!score())
             return 0;
@@ -543,7 +543,7 @@ int Part::harmonyCount()
 //   hasPitchedStaff
 //---------------------------------------------------------
 
-bool Part::hasPitchedStaff()
+bool Part::hasPitchedStaff() const
       {
       if (!staves())
             return false;
@@ -558,7 +558,7 @@ bool Part::hasPitchedStaff()
 //   hasTabStaff
 //---------------------------------------------------------
 
-bool Part::hasTabStaff()
+bool Part::hasTabStaff() const
       {
       if (!staves())
             return false;
@@ -573,7 +573,7 @@ bool Part::hasTabStaff()
 //   hasDrumStaff
 //---------------------------------------------------------
 
-bool Part::hasDrumStaff()
+bool Part::hasDrumStaff() const
       {
       if (!staves())
             return false;
