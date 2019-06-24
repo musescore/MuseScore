@@ -319,7 +319,9 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       popup->addAction("Debugger")->setData("list");
 #endif
 
+      popupActive = true;
       a = popup->exec(pos);
+      popupActive = false;
       if (a == 0)
             return;
       const QByteArray& cmd(a->data().toByteArray());
@@ -1903,7 +1905,7 @@ void ScoreView::cmd(const char* s)
 
       else if (cmd == "edit-element") {
             Element* e = _score->selection().element();
-            if (e && e->isEditable()) {
+            if (e && e->isEditable() && !popupActive) {
                   startEditMode(e);
                   }
             }
