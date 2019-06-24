@@ -85,11 +85,13 @@
           <midiChannel>0</midiChannel>
           </Channel>
         <Channel name="pizzicato">
+          <controller ctrl="32" value="21"/>
           <program value="45"/>
           <midiPort>0</midiPort>
           <midiChannel>1</midiChannel>
           </Channel>
         <Channel name="tremolo">
+          <controller ctrl="32" value="21"/>
           <program value="44"/>
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
