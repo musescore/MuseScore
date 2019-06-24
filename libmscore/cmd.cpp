@@ -245,7 +245,8 @@ void Score::update()
                   setPlayPos(is.segment()->tick());
                   }
             if (playlistDirty()) {
-                  emit playlistChanged();
+                  for (Score* s : scoreList())
+                        emit s->playlistChanged();
                   masterScore()->setPlaylistClean();
                   }
             cs.reset();
