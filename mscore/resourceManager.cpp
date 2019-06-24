@@ -701,7 +701,9 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
       QString direct_link;
       DownloadUtils page(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
       page.setTarget(url);
+      qDebug("before page download " + desc.package_name.toLatin1());
       page.download();
+      qDebug("thread after page download " + desc.package_name.toLatin1());
       QByteArray html_raw = page.returnData();
       std::vector<PluginPackageLink> urls = getLinks(html_raw);
       // choose a link with the highest score
@@ -715,9 +717,14 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
             }
       if (score == -2)
             return false;
-      if (target.source == GITHUB) {
+      if (target.source == GITHUB || target.source == GITHUB_RELEASE) {
             int release_id;
-            if (getLatestRelease(target.user, target.repo, release_id, direct_link)) {
+            bool has_release = false;
+            if (target.source == GITHUB)
+                  has_release = getLatestRelease(target.user, target.repo, release_id, direct_link);
+            else
+                  has_release = getLatestRelease(target.user, target.repo, release_id, direct_link, QFileInfo(target.url).completeBaseName());
+            if (has_release) {
                   // there is a GitHub release, change source to RELEASE
                   if (desc.source != GITHUB_RELEASE || (desc.release_id != release_id && release_id > 0)) {
                         desc.release_id = release_id;
@@ -726,11 +733,16 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
                         return true;
                         }
                   else
+                        // already up-to-date
                         return false;
                   }
-                  
-            // else, fetch latest commit sha on master(usually for 3.x), as info for update
-            QString branch = target.branch.isNull() ? "master" : target.branch;
+            QString branch;
+            if (target.source == GITHUB_RELEASE)
+                  // for archive links, the URL suffix is the branch name
+                  branch = QFileInfo(target.url).completeBaseName();
+            else
+                  // fetch latest commit sha on master(usually for 3.x), as info for update
+                  branch = target.branch.isNull() ? "master" : target.branch;
             QString sha = getLatestCommitSha(target.user, target.repo, branch);
             // compare the sha with previous stored sha. If the same, don't update.
             if (desc.source != GITHUB || desc.latest_commit != sha) {
@@ -742,25 +754,7 @@ bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& d
             else
                   return false;
             }
-      else if (target.source == GITHUB_RELEASE) {
-            // even if the download link is known, we still need to fetch the release id
-            int release_id = 0;
-            getLatestRelease(target.user, target.repo, release_id, direct_link, QFileInfo(target.url).completeBaseName());
-            if (release_id > 0) {
-                  if (desc.source != GITHUB_RELEASE || (desc.release_id != release_id && release_id > 0)) {
-                        desc.release_id = release_id;
-                        desc.direct_link = target.url;
-                        desc.source = GITHUB_RELEASE;
-                        return true;
-                        }
-                  else
-                        return false;
-                  }
-            else {
-                  qDebug("Invalid release id in the link.");
-                  return false;
-                  }
-            }
+
       else if (target.source == ATTACHMENT) {
             QDateTime date_time;
             if (desc.source != ATTACHMENT || desc.direct_link != target.url || (date_time = GetLastModified(target.url)) != desc.last_modified) {
@@ -1114,6 +1108,7 @@ void ResourceManager::refreshPluginButton(int row, bool updated/* = true*/)
       // TODO: get button, then plugin url, then update status
       // install button
       QPushButton* install = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 3)));
+      install->disconnect();
       QPushButton* uninstall = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 4)));
       const QString& page_url = install->property("page_url").toString();
       bool installed = pluginDescriptionMap.contains(page_url);
