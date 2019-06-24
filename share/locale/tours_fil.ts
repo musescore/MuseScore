@@ -4,7 +4,7 @@
     <message>
         <source>Welcome to MuseScore! This brief tour will guide you through the MuseScore user interface.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Maligayang pagbati sa MuseScore! Ang maikling paglalakbay na ito ay makatutulong sa iyo sa user interface ng MuseScore.</translation>
     </message>
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
@@ -24,7 +24,7 @@
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation type="unfinished"/>
+        <translation>Ang bawat paleta ay naglalaman ng mga bagay na puwedeng idagdag sa iskor.</translation>
     </message>
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
@@ -130,7 +130,7 @@
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Ang Panuri ay nagbibigay sa iyo ng kontrol sa iba&apos;t ibang mga katangian ng mga elemento sa iyong iskor.</translation>
     </message>
     <message>
         <source>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
@@ -183,7 +183,8 @@
         <source>MuseScore supports different types of selections: single, list, and range.
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Sinusuportahan ng MuseScore ang iba&apos; ibang uri ng mga seleksyon: isahan, listahan, at saklaw.
+Pindutin ang &quot;Susunod&quot; para malaman ang mga ito.</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.
@@ -248,7 +249,7 @@
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Upang magdagdag ng nota sa isang akorde, pinutin ang &quot;Shift&quot; habang pinipindot ang kaakibat nitong letra, o pumindot sa limguhit.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>

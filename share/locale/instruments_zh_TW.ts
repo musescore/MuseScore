@@ -1998,12 +1998,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="50"/>
         <source>Common</source>
-        <translation type="unfinished"/>
+        <translation>常用樂器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="51"/>
         <source>Pop/Rock</source>
-        <translation type="unfinished"/>
+        <translation>流行／搖滾樂器</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="52"/>
@@ -2284,7 +2284,7 @@
         <location filename="../instruments/instrumentsxml.h" line="133"/>
         <source>B♭ S. Oc.</source>
         <comment>B♭ Soprano Ocarina</comment>
-        <translation type="unfinished"/>
+        <translation>B♭ S. Oc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="135"/>
@@ -2308,7 +2308,7 @@
         <location filename="../instruments/instrumentsxml.h" line="141"/>
         <source>B♭ A. Oc.</source>
         <comment>B♭ Alto Ocarina</comment>
-        <translation type="unfinished"/>
+        <translation>B♭ A. Oc.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="143"/>
@@ -3749,7 +3749,7 @@
         <location filename="../instruments/instrumentsxml.h" line="646"/>
         <source>Spt.</source>
         <comment>Serpent</comment>
-        <translation type="unfinished"/>
+        <translation>Spt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="647"/>
@@ -4295,7 +4295,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="817"/>
         <source>Chinese Tom-Toms</source>
-        <translation type="unfinished"/>
+        <translation>中式大鼓</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="818"/>
@@ -4598,7 +4598,7 @@
         <location filename="../instruments/instrumentsxml.h" line="912"/>
         <source>Sto.</source>
         <comment>Stones</comment>
-        <translation type="unfinished"/>
+        <translation>Sto.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="914"/>
@@ -4945,12 +4945,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1028"/>
         <source>echoes</source>
-        <translation type="unfinished"/>
+        <translation>回音</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1029"/>
         <source>scifi</source>
-        <translation type="unfinished"/>
+        <translation>科幻</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1030"/>
@@ -5064,7 +5064,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1050"/>
         <source>polysynth</source>
-        <translation type="unfinished"/>
+        <translation>和音</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1051"/>
@@ -5278,7 +5278,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1245"/>
         <source>Ukulele (Low G)</source>
-        <translation type="unfinished"/>
+        <translation>烏克麗麗（低音 G ）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1246"/>
@@ -6004,7 +6004,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1150"/>
         <source>7-string Guitar (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>7 弦吉他【圖表記譜法】</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1151"/>
@@ -6167,7 +6167,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1199"/>
         <source>Lute (Tablature)</source>
-        <translation type="unfinished"/>
+        <translation>琵琶【圖表記譜法】</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1222"/>
