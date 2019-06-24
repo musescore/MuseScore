@@ -844,6 +844,7 @@ void ScoreView::contextMenuEvent(QContextMenuEvent* ev)
             }
       QPoint gp          = ev->globalPos();
       editData.startMove = toLogical(ev->pos());
+      editData.buttons   = Qt::NoButton;
       Element* e         = elementNear(editData.startMove);
       if (e) {
             if (!e->selected()) {
