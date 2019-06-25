@@ -93,7 +93,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>70</y>
+      <y>10</y>
       <width>280</width>
       <height>200</height>
      </rect>
@@ -148,10 +148,10 @@
    <widget class="QTreeWidget" name="masterVolumeTreeWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>10</y>
+      <x>10</x>
+      <y>230</y>
       <width>280</width>
-      <height>20</height>
+      <height>25</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -163,13 +163,13 @@
     <property name="minimumSize">
      <size>
       <width>280</width>
-      <height>20</height>
+      <height>25</height>
      </size>
     </property>
     <property name="maximumSize">
      <size>
       <width>16777215</width>
-      <height>22</height>
+      <height>25</height>
      </size>
     </property>
     <property name="tabKeyNavigation">

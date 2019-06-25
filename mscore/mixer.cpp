@@ -265,7 +265,7 @@ void Mixer::updateUiOptions()
       bool showMasterVol = options->showMasterVolume();
 
       if (options->showDetailsOnTheSide()) {
-
+            // show TO THE SIDE case
             showDetailsIcon.addFile(QString::fromUtf8(":/data/icons/go-next.svg"), QSize(), QIcon::Normal, QIcon::Off);
 
             // addWidget(row, column, rowSpan, columnSpan, [Qt::Alignment])
@@ -279,10 +279,10 @@ void Mixer::updateUiOptions()
                   }
             gridLayout->addWidget(partOnlyCheckBox, showMasterVol ? 2 : 1, 0, 1, 1);
             gridLayout->addWidget(showDetailsButton, showMasterVol ? 2 : 1, 1, 1, 1);
-            gridLayout->addWidget(mixerDetails, 0, 3, showMasterVol ? 3 : 2, 1);
+            gridLayout->addWidget(mixerDetails, 0, 3, showMasterVol ? 3 : 2, 1, Qt::AlignTop);
             }
       else {
-
+            // show BELOW case
             showDetailsIcon.addFile(QString::fromUtf8(":/data/icons/arrow_down.svg"), QSize(), QIcon::Normal, QIcon::Off);
             gridLayout->addWidget(mixerTreeWidget, 0, 0, 1, 2);
             if (showMasterVol) {
@@ -294,7 +294,7 @@ void Mixer::updateUiOptions()
                   }
             gridLayout->addWidget(partOnlyCheckBox, showMasterVol ? 2 : 1, 0, 1, 1);
             gridLayout->addWidget(showDetailsButton, showMasterVol ? 2 : 1, 1, 1, 1);
-            gridLayout->addWidget(mixerDetails, 3, 0, showMasterVol ? 3 : 2, 2);
+            gridLayout->addWidget(mixerDetails, showMasterVol ? 3 : 2, 0, 1 , 2, Qt::AlignTop);
             }
 
       showDetailsButton->setIcon(showDetailsIcon);

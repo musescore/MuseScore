@@ -88,6 +88,7 @@ void MixerDetails::updateUiOptions()
       portSpinBox->setVisible(showMidiOptions);
 
       updateTabOrder();
+      adjustSize();
       }
 
 
