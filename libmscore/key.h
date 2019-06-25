@@ -57,6 +57,7 @@ enum class KeyMode {
       NONE,
       MAJOR,
       MINOR,
+      HEAD
       DORIAN,
       PHRYGIAN,
       LYDIAN,
@@ -146,6 +147,7 @@ class AccidentalState {
 
 struct Interval;
 extern Key transposeKey(Key oldKey, const Interval&);
+extern Interval calculateInterval(Key key1, Key key2);
 
 
 }     // namespace Ms

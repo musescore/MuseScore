@@ -118,6 +118,20 @@ Key transposeKey(Key key, const Interval& interval)
       }
 
 //---------------------------------------------------------
+//   calculateInterval
+//    Calculates the interval to move from one key to another
+//---------------------------------------------------------
+
+Interval calculateInterval(Key key1, Key key2)
+      {
+      int chromatic = 7 * ((int)key2 - (int)key1);
+      chromatic = chromatic % 12;
+      if (chromatic < 0)
+            chromatic += 12;
+      return Interval::Interval(chromatic);
+      }
+
+//---------------------------------------------------------
 //   initFromSubtype
 //    for backward compatibility
 //---------------------------------------------------------
