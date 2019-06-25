@@ -56,7 +56,8 @@ enum class KeyMode {
       UNKNOWN = -1,
       NONE,
       MAJOR,
-      MINOR
+      MINOR,
+      INSTRUMENT_CHANGE
       };
 
 static inline bool operator< (Key a, Key b) { return static_cast<int>(a) < static_cast<int>(b); }
@@ -139,6 +140,7 @@ class AccidentalState {
 
 struct Interval;
 extern Key transposeKey(Key oldKey, const Interval&);
+extern Interval calculateInterval(Key key1, Key key2);
 
 
 }     // namespace Ms
