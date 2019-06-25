@@ -31,6 +31,7 @@ KeySigEvent::KeySigEvent(const KeySigEvent& k)
       _mode       = k._mode;
       _custom     = k._custom;
       _keySymbols = k._keySymbols;
+      _forInstrumentChange = k._forInstrumentChange;
       }
 
 //---------------------------------------------------------
@@ -87,7 +88,7 @@ void KeySigEvent::setKey(Key v)
 
 bool KeySigEvent::operator==(const KeySigEvent& e) const
       {
-      if (e._custom != _custom || e._mode != _mode)
+      if (e._custom != _custom || e._mode != _mode || e._forInstrumentChange != _forInstrumentChange)
             return false;
       if (_custom && !isAtonal()) {
             if (e._keySymbols.size() != _keySymbols.size())
@@ -129,6 +130,20 @@ Key transposeKey(Key key, const Interval& interval, PreferSharpFlat prefer)
             tpc += 12; // no more than 7 flats in keysig
 
       return Key(tpc - 14);
+      }
+
+//---------------------------------------------------------
+//   calculateInterval
+//    Calculates the interval to move from one key to another
+//---------------------------------------------------------
+
+Interval calculateInterval(Key key1, Key key2)
+      {
+      int chromatic = 7 * ((int)key2 - (int)key1);
+      chromatic = chromatic % 12;
+      if (chromatic < 0)
+            chromatic += 12;
+      return Interval(chromatic);
       }
 
 //---------------------------------------------------------

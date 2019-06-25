@@ -680,6 +680,8 @@ class Score : public QObject, public ScoreElement {
       void undoChangeStyleVal(Sid idx, const QVariant& v);
       void undoChangePageNumberOffset(int po);
 
+      void updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff* staff, const Ms::Fraction& tick);
+
       Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
       Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = Direction::AUTO, bool forceAccidental = false, bool rhythmic = false);
