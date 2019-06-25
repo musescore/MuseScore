@@ -127,11 +127,11 @@ class MsProcess : public QProcess {
       };
 
 //---------------------------------------------------------
-//   @@ ScoreView \since MuseScore 3.2
+//   @@ ScoreView
 ///    This is an GUI element to show a score. \since MuseScore 3.2
 //---------------------------------------------------------
 
-class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
+class ScoreView : public QQuickPaintedItem, public MuseScoreView {
       Q_OBJECT
       /** Background color */
       Q_PROPERTY(QColor color READ color WRITE setColor)
@@ -169,8 +169,8 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
 
    public:
       /// \cond MS_INTERNAL
-      MsScoreView(QQuickItem* parent = 0);
-      virtual ~MsScoreView() {}
+      ScoreView(QQuickItem* parent = 0);
+      virtual ~ScoreView() {}
       QColor color() const            { return _color;        }
       void setColor(const QColor& c)  { _color = c;           }
       qreal scale() const             { return mag;        }
