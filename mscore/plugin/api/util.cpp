@@ -135,8 +135,15 @@ int FileIO::modifiedTime()
 
 void MsScoreView::setScore(Ms::PluginAPI::Score* s)
       {
+      Ms::Score* newScore = s ? s->score() : nullptr;
+      setScore(newScore);
+      }
+
+void MsScoreView::setScore(Ms::Score* s)
+      {
+      MuseScoreView::setScore(s);
       _currentPage = 0;
-      score = s ? s->score() : nullptr;
+      score = s;
 
       if (score) {
             score->doLayout();

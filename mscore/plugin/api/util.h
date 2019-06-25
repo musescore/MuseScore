@@ -147,6 +147,8 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
 
       QNetworkAccessManager* networkManager;
 
+      virtual void setScore(Ms::Score*) override;
+
       virtual void dataChanged(const QRectF&) override { update(); }
       virtual void updateAll() override                { update(); }
 
