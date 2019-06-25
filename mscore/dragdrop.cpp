@@ -332,7 +332,6 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       editData.modifiers = event->keyboardModifiers();
 
       switch (editData.dropElement->type()) {
-            case ElementType::VOLTA:
             case ElementType::PEDAL:
             case ElementType::LET_RING:
             case ElementType::VIBRATO:
@@ -346,6 +345,7 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             case ElementType::IMAGE:
             case ElementType::SYMBOL:
             case ElementType::DYNAMIC:
+            case ElementType::VOLTA:
             case ElementType::KEYSIG:
             case ElementType::CLEF:
             case ElementType::TIMESIG:
@@ -417,7 +417,6 @@ void ScoreView::dropEvent(QDropEvent* event)
             Q_ASSERT(editData.dropElement->score() == score());
             _score->addRefresh(editData.dropElement->canvasBoundingRect());
             switch (editData.dropElement->type()) {
-                  case ElementType::VOLTA:
                   case ElementType::OTTAVA:
                   case ElementType::TRILL:
                   case ElementType::PEDAL:
@@ -477,6 +476,9 @@ void ScoreView::dropEvent(QDropEvent* event)
                         }
                         event->acceptProposedAction();
                         break;
+                  case ElementType::VOLTA:
+                        if (editData.modifiers & Qt::ControlModifier)
+                              editData.dropElement->setSystemFlag(false);
                   case ElementType::HBOX:
                   case ElementType::VBOX:
                   case ElementType::KEYSIG:

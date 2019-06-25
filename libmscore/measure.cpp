@@ -1317,6 +1317,7 @@ bool Measure::acceptDrop(EditData& data) const
                   viewer->setDropRectangle(canvasBoundingRect());
                   return true;
 
+            case ElementType::VOLTA:
             case ElementType::KEYSIG:
             case ElementType::TIMESIG:
                   if (data.modifiers & Qt::ControlModifier)
@@ -1436,6 +1437,14 @@ Element* Measure::drop(EditData& data)
                   score()->undoChangeClef(staff, first(), toClef(e)->clefType());
                   delete e;
                   break;
+
+            case ElementType::VOLTA:
+                  {
+                  Spanner* volta = static_cast<Spanner*>(e->clone());
+                  volta->setScore(score());
+                  score()->cmdAddSpanner(volta, staffIdx, first(), last());
+                  break;
+                  }
 
             case ElementType::KEYSIG:
                   {
