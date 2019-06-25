@@ -23,17 +23,17 @@
 #include "libmscore/part.h"
 #include "seq.h"
 
-/* obq-note
- MixerTrackItem objects
- 1) represent a channel that is one the sound source for an instrument that
- in turn belongs to a part. Provides a uniform / clean interface for interacting with
- the sound source in the mixer.
- 
- 2) represents a collection of channels that form the variant sound sources for an
+/*
+ A MixerTrackItem object:
+ EITHER (1) represents a channel that is one sound source for an instrument that
+ in turn belongs to a part. It provides a uniform / clean interface for
+ interacting with the sound source in the mixer.
+
+ OR (2) represents a collection of channels that form the variant sound sources for an
  instrument. Implements rules whereby changes to the top level (the collection level)
  are trickled down to the sub-levels (indidvidual channels).
  
- TODO: clarify my understanding - the enum cases are {PART, CHANNEL}, but, I think, that's
+ TODO: Clarify my understanding - the enum cases are {PART, CHANNEL}, but, I think, that's
  at odds with how the terminology is used elsewhere. The TrackTypes are, I think, better
  described as:
  - Instrument (one or more channels as a sound source)
@@ -50,8 +50,8 @@ namespace Ms {
 //   MixerTrackItem
 //---------------------------------------------------------
 
-MixerTrackItem::MixerTrackItem(TrackType tt, Part* part, Instrument* instr, Channel *chan)
-      :_trackType(tt), _part(part), _instr(instr), _chan(chan)
+MixerTrackItem::MixerTrackItem(TrackType trackType, Part* part, Instrument* instr, Channel *chan)
+      :_trackType(trackType), _part(part), _instrument(instr), _channel(chan)
       {
       }
 
@@ -79,7 +79,7 @@ Channel* MixerTrackItem::playbackChannel(const Channel* channel)
 
 int MixerTrackItem::color()
       {
-      return _trackType ==TrackType::PART ? _part->color() : _chan->color();
+      return _trackType ==TrackType::PART ? _part->color() : _channel->color();
       }
 
 
@@ -136,9 +136,9 @@ void MixerTrackItem::setVolume(char value)
                   }
             }
       else {
-            if (_chan->volume() != value) {
-                  _chan->setVolume(value);
-                  seq->setController(_chan->channel(), CTRL_VOLUME, _chan->volume());
+            if (_channel->volume() != value) {
+                  _channel->setVolume(value);
+                  seq->setController(_channel->channel(), CTRL_VOLUME, _channel->volume());
                   }
             }
       }
@@ -165,9 +165,9 @@ void MixerTrackItem::setPan(char value)
                   }
             }
       else {
-            if (_chan->pan() != value) {
-                  _chan->setPan(value);
-                  seq->setController(_chan->channel(), CTRL_PANPOT, _chan->pan());
+            if (_channel->pan() != value) {
+                  _channel->setPan(value);
+                  seq->setController(_channel->channel(), CTRL_PANPOT, _channel->pan());
                   }
             }
       }
@@ -194,9 +194,9 @@ void MixerTrackItem::setChorus(char value)
                   }
             }
       else {
-            if (_chan->chorus() != value) {
-                  _chan->setChorus(value);
-                  seq->setController(_chan->channel(), CTRL_CHORUS_SEND, _chan->chorus());
+            if (_channel->chorus() != value) {
+                  _channel->setChorus(value);
+                  seq->setController(_channel->channel(), CTRL_CHORUS_SEND, _channel->chorus());
                   }
             }
       }
@@ -223,9 +223,9 @@ void MixerTrackItem::setReverb(char value)
                   }
             }
       else {
-            if (_chan->reverb() != value) {
-                  _chan->setReverb(value);
-                  seq->setController(_chan->channel(), CTRL_REVERB_SEND, _chan->reverb());
+            if (_channel->reverb() != value) {
+                  _channel->setReverb(value);
+                  seq->setController(_channel->channel(), CTRL_REVERB_SEND, _channel->reverb());
                   }
             }
       }
@@ -249,7 +249,7 @@ void MixerTrackItem::setColor(int valueRgb)
                   }
             }
       else {
-            _chan->setColor(valueRgb);
+            _channel->setColor(valueRgb);
             }
       }
 
@@ -273,8 +273,8 @@ void MixerTrackItem::setMute(bool value)
             }
       else {
             if (value)
-                  seq->stopNotes(_chan->channel());
-            _chan->setMute(value);
+                  seq->stopNotes(_channel->channel());
+            _channel->setMute(value);
             }
       }
 
@@ -295,7 +295,7 @@ void MixerTrackItem::setSolo(bool value)
                   }
             }
       else {
-            _chan->setSolo(value);
+            _channel->setSolo(value);
             }
 
       //Go through all channels so that all not being soloed are mute

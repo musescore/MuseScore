@@ -21,9 +21,6 @@
 #define __MIXERTRACKPART_H__
 
 #include "ui_mixertrackpart.h"
-#include "mixertrackgroup.h"
-#include "mixertrack.h"
-#include "mixertrackitem.h"
 #include "libmscore/instrument.h"
 
 namespace Ms {
@@ -31,9 +28,7 @@ namespace Ms {
 class MidiMapping;
 class MixerTrackItem;
 
-//---------------------------------------------------------
-//   MixerTrackPart
-//---------------------------------------------------------
+/* Not used in the re-designed mixer */
 
 class MixerTrackPart : public QWidget, public Ui::MixerTrackPart, public ChannelListener
       {
@@ -41,36 +36,11 @@ class MixerTrackPart : public QWidget, public Ui::MixerTrackPart, public Channel
 
       MixerTrackItem* mixerTrackItem;
 
-      bool _selected;
-      static const QString unselStyleDark;
-      static const QString selStyleDark;
-      static const QString unselStyleLight;
-      static const QString selStyleLight;
-      static const QString sliderStyle;
-
-      MixerTrackGroup* _group;
-
-      void updateNameLabel();
-
-signals:
-      void selectedChanged(bool);
-
-public slots:
-      void updateSolo(bool);
-      void updateMute(bool);
-      void stripVolumeSliderMoved(double);
-      void stripPanSliderMoved(double);
-      void controlSelected();
-      void applyStyle();
-
 protected:
-      void mouseReleaseEvent(QMouseEvent * event) override;
       void propertyChanged(Channel::Prop property) override;
 
 public:
       explicit MixerTrackPart(QWidget *parent, MixerTrackItem* trackItem, bool expanded);
-
-      void setGroup(MixerTrackGroup* group) { _group = group; }
       };
 
 }

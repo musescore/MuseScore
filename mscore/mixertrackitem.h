@@ -44,18 +44,18 @@ private:
       TrackType _trackType;
       Part* _part;
 
-      Instrument* _instr;
-      Channel* _chan;
+      Instrument* _instrument;
+      Channel* _channel;
 
       Channel* playbackChannel(const Channel* channel);
 
 public:
-      MixerTrackItem(TrackType tt, Part* part, Instrument* _instr, Channel* _chan);
+      MixerTrackItem(TrackType trackType, Part* part, Instrument* _instr, Channel* _chan);
 
       TrackType trackType() { return _trackType; }
       Part* part() { return _part; }
-      Instrument* instrument() { return _instr; }
-      Channel* chan() { return _chan; }
+      Instrument* instrument() { return _instrument; }
+      Channel* chan() { return _channel; }
       MidiMapping *midiMap();
       int color();
 

@@ -33,6 +33,14 @@
 
 namespace Ms {
 
+//--------------------------------------------------------------
+//  MixerTrackChannel provides an widget that is displayed in a
+//  row of a QTreeWidget. The widget includes a slider (by default
+//  to control track volume) and Mute and Solo Buttons. The widget
+//  is a "listener" to the track that is controls. This means that
+//  when other parts of MuseScore change the track, the control
+//  will update itself.
+//--------------------------------------------------------------
 MixerTrackChannel::MixerTrackChannel(QTreeWidgetItem* treeWidgetItem, MixerTrackItem* mixerTrackItem, MixerOptions* options) :
       treeWidgetItem(treeWidgetItem), mixerTrackItem(mixerTrackItem)
       {
@@ -96,6 +104,7 @@ void MixerTrackChannel::update()
       if (colorLabel)
             colorLabel->setStyleSheet(QString("QLabel{background: %1;padding-top: 2px; padding-bottom: 2px; border-radius: 3px;}").arg(channelColor.name()));
 
+      //TODO: this tooltip might want to go over the instrument name instead (or both?)
       QString tooltip = tr("Part Name: %1\n"
                            "Instrument: %2\n"
                            "Channel: %3\n"
@@ -140,26 +149,27 @@ void MixerTrackChannel::stripMuteToggled(bool val)
       }
 
 
-//-----------------------------------------
-//  MixerMasterChannel class
-//-----------------------------------------
 
+//--------------------------------------------------------------
+//  MixerMasterChannel provides an widget that is displayed in a
+//  row of a QTreeWidget. The widget includes a slider (by default
+//  to control track volume) and Play and Loop buttons. It shares
+//  the UI class with MixerMasterChannel as the master control
+//  needs to look like the track controls.
+//--------------------------------------------------------------
 MixerMasterChannel::MixerMasterChannel()
       {
       setupUi(this);
       setupAdditionalUi();
       setupSlotsAndSignals();
       update();
-
-      //channel->addListener(this);
       }
 
 
 void MixerMasterChannel::setupSlotsAndSignals()
       {
-      connect(volumeSlider,   SIGNAL(valueChanged(int)),    SLOT(masterVolumeSliderMoved(int)));
+      connect(volumeSlider, SIGNAL(valueChanged(int)), SLOT(masterVolumeSliderMoved(int)));
       }
-
 
 
 void MixerMasterChannel::setupAdditionalUi()
@@ -176,13 +186,14 @@ void MixerMasterChannel::setupAdditionalUi()
       soloButton->setDefaultAction(getAction("play"));
       muteButton->setDefaultAction(getAction("loop"));
 
-
       soloButton->setText("");
       muteButton->setText("");
 
       soloButton->setIcon(playIcon);
       muteButton->setIcon(loopIcon);
 
+      // the label is retained but made transparent to preserve alignment with
+      // the track widgets
       QString transparentColorLabelStyle = "QToolButton { background: none;}";
       colorLabel->setStyleSheet(transparentColorLabelStyle);
       }
@@ -208,7 +219,7 @@ void MixerMasterChannel::update()
 
 void MixerMasterChannel::volumeChanged(float synthGain)
       {
-      const QSignalBlocker blockSignals(volumeSlider);     // block during this method
+      const QSignalBlocker blockSignals(volumeSlider); // block during this method
       float gainInSliderRange = int (synthGain*12.7); //TODO: fix the maths (decibels etc.)
       volumeSlider->setValue(int(gainInSliderRange));
       }
@@ -216,11 +227,9 @@ void MixerMasterChannel::volumeChanged(float synthGain)
 
 void MixerMasterChannel::masterVolumeSliderMoved(int value)
       {
-      const QSignalBlocker blockSignals(volumeSlider);     // block during this method
+      const QSignalBlocker blockSignals(volumeSlider); // block during this method
       volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));
       synti->setGain(float(value) / 12.7); //TODO: fix the maths (decibels etc.)
       }
-
-
 
 }
