@@ -476,6 +476,7 @@ add_library(mscoreapp STATIC
       script/script.cpp script/scriptentry.cpp script/testscript.cpp script/recorderwidget.cpp
       qml/msqmlengine.cpp qml/nativemenu.cpp qml/nativetooltip.cpp
       qmldockwidget.cpp
+      plugin/pluginUpdater.cpp plugin/pluginUpdater.h
 
       ${WIDGETS_SOURCE_FILES}
       ${COCOABRIDGE}

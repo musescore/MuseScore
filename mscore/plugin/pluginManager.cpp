@@ -402,20 +402,5 @@ void PluginManager::readSettings()
       MuseScore::restoreGeometry(this);
       }
 
-void PluginWorker::update()
-      {
-
-      }
-
-bool PluginWorker::analyzePluginPage(QString page_url)
-      {
-      return false;
-      }
-
-void PluginWorker::download()
-      {
-
-      }
-
 }
 

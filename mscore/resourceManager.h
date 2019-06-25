@@ -15,9 +15,8 @@
 
 #include "ui_resourceManager.h"
 #include "downloadUtils.h"
-// As a proof of concept, and for convenience, I just include pluginManager.h to use some plugin related definitions for now.
-// Maybe all contents in pluginManager.h will be integrated into resource manager later.
 #include "plugin/pluginManager.h"
+#include "plugin/pluginUpdater.h"
 
 namespace Ms {
 
