@@ -523,6 +523,7 @@ void Ms::ScoreView::selectInstrument(InstrumentChange* ic)
                         for (int i = 0; i < part->nstaves(); i++) {
                               if (!part->staff(i)->keySigEvent(tickStart).isAtonal()) {
                                     KeySigEvent ks;
+                                    ks.setForInstrumentChange(true);
                                     Key key = part->staff(i)->key(tickStart);
                                     if (!score()->styleB(Sid::concertPitch))
                                           key = transposeKey(key, oldV);

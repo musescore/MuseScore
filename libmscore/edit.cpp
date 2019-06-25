@@ -1652,7 +1652,15 @@ void Score::deleteItem(Element* el)
                   break;
 
             case ElementType::KEYSIG:
-                  undoRemoveElement(el);
+                  {
+                  KeySig* k = toKeySig(el);
+                  undoRemoveElement(k);
+                  for (int i = 0; i < k->part()->nstaves(); i++) {
+                        Staff* staff = k->part()->staff(i);
+                        KeySigEvent e = staff->keySigEvent(k->tick());
+                        updateInstrumentChangeTranspositions(e, staff, k->tick());
+                        }
+                  }
                   break;
 
             case ElementType::NOTE:
@@ -1985,6 +1993,12 @@ void Score::deleteItem(Element* el)
                   Part* part = ic->part();
                   Interval oldV = part->instrument(tickStart)->transpose();
                   undoRemoveElement(el);
+                  for (KeySig* keySig : ic->keySigs())
+                        if (keySig->parent())
+                              score()->deleteItem(keySig);
+                  for (Clef* clef : ic->clefs())
+                        if (clef->parent())
+                              score()->deleteItem(clef);
                   if (part->instrument(tickStart)->transpose() != oldV) {
                         auto i = part->instruments()->upper_bound(tickStart.ticks());
                         Fraction tickEnd;
@@ -1994,13 +2008,6 @@ void Score::deleteItem(Element* el)
                               tickEnd = Fraction::fromTicks(i->first);
                         transpositionChanged(part, oldV, tickStart, tickEnd);
                         }
-                  for (KeySig* keySig : ic->keySigs()) {
-                        if (keySig->enabled())
-                              score()->deleteItem(keySig);
-                        }
-                  for (Clef* clef : ic->clefs())
-                        if (clef->enabled())
-                              score()->deleteItem(clef);
                   }
                   break;
 
@@ -3772,6 +3779,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
 
             Score* score = staff->score();
             Measure* measure = score->tick2measure(tick);
+            KeySigEvent currentKeySigEvent = staff->keySigEvent(tick);
             if (!measure) {
                   qWarning("measure for tick %d not found!", tick.ticks());
                   continue;
@@ -3785,14 +3793,15 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
             Interval interval = staff->part()->instrument(tick)->transpose();
             KeySigEvent nkey  = key;
             bool concertPitch = score->styleB(Sid::concertPitch);
+
             if (interval.chromatic && !concertPitch && !nkey.custom() && !nkey.isAtonal()) {
                   interval.flip();
                   nkey.setKey(transposeKey(key.key(), interval, staff->part()->preferSharpFlat()));
                   }
+
+            updateInstrumentChangeTranspositions(key, staff, tick);
             if (ks) {
                   ks->undoChangeProperty(Pid::GENERATED, false);
-                  if (ic)
-                        ic->addKeySig(ks);
                   undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
                   }
             else {
@@ -3810,6 +3819,39 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
                         else
                               lks = nks;
                         }
+                  }
+            }
+      }
+
+void Score::updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff* staff, const Ms::Fraction& tick)
+      {
+      if (!key.isForInstrumentChange()) {
+            KeyList* kl = staff->keyList();
+            int nextTick = kl->nextKeyTick(tick.ticks());
+
+            while (nextTick != -1) {
+                  KeySigEvent e = kl->key(nextTick);
+                  if (e.isForInstrumentChange()) {
+                        Measure* m = tick2measure(Fraction::fromTicks(nextTick));
+                        Segment* s = m->tick2segment(Fraction::fromTicks(nextTick), SegmentType::KeySig);
+                        int track = staff->idx() * VOICES;
+                        KeySig* keySig = toKeySig(s->element(track));
+                        if (key.isAtonal() && !e.isAtonal()) {
+                              e.setMode(KeyMode::NONE);
+                              e.setKey(Key::C);
+                              }
+                        else {
+                              e.setMode(key.mode());
+                              Interval changeInterval = staff->part()->instrument(Fraction::fromTicks(nextTick))->transpose();
+                              changeInterval.flip();
+                              Key nkey = transposeKey(key.key(), changeInterval);
+                              e.setKey(nkey);
+                              }
+                        undo(new ChangeKeySig(keySig, e, keySig->showCourtesy()));
+                        nextTick = kl->nextKeyTick(nextTick);
+                        }
+                  else
+                        nextTick = -1;
                   }
             }
       }
