@@ -280,7 +280,7 @@ void Score::deletePostponed()
 //        HAIRPIN, LET_RING, VIBRATO and TEXTLINE
 //---------------------------------------------------------
 
-void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
+void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, bool firstStaffOnly)
       {
       int staffIdx;
       Segment* segment;
@@ -292,6 +292,8 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             return;
             }
 
+      if (firstStaffOnly)
+            staffIdx = 0;
       // all spanners live in voice 0 (except slurs/ties)
       int track = staffIdx == -1 ? -1 : staffIdx * VOICES;
 
@@ -308,7 +310,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos)
             Measure* m = toMeasure(mb);
             QRectF b(m->canvasBoundingRect());
 
-            if (pos.x() >= (b.x() + b.width() * .5) && m != lastMeasureMM())
+            if (!spanner->isVolta() && pos.x() >= (b.x() + b.width() * .5) && m != lastMeasureMM())
                   m = m->nextMeasure();
             spanner->setTick(m->tick());
             spanner->setTick2(m->endTick());

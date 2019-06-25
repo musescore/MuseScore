@@ -143,11 +143,13 @@ void ScoreView::setViewRect(const QRectF& r)
 //    return true if there is a valid target
 //---------------------------------------------------------
 
-bool ScoreView::dragTimeAnchorElement(const QPointF& pos)
+bool ScoreView::dragTimeAnchorElement(const QPointF& pos, bool firstStaffOnly)
       {
       int staffIdx;
       Segment* seg;
       MeasureBase* mb = _score->pos2measure(pos, &staffIdx, 0, &seg, 0);
+      if (firstStaffOnly)
+            staffIdx = 0;
       int track  = staffIdx * VOICES;
 
       if (mb && mb->isMeasure() && seg->element(track)) {
@@ -334,6 +336,8 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
 
       switch (editData.dropElement->type()) {
             case ElementType::VOLTA:
+                  event->setAccepted(dragTimeAnchorElement(pos, !(editData.modifiers & Qt::ControlModifier)));
+                  break;
             case ElementType::PEDAL:
             case ElementType::LET_RING:
             case ElementType::VIBRATO:
@@ -412,6 +416,7 @@ void ScoreView::dropEvent(QDropEvent* event)
       editData.modifiers = event->keyboardModifiers();
 
       if (editData.dropElement) {
+            bool firstStaffOnly = false;
             bool applyUserOffset = false;
             bool triggerSpannerDropApplyTour = editData.dropElement->isSpanner();
             editData.dropElement->styleChanged();
@@ -420,6 +425,9 @@ void ScoreView::dropEvent(QDropEvent* event)
             _score->addRefresh(editData.dropElement->canvasBoundingRect());
             switch (editData.dropElement->type()) {
                   case ElementType::VOLTA:
+                        // voltas drop to first staff by default, or closest staff if Control is held
+                        firstStaffOnly = !(editData.modifiers & Qt::ControlModifier);
+                        // fall-thru
                   case ElementType::OTTAVA:
                   case ElementType::TRILL:
                   case ElementType::PEDAL:
@@ -430,7 +438,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::TEXTLINE:
                         {
                         Spanner* spanner = static_cast<Spanner*>(editData.dropElement);
-                        score()->cmdAddSpanner(spanner, pos);
+                        score()->cmdAddSpanner(spanner, pos, firstStaffOnly);
                         score()->setUpdateAll();
                         event->acceptProposedAction();
                         }

@@ -183,7 +183,7 @@ class ScoreView : public QWidget, public MuseScoreView {
 
       void setShadowNote(const QPointF&);
       void drawElements(QPainter& p,QList<Element*>& el, Element* editElement);
-      bool dragTimeAnchorElement(const QPointF& pos);
+      bool dragTimeAnchorElement(const QPointF& pos, bool firstStaffOnly = false);
       bool dragMeasureAnchorElement(const QPointF& pos);
       virtual void lyricsTab(bool back, bool end, bool moveOnly) override;
       virtual void lyricsReturn() override;
