@@ -41,12 +41,12 @@ namespace Ms {
 //  when other parts of MuseScore change the track, the control
 //  will update itself.
 //--------------------------------------------------------------
-MixerTrackChannel::MixerTrackChannel(QTreeWidgetItem* treeWidgetItem, MixerTrackItem* mixerTrackItem, MixerOptions* options) :
+MixerTrackChannel::MixerTrackChannel(QTreeWidgetItem* treeWidgetItem, MixerTrackItem* mixerTrackItem) :
       treeWidgetItem(treeWidgetItem), mixerTrackItem(mixerTrackItem)
       {
       setupUi(this);
       setupAdditionalUi();
-      updateUiControls(options);
+      updateUiControls();
       setupSlotsAndSignals();
       update();
 
@@ -77,9 +77,9 @@ void MixerTrackChannel::setupAdditionalUi()
       soloButton->setStyleSheet(basicButton + colorTemplate.arg("green"));
       }
 
-void MixerTrackChannel::updateUiControls(MixerOptions* options)
+void MixerTrackChannel::updateUiControls()
       {
-      bool showTrackColors = options->showTrackColors();
+      bool showTrackColors = Mixer::getOptions()->showTrackColors();
       colorLabel->setVisible(showTrackColors);
       }
 
@@ -198,7 +198,7 @@ void MixerMasterChannel::setupAdditionalUi()
       colorLabel->setStyleSheet(transparentColorLabelStyle);
       }
 
-void MixerMasterChannel::updateUiControls(MixerOptions* options)
+void MixerMasterChannel::updateUiControls()
       {
       colorLabel->setVisible(false);
       }

@@ -76,7 +76,7 @@ char userRangeToReverb(double v);
 
 enum class MixerVolumeMode : int
       {
-            Override,
+            Override = 1,
             Ratio,
             PrimaryInstrument
       };
@@ -89,8 +89,9 @@ class Mixer : public QDockWidget, public Ui::Mixer
       Score* _activeScore = nullptr;                  // may be a _score itself or its excerpt;
       MixerContextMenu* contextMenu;                  // context menu
       QGridLayout* gridLayout;                        // main layout - used to show/hide & position details panel
-      MixerOptions* options;                          // UI options, e.g. show/hide track colors
       MixerMasterChannel* masterChannelWidget;        // master volume + play / loop widget
+
+      static MixerOptions* options;                   // UI options, e.g. show/hide track colors, slider modes
 
       EnablePlayForWidget* enablePlay;
 
@@ -129,6 +130,7 @@ class Mixer : public QDockWidget, public Ui::Mixer
       void showMidiOptions();
       void showTrackColors();
       void showMasterVolume();
+      void updateVolumeMode();
 
       void saveTreeSelection();
       void restoreTreeSelection();
@@ -149,7 +151,7 @@ class Mixer : public QDockWidget, public Ui::Mixer
       void contextMenuEvent(QContextMenuEvent *event) override;   // TODO: contextMenuEvent - does it need to be public?
       MixerDetails* mixerDetails;                                 // TODO: mixerDetails - does it NEED to be public?
       void updateUiOptions();
-      MixerOptions* getOptions() { return options; };
+      static MixerOptions* getOptions() { return options; };
             
       };
 
@@ -182,6 +184,8 @@ public:
       QAction* overallVolumeFirstMode;
       QAction* showTrackColors;
       QAction* showMasterVolume;
+
+      QActionGroup* modeGroup;
       };
 
       

@@ -49,6 +49,9 @@ private:
 
       Channel* playbackChannel(const Channel* channel);
 
+      bool isPart();
+      QList<Channel*> subChannels();//TODO: better name for this method?
+
 public:
       MixerTrackItem(TrackType trackType, Part* part, Instrument* _instr, Channel* _chan);
 
@@ -64,6 +67,8 @@ public:
       void setPan(char value);
       void setChorus(char value);
       void setReverb(char value);
+
+      void finalizeVolume(Channel* channel, int value);
 
       void setMute(bool value);
       void setSolo(bool value);

@@ -18,7 +18,7 @@
 //=============================================================================
 
 #include "mixertrackitem.h"
-
+#include "mixer.h"
 #include "libmscore/score.h"
 #include "libmscore/part.h"
 #include "seq.h"
@@ -106,40 +106,67 @@ bool MixerTrackItem::getSolo()
 // MixerTrackItem settters - when a change is made to underlying channel a propertyChange()
 // will be sent to any registered listeners
 
+void MixerTrackItem::finalizeVolume(Channel* channel, int value)
+      {
+      if (channel->volume() == value)
+            return;
+
+      value = (value > 127) ? 127 : value;
+      value = (value < 0) ? 0 : value;
+
+      channel->setVolume(value);
+      seq->setController(channel->channel(), CTRL_VOLUME, channel->volume());
+      }
+
 void MixerTrackItem::setVolume(char value)
       {
-      //      char v = (char)qBound(0, (int)(value * 128.0 / 100.0), 127);
 
-      /* obq-note
+      if (!isPart()) {
+            if (_channel->volume() == value)
+                  return;
+            finalizeVolume(_channel, value);
+            return;
+      }
 
-       repeated code in lots of this functions
+      // case where we're operating a slider "manages" some sub-channels
+      // test for different policies as to how the secondary channels
+      // respond to changes made by the slider for the primary channel
 
-       if SOMETHING is a PART then it seeks to apply the changes to all the sub-parts (i.e. channels)
-       otherwise it just applies it once.
+      //TODO: can't put a brake on the slider, but there could be a
+      // spring back if we hit a ceiling - so after we let go of the slider
+      // it could return to the point where the limit was hit
 
-       must be a more efficient way to do this, e.g. get a LIST and then apply the operation to all the
-       items on the list! the repeated code is CRAZY... it makes the code harder to follow and the
-       overall code length much longer...
-       */
+      MixerVolumeMode mode = Mixer::getOptions()->mode();
+      bool primaryChannel = true;
+      int primaryDiff = 0;
+      for (Channel* channel: subChannels()) {
+            if (primaryChannel)
+                  primaryDiff = value - double(channel->volume());
 
-      if (_trackType == TrackType::PART) {
-            const InstrumentList* il = _part->instruments();
-            for (auto it = il->begin(); it != il->end(); ++it) {
-                  Instrument* instr = it->second;
-                  for (const Channel* instrChan: instr->channel()) {
-                        Channel* chan = playbackChannel(instrChan);
-                        if (chan->volume() != value) {
-                              chan->setVolume(value);
-                              seq->setController(chan->channel(), CTRL_VOLUME, chan->volume());
+            switch (mode) {
+                  case MixerVolumeMode::Override:
+                        // set primary channel and all secondary channels to the same value
+                        finalizeVolume(channel, value);
+                        break;
+
+                  case MixerVolumeMode::Ratio:
+                        // adjust the secondary channels by the same amount, but starting where
+                        // they are already at - not a RATIO at all!!
+                        if (primaryChannel)
+                              finalizeVolume(channel, value);
+                        else {
+                              int oldValue = channel->volume();
+                              finalizeVolume(channel, oldValue + primaryDiff);
                               }
-                        }
+                        break;
+
+                  case MixerVolumeMode::PrimaryInstrument:
+                        // adjust ONLY the primary channel
+                        if (primaryChannel)
+                              finalizeVolume(channel, value);
+                        break;
                   }
-            }
-      else {
-            if (_channel->volume() != value) {
-                  _channel->setVolume(value);
-                  seq->setController(_channel->channel(), CTRL_VOLUME, _channel->volume());
-                  }
+            primaryChannel = false;
             }
       }
 
@@ -332,5 +359,34 @@ void MixerTrackItem::setSolo(bool value)
                   }
             }
       }
+
+//MARK:- helper methods
+
+bool MixerTrackItem::isPart()
+      {
+      return _trackType == TrackType::PART;
+      }
+
+
+QList<Channel*> MixerTrackItem::subChannels()
+      {
+      if (!isPart()) {
+            return QList<Channel*> { _channel };
+            }
+
+      QList<Channel*> channels;
+
+      //TODO: duplication between here and in Mixer::updateTracks
+      const InstrumentList* instrumentList = _part->instruments();
+      for (auto item = instrumentList->begin(); item != instrumentList->end(); ++item) {
+            Instrument* instrument = item->second;
+            for (const Channel* instrumentChannel: instrument->channel()) {
+                  Channel* channel = playbackChannel(instrumentChannel);
+                  channels.append(channel);
+                  }
+            }
+      return channels;
+      }
+
 }
 

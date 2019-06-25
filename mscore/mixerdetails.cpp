@@ -71,11 +71,12 @@ void MixerDetails::setupSlotsAndSignals()
 
 void MixerDetails::updateUiOptions()
       {
-      bool showTrackColors = mixer->getOptions()->showTrackColors();
+      MixerOptions* options = Mixer::getOptions();
+      bool showTrackColors = options->showTrackColors();
       trackColorLabel->setVisible(showTrackColors);
       labelTrackColor->setVisible(showTrackColors);
 
-      bool showMidiOptions = mixer->getOptions()->showMidiOptions();
+      bool showMidiOptions = options->showMidiOptions();
       reverbSlider->setVisible(showMidiOptions);
       reverbSpinBox->setVisible(showMidiOptions);
       labelReverb->setVisible(showMidiOptions);
