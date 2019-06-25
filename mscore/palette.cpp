@@ -680,8 +680,10 @@ void Palette::applyPaletteElement(PaletteCell* cell, Qt::KeyboardModifiers modif
             else if (element->isSLine() && element->type() != ElementType::GLISSANDO) {
                   Segment* startSegment = sel.startSegment();
                   Segment* endSegment = sel.endSegment();
-                  int endStaff = sel.staffEnd();
-                  for (int i = sel.staffStart(); i < endStaff; ++i) {
+                  bool firstStaffOnly = element->isVolta() && !(modifiers & Qt::ControlModifier);
+                  int startStaff = firstStaffOnly ? 0 : sel.staffStart();
+                  int endStaff   = firstStaffOnly ? 1 : sel.staffEnd();
+                  for (int i = startStaff; i < endStaff; ++i) {
                         Spanner* spanner = static_cast<Spanner*>(element->clone());
                         spanner->setScore(score);
                         spanner->styleChanged();
