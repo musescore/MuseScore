@@ -363,6 +363,10 @@ class Note : public Element {
 //       Q_PROPERTY(int                            subchannel        READ subchannel)
 //       Q_PROPERTY(Ms::Tie*                       tieBack           READ tieBack)
 //       Q_PROPERTY(Ms::Tie*                       tieFor            READ tieFor)
+      /// The NoteType of the note.
+      /// \since MuseScore 3.2.1
+      Q_PROPERTY(Ms::NoteType                      noteType          READ noteType)
+
       /** MIDI pitch of this note */
       API_PROPERTY_T( int, pitch,                   PITCH                     )
       /**
@@ -406,6 +410,7 @@ class Note : public Element {
 
       Ms::AccidentalType accidentalType() { return note()->accidentalType(); }
       void setAccidentalType(Ms::AccidentalType t) { note()->setAccidentalType(t); }
+      Ms::NoteType noteType() { return note()->noteType(); }
       /// \endcond
       };
 
@@ -423,6 +428,9 @@ class Chord : public Element {
       //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  stemSlash  READ stemSlash )
       //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  beam       READ beam      )
       //Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element>  hook       READ hook      )
+      /// The NoteType of the chord.
+      /// \since MuseScore 3.2.1
+      Q_PROPERTY(Ms::NoteType                              noteType   READ noteType)
 
    public:
       /// \cond MS_INTERNAL
@@ -439,6 +447,7 @@ class Chord : public Element {
       //QQmlListProperty<Element> stemSlash()    { return wrapContainerProperty<Element>(this, chord()->stemSlash()); }
       //QQmlListProperty<Element> beam()         { return wrapContainerProperty<Element>(this, chord()->beam());      }
       //QQmlListProperty<Element> hook()         { return wrapContainerProperty<Element>(this, chord()->hook());      }
+      Ms::NoteType noteType()                  { return chord()->noteType(); }
       /// \endcond
       };
 
