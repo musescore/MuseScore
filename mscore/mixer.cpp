@@ -110,6 +110,8 @@ void Mixer::setupSlotsAndSignals()
       connect(mixerTreeWidget,SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),SLOT(currentMixerTreeItemChanged()));
       connect(synti,SIGNAL(gainChanged(float)),SLOT(synthGainChanged(float)));
       connect(showDetailsButton,SIGNAL(clicked()),SLOT(showDetailsClicked()));
+
+      connect(mixerTreeWidget->header(), SIGNAL(geometriesChanged()), this, SLOT(adjustHeaderWidths()));
       }
 
 void Mixer::setupAdditionalUi()
@@ -124,24 +126,42 @@ void Mixer::setupAdditionalUi()
       masterVolumeTreeWidget->setItemWidget(masterVolumeItem, 1, masterChannelWidget);
 
       masterVolumeTreeWidget->setColumnCount(2);
-      masterVolumeTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+      masterVolumeTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Fixed);
       masterVolumeTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
-      masterVolumeTreeWidget->header()->setDefaultSectionSize(168);//TODO: eliminate magic number
       masterVolumeTreeWidget->setSelectionMode(QAbstractItemView::NoSelection);
 
       // configure the main mixer tree
       mixerTreeWidget->setAlternatingRowColors(true);
       mixerTreeWidget->setColumnCount(2);
       mixerTreeWidget->setHeaderLabels({tr("Instrument"), tr("Volume")});
-      mixerTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+      mixerTreeWidget->header()->setSectionResizeMode(0, QHeaderView::Fixed);
       mixerTreeWidget->header()->setSectionResizeMode(1, QHeaderView::Fixed);
 
-      //TODO: eliminate magic number - ask mixerTrackChannel for a number
-      // note also that this will depend if the control is expanded with a pan control (to be implemented)
-      // the ratios / geometry aren't right yet - might need to hand code something that monitors
-      // the stretch - we do want LONGER SLIDERS in some circumstances...
-      mixerTreeWidget->header()->setDefaultSectionSize(168);
       mixerTreeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+      adjustHeaderWidths();
+      }
+
+
+void Mixer::adjustHeaderWidths()
+      {
+      int width = mixerTreeWidget->width();
+
+      int firstColumnMaximumWidth = 300;
+      double ratio = 0.4; // instrument names take up 2/5 and controls 3/5
+      int margin = 2;   // factor to avoid triggering horizontal scrolling
+
+      int column0 = int(double(width) * ratio);
+      int column1 = int(double(width) * (1-ratio) - margin);
+
+      if (column0 > firstColumnMaximumWidth) {
+            column0 = firstColumnMaximumWidth;
+            column1 = (width - firstColumnMaximumWidth) - margin;
+            }
+
+      mixerTreeWidget->header()->resizeSection(0, column0);
+      mixerTreeWidget->header()->resizeSection(1, column1);
+      masterVolumeTreeWidget->header()->resizeSection(0, column0);
+      masterVolumeTreeWidget->header()->resizeSection(1, column1);
       }
 
 //---------------------------------------------------------

@@ -116,6 +116,7 @@ class Mixer : public QDockWidget, public Ui::Mixer
 
    private slots:
       void on_partOnlyCheckBox_toggled(bool checked);
+      
 
    public slots:
       void updateTracks();
@@ -131,6 +132,7 @@ class Mixer : public QDockWidget, public Ui::Mixer
 
       void saveTreeSelection();
       void restoreTreeSelection();
+      void adjustHeaderWidths();
             
    signals:
       void closed(bool);
