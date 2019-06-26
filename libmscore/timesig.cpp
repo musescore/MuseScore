@@ -104,7 +104,7 @@ Element* TimeSig::drop(EditData& data)
 
 void TimeSig::setNumeratorString(const QString& a)
       {
-      if (_timeSigType == TimeSigType::NORMAL)
+      if (_timeSigType == TimeSigType::NORMAL || _timeSigType == TimeSigType::CREATE_CUSTOM)
             _numeratorString = a;
       }
 
@@ -115,7 +115,7 @@ void TimeSig::setNumeratorString(const QString& a)
 
 void TimeSig::setDenominatorString(const QString& a)
       {
-      if (_timeSigType ==  TimeSigType::NORMAL)
+      if (_timeSigType == TimeSigType::NORMAL || _timeSigType == TimeSigType::CREATE_CUSTOM)
             _denominatorString = a;
       }
 

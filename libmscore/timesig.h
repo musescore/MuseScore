@@ -31,6 +31,7 @@ enum class TimeSigType : char {
       NORMAL,            // use sz/sn text
       FOUR_FOUR,         // common time (4/4)
       ALLA_BREVE,        // cut time (2/2)
+      CREATE_CUSTOM,     // shortcut to open master palette create time signature dialog, appears like X/X
       };
 
 //---------------------------------------------------------------------------------------

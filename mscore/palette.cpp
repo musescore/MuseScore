@@ -361,6 +361,11 @@ void Palette::mousePressEvent(QMouseEvent* ev)
       PaletteCell* cell = cellAt(dragIdx);
       if (cell && (cell->tag == "ShowMore"))
             emit displayMore(_name);
+      if (cell && (cell->name == "create custom time signature")) {
+            dragIdx = -1; // disable dragging
+            mscore->showMasterPalette(qApp->translate("Palette", "Time Signatures"));
+            return;
+            }
       if (mscore->getPaletteBox()->getKeyboardNavigation()) {
             PaletteBox* pb = mscore->getPaletteBox();
             pb->mousePressEvent(ev, this);

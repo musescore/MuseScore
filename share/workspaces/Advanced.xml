@@ -372,6 +372,13 @@
             <sigD>2</sigD>
             </TimeSig>
           </Cell>
+        <Cell name="create custom time signature">
+          <staff>1</staff>
+          <TimeSig>
+            <textN>X</textN>
+            <textD>X</textD>
+            </TimeSig>
+          </Cell>
         </Palette>
       <Palette name="Brackets">
         <gridWidth>40</gridWidth>
