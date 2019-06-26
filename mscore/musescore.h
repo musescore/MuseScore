@@ -734,6 +734,7 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void selectSimilarInRange(Element* e);
       void selectElementDialog(Element* e);
       void transpose();
+      void realizeChordSymbols();
 
       Q_INVOKABLE void openExternalLink(const QString&);
 

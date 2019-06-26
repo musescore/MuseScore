@@ -92,7 +92,7 @@ QT5_WRAP_UI (ui_headers
       articulation.ui metaedit.ui paletteProperties.ui paletteCellProperties.ui selectdialog.ui selectnotedialog.ui
       synthcontrol.ui splitstaff.ui keyedit.ui selectinstr.ui
       fretdprops.ui editstafftype.ui bend.ui tremolobar.ui
-      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui
+      editpitch.ui editstringdata.ui editraster.ui mediadialog.ui albummanager.ui layer.ui realizeharmonydialog.ui
       omrpanel.ui masterpalette.ui harmonyedit.ui pathlistdialog.ui
       note_groups.ui resourceManager.ui stafftypetemplates.ui
       startcenter.ui scorePreview.ui scoreBrowser.ui templateBrowser.ui
@@ -355,7 +355,7 @@ add_executable ( ${ExecutableName}
       seq.h shortcut.h shortcutcapturedialog.h simplebutton.h splitstaff.h stafftextproperties.h
       startcenter.h startupWizard.h stringutils.h svggenerator.h symboldialog.h synthcontrol.h
       templateBrowser.h textcursor.h textpalette.h texttools.h timedialog.h timeline.h timesigproperties.h
-      toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h tremolobarprop.h
+      toolbarEditor.h toolbuttonmenu.h transposedialog.h tremolobarcanvas.h tremolobarprop.h realizeharmonydialog.h
       tupletdialog.h updatechecker.h uploadscoredialog.h waveview.h webpage.h workspace.h
 
       recordbutton.h greendotbutton prefsdialog.h prefsdialog.cpp
@@ -377,7 +377,7 @@ add_executable ( ${ExecutableName}
       simplebutton.cpp musedata.cpp
       editdrumset.cpp editstaff.cpp
       timesigproperties.cpp newwizard.cpp transposedialog.cpp
-      excerptsdialog.cpp metaedit.cpp magbox.cpp
+      excerptsdialog.cpp metaedit.cpp magbox.cpp realizeharmonydialog.cpp
       capella.cpp capxml.cpp exportaudio.cpp
       synthcontrol.cpp drumroll.cpp pianoroll.cpp piano.cpp
       pianokeyboard.cpp pianolevels.cpp pianolevelschooser.cpp pianolevelsfilter.cpp
