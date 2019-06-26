@@ -108,7 +108,7 @@ void MixerDetails::updateDetails(MixerTrackItem* mixerTrackItem)
       // setNotifier(channel) zaps previous notifiers and then calls addListener(this).
       // As a listener, this object receives propertyChanged() calls when the channel is
       // changed. This ensures the details view is synced with changes in the tree view.
-      setNotifier(selectedMixerTrackItem->chan());
+      setNotifier(selectedMixerTrackItem->channel());
 
       setEnabled(true);
 
@@ -180,7 +180,7 @@ void MixerDetails::propertyChanged(Channel::Prop property)
 void MixerDetails::updateName()
       {
       Part* part = selectedMixerTrackItem->part();
-      Channel* channel = selectedMixerTrackItem->chan();
+      Channel* channel = selectedMixerTrackItem->channel();
       QString partName = part->partName();
       if (!channel->name().isEmpty())
             channelLabel->setText(qApp->translate("InstrumentsXML", channel->name().toUtf8().data()));
@@ -199,7 +199,7 @@ void MixerDetails::updateTrackColor()
 
 void MixerDetails::updatePatch()
       {
-      Channel* channel = selectedMixerTrackItem->chan();
+      Channel* channel = selectedMixerTrackItem->channel();
       MidiMapping* midiMap = selectedMixerTrackItem->midiMap();
       
       //Check if drumkit
@@ -249,7 +249,7 @@ void MixerDetails::updatePatch()
 
 void MixerDetails::updateVolume()
       {
-      Channel* channel = selectedMixerTrackItem->chan();
+      Channel* channel = selectedMixerTrackItem->channel();
       volumeSlider->setValue((int)channel->volume());
       volumeSpinBox->setValue(channel->volume());
       }
@@ -303,14 +303,14 @@ void MixerDetails::updateMutePerVoice()
 void MixerDetails::updateMidiChannelAndPort()
       {
       Part* part = selectedMixerTrackItem->part();
-      Channel* channel = selectedMixerTrackItem->chan();
+      Channel* channel = selectedMixerTrackItem->channel();
       portSpinBox->setValue(part->masterScore()->midiMapping(channel->channel())->port() + 1);
       channelSpinBox->setValue(part->masterScore()->midiMapping(channel->channel())->channel() + 1);
       }
 
 void MixerDetails::updateReverb()
       {
-      Channel* channel = selectedMixerTrackItem->chan();
+      Channel* channel = selectedMixerTrackItem->channel();
       reverbSlider->setValue((int)channel->reverb());
       reverbSpinBox->setValue(channel->reverb());
       }
@@ -318,7 +318,7 @@ void MixerDetails::updateReverb()
 
 void MixerDetails::updateChorus()
       {
-      Channel* channel = selectedMixerTrackItem->chan();
+      Channel* channel = selectedMixerTrackItem->channel();
       reverbSlider->setValue((int)channel->reverb());
       reverbSpinBox->setValue(channel->reverb());
       }
@@ -398,7 +398,7 @@ void MixerDetails::drumsetCheckboxToggled(bool drumsetSelected)
       qDebug()<<"drumsetCheckBoxToggled to: "<<drumsetSelected;
 
       Part* part = selectedMixerTrackItem->part();
-      Channel* channel = selectedMixerTrackItem->chan();
+      Channel* channel = selectedMixerTrackItem->channel();
 
       Instrument *instr;
       if (selectedMixerTrackItem->trackType() == MixerTrackItem::TrackType::CHANNEL)
@@ -548,7 +548,7 @@ void MixerDetails::midiChannelOrPortEdited(int)
             return;
 
       Part* part = selectedMixerTrackItem->part();
-      Channel* channel = selectedMixerTrackItem->chan();
+      Channel* channel = selectedMixerTrackItem->channel();
 
       seq->stopNotes(channel->channel());
       int p =    portSpinBox->value() - 1;

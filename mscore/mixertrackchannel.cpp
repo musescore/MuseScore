@@ -50,7 +50,7 @@ MixerTrackChannel::MixerTrackChannel(QTreeWidgetItem* treeWidgetItem, MixerTrack
       setupSlotsAndSignals();
       update();
 
-      Channel* channel = mixerTrackItem->chan();
+      Channel* channel = mixerTrackItem->channel();
       channel->addListener(this);
       }
 
@@ -95,7 +95,7 @@ void MixerTrackChannel::update()
       muteButton->setChecked(mixerTrackItem->getMute());
       soloButton->setChecked(mixerTrackItem->getSolo());
 
-      Channel* channel = mixerTrackItem->chan();
+      Channel* channel = mixerTrackItem->channel();
       MidiPatch* midiPatch = synti->getPatchInfo(channel->synti(), channel->bank(), channel->program());
       Part* part = mixerTrackItem->part();
       Instrument* instrument = mixerTrackItem->instrument();

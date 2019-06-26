@@ -50,7 +50,8 @@ private:
       Channel* playbackChannel(const Channel* channel);
 
       bool isPart();
-      QList<Channel*> subChannels();//TODO: better name for this method?
+      QList<Channel*> secondaryPlaybackChannels();
+      QList<Channel*> playbackChannels(Part* part);
 
 public:
       MixerTrackItem(TrackType trackType, Part* part, Instrument* _instr, Channel* _chan);
@@ -58,7 +59,7 @@ public:
       TrackType trackType() { return _trackType; }
       Part* part() { return _part; }
       Instrument* instrument() { return _instrument; }
-      Channel* chan() { return _channel; }
+      Channel* channel() { return _channel; }
       MidiMapping *midiMap();
       int color();
 
@@ -68,7 +69,8 @@ public:
       void setChorus(char value);
       void setReverb(char value);
 
-      void finalizeVolume(Channel* channel, int value);
+      template <class ChannelWriter, class ChannelReader>
+      void adjustValue(int newValue, ChannelReader reader, ChannelWriter writer);
 
       void setMute(bool value);
       void setSolo(bool value);
