@@ -285,7 +285,7 @@
         <gridWidth>42</gridWidth>
         <gridHeight>38</gridHeight>
         <mag>0.8</mag>
-        <moreElements>0</moreElements>
+        <moreElements>1</moreElements>
         <Cell name="2/4">
           <staff>1</staff>
           <TimeSig>
@@ -369,6 +369,13 @@
           <TimeSig>
             <subtype>2</subtype>
             <sigN>2</sigN>
+            <sigD>2</sigD>
+            </TimeSig>
+          </Cell>
+        <Cell name="3/2">
+          <staff>1</staff>
+          <TimeSig>
+            <sigN>3</sigN>
             <sigD>2</sigD>
             </TimeSig>
           </Cell>
