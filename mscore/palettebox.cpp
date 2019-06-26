@@ -52,6 +52,8 @@ PaletteBox::PaletteBox(QWidget* parent)
       hl->addWidget(addWorkspaceButton);
 
       setWidget(w);
+      
+      
 
       _searchBox = new QLineEdit(this);
       _searchBox->setFocusPolicy(Qt::StrongFocus);
@@ -74,6 +76,10 @@ PaletteBox::PaletteBox(QWidget* parent)
       vl->addWidget(sa);
       vl->addLayout(hlSearch);
       vl->addLayout(hl);
+      vl->addWidget(tree);
+
+      tree = new QTreeWidget(this);
+      vl->addWidget(tree);
 
       QWidget* paletteList = new QWidget;
       sa->setWidget(paletteList);
@@ -418,9 +424,16 @@ bool PaletteBox::read(XmlReader& e)
                   Palette* p = new Palette();
                   QString name = e.attribute("name");
                   p->setName(name);
-                  p->read(e);
-                  addPalette(p);
-                  connect(p, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
+                  QTreeWidgetItem* paletteItem = new QTreeWidgetItem(tree);
+                  paletteItem->setText(0,name);
+                  qDebug() << "PaletteBox read: "<< name;
+                  QTreeWidgetItem* paletteElementsItem = new QTreeWidgetItem(paletteItem);
+                  PaletteList* paletteList = new PaletteList(tree);
+                  tree->setItemWidget(paletteElementsItem, 0, paletteList);
+                  paletteList->read(e);
+                  //p->read(e);
+                  //addPalette(p);
+                  //connect(p, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));
                   }
             else
                   e.unknown();

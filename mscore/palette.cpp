@@ -1929,5 +1929,93 @@ void Palette::dropEvent(QDropEvent* event)
       emit changed();
       }
 
+PaletteList::PaletteList(QWidget* parent) : QListWidget(parent)
+      {
+      setAutoFillBackground(true);
+      setViewMode(QListView::IconMode);
+      setResizeMode(QListView::Adjust);
+      }
+
+void PaletteList::read(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& t(e.name());
+            if (t == "gridWidth")
+                  /*hgrid =*/ e.readDouble();
+            else if (t == "gridHeight")
+                  /*vgrid =*/ e.readDouble();
+            else if (t == "mag")
+                  /*extraMag =*/ e.readDouble();
+            else if (t == "grid")
+                  /*_drawGrid =*/ e.readInt();
+            else if (t == "moreElements")
+                  /*setMoreElements(*/ e.readInt();
+            else if (t == "yoffset")
+                  /*_yOffset =*/ e.readDouble();
+            else if (t == "drumPalette")      // obsolete
+                  e.skipCurrentElement();
+            else if (t == "Cell") {
+                  PaletteCellItem* cell = new PaletteCellItem(this);
+                  cell->setName(e.attribute("name"));
+                  if (!cell->read(e)){
+                        Element* element = cell->element;
+                        delete cell;
+                        if(!element)
+                              return;
+                        } 
+                  }
+            else
+                  e.unknown();
+            }
+
+      }
+
+PaletteCellItem::PaletteCellItem(PaletteList* parent) : QListWidgetItem(parent)
+      {     
+
+      }
+
+
+bool PaletteCellItem::read(XmlReader& e)
+      {
+      while (e.readNextStartElement()) {
+            const QStringRef& t1(e.name());
+            if (t1 == "staff")
+                  /* cell->drawStaff= */ e.readInt();
+            else if (t1 == "xoffset")
+                  /* cell->xoffset = */ e.readDouble();
+            else if (t1 == "yoffset")
+                  /* cell->yoffset = */ e.readDouble();
+            else if (t1 == "mag")
+                  /* cell->mag = */ e.readDouble();
+            else if (t1 == "tag")
+                  /* cell->tag = */ e.readElementText();
+            else {
+                  element = Element::name2Element(t1, gscore);
+                  if (!element) {
+                        e.unknown();
+                        return false;
+                        }
+                  else {
+                        element->read(e);
+                        element->styleChanged();
+                        if (element->type() == ElementType::ICON) {
+                              Icon* icon = static_cast<Icon*>(element);
+                              QAction* ac = getAction(icon->action());
+                              if (ac) {
+                                    QIcon qicon(ac->icon());
+                                    icon->setAction(icon->action(), qicon);
+                                    setIcon(qicon);
+                                    }
+                              else {
+                                    return false; // action is not valid, don't add it to the palette.
+                                    }
+                              }
+                        }
+                  }
+            }
+      return true;
+      }
+
 }
 
