@@ -30,6 +30,7 @@ KeySigEvent::KeySigEvent(const KeySigEvent& k)
       _mode       = k._mode;
       _custom     = k._custom;
       _keySymbols = k._keySymbols;
+      _forInstrumentChange = k._forInstrumentChange;
       }
 
 //---------------------------------------------------------
@@ -86,7 +87,7 @@ void KeySigEvent::setKey(Key v)
 
 bool KeySigEvent::operator==(const KeySigEvent& e) const
       {
-      if (e._custom != _custom || e._mode != _mode)
+      if (e._custom != _custom || e._mode != _mode || e._forInstrumentChange != _forInstrumentChange)
             return false;
       if (_custom && !isAtonal()) {
             if (e._keySymbols.size() != _keySymbols.size())
