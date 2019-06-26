@@ -9,7 +9,7 @@ image: Visual Studio 2017
 branches:
   only:
   - master
-  - 3.2
+  - 3.2.1
 
 # build cache to preserve files/folders between builds
 cache:
