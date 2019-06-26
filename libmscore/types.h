@@ -491,17 +491,17 @@ enum class TupletNumberType  : char { SHOW_NUMBER, SHOW_RELATION, NO_TEXT       
 enum class TupletBracketType : char { AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET };
 
 #ifdef SCRIPT_INTERFACE
-Q_ENUM_NS(ElementType)
-Q_ENUM_NS(Direction)
-Q_ENUM_NS(GlissandoType)
-Q_ENUM_NS(GlissandoStyle)
-Q_ENUM_NS(Placement)
-Q_ENUM_NS(SegmentType)
-Q_ENUM_NS(Tid)
-Q_ENUM_NS(Align)
-Q_ENUM_NS(NoteType)
-Q_ENUM_NS(PlayEventType)
-Q_ENUM_NS(AccidentalType)
+Q_ENUM_NS(ElementType);
+Q_ENUM_NS(Direction);
+Q_ENUM_NS(GlissandoType);
+Q_ENUM_NS(GlissandoStyle);
+Q_ENUM_NS(Placement);
+Q_ENUM_NS(SegmentType);
+Q_ENUM_NS(Tid);
+Q_ENUM_NS(Align);
+Q_ENUM_NS(NoteType);
+Q_ENUM_NS(PlayEventType);
+Q_ENUM_NS(AccidentalType);
 #endif
 
 //hack: to force the build system to run moc on this file

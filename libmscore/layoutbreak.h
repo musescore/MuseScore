@@ -33,7 +33,7 @@ class LayoutBreak final : public Element {
             ///\}
             };
    private:
-      Q_ENUM(Type)
+      Q_ENUM(Type);
 
       qreal lw;
       QPainterPath path;
