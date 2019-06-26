@@ -1923,6 +1923,12 @@ void Score::deleteItem(Element* el)
                   Part* part = ic->part();
                   Interval oldV = part->instrument(tickStart)->transpose();
                   undoRemoveElement(el);
+                  for (KeySig* keySig : ic->keySigs())
+                        if (keySig->parent())
+                              score()->deleteItem(keySig);
+                  for (Clef* clef : ic->clefs())
+                        if (clef->parent())
+                              score()->deleteItem(clef);
                   if (part->instrument(tickStart)->transpose() != oldV) {
                         auto i = part->instruments()->upper_bound(tickStart.ticks());
                         Fraction tickEnd;
@@ -1932,13 +1938,6 @@ void Score::deleteItem(Element* el)
                               tickEnd = Fraction::fromTicks(i->first);
                         transpositionChanged(part, oldV, tickStart, tickEnd);
                         }
-                  for (KeySig* keySig : ic->keySigs()) {
-                        if (keySig->enabled())
-                              score()->deleteItem(keySig);
-                        }
-                  for (Clef* clef : ic->clefs())
-                        if (clef->enabled())
-                              score()->deleteItem(clef);
                   }
                   break;
 
@@ -3719,8 +3718,6 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
             updateInstrumentChangeTranspositions(key, staff, tick);
             if (ks) {
                   ks->undoChangeProperty(Pid::GENERATED, false);
-                  if (ic)
-                        ic->addKeySig(ks);
                   undo(new ChangeKeySig(ks, nkey, ks->showCourtesy()));
                   }
             else {
@@ -3744,20 +3741,29 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
 
 void Score::updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff* staff, const Ms::Fraction& tick)
       {
-      if (key.mode() != KeyMode::INSTRUMENT_CHANGE) {
+      if (!key.isForInstrumentChange()) {
             KeyList* kl = staff->keyList();
             int nextTick = kl->nextKeyTick(tick.ticks());
+
             while (nextTick != -1) {
                   KeySigEvent e = kl->key(nextTick);
-                  if (e.mode() == KeyMode::INSTRUMENT_CHANGE) {
-                        Interval transposeInterval = calculateInterval(e.key(), key.key());
-                        auto i = staff->part()->instruments()->upper_bound(nextTick);
-                        Fraction tickEnd;
-                        if (i == staff->part()->instruments()->end())
-                              tickEnd = Fraction(-1, 1);
-                        else
-                              tickEnd = Fraction::fromTicks(i->first);
-                        transpositionChanged(staff->part(), transposeInterval, Fraction::fromTicks(nextTick), tickEnd);
+                  if (e.isForInstrumentChange()) {
+                        Measure* m = tick2measure(Fraction::fromTicks(nextTick));
+                        Segment* s = m->tick2segment(Fraction::fromTicks(nextTick), SegmentType::KeySig);
+                        int track = staff->idx() * VOICES;
+                        KeySig* keySig = toKeySig(s->element(track));
+                        if (key.isAtonal() && !e.isAtonal()) {
+                              e.setMode(KeyMode::NONE);
+                              e.setKey(Key::C);
+                              }
+                        else {
+                              e.setMode(key.mode());
+                              Interval changeInterval = staff->part()->instrument(Fraction::fromTicks(nextTick))->transpose();
+                              changeInterval.flip();
+                              Key nkey = transposeKey(key.key(), changeInterval);
+                              e.setKey(nkey);
+                              }
+                        undo(new ChangeKeySig(keySig, e, keySig->showCourtesy()));
                         nextTick = kl->nextKeyTick(nextTick);
                         }
                   else

@@ -57,7 +57,6 @@ enum class KeyMode {
       NONE,
       MAJOR,
       MINOR,
-      HEAD
       DORIAN,
       PHRYGIAN,
       LYDIAN,
@@ -97,6 +96,7 @@ class KeySigEvent {
       Key _key            { Key::INVALID     };          // -7 -> +7
       KeyMode _mode       { KeyMode::UNKNOWN };
       bool _custom        { false            };
+      bool _forInstrumentChange{ false          };
       QList<KeySym> _keySymbols;
 
       void enforceLimits();
@@ -118,6 +118,8 @@ class KeySigEvent {
       void setCustom(bool val)   { _custom = val; _key = Key::C;   }
       bool isValid() const       { return _key != Key::INVALID;    }
       bool isAtonal() const      { return _mode == KeyMode::NONE;  }
+      void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
+      bool isForInstrumentChange() const{ return _forInstrumentChange; }
       void initFromSubtype(int);    // for backward compatibility
       QList<KeySym>& keySymbols()             { return _keySymbols; }
       const QList<KeySym>& keySymbols() const { return _keySymbols; }
