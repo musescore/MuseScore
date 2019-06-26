@@ -1454,7 +1454,10 @@ void Score::cmdFlip()
                                     articAnchor = ArticulationAnchor::TOP_STAFF;
                                     break;
                               }
-                        articulation->undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(articAnchor));
+                        PropertyFlags pf = articulation->propertyFlags(Pid::ARTICULATION_ANCHOR);
+                        if (pf == PropertyFlags::STYLED)
+                                pf = PropertyFlags::UNSTYLED;
+                        articulation->undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(articAnchor), pf);
                         });
                   }
             else if (e->isTuplet()) {
