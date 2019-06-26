@@ -52,8 +52,8 @@ class ApiInfo
 
       static constexpr const char* apiHost = "https://api.musescore.com/";
       static constexpr const char* apiRoot = "/v2";
-      static constexpr const char* clientIdHeader = "X-MS-CLIENT-ID";
-      static constexpr const char* apiKeyHeader = "X-MS-API-KEY";
+      static constexpr const char* clientIdHeaderText = "X-MS-CLIENT-ID";
+      static constexpr const char* apiKeyHeaderText = "X-MS-API-KEY";
       static constexpr const char* userAgentTemplate = "MS_EDITOR/%1.%2 (%3)";
 
       static constexpr const char* loginPage = "https://musescore.com/user/auth/webview";
@@ -61,6 +61,8 @@ class ApiInfo
 
       static const QUrl loginUrl;
       static const QUrl loginSuccessUrl;
+      static const char* clientIdHeader;
+      static const char* apiKeyHeader;
 
       const QByteArray clientId;
       const QByteArray apiKey;

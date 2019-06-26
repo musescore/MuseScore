@@ -29,6 +29,8 @@ extern QString dataPath;
 ApiInfo* ApiInfo::_instance = nullptr;
 const QUrl ApiInfo::loginUrl(ApiInfo::loginPage);
 const QUrl ApiInfo::loginSuccessUrl(ApiInfo::loginSuccessPage);
+const char* ApiInfo::clientIdHeader(ApiInfo::clientIdHeaderText);
+const char* ApiInfo::apiKeyHeader(ApiInfo::apiKeyHeaderText);
 
 //---------------------------------------------------------
 //   ApiInfo:apiInfoLocation
