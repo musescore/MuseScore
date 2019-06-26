@@ -296,8 +296,8 @@ class MScore {
    public:
       enum class DirectionH : char { /**.\{*/ AUTO, LEFT, RIGHT /**\}*/ };
       enum class OrnamentStyle : char { /**.\{*/ DEFAULT, BAROQUE /**\}*/ };
-      Q_ENUM(DirectionH)
-      Q_ENUM(OrnamentStyle)
+      Q_ENUM(DirectionH);
+      Q_ENUM(OrnamentStyle);
 
       static MsError _error;
       static std::vector<MScoreError> errorList;
