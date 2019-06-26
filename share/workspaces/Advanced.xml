@@ -181,7 +181,7 @@
         <gridWidth>56</gridWidth>
         <gridHeight>55</gridHeight>
         <mag>1</mag>
-        <moreElements>0</moreElements>
+        <moreElements>1</moreElements>
         <yoffset>1</yoffset>
         <Cell name="G major, E minor">
           <staff>1</staff>
@@ -285,7 +285,7 @@
         <gridWidth>42</gridWidth>
         <gridHeight>38</gridHeight>
         <mag>0.8</mag>
-        <moreElements>0</moreElements>
+        <moreElements>1</moreElements>
         <Cell name="2/4">
           <staff>1</staff>
           <TimeSig>
