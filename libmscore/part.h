@@ -122,11 +122,11 @@ class Part final : public ScoreElement {
       QVariant getProperty(Pid) const override;
       bool setProperty(Pid, const QVariant&) override;
 
-      int lyricCount();
-      int harmonyCount();
-      bool hasPitchedStaff();
-      bool hasTabStaff();
-      bool hasDrumStaff();
+      int lyricCount() const;
+      int harmonyCount() const;
+      bool hasPitchedStaff() const;
+      bool hasTabStaff() const;
+      bool hasDrumStaff() const;
 
       const Part* masterPart() const;
       Part* masterPart();
