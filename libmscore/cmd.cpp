@@ -3101,6 +3101,7 @@ void Score::cmdSlashRhythm()
 ///   Realize selected chord symbols into notes on the staff.
 ///   Currently just pops up a dialog to list TPCs,
 ///   Intervals, and pitches.
+///   FIXME - PHV: deprecated
 //---------------------------------------------------------
 
 void Score::cmdRealizeChordSymbols()

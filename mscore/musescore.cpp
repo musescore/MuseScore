@@ -23,6 +23,7 @@
 #include "instrdialog.h"
 #include "preferences.h"
 #include "prefsdialog.h"
+#include "realizeharmonydialog.h"
 #include "icons.h"
 #include "libmscore/xml.h"
 #include "seq.h"
@@ -5771,6 +5772,83 @@ void MuseScore::transpose()
       }
 
 //---------------------------------------------------------
+//   cmdRealizeChordSymbols
+///   Realize selected chord symbols into notes on the staff.
+///   Currently just pops up a dialog to list TPCs,
+///   Intervals, and pitches.
+//---------------------------------------------------------
+
+void MuseScore::realizeChordSymbols()
+      {
+      if (!cs)
+            return;
+      if (!cs->selection().isList()) {
+            QErrorMessage err;
+            err.showMessage("Invalid Selection. Cannot Realize Chord");
+            err.exec();
+            return;
+            }
+      QList<Harmony*> hlist;
+      for (Element* e : cs->selection().elements()) {
+            if (e->isHarmony())
+                  hlist << toHarmony(e);
+            }
+
+      RealizeHarmonyDialog dialog;
+      if (!hlist.empty()) {
+            QString s;  //chord label string
+            QString d;  //chord info list, change this later TODO - PHV
+
+            for (Harmony* h : hlist) {
+                  s += h->harmonyName() + " ";
+                  QString intervals;
+                  for (int interval : h->getDescription()->intervals())
+                        intervals += QString::number(interval) + " ";
+                  QString line = QString("(ID: %1) Chord: %2  Intervals: %3  Notes: %4\n")
+                                    .arg(h->id())
+                                    .arg(h->harmonyName())
+                                    .arg(intervals)
+                                    .arg(h->getDescription()->noteNames(h->rootTpc()));
+                  d += line;
+                  }
+
+            //new dialog
+            dialog.setChordLabel(s);
+            }
+      else {
+            QErrorMessage err;
+            err.showMessage("No Chord Selected. Cannot Realize Chord");
+            err.exec();
+            return;
+            }
+
+      if (dialog.exec()) {    //realize the chord symbols onto the track
+            cs->startCmd();
+            for (Harmony* h : hlist) {
+                  RealizedHarmony r = h->realizedHarmony();
+                  Segment* seg = toSegment(h->parent());
+                  Fraction duration = h->ticksTilNext();
+
+                  Chord* chord = new Chord(cs);
+                  //create chord from notes
+                  QMapIterator<int, int> i(r.notes());
+                  while (i.hasNext()) {
+                        i.next();
+                        Note* note = new Note(cs);
+                        note->setPitch(i.key());
+                        note->setTpc(i.value());
+                        chord->add(note);
+                        }
+
+                  cs->setChord(seg, h->track(), chord, duration);
+                  delete chord;
+                  }
+            cs->endCmd();
+            }
+      }
+
+
+//---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
 
@@ -6212,6 +6290,8 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             changeScore(-1);
       else if (cmd == "transpose")
             transpose();
+      else if (cmd == "realize-chord-symbols")
+            realizeChordSymbols();
       else if (cmd == "save-style") {
             QString name = getStyleFilename(false);
             if (!name.isEmpty()) {
