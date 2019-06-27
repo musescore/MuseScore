@@ -112,7 +112,7 @@ void Fingering::layout()
 
             // update offset after drag
             qreal rebase = 0.0;
-            if (offsetChanged() != OffsetChange::NONE)
+            if (offsetChanged() != OffsetChange::NONE && !tight)
                   rebase = rebaseOffset();
 
             // temporarily exclude self from chord shape
