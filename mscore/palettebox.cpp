@@ -79,6 +79,7 @@ PaletteBox::PaletteBox(QWidget* parent)
       vl->addWidget(tree);
 
       tree = new QTreeWidget(this);
+      tree->setHeaderLabel("Palette");
       vl->addWidget(tree);
 
       QWidget* paletteList = new QWidget;
@@ -427,10 +428,14 @@ bool PaletteBox::read(XmlReader& e)
                   QTreeWidgetItem* paletteItem = new QTreeWidgetItem(tree);
                   paletteItem->setText(0,name);
                   qDebug() << "PaletteBox read: "<< name;
-                  QTreeWidgetItem* paletteElementsItem = new QTreeWidgetItem(paletteItem);
                   PaletteList* paletteList = new PaletteList(tree);
+                  QTreeWidgetItem* paletteElementsItem = new QTreeWidgetItem(paletteItem);
                   tree->setItemWidget(paletteElementsItem, 0, paletteList);
                   paletteList->read(e);
+                  paletteItem->setExpanded(true);
+                  paletteItem->setExpanded(false);
+                  //paletteList->QAbstractScrollArea::setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+
                   //p->read(e);
                   //addPalette(p);
                   //connect(p, SIGNAL(displayMore(const QString&)), mscore, SLOT(showMasterPalette(const QString&)));

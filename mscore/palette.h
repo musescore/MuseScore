@@ -223,19 +223,22 @@ class Palette : public QWidget {
       {
          Q_OBJECT
 
+         protected:
+            virtual void resizeEvent(QResizeEvent *event) override;
+
          public:
             PaletteList(QWidget* parent); 
             void  read(XmlReader& e);
-
       };
 
       class PaletteCellItem : public  QListWidgetItem
       {
+
          public:
             PaletteCellItem(PaletteList* parent);
             Element* element = nullptr;
             void setName(QString name){setText(name);}
-            bool  read(XmlReader& e);
+            bool read(XmlReader& e);
       };
 
 

@@ -1970,6 +1970,16 @@ void PaletteList::read(XmlReader& e)
 
       }
 
+ void PaletteList::resizeEvent(QResizeEvent *event)
+      {     
+            QListWidget::resizeEvent(event);
+            int numItems = count();
+            QListWidgetItem* last = item(numItems-1);
+            QRect lastItem = visualItemRect(last);
+            int yPos = lastItem.bottom();
+            setFixedHeight(yPos);
+      }
+
 PaletteCellItem::PaletteCellItem(PaletteList* parent) : QListWidgetItem(parent)
       {     
 
