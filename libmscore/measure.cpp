@@ -3814,7 +3814,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                                     // a transposing instrument using a different key sig.
                                     // To prevent this from making the wrong key sig display, remove any key
                                     // sigs on staves where the key in this measure is C.
-                                    score()->undo(new RemoveElement(e));
+                                    kSegment->remove(e);
                                     }
                               }
 
