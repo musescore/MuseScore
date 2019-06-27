@@ -12,7 +12,7 @@ unzip bottles.zip
 # we don't use freetype
 rm bottles/freetype*
 
-brew update
+# brew update
 
 # additional dependencies
 brew install jack lame
