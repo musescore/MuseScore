@@ -49,6 +49,14 @@ PACKAGE_NAME=MuseScore
 DMGFILE=applebuild/$PACKAGE_NAME-*.dmg
 fi
 
+SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
+
+# transfer file
+scp -C -i $SSH_INDENTITY $DMGFILE musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
+
+# trigger distribution
+ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
+
 # send nightly update to S3
 VERSION_MAJOR=$(grep 'SET(MUSESCORE_VERSION_MAJOR' CMakeLists.txt | cut -d \" -f2)
 VERSION_MINOR=$(grep 'SET(MUSESCORE_VERSION_MINOR' CMakeLists.txt | cut -d \" -f2)
