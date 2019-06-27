@@ -39,13 +39,13 @@ cp -Rf ~/Library/Frameworks/Sparkle.framework applebuild/mscore.app/Contents/Fra
 if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
 then # Build is marked UNSTABLE inside CMakeLists.txt
 build/package_mac $BRANCH-$REVISION
-PACKAGE_NAME=MusescoreNightly
+PACKAGE_NAME=MuseScoreNightly
 DMGFILE=applebuild/$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
 DMGFILENAME=$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
 mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
 else
 build/package_mac
-PACKAGE_NAME=Musescore
+PACKAGE_NAME=MuseScore
 DMGFILE=applebuild/$PACKAGE_NAME-*.dmg
 fi
 
@@ -106,14 +106,14 @@ fi
 
 echo "<rss xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2.0\">
 <channel>
-<title>Musescore development channel</title>
+<title>MuseScore development channel</title>
 <link>
 ${APPCAST_URL}
 </link>
 <description>Most recent changes with links to updates.</description>
 <language>en</language>
 <item>
-<title>Musescore ${MUSESCORE_VERSION} ${REVISION}</title>
+<title>MuseScore ${MUSESCORE_VERSION} ${REVISION}</title>
 <description>
 <![CDATA[
 ${GIT_LOG}
