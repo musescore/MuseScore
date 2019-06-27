@@ -15,13 +15,14 @@ BRANCH="$TRAVIS_BRANCH"
 REVISION="$(echo "$TRAVIS_COMMIT" | cut -c 1-7)"
 [ "REVISION" ] || REVISION="$(make -f Makefile.osx revision && cat mscore/revision.h)"
 
-if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
-then
-cp -f build/travis/resources/splash-nightly.png  mscore/data/splash.png
-cp -f build/travis/resources/mscore-nightly.icns mscore/data/mscore.icns
-#else
-#python build/add-mc-keys.py $MC_CONSUMER_KEY $MC_CONSUMER_SECRET
-fi
+#nightlies are deliberately disabled for the macOS 10.10 builds
+# if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
+# then
+# cp -f build/travis/resources/splash-nightly.png  mscore/data/splash.png
+# cp -f build/travis/resources/mscore-nightly.icns mscore/data/mscore.icns
+# #else
+# #python build/add-mc-keys.py $MC_CONSUMER_KEY $MC_CONSUMER_SECRET
+# fi
 
 make -f Makefile.osx ci BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
 
@@ -36,18 +37,18 @@ unzip musescore_dependencies_macos.zip -d applebuild/mscore.app/Contents/Resourc
 mkdir -p applebuild/mscore.app/Contents/Frameworks
 cp -Rf ~/Library/Frameworks/Sparkle.framework applebuild/mscore.app/Contents/Frameworks
 
-if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
-then # Build is marked UNSTABLE inside CMakeLists.txt
-build/package_mac $BRANCH-$REVISION
-PACKAGE_NAME=MuseScoreNightly
-DMGFILE=applebuild/$PACKAGE_NAME-10.10-$DATE-$BRANCH-$REVISION.dmg
-DMGFILENAME=$PACKAGE_NAME-10.10-$DATE-$BRANCH-$REVISION.dmg
-mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
-else
+# if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
+# then # Build is marked UNSTABLE inside CMakeLists.txt
+# build/package_mac $BRANCH-$REVISION
+# PACKAGE_NAME=MuseScoreNightly
+# DMGFILE=applebuild/$PACKAGE_NAME-10.10-$DATE-$BRANCH-$REVISION.dmg
+# DMGFILENAME=$PACKAGE_NAME-10.10-$DATE-$BRANCH-$REVISION.dmg
+# mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
+# else
 build/package_mac
 PACKAGE_NAME=MuseScore
-DMGFILE=applebuild/$PACKAGE_NAME-*.dmg
-fi
+DMGFILE=applebuild/$PACKAGE_NAME-10.10-*.dmg
+# fi
 
 SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
 
@@ -106,7 +107,7 @@ export ARTIFACTS_REGION=us-east-1
 export ARTIFACTS_BUCKET=sparkle.musescore.org
 export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
 export ARTIFACTS_PERMISSIONS=public-read
-export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/macos_10.10"
+export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/prebuild/macos_10.10"
 export ARTIFACTS_PATHS=appcast.xml
 artifacts upload
 
