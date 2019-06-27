@@ -12,10 +12,14 @@
 
 #include "musescore.h"
 #include "resourceManager.h"
+#include "downloadUtils.h"
 #include "plugin/pluginUpdater.h"
 #include "thirdparty/qzip/qzipreader_p.h"
+#include "ui_resourceManager.h"
 
 namespace Ms {
+
+static int PluginStatus_id = qRegisterMetaType<PluginStatus>();
 
 static inline std::tuple<bool, bool, bool> compatFromString(const QString& raw) {
       return std::make_tuple(raw.contains("1.x"), raw.contains("2.x"), raw.contains("3.x"));
@@ -131,7 +135,7 @@ void ResourceManager::displayPluginRepo()
       readPluginPackages();
       // fetch plugin list from web
       DownloadUtils html(this);
-      html.setTarget(pluginAddr());
+      html.setTarget(pluginRepoAddr());
       html.download();
       QByteArray html_raw = html.returnData();
       QByteArray table_start("<table");
@@ -405,127 +409,6 @@ static QDateTime GetLastModified(QString& url)
             return QDateTime();
       }
 
-//---------------------------------------------------------
-//   analyzePluginPage
-//---------------------------------------------------------
-bool ResourceManager::analyzePluginPage(QString url, PluginPackageDescription& desc)
-      {
-      bool new_plugin = desc.source == UNKNOWN;
-      QString direct_link;
-      DownloadUtils page(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
-      page.setTarget(url);
-      qDebug("before page download " + desc.package_name.toLatin1());
-      page.download();
-      qDebug("thread after page download " + desc.package_name.toLatin1());
-      QByteArray html_raw = page.returnData();
-      std::vector<PluginPackageLink> urls = getLinks(html_raw);
-      // choose a link with the highest score
-      PluginPackageLink target;
-      int score = -2;
-      for (auto& item : urls) {
-            if (item.score > score) {
-                  target = item;
-                  score = item.score;
-            }
-      }
-      if (score == -2)
-            return false;
-      if (target.source == GITHUB || target.source == GITHUB_RELEASE) {
-            int release_id;
-            bool has_release = false;
-            if (target.source == GITHUB)
-                  has_release = getLatestRelease(target.user, target.repo, release_id, direct_link);
-            else
-                  has_release = getLatestRelease(target.user, target.repo, release_id, direct_link, QFileInfo(target.url).completeBaseName());
-            if (has_release) {
-                  // there is a GitHub release, change source to RELEASE
-                  if (desc.source != GITHUB_RELEASE || (desc.release_id != release_id && release_id > 0)) {
-                        desc.release_id = release_id;
-                        desc.direct_link = direct_link;
-                        desc.source = GITHUB_RELEASE;
-                        return true;
-                  }
-                  else
-                        // already up-to-date
-                        return false;
-            }
-            QString branch;
-            if (target.source == GITHUB_RELEASE)
-                  // for archive links, the URL suffix is the branch name
-                  branch = QFileInfo(target.url).completeBaseName();
-            else
-                  // fetch latest commit sha on master(usually for 3.x), as info for update
-                  branch = target.branch.isNull() ? "master" : target.branch;
-            QString sha = getLatestCommitSha(target.user, target.repo, branch);
-            // compare the sha with previous stored sha. If the same, don't update.
-            if (desc.source != GITHUB || desc.latest_commit != sha) {
-                  desc.latest_commit = sha;
-                  desc.direct_link = githubLatestArchiveURL(target.user, target.repo, "master");
-                  desc.source = GITHUB;
-                  return true;
-            }
-            else
-                  return false;
-      }
-
-      else if (target.source == ATTACHMENT) {
-            QDateTime date_time;
-            if (desc.source != ATTACHMENT || desc.direct_link != target.url || (date_time = GetLastModified(target.url)) != desc.last_modified) {
-                  desc.source = ATTACHMENT;
-                  desc.direct_link = target.url;
-                  if (!date_time.isValid())
-                        // when it's a new plugin, we can always download and get timestamp later, so skip this step.
-                        if (!new_plugin)
-                              date_time = GetLastModified(target.url);
-                  desc.last_modified = date_time;
-                  return true;
-            }
-            else
-                  return false;
-      }
-      else
-            return false;
-      }
-
-void ResourceManager::updatePlugin()
-      {
-      QPushButton* install = static_cast<QPushButton*>(sender());
-
-      const QString& page_url = install->property("page_url").toString();
-      PluginPackageDescription& desc = pluginDescriptionMap[page_url];
-      Q_ASSERT(desc.update != nullptr);
-      if (desc.update->source == UNKNOWN) {
-            install->setText("Failed Try again.");
-            install->setEnabled(true);
-            return;
-            }
-      install->setText(tr("Downloading..."));
-      QString localPath = downloadPluginPackage(*desc.update, page_url);
-      if (installPluginPackage(localPath, *desc.update)) {
-            PluginPackageDescription* p_update = desc.update;
-            desc = *desc.update;
-            delete(p_update);
-            desc.update = nullptr;
-            refreshPluginButton(install->property("row").toInt(), true);
-            writePluginPackages();
-            }
-      }
-
-void ResourceManager::checkPluginUpdate(QPushButton* install)
-      {
-      const QString& page_url = install->property("page_url").toString();
-      if (pluginDescriptionMap.contains(page_url)) {
-            auto& desc = pluginDescriptionMap[page_url];
-            PluginPackageDescription* desc_tmp = new PluginPackageDescription(desc);
-            install->setText("Checking for update...");
-            bool should_update = analyzePluginPage("https://musescore.org" + page_url, *desc_tmp);
-            if (should_update)
-                  desc.update = desc_tmp;
-            else
-                  delete desc_tmp;
-            refreshPluginButton(install->property("row").toInt(), !should_update);
-            }
-      }
 
 void ResourceManager::scanPluginUpdate()
       {
@@ -533,8 +416,12 @@ void ResourceManager::scanPluginUpdate()
             QPushButton* install = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 3)));
             const QString& page_url = install->property("page_url").toString();
             // if installed
-            if (pluginDescriptionMap.contains(page_url))
-                  checkPluginUpdate(install);
+            if (pluginDescriptionMap.contains(page_url)) {
+                  install->setEnabled(false);
+                  install->setText("Pending¡­");
+                  PluginWorker* worker = new PluginWorker(pluginDescriptionMap[page_url], this);
+                  QtConcurrent::run(&workerThreadPool, worker, &PluginWorker::checkUpdate, install);
+                  }
             }
       }
 
@@ -613,25 +500,6 @@ bool ResourceManager::installPluginPackage(QString& download_pkg, PluginPackageD
       return true;
       }
 
-QString ResourceManager::downloadPluginPackage(PluginPackageDescription& desc, const QString& page_url)
-      {
-      DownloadUtils package(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy, this);
-      package.setTarget(desc.direct_link);
-      // TODO: try to get extension name from direct_link, and add it to localPath
-      QString localPath = dataPath + "/plugins/" + filenameBaseFromPageURL(page_url);
-      if (desc.source == GITHUB || desc.source == GITHUB_RELEASE)
-            localPath += ".zip";
-      else if (desc.source == ATTACHMENT)
-            localPath += "." + QFileInfo(desc.direct_link).suffix();
-      QDir().mkpath(dataPath + "/plugins");
-      package.setLocalFile(localPath);
-      package.download();
-      package.saveFile();
-      // update the timestamp again
-      desc.last_modified = package.getHeader(QNetworkRequest::LastModifiedHeader).toDateTime();
-      return localPath;
-      }
-
 //---------------------------------------------------------
 //   downloadInstallPlugin
 //---------------------------------------------------------
@@ -640,31 +508,9 @@ void ResourceManager::downloadInstallPlugin()
       {
       QPushButton* button = static_cast<QPushButton*>(sender());
       button->setEnabled(false);
-      button->setText(tr("Analyzing..."));
-      QString page_url = button->property("page_url").toString();
-      PluginPackageDescription new_package;
-      new_package.package_name = button->property("name").toString();
-      analyzePluginPage("https://musescore.org" + page_url, new_package);
-      if (new_package.source == UNKNOWN) {
-            button->setText("Unknown plugin source.");
-            button->setEnabled(true);
-            return;
-            }
-      button->setText(tr("Downloading..."));
-      QString localPath = downloadPluginPackage(new_package, page_url);
-
-      if (installPluginPackage(localPath, new_package)) {
-            // add the new description item to the map
-            pluginDescriptionMap[page_url] = new_package;
-            refreshPluginButton(button->property("row").toInt());
-            writePluginPackages();
-            displayPlugins();
-            }
-      else {
-            button->setText("Bad archive. Try again");
-            button->setEnabled(true);
-            return;
-            }
+      button->setText("Pending...");
+      PluginWorker* worker = new PluginWorker(this);
+      QtConcurrent::run(&workerThreadPool, worker, &PluginWorker::downloadInstall, button);
       }
 
 void ResourceManager::uninstallPluginPackage()
@@ -689,6 +535,16 @@ void ResourceManager::uninstallPluginPackage()
       displayPlugins();
       }
 
+static const std::map<PluginStatus, PluginButtonStatus> buttonStatuses = {
+      {NOT_INSTALLED,{"Uninstall",true,false}},
+      {INSTALL_FAILED,{"Fail to install. Try again",true,false}},
+      {ANALYZING,{"Analyzing",false,false}},
+      {ANALYZE_FAILED,{"Analyze failed. Try again",true,false}},
+      {DOWNLOADING,{"Downloading",false,false}},
+      {DOWNLOAD_FAILED,{"Download failed. Try again",true,false}},
+      {UPDATED,{"Updated",false,true}},
+      {UPDATE_AVAILABLE,{"Update",true,true}}
+      };
 
 void ResourceManager::refreshPluginButton(int row, bool updated/* = true*/)
       {
@@ -718,6 +574,23 @@ void ResourceManager::refreshPluginButton(int row, bool updated/* = true*/)
             }
 
       }
+
+void ResourceManager::refreshPluginButton(int row, PluginStatus status)
+      {
+      QPushButton* install = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 3)));
+      QPushButton* uninstall = static_cast<QPushButton*>(pluginsTable->indexWidget(pluginsTable->model()->index(row, 4)));
+      Q_ASSERT(buttonStatuses.find(status) != buttonStatuses.end());
+      const PluginButtonStatus& button_stat = buttonStatuses.at(status);
+      install->setText(button_stat.display_text);
+      install->setEnabled(button_stat.install_enable);
+      install->disconnect();
+      if (status == UPDATE_AVAILABLE)
+            QObject::connect(install, SIGNAL(clicked()), this, SLOT(updatePlugin()));
+      else if(button_stat.install_enable)
+            QObject::connect(install, SIGNAL(clicked()), this, SLOT(downloadInstallPlugin()));
+      uninstall->setEnabled(button_stat.uninstall_enable);
+      }
+
 
 //---------------------------------------------------------
 //   writePluginPackages
@@ -823,19 +696,250 @@ bool ResourceManager::readPluginPackages()
       return true;
       }
 
-      void PluginWorker::update()
+PluginWorker::PluginWorker(ResourceManager* r) : r(r)
       {
-
+      QObject::connect(this, SIGNAL(pluginStatusChanged(int, PluginStatus)), r, SLOT(refreshPluginButton(int,PluginStatus)));
       }
 
-      bool PluginWorker::analyzePluginPage(QString page_url)
+PluginWorker::PluginWorker(PluginPackageDescription& desc, ResourceManager* r) : desc(desc), r(r)
       {
+      QObject::connect(this, SIGNAL(pluginStatusChanged(int, PluginStatus)), r, SLOT(refreshPluginButton(int, PluginStatus)));
+      }
+
+void PluginWorker::checkUpdate(QPushButton* install)
+      {
+      const QString& page_url = install->property("page_url").toString();
+      PluginPackageDescription* desc_tmp = new PluginPackageDescription(desc);
+      PluginPackageDescription desc_backup = desc;
+      install->setEnabled(false);
+      install->setText("Checking for update...");
+      bool should_update = analyzePluginPage("https://musescore.org" + page_url);
+      desc = desc_backup;
+      if (should_update) {
+            desc.update = desc_tmp;
+            r->commitPlugin(page_url, desc);
+            emit pluginStatusChanged(install->property("row").toInt(), PluginStatus::UPDATE_AVAILABLE);
+            }
+      else {
+            delete desc_tmp;
+            emit pluginStatusChanged(install->property("row").toInt(), PluginStatus::UPDATED);
+            }
+      }
+
+void PluginWorker::timeconsume()
+      {
+      qDebug("timeconsume start");
+      int member = 0;
+      for (int i = 0; i < 1000000; i++)
+            member = member * 2 + 1;
+      qDebug("timeconsume end");
+      emit finished();
+      }
+
+bool PluginWorker::analyzePluginPage(QString full_url)
+      {
+      bool new_plugin = desc.source == UNKNOWN;
+      QString direct_link;
+      DownloadUtils page(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy);
+      page.setTarget(full_url);
+      page.download();
+      QByteArray html_raw = page.returnData();
+      std::vector<PluginPackageLink> urls = getLinks(html_raw);
+      // choose a link with the highest score
+      PluginPackageLink target;
+      int score = -2;
+      for (auto& item : urls) {
+            if (item.score > score) {
+                  target = item;
+                  score = item.score;
+            }
+      }
+      if (score == -2)
+            return false;
+      if (target.source == GITHUB || target.source == GITHUB_RELEASE) {
+            int release_id;
+            bool has_release = false;
+            if (target.source == GITHUB)
+                  has_release = getLatestRelease(target.user, target.repo, release_id, direct_link);
+            else
+                  has_release = getLatestRelease(target.user, target.repo, release_id, direct_link, QFileInfo(target.url).completeBaseName());
+            if (has_release) {
+                  // there is a GitHub release, change source to RELEASE
+                  if (desc.source != GITHUB_RELEASE || (desc.release_id != release_id && release_id > 0)) {
+                        qDebug() << "desc source original:" << int(desc.source) << " now:release";
+                        qDebug() << "release_id original:" << desc.release_id << "now: " << release_id;
+                        desc.release_id = release_id;
+                        desc.direct_link = direct_link;
+                        desc.source = GITHUB_RELEASE;
+                        return true;
+                  }
+                  else
+                        // already up-to-date
+                        return false;
+            }
+            QString branch;
+            if (target.source == GITHUB_RELEASE)
+                  // for archive links, the URL suffix is the branch name
+                  branch = QFileInfo(target.url).completeBaseName();
+            else
+                  // fetch latest commit sha on master(usually for 3.x), as info for update
+                  branch = target.branch.isNull() ? "master" : target.branch;
+            QString sha = getLatestCommitSha(target.user, target.repo, branch);
+            // compare the sha with previous stored sha. If the same, don't update.
+            if (desc.source != GITHUB || (!sha.isEmpty() && desc.latest_commit != sha)) {
+                  qDebug() << "desc source original:" << int(desc.source) << " now:github";
+                  qDebug() << "commit sha original:" << desc.latest_commit << " now:" << sha;
+                  desc.latest_commit = sha;
+                  desc.direct_link = githubLatestArchiveURL(target.user, target.repo, "master");
+                  desc.source = GITHUB;
+                  return true;
+            }
+            else
+                  return false;
+      }
+
+      else if (target.source == ATTACHMENT) {
+            QDateTime date_time;
+            if (desc.source != ATTACHMENT || desc.direct_link != target.url || (date_time = GetLastModified(target.url)) != desc.last_modified) {
+                  qDebug() << "desc source original:" << int(desc.source) << " now:attachment";
+                  qDebug() << "url before:" << desc.direct_link << " now:" << target.url;
+                  desc.source = ATTACHMENT;
+                  desc.direct_link = target.url;
+                  if (!date_time.isValid())
+                        // when it's a new plugin, we can always download and get timestamp later, so skip this step.
+                        if (!new_plugin)
+                              date_time = GetLastModified(target.url);
+                  desc.last_modified = date_time;
+                  return true;
+            }
+            else
+                  return false;
+      }
+      else
             return false;
       }
 
-      void PluginWorker::download()
+QString PluginWorker::download(const QString& page_url)
+      {
+      DownloadUtils package(QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy);
+      package.setTarget(desc.direct_link);
+      // TODO: try to get extension name from direct_link, and add it to localPath
+      QString localPath = dataPath + "/plugins/" + filenameBaseFromPageURL(page_url);
+      if (desc.source == GITHUB || desc.source == GITHUB_RELEASE)
+            localPath += ".zip";
+      else if (desc.source == ATTACHMENT)
+            localPath += "." + QFileInfo(desc.direct_link).suffix();
+      QDir().mkpath(dataPath + "/plugins");
+      package.setLocalFile(localPath);
+      package.download();
+      package.saveFile();
+      // update the timestamp again
+      desc.last_modified = package.getHeader(QNetworkRequest::LastModifiedHeader).toDateTime();
+      return localPath;
+      }
+
+void PluginWorker::updateInstall()
       {
 
       }
+
+bool PluginWorker::install(QString& download_pkg)
+      {
+      QFileInfo f_pkg(download_pkg);
+      QString suffix = f_pkg.suffix().toLower();
+      QString destination_prefix = dataPath + "/plugins" + "/" + f_pkg.completeBaseName();
+      QDir().mkdir(destination_prefix);
+      desc.dir = destination_prefix;
+      if (suffix == "zip") {
+            MQZipReader zipFile(download_pkg);
+            QVector<MQZipReader::FileInfo> allFiles = zipFile.fileInfoList();
+            if (allFiles.size() == 0)
+                  return false;
+            // If zip contains multiple files in root, or a single qml, create a
+            // root folder in plugin dir for them.
+            // If zip contains a single directory, don't use that directory's name
+            bool has_no_dir = true;
+            std::set<QString> dirs;
+            for (MQZipReader::FileInfo fi : allFiles) {
+                  QString dir_root = fi.filePath.split('/').first();
+                  dirs.insert(dir_root);
+                  }
+            if (dirs.size() == 1)
+                  if (allFiles.size() > 1) // the element in dirs must be a dir then
+                        has_no_dir = false;
+            int stripped_len = 0;
+            if (!has_no_dir) {
+                  stripped_len = allFiles.first().filePath.length() + 1;
+                  // the directory in the archive is not to be added
+                  allFiles.pop_front();
+                  }
+            auto filePathStripper = [&](QString& filePath) {return filePath.right(filePath.size() - stripped_len); };
+
+            // extract and copy
+            for (MQZipReader::FileInfo fi : allFiles) {
+                  if (fi.isDir)
+                        QDir().mkdir(destination_prefix + "/" + filePathStripper(fi.filePath));
+                  else if (fi.isFile) {
+                        if (QFileInfo(fi.filePath).suffix().toLower() == "qml")
+                              desc.qml_paths.push_back(destination_prefix + "/" + filePathStripper(fi.filePath));
+                        QFile new_f(destination_prefix + "/" + filePathStripper(fi.filePath));
+                        if (!new_f.open(QIODevice::WriteOnly)) {
+                              qDebug("Cannot write the file.");
+                              return false;
+                              }
+                        new_f.write(zipFile.fileData(fi.filePath));
+                        new_f.setPermissions(fi.permissions);
+                        new_f.close();
+                        }
+                  }
+            zipFile.close();
+            }
+      else if (suffix == "qml") {
+            QString destination = destination_prefix + "/" + f_pkg.fileName();
+            QFileInfo check(destination);
+            if (check.exists()) {
+                  if (check.isDir())
+                        QDir(check.absoluteFilePath()).removeRecursively();
+                  if (check.isFile())
+                        QFile::remove(check.absoluteFilePath());
+                  }
+            QFile(f_pkg.absoluteFilePath()).copy(destination);
+            desc.qml_paths.push_back(destination);
+            }
+      else {
+            qDebug("Unknown plugin suffix %s.", qPrintable(suffix));
+            return false;
+            }
+      QFile::remove(download_pkg);
+      return true;
+      }
+
+void PluginWorker::downloadInstall(QPushButton* button)
+      {
+      button->setEnabled(false);
+      button->setText(tr("Analyzing..."));
+      QString page_url = button->property("page_url").toString();
+      desc.package_name = button->property("name").toString();
+      analyzePluginPage("https://musescore.org" + page_url);
+      if (desc.source == UNKNOWN) {
+            button->setText("Unknown plugin source.");
+            button->setEnabled(true);
+            return;
+            }
+      button->setText(tr("Downloading..."));
+      QString localPath = download(page_url);
+
+      if (install(localPath)) {
+            // add the new description item to the map
+            r->commitPlugin(page_url, desc);
+            emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::UPDATED);
+            
+      }
+      else {
+            emit pluginStatusChanged(button->property("row").toInt(), PluginStatus::INSTALL_FAILED);
+            return;
+      }
+      }
+
 }
 

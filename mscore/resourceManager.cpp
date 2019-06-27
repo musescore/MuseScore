@@ -117,6 +117,13 @@ void ResourceManager::selectExtensionsTab()
       tabs->setCurrentIndex(tabs->indexOf(extensions));
       }
 
+void ResourceManager::commitPlugin(const QString & url, PluginPackageDescription & desc)
+      {
+      pluginDescriptionMap[url] = desc;
+      writePluginPackages();
+      displayPlugins();
+      }
+
 
 //---------------------------------------------------------
 //   displayExtensions

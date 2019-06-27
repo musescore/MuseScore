@@ -32,10 +32,10 @@ class ResourceManager : public QDialog, public Ui::Resource
     void displayPlugins();
     bool verifyFile(QString path, QString hash);
     bool verifyLanguageFile(QString filename, QString hash);
+    void refreshPluginButton(int row, bool updated = true);
     /*  Analyzes the plugin page at `url` and writes download-related info to `desc`.
      *  Returns true if an update is needed.
      */
-    bool analyzePluginPage(QString url, PluginPackageDescription& desc);
     /*  Extracts the package(assumed zip format for now), and installs necessary files
         to plugin directory.
         Returns true on success.
@@ -44,9 +44,6 @@ class ResourceManager : public QDialog, public Ui::Resource
     /*  Check update for one single plugin.
     
      */
-    void checkPluginUpdate(QPushButton* install);
-    //void refreshPluginButton(QWidget* button_group, bool updated = true);
-    void refreshPluginButton(int row, bool updated = true);
     void writePluginPackages();
     /*  Reads plugin descriptions from xml. `pluginDescriptionMap` would be flushed.
         Should only be called at the beginning
@@ -58,6 +55,7 @@ public:
     explicit ResourceManager(QWidget *parent = 0);
     void selectLanguagesTab();
     void selectExtensionsTab();
+    void commitPlugin(const QString& url, PluginPackageDescription& desc);
 
     static inline QString baseAddr() { return "http://extensions.musescore.org/3.5/"; }
     static inline QString pluginAddr() { return "https://musescore.org/en/plugins"; }
@@ -69,16 +67,17 @@ private:
 
     QMap <QString, PluginPackageDescription> pluginDescriptionMap; // plugin page url -> description of installed plugin
 
+    QThreadPool workerThreadPool;
+
 private slots:
     void filterPluginList();
     void downloadLanguage();
     void scanPluginUpdate();
-    void updatePlugin();
     void downloadExtension();
-    QString downloadPluginPackage(PluginPackageDescription & desc, const QString & page_url);
     void downloadInstallPlugin();
     void uninstallPluginPackage();
     void uninstallExtension();
+    void refreshPluginButton(int row, PluginStatus status);
    };
 
 class ExtensionFileSize : public QTableWidgetItem

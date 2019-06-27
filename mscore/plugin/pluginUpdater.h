@@ -63,6 +63,23 @@ struct PluginPackageDescription {
       QDateTime last_modified; // valid when source set to ATTACHMENT
       };
 
+enum PluginStatus {
+      NOT_INSTALLED, INSTALL_FAILED,
+      ANALYZING, ANALYZE_FAILED,
+      DOWNLOADING, DOWNLOAD_FAILED,
+      UPDATED, UPDATE_AVAILABLE
+      };
+
+struct PluginButtonStatus {
+      //PluginStatus s;
+      QString display_text;
+      bool install_enable;
+      bool uninstall_enable;
+      };
+
+
+class ResourceManager;
+
 //---------------------------------------------------------
 //   PluginWorker
 //   A class that manages blocking procedures including downloading, installing
@@ -70,19 +87,31 @@ struct PluginPackageDescription {
 //---------------------------------------------------------
 class PluginWorker : public QObject {
       Q_OBJECT
-            PluginPackageDescription& desc;
 public:
-      PluginWorker(PluginPackageDescription& desc) : desc(desc) {}
+      PluginWorker(ResourceManager* r);
+      PluginWorker(PluginPackageDescription& desc, ResourceManager* r);
 public slots:
-      // bool checkUpdate(); // may be discarded
-      void update(); // called in ResourceManager::updatePlugin()
       bool analyzePluginPage(QString page_url); // replace ResourceManager::analyzePluginPage
-      void download(); // replace Resource::downloadPluginPackage
+      QString download(const QString& page_url); // replace Resource::downloadPluginPackage
+      bool install(QString& download_pkg);
+      void downloadInstall(QPushButton* install);
+      void updateInstall(); // called in ResourceManager::updatePlugin()
+      void checkUpdate(QPushButton* install);
+      void timeconsume();
 
+signals:
+      void pluginStatusChanged(int idx, PluginStatus status);
+      void finished();
+private:
+      PluginPackageDescription desc;
+      PluginStatus status;
+      ResourceManager* r;
       };
 
 
 
 } // namespace Ms
+
+Q_DECLARE_METATYPE(Ms::PluginStatus);
 
 #endif
