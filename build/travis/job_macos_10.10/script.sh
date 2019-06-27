@@ -39,7 +39,7 @@ cp -Rf ~/Library/Frameworks/Sparkle.framework applebuild/mscore.app/Contents/Fra
 if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
 then # Build is marked UNSTABLE inside CMakeLists.txt
 build/package_mac $BRANCH-$REVISION
-PACKAGE_NAME=MusescoreNightly
+PACKAGE_NAME=MusescoreNightly_10.10
 DMGFILE=applebuild/$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
 DMGFILENAME=$PACKAGE_NAME-$DATE-$BRANCH-$REVISION.dmg
 mv applebuild/$PACKAGE_NAME-$BRANCH-$REVISION.dmg $DMGFILE
@@ -48,22 +48,6 @@ build/package_mac
 PACKAGE_NAME=Musescore
 DMGFILE=applebuild/$PACKAGE_NAME-*.dmg
 fi
-
-SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
-
-# transfer file
-scp -C -i $SSH_INDENTITY $DMGFILE musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
-
-# delete old files
-ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/macosx; ls MuseScoreNightly* -t | tail -n +41 | xargs rm -f"
-
-# create and upload index.html and RSS
-python build/travis/job_macos/updateHTML.py $SSH_INDENTITY
-scp -C -i $SSH_INDENTITY build/travis/job_macos/web/index.html musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
-scp -C -i $SSH_INDENTITY build/travis/job_macos/web/nightly.xml musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
-
-# trigger distribution
-ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
 
 # send nightly update to S3
 VERSION_MAJOR=$(grep 'SET(MUSESCORE_VERSION_MAJOR' CMakeLists.txt | cut -d \" -f2)
@@ -80,29 +64,6 @@ GIT_LOG=$(./build/travis/job_macos/generateGitLog.sh)
 
 #install artifacts
 curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
-
-if [[ "$NIGHTLY_BUILD" = "TRUE" ]]
-then
-echo "<update>
-<version>${MUSESCORE_VERSION}</version>
-<revision>${REVISION}</revision>
-<releaseType>nightly</releaseType>
-<date>${SHORT_DATE}</date>
-<description>MuseScore ${MUSESCORE_VERSION} ${REVISION}</description>
-<downloadUrl>https://ftp.osuosl.org/pub/musescore-nightlies/macosx/$DMGFILENAME</downloadUrl>
-<infoUrl>https://ftp.osuosl.org/pub/musescore-nightlies/macosx/</infoUrl>
-</update>" >> update_mac_nightly.xml
-
-export ARTIFACTS_KEY=$UPDATE_S3_KEY
-export ARTIFACTS_SECRET=$UPDATE_S3_SECRET
-export ARTIFACTS_REGION=us-east-1
-export ARTIFACTS_BUCKET=update.musescore.org
-export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
-export ARTIFACTS_PERMISSIONS=public-read
-export ARTIFACTS_TARGET_PATHS="/"
-export ARTIFACTS_PATHS=update_mac_nightly.xml
-artifacts upload
-fi
 
 echo "<rss xmlns:sparkle=\"http://www.andymatuschak.org/xml-namespaces/sparkle\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2.0\">
 <channel>
@@ -132,7 +93,7 @@ export ARTIFACTS_REGION=us-east-1
 export ARTIFACTS_BUCKET=sparkle.musescore.org
 export ARTIFACTS_CACHE_CONTROL='public, max-age=315360000'
 export ARTIFACTS_PERMISSIONS=public-read
-export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/macos"
+export ARTIFACTS_TARGET_PATHS="/${MSCORE_RELEASE_CHANNEL}/3/macos_10.10"
 export ARTIFACTS_PATHS=appcast.xml
 artifacts upload
 
