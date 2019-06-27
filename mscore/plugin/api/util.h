@@ -107,8 +107,10 @@ class FileIO : public QObject {
 //---------------------------------------------------------
 //   MsProcess
 //   @@ QProcess
-///    Start an external program. Using this will most probably
-///    result in the plugin to be platform dependant. \since MuseScore 3.2
+///   \brief Start an external program.\ Available in QML
+///   as \p QProcess.
+///   \details Using this will most probably result in the
+///   plugin to be platform dependant. \since MuseScore 3.2
 //---------------------------------------------------------
 
 class MsProcess : public QProcess {
@@ -127,11 +129,11 @@ class MsProcess : public QProcess {
       };
 
 //---------------------------------------------------------
-//   @@ ScoreView \since MuseScore 3.2
+//   @@ ScoreView
 ///    This is an GUI element to show a score. \since MuseScore 3.2
 //---------------------------------------------------------
 
-class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
+class ScoreView : public QQuickPaintedItem, public MuseScoreView {
       Q_OBJECT
       /** Background color */
       Q_PROPERTY(QColor color READ color WRITE setColor)
@@ -146,6 +148,8 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
       QRectF _boundingRect;
 
       QNetworkAccessManager* networkManager;
+
+      virtual void setScore(Ms::Score*) override;
 
       virtual void dataChanged(const QRectF&) override { update(); }
       virtual void updateAll() override                { update(); }
@@ -167,8 +171,8 @@ class MsScoreView : public QQuickPaintedItem, public MuseScoreView {
 
    public:
       /// \cond MS_INTERNAL
-      MsScoreView(QQuickItem* parent = 0);
-      virtual ~MsScoreView() {}
+      ScoreView(QQuickItem* parent = 0);
+      virtual ~ScoreView() {}
       QColor color() const            { return _color;        }
       void setColor(const QColor& c)  { _color = c;           }
       qreal scale() const             { return mag;        }
