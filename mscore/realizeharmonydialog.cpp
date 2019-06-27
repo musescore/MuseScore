@@ -18,14 +18,64 @@
 //=============================================================================
 
 #include "realizeharmonydialog.h"
+#include "libmscore/harmony.h"
 
 namespace Ms {
+
+//---------------------------------------------------------
+//   RealizeHarmonyDialog
+//---------------------------------------------------------
 
 RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget *parent)
    : QDialog(parent)
       {
       setObjectName("TestingName");
       setupUi(this);
+
+      chordTable->setVisible(false);
+      connect(showButton, SIGNAL(clicked()), SLOT(toggleChordTable()));
+
+      //make the chord uneditable
+      chordTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+      }
+
+//---------------------------------------------------------
+//   toggleChordTable
+//---------------------------------------------------------
+void RealizeHarmonyDialog::toggleChordTable()
+      {
+      int visible = chordTable->isVisible();
+      chordTable->setVisible(!visible);
+      showButton->setText(!visible ? tr("Show Less...") : tr("Show More..."));
+      }
+
+//---------------------------------------------------------
+//   set
+//---------------------------------------------------------
+void RealizeHarmonyDialog::setChordList(QList<Harmony*> hlist)
+      {
+      static const QStringList header = { "ID", "Name", "Intervals", "Notes" };
+      QString s;  //chord label string
+      int rows = hlist.size();
+
+      chordTable->setRowCount(rows);
+      chordTable->setColumnCount(header.size());
+      chordTable->setHorizontalHeaderLabels(header);
+      for (int i = 0; i < rows; ++i) {
+            Harmony* h = hlist.at(i);
+            s += h->harmonyName() + " ";
+            QString intervals;
+            for (int interval : h->getDescription()->intervals())
+                  intervals += QString::number(interval) + " ";
+            chordTable->setItem(i, 0, new QTableWidgetItem(QString::number(h->id())));
+            chordTable->setItem(i, 1, new QTableWidgetItem(h->harmonyName()));
+            chordTable->setItem(i, 2, new QTableWidgetItem(intervals));
+            chordTable->setItem(i, 3, new QTableWidgetItem(h->getDescription()->noteNames(h->rootTpc())));
+            }
+      setChordLabel(s);
+
+      //set table uneditable again
+      chordTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
       }
 
 }
