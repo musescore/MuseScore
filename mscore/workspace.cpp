@@ -694,13 +694,20 @@ void Workspace::read(XmlReader& e)
                   saveMenuBar = true;
                   QMenuBar* mb = mscore->menuBar();
                   mb->clear();
-                  menuToStringList.clear();
                   while (e.readNextStartElement()) {
                         if (e.hasAttribute("name")) { // is a menu
                               QString menu_id = e.attribute("name");
-                              QMenu* menu = mb->addMenu(menu_id);
-                              addMenuAndString(menu, menu_id);
-                              readMenu(e, menu);
+                              QMenu* menu = findMenuFromString(menu_id);
+                              if (menu) {
+                                    menu->clear();
+                                    mb->addMenu(menu);
+                                    readMenu(e, menu);
+                                    }
+                              else {
+                                    menu = new QMenu(menu_id);
+                                    mb->addMenu(menu);
+                                    readMenu(e, menu);
+                                    }
                               }
                         else { // is an action
                               QString action_id = e.readXml();
@@ -712,7 +719,6 @@ void Workspace::read(XmlReader& e)
                                     }
                               }
                         }
-                  mscore->updateMenus();
                   }
             else if (tag == "State") {
                   saveComponents = true;
@@ -756,9 +762,17 @@ void Workspace::readMenu(XmlReader& e, QMenu* menu)
       while (e.readNextStartElement()) {
             if (e.hasAttribute("name")) { // is a menu
                   QString menu_id = e.attribute("name");
-                  QMenu* new_menu = menu->addMenu(menu_id);
-                  addMenuAndString(new_menu, menu_id);
-                  readMenu(e, new_menu);
+                  QMenu* new_menu = findMenuFromString(menu_id);
+                  if (new_menu) {
+                        new_menu->clear();
+                        menu->addMenu(new_menu);
+                        readMenu(e, new_menu);
+                        }
+                  else {
+                        new_menu = new QMenu(menu_id);
+                        menu->addMenu(new_menu);
+                        readMenu(e, new_menu);
+                        }
                   }
             else { // is an action
                   QString action_id = e.readXml();
@@ -792,13 +806,20 @@ void Workspace::readGlobalMenuBar()
                         if (e.name() == "MenuBar") {
                               QMenuBar* mb = mscore->menuBar();
                               mb->clear();
-                              menuToStringList.clear();
                               while (e.readNextStartElement()) {
                                     if (e.hasAttribute("name")) { // is a menu
                                           QString menu_id = e.attribute("name");
-                                          QMenu* menu = mb->addMenu(menu_id);
-                                          addMenuAndString(menu, menu_id);
-                                          readMenu(e, menu);
+                                          QMenu* menu = findMenuFromString(menu_id);
+                                          if (menu) {
+                                                menu->clear();
+                                                mb->addMenu(menu);
+                                                readMenu(e, menu);
+                                                }
+                                          else {
+                                                menu = new QMenu(menu_id);
+                                                mb->addMenu(menu);
+                                                readMenu(e, menu);
+                                                }
                                           }
                                     else { // is an action
                                           QString action_id = e.readXml();
@@ -810,7 +831,6 @@ void Workspace::readGlobalMenuBar()
                                                 }
                                           }
                                     }
-                              mscore->updateMenus();
                               }
                         else
                               e.unknown();

@@ -310,7 +310,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuTuplet;
 
       QMenu* menuFormat;
-      QMenu* menuStretch;
       QMenu* menuTools;
       QMenu* menuVoices;
       QMenu* menuMeasure;
@@ -318,9 +317,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QMenu* menuPlugins;
       QMenu* menuHelp;
       QMenu* menuTours;
-#ifndef NDEBUG
-      QMenu* menuDebug;
-#endif
       AlbumManager* albumManager           { 0 };
 
       QWidget* _searchDialog               { 0 };
@@ -446,8 +442,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       virtual void showEvent(QShowEvent *event);
 
       void retranslate();
-      void setMenuTitles();
-      void updateMenu(QMenu*& menu, QString menu_id, QString objectName);
 
       void playVisible(bool flag);
       void launchBrowser(const QString whereTo);
@@ -809,7 +803,6 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
 
       WorkspaceDialog* workspaceDialog() { return _workspaceDialog; }
       void updateIcons();
-      void updateMenus();
 
       Inspector* inspector()           { return _inspector; }
       PluginCreator* pluginCreator()   { return _pluginCreator; }

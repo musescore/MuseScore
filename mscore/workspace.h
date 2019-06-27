@@ -49,6 +49,7 @@ class Workspace : public QObject {
 
       static QString findStringFromAction(QAction* action);
       static QAction* findActionFromString(QString string);
+      static QMenu* findMenuFromString(QString string);
       static QString findStringFromMenu(QMenu* menu);
 
       QString _name;
@@ -99,7 +100,6 @@ class Workspace : public QObject {
       static void addActionAndString(QAction* action, QString string);
       static void addRemainingFromMenuBar(QMenuBar* mb);
       static void addMenuAndString(QMenu* menu, QString string);
-      static QMenu* findMenuFromString(QString string);
 
       bool getSaveComponents()       { return saveComponents; }
       void setSaveComponents(bool s) { saveComponents = s;    }
