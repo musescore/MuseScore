@@ -1616,7 +1616,7 @@ MuseScore::MuseScore()
 
       menuFormat->addAction(getAction("add-remove-breaks"));
 
-      QMenu* menuStretch = new QMenu(tr("&Stretch"));
+      menuStretch = new QMenu(tr("&Stretch"));
       for (auto i : { "stretch+", "stretch-", "reset-stretch" })
             menuStretch->addAction(getAction(i));
       Workspace::addMenuAndString(menuStretch, "menu-stretch");
@@ -1702,7 +1702,7 @@ MuseScore::MuseScore()
       //---------------------
 
 #ifndef NDEBUG
-      QMenu* menuDebug = mb->addMenu("Debug");
+      menuDebug = mb->addMenu("Debug");
       menuDebug->setObjectName("Debug");
       a = getAction("no-horizontal-stretch");
       a->setCheckable(true);
@@ -1939,32 +1939,9 @@ void MuseScore::showError()
 
 void MuseScore::retranslate()
       {
+      setMenuTitles();
       _positionLabel->setToolTip(tr("Measure:Beat:Tick"));
-
-      // retranslate the menu
-      menuFile->setTitle(tr("&File"));
-      openRecent->setTitle(tr("Open &Recent"));
-      menuEdit->setTitle(tr("&Edit"));
-      menuView->setTitle(tr("&View"));
-      menuToolbars->setTitle(tr("&Toolbars"));
-      menuWorkspaces->setTitle(tr("W&orkspaces"));
       pref->setText(tr("&Preferences…"));
-      menuAdd->setTitle(tr("&Add"));
-      menuAddMeasures->setTitle(tr("&Measures"));
-      menuAddFrames->setTitle(tr("&Frames"));
-      menuAddText->setTitle(tr("&Text"));
-      menuAddLines->setTitle(tr("&Lines"));
-      menuAddPitch->setTitle(tr("N&otes"));
-      menuAddInterval->setTitle(tr("&Intervals"));
-      menuTuplet->setTitle(tr("T&uplets"));
-      menuFormat->setTitle(tr("F&ormat"));
-      menuTools->setTitle(tr("&Tools"));
-      menuVoices->setTitle(tr("&Voices"));
-      menuMeasure->setTitle(tr("&Measure"));
-      menuPlugins->setTitle(tr("&Plugins"));
-      menuHelp->setTitle(tr("&Help"));
-      menuTours->setTitle(tr("&Tours"));
-
       aboutAction->setText(tr("&About…"));
       aboutQtAction->setText(tr("About &Qt…"));
       aboutMusicXMLAction->setText(tr("About &MusicXML…"));
@@ -1993,7 +1970,91 @@ void MuseScore::retranslate()
       Shortcut::retranslate();
       Workspace::retranslate();
       }
+      
+//---------------------------------------------------------
+//   setMenuTitles
+//---------------------------------------------------------
 
+void MuseScore::setMenuTitles()
+      {
+      menuFile->setTitle(tr("&File"));
+      openRecent->setTitle(tr("Open &Recent"));
+      menuEdit->setTitle(tr("&Edit"));
+      menuView->setTitle(tr("&View"));
+      menuToolbars->setTitle(tr("&Toolbars"));
+      menuWorkspaces->setTitle(tr("W&orkspaces"));
+      menuAdd->setTitle(tr("&Add"));
+      menuAddMeasures->setTitle(tr("&Measures"));
+      menuAddFrames->setTitle(tr("&Frames"));
+      menuAddText->setTitle(tr("&Text"));
+      menuAddLines->setTitle(tr("&Lines"));
+      menuAddPitch->setTitle(tr("N&otes"));
+      menuAddInterval->setTitle(tr("&Intervals"));
+      menuTuplet->setTitle(tr("T&uplets"));
+      menuFormat->setTitle(tr("F&ormat"));
+      menuStretch->setTitle(tr("&Stretch"));
+      menuTools->setTitle(tr("&Tools"));
+      menuVoices->setTitle(tr("&Voices"));
+      menuMeasure->setTitle(tr("&Measure"));
+      menuPlugins->setTitle(tr("&Plugins"));
+      menuHelp->setTitle(tr("&Help"));
+      menuTours->setTitle(tr("&Tours"));
+#ifndef NDEBUG
+      menuDebug->setTitle("Debug");  // not translated
+#endif
+      }
+
+//---------------------------------------------------------
+//   updateMenu
+//---------------------------------------------------------
+
+void MuseScore::updateMenu(QMenu*& menu, QString menu_id, QString name)
+      {
+      QMenu* m = Workspace::findMenuFromString(menu_id);
+      if (m) {
+            menu = m;
+            if (name != "")
+                  menu->setObjectName(name);
+            }
+      }
+
+//---------------------------------------------------------
+//   updateMenus
+//---------------------------------------------------------
+
+void MuseScore::updateMenus()
+      {
+      updateMenu(menuFile,        "menu-file",         "File");
+      updateMenu(openRecent,      "menu-open-recent",  "");
+      updateMenu(menuEdit,        "menu-edit",         "Edit");
+      updateMenu(menuView,        "menu-view",         "View");
+      updateMenu(menuToolbars,    "menu-toolbars",     "");
+      updateMenu(menuWorkspaces,  "menu-workspaces",   "");
+      updateMenu(menuAdd,         "menu-add",          "Add");
+      updateMenu(menuAddMeasures, "menu-add-measures", "");
+      updateMenu(menuAddFrames,   "menu-add-frames",   "");
+      updateMenu(menuAddText,     "menu-add-text",     "");
+      updateMenu(menuAddLines,    "menu-add-lines",    "");
+      updateMenu(menuAddPitch,    "menu-add-pitch",    "");
+      updateMenu(menuAddInterval, "menu-add-interval", "");
+      updateMenu(menuTuplet,      "menu-tuplet",       "");
+      updateMenu(menuFormat,      "menu-format",       "Format");
+      updateMenu(menuStretch,     "menu-stretch",      "");
+      updateMenu(menuTools,       "menu-tools",        "Tools");
+      updateMenu(menuVoices,      "menu-voices",       "");
+      updateMenu(menuMeasure,     "menu-measure",      "");
+      updateMenu(menuPlugins,     "menu-plugins",      "Plugins");
+      updateMenu(menuHelp,        "menu-help",         "Help");
+      updateMenu(menuTours,       "menu-tours",        "");
+#ifndef NDEBUG
+      updateMenu(menuDebug,       "menu-debug",        "Debug");
+#endif
+      connect(openRecent,     SIGNAL(aboutToShow()),       SLOT(openRecentMenu()));
+      connect(openRecent,     SIGNAL(triggered(QAction*)), SLOT(selectScore(QAction*)));
+      connect(menuWorkspaces, SIGNAL(aboutToShow()),       SLOT(showWorkspaceMenu()));
+      setMenuTitles();
+      }
+      
 //---------------------------------------------------------
 //   resizeEvent
 //---------------------------------------------------------
