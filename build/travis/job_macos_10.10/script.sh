@@ -54,6 +54,11 @@ SSH_INDENTITY=$HOME/.ssh/osuosl_nighlies_rsa
 # transfer file
 scp -C -i $SSH_INDENTITY $DMGFILE musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
 
+# create and upload index.html and RSS
+python build/travis/job_macos/updateHTML.py $SSH_INDENTITY
+scp -C -i $SSH_INDENTITY build/travis/job_macos/web/index.html musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
+scp -C -i $SSH_INDENTITY build/travis/job_macos/web/nightly.xml musescore-nightlies@ftp-osl.osuosl.org:ftp/macosx
+
 # trigger distribution
 ssh -i $SSH_INDENTITY musescore-nightlies@ftp-osl.osuosl.org "~/trigger-musescore-nightlies"
 
