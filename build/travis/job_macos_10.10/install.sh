@@ -79,10 +79,10 @@ rvm uninstall 2.0.0-p643
 rvm uninstall 2.0.0
 rvm get head
 
-wget -nv http://utils.musescore.org.s3.amazonaws.com/qt5124_mac.zip
+wget -nv http://utils.musescore.org.s3.amazonaws.com/qt598_mac.zip
 mkdir -p $QT_MACOS
-unzip -qq qt5124_mac.zip -d $QT_MACOS
-rm qt5124_mac.zip
+unzip -qq qt598_mac.zip -d $QT_MACOS
+rm qt598_mac.zip
 
 #install sparkle
 export SPARKLE_VERSION=1.20.0
