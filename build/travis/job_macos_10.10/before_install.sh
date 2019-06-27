@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export QT_SHORT_VERSION=5.12
-export QT_LONG_VERSION=5.12.1
+export QT_SHORT_VERSION=5.9
+export QT_LONG_VERSION=5.9.8
 export QT_INSTALLER_ROOT=qt-opensource-mac-x64-clang-${QT_LONG_VERSION}
 export QT_INSTALLER_FILENAME=${QT_INSTALLER_ROOT}.dmg
 
@@ -32,6 +32,7 @@ EOF
 #set NIGHTLY_BUILD variable if MSCORE_UNSTABLE is TRUE in CMakeLists.txt
 if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
 then
+#exit 0 #disable macOS <10.12 nightly builds
 export NIGHTLY_BUILD=TRUE
 fi
 

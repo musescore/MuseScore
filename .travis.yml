@@ -12,10 +12,9 @@ matrix:
   fast_finish: true
   allow_failures:
             - env: "JOB=AppImage_x86_64"
-            - env: "JOB=AppImage_i686"
-            - env: "JOB=AppImage_armhf"
             - env: "JOB=MacOSX"
             - env: "JOB=MacOS_lupdate"
+            - env: "JOB=MacOSX_10.10"
   include:
     # 1st parallel build job - debug build on Ubuntu
     - env: "JOB=Tests"
@@ -77,49 +76,25 @@ matrix:
       script:
         - "if [[ $APPIMAGE_BUILD_ARCHS == *x86_64* ]]; then ./build/travis/job2_AppImage/build.sh --x86_64 --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
 
-    # 3rd parallel build job - portable Linux AppImage 32-bit x86 build on CentOS
-    #- env: "JOB=AppImage_i686"
-    #  addons:
-    #    apt:
-    #      packages:
-    #      - bsdtar
-    #      - curl
-    #      - zsync
-    #      - expect
-    #  services:
-    #    - docker
-    #  script:
-    #    - "if [[ $APPIMAGE_BUILD_ARCHS == *i686* ]]; then ./build/travis/job2_AppImage/build.sh --i686 --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
-
-    # 4th parallel build job - portable Linux AppImage armhf build on Debian crosscompiler
-    #- env: "JOB=AppImage_armhf"
-    #  addons:
-    #    apt:
-    #      packages:
-    #      - bsdtar
-    #      - curl
-    #      - zsync
-    #      - expect
-    #  services:
-    #    - docker
-    #  before_script:
-    #    - "sudo ./build/travis/job2_AppImage/set-binfmt-misc.sh"
-    #  script:
-    #    - "if [[ $APPIMAGE_BUILD_ARCHS == *armhf* ]]; then ./build/travis/job2_AppImage/build.sh --armhf --upload-branches $APPIMAGE_UPLOAD_BRANCHES; fi"
-
-    # 5th parallel build job - mac osx build
     - env: "JOB=MacOSX"
       os: osx
-      osx_image: xcode9.4
-      #cache:
-      #  directories:
-      #    - /usr/local/Cellar
+      osx_image: xcode10.2
       before_install:
         - source build/travis/job_macos/before_install.sh
       install:
         - source ./build/travis/job_macos/install.sh
       script:
         - "./build/travis/job_macos/script.sh"
+
+    - env: "JOB=MacOSX_10.10"
+      os: osx
+      osx_image: xcode9.4
+      before_install:
+        - source build/travis/job_macos_10.10/before_install.sh
+      install:
+        - source ./build/travis/job_macos_10.10/install.sh
+      script:
+        - "./build/travis/job_macos_10.10/script.sh"
 
     - env: "JOB=MacOS_lupdate"
       os: osx

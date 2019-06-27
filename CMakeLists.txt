@@ -155,18 +155,15 @@ set(CRASH_REPORT_URL "http://127.0.0.1:1127/post" CACHE STRING "URL where to sen
 if (APPLE)
       set (CMAKE_CXX_COMPILER   clang++)
       set (CMAKE_CXX_COMPILER_ID "Clang")
-      # Currently, just 'ppc', 'i386' or 'ppc i386' are useful architectures,
-      # because the Flash-Player is not yet available as a 64-bit version.
-      # Flash is required for displaying the videos of MuseScore-Connect.
-      # See http://qt.gitorious.org/qt/pages/Qt470KnownIssues
-      # Since 10.6+ only runs on intel, just set it to i386.
       set(CMAKE_OSX_ARCHITECTURES x86_64)
 
-      # Adjust and uncomment this variable, if you target a different version
-      # of MacOSX.
-      #set(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk)
+      message("Current OSX version is ${CURRENT_OSX_VERSION}")
+      if (${CURRENT_OSX_VERSION} LESS "10.14")
+            set(CMAKE_OSX_DEPLOYMENT_TARGET 10.10)
+      else (${CURRENT_OSX_VERSION} LESS "10.14")
+            set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)
+      endif(${CURRENT_OSX_VERSION} LESS "10.14")
 
-      set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)      # Min version required
       set(HAS_AUDIOFILE TRUE)            # Requires libsndfile
       set(MAC_APPCAST_URL "")
 
@@ -201,7 +198,12 @@ if (BUILD_AUTOUPDATE STREQUAL "ON")
              if(SPARKLE_FOUND)
                    set(MAC_SPARKLE_ENABLED 1)
                    set(OsxFrameworks ${OsxFrameworks} ${SPARKLE_LIBRARY})
-                   set(MAC_APPCAST_URL "https://sparkle.musescore.org/${MSCORE_RELEASE_CHANNEL}/3/macos/appcast.xml")
+                   message("Current OSX version is ${CURRENT_OSX_VERSION}")
+                   if (${CURRENT_OSX_VERSION} LESS "10.14")
+                         set(MAC_APPCAST_URL "https://sparkle.musescore.org/${MSCORE_RELEASE_CHANNEL}/3/macos_10.10/appcast.xml")
+                   else (${CURRENT_OSX_VERSION} LESS "10.14")
+                         set(MAC_APPCAST_URL "https://sparkle.musescore.org/${MSCORE_RELEASE_CHANNEL}/3/macos/appcast.xml")
+                   endif (${CURRENT_OSX_VERSION} LESS "10.14")
              endif(SPARKLE_FOUND)
       elseif (MSVC)
              if (NOT MSCORE_UNSTABLE)
