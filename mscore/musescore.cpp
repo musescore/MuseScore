@@ -5796,24 +5796,7 @@ void MuseScore::realizeChordSymbols()
 
       RealizeHarmonyDialog dialog;
       if (!hlist.empty()) {
-            QString s;  //chord label string
-            QString d;  //chord info list, change this later TODO - PHV
-
-            for (Harmony* h : hlist) {
-                  s += h->harmonyName() + " ";
-                  QString intervals;
-                  for (int interval : h->getDescription()->intervals())
-                        intervals += QString::number(interval) + " ";
-                  QString line = QString("(ID: %1) Chord: %2  Intervals: %3  Notes: %4\n")
-                                    .arg(h->id())
-                                    .arg(h->harmonyName())
-                                    .arg(intervals)
-                                    .arg(h->getDescription()->noteNames(h->rootTpc()));
-                  d += line;
-                  }
-
-            //new dialog
-            dialog.setChordLabel(s);
+            dialog.setChordList(hlist);
             }
       else {
             QErrorMessage err;
@@ -5830,6 +5813,7 @@ void MuseScore::realizeChordSymbols()
                   Fraction duration = h->ticksTilNext();
 
                   Chord* chord = new Chord(cs);
+                  chord->setTrack(h->track()); //set track so notes have a track to sit on
                   //create chord from notes
                   QMapIterator<int, int> i(r.notes());
                   while (i.hasNext()) {

@@ -25,12 +25,17 @@
 
 namespace Ms {
 
+class Harmony;
+
 class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase {
       Q_OBJECT
 
-public:
+   private slots:
+      void toggleChordTable();
+   public:
       RealizeHarmonyDialog(QWidget* parent = 0);
-      void setChordLabel(QString s) { chordLabel->setText(s); }
+      void setChordLabel(QString s) { chordLabel->setText(s); } //TODO - PHV: we might not need this eventually
+      void setChordList(QList<Harmony*>);
       };
 
 }
