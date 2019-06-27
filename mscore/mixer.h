@@ -96,7 +96,6 @@ class Mixer : public QDockWidget, public Ui::Mixer
       EnablePlayForWidget* enablePlay;
 
       QSet<Part*> expandedParts;                      //TOD: expandedParts - from old mixer code - re-implement
-      QList<MixerTrack*> trackList;                   //TO:  trackLIst - from old mixer code - may re-use
       int savedSelectionTopLevelIndex;
       int savedSelectionChildIndex;
 
@@ -112,8 +111,6 @@ class Mixer : public QDockWidget, public Ui::Mixer
       void disableMixer();                            // gray out everything when no score or part is open
 
       void setPlaybackScore(Score*);
-
-      MixerTrackItem* mixerTrackItemFromPart(Part* part);
 
    private slots:
       void on_partOnlyCheckBox_toggled(bool checked);

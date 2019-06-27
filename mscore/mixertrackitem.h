@@ -55,7 +55,7 @@ private:
 
 public:
       MixerTrackItem(TrackType trackType, Part* part, Instrument* _instr, Channel* _chan);
-
+      MixerTrackItem(Part* part, Score* score);
       TrackType trackType() { return _trackType; }
       Part* part() { return _part; }
       Instrument* instrument() { return _instrument; }
@@ -80,6 +80,24 @@ public:
       bool getSolo();
       char getPan();
       };
-}
 
+
+/*
+ MixerTreeWidgetItem
+ 
+ subclass of QTreeWidget that:
+ - will construct a MixerTreeWidgetItem from a Part (including any children)
+ - host a MixerTrackItem for processing user changes and updating controls
+   when changes are signalled from outwith the mixer
+*/
+
+class MixerTreeWidgetItem : public QTreeWidgetItem
+      {
+   public:
+      MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* parent);
+      MixerTreeWidgetItem(Channel* channel, Instrument* instrument, Part* part);
+      MixerTrackItem* mixerTrackItem;
+      };
+
+}
 #endif // __MIXERTRACKITEM_H__

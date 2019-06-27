@@ -47,13 +47,13 @@ class MixerTrackChannel : public QWidget, public Ui::MixerTrackChannel, public C
       {
       Q_OBJECT
 
-      QTreeWidgetItem * treeWidgetItem;   // to enable selecting item when user interacts with controls
-      MixerTrackItem* mixerTrackItem;
+      MixerTreeWidgetItem * treeWidgetItem;   // to enable selecting item when user interacts with controls
 
       void setupAdditionalUi();
       void setupSlotsAndSignals();
       void update();
-
+      MixerTrackItem* mixerTrackItem() {return treeWidgetItem->mixerTrackItem; };
+      
 public slots:
       void stripMuteToggled(bool);
       void stripSoloToggled(bool);
@@ -69,8 +69,7 @@ protected:
       void propertyChanged(Channel::Prop property) override;      // ChannelListener method
             
 public:
-      explicit MixerTrackChannel(QTreeWidgetItem*, MixerTrackItem*);
-      MixerTrackItem* getMixerTrackItem() { return mixerTrackItem; }
+      explicit MixerTrackChannel(MixerTreeWidgetItem*);
       };
 
 

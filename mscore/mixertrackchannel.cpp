@@ -41,8 +41,8 @@ namespace Ms {
 //  when other parts of MuseScore change the track, the control
 //  will update itself.
 //--------------------------------------------------------------
-MixerTrackChannel::MixerTrackChannel(QTreeWidgetItem* treeWidgetItem, MixerTrackItem* mixerTrackItem) :
-      treeWidgetItem(treeWidgetItem), mixerTrackItem(mixerTrackItem)
+MixerTrackChannel::MixerTrackChannel(MixerTreeWidgetItem* treeWidgetItem) :
+      treeWidgetItem(treeWidgetItem)
       {
       setupUi(this);
       setupAdditionalUi();
@@ -50,7 +50,7 @@ MixerTrackChannel::MixerTrackChannel(QTreeWidgetItem* treeWidgetItem, MixerTrack
       setupSlotsAndSignals();
       update();
 
-      Channel* channel = mixerTrackItem->channel();
+      Channel* channel = mixerTrackItem()->channel();
       channel->addListener(this);
       }
 
@@ -89,16 +89,16 @@ void MixerTrackChannel::update()
       const QSignalBlocker blockMuteSignals(muteButton);
       const QSignalBlocker blockSoloSignals(soloButton);
 
-      volumeSlider->setValue(mixerTrackItem->getVolume());
-      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(mixerTrackItem->getVolume())));
+      volumeSlider->setValue(mixerTrackItem()->getVolume());
+      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(mixerTrackItem()->getVolume())));
       
-      muteButton->setChecked(mixerTrackItem->getMute());
-      soloButton->setChecked(mixerTrackItem->getSolo());
+      muteButton->setChecked(mixerTrackItem()->getMute());
+      soloButton->setChecked(mixerTrackItem()->getSolo());
 
-      Channel* channel = mixerTrackItem->channel();
+      Channel* channel = mixerTrackItem()->channel();
       MidiPatch* midiPatch = synti->getPatchInfo(channel->synti(), channel->bank(), channel->program());
-      Part* part = mixerTrackItem->part();
-      Instrument* instrument = mixerTrackItem->instrument();
+      Part* part = mixerTrackItem()->part();
+      Instrument* instrument = mixerTrackItem()->instrument();
 
       QColor channelColor = channel->color();
       if (colorLabel)
@@ -129,7 +129,7 @@ void MixerTrackChannel::propertyChanged(Channel::Prop property)
 
 void MixerTrackChannel::stripVolumeSliderMoved(int value)
       {
-      mixerTrackItem->setVolume(value);
+      mixerTrackItem()->setVolume(value);
       volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));
       takeSelection();
       }
@@ -137,14 +137,14 @@ void MixerTrackChannel::stripVolumeSliderMoved(int value)
 
 void MixerTrackChannel::stripSoloToggled(bool val)
       {
-      mixerTrackItem->setSolo(val);
+      mixerTrackItem()->setSolo(val);
       takeSelection();
       }
 
 
 void MixerTrackChannel::stripMuteToggled(bool val)
       {
-      mixerTrackItem->setMute(val);
+      mixerTrackItem()->setMute(val);
       takeSelection();
       }
 

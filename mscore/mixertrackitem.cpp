@@ -65,9 +65,28 @@ namespace Ms {
 //   MixerTrackItem
 //---------------------------------------------------------
 
+// General purpose constructor
 MixerTrackItem::MixerTrackItem(TrackType trackType, Part* part, Instrument* instr, Channel *chan)
       :_trackType(trackType), _part(part), _instrument(instr), _channel(chan)
       {
+      }
+      
+
+MixerTrackItem::MixerTrackItem(Part* part, Score* score)
+      {
+      _trackType = TrackType::PART;
+      _part = part;
+      _instrument = nullptr;
+      _channel = nullptr;
+      
+      const InstrumentList* instrumenList = part->instruments();
+
+      if (instrumenList->empty())
+            return;
+
+      instrumenList->begin();
+      _instrument = instrumenList->begin()->second;
+      _channel = _instrument->playbackChannel(0, score->masterScore());
       }
 
 //---------------------------------------------------------
@@ -380,5 +399,46 @@ QList<Channel*> MixerTrackItem::playbackChannels(Part* part)
       return channels;
       }
 
+//MARK:- MixerTreeWidgetItem class
+
+// Don't like the way in which I'm passing so many different vars through here. Doesn't
+// feel like good design. At the moment just mirroring the original code though.
+// Don't yet fully undertand the parts / instuments data structure, so just replicating
+// what the old mixer code did. It does feel as if there should be a class that is
+// a comprehensive descriptor and that captures all the gubbins being passed back and
+// forth.
+
+MixerTreeWidgetItem::MixerTreeWidgetItem(Part* part, Score* score, QTreeWidget* treeWidget)
+      {
+      mixerTrackItem = new MixerTrackItem(part, score);
+      setText(0, part->partName());
+      setToolTip(0, part->partName());
+
+      // check for secondary channels and add MixerTreeWidgetItem children if required
+      const InstrumentList* partInstrumentList = part->instruments(); //Add per channel tracks
+      
+      // partInstrumentList is of type: map<const int, Instrument*>
+      for (auto partInstrumentListItem = partInstrumentList->begin(); partInstrumentListItem != partInstrumentList->end(); ++partInstrumentListItem) {
+            
+            Instrument* instrument = partInstrumentListItem->second;
+            if (instrument->channel().size() <= 1)
+                  continue;
+            
+            for (int i = 0; i < instrument->channel().size(); ++i) {
+                  Channel* channel = instrument->playbackChannel(i, score->masterScore());
+                  MixerTreeWidgetItem* child = new MixerTreeWidgetItem(channel, instrument, part);
+                  addChild(child);
+                  treeWidget->setItemWidget(child, 1, new MixerTrackChannel(child));
+                  }
+            }
+      }
+
+MixerTreeWidgetItem::MixerTreeWidgetItem(Channel* channel, Instrument* instrument, Part* part)
+      {
+      setText(0, channel->name());
+      setToolTip(0, QString("%1 - %2").arg(part->partName()).arg(channel->name()));
+      mixerTrackItem = new MixerTrackItem(MixerTrackItem::TrackType::CHANNEL, part, instrument, channel);
+      }
+      
 }
 

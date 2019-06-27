@@ -599,7 +599,7 @@ void MixerDetails::updateTabOrder()
       while (tabOrder.count() > 1) {
             tabOrder.removeFirst();
             QWidget* next = tabOrder.first();
-            qDebug()<<"Setting tab order. "<<current->objectName()<<" before "<<next->objectName();
+            // qDebug()<<"Setting tab order. "<<current->objectName()<<" before "<<next->objectName();
             setTabOrder(current, next);
             current = next;
             }
