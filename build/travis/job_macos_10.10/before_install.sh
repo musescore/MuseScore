@@ -32,8 +32,8 @@ EOF
 #set NIGHTLY_BUILD variable if MSCORE_UNSTABLE is TRUE in CMakeLists.txt
 if [ "$(grep '^[[:blank:]]*set( *MSCORE_UNSTABLE \+TRUE *)' CMakeLists.txt)" ]
 then
-#exit 0 #disable macOS <10.12 nightly builds
-export NIGHTLY_BUILD=TRUE
+  export NIGHTLY_BUILD=TRUE
+  exit 0 #deliberately disable macOS <10.12 nightly builds
 fi
 
 export MSCORE_RELEASE_CHANNEL=$(grep '^[[:blank:]]*set *( *MSCORE_RELEASE_CHANNEL' CMakeLists.txt | awk -F \" '{print $2}')
