@@ -40,6 +40,7 @@ Enum* PluginAPI::directionHEnum;
 Enum* PluginAPI::ornamentStyleEnum;
 Enum* PluginAPI::glissandoStyleEnum;
 Enum* PluginAPI::tidEnum;
+Enum* PluginAPI::noteTypeEnum;
 Enum* PluginAPI::noteHeadTypeEnum;
 Enum* PluginAPI::noteHeadGroupEnum;
 Enum* PluginAPI::noteValueTypeEnum;
@@ -67,6 +68,7 @@ void PluginAPI::initEnums() {
       PluginAPI::ornamentStyleEnum = wrapEnum<Ms::MScore::OrnamentStyle>();
       PluginAPI::glissandoStyleEnum = wrapEnum<Ms::GlissandoStyle>();
       PluginAPI::tidEnum = wrapEnum<Ms::Tid>();
+      PluginAPI::noteTypeEnum = wrapEnum<Ms::NoteType>();
       PluginAPI::noteHeadTypeEnum = wrapEnum<Ms::NoteHead::Type>();
       PluginAPI::noteHeadGroupEnum = wrapEnum<Ms::NoteHead::Group>();
       PluginAPI::noteValueTypeEnum = wrapEnum<Ms::Note::ValueType>();
