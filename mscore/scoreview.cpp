@@ -2389,6 +2389,7 @@ void ScoreView::textTab(bool back)
       TextBase* ot = toTextBase(oe);
       Tid tid = ot->tid();
       ElementType type = ot->type();
+      int staffIdx = ot->staffIdx();
 
       // get prev/next element now, as current element may be deleted if empty
       Element* el = back ? score()->prevElement() : score()->nextElement();
@@ -2450,7 +2451,7 @@ void ScoreView::textTab(bool back)
             // check annotation list of new segment
             Segment* ns = nn->chord()->segment();
             for (Element* e : ns->annotations()) {
-                  if (e->type() != type)
+                  if (e->staffIdx() != staffIdx || e->type() != type)
                         continue;
                   TextBase* nt = toTextBase(e);
                   if (nt->tid() == tid) {
