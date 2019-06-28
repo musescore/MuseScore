@@ -25,7 +25,8 @@ apt-get -y install \
   libgl1-mesa-dev \
   libopenal1 \
   gstreamer0.10-plugins-base \
-  software-properties-common # installs `add-apt-repository`
+  software-properties-common \ # installs `add-apt-repository`
+  libmirclient #remove after updating to 18.04
 
 # get newer compiler
 if [ ! -f /etc/apt/sources.list.d/ubuntu-toolchain-r-test-precise.list ]; then
