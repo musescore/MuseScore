@@ -162,7 +162,6 @@ MixerMasterChannel::MixerMasterChannel()
       setupUi(this);
       setupAdditionalUi();
       setupSlotsAndSignals();
-      update();
       }
 
 
@@ -171,6 +170,7 @@ void MixerMasterChannel::setupSlotsAndSignals()
       connect(volumeSlider, SIGNAL(valueChanged(int)), SLOT(masterVolumeSliderMoved(int)));
       }
 
+#define MIXER_MASTER_VOLUME_STEPS 500 // maximum number of discrete steps for master volume control
 
 void MixerMasterChannel::setupAdditionalUi()
       {
@@ -192,6 +192,8 @@ void MixerMasterChannel::setupAdditionalUi()
       soloButton->setIcon(playIcon);
       muteButton->setIcon(loopIcon);
 
+      volumeSlider->setRange(0, MIXER_MASTER_VOLUME_STEPS);
+
       // the label is retained but made transparent to preserve alignment with
       // the track widgets
       QString transparentColorLabelStyle = "QToolButton { background: none;}";
@@ -203,33 +205,36 @@ void MixerMasterChannel::updateUiControls()
       colorLabel->setVisible(false);
       }
 
-void MixerMasterChannel::update()
-      {
-      const QSignalBlocker blockVolumeSignals(volumeSlider);
-      const QSignalBlocker blockMuteSignals(muteButton);
-      const QSignalBlocker blockSoloSignals(soloButton);
-
-      volumeSlider->setValue(50);
-      volumeSlider->setToolTip(tr("Master Volume: %1").arg(QString::number(volumeSlider->value())));
-
-      muteButton->setChecked(true);
-      soloButton->setChecked(true);
-      }
-
-
+      
 void MixerMasterChannel::volumeChanged(float synthGain)
       {
       const QSignalBlocker blockSignals(volumeSlider); // block during this method
-      float gainInSliderRange = int (synthGain*12.7); //TODO: fix the maths (decibels etc.)
-      volumeSlider->setValue(int(gainInSliderRange));
+      float sliderPosition = synthGain * MIXER_MASTER_VOLUME_STEPS / 10.0;
+      qDebug()<<"Not implemented yet: synthGain = "<<synthGain<<" current calculation"<<sliderPosition<<" in a range 0 to "<<MIXER_MASTER_VOLUME_STEPS;
+      volumeSlider->setValue(int(sliderPosition));
       }
 
 
 void MixerMasterChannel::masterVolumeSliderMoved(int value)
       {
       const QSignalBlocker blockSignals(volumeSlider); // block during this method
-      volumeSlider->setToolTip(tr("Volume: %1").arg(QString::number(value)));
-      synti->setGain(float(value) / 12.7); //TODO: fix the maths (decibels etc.)
+      float newGain = 10.0* float(value) / MIXER_MASTER_VOLUME_STEPS;
+      if (newGain == synti->gain())
+            return;
+
+      //TODO:- magic numbers (needs to be made unmagical)
+      float n = 20.0;         // from playpanel.h
+      float mute = 0.0;       // from playpanel.h
+
+      float decibels;
+
+            if (newGain == mute)
+                  decibels = -80.0;
+            else
+                  decibels = ((n * std::log10(newGain)) - n);
+
+      volumeSlider->setToolTip(tr("Volume: %1 dB").arg(QString::number(decibels)));
+      synti->setGain(newGain);
       }
 
 }

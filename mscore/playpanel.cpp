@@ -242,6 +242,7 @@ void PlayPanel::setRelTempo(qreal val)
 void PlayPanel::setGain(float val)
       {
       volumeSlider->setValue(val);
+      qDebug()<<"PlayPanel volume slider value = "<<val;
       }
 
 

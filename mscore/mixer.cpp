@@ -589,7 +589,7 @@ void Mixer::changeEvent(QEvent *event)
 void Mixer::updateTracks()
       {
       qDebug()<<"Mixer::updateTracks()";
-      const QSignalBlocker blockTreeWidgetSignals(mixerTreeWidget);     // block during this method
+      const QSignalBlocker blockTreeWidgetSignals(mixerTreeWidget);  // block during this method
 
       mixerTreeWidget->clear();
       trackList.clear();
